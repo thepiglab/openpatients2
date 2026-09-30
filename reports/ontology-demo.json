@@ -1,0 +1,135 @@
+{
+  "mode": "SYNTHETIC_FIXTURES_MOCK_HTTP_ONLY",
+  "mapping": {
+    "records": 1,
+    "mapping_status": {
+      "exact_unique": 4,
+      "ambiguous": 1
+    },
+    "catalog_fingerprint": "5c8a83519c7cadfd0db94c1c14805bc162c3e97ea8621440c2993d820e549c20",
+    "clinical_accuracy": null,
+    "gpu_used": false,
+    "policy": {
+      "rules": {
+        "conditions": {
+          "field": "name",
+          "systems": [
+            "urn:openpatients2:demo:clinical-concepts"
+          ]
+        },
+        "family_genetics": {
+          "field": "name",
+          "systems": [
+            "urn:openpatients2:demo:clinical-concepts"
+          ]
+        },
+        "oncology_tumors": {
+          "field": "name",
+          "systems": [
+            "urn:openpatients2:demo:clinical-concepts"
+          ]
+        },
+        "procedures_devices": {
+          "field": "name",
+          "systems": [
+            "urn:openpatients2:demo:clinical-concepts"
+          ]
+        },
+        "symptoms_function": {
+          "field": "name",
+          "systems": [
+            "urn:openpatients2:demo:clinical-concepts"
+          ]
+        }
+      },
+      "candidate_limit": 12,
+      "auto_exact": true,
+      "workers": 2
+    }
+  },
+  "prepared": {
+    "requests": 1,
+    "scope": "unresolved fact/system occurrences; no full-article reprompt"
+  },
+  "selector": {
+    "counts": {
+      "network_requests": 1,
+      "ok": 1
+    },
+    "elapsed_seconds": null,
+    "new_requests_per_second": null,
+    "usage": {
+      "prompt_tokens": null,
+      "completion_tokens": null,
+      "reasoning_tokens": null,
+      "cached_tokens": null
+    },
+    "reasoning_accounting": "reasoning_tokens are a subset of completion_tokens when reported; do not add twice",
+    "clinical_accuracy": null,
+    "model_identity": {
+      "model": "mock-selector",
+      "model_id": "NOT_A_MODEL",
+      "revision": "mock-fixture"
+    },
+    "proposals": "/mnt/data/op2_verification/ontology/selector/proposals.jsonl",
+    "mapping_approved_by_model": false
+  },
+  "cohort": {
+    "name": "LOCAL demo cancer descendants only",
+    "criteria": {
+      "name": "LOCAL demo cancer descendants only",
+      "source_kinds": [
+        "synthetic_fixture"
+      ],
+      "criteria": [
+        {
+          "id": "cancer",
+          "domain": "conditions",
+          "where": [
+            {
+              "field": "name",
+              "op": "concept_descendant",
+              "value": {
+                "system": "urn:openpatients2:demo:clinical-concepts",
+                "version": "synthetic-fixture-v1",
+                "code": "root"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "corpus_records": 1,
+    "matched_source_records_before_exact_dedup": 1,
+    "matched_records_after_exact_dedup": 1,
+    "returned_records": 1,
+    "sampling": "all matching records",
+    "interpretation": "Candidate case cohort only; not population-representative, not adjudicated eligibility, not prevalence.",
+    "unknown_handling": "Unstated values never satisfy positive or explicitly negative predicates."
+  },
+  "graph": {
+    "format": "openpatients2.graph/1",
+    "counts": {
+      "nodes_SourceCase": 1,
+      "nodes_Fact": 14,
+      "edges_has_documented_fact": 14,
+      "nodes_Evidence": 15,
+      "edges_supported_by": 15,
+      "edges_linked_to_tumor": 2,
+      "nodes_Concept": 5,
+      "edges_is_a": 2,
+      "edges_denotes": 5
+    },
+    "source": "/mnt/data/op2_verification/ontology/reviewed.jsonl",
+    "catalog_fingerprint": "5c8a83519c7cadfd0db94c1c14805bc162c3e97ea8621440c2993d820e549c20",
+    "person_deduplication": false,
+    "causal_inference": false,
+    "fhir_conformance": false,
+    "model_reasoning_indexed": false,
+    "clinical_accuracy": null,
+    "media_assignment": "SourceCase multimedia remains article-level/unverified unless independently reviewed."
+  },
+  "licensed_terminology_content_bundled": false,
+  "gpu_benchmark": null,
+  "clinical_accuracy": null
+}

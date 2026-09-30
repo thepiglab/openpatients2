@@ -1,0 +1,33 @@
+# Attribution-only example using the small pinned sample, not a full clinical run.
+input: runs/attribution-v1/articles-v2.jsonl
+output: runs/figure-attribution-pilot
+endpoint: https://openrouter.ai/api/v1
+api_key_env: OPENROUTER_API_KEY
+budget_usd: 1
+budget_file: runs/figure-attribution-pilot/budget.sqlite
+concurrency: 4
+article_concurrency: 3
+validation_retries: 0
+retry_failed: false
+request_deadline_seconds: 150
+article_ids: [PMC12285374, PMC10998798, PMC12802722]
+reference_rosters: runs/medical-fidelity-v1/reference-rosters
+figure_attribution: true
+companion_tasks: []
+clinical_tasks: []
+models:
+- id: google/gemma-4-31b-it
+  context_length: 131072
+  response_format: prompt_json
+  max_input_per_million: 0.1
+  max_output_per_million: 0.36
+  extra_body:
+    reasoning:
+      enabled: false
+    provider:
+      only: [deepinfra/turbo]
+      allow_fallbacks: false
+      require_parameters: true
+      max_price:
+        prompt: 0.1
+        completion: 0.36

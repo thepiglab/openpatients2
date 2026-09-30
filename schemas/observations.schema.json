@@ -1,0 +1,375 @@
+{
+  "$defs": {
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "quote": {
+          "description": "Exact contiguous source text; include qualifiers and negation.",
+          "maxLength": 1200,
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        },
+        "source_section": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Heading actually present in the source, otherwise null.",
+          "title": "Source Section"
+        }
+      },
+      "required": [
+        "quote",
+        "source_section"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "Observation": {
+      "additionalProperties": false,
+      "properties": {
+        "subject": {
+          "enum": [
+            "index_patient",
+            "family_member",
+            "mother",
+            "fetus",
+            "newborn",
+            "other",
+            "unknown"
+          ],
+          "title": "Subject",
+          "type": "string"
+        },
+        "assertion": {
+          "description": "Whether this fact is explicitly affirmed, negated, or uncertain; not test positivity.",
+          "enum": [
+            "present",
+            "absent",
+            "possible",
+            "conditional",
+            "unknown"
+          ],
+          "title": "Assertion",
+          "type": "string"
+        },
+        "temporality": {
+          "enum": [
+            "current",
+            "historical",
+            "future",
+            "unknown"
+          ],
+          "title": "Temporality",
+          "type": "string"
+        },
+        "time": {
+          "$ref": "#/$defs/TimeMention"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "result_absent_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "pending",
+                "not_performed",
+                "not_reported",
+                "not_applicable",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "null when a result is provided. A pending/unreported result is not a negative or normal result.",
+          "title": "Result Absent Reason"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "laboratory",
+            "vital",
+            "imaging",
+            "pathology",
+            "microbiology",
+            "physiologic",
+            "other"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "resulted",
+            "ordered",
+            "planned",
+            "pending",
+            "not_performed",
+            "historical",
+            "unknown"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "text_value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Text Value"
+        },
+        "numeric_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Numeric Value"
+        },
+        "comparator": {
+          "enum": [
+            "=",
+            "<",
+            "<=",
+            ">",
+            ">=",
+            "unknown"
+          ],
+          "title": "Comparator",
+          "type": "string"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Unit"
+        },
+        "flag": {
+          "enum": [
+            "normal",
+            "high",
+            "low",
+            "positive",
+            "negative",
+            "indeterminate",
+            "unknown"
+          ],
+          "title": "Flag",
+          "type": "string"
+        },
+        "reference_range_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Reference Range Text"
+        },
+        "specimen": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Specimen"
+        },
+        "method": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Method"
+        },
+        "body_site": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Body Site"
+        }
+      },
+      "required": [
+        "subject",
+        "assertion",
+        "temporality",
+        "time",
+        "evidence",
+        "result_absent_reason",
+        "name",
+        "kind",
+        "status",
+        "text_value",
+        "numeric_value",
+        "comparator",
+        "unit",
+        "flag",
+        "reference_range_text",
+        "specimen",
+        "method",
+        "body_site"
+      ],
+      "title": "Observation",
+      "type": "object"
+    },
+    "TimeMention": {
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Verbatim temporal expression. Never invent dates or durations.",
+          "title": "Text"
+        },
+        "relation": {
+          "enum": [
+            "at",
+            "before",
+            "after",
+            "during",
+            "since",
+            "until",
+            "unknown"
+          ],
+          "title": "Relation",
+          "type": "string"
+        },
+        "anchor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Explicit anchor such as surgery or admission; not publication date.",
+          "title": "Anchor"
+        },
+        "date_iso": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "YYYY-MM-DD only if explicitly present as an unshifted full date; otherwise null.",
+          "title": "Date Iso"
+        }
+      },
+      "required": [
+        "text",
+        "relation",
+        "anchor",
+        "date_iso"
+      ],
+      "title": "TimeMention",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "coverage": {
+      "description": "complete means this task reviewed the supplied source, NOT that the patient's history is complete.",
+      "enum": [
+        "complete",
+        "limited",
+        "not_applicable"
+      ],
+      "title": "Coverage",
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "documentation_status": {
+      "description": "documented includes positive, negative, possible and historical facts. Silence is not_documented, never a clinical negative.",
+      "enum": [
+        "documented",
+        "not_documented",
+        "explicitly_unknown",
+        "not_applicable"
+      ],
+      "title": "Documentation Status",
+      "type": "string"
+    },
+    "documentation_evidence": {
+      "description": "Exact source support for explicitly_unknown/not_applicable; empty for not_documented. Fact evidence stays on each item.",
+      "items": {
+        "$ref": "#/$defs/Evidence"
+      },
+      "title": "Documentation Evidence",
+      "type": "array"
+    },
+    "items": {
+      "items": {
+        "$ref": "#/$defs/Observation"
+      },
+      "title": "Items",
+      "type": "array"
+    }
+  },
+  "required": [
+    "coverage",
+    "limitations",
+    "documentation_status",
+    "documentation_evidence",
+    "items"
+  ],
+  "title": "Observations",
+  "type": "object"
+}

@@ -1,0 +1,26 @@
+# Pin api.revision with `op2 pin-config` after CPU-only model download.
+api:
+  endpoints: [http://127.0.0.1:8000/v1]
+  model: clinical-extractor
+  model_id: IFM/K2-Horizon-375B-A23B-NVFP4
+  revision: UNPINNED
+  response_format: json_schema
+  temperature: 0.2
+  top_p: 0.95
+  max_tokens: 4096
+  max_retry_tokens: 16384
+  extra_body:
+    chat_template_kwargs:
+      reasoning_effort: low
+input: data/enriched.jsonl
+output: runs/k2
+patient_concurrency: 8
+task_fanout: 2
+request_concurrency: 32
+max_model_len: 65536
+token_profile: data/k2.tokens.jsonl
+require_token_profile: true
+namespace: production-v2
+
+# Merge large JSONL outputs later on CPU after the GPU allocation exits.
+export_after_run: false

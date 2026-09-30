@@ -1,0 +1,231 @@
+{
+  "$defs": {
+    "Demographic": {
+      "additionalProperties": false,
+      "properties": {
+        "subject": {
+          "enum": [
+            "index_patient",
+            "family_member",
+            "mother",
+            "fetus",
+            "newborn",
+            "other",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "assertion": {
+          "enum": [
+            "present",
+            "absent",
+            "possible",
+            "conditional",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "temporality": {
+          "enum": [
+            "current",
+            "historical",
+            "future",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "time": {
+          "$ref": "#/$defs/TimeMention"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "attribute": {
+          "enum": [
+            "age_at_presentation",
+            "age_at_diagnosis",
+            "age_other",
+            "documented_sex",
+            "sex_assigned_at_birth",
+            "gender_identity",
+            "race_as_documented",
+            "ethnicity_as_documented",
+            "language"
+          ],
+          "type": "string"
+        },
+        "text_value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "numeric_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "subject",
+        "assertion",
+        "temporality",
+        "time",
+        "evidence",
+        "attribute",
+        "text_value",
+        "numeric_value",
+        "unit"
+      ],
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "quote": {
+          "maxLength": 1200,
+          "minLength": 1,
+          "type": "string"
+        },
+        "source_section": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "quote",
+        "source_section"
+      ],
+      "type": "object"
+    },
+    "TimeMention": {
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "relation": {
+          "enum": [
+            "at",
+            "before",
+            "after",
+            "during",
+            "since",
+            "until",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "anchor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "date_iso": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "text",
+        "relation",
+        "anchor",
+        "date_iso"
+      ],
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "coverage": {
+      "enum": [
+        "complete",
+        "limited",
+        "not_applicable"
+      ],
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "documentation_status": {
+      "enum": [
+        "documented",
+        "not_documented",
+        "explicitly_unknown",
+        "not_applicable"
+      ],
+      "type": "string"
+    },
+    "documentation_evidence": {
+      "items": {
+        "$ref": "#/$defs/Evidence"
+      },
+      "type": "array"
+    },
+    "items": {
+      "items": {
+        "$ref": "#/$defs/Demographic"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "coverage",
+    "limitations",
+    "documentation_status",
+    "documentation_evidence",
+    "items"
+  ],
+  "type": "object"
+}

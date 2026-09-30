@@ -1,0 +1,144 @@
+{
+  "mode": "hand-authored synthetic fixtures + mock HTTP; NOT inference",
+  "extraction": {
+    "wall_seconds": null,
+    "new_complete_records": 1,
+    "failed_records": 0,
+    "fully_resumed_records": 0,
+    "attempts": 14,
+    "validated_new_records_per_hour": null,
+    "logical_prompt_tokens": null,
+    "output_tokens_including_reasoning": null,
+    "cached_prompt_tokens": null,
+    "uncached_prompt_tokens": null,
+    "logical_input_tokens_per_second": null,
+    "uncached_input_tokens_per_wall_second": null,
+    "output_tokens_per_second": null,
+    "cache_hit_fraction": null,
+    "http_error_rate": 0.0,
+    "length_finish_rate": 0.0,
+    "attempt_validation_failure_rate": 0.0,
+    "retry_attempts": 0,
+    "ttft_seconds": {
+      "n": 14,
+      "min": 0.001882570000020678,
+      "p50": 0.002452314500033026,
+      "p95": 0.0036422595500027904,
+      "p99": 0.004348301510000282,
+      "max": 0.004524811999999656
+    },
+    "time_to_final_answer_start_seconds": {
+      "n": 14,
+      "min": 0.0018947200001093734,
+      "p50": 0.0024654080000345857,
+      "p95": 0.003655610849943968,
+      "p99": 0.00436649816995441,
+      "max": 0.004544219999957022
+    },
+    "request_latency_seconds": {
+      "n": 14,
+      "min": 0.001921460000062325,
+      "p50": 0.0025017965000415643,
+      "p95": 0.003696744650011396,
+      "p99": 0.0044022489300198225,
+      "max": 0.00457862500002193
+    },
+    "finish_reasons": {
+      "stop": 14
+    },
+    "notes": [
+      "TTFT includes queueing, scheduling, prefill, and first decode; it is NOT isolated prefill time.",
+      "Logical input TPS can include cache hits; do not call it physical prefill throughput.",
+      "Completion tokens already include reasoning when reported that way by the API; never add reasoning twice.",
+      "Missing usage/cached-token metrics remain null, not zero.",
+      "Source/structural validation is not clinical adjudication; quality-adjusted clinical throughput requires gold labels."
+    ],
+    "run_id": "fda24a8a972b47c8821c350e377dcd0a",
+    "model": {
+      "model": "hand-authored-fixture",
+      "model_id": "NOT_A_MODEL",
+      "revision": "fixture-v1"
+    },
+    "scope_tasks": [
+      "case_context",
+      "demographics",
+      "conditions",
+      "symptoms_function",
+      "medications",
+      "allergies",
+      "procedures_devices",
+      "observations",
+      "oncology",
+      "family_genetics",
+      "reproductive_perinatal",
+      "social_exposures",
+      "outcomes",
+      "care_plans"
+    ],
+    "cache_mode": "locality",
+    "patient_concurrency": 1,
+    "request_concurrency": 32,
+    "task_fanout": 2,
+    "generation_parameters": {
+      "temperature": 0.2,
+      "top_p": 0.95,
+      "max_tokens": 4096,
+      "max_retry_tokens": 16384,
+      "extra_body": {},
+      "response_format": "json_schema",
+      "seed": null,
+      "save_reasoning": true,
+      "save_messages": true
+    },
+    "clinical_accuracy": null,
+    "device_benchmark_status": "MOCK_ONLY_NO_GPU_NO_CLINICAL_MODEL",
+    "patient_export_pending": false
+  },
+  "cohort": {
+    "name": "synthetic demonstrator only",
+    "criteria": {
+      "name": "synthetic demonstrator only",
+      "source_kinds": [
+        "synthetic_fixture"
+      ],
+      "criteria": [
+        {
+          "id": "cancer",
+          "domain": "oncology_tumors",
+          "where": [
+            {
+              "field": "primary_site",
+              "value": "lung"
+            },
+            {
+              "field": "stage_group",
+              "value": "IV"
+            }
+          ]
+        },
+        {
+          "id": "marker",
+          "domain": "oncology_biomarkers",
+          "linked_to": "cancer",
+          "where": [
+            {
+              "field": "gene",
+              "value": "EGFR"
+            },
+            {
+              "field": "interpretation",
+              "value": "positive"
+            }
+          ]
+        }
+      ]
+    },
+    "corpus_records": 1,
+    "matched_source_records_before_exact_dedup": 1,
+    "matched_records_after_exact_dedup": 1,
+    "returned_records": 1,
+    "sampling": "all matching records",
+    "interpretation": "Candidate case cohort only; not population-representative, not adjudicated eligibility, not prevalence.",
+    "unknown_handling": "Unstated values never satisfy positive or explicitly negative predicates."
+  }
+}

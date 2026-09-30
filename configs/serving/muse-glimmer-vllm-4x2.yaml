@@ -1,0 +1,23 @@
+name: muse-glimmer-vllm-4x2
+backend: vllm
+version: 0.30.0
+image_reference: docker://vllm/vllm-openai:v0.30.0
+sif: containers/vllm030.sif
+model_path: models/muse-glimmer-30b
+model_id: meta-models/Muse-Glimmer-30B
+tensor_parallel: 2
+data_parallel: 1
+replicas: 4
+expert_parallel: false
+reasoning_parser: muse_glimmer
+speculation: 'off'
+max_model_len: 32768
+max_num_seqs: 128
+max_batched_tokens: 16384
+gpu_memory_utilization: 0.9
+kv_cache_dtype: auto
+prefix_cache: true
+experimental: true
+validation_note: Command-generation checked only. Requires pinned weights and B200
+  smoke. Use prompt_json first; verify reasoning and structured-output interaction
+  before schema enforcement. BF16, no speculative decoding baseline.

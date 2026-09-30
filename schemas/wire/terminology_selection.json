@@ -1,0 +1,48 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "decision": {
+      "enum": [
+        "select",
+        "abstain"
+      ],
+      "type": "string"
+    },
+    "candidate_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "relation": {
+      "anyOf": [
+        {
+          "enum": [
+            "equivalent",
+            "broader"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "rationale": {
+      "maxLength": 3000,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "decision",
+    "candidate_id",
+    "relation",
+    "rationale"
+  ],
+  "type": "object"
+}

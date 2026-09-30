@@ -1,0 +1,663 @@
+{
+  "$defs": {
+    "Biomarker": {
+      "additionalProperties": false,
+      "properties": {
+        "subject": {
+          "enum": [
+            "index_patient",
+            "family_member",
+            "mother",
+            "fetus",
+            "newborn",
+            "other",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "assertion": {
+          "enum": [
+            "present",
+            "absent",
+            "possible",
+            "conditional",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "temporality": {
+          "enum": [
+            "current",
+            "historical",
+            "future",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "time": {
+          "$ref": "#/$defs/TimeMention"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "tumor_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "gene": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "alteration": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "origin": {
+          "enum": [
+            "somatic",
+            "germline",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "interpretation": {
+          "enum": [
+            "positive",
+            "negative",
+            "wild_type",
+            "pathogenic",
+            "likely_pathogenic",
+            "vus",
+            "indeterminate",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "text_value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "numeric_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "assay": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "specimen": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "subject",
+        "assertion",
+        "temporality",
+        "time",
+        "evidence",
+        "tumor_ref",
+        "name",
+        "gene",
+        "alteration",
+        "origin",
+        "interpretation",
+        "text_value",
+        "numeric_value",
+        "unit",
+        "assay",
+        "specimen"
+      ],
+      "type": "object"
+    },
+    "CancerTreatment": {
+      "additionalProperties": false,
+      "properties": {
+        "subject": {
+          "enum": [
+            "index_patient",
+            "family_member",
+            "mother",
+            "fetus",
+            "newborn",
+            "other",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "assertion": {
+          "enum": [
+            "present",
+            "absent",
+            "possible",
+            "conditional",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "temporality": {
+          "enum": [
+            "current",
+            "historical",
+            "future",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "time": {
+          "$ref": "#/$defs/TimeMention"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "tumor_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "modality": {
+          "enum": [
+            "surgery",
+            "radiotherapy",
+            "systemic",
+            "supportive",
+            "other",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "action": {
+          "enum": [
+            "given",
+            "ongoing",
+            "planned",
+            "stopped",
+            "declined",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "line_of_therapy": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "intent": {
+          "enum": [
+            "curative",
+            "palliative",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "setting": {
+          "enum": [
+            "neoadjuvant",
+            "adjuvant",
+            "definitive",
+            "maintenance",
+            "salvage",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "response": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "subject",
+        "assertion",
+        "temporality",
+        "time",
+        "evidence",
+        "tumor_ref",
+        "name",
+        "modality",
+        "action",
+        "line_of_therapy",
+        "intent",
+        "setting",
+        "response"
+      ],
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "quote": {
+          "maxLength": 1200,
+          "minLength": 1,
+          "type": "string"
+        },
+        "source_section": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "quote",
+        "source_section"
+      ],
+      "type": "object"
+    },
+    "TimeMention": {
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "relation": {
+          "enum": [
+            "at",
+            "before",
+            "after",
+            "during",
+            "since",
+            "until",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "anchor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "date_iso": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "text",
+        "relation",
+        "anchor",
+        "date_iso"
+      ],
+      "type": "object"
+    },
+    "Tumor": {
+      "additionalProperties": false,
+      "properties": {
+        "subject": {
+          "enum": [
+            "index_patient",
+            "family_member",
+            "mother",
+            "fetus",
+            "newborn",
+            "other",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "assertion": {
+          "enum": [
+            "present",
+            "absent",
+            "possible",
+            "conditional",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "temporality": {
+          "enum": [
+            "current",
+            "historical",
+            "future",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "time": {
+          "$ref": "#/$defs/TimeMention"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "tumor_ref": {
+          "pattern": "^t[1-9][0-9]*$",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "primary_site": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "histology": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "grade": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "laterality": {
+          "enum": [
+            "left",
+            "right",
+            "bilateral",
+            "midline",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "disease_extent": {
+          "enum": [
+            "in_situ",
+            "localized",
+            "regional",
+            "distant_metastatic",
+            "hematologic",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "metastatic_sites": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "stage_group": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "stage_system": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "stage_edition": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "stage_context": {
+          "enum": [
+            "clinical",
+            "pathologic",
+            "post_neoadjuvant",
+            "recurrent",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "t_category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "n_category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "m_category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "disease_status": {
+          "enum": [
+            "active",
+            "remission",
+            "recurrence",
+            "progression",
+            "resolved",
+            "unknown"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "subject",
+        "assertion",
+        "temporality",
+        "time",
+        "evidence",
+        "tumor_ref",
+        "name",
+        "primary_site",
+        "histology",
+        "grade",
+        "laterality",
+        "disease_extent",
+        "metastatic_sites",
+        "stage_group",
+        "stage_system",
+        "stage_edition",
+        "stage_context",
+        "t_category",
+        "n_category",
+        "m_category",
+        "disease_status"
+      ],
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "coverage": {
+      "enum": [
+        "complete",
+        "limited",
+        "not_applicable"
+      ],
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "documentation_status": {
+      "enum": [
+        "documented",
+        "not_documented",
+        "explicitly_unknown",
+        "not_applicable"
+      ],
+      "type": "string"
+    },
+    "documentation_evidence": {
+      "items": {
+        "$ref": "#/$defs/Evidence"
+      },
+      "type": "array"
+    },
+    "tumors": {
+      "items": {
+        "$ref": "#/$defs/Tumor"
+      },
+      "type": "array"
+    },
+    "biomarkers": {
+      "items": {
+        "$ref": "#/$defs/Biomarker"
+      },
+      "type": "array"
+    },
+    "treatments": {
+      "items": {
+        "$ref": "#/$defs/CancerTreatment"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "coverage",
+    "limitations",
+    "documentation_status",
+    "documentation_evidence",
+    "tumors",
+    "biomarkers",
+    "treatments"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,39 @@
+input: runs/article-pilot/articles-audited.jsonl
+output: runs/article-pilot/vision-eligible
+endpoint: https://openrouter.ai/api/v1
+api_key_env: OPENROUTER_API_KEY
+budget_usd: 25
+concurrency: 12
+article_concurrency: 9
+validation_retries: 1
+retry_failed: false
+models:
+- id: google/gemma-4-31b-it
+  context_length: 262144
+  response_format: prompt_json
+  max_input_per_million: 0.1
+  max_output_per_million: 0.36
+  extra_body:
+    reasoning:
+      enabled: false
+    provider:
+      only:
+      - deepinfra/turbo
+      allow_fallbacks: false
+      require_parameters: true
+      max_price:
+        prompt: 0.1
+        completion: 0.36
+budget_file: runs/article-pilot/comparison/budget.sqlite
+request_deadline_seconds: 180
+packet_scope: whole_article
+roster_run: runs/article-pilot/clinical-eligible
+roster_model: meta/muse-glimmer-30b
+max_images: 100
+vision_samples:
+- pmcid: PMC13314001
+  figure_id: Fig1
+- pmcid: PMC12285374
+  figure_id: F1
+- pmcid: PMC10998798
+  figure_id: Fig1

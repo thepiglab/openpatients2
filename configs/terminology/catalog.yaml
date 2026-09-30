@@ -1,0 +1,29 @@
+# Run on CPU. Supply your locally obtained, appropriately licensed release files.
+# These paths are placeholders, not bundled data. Change version strings only
+# together with the actual files. Releases are explicit research snapshots.
+releases:
+  - kind: icd10cm
+    version: 'FY2026-April-1'
+    source_url: https://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10CM/2026-update/
+    path: data/terminology/icd10cm_tabular_2026.xml
+    # expected_sha256: {path: VERIFIED_FILE_SHA256}
+  - kind: snomed
+    version: 'US-20260901'
+    source_url: https://www.nlm.nih.gov/healthit/snomedct/us_edition.html
+    license_acknowledged: false # Set true only after obtaining/accepting the applicable license.
+    concepts: data/terminology/snomed/sct2_Concept_Snapshot_US1000124_20260901.txt
+    descriptions: data/terminology/snomed/sct2_Description_Snapshot-en_US1000124_20260901.txt
+    relationships: data/terminology/snomed/sct2_Relationship_Snapshot_US1000124_20260901.txt
+    language: data/terminology/snomed/der2_cRefset_LanguageSnapshot-en_US1000124_20260901.txt
+    dialect_refset: '900000000000509007' # US English
+  - kind: loinc
+    version: '2.83'
+    source_url: https://loinc.org/downloads/
+    license_acknowledged: false
+    path: data/terminology/loinc/LoincTable/Loinc.csv
+# Optional official RF2 ExtendedMap Snapshot: retained as UNEVALUATED rules.
+# Confirm the mapping's target ICD release from its documentation before enabling.
+# snomed_icd10_maps:
+#   - path: data/terminology/snomed/der2_iisssccRefset_ExtendedMapSnapshot_US1000124_20260901.txt
+#     source_version: 'US-20260901'
+#     target_version: 'EXACT_TARGET_VERSION_IN_THIS_CATALOG'

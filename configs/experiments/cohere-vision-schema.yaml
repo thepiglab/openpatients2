@@ -1,0 +1,61 @@
+input: runs/article-pilot/articles.jsonl
+output: runs/article-pilot/cohere-vision-schema
+endpoint: https://openrouter.ai/api/v1
+api_key_env: OPENROUTER_API_KEY
+budget_usd: 25
+concurrency: 6
+article_concurrency: 9
+validation_retries: 1
+retry_failed: false
+companion_tasks:
+- summary
+- timeline
+clinical_tasks:
+- case_context
+- demographics
+- conditions
+- symptoms_function
+- medications
+- allergies
+- procedures_devices
+- observations
+- oncology
+- family_genetics
+- reproductive_perinatal
+- social_exposures
+- outcomes
+- care_plans
+models:
+- id: cohere/command-a-plus
+  context_length: 192000
+  response_format: json_schema
+  max_input_per_million: 0.31
+  max_output_per_million: 1.6
+  extra_body:
+    reasoning:
+      enabled: false
+    provider:
+      only:
+      - cohere
+      allow_fallbacks: false
+      require_parameters: true
+      max_price:
+        prompt: 0.31
+        completion: 1.6
+  schema_profile: cohere
+budget_file: runs/article-pilot/comparison/budget.sqlite
+request_deadline_seconds: 90
+article_ids:
+- PMC13294519
+- PMC13290180
+- PMC10828776
+reference_rosters: runs/article-pilot/reference-rosters
+packet_scope: whole_article
+roster_run: runs/article-pilot/cohere-clinical
+vision_samples:
+- pmcid: PMC13294519
+  figure_id: fig1-15910199231219021
+- pmcid: PMC13290180
+  figure_id: ajts_103_23-f001
+- pmcid: PMC10828776
+  figure_id: F2

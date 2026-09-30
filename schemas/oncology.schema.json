@@ -1,0 +1,741 @@
+{
+  "$defs": {
+    "Biomarker": {
+      "additionalProperties": false,
+      "properties": {
+        "subject": {
+          "enum": [
+            "index_patient",
+            "family_member",
+            "mother",
+            "fetus",
+            "newborn",
+            "other",
+            "unknown"
+          ],
+          "title": "Subject",
+          "type": "string"
+        },
+        "assertion": {
+          "description": "Whether this fact is explicitly affirmed, negated, or uncertain; not test positivity.",
+          "enum": [
+            "present",
+            "absent",
+            "possible",
+            "conditional",
+            "unknown"
+          ],
+          "title": "Assertion",
+          "type": "string"
+        },
+        "temporality": {
+          "enum": [
+            "current",
+            "historical",
+            "future",
+            "unknown"
+          ],
+          "title": "Temporality",
+          "type": "string"
+        },
+        "time": {
+          "$ref": "#/$defs/TimeMention"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "tumor_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Tumor Ref"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "gene": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gene"
+        },
+        "alteration": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Alteration"
+        },
+        "origin": {
+          "enum": [
+            "somatic",
+            "germline",
+            "unknown"
+          ],
+          "title": "Origin",
+          "type": "string"
+        },
+        "interpretation": {
+          "enum": [
+            "positive",
+            "negative",
+            "wild_type",
+            "pathogenic",
+            "likely_pathogenic",
+            "vus",
+            "indeterminate",
+            "unknown"
+          ],
+          "title": "Interpretation",
+          "type": "string"
+        },
+        "text_value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Text Value"
+        },
+        "numeric_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Numeric Value"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Unit"
+        },
+        "assay": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Assay"
+        },
+        "specimen": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Specimen"
+        }
+      },
+      "required": [
+        "subject",
+        "assertion",
+        "temporality",
+        "time",
+        "evidence",
+        "tumor_ref",
+        "name",
+        "gene",
+        "alteration",
+        "origin",
+        "interpretation",
+        "text_value",
+        "numeric_value",
+        "unit",
+        "assay",
+        "specimen"
+      ],
+      "title": "Biomarker",
+      "type": "object"
+    },
+    "CancerTreatment": {
+      "additionalProperties": false,
+      "properties": {
+        "subject": {
+          "enum": [
+            "index_patient",
+            "family_member",
+            "mother",
+            "fetus",
+            "newborn",
+            "other",
+            "unknown"
+          ],
+          "title": "Subject",
+          "type": "string"
+        },
+        "assertion": {
+          "description": "Whether this fact is explicitly affirmed, negated, or uncertain; not test positivity.",
+          "enum": [
+            "present",
+            "absent",
+            "possible",
+            "conditional",
+            "unknown"
+          ],
+          "title": "Assertion",
+          "type": "string"
+        },
+        "temporality": {
+          "enum": [
+            "current",
+            "historical",
+            "future",
+            "unknown"
+          ],
+          "title": "Temporality",
+          "type": "string"
+        },
+        "time": {
+          "$ref": "#/$defs/TimeMention"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "tumor_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Tumor Ref"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "modality": {
+          "enum": [
+            "surgery",
+            "radiotherapy",
+            "systemic",
+            "supportive",
+            "other",
+            "unknown"
+          ],
+          "title": "Modality",
+          "type": "string"
+        },
+        "action": {
+          "enum": [
+            "given",
+            "ongoing",
+            "planned",
+            "stopped",
+            "declined",
+            "unknown"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "line_of_therapy": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Line Of Therapy"
+        },
+        "intent": {
+          "enum": [
+            "curative",
+            "palliative",
+            "unknown"
+          ],
+          "title": "Intent",
+          "type": "string"
+        },
+        "setting": {
+          "enum": [
+            "neoadjuvant",
+            "adjuvant",
+            "definitive",
+            "maintenance",
+            "salvage",
+            "unknown"
+          ],
+          "title": "Setting",
+          "type": "string"
+        },
+        "response": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Response"
+        }
+      },
+      "required": [
+        "subject",
+        "assertion",
+        "temporality",
+        "time",
+        "evidence",
+        "tumor_ref",
+        "name",
+        "modality",
+        "action",
+        "line_of_therapy",
+        "intent",
+        "setting",
+        "response"
+      ],
+      "title": "CancerTreatment",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "quote": {
+          "description": "Exact contiguous source text; include qualifiers and negation.",
+          "maxLength": 1200,
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        },
+        "source_section": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Heading actually present in the source, otherwise null.",
+          "title": "Source Section"
+        }
+      },
+      "required": [
+        "quote",
+        "source_section"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "TimeMention": {
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Verbatim temporal expression. Never invent dates or durations.",
+          "title": "Text"
+        },
+        "relation": {
+          "enum": [
+            "at",
+            "before",
+            "after",
+            "during",
+            "since",
+            "until",
+            "unknown"
+          ],
+          "title": "Relation",
+          "type": "string"
+        },
+        "anchor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Explicit anchor such as surgery or admission; not publication date.",
+          "title": "Anchor"
+        },
+        "date_iso": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "YYYY-MM-DD only if explicitly present as an unshifted full date; otherwise null.",
+          "title": "Date Iso"
+        }
+      },
+      "required": [
+        "text",
+        "relation",
+        "anchor",
+        "date_iso"
+      ],
+      "title": "TimeMention",
+      "type": "object"
+    },
+    "Tumor": {
+      "additionalProperties": false,
+      "properties": {
+        "subject": {
+          "enum": [
+            "index_patient",
+            "family_member",
+            "mother",
+            "fetus",
+            "newborn",
+            "other",
+            "unknown"
+          ],
+          "title": "Subject",
+          "type": "string"
+        },
+        "assertion": {
+          "description": "Whether this fact is explicitly affirmed, negated, or uncertain; not test positivity.",
+          "enum": [
+            "present",
+            "absent",
+            "possible",
+            "conditional",
+            "unknown"
+          ],
+          "title": "Assertion",
+          "type": "string"
+        },
+        "temporality": {
+          "enum": [
+            "current",
+            "historical",
+            "future",
+            "unknown"
+          ],
+          "title": "Temporality",
+          "type": "string"
+        },
+        "time": {
+          "$ref": "#/$defs/TimeMention"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "tumor_ref": {
+          "description": "Local tumor ID within this section; never identifies a person.",
+          "pattern": "^t[1-9][0-9]*$",
+          "title": "Tumor Ref",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "primary_site": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Primary Site"
+        },
+        "histology": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Histology"
+        },
+        "grade": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Grade"
+        },
+        "laterality": {
+          "enum": [
+            "left",
+            "right",
+            "bilateral",
+            "midline",
+            "unknown"
+          ],
+          "title": "Laterality",
+          "type": "string"
+        },
+        "disease_extent": {
+          "enum": [
+            "in_situ",
+            "localized",
+            "regional",
+            "distant_metastatic",
+            "hematologic",
+            "unknown"
+          ],
+          "title": "Disease Extent",
+          "type": "string"
+        },
+        "metastatic_sites": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Metastatic Sites",
+          "type": "array"
+        },
+        "stage_group": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Stage Group"
+        },
+        "stage_system": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Stage System"
+        },
+        "stage_edition": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Stage Edition"
+        },
+        "stage_context": {
+          "enum": [
+            "clinical",
+            "pathologic",
+            "post_neoadjuvant",
+            "recurrent",
+            "unknown"
+          ],
+          "title": "Stage Context",
+          "type": "string"
+        },
+        "t_category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "T Category"
+        },
+        "n_category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "N Category"
+        },
+        "m_category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "M Category"
+        },
+        "disease_status": {
+          "enum": [
+            "active",
+            "remission",
+            "recurrence",
+            "progression",
+            "resolved",
+            "unknown"
+          ],
+          "title": "Disease Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "subject",
+        "assertion",
+        "temporality",
+        "time",
+        "evidence",
+        "tumor_ref",
+        "name",
+        "primary_site",
+        "histology",
+        "grade",
+        "laterality",
+        "disease_extent",
+        "metastatic_sites",
+        "stage_group",
+        "stage_system",
+        "stage_edition",
+        "stage_context",
+        "t_category",
+        "n_category",
+        "m_category",
+        "disease_status"
+      ],
+      "title": "Tumor",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "coverage": {
+      "description": "complete means this task reviewed the supplied source, NOT that the patient's history is complete.",
+      "enum": [
+        "complete",
+        "limited",
+        "not_applicable"
+      ],
+      "title": "Coverage",
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "documentation_status": {
+      "description": "documented includes positive, negative, possible and historical facts. Silence is not_documented, never a clinical negative.",
+      "enum": [
+        "documented",
+        "not_documented",
+        "explicitly_unknown",
+        "not_applicable"
+      ],
+      "title": "Documentation Status",
+      "type": "string"
+    },
+    "documentation_evidence": {
+      "description": "Exact source support for explicitly_unknown/not_applicable; empty for not_documented. Fact evidence stays on each item.",
+      "items": {
+        "$ref": "#/$defs/Evidence"
+      },
+      "title": "Documentation Evidence",
+      "type": "array"
+    },
+    "tumors": {
+      "items": {
+        "$ref": "#/$defs/Tumor"
+      },
+      "title": "Tumors",
+      "type": "array"
+    },
+    "biomarkers": {
+      "items": {
+        "$ref": "#/$defs/Biomarker"
+      },
+      "title": "Biomarkers",
+      "type": "array"
+    },
+    "treatments": {
+      "items": {
+        "$ref": "#/$defs/CancerTreatment"
+      },
+      "title": "Treatments",
+      "type": "array"
+    }
+  },
+  "required": [
+    "coverage",
+    "limitations",
+    "documentation_status",
+    "documentation_evidence",
+    "tumors",
+    "biomarkers",
+    "treatments"
+  ],
+  "title": "Oncology",
+  "type": "object"
+}

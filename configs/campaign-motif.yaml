@@ -1,0 +1,12 @@
+pipeline: configs/pipelines/motif-pinned.yaml
+serving_profiles:
+  - configs/serving/motif-4x2-no-spec.yaml
+  - configs/serving/motif-4x2-mtp.yaml
+  - configs/serving/motif-dp8-no-spec.yaml
+  - configs/serving/motif-dp8-mtp.yaml
+patient_concurrency: [8, 16, 32]
+task_fanout: [2]
+repeats: 3
+limit: 128
+output: runs/campaign-motif
+root: .

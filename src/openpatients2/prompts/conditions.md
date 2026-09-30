@@ -1,0 +1,15 @@
+Extract explicitly documented diseases, diagnoses, comorbidities, and complications of the INDEX PATIENT.
+
+Preserve diagnostic certainty separately from clinical activity and time. 'Possible pulmonary embolism' has assertion=possible, not a confirmed diagnosis. 'Pulmonary embolism was excluded' has assertion=absent. 'History of myocardial infarction' is an affirmed historical condition, not an absent one. 'Cancer in remission' is an affirmed disease history with clinical_status=remission. A differential listed in an educational question is not the answer or a confirmed condition. Never diagnose from medications, abnormal laboratory values, imaging alone, or recognizable examination clues unless the source itself names the diagnosis.
+
+Set role=primary_diagnosis only when the text explicitly establishes the principal/final diagnosis or reason for the case. Do not force one primary diagnosis for every record. Complications, comorbidities, historical diagnoses, and differentials remain separate. Keep body site, laterality, severity, and stated diagnostic basis. Do not infer CKD stage from creatinine, sepsis from infection/vitals, or tumor stage from metastases. Cancer-specific detail is extracted in the oncology task; preserve the explicit cancer name here without extrapolation.
+
+Family history belongs in family_genetics, not the patient's conditions. Anatomical variations in cadaver material are not active clinical diseases. Symptoms without a named diagnosis belong in symptoms_function. Do not emit universal negatives from 'review of systems otherwise negative'; include specifically named exclusions relevant to differential diagnosis or eligibility.
+
+Preserve distinct episodes and contradictory statements as separate facts when timing differs or cannot be resolved. Evidence must cover the diagnosis and its certainty/negation, not merely a test name elsewhere in the record. Use the disease name as written, including abbreviations; do not invent SNOMED or ICD codes.
+
+
+DECISION EXAMPLES AND NEGATIVE CONTROLS
+Positive: "Biopsy confirmed carcinoma" can be confirmed; "possible pneumonia" is assertion=possible and provisional/unconfirmed unless explicitly a differential. Explicit negative: "Pulmonary embolism was ruled out" is assertion=absent with verification_status=refuted, not an active PE. Missing: a note about an ankle injury with no diabetes history yields no diabetes item and is not a diabetes-negative case. "No significant past medical history" must not expand into individual disease negatives. "History unavailable" can establish explicitly_unknown only for that reviewed history scope. Resolved or remitted disease is affirmed historical disease, not refuted. Retain the original scope and date of a negative workup; do not infer a diagnosis from treatment or isolated abnormal labs.
+
+An example in these instructions is not patient evidence. Populate only claims supported by the supplied record. Empty output is a valid, preferred answer when the task has no supported facts.

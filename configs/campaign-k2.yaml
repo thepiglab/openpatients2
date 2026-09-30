@@ -1,0 +1,11 @@
+pipeline: configs/pipelines/k2-pinned.yaml
+serving_profiles:
+  - configs/serving/k2-vllm-tp8.yaml
+  - configs/serving/k2-vllm-tp2-dp4.yaml
+  - configs/serving/k2-vllm-4x2.yaml
+patient_concurrency: [8, 16, 32]
+task_fanout: [2]
+repeats: 3
+limit: 128
+output: runs/campaign-k2
+root: .

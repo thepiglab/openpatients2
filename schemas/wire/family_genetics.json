@@ -1,0 +1,272 @@
+{
+  "$defs": {
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "quote": {
+          "maxLength": 1200,
+          "minLength": 1,
+          "type": "string"
+        },
+        "source_section": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "quote",
+        "source_section"
+      ],
+      "type": "object"
+    },
+    "FamilyGenetic": {
+      "additionalProperties": false,
+      "properties": {
+        "subject": {
+          "enum": [
+            "index_patient",
+            "family_member",
+            "mother",
+            "fetus",
+            "newborn",
+            "other",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "assertion": {
+          "enum": [
+            "present",
+            "absent",
+            "possible",
+            "conditional",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "temporality": {
+          "enum": [
+            "current",
+            "historical",
+            "future",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "time": {
+          "$ref": "#/$defs/TimeMention"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "name": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "family_condition",
+            "genetic_test",
+            "inheritance",
+            "consanguinity"
+          ],
+          "type": "string"
+        },
+        "relative": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "age_at_diagnosis_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "gene": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "variant": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "origin": {
+          "enum": [
+            "germline",
+            "somatic",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "interpretation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "inheritance": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "subject",
+        "assertion",
+        "temporality",
+        "time",
+        "evidence",
+        "name",
+        "kind",
+        "relative",
+        "age_at_diagnosis_text",
+        "gene",
+        "variant",
+        "origin",
+        "interpretation",
+        "inheritance"
+      ],
+      "type": "object"
+    },
+    "TimeMention": {
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "relation": {
+          "enum": [
+            "at",
+            "before",
+            "after",
+            "during",
+            "since",
+            "until",
+            "unknown"
+          ],
+          "type": "string"
+        },
+        "anchor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "date_iso": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "text",
+        "relation",
+        "anchor",
+        "date_iso"
+      ],
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "coverage": {
+      "enum": [
+        "complete",
+        "limited",
+        "not_applicable"
+      ],
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "documentation_status": {
+      "enum": [
+        "documented",
+        "not_documented",
+        "explicitly_unknown",
+        "not_applicable"
+      ],
+      "type": "string"
+    },
+    "documentation_evidence": {
+      "items": {
+        "$ref": "#/$defs/Evidence"
+      },
+      "type": "array"
+    },
+    "items": {
+      "items": {
+        "$ref": "#/$defs/FamilyGenetic"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "coverage",
+    "limitations",
+    "documentation_status",
+    "documentation_evidence",
+    "items"
+  ],
+  "type": "object"
+}

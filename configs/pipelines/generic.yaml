@@ -1,0 +1,22 @@
+# Bring your own OpenAI-compatible server. API keys are read from the environment.
+api:
+  endpoints: [http://127.0.0.1:8000/v1]
+  api_key_env: OPENAI_API_KEY
+  model: YOUR_SERVED_MODEL_NAME
+  model_id: YOUR_ACTUAL_CHECKPOINT_ID
+  revision: UNPINNED
+  response_format: prompt_json
+  max_tokens: 16384
+  max_retry_tokens: 16384
+input: data/prepared.jsonl
+output: runs/generic
+patient_concurrency: 8
+task_fanout: 2
+request_concurrency: 32
+max_model_len: 65536
+token_profile: data/generic.tokens.jsonl
+require_token_profile: true
+validation_retries: 1
+recover_citation_formatting: true
+recover_identical_duplicates: true
+targeted_item_repair: true

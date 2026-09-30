@@ -1,0 +1,39 @@
+# Best cost/checklist candidate in the small hosted studies; not a validated
+# model ranking. These are enforced price ceilings from the recorded route.
+# Use fresh input/output shards and an account budget you actually intend to spend.
+input: data/articles.jsonl
+output: runs/article-workflow-spark
+endpoint: https://openrouter.ai/api/v1
+api_key_env: OPENROUTER_API_KEY
+budget_usd: 25
+budget_file: runs/article-workflow-spark/budget.sqlite
+concurrency: 6
+article_concurrency: 2
+request_deadline_seconds: 240
+validation_retries: 1
+retry_failed: false
+recover_citation_formatting: true
+recover_identical_duplicates: true
+targeted_item_repair: true
+packet_scope: whole_article
+clinical_source: pmc_text
+allow_pdf_review: false
+figure_attribution: true
+figure_max_tokens: 6144
+clinical_max_tokens: 16384
+companion_tasks: [summary, timeline]
+# Omitting clinical_tasks enables all 14 domains. Roster/figures/companions use
+# canonical JATS. Official TXT is used only for clinical tasks when available.
+models:
+- id: meta/muse-spark-1.2
+  context_length: 131072
+  response_format: prompt_json
+  max_input_per_million: 1.26
+  max_output_per_million: 4.26
+  extra_body:
+    reasoning: {effort: low}
+    provider:
+      only: [meta]
+      allow_fallbacks: false
+      require_parameters: true
+      max_price: {prompt: 1.26, completion: 4.26}

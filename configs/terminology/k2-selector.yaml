@@ -1,0 +1,24 @@
+# Uses your already-serving OpenAI-compatible endpoint, independently of extraction.
+# Set revision to the sha in models/k2/op2_snapshot.json before GPU inference.
+input: data/coding-requests.jsonl
+output: runs/coding-k2-low
+api:
+  endpoints: [http://127.0.0.1:8000/v1]
+  model: clinical-extractor
+  model_id: IFM/K2-Horizon-375B-A23B-NVFP4
+  revision: UNPINNED
+  response_format: json_schema
+  temperature: 0.0
+  top_p: 1.0
+  max_tokens: 4096
+  http_retries: 2
+  save_messages: true
+  extra_body:
+    chat_template_kwargs:
+      reasoning_effort: low
+concurrency: 32
+max_model_len: 32768
+safety_tokens: 512
+require_token_profile: true
+token_profile: data/coding-k2.tokens.jsonl
+allow_unpinned_revision: false

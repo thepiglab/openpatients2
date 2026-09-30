@@ -1,0 +1,32 @@
+name: Documented male cases aged 40-75 with stage-IV EGFR-positive lung cancer
+# Default source filters exclude educational/synthetic vignettes and unknown provenance.
+source_kinds: [published_case_summary, ehr_summary]
+deduplicate_exact_text: true
+criteria:
+  - id: sex
+    domain: demographics
+    where:
+      - {field: attribute, op: eq, value: documented_sex}
+      - {field: text_value, op: eq, value: male}
+  - id: age
+    domain: demographics
+    where:
+      - {field: attribute, op: eq, value: age_at_presentation}
+      - {field: unit, op: eq, value: years}
+      - {field: numeric_value, op: gte, value: 40}
+      - {field: numeric_value, op: lte, value: 75}
+  - id: cancer
+    domain: oncology_tumors
+    where:
+      - {field: primary_site, op: eq, value: lung}
+      - {field: stage_group, op: eq, value: IV}
+      - {field: disease_status, op: eq, value: active}
+  - id: biomarker
+    domain: oncology_biomarkers
+    linked_to: cancer
+    where:
+      - {field: gene, op: eq, value: EGFR}
+      - {field: interpretation, op: eq, value: positive}
+# Optional uniform sample of matching corpus cases, NOT population representativeness:
+# sample_size: 100
+# seed: 42

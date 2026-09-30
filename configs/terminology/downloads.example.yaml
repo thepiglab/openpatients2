@@ -1,0 +1,27 @@
+# Explicit opt-in: `op2 vocab-download --config ... --execute`.
+# Do not run on the local pilot. Obtain the current exact release URLs and hashes
+# from the publishers and use the same versions in catalog.yaml.
+output: data/terminology
+max_download_bytes: 2000000000
+max_unpacked_bytes: 6000000000
+downloads:
+  - kind: icd10cm
+    version: REPLACE_WITH_EXACT_RELEASE
+    url_env: ICD10CM_RELEASE_ZIP_URL
+    members:
+      REPLACE_WITH_TABULAR_XML_ARCHIVE_MEMBER: icd10cm_tabular.xml
+  - kind: snomed
+    version: REPLACE_WITH_EXACT_RELEASE
+    license_acknowledged: false
+    url_env: SNOMED_AUTHORIZED_RELEASE_URL
+    members:
+      REPLACE_WITH_RF2_CONCEPT_MEMBER: snomed/concepts.txt
+      REPLACE_WITH_RF2_DESCRIPTION_MEMBER: snomed/descriptions.txt
+      REPLACE_WITH_RF2_RELATIONSHIP_MEMBER: snomed/relationships.txt
+      REPLACE_WITH_RF2_LANGUAGE_MEMBER: snomed/language.txt
+  - kind: loinc
+    version: REPLACE_WITH_EXACT_RELEASE
+    license_acknowledged: false
+    url_env: LOINC_AUTHORIZED_RELEASE_URL
+    members:
+      LoincTable/Loinc.csv: loinc/Loinc.csv

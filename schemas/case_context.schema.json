@@ -1,0 +1,175 @@
+{
+  "$defs": {
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "quote": {
+          "description": "Exact contiguous source text; include qualifiers and negation.",
+          "maxLength": 1200,
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        },
+        "source_section": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Heading actually present in the source, otherwise null.",
+          "title": "Source Section"
+        }
+      },
+      "required": [
+        "quote",
+        "source_section"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "coverage": {
+      "description": "complete means this task reviewed the supplied source, NOT that the patient's history is complete.",
+      "enum": [
+        "complete",
+        "limited",
+        "not_applicable"
+      ],
+      "title": "Coverage",
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "documentation_status": {
+      "description": "documented includes positive, negative, possible and historical facts. Silence is not_documented, never a clinical negative.",
+      "enum": [
+        "documented",
+        "not_documented",
+        "explicitly_unknown",
+        "not_applicable"
+      ],
+      "title": "Documentation Status",
+      "type": "string"
+    },
+    "documentation_evidence": {
+      "description": "Exact source support for explicitly_unknown/not_applicable; empty for not_documented. Fact evidence stays on each item.",
+      "items": {
+        "$ref": "#/$defs/Evidence"
+      },
+      "title": "Documentation Evidence",
+      "type": "array"
+    },
+    "case_kind": {
+      "enum": [
+        "clinical_case",
+        "clinical_record",
+        "exam_vignette",
+        "synthetic_vignette",
+        "cadaveric_anatomic",
+        "animal",
+        "in_vitro",
+        "review_without_case",
+        "multi_patient",
+        "unknown"
+      ],
+      "title": "Case Kind",
+      "type": "string"
+    },
+    "index_subject_description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Index Subject Description"
+    },
+    "species": {
+      "enum": [
+        "human",
+        "nonhuman",
+        "unknown"
+      ],
+      "title": "Species",
+      "type": "string"
+    },
+    "multiple_index_patients": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Multiple Index Patients"
+    },
+    "subject_state": {
+      "enum": [
+        "living_at_presentation",
+        "deceased_during_course",
+        "cadaver",
+        "unknown"
+      ],
+      "title": "Subject State",
+      "type": "string"
+    },
+    "care_setting": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Care Setting"
+    },
+    "chief_complaint": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Chief Complaint"
+    },
+    "evidence": {
+      "items": {
+        "$ref": "#/$defs/Evidence"
+      },
+      "title": "Evidence",
+      "type": "array"
+    }
+  },
+  "required": [
+    "coverage",
+    "limitations",
+    "documentation_status",
+    "documentation_evidence",
+    "case_kind",
+    "index_subject_description",
+    "species",
+    "multiple_index_patients",
+    "subject_state",
+    "care_setting",
+    "chief_complaint",
+    "evidence"
+  ],
+  "title": "CaseContext",
+  "type": "object"
+}

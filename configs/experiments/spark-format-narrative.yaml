@@ -1,0 +1,36 @@
+input: runs/article-pilot/articles.jsonl
+output: runs/article-pilot/spark-format-narrative
+endpoint: https://openrouter.ai/api/v1
+api_key_env: OPENROUTER_API_KEY
+budget_usd: 25
+concurrency: 6
+article_concurrency: 6
+validation_retries: 1
+retry_failed: true
+companion_tasks: []
+clinical_tasks: []
+models:
+- id: meta/muse-spark-1.2-contributor
+  context_length: 1048576
+  response_format: prompt_json
+  max_input_per_million: 0.11
+  max_output_per_million: 0.21
+  extra_body:
+    reasoning:
+      effort: low
+    provider:
+      only:
+      - meta
+      allow_fallbacks: false
+      require_parameters: true
+      max_price:
+        prompt: 0.11
+        completion: 0.21
+budget_file: runs/article-pilot/comparison/budget.sqlite
+request_deadline_seconds: 180
+article_ids:
+- PMC13314001
+- PMC13290180
+reference_rosters: null
+packet_scope: whole_article
+generation_style: narrative_then_structure

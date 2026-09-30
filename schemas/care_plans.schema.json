@@ -1,0 +1,278 @@
+{
+  "$defs": {
+    "CarePlan": {
+      "additionalProperties": false,
+      "properties": {
+        "subject": {
+          "enum": [
+            "index_patient",
+            "family_member",
+            "mother",
+            "fetus",
+            "newborn",
+            "other",
+            "unknown"
+          ],
+          "title": "Subject",
+          "type": "string"
+        },
+        "assertion": {
+          "description": "Whether this fact is explicitly affirmed, negated, or uncertain; not test positivity.",
+          "enum": [
+            "present",
+            "absent",
+            "possible",
+            "conditional",
+            "unknown"
+          ],
+          "title": "Assertion",
+          "type": "string"
+        },
+        "temporality": {
+          "enum": [
+            "current",
+            "historical",
+            "future",
+            "unknown"
+          ],
+          "title": "Temporality",
+          "type": "string"
+        },
+        "time": {
+          "$ref": "#/$defs/TimeMention"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "action_text": {
+          "title": "Action Text",
+          "type": "string"
+        },
+        "plan_type": {
+          "enum": [
+            "follow_up",
+            "referral",
+            "monitoring",
+            "counseling",
+            "goals_of_care",
+            "other"
+          ],
+          "title": "Plan Type",
+          "type": "string"
+        },
+        "target": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Target"
+        },
+        "responsible_specialty": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Responsible Specialty"
+        },
+        "urgency": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Urgency"
+        },
+        "action_status": {
+          "enum": [
+            "planned",
+            "recommended",
+            "scheduled",
+            "declined",
+            "completed",
+            "unknown"
+          ],
+          "title": "Action Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "subject",
+        "assertion",
+        "temporality",
+        "time",
+        "evidence",
+        "action_text",
+        "plan_type",
+        "target",
+        "responsible_specialty",
+        "urgency",
+        "action_status"
+      ],
+      "title": "CarePlan",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "quote": {
+          "description": "Exact contiguous source text; include qualifiers and negation.",
+          "maxLength": 1200,
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        },
+        "source_section": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Heading actually present in the source, otherwise null.",
+          "title": "Source Section"
+        }
+      },
+      "required": [
+        "quote",
+        "source_section"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "TimeMention": {
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Verbatim temporal expression. Never invent dates or durations.",
+          "title": "Text"
+        },
+        "relation": {
+          "enum": [
+            "at",
+            "before",
+            "after",
+            "during",
+            "since",
+            "until",
+            "unknown"
+          ],
+          "title": "Relation",
+          "type": "string"
+        },
+        "anchor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Explicit anchor such as surgery or admission; not publication date.",
+          "title": "Anchor"
+        },
+        "date_iso": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "YYYY-MM-DD only if explicitly present as an unshifted full date; otherwise null.",
+          "title": "Date Iso"
+        }
+      },
+      "required": [
+        "text",
+        "relation",
+        "anchor",
+        "date_iso"
+      ],
+      "title": "TimeMention",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "coverage": {
+      "description": "complete means this task reviewed the supplied source, NOT that the patient's history is complete.",
+      "enum": [
+        "complete",
+        "limited",
+        "not_applicable"
+      ],
+      "title": "Coverage",
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "documentation_status": {
+      "description": "documented includes positive, negative, possible and historical facts. Silence is not_documented, never a clinical negative.",
+      "enum": [
+        "documented",
+        "not_documented",
+        "explicitly_unknown",
+        "not_applicable"
+      ],
+      "title": "Documentation Status",
+      "type": "string"
+    },
+    "documentation_evidence": {
+      "description": "Exact source support for explicitly_unknown/not_applicable; empty for not_documented. Fact evidence stays on each item.",
+      "items": {
+        "$ref": "#/$defs/Evidence"
+      },
+      "title": "Documentation Evidence",
+      "type": "array"
+    },
+    "items": {
+      "items": {
+        "$ref": "#/$defs/CarePlan"
+      },
+      "title": "Items",
+      "type": "array"
+    }
+  },
+  "required": [
+    "coverage",
+    "limitations",
+    "documentation_status",
+    "documentation_evidence",
+    "items"
+  ],
+  "title": "CarePlans",
+  "type": "object"
+}

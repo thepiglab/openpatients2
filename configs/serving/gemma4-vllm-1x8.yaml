@@ -1,0 +1,22 @@
+name: gemma4-vllm-1x8
+backend: vllm
+version: 0.30.0
+image_reference: docker://vllm/vllm-openai:v0.30.0
+sif: containers/vllm030.sif
+model_path: models/gemma4-31b
+model_id: google/gemma-4-31B-it
+tensor_parallel: 8
+data_parallel: 1
+replicas: 1
+expert_parallel: false
+reasoning_parser: gemma4
+speculation: 'off'
+max_model_len: 32768
+max_num_seqs: 128
+max_batched_tokens: 16384
+gpu_memory_utilization: 0.9
+kv_cache_dtype: auto
+prefix_cache: true
+experimental: true
+validation_note: Command-generation checked only. Requires a pinned model snapshot
+  and B200 runtime smoke. Compare BF16 baseline before quantization or speculation.

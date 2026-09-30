@@ -1,0 +1,26 @@
+name: k2-sglang-tp8
+backend: sglang
+version: 0.5.20
+image_reference: Build SGLang v0.5.20 and record immutable image digest; see docs/DEPLOYMENT.md
+sif: containers/k2-sglang0520.sif
+model_path: models/k2
+model_id: IFM/K2-Horizon-375B-A23B-NVFP4
+tensor_parallel: 8
+data_parallel: 1
+replicas: 1
+expert_parallel: false
+external_dp: true
+reasoning_parser: k2_horizon
+speculation: 'off'
+max_model_len: 65536
+max_num_seqs: 128
+max_batched_tokens: 16384
+gpu_memory_utilization: 0.85
+kv_cache_dtype: auto
+prefix_cache: true
+extra_args:
+- --model-loader-extra-config
+- '{"enable_multithread_load":false}'
+experimental: true
+validation_note: Official K2 SGLang recipe validates H200 BF16 only. B200 NVFP4 +
+  structured output is an unvalidated challenger; kernel/backend smoke is mandatory.

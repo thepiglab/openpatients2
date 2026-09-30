@@ -1,0 +1,11 @@
+name: Published human cases aged at least 50 at presentation
+source_kinds: [published_case_summary]
+# Explicit pilot choice: retain source-limited records for manual review.
+include_incomplete: true
+criteria:
+  - id: age
+    domain: demographics
+    where:
+      - {field: attribute, op: eq, value: age_at_presentation}
+      - {field: unit, op: in, value: [year, years, yr, yrs, y]}
+      - {field: numeric_value, op: gte, value: 50}

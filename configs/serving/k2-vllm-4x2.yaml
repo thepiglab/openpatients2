@@ -1,0 +1,26 @@
+name: k2-vllm-4x2
+backend: vllm
+version: 0.30.0
+image_reference: docker://vllm/vllm-openai:v0.30.0
+sif: containers/k2-vllm030.sif
+model_path: models/k2
+model_id: IFM/K2-Horizon-375B-A23B-NVFP4
+tensor_parallel: 2
+data_parallel: 1
+replicas: 4
+expert_parallel: true
+external_dp: true
+reasoning_parser: k2_horizon
+speculation: 'off'
+max_model_len: 65536
+max_num_seqs: 128
+max_batched_tokens: 16384
+gpu_memory_utilization: 0.85
+kv_cache_dtype: auto
+prefix_cache: true
+extra_args:
+- --chat-template-content-format
+- string
+experimental: true
+validation_note: Upstream v0.30 supports K2; exact NVFP4/B200 extraction stack must
+  pass smoke. Not measured by this project.

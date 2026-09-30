@@ -1,0 +1,23 @@
+# First pin configs/pipelines/k2.yaml to configs/pipelines/k2-pinned.yaml.
+# ALL parameters/topology other than this documented control stay fixed.
+pipeline: configs/pipelines/k2-pinned.yaml
+output: runs/reasoning-k2
+sample_size: 256
+sample_seed: 1927
+control_path: chat_template_kwargs.reasoning_effort
+levels:
+  - {name: low, value: low}
+  - {name: medium, value: medium}
+  - {name: high, value: high}
+seeds: [17, 43, 101]
+send_seed: true
+# Equal TOTAL reasoning + final-output allowance. Do not force high to fit a low-mode cap.
+max_tokens: 32768
+bootstrap_resamples: 2000
+permutation_resamples: 9999
+analysis_seed: 42
+gold: null  # Point to independently reviewed JSONL labels to assess accuracy.
+notes: >-
+  K2's recipe documents low/medium/high through chat_template_kwargs.reasoning_effort.
+  Confirm parser and reasoning behavior on your pinned vLLM/SGLang environment.
+  The supplied sample size is an engineering starting point, not a power calculation.

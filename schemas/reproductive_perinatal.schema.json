@@ -1,0 +1,304 @@
+{
+  "$defs": {
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "quote": {
+          "description": "Exact contiguous source text; include qualifiers and negation.",
+          "maxLength": 1200,
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        },
+        "source_section": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Heading actually present in the source, otherwise null.",
+          "title": "Source Section"
+        }
+      },
+      "required": [
+        "quote",
+        "source_section"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "ReproductivePerinatal": {
+      "additionalProperties": false,
+      "properties": {
+        "subject": {
+          "enum": [
+            "index_patient",
+            "family_member",
+            "mother",
+            "fetus",
+            "newborn",
+            "other",
+            "unknown"
+          ],
+          "title": "Subject",
+          "type": "string"
+        },
+        "assertion": {
+          "description": "Whether this fact is explicitly affirmed, negated, or uncertain; not test positivity.",
+          "enum": [
+            "present",
+            "absent",
+            "possible",
+            "conditional",
+            "unknown"
+          ],
+          "title": "Assertion",
+          "type": "string"
+        },
+        "temporality": {
+          "enum": [
+            "current",
+            "historical",
+            "future",
+            "unknown"
+          ],
+          "title": "Temporality",
+          "type": "string"
+        },
+        "time": {
+          "$ref": "#/$defs/TimeMention"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "event": {
+          "enum": [
+            "pregnancy",
+            "gravidity_parity",
+            "delivery",
+            "gestational_age",
+            "newborn",
+            "congenital",
+            "fertility",
+            "lactation",
+            "other"
+          ],
+          "title": "Event",
+          "type": "string"
+        },
+        "text_value": {
+          "title": "Text Value",
+          "type": "string"
+        },
+        "numeric_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Numeric Value"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Unit"
+        },
+        "related_subject": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Related Subject"
+        },
+        "gestational_age_weeks": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gestational Age Weeks"
+        },
+        "birth_weight_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Birth Weight Text"
+        },
+        "outcome": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Outcome"
+        }
+      },
+      "required": [
+        "subject",
+        "assertion",
+        "temporality",
+        "time",
+        "evidence",
+        "event",
+        "text_value",
+        "numeric_value",
+        "unit",
+        "related_subject",
+        "gestational_age_weeks",
+        "birth_weight_text",
+        "outcome"
+      ],
+      "title": "ReproductivePerinatal",
+      "type": "object"
+    },
+    "TimeMention": {
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Verbatim temporal expression. Never invent dates or durations.",
+          "title": "Text"
+        },
+        "relation": {
+          "enum": [
+            "at",
+            "before",
+            "after",
+            "during",
+            "since",
+            "until",
+            "unknown"
+          ],
+          "title": "Relation",
+          "type": "string"
+        },
+        "anchor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Explicit anchor such as surgery or admission; not publication date.",
+          "title": "Anchor"
+        },
+        "date_iso": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "YYYY-MM-DD only if explicitly present as an unshifted full date; otherwise null.",
+          "title": "Date Iso"
+        }
+      },
+      "required": [
+        "text",
+        "relation",
+        "anchor",
+        "date_iso"
+      ],
+      "title": "TimeMention",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "coverage": {
+      "description": "complete means this task reviewed the supplied source, NOT that the patient's history is complete.",
+      "enum": [
+        "complete",
+        "limited",
+        "not_applicable"
+      ],
+      "title": "Coverage",
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "documentation_status": {
+      "description": "documented includes positive, negative, possible and historical facts. Silence is not_documented, never a clinical negative.",
+      "enum": [
+        "documented",
+        "not_documented",
+        "explicitly_unknown",
+        "not_applicable"
+      ],
+      "title": "Documentation Status",
+      "type": "string"
+    },
+    "documentation_evidence": {
+      "description": "Exact source support for explicitly_unknown/not_applicable; empty for not_documented. Fact evidence stays on each item.",
+      "items": {
+        "$ref": "#/$defs/Evidence"
+      },
+      "title": "Documentation Evidence",
+      "type": "array"
+    },
+    "items": {
+      "items": {
+        "$ref": "#/$defs/ReproductivePerinatal"
+      },
+      "title": "Items",
+      "type": "array"
+    }
+  },
+  "required": [
+    "coverage",
+    "limitations",
+    "documentation_status",
+    "documentation_evidence",
+    "items"
+  ],
+  "title": "ReproductivePerinatalSection",
+  "type": "object"
+}
