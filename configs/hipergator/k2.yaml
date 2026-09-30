@@ -1,4 +1,4 @@
-# Eight B200s per GPU job. Topologies are educated starting points, not measured optima.
+# Four B200s for 375B; two for smaller models. Topologies require hardware measurement.
 account: cai5724
 qos: cai5724
 gpu_partition: hpg-b200
@@ -18,8 +18,7 @@ download_workers: 4
 slurm:
   setup: {cpus: 8, mem: 32G, time: '04:00:00'}
   download: {cpus: 8, mem: 32G, time: '08:00:00'}
-  # Match the eight-GPU CPU/RAM envelope used by the cai5724 ms2smiles campaigns.
-  gpu: {cpus: 32, mem: 250G, time: '12:00:00'}
+  gpu: {cpus: 8, mem: 64G, time: '12:00:00'}
   cleanup: {cpus: 2, mem: 4G, time: '01:00:00'}
   report: {cpus: 2, mem: 4G, time: '01:00:00'}
 arms:
@@ -39,15 +38,17 @@ models:
   - name: k2-375b-nvfp4
     id: IFM/K2-Horizon-375B-A23B-NVFP4
     revision: 0a074bccc707eca1a492e2d3ccb1ede33e39904c
-    replicas: 2
+    replicas: 1
     tensor_parallel: 4
+    # Preserve host loading headroom for the 229.64 GB checkpoint.
+    gpu_resources: {cpus: 16, mem: 250G}
     expert_parallel: true
     quantization: compressed-tensors
     expected_bytes: 229640053319
   - name: k2-32b-nvfp4
     id: IFM/K2-Horizon-32B-NVFP4
     revision: 71b07893498c52a6508bfce3e3ccb5456ba75328
-    replicas: 8
+    replicas: 2
     tensor_parallel: 1
     expert_parallel: false
     quantization: compressed-tensors
@@ -55,15 +56,16 @@ models:
   - name: k2-mova-36b-fp8
     id: IFM/K2-Horizon-MoVA-36B-A4B-FP8
     revision: feffd71999eb06bfa2fbb8ad220059b694077457
-    replicas: 8
+    replicas: 2
     tensor_parallel: 1
+    gpu_resources: {mem: 128G}
     expert_parallel: true
     quantization: fp8
     expected_bytes: 48390779584
   - name: k2-7b-fp8
     id: IFM/K2-Horizon-7B-FP8
     revision: 59d473210f0b9ee3ea559a867fc23e7059473944
-    replicas: 8
+    replicas: 2
     tensor_parallel: 1
     expert_parallel: false
     quantization: compressed-tensors

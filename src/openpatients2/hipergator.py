@@ -27,6 +27,14 @@ from .benchmark import environment_report
 DEFAULT_CONFIG = 'configs/hipergator/k2.yaml'
 
 
+def gpu_count(model):
+    if any(type(model[k]) is not int or model[k] < 1 for k in ('replicas', 'tensor_parallel')):
+        raise ValueError('Each profile must use between one and eight GPUs with positive integer topology sizes')
+    count = model['replicas'] * model['tensor_parallel']
+    if count > 8: raise ValueError('Each profile must use between one and eight GPUs')
+    return count
+
+
 def sha256(path):
     digest = hashlib.sha256()
     with Path(path).open('rb') as f:
@@ -42,8 +50,13 @@ def load_campaign(path, root):
         name = model['name']; names.append(name)
         if not re.fullmatch(r'[a-z0-9][a-z0-9-]{0,63}', name): raise ValueError('Unsafe model name')
         if not re.fullmatch(r'[a-f0-9]{40}', model['revision']): raise ValueError('Pin every model to an exact HF commit')
-        if model['replicas'] * model['tensor_parallel'] != 8:
-            raise ValueError('Each profile must use the requested eight GPUs')
+        count = gpu_count(model)
+        overrides = model.get('gpu_resources', {})
+        if not isinstance(overrides, dict) or set(overrides) - {'cpus', 'mem', 'time'}:
+            raise ValueError('GPU resource overrides support only cpus, mem and time')
+        resources = {**config['slurm']['gpu'], **overrides}
+        if type(resources['cpus']) is not int or resources['cpus'] < count:
+            raise ValueError('Request at least one CPU per GPU')
         if 'MoVA' in model['id'] and model['tensor_parallel'] not in (1, 2):
             raise ValueError('MoVA FP8 requires TP=1 or TP=2 to preserve whole quantization blocks')
         # Metadata is pinned alongside the launch profile, never inferred from model names.
@@ -88,13 +101,14 @@ def package(root, output):
 
 def sbatch_command(stage, root, work, config, model=None, dependency=None):
     resources = config['slurm'][stage]
+    if stage == 'gpu': resources = {**resources, **model.get('gpu_resources', {})}
     name = model['name'] if model else stage
     args = ['sbatch', '--parsable', '--account=' + config['account'], '--qos=' + config['qos'],
             '--nodes=1', '--ntasks=1', '--no-requeue', '--cpus-per-task=' + str(resources['cpus']),
             '--mem=' + resources['mem'], '--time=' + resources['time'], '--chdir=' + str(root),
             '--job-name=op2-' + stage + '-' + name, '--output=' + str(work / 'logs' / (stage + '-' + name + '-%j.log'))]
     if stage == 'gpu':
-        args += ['--partition=' + config['gpu_partition'], '--gres=gpu:b200:8', '--signal=B:TERM@120']
+        args += ['--partition=' + config['gpu_partition'], '--gres=gpu:b200:' + str(gpu_count(model)), '--signal=B:TERM@120']
     else:
         args += ['--gres=none']
         if config.get('cpu_partition'): args += ['--partition=' + config['cpu_partition']]
@@ -135,8 +149,10 @@ def slurm_command(args, env, audit_path, audit):
 
 def scheduler_preflight(root, work, config, env, audit):
     """Check every resource profile without submitting jobs or downloading files."""
-    for stage in ('setup', 'download', 'gpu', 'cleanup', 'report'):
-        model = config['models'][0] if stage in ('download', 'gpu', 'cleanup') else None
+    first = config['models'][0]
+    profiles = [('setup', None), ('download', first)] + [('gpu', m) for m in config['models']]
+    profiles += [('cleanup', first), ('report', None)]
+    for stage, model in profiles:
         args = sbatch_command(stage, root, work, config, model)
         args.insert(1, '--test-only')
         try:
@@ -413,6 +429,7 @@ async def gpu(campaign, model):
             if stat.st_size != item['bytes'] or stat.st_mtime_ns != item['mtime_ns']:
                 raise ValueError('Checkpoint changed after CPU verification')
         cfg = serving_config(campaign, model)
+        count = cfg.gpus
         setup_info = json.loads((work / 'setup.json').read_text())
         if sha256(cfg.sif) != setup_info['sha256']: raise ValueError('Container changed since CPU setup')
         result_root = work / 'results' / model['name']
@@ -421,10 +438,10 @@ async def gpu(campaign, model):
                  'assert vllm.__version__ == ' + repr(config['engine_version']) + '; '
                  'assert "K2HorizonForCausalLM" in ModelRegistry.get_supported_archs(); '
                  'ReasoningParserManager.get_reasoning_parser("k2_horizon"); '
-                 'assert torch.cuda.device_count()==8; '
-                 'assert all(torch.cuda.get_device_capability(i)[0]>=10 for i in range(8)); '
+                 f'assert torch.cuda.device_count()=={count}; '
+                 f'assert all(torch.cuda.get_device_capability(i)[0]>=10 for i in range({count})); '
                  'print(json.dumps({"vllm":vllm.__version__,"torch":torch.__version__,"transformers":transformers.__version__, '
-                 '"gpus":[torch.cuda.get_device_name(i) for i in range(8)]}))')
+                 f'"gpus":[torch.cuda.get_device_name(i) for i in range({count})]}}))')
         probe_args = ['apptainer', 'exec', '--nv', '--cleanenv', '--bind', f'{work}:{work}',
                       '--env', 'CUDA_VISIBLE_DEVICES=' + os.environ['CUDA_VISIBLE_DEVICES']]
         for key, value in cfg.environment.items(): probe_args += ['--env', key + '=' + value]
@@ -470,8 +487,13 @@ async def gpu(campaign, model):
                 for i, endpoint in enumerate(endpoints):
                     metrics = await client.get(endpoint.removesuffix('/v1') + '/metrics')
                     metrics.raise_for_status(); (result_root / f'server-{i}-metrics.txt').write_text(metrics.text)
-            return {'status': 'completed', 'model': model['name'], 'gpu_stage_seconds': time.monotonic() - started,
-                    'gpu_count': 8,
+            duration = time.monotonic() - started
+            measured_arms = {a: json.loads((result_root / a / 'report.json').read_text()) for a in config['arms']}
+            throughput = throughput_summary(model, measured_arms, duration)
+            write_json(result_root / 'throughput.json', throughput)
+            return {'status': 'completed', 'model': model['name'], 'gpu_stage_seconds': duration,
+                    'gpu_count': count,
+                    'throughput': throughput,
                     'arms': {a: {'tasks': r['tasks'], 'valid_tasks': r['valid_tasks'], 'scores': r['scores']} for a, r in reports.items()}}
         finally:
             await group.stop()
@@ -480,6 +502,33 @@ async def gpu(campaign, model):
                 try: monitor.wait(timeout=10)
                 except subprocess.TimeoutExpired: monitor.kill(); monitor.wait()
             if log: log.close()
+
+
+def throughput_summary(model, arms, gpu_stage_seconds=None):
+    """Weight rates by elapsed time, never average replica/arm token rates."""
+    samples = [(r, r.get('workflow_tokens_including_secondary', r['tokens'])) for r in arms.values()]
+    seconds = sum(r['wall_seconds'] + r.get('secondary_summary', {}).get('wall_seconds', 0) for r, _ in samples)
+    fresh = bool(samples) and all(t.get('fresh_measurement', t.get('aggregate_output_tokens_per_second') is not None) for _, t in samples)
+    def total(key):
+        values = [row.get(key) for _, t in samples for row in t['per_article']]
+        return sum(values) if values and all(v is not None for v in values) else None
+    output = total('output_tokens'); inputs = total('input_tokens'); count = gpu_count(model)
+    rate = output / seconds if fresh and output is not None and seconds > 0 else None
+    articles = {row['article_id'] for _, t in samples for row in t['per_article'] if row['requests_sent']}
+    return {'gpu_count': count, 'fresh_measurement': fresh, 'evaluation_seconds': seconds,
+            'gpu_stage_seconds': gpu_stage_seconds, 'total_input_tokens': inputs, 'total_output_tokens': output,
+            'aggregate_output_tokens_per_second': rate,
+            'output_tokens_per_gpu_second': rate / count if rate is not None else None,
+            'aggregate_input_tokens_per_second': inputs / seconds if fresh and inputs is not None and seconds > 0 else None,
+            'benchmark_output_tokens_per_allocated_second': output / gpu_stage_seconds
+                if fresh and output is not None and gpu_stage_seconds and gpu_stage_seconds > 0 else None,
+            'unique_articles_processed': len(articles),
+            'complete_benchmark_articles_per_hour': len(articles) * 3600 / gpu_stage_seconds
+                if fresh and gpu_stage_seconds and gpu_stage_seconds > 0 else None,
+            'notice': 'Aggregate across all replicas and both arms, including secondary calls when present. '
+                      'Evaluation rates exclude startup/warmup. Allocated-time rates include stage startup. '
+                      'Articles/hour measures the complete two-arm benchmark, not a single extraction pass. '
+                      'Missing usage stays unknown; resumed runs have no fresh throughput rate.'}
 
 
 def report(campaign):
@@ -491,6 +540,8 @@ def report(campaign):
             path = root / (stage + '.json')
             result[stage] = json.loads(path.read_text()) if path.exists() else {'status': 'missing'}
         result['arms'] = {a: json.loads((root / a / 'report.json').read_text()) for a in config['arms'] if (root / a / 'report.json').exists()}
+        result['throughput'] = throughput_summary(model, result['arms'], result['gpu'].get('gpu_stage_seconds'))
+        write_json(root / 'throughput.json', result['throughput'])
         expected = result['gpu'].get('status') == 'completed' and result['cleanup'].get('status') == 'deleted'
         if not expected or len(result['arms']) != len(config['arms']): failures.append(model['name'])
         results.append(result)
@@ -499,14 +550,22 @@ def report(campaign):
                'weight_storage_exists': active_path(campaign).exists(),
                'notice': 'Clinical checklist scoring is source grounded but partial; attribution and physician reviews remain pending.'}
     write_json(work / 'summary.json', summary)
-    lines = ['# K2 HiPerGator benchmark', '', '| Model | Arm | Required facts raw / delivered | Forbidden raw / delivered | Valid tasks | Output tokens/s |',
+    lines = ['# K2 HiPerGator benchmark', '', '| Model | Arm | Required facts raw / delivered | Forbidden raw / delivered | Valid tasks | Output tokens/s (all GPUs) |',
              '| --- | --- | --- | --- | --- | --- |']
     for row in results:
         for name, arm in row['arms'].items():
             scores = arm['scores']; rate = arm['tokens']['aggregate_output_tokens_per_second']
             lines.append(f"| {row['model']['name']} | {name} | {scores['raw']['matched']} / {scores['delivered']['matched']} of 161 | {scores['raw']['forbidden_violations']} / {scores['delivered']['forbidden_violations']} of 36 | {arm['valid_tasks']}/{arm['tasks']} | {rate:.2f} |" if rate is not None else
                          f"| {row['model']['name']} | {name} | {scores['raw']['matched']} / {scores['delivered']['matched']} of 161 | {scores['raw']['forbidden_violations']} / {scores['delivered']['forbidden_violations']} of 36 | {arm['valid_tasks']}/{arm['tasks']} | unavailable |")
-    lines += ['', 'Failed/incomplete models: ' + (', '.join(failures) or 'none'), '',
+    lines += ['', '## Throughput across all replicas', '',
+              '| Model | GPUs | Output tokens/s | Output tokens/GPU-second | GPU stage seconds | Complete benchmark articles/hour |',
+              '| --- | ---: | ---: | ---: | ---: | ---: |']
+    def shown(value): return f'{value:.2f}' if value is not None else 'unavailable'
+    for row in results:
+        t = row['throughput']
+        lines.append(f"| {row['model']['name']} | {t['gpu_count']} | {shown(t['aggregate_output_tokens_per_second'])} | {shown(t['output_tokens_per_gpu_second'])} | {shown(t['gpu_stage_seconds'])} | {shown(t['complete_benchmark_articles_per_hour'])} |")
+    lines += ['', 'Rates aggregate all replicas and both arms, including secondary calls. Evaluation token rates exclude startup and warmup; articles/hour includes GPU-stage startup and both benchmark arms. Queue waiting is excluded. Missing usage and resumed runs have unavailable rates.', '',
+              'Failed/incomplete models: ' + (', '.join(failures) or 'none'), '',
               'Matched uses frozen prompts, historical clinical gates, T=0/top_p=1, low reasoning and 8k/16k output caps. IFM-high uses T=1/top_p=.95/high reasoning and 32k output caps. Reasoning effort is model specific. Historical hosted timings are not local GPU throughput.', '',
               'Visual interpretation is unavailable and omitted; captions and text-based figure attribution remain available. Secondary discovery/attribution results and pending review forms are in each IFM-high folder.', '',
               'The 197 checks are a partial checklist, not comprehensive medical precision/recall. See summary.json for historical comparison, per-article token mean/median/P95 and missing-usage counts.']
@@ -532,7 +591,7 @@ def stage(stage_name, work, model_name=None):
         write_json(output, {'status': 'failed', 'stage': stage_name, 'error_type': type(exc).__name__, 'error': str(exc)[:2000]})
         if stage_name == 'download':
             # This download has unwound its ownership lock and saved its failure.
-            # Cancel only its still-dependent GPU job to avoid waiting for eight
+            # Cancel only its still-dependent GPU job to avoid waiting for allocated
             # GPUs just to discover that weights are incomplete. Cleanup remains
             # afterany on that canceled GPU job, then the serial chain continues.
             jobs_path = Path(work) / 'jobs.json'
@@ -546,7 +605,7 @@ def stage(stage_name, work, model_name=None):
 
 
 def add_parser(sub):
-    cmd = sub.add_parser('hpg-benchmark', help='Portable, sequential eight-B200 K2 medical benchmark')
+    cmd = sub.add_parser('hpg-benchmark', help='Portable, sequential K2 medical benchmark on B200s')
     actions = cmd.add_subparsers(dest='hpg_action', required=True)
     p = actions.add_parser('package', help='Create a small transfer archive; no model download')
     p.add_argument('--output', default='dist/openpatients2-k2-benchmark.tar.gz')

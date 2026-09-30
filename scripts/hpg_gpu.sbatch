@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# op2 hpg-benchmark supplies --partition=hpg-b200 --gres=gpu:b200:8,
+# op2 hpg-benchmark supplies --partition=hpg-b200 and the model's GPU count,
 # --account=cai5724 --qos=cai5724 and the selected model's topology.
 set -euo pipefail
 umask 077

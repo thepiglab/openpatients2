@@ -269,13 +269,18 @@ class Replay:
                 if row['unknown_' + name + '_usage']: row[name + '_tokens'] = None
         output_complete = all(row['output_tokens'] is not None for row in per_article)
         total = sum(row['output_tokens'] for row in per_article) if output_complete else None
+        input_total = sum(row['input_tokens'] for row in per_article) if all(row['input_tokens'] is not None for row in per_article) else None
         fresh = not any(r['resumed'] for r in results)
         return {'per_article': per_article,
+                'gpu_count': self.model['replicas'] * self.model['tensor_parallel'],
+                'total_input_tokens': input_total, 'total_output_tokens': total,
+                'measurement_wall_seconds': wall, 'fresh_measurement': fresh,
                 'per_article_stats_all_nine': {key: usage_stats(per_article, key)
                     for key in ('input_tokens', 'output_tokens', 'reasoning_tokens')},
                 'per_article_stats_with_patients': {key: usage_stats((r for r in per_article if r['patient_cases']), key)
                     for key in ('input_tokens', 'output_tokens', 'reasoning_tokens')},
                 'ttft_seconds': stats(ttft), 'request_latency_seconds': stats(latencies),
+                'aggregate_input_tokens_per_second': input_total / wall if input_total is not None and fresh and wall else None,
                 'aggregate_output_tokens_per_second': total / wall if total is not None and fresh and wall else None,
                 'aggregate_output_tokens_per_gpu_second': total / wall / (self.model['replicas'] * self.model['tensor_parallel'])
                     if total is not None and fresh and wall else None,

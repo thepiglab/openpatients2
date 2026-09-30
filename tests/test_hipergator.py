@@ -46,7 +46,8 @@ def test_chain_does_not_hold_gpus_for_download_or_overlap_checkpoints(tmp_path):
         command = job['command']
         assert '--account=cai5724' in command and '--qos=cai5724' in command
         if job['stage'] == 'gpu':
-            assert '--partition=hpg-b200' in command and '--gres=gpu:b200:8' in command
+            expected = 4 if job['model'] == 'k2-375b-nvfp4' else 2
+            assert '--partition=hpg-b200' in command and f'--gres=gpu:b200:{expected}' in command
         else:
             assert '--gres=none' in command and '--partition=hpg-b200' not in command
         if i:
@@ -68,7 +69,11 @@ def test_submit_checks_resources_then_releases_setup_only_after_all_successors(t
             if '--test-only' in args:
                 assert not accepted
                 if '--partition=hpg-b200' in args:
-                    assert '--cpus-per-task=32' in args and '--mem=250G' in args
+                    if '--gres=gpu:b200:4' in args:
+                        assert '--cpus-per-task=16' in args and '--mem=250G' in args
+                    else:
+                        assert '--gres=gpu:b200:2' in args and '--cpus-per-task=8' in args
+                        assert '--mem=64G' in args or '--mem=128G' in args
                 return subprocess.CompletedProcess(args, 0, '', 'sbatch: Job would be scheduled')
             assert '--hold' in args
             job = str(4100 + len(accepted)); accepted.append(job)
@@ -81,7 +86,7 @@ def test_submit_checks_resources_then_releases_setup_only_after_all_successors(t
     monkeypatch.setattr(hpg.subprocess, 'run', scheduler)
     work = tmp_path / 'campaign'
     result = hpg.prepare(ROOT / hpg.DEFAULT_CONFIG, ROOT, work, submit=True)
-    assert len([c for c in calls if '--test-only' in c]) == 5
+    assert len([c for c in calls if '--test-only' in c]) == 8
     assert released == list(reversed(accepted))
     assert all(j['release_confirmed'] for j in result['jobs'])
     assert json.loads((work / 'submission.json').read_text()) == {'status': 'released', 'preflight_passed': True}
@@ -207,18 +212,20 @@ def test_ambiguous_submission_is_logged_and_never_automatically_retried(tmp_path
         assert audit[-2]['stdout'] == 'unexpected response'
 
 
-def test_topologies_use_all_eight_assigned_gpus_and_offline_native_quantization(tmp_path, monkeypatch):
+def test_topologies_use_exactly_the_requested_gpus_and_offline_native_quantization(tmp_path, monkeypatch):
     hpg.prepare(ROOT / hpg.DEFAULT_CONFIG, ROOT, tmp_path / 'campaign')
     campaign = hpg.read_campaign(tmp_path / 'campaign')
     hpg.write_json(tmp_path / 'campaign/setup.json', {'sif': '/shared/vllm.sif'})
-    monkeypatch.setenv('CUDA_VISIBLE_DEVICES', ','.join('GPU-' + str(i) for i in range(8)))
     for key in ('HF_HOME', 'HF_HUB_CACHE', 'HF_XET_CACHE', 'HF_MODULES_CACHE', 'HF_XET_CHUNK_CACHE_SIZE_BYTES', 'XDG_CACHE_HOME'):
         monkeypatch.setenv(key, '')
     for model in campaign['config']['models']:
+        count = 4 if model['name'] == 'k2-375b-nvfp4' else 2
+        assert hpg.gpu_count(model) == count
+        monkeypatch.setenv('CUDA_VISIBLE_DEVICES', ','.join('GPU-' + str(i) for i in range(count)))
         cfg = hpg.serving_config(campaign, model)
         commands = render(cfg, campaign['work'])
         assert len(commands) == model['replicas']
-        assert sorted(gpu for c in commands for gpu in c['devices']) == ['GPU-' + str(i) for i in range(8)]
+        assert sorted(gpu for c in commands for gpu in c['devices']) == ['GPU-' + str(i) for i in range(count)]
         for c in commands:
             args = c['argv']
             assert 'HF_HUB_OFFLINE=1' in args and 'TRANSFORMERS_OFFLINE=1' in args
@@ -226,6 +233,89 @@ def test_topologies_use_all_eight_assigned_gpus_and_offline_native_quantization(
             assert args[args.index('--quantization')+1] == model['quantization']
             assert len(c['devices']) == model['tensor_parallel']
             assert 'IFM/' not in args[args.index('serve')+1]  # Local checkpoint, never a Hub repo download.
+
+
+def test_all_gpu_profiles_are_preflighted_including_the_mova_ram_override(tmp_path, monkeypatch):
+    calls = []
+    def scheduler(args, **kwargs):
+        calls.append(args)
+        assert '--test-only' in args
+        return subprocess.CompletedProcess(args, 1 if '--mem=128G' in args else 0, '',
+                                           'Synthetic MoVA memory rejection' if '--mem=128G' in args else '')
+    monkeypatch.setattr(hpg.subprocess, 'run', scheduler)
+    work = tmp_path / 'campaign'
+    with pytest.raises(RuntimeError, match='Synthetic MoVA memory rejection'):
+        hpg.prepare(ROOT / hpg.DEFAULT_CONFIG, ROOT, work, submit=True)
+    assert len(calls) == 5 and json.loads((work / 'jobs.json').read_text())['jobs'] == []
+
+
+def synthetic_throughput_arms():
+    def tokens(rows, seconds):
+        return {'per_article': rows, 'fresh_measurement': True,
+                'aggregate_output_tokens_per_second': sum(r['output_tokens'] for r in rows) / seconds}
+    a = {'article_id': 'a', 'requests_sent': 1, 'input_tokens': 2000, 'output_tokens': 1000}
+    b = {'article_id': 'a', 'requests_sent': 1, 'input_tokens': 500, 'output_tokens': 500}
+    combined = [{'article_id': 'a', 'requests_sent': 2, 'input_tokens': 600, 'output_tokens': 1000},
+                {'article_id': 'b', 'requests_sent': 1, 'input_tokens': 500, 'output_tokens': 0}]
+    return {'matched': {'wall_seconds': 10, 'tokens': tokens([a], 10)},
+            'ifm_high': {'wall_seconds': 20, 'tokens': tokens([b], 20),
+                         'secondary_summary': {'wall_seconds': 10},
+                         'workflow_tokens_including_secondary': tokens(combined, 30)}}
+
+
+def test_model_throughput_weights_elapsed_time_and_includes_secondary_without_double_counting():
+    model = {'replicas': 1, 'tensor_parallel': 4}
+    result = hpg.throughput_summary(model, synthetic_throughput_arms(), gpu_stage_seconds=80)
+    assert result['evaluation_seconds'] == 40 and result['total_output_tokens'] == 2000
+    assert result['total_input_tokens'] == 3100 and result['aggregate_input_tokens_per_second'] == 77.5
+    assert result['aggregate_output_tokens_per_second'] == 50
+    assert result['output_tokens_per_gpu_second'] == 12.5
+    assert result['benchmark_output_tokens_per_allocated_second'] == 25
+    assert result['complete_benchmark_articles_per_hour'] == 90
+    small = hpg.throughput_summary({'replicas': 2, 'tensor_parallel': 1}, synthetic_throughput_arms(), 80)
+    assert small['gpu_count'] == 2 and small['output_tokens_per_gpu_second'] == 25
+
+
+def test_resumed_or_unknown_usage_does_not_create_misleading_throughput():
+    arms = synthetic_throughput_arms()
+    arms['matched']['tokens']['fresh_measurement'] = False
+    result = hpg.throughput_summary({'replicas': 1, 'tensor_parallel': 4}, arms, 80)
+    assert not result['fresh_measurement']
+    assert result['aggregate_output_tokens_per_second'] is None
+    assert result['benchmark_output_tokens_per_allocated_second'] is None
+    assert result['complete_benchmark_articles_per_hour'] is None
+    arms = synthetic_throughput_arms()
+    arms['matched']['tokens']['per_article'][0]['output_tokens'] = None
+    result = hpg.throughput_summary({'replicas': 1, 'tensor_parallel': 4}, arms, 80)
+    assert result['total_output_tokens'] is None and result['output_tokens_per_gpu_second'] is None
+    assert result['aggregate_input_tokens_per_second'] == 77.5
+
+
+def test_final_report_persists_model_throughput_and_displays_actual_gpu_counts(tmp_path, monkeypatch):
+    hpg.prepare(ROOT / hpg.DEFAULT_CONFIG, ROOT, tmp_path / 'campaign')
+    campaign = hpg.read_campaign(tmp_path / 'campaign')
+    monkeypatch.delenv('SLURM_JOB_GPUS', raising=False)
+    monkeypatch.delenv('SLURM_STEP_GPUS', raising=False)
+    monkeypatch.setenv('SLURM_GPUS_ON_NODE', '0')
+    monkeypatch.setenv('CUDA_VISIBLE_DEVICES', '')
+    for model in campaign['config']['models']:
+        output = Path(campaign['work']) / 'results' / model['name']
+        hpg.write_json(output / 'gpu.json', {'status': 'completed', 'gpu_stage_seconds': 80})
+        hpg.write_json(output / 'cleanup.json', {'status': 'deleted'})
+        arms = synthetic_throughput_arms()
+        for arm, data in arms.items():
+            data.update(tasks=10, valid_tasks=10, scores={k: {'matched': 161, 'forbidden_violations': 0} for k in ('raw', 'delivered')})
+            hpg.write_json(output / arm / 'report.json', data)
+    result = hpg.report(campaign)
+    summary = json.loads(Path(result['summary']).read_text())
+    assert [m['throughput']['gpu_count'] for m in summary['models']] == [4, 2, 2, 2]
+    assert all(m['throughput']['aggregate_output_tokens_per_second'] == 50 for m in summary['models'])
+    for model in campaign['config']['models']:
+        assert (Path(campaign['work']) / 'results' / model['name'] / 'throughput.json').exists()
+    text = Path(result['markdown']).read_text()
+    assert 'Output tokens/GPU-second' in text and 'Complete benchmark articles/hour' in text
+    assert '| k2-375b-nvfp4 | 4 | 50.00 | 12.50 |' in text
+    assert '| k2-7b-fp8 | 2 | 50.00 | 25.00 |' in text
 
 
 def small_download_campaign(tmp_path, monkeypatch):
@@ -440,10 +530,13 @@ async def test_failed_gpu_start_stops_all_servers_and_leaves_checkpoint_for_cpu_
     hpg.write_json(Path(campaign['work']) / 'setup.json', {'sif': str(sif), 'sha256': hpg.sha256(sif)})
     hpg.download(campaign, model, fake_download)
     monkeypatch.setenv('SLURM_JOB_ID', 'SYNTHETIC_TEST')
-    monkeypatch.setenv('CUDA_VISIBLE_DEVICES', '0,1,2,3,4,5,6,7')
+    monkeypatch.setenv('CUDA_VISIBLE_DEVICES', '0,1,2,3')
     def run(command, **kwargs):
         if command[0] == 'apptainer':
             assert 'HF_HUB_OFFLINE=1' in command and 'TRANSFORMERS_OFFLINE=1' in command
+            probe = command[-1]
+            compile(probe, '<container-probe>', 'exec')
+            assert 'torch.cuda.device_count()==4' in probe and 'range(8)' not in probe
         return subprocess.CompletedProcess(command, 0, stdout='SYNTHETIC GPU PROBE', stderr='')
     monkeypatch.setattr(hpg.subprocess, 'run', run)
     monkeypatch.setattr(hpg, 'environment_report', lambda: {'test_fixture': True})
