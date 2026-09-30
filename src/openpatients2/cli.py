@@ -154,6 +154,8 @@ def parser():
     cmd.add_argument("--repo", required=True)
     cmd.add_argument("--output", required=True)
     cmd.add_argument("--revision", default="main")
+    from .hipergator import add_parser as add_hpg_parser
+    add_hpg_parser(sub)
     cmd = sub.add_parser("pin-config")
     cmd.add_argument("--config", required=True)
     cmd.add_argument("--snapshot", required=True, help="models/.../op2_snapshot.json")
@@ -323,6 +325,9 @@ def _main(argv=None):
         elif args.command == "download-model":
             from .data import download_model
             result = download_model(args.repo, args.output, args.revision)
+        elif args.command == "hpg-benchmark":
+            from .hipergator import dispatch
+            result = dispatch(args)
         elif args.command == "pin-config":
             cfg = load_config(args.config)
             snapshot = json.loads(Path(args.snapshot).read_text())

@@ -1,0 +1,324 @@
+import asyncio
+import copy
+import hashlib
+import json
+import shutil
+import subprocess
+import tarfile
+from pathlib import Path
+
+import httpx
+import pytest
+
+from openpatients2 import hipergator as hpg
+from openpatients2.hpg_eval import Replay, fixtures
+from openpatients2.provenance import json_digest
+from openpatients2.serving import render
+
+ROOT = Path(__file__).resolve().parents[1]
+FIXTURES = ROOT / 'benchmarks/hipergator-k2/fixtures'
+
+
+def test_fixture_matches_the_previous_article_patient_and_request_sample():
+    manifest, articles, packets, requests, reference = fixtures(FIXTURES)
+    assert (len(articles), len(packets), len(requests), len(reference['checks'])) == (9, 11, 176, 197)
+    assert (FIXTURES / 'articles.jsonl').read_bytes() == (ROOT / 'runs/medical-fidelity-v1/articles.jsonl').read_bytes()
+    assert (FIXTURES / 'reference.json').read_bytes() == (ROOT / 'runs/medical-fidelity-v1/reference.json').read_bytes()
+    for r in requests:
+        previous = next((ROOT / 'runs/medical-fidelity-v1/comparison/attempts').glob(r['origin_signature'] + '-0-*.json'))
+        assert r['messages'] == json.loads(previous.read_text())['request']
+    assert manifest['negative_control_articles'] == 2
+
+
+def test_modified_fixture_is_rejected(tmp_path):
+    shutil.copytree(FIXTURES, tmp_path / 'fixtures')
+    p = tmp_path / 'fixtures/articles.jsonl'
+    p.write_bytes(p.read_bytes() + b'\n')
+    with pytest.raises(ValueError, match='integrity'): fixtures(tmp_path / 'fixtures')
+
+
+def test_chain_does_not_hold_gpus_for_download_or_overlap_checkpoints(tmp_path):
+    result = hpg.prepare(ROOT / hpg.DEFAULT_CONFIG, ROOT, tmp_path / 'campaign')
+    jobs = result['jobs']
+    assert len(jobs) == 14
+    assert [j['stage'] for j in jobs] == ['setup'] + ['download', 'gpu', 'cleanup'] * 4 + ['report']
+    for i, job in enumerate(jobs):
+        command = job['command']
+        assert '--account=cai5724' in command and '--qos=cai5724' in command
+        if job['stage'] == 'gpu':
+            assert '--partition=hpg-b200' in command and '--gres=gpu:b200:8' in command
+        else:
+            assert '--gres=none' in command and '--partition=hpg-b200' not in command
+        if i:
+            kind = 'afterok' if jobs[i-1]['stage'] == 'cleanup' else 'afterany'
+            assert '--dependency=' + kind + ':' + jobs[i-1]['id'] in command
+    assert not (tmp_path / 'campaign/active-model').exists()
+    with pytest.raises(ValueError, match='new work'): hpg.prepare(ROOT / hpg.DEFAULT_CONFIG, ROOT, tmp_path / 'campaign')
+
+
+def test_topologies_use_all_eight_assigned_gpus_and_offline_native_quantization(tmp_path, monkeypatch):
+    hpg.prepare(ROOT / hpg.DEFAULT_CONFIG, ROOT, tmp_path / 'campaign')
+    campaign = hpg.read_campaign(tmp_path / 'campaign')
+    hpg.write_json(tmp_path / 'campaign/setup.json', {'sif': '/shared/vllm.sif'})
+    monkeypatch.setenv('CUDA_VISIBLE_DEVICES', ','.join('GPU-' + str(i) for i in range(8)))
+    for key in ('HF_HOME', 'HF_HUB_CACHE', 'HF_XET_CACHE', 'HF_MODULES_CACHE', 'HF_XET_CHUNK_CACHE_SIZE_BYTES', 'XDG_CACHE_HOME'):
+        monkeypatch.setenv(key, '')
+    for model in campaign['config']['models']:
+        cfg = hpg.serving_config(campaign, model)
+        commands = render(cfg, campaign['work'])
+        assert len(commands) == model['replicas']
+        assert sorted(gpu for c in commands for gpu in c['devices']) == ['GPU-' + str(i) for i in range(8)]
+        for c in commands:
+            args = c['argv']
+            assert 'HF_HUB_OFFLINE=1' in args and 'TRANSFORMERS_OFFLINE=1' in args
+            assert args[args.index('--model-impl')+1] == 'vllm'
+            assert args[args.index('--quantization')+1] == model['quantization']
+            assert len(c['devices']) == model['tensor_parallel']
+            assert 'IFM/' not in args[args.index('serve')+1]  # Local checkpoint, never a Hub repo download.
+
+
+def small_download_campaign(tmp_path, monkeypatch):
+    hpg.prepare(ROOT / hpg.DEFAULT_CONFIG, ROOT, tmp_path / 'campaign')
+    campaign = hpg.read_campaign(tmp_path / 'campaign')
+    model = copy.deepcopy(campaign['config']['models'][0]); model['expected_bytes'] = 8
+    campaign['config']['disk_headroom_gb'] = 0
+    metadata = tmp_path / 'tiny-metadata.json'
+    hpg.write_json(metadata, {'files': [{'rfilename': 'config.json', 'size': 2},
+        {'rfilename': 'model.safetensors', 'size': 6, 'lfs': {'sha256': hashlib.sha256(b'WEIGHT').hexdigest()}}]})
+    model['metadata'] = str(metadata)
+    hpg.write_json(tmp_path / 'campaign/setup.json', {'status': 'ready'})
+    for key in ('HF_HOME', 'HF_HUB_CACHE', 'HF_XET_CACHE', 'HF_MODULES_CACHE', 'HF_XET_CHUNK_CACHE_SIZE_BYTES', 'XDG_CACHE_HOME', 'HF_HUB_OFFLINE', 'TRANSFORMERS_OFFLINE', 'CUDA_VISIBLE_DEVICES'):
+        monkeypatch.setenv(key, '')
+    monkeypatch.delenv('SLURM_JOB_GPUS', raising=False); monkeypatch.delenv('SLURM_STEP_GPUS', raising=False)
+    return campaign, model
+
+
+def fake_download(**kwargs):
+    assert len(kwargs['revision']) == 40
+    path = Path(kwargs['local_dir']); path.mkdir()
+    (path / 'config.json').write_bytes(b'{}'); (path / 'model.safetensors').write_bytes(b'WEIGHT')
+
+
+def test_owned_cleanup_after_partial_download_preserves_results_and_allows_next_model(tmp_path, monkeypatch):
+    campaign, model = small_download_campaign(tmp_path, monkeypatch)
+    def interrupted(**kwargs):
+        fake_download(**kwargs)
+        raise RuntimeError('Interrupted download')
+    with pytest.raises(RuntimeError, match='Interrupted'):
+        hpg.download(campaign, model, interrupted)
+    path = hpg.active_path(campaign)
+    assert path.exists() and not (path / 'ready.json').exists()
+    assert Path(__import__('os').environ['HF_HOME']).is_relative_to(path)
+    with pytest.raises(ValueError, match='Previous checkpoint'): hpg.download(campaign, model, fake_download)
+    sentinel = Path(campaign['work']) / 'results/keep.json'; sentinel.write_text('KEEP')
+    with pytest.raises(ValueError, match='another model'):
+        hpg.cleanup(campaign, {**model, 'name': 'another-model'})
+    hpg.cleanup(campaign, model)
+    assert not path.exists() and sentinel.read_text() == 'KEEP'
+    result = hpg.download(campaign, model, fake_download)
+    assert result['downloaded_bytes'] == 8 and (path / 'ready.json').exists()
+    hpg.cleanup(campaign, model)
+    assert not path.exists()
+
+
+def test_corrupt_weights_fail_cpu_verification_and_are_still_removable(tmp_path, monkeypatch):
+    campaign, model = small_download_campaign(tmp_path, monkeypatch)
+    def corrupt(**kwargs):
+        fake_download(**kwargs)
+        (Path(kwargs['local_dir']) / 'model.safetensors').write_bytes(b'BADBAD')
+    with pytest.raises(ValueError, match='SHA256'): hpg.download(campaign, model, corrupt)
+    assert not (hpg.active_path(campaign) / 'ready.json').exists()
+    hpg.cleanup(campaign, model)
+    assert not hpg.active_path(campaign).exists()
+
+
+@pytest.mark.parametrize('gpu_ids', ['0', '0,1,2,3,4,5,6,7'])
+def test_download_on_gpu_allocation_is_rejected_before_creating_weights(tmp_path, monkeypatch, gpu_ids):
+    campaign, model = small_download_campaign(tmp_path, monkeypatch)
+    monkeypatch.setenv('SLURM_JOB_GPUS', gpu_ids)
+    with pytest.raises(RuntimeError, match='CPU-only'): hpg.download(campaign, model, fake_download)
+    assert not hpg.active_path(campaign).exists()
+
+
+def test_running_inference_lock_prevents_cleanup(tmp_path, monkeypatch):
+    campaign, model = small_download_campaign(tmp_path, monkeypatch)
+    hpg.download(campaign, model, fake_download)
+    with hpg.model_lock(campaign['work']):
+        with pytest.raises(BlockingIOError): hpg.cleanup(campaign, model)
+    assert hpg.active_path(campaign).exists()
+    hpg.cleanup(campaign, model)
+
+
+def test_packaging_excludes_credentials_weights_and_the_large_runs_tree(tmp_path):
+    output = tmp_path / 'benchmark.tar.gz'
+    result = hpg.package(ROOT, output)
+    assert result['bytes'] < 5_000_000
+    with tarfile.open(output) as archive:
+        names = archive.getnames()
+        assert any(n.endswith('fixtures/requests.jsonl') for n in names)
+        assert any(n.endswith('scripts/hpg_gpu.sbatch') for n in names)
+        assert not any('/runs/' in n or '/models/' in n or '.env' in n or '.venv' in n for n in names)
+
+
+@pytest.mark.asyncio
+async def test_replay_reproduces_historical_factual_scoring_without_vision_or_grammar(tmp_path):
+    """Replay actual stored model outputs through the mock SSE API and frozen gates."""
+    _, _, _, requests, _ = fixtures(FIXTURES)
+    base = ROOT / 'runs/medical-fidelity-v1/comparison/meta--muse-glimmer-30b'
+    responses = {}
+    for r in requests:
+        i = r['identity']; bundle = json.loads((base / (i['article_id'] + '-' + i['patient_id'] + '.json')).read_text())
+        response = bundle['generations'][r['task']] if r['task'] not in ('summary', 'timeline') else bundle['companions'][r['task']]['attempt_responses'][-1]
+        responses[r['messages_sha256']] = response
+    sent = []
+    def handler(request):
+        body = json.loads(request.content)
+        if request.url.path == '/tokenize': return httpx.Response(200, json={'count': 1000})
+        assert 'response_format' not in body and 'structured_outputs' not in body
+        assert all(isinstance(m['content'], str) for m in body['messages'])
+        sent.append(body)
+        messages = body['messages'][:2]
+        response = responses[json_digest(messages)]
+        if response.get('error'): return httpx.Response(500)
+        event = {'choices': [{'index': 0, 'delta': {'content': response['content'],
+                 'reasoning_content': response.get('reasoning_text') or ''}, 'finish_reason': response['finish_reason']}],
+                 'usage': {'prompt_tokens': 1000, 'completion_tokens': 200}}
+        return httpx.Response(200, text='data: ' + json.dumps(event) + '\n\ndata: [DONE]\n\n', headers={'content-type': 'text/event-stream'})
+    config = hpg.load_campaign(ROOT / hpg.DEFAULT_CONFIG, ROOT); model = config['models'][0]
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as http:
+        replay = Replay(FIXTURES, tmp_path / 'run', model, config['arms']['matched'],
+                        ['http://127.0.0.1:8000/v1', 'http://127.0.0.1:8001/v1'], 8, 60, 65536, http=http)
+        try:
+            report = await replay.run()
+            historical = json.loads((FIXTURES / 'historical-scores.json').read_text())['models']['meta/muse-glimmer-30b']
+            assert report['scores']['raw']['matched'] == historical['raw']['matched']
+            assert report['scores']['delivered']['matched'] == historical['delivered']['matched']
+            assert report['tasks'] == 176 and len(sent) >= 176
+            assert report['tokens']['per_article_stats_with_patients']['input_tokens']['n'] == 7
+            assert report['tokens']['aggregate_output_tokens_per_second'] > 0
+            assert report['tokens']['per_article_stats_with_patients']['reasoning_tokens']['unknown_articles'] == 7
+            assert report['tokens']['per_article_stats_with_patients']['reasoning_tokens']['mean'] is None
+            for p in (tmp_path / 'run').glob('PMC*-p*.json'):
+                patient = json.loads(p.read_text())
+                assert patient['model']['capabilities']['vision'] is False
+                assert patient['vision']['status'] == 'unsupported_by_model'
+                assert not patient['source']['multimedia']['pixels_inspected']
+                assert not {'visual_findings', 'pixel_observations', 'pixel_interpretations'} & patient.keys()
+                assert patient['source']['article_source']['license']
+            again = await replay.run()
+            assert again['resumed_tasks'] == 176
+            assert again['tokens']['aggregate_output_tokens_per_second'] is None
+        finally: await replay.close()
+
+
+@pytest.mark.asyncio
+async def test_context_guard_preserves_full_source_and_never_calls_completion(tmp_path):
+    config = hpg.load_campaign(ROOT / hpg.DEFAULT_CONFIG, ROOT)
+    sent = []
+    def handler(request):
+        sent.append(request.url.path)
+        return httpx.Response(200, json={'count': 64000})
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as http:
+        replay = Replay(FIXTURES, tmp_path / 'run', config['models'][0], config['arms']['matched'],
+                        ['http://127.0.0.1:8000/v1'], 1, 60, 65536, http=http)
+        original = copy.deepcopy(replay.requests[0]['messages'])
+        try:
+            result = await replay.call(replay.requests[0])
+            assert result['status'] == 'failed' and 'context_guard' in result['errors'][0]
+            assert sent == ['/tokenize'] and replay.requests[0]['messages'] == original
+        finally: await replay.close()
+
+
+@pytest.mark.asyncio
+async def test_secondary_shared_figure_assignment_is_attached_to_each_patient_and_failures_stay_missing(tmp_path):
+    from openpatients2.article_tasks import task_messages
+    from openpatients2.figure_attribution import figure_messages
+    _, articles, packets, _, _ = fixtures(FIXTURES)
+    config = hpg.load_campaign(ROOT / hpg.DEFAULT_CONFIG, ROOT)
+    output = tmp_path / 'run'; output.mkdir()
+    rosters = {aid: json.loads((FIXTURES / 'rosters' / (aid + '.json')).read_text())['roster'] for aid in articles}
+    responses = {}; shared = None; bad = None
+    for aid, article in articles.items():
+        roster = rosters[aid]
+        responses[json_digest(task_messages('roster', article))] = roster
+        for figure in article['figures']:
+            fid = figure['figure_key']
+            assignment = {'panel': None, 'patient_ids': [], 'scope': 'unresolved', 'subject': 'unresolved',
+                          'evidence': [], 'rationale': 'Unresolved in this synthetic transport test.'}
+            reference = next((f for f in roster['figures'] if f['figure_id'] == fid and f['scope'] == 'shared'), None)
+            if reference and shared is None:
+                assignment.update({'patient_ids': reference['patient_ids'], 'scope': 'shared', 'subject': 'patient',
+                                   'evidence': reference['evidence']})
+                shared = (aid, fid, reference['patient_ids'])
+            responses[json_digest(figure_messages(article, roster, fid))] = {'figure_id': fid, 'assignments': [assignment], 'limitations': []}
+            if bad is None and not reference and roster['patients']: bad = (aid, fid)
+    assert shared is not None
+    bad_key = json_digest(figure_messages(articles[bad[0]], rosters[bad[0]], bad[1]))
+    for rid, packet in packets.items():
+        hpg.write_json(output / (rid.replace(':', '-') + '.json'), {'source': packet, 'vision': {'status': 'unsupported_by_model'}})
+    def handler(request):
+        body = json.loads(request.content)
+        if request.url.path == '/tokenize': return httpx.Response(200, json={'count': 1000})
+        key = json_digest(body['messages'][:2])
+        content = '{' if key == bad_key else json.dumps(responses[key])
+        event = {'choices': [{'index': 0, 'delta': {'content': content}, 'finish_reason': 'stop'}],
+                 'usage': {'prompt_tokens': 1000, 'completion_tokens': 200}}
+        return httpx.Response(200, text='data: ' + json.dumps(event) + '\n\ndata: [DONE]\n\n')
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as http:
+        replay = Replay(FIXTURES, output, config['models'][0], config['arms']['ifm_high'],
+                        ['http://127.0.0.1:8000/v1'], 8, 60, 65536, http=http)
+        try: report = await replay.secondary()
+        finally: await replay.close()
+    assert report['task_counts'] == {'roster': 9, 'figure_attribution': 31}
+    assert report['figure_semantic_accuracy'] is None and report['pixel_accuracy'] is None
+    for pid in shared[2]:
+        p = json.loads((output / (shared[0] + '-' + pid + '.json')).read_text())
+        assert any(a['figure_id'] == shared[1] and a['patient_ids'] == shared[2] for a in p['source']['figure_assignments'])
+        assert any(f['figure_key'] == shared[1] and f['image_urls'] for f in p['source']['multimedia']['figures'])
+        assert p['source']['multimedia']['pixels_inspected'] is False
+    for patient in rosters[bad[0]]['patients']:
+        p = json.loads((output / (bad[0] + '-' + patient['patient_id'] + '.json')).read_text())
+        assert bad[1] in p['source']['multimedia']['unreviewed_figure_ids']
+        assert not any(a['figure_id'] == bad[1] for a in p['source']['figure_assignments'])
+
+
+@pytest.mark.asyncio
+async def test_failed_gpu_start_stops_all_servers_and_leaves_checkpoint_for_cpu_cleanup(tmp_path, monkeypatch):
+    campaign, model = small_download_campaign(tmp_path, monkeypatch)
+    sif = tmp_path / 'fake.sif'; sif.write_bytes(b'SYNTHETIC IMAGE')
+    hpg.write_json(Path(campaign['work']) / 'setup.json', {'sif': str(sif), 'sha256': hpg.sha256(sif)})
+    hpg.download(campaign, model, fake_download)
+    monkeypatch.setenv('SLURM_JOB_ID', 'SYNTHETIC_TEST')
+    monkeypatch.setenv('CUDA_VISIBLE_DEVICES', '0,1,2,3,4,5,6,7')
+    def run(command, **kwargs):
+        if command[0] == 'apptainer':
+            assert 'HF_HUB_OFFLINE=1' in command and 'TRANSFORMERS_OFFLINE=1' in command
+        return subprocess.CompletedProcess(command, 0, stdout='SYNTHETIC GPU PROBE', stderr='')
+    monkeypatch.setattr(hpg.subprocess, 'run', run)
+    monkeypatch.setattr(hpg, 'environment_report', lambda: {'test_fixture': True})
+    stopped = []
+    class FailedServers:
+        def __init__(self, *args): pass
+        async def start(self, *args): raise RuntimeError('SYNTHETIC unsupported kernel')
+        async def stop(self): stopped.append(True)
+    monkeypatch.setattr(hpg, 'ServerGroup', FailedServers)
+    with pytest.raises(RuntimeError, match='unsupported kernel'): await hpg.gpu(campaign, model)
+    assert stopped == [True] and hpg.active_path(campaign).exists()
+    hpg.cleanup(campaign, model)
+    assert not hpg.active_path(campaign).exists()
+
+
+def test_handled_download_failure_cancels_only_its_gpu_and_keeps_cleanup(tmp_path, monkeypatch):
+    campaign, model = small_download_campaign(tmp_path, monkeypatch)
+    work = Path(campaign['work'])
+    hpg.write_json(work / 'jobs.json', {'submitted': True, 'jobs': [
+        {'id': '101', 'stage': 'gpu', 'model': model['name']},
+        {'id': '102', 'stage': 'cleanup', 'model': model['name']},
+        {'id': '103', 'stage': 'gpu', 'model': 'another-model'}]})
+    calls = []
+    monkeypatch.setattr(hpg, 'read_campaign', lambda work: campaign)
+    monkeypatch.setattr(hpg, 'download', lambda *args: (_ for _ in ()).throw(RuntimeError('SYNTHETIC failure')))
+    monkeypatch.setattr(hpg.subprocess, 'run', lambda args, **kwargs: calls.append(args))
+    with pytest.raises(RuntimeError, match='SYNTHETIC'): hpg.stage('download', work, model['name'])
+    assert calls == [['scancel', '101']]
+    assert json.loads((work / 'results' / model['name'] / 'download.json').read_text())['status'] == 'failed'

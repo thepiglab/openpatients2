@@ -68,6 +68,8 @@ subjects unless the query explicitly asks for those subjects/assertions.
 
 The new article workflow implements case localization, patient summaries, temporal graphs and a separate pixel-inspection stage. EHR seeds preserve observed evidence and image descriptions; a patient simulator, patient merging and FHIR generation/server remain unimplemented. See the [current article workflow](docs/ARTICLE_PIPELINE.md) and [terminology guide](docs/TERMINOLOGY_AND_KNOWLEDGE_GRAPH.md).
 
+The [HiPerGator K2 benchmark](docs/HIPERGATOR_K2.md) packages the exact previous medical-fidelity articles, prompts and factual checks for the four IFM checkpoints. Run `bash scripts/hpg_benchmark.sh --work-dir /blue/cai5724/wkieffer/op2-k2-runs/run-01` on the cluster: CPU jobs download one pinned model, eight B200s evaluate it, and CPU cleanup deletes its weights before the next download. The defaults use `cai5724` account/QoS; text-only outputs explicitly mark vision unavailable.
+
 ## Within-model reasoning, trace capture and empty cases
 
 The project includes **paired reasoning-level studies within a single pinned model**, saved returned reasoning alongside every task output, and review-gated distillation exports. Clinical schema **2.1.0** distinguishes absent documentation from explicitly negative or explicitly unknown findings. Every one of the 14 task prompts includes clinical decision examples and valid empty-output guidance.
