@@ -2,7 +2,7 @@
 
 The transfer archive contains code, a uv lockfile, frozen evaluation inputs and Slurm workers. It contains no model weights, images, API keys, ontologies or large datasets. Downloading and testing the four models happens on HiPerGator. No OpenRouter credits are used.
 
-The defaults follow your ms2smiles scripts: account **cai5724**, QoS **cai5724**, GPU partition **hpg-b200**, one node with **eight B200s**. CPU jobs use the site's default CPU partition and request no GPUs. The workers load `apptainer` if it is not already on PATH; change that module line if your environment uses a different module name. `uv`, `sbatch`, and network access in the CPU setup/download allocation must be available.
+The defaults follow your ms2smiles scripts: account **cai5724**, QoS **cai5724**, GPU partition **hpg-b200**, one node with **eight B200s**, **32 CPUs** and **250G host RAM**. This matches the CPU/RAM envelope in its campaign configuration; it is not a measurement of your current Slurm account limits. CPU jobs use the site's default CPU partition and request no GPUs. The workers load `apptainer` if it is not already on PATH; change that module line if your environment uses a different module name. `uv`, `sbatch`, `scontrol`, and network access in the CPU setup/download allocation must be available.
 
 ## Run
 
@@ -16,6 +16,8 @@ bash scripts/hpg_benchmark.sh \
 ```
 
 That single launcher command installs the small, locked Python 3.12 client environment and submits the complete job chain. Heavy dependencies, the container and all checkpoints are acquired in CPU jobs. GPU jobs use `uv run --no-sync --offline` and Hugging Face offline mode; they cannot fetch missing checkpoint files. Results and scratch must be on shared storage visible from all nodes. Use a **new work directory** for every new campaign.
+
+Before submitting any jobs, the launcher checks each CPU/GPU resource profile with `sbatch --test-only`. It then submits every job held, and releases successors first and CPU setup last. Downloads cannot begin until the full chain, including every cleanup job, has been accepted. Preflight checks do not reserve resources; a later rejection still triggers rollback. Scheduler stdout/stderr and exact commands are saved in `WORK/slurm-commands.json`. `WORK/submission.json` records preflight, release and rollback status. A rejection prints Slurm's error directly instead of an uninformative Python traceback. See [Slurm's preflight and hold options](https://slurm.schedmd.com/sbatch.html) and [release command](https://slurm.schedmd.com/scontrol.html).
 
 If the client environment is already prepared, the equivalent command is:
 
@@ -38,6 +40,22 @@ uv run --no-sync op2 hpg-benchmark plan --work-dir /tmp/op2-k2-plan
 ```
 
 Pass `--sif /path/to/vllm-030.sif` to reuse a pre-existing vLLM 0.30.0 Apptainer image. Otherwise the CPU setup job pulls `docker://vllm/vllm-openai:v0.30.0` once. Its SHA256 and actual runtime versions are recorded, and each GPU job checks the image SHA, native K2 architecture, reasoning parser, eight visible Blackwell GPUs and exact vLLM version. The image tag is versioned but mutable; the recorded SIF digest identifies the actual image used.
+
+## Recover from a rejected submission
+
+The older launcher hid `sbatch` stderr and requested 64 CPUs/512G host RAM. The traceback alone cannot establish why Slurm rejected that request. The updated configuration requests 32 CPUs/250G, retaining all eight B200s and the same model parallelism. The uv hardlink-to-copy warning is unrelated to Slurm submission; `export UV_LINK_MODE=copy` can silence it.
+
+The older launcher attempted to cancel jobs already submitted. Check the job IDs in `run-01/jobs.json` against `squeue -u "$USER"` before replacing code. Cancel any remaining jobs from that campaign with `scancel JOB_ID ...`; this does not delete downloaded files. If `run-01/active-model` exists, wait until its GPU job has stopped and use the owned cleanup command below with the original package before updating it. Every worker verifies its package fingerprint, so replacing code while old jobs remain active will stop those workers.
+
+Copy `openpatients2-slurm-fix.tar.gz` to HiPerGator. From your existing checkout, apply the small patch and use a fresh campaign directory:
+
+```bash
+tar -xzf /path/to/openpatients2-slurm-fix.tar.gz
+uv run --locked --python 3.12 --no-dev op2 hpg-benchmark submit \
+  --work-dir /blue/cai5724/wkieffer/op2-k2-runs/run-02
+```
+
+The patch contains only the launcher source, resource YAML and this guide. Retain the old work directory for inspection. If the new resource preflight fails, no jobs have been submitted; the displayed scheduler error and saved diagnostics identify the actual rejection. A submission or release failure requests cancellation of known job IDs and reports any rollback failure. On a release failure the launcher first reholds successors, so canceling an `afterany` parent cannot start a download. If reholding fails, it leaves the complete chain in place for inspection instead of canceling its cleanup jobs. A timeout or invalid job-ID response has an ambiguous submission outcome: inspect `squeue` for the recorded job name before retrying. Cancellation requests are recorded as requests, rather than proof that jobs have stopped.
 
 ## Storage and failures
 

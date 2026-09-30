@@ -56,6 +56,157 @@ def test_chain_does_not_hold_gpus_for_download_or_overlap_checkpoints(tmp_path):
     with pytest.raises(ValueError, match='new work'): hpg.prepare(ROOT / hpg.DEFAULT_CONFIG, ROOT, tmp_path / 'campaign')
 
 
+def test_submit_checks_resources_then_releases_setup_only_after_all_successors(tmp_path, monkeypatch):
+    calls = []; accepted = []; released = []
+    monkeypatch.setenv('SBATCH_PARTITION', 'unexpected-partition')
+    monkeypatch.setenv('SBATCH_GRES', 'gpu:1')
+    monkeypatch.setenv('HF_TOKEN', 'SYNTHETIC_NOT_A_SECRET')
+    def scheduler(args, **kwargs):
+        calls.append(args)
+        assert not any(k.startswith('SBATCH_') for k in kwargs['env'])
+        if args[0] == 'sbatch':
+            if '--test-only' in args:
+                assert not accepted
+                if '--partition=hpg-b200' in args:
+                    assert '--cpus-per-task=32' in args and '--mem=250G' in args
+                return subprocess.CompletedProcess(args, 0, '', 'sbatch: Job would be scheduled')
+            assert '--hold' in args
+            job = str(4100 + len(accepted)); accepted.append(job)
+            return subprocess.CompletedProcess(args, 0, job + ';hipergator\n', '')
+        assert args[:2] == ['scontrol', 'release'] and len(accepted) == 14
+        if args[2] == accepted[0]:
+            assert released == list(reversed(accepted[1:]))
+        released.append(args[2])
+        return subprocess.CompletedProcess(args, 0, '', '')
+    monkeypatch.setattr(hpg.subprocess, 'run', scheduler)
+    work = tmp_path / 'campaign'
+    result = hpg.prepare(ROOT / hpg.DEFAULT_CONFIG, ROOT, work, submit=True)
+    assert len([c for c in calls if '--test-only' in c]) == 5
+    assert released == list(reversed(accepted))
+    assert all(j['release_confirmed'] for j in result['jobs'])
+    assert json.loads((work / 'submission.json').read_text()) == {'status': 'released', 'preflight_passed': True}
+    audit = (work / 'slurm-commands.json').read_text()
+    assert 'Job would be scheduled' in audit and 'SYNTHETIC_NOT_A_SECRET' not in audit
+    assert not (work / 'active-model').exists()
+
+
+def test_resource_rejection_surfaces_slurm_stderr_without_submitting_any_jobs(tmp_path, monkeypatch, capsys):
+    from openpatients2.cli import main
+    calls = []
+    error = 'sbatch: error: QOSMaxCpuPerJobLimit\nsbatch: error: Batch job submission failed: Job violates accounting/QOS policy\n'
+    def scheduler(args, **kwargs):
+        calls.append(args)
+        assert args[0] == 'sbatch' and '--test-only' in args
+        return subprocess.CompletedProcess(args, 1 if '--partition=hpg-b200' in args else 0, '', error if '--partition=hpg-b200' in args else '')
+    monkeypatch.setattr(hpg.subprocess, 'run', scheduler)
+    monkeypatch.chdir(ROOT)
+    work = tmp_path / 'campaign'
+    assert main(['hpg-benchmark', 'submit', '--work-dir', str(work)]) == 2
+    message = capsys.readouterr().err
+    assert error.strip() in message and 'gpu resource preflight' in message
+    assert 'Traceback' not in message and str(work / 'slurm-commands.json') in message
+    assert len(calls) == 3 and not (work / 'active-model').exists()
+    assert json.loads((work / 'jobs.json').read_text())['jobs'] == []
+    state = json.loads((work / 'submission.json').read_text())
+    assert state['phase'] == 'preflight' and state['rollback']['status'] == 'not_needed'
+    assert not state['preflight_passed']
+    assert json.loads((work / 'slurm-commands.json').read_text())['commands'][-1]['stderr'] == error
+
+
+@pytest.mark.parametrize('cancel_code', [0, 1])
+def test_rejection_after_preflight_keeps_jobs_held_and_records_rollback(tmp_path, monkeypatch, cancel_code):
+    calls = []; accepted = []
+    error = 'sbatch: error: Requested node configuration is not available'
+    def scheduler(args, **kwargs):
+        calls.append(args)
+        if '--test-only' in args:
+            return subprocess.CompletedProcess(args, 0, '', '')
+        if args[0] == 'sbatch':
+            assert '--hold' in args
+            if '--partition=hpg-b200' in args:
+                return subprocess.CompletedProcess(args, 1, '', error)
+            job = str(44131000 + len(accepted)); accepted.append(job)
+            return subprocess.CompletedProcess(args, 0, job, '')
+        assert args == ['scancel', *accepted]
+        return subprocess.CompletedProcess(args, cancel_code, '', 'scancel: error: Controller unavailable' if cancel_code else '')
+    monkeypatch.setattr(hpg.subprocess, 'run', scheduler)
+    work = tmp_path / 'campaign'
+    with pytest.raises(RuntimeError, match=error) as exc:
+        hpg.prepare(ROOT / hpg.DEFAULT_CONFIG, ROOT, work, submit=True)
+    assert len(accepted) == 2 and not any(c[0] == 'scontrol' for c in calls)
+    assert 'gpu/k2-375b-nvfp4' in str(exc.value)
+    state = json.loads((work / 'submission.json').read_text())
+    assert state['rollback']['job_ids'] == accepted
+    assert state['rollback']['status'] == ('failed' if cancel_code else 'cancellation_requested')
+    if cancel_code:
+        assert 'Controller unavailable' in str(exc.value) and 'Inspect these jobs' in str(exc.value)
+    assert not (work / 'active-model').exists()
+
+
+@pytest.mark.parametrize('hold_code', [0, 1])
+def test_partial_release_reholds_successors_before_canceling_their_parents(tmp_path, monkeypatch, hold_code):
+    calls = []; held = {}; released = []
+    def scheduler(args, **kwargs):
+        calls.append(args)
+        if '--test-only' in args:
+            return subprocess.CompletedProcess(args, 0, '', '')
+        if args[0] == 'sbatch':
+            job = str(5100 + len(held)); held[job] = True
+            return subprocess.CompletedProcess(args, 0, job, '')
+        if args[:2] == ['scontrol', 'release']:
+            assert held['5100']  # Setup has not been released; no downloads can start.
+            if len(released) == 2:
+                return subprocess.CompletedProcess(args, 1, '', 'scontrol: error: Synthetic release rejection')
+            held[args[2]] = False; released.append(args[2])
+        elif args[:2] == ['scontrol', 'hold']:
+            if hold_code:
+                return subprocess.CompletedProcess(args, 1, '', 'scontrol: error: Controller unavailable during hold')
+            for job in args[2:]: held[job] = True
+        else:
+            assert args == ['scancel', *held] and all(held.values())
+        return subprocess.CompletedProcess(args, 0, '', '')
+    monkeypatch.setattr(hpg.subprocess, 'run', scheduler)
+    work = tmp_path / 'campaign'
+    with pytest.raises(RuntimeError, match='Synthetic release rejection'):
+        hpg.prepare(ROOT / hpg.DEFAULT_CONFIG, ROOT, work, submit=True)
+    assert len(held) == 14 and released == ['5113', '5112']
+    state = json.loads((work / 'submission.json').read_text())
+    assert state['phase'] == 'release'
+    if hold_code:
+        assert calls[-1] == ['scontrol', 'hold', *held]
+        assert not any(c[0] == 'scancel' for c in calls)
+        assert state['rollback']['status'] == 'failed' and 'during hold' in state['rollback']['error']
+    else:
+        assert calls[-2] == ['scontrol', 'hold', *held] and calls[-1] == ['scancel', *held]
+
+
+@pytest.mark.parametrize('response', ['timeout', 'invalid_id'])
+def test_ambiguous_submission_is_logged_and_never_automatically_retried(tmp_path, monkeypatch, response):
+    submissions = []
+    def scheduler(args, **kwargs):
+        if '--test-only' in args:
+            return subprocess.CompletedProcess(args, 0, '', '')
+        if args[0] == 'sbatch':
+            submissions.append(args)
+            if len(submissions) == 3:
+                if response == 'timeout':
+                    raise subprocess.TimeoutExpired(args, 60, stderr=b'sbatch: Controller response timed out')
+                return subprocess.CompletedProcess(args, 0, 'unexpected response', '')
+            return subprocess.CompletedProcess(args, 0, str(6100 + len(submissions)), '')
+        assert args == ['scancel', '6101', '6102']
+        return subprocess.CompletedProcess(args, 0, '', '')
+    monkeypatch.setattr(hpg.subprocess, 'run', scheduler)
+    work = tmp_path / 'campaign'
+    with pytest.raises(RuntimeError, match='inspect squeue'):
+        hpg.prepare(ROOT / hpg.DEFAULT_CONFIG, ROOT, work, submit=True)
+    assert len(submissions) == 3
+    audit = json.loads((work / 'slurm-commands.json').read_text())['commands']
+    if response == 'timeout':
+        assert audit[-2]['stderr'] == 'sbatch: Controller response timed out'
+    else:
+        assert audit[-2]['stdout'] == 'unexpected response'
+
+
 def test_topologies_use_all_eight_assigned_gpus_and_offline_native_quantization(tmp_path, monkeypatch):
     hpg.prepare(ROOT / hpg.DEFAULT_CONFIG, ROOT, tmp_path / 'campaign')
     campaign = hpg.read_campaign(tmp_path / 'campaign')

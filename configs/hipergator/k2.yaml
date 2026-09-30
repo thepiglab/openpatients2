@@ -18,7 +18,8 @@ download_workers: 4
 slurm:
   setup: {cpus: 8, mem: 32G, time: '04:00:00'}
   download: {cpus: 8, mem: 32G, time: '08:00:00'}
-  gpu: {cpus: 64, mem: 512G, time: '12:00:00'}
+  # Match the eight-GPU CPU/RAM envelope used by the cai5724 ms2smiles campaigns.
+  gpu: {cpus: 32, mem: 250G, time: '12:00:00'}
   cleanup: {cpus: 2, mem: 4G, time: '01:00:00'}
   report: {cpus: 2, mem: 4G, time: '01:00:00'}
 arms:

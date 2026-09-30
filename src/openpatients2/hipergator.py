@@ -106,6 +106,45 @@ def sbatch_command(stage, root, work, config, model=None, dependency=None):
     return args
 
 
+def slurm_command(args, env, audit_path, audit):
+    """Preserve scheduler diagnostics, including failed or ambiguous submissions."""
+    entry = {'command': args, 'started_unix': time.time(), 'status': 'started'}
+    audit.append(entry)
+    write_json(audit_path, {'commands': audit})
+    try:
+        result = subprocess.run(args, env=env, text=True, capture_output=True, check=False, timeout=60)
+    except (OSError, subprocess.SubprocessError) as exc:
+        # TimeoutExpired may carry bytes even with text=True. Never log the environment.
+        def decoded(value):
+            return value.decode('utf-8', errors='replace') if isinstance(value, bytes) else value or ''
+        entry.update(status='failed', finished_unix=time.time(), error=str(exc),
+                     stdout=decoded(getattr(exc, 'stdout', None)), stderr=decoded(getattr(exc, 'stderr', None)))
+        write_json(audit_path, {'commands': audit})
+        message = entry['stderr'].strip() or entry['stdout'].strip() or str(exc)
+        if isinstance(exc, subprocess.TimeoutExpired) and args[0] == 'sbatch' and '--test-only' not in args:
+            message += '\nSubmission outcome is unknown; inspect squeue for this job name before retrying.'
+        raise RuntimeError(args[0] + ' failed: ' + message) from None
+    entry.update(status='ok' if result.returncode == 0 else 'failed', finished_unix=time.time(),
+                 returncode=result.returncode, stdout=result.stdout, stderr=result.stderr)
+    write_json(audit_path, {'commands': audit})
+    if result.returncode:
+        message = result.stderr.strip() or result.stdout.strip() or '(no scheduler output)'
+        raise RuntimeError(f'{args[0]} exited {result.returncode}: {message}')
+    return result
+
+
+def scheduler_preflight(root, work, config, env, audit):
+    """Check every resource profile without submitting jobs or downloading files."""
+    for stage in ('setup', 'download', 'gpu', 'cleanup', 'report'):
+        model = config['models'][0] if stage in ('download', 'gpu', 'cleanup') else None
+        args = sbatch_command(stage, root, work, config, model)
+        args.insert(1, '--test-only')
+        try:
+            slurm_command(args, env, work / 'slurm-commands.json', audit)
+        except RuntimeError as exc:
+            raise RuntimeError(f'{stage} resource preflight: {exc}') from None
+
+
 def prepare(config_path, root, work, submit=False, account=None, qos=None, sif=None):
     root = Path(root).resolve(); work = Path(work).resolve()
     if work.exists(): raise ValueError('Use a new work directory for each campaign; existing results are never overwritten')
@@ -128,31 +167,78 @@ def prepare(config_path, root, work, submit=False, account=None, qos=None, sif=N
     files += sorted(root.glob('scripts/hpg_*'))
     files += sorted((root / 'configs/hipergator').glob('*.json'))
     write_json(work / 'runtime-manifest.json', {str(p.relative_to(root)): sha256(p) for p in files})
-    previous = None; previous_stage = None; jobs = []
+    previous = None; previous_stage = None; jobs = []; audit = []
+    # Environment options can silently replace CLI defaults; use only the configured request.
+    env = {k: v for k, v in os.environ.items() if not k.startswith('SBATCH_')}
+    submission = {'status': 'preflight' if submit else 'planned', 'preflight_passed': False}
+    write_json(work / 'jobs.json', {'submitted': submit, 'jobs': jobs})
+    write_json(work / 'submission.json', submission)
     stages = [('setup', None)]
     for model in config['models']: stages += [('download', model), ('gpu', model), ('cleanup', model)]
     stages += [('report', None)]
+    phase = 'preflight'; current = None
     try:
+        if submit:
+            scheduler_preflight(root, work, config, env, audit)
+            submission.update(status='submitting_held', preflight_passed=True)
+            write_json(work / 'submission.json', submission)
+        phase = 'submission'
         for stage, model in stages:
+            current = stage + ('/' + model['name'] if model else '')
             # afterany lets failed downloads reach GPU preflight and then cleanup;
             # afterok on cleanup prevents a second checkpoint if deletion failed.
             dependency = None if previous is None else ('afterok:' if previous_stage == 'cleanup' else 'afterany:') + previous
             args = sbatch_command(stage, root, work, config, model, dependency)
+            # Hold every job: canceling a held parent cannot accidentally start an
+            # afterany child before the rest of a rejected chain has been canceled.
+            args.insert(1, '--hold')
             if submit:
-                env = {k: v for k, v in os.environ.items() if not k.startswith('SBATCH_')}
-                result = subprocess.run(args, env=env, text=True, capture_output=True, check=True)
+                result = slurm_command(args, env, work / 'slurm-commands.json', audit)
                 job = result.stdout.strip().split(';')[0]
-                if not job.isdigit(): raise RuntimeError('sbatch did not return a job ID')
+                if not job.isdigit():
+                    raise RuntimeError('sbatch did not return a job ID; inspect squeue for this job name before retrying')
             else: job = '<' + str(len(jobs) + 1) + '>'
-            jobs.append({'stage': stage, 'model': model['name'] if model else None, 'id': job, 'command': args})
+            jobs.append({'stage': stage, 'model': model['name'] if model else None, 'id': job,
+                         'command': args, 'release_confirmed': False})
             previous = job
             previous_stage = stage
             write_json(work / 'jobs.json', {'submitted': submit, 'jobs': jobs})
-    except BaseException:
+        if submit:
+            phase = 'release'
+            submission['status'] = 'releasing'; write_json(work / 'submission.json', submission)
+            # Release successors first and setup last. Until setup is released,
+            # dependencies keep the entire chain from starting, even on a release failure.
+            for job in reversed(jobs):
+                current = job['stage'] + ('/' + job['model'] if job['model'] else '')
+                slurm_command(['scontrol', 'release', job['id']], env, work / 'slurm-commands.json', audit)
+                job['release_confirmed'] = True
+                write_json(work / 'jobs.json', {'submitted': True, 'jobs': jobs})
+            submission['status'] = 'released'; write_json(work / 'submission.json', submission)
+    except BaseException as exc:
         # A partially submitted chain must not run with its cleanup/report missing.
+        rollback = {'status': 'not_needed', 'job_ids': [j['id'] for j in jobs]}
         if submit and jobs:
-            subprocess.run(['scancel', *[j['id'] for j in jobs]], check=False)
-        raise
+            try:
+                # A release error can leave some successors unheld. Rehold the
+                # chain before canceling parents with afterany children. If that
+                # fails, retain the chain (and its cleanup) for manual inspection.
+                if phase == 'release':
+                    slurm_command(['scontrol', 'hold', *rollback['job_ids']], env, work / 'slurm-commands.json', audit)
+                slurm_command(['scancel', *rollback['job_ids']], env, work / 'slurm-commands.json', audit)
+                rollback['status'] = 'cancellation_requested'
+            except RuntimeError as cancel_error:
+                rollback.update(status='failed', error=str(cancel_error))
+        submission.update(status='failed', phase=phase, stage=current,
+                          error=str(exc) or type(exc).__name__, rollback=rollback)
+        write_json(work / 'submission.json', submission)
+        if isinstance(exc, (KeyboardInterrupt, SystemExit)): raise
+        message = f'Slurm {phase} failed' + (f' ({current})' if current else '') + f': {exc}'
+        if rollback['status'] == 'failed':
+            message += '\nRollback also failed: ' + rollback['error'] + '\nInspect these jobs: ' + ', '.join(rollback['job_ids'])
+        elif rollback['job_ids']:
+            message += '\nCancellation requested for job IDs: ' + ', '.join(rollback['job_ids'])
+        message += f'\nDiagnostics: {work / "submission.json"} and {work / "slurm-commands.json"}'
+        raise RuntimeError(message) from None
     (work / 'submit-plan.sh').write_text('#!/usr/bin/env bash\n# Review only; use the submit command to resolve job dependencies.\n' + '\n'.join(shlex.join(j['command']) for j in jobs) + '\n')
     return {'work_dir': str(work), 'submitted': submit, 'jobs': jobs,
             'notice': 'One owned checkpoint at a time. Cleanup gates the next download. Container and results are retained.'}
