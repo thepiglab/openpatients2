@@ -28,6 +28,7 @@ class ServingConfig(ConfigModel):
     model_path: str
     model_id: str
     served_model_name: str = "clinical-extractor"
+    container_python: str | None = None
     replicas: int = Field(default=1, ge=1)
     tensor_parallel: int = Field(default=8, ge=1)
     data_parallel: int = Field(default=1, ge=1)
@@ -104,7 +105,8 @@ def render(config: ServingConfig, root: str = ".") -> list[dict]:
                 cmd += ["--env", f"{key}={value}"]
             cmd += [sif]
             if config.backend == "vllm":
-                cmd += ["vllm", "serve", model, "--served-model-name", config.served_model_name,
+                cmd += [config.container_python, "-m", "vllm.entrypoints.cli.main"] if config.container_python else ["vllm"]
+                cmd += ["serve", model, "--served-model-name", config.served_model_name,
                         "--trust-remote-code", "--dtype", "bfloat16", "--host", "127.0.0.1", "--port", str(port),
                         "--tensor-parallel-size", str(config.tensor_parallel),
                         "--max-model-len", str(config.max_model_len), "--max-num-seqs", str(config.max_num_seqs),

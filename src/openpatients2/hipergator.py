@@ -315,6 +315,16 @@ def cache_environment(path):
     return env
 
 
+def container_check(command, log_path, label):
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+    write_json(log_path, {'command': command, 'returncode': result.returncode,
+                         'stdout': result.stdout, 'stderr': result.stderr})
+    if result.returncode:
+        detail = result.stderr.strip() or result.stdout.strip() or '(no subprocess output)'
+        raise RuntimeError(f'{label} exited {result.returncode}: {detail}\nFull diagnostics: {log_path}')
+    return result
+
+
 def setup(campaign):
     require_cpu()
     work = Path(campaign['work']); config = campaign['config']
@@ -331,8 +341,16 @@ def setup(campaign):
             if shutil.disk_usage(work).free < 70_000_000_000:
                 raise RuntimeError('Container acquisition needs 70 GB free scratch; or supply --sif with an existing image')
             subprocess.run(['apptainer', 'pull', str(sif), config['image']], env=env, check=True)
+        interpreter = config.get('container_python', '/usr/bin/python3')
+        # This checks executable/package availability on CPU, without importing
+        # CUDA libraries or downloading weights. GPU capability checks follow later.
+        code = ('import importlib.metadata as m,json,sys; v=m.version("vllm"); '
+                'print(json.dumps({"python":sys.executable,"vllm":v}),flush=True); '
+                f'assert v=={config["engine_version"]!r}, (v,{config["engine_version"]!r})')
+        container_check(['apptainer', 'exec', '--cleanenv', str(sif), interpreter, '-c', code],
+                        work / 'container-python.json', 'CPU container interpreter/package check')
         result = {'status': 'ready', 'sif': str(sif), 'sha256': sha256(sif),
-                  'image': config['image'], 'engine_expected': config['engine_version']}
+                  'image': config['image'], 'engine_expected': config['engine_version'], 'container_python': interpreter}
         write_json(work / 'setup.json', result)
         return result
     finally:
@@ -343,6 +361,8 @@ def download(campaign, model, downloader=None):
     require_cpu()
     work = Path(campaign['work']); config = campaign['config']; path = active_path(campaign)
     if not (work / 'setup.json').is_file(): raise RuntimeError('CPU container setup did not complete')
+    if json.loads((work / 'setup.json').read_text()).get('status') != 'ready':
+        raise RuntimeError('CPU container setup did not complete successfully; no model download')
     with model_lock(work):
         if path.exists(): raise ValueError('Previous checkpoint has not been deleted; refusing a second download')
         need = int(model['expected_bytes'] * 1.1) + config['disk_headroom_gb'] * 1_000_000_000
@@ -402,6 +422,7 @@ def serving_config(campaign, model):
     return ServingConfig(name=model['name'], backend='vllm', version=config['engine_version'],
         image_reference=config['image'], sif=setup_info['sif'], model_path=str(path / 'weights'),
         model_id=model['id'], replicas=model['replicas'], tensor_parallel=model['tensor_parallel'],
+        container_python=config.get('container_python', '/usr/bin/python3'),
         expert_parallel=model['expert_parallel'], data_parallel=1, quantization=model['quantization'],
         reasoning_parser='k2_horizon', max_model_len=config['max_model_len'], max_num_seqs=config['max_num_seqs'],
         max_batched_tokens=config['max_batched_tokens'], gpu_memory_utilization=config['gpu_memory_utilization'],
@@ -445,7 +466,9 @@ async def gpu(campaign, model):
         probe_args = ['apptainer', 'exec', '--nv', '--cleanenv', '--bind', f'{work}:{work}',
                       '--env', 'CUDA_VISIBLE_DEVICES=' + os.environ['CUDA_VISIBLE_DEVICES']]
         for key, value in cfg.environment.items(): probe_args += ['--env', key + '=' + value]
-        probed = subprocess.run([*probe_args, cfg.sif, 'python', '-c', probe], capture_output=True, text=True, check=True)
+        probe_command = [*probe_args, cfg.sif, cfg.container_python, '-c', probe]
+        probe_log = result_root / 'container-probe.json'
+        probed = container_check(probe_command, probe_log, 'GPU container preflight')
         write_json(result_root / 'environment.json', {'host': environment_report(), 'container_probe': probed.stdout,
                                                       'container_sha256': setup_info['sha256'], 'serving': cfg.model_dump()})
         group = ServerGroup(cfg, campaign['work'], str(result_root / 'servers'))

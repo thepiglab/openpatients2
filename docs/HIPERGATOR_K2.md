@@ -17,6 +17,17 @@ bash scripts/hpg_benchmark.sh \
 
 That single launcher command installs the small, locked Python 3.12 client environment and submits the complete job chain. Heavy dependencies, the container and all checkpoints are acquired in CPU jobs. GPU jobs use `uv run --no-sync --offline` and Hugging Face offline mode; they cannot fetch missing checkpoint files. Results and scratch must be on shared storage visible from all nodes. Use a **new work directory** for every new campaign.
 
+The vLLM 0.30.0 runtime image installs Python 3 as `/usr/bin/python3`; the launcher uses that absolute interpreter for both probes and `-m vllm.entrypoints.cli.main serve`. It does not assume a `python` alias exists. CPU setup checks the interpreter and installed vLLM version before any checkpoint download, saves `WORK/container-python.json`, and blocks downloads if setup failed. This CPU metadata check does not test CUDA or checkpoint loading. See the [pinned image Dockerfile](https://github.com/vllm-project/vllm/blob/v0.30.0/docker/Dockerfile).
+
+To test an existing SIF on one B200 without downloading weights, submit `scripts/hpg_container_check.sbatch` with the SIF path as its argument. For example, from the checkout:
+
+```bash
+sbatch --output=/path/to/run/container-check-%j.log \
+  scripts/hpg_container_check.sbatch /path/to/run/vllm.sif
+```
+
+The diagnostic prints Python/Torch/CUDA/vLLM failures directly, checks native K2 and its reasoning parser, and requests one GPU for at most ten minutes. Passing it does not establish successful quantized checkpoint loading or inference.
+
 Before submitting any jobs, the launcher checks each CPU/GPU resource profile with `sbatch --test-only`. It then submits every job held, and releases successors first and CPU setup last. Downloads cannot begin until the full chain, including every cleanup job, has been accepted. Preflight checks do not reserve resources; a later rejection still triggers rollback. Scheduler stdout/stderr and exact commands are saved in `WORK/slurm-commands.json`. `WORK/submission.json` records preflight, release and rollback status. A rejection prints Slurm's error directly instead of an uninformative Python traceback. See [Slurm's preflight and hold options](https://slurm.schedmd.com/sbatch.html) and [release command](https://slurm.schedmd.com/scontrol.html).
 
 If the client environment is already prepared, the equivalent command is:
@@ -55,7 +66,7 @@ uv run --locked --python 3.12 --no-dev op2 hpg-benchmark submit \
   --work-dir /blue/cai5724/wkieffer/op2-k2-runs/run-02
 ```
 
-The patch contains the launcher, evaluator, GPU worker, resource YAML, README and this guide. Retain the old work directory for inspection. If the new resource preflight fails, no jobs have been submitted; the displayed scheduler error and saved diagnostics identify the actual rejection. A submission or release failure requests cancellation of known job IDs and reports any rollback failure. On a release failure the launcher first reholds successors, so canceling an `afterany` parent cannot start a download. If reholding fails, it leaves the complete chain in place for inspection instead of canceling its cleanup jobs. A timeout or invalid job-ID response has an ambiguous submission outcome: inspect `squeue` for the recorded job name before retrying. Cancellation requests are recorded as requests, rather than proof that jobs have stopped.
+The patch contains the launcher, evaluator, serving launcher, GPU worker, container diagnostic, resource YAML, README and this guide. Retain the old work directory for inspection. If the new resource preflight fails, no jobs have been submitted; the displayed scheduler error and saved diagnostics identify the actual rejection. A submission or release failure requests cancellation of known job IDs and reports any rollback failure. On a release failure the launcher first reholds successors, so canceling an `afterany` parent cannot start a download. If reholding fails, it leaves the complete chain in place for inspection instead of canceling its cleanup jobs. A timeout or invalid job-ID response has an ambiguous submission outcome: inspect `squeue` for the recorded job name before retrying. Cancellation requests are recorded as requests, rather than proof that jobs have stopped.
 
 ## Storage and failures
 
@@ -73,6 +84,8 @@ The largest pinned checkpoint occupies **229.64 GB** before scratch. The downloa
 Every checkpoint is downloaded to `WORK/active-model/weights`; Hugging Face, Xet, custom-code and inference caches also live inside `WORK/active-model`. The CPU stage pins the exact HF commit, verifies every expected file's size, hashes every file, and checks LFS SHA256s. GPU preflight requires that successful audit and unchanged files. Cleanup deletes only this campaign's marked storage, preserving outputs, fixtures, container and uv environment. A filesystem lock also prevents inference and deletion from overlapping.
 
 The GPU stage and cleanup use `afterany`, so failed or timed-out models still reach deletion. A next download uses `afterok` on deletion, so a failed deletion stops the chain before a second model can occupy the disk. A failed setup/download does not leave dependent GPU/cleanup jobs stuck on `DependencyNeverSatisfied`. A handled download failure cancels its still-dependent GPU job, allowing CPU cleanup to proceed without acquiring GPUs; abrupt scheduler termination instead reaches GPU preflight and then cleanup. The other models continue after successful cleanup; the final report marks incomplete models and exits nonzero. Structural/medical extraction failures are measured outcomes, not reasons to abandon all remaining tasks.
+
+The GPU container preflight records its exact command, exit code, stdout and stderr in `WORK/results/MODEL/container-probe.json`, including failed probes. Its failure message includes the subprocess error and diagnostic path; a successful image build does not establish successful GPU initialization or native model/parser availability.
 
 Inspect `WORK/logs/`, `WORK/jobs.json`, and `WORK/results/MODEL/{download,gpu,cleanup}.json`. Slurm cancellation of the **entire** chain also cancels scheduled cleanup: after all GPU jobs have stopped, remove leftover owned storage with:
 

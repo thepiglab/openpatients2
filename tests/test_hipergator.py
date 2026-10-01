@@ -228,6 +228,7 @@ def test_topologies_use_exactly_the_requested_gpus_and_offline_native_quantizati
         assert sorted(gpu for c in commands for gpu in c['devices']) == ['GPU-' + str(i) for i in range(count)]
         for c in commands:
             args = c['argv']
+            assert args[args.index('vllm.entrypoints.cli.main')-2:args.index('vllm.entrypoints.cli.main')+1] == ['/usr/bin/python3', '-m', 'vllm.entrypoints.cli.main']
             assert 'HF_HUB_OFFLINE=1' in args and 'TRANSFORMERS_OFFLINE=1' in args
             assert args[args.index('--model-impl')+1] == 'vllm'
             assert args[args.index('--quantization')+1] == model['quantization']
@@ -247,6 +248,36 @@ def test_all_gpu_profiles_are_preflighted_including_the_mova_ram_override(tmp_pa
     with pytest.raises(RuntimeError, match='Synthetic MoVA memory rejection'):
         hpg.prepare(ROOT / hpg.DEFAULT_CONFIG, ROOT, work, submit=True)
     assert len(calls) == 5 and json.loads((work / 'jobs.json').read_text())['jobs'] == []
+
+
+@pytest.mark.parametrize('exit_code', [0, 255])
+def test_cpu_image_check_blocks_downloads_on_missing_interpreter(tmp_path, monkeypatch, exit_code):
+    hpg.prepare(ROOT / hpg.DEFAULT_CONFIG, ROOT, tmp_path / 'campaign')
+    campaign = hpg.read_campaign(tmp_path / 'campaign')
+    sif = tmp_path / 'existing.sif'; sif.write_bytes(b'SYNTHETIC IMAGE')
+    campaign['config']['existing_sif'] = str(sif)
+    monkeypatch.setattr(hpg, 'read_campaign', lambda work: campaign)
+    monkeypatch.delenv('SLURM_JOB_GPUS', raising=False)
+    monkeypatch.delenv('SLURM_STEP_GPUS', raising=False)
+    monkeypatch.setenv('SLURM_GPUS_ON_NODE', '0')
+    monkeypatch.setenv('CUDA_VISIBLE_DEVICES', '')
+    def run(args, **kwargs):
+        assert args[:4] == ['apptainer', 'exec', '--cleanenv', str(sif)]
+        assert args[4] == '/usr/bin/python3' and '--nv' not in args
+        compile(args[-1], '<cpu-container-check>', 'exec')
+        return subprocess.CompletedProcess(args, exit_code, '{"vllm":"0.30.0"}', 'FATAL: executable missing' if exit_code else '')
+    monkeypatch.setattr(hpg.subprocess, 'run', run)
+    work = Path(campaign['work'])
+    if exit_code:
+        with pytest.raises(RuntimeError, match='executable missing'): hpg.stage('setup', work)
+        assert json.loads((work / 'setup.json').read_text())['status'] == 'failed'
+        with pytest.raises(RuntimeError, match='no model download'):
+            hpg.download(campaign, campaign['config']['models'][0], lambda **kwargs: pytest.fail('Must not download'))
+        assert not hpg.active_path(campaign).exists()
+    else:
+        assert hpg.stage('setup', work)['status'] == 'ready'
+    assert json.loads((work / 'container-python.json').read_text())['returncode'] == exit_code
+    assert not (work / 'container-build').exists()
 
 
 def synthetic_throughput_arms():
@@ -524,20 +555,23 @@ async def test_secondary_shared_figure_assignment_is_attached_to_each_patient_an
 
 
 @pytest.mark.asyncio
-async def test_failed_gpu_start_stops_all_servers_and_leaves_checkpoint_for_cpu_cleanup(tmp_path, monkeypatch):
+@pytest.mark.parametrize('probe_exit', [0, 1])
+async def test_failed_gpu_start_stops_all_servers_and_leaves_checkpoint_for_cpu_cleanup(tmp_path, monkeypatch, probe_exit):
     campaign, model = small_download_campaign(tmp_path, monkeypatch)
     sif = tmp_path / 'fake.sif'; sif.write_bytes(b'SYNTHETIC IMAGE')
-    hpg.write_json(Path(campaign['work']) / 'setup.json', {'sif': str(sif), 'sha256': hpg.sha256(sif)})
+    hpg.write_json(Path(campaign['work']) / 'setup.json', {'status': 'ready', 'sif': str(sif), 'sha256': hpg.sha256(sif)})
     hpg.download(campaign, model, fake_download)
     monkeypatch.setenv('SLURM_JOB_ID', 'SYNTHETIC_TEST')
     monkeypatch.setenv('CUDA_VISIBLE_DEVICES', '0,1,2,3')
     def run(command, **kwargs):
         if command[0] == 'apptainer':
             assert 'HF_HUB_OFFLINE=1' in command and 'TRANSFORMERS_OFFLINE=1' in command
+            assert command[-3] == '/usr/bin/python3'
             probe = command[-1]
             compile(probe, '<container-probe>', 'exec')
             assert 'torch.cuda.device_count()==4' in probe and 'range(8)' not in probe
-        return subprocess.CompletedProcess(command, 0, stdout='SYNTHETIC GPU PROBE', stderr='')
+        return subprocess.CompletedProcess(command, probe_exit, stdout='SYNTHETIC GPU PROBE',
+                                           stderr='SYNTHETIC missing shared library' if probe_exit else '')
     monkeypatch.setattr(hpg.subprocess, 'run', run)
     monkeypatch.setattr(hpg, 'environment_report', lambda: {'test_fixture': True})
     stopped = []
@@ -546,8 +580,12 @@ async def test_failed_gpu_start_stops_all_servers_and_leaves_checkpoint_for_cpu_
         async def start(self, *args): raise RuntimeError('SYNTHETIC unsupported kernel')
         async def stop(self): stopped.append(True)
     monkeypatch.setattr(hpg, 'ServerGroup', FailedServers)
-    with pytest.raises(RuntimeError, match='unsupported kernel'): await hpg.gpu(campaign, model)
-    assert stopped == [True] and hpg.active_path(campaign).exists()
+    with pytest.raises(RuntimeError, match='missing shared library' if probe_exit else 'unsupported kernel'):
+        await hpg.gpu(campaign, model)
+    assert stopped == ([] if probe_exit else [True]) and hpg.active_path(campaign).exists()
+    probe = json.loads((Path(campaign['work']) / 'results' / model['name'] / 'container-probe.json').read_text())
+    assert probe['returncode'] == probe_exit and probe['stdout'] == 'SYNTHETIC GPU PROBE'
+    if probe_exit: assert probe['stderr'] == 'SYNTHETIC missing shared library'
     hpg.cleanup(campaign, model)
     assert not hpg.active_path(campaign).exists()
 
