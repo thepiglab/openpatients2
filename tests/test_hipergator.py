@@ -586,6 +586,30 @@ async def test_recommended_reasoning_arms_send_equal_sampling_and_budgets(tmp_pa
 
 
 @pytest.mark.asyncio
+async def test_answer_boundary_recovery_still_rejects_schema_invalid_clinical_output(tmp_path):
+    config = hpg.load_campaign(ROOT / hpg.DEFAULT_CONFIG, ROOT)
+    def handler(request):
+        if request.url.path == '/tokenize':
+            return httpx.Response(200, json={'count': 1000})
+        event = {'choices': [{'index': 0, 'delta': {'reasoning_content': 'Thoughts\n</ifm|think>\n{}'}, 'finish_reason': 'stop'}]}
+        return httpx.Response(200, text='data: ' + json.dumps(event) + '\n\ndata: [DONE]\n\n')
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as http:
+        replay = Replay(FIXTURES, tmp_path, config['models'][0], config['arms']['ifm_low'],
+                        ['http://127.0.0.1:8000/v1'], 1, 60, 65536, http=http)
+        try:
+            result = await replay.call(replay.requests[0])
+        finally:
+            await replay.close()
+    assert result['status'] == 'failed' and result['data'] is None
+    assert len(result['attempts']) == 2
+    for attempt in result['attempts']:
+        assert attempt['endpoint_response']['content'] == ''
+        assert attempt['response']['content'] == '{}'
+        assert attempt['answer_boundary_recovery'] and attempt['errors']
+        assert 'No complete parseable object' not in attempt['errors'][0]
+
+
+@pytest.mark.asyncio
 @pytest.mark.parametrize('probe_exit', [0, 1])
 async def test_failed_gpu_start_stops_all_servers_and_leaves_checkpoint_for_cpu_cleanup(tmp_path, monkeypatch, probe_exit):
     campaign, model = small_download_campaign(tmp_path, monkeypatch)

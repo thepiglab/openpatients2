@@ -19,6 +19,7 @@ import numpy as np
 
 from .article_tasks import check_article_task, task_messages
 from .client import APIClient
+from .k2_output import recover_answer
 from .config import APIConfig
 from .data import read_jsonl, write_json
 from .fidelity import evaluate, summarize, validate_reference, review_sample
@@ -154,6 +155,8 @@ class Replay:
                                      'tokenized_prompt_tokens': count, 'max_tokens': cap, 'metrics': {}})
                     break
                 response = await client.complete_once(client.config.endpoints[0], request['task'], messages, cap)
+                endpoint_response = response.response()
+                response, boundary_recovery = recover_answer(response, self.model['id'])
                 candidate = None; errors = []
                 if response.error:
                     errors = [response.error]
@@ -166,6 +169,7 @@ class Replay:
                     except (ValueError, TypeError, KeyError, jsonschema.ValidationError) as exc:
                         errors = [str(exc)[:4000]]
                 attempts.append({'attempt': attempt, 'response': response.response(), 'metrics': response.metrics(),
+                                 'endpoint_response': endpoint_response, 'answer_boundary_recovery': boundary_recovery,
                                  'candidate': candidate, 'errors': errors, 'max_tokens': cap,
                                  'tokenized_prompt_tokens': count, 'messages_sha256': json_digest(messages)})
                 # Persist even if the job is killed before its other tasks finish.
@@ -222,6 +226,7 @@ class Replay:
                   'fixtures': self.manifest, 'wall_seconds': wall, 'resumed_tasks': sum(r['resumed'] for r in results),
                   'tasks': len(results), 'valid_tasks': sum(r['status'] == 'valid' for r in results),
                   'first_attempt_valid_tasks': sum(bool(r['attempts'] and not r['attempts'][0]['errors']) for r in results),
+                  'answer_boundary_recovered_attempts': sum(bool(a.get('answer_boundary_recovery')) for r in results for a in r['attempts']),
                   'by_task': {task: {'total': sum(r['task'] == task for r in results),
                                     'valid': sum(r['task'] == task and r['status'] == 'valid' for r in results)}
                               for task in sorted({r['task'] for r in results})},
