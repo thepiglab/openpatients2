@@ -112,7 +112,7 @@ def render(config: ServingConfig, root: str = ".") -> list[dict]:
                         "--max-model-len", str(config.max_model_len), "--max-num-seqs", str(config.max_num_seqs),
                         "--max-num-batched-tokens", str(config.max_batched_tokens),
                         "--gpu-memory-utilization", str(config.gpu_memory_utilization),
-                        "--kv-cache-dtype", config.kv_cache_dtype, "--enable-chunked-prefill", "--disable-log-requests"]
+                        "--kv-cache-dtype", config.kv_cache_dtype, "--enable-chunked-prefill"]
                 if config.prefix_cache:
                     cmd += ["--enable-prefix-caching"]
                 else:

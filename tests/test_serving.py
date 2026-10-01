@@ -19,6 +19,7 @@ def test_all_profiles_fit_budget_and_render(path, monkeypatch):
     assert all(x["argv"][0] == "apptainer" for x in commands)
     assert all("HF_HUB_OFFLINE=1" in x["argv"] for x in commands)
     assert all("--host" in x["argv"] and "127.0.0.1" in x["argv"] for x in commands)
+    assert all("--disable-log-requests" not in x["argv"] for x in commands)
 
 
 def test_external_dp_has_disjoint_devices_and_explicit_rank(monkeypatch):
