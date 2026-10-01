@@ -15,7 +15,7 @@ command -v uv >/dev/null
 command -v setsid >/dev/null
 # TERM unwinds Python and shuts down all independently sessioned vLLM servers.
 # Do not let the uv wrapper absorb Slurm's advance signal.
-setsid uv run --no-sync --offline op2 hpg-benchmark stage gpu --work-dir "$work" --model "$model" &
+setsid uv run --python 3.12 --no-sync --offline op2 hpg-benchmark stage gpu --work-dir "$work" --model "$model" &
 pid=$!
 terminate() {
   local status="$1"

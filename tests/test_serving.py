@@ -57,3 +57,24 @@ def test_over_budget_rejected():
     raw["replicas"] = 2
     with pytest.raises(ValueError):
         ServingConfig.model_validate(raw)
+
+
+@pytest.mark.asyncio
+async def test_real_server_exit_retains_original_error_and_log(tmp_path, monkeypatch):
+    import sys
+    from openpatients2.serving import ServerGroup
+    monkeypatch.delenv('CUDA_VISIBLE_DEVICES', raising=False)
+    config = ServingConfig.load(str(ROOT / 'configs/serving/k2-vllm-tp8.yaml'))
+    group = ServerGroup(config, str(tmp_path), str(tmp_path / 'logs'))
+    monkeypatch.setattr(group, 'preflight', lambda: {'synthetic': True})
+    group.commands = [{'argv': [sys.executable, '-c',
+                               "import sys; print('SYNTHETIC kernel failure', flush=True); sys.exit(7)"],
+                       'endpoint': 'http://127.0.0.1:1/v1'}]
+    with pytest.raises(RuntimeError, match='exited 7') as failure:
+        await group.start(timeout=10)
+    assert 'SYNTHETIC kernel failure' in str(failure.value)
+    record = json.loads((tmp_path / 'logs/startup.json').read_text())
+    assert record['failed_servers'][0]['returncode'] == 7
+    assert Path(record['failed_servers'][0]['log']).is_absolute()
+    assert not group.processes and not group.files
+    assert group.stop() is None  # Real synchronous interface; repeated cleanup is safe.

@@ -10,6 +10,7 @@ import re
 import shlex
 import shutil
 import subprocess
+import sys
 import tarfile
 import time
 from contextlib import contextmanager
@@ -70,6 +71,11 @@ def load_campaign(path, root):
             raise ValueError('Disk estimate differs from the pinned checkpoint inventory')
         if model['tensor_parallel'] < 1 or model['replicas'] < 1:
             raise ValueError('GPU topology sizes must be positive')
+        profile = meta['reasoning_profile']
+        for arm in config['arms'].values():
+            if arm['reasoning_effort'] not in profile['supported_levels']:
+                raise ValueError('Unsupported checkpoint reasoning level: ' + arm['reasoning_effort'])
+        model['reasoning_profile'] = profile
         model['metadata'] = str(meta_path.resolve())
     if len(set(names)) != len(names): raise ValueError('Duplicate model names')
     for arm in config['arms'].values():
@@ -386,6 +392,8 @@ def download(campaign, model, downloader=None):
             if not local.is_file() or local.stat().st_size != asset['size']:
                 raise ValueError('Incomplete checkpoint file: ' + asset['rfilename'])
             expected = (asset.get('lfs') or {}).get('sha256')
+            if asset['rfilename'] == 'chat_template.jinja':
+                expected = meta['reasoning_profile']['template_sha256']
             actual = sha256(local)
             if expected and expected != actual: raise ValueError('Checkpoint SHA256 mismatch: ' + asset['rfilename'])
             audited.append({'file': asset['rfilename'], 'bytes': asset['size'], 'sha256': actual,
@@ -491,7 +499,7 @@ async def gpu(campaign, model):
                                 endpoints, config['concurrency_per_replica'], config['request_timeout_seconds'], config['max_model_len'])
                 try:
                     reports[arm_name] = await replay.run()
-                    if arm_name == 'ifm_high': await replay.secondary()
+                    if arm_name.startswith('ifm_'): await replay.secondary()
                 finally: await replay.close()
             # Plain article token lengths use this checkpoint's serving tokenizer,
             # distinct from the repeated input tokens spent across extraction calls.
@@ -519,12 +527,19 @@ async def gpu(campaign, model):
                     'throughput': throughput,
                     'arms': {a: {'tasks': r['tasks'], 'valid_tasks': r['valid_tasks'], 'scores': r['scores']} for a, r in reports.items()}}
         finally:
-            await group.stop()
-            if monitor:
-                monitor.terminate()
-                try: monitor.wait(timeout=10)
-                except subprocess.TimeoutExpired: monitor.kill(); monitor.wait()
-            if log: log.close()
+            primary_error = sys.exception()
+            try:
+                group.stop()
+            except Exception as cleanup_error:
+                write_json(result_root / 'server-cleanup-error.json', {'error': repr(cleanup_error)})
+                if primary_error is None:
+                    raise
+            finally:
+                if monitor:
+                    monitor.terminate()
+                    try: monitor.wait(timeout=10)
+                    except subprocess.TimeoutExpired: monitor.kill(); monitor.wait()
+                if log: log.close()
 
 
 def throughput_summary(model, arms, gpu_stage_seconds=None):
@@ -548,9 +563,9 @@ def throughput_summary(model, arms, gpu_stage_seconds=None):
             'unique_articles_processed': len(articles),
             'complete_benchmark_articles_per_hour': len(articles) * 3600 / gpu_stage_seconds
                 if fresh and gpu_stage_seconds and gpu_stage_seconds > 0 else None,
-            'notice': 'Aggregate across all replicas and both arms, including secondary calls when present. '
+            'notice': 'Aggregate across all replicas and all arms, including secondary calls when present. '
                       'Evaluation rates exclude startup/warmup. Allocated-time rates include stage startup. '
-                      'Articles/hour measures the complete two-arm benchmark, not a single extraction pass. '
+                      'Articles/hour measures the complete configured benchmark, not a single extraction pass. '
                       'Missing usage stays unknown; resumed runs have no fresh throughput rate.'}
 
 
@@ -587,10 +602,10 @@ def report(campaign):
     for row in results:
         t = row['throughput']
         lines.append(f"| {row['model']['name']} | {t['gpu_count']} | {shown(t['aggregate_output_tokens_per_second'])} | {shown(t['output_tokens_per_gpu_second'])} | {shown(t['gpu_stage_seconds'])} | {shown(t['complete_benchmark_articles_per_hour'])} |")
-    lines += ['', 'Rates aggregate all replicas and both arms, including secondary calls. Evaluation token rates exclude startup and warmup; articles/hour includes GPU-stage startup and both benchmark arms. Queue waiting is excluded. Missing usage and resumed runs have unavailable rates.', '',
+    lines += ['', 'Rates aggregate all replicas and all arms, including secondary calls. Evaluation token rates exclude startup and warmup; articles/hour includes GPU-stage startup and all benchmark arms. Queue waiting is excluded. Missing usage and resumed runs have unavailable rates.', '',
               'Failed/incomplete models: ' + (', '.join(failures) or 'none'), '',
-              'Matched uses frozen prompts, historical clinical gates, T=0/top_p=1, low reasoning and 8k/16k output caps. IFM-high uses T=1/top_p=.95/high reasoning and 32k output caps. Reasoning effort is model specific. Historical hosted timings are not local GPU throughput.', '',
-              'Visual interpretation is unavailable and omitted; captions and text-based figure attribution remain available. Secondary discovery/attribution results and pending review forms are in each IFM-high folder.', '',
+              'Matched uses frozen prompts, historical clinical gates, T=0/top_p=1, low reasoning and 8k/16k output caps. IFM-low/medium/high use T=1/top_p=.95 and identical 32k output caps; high is the publisher recommendation, low/medium are speed-quality experiments. Historical hosted timings are not local GPU throughput.', '',
+              'Visual interpretation is unavailable and omitted; captions and text-based figure attribution remain available. Secondary discovery/attribution results and pending review forms are in each IFM arm folder.', '',
               'The 197 checks are a partial checklist, not comprehensive medical precision/recall. See summary.json for historical comparison, per-article token mean/median/P95 and missing-usage counts.']
     (work / 'SUMMARY.md').write_text('\n'.join(lines) + '\n')
     return {'summary': str(work / 'summary.json'), 'markdown': str(work / 'SUMMARY.md'), 'failed_records': len(failures)}
@@ -611,7 +626,7 @@ def stage(stage_name, work, model_name=None):
         write_json(output, result)
         return result
     except BaseException as exc:
-        write_json(output, {'status': 'failed', 'stage': stage_name, 'error_type': type(exc).__name__, 'error': str(exc)[:2000]})
+        write_json(output, {'status': 'failed', 'stage': stage_name, 'error_type': type(exc).__name__, 'error': str(exc)})
         if stage_name == 'download':
             # This download has unwound its ownership lock and saved its failure.
             # Cancel only its still-dependent GPU job to avoid waiting for allocated

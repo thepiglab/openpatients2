@@ -192,8 +192,18 @@ class ServerGroup:
             start = time.monotonic()
             async with httpx.AsyncClient(timeout=5) as client:
                 while time.monotonic() - start < timeout:
-                    if any(p.poll() is not None for p in self.processes):
-                        raise RuntimeError("Serving process exited during startup; inspect per-rank logs")
+                    failed = [(i, p.returncode) for i, p in enumerate(self.processes) if p.poll() is not None]
+                    if failed:
+                        details = []
+                        for i, code in failed:
+                            path = (self.logs / f"server-{i}.log").resolve()
+                            with path.open('rb') as source:
+                                source.seek(max(0, path.stat().st_size - 12000))
+                                tail = source.read().decode('utf-8', errors='replace')
+                            details.append({'replica': i, 'returncode': code, 'log': str(path), 'tail': tail})
+                        write_json(self.logs / 'startup.json', {'status': 'failed', 'failed_servers': details})
+                        detail = '\n'.join(f"Replica {d['replica']} exited {d['returncode']}; {d['log']}\n{d['tail']}" for d in details)
+                        raise RuntimeError("Serving process exited during startup:\n" + detail)
                     ready = []
                     for item in self.commands:
                         try:
@@ -208,7 +218,10 @@ class ServerGroup:
                     await asyncio.sleep(2)
             raise TimeoutError("Serving readiness timeout")
         except BaseException:
-            self.stop()
+            try:
+                self.stop()
+            except Exception as cleanup_error:
+                write_json(self.logs / 'cleanup-error.json', {'error': repr(cleanup_error)})
             raise
 
     def stop(self):

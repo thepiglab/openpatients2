@@ -334,19 +334,23 @@ def test_final_report_persists_model_throughput_and_displays_actual_gpu_counts(t
         hpg.write_json(output / 'gpu.json', {'status': 'completed', 'gpu_stage_seconds': 80})
         hpg.write_json(output / 'cleanup.json', {'status': 'deleted'})
         arms = synthetic_throughput_arms()
+        for name in campaign['config']['arms']:
+            if name not in arms:
+                arms[name] = copy.deepcopy(arms['ifm_high'])
         for arm, data in arms.items():
             data.update(tasks=10, valid_tasks=10, scores={k: {'matched': 161, 'forbidden_violations': 0} for k in ('raw', 'delivered')})
             hpg.write_json(output / arm / 'report.json', data)
     result = hpg.report(campaign)
     summary = json.loads(Path(result['summary']).read_text())
     assert [m['throughput']['gpu_count'] for m in summary['models']] == [4, 2, 2, 2]
-    assert all(m['throughput']['aggregate_output_tokens_per_second'] == 50 for m in summary['models'])
+    assert all(m['throughput']['aggregate_output_tokens_per_second'] == 40 for m in summary['models'])
     for model in campaign['config']['models']:
         assert (Path(campaign['work']) / 'results' / model['name'] / 'throughput.json').exists()
     text = Path(result['markdown']).read_text()
     assert 'Output tokens/GPU-second' in text and 'Complete benchmark articles/hour' in text
-    assert '| k2-375b-nvfp4 | 4 | 50.00 | 12.50 |' in text
-    assert '| k2-7b-fp8 | 2 | 50.00 | 25.00 |' in text
+    assert '| k2-375b-nvfp4 | 4 | 40.00 | 10.00 |' in text
+    assert '| k2-7b-fp8 | 2 | 40.00 | 20.00 |' in text
+    assert summary['failed_models'] == []
 
 
 def small_download_campaign(tmp_path, monkeypatch):
@@ -555,6 +559,33 @@ async def test_secondary_shared_figure_assignment_is_attached_to_each_patient_an
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize('model_index', range(4))
+@pytest.mark.parametrize('level', ['low', 'medium', 'high'])
+async def test_recommended_reasoning_arms_send_equal_sampling_and_budgets(tmp_path, model_index, level):
+    config = hpg.load_campaign(ROOT / hpg.DEFAULT_CONFIG, ROOT)
+    model = config['models'][model_index]
+    arm = config['arms']['ifm_' + level]
+    assert model['reasoning_profile']['supported_levels'] == ['low', 'medium', 'high']
+    assert arm['max_tokens'] == arm['retry_tokens'] == 32768
+    sent = []
+    def handler(request):
+        sent.append(json.loads(request.content))
+        return httpx.Response(200, text='data: ' + json.dumps({'choices': [
+            {'index': 0, 'delta': {'content': '{}'}, 'finish_reason': 'stop'}]}) + '\n\ndata: [DONE]\n\n')
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as http:
+        replay = Replay(FIXTURES, tmp_path, model, arm, ['http://127.0.0.1:8000/v1'], 1, 60, 65536, http=http)
+        try:
+            request = replay.requests[0]
+            await replay.clients[0].complete_once('http://127.0.0.1:8000/v1', request['task'], request['messages'], arm['max_tokens'])
+        finally:
+            await replay.close()
+    assert sent[0]['temperature'] == 1.0 and sent[0]['top_p'] == 0.95
+    assert sent[0]['max_tokens'] == 32768
+    assert sent[0]['chat_template_kwargs']['reasoning_effort'] == level
+    assert 'response_format' not in sent[0] and 'structured_outputs' not in sent[0]
+
+
+@pytest.mark.asyncio
 @pytest.mark.parametrize('probe_exit', [0, 1])
 async def test_failed_gpu_start_stops_all_servers_and_leaves_checkpoint_for_cpu_cleanup(tmp_path, monkeypatch, probe_exit):
     campaign, model = small_download_campaign(tmp_path, monkeypatch)
@@ -578,7 +609,7 @@ async def test_failed_gpu_start_stops_all_servers_and_leaves_checkpoint_for_cpu_
     class FailedServers:
         def __init__(self, *args): pass
         async def start(self, *args): raise RuntimeError('SYNTHETIC unsupported kernel')
-        async def stop(self): stopped.append(True)
+        def stop(self): stopped.append(True)
     monkeypatch.setattr(hpg, 'ServerGroup', FailedServers)
     with pytest.raises(RuntimeError, match='missing shared library' if probe_exit else 'unsupported kernel'):
         await hpg.gpu(campaign, model)

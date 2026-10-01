@@ -17,4 +17,4 @@ if [[ "$stage" == setup ]]; then
 fi
 args=(hpg-benchmark stage "$stage" --work-dir "$work")
 if [[ -n "$model" ]]; then args+=(--model "$model"); fi
-exec uv run --no-sync --offline op2 "${args[@]}"
+exec uv run --python 3.12 --no-sync --offline op2 "${args[@]}"
