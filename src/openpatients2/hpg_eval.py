@@ -43,6 +43,18 @@ def usage_stats(rows, key):
     return result
 
 
+def sampling_body(model, arm):
+    """Use the checkpoint's actual template control, not a provider's alias."""
+    profile = model.get('reasoning_profile', {})
+    if profile.get('template_kwarg') == 'reasoning_strength':
+        body = {'chat_template_kwargs': {'reasoning_strength': arm['reasoning_effort']},
+                'skip_special_tokens': False}
+    else:
+        body = {'chat_template_kwargs': {'reasoning_effort': arm['reasoning_effort'], 'tool_call_format': 'xml'}}
+    if 'top_k' in arm: body['top_k'] = arm['top_k']
+    return body
+
+
 def fixtures(path: Path):
     """Reject changed inputs or gold labels before requests leave the client."""
     manifest = json.loads((path / 'manifest.json').read_text())
@@ -104,7 +116,7 @@ class Replay:
         self.clients = [APIClient(APIConfig(endpoints=[e], model='clinical-extractor', model_id=model['id'],
             revision=model['revision'], api_key_env='OP2_LOCAL_UNUSED_API_KEY', response_format='prompt_json',
             temperature=arm['temperature'], top_p=arm['top_p'], http_retries=0, timeout_seconds=timeout,
-            extra_body={'chat_template_kwargs': {'reasoning_effort': arm['reasoning_effort'], 'tool_call_format': 'xml'}}),
+            seed=arm.get('seed'), extra_body=sampling_body(model, arm)),
             http=http, schema_overrides={r['task']: r['schema'] for r in self.requests}) for e in endpoints]
         self.slots = [asyncio.Semaphore(concurrency) for _ in endpoints]
         # Round-robin by patient, then keep all that patient's tasks on one replica
@@ -201,12 +213,14 @@ class Replay:
             predictions[rid]['delivered'][task] = result['data']
         for rid, packet in self.packets.items():
             source = copy.deepcopy(packet)
-            source.setdefault('multimedia', {}).update({'pixels_inspected': False, 'vision_status': 'unsupported_by_model'})
+            vision_capable = self.model.get('capabilities', {}).get('vision', False)
+            vision_status = 'not_evaluated_text_only' if vision_capable else 'unsupported_by_model'
+            source.setdefault('multimedia', {}).update({'pixels_inspected': False, 'vision_status': vision_status})
             tasks = grouped[rid]
             clinical = {t: r['data'] for t, r in tasks.items() if t not in {'summary', 'timeline'}}
             patient = {'schema_version': '2.1.0', 'source': source,
-                'model': {'model_id': self.model['id'], 'revision': self.model['revision'], 'capabilities': {'vision': False}},
-                'vision': {'status': 'unsupported_by_model', 'pixels_inspected': False,
+                'model': {'model_id': self.model['id'], 'revision': self.model['revision'], 'capabilities': {'vision': vision_capable}},
+                'vision': {'status': vision_status, 'pixels_inspected': False,
                            'caption_text_available': any(f.get('caption') for f in source['article_source']['figures']),
                            'pixel_interpretation_evaluated': False},
                 'sections': clinical,
@@ -339,7 +353,7 @@ class Replay:
             patient = json.loads(path.read_text())
             assignments, media = patient_media(self.articles[aid], rosters[aid], pid,
                                                [r for r in reviews[aid] if r['data'] is not None])
-            media.update({'vision_status': 'unsupported_by_model', 'pixels_inspected': False})
+            media.update({'vision_status': patient['vision']['status'], 'pixels_inspected': False})
             patient['source']['figure_assignments'] = assignments
             patient['source']['multimedia'] = media
             patient['figure_attribution'] = {'method': 'text_only_caption_and_article', 'semantic_review': 'unreviewed'}

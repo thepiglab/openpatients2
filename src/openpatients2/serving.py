@@ -38,6 +38,9 @@ class ServingConfig(ConfigModel):
     reasoning_parser: str | None = None
     quantization: str | None = None
     speculation: Literal["off", "mtp", "ngram"] = "off"
+    # Complete, pinned backend-specific speculative configuration (e.g. DFlash).
+    speculative_config: dict | None = None
+    decode_context_parallel: int = Field(default=1, ge=1)
     speculative_tokens: int = Field(default=1, ge=1)
     max_model_len: int = Field(default=65536, ge=1024)
     max_num_seqs: int = Field(default=128, ge=1)
@@ -49,8 +52,10 @@ class ServingConfig(ConfigModel):
     rpc_port: int = Field(default=13345, ge=1024, le=60000)
     extra_args: list[str] = Field(default_factory=list)
     environment: dict[str, str] = Field(default_factory=dict)
+    bind_files: dict[str, str] = Field(default_factory=dict)
     experimental: bool = False
     validation_note: str = "Not hardware-tested by this project"
+    startup_wave_size: int | None = Field(default=None, ge=1)
 
     @model_validator(mode="after")
     def topology(self):
@@ -60,9 +65,15 @@ class ServingConfig(ConfigModel):
             raise ValueError("Only SGLang TP/EP non-speculative profiles are implemented; do not pretend an unverified feature works")
         if self.pipeline_parallel != 1:
             raise ValueError("PP>1 is not implemented in this one-node launcher")
+        if self.tensor_parallel % self.decode_context_parallel or (self.backend != 'vllm' and self.decode_context_parallel != 1):
+            raise ValueError('Decode context parallelism must divide vLLM tensor parallelism')
+        if self.speculative_config and (self.backend != 'vllm' or self.speculation != 'off'):
+            raise ValueError('Use one vLLM speculative configuration at a time')
+        if self.startup_wave_size and self.external_dp and self.data_parallel > 1:
+            raise ValueError('Connected external DP ranks must start together; startup waves are for independent replicas')
         managed = {"--port", "--host", "--tensor-parallel-size", "--data-parallel-size", "--data-parallel-rank",
                    "--model", "--model-path", "--served-model-name", "--tp", "--tp-size", "--ep", "--ep-size",
-                   "--speculative-config", "--gpu-memory-utilization", "--mem-fraction-static"}
+                   "--speculative-config", "--decode-context-parallel-size", "--gpu-memory-utilization", "--mem-fraction-static"}
         if any(arg.split("=")[0] in managed for arg in self.extra_args):
             raise ValueError("extra_args cannot override managed topology/model/memory flags")
         return self
@@ -101,6 +112,10 @@ def render(config: ServingConfig, root: str = ".") -> list[dict]:
             # Local model paths outside the project root must also be explicitly mounted.
             if not Path(model).is_relative_to(root_path):
                 cmd += ["--bind", f"{model}:{model}"]
+            for source, target in config.bind_files.items():
+                if not Path(source).is_absolute() or not Path(target).is_absolute() or ':' in source or ':' in target:
+                    raise ValueError('Container file overlays require absolute paths without colons')
+                cmd += ['--bind', f'{source}:{target}:ro']
             for key, value in env.items():
                 cmd += ["--env", f"{key}={value}"]
             cmd += [sif]
@@ -113,6 +128,8 @@ def render(config: ServingConfig, root: str = ".") -> list[dict]:
                         "--max-num-batched-tokens", str(config.max_batched_tokens),
                         "--gpu-memory-utilization", str(config.gpu_memory_utilization),
                         "--kv-cache-dtype", config.kv_cache_dtype, "--enable-chunked-prefill"]
+                if config.decode_context_parallel > 1:
+                    cmd += ['--decode-context-parallel-size', str(config.decode_context_parallel)]
                 if config.prefix_cache:
                     cmd += ["--enable-prefix-caching"]
                 else:
@@ -133,6 +150,8 @@ def render(config: ServingConfig, root: str = ".") -> list[dict]:
                     spec = {"method": "ngram", "num_speculative_tokens": config.speculative_tokens,
                             "prompt_lookup_max": 5, "prompt_lookup_min": 3}
                     cmd += ["--speculative-config", json.dumps(spec)]
+                if config.speculative_config:
+                    cmd += ['--speculative-config', json.dumps(config.speculative_config)]
             else:
                 cmd += ["python", "-m", "sglang.launch_server", "--model-path", model,
                         "--served-model-name", config.served_model_name, "--trust-remote-code",
@@ -184,12 +203,18 @@ class ServerGroup:
         write_json(self.logs / "deployment.json", {"serving": self.config.model_dump(), "snapshot": snapshot,
                                                   "commands": self.commands, "kernel_validation": "pending real smoke/benchmark"})
         try:
-            for i, item in enumerate(self.commands):
-                handle = open(self.logs / f"server-{i}.log", "w", encoding="utf-8")
-                self.files.append(handle)
-                self.processes.append(subprocess.Popen(item["argv"], cwd=self.root, stdout=handle, stderr=subprocess.STDOUT, start_new_session=True))
-            # All EP-connected ranks must launch before waiting for readiness.
             start = time.monotonic()
+            wave = self.config.startup_wave_size or len(self.commands)
+            def launch_wave():
+                offset = len(self.processes)
+                for i in range(offset, min(offset + wave, len(self.commands))):
+                    item = self.commands[i]
+                    handle = open(self.logs / f"server-{i}.log", "w", encoding="utf-8")
+                    self.files.append(handle)
+                    self.processes.append(subprocess.Popen(item["argv"], cwd=self.root, stdout=handle, stderr=subprocess.STDOUT, start_new_session=True))
+            # Connected EP/DP ranks launch together. Independent dense replicas
+            # may launch in waves to bound transient host loading memory.
+            launch_wave()
             async with httpx.AsyncClient(timeout=5) as client:
                 while time.monotonic() - start < timeout:
                     failed = [(i, p.returncode) for i, p in enumerate(self.processes) if p.poll() is not None]
@@ -205,13 +230,16 @@ class ServerGroup:
                         detail = '\n'.join(f"Replica {d['replica']} exited {d['returncode']}; {d['log']}\n{d['tail']}" for d in details)
                         raise RuntimeError("Serving process exited during startup:\n" + detail)
                     ready = []
-                    for item in self.commands:
+                    for item in self.commands[:len(self.processes)]:
                         try:
                             response = await client.get(item["endpoint"] + "/models")
                             ready.append(response.status_code == 200)
                         except httpx.HTTPError:
                             ready.append(False)
                     if all(ready):
+                        if len(self.processes) < len(self.commands):
+                            launch_wave()
+                            continue
                         write_json(self.logs / "startup.json", {"startup_seconds": time.monotonic() - start,
                                                                "ready_endpoints": [x["endpoint"] for x in self.commands]})
                         return self.commands

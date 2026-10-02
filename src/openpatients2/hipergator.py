@@ -61,11 +61,11 @@ def load_campaign(path, root):
         if 'MoVA' in model['id'] and model['tensor_parallel'] not in (1, 2):
             raise ValueError('MoVA FP8 requires TP=1 or TP=2 to preserve whole quantization blocks')
         # Metadata is pinned alongside the launch profile, never inferred from model names.
-        meta_path = Path(root) / 'configs/hipergator' / (model['id'].split('/')[-1] + '.metadata.json')
+        meta_path = Path(root) / model.get('metadata', 'configs/hipergator/' + model['id'].split('/')[-1] + '.metadata.json')
         meta = json.loads(meta_path.read_text())
         if (meta['revision'], meta['model_id']) != (model['revision'], model['id']):
             raise ValueError('Checkpoint/profile metadata mismatch')
-        if meta['config']['quantization_config']['quant_method'] != model['quantization']:
+        if (meta['config'].get('quantization_config') or {}).get('quant_method') != model['quantization']:
             raise ValueError('Quantization profile differs from the checkpoint')
         if model['expected_bytes'] != sum(f['size'] for f in meta['files']):
             raise ValueError('Disk estimate differs from the pinned checkpoint inventory')
@@ -81,6 +81,9 @@ def load_campaign(path, root):
     for arm in config['arms'].values():
         if arm['max_tokens'] < 128 or arm['retry_tokens'] < arm['max_tokens'] or arm['retry_tokens'] >= config['max_model_len']:
             raise ValueError('Output budget must leave room for source tokens')
+    if config.get('benchmark_family') == 'glimmer':
+        from .glimmer_benchmark import validate_config
+        validate_config(config, Path(root))
     fixtures(Path(root) / config['fixtures'])
     return config
 
@@ -88,19 +91,23 @@ def load_campaign(path, root):
 def package(root, output):
     """An explicit allowlist excludes caches, credentials, historical raw responses and weights."""
     root = Path(root).resolve(); output = Path(output).resolve()
-    files = {root / p for p in ('pyproject.toml', 'uv.lock', 'README.md', 'docs/HIPERGATOR_K2.md')}
+    files = {root / p for p in ('pyproject.toml', 'uv.lock', 'README.md', 'docs/HIPERGATOR_K2.md', 'docs/HIPERGATOR_GLIMMER.md') if (root / p).exists()}
     for name in ('LICENSE', 'LICENSE.md'):
         if (root / name).exists(): files.add(root / name)
     for folder in ('src/openpatients2', 'configs/hipergator', 'benchmarks/hipergator-k2'):
-        files.update(p for p in (root / folder).rglob('*') if p.is_file() and p.suffix in {'.py', '.md', '.json', '.jsonl', '.sha256', '.yaml'})
+        files.update(p for p in (root / folder).rglob('*') if p.is_file() and p.suffix in {'.py', '.md', '.json', '.jsonl', '.sha256', '.yaml', '.jinja', '.txt'})
     files.update(root.glob('scripts/hpg_*'))
     if any(p.is_symlink() for p in files): raise ValueError('Package files cannot be symlinks')
     fixtures(root / 'benchmarks/hipergator-k2/fixtures')
     output.parent.mkdir(parents=True, exist_ok=True)
     with tarfile.open(output, 'w:gz') as archive:
         for p in sorted(files): archive.add(p, arcname=str(Path('openpatients2-k2-benchmark') / p.relative_to(root)), recursive=False)
+    # The same explicit allowlist supports updating an existing cluster checkout
+    # with rsync, without transferring histories, environments or weights.
+    transfer = output.with_suffix(output.suffix + '.files.txt')
+    transfer.write_text(''.join(str(p.relative_to(root)) + '\n' for p in sorted(files)))
     result = {'archive': str(output), 'bytes': output.stat().st_size, 'sha256': sha256(output), 'files': len(files),
-              'weights_included': False, 'credentials_included': False}
+              'transfer_manifest': str(transfer), 'weights_included': False, 'credentials_included': False}
     write_json(output.with_suffix(output.suffix + '.manifest.json'), result)
     return result
 
@@ -187,7 +194,7 @@ def prepare(config_path, root, work, submit=False, account=None, qos=None, sif=N
     files = sorted(p for p in (root / 'src/openpatients2').rglob('*') if p.suffix in {'.py', '.md'})
     files += [root / 'pyproject.toml', root / 'uv.lock']
     files += sorted(root.glob('scripts/hpg_*'))
-    files += sorted((root / 'configs/hipergator').glob('*.json'))
+    files += sorted(p for p in (root / 'configs/hipergator').rglob('*') if p.is_file() and p.suffix in {'.json', '.jinja', '.md'})
     write_json(work / 'runtime-manifest.json', {str(p.relative_to(root)): sha256(p) for p in files})
     previous = None; previous_stage = None; jobs = []; audit = []
     # Environment options can silently replace CLI defaults; use only the configured request.
@@ -355,6 +362,9 @@ def setup(campaign):
                 f'assert v=={config["engine_version"]!r}, (v,{config["engine_version"]!r})')
         container_check(['apptainer', 'exec', '--cleanenv', str(sif), interpreter, '-c', code],
                         work / 'container-python.json', 'CPU container interpreter/package check')
+        if config.get('benchmark_family') == 'glimmer':
+            from .glimmer_benchmark import setup_plugins
+            setup_plugins(campaign, sif, interpreter)
         result = {'status': 'ready', 'sif': str(sif), 'sha256': sha256(sif),
                   'image': config['image'], 'engine_expected': config['engine_version'], 'container_python': interpreter}
         write_json(work / 'setup.json', result)
@@ -371,7 +381,12 @@ def download(campaign, model, downloader=None):
         raise RuntimeError('CPU container setup did not complete successfully; no model download')
     with model_lock(work):
         if path.exists(): raise ValueError('Previous checkpoint has not been deleted; refusing a second download')
-        need = int(model['expected_bytes'] * 1.1) + config['disk_headroom_gb'] * 1_000_000_000
+        expected_bytes = model['expected_bytes']
+        if config.get('benchmark_family') == 'glimmer' and model.get('test_dflash'):
+            expected_bytes += json.loads((Path(campaign['root']) / config['drafter_metadata']).read_text())['expected_bytes']
+            if config.get('dspark_metadata'):
+                expected_bytes += json.loads((Path(campaign['root']) / config['dspark_metadata']).read_text())['expected_bytes']
+        need = int(expected_bytes * 1.1) + config['disk_headroom_gb'] * 1_000_000_000
         free = shutil.disk_usage(work).free
         if free < need: raise RuntimeError(f'Need {need / 1e9:.1f} GB free scratch, have {free / 1e9:.1f} GB; filesystem quotas also apply')
         path.mkdir()
@@ -382,29 +397,45 @@ def download(campaign, model, downloader=None):
             from huggingface_hub import snapshot_download
             downloader = snapshot_download
         started = time.monotonic()
-        downloader(repo_id=model['id'], revision=model['revision'], local_dir=str(path / 'weights'),
-                   max_workers=config['download_workers'])
-        meta = json.loads(Path(model['metadata']).read_text()); audited = []
-        for asset in meta['files']:
-            local = path / 'weights' / asset['rfilename']
-            if local.is_symlink() or not local.resolve().is_relative_to((path / 'weights').resolve()):
-                raise ValueError('Snapshot contains an unexpected external file')
-            if not local.is_file() or local.stat().st_size != asset['size']:
-                raise ValueError('Incomplete checkpoint file: ' + asset['rfilename'])
-            expected = (asset.get('lfs') or {}).get('sha256')
-            if asset['rfilename'] == 'chat_template.jinja':
-                expected = meta['reasoning_profile']['template_sha256']
-            actual = sha256(local)
-            if expected and expected != actual: raise ValueError('Checkpoint SHA256 mismatch: ' + asset['rfilename'])
-            audited.append({'file': asset['rfilename'], 'bytes': asset['size'], 'sha256': actual,
-                            'mtime_ns': local.stat().st_mtime_ns})
+        meta = json.loads(Path(model['metadata']).read_text())
+        inventories = [('weights', {**meta, 'model_id': model['id'], 'revision': model['revision']})]
+        if config.get('benchmark_family') == 'glimmer' and model.get('test_dflash'):
+            inventories.append(('drafter', json.loads((Path(campaign['root']) / config['drafter_metadata']).read_text())))
+            if config.get('dspark_metadata'):
+                inventories.append(('dspark', json.loads((Path(campaign['root']) / config['dspark_metadata']).read_text())))
+        audited = []
+        for folder, inventory in inventories:
+            downloader(repo_id=inventory['model_id'], revision=inventory['revision'], local_dir=str(path / folder),
+                       allow_patterns=[a['rfilename'] for a in inventory['files']], max_workers=config['download_workers'])
+            audited.extend(verify_inventory(path / folder, inventory, folder))
         write_json(path / 'weights/op2_snapshot.json', {'model_id': model['id'], 'revision': model['revision'],
                                                       'local_path': str(path / 'weights')})
+        if config.get('benchmark_family') == 'glimmer':
+            from .glimmer_benchmark import template_probe
+            template_probe(campaign, model)
         report = {'status': 'ready', 'model': model, 'download_and_verify_seconds': time.monotonic() - started,
                   'files': audited, 'bytes': sum(a['bytes'] for a in audited)}
         write_json(work / 'results' / model['name'] / 'download.json', report)
         write_json(path / 'ready.json', {'campaign': campaign['id'], 'model': model['name'], 'audit_sha256': json_digest(report)})
         return {'model': model['name'], 'downloaded_bytes': report['bytes'], 'status': 'ready'}
+
+
+def verify_inventory(directory, meta, folder='weights'):
+    audited = []
+    for asset in meta['files']:
+        local = directory / asset['rfilename']
+        if local.is_symlink() or not local.resolve().is_relative_to(directory.resolve()):
+            raise ValueError('Snapshot contains an unexpected external file')
+        if not local.is_file() or local.stat().st_size != asset['size']:
+            raise ValueError('Incomplete checkpoint file: ' + asset['rfilename'])
+        expected = (asset.get('lfs') or {}).get('sha256')
+        if asset['rfilename'] == 'chat_template.jinja':
+            expected = meta['reasoning_profile']['template_sha256']
+        actual = sha256(local)
+        if expected and expected != actual: raise ValueError('Checkpoint SHA256 mismatch: ' + asset['rfilename'])
+        audited.append({'file': asset['rfilename'], 'bytes': asset['size'], 'sha256': actual,
+                       'mtime_ns': local.stat().st_mtime_ns, 'folder': folder})
+    return audited
 
 
 def cleanup(campaign, model):
@@ -442,6 +473,9 @@ def serving_config(campaign, model):
 
 
 async def gpu(campaign, model):
+    if campaign['config'].get('benchmark_family') == 'glimmer':
+        from .glimmer_benchmark import gpu_gauntlet
+        return await gpu_gauntlet(campaign, model)
     if not os.environ.get('SLURM_JOB_ID') or not os.environ.get('CUDA_VISIBLE_DEVICES'):
         raise RuntimeError('GPU evaluation requires a Slurm allocation with visible GPUs')
     work = Path(campaign['work']); config = campaign['config']; path = active_path(campaign)
@@ -571,6 +605,9 @@ def throughput_summary(model, arms, gpu_stage_seconds=None):
 
 def report(campaign):
     require_cpu()
+    if campaign['config'].get('benchmark_family') == 'glimmer':
+        from .glimmer_benchmark import report_gauntlet
+        return report_gauntlet(campaign)
     work = Path(campaign['work']); config = campaign['config']; results = []; failures = []
     for model in config['models']:
         root = work / 'results' / model['name']; result = {'model': model}
@@ -643,7 +680,7 @@ def stage(stage_name, work, model_name=None):
 
 
 def add_parser(sub):
-    cmd = sub.add_parser('hpg-benchmark', help='Portable, sequential K2 medical benchmark on B200s')
+    cmd = sub.add_parser('hpg-benchmark', help='Sequential K2 or Glimmer medical benchmarks on B200s')
     actions = cmd.add_subparsers(dest='hpg_action', required=True)
     p = actions.add_parser('package', help='Create a small transfer archive; no model download')
     p.add_argument('--output', default='dist/openpatients2-k2-benchmark.tar.gz')

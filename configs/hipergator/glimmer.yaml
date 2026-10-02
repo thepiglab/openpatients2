@@ -1,0 +1,93 @@
+# Eight B200s on ONE node; checkpoints run serially. No weights on login nodes.
+benchmark_family: glimmer
+account: cai5724
+qos: cai5724
+gpu_partition: hpg-b200
+cpu_partition: null
+fixtures: benchmarks/hipergator-k2/fixtures
+image: docker://vllm/vllm-openai:v0.30.0
+engine_version: 0.30.0
+container_python: /usr/bin/python3
+# vLLM 0.30 moved BNB out of tree. Installed on CPU, --no-deps, into a
+# campaign-local directory mounted read-only by convention through PYTHONPATH.
+container_plugins: ['vllm-bnb-plugin==0.0.3', 'bitsandbytes==0.50.2']
+chat_template: configs/hipergator/glimmer/meta-models-chat_template.jinja
+chat_template_sha256: cfc67e5f349f37690dfd31ed1f18bc4442a9dd32fe39a648f993cb4eb3cae678
+drafter_metadata: configs/hipergator/glimmer/drafter.metadata.json
+drafter_revision: e8192f3a8f617f74be2ce220360c89ef4789f39f
+dspark_metadata: configs/hipergator/glimmer/dspark.metadata.json
+dspark_revision: 4699c0896e9337a2709149bfb0f64da1d91d839e
+speculation_quality_arm: meta_medium
+max_model_len: 65536
+max_num_seqs: 64
+max_batched_tokens: 16384
+gpu_memory_utilization: 0.90
+concurrency_per_replica: 8
+startup_timeout_seconds: 1800
+startup_wave_size: 2  # Bound transient CPU loading memory within the 250 GB allocation.
+request_timeout_seconds: 1800
+disk_headroom_gb: 30
+download_workers: 4
+quality_layout: dp8-tp1
+slurm:
+  setup: {cpus: 8, mem: 32G, time: '04:00:00'}
+  download: {cpus: 8, mem: 32G, time: '08:00:00'}
+  gpu: {cpus: 32, mem: 250G, time: '12:00:00'}
+  cleanup: {cpus: 2, mem: 4G, time: '01:00:00'}
+  report: {cpus: 2, mem: 4G, time: '01:00:00'}
+arms:
+  matched: {temperature: 0.0, top_p: 1.0, reasoning_effort: low, max_tokens: 8192, retry_tokens: 16384, seed: 42}
+  meta_low: {temperature: 1.0, top_p: 0.95, top_k: 64, reasoning_effort: low, max_tokens: 32768, retry_tokens: 32768, seed: 42}
+  meta_medium: {temperature: 1.0, top_p: 0.95, top_k: 64, reasoning_effort: medium, max_tokens: 32768, retry_tokens: 32768, seed: 42}
+  meta_high: {temperature: 1.0, top_p: 0.95, top_k: 64, reasoning_effort: high, max_tokens: 32768, retry_tokens: 32768, seed: 42}
+  meta_xhigh: {temperature: 1.0, top_p: 0.95, top_k: 64, reasoning_effort: xhigh, max_tokens: 32768, retry_tokens: 32768, seed: 42}
+throughput:
+  arm: meta_medium
+  subset_requests: 32  # Short + long prompts from all 16 tasks.
+  copies: 4           # 128 requests per repeat, identical across cells.
+  repetitions: 2
+  concurrency_per_replica: [8, 16]
+  seed: 5724
+layouts:
+  - {name: dp8-tp1, replicas: 8, tensor_parallel: 1}
+  - {name: dp4-tp2, replicas: 4, tensor_parallel: 2}
+  - {name: dp2-tp4, replicas: 2, tensor_parallel: 4}
+  - {name: dp1-tp8, replicas: 1, tensor_parallel: 8}
+  # Reuses the TP ranks; no additional GPU axis. Hybrid attention support must
+  # pass the real smoke before measurement. Failure is reported, never hidden.
+  - {name: dp2-tp4-dcp2, replicas: 2, tensor_parallel: 4, decode_context_parallel: 2, experimental: true}
+  - {name: dp8-tp1-dflash, replicas: 8, tensor_parallel: 1, speculation: dflash, experimental: true}
+  - {name: dp4-tp2-dflash, replicas: 4, tensor_parallel: 2, speculation: dflash, experimental: true}
+  - {name: dp8-tp1-dspark, replicas: 8, tensor_parallel: 1, speculation: dspark, experimental: true}
+  - {name: dp4-tp2-dspark, replicas: 4, tensor_parallel: 2, speculation: dspark, experimental: true}
+models:
+  - name: glimmer-fp8
+    id: RedHatAI/Muse-Glimmer-30B-FP8-block
+    revision: 1deb4641ff84f9a728dd11b27cac1f6a02a9ed14
+    metadata: configs/hipergator/glimmer/RedHatAI.metadata.json
+    replicas: 8
+    tensor_parallel: 1
+    expert_parallel: false
+    quantization: compressed-tensors
+    expected_bytes: 34421235287
+    test_dflash: true
+  - name: glimmer-nvfp4
+    id: nvidia/Muse-Glimmer-30B-NVFP4
+    revision: 47818374517751c48c55cde2621594926b1888b6
+    metadata: configs/hipergator/glimmer/nvidia.metadata.json
+    replicas: 8
+    tensor_parallel: 1
+    expert_parallel: false
+    quantization: modelopt
+    expected_bytes: 24698194519
+    test_dflash: true
+  - name: glimmer-nf4
+    id: unsloth/Muse-Glimmer-30B-unsloth-bnb-4bit
+    revision: ecedda395d4d099b477d135a9a573eedaa5a7aad
+    metadata: configs/hipergator/glimmer/unsloth.metadata.json
+    replicas: 8
+    tensor_parallel: 1
+    expert_parallel: false
+    quantization: bitsandbytes
+    expected_bytes: 22236565480
+    test_dflash: false

@@ -429,6 +429,10 @@ def test_packaging_excludes_credentials_weights_and_the_large_runs_tree(tmp_path
     output = tmp_path / 'benchmark.tar.gz'
     result = hpg.package(ROOT, output)
     assert result['bytes'] < 5_000_000
+    transfer = Path(result['transfer_manifest']).read_text().splitlines()
+    assert 'src/openpatients2/glimmer_benchmark.py' in transfer
+    assert 'configs/hipergator/glimmer.yaml' in transfer
+    assert all(not Path(p).is_absolute() and '..' not in Path(p).parts for p in transfer)
     with tarfile.open(output) as archive:
         names = archive.getnames()
         assert any(n.endswith('fixtures/requests.jsonl') for n in names)
@@ -506,11 +510,14 @@ async def test_context_guard_preserves_full_source_and_never_calls_completion(tm
 
 
 @pytest.mark.asyncio
-async def test_secondary_shared_figure_assignment_is_attached_to_each_patient_and_failures_stay_missing(tmp_path):
+@pytest.mark.parametrize('vision_capable', [False, True])
+async def test_secondary_shared_figure_assignment_is_attached_to_each_patient_and_failures_stay_missing(tmp_path, vision_capable):
     from openpatients2.article_tasks import task_messages
     from openpatients2.figure_attribution import figure_messages
     _, articles, packets, _, _ = fixtures(FIXTURES)
     config = hpg.load_campaign(ROOT / hpg.DEFAULT_CONFIG, ROOT)
+    config['models'][0]['capabilities'] = {'vision': vision_capable}
+    vision_status = 'not_evaluated_text_only' if vision_capable else 'unsupported_by_model'
     output = tmp_path / 'run'; output.mkdir()
     rosters = {aid: json.loads((FIXTURES / 'rosters' / (aid + '.json')).read_text())['roster'] for aid in articles}
     responses = {}; shared = None; bad = None
@@ -531,7 +538,7 @@ async def test_secondary_shared_figure_assignment_is_attached_to_each_patient_an
     assert shared is not None
     bad_key = json_digest(figure_messages(articles[bad[0]], rosters[bad[0]], bad[1]))
     for rid, packet in packets.items():
-        hpg.write_json(output / (rid.replace(':', '-') + '.json'), {'source': packet, 'vision': {'status': 'unsupported_by_model'}})
+        hpg.write_json(output / (rid.replace(':', '-') + '.json'), {'source': packet, 'vision': {'status': vision_status}})
     def handler(request):
         body = json.loads(request.content)
         if request.url.path == '/tokenize': return httpx.Response(200, json={'count': 1000})
@@ -552,6 +559,7 @@ async def test_secondary_shared_figure_assignment_is_attached_to_each_patient_an
         assert any(a['figure_id'] == shared[1] and a['patient_ids'] == shared[2] for a in p['source']['figure_assignments'])
         assert any(f['figure_key'] == shared[1] and f['image_urls'] for f in p['source']['multimedia']['figures'])
         assert p['source']['multimedia']['pixels_inspected'] is False
+        assert p['source']['multimedia']['vision_status'] == vision_status
     for patient in rosters[bad[0]]['patients']:
         p = json.loads((output / (bad[0] + '-' + patient['patient_id'] + '.json')).read_text())
         assert bad[1] in p['source']['multimedia']['unreviewed_figure_ids']

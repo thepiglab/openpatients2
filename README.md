@@ -70,6 +70,8 @@ The new article workflow implements case localization, patient summaries, tempor
 
 The [HiPerGator K2 benchmark](docs/HIPERGATOR_K2.md) packages the exact previous medical-fidelity articles, prompts and factual checks for the four IFM checkpoints. Run `bash scripts/hpg_benchmark.sh --work-dir /blue/cai5724/wkieffer/op2-k2-runs/run-01` on the cluster: CPU jobs download one pinned model, four B200s evaluate 375B or two evaluate smaller models, and CPU cleanup deletes its weights before the next download. The defaults use `cai5724` account/QoS; text-only outputs explicitly mark vision unavailable.
 
+The [Glimmer B200 gauntlet](docs/HIPERGATOR_GLIMMER.md) reuses those frozen inputs for FP8, NVIDIA NVFP4 and Unsloth NF4; the full BF16 verifier is excluded. It tests low/medium/high/xhigh reasoning, single-node DP/TP layouts, concurrency, experimental DCP, DFlash and DSpark. CPU jobs download and delete one verifier and its assistants at a time; GPU stages request eight B200s. Run `bash scripts/hpg_glimmer.sh --work-dir "$PWD/../op2-glimmer-runs/run-$(date +%Y%m%d-%H%M%S)"` from the updated cluster checkout. Software checks are local; B200 results are produced by that campaign.
+
 ## Within-model reasoning, trace capture and empty cases
 
 The project includes **paired reasoning-level studies within a single pinned model**, saved returned reasoning alongside every task output, and review-gated distillation exports. Clinical schema **2.1.0** distinguishes absent documentation from explicitly negative or explicitly unknown findings. Every one of the 14 task prompts includes clinical decision examples and valid empty-output guidance.

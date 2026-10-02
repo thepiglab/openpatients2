@@ -9,6 +9,8 @@ model="${3:-}"
 cd "${SLURM_SUBMIT_DIR:?Submit from the extracted benchmark package}"
 export CUDA_VISIBLE_DEVICES=""
 export UV_CACHE_DIR="$work/uv-cache"
+export UV_PROJECT_ENVIRONMENT="$work/client-venv"
+export UV_LINK_MODE=copy
 command -v uv >/dev/null
 if [[ "$stage" == setup ]]; then
   # All dependency/Python acquisition happens on CPU, before any GPU job.

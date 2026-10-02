@@ -79,3 +79,51 @@ async def test_real_server_exit_retains_original_error_and_log(tmp_path, monkeyp
     assert Path(record['failed_servers'][0]['log']).is_absolute()
     assert not group.processes and not group.files
     assert group.stop() is None  # Real synchronous interface; repeated cleanup is safe.
+
+
+@pytest.mark.asyncio
+async def test_independent_replicas_wait_for_readiness_before_loading_next_wave(tmp_path, monkeypatch):
+    import httpx
+    from openpatients2 import serving
+    monkeypatch.delenv('CUDA_VISIBLE_DEVICES', raising=False)
+    raw = ServingConfig.load(str(ROOT / 'configs/serving/k2-vllm-tp8.yaml')).model_dump()
+    raw.update(replicas=8, tensor_parallel=1, startup_wave_size=2)
+    group = serving.ServerGroup(ServingConfig.model_validate(raw), str(tmp_path), str(tmp_path / 'logs'))
+    monkeypatch.setattr(group, 'preflight', lambda: {'synthetic': True})
+    ready = set(); launched = []; probes = []
+    class Process:
+        returncode = None
+        def poll(self): return None
+    def launch(*args, **kwargs):
+        # A new wave may start only after all previous replicas were probed.
+        assert ready == set(range(len(launched)))
+        launched.append(Process())
+        return launched[-1]
+    # Check at wave boundaries; both members launch together.
+    def launch_at_boundary(*args, **kwargs):
+        if len(launched) % 2 == 0:
+            return launch(*args, **kwargs)
+        launched.append(Process()); return launched[-1]
+    monkeypatch.setattr(serving.subprocess, 'Popen', launch_at_boundary)
+    def handler(request):
+        replica = request.url.port - 8000
+        assert replica < len(launched)
+        probes.append(replica)
+        if replica == 1 and probes.count(1) == 1:
+            return httpx.Response(503)
+        ready.add(replica)
+        return httpx.Response(200, json={'data': []})
+    original = httpx.AsyncClient
+    monkeypatch.setattr(serving.httpx, 'AsyncClient', lambda **kw: original(transport=httpx.MockTransport(handler), **kw))
+    await group.start(timeout=10)
+    assert len(launched) == 8 and ready == set(range(8))
+    assert probes[:4] == [0, 1, 0, 1]  # Waited for the second replica's readiness.
+    assert len(json.loads((tmp_path / 'logs/startup.json').read_text())['ready_endpoints']) == 8
+    for handle in group.files: handle.close()
+
+
+def test_connected_external_dp_cannot_load_in_independent_waves():
+    raw = ServingConfig.load(str(ROOT / 'configs/serving/k2-vllm-tp2-dp4.yaml')).model_dump()
+    raw['startup_wave_size'] = 2
+    with pytest.raises(ValueError, match='Connected external DP'):
+        ServingConfig.model_validate(raw)

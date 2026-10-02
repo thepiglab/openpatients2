@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased — Glimmer HiPerGator gauntlet
+
+- Pinned FP8, ModelOpt mixed NVFP4 and Unsloth NF4 checkpoints, official corrected ATEM template and four publisher reasoning strengths; full BF16 verifier excluded.
+- Replays the frozen PMC clinical evaluation, with source-check and validation counts, bounded retries, captions/figure attribution, and explicit text-only vision status.
+- Measures all-eight-GPU DP/TP/concurrency layouts, experimental DCP, official DFlash and a Glimmer-derived DSpark head; speculative TP1 runs also repeat the full medium quality arm.
+- CPU-only acquisition and deletion, campaign-local client/plugin environments, audited read-only DSpark compatibility overlay, warm-cache workload controls, speculative counters and failure diagnostics.
+- No local weight downloads or B200 performance/quality claims before the cluster campaign runs.
+
 ## 0.5.0 — terminology grounding
 
 - Local pinned ICD-10-CM/SNOMED CT/LOINC catalog imports and hierarchy lookup.

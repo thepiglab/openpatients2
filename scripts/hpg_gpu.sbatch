@@ -8,6 +8,8 @@ work="${2:?Campaign work directory required}"
 model="${3:?Model name required}"
 cd "${SLURM_SUBMIT_DIR:?Submit from the extracted benchmark package}"
 export UV_CACHE_DIR="$work/uv-cache"
+export UV_PROJECT_ENVIRONMENT="$work/client-venv"
+export UV_LINK_MODE=copy
 export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1
 export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 if ! command -v apptainer >/dev/null; then module load apptainer; fi
