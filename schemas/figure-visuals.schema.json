@@ -1,0 +1,834 @@
+{
+  "$defs": {
+    "Chart": {
+      "additionalProperties": false,
+      "properties": {
+        "chart_type": {
+          "enum": [
+            "line",
+            "scatter",
+            "bar",
+            "histogram",
+            "box",
+            "violin",
+            "pie",
+            "heatmap",
+            "area",
+            "kaplan_meier",
+            "forest",
+            "roc",
+            "waveform",
+            "clinical_timeline",
+            "table",
+            "flowchart",
+            "other",
+            "unknown"
+          ],
+          "title": "Chart Type",
+          "type": "string"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Title"
+        },
+        "scope": {
+          "enum": [
+            "individual",
+            "multiple_individuals",
+            "aggregate",
+            "background",
+            "unknown"
+          ],
+          "title": "Scope",
+          "type": "string"
+        },
+        "is_clinical_chart": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Is Clinical Chart"
+        },
+        "x_axis": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ChartAxis"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "y_axis": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ChartAxis"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "measured_quantities": {
+          "items": {
+            "$ref": "#/$defs/VisualTag"
+          },
+          "title": "Measured Quantities",
+          "type": "array"
+        },
+        "readings": {
+          "items": {
+            "$ref": "#/$defs/ChartReading"
+          },
+          "title": "Readings",
+          "type": "array"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Limitations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "chart_type",
+        "title",
+        "scope",
+        "is_clinical_chart",
+        "x_axis",
+        "y_axis",
+        "measured_quantities",
+        "readings",
+        "limitations"
+      ],
+      "title": "Chart",
+      "type": "object"
+    },
+    "ChartAxis": {
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Label"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Unit"
+        },
+        "scale": {
+          "enum": [
+            "linear",
+            "logarithmic",
+            "categorical",
+            "time",
+            "unknown"
+          ],
+          "title": "Scale",
+          "type": "string"
+        },
+        "visible_ticks": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Visible Ticks",
+          "type": "array"
+        }
+      },
+      "required": [
+        "label",
+        "unit",
+        "scale",
+        "visible_ticks"
+      ],
+      "title": "ChartAxis",
+      "type": "object"
+    },
+    "ChartReading": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "enum": [
+            "pixels",
+            "caption",
+            "article"
+          ],
+          "title": "Basis",
+          "type": "string"
+        },
+        "visual_cue": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Visual Cue"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Citation"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "certainty": {
+          "enum": [
+            "clear",
+            "uncertain",
+            "unreadable"
+          ],
+          "title": "Certainty",
+          "type": "string"
+        },
+        "metric_name": {
+          "title": "Metric Name",
+          "type": "string"
+        },
+        "metric_kind": {
+          "enum": [
+            "blood_pressure_systolic",
+            "blood_pressure_diastolic",
+            "blood_pressure_unspecified",
+            "heart_rate",
+            "respiratory_rate",
+            "temperature",
+            "oxygen_saturation",
+            "ecg",
+            "eeg",
+            "laboratory",
+            "drug_dose",
+            "fluid_balance",
+            "survival",
+            "image_count",
+            "percentage",
+            "other",
+            "unknown"
+          ],
+          "title": "Metric Kind",
+          "type": "string"
+        },
+        "series_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Series Label"
+        },
+        "time_or_x_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Time Or X Label"
+        },
+        "value_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value Text"
+        },
+        "numeric_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Numeric Value"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Unit"
+        },
+        "precision": {
+          "enum": [
+            "printed_exact",
+            "estimated_from_plot",
+            "unreadable"
+          ],
+          "title": "Precision",
+          "type": "string"
+        }
+      },
+      "required": [
+        "basis",
+        "visual_cue",
+        "evidence",
+        "certainty",
+        "metric_name",
+        "metric_kind",
+        "series_label",
+        "time_or_x_label",
+        "value_text",
+        "numeric_value",
+        "unit",
+        "precision"
+      ],
+      "title": "ChartReading",
+      "type": "object"
+    },
+    "Citation": {
+      "additionalProperties": false,
+      "properties": {
+        "segment_id": {
+          "title": "Segment Id",
+          "type": "string"
+        },
+        "quote": {
+          "maxLength": 1600,
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        }
+      },
+      "required": [
+        "segment_id",
+        "quote"
+      ],
+      "title": "Citation",
+      "type": "object"
+    },
+    "ClinicalSignificance": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "enum": [
+            "pixels",
+            "caption",
+            "article"
+          ],
+          "title": "Basis",
+          "type": "string"
+        },
+        "visual_cue": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Visual Cue"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Citation"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "certainty": {
+          "enum": [
+            "clear",
+            "uncertain",
+            "unreadable"
+          ],
+          "title": "Certainty",
+          "type": "string"
+        },
+        "statement": {
+          "title": "Statement",
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "diagnostic_evidence",
+            "differential_diagnosis",
+            "treatment_planning",
+            "treatment_response",
+            "disease_course",
+            "prognosis",
+            "procedure_documentation",
+            "background",
+            "unknown"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "clinical_fact_status": {
+          "const": "unreviewed_annotation",
+          "default": "unreviewed_annotation",
+          "title": "Clinical Fact Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "basis",
+        "visual_cue",
+        "evidence",
+        "certainty",
+        "statement",
+        "role"
+      ],
+      "title": "ClinicalSignificance",
+      "type": "object"
+    },
+    "MedicalDomainTag": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "enum": [
+            "pixels",
+            "caption",
+            "article"
+          ],
+          "title": "Basis",
+          "type": "string"
+        },
+        "visual_cue": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Visual Cue"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Citation"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "certainty": {
+          "enum": [
+            "clear",
+            "uncertain",
+            "unreadable"
+          ],
+          "title": "Certainty",
+          "type": "string"
+        },
+        "value": {
+          "enum": [
+            "oncology",
+            "surgery",
+            "pulmonology",
+            "ophthalmology",
+            "dermatology",
+            "gastroenterology",
+            "radiology",
+            "orthopedics",
+            "urology",
+            "neurology",
+            "infectious_disease",
+            "obstetrics_gynecology",
+            "rheumatology",
+            "cardiology",
+            "nephrology",
+            "endocrinology",
+            "pathology",
+            "biology",
+            "hematology",
+            "andrology",
+            "cytology",
+            "psychiatry",
+            "veterinary_medicine",
+            "other",
+            "unknown"
+          ],
+          "title": "Value",
+          "type": "string"
+        },
+        "as_documented": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "As Documented"
+        }
+      },
+      "required": [
+        "basis",
+        "visual_cue",
+        "evidence",
+        "certainty",
+        "value",
+        "as_documented"
+      ],
+      "title": "MedicalDomainTag",
+      "type": "object"
+    },
+    "ModalityTag": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "enum": [
+            "pixels",
+            "caption",
+            "article"
+          ],
+          "title": "Basis",
+          "type": "string"
+        },
+        "visual_cue": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Visual Cue"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Citation"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "certainty": {
+          "enum": [
+            "clear",
+            "uncertain",
+            "unreadable"
+          ],
+          "title": "Certainty",
+          "type": "string"
+        },
+        "value": {
+          "enum": [
+            "x_ray",
+            "ct",
+            "mri",
+            "ultrasound",
+            "light_microscopy",
+            "fluorescence_microscopy",
+            "electron_microscopy",
+            "endoscopy",
+            "optical_imaging",
+            "nuclear_medicine",
+            "pet",
+            "spect",
+            "clinical_photography",
+            "other",
+            "unknown"
+          ],
+          "title": "Value",
+          "type": "string"
+        },
+        "as_documented": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "As Documented"
+        }
+      },
+      "required": [
+        "basis",
+        "visual_cue",
+        "evidence",
+        "certainty",
+        "value",
+        "as_documented"
+      ],
+      "title": "ModalityTag",
+      "type": "object"
+    },
+    "VisualPanel": {
+      "additionalProperties": false,
+      "properties": {
+        "panel": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Panel"
+        },
+        "general_description": {
+          "title": "General Description",
+          "type": "string"
+        },
+        "detailed_description": {
+          "title": "Detailed Description",
+          "type": "string"
+        },
+        "image_kind": {
+          "enum": [
+            "medical_imaging",
+            "clinical_photograph",
+            "operative_photograph",
+            "specimen_photograph",
+            "microscopy",
+            "graph",
+            "table",
+            "diagram",
+            "timeline",
+            "mixed",
+            "other",
+            "unknown"
+          ],
+          "title": "Image Kind",
+          "type": "string"
+        },
+        "has_chart": {
+          "title": "Has Chart",
+          "type": "boolean"
+        },
+        "charts": {
+          "items": {
+            "$ref": "#/$defs/Chart"
+          },
+          "title": "Charts",
+          "type": "array"
+        },
+        "imaging_modalities": {
+          "items": {
+            "$ref": "#/$defs/ModalityTag"
+          },
+          "title": "Imaging Modalities",
+          "type": "array"
+        },
+        "imaging_submodalities": {
+          "items": {
+            "$ref": "#/$defs/VisualTag"
+          },
+          "title": "Imaging Submodalities",
+          "type": "array"
+        },
+        "medical_domains": {
+          "items": {
+            "$ref": "#/$defs/MedicalDomainTag"
+          },
+          "title": "Medical Domains",
+          "type": "array"
+        },
+        "body_parts": {
+          "items": {
+            "$ref": "#/$defs/VisualTag"
+          },
+          "title": "Body Parts",
+          "type": "array"
+        },
+        "mentioned_categories": {
+          "items": {
+            "$ref": "#/$defs/VisualTag"
+          },
+          "title": "Mentioned Categories",
+          "type": "array"
+        },
+        "pixel_observations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Pixel Observations",
+          "type": "array"
+        },
+        "caption_claims": {
+          "items": {
+            "$ref": "#/$defs/VisualTag"
+          },
+          "title": "Caption Claims",
+          "type": "array"
+        },
+        "clinical_significance": {
+          "items": {
+            "$ref": "#/$defs/ClinicalSignificance"
+          },
+          "title": "Clinical Significance",
+          "type": "array"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Limitations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "panel",
+        "general_description",
+        "detailed_description",
+        "image_kind",
+        "has_chart",
+        "charts",
+        "imaging_modalities",
+        "imaging_submodalities",
+        "medical_domains",
+        "body_parts",
+        "mentioned_categories",
+        "pixel_observations",
+        "caption_claims",
+        "clinical_significance",
+        "limitations"
+      ],
+      "title": "VisualPanel",
+      "type": "object"
+    },
+    "VisualTag": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "enum": [
+            "pixels",
+            "caption",
+            "article"
+          ],
+          "title": "Basis",
+          "type": "string"
+        },
+        "visual_cue": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Visual Cue"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Citation"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "certainty": {
+          "enum": [
+            "clear",
+            "uncertain",
+            "unreadable"
+          ],
+          "title": "Certainty",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        },
+        "as_documented": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "As Documented"
+        }
+      },
+      "required": [
+        "basis",
+        "visual_cue",
+        "evidence",
+        "certainty",
+        "value",
+        "as_documented"
+      ],
+      "title": "VisualTag",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "figure_id": {
+      "title": "Figure Id",
+      "type": "string"
+    },
+    "general_description": {
+      "title": "General Description",
+      "type": "string"
+    },
+    "detailed_description": {
+      "title": "Detailed Description",
+      "type": "string"
+    },
+    "panels": {
+      "items": {
+        "$ref": "#/$defs/VisualPanel"
+      },
+      "minItems": 1,
+      "title": "Panels",
+      "type": "array"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "figure_id",
+    "general_description",
+    "detailed_description",
+    "panels",
+    "limitations"
+  ],
+  "title": "FigureVisuals",
+  "type": "object"
+}

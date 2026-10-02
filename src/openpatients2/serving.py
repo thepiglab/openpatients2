@@ -253,12 +253,13 @@ class ServerGroup:
             raise
 
     def stop(self):
+        # The launcher can exit before its CUDA workers. Its owned process group
+        # still needs signalling even when Popen.poll() reports termination.
         for process in self.processes:
-            if process.poll() is None:
-                try:
-                    os.killpg(process.pid, signal.SIGTERM)
-                except ProcessLookupError:
-                    pass
+            try:
+                os.killpg(process.pid, signal.SIGTERM)
+            except ProcessLookupError:
+                pass
         for process in self.processes:
             try:
                 process.wait(timeout=30)
@@ -268,6 +269,11 @@ class ServerGroup:
                 except ProcessLookupError:
                     pass
                 process.wait(timeout=10)
+        for process in self.processes:
+            try:
+                os.killpg(process.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
         for handle in self.files:
             handle.close()
         self.processes.clear()

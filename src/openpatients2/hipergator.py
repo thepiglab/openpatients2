@@ -91,9 +91,11 @@ def load_campaign(path, root):
 def package(root, output):
     """An explicit allowlist excludes caches, credentials, historical raw responses and weights."""
     root = Path(root).resolve(); output = Path(output).resolve()
-    files = {root / p for p in ('pyproject.toml', 'uv.lock', 'README.md', 'docs/HIPERGATOR_K2.md', 'docs/HIPERGATOR_GLIMMER.md') if (root / p).exists()}
+    files = {root / p for p in ('pyproject.toml', 'uv.lock', 'README.md', 'docs/HIPERGATOR_K2.md', 'docs/HIPERGATOR_GLIMMER.md', 'docs/HIPERGATOR_GLIMMER_TUNING.md') if (root / p).exists()}
     for name in ('LICENSE', 'LICENSE.md'):
         if (root / name).exists(): files.add(root / name)
+    for name in ('figure-visuals.schema.json', 'joint-figure-analysis.schema.json'):
+        if (root / 'schemas' / name).exists(): files.add(root / 'schemas' / name)
     for folder in ('src/openpatients2', 'configs/hipergator', 'benchmarks/hipergator-k2'):
         files.update(p for p in (root / folder).rglob('*') if p.is_file() and p.suffix in {'.py', '.md', '.json', '.jsonl', '.sha256', '.yaml', '.jinja', '.txt'})
     files.update(root.glob('scripts/hpg_*'))
@@ -413,8 +415,13 @@ def download(campaign, model, downloader=None):
         if config.get('benchmark_family') == 'glimmer':
             from .glimmer_benchmark import template_probe
             template_probe(campaign, model)
+            if config.get('vision_evaluation'):
+                from .glimmer_vision import prepare_assets
+                asyncio.run(prepare_assets(campaign))  # Bounded image fetches belong to the CPU stage.
         report = {'status': 'ready', 'model': model, 'download_and_verify_seconds': time.monotonic() - started,
                   'files': audited, 'bytes': sum(a['bytes'] for a in audited)}
+        if config.get('vision_evaluation'):
+            report['vision_manifest_sha256'] = sha256(work / 'vision-assets/manifest.json')
         write_json(work / 'results' / model['name'] / 'download.json', report)
         write_json(path / 'ready.json', {'campaign': campaign['id'], 'model': model['name'], 'audit_sha256': json_digest(report)})
         return {'model': model['name'], 'downloaded_bytes': report['bytes'], 'status': 'ready'}

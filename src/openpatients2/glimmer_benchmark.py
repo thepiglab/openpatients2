@@ -34,7 +34,16 @@ def validate_config(config, root):
         raise ValueError('Glimmer template differs from the pinned corrected Meta template')
     if config['quality_layout'] != 'dp8-tp1':
         raise ValueError('Quality runs must use the fixed non-speculative TP1/DP8 control')
-    if {a['reasoning_effort'] for n, a in config['arms'].items() if n != 'matched'} != set(LEVELS):
+    tuning = config.get('benchmark_mode') == 'fp8_tuning'
+    if tuning:
+        if len(config['models']) != 1 or config['models'][0]['id'] != 'RedHatAI/Muse-Glimmer-30B-FP8-block':
+            raise ValueError('The focused tuning campaign uses only the Red Hat FP8 verifier')
+        if len({a['seed'] for a in config['arms'].values()}) < 3:
+            raise ValueError('Tuning needs at least three independent quality seeds')
+        if any(a['reasoning_effort'] != 'medium' or a['max_tokens'] != 32768 or a['retry_tokens'] != 32768
+               for a in config['arms'].values()):
+            raise ValueError('Keep medium reasoning and equal 32k budgets during throughput tuning')
+    elif {a['reasoning_effort'] for n, a in config['arms'].items() if n != 'matched'} != set(LEVELS):
         raise ValueError('Benchmark all four published Glimmer reasoning strengths')
     layouts = config['layouts']
     names = set()
@@ -47,6 +56,10 @@ def validate_config(config, root):
             raise ValueError('DCP must divide TP; it does not request additional GPUs')
         if layout.get('speculation') not in (None, 'dflash', 'dspark'):
             raise ValueError('Unknown Glimmer speculation method')
+        if layout.get('kv_cache_dtype', 'auto') not in ('auto', 'fp8_e4m3'):
+            raise ValueError('Unknown KV precision experiment')
+        if layout.get('max_batched_tokens', config['max_batched_tokens']) < config['max_num_seqs'] * 16:
+            raise ValueError('Prefill budget must fit the expanded DFlash warmup batch')
     if config['quality_layout'] not in names: raise ValueError('Missing quality control layout')
     for arm in config['arms'].values():
         if arm['reasoning_effort'] not in LEVELS: raise ValueError('Unsupported Glimmer reasoning strength')
@@ -69,16 +82,26 @@ def validate_config(config, root):
     if drafter['revision'] != config['drafter_revision']: raise ValueError('DFlash revision mismatch')
     if drafter['config']['block_size'] != 16:
         raise ValueError('The Meta DFlash head requires its trained 16-position block')
-    dspark = json.loads((root / config['dspark_metadata']).read_text())
-    if dspark['revision'] != config['dspark_revision']: raise ValueError('DSpark revision mismatch')
-    if dspark['config']['sample_from_anchor'] is not False or dspark['config']['block_size'] != 16:
-        raise ValueError('This DSpark checkpoint requires its trained 16-token non-anchor layout')
+    if any(l.get('speculation') == 'dspark' for l in layouts):
+        dspark = json.loads((root / config['dspark_metadata']).read_text())
+        if dspark['revision'] != config['dspark_revision']: raise ValueError('DSpark revision mismatch')
+        if dspark['config']['sample_from_anchor'] is not False or dspark['config']['block_size'] != 16:
+            raise ValueError('This DSpark checkpoint requires its trained 16-token non-anchor layout')
 
 
 def setup_plugins(campaign, sif, interpreter):
     """Install the official BNB extension on CPU; leave the shared SIF immutable."""
     from .hipergator import container_check, sha256
     work = Path(campaign['work']); config = campaign['config']
+    if not config['container_plugins']:
+        write_json(work / 'container-plugins-manifest.json', {})
+        help_result = container_check(['apptainer', 'exec', '--cleanenv', str(sif), interpreter,
+            '-m', 'vllm.entrypoints.cli.main', 'serve', '--help=all'],
+            work / 'serving-cli-help.json', 'CPU serving CLI compatibility check')
+        for flag in ('--calculate-kv-scales', '--enforce-eager', '--max-num-batched-tokens', '--speculative-config', '--limit-mm-per-prompt'):
+            if flag not in help_result.stdout:
+                raise ValueError('Pinned serving image lacks required tuning flag: ' + flag)
+        return  # Focused FP8/DFlash needs neither BNB packages nor a DSpark overlay.
     dest = work / 'container-plugins'
     subprocess.run(['uv', 'pip', 'install', '--python', sys.executable, '--target', str(dest),
                     '--no-deps', '--only-binary=:all:', *config['container_plugins']], check=True)
@@ -177,6 +200,11 @@ def serving_config(campaign, model, layout):
              '--chat-template', str(path / 'chat_template.jinja'), '--language-model-only',
              '--enable-auto-tool-choice', '--tool-call-parser', 'muse_glimmer',
              '--compilation-config', '{"cudagraph_mode":"PIECEWISE"}']
+    if layout.get('enforce_eager'): extra += ['--enforce-eager']
+    if layout.get('kv_cache_dtype') == 'fp8_e4m3': extra += ['--calculate-kv-scales']
+    if layout.get('vision'):
+        extra.remove('--language-model-only')
+        extra += ['--limit-mm-per-prompt', '{"image":1,"video":0}']
     if model['quantization'] == 'bitsandbytes': extra += ['--load-format', 'bitsandbytes']
     speculation = None
     binds = {}
@@ -199,10 +227,12 @@ def serving_config(campaign, model, layout):
         # Let config.json choose modelopt_mixed / FP8 / BNB. ModelOpt's producer
         # name "modelopt" is NOT the correct forced runtime method for mixed FP4.
         quantization=None, decode_context_parallel=layout.get('decode_context_parallel', 1),
-        speculative_config=speculation, max_model_len=config['max_model_len'], max_num_seqs=config['max_num_seqs'],
+        speculative_config=speculation, max_model_len=config['max_model_len'],
+        max_num_seqs=layout.get('max_num_seqs', config['max_num_seqs']),
         startup_wave_size=config['startup_wave_size'],
-        max_batched_tokens=config['max_batched_tokens'], gpu_memory_utilization=config['gpu_memory_utilization'],
-        kv_cache_dtype='auto', prefix_cache=True, extra_args=extra, bind_files=binds,
+        max_batched_tokens=layout.get('max_batched_tokens', config['max_batched_tokens']),
+        gpu_memory_utilization=config['gpu_memory_utilization'],
+        kv_cache_dtype=layout.get('kv_cache_dtype', 'auto'), prefix_cache=layout.get('prefix_cache', True), extra_args=extra, bind_files=binds,
         environment={**cache_environment(path), 'HF_HUB_OFFLINE': '1', 'TRANSFORMERS_OFFLINE': '1', 'HF_DATASETS_OFFLINE': '1',
             'PYTHONPATH': str(work / 'container-plugins'), 'PYTHONDONTWRITEBYTECODE': '1',
             'VLLM_CACHE_ROOT': str(path / 'runtime-cache/vllm'), 'TRITON_CACHE_DIR': str(path / 'runtime-cache/triton'),
@@ -286,7 +316,8 @@ async def throughput_cell(campaign, model, layout, endpoints, concurrency, outpu
     workload = [(request, copy_index) for copy_index in range(sweep['copies']) for request in subset]
     write_json(output / 'workload.json', {'signature': json_digest(workload), 'requests': workload,
         'arm': arm, 'replica_assignment': 'request ordinal modulo replicas; no patient affinity',
-        'prefix_cache': 'warm repeated real prompts; identical workload for every cell'})
+        'prefix_cache': layout.get('prefix_cache', True),
+        'cache_protocol': 'Warm repeated prompts when enabled; disabled-cache control uses the same requests.'})
     metrics = []; rounds = []
     try:
         # Exact tokenizer/context guards, outside the measured wall interval.
@@ -410,6 +441,9 @@ def cell_metrics(rows, wall, gpus):
 
 
 async def gpu_gauntlet(campaign, model):
+    if campaign['config'].get('benchmark_mode') == 'fp8_tuning':
+        from .glimmer_tuning import gpu_tuning
+        return await gpu_tuning(campaign, model)
     from .hipergator import active_path, model_lock, check_owner
     if not os.environ.get('SLURM_JOB_ID') or not os.environ.get('CUDA_VISIBLE_DEVICES'):
         raise RuntimeError('Glimmer gauntlet requires a Slurm allocation with eight visible B200s')
@@ -527,6 +561,9 @@ async def article_lengths(campaign, endpoint, result_root):
 
 
 def report_gauntlet(campaign):
+    if campaign['config'].get('benchmark_mode') == 'fp8_tuning':
+        from .glimmer_tuning import report_tuning
+        return report_tuning(campaign)
     from .hipergator import active_path
     work = Path(campaign['work']); config = campaign['config']; models = []; failed = []; experiments = []
     lines = ['# Glimmer B200 gauntlet', '', 'Same nine PMC articles, eleven cases, 176 primary tasks, 161 required/36 forbidden checks.', '',

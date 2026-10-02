@@ -1,0 +1,157 @@
+# One Red Hat FP8 checkpoint plus the Meta DFlash head; one node / eight B200s.
+benchmark_family: glimmer
+account: cai5724
+qos: cai5724
+gpu_partition: hpg-b200
+cpu_partition: null
+fixtures: benchmarks/hipergator-k2/fixtures
+image: docker://vllm/vllm-openai:v0.30.0
+engine_version: 0.30.0
+container_python: /usr/bin/python3
+container_plugins: []
+chat_template: configs/hipergator/glimmer/meta-models-chat_template.jinja
+chat_template_sha256: cfc67e5f349f37690dfd31ed1f18bc4442a9dd32fe39a648f993cb4eb3cae678
+drafter_metadata: configs/hipergator/glimmer/drafter.metadata.json
+drafter_revision: e8192f3a8f617f74be2ce220360c89ef4789f39f
+speculation_quality_arm: medium_seed42
+max_model_len: 65536
+max_num_seqs: 64
+max_batched_tokens: 16384
+gpu_memory_utilization: 0.9
+concurrency_per_replica: 8
+startup_timeout_seconds: 1800
+startup_wave_size: 2
+request_timeout_seconds: 1800
+disk_headroom_gb: 30
+download_workers: 4
+vision_evaluation:
+  max_image_bytes: 8000000
+  max_total_bytes: 64000000
+  concurrency_per_replica: 2
+  max_tokens: 16384
+quality_layout: dp8-tp1
+slurm:
+  setup:
+    cpus: 8
+    mem: 32G
+    time: 04:00:00
+  download:
+    cpus: 8
+    mem: 32G
+    time: 08:00:00
+  gpu:
+    cpus: 32
+    mem: 250G
+    time: '12:00:00'
+  cleanup:
+    cpus: 2
+    mem: 4G
+    time: 01:00:00
+  report:
+    cpus: 2
+    mem: 4G
+    time: 01:00:00
+arms:
+  medium_seed42:
+    temperature: 1.0
+    top_p: 0.95
+    top_k: 64
+    reasoning_effort: medium
+    max_tokens: 32768
+    retry_tokens: 32768
+    seed: 42
+  medium_seed1729:
+    temperature: 1.0
+    top_p: 0.95
+    top_k: 64
+    reasoning_effort: medium
+    max_tokens: 32768
+    retry_tokens: 32768
+    seed: 1729
+  medium_seed5724:
+    temperature: 1.0
+    top_p: 0.95
+    top_k: 64
+    reasoning_effort: medium
+    max_tokens: 32768
+    retry_tokens: 32768
+    seed: 5724
+throughput:
+  arm: medium_seed42
+  subset_requests: 32
+  copies: 16
+  repetitions: 3
+  concurrency_per_replica:
+  - 8
+  - 16
+  - 32
+  - 64
+  seed: 5724
+layouts:
+- name: dp8-tp1
+  replicas: 8
+  tensor_parallel: 1
+- name: dp8-tp1-dflash
+  replicas: 8
+  tensor_parallel: 1
+  speculation: dflash
+- name: dp4-tp2
+  replicas: 4
+  tensor_parallel: 2
+  experimental: true
+- name: dp4-tp2-dflash
+  replicas: 4
+  tensor_parallel: 2
+  speculation: dflash
+  experimental: true
+- name: dp8-tp1-dflash-b8192
+  replicas: 8
+  tensor_parallel: 1
+  speculation: dflash
+  max_batched_tokens: 8192
+  experimental: true
+- name: dp8-tp1-dflash-b32768
+  replicas: 8
+  tensor_parallel: 1
+  speculation: dflash
+  max_batched_tokens: 32768
+  experimental: true
+- name: dp4-tp2-dflash-b32768
+  replicas: 4
+  tensor_parallel: 2
+  speculation: dflash
+  max_batched_tokens: 32768
+  experimental: true
+- name: dp8-tp1-dflash-no-prefix
+  replicas: 8
+  tensor_parallel: 1
+  speculation: dflash
+  prefix_cache: false
+  experimental: true
+- name: dp8-tp1-dflash-kvfp8
+  replicas: 8
+  tensor_parallel: 1
+  speculation: dflash
+  kv_cache_dtype: fp8_e4m3
+  experimental: true
+- name: dp8-tp1-dflash-eager
+  replicas: 8
+  tensor_parallel: 1
+  speculation: dflash
+  enforce_eager: true
+  experimental: true
+models:
+- name: glimmer-fp8
+  id: RedHatAI/Muse-Glimmer-30B-FP8-block
+  revision: 1deb4641ff84f9a728dd11b27cac1f6a02a9ed14
+  metadata: configs/hipergator/glimmer/RedHatAI.metadata.json
+  replicas: 8
+  tensor_parallel: 1
+  expert_parallel: false
+  quantization: compressed-tensors
+  expected_bytes: 34421235287
+  test_dflash: true
+benchmark_mode: fp8_tuning
+cleanup_timeout_seconds: 120
+quality_max_lost_checks: 5
+quality_max_lost_tasks: 4
