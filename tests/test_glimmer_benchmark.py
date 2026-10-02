@@ -278,3 +278,32 @@ def test_cpu_download_owns_both_assistants_and_deletes_them_even_after_failure(t
     keep = Path(campaign['work']) / 'results' / 'keep.json'; keep.write_text('KEEP')
     hpg.cleanup(campaign, model)
     assert not hpg.active_path(campaign).exists() and keep.read_text() == 'KEEP'
+
+
+def test_cpu_setup_inspects_source_without_initializing_cuda(tmp_path, monkeypatch):
+    import subprocess
+    import importlib.metadata
+    source = tmp_path / 'vllm'
+    source.mkdir()
+    (source / 'args.py').write_text('calculate_kv_scales enforce_eager max_num_batched_tokens speculative_config limit_mm_per_prompt')
+
+    class Distribution:
+        version = '0.30.0'
+        def locate_file(self, name):
+            assert name == 'vllm'
+            return source
+
+    monkeypatch.setattr(importlib.metadata, 'distribution', lambda name: Distribution())
+    calls = []
+    def check(args, output, label):
+        assert '--nv' not in args
+        assert args[-2] == '-c'
+        assert 'import vllm' not in args[-1]
+        assert 'serve' not in args
+        exec(compile(args[-1], '<cpu-check>', 'exec'), {})
+        calls.append(args)
+        return subprocess.CompletedProcess(args, 0, '', '')
+    monkeypatch.setattr(hpg, 'container_check', check)
+    glimmer.setup_plugins({'work': str(tmp_path), 'config': {'container_plugins': []}}, 'vllm.sif', '/usr/bin/python3')
+    assert len(calls) == 1
+    assert json.loads((tmp_path / 'container-plugins-manifest.json').read_text()) == {}

@@ -95,12 +95,22 @@ def setup_plugins(campaign, sif, interpreter):
     work = Path(campaign['work']); config = campaign['config']
     if not config['container_plugins']:
         write_json(work / 'container-plugins-manifest.json', {})
-        help_result = container_check(['apptainer', 'exec', '--cleanenv', str(sif), interpreter,
-            '-m', 'vllm.entrypoints.cli.main', 'serve', '--help=all'],
-            work / 'serving-cli-help.json', 'CPU serving CLI compatibility check')
-        for flag in ('--calculate-kv-scales', '--enforce-eager', '--max-num-batched-tokens', '--speculative-config', '--limit-mm-per-prompt'):
-            if flag not in help_result.stdout:
-                raise ValueError('Pinned serving image lacks required tuning flag: ' + flag)
+        # Even --help constructs DeviceConfig in this CUDA build. Inspect the
+        # installed source without importing vLLM or constructing its parser;
+        # actual CLI parsing and GPU compatibility are checked in the GPU stage.
+        code = '''import importlib.metadata as m,json
+from pathlib import Path
+d = m.distribution("vllm")
+assert d.version == "0.30.0", d.version
+root = Path(d.locate_file("vllm"))
+source = "\\n".join(p.read_text() for p in root.rglob("*.py"))
+flags = ["calculate_kv_scales", "enforce_eager", "max_num_batched_tokens", "speculative_config", "limit_mm_per_prompt"]
+missing = [f for f in flags if f not in source and f.replace("_", "-") not in source]
+assert not missing, missing
+print(json.dumps({"vllm":d.version,"source_options":flags,"check":"source-only; GPU startup validates CLI"}))
+'''
+        container_check(['apptainer', 'exec', '--cleanenv', str(sif), interpreter, '-c', code],
+            work / 'serving-cli-source.json', 'CPU serving source compatibility check')
         return  # Focused FP8/DFlash needs neither BNB packages nor a DSpark overlay.
     dest = work / 'container-plugins'
     subprocess.run(['uv', 'pip', 'install', '--python', sys.executable, '--target', str(dest),
