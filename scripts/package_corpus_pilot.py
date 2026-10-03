@@ -12,10 +12,11 @@ def main():
     parser.add_argument('--output',type=Path,default=Path('dist/openpatients2-corpus-pilot.tar.gz'))
     args=parser.parse_args();root=Path(__file__).resolve().parents[1]
     if args.output.exists(): raise ValueError('Choose a new package filename')
-    names=['README.md','pyproject.toml','uv.lock','LICENSE',
-        'docs/CORPUS_PILOT.md','docs/CORPUS_CORRECTNESS.md','docs/PMC_ACQUISITION.md','docs/ARTICLE_LICENSE_POLICY.md',
+    names=['README.md','CHANGELOG.md','pyproject.toml','uv.lock','LICENSE',
+        'docs/CORPUS_PILOT.md','docs/CORPUS_CORRECTNESS.md','docs/CORPUS_REFINEMENT.md','docs/PMC_ACQUISITION.md','docs/ARTICLE_LICENSE_POLICY.md',
         'docs/ROBUST_EXTRACTION_DESIGN.md','docs/PAPERCLIP_EVALUATION.md',
         'reports/GLIMMER_TUNING_20261002.md','reports/GLIMMER_TOKENIZER_SMOKE.json',
+        'reports/CORPUS_CORRECTNESS_20261003.md','reports/CORPUS_CORRECTNESS_20261003.json',
         'reports/PMC_ACQUISITION_V2_LIVE_SMOKE.json','reports/PMC_ACQUISITION_PARALLEL_SMOKE.json',
         'reports/glimmer-token-lengths-nine/token-histograms.png',
         'reports/glimmer-token-lengths-nine/token-histograms.svg',

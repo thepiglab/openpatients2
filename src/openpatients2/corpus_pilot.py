@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import copy
+import gzip
 import json
 import os
 from pathlib import Path
@@ -39,6 +40,7 @@ def prepare(root, work, config_path):
     config = yaml.safe_load(Path(config_path).read_text())
     fixed = config.get('source_mode') == 'fixed_fixture'
     paths = tuple(k for k in PATH_KEYS if k != 'source_config' or not fixed) + (FIXED_PATH_KEYS if fixed else ())
+    if config.get('holdout_source_config'): paths += ('holdout_source_config',)
     for key in paths:
         config[key] = str((root / config[key]).resolve())
         if not Path(config[key]).is_file(): raise ValueError('Missing pilot input: '+key)
@@ -46,11 +48,20 @@ def prepare(root, work, config_path):
     if not 1 <= config['workers'] <= 32 or not 1 <= config['max_figures'] <= 12:
         raise ValueError('Pilot CPU/figure limits exceeded')
     if fixed:
-        if config['sample_size'] != 20 or config.get('seeds') != [42,43,44]:
-            raise ValueError('Correctness campaign requires twenty fixed articles and seeds 42,43,44')
-        if config.get('variants') != [
+        refinement = config.get('experiment') == 'refinement_v2'
+        expected_seeds = [42,43,44,45] if refinement else [42,43,44]
+        if config['sample_size'] != 20 or config.get('seeds') != expected_seeds:
+            raise ValueError('Correctness campaign requires twenty fixed articles and seeds '+','.join(map(str,expected_seeds)))
+        expected_variants = [
             {'name':'whole-targeted','arm':'targeted','input_scope':'whole_article'},
-            {'name':'compact-targeted','arm':'targeted','input_scope':'patient_sections'}]:
+            {'name':'compact-targeted','arm':'targeted','input_scope':'patient_sections'}]
+        if refinement:
+            expected_variants = [
+                {'name':'whole-legacy','arm':'targeted','input_scope':'whole_article','refinement_policy':'legacy','roster':'frozen'},
+                {'name':'compact-legacy','arm':'targeted','input_scope':'patient_sections','refinement_policy':'legacy','roster':'frozen'},
+                {'name':'compact-refined','arm':'targeted','input_scope':'patient_sections','refinement_policy':'source_aware','roster':'frozen'},
+                {'name':'compact-live','arm':'targeted','input_scope':'patient_sections','refinement_policy':'source_aware','roster':'live'}]
+        if config.get('variants') != expected_variants:
             raise ValueError('Correctness campaign requires matched whole and compact targeted variants')
         if config['matrix'] != [{'context':65536,'prefill':32768}]:
             raise ValueError('Correctness campaign requires the pinned 64k/32768 layout')
@@ -70,6 +81,10 @@ def prepare(root, work, config_path):
     from .acquisition import AcquisitionConfig
     if not fixed:
         AcquisitionConfig.model_validate(yaml.safe_load(Path(config['source_config']).read_text()))
+    if config.get('holdout_source_config'):
+        if not fixed or config.get('experiment') != 'refinement_v2' or config.get('holdout_sample_size') != 24:
+            raise ValueError('Holdout acquisition requires the bounded refinement campaign with 24 articles')
+        AcquisitionConfig.model_validate(yaml.safe_load(Path(config['holdout_source_config']).read_text()))
     from .pilot_extract import load_pilot_config
     load_pilot_config(config['extraction_config'])
     work.mkdir(parents=True); (work/'logs').mkdir()
@@ -176,10 +191,14 @@ async def correctness_runs(campaign, destination, endpoints, context):
     work = Path(campaign['work']); config = campaign['config']
     sample = work/'profile/sample.jsonl.gz'; frozen = work/'profile/rosters.json'
     frozen_hash = sha256(frozen); results = []; discovery = []
+    from .pilot_extract import load_pilot_config
+    extraction_config = load_pilot_config(config['extraction_config']).model_dump()
     for index, seed in enumerate(config['seeds']):
         base = Path(destination)/f'seed{seed}'
         try:
-            roster_report = await prepare_rosters(config['extraction_config'], sample, base/'discovery',
+            discovery_config = ({**extraction_config,'refinement_policy':'source_aware'}
+                if config.get('experiment') == 'refinement_v2' else config['extraction_config'])
+            roster_report = await prepare_rosters(discovery_config, sample, base/'discovery',
                 endpoints, context, seed=seed)
         except Exception as exc:
             # The reviewed roster is independent of live discovery. A failed
@@ -196,15 +215,25 @@ async def correctness_runs(campaign, destination, endpoints, context):
                 roster_report.update(status='failed',error='Discovery scoring failed: '+str(exc))
         discovery.append({'seed':seed, 'report':roster_report})
         variants = config['variants'] if index % 2 == 0 else list(reversed(config['variants']))
+        if config.get('experiment') == 'refinement_v2':
+            # Four seeds: each arm occupies every execution position once.
+            variants = config['variants'][index:] + config['variants'][:index]
         for order, variant in enumerate(variants):
             if sha256(frozen) != frozen_hash:
                 raise ValueError('Hand-reviewed frozen rosters changed during correctness run')
             write_json(work/'progress.json',{'phase':'extracting','seed':seed,'variant':variant['name'],
                 'input_scope':variant['input_scope'],'order':order,'time_unix':time.time()})
             try:
-                measured = await run_pilot(config['extraction_config'], sample, base/variant['name'], endpoints,
+                trial_config = {**extraction_config,
+                    'refinement_policy': variant.get('refinement_policy', extraction_config['refinement_policy'])}
+                if config.get('reset_between_trials'):
+                    cache = await trial_warmup(endpoints, trial_config, seed)
+                    write_json(base/(variant['name']+'-warmup.json'), cache)
+                measured = await run_pilot(trial_config, sample, base/variant['name'], endpoints,
                     context, variant['arm'], image_manifest=work/'vision-assets/manifest.json',
-                    frozen_rosters=frozen, input_scope=variant['input_scope'], seed=seed)
+                    frozen_rosters=frozen if variant.get('roster','frozen') == 'frozen' else None,
+                    input_scope=variant['input_scope'], seed=seed)
+                if config.get('reset_between_trials'): measured['warmup'] = cache
             except Exception as exc:
                 measured = {'status':'failed','error_type':type(exc).__name__,'error':str(exc),
                             'tokens':{},'valid_tasks':0,'task_count':0}
@@ -223,8 +252,107 @@ async def correctness_runs(campaign, destination, endpoints, context):
                     measured.update(status='failed',error='Source-fidelity scoring failed: '+str(exc))
                     write_json(base/variant['name']/'SCORING_FAILED.json',{'error':str(exc)})
             results.append({'arm':variant['name'],'seed':seed,'input_scope':variant['input_scope'],
-                'order':order,'frozen_rosters_sha256':frozen_hash,'report':measured})
+                'order':order,'refinement_policy':trial_config['refinement_policy'],
+                'roster_conditioning':variant.get('roster','frozen'),
+                'frozen_rosters_sha256':frozen_hash if variant.get('roster','frozen') == 'frozen' else None,
+                'report':measured})
     return results, discovery
+
+
+async def trial_warmup(endpoints, config, seed):
+    """Reset prefixes where supported, then equally warm every replica.
+
+    Failures remain visible; unavailable resets do not prevent a quality trial
+    or masquerade as a controlled throughput comparison. Calls are excluded
+    from extraction usage/wall timers and have a strict small output cap.
+    """
+    import httpx
+    async with httpx.AsyncClient(timeout=120) as http:
+        async def one(endpoint):
+            base = endpoint.removesuffix('/v1').rstrip('/')
+            result = {'endpoint': endpoint, 'prefix_reset': False, 'warmup_completed': False}
+            try:
+                response = await http.post(base+'/reset_prefix_cache')
+                result['prefix_reset'] = response.is_success
+                result['reset_http_status'] = response.status_code
+                response = await http.post(endpoint.rstrip('/')+'/chat/completions', json={
+                    'model': config['served_model'], 'messages':[{'role':'user','content':'Return only {"ready":true}.'}],
+                    'max_tokens': 128, 'temperature': 1, 'top_p': .95, 'top_k': 64, 'seed':seed,
+                    'chat_template_kwargs':{'reasoning_strength':'medium'}})
+                response.raise_for_status(); result['warmup_completed'] = True
+            except (httpx.HTTPError, ValueError) as exc: result['error'] = str(exc)
+            return result
+        rows = await asyncio.gather(*(one(endpoint) for endpoint in endpoints))
+    return {'replicas':rows, 'controlled_prefix_reset':all(r['prefix_reset'] for r in rows),
+            'all_replicas_warmed':all(r['warmup_completed'] for r in rows),
+            'notice':'Equal bounded startup warmup; not a saturated throughput tuning experiment.'}
+
+
+async def prepare_cpu_campaign(campaign):
+    """Prepare regressions and a disjoint small new-source sample, on CPU only."""
+    from .pilot_cpu import run_cpu
+    from .data import read_jsonl
+    work = Path(campaign['work']); config = campaign['config']
+    result = await run_cpu(work, config)
+    if not config.get('holdout_source_config'): return result
+    child = work/'holdout'
+    try:
+        if child.exists(): raise ValueError('Existing holdout folder refused')
+        child.mkdir()
+        write_json(child/'source-owner.json', {'work':str(child),'config_sha256':campaign['config_sha256'],
+                                             'scope':'corpus-pilot-holdout/1'})
+        settings = {**config, 'source_mode':'acquisition', 'source_config':config['holdout_source_config'],
+                    'sample_size':config['holdout_sample_size'], 'seed':5725,
+                    'fixed_source':None, 'fixed_source_sha256':None, 'fixed_rosters':None,
+                    'fixed_rosters_sha256':None, 'fidelity_reference':None, 'fidelity_reference_sha256':None,
+                    'prioritize_reference_figures':False}
+        holdout = await run_cpu(child, settings)
+        if holdout['status'] != 'ready': raise ValueError('No eligible holdout sample; inspect holdout/cpu.json')
+        excluded = {a['pmcid'] for a in read_jsonl(work/'profile/sample.jsonl.gz')}
+        sample = child/'profile/sample.jsonl.gz'; candidates = list(read_jsonl(sample))
+        selected = [a for a in candidates if a['pmcid'] not in excluded]
+        if not selected: raise ValueError('Holdout sample overlaps the regression articles entirely')
+        # Keep only the small selected review surface, including cases where
+        # discovery finds no patients. Raw acquisition/download trees are still
+        # deleted; these immutable result inputs let reviewers check omissions.
+        review = {'schema_version':'review-source-sample/1','source_set':'heldout_unadjudicated',
+            'clinical_adjudication':'pending','articles':[{k:a[k] for k in (
+                'article_id','pmcid','version','title','authors','license','xml_sha256','text_sha256',
+                'parser_version','retrieval','figures','references','segments') if k in a} for a in selected]}
+        review_bytes = json.dumps(review,ensure_ascii=False).encode()
+        if len(review_bytes) > 32_000_000: raise ValueError('Selected source review snapshot exceeds 32 MB')
+        review_path = work/'review-source-sample.json'
+        if review_path.exists(): raise ValueError('Existing source review snapshot refused')
+        review_path.write_bytes(review_bytes)
+        result['hashes']['review-source-sample.json'] = sha256(review_path)
+        with gzip.open(sample, 'wt', encoding='utf-8') as stream:
+            for article in selected: stream.write(json.dumps(article,ensure_ascii=False)+'\n')
+        holdout['hashes']['profile/sample.jsonl.gz'] = sha256(sample)
+        holdout['sample_size'] = len(selected)
+        selected_ids = {a['article_id'] for a in selected}
+        manifest_path = child/'vision-assets/manifest.json'
+        manifest = read_json(manifest_path)
+        manifest['figures'] = [row for row in manifest['figures'] if row['article_id'] in selected_ids]
+        manifest['selection_after_overlap_exclusion'] = True
+        write_json(manifest_path,manifest)
+        holdout['hashes']['vision-assets/manifest.json'] = sha256(manifest_path)
+        holdout['inference_selection'] = {'excluded_pmcids':sorted(excluded),
+            'removed_overlap':len(candidates)-len(selected),'selected_articles':len(selected),
+            'review_status':'unadjudicated new-source stress sample, not new accuracy gold'}
+        write_json(child/'cpu.json',holdout)
+        result['holdout'] = {'status':'ready','selected_articles':len(selected),
+                            'cpu_report':'holdout/cpu.json','review_status':'source_adjudication_pending'}
+        for path, digest in holdout['hashes'].items():
+            absolute = (child/path).resolve()
+            result['hashes'][str(absolute.relative_to(work)) if absolute.is_relative_to(work) else str(absolute)] = digest
+        result['hashes']['holdout/cpu.json'] = sha256(child/'cpu.json')
+        result['hashes']['holdout/source-owner.json'] = sha256(child/'source-owner.json')
+        write_json(work/'cpu.json',result)
+        return result
+    except BaseException as exc:
+        result.update(status='failed',holdout={'status':'failed','error':str(exc)})
+        write_json(work/'cpu.json',result)
+        raise
 
 
 async def _gpu_locked(campaign):
@@ -280,6 +408,33 @@ async def _gpu_locked(campaign):
                 failed.extend({'cell':cell,'seed':row['seed'],'arm':row.get('arm','discovery'),
                     'error':row['report'].get('error','Correctness trial failed')}
                     for row in [*rows,*discovered] if row['report'].get('status') == 'failed')
+                if campaign['config'].get('holdout_source_config'):
+                    from .pilot_extract import load_pilot_config
+                    sample = work/'holdout/profile/sample.jsonl.gz'
+                    base_config = load_pilot_config(campaign['config']['extraction_config']).model_dump()
+                    for index, seed in enumerate((42,43)):
+                        policies = ['legacy','source_aware'] if index == 0 else ['source_aware','legacy']
+                        for order, policy in enumerate(policies):
+                            name = 'holdout-'+policy
+                            trial = dest/'holdout'/f'seed{seed}'/name
+                            write_json(work/'progress.json',{'phase':'heldout_extracting','seed':seed,
+                                'variant':name,'time_unix':time.time()})
+                            trial_config = {**base_config,'refinement_policy':policy,'max_articles':24}
+                            cache = await trial_warmup(endpoints,trial_config,seed)
+                            write_json(trial.parent/(name+'-warmup.json'),cache)
+                            try:
+                                measured = await run_pilot(trial_config,sample,trial,endpoints,cell['context'],
+                                    'targeted',input_scope='patient_sections',seed=seed,
+                                    image_manifest=work/'holdout/vision-assets/manifest.json')
+                                measured.update(warmup=cache,accuracy_gold='unavailable; new source adjudication pending')
+                                write_json(trial/'report.json',measured)
+                            except Exception as exc:
+                                measured={'status':'failed','error':str(exc),'tokens':{},'valid_tasks':0,'task_count':0}
+                                write_json(trial/'FAILED.json',measured)
+                                failed.append({'cell':cell,'arm':name,'seed':seed,'error':str(exc)})
+                            results.append({'cell':cell,'arm':name,'seed':seed,'order':order,
+                                'refinement_policy':policy,'roster_conditioning':'live',
+                                'input_scope':'patient_sections','source_set':'heldout_unadjudicated','report':measured})
             else:
                 for arm in campaign['config']['arms']:
                     write_json(work/'progress.json',{'phase':'extracting','cell':label,'arm':arm,'time_unix':time.time()})
@@ -322,7 +477,7 @@ def report(campaign):
             'failures':run.get('failures',[]),'cells':run.get('results',[]),'discovery':run.get('discovery',[]),
             'source_mode':campaign['config'].get('source_mode','acquisition')}
     write_json(work/'summary.json',result)
-    lines=[]; fidelity_lines=[]; discovery_lines=[]
+    lines=[]; fidelity_lines=[]; discovery_lines=[]; measurement_lines=[]; timeline_lines=[]
     for row in result['cells']:
         cell, measured=row['cell'],row['report']; tokens=measured['tokens']
         rate=tokens.get('all_gpus_output_tokens_per_second')
@@ -330,6 +485,17 @@ def report(campaign):
         lines.append(f'| {cell["context"]} | {cell["prefill"]} | {row.get("seed","—")} | {row["arm"]} | '
                      f'{measured["valid_tasks"]} / {measured["task_count"]-measured["valid_tasks"]} | '
                      f'{display_rate} |')
+        comparisons = measured.get('measurement_comparison', {})
+        if comparisons:
+            measurement_lines.append(f'| {row.get("seed","—")} | {row["arm"]} | '
+                f'{comparisons.get("matched_model_fields",0)} | {comparisons.get("conflict",0)} | '
+                f'{comparisons.get("source_parse_only",0)} | {comparisons.get("ambiguous_source_notation",0)} | '
+                f'{comparisons.get("unresolved",0)} |')
+        ordering = measured.get('relative_timelines', {})
+        if ordering:
+            timeline_lines.append(f'| {row.get("seed","—")} | {row["arm"]} | '
+                f'{ordering.get("patients",0)} | {ordering.get("events",0)} | '
+                f'{ordering.get("ordered_pairs",0)} | {ordering.get("incomparable_pairs",0)} |')
         score = measured.get('fidelity', {})
         if score:
             first = score['summary']['first_pass']; delivered = score['summary']['delivered']
@@ -338,18 +504,21 @@ def report(campaign):
             def figure_counts(name):
                 counts = figures[name]['summary']
                 return f'{counts["matched"]}/{counts["required"]} ({counts["unscorable"]} unavailable)'
+            representation = score.get('representation_aware', {})
+            semantic = f'{representation.get("matched","—")}/{representation.get("required","—")}'
             fidelity_lines.append(f'| {row["seed"]} | {row["arm"]} | {first["matched"]}/{first["required"]} | '
                 f'{delivered["matched"]}/{delivered["required"]} | {delivered["missing"]} / {delivered["unscorable"]} | '
                 f'{delivered["forbidden_violations"]}/{delivered["forbidden"]} ({delivered["forbidden_unscorable"]} unavailable) | '
-                f'{timelines.get("valid",0)}/{sum(timelines.values())} | {figure_counts("caption")} | {figure_counts("pixels")} |')
+                f'{timelines.get("valid",0)}/{sum(timelines.values())} ({timelines.get("partial",0)} partial) | '
+                f'{figure_counts("caption")} | {figure_counts("pixels")} | {semantic} |')
     for trial in result['discovery']:
         counts = trial['report'].get('fidelity', {}).get('summary')
         if counts:
             discovery_lines.append(f'| {trial["seed"]} | {counts["count_matches"]}/{counts["definitive_articles"]} | '
                 f'{counts["missing_patients"]} | {counts["extra_patients"]} | {counts["unscorable"]} |')
     correctness = ('\n## Reviewed source checklist\n\n'
-        '| Seed | Scope | First-pass matches | Delivered matches | Missing / unavailable | Forbidden hits | Valid timelines | Caption ownership | Pixel ownership |\n'
-        '| ---: | --- | ---: | ---: | ---: | ---: | ---: | --- | --- |\n' + '\n'.join(fidelity_lines) +
+        '| Seed | Scope | First-pass matches | Strict delivered | Missing / unavailable | Forbidden hits | Valid timelines | Caption ownership | Pixel ownership | Representation-aware delivered |\n'
+        '| ---: | --- | ---: | ---: | ---: | ---: | --- | --- | --- | ---: |\n' + '\n'.join(fidelity_lines) +
         '\n\nMatches are finite reference assertions, not comprehensive clinical accuracy. Missing and unavailable remain separate; unavailable forbidden checks do not establish safety. Pixel descriptions still need source/pixel adjudication.\n'
         '\n## Independent patient discovery\n\n'
         '| Seed | Correct article counts | Missing patients | Extra patients | Unavailable articles |\n'
@@ -360,8 +529,22 @@ def report(campaign):
         '| Context | Prefill budget | Seed | Arm | Valid / invalid tasks | Generated tok/s, all GPUs |\n'+
         '| ---: | ---: | ---: | --- | ---: | ---: |\n'+'\n'.join(lines)+'\n\n'+
         correctness +
+        ('## Measurement notation: parser versus LLM fields\n\n'
+         '| Seed | Arm | Agreement | Conflict | Source only | Ambiguous exponent | Unresolved |\n'
+         '| ---: | --- | ---: | ---: | ---: | ---: | ---: |\n'+'\n'.join(measurement_lines)+
+         '\n\nSidecars preserve raw text, decimal magnitude, unit, comparator and scientific scale. '
+         'Unresolved includes qualitative results and unsupported unit formats; agreement is lexical, not clinical accuracy.\n\n'
+         if measurement_lines else '') +
+        ('## Relative clinical sequence\n\n'
+         '| Seed | Arm | Patient timelines | Events | Before/after pairs | Unknown-order pairs |\n'
+         '| ---: | --- | ---: | ---: | ---: | ---: |\n'+'\n'.join(timeline_lines)+
+         '\n\nRelations are source-gated model claims. Topological layers are not simultaneous visits; '
+         'exact dates are optional and disconnected events remain unordered.\n\n' if timeline_lines else '') +
         'CPU lengths: profile/SUMMARY.md. Per-cell extraction counts and input/output token distributions: extraction/*/{direct,targeted}/report.json.\n\n'+
-        ('Correctness variants share reviewed fixed rosters; live-discovery trials are reported separately. Source-fidelity scores cover only the reviewed reference assertions.\n'
+        ('Roster conditioning is saved per trial: frozen regressions and live end-to-end trials have different denominators. '
+         'Strict historical patterns remain unchanged; reviewed representation alternatives are a separate score, not medical accuracy. '
+         'Heldout sources have no accuracy gold yet. Warmup/reset receipts accompany each refinement trial; '
+         'a failed cache reset makes speed comparisons uncontrolled.\n'
          if result['source_mode']=='fixed_fixture' else
          'New-source clinical accuracy is pending source adjudication. Field validity and literal evidence checks are separate from entailment and recall.\n'))
     return result
@@ -371,8 +554,7 @@ def stage(campaign, phase):
     work=Path(campaign['work']); destination=work/f'{phase}.json'
     try:
         if phase=='cpu':
-            from .pilot_cpu import run_cpu
-            return asyncio.run(run_cpu(work,campaign['config']))
+            return asyncio.run(prepare_cpu_campaign(campaign))
         if phase=='gpu':
             def interrupted(signum,frame): raise KeyboardInterrupt('Slurm signal '+str(signum))
             signal.signal(signal.SIGTERM,interrupted)
@@ -413,13 +595,50 @@ def archive_results(campaign, output):
     if output.exists() or output.is_relative_to(work):
         raise ValueError('Use a new archive filename outside the campaign')
     names = ('pilot.json','cpu.json','gpu.json','summary.json','SUMMARY.md','source-cleanup.json',
-             'source-owner.json','progress.json','extraction','logs','vision-assets','profile/counts.jsonl.gz',
+             'source-owner.json','progress.json','review-source-sample.json','extraction','logs','vision-assets','profile/counts.jsonl.gz',
              'profile/profile.json','profile/SUMMARY.md','profile/rosters.json',
              'profile/token-histograms.png','profile/token-histograms.svg','profile/token-histograms.json',
              'cpu-error.json','gpu-error.json','source-cleanup-error.json',
              'engine/setup.json','engine/container-python.json',
              'engine/results/glimmer-fp8/download.json','engine/results/glimmer-fp8/cleanup.json')
+    if campaign['config'].get('holdout_source_config'):
+        names += ('holdout/cpu.json','holdout/source-owner.json','holdout/vision-assets',
+                  'holdout/profile/counts.jsonl.gz','holdout/profile/profile.json','holdout/profile/SUMMARY.md',
+                  'holdout/profile/token-histograms.png','holdout/profile/token-histograms.svg',
+                  'holdout/profile/token-histograms.json')
     files = []
+    deduplicate = (campaign['config'].get('experiment') == 'refinement_v2' and
+                   (work/'gpu.json').exists() and read_json(work/'gpu.json').get('status') == 'completed')
+    def redundant_attempts(path):
+        task_dir = path.parent/'tasks'
+        if not task_dir.is_dir() or task_dir.is_symlink(): return False
+        saved = {}
+        try:
+            for task_path in task_dir.glob('*.json'):
+                if task_path.is_symlink(): return False
+                for attempt in read_json(task_path).get('attempts', []):
+                    seq = attempt.get('ledger_sequence')
+                    if not isinstance(seq,int) or seq in saved: return False
+                    saved[seq] = json_digest(attempt)
+            count = 0
+            with path.open() as stream:
+                for line in stream:
+                    if not line.strip(): continue
+                    attempt = json.loads(line); seq = attempt.get('ledger_sequence')
+                    if seq not in saved or saved.pop(seq) != json_digest(attempt): return False
+                    count += 1
+            return count > 0 and not saved
+        except (ValueError, TypeError, KeyError): return False
+    patient_digests = {}
+    def redundant_patient(path):
+        aggregate = path.parent.parent/'patients.jsonl'
+        if not aggregate.is_file() or aggregate.is_symlink(): return False
+        try:
+            if aggregate not in patient_digests:
+                with aggregate.open() as stream:
+                    patient_digests[aggregate] = {json_digest(json.loads(line)) for line in stream if line.strip()}
+            return json_digest(read_json(path)) in patient_digests[aggregate]
+        except (ValueError, TypeError, KeyError): return False
     for name in names:
         path = work/name
         if path.is_symlink():
@@ -429,6 +648,13 @@ def archive_results(campaign, output):
             if entry.is_symlink() or not entry.resolve().is_relative_to(work):
                 raise ValueError('Result archive path escaped campaign')
             if entry.is_file():
+                relative = entry.relative_to(work)
+                if deduplicate and relative.parts[0] == 'extraction' and (
+                        (entry.name == 'attempts.jsonl' and redundant_attempts(entry)) or
+                        (entry.parent.name == 'patients' and redundant_patient(entry))):
+                    # Completed task JSON retains all attempts with their ledger
+                    # sequence; patients.jsonl retains all individual bundles.
+                    continue
                 if entry.suffix == '.sif' or any(part in {'.venv','uv-cache','.cache'} for part in entry.relative_to(work).parts):
                     continue
                 files.append(entry)
@@ -447,6 +673,7 @@ def archive_results(campaign, output):
             output.unlink(missing_ok=True)
         raise
     return {'output':str(output),'files':len(files),'uncompressed_bytes':total,'sha256':sha256(output),
+            'duplicate_attempt_and_patient_copies_omitted':deduplicate,
             'scope':'Result reports, extraction audits, logs, scalar profiles and bounded review pixels; source bodies/model caches excluded.'}
 
 

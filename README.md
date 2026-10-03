@@ -6,6 +6,8 @@ A uv Python project for turning licensed PMC full articles and Open-Patients sou
 
 The [fixed-source correctness campaign](docs/CORPUS_CORRECTNESS.md) compares whole-article and compact patient inputs on 20 previously downloaded articles, across three seeds. One command schedules CPU preparation, eight-B200 FP8/DFlash inference, source-checklist scoring, reporting and owned-download cleanup. It separates live discovery, first-pass versus delivered facts, timelines, caption/pixel ownership and schema validity.
 
+The [next refinement campaign](docs/CORPUS_REFINEMENT.md) adds source-aware repair controls, four balanced seeds, live patient discovery, a bounded prospective sample, relative ordered timeline exports, and source-parsed observation magnitudes/units. Strict checklist scoring stays separate from equivalent-representation matches and clinical review.
+
 The [figure attribution and cross-article linkage experiment](reports/FIGURE_ATTRIBUTION_AND_LINKAGE.md) tests panel ownership, specimen context, citation-guided retrieval and explicit follow-up identity links. The article runner now enables a separate per-figure attribution stage by default, and citation plans preserve article-local cases. Synthetic patient composition remains a separate future step.
 
 **A live, budgeted PMC/API pilot is now included**, alongside synthetic CPU/mock demonstrations. No B200 throughput or physician-adjudicated accuracy is claimed. No model weights or ontology releases were downloaded. A source case is not necessarily a unique real patient, and retrieved cohorts are not population-representative.

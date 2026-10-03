@@ -229,6 +229,7 @@
             "survival",
             "image_count",
             "percentage",
+            "clinical_risk_score",
             "other",
             "unknown"
           ],
@@ -412,6 +413,82 @@
         "role"
       ],
       "title": "ClinicalSignificance",
+      "type": "object"
+    },
+    "DiagramRelation": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "enum": [
+            "pixels",
+            "caption",
+            "article"
+          ],
+          "title": "Basis",
+          "type": "string"
+        },
+        "visual_cue": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Visual Cue"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Citation"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "certainty": {
+          "enum": [
+            "clear",
+            "uncertain",
+            "unreadable"
+          ],
+          "title": "Certainty",
+          "type": "string"
+        },
+        "source_label": {
+          "title": "Source Label",
+          "type": "string"
+        },
+        "target_label": {
+          "title": "Target Label",
+          "type": "string"
+        },
+        "arrow_style": {
+          "enum": [
+            "solid",
+            "dashed",
+            "bidirectional",
+            "unknown"
+          ],
+          "title": "Arrow Style",
+          "type": "string"
+        },
+        "clinical_fact_status": {
+          "const": "unreviewed_annotation",
+          "default": "unreviewed_annotation",
+          "title": "Clinical Fact Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "basis",
+        "visual_cue",
+        "evidence",
+        "certainty",
+        "source_label",
+        "target_label",
+        "arrow_style"
+      ],
+      "title": "DiagramRelation",
       "type": "object"
     },
     "MedicalDomainTag": {
@@ -695,6 +772,13 @@
             "$ref": "#/$defs/ClinicalSignificance"
           },
           "title": "Clinical Significance",
+          "type": "array"
+        },
+        "diagram_relations": {
+          "items": {
+            "$ref": "#/$defs/DiagramRelation"
+          },
+          "title": "Diagram Relations",
           "type": "array"
         },
         "limitations": {

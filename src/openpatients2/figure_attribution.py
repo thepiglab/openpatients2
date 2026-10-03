@@ -55,6 +55,9 @@ For a multi-patient timeline with no panel letters use one shared assignment nam
 Patient tissue is patient_specimen. A parasite's organs are organism_from_patient, not the host patient's organs.
 A comparison animal/person from another case is external, with no local patient IDs. Do not add an external case to the roster.
 Shared means the actual depicted material belongs to multiple identified cases; aggregate group plots have no individual IDs.
+A caption discussing both patients does not prove that a physical photograph or histology panel contains specimens from
+both. Attribute each panel's physical source separately. Keep uncertain specimen origin unresolved; do not assign all
+panels to both patients merely because their morphology is similar. Anonymous dashboard beds are not roster identities.
 Do not assume every image in a single-case article belongs to its patient. Do not use resemblance, demographics or diagnosis alone.
 Give exact contiguous segment quotes establishing BOTH what the panel is and whose case/specimen it concerns.
 Unknown ownership stays unresolved. Never infer a clinical diagnosis from appearance. Pixels, if supplied, help read labels and

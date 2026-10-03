@@ -92,7 +92,7 @@ async def _fetch(http, url, limit, budget):
 
 
 async def prepare_media(input_path, output_dir, max_figures=12, max_total_bytes=64_000_000,
-                        max_image_bytes=8_000_000, http=None):
+                        max_image_bytes=8_000_000, http=None, priority_figures=None):
     """Select at most twelve figures round-robin; refuse existing media output.
 
     The total response budget includes bytes from failed integrity checks. HTTP
@@ -103,13 +103,23 @@ async def prepare_media(input_path, output_dir, max_figures=12, max_total_bytes=
         if type(value) is not int or not 1 <= value <= cap: raise ValueError('Media limit outside pilot bounds')
     articles = _articles(input_path)
     selected = []
+    known = {(a['article_id'], f['figure_key']): (a, f) for a in articles for f in a.get('figures', [])}
+    priorities = [(row['article_id'], row['figure_id']) for row in priority_figures or []]
+    if len(priorities) > max_figures or len(set(priorities)) != len(priorities) or set(priorities) - known.keys():
+        raise ValueError('Priority figures must be unique canonical figures within the pixel cap')
+    selected.extend(known[key] for key in priorities)
+    selected_ids = set(priorities)
     index = 0
     while len(selected) < max_figures:
         added = False
         for article in articles:
             figures = article.get('figures', [])
             if index < len(figures):
+                added = True
+                key = article['article_id'], figures[index]['figure_key']
+                if key in selected_ids: continue
                 selected.append((article, figures[index])); added = True
+                selected_ids.add(key)
                 if len(selected) == max_figures: break
         if not added: break
         index += 1
@@ -117,7 +127,8 @@ async def prepare_media(input_path, output_dir, max_figures=12, max_total_bytes=
     if folder.exists() or folder.is_symlink(): raise ValueError('Existing vision-assets refused; use a fresh output')
     folder.mkdir(parents=True, exist_ok=False)
     manifest = {'figures': [], 'bytes': 0, 'response_bytes': 0, 'complete': False,
-                'selection': 'round-robin figure index across selected articles',
+                'selection': 'reference-priority then round-robin' if priorities else 'round-robin figure index across selected articles',
+                'priority_figures': [{'article_id': aid, 'figure_id': fid} for aid, fid in priorities],
                 'limits': {'figures': max_figures, 'total_bytes': max_total_bytes, 'image_bytes': max_image_bytes}}
     budget = {'received': 0, 'limit': max_total_bytes}
     owns = http is None

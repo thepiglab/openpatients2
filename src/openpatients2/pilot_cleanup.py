@@ -90,13 +90,21 @@ def cleanup_sources(campaign):
             raise ValueError('Invalid owned engine campaign')
         if _read(work, 'engine/results/glimmer-fp8/cleanup.json').get('status') != 'deleted':
             raise ValueError('Model cleanup must finish before source cleanup')
-    paths = [(relative, _safe_path(work, relative)) for relative in TARGETS]
+    targets = list(TARGETS); directories = set(DIRECTORIES)
+    holdout = campaign['config'].get('holdout_source_config') and (work/'holdout').exists()
+    if holdout:
+        proof = {'work':str(work/'holdout'),'config_sha256':digest,'scope':'corpus-pilot-holdout/1'}
+        if _read(work,'holdout/source-owner.json') != proof:
+            raise ValueError('Holdout source ownership marker does not match this campaign')
+        targets += ['holdout/'+name for name in TARGETS]
+        directories |= {'holdout/'+name for name in DIRECTORIES}
+    paths = [(relative, _safe_path(work, relative)) for relative in targets]
     # Validate every target and descendant first: no partial delete on a bad link.
     inventory = {}
     for relative, path in paths:
         if not path.exists():
             continue
-        if path.is_dir() != (relative in DIRECTORIES):
+        if path.is_dir() != (relative in directories):
             raise ValueError('Source cleanup target has unexpected type: '+relative)
         inventory[relative] = _inventory(path)
     with ExitStack() as stack:
@@ -106,16 +114,18 @@ def cleanup_sources(campaign):
                 stack.enter_context(model_lock(engine))
             except BlockingIOError:
                 raise ValueError('Active GPU/model operation prevents source cleanup') from None
-        acquisition = work/'acquisition'
-        if acquisition.is_dir():
-            owner = stack.enter_context((acquisition/'owner.lock').open('a'))
-            try:
-                fcntl.flock(owner, fcntl.LOCK_EX | fcntl.LOCK_NB)
-            except BlockingIOError:
-                raise ValueError('Active acquisition prevents source cleanup') from None
+        for acquisition in [work/'acquisition', *([work/'holdout/acquisition'] if holdout else [])]:
+            if acquisition.is_dir():
+                owner = stack.enter_context((acquisition/'owner.lock').open('a'))
+                try:
+                    fcntl.flock(owner, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                except BlockingIOError:
+                    raise ValueError('Active acquisition prevents source cleanup') from None
         # Recheck ownership/report while holding both relevant writer locks.
         if _read(work, 'source-owner.json') != expected:
             raise ValueError('Source ownership changed before cleanup')
+        if holdout and _read(work,'holdout/source-owner.json') != proof:
+            raise ValueError('Holdout ownership changed before cleanup')
         _read(work, 'summary.json')
         if _read(work, 'gpu.json').get('status') not in {'completed', 'partial', 'failed'}:
             raise ValueError('Benchmark attempt has not ended; source cleanup is deferred')
@@ -131,7 +141,7 @@ def cleanup_sources(campaign):
                 continue
             _safe_path(work, relative)
             _inventory(path)
-            if relative in DIRECTORIES:
+            if relative in directories:
                 shutil.rmtree(path)
             else:
                 path.unlink()

@@ -6,6 +6,8 @@ A structurally accepted graph still requires semantic attribution/time review.
 from __future__ import annotations
 
 import datetime
+from collections import Counter
+from copy import deepcopy
 import re
 from typing import Literal
 from pydantic import Field, model_validator
@@ -214,3 +216,138 @@ def audit_timeline(timeline: PatientTimeline, sources, fact_records: dict[str, s
             'unordered_event_ids': sorted(k for k in by_id if not order[k] and not any(k in v for v in order.values())
                                           and not any(k in p for p in same_time)),
             'synthetic_dates_generated': False}
+
+
+def partial_timeline(value, sources, fact_records, record_id):
+    """Retain source-gated events when an optional time/link or neighbor fails.
+
+    Every removed candidate remains in the returned quarantine audit. Neither
+    unknown patient identity nor nonliteral event/attribution evidence is fixed
+    by dropping evidence. Semantic correctness remains pending review.
+    """
+    if not isinstance(value, dict) or value.get('record_id') != record_id:
+        return None, []
+    if value.get('schema_version') != 'patient-timeline/2': return None, []
+    events = value.get('events'); edges = value.get('edges')
+    if not isinstance(events, list) or not isinstance(edges, list): return None, []
+    if not isinstance(value.get('limitations'),list) or any(not isinstance(v,str) for v in value['limitations']):
+        return None, []
+    quarantine = []
+    counts = Counter(e.get('event_id') for e in events
+                     if isinstance(e, dict) and isinstance(e.get('event_id'), str))
+    shell = {'schema_version': 'patient-timeline/2', 'record_id': record_id,
+             'events': [], 'edges': [], 'limitations': list(value.get('limitations') or [])}
+    def reject(kind, raw, reason):
+        quarantine.append({'kind': kind, 'candidate': deepcopy(raw), 'reason': reason,
+                           'clinical_entailment_verified': False})
+    for raw in events:
+        if (not isinstance(raw, dict) or not isinstance(raw.get('event_id'), str)
+                or counts[raw['event_id']] != 1):
+            reject('event', raw, 'ambiguous_or_missing_event_identity'); continue
+        row = deepcopy(raw)
+        times = row.get('times')
+        if not isinstance(times, list): reject('event', raw, 'malformed_times'); continue
+        row['times'] = []
+        for time in times:
+            try:
+                t = TimeExpression.model_validate(time)
+                if any(span_errors(e, sources) for e in t.evidence): raise ValueError('invalid time span')
+                row['times'].append(time)
+            except (ValueError, TypeError): reject('time', time, 'invalid_literal_time_or_span')
+        ids = row.get('fact_ids')
+        if not isinstance(ids, list): reject('event', raw, 'malformed_fact_registry_links'); continue
+        row['fact_ids'] = []
+        for fid in ids:
+            if isinstance(fid, str) and fact_records.get(fid) == record_id: row['fact_ids'].append(fid)
+            else: reject('fact_link', fid, 'unknown_or_wrong_patient_fact')
+        try:
+            event = LongitudinalEvent.model_validate(row)
+            probe = PatientTimeline.model_validate({**shell, 'events': [event.model_dump()]})
+            if not audit_timeline(probe, sources, fact_records)['structural_source_gates_passed']:
+                raise ValueError('event source/identity gates failed')
+            shell['events'].append(event.model_dump())
+        except (ValueError, TypeError): reject('event', raw, 'event_source_schema_or_patient_gate_failed')
+    edge_counts = Counter(e.get('edge_id') for e in edges
+                          if isinstance(e, dict) and isinstance(e.get('edge_id'), str))
+    for raw in edges:
+        if (not isinstance(raw, dict) or not isinstance(raw.get('edge_id'), str)
+                or edge_counts[raw['edge_id']] != 1):
+            reject('edge', raw, 'ambiguous_or_missing_edge_identity'); continue
+        try:
+            probe = PatientTimeline.model_validate({**shell, 'edges': [raw]})
+            if not audit_timeline(probe, sources, fact_records)['structural_source_gates_passed']:
+                raise ValueError('temporal graph gate failed')
+            shell['edges'].append(probe.edges[0].model_dump())
+        except (ValueError, TypeError): reject('edge', raw, 'edge_source_reference_or_consistency_gate_failed')
+    if not shell['events']: return None, quarantine
+    combined = PatientTimeline.model_validate(shell)
+    if not audit_timeline(combined, sources, fact_records)['structural_source_gates_passed']:
+        # Do not select a winning chronology by source/list order.
+        for raw in shell['edges']: reject('edge', raw, 'combined_graph_conflict')
+        shell['edges'] = []
+    shell['limitations'].append('Partial timeline: unresolved candidates retained in the task quarantine audit; '
+                                'no completeness or semantic chronology claim.')
+    return shell, quarantine
+
+
+def canonical_timeline_ids(value):
+    """Code assigns export IDs after all original reference gates have passed."""
+    result = deepcopy(value)
+    mapping = {e['event_id']: f'e{i+1}' for i, e in enumerate(result['events'])}
+    for event in result['events']: event['event_id'] = mapping[event['event_id']]
+    for i, edge in enumerate(result['edges']):
+        edge['edge_id'] = f'edge{i+1}'
+        edge['from_event_id'] = mapping[edge['from_event_id']]
+        edge['to_event_id'] = mapping[edge['to_event_id']]
+    return result, mapping
+
+
+def relative_order(value):
+    """A usable partial sequence; no dates, invented visits or tied-event guesses.
+
+    Layers are a topological rendering, not simultaneous encounters. Only
+    explicit same_time edges put events in the same group. before_pairs lists
+    the actual reachability constraint; incomparable pairs remain unknown.
+    """
+    graph = PatientTimeline.model_validate(value)
+    ids = [e.event_id for e in graph.events]
+    parent = {key:key for key in ids}
+    def root(key):
+        while parent[key] != key:
+            key = parent[key]
+        return key
+    for edge in graph.edges:
+        if edge.relation == 'same_time': parent[root(edge.to_event_id)] = root(edge.from_event_id)
+    groups = {}
+    for key in ids: groups.setdefault(root(key), []).append(key)
+    order = {key:set() for key in groups}
+    for edge in graph.edges:
+        if edge.relation not in {'before','after'}: continue
+        a, b = root(edge.from_event_id), root(edge.to_event_id)
+        if edge.relation == 'after': a, b = b, a
+        order[a].add(b)
+    reach = {key:set(v) for key,v in order.items()}
+    for middle in groups:
+        for left in groups:
+            if middle in reach[left]: reach[left].update(reach[middle])
+    if any(key in values for key,values in reach.items()):
+        raise ValueError('Cannot render a contradictory relative timeline')
+    remaining = set(groups); layers = []
+    while remaining:
+        frontier = sorted(k for k in remaining if not any(k in order[j] for j in remaining))
+        if not frontier: raise ValueError('Cannot render a cyclic relative timeline')
+        layers.append([groups[k] for k in frontier]); remaining.difference_update(frontier)
+    before = [[a,b] for a in ids for b in ids if root(b) in reach[root(a)]]
+    incomparable = [[a,b] for index,a in enumerate(ids) for b in ids[index+1:]
+        if root(a) != root(b) and root(a) not in reach[root(b)] and root(b) not in reach[root(a)]]
+    return {'schema_version':'relative-timeline/1', 'record_id':graph.record_id,
+        'events':[e.model_dump() for e in graph.events], 'topological_layers':layers,
+        'before_pairs':before, 'incomparable_pairs':incomparable,
+        'same_time_groups':[g for g in groups.values() if len(g)>1],
+        'interval_relations':[e.model_dump() for e in graph.edges if e.relation in {'during','overlaps'}],
+        'ordered_event_ids':[key for key in ids if any(key in pair for pair in before)],
+        'order_unknown_event_ids':[key for key in ids if not any(key in pair for pair in before)
+            and len(groups[root(key)]) == 1],
+        'layers_are_simultaneous':False, 'synthetic_dates_generated':False,
+        'clinical_sequence_verified':False,
+        'basis':'Source-gated model relations; paragraph order and event kind do not create chronology.'}

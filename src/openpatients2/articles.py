@@ -22,13 +22,26 @@ def _clean(node) -> str:
         return ''
     chunks = []
     def walk(x):
+        if local_name(x.tag) in {'msup','msub'} and len(x) == 2:
+            walk(x[0])
+            chunks.append('^(' if local_name(x.tag) == 'msup' else '_(')
+            walk(x[1]); chunks.append(')')
+            return
         if x.text:
             chunks.append(x.text)
         for y in x:
             block=local_name(y.tag) in {'p','title','label','list-item','tr','td','th','caption'}
             if block:chunks.append(' ')
+            # Preserve mathematical markup rather than turning 10<sup>9</sup>
+            # into 109. Parentheses also distinguish chemical subscripts.
+            notation = {'sup': '^(', 'sub': '_('}.get(local_name(y.tag))
+            notation_start = len(chunks)
+            if notation: chunks.append(notation)
             if not (local_name(y.tag) == 'xref' and y.get('ref-type') == 'bibr'):
                 walk(y)
+            if notation:
+                if ''.join(chunks[notation_start+1:]).strip(): chunks.append(')')
+                else: del chunks[notation_start:]  # Empty, stripped bibliography callout.
             if block:chunks.append(' ')
             if y.tail:
                 chunks.append(y.tail)
@@ -141,9 +154,20 @@ def parse_article(xml: str, metadata: dict, retrieval: dict | None = None) -> di
             if local_name(node.tag) in {'app-group', 'app', 'sec'}:
                 visit(node, ['Appendix'])
     for fig in figures['figures']:
-        text = '\n'.join(x for x in [fig['label'], fig['group_caption'], fig['caption'], fig['alt_text']] if x)
         fig_node = next((x for x in article.iter() if local_name(x.tag) in {'fig', 'fig-group'}
                          and x.get('id') == fig['figure_id']), None)
+        if fig_node is not None:
+            for key, tag in (('caption','caption'),('alt_text','alt-text')):
+                node = child(fig_node,tag)
+                if node is not None and any(local_name(x.tag) in {'sup','sub','msup','msub'} for x in node.iter()):
+                    fig[key] = _clean(node)
+        if fig.get('group_id'):
+            group = next((x for x in article.iter() if local_name(x.tag) == 'fig-group'
+                          and x.get('id') == fig['group_id']), None)
+            node = child(group,'caption') if group is not None else None
+            if node is not None and any(local_name(x.tag) in {'sup','sub','msup','msub'} for x in node.iter()):
+                fig['group_caption'] = _clean(node)
+        text = '\n'.join(x for x in [fig['label'], fig['group_caption'], fig['caption'], fig['alt_text']] if x)
         add('figure_caption', text, 'Figures', fig_node if fig_node is not None else article,
             figure_id=fig['figure_key'], cross_references=cross_references(fig_node) if fig_node is not None else [],
             text_with_reference_markers=marked_text(fig_node) if fig_node is not None and cross_references(fig_node) else None,
@@ -183,7 +207,7 @@ def parse_article(xml: str, metadata: dict, retrieval: dict | None = None) -> di
         'lengths': {'words': len(re.findall(r'\S+', '\n'.join(s['text'] for s in segments))),
                     'characters': len(text), 'xml_bytes': len(xml.encode()),
                     'definition': 'abstract + body + appendices + tables + captions; no bibliography/author metadata'},
-        'parser_version': '1.3',
+        'parser_version': '1.4',
         'has_body_text':body is not None and bool(_clean(body)),
         'limitations': ['Tables with row/column spans retain span markers; complex grids need review.',
                          'Supplement contents are not downloaded. Figure captions are author statements, not pixel inspection.']}

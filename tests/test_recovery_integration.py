@@ -81,6 +81,18 @@ def test_targeted_repair_cannot_drop_or_add_items(sections,row):
     assert plan.audit()['pending'][0]['item']['evidence'][0]['quote']=='fabricated quotation'
 
 
+def test_source_aware_numeric_change_is_not_a_validation_repair(sections,row):
+    plan=ItemRepair.create('medications',two_items(sections),row['text'],[],policy='source_aware')
+    reply=copy.deepcopy(sections['medications']);reply['items']=reply['items'][:1]
+    reply['items'][0]['dose_value']=999
+    plan.instruction();plan.apply(reply)
+    assert len(plan.pending)==1 and len(plan.accepted)==1
+    assert 'Protected value changes' in str(plan.trace[-1]['errors'])
+    from openpatients2.targeted_repair import protected_value_changes
+    assert protected_value_changes({'biomarkers':[{'numeric_value':5,'unit':'%'}]},
+        {'biomarkers':[{'numeric_value':7,'unit':'%'}]}) == ['/biomarkers/0/numeric_value']
+
+
 def test_targeted_large_failed_set_batches_without_losing_supported_neighbors(sections,row):
     candidate = two_items(sections)
     candidate['items'].extend(copy.deepcopy(candidate['items'][1]) for _ in range(9))

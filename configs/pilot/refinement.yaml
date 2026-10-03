@@ -1,0 +1,58 @@
+# Regression ablation plus live-roster and disjoint new-source stress trials.
+engine_config: configs/hipergator/glimmer-fp8-tuning.yaml
+extraction_config: configs/pilot/glimmer-correctness.yaml
+tokenizer_metadata: configs/hipergator/glimmer/RedHatAI.metadata.json
+chat_template: configs/hipergator/glimmer/meta-models-chat_template.jinja
+account: cai5724
+qos: cai5724
+cpu_partition: hpg-default
+gpu_partition: hpg-b200
+workers: 32
+sample_size: 20
+seed: 5724
+fetch_batch: 25
+max_invocations: 100
+export_max_bytes: 1000000000
+max_figures: 12
+pixel_total_bytes: 64000000
+historical_regression: false
+matrix:
+- context: 65536
+  prefill: 32768
+arms:
+- targeted
+source_mode: fixed_fixture
+fixed_source: benchmarks/corpus-correctness/articles.jsonl.gz
+fixed_rosters: benchmarks/corpus-correctness/rosters.json
+fidelity_reference: benchmarks/corpus-correctness/reference-v2.json
+seeds:
+- 42
+- 43
+- 44
+- 45
+variants:
+- name: whole-legacy
+  arm: targeted
+  input_scope: whole_article
+  refinement_policy: legacy
+  roster: frozen
+- name: compact-legacy
+  arm: targeted
+  input_scope: patient_sections
+  refinement_policy: legacy
+  roster: frozen
+- name: compact-refined
+  arm: targeted
+  input_scope: patient_sections
+  refinement_policy: source_aware
+  roster: frozen
+- name: compact-live
+  arm: targeted
+  input_scope: patient_sections
+  refinement_policy: source_aware
+  roster: live
+experiment: refinement_v2
+prioritize_reference_figures: true
+reset_between_trials: true
+holdout_source_config: configs/sources/corpus-refinement-holdout.yaml
+holdout_sample_size: 24

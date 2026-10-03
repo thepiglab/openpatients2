@@ -1,0 +1,65 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "raw_text": {
+      "title": "Raw Text",
+      "type": "string"
+    },
+    "comparator": {
+      "enum": [
+        "=",
+        "<",
+        "<=",
+        ">",
+        ">="
+      ],
+      "title": "Comparator",
+      "type": "string"
+    },
+    "mantissa": {
+      "title": "Mantissa",
+      "type": "string"
+    },
+    "power_of_ten": {
+      "maximum": 30,
+      "minimum": -30,
+      "title": "Power Of Ten",
+      "type": "integer"
+    },
+    "magnitude": {
+      "description": "Expanded decimal magnitude in the stated unit; no unit conversion",
+      "title": "Magnitude",
+      "type": "string"
+    },
+    "unit": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Unit"
+    },
+    "notation": {
+      "enum": [
+        "decimal",
+        "scientific"
+      ],
+      "title": "Notation",
+      "type": "string"
+    }
+  },
+  "required": [
+    "raw_text",
+    "comparator",
+    "mantissa",
+    "power_of_ten",
+    "magnitude",
+    "unit",
+    "notation"
+  ],
+  "title": "Measurement",
+  "type": "object"
+}

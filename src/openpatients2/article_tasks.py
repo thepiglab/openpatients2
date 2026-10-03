@@ -31,11 +31,21 @@ class FigureAssignment(StrictModel):
     evidence: list[Citation]
 
 
+class CitedCase(StrictModel):
+    label: str
+    species: Literal['human', 'nonhuman', 'unknown']
+    identity_evidence: list[Citation] = Field(min_length=1)
+    source_segment_ids: list[str] = Field(min_length=1)
+    origin_reference_ids: list[str]
+    attribution_limitations: list[str]
+
+
 class Roster(StrictModel):
     disposition: Literal['individual_cases','aggregate_only','no_patient_data','uncertain']
     reported_individual_count: int | None = Field(ge=0)
     roster_complete: bool
     patients: list[Patient]
+    cited_cases: list[CitedCase] = Field(default_factory=list)
     background_segment_ids: list[str]
     unresolved_segment_ids: list[str]
     figures: list[FigureAssignment]
@@ -183,6 +193,17 @@ def check_article_task(task: str, value: dict, article: dict, patient: dict | No
             refs = set(p['source_segment_ids']); patient_blocks |= refs
             if not {e['segment_id'] for e in p['identity_evidence']} <= refs:
                 raise ValueError('Identity evidence must be included in patient packet')
+        references = {r['reference_id'] for r in article.get('references', [])}
+        for case in data['cited_cases']:
+            refs = set(case['source_segment_ids'])
+            if refs - allowed or not {e['segment_id'] for e in case['identity_evidence']} <= refs:
+                raise ValueError('Cited case needs known blocks and literal identity evidence')
+            if set(case['origin_reference_ids']) - references:
+                raise ValueError('Cited case references an unknown bibliographic entry')
+            # These are link candidates, not additional primary extraction
+            # targets. Shared blocks already containing a primary case remain.
+            classified |= refs - patient_blocks
+            data['background_segment_ids'] = sorted(set(data['background_segment_ids']) | (refs - patient_blocks))
         unknown = (classified | patient_blocks)-set(segments)
         if unknown:
             raise ValueError('Unknown source block IDs: '+str(sorted(unknown)))
@@ -246,6 +267,7 @@ def patient_packet(article: dict, roster: dict, patient: dict, *, scope: str = '
     record = normalize(raw, dataset_id='PMC-article-pilot')
     # These are app-owned convenience fields; original_row retains their input form.
     record['patient_target'] = patient
+    record['cited_case_candidates'] = roster.get('cited_cases', [])
     record['article_source'] = raw['article_source']
     record['packet_spans'] = spans
     for k in ('clinical_source_selection','clinical_source_provenance','patient_registry','canonical_evidence'):

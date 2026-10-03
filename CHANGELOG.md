@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased — corpus refinement trial
+
+- Adds a one-command CPU→GPU→cleanup campaign with four balanced regression arms and a small disjoint live-discovery sample.
+- Quarantines unsupported time associations, rotates item-repair batches, protects accepted atoms and populated measurements, and retains partial timelines/panels with failed candidates in audit.
+- Exports relative clinical order without synthetic dates and compares source-parsed decimal magnitudes/units/scientific scales against unchanged model fields.
+- Preserves JATS superscript/subscript notation for new sources; frozen older flattened exponents remain explicitly ambiguous.
+- Separates cited case link candidates, strengthens visual consistency prompts/gates, prioritizes reference figures and keeps strict versus representation-aware scores separate.
+- Cleans both owned article download trees and archives results with verified duplicate elimination.
+
 ## Unreleased — Glimmer HiPerGator gauntlet
 
 - Pinned FP8, ModelOpt mixed NVFP4 and Unsloth NF4 checkpoints, official corrected ATEM template and four publisher reasoning strengths; full BF16 verifier excluded.

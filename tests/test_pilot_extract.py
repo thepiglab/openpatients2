@@ -412,7 +412,8 @@ async def test_parallel_tokenization_cannot_overrun_shared_call_budget(tmp_path,
             await runner.close()
 
 
-async def test_temporal_source_and_graph_gates_block_delivery(tmp_path, monkeypatch):
+@pytest.mark.parametrize('policy', ['legacy', 'source_aware'])
+async def test_temporal_source_and_graph_gates_block_delivery(tmp_path, monkeypatch, policy):
     value = article(); segment = value['segments'][0]
     source_span = {'source_id': 'PMC1.1:jats', 'segment_id': segment['segment_id'],
         'segment_sha256': hashlib.sha256(segment['text'].encode()).hexdigest(),
@@ -431,12 +432,19 @@ async def test_temporal_source_and_graph_gates_block_delivery(tmp_path, monkeypa
                        'offset': None, 'evidence': [source_span]}], 'limitations': []}
     http, _ = setup_mock(monkeypatch, value, responses=reply)
     async with http:
-        report = await run_pilot({}, input_file(tmp_path, [value]), tmp_path / 'cyclic',
+        report = await run_pilot({'refinement_policy': policy}, input_file(tmp_path, [value]), tmp_path / 'cyclic',
             ['http://localhost:8000/v1'], 8192, 'direct', http=http)
     patient = json.loads((tmp_path / 'cyclic' / 'patients.jsonl').read_text())
-    assert patient['companions']['timeline_v2'] is None
+    if policy == 'legacy':
+        assert patient['companions']['timeline_v2'] is None
+    else:
+        assert len(patient['companions']['timeline_v2']['events']) == 2
+        assert patient['companions']['timeline_v2']['edges'] == []
+        assert patient['quality']['timeline_v2']['status'] == 'partial'
+        assert len(patient['quality']['timeline_v2']['quarantine']) == 2
+        assert not patient['complete_for_scope']
     assert 'contradictory_temporal_order' in patient['quality']['timeline_v2']['errors'][0]
-    assert not patient['complete_for_scope'] and report['task_statuses']['failed'] == 1
+    assert not patient['complete_for_scope'] and report['task_statuses']['failed' if policy == 'legacy' else 'partial'] == 1
 
 
 async def test_full_output_budget_excludes_nonfitting_source_even_above_minimum(tmp_path, monkeypatch):

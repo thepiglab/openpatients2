@@ -33,14 +33,16 @@ from .evidence_recovery import packet_segments, recover_citations, resolve_timel
 from .extraction_contracts import FactEnvelope, FieldSupport, SourceSpan, field_support_report
 from .figure_attribution import (FigureReview, bind_figure_review, figure_messages,
                                  patient_media, validate_figure_review)
-from .figure_visuals import FigureVisuals, panel_columns, validate_visuals, visual_messages
-from .longitudinal import PatientTimeline, audit_timeline
+from .figure_visuals import FigureVisuals, panel_columns, validate_visuals, visual_messages, partial_visuals
+from .longitudinal import PatientTimeline, audit_timeline, partial_timeline, canonical_timeline_ids, relative_order
+from .measurements import observation_measurements
 from .output_parser import parse_output
 from .prompts import messages_for
 from .provenance import json_digest
 from .patient_context import discovery_messages, check_patient_roster, frozen_rosters as read_frozen_rosters, patient_view
 from .schemas import TASK_MODELS
-from .targeted_repair import ItemRepair, erased
+from .targeted_repair import ItemRepair, erased, repair_snapshot, changed_accepted_atoms, protected_value_changes
+from .clinical_normalization import normalize_clinical
 from .validation import iter_objects, validate
 
 
@@ -77,6 +79,7 @@ class PilotConfig(ConfigModel):
     max_image_bytes: int = Field(default=8_000_000, ge=1, le=8_000_000)
     article_ids: list[str] | None = None
     robust_contracts: bool = True
+    refinement_policy: Literal['legacy', 'source_aware'] = 'source_aware'
     image_manifest: str | None = None
 
 
@@ -236,7 +239,7 @@ def timeline_wire_schema() -> dict:
     return schema
 
 
-def timeline_messages(article: dict, patient: dict, record_id: str, facts: dict[str, str], fact_rows=None) -> list[dict]:
+def timeline_messages(article: dict, patient: dict, record_id: str, facts: dict[str, str], fact_rows=None, *, refined=False) -> list[dict]:
     source_id, _ = sources_for(article)
     source = {'source_id': source_id, 'record_id': record_id, 'target_patient': patient,
         'segments': [{k: s[k] for k in ('segment_id', 'kind', 'heading', 'text') if k in s}
@@ -259,6 +262,15 @@ def timeline_messages(article: dict, patient: dict, record_id: str, facts: dict[
         'Use fact_ids only from known_fact_ids for this record; empty is allowed. The registry associates IDs '
         'with unreviewed extracted values: verify every event and link against primary source, not registry alone. '
         'Preserve uncertainty and contradictions.')
+    if refined:
+        instruction += (' The primary goal is relative clinical sequence, not dates: distinguish past history, '
+            'presentation, investigations, treatment, adverse events or failed response, treatment changes, '
+            'discharge and follow-up when documented. Use before/after edges with offset=null when the source '
+            'establishes order without a duration; events may have times=[]. A history reported at admission '
+            'can describe an earlier event: order the clinical occurrence, not when it was narrated. '
+            'Do not mechanically order events by kind or put every test before every treatment. Preserve '
+            'simultaneity only when stated, and leave incomparable events unordered. Link events to the '
+            'corresponding extracted fact_ids whenever the source supports that association.')
     return [{'role': 'system', 'content': SYSTEM}, {'role': 'user', 'content':
         'SOURCE_JSON:\n' + json.dumps(source, ensure_ascii=False) + '\nTASK:\n' + instruction +
         '\nSCHEMA:\n' + json.dumps(timeline_wire_schema())}]
@@ -359,10 +371,11 @@ class PilotRunner:
         # Do not replace this with text tokenization or a hand-waved image bound.
         return count, 'server_multimodal_exact_vllm_0.30.0' if pixels else 'server_text_exact', server_max
 
-    async def call(self, task, messages, checker, identity, replica, segments, *, packet=None):
+    async def call(self, task, messages, checker, identity, replica, segments, *, packet=None, partial_builder=None):
         key = json_digest({'identity': identity, 'task': task, 'messages': safe_messages(messages)})
         attempts = []; data = None; errors = []; plan = None; partial = None
         baseline = None; repair_rounds = 0; transports = 0; mode = 'initial'
+        latest_candidate = None
         async with self.slots[replica]:
             client = self.clients[replica]
             while True:
@@ -436,6 +449,7 @@ class PilotRunner:
                                 candidate, span_audit = resolve_timeline_spans(candidate,
                                     identity['article_id'] + ':jats', segments)
                                 entry['span_resolution'] = span_audit
+                                latest_candidate = copy.deepcopy(candidate)
                                 if span_audit['unresolved']:
                                     raise ValueError('timeline_span_unresolved:' + '; '.join(
                                         x['code'] + ':' + x['path'] for x in span_audit['unresolved']))
@@ -446,6 +460,10 @@ class PilotRunner:
                                 else:
                                     candidate, citation_audit = recover_citations(candidate, segments)
                             entry['citation_recovery'] = citation_audit
+                            if self.config.refinement_policy == 'source_aware' and task in TASK_MODELS:
+                                candidate, changes = normalize_clinical(task, candidate, segments)
+                                entry['field_normalization'] = changes
+                            latest_candidate = copy.deepcopy(candidate)
                             if plan:
                                 plan.apply(candidate); candidate = plan.output()
                                 entry['item_repair'] = plan.audit()
@@ -455,8 +473,17 @@ class PilotRunner:
                             elif mode == 'repair' and baseline is not None:
                                 # Whole-object regeneration is never a license to
                                 # delete supported values or neighbors.
-                                losses = erased(baseline, candidate)
+                                protected = (baseline if self.config.refinement_policy == 'legacy'
+                                             else repair_snapshot(task, baseline, checker))
+                                losses = erased(protected, candidate)
+                                if self.config.refinement_policy == 'source_aware':
+                                    losses += changed_accepted_atoms(task, protected, candidate)
+                                    if task in TASK_MODELS:
+                                        losses += protected_value_changes(protected,candidate)
+                                entry['repair_protection'] = {'policy': self.config.refinement_policy,
+                                    'protected_snapshot': protected, 'erased_paths': losses}
                                 if losses:
+                                    latest_candidate = copy.deepcopy(baseline)
                                     raise ValueError('repair_refused_field_erasure:' + ','.join(losses)[:2000])
                             data = checker(candidate)
                             entry['checked_candidate'] = candidate
@@ -465,7 +492,8 @@ class PilotRunner:
                             if baseline is None:
                                 baseline = copy.deepcopy(candidate)
                             if packet is not None and plan is None and self.arm == 'targeted':
-                                plan = ItemRepair.create(task, candidate, packet['text'], segments)
+                                plan = ItemRepair.create(task, candidate, packet['text'], segments,
+                                    policy=self.config.refinement_policy)
                                 if plan:
                                     entry['item_repair'] = plan.audit()
                     entry['errors'] = errors
@@ -488,6 +516,14 @@ class PilotRunner:
                     break
         if plan is not None and plan.pending:
             partial = plan.output()
+        quarantine = []
+        if data is None and partial_builder and self.config.refinement_policy == 'source_aware':
+            try:
+                partial, quarantine = partial_builder(latest_candidate)
+            except (ValueError, TypeError, KeyError) as exc:
+                partial = None
+                quarantine = [{'kind':'partial_recovery_failure','reason':str(exc),
+                               'candidate':latest_candidate}]
         if partial is not None:
             try:
                 partial = checker(partial)
@@ -497,6 +533,10 @@ class PilotRunner:
             'status': 'valid' if data is not None and not errors else 'partial' if partial is not None else 'failed',
             'data': data if not errors else partial, 'errors': errors, 'attempts': attempts,
             'semantic_review': 'unreviewed', 'clinical_accuracy_verified': False}
+        result['refinement_policy'] = self.config.refinement_policy
+        result['quarantine'] = quarantine
+        if task == 'timeline_v2' and result['data'] is not None and self.config.refinement_policy == 'source_aware':
+            result['data'], result['export_event_id_map'] = canonical_timeline_ids(result['data'])
         write_json(self.output / 'tasks' / (key + '.json'), result)
         self.results.append(result)
         return result
@@ -574,6 +614,15 @@ class PilotRunner:
         async def clinical(task):
             messages = messages_for(packet, task, namespace='bounded-pmc-pilot/1')
             messages[-1]['content'] += '\nReturn only JSON matching SCHEMA:\n' + json.dumps(self.schemas[task])
+            if self.config.refinement_policy == 'source_aware':
+                messages[-1]['content'] += ('\nKeep explicit routes in route fields, not only medication names. '
+                    'Split named laboratory/immunohistochemical panel members into individual observations. '
+                    'Distinguish the performed test from an absent finding. Preserve specimen, value/unit, '
+                    'planned versus performed status, and separate encounters. Do not infer missing results. '
+                    'For observations, split numeric magnitude, comparator and unit into their fields. '
+                    'Preserve the exact result notation in text_value, including scientific exponents; '
+                    'keep reference intervals separate. Do not mistake flattened 109 for an explicit 10^9, '
+                    'convert units, or copy a reference threshold as the patient result.')
             return await self.call(task, messages, self.clinical_checker(task, packet, segments),
                                    identity, replica, segments, packet=packet)
         tasks = await asyncio.gather(*(clinical(task) for task in TASK_MODELS))
@@ -591,8 +640,10 @@ class PilotRunner:
             if not audit['structural_source_gates_passed']:
                 raise ValueError('; '.join(i['code'] for i in audit['issues'] if i['severity'] == 'block'))
             return graph.model_dump()
-        timeline = await self.call('timeline_v2', timeline_messages(context_article, patient, rid, facts, rows),
-                                  timeline_checker, identity, replica, context_article['segments'])
+        timeline = await self.call('timeline_v2', timeline_messages(context_article, patient, rid, facts, rows,
+                                  refined=self.config.refinement_policy == 'source_aware'),
+                                  timeline_checker, identity, replica, context_article['segments'],
+                                  partial_builder=lambda value: partial_timeline(value, sources, facts, rid))
         rows.extend(review_rows(article, rid, 'summary', summary['data']))
         rows.extend(review_rows(article, rid, 'timeline_v2', timeline['data']))
         all_tasks = [*tasks, summary, timeline]
@@ -606,7 +657,10 @@ class PilotRunner:
             'context_selection': context_audit, 'expected_tasks': list(TASK_MODELS),
             'sections': {r['task']: r['data'] for r in tasks},
             'companions': {'summary': summary['data'], 'timeline_v2': timeline['data']},
-            'quality': {r['task']: {'status': r['status'], 'errors': r['errors']} for r in all_tasks},
+            'quality': {r['task']: {'status': r['status'], 'errors': r['errors'],
+                'quarantine': r.get('quarantine', []),
+                'field_normalization': [change for a in r['attempts'] for change in a.get('field_normalization', [])]}
+                for r in all_tasks},
             'all_clinical_companion_tasks_valid': all(r['status'] == 'valid' for r in all_tasks),
             'complete_for_scope': all(r['status'] == 'valid' for r in all_tasks) and visual_complete,
             'semantic_coverage_verified': False, 'clinical_review_status': 'unreviewed',
@@ -614,6 +668,8 @@ class PilotRunner:
             'vision': vision}
         if timeline['data'] is not None:
             bundle['timeline_audit'] = audit_timeline(PatientTimeline.model_validate(timeline['data']), sources, facts)
+            bundle['relative_timeline'] = relative_order(timeline['data'])
+        bundle['observation_measurements'] = observation_measurements(bundle['sections'].get('observations'), segments)
         if self.config.robust_contracts:
             bundle['coverage_inventory'] = coverage_inventory(article, [rid])
             envelopes = []
@@ -679,8 +735,11 @@ class PilotRunner:
                       'pixel_provenance': row.get('pixel_provenance'), 'pixels_inspected': False}
             self.visual_rows.append(result)
             return result
-        visual = await self.call('figure_visuals', visual_messages(article, roster, row['figure_id'], pixels),
-            lambda value: validate_visuals(value, article, row['figure_id']), identity, replica, article['segments'])
+        refined = self.config.refinement_policy == 'source_aware'
+        visual = await self.call('figure_visuals', visual_messages(article, roster, row['figure_id'], pixels, refined=refined),
+            lambda value: validate_visuals(value, article, row['figure_id'], refined=refined),
+            identity, replica, article['segments'],
+            partial_builder=lambda value: partial_visuals(value, article, row['figure_id']))
         attribution = await self.call('pixel_attribution', figure_messages(article, roster, row['figure_id'], focused=False, pixels=pixels),
             lambda value: validate_figure_review(value, article, roster, row['figure_id']), identity, replica, article['segments'])
         inspected = any(a['response'] and not a['response'].get('error') for r in (visual, attribution) for a in r['attempts'])
@@ -794,7 +853,8 @@ class PilotRunner:
                     'status': 'valid', 'data': frozen[article['article_id']], 'errors': [], 'attempts': [],
                     'origin': 'frozen_source_checked_roster', 'excluded_from_generated_task_metrics': True}
             else:
-                roster = await self.call('roster', discovery_messages(article),
+                roster = await self.call('roster', discovery_messages(article,
+                    refined=self.config.refinement_policy == 'source_aware'),
                     lambda value: check_patient_roster(value, article),
                     {'article_id': article['article_id']}, replica, article['segments'])
             row.update(roster=roster, status='roster_failed' if roster['status'] != 'valid' else 'roster_valid')
@@ -851,6 +911,13 @@ class PilotRunner:
                 'patient_review_forms': str(self.output / 'review'),
                 'visual_annotations': str(self.output / 'visual-annotations.json')},
             'patients_extracted': len(self.patients), 'model_calls': self.calls,
+            'measurement_comparison': dict(Counter(m['status'] for p in self.patients
+                for m in p['observation_measurements'])),
+            'relative_timelines': {'patients': sum('relative_timeline' in p for p in self.patients),
+                'events': sum(len(p.get('relative_timeline', {}).get('events', [])) for p in self.patients),
+                'ordered_pairs': sum(len(p.get('relative_timeline', {}).get('before_pairs', [])) for p in self.patients),
+                'incomparable_pairs': sum(len(p.get('relative_timeline', {}).get('incomparable_pairs', [])) for p in self.patients),
+                'clinical_sequence_verified': False},
             'concurrency': {'configured_per_endpoint': self.config.concurrency_per_endpoint,
                             'observed_peak_completions_per_endpoint': self.peak_active},
             'valid_tasks': sum(r['status'] == 'valid' for r in self.results), 'task_count': len(self.results),

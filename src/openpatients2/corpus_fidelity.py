@@ -22,6 +22,13 @@ def validate_reference_sources(reference, articles):
         if article.get('text') != rendered or hashlib.sha256(rendered.encode()).hexdigest() != article.get('text_sha256'):
             raise ValueError('Canonical article text/hash changed')
     validate_reference(reference, articles)
+    from .schemas import TASK_MODELS
+    for check in reference['checks']:
+        for alternative in check.get('semantic_alternatives', []):
+            if (check['kind'] != 'required' or alternative.get('task') not in TASK_MODELS
+                    or alternative.get('collection') not in TASK_MODELS[alternative['task']].model_fields
+                    or not isinstance(alternative.get('pattern'), dict)):
+                raise ValueError('Invalid representation-aware reference alternative')
     for row in reference.get('articles', []) + reference.get('figure_checks', []):
         article = articles[row['article_id']]
         if row.get('text_sha256') != article['text_sha256']:
@@ -138,6 +145,20 @@ def evaluate(reference, patients, *, task_rows=None, discovery=None, visual_rows
                 'unscorable_reason': None if available else ('source_binding_failed' if patient and not bound else 'missing_or_unparseable_section')}
             if check['kind'] == 'required':
                 covered[mode].update((rid, check['task'], check.get('collection'), i) for i in hits)
+        # Keep the historical strict score untouched. Explicitly reviewed
+        # proposition alternatives live in a separate versioned readout.
+        alternatives = []
+        alternative_available = False
+        for alternative in check.get('semantic_alternatives', []):
+            section = _section(patient, alternative['task'])
+            alternative_available |= bound and isinstance(section, dict)
+            for i, item in enumerate(_items(section, alternative['collection'])):
+                if bound and matches(alternative['pattern'], without_evidence(item)):
+                    alternatives.append({'task': alternative['task'], 'collection': alternative['collection'], 'item_index': i})
+        row['representation_aware_delivered'] = {
+            'available': row['delivered']['available'] or alternative_available,
+            'matched': row['delivered']['matched'] or bool(alternatives),
+            'alternative_locations': alternatives}
         result.append(row)
     summaries = {}
     unreviewed = {}
@@ -164,7 +185,15 @@ def evaluate(reference, patients, *, task_rows=None, discovery=None, visual_rows
         for patient in records.values():
             for status in (patient.get('quality') or {}).values():
                 statuses[status.get('status', 'unknown') if isinstance(status, dict) else str(status)] += 1
+    required = [r['representation_aware_delivered'] for r in result if r['kind'] == 'required']
+    representation = {'reference_schema_version': reference.get('schema_version'), 'required': len(required),
+        'matched': sum(r['matched'] for r in required),
+        'missing': sum(r['available'] and not r['matched'] for r in required),
+        'unscorable': sum(not r['available'] for r in required),
+        'definition': 'Strict match or an explicitly reviewed equivalent representation; no evidence-text search, '
+                      'cross-item union, inference, or relaxation of forbidden checks. Not clinical accuracy.'}
     return {'schema_version': 'corpus-fidelity/1', 'raw_definition': 'first original raw_candidate; raw aliases first_pass; final repair patches excluded', 'checks': result, 'summary': summaries,
+        'representation_aware': representation,
         'discovery': _discovery(reference, discovery), 'figures': _figures(reference, visual_rows, task_rows),
         'schema': {'reported_task_statuses': dict(statuses), 'clinical_accuracy_established': False},
         'unreviewed_claims': unreviewed,

@@ -19,10 +19,11 @@ def minimal_segments(segments):
             for s in segments]
 
 
-def discovery_messages(article):
+def discovery_messages(article, *, refined=False):
     schema = copy.deepcopy(Roster.model_json_schema())
     schema['properties'].pop('figures')
     schema['required'] = [k for k in schema['required'] if k != 'figures']
+    if not refined: schema['properties'].pop('cited_cases', None)
     source = {'article_id': article['article_id'], 'title': article.get('title'),
               'segments': minimal_segments(article['segments'])}
     instruction = (
@@ -38,6 +39,15 @@ def discovery_messages(article):
         'This task ONLY identifies patients and source blocks. Figure/panel ownership is evaluated separately; '
         'do not output a figures field. Captions can support patient identity when explicitly linked. '
         'Return the complete JSON object, no prose or markdown. Schema validity does not establish completeness.')
+    if refined:
+        source['references'] = [{k: r[k] for k in ('reference_id', 'citation_text') if k in r}
+                                for r in article.get('references', [])]
+        instruction += (' PRIMARY VERSUS CITED CASES: patients contains cases presented as the article\'s '
+            'own clinical cases, including an explicitly reported follow-up to a previous publication. '
+            'Cases merely summarized from other publications belong in cited_cases, never patients. '
+            'Keep exact evidence and known origin_reference_ids, or an empty reference list with a limitation '
+            'when linkage is uncertain. Do not invent citation IDs or merge identities. Primary count excludes '
+            'cited_cases. Background experimental groups and anonymous bed numbers are not cited individual cases.')
     return [{'role': 'system', 'content': SYSTEM}, {'role': 'user', 'content':
         'SOURCE_JSON:\n' + json.dumps(source, ensure_ascii=False) + '\nTASK:\n' + instruction +
         '\nSCHEMA:\n' + json.dumps(schema)}]

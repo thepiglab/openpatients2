@@ -39,6 +39,7 @@ class CPUConfig(BaseModel):
     export_max_bytes: int = Field(default=1_000_000_000, ge=1, le=150_000_000_000)
     max_figures: int = Field(default=12, ge=1, le=12)
     pixel_total_bytes: int = Field(default=64_000_000, ge=1, le=64_000_000)
+    prioritize_reference_figures: bool = False
 
     @model_validator(mode='after')
     def source(self):
@@ -265,8 +266,14 @@ async def run_cpu(work, config, *, http=None):
             pin(work/'profile'/name)
         save('media')
         from .pilot_media import prepare_media
+        priorities = None
+        if cfg.prioritize_reference_figures:
+            if not cfg.fidelity_reference: raise ValueError('Figure priority needs a pinned reference')
+            priorities = [{'article_id': row['article_id'], 'figure_id': row['figure_id']}
+                          for row in json.loads(Path(cfg.fidelity_reference).read_text()).get('figure_checks', [])]
+            priorities = list({(p['article_id'], p['figure_id']): p for p in priorities}.values())
         report['media'] = await prepare_media(sample, work, max_figures=cfg.max_figures,
-            max_total_bytes=cfg.pixel_total_bytes, http=http)
+            max_total_bytes=cfg.pixel_total_bytes, http=http, priority_figures=priorities)
         if not report['media'].get('complete'):
             raise ValueError('Selected media preparation did not complete')
         pin(work/'vision-assets'/'manifest.json')

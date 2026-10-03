@@ -1,0 +1,3387 @@
+{
+  "run": "run-20261003-120419",
+  "archive_sha256": "e00e64d57e4cb03d6e920afa389858e40214d3535ec2e3e256fe90f72d69f2ec",
+  "aggregates": {
+    "whole": {
+      "tasks": {
+        "valid": 972,
+        "failed": 46,
+        "partial": 23
+      },
+      "domains": {
+        "clinical": {
+          "valid": 683,
+          "partial": 23,
+          "failed": 8
+        },
+        "summary": {
+          "valid": 49,
+          "failed": 2
+        },
+        "timeline": {
+          "valid": 35,
+          "failed": 16
+        },
+        "patient_discovery": {},
+        "caption_ownership": {
+          "valid": 140,
+          "failed": 13
+        },
+        "pixel_description": {
+          "valid": 32,
+          "failed": 4
+        },
+        "pixel_ownership": {
+          "valid": 33,
+          "failed": 3
+        }
+      },
+      "first_pass_required_matches": 118,
+      "delivered_required_matches": 111,
+      "required_check_instances": 129,
+      "missing_required": 12,
+      "unavailable_required": 6,
+      "forbidden_hits": 0,
+      "forbidden_unavailable": 0,
+      "input_tokens": 10227804,
+      "output_tokens": 3008409,
+      "wall_seconds": 515.3027176265605,
+      "weighted_output_tokens_per_second_all_8_gpus": 5838.139208456867,
+      "paired_check_transitions": {
+        "kept": 110,
+        "lost": 8,
+        "missed_both": 10,
+        "gained": 1
+      },
+      "nonvalid_final_error_categories": {
+        "field_erasure": 22,
+        "other": 14,
+        "pending_items": 25,
+        "parse": 4,
+        "conflicting_json": 1,
+        "fact_id": 1,
+        "literal_time": 1,
+        "nonliteral_evidence": 1
+      },
+      "figure_summary": {
+        "caption": {
+          "required": 18,
+          "matched": 14,
+          "unscorable": 1,
+          "wrong_patient_assignments": 0
+        },
+        "pixels": {
+          "required": 18,
+          "matched": 7,
+          "unscorable": 11,
+          "wrong_patient_assignments": 0
+        }
+      },
+      "model_calls": 1453,
+      "first_attempt_valid_tasks": 753,
+      "generated_clinical_items_first_pass": 2850,
+      "generated_clinical_items_delivered": 2778
+    },
+    "compact": {
+      "tasks": {
+        "valid": 974,
+        "failed": 47,
+        "partial": 20
+      },
+      "domains": {
+        "clinical": {
+          "valid": 685,
+          "failed": 9,
+          "partial": 20
+        },
+        "summary": {
+          "valid": 48,
+          "failed": 3
+        },
+        "timeline": {
+          "valid": 42,
+          "failed": 9
+        },
+        "patient_discovery": {},
+        "caption_ownership": {
+          "valid": 137,
+          "failed": 16
+        },
+        "pixel_description": {
+          "valid": 29,
+          "failed": 7
+        },
+        "pixel_ownership": {
+          "valid": 33,
+          "failed": 3
+        }
+      },
+      "first_pass_required_matches": 120,
+      "delivered_required_matches": 119,
+      "required_check_instances": 129,
+      "missing_required": 7,
+      "unavailable_required": 3,
+      "forbidden_hits": 0,
+      "forbidden_unavailable": 2,
+      "input_tokens": 9891648,
+      "output_tokens": 3071477,
+      "wall_seconds": 516.2119778073393,
+      "weighted_output_tokens_per_second_all_8_gpus": 5950.03047594207,
+      "paired_check_transitions": {
+        "kept": 116,
+        "missed_both": 6,
+        "lost": 4,
+        "gained": 3
+      },
+      "nonvalid_final_error_categories": {
+        "other": 14,
+        "pending_items": 21,
+        "field_erasure": 19,
+        "nonliteral_evidence": 2,
+        "parse": 7,
+        "fact_id": 1,
+        "literal_time": 3
+      },
+      "figure_summary": {
+        "caption": {
+          "required": 18,
+          "matched": 13,
+          "unscorable": 0,
+          "wrong_patient_assignments": 0
+        },
+        "pixels": {
+          "required": 18,
+          "matched": 6,
+          "unscorable": 11,
+          "wrong_patient_assignments": 0
+        }
+      },
+      "model_calls": 1454,
+      "first_attempt_valid_tasks": 743,
+      "generated_clinical_items_first_pass": 2935,
+      "generated_clinical_items_delivered": 2971
+    }
+  },
+  "trials": [
+    {
+      "seed": 42,
+      "scope": "whole",
+      "task_count": 347,
+      "task_statuses": {
+        "valid": 324,
+        "failed": 15,
+        "partial": 8
+      },
+      "task_statuses_by_domain": {
+        "clinical": {
+          "valid": 228,
+          "partial": 8,
+          "failed": 2
+        },
+        "summary": {
+          "valid": 16,
+          "failed": 1
+        },
+        "timeline": {
+          "valid": 11,
+          "failed": 6
+        },
+        "patient_discovery": {},
+        "caption_ownership": {
+          "valid": 48,
+          "failed": 3
+        },
+        "pixel_description": {
+          "valid": 11,
+          "failed": 1
+        },
+        "pixel_ownership": {
+          "valid": 10,
+          "failed": 2
+        }
+      },
+      "first_attempt_valid_tasks": 252,
+      "wall_seconds": 198.66714999685064,
+      "tokens": {
+        "input_tokens": 3463329,
+        "output_tokens": 1026096,
+        "all_gpus_output_tokens_per_second": 5164.90018614686,
+        "unknown_input_usage_calls": 0,
+        "unknown_output_usage_calls": 0
+      },
+      "model_calls": 491,
+      "fidelity_summary": {
+        "first_pass": {
+          "required": 43,
+          "matched": 41,
+          "missing": 2,
+          "unscorable": 0,
+          "forbidden": 8,
+          "forbidden_violations": 0,
+          "forbidden_unscorable": 0,
+          "checklist_delivery_fraction": 0.9534883720930233
+        },
+        "raw": {
+          "required": 43,
+          "matched": 41,
+          "missing": 2,
+          "unscorable": 0,
+          "forbidden": 8,
+          "forbidden_violations": 0,
+          "forbidden_unscorable": 0,
+          "checklist_delivery_fraction": 0.9534883720930233
+        },
+        "delivered": {
+          "required": 43,
+          "matched": 38,
+          "missing": 3,
+          "unscorable": 2,
+          "forbidden": 8,
+          "forbidden_violations": 0,
+          "forbidden_unscorable": 0,
+          "checklist_delivery_fraction": 0.8837209302325582
+        }
+      },
+      "figure_summary": {
+        "caption": {
+          "required": 6,
+          "matched": 5,
+          "unscorable": 0,
+          "wrong_patient_assignments": 0
+        },
+        "pixels": {
+          "required": 6,
+          "matched": 2,
+          "unscorable": 4,
+          "wrong_patient_assignments": 0
+        }
+      },
+      "unreviewed_claims": {
+        "first_pass": {
+          "generated_items": 890,
+          "items_matching_required_check": 44,
+          "items_outside_checklist": 846,
+          "unsupported_claims": null,
+          "reason": "Claims outside this finite checklist need manual source adjudication; pattern hits also do not establish full correctness."
+        },
+        "raw": {
+          "generated_items": 890,
+          "items_matching_required_check": 44,
+          "items_outside_checklist": 846,
+          "unsupported_claims": null,
+          "reason": "Claims outside this finite checklist need manual source adjudication; pattern hits also do not establish full correctness."
+        },
+        "delivered": {
+          "generated_items": 897,
+          "items_matching_required_check": 41,
+          "items_outside_checklist": 856,
+          "unsupported_claims": null,
+          "reason": "Claims outside this finite checklist need manual source adjudication; pattern hits also do not establish full correctness."
+        }
+      },
+      "source_span_recovery": {
+        "resolved": 791,
+        "mechanical_changes": 791,
+        "unresolved": 2,
+        "clinical_content_changed": false
+      },
+      "paired_changes": {
+        "kept": 38,
+        "lost": 3,
+        "missed_both": 2
+      },
+      "nonvalid_final_error_categories": {
+        "field_erasure": 7,
+        "other": 3,
+        "pending_items": 8,
+        "parse": 2,
+        "conflicting_json": 1,
+        "fact_id": 1,
+        "literal_time": 1
+      },
+      "nonvalid_tasks": [
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p2",
+            "record_id": "PMC13549756.1:p2"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/edges/0/offset"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p1",
+            "record_id": "PMC13549756.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "1 validation error for PatientTimeline\nevents.6.times.0\n  Value error, Time phrase must be literal in its own evidence [type=value_error, input_value={'text': 'during admissio...rt': 935, 'end': 1084}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error"
+          ]
+        },
+        {
+          "task": "pixel_attribution",
+          "identity": {
+            "article_id": "PMC13582412.1",
+            "figure_id": "Fig1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/assignments/12"
+          ]
+        },
+        {
+          "task": "symptoms_function",
+          "identity": {
+            "article_id": "PMC13612135.1",
+            "patient_id": "p1",
+            "record_id": "PMC13612135.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "summary",
+          "identity": {
+            "article_id": "PMC13582412.1",
+            "patient_id": "p2",
+            "record_id": "PMC13582412.1:p2"
+          },
+          "status": "failed",
+          "errors": [
+            "No complete parseable object; preserve raw response and request explicit structure"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13612135.1",
+            "patient_id": "p1",
+            "record_id": "PMC13612135.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "Multiple conflicting output objects; request a single answer"
+          ]
+        },
+        {
+          "task": "symptoms_function",
+          "identity": {
+            "article_id": "PMC13624352.1",
+            "patient_id": "p1",
+            "record_id": "PMC13624352.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "oncology",
+          "identity": {
+            "article_id": "PMC13612135.1",
+            "patient_id": "p1",
+            "record_id": "PMC13612135.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/biomarkers/0/time/text"
+          ]
+        },
+        {
+          "task": "figure_visuals",
+          "identity": {
+            "article_id": "PMC13524801.1",
+            "figure_id": "Fig1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/panel,/image_kind,/has_chart,/charts,/medical_domains,/mentioned_categories,/pixel_observations,/caption_claims,/clinical_significance"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13624771.1",
+            "figure_id": "f3-ce-2025-262"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/assignments/0/patient_ids/0"
+          ]
+        },
+        {
+          "task": "outcomes",
+          "identity": {
+            "article_id": "PMC13542385.1",
+            "patient_id": "p1",
+            "record_id": "PMC13542385.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13575834.1",
+            "figure_id": "F2"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/assignments/0/patient_ids/0,/assignments/1/patient_ids/0,/assignments/2/patient_ids/0,/assignments/3/patient_ids/0,/assignments/4/patient_ids/0,/assignments/5/patient_ids/0"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13542385.1",
+            "patient_id": "p1",
+            "record_id": "PMC13542385.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "1 validation error for PatientTimeline\nevents.5.times.0\n  Value error, Time phrase must be literal in its own evidence [type=value_error, input_value={'text': '1 week post-op'...art': 222, 'end': 325}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13618765.1",
+            "patient_id": "p1",
+            "record_id": "PMC13618765.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13587181.1",
+            "patient_id": "p1",
+            "record_id": "PMC13587181.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "unknown_or_wrong_patient_fact"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p3",
+            "record_id": "PMC13549756.1:p3"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "pixel_attribution",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "figure_id": "f1-apem-2550320-160"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/assignments/0/patient_ids/0,/assignments/0/patient_ids/1,/assignments/0/patient_ids/2"
+          ]
+        },
+        {
+          "task": "conditions",
+          "identity": {
+            "article_id": "PMC13582412.1",
+            "patient_id": "p2",
+            "record_id": "PMC13582412.1:p2"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13543720.1",
+            "figure_id": "vetr70220-fig-0004"
+          },
+          "status": "failed",
+          "errors": [
+            "Nonliteral/missing source evidence"
+          ]
+        },
+        {
+          "task": "social_exposures",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p2",
+            "record_id": "PMC13549756.1:p2"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13618765.1",
+            "patient_id": "p1",
+            "record_id": "PMC13618765.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "No complete parseable object; preserve raw response and request explicit structure"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13587181.1",
+            "patient_id": "p1",
+            "record_id": "PMC13587181.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "oncology",
+          "identity": {
+            "article_id": "PMC13624890.1",
+            "patient_id": "p1",
+            "record_id": "PMC13624890.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "/tumors/0/time/text: temporal expression must occur literally in this fact's evidence; use null for an unstated time"
+          ]
+        }
+      ]
+    },
+    {
+      "seed": 42,
+      "scope": "compact",
+      "task_count": 347,
+      "task_statuses": {
+        "valid": 321,
+        "failed": 18,
+        "partial": 8
+      },
+      "task_statuses_by_domain": {
+        "clinical": {
+          "valid": 226,
+          "failed": 4,
+          "partial": 8
+        },
+        "summary": {
+          "valid": 17
+        },
+        "timeline": {
+          "valid": 12,
+          "failed": 5
+        },
+        "patient_discovery": {},
+        "caption_ownership": {
+          "valid": 45,
+          "failed": 6
+        },
+        "pixel_description": {
+          "valid": 10,
+          "failed": 2
+        },
+        "pixel_ownership": {
+          "valid": 11,
+          "failed": 1
+        }
+      },
+      "first_attempt_valid_tasks": 253,
+      "wall_seconds": 172.6958824917674,
+      "tokens": {
+        "input_tokens": 3360307,
+        "output_tokens": 1003389,
+        "all_gpus_output_tokens_per_second": 5810.1501062008965,
+        "unknown_input_usage_calls": 0,
+        "unknown_output_usage_calls": 0
+      },
+      "model_calls": 485,
+      "fidelity_summary": {
+        "first_pass": {
+          "required": 43,
+          "matched": 41,
+          "missing": 2,
+          "unscorable": 0,
+          "forbidden": 8,
+          "forbidden_violations": 0,
+          "forbidden_unscorable": 0,
+          "checklist_delivery_fraction": 0.9534883720930233
+        },
+        "raw": {
+          "required": 43,
+          "matched": 41,
+          "missing": 2,
+          "unscorable": 0,
+          "forbidden": 8,
+          "forbidden_violations": 0,
+          "forbidden_unscorable": 0,
+          "checklist_delivery_fraction": 0.9534883720930233
+        },
+        "delivered": {
+          "required": 43,
+          "matched": 40,
+          "missing": 2,
+          "unscorable": 1,
+          "forbidden": 8,
+          "forbidden_violations": 0,
+          "forbidden_unscorable": 1,
+          "checklist_delivery_fraction": 0.9302325581395349
+        }
+      },
+      "figure_summary": {
+        "caption": {
+          "required": 6,
+          "matched": 4,
+          "unscorable": 0,
+          "wrong_patient_assignments": 0
+        },
+        "pixels": {
+          "required": 6,
+          "matched": 2,
+          "unscorable": 4,
+          "wrong_patient_assignments": 0
+        }
+      },
+      "unreviewed_claims": {
+        "first_pass": {
+          "generated_items": 999,
+          "items_matching_required_check": 44,
+          "items_outside_checklist": 955,
+          "unsupported_claims": null,
+          "reason": "Claims outside this finite checklist need manual source adjudication; pattern hits also do not establish full correctness."
+        },
+        "raw": {
+          "generated_items": 999,
+          "items_matching_required_check": 44,
+          "items_outside_checklist": 955,
+          "unsupported_claims": null,
+          "reason": "Claims outside this finite checklist need manual source adjudication; pattern hits also do not establish full correctness."
+        },
+        "delivered": {
+          "generated_items": 959,
+          "items_matching_required_check": 42,
+          "items_outside_checklist": 917,
+          "unsupported_claims": null,
+          "reason": "Claims outside this finite checklist need manual source adjudication; pattern hits also do not establish full correctness."
+        }
+      },
+      "source_span_recovery": {
+        "resolved": 834,
+        "mechanical_changes": 834,
+        "unresolved": 0,
+        "clinical_content_changed": false
+      },
+      "paired_changes": {
+        "kept": 40,
+        "missed_both": 2,
+        "lost": 1
+      },
+      "nonvalid_final_error_categories": {
+        "other": 6,
+        "pending_items": 8,
+        "field_erasure": 7,
+        "nonliteral_evidence": 1,
+        "parse": 2,
+        "fact_id": 1,
+        "literal_time": 1
+      },
+      "nonvalid_tasks": [
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13624957.1",
+            "figure_id": "F1"
+          },
+          "status": "failed",
+          "errors": [
+            "Nonliteral/missing source evidence"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13624352.1",
+            "patient_id": "p1",
+            "record_id": "PMC13624352.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "oncology",
+          "identity": {
+            "article_id": "PMC13582412.1",
+            "patient_id": "p1",
+            "record_id": "PMC13582412.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/tumors/1"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13587181.1",
+            "patient_id": "p1",
+            "record_id": "PMC13587181.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13612135.1",
+            "patient_id": "p1",
+            "record_id": "PMC13612135.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "conditions",
+          "identity": {
+            "article_id": "PMC13624890.1",
+            "patient_id": "p1",
+            "record_id": "PMC13624890.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "oncology",
+          "identity": {
+            "article_id": "PMC13624890.1",
+            "patient_id": "p1",
+            "record_id": "PMC13624890.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/tumors/0/time/text"
+          ]
+        },
+        {
+          "task": "oncology",
+          "identity": {
+            "article_id": "PMC13624889.1",
+            "patient_id": "p1",
+            "record_id": "PMC13624889.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/tumors/1"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13069285.1",
+            "figure_id": "fig1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/assignments/0/evidence/2"
+          ]
+        },
+        {
+          "task": "figure_visuals",
+          "identity": {
+            "article_id": "PMC13524801.1",
+            "figure_id": "Fig1"
+          },
+          "status": "failed",
+          "errors": [
+            "Visual schema contains nonliteral source evidence"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13624771.1",
+            "figure_id": "f3-ce-2025-262"
+          },
+          "status": "failed",
+          "errors": [
+            "No complete parseable object; preserve raw response and request explicit structure"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13624890.1",
+            "patient_id": "p1",
+            "record_id": "PMC13624890.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13587181.1",
+            "patient_id": "p1",
+            "record_id": "PMC13587181.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/events/6/times/0,/events/7/times/0,/events/8/times/0,/events/9/times/0,/events/12/times/0,/edges/2"
+          ]
+        },
+        {
+          "task": "symptoms_function",
+          "identity": {
+            "article_id": "PMC13582412.1",
+            "patient_id": "p2",
+            "record_id": "PMC13582412.1:p2"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "figure_visuals",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "figure_id": "f1-apem-2550320-160"
+          },
+          "status": "failed",
+          "errors": [
+            "1 validation error for FigureVisuals\npanels.0\n  Value error, A graph about imaging modalities is not itself a medical imaging acquisition [type=value_error, input_value={'panel': None, 'general_... are conceptual only.']}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13575834.1",
+            "figure_id": "F2"
+          },
+          "status": "failed",
+          "errors": [
+            "Nonliteral/missing source evidence"
+          ]
+        },
+        {
+          "task": "social_exposures",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p1",
+            "record_id": "PMC13549756.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13582412.1",
+            "patient_id": "p2",
+            "record_id": "PMC13582412.1:p2"
+          },
+          "status": "failed",
+          "errors": [
+            "unknown_or_wrong_patient_fact"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13542385.1",
+            "patient_id": "p1",
+            "record_id": "PMC13542385.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "2 validation errors for PatientTimeline\nevents.6.times.0\n  Value error, Time phrase must be literal in its own evidence [type=value_error, input_value={'text': '3 months', 'kin...art': 222, 'end': 310}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error\nevents.7.times.0\n  Value error, Time phrase must be literal in its own evidence [type=value_error, input_value={'text': '13 months', 'ki...art': 326, 'end': 391}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error"
+          ]
+        },
+        {
+          "task": "conditions",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p1",
+            "record_id": "PMC13549756.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p1",
+            "record_id": "PMC13549756.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/events/2,/events/3,/events/4,/events/5,/events/6,/events/9,/edges/0,/edges/1,/edges/2,/edges/3"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13069285.1",
+            "figure_id": "fig6"
+          },
+          "status": "failed",
+          "errors": [
+            "No complete parseable object; preserve raw response and request explicit structure"
+          ]
+        },
+        {
+          "task": "oncology",
+          "identity": {
+            "article_id": "PMC13612135.1",
+            "patient_id": "p1",
+            "record_id": "PMC13612135.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "/tumors/1/time/text: temporal expression must occur literally in this fact's evidence; use null for an unstated time; /biomarkers/1/time/text: temporal expression must occur literally in this fact's evidence; use null for an unstated time"
+          ]
+        },
+        {
+          "task": "pixel_attribution",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "figure_id": "f1-apem-2550320-160"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/assignments/0/patient_ids/0,/assignments/0/patient_ids/1,/assignments/0/patient_ids/2"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13582412.1",
+            "patient_id": "p1",
+            "record_id": "PMC13582412.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "Duplicate object key: event_id"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13543720.1",
+            "figure_id": "vetr70220-fig-0004"
+          },
+          "status": "failed",
+          "errors": [
+            "Nonliteral/missing source evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "seed": 43,
+      "scope": "whole",
+      "task_count": 347,
+      "task_statuses": {
+        "valid": 324,
+        "failed": 14,
+        "partial": 9
+      },
+      "task_statuses_by_domain": {
+        "clinical": {
+          "valid": 226,
+          "partial": 9,
+          "failed": 3
+        },
+        "summary": {
+          "valid": 17
+        },
+        "timeline": {
+          "valid": 12,
+          "failed": 5
+        },
+        "patient_discovery": {},
+        "caption_ownership": {
+          "valid": 47,
+          "failed": 4
+        },
+        "pixel_description": {
+          "valid": 10,
+          "failed": 2
+        },
+        "pixel_ownership": {
+          "valid": 12
+        }
+      },
+      "first_attempt_valid_tasks": 259,
+      "wall_seconds": 151.9993425454013,
+      "tokens": {
+        "input_tokens": 3362797,
+        "output_tokens": 989666,
+        "all_gpus_output_tokens_per_second": 6510.988688680628,
+        "unknown_input_usage_calls": 0,
+        "unknown_output_usage_calls": 0
+      },
+      "model_calls": 473,
+      "fidelity_summary": {
+        "first_pass": {
+          "required": 43,
+          "matched": 37,
+          "missing": 5,
+          "unscorable": 1,
+          "forbidden": 8,
+          "forbidden_violations": 0,
+          "forbidden_unscorable": 0,
+          "checklist_delivery_fraction": 0.8604651162790697
+        },
+        "raw": {
+          "required": 43,
+          "matched": 37,
+          "missing": 5,
+          "unscorable": 1,
+          "forbidden": 8,
+          "forbidden_violations": 0,
+          "forbidden_unscorable": 0,
+          "checklist_delivery_fraction": 0.8604651162790697
+        },
+        "delivered": {
+          "required": 43,
+          "matched": 34,
+          "missing": 6,
+          "unscorable": 3,
+          "forbidden": 8,
+          "forbidden_violations": 0,
+          "forbidden_unscorable": 0,
+          "checklist_delivery_fraction": 0.7906976744186046
+        }
+      },
+      "figure_summary": {
+        "caption": {
+          "required": 6,
+          "matched": 4,
+          "unscorable": 1,
+          "wrong_patient_assignments": 0
+        },
+        "pixels": {
+          "required": 6,
+          "matched": 3,
+          "unscorable": 3,
+          "wrong_patient_assignments": 0
+        }
+      },
+      "unreviewed_claims": {
+        "first_pass": {
+          "generated_items": 1013,
+          "items_matching_required_check": 40,
+          "items_outside_checklist": 973,
+          "unsupported_claims": null,
+          "reason": "Claims outside this finite checklist need manual source adjudication; pattern hits also do not establish full correctness."
+        },
+        "raw": {
+          "generated_items": 1013,
+          "items_matching_required_check": 40,
+          "items_outside_checklist": 973,
+          "unsupported_claims": null,
+          "reason": "Claims outside this finite checklist need manual source adjudication; pattern hits also do not establish full correctness."
+        },
+        "delivered": {
+          "generated_items": 936,
+          "items_matching_required_check": 36,
+          "items_outside_checklist": 900,
+          "unsupported_claims": null,
+          "reason": "Claims outside this finite checklist need manual source adjudication; pattern hits also do not establish full correctness."
+        }
+      },
+      "source_span_recovery": {
+        "resolved": 848,
+        "mechanical_changes": 848,
+        "unresolved": 1,
+        "clinical_content_changed": false
+      },
+      "paired_changes": {
+        "kept": 33,
+        "lost": 4,
+        "missed_both": 5,
+        "gained": 1
+      },
+      "nonvalid_final_error_categories": {
+        "pending_items": 9,
+        "field_erasure": 9,
+        "other": 4,
+        "nonliteral_evidence": 1
+      },
+      "nonvalid_tasks": [
+        {
+          "task": "conditions",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p3",
+            "record_id": "PMC13549756.1:p3"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13582412.1",
+            "patient_id": "p1",
+            "record_id": "PMC13582412.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/edges/0"
+          ]
+        },
+        {
+          "task": "oncology",
+          "identity": {
+            "article_id": "PMC13624889.1",
+            "patient_id": "p1",
+            "record_id": "PMC13624889.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/tumors/1"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13587181.1",
+            "patient_id": "p1",
+            "record_id": "PMC13587181.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "5 validation errors for PatientTimeline\nevents.5.times.0\n  Value error, Time phrase must be literal in its own evidence [type=value_error, input_value={'text': 'At the emergenc...t': 1131, 'end': 1239}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error\nevents.6.times.0\n  Value error, Time phrase must be literal in its own evidence [type=value_error, input_value={'text': 'At the emergenc...t': 1131, 'end': 1340}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error\nevents.7.times.0\n  Value error, Time phrase must be literal in its own evidence [type=value_error, input_value={'text': 'during drainage...t': 1486, 'end': 1583}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error\nevents.8.times.0\n  Value error, Time phrase must be literal in its own evidence [type=value_error, input_value={'text': 'after drainage'...t': 1832, 'end': 1924}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error\nevents.10.times.0\n  Value error, Time phrase must be literal in its own evidence [type=value_error, input_value={'text': 'after sclerothe...t': 2448, 'end': 2528}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13618778.1",
+            "patient_id": "p1",
+            "record_id": "PMC13618778.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "oncology",
+          "identity": {
+            "article_id": "PMC13612135.1",
+            "patient_id": "p1",
+            "record_id": "PMC13612135.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/biomarkers/0/time/text"
+          ]
+        },
+        {
+          "task": "outcomes",
+          "identity": {
+            "article_id": "PMC13587181.1",
+            "patient_id": "p1",
+            "record_id": "PMC13587181.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13618778.1",
+            "patient_id": "p1",
+            "record_id": "PMC13618778.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/edges/1"
+          ]
+        },
+        {
+          "task": "reproductive_perinatal",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p1",
+            "record_id": "PMC13549756.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13624890.1",
+            "patient_id": "p1",
+            "record_id": "PMC13624890.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "figure_visuals",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "figure_id": "f1-apem-2550320-160"
+          },
+          "status": "failed",
+          "errors": [
+            "Visual schema contains nonliteral source evidence"
+          ]
+        },
+        {
+          "task": "figure_visuals",
+          "identity": {
+            "article_id": "PMC13624889.1",
+            "figure_id": "fig001"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/panels/0/imaging_modalities/1,/panels/0/clinical_significance/0/clinical_fact_status,/panels/0/clinical_significance/1/clinical_fact_status"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13575834.1",
+            "figure_id": "F2"
+          },
+          "status": "failed",
+          "errors": [
+            "Nonliteral/missing source evidence"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13542385.1",
+            "patient_id": "p1",
+            "record_id": "PMC13542385.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/events/2/fact_ids/1,/events/2/fact_ids/2,/events/2/fact_ids/3,/events/2/fact_ids/4,/events/3/times/0,/events/5/fact_ids/1,/events/6/fact_ids/1,/edges/2,/edges/3,/edges/4"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p3",
+            "record_id": "PMC13549756.1:p3"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13543720.1",
+            "figure_id": "vetr70220-fig-0002"
+          },
+          "status": "failed",
+          "errors": [
+            "Nonliteral/missing source evidence"
+          ]
+        },
+        {
+          "task": "oncology",
+          "identity": {
+            "article_id": "PMC13582412.1",
+            "patient_id": "p2",
+            "record_id": "PMC13582412.1:p2"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/tumors/1"
+          ]
+        },
+        {
+          "task": "conditions",
+          "identity": {
+            "article_id": "PMC13582412.1",
+            "patient_id": "p2",
+            "record_id": "PMC13582412.1:p2"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13543720.1",
+            "figure_id": "vetr70220-fig-0004"
+          },
+          "status": "failed",
+          "errors": [
+            "Nonliteral/missing source evidence"
+          ]
+        },
+        {
+          "task": "symptoms_function",
+          "identity": {
+            "article_id": "PMC13542385.1",
+            "patient_id": "p1",
+            "record_id": "PMC13542385.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13612135.1",
+            "patient_id": "p1",
+            "record_id": "PMC13612135.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/edges/0/offset"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13524801.1",
+            "figure_id": "Fig1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/assignments/1,/assignments/2"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13587181.1",
+            "patient_id": "p1",
+            "record_id": "PMC13587181.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        }
+      ]
+    },
+    {
+      "seed": 43,
+      "scope": "compact",
+      "task_count": 347,
+      "task_statuses": {
+        "valid": 328,
+        "failed": 13,
+        "partial": 6
+      },
+      "task_statuses_by_domain": {
+        "clinical": {
+          "valid": 229,
+          "failed": 3,
+          "partial": 6
+        },
+        "summary": {
+          "valid": 14,
+          "failed": 3
+        },
+        "timeline": {
+          "valid": 16,
+          "failed": 1
+        },
+        "patient_discovery": {},
+        "caption_ownership": {
+          "valid": 47,
+          "failed": 4
+        },
+        "pixel_description": {
+          "valid": 10,
+          "failed": 2
+        },
+        "pixel_ownership": {
+          "valid": 12
+        }
+      },
+      "first_attempt_valid_tasks": 241,
+      "wall_seconds": 194.61546148825437,
+      "tokens": {
+        "input_tokens": 3299663,
+        "output_tokens": 1046868,
+        "all_gpus_output_tokens_per_second": 5379.161511600565,
+        "unknown_input_usage_calls": 0,
+        "unknown_output_usage_calls": 0
+      },
+      "model_calls": 486,
+      "fidelity_summary": {
+        "first_pass": {
+          "required": 43,
+          "matched": 38,
+          "missing": 3,
+          "unscorable": 2,
+          "forbidden": 8,
+          "forbidden_violations": 0,
+          "forbidden_unscorable": 0,
+          "checklist_delivery_fraction": 0.8837209302325582
+        },
+        "raw": {
+          "required": 43,
+          "matched": 38,
+          "missing": 3,
+          "unscorable": 2,
+          "forbidden": 8,
+          "forbidden_violations": 0,
+          "forbidden_unscorable": 0,
+          "checklist_delivery_fraction": 0.8837209302325582
+        },
+        "delivered": {
+          "required": 43,
+          "matched": 40,
+          "missing": 3,
+          "unscorable": 0,
+          "forbidden": 8,
+          "forbidden_violations": 0,
+          "forbidden_unscorable": 1,
+          "checklist_delivery_fraction": 0.9302325581395349
+        }
+      },
+      "figure_summary": {
+        "caption": {
+          "required": 6,
+          "matched": 5,
+          "unscorable": 0,
+          "wrong_patient_assignments": 0
+        },
+        "pixels": {
+          "required": 6,
+          "matched": 2,
+          "unscorable": 3,
+          "wrong_patient_assignments": 0
+        }
+      },
+      "unreviewed_claims": {
+        "first_pass": {
+          "generated_items": 922,
+          "items_matching_required_check": 42,
+          "items_outside_checklist": 880,
+          "unsupported_claims": null,
+          "reason": "Claims outside this finite checklist need manual source adjudication; pattern hits also do not establish full correctness."
+        },
+        "raw": {
+          "generated_items": 922,
+          "items_matching_required_check": 42,
+          "items_outside_checklist": 880,
+          "unsupported_claims": null,
+          "reason": "Claims outside this finite checklist need manual source adjudication; pattern hits also do not establish full correctness."
+        },
+        "delivered": {
+          "generated_items": 967,
+          "items_matching_required_check": 44,
+          "items_outside_checklist": 923,
+          "unsupported_claims": null,
+          "reason": "Claims outside this finite checklist need manual source adjudication; pattern hits also do not establish full correctness."
+        }
+      },
+      "source_span_recovery": {
+        "resolved": 745,
+        "mechanical_changes": 745,
+        "unresolved": 0,
+        "clinical_content_changed": false
+      },
+      "paired_changes": {
+        "kept": 38,
+        "gained": 2,
+        "missed_both": 3
+      },
+      "nonvalid_final_error_categories": {
+        "pending_items": 7,
+        "field_erasure": 4,
+        "other": 3,
+        "literal_time": 1,
+        "parse": 4
+      },
+      "nonvalid_tasks": [
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13624352.1",
+            "patient_id": "p1",
+            "record_id": "PMC13624352.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13618765.1",
+            "patient_id": "p1",
+            "record_id": "PMC13618765.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "outcomes",
+          "identity": {
+            "article_id": "PMC13582412.1",
+            "patient_id": "p1",
+            "record_id": "PMC13582412.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "oncology",
+          "identity": {
+            "article_id": "PMC13582412.1",
+            "patient_id": "p1",
+            "record_id": "PMC13582412.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/treatments/0/evidence/1"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13624352.1",
+            "figure_id": "fig1-02676591251408657"
+          },
+          "status": "failed",
+          "errors": [
+            "Nonliteral/missing source evidence"
+          ]
+        },
+        {
+          "task": "oncology",
+          "identity": {
+            "article_id": "PMC13624890.1",
+            "patient_id": "p1",
+            "record_id": "PMC13624890.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "/tumors/0/time/text: temporal expression must occur literally in this fact's evidence; use null for an unstated time"
+          ]
+        },
+        {
+          "task": "allergies",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p2",
+            "record_id": "PMC13549756.1:p2"
+          },
+          "status": "failed",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "figure_visuals",
+          "identity": {
+            "article_id": "PMC13524801.1",
+            "figure_id": "Fig1"
+          },
+          "status": "failed",
+          "errors": [
+            "No complete parseable object; preserve raw response and request explicit structure"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13624890.1",
+            "patient_id": "p1",
+            "record_id": "PMC13624890.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "summary",
+          "identity": {
+            "article_id": "PMC13582412.1",
+            "patient_id": "p2",
+            "record_id": "PMC13582412.1:p2"
+          },
+          "status": "failed",
+          "errors": [
+            "No complete parseable object; preserve raw response and request explicit structure"
+          ]
+        },
+        {
+          "task": "summary",
+          "identity": {
+            "article_id": "PMC13618765.1",
+            "patient_id": "p1",
+            "record_id": "PMC13618765.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/claims/11,/claims/18"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13542385.1",
+            "patient_id": "p1",
+            "record_id": "PMC13542385.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/edges/3/offset,/edges/4/offset,/edges/5/offset"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13575834.1",
+            "figure_id": "F2"
+          },
+          "status": "failed",
+          "errors": [
+            "No complete parseable object; preserve raw response and request explicit structure"
+          ]
+        },
+        {
+          "task": "summary",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p2",
+            "record_id": "PMC13549756.1:p2"
+          },
+          "status": "failed",
+          "errors": [
+            "No complete parseable object; preserve raw response and request explicit structure"
+          ]
+        },
+        {
+          "task": "conditions",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p1",
+            "record_id": "PMC13549756.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13543720.1",
+            "figure_id": "vetr70220-fig-0002"
+          },
+          "status": "failed",
+          "errors": [
+            "Nonliteral/missing source evidence"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13543720.1",
+            "figure_id": "vetr70220-fig-0004"
+          },
+          "status": "failed",
+          "errors": [
+            "Nonliteral/missing source evidence"
+          ]
+        },
+        {
+          "task": "figure_visuals",
+          "identity": {
+            "article_id": "PMC13582412.1",
+            "figure_id": "Fig1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/panels/0/clinical_significance/0/clinical_fact_status,/panels/1/clinical_significance/0/clinical_fact_status,/panels/2/clinical_significance/0/clinical_fact_status,/panels/3/clinical_significance/0/clinical_fact_status,/panels/4/clinical_significance/0/clinical_fact_status,/panels/5/clinical_significance/0/clinical_fact_status,/panels/6/clinical_significance/0/clinical_fact_status,/panels/7/clinical_significance/0/clinical_fact_status,/panels/8/clinical_significance/0/clinical_fact_status,/panels/9/clinical_significance/0/clinical_fact_status,/panels/10/clinical_significance/0/clinical_fact_status,/panels/11/clinical_significance/0/clinical_fact_status"
+          ]
+        },
+        {
+          "task": "outcomes",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p1",
+            "record_id": "PMC13549756.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        }
+      ]
+    },
+    {
+      "seed": 44,
+      "scope": "whole",
+      "task_count": 347,
+      "task_statuses": {
+        "valid": 324,
+        "failed": 17,
+        "partial": 6
+      },
+      "task_statuses_by_domain": {
+        "clinical": {
+          "valid": 229,
+          "failed": 3,
+          "partial": 6
+        },
+        "summary": {
+          "valid": 16,
+          "failed": 1
+        },
+        "timeline": {
+          "valid": 12,
+          "failed": 5
+        },
+        "patient_discovery": {},
+        "caption_ownership": {
+          "valid": 45,
+          "failed": 6
+        },
+        "pixel_description": {
+          "valid": 11,
+          "failed": 1
+        },
+        "pixel_ownership": {
+          "valid": 11,
+          "failed": 1
+        }
+      },
+      "first_attempt_valid_tasks": 242,
+      "wall_seconds": 164.63622508430853,
+      "tokens": {
+        "input_tokens": 3401678,
+        "output_tokens": 992647,
+        "all_gpus_output_tokens_per_second": 6029.3352783792,
+        "unknown_input_usage_calls": 0,
+        "unknown_output_usage_calls": 0
+      },
+      "model_calls": 489,
+      "fidelity_summary": {
+        "first_pass": {
+          "required": 43,
+          "matched": 40,
+          "missing": 3,
+          "unscorable": 0,
+          "forbidden": 8,
+          "forbidden_violations": 0,
+          "forbidden_unscorable": 0,
+          "checklist_delivery_fraction": 0.9302325581395349
+        },
+        "raw": {
+          "required": 43,
+          "matched": 40,
+          "missing": 3,
+          "unscorable": 0,
+          "forbidden": 8,
+          "forbidden_violations": 0,
+          "forbidden_unscorable": 0,
+          "checklist_delivery_fraction": 0.9302325581395349
+        },
+        "delivered": {
+          "required": 43,
+          "matched": 39,
+          "missing": 3,
+          "unscorable": 1,
+          "forbidden": 8,
+          "forbidden_violations": 0,
+          "forbidden_unscorable": 0,
+          "checklist_delivery_fraction": 0.9069767441860465
+        }
+      },
+      "figure_summary": {
+        "caption": {
+          "required": 6,
+          "matched": 5,
+          "unscorable": 0,
+          "wrong_patient_assignments": 0
+        },
+        "pixels": {
+          "required": 6,
+          "matched": 2,
+          "unscorable": 4,
+          "wrong_patient_assignments": 0
+        }
+      },
+      "unreviewed_claims": {
+        "first_pass": {
+          "generated_items": 947,
+          "items_matching_required_check": 42,
+          "items_outside_checklist": 905,
+          "unsupported_claims": null,
+          "reason": "Claims outside this finite checklist need manual source adjudication; pattern hits also do not establish full correctness."
+        },
+        "raw": {
+          "generated_items": 947,
+          "items_matching_required_check": 42,
+          "items_outside_checklist": 905,
+          "unsupported_claims": null,
+          "reason": "Claims outside this finite checklist need manual source adjudication; pattern hits also do not establish full correctness."
+        },
+        "delivered": {
+          "generated_items": 945,
+          "items_matching_required_check": 41,
+          "items_outside_checklist": 904,
+          "unsupported_claims": null,
+          "reason": "Claims outside this finite checklist need manual source adjudication; pattern hits also do not establish full correctness."
+        }
+      },
+      "source_span_recovery": {
+        "resolved": 771,
+        "mechanical_changes": 771,
+        "unresolved": 9,
+        "clinical_content_changed": false
+      },
+      "paired_changes": {
+        "kept": 39,
+        "missed_both": 3,
+        "lost": 1
+      },
+      "nonvalid_final_error_categories": {
+        "field_erasure": 6,
+        "other": 7,
+        "pending_items": 8,
+        "parse": 2
+      },
+      "nonvalid_tasks": [
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13542385.1",
+            "patient_id": "p1",
+            "record_id": "PMC13542385.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/events/7,/events/8,/events/9,/events/10,/events/11,/events/12,/events/13,/events/14,/edges/2"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13624957.1",
+            "figure_id": "F1"
+          },
+          "status": "failed",
+          "errors": [
+            "Nonliteral/missing source evidence"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13624890.1",
+            "figure_id": "fig002"
+          },
+          "status": "failed",
+          "errors": [
+            "Nonliteral/missing source evidence"
+          ]
+        },
+        {
+          "task": "reproductive_perinatal",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p2",
+            "record_id": "PMC13549756.1:p2"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p2",
+            "record_id": "PMC13549756.1:p2"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "oncology",
+          "identity": {
+            "article_id": "PMC13618765.1",
+            "patient_id": "p1",
+            "record_id": "PMC13618765.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/documentation_evidence/0"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p3",
+            "record_id": "PMC13549756.1:p3"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/edges/1"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13618778.1",
+            "patient_id": "p1",
+            "record_id": "PMC13618778.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/events/6/times/0,/events/10/fact_ids/1"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p2",
+            "record_id": "PMC13549756.1:p2"
+          },
+          "status": "failed",
+          "errors": [
+            "No complete parseable object; preserve raw response and request explicit structure"
+          ]
+        },
+        {
+          "task": "outcomes",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p2",
+            "record_id": "PMC13549756.1:p2"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13624771.1",
+            "figure_id": "f1-ce-2025-262"
+          },
+          "status": "failed",
+          "errors": [
+            "No complete parseable object; preserve raw response and request explicit structure"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13624890.1",
+            "patient_id": "p1",
+            "record_id": "PMC13624890.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13524801.1",
+            "patient_id": "p1",
+            "record_id": "PMC13524801.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/limitations/1"
+          ]
+        },
+        {
+          "task": "demographics",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p3",
+            "record_id": "PMC13549756.1:p3"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "summary",
+          "identity": {
+            "article_id": "PMC13587181.1",
+            "patient_id": "p1",
+            "record_id": "PMC13587181.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "/claims/4/evidence/0: invalid segment or nonliteral citation"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p3",
+            "record_id": "PMC13549756.1:p3"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13543720.1",
+            "figure_id": "vetr70220-fig-0002"
+          },
+          "status": "failed",
+          "errors": [
+            "Nonliteral/missing source evidence"
+          ]
+        },
+        {
+          "task": "allergies",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p2",
+            "record_id": "PMC13549756.1:p2"
+          },
+          "status": "failed",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "pixel_attribution",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "figure_id": "f1-apem-2550320-160"
+          },
+          "status": "failed",
+          "errors": [
+            "1 validation error for FigureReview\nassignments.0\n  Value error, Shared panel requires at least two patients [type=value_error, input_value={'panel': None, 'patient_...tient 2, or Patient 3.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13618765.1",
+            "figure_id": "figure-2"
+          },
+          "status": "failed",
+          "errors": [
+            "Nonliteral/missing source evidence"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13543720.1",
+            "figure_id": "vetr70220-fig-0004"
+          },
+          "status": "failed",
+          "errors": [
+            "Nonliteral/missing source evidence"
+          ]
+        },
+        {
+          "task": "symptoms_function",
+          "identity": {
+            "article_id": "PMC13542385.1",
+            "patient_id": "p1",
+            "record_id": "PMC13542385.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "figure_visuals",
+          "identity": {
+            "article_id": "PMC13582412.1",
+            "figure_id": "Fig1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/panels/0/clinical_significance/0/clinical_fact_status,/panels/1/clinical_significance/0/clinical_fact_status,/panels/8/clinical_significance/0/clinical_fact_status"
+          ]
+        }
+      ]
+    },
+    {
+      "seed": 44,
+      "scope": "compact",
+      "task_count": 347,
+      "task_statuses": {
+        "valid": 325,
+        "failed": 16,
+        "partial": 6
+      },
+      "task_statuses_by_domain": {
+        "clinical": {
+          "valid": 230,
+          "partial": 6,
+          "failed": 2
+        },
+        "summary": {
+          "valid": 17
+        },
+        "timeline": {
+          "valid": 14,
+          "failed": 3
+        },
+        "patient_discovery": {},
+        "caption_ownership": {
+          "valid": 45,
+          "failed": 6
+        },
+        "pixel_description": {
+          "valid": 9,
+          "failed": 3
+        },
+        "pixel_ownership": {
+          "valid": 10,
+          "failed": 2
+        }
+      },
+      "first_attempt_valid_tasks": 249,
+      "wall_seconds": 148.9006338273175,
+      "tokens": {
+        "input_tokens": 3231678,
+        "output_tokens": 1021220,
+        "all_gpus_output_tokens_per_second": 6858.399281122775,
+        "unknown_input_usage_calls": 0,
+        "unknown_output_usage_calls": 0
+      },
+      "model_calls": 483,
+      "fidelity_summary": {
+        "first_pass": {
+          "required": 43,
+          "matched": 41,
+          "missing": 1,
+          "unscorable": 1,
+          "forbidden": 8,
+          "forbidden_violations": 0,
+          "forbidden_unscorable": 0,
+          "checklist_delivery_fraction": 0.9534883720930233
+        },
+        "raw": {
+          "required": 43,
+          "matched": 41,
+          "missing": 1,
+          "unscorable": 1,
+          "forbidden": 8,
+          "forbidden_violations": 0,
+          "forbidden_unscorable": 0,
+          "checklist_delivery_fraction": 0.9534883720930233
+        },
+        "delivered": {
+          "required": 43,
+          "matched": 39,
+          "missing": 2,
+          "unscorable": 2,
+          "forbidden": 8,
+          "forbidden_violations": 0,
+          "forbidden_unscorable": 0,
+          "checklist_delivery_fraction": 0.9069767441860465
+        }
+      },
+      "figure_summary": {
+        "caption": {
+          "required": 6,
+          "matched": 4,
+          "unscorable": 0,
+          "wrong_patient_assignments": 0
+        },
+        "pixels": {
+          "required": 6,
+          "matched": 2,
+          "unscorable": 4,
+          "wrong_patient_assignments": 0
+        }
+      },
+      "unreviewed_claims": {
+        "first_pass": {
+          "generated_items": 1014,
+          "items_matching_required_check": 43,
+          "items_outside_checklist": 971,
+          "unsupported_claims": null,
+          "reason": "Claims outside this finite checklist need manual source adjudication; pattern hits also do not establish full correctness."
+        },
+        "raw": {
+          "generated_items": 1014,
+          "items_matching_required_check": 43,
+          "items_outside_checklist": 971,
+          "unsupported_claims": null,
+          "reason": "Claims outside this finite checklist need manual source adjudication; pattern hits also do not establish full correctness."
+        },
+        "delivered": {
+          "generated_items": 1045,
+          "items_matching_required_check": 41,
+          "items_outside_checklist": 1004,
+          "unsupported_claims": null,
+          "reason": "Claims outside this finite checklist need manual source adjudication; pattern hits also do not establish full correctness."
+        }
+      },
+      "source_span_recovery": {
+        "resolved": 705,
+        "mechanical_changes": 705,
+        "unresolved": 0,
+        "clinical_content_changed": false
+      },
+      "paired_changes": {
+        "kept": 38,
+        "lost": 3,
+        "gained": 1,
+        "missed_both": 1
+      },
+      "nonvalid_final_error_categories": {
+        "pending_items": 6,
+        "field_erasure": 8,
+        "other": 5,
+        "literal_time": 1,
+        "nonliteral_evidence": 1,
+        "parse": 1
+      },
+      "nonvalid_tasks": [
+        {
+          "task": "outcomes",
+          "identity": {
+            "article_id": "PMC13612135.1",
+            "patient_id": "p1",
+            "record_id": "PMC13612135.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13543720.1",
+            "figure_id": "vetr70220-fig-0005"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/panel,/scope,/subject,/evidence"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13587181.1",
+            "patient_id": "p1",
+            "record_id": "PMC13587181.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "pixel_attribution",
+          "identity": {
+            "article_id": "PMC13624887.1",
+            "figure_id": "fig001"
+          },
+          "status": "failed",
+          "errors": [
+            "Nonliteral/missing source evidence"
+          ]
+        },
+        {
+          "task": "oncology",
+          "identity": {
+            "article_id": "PMC13624890.1",
+            "patient_id": "p1",
+            "record_id": "PMC13624890.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "/tumors/0/time/text: temporal expression must occur literally in this fact's evidence; use null for an unstated time"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13542385.1",
+            "patient_id": "p1",
+            "record_id": "PMC13542385.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/edges/1/offset,/edges/2/offset,/edges/3/offset"
+          ]
+        },
+        {
+          "task": "oncology",
+          "identity": {
+            "article_id": "PMC13624889.1",
+            "patient_id": "p1",
+            "record_id": "PMC13624889.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/tumors/1"
+          ]
+        },
+        {
+          "task": "figure_visuals",
+          "identity": {
+            "article_id": "PMC13524801.1",
+            "figure_id": "Fig1"
+          },
+          "status": "failed",
+          "errors": [
+            "Visual schema contains nonliteral source evidence"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13624771.1",
+            "figure_id": "f3-ce-2025-262"
+          },
+          "status": "failed",
+          "errors": [
+            "Nonliteral/missing source evidence"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13624890.1",
+            "patient_id": "p1",
+            "record_id": "PMC13624890.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p2",
+            "record_id": "PMC13549756.1:p2"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13575834.1",
+            "figure_id": "F2"
+          },
+          "status": "failed",
+          "errors": [
+            "Nonliteral/missing source evidence"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13582412.1",
+            "figure_id": "Fig1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/assignments/12"
+          ]
+        },
+        {
+          "task": "observations",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p3",
+            "record_id": "PMC13549756.1:p3"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        },
+        {
+          "task": "figure_visuals",
+          "identity": {
+            "article_id": "PMC13624352.1",
+            "figure_id": "fig1-02676591251408657"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/panels/0/medical_domains/2,/panels/0/body_parts/1"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13543720.1",
+            "figure_id": "vetr70220-fig-0002"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/assignments/0/evidence/1,/assignments/2/evidence/1"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13612135.1",
+            "patient_id": "p1",
+            "record_id": "PMC13612135.1:p1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/events/3/fact_ids/1,/events/5/fact_ids/2"
+          ]
+        },
+        {
+          "task": "pixel_attribution",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "figure_id": "f1-apem-2550320-160"
+          },
+          "status": "failed",
+          "errors": [
+            "1 validation error for FigureReview\nassignments.0\n  Value error, Subject and patient ownership conflict [type=value_error, input_value={'panel': None, 'patient_...ed cases collectively.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error"
+          ]
+        },
+        {
+          "task": "timeline_v2",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p3",
+            "record_id": "PMC13549756.1:p3"
+          },
+          "status": "failed",
+          "errors": [
+            "No complete parseable object; preserve raw response and request explicit structure"
+          ]
+        },
+        {
+          "task": "figure_attribution",
+          "identity": {
+            "article_id": "PMC13543720.1",
+            "figure_id": "vetr70220-fig-0004"
+          },
+          "status": "failed",
+          "errors": [
+            "Nonliteral/missing source evidence"
+          ]
+        },
+        {
+          "task": "figure_visuals",
+          "identity": {
+            "article_id": "PMC13582412.1",
+            "figure_id": "Fig1"
+          },
+          "status": "failed",
+          "errors": [
+            "repair_refused_field_erasure:/panels/0/clinical_significance/0/clinical_fact_status,/panels/1/clinical_significance/0/clinical_fact_status,/panels/8/clinical_significance/0/clinical_fact_status"
+          ]
+        },
+        {
+          "task": "reproductive_perinatal",
+          "identity": {
+            "article_id": "PMC13549756.1",
+            "patient_id": "p1",
+            "record_id": "PMC13549756.1:p1"
+          },
+          "status": "partial",
+          "errors": [
+            "targeted_items_unresolved"
+          ]
+        }
+      ]
+    }
+  ],
+  "discovery": [
+    {
+      "seed": 42,
+      "articles": [
+        {
+          "article_id": "PMC13612135.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13542385.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13582412.1",
+          "available": true,
+          "expected_count": 2,
+          "predicted_count": 2,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13549756.1",
+          "available": true,
+          "expected_count": 3,
+          "predicted_count": 3,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13618765.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13624889.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13624890.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13587181.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13624352.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13618778.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13524801.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13624887.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13575834.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 0,
+          "missing_count": 1,
+          "extra_count": 0,
+          "count_match": false,
+          "species_multiset_match": false,
+          "provisional": true,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13624771.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13577788.1",
+          "available": true,
+          "expected_count": 0,
+          "predicted_count": 0,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13543720.1",
+          "available": true,
+          "expected_count": 0,
+          "predicted_count": 0,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13524818.1",
+          "available": true,
+          "expected_count": 0,
+          "predicted_count": 0,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13624957.1",
+          "available": true,
+          "expected_count": 0,
+          "predicted_count": 0,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13575883.1",
+          "available": true,
+          "expected_count": 0,
+          "predicted_count": 0,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13069285.1",
+          "available": true,
+          "expected_count": 0,
+          "predicted_count": 0,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        }
+      ],
+      "summary": {
+        "definitive_articles": 19,
+        "count_matches": 19,
+        "unscorable": 0,
+        "extra_patients": 0,
+        "missing_patients": 0,
+        "provisional_articles_excluded": 1
+      }
+    },
+    {
+      "seed": 43,
+      "articles": [
+        {
+          "article_id": "PMC13612135.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13542385.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13582412.1",
+          "available": true,
+          "expected_count": 2,
+          "predicted_count": 2,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13549756.1",
+          "available": true,
+          "expected_count": 3,
+          "predicted_count": 3,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13618765.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 3,
+          "missing_count": 0,
+          "extra_count": 2,
+          "count_match": false,
+          "species_multiset_match": false,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13624889.1",
+          "available": false,
+          "expected_count": 1,
+          "predicted_count": null,
+          "missing_count": 1,
+          "extra_count": null,
+          "count_match": false,
+          "species_multiset_match": false,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13624890.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13587181.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13624352.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13618778.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13524801.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13624887.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13575834.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 0,
+          "missing_count": 1,
+          "extra_count": 0,
+          "count_match": false,
+          "species_multiset_match": false,
+          "provisional": true,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13624771.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13577788.1",
+          "available": true,
+          "expected_count": 0,
+          "predicted_count": 0,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13543720.1",
+          "available": true,
+          "expected_count": 0,
+          "predicted_count": 0,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13524818.1",
+          "available": true,
+          "expected_count": 0,
+          "predicted_count": 0,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13624957.1",
+          "available": true,
+          "expected_count": 0,
+          "predicted_count": 0,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13575883.1",
+          "available": true,
+          "expected_count": 0,
+          "predicted_count": 0,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13069285.1",
+          "available": true,
+          "expected_count": 0,
+          "predicted_count": 0,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        }
+      ],
+      "summary": {
+        "definitive_articles": 19,
+        "count_matches": 17,
+        "unscorable": 1,
+        "extra_patients": 2,
+        "missing_patients": 1,
+        "provisional_articles_excluded": 1
+      }
+    },
+    {
+      "seed": 44,
+      "articles": [
+        {
+          "article_id": "PMC13612135.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13542385.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13582412.1",
+          "available": true,
+          "expected_count": 2,
+          "predicted_count": 2,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13549756.1",
+          "available": true,
+          "expected_count": 3,
+          "predicted_count": 3,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13618765.1",
+          "available": false,
+          "expected_count": 1,
+          "predicted_count": null,
+          "missing_count": 1,
+          "extra_count": null,
+          "count_match": false,
+          "species_multiset_match": false,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13624889.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13624890.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13587181.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13624352.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13618778.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13524801.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13624887.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13575834.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 0,
+          "missing_count": 1,
+          "extra_count": 0,
+          "count_match": false,
+          "species_multiset_match": false,
+          "provisional": true,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13624771.1",
+          "available": true,
+          "expected_count": 1,
+          "predicted_count": 1,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13577788.1",
+          "available": true,
+          "expected_count": 0,
+          "predicted_count": 0,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13543720.1",
+          "available": true,
+          "expected_count": 0,
+          "predicted_count": 0,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13524818.1",
+          "available": true,
+          "expected_count": 0,
+          "predicted_count": 0,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13624957.1",
+          "available": true,
+          "expected_count": 0,
+          "predicted_count": 0,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13575883.1",
+          "available": true,
+          "expected_count": 0,
+          "predicted_count": 0,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        },
+        {
+          "article_id": "PMC13069285.1",
+          "available": true,
+          "expected_count": 0,
+          "predicted_count": 0,
+          "missing_count": 0,
+          "extra_count": 0,
+          "count_match": true,
+          "species_multiset_match": true,
+          "provisional": false,
+          "individual_identity_accuracy": "unreviewed; counts and species do not adjudicate identities"
+        }
+      ],
+      "summary": {
+        "definitive_articles": 19,
+        "count_matches": 18,
+        "unscorable": 1,
+        "extra_patients": 0,
+        "missing_patients": 1,
+        "provisional_articles_excluded": 1
+      }
+    }
+  ],
+  "gpu": {
+    "status": "completed",
+    "gpu_stage_seconds": 2013.6227371240966,
+    "gpus": 8,
+    "failures": [],
+    "pixel_expansion": "exact vLLM /tokenize guard",
+    "medical_accuracy": "finite source-reviewed checklist; remaining claims and pixel descriptions unadjudicated",
+    "throughput_notice": "Diverse sample includes orchestration/retries; distinct from warm repeated prompt tuning."
+  },
+  "warning": "Repeated finite development checklist, not medical accuracy. Clinical trials use frozen reviewed rosters; alternate schema representations can produce pattern misses. Nonvalid error counters can overlap. Throughput includes retries and all completion tokens, excludes startup.",
+  "manual_audit": [
+    {
+      "article": "PMC13549756.1",
+      "finding": "Initial Na/K values 129/7.4, 115/6.4, 121/6.3 mmol/L stay with infants p1/p2/p3 across all six trials. Flucloxacillin appears in every trial, but route is null in three while IV remains in the name."
+    },
+    {
+      "article": "PMC13587181.1",
+      "finding": "Drain fluid creatinine 0.27 mg/dL is present in all first passes and only three final observations sections. In whole seeds 42/43 correcting an unsupported time to null was rejected as field erasure. Compact seed44 retained incorrect time/evidence association after repair."
+    },
+    {
+      "article": "PMC13582412.1",
+      "finding": "All six retain the initial no-metastasis imaging in observations despite the conditions-only checklist missing it. Subsequent metastasis must remain a different event."
+    },
+    {
+      "article": "PMC13624889.1",
+      "finding": "NRAS Q61R and VAF 30% survive in observations across all six; failing oncology bundles are not complete disappearance of this fact from the patient record."
+    },
+    {
+      "article": "PMC13618765.1",
+      "finding": "Negative Doppler findings and acemetacin dose/frequency are supported in inspected outputs. Discovery seed43 adds two explicitly prior-publication patients; this is a primary-versus-cited scope issue, not invented identities."
+    },
+    {
+      "article": "PMC13624887.1",
+      "finding": "A source-negative bone involvement result can miss the gold pattern because assertion absent represents the same negative finding that the gold expected as a present observation."
+    },
+    {
+      "article": "PMC13549756.1",
+      "figure": "f1-apem-2550320-160",
+      "trial": "seed43 compact",
+      "finding": "Valid description invents skin-barrier-to-GI direction and a GI-to-atopy loop, and misplaces a dashed connection to hyponatraemia. Correct broad background scope does not validate arrow connectivity."
+    },
+    {
+      "article": "PMC13612135.1",
+      "trial": "seed43 compact",
+      "finding": "Valid PET panel C description confuses PSMA/FDG/DOTATATE/FAPI labels. All-panels-PET/CT claim overlooks grayscale PET MIPs in A and standalone grayscale CT views in F."
+    },
+    {
+      "article": "PMC13524801.1",
+      "finding": "CoMET pixel descriptions are valid only in whole seeds43/44. Seed43 whole correctly reads bed/INST numbers in prose but leaves chart readings empty and clinical-chart flag false; categorical definition/structured extraction needs refinement. Aggregate dashboard should not be assigned to the illustrative index infant."
+    }
+  ]
+}
