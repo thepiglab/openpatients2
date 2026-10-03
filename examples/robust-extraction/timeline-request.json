@@ -1,0 +1,168 @@
+{
+  "notice": "Invented software example; not a medical record or real patient.",
+  "sources": {
+    "INVENTED-EXAMPLE.1:jats": {
+      "b1": "Patient 1 was admitted in 2020-03. Surgery was performed 2 days after admission. Follow-up was planned."
+    }
+  },
+  "fact_records": {},
+  "timeline": {
+    "schema_version": "patient-timeline/2",
+    "record_id": "INVENTED-EXAMPLE.1:p1",
+    "events": [
+      {
+        "event_id": "e1",
+        "record_id": "INVENTED-EXAMPLE.1:p1",
+        "episode_id": null,
+        "kind": "presentation",
+        "occurrence": "occurred",
+        "description": "Patient 1 was admitted in 2020-03.",
+        "fact_ids": [],
+        "evidence": [
+          {
+            "source_id": "INVENTED-EXAMPLE.1:jats",
+            "segment_id": "b1",
+            "segment_sha256": "aa605aa0b108724c41525f3d8e66c7817f0a1b96e7e442bd99e7e81b5b927428",
+            "start": 0,
+            "end": 34,
+            "quote": "Patient 1 was admitted in 2020-03."
+          }
+        ],
+        "attribution_evidence": [
+          {
+            "source_id": "INVENTED-EXAMPLE.1:jats",
+            "segment_id": "b1",
+            "segment_sha256": "aa605aa0b108724c41525f3d8e66c7817f0a1b96e7e442bd99e7e81b5b927428",
+            "start": 0,
+            "end": 9,
+            "quote": "Patient 1"
+          }
+        ],
+        "times": [
+          {
+            "text": "2020-03",
+            "kind": "calendar",
+            "precision": "exact",
+            "calendar_value": "2020-03",
+            "evidence": [
+              {
+                "source_id": "INVENTED-EXAMPLE.1:jats",
+                "segment_id": "b1",
+                "segment_sha256": "aa605aa0b108724c41525f3d8e66c7817f0a1b96e7e442bd99e7e81b5b927428",
+                "start": 26,
+                "end": 33,
+                "quote": "2020-03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "e2",
+        "record_id": "INVENTED-EXAMPLE.1:p1",
+        "episode_id": null,
+        "kind": "treatment",
+        "occurrence": "occurred",
+        "description": "Surgery was performed 2 days after admission.",
+        "fact_ids": [],
+        "evidence": [
+          {
+            "source_id": "INVENTED-EXAMPLE.1:jats",
+            "segment_id": "b1",
+            "segment_sha256": "aa605aa0b108724c41525f3d8e66c7817f0a1b96e7e442bd99e7e81b5b927428",
+            "start": 35,
+            "end": 80,
+            "quote": "Surgery was performed 2 days after admission."
+          }
+        ],
+        "attribution_evidence": [
+          {
+            "source_id": "INVENTED-EXAMPLE.1:jats",
+            "segment_id": "b1",
+            "segment_sha256": "aa605aa0b108724c41525f3d8e66c7817f0a1b96e7e442bd99e7e81b5b927428",
+            "start": 0,
+            "end": 9,
+            "quote": "Patient 1"
+          }
+        ],
+        "times": [
+          {
+            "text": "2 days after admission",
+            "kind": "relative",
+            "precision": "exact",
+            "calendar_value": null,
+            "evidence": [
+              {
+                "source_id": "INVENTED-EXAMPLE.1:jats",
+                "segment_id": "b1",
+                "segment_sha256": "aa605aa0b108724c41525f3d8e66c7817f0a1b96e7e442bd99e7e81b5b927428",
+                "start": 57,
+                "end": 79,
+                "quote": "2 days after admission"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "e3",
+        "record_id": "INVENTED-EXAMPLE.1:p1",
+        "episode_id": null,
+        "kind": "plan",
+        "occurrence": "planned",
+        "description": "Follow-up was planned.",
+        "fact_ids": [],
+        "evidence": [
+          {
+            "source_id": "INVENTED-EXAMPLE.1:jats",
+            "segment_id": "b1",
+            "segment_sha256": "aa605aa0b108724c41525f3d8e66c7817f0a1b96e7e442bd99e7e81b5b927428",
+            "start": 81,
+            "end": 103,
+            "quote": "Follow-up was planned."
+          }
+        ],
+        "attribution_evidence": [
+          {
+            "source_id": "INVENTED-EXAMPLE.1:jats",
+            "segment_id": "b1",
+            "segment_sha256": "aa605aa0b108724c41525f3d8e66c7817f0a1b96e7e442bd99e7e81b5b927428",
+            "start": 0,
+            "end": 9,
+            "quote": "Patient 1"
+          }
+        ],
+        "times": []
+      }
+    ],
+    "edges": [
+      {
+        "edge_id": "r1",
+        "from_event_id": "e2",
+        "to_event_id": "e1",
+        "relation": "after",
+        "offset": {
+          "text": "2 days after admission",
+          "lower": 2.0,
+          "upper": 2.0,
+          "unit": "day",
+          "precision": "exact"
+        },
+        "evidence": [
+          {
+            "source_id": "INVENTED-EXAMPLE.1:jats",
+            "segment_id": "b1",
+            "segment_sha256": "aa605aa0b108724c41525f3d8e66c7817f0a1b96e7e442bd99e7e81b5b927428",
+            "start": 35,
+            "end": 80,
+            "quote": "Surgery was performed 2 days after admission."
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      "No exact admission day is reported.",
+      "Planned follow-up has no documented completion."
+    ]
+  }
+}

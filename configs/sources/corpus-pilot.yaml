@@ -1,0 +1,21 @@
+# CPU only. These budgets are intentionally safe for a small local or cluster pilot.
+# Date intervals are split until ESearch results fit; keyword lanes prioritize,
+# while the open-access lane keeps articles with atypical case descriptions.
+lanes:
+  - name: case_focused
+    query: '"case report" OR "case series" OR "case presentation"'
+    start: '2024-01-01'
+    end: '2024-12-31'
+  - name: exploration
+    query: 'open access[filter]'
+    start: '2024-01-01'
+    end: '2024-12-31'
+max_candidates: 200
+page_size: 25
+search_partition_limit: 9000
+max_storage_bytes: 256000000
+min_free_bytes: 1000000000
+max_network_bytes_per_invocation: 32000000
+max_requests_per_invocation: 300
+max_xml_bytes: 5000000
+max_article_json_bytes: 20000000

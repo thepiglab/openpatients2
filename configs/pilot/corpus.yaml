@@ -1,0 +1,25 @@
+# Start with submit-cpu; submit-gpu is a separate explicit command after review.
+source_config: configs/sources/corpus-stratified-pilot.yaml
+engine_config: configs/hipergator/glimmer-fp8-tuning.yaml
+extraction_config: configs/pilot/glimmer-extraction.yaml
+tokenizer_metadata: configs/hipergator/glimmer/RedHatAI.metadata.json
+chat_template: configs/hipergator/glimmer/meta-models-chat_template.jinja
+account: cai5724
+qos: cai5724
+cpu_partition: hpg-default
+gpu_partition: hpg-b200
+workers: 32
+sample_size: 48
+seed: 5724
+fetch_batch: 25
+max_invocations: 100
+export_max_bytes: 1000000000
+max_figures: 12
+pixel_total_bytes: 64000000
+historical_regression: true
+# Each pair is an actual server context and a distinct prefill scheduling budget.
+matrix:
+  - {context: 32768, prefill: 8192}
+  - {context: 65536, prefill: 8192}
+  - {context: 65536, prefill: 32768}
+arms: [direct, targeted]

@@ -12,76 +12,8 @@ from .pmc_media import (XLINK, child, local_name, media_manifest, metadata_flag,
 from .jats_links import cross_references, bibliography, marked_text
 
 ARTICLE_FORMAT = 'openpatients2.article/1'
-POLICY_VERSION = 'cc-adaptations-noncommercial/2'
-# These are a set, not a total ordering of licenses. BY-SA is a separate lane.
-ACCEPTED_LICENSES = {'CC0', 'CC BY', 'CC BY-NC', 'CC BY-NC-SA', 'CC BY-SA'}
-
-
-def normalize_license(value: str | None) -> str | None:
-    if not value:
-        return None
-    value = value.strip()
-    match = re.search(r'creativecommons\.org/(?:licenses/(by(?:-nc)?(?:-sa|-nd)?)/|publicdomain/(zero)/)', value, re.I)
-    if match:
-        return 'CC0' if match[2] else 'CC ' + match[1].upper()
-    token = re.sub(r'\s+', ' ', value.upper().replace('_', '-'))
-    token = re.sub(r'(?:\s|[-/])\d\.\d(?:\s.*)?$', '', token)
-    token = token.replace('CC-', 'CC ', 1)
-    if token in {'CC0', 'CC 0'}:
-        return 'CC0'
-    return token if re.fullmatch(r'CC BY(?:-NC)?(?:-SA|-ND)?', token) else None
-
-
-def license_decision(metadata: dict, statements: list[dict]) -> dict:
-    code = normalize_license(metadata.get('license_code'))
-    explicit = set()
-    restricted_prose = False
-    for statement in statements:
-        if statement.get('type') != 'license':
-            continue
-        # JATS often puts the URL on a nested ext-link. Its own prose may also
-        # contradict that URL; considering only the outer href misses this.
-        text = ' '.join(str(statement.get(k) or '') for k in ('url', 'text'))
-        for match in re.finditer(r'creativecommons\.org/(?:licenses/(by(?:-nc)?(?:-sa|-nd)?)/|publicdomain/(zero)/)', text, re.I):
-            explicit.add('CC0' if match[2] else 'CC '+match[1].upper())
-        for match in re.finditer(r'\bCC[\s-]*BY(?:[\s-]*NC)?(?:[\s-]*(?:SA|ND))?\b', text, re.I):
-            compact = re.sub(r'[\s-]', '', match[0]).upper()
-            suffix = compact[4:]
-            explicit.add('CC BY'+('-NC' if suffix.startswith('NC') else '')+
-                         ('-SA' if suffix.endswith('SA') else '-ND' if suffix.endswith('ND') else ''))
-        if re.search(r'\bCC\s*0\b', text, re.I):
-            explicit.add('CC0')
-        restricted_prose |= bool(re.search(r'\bno[\s-]*derivatives\b|\bcannot be changed\b|\ball rights reserved\b', text, re.I))
-    reason = None
-    if metadata_flag(metadata.get('is_retracted')) is not False:
-        reason = 'retracted_or_retraction_status_unknown'
-    elif metadata_flag(metadata.get('is_pmc_openaccess')) is not True:
-        reason = 'not_verified_open_access'
-    elif code not in ACCEPTED_LICENSES:
-        reason = 'license_unknown_or_disallows_adaptations'
-    elif explicit and explicit != {code}:
-        reason = 'conflicting_license_statements'
-    elif restricted_prose:
-        reason = 'restrictive_license_prose_requires_review'
-    return {'policy_version': POLICY_VERSION, 'allowed': reason is None,
-            'reason': reason or 'explicit_allowlist', 'code': code,
-            'raw_code': metadata.get('license_code'), 'statements': statements,
-            'statement_codes': sorted(explicit), 'restrictive_prose': restricted_prose,
-            'release_lane': 'sharealike_source_terms' if code == 'CC BY-SA' else 'noncommercial_compatible',
-            'notice': 'Retain source license version, authors, citation and changes. Asset exceptions are separate; no blanket relicensing.'}
-
-
-def recheck_license(decision: dict) -> dict:
-    """Reapply current adaptation rules to previously acquired article rights.
-
-    This is an offline check, not a new assertion about live retraction status.
-    Never rehabilitate a previously rejected acquisition here.
-    """
-    if not decision.get('allowed'):
-        return decision
-    return license_decision({'license_code':decision.get('raw_code') or decision.get('code'),
-                             'is_retracted':False, 'is_pmc_openaccess':True},
-                            decision.get('statements', []))
+from .license_policy import (POLICY_VERSION, ACCEPTED_LICENSES, normalize_license,
+                             license_decision, recheck_license)
 
 
 def _clean(node) -> str:

@@ -1,0 +1,74 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "record_id": {
+      "title": "Record Id",
+      "type": "string"
+    },
+    "source_digest": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Source Digest",
+      "type": "string"
+    },
+    "target_id": {
+      "title": "Target Id",
+      "type": "string"
+    },
+    "stage": {
+      "enum": [
+        "transport",
+        "parse",
+        "schema",
+        "evidence",
+        "attribution",
+        "clinical",
+        "temporal",
+        "coverage",
+        "terminology",
+        "media",
+        "rights"
+      ],
+      "title": "Stage",
+      "type": "string"
+    },
+    "candidate_digest": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Candidate Digest",
+      "type": "string"
+    },
+    "remaining_issue_codes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Remaining Issue Codes",
+      "type": "array"
+    },
+    "outcome": {
+      "enum": [
+        "improved",
+        "unchanged",
+        "regressed",
+        "transport_failed"
+      ],
+      "title": "Outcome",
+      "type": "string"
+    },
+    "tokens": {
+      "minimum": 0,
+      "title": "Tokens",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "record_id",
+    "source_digest",
+    "target_id",
+    "stage",
+    "candidate_digest",
+    "remaining_issue_codes",
+    "outcome",
+    "tokens"
+  ],
+  "title": "RepairAttempt",
+  "type": "object"
+}

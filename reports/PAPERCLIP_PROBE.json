@@ -1,0 +1,1701 @@
+{
+  "checked_at": "2026-10-03T03:15:55.000351+00:00",
+  "authentication": "none; no credential/environment reads",
+  "response_body_budget": 2000000,
+  "scope": "Public installer/schema GET; read-only search POST and document GET",
+  "requests": [
+    {
+      "name": "installer_text",
+      "url": "https://paperclip.gxl.ai/install.sh",
+      "method": "GET",
+      "payload": null,
+      "status": 200,
+      "final_url": "https://paperclip.gxl.ai/install.sh",
+      "bytes_read": 7296,
+      "cap_reached": false,
+      "sha256": "c35aa194b13ceae7af269a72c489c383a2984dcf64359109245b3113e0d1b704",
+      "content_type": "text/plain",
+      "source_references": [
+        "# Usage: curl -fsSL https://paperclip.gxl.ai/install.sh | bash",
+        "BASE_URL=\"${PAPERCLIP_BASE_URL:-https://paperclip.gxl.ai}\"",
+        "fail \"Python 3 is required. Install it from https://python.org\"",
+        "if command -v curl &>/dev/null; then",
+        "curl -fsSL \"$url\" -o \"$dest\"",
+        "elif command -v wget &>/dev/null; then",
+        "wget -q \"$url\" -O \"$dest\"",
+        "fail \"curl or wget required\""
+      ]
+    },
+    {
+      "name": "openapi",
+      "url": "https://paperclip.gxl.ai/api/v1/openapi.json",
+      "method": "GET",
+      "payload": null,
+      "status": 200,
+      "final_url": "https://paperclip.gxl.ai/api/v1/openapi.json",
+      "bytes_read": 20841,
+      "cap_reached": false,
+      "sha256": "4b1a89addd6aba387e8a119094caaf4b61d56c8ad35bb569436347e0b3a8a775",
+      "content_type": "application/json",
+      "schema": {
+        "openapi": "3.1.0",
+        "info": {
+          "title": "Paperclip API",
+          "description": "JSON search and document API for Paperclip. Default search corpus is abstracts (title+abstract leftover). Authenticate with `X-API-Key: gxl_\u2026` or `Authorization: Bearer gxl_\u2026`.",
+          "version": "1.0.0"
+        },
+        "paths": {
+          "/search": {
+            "post": {
+              "tags": [
+                "v1"
+              ],
+              "summary": "Search papers, trials, FDA documents, patents, or proteins",
+              "operationId": "search_search_post",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/SearchRequest"
+                    }
+                  }
+                },
+                "required": true
+              },
+              "responses": {
+                "200": {
+                  "description": "Successful Response",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/SearchResponse"
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Bad Request",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "401": {
+                  "description": "Unauthorized",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "429": {
+                  "description": "Too Many Requests",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "422": {
+                  "description": "Validation Error",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/HTTPValidationError"
+                      }
+                    }
+                  }
+                }
+              },
+              "security": [
+                {
+                  "HTTPBearer": []
+                }
+              ]
+            }
+          },
+          "/lookup": {
+            "post": {
+              "tags": [
+                "v1"
+              ],
+              "summary": "Retrieve papers by pmid, doi, year, or other metadata fields",
+              "operationId": "lookup_lookup_post",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/LookupRequest"
+                    }
+                  }
+                },
+                "required": true
+              },
+              "responses": {
+                "200": {
+                  "description": "Successful Response",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/LookupResponse"
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Bad Request",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "401": {
+                  "description": "Unauthorized",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "429": {
+                  "description": "Too Many Requests",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "422": {
+                  "description": "Validation Error",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/HTTPValidationError"
+                      }
+                    }
+                  }
+                }
+              },
+              "security": [
+                {
+                  "HTTPBearer": []
+                }
+              ]
+            }
+          },
+          "/citations/batch": {
+            "post": {
+              "tags": [
+                "v1"
+              ],
+              "summary": "Citing-paper lists for up to 10,000 papers in one request",
+              "description": "Bulk read against the citation-graph snapshot.\n\nOne auth check and one round trip for the whole batch; each id costs\nan in-memory array read upstream. Returns, per id: `found`, the\nresolved `work`, the exact `total`, and up to `limit` neighbors in\nthe requested `direction` (identifiers + count by default,\nfull metadata with `hydrate: true`).",
+              "operationId": "citations_batch_citations_batch_post",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/CitationsBatchRequest"
+                    }
+                  }
+                },
+                "required": true
+              },
+              "responses": {
+                "200": {
+                  "description": "Successful Response",
+                  "content": {
+                    "application/json": {
+                      "schema": {}
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Bad Request",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "401": {
+                  "description": "Unauthorized",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "429": {
+                  "description": "Too Many Requests",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "503": {
+                  "description": "Service Unavailable",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "422": {
+                  "description": "Validation Error",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/HTTPValidationError"
+                      }
+                    }
+                  }
+                }
+              },
+              "security": [
+                {
+                  "HTTPBearer": []
+                }
+              ]
+            }
+          },
+          "/claims/support": {
+            "post": {
+              "tags": [
+                "v1"
+              ],
+              "summary": "Evidence for and against a scientific claim",
+              "description": "Hunt the literature for a claim: vector search over full-text passages\nplus a keyword add-on, and a per-passage supports/refutes judgment.\nReturns classified evidence with paper metadata and citation counts.\nPassages are receipts, not rulings \u2014 callers weigh them.",
+              "operationId": "claims_support_claims_support_post",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/ClaimSupportRequest"
+                    }
+                  }
+                },
+                "required": true
+              },
+              "responses": {
+                "200": {
+                  "description": "Successful Response",
+                  "content": {
+                    "application/json": {
+                      "schema": {}
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Bad Request",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "401": {
+                  "description": "Unauthorized",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "429": {
+                  "description": "Too Many Requests",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "503": {
+                  "description": "Service Unavailable",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "422": {
+                  "description": "Validation Error",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/HTTPValidationError"
+                      }
+                    }
+                  }
+                }
+              },
+              "security": [
+                {
+                  "HTTPBearer": []
+                }
+              ]
+            }
+          },
+          "/claims/reputation": {
+            "post": {
+              "tags": [
+                "v1"
+              ],
+              "summary": "Journal and institution quality for claim evidence",
+              "operationId": "claims_reputation_claims_reputation_post",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/ClaimReputationRequest"
+                    }
+                  }
+                },
+                "required": true
+              },
+              "responses": {
+                "200": {
+                  "description": "Successful Response",
+                  "content": {
+                    "application/json": {
+                      "schema": {}
+                    }
+                  }
+                },
+                "401": {
+                  "description": "Unauthorized",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "429": {
+                  "description": "Too Many Requests",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "503": {
+                  "description": "Service Unavailable",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  }
+                },
+                "422": {
+                  "description": "Validation Error",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/HTTPValidationError"
+                      }
+                    }
+                  }
+                }
+              },
+              "security": [
+                {
+                  "HTTPBearer": []
+                }
+              ]
+            }
+          },
+          "/documents/{doc_id}": {
+            "get": {
+              "tags": [
+                "v1"
+              ],
+              "summary": "Get document metadata by id",
+              "operationId": "get_document_documents__doc_id__get",
+              "security": [
+                {
+                  "HTTPBearer": []
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "doc_id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "string",
+                    "title": "Doc Id"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Successful Response",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/DocumentResponse"
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "404": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      }
+                    }
+                  },
+                  "description": "Not Found"
+                },
+                "422": {
+                  "description": "Validation Error",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/HTTPValidationError"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "CitationsBatchRequest": {
+              "properties": {
+                "ids": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "maxItems": 10000,
+                  "minItems": 1,
+                  "title": "Ids",
+                  "description": "Paper identifiers: doi:\u2026, pmid:\u2026, arxiv:\u2026, or a bare DOI."
+                },
+                "direction": {
+                  "type": "string",
+                  "enum": [
+                    "cited_by",
+                    "references"
+                  ],
+                  "title": "Direction",
+                  "description": "cited_by returns the papers citing each id; references returns what each id cites.",
+                  "default": "cited_by"
+                },
+                "limit": {
+                  "type": "integer",
+                  "maximum": 10000.0,
+                  "minimum": 1.0,
+                  "title": "Limit",
+                  "description": "Maximum neighbors returned per id (total counts are always exact).",
+                  "default": 100
+                },
+                "hydrate": {
+                  "type": "boolean",
+                  "title": "Hydrate",
+                  "description": "If true, each neighbor carries full metadata (title, year); default is identifiers + count.",
+                  "default": false
+                }
+              },
+              "type": "object",
+              "required": [
+                "ids"
+              ],
+              "title": "CitationsBatchRequest",
+              "description": "Bulk citation-graph read: the citing-paper (or reference) list for\nup to 10,000 papers in one request. One auth check, one round trip \u2014\nevery lookup is an in-memory array read against the graph snapshot."
+            },
+            "ClaimReputationItem": {
+              "properties": {
+                "doc_id": {
+                  "type": "string",
+                  "maxLength": 200,
+                  "title": "Doc Id"
+                },
+                "journal": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 500
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Journal"
+                },
+                "citations": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Citations"
+                }
+              },
+              "type": "object",
+              "required": [
+                "doc_id"
+              ],
+              "title": "ClaimReputationItem"
+            },
+            "ClaimReputationRequest": {
+              "properties": {
+                "items": {
+                  "items": {
+                    "$ref": "#/components/schemas/ClaimReputationItem"
+                  },
+                  "type": "array",
+                  "maxItems": 1000,
+                  "title": "Items"
+                }
+              },
+              "type": "object",
+              "required": [
+                "items"
+              ],
+              "title": "ClaimReputationRequest",
+              "description": "Journal and institution quality for evidence papers already returned\nby /claims/support (scored on demand, cached per journal)."
+            },
+            "ClaimSupportRequest": {
+              "properties": {
+                "claim": {
+                  "type": "string",
+                  "maxLength": 590,
+                  "minLength": 3,
+                  "title": "Claim",
+                  "description": "The scientific claim to find evidence for and against."
+                },
+                "top_n": {
+                  "type": "integer",
+                  "maximum": 1000.0,
+                  "minimum": 1.0,
+                  "title": "Top N",
+                  "description": "Size of the vector candidate pool, before the keyword add-on.",
+                  "default": 100
+                },
+                "min_conf": {
+                  "type": "number",
+                  "maximum": 0.99,
+                  "minimum": 0.5,
+                  "title": "Min Conf",
+                  "description": "Confidence floor for a passage to be returned as evidence.",
+                  "default": 0.8
+                },
+                "min_sim": {
+                  "type": "number",
+                  "maximum": 1.0,
+                  "minimum": 0.0,
+                  "title": "Min Sim",
+                  "description": "Similarity floor applied to the vector leg.",
+                  "default": 0.0
+                },
+                "hybrid": {
+                  "type": "boolean",
+                  "title": "Hybrid",
+                  "description": "Add the best keyword (BM25) hits the vector leg missed.",
+                  "default": true
+                },
+                "rerank": {
+                  "type": "boolean",
+                  "title": "Rerank",
+                  "description": "Optionally cross-encoder rerank before judging.",
+                  "default": false
+                }
+              },
+              "type": "object",
+              "required": [
+                "claim"
+              ],
+              "title": "ClaimSupportRequest",
+              "description": "Evidence retrieval for a scientific claim: vector search over full-text\npassages plus a keyword add-on, then per-passage supports/refutes\njudgments. Returns classified evidence with paper metadata and citation\ncounts \u2014 receipts, not rulings."
+            },
+            "DocumentResponse": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "title": "Id"
+                },
+                "object": {
+                  "type": "string",
+                  "enum": [
+                    "paper",
+                    "trial",
+                    "fda",
+                    "patent",
+                    "protein",
+                    "document"
+                  ],
+                  "title": "Object"
+                },
+                "title": {
+                  "type": "string",
+                  "title": "Title"
+                },
+                "url": {
+                  "type": "string",
+                  "title": "Url"
+                },
+                "source": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Source"
+                },
+                "published_date": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Published Date"
+                },
+                "authors": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "title": "Authors"
+                },
+                "pmid": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Pmid"
+                },
+                "doi": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Doi"
+                },
+                "year": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Year"
+                },
+                "journal": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Journal"
+                },
+                "identifiers": {
+                  "$ref": "#/components/schemas/Identifiers"
+                },
+                "abstract": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Abstract"
+                },
+                "meta": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Meta"
+                }
+              },
+              "type": "object",
+              "required": [
+                "id",
+                "object",
+                "title",
+                "url"
+              ],
+              "title": "DocumentResponse"
+            },
+            "ErrorDetail": {
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "title": "Type"
+                },
+                "message": {
+                  "type": "string",
+                  "title": "Message"
+                },
+                "request_id": {
+                  "type": "string",
+                  "title": "Request Id"
+                }
+              },
+              "type": "object",
+              "required": [
+                "type",
+                "message",
+                "request_id"
+              ],
+              "title": "ErrorDetail"
+            },
+            "ErrorResponse": {
+              "properties": {
+                "error": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              },
+              "type": "object",
+              "required": [
+                "error"
+              ],
+              "title": "ErrorResponse"
+            },
+            "HTTPValidationError": {
+              "properties": {
+                "detail": {
+                  "items": {
+                    "$ref": "#/components/schemas/ValidationError"
+                  },
+                  "type": "array",
+                  "title": "Detail"
+                }
+              },
+              "type": "object",
+              "title": "HTTPValidationError"
+            },
+            "Identifiers": {
+              "properties": {
+                "pmc": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Pmc"
+                },
+                "pmid": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Pmid"
+                },
+                "doi": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Doi"
+                },
+                "nct": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Nct"
+                },
+                "arxiv": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Arxiv"
+                }
+              },
+              "type": "object",
+              "title": "Identifiers"
+            },
+            "LookupRequest": {
+              "properties": {
+                "field": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Field",
+                  "description": "CLI lookup field: pmid, doi, pmc, arxiv, title, author, journal, year, keywords, type."
+                },
+                "value": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Value",
+                  "description": "Value for `field`."
+                },
+                "pmid": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Pmid"
+                },
+                "doi": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Doi"
+                },
+                "pmc": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Pmc"
+                },
+                "arxiv": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Arxiv"
+                },
+                "title": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Title"
+                },
+                "author": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Author"
+                },
+                "journal": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Journal"
+                },
+                "year": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "maximum": 3000.0,
+                      "minimum": 1000.0
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Year"
+                },
+                "keywords": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Keywords"
+                },
+                "num_results": {
+                  "type": "integer",
+                  "maximum": 100.0,
+                  "minimum": 1.0,
+                  "title": "Num Results",
+                  "default": 25
+                }
+              },
+              "type": "object",
+              "title": "LookupRequest",
+              "description": "Retrieve papers by identifier or metadata field.\n\nSend one of the first-class keys (`pmid`, `doi`, `pmc`, `year`, \u2026)\nor the generic `field` + `value` pair. Response papers use the same\ncitable shape as search (`id`, `title`, `pmid`, `doi`, `year`, `source`)."
+            },
+            "LookupResponse": {
+              "properties": {
+                "query": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Query"
+                },
+                "papers": {
+                  "items": {
+                    "$ref": "#/components/schemas/SearchHit"
+                  },
+                  "type": "array",
+                  "title": "Papers"
+                },
+                "results": {
+                  "items": {
+                    "$ref": "#/components/schemas/SearchHit"
+                  },
+                  "type": "array",
+                  "title": "Results"
+                },
+                "usage": {
+                  "$ref": "#/components/schemas/SearchUsage"
+                }
+              },
+              "type": "object",
+              "required": [
+                "query",
+                "papers",
+                "results",
+                "usage"
+              ],
+              "title": "LookupResponse"
+            },
+            "SearchContents": {
+              "properties": {
+                "abstract": {
+                  "type": "boolean",
+                  "title": "Abstract",
+                  "default": true
+                },
+                "highlights": {
+                  "type": "boolean",
+                  "title": "Highlights",
+                  "default": false
+                },
+                "text": {
+                  "type": "boolean",
+                  "title": "Text",
+                  "default": false
+                }
+              },
+              "type": "object",
+              "title": "SearchContents"
+            },
+            "SearchFilters": {
+              "properties": {
+                "min_year": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "maximum": 3000.0,
+                      "minimum": 1000.0
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Min Year",
+                  "description": "Inclusive lower bound on publication year, applied in the index."
+                },
+                "max_year": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "maximum": 3000.0,
+                      "minimum": 1000.0
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Max Year",
+                  "description": "Inclusive upper bound on publication year, applied in the index."
+                },
+                "year": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "maximum": 3000.0,
+                      "minimum": 1000.0
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Year",
+                  "description": "Exact publication year. Hits with unknown year are kept."
+                },
+                "published_after": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Published After",
+                  "description": "Inclusive lower bound as YYYY-MM-DD or YYYY. Year-granular alias of min_year.",
+                  "examples": [
+                    "2023-01-01"
+                  ]
+                },
+                "published_before": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Published Before",
+                  "description": "Inclusive upper bound as YYYY-MM-DD or YYYY. Year-granular alias of max_year.",
+                  "examples": [
+                    "2024-12-31"
+                  ]
+                },
+                "author": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Author"
+                },
+                "journal": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Journal"
+                }
+              },
+              "type": "object",
+              "title": "SearchFilters"
+            },
+            "SearchHit": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "title": "Id",
+                  "description": "Paperclip document id (work id / PMC / preprint id)."
+                },
+                "object": {
+                  "type": "string",
+                  "enum": [
+                    "paper",
+                    "trial",
+                    "fda",
+                    "patent",
+                    "protein",
+                    "document"
+                  ],
+                  "title": "Object"
+                },
+                "title": {
+                  "type": "string",
+                  "title": "Title"
+                },
+                "url": {
+                  "type": "string",
+                  "title": "Url"
+                },
+                "source": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Source"
+                },
+                "published_date": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Published Date"
+                },
+                "authors": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "title": "Authors"
+                },
+                "pmid": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Pmid",
+                  "description": "PubMed id, or absent. Never the internal document id."
+                },
+                "doi": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Doi",
+                  "description": "Bare DOI, or absent."
+                },
+                "year": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Year",
+                  "description": "Publication year. Null when unknown \u2014 the hit is still returned."
+                },
+                "journal": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Journal",
+                  "description": "Journal or venue, when known."
+                },
+                "identifiers": {
+                  "$ref": "#/components/schemas/Identifiers"
+                },
+                "score": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Score"
+                },
+                "snippet": {
+                  "type": "string",
+                  "title": "Snippet",
+                  "default": ""
+                },
+                "highlights": {
+                  "anyOf": [
+                    {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Highlights"
+                },
+                "text": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Text"
+                },
+                "abstract": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Abstract"
+                }
+              },
+              "type": "object",
+              "required": [
+                "id",
+                "object",
+                "title",
+                "url"
+              ],
+              "title": "SearchHit"
+            },
+            "SearchRequest": {
+              "properties": {
+                "query": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Query",
+                  "description": "Search query. Required unless `queries` is set."
+                },
+                "queries": {
+                  "anyOf": [
+                    {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array",
+                      "maxItems": 20
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Queries",
+                  "description": "Fan-out: search several phrasings in one call. Candidate pools are fused server-side (reciprocal rank fusion), deduplicated (PMID, then DOI, then normalized title) and reranked once against `rerank_query` (default: `query` or the first entry). Max 20."
+                },
+                "rerank_query": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Rerank Query",
+                  "description": "Question the fused candidate pool is reranked against. Defaults to `query` (or the first of `queries`). Use it to pass the user's original question when `queries` are keyword rewrites."
+                },
+                "expand": {
+                  "type": "boolean",
+                  "title": "Expand",
+                  "description": "Generate additional phrasings of the query with an LLM (synonyms, gene symbols, sub-topics) and fan them out like `queries`. Improves recall on broad questions at the cost of latency.",
+                  "default": false
+                },
+                "num_results": {
+                  "type": "integer",
+                  "maximum": 200.0,
+                  "minimum": 1.0,
+                  "title": "Num Results",
+                  "description": "Papers to return (1\u2013200). The engine retrieves a pool several times deeper, reranks the whole pool, then returns the top `num_results`. Ranking reorders; it does not filter.",
+                  "default": 50
+                },
+                "sources": {
+                  "anyOf": [
+                    {
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "papers",
+                          "pmc",
+                          "biorxiv",
+                          "medrxiv",
+                          "arxiv",
+                          "abstracts",
+                          "peer_reviews",
+                          "nature_reviews",
+                          "openreview",
+                          "fda",
+                          "fda/us",
+                          "fda/jp",
+                          "fda/eu",
+                          "trials",
+                          "trials/us",
+                          "trials/cn",
+                          "trials/jp",
+                          "trials/eu",
+                          "trials/intl",
+                          "patents",
+                          "proteins",
+                          "uniprot",
+                          "pdb",
+                          "chembl",
+                          "clipboard"
+                        ]
+                      },
+                      "type": "array"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Sources",
+                  "description": "Corpus. Default is abstracts (title+abstract leftover via the Qwen chunk index \u2014 PubMed/Crossref, not OpenAlex, not PMC). `pmc` / `papers` are a different full-text collection. Choose explicitly."
+                },
+                "filters": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/SearchFilters"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "ranking": {
+                  "type": "string",
+                  "enum": [
+                    "hybrid",
+                    "bm25",
+                    "vector"
+                  ],
+                  "title": "Ranking",
+                  "description": "hybrid = BM25+vector fused; bm25 = lexical (named-entity / rare-disease); vector = conceptual. Recency is a separate knob.",
+                  "default": "hybrid"
+                },
+                "recency": {
+                  "type": "string",
+                  "enum": [
+                    "off",
+                    "boost"
+                  ],
+                  "title": "Recency",
+                  "description": "off = full corpus (default). boost = last-~2-years window. Any year bound disables the recency window even if boost is set.",
+                  "default": "off"
+                },
+                "contents": {
+                  "$ref": "#/components/schemas/SearchContents"
+                },
+                "resolved_queries": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "title": "Resolved Queries"
+                }
+              },
+              "type": "object",
+              "title": "SearchRequest"
+            },
+            "SearchResponse": {
+              "properties": {
+                "search_id": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Search Id"
+                },
+                "query": {
+                  "type": "string",
+                  "title": "Query"
+                },
+                "queries": {
+                  "anyOf": [
+                    {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Queries"
+                },
+                "papers": {
+                  "items": {
+                    "$ref": "#/components/schemas/SearchHit"
+                  },
+                  "type": "array",
+                  "title": "Papers"
+                },
+                "results": {
+                  "items": {
+                    "$ref": "#/components/schemas/SearchHit"
+                  },
+                  "type": "array",
+                  "title": "Results"
+                },
+                "usage": {
+                  "$ref": "#/components/schemas/SearchUsage"
+                },
+                "resolved_route": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Resolved Route"
+                }
+              },
+              "type": "object",
+              "required": [
+                "query",
+                "papers",
+                "results",
+                "usage"
+              ],
+              "title": "SearchResponse"
+            },
+            "SearchUsage": {
+              "properties": {
+                "searches": {
+                  "type": "integer",
+                  "title": "Searches",
+                  "default": 1
+                },
+                "contents": {
+                  "type": "integer",
+                  "title": "Contents",
+                  "default": 0
+                },
+                "elapsed_ms": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Elapsed Ms"
+                }
+              },
+              "type": "object",
+              "title": "SearchUsage"
+            },
+            "ValidationError": {
+              "properties": {
+                "loc": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "integer"
+                      }
+                    ]
+                  },
+                  "type": "array",
+                  "title": "Location"
+                },
+                "msg": {
+                  "type": "string",
+                  "title": "Message"
+                },
+                "type": {
+                  "type": "string",
+                  "title": "Error Type"
+                }
+              },
+              "type": "object",
+              "required": [
+                "loc",
+                "msg",
+                "type"
+              ],
+              "title": "ValidationError"
+            }
+          },
+          "securitySchemes": {
+            "HTTPBearer": {
+              "type": "http",
+              "scheme": "bearer"
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "/api/v1"
+          }
+        ]
+      }
+    },
+    {
+      "name": "pmc_search",
+      "url": "https://paperclip.gxl.ai/api/v1/search",
+      "method": "POST",
+      "payload": {
+        "query": "case report",
+        "sources": [
+          "pmc"
+        ],
+        "num_results": 1,
+        "ranking": "bm25",
+        "expand": false
+      },
+      "status": 401,
+      "final_url": "https://paperclip.gxl.ai/api/v1/search",
+      "bytes_read": 135,
+      "cap_reached": false,
+      "sha256": "55815611185ef5775abc6455ec0f200c0501d68ea3103bbcba3977922470ad8d",
+      "content_type": "application/json",
+      "body": "{\"error\":{\"type\":\"auth_error\",\"message\":\"Not authenticated - no credentials provided\",\"request_id\":\"e099fe0b127647329d01a36eb1dcd795\"}}"
+    },
+    {
+      "name": "pmc_document",
+      "url": "https://paperclip.gxl.ai/api/v1/documents/PMC8654144",
+      "method": "GET",
+      "payload": null,
+      "status": 401,
+      "final_url": "https://paperclip.gxl.ai/api/v1/documents/PMC8654144",
+      "bytes_read": 135,
+      "cap_reached": false,
+      "sha256": "9ebb31979abf8a381a75980e469d24bb86af8ec7e5dc8e60b88ca3c0971bb8ee",
+      "content_type": "application/json",
+      "body": "{\"error\":{\"type\":\"auth_error\",\"message\":\"Not authenticated - no credentials provided\",\"request_id\":\"e15aad069a0a4cffa0b3e0b05d35c862\"}}"
+    }
+  ],
+  "total_response_body_bytes": 28407
+}

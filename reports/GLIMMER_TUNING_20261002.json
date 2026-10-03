@@ -1,0 +1,3037 @@
+{
+  "archive": "/Users/mkieffer/Downloads/run-20261002-120538-results.tar.gz",
+  "campaign_id": "ec0c3e5a3926485f390be84eccb3c9cf23c44278d09044f8e676d3c4a4968064",
+  "fixture_manifest_sha256": "4c32ad96674b353c69a62e22f720c789c49c51824836082df65a0f513a6d08a2",
+  "fixture_manifest_matches": true,
+  "first_prompt_hashes_checked": 1584,
+  "first_prompt_hash_mismatches": [],
+  "gpu_drain_snapshots_status": {
+    "released": 28
+  },
+  "gpu_status": "completed",
+  "cleanup_status": "deleted",
+  "gpu_stage_seconds": 24446.250766102225,
+  "layout_failures": [
+    {
+      "status": "failed",
+      "layout": "dp8-tp1-dflash-kvfp8",
+      "experimental": true,
+      "error_type": "RuntimeError",
+      "error": "Serving process exited during startup:\nReplica 1 exited 2; /blue/cai6734/ehr_agent/op2-glimmer-tuning/run-20261002-120538/results/glimmer-fp8/layouts/dp8-tp1-dflash-kvfp8/servers/server-1.log\nINFO:    underlay of /usr/bin/nvidia-debugdump required more than 50 (478) bind mounts\nINFO:    underlay of /usr/share/nvidia/nvoptix.bin required more than 50 (80) bind mounts\nusage: main.py [-h] [-v]\n               {chat,complete,serve,launch,bench,collect-env,run-batch} ...\nmain.py: error: unrecognized arguments: --calculate-kv-scales\n"
+    }
+  ],
+  "best_measured_layout": {
+    "layout": {
+      "name": "dp8-tp1-dflash-b8192",
+      "replicas": 8,
+      "tensor_parallel": 1,
+      "speculation": "dflash",
+      "max_batched_tokens": 8192,
+      "experimental": true
+    },
+    "concurrency_per_replica": 64,
+    "aggregate_output_tokens_per_second": 18714.974329915458,
+    "valid_tasks_per_second": 7.820724423507975,
+    "stability": {
+      "passed": true,
+      "paired_seeds": [
+        {
+          "arm": "medium_seed42",
+          "reference_delivered": 115,
+          "candidate_delivered": 120,
+          "facts_lost": -5,
+          "valid_tasks_lost": -7,
+          "additional_forbidden_hits": 0,
+          "passed": true
+        },
+        {
+          "arm": "medium_seed1729",
+          "reference_delivered": 91,
+          "candidate_delivered": 121,
+          "facts_lost": -30,
+          "valid_tasks_lost": -3,
+          "additional_forbidden_hits": 0,
+          "passed": true
+        },
+        {
+          "arm": "medium_seed5724",
+          "reference_delivered": 96,
+          "candidate_delivered": 95,
+          "facts_lost": 1,
+          "valid_tasks_lost": -1,
+          "additional_forbidden_hits": 0,
+          "passed": true
+        }
+      ],
+      "notice": "Partial automatic checklist stability, not medical equivalence or a production deployment approval."
+    }
+  },
+  "quality_verification": {
+    "confirm0_medium_seed42": {
+      "tasks_read": 176,
+      "patients": 11,
+      "first_valid": 139,
+      "status_counts": {
+        "valid": 172,
+        "failed": 4
+      },
+      "final_errors": {
+        "nonliteral time evidence": 3,
+        "/items/0/evidence/0: quote is not an exact contiguous source substring": 1
+      },
+      "recomputed_scores": {
+        "raw": {
+          "required_checks": 161,
+          "matched": 139,
+          "missing_or_wrong": 22,
+          "checklist_retention": 0.8633540372670807,
+          "checks_with_parseable_section": 161,
+          "retention_conditional_on_available_section": 0.8633540372670807,
+          "forbidden_checks": 36,
+          "forbidden_violations": 0,
+          "forbidden_checks_unavailable": 0,
+          "warning": "Partial checklist; neither full clinical recall nor precision. Unavailable sections are missing delivery, not evidence of medically false content."
+        },
+        "delivered": {
+          "required_checks": 161,
+          "matched": 120,
+          "missing_or_wrong": 41,
+          "checklist_retention": 0.7453416149068323,
+          "checks_with_parseable_section": 137,
+          "retention_conditional_on_available_section": 0.8759124087591241,
+          "forbidden_checks": 36,
+          "forbidden_violations": 0,
+          "forbidden_checks_unavailable": 4,
+          "warning": "Partial checklist; neither full clinical recall nor precision. Unavailable sections are missing delivery, not evidence of medically false content."
+        }
+      },
+      "saved_scores_match": true,
+      "secondary_status_counts": {
+        "figure_attribution/failed": 18,
+        "figure_attribution/valid": 13,
+        "roster/valid": 7,
+        "roster/failed": 2
+      }
+    },
+    "confirm0_medium_seed1729": {
+      "tasks_read": 176,
+      "patients": 11,
+      "first_valid": 136,
+      "status_counts": {
+        "valid": 170,
+        "failed": 6
+      },
+      "final_errors": {
+        "nonliteral time evidence": 1,
+        "nonliteral source evidence": 1,
+        "no parseable final JSON": 1,
+        "/items/0/evidence/0: quote is not an exact contiguous source substring; /items/6/evidence/0: quote is not an exact contiguous source substring; /documentation/evidence/0: quote is ": 1,
+        "/items/29/evidence/0: quote is not an exact contiguous source substring; /items/30/evidence/0: quote is not an exact contiguous source substring": 1,
+        "/items/0/evidence/0: quote is not an exact contiguous source substring": 1
+      },
+      "recomputed_scores": {
+        "raw": {
+          "required_checks": 161,
+          "matched": 134,
+          "missing_or_wrong": 27,
+          "checklist_retention": 0.8322981366459627,
+          "checks_with_parseable_section": 161,
+          "retention_conditional_on_available_section": 0.8322981366459627,
+          "forbidden_checks": 36,
+          "forbidden_violations": 0,
+          "forbidden_checks_unavailable": 0,
+          "warning": "Partial checklist; neither full clinical recall nor precision. Unavailable sections are missing delivery, not evidence of medically false content."
+        },
+        "delivered": {
+          "required_checks": 161,
+          "matched": 121,
+          "missing_or_wrong": 40,
+          "checklist_retention": 0.7515527950310559,
+          "checks_with_parseable_section": 139,
+          "retention_conditional_on_available_section": 0.8705035971223022,
+          "forbidden_checks": 36,
+          "forbidden_violations": 0,
+          "forbidden_checks_unavailable": 4,
+          "warning": "Partial checklist; neither full clinical recall nor precision. Unavailable sections are missing delivery, not evidence of medically false content."
+        }
+      },
+      "saved_scores_match": true,
+      "secondary_status_counts": {
+        "figure_attribution/failed": 16,
+        "figure_attribution/valid": 15,
+        "roster/valid": 8,
+        "roster/failed": 1
+      }
+    },
+    "confirm1_medium_seed5724": {
+      "tasks_read": 176,
+      "patients": 11,
+      "first_valid": 135,
+      "status_counts": {
+        "valid": 165,
+        "failed": 11
+      },
+      "final_errors": {
+        "nonliteral time evidence": 4,
+        "nonliteral source evidence": 2,
+        "no parseable final JSON": 3,
+        "'limitations' is a required property\n\nFailed validating 'required' in schema:\n    {'$defs': {'Citation': {'additionalProperties': False,\n                            'properties': {": 1,
+        "/items/7/evidence/0: quote is not an exact contiguous source substring": 1
+      },
+      "recomputed_scores": {
+        "raw": {
+          "required_checks": 161,
+          "matched": 132,
+          "missing_or_wrong": 29,
+          "checklist_retention": 0.8198757763975155,
+          "checks_with_parseable_section": 161,
+          "retention_conditional_on_available_section": 0.8198757763975155,
+          "forbidden_checks": 36,
+          "forbidden_violations": 0,
+          "forbidden_checks_unavailable": 0,
+          "warning": "Partial checklist; neither full clinical recall nor precision. Unavailable sections are missing delivery, not evidence of medically false content."
+        },
+        "delivered": {
+          "required_checks": 161,
+          "matched": 108,
+          "missing_or_wrong": 53,
+          "checklist_retention": 0.6708074534161491,
+          "checks_with_parseable_section": 135,
+          "retention_conditional_on_available_section": 0.8,
+          "forbidden_checks": 36,
+          "forbidden_violations": 0,
+          "forbidden_checks_unavailable": 6,
+          "warning": "Partial checklist; neither full clinical recall nor precision. Unavailable sections are missing delivery, not evidence of medically false content."
+        }
+      },
+      "saved_scores_match": true,
+      "secondary_status_counts": {
+        "roster/valid": 6,
+        "figure_attribution/valid": 19,
+        "figure_attribution/failed": 12,
+        "roster/failed": 3
+      }
+    },
+    "medium_seed1729": {
+      "tasks_read": 176,
+      "patients": 11,
+      "first_valid": 133,
+      "status_counts": {
+        "valid": 167,
+        "failed": 9
+      },
+      "final_errors": {
+        "nonliteral time evidence": 5,
+        "/items/0/evidence/0: quote is not an exact contiguous source substring; /items/1/evidence/0: quote is not an exact contiguous source substring": 1,
+        "no parseable final JSON": 2,
+        "/items/12/evidence/0: quote is not an exact contiguous source substring": 1
+      },
+      "recomputed_scores": {
+        "raw": {
+          "required_checks": 161,
+          "matched": 140,
+          "missing_or_wrong": 21,
+          "checklist_retention": 0.8695652173913043,
+          "checks_with_parseable_section": 161,
+          "retention_conditional_on_available_section": 0.8695652173913043,
+          "forbidden_checks": 36,
+          "forbidden_violations": 0,
+          "forbidden_checks_unavailable": 0,
+          "warning": "Partial checklist; neither full clinical recall nor precision. Unavailable sections are missing delivery, not evidence of medically false content."
+        },
+        "delivered": {
+          "required_checks": 161,
+          "matched": 91,
+          "missing_or_wrong": 70,
+          "checklist_retention": 0.5652173913043478,
+          "checks_with_parseable_section": 110,
+          "retention_conditional_on_available_section": 0.8272727272727273,
+          "forbidden_checks": 36,
+          "forbidden_violations": 0,
+          "forbidden_checks_unavailable": 10,
+          "warning": "Partial checklist; neither full clinical recall nor precision. Unavailable sections are missing delivery, not evidence of medically false content."
+        }
+      },
+      "saved_scores_match": true,
+      "secondary_status_counts": {
+        "figure_attribution/failed": 16,
+        "roster/valid": 7,
+        "figure_attribution/valid": 15,
+        "roster/failed": 2
+      }
+    },
+    "medium_seed42": {
+      "tasks_read": 176,
+      "patients": 11,
+      "first_valid": 134,
+      "status_counts": {
+        "valid": 165,
+        "failed": 11
+      },
+      "final_errors": {
+        "nonliteral time evidence": 3,
+        "nonliteral source evidence": 3,
+        "/items/7/evidence/0: quote is not an exact contiguous source substring": 1,
+        "/items/4/evidence/0: quote is not an exact contiguous source substring": 1,
+        "1 validation error for Timeline\n  Value error, Cyclic temporal anchors [type=value_error, input_value={'events': [{'event_id': ...in mixed case columns']}, input_type=dict]\n    For": 1,
+        "Multiple conflicting output objects; request a single answer": 1,
+        ": value_error: Value error, Duplicate tumor_ref; references must uniquely identify tumors.": 1
+      },
+      "recomputed_scores": {
+        "raw": {
+          "required_checks": 161,
+          "matched": 141,
+          "missing_or_wrong": 20,
+          "checklist_retention": 0.8757763975155279,
+          "checks_with_parseable_section": 161,
+          "retention_conditional_on_available_section": 0.8757763975155279,
+          "forbidden_checks": 36,
+          "forbidden_violations": 0,
+          "forbidden_checks_unavailable": 0,
+          "warning": "Partial checklist; neither full clinical recall nor precision. Unavailable sections are missing delivery, not evidence of medically false content."
+        },
+        "delivered": {
+          "required_checks": 161,
+          "matched": 115,
+          "missing_or_wrong": 46,
+          "checklist_retention": 0.7142857142857143,
+          "checks_with_parseable_section": 135,
+          "retention_conditional_on_available_section": 0.8518518518518519,
+          "forbidden_checks": 36,
+          "forbidden_violations": 0,
+          "forbidden_checks_unavailable": 6,
+          "warning": "Partial checklist; neither full clinical recall nor precision. Unavailable sections are missing delivery, not evidence of medically false content."
+        }
+      },
+      "saved_scores_match": true,
+      "secondary_status_counts": {
+        "figure_attribution/failed": 16,
+        "figure_attribution/valid": 15,
+        "roster/valid": 7,
+        "roster/failed": 2
+      }
+    },
+    "medium_seed5724": {
+      "tasks_read": 176,
+      "patients": 11,
+      "first_valid": 138,
+      "status_counts": {
+        "valid": 168,
+        "failed": 8
+      },
+      "final_errors": {
+        "nonliteral time evidence": 3,
+        "no parseable final JSON": 1,
+        ": value_error: Value error, Limited extraction requires a stated limitation": 1,
+        "/items/4/evidence/0: quote is not an exact contiguous source substring; /items/5/evidence/0: quote is not an exact contiguous source substring": 1,
+        "nonliteral source evidence": 1,
+        "/items/9/evidence/0: quote is not an exact contiguous source substring": 1
+      },
+      "recomputed_scores": {
+        "raw": {
+          "required_checks": 161,
+          "matched": 145,
+          "missing_or_wrong": 16,
+          "checklist_retention": 0.9006211180124224,
+          "checks_with_parseable_section": 161,
+          "retention_conditional_on_available_section": 0.9006211180124224,
+          "forbidden_checks": 36,
+          "forbidden_violations": 0,
+          "forbidden_checks_unavailable": 0,
+          "warning": "Partial checklist; neither full clinical recall nor precision. Unavailable sections are missing delivery, not evidence of medically false content."
+        },
+        "delivered": {
+          "required_checks": 161,
+          "matched": 96,
+          "missing_or_wrong": 65,
+          "checklist_retention": 0.5962732919254659,
+          "checks_with_parseable_section": 111,
+          "retention_conditional_on_available_section": 0.8648648648648649,
+          "forbidden_checks": 36,
+          "forbidden_violations": 0,
+          "forbidden_checks_unavailable": 9,
+          "warning": "Partial checklist; neither full clinical recall nor precision. Unavailable sections are missing delivery, not evidence of medically false content."
+        }
+      },
+      "saved_scores_match": true,
+      "secondary_status_counts": {
+        "figure_attribution/valid": 18,
+        "roster/failed": 1,
+        "figure_attribution/failed": 13,
+        "roster/valid": 8
+      }
+    },
+    "confirm1_medium_seed1729": {
+      "tasks_read": 176,
+      "patients": 11,
+      "first_valid": 142,
+      "status_counts": {
+        "valid": 169,
+        "failed": 7
+      },
+      "final_errors": {
+        "nonliteral source evidence": 1,
+        "nonliteral time evidence": 4,
+        ": value_error: Value error, Duplicate tumor_ref; references must uniquely identify tumors.": 1,
+        ": value_error: Value error, Limited extraction requires a stated limitation": 1
+      },
+      "recomputed_scores": {
+        "raw": {
+          "required_checks": 161,
+          "matched": 138,
+          "missing_or_wrong": 23,
+          "checklist_retention": 0.8571428571428571,
+          "checks_with_parseable_section": 161,
+          "retention_conditional_on_available_section": 0.8571428571428571,
+          "forbidden_checks": 36,
+          "forbidden_violations": 0,
+          "forbidden_checks_unavailable": 0,
+          "warning": "Partial checklist; neither full clinical recall nor precision. Unavailable sections are missing delivery, not evidence of medically false content."
+        },
+        "delivered": {
+          "required_checks": 161,
+          "matched": 94,
+          "missing_or_wrong": 67,
+          "checklist_retention": 0.5838509316770186,
+          "checks_with_parseable_section": 110,
+          "retention_conditional_on_available_section": 0.8545454545454545,
+          "forbidden_checks": 36,
+          "forbidden_violations": 0,
+          "forbidden_checks_unavailable": 8,
+          "warning": "Partial checklist; neither full clinical recall nor precision. Unavailable sections are missing delivery, not evidence of medically false content."
+        }
+      },
+      "saved_scores_match": true,
+      "secondary_status_counts": {
+        "figure_attribution/valid": 16,
+        "figure_attribution/failed": 15,
+        "roster/valid": 8,
+        "roster/failed": 1
+      }
+    },
+    "confirm1_medium_seed42": {
+      "tasks_read": 176,
+      "patients": 11,
+      "first_valid": 139,
+      "status_counts": {
+        "valid": 167,
+        "failed": 9
+      },
+      "final_errors": {
+        "no parseable final JSON": 1,
+        "/items/0/evidence/0: quote is not an exact contiguous source substring; /documentation/evidence/1: quote is not an exact contiguous source substring": 1,
+        "nonliteral time evidence": 5,
+        "nonliteral source evidence": 1,
+        "/items/16/evidence/0: quote is not an exact contiguous source substring": 1
+      },
+      "recomputed_scores": {
+        "raw": {
+          "required_checks": 161,
+          "matched": 149,
+          "missing_or_wrong": 12,
+          "checklist_retention": 0.9254658385093167,
+          "checks_with_parseable_section": 161,
+          "retention_conditional_on_available_section": 0.9254658385093167,
+          "forbidden_checks": 36,
+          "forbidden_violations": 0,
+          "forbidden_checks_unavailable": 0,
+          "warning": "Partial checklist; neither full clinical recall nor precision. Unavailable sections are missing delivery, not evidence of medically false content."
+        },
+        "delivered": {
+          "required_checks": 161,
+          "matched": 83,
+          "missing_or_wrong": 78,
+          "checklist_retention": 0.515527950310559,
+          "checks_with_parseable_section": 90,
+          "retention_conditional_on_available_section": 0.9222222222222223,
+          "forbidden_checks": 36,
+          "forbidden_violations": 0,
+          "forbidden_checks_unavailable": 12,
+          "warning": "Partial checklist; neither full clinical recall nor precision. Unavailable sections are missing delivery, not evidence of medically false content."
+        }
+      },
+      "saved_scores_match": true,
+      "secondary_status_counts": {
+        "figure_attribution/failed": 17,
+        "roster/valid": 9,
+        "figure_attribution/valid": 14
+      }
+    },
+    "confirm0_medium_seed5724": {
+      "tasks_read": 176,
+      "patients": 11,
+      "first_valid": 141,
+      "status_counts": {
+        "valid": 169,
+        "failed": 7
+      },
+      "final_errors": {
+        "nonliteral time evidence": 5,
+        "/items/8/evidence/0: source_section is not present in source; /items/9/evidence/0: source_section is not present in source; /items/10/evidence/0: source_section is not present in s": 1,
+        "no parseable final JSON": 1
+      },
+      "recomputed_scores": {
+        "raw": {
+          "required_checks": 161,
+          "matched": 131,
+          "missing_or_wrong": 30,
+          "checklist_retention": 0.8136645962732919,
+          "checks_with_parseable_section": 159,
+          "retention_conditional_on_available_section": 0.8238993710691824,
+          "forbidden_checks": 36,
+          "forbidden_violations": 0,
+          "forbidden_checks_unavailable": 0,
+          "warning": "Partial checklist; neither full clinical recall nor precision. Unavailable sections are missing delivery, not evidence of medically false content."
+        },
+        "delivered": {
+          "required_checks": 161,
+          "matched": 95,
+          "missing_or_wrong": 66,
+          "checklist_retention": 0.5900621118012422,
+          "checks_with_parseable_section": 114,
+          "retention_conditional_on_available_section": 0.8333333333333334,
+          "forbidden_checks": 36,
+          "forbidden_violations": 0,
+          "forbidden_checks_unavailable": 8,
+          "warning": "Partial checklist; neither full clinical recall nor precision. Unavailable sections are missing delivery, not evidence of medically false content."
+        }
+      },
+      "saved_scores_match": true,
+      "secondary_status_counts": {
+        "figure_attribution/valid": 19,
+        "roster/valid": 9,
+        "figure_attribution/failed": 12
+      }
+    }
+  },
+  "vision_evaluations": {
+    "ordinary": {
+      "status": "completed",
+      "figures_per_seed": 31,
+      "seeds": 3,
+      "rows": 93,
+      "asset_status_counts": {
+        "ready": 31
+      },
+      "task_status_counts": {
+        "caption_attribution": {
+          "failed": 84,
+          "valid": 9
+        },
+        "pixel_attribution": {
+          "failed": 80,
+          "valid": 13
+        },
+        "description": {
+          "valid": 28,
+          "failed": 65
+        },
+        "joint_analysis": {
+          "failed": 87,
+          "valid": 6
+        }
+      },
+      "wall_seconds": 1044.8516107806936,
+      "output_tokens": 1081019,
+      "aggregate_output_tokens_per_second": 1034.614857120508,
+      "joint_separate_attribution_agreement": {
+        "comparable": 4,
+        "agree": 4,
+        "notice": "Agreement on panel/patient/scope/subject is not attribution accuracy."
+      },
+      "semantic_review": "pending; schema/citation validity does not establish pixel accuracy or patient ownership"
+    },
+    "dflash": {
+      "status": "completed",
+      "figures_per_seed": 31,
+      "seeds": 3,
+      "rows": 93,
+      "asset_status_counts": {
+        "ready": 31
+      },
+      "task_status_counts": {
+        "caption_attribution": {
+          "failed": 84,
+          "valid": 9
+        },
+        "pixel_attribution": {
+          "failed": 80,
+          "valid": 13
+        },
+        "description": {
+          "valid": 27,
+          "failed": 66
+        },
+        "joint_analysis": {
+          "failed": 87,
+          "valid": 6
+        }
+      },
+      "wall_seconds": 244.01114188320935,
+      "output_tokens": 1073529,
+      "aggregate_output_tokens_per_second": 4399.508119648985,
+      "joint_separate_attribution_agreement": {
+        "comparable": 2,
+        "agree": 2,
+        "notice": "Agreement on panel/patient/scope/subject is not attribution accuracy."
+      },
+      "semantic_review": "pending; schema/citation validity does not establish pixel accuracy or patient ownership"
+    }
+  },
+  "vision_error_counts": {
+    "ordinary/caption_attribution": {
+      "nonliteral source evidence": 75,
+      "no parseable final JSON": 3,
+      "Evidence does not reference this figure or its caption": 6
+    },
+    "ordinary/pixel_attribution": {
+      "nonliteral source evidence": 69,
+      "Wrong/unknown figure": 6,
+      "no parseable final JSON": 3,
+      "Evidence does not reference this figure or its caption": 2
+    },
+    "ordinary/joint_analysis": {
+      "no parseable final JSON": 19,
+      "1 validation error for JointFigureAnalysis\nattribution.limitations\n  Field required [type=missing, input_value={'figure_id': 'Fig6', 'as...in primitive stroma.'}]}, input_type=dict": 1,
+      "nonliteral source evidence": 33,
+      "Evidence does not reference this figure or its caption": 11,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'Fig2', 'as...printed in the image.']}, input_type=dict]\n    For furthe": 1,
+      "1 validation error for JointFigureAnalysis\nattribution.limitations\n  Field required [type=missing, input_value={'figure_id': 'Fig1', 'as...ular molar swelling.'}]}, input_type=dict": 1,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'F4', 'assi...atient ID in caption.']}, input_type=dict]\n    For furthe": 1,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'tpg220342-...ate genomic diagrams.']}, input_type=dict]\n    For furthe": 1,
+      "Multiple conflicting output objects; request a single answer": 7,
+      "1 validation error for JointFigureAnalysis\nattribution.limitations\n  Field required [type=missing, input_value={'figure_id': 'Fig1', 'as...he described lesion.'}]}, input_type=dict": 1,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'fig1-15910...on remains aggregate.']}, input_type=dict]\n    For furthe": 1,
+      "1 validation error for JointFigureAnalysis\nvisual.panels.0\n  Value error, A graph about imaging modalities is not itself a medical imaging acquisition [type=value_error, input_valu": 1,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'Fig4', 'as....'}], 'limitations': []}, input_type=dict]\n    For furthe": 1,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'Fig3', 'as...pecified canine case.']}, input_type=dict]\n    For furthe": 1,
+      "1 validation error for JointFigureAnalysis\nattribution.limitations\n  Field required [type=missing, input_value={'figure_id': 'Fig3', 'as...r not the study cat.'}]}, input_type=dict": 1,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'fig2-15910...ed from pixels alone.']}, input_type=dict]\n    For furthe": 1,
+      "3 validation errors for JointFigureAnalysis\nvisual.limitations\n  Field required [type=missing, input_value={'figure_id': 'Fig2', 'ge...n 200x from caption']}]}, input_type=dict]\n  ": 1,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'Fig3', 'as... printed on the image']}, input_type=dict]\n    For furthe": 1,
+      "1 validation error for JointFigureAnalysis\nattribution.limitations\n  Field required [type=missing, input_value={'figure_id': 'Fig6', 'as... same case specimen.'}]}, input_type=dict": 1,
+      "1 validation error for JointFigureAnalysis\nattribution.limitations\n  Field required [type=missing, input_value={'figure_id': 'Fig4', 'as... osteoid deposition.'}]}, input_type=dict": 1,
+      "1 validation error for JointFigureAnalysis\nattribution.limitations\n  Field required [type=missing, input_value={'figure_id': 'Fig4', 'as... to the same biopsy.'}]}, input_type=dict": 1
+    },
+    "ordinary/description": {
+      "nonliteral source evidence": 33,
+      "no parseable final JSON": 27,
+      "1 validation error for FigureVisuals\npanels.0\n  Value error, A graph about imaging modalities is not itself a medical imaging acquisition [type=value_error, input_value={'panel': N": 1,
+      "Multiple conflicting output objects; request a single answer": 4
+    },
+    "dflash/caption_attribution": {
+      "nonliteral source evidence": 70,
+      "Evidence does not reference this figure or its caption": 8,
+      "no parseable final JSON": 5,
+      "Wrong/unknown figure": 1
+    },
+    "dflash/pixel_attribution": {
+      "nonliteral source evidence": 67,
+      "Wrong/unknown figure": 7,
+      "no parseable final JSON": 3,
+      "Evidence does not reference this figure or its caption": 2,
+      "11 validation errors for FigureReview\nassignments.0.rationale\n  Field required [type=missing, input_value={'panel': 'A', 'patient_i...iews, respectively).'}]}, input_type=dict]\n   ": 1
+    },
+    "dflash/description": {
+      "nonliteral source evidence": 35,
+      "no parseable final JSON": 19,
+      "1 validation error for FigureVisuals\npanels.0\n  Value error, A graph about imaging modalities is not itself a medical imaging acquisition [type=value_error, input_value={'panel': N": 1,
+      "Multiple conflicting output objects; request a single answer": 5,
+      "14 validation errors for FigureVisuals\nfigure_id\n  Field required [type=missing, input_value={'panel': 'B', 'general_d...on key for red marker']}, input_type=dict]\n    For further ": 1,
+      "14 validation errors for FigureVisuals\nfigure_id\n  Field required [type=missing, input_value={'panel': 'B', 'general_d...scernible from pixels']}, input_type=dict]\n    For further ": 1,
+      "6 validation errors for FigureVisuals\npanels.5.imaging_submodalities\n  Field required [type=missing, input_value={'panel': 'F', 'general_d...n'}], 'limitations': []}, input_type=di": 1,
+      "Visual analysis belongs to another figure": 2,
+      "1 validation error for FigureVisuals\nlimitations\n  Field required [type=missing, input_value={'figure_id': 'fig3-15910...jection not labeled']}]}, input_type=dict]\n    For further ": 1
+    },
+    "dflash/joint_analysis": {
+      "nonliteral source evidence": 39,
+      "1 validation error for JointFigureAnalysis\nattribution.limitations\n  Field required [type=missing, input_value={'figure_id': 'fig2-15910...lature on the right.'}]}, input_type=dict": 1,
+      "no parseable final JSON": 14,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'F4', 'assi...ers visible in pixels']}, input_type=dict]\n    For furthe": 1,
+      "Evidence does not reference this figure or its caption": 8,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'fig2-15910...tients is unresolved.']}, input_type=dict]\n    For furthe": 1,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'F3', 'assi...nt ID in image pixels']}, input_type=dict]\n    For furthe": 1,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'tpg220342-....'}], 'limitations': []}, input_type=dict]\n    For furthe": 1,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'fig1-15910...t ID in image pixels.']}, input_type=dict]\n    For furthe": 1,
+      "Multiple conflicting output objects; request a single answer": 7,
+      "1 validation error for JointFigureAnalysis\nattribution.limitations\n  Field required [type=missing, input_value={'figure_id': 'fig2-15910...e case presentation.'}]}, input_type=dict": 1,
+      "1 validation error for JointFigureAnalysis\nattribution.limitations\n  Field required [type=missing, input_value={'figure_id': 'Fig6', 'as...he primitive stroma.'}]}, input_type=dict": 1,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'Fig3', 'as...ovided in the article']}, input_type=dict]\n    For furthe": 1,
+      "1 validation error for JointFigureAnalysis\nattribution.limitations\n  Field required [type=missing, input_value={'figure_id': 'Fig1', 'as...ified as patient p1.'}]}, input_type=dict": 1,
+      "1 validation error for JointFigureAnalysis\nattribution.limitations\n  Field required [type=missing, input_value={'figure_id': 'Fig5', 'as...men from patient p1.'}]}, input_type=dict": 1,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'Fig1', 'as...ier visible in pixels']}, input_type=dict]\n    For furthe": 1,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'F1', 'assi...der and article text.']}, input_type=dict]\n    For furthe": 1,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'tpg220342-... plant genetics data.']}, input_type=dict]\n    For furthe": 1,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'Fig6', 'as...e in the image pixels']}, input_type=dict]\n    For furthe": 1,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'tpg220342-...ate genomic data only']}, input_type=dict]\n    For furthe": 1,
+      "3 validation errors for JointFigureAnalysis\nvisual.panels.0\n  Value error, A graph about imaging modalities is not itself a medical imaging acquisition [type=value_error, input_val": 1,
+      "1 validation error for JointFigureAnalysis\nattribution.limitations\n  Field required [type=missing, input_value={'figure_id': 'Fig7', 'as...cimen of patient p1.'}]}, input_type=dict": 1,
+      "5 validation errors for JointFigureAnalysis\nvisual\n  Field required [type=missing, input_value={'figure_id': 'F2', 'assi...n Case 1 description.']}, input_type=dict]\n    For furthe": 1
+    }
+  },
+  "cells": [
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash-b32768",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash",
+        "max_batched_tokens": 32768,
+        "experimental": true
+      },
+      "concurrency_per_replica": 64,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1229,
+      "invalid_tasks": 307,
+      "aggregate_output_tokens_per_second": 18438.727836445767,
+      "valid_tasks_per_second": 7.769733347296576,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 16.174092790403545,
+        "median": 11.048534511122853,
+        "p95": 41.671333549777046,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.8173474576118073,
+        "median": 0.7085197838023305,
+        "p95": 1.346640384523198,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 14.231540524933129,
+        "median": 10.29535234766081,
+        "p95": 34.30857353215106,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 53.32513506524265,
+          "requests": 512,
+          "valid_tasks": 407,
+          "invalid_tasks": 105,
+          "aggregate_output_tokens_per_second": 18331.07405736586,
+          "valid_tasks_per_second": 7.632423237222756
+        },
+        {
+          "wall_seconds": 52.11117871198803,
+          "requests": 512,
+          "valid_tasks": 406,
+          "invalid_tasks": 106,
+          "aggregate_output_tokens_per_second": 18681.00135251885,
+          "valid_tasks_per_second": 7.791034669238845
+        },
+        {
+          "wall_seconds": 52.74157278146595,
+          "requests": 512,
+          "valid_tasks": 416,
+          "invalid_tasks": 96,
+          "aggregate_output_tokens_per_second": 18308.195017258284,
+          "valid_tasks_per_second": 7.887516015566901
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash-b32768",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash",
+        "max_batched_tokens": 32768,
+        "experimental": true
+      },
+      "concurrency_per_replica": 16,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1230,
+      "invalid_tasks": 306,
+      "aggregate_output_tokens_per_second": 14080.637358698461,
+      "valid_tasks_per_second": 5.975295182518715,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 7.0703339556142355,
+        "median": 5.091350958216935,
+        "p95": 18.721686547854915,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.19289309962065695,
+        "median": 0.16902094846591353,
+        "p95": 0.3600939507596195,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 5.916476581939908,
+        "median": 4.618452480994165,
+        "p95": 14.127418998396024,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 69.16721527371556,
+          "requests": 512,
+          "valid_tasks": 419,
+          "invalid_tasks": 93,
+          "aggregate_output_tokens_per_second": 13975.884328645921,
+          "valid_tasks_per_second": 6.057783276974366
+        },
+        {
+          "wall_seconds": 66.74296158831567,
+          "requests": 512,
+          "valid_tasks": 408,
+          "invalid_tasks": 104,
+          "aggregate_output_tokens_per_second": 14431.873819765091,
+          "valid_tasks_per_second": 6.113004132430143
+        },
+        {
+          "wall_seconds": 69.9373942501843,
+          "requests": 512,
+          "valid_tasks": 403,
+          "invalid_tasks": 109,
+          "aggregate_output_tokens_per_second": 13849.043281984268,
+          "valid_tasks_per_second": 5.762296469873669
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash-b32768",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash",
+        "max_batched_tokens": 32768,
+        "experimental": true
+      },
+      "concurrency_per_replica": 32,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1226,
+      "invalid_tasks": 310,
+      "aggregate_output_tokens_per_second": 16899.45332951872,
+      "valid_tasks_per_second": 7.081394471521942,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 10.501287944696136,
+        "median": 7.4814020288176835,
+        "p95": 27.478551839478314,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.3970900970313475,
+        "median": 0.38128045154735446,
+        "p95": 0.6817300543189049,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 8.919121939552497,
+        "median": 6.659380544908345,
+        "p95": 21.91710041370243,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 56.53793336916715,
+          "requests": 512,
+          "valid_tasks": 412,
+          "invalid_tasks": 100,
+          "aggregate_output_tokens_per_second": 17215.892799697114,
+          "valid_tasks_per_second": 7.287142904743727
+        },
+        {
+          "wall_seconds": 57.89808259345591,
+          "requests": 512,
+          "valid_tasks": 407,
+          "invalid_tasks": 105,
+          "aggregate_output_tokens_per_second": 16864.651751185345,
+          "valid_tasks_per_second": 7.029593758015094
+        },
+        {
+          "wall_seconds": 58.693726340308785,
+          "requests": 512,
+          "valid_tasks": 407,
+          "invalid_tasks": 105,
+          "aggregate_output_tokens_per_second": 16628.966345415123,
+          "valid_tasks_per_second": 6.93430159196566
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash-b32768",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash",
+        "max_batched_tokens": 32768,
+        "experimental": true
+      },
+      "concurrency_per_replica": 8,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1234,
+      "invalid_tasks": 302,
+      "aggregate_output_tokens_per_second": 9301.77461714265,
+      "valid_tasks_per_second": 3.956466516826314,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 5.618959258616087,
+        "median": 4.139971894212067,
+        "p95": 15.043092193780467,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.10054832125570101,
+        "median": 0.08705448126420379,
+        "p95": 0.198752632830292,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 4.682279602175792,
+        "median": 3.703955721575767,
+        "p95": 11.381001902511343,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 103.69379160460085,
+          "requests": 512,
+          "valid_tasks": 411,
+          "invalid_tasks": 101,
+          "aggregate_output_tokens_per_second": 9411.209532400786,
+          "valid_tasks_per_second": 3.963593129733373
+        },
+        {
+          "wall_seconds": 105.2781552663073,
+          "requests": 512,
+          "valid_tasks": 412,
+          "invalid_tasks": 100,
+          "aggregate_output_tokens_per_second": 9196.171775151191,
+          "valid_tasks_per_second": 3.913442432172389
+        },
+        {
+          "wall_seconds": 102.92251621931791,
+          "requests": 512,
+          "valid_tasks": 411,
+          "invalid_tasks": 101,
+          "aggregate_output_tokens_per_second": 9299.539451216335,
+          "valid_tasks_per_second": 3.9932952972525353
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash"
+      },
+      "concurrency_per_replica": 64,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1229,
+      "invalid_tasks": 307,
+      "aggregate_output_tokens_per_second": 18277.530769167475,
+      "valid_tasks_per_second": 7.724372451816759,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 16.141585349201705,
+        "median": 10.958389139268547,
+        "p95": 41.894107070052996,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.7814566614336703,
+        "median": 0.694840585347265,
+        "p95": 1.2342091230675578,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 14.167122324592128,
+        "median": 10.21191290859133,
+        "p95": 34.12405968317762,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 51.64977789763361,
+          "requests": 512,
+          "valid_tasks": 412,
+          "invalid_tasks": 100,
+          "aggregate_output_tokens_per_second": 18742.11350760428,
+          "valid_tasks_per_second": 7.976801000317103
+        },
+        {
+          "wall_seconds": 54.04945758730173,
+          "requests": 512,
+          "valid_tasks": 409,
+          "invalid_tasks": 103,
+          "aggregate_output_tokens_per_second": 17965.323674739866,
+          "valid_tasks_per_second": 7.567143469282282
+        },
+        {
+          "wall_seconds": 53.40754084754735,
+          "requests": 512,
+          "valid_tasks": 408,
+          "invalid_tasks": 104,
+          "aggregate_output_tokens_per_second": 18144.19807806038,
+          "valid_tasks_per_second": 7.639370649261727
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash"
+      },
+      "concurrency_per_replica": 32,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1218,
+      "invalid_tasks": 318,
+      "aggregate_output_tokens_per_second": 16428.526863119238,
+      "valid_tasks_per_second": 6.764676097328851,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 10.537684690732325,
+        "median": 7.367718441411853,
+        "p95": 27.994451623177156,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.3880735882236574,
+        "median": 0.37593266274780035,
+        "p95": 0.672765675932169,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 8.973019075655126,
+        "median": 6.543160770088434,
+        "p95": 22.522880299016833,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 60.031219424679875,
+          "requests": 512,
+          "valid_tasks": 408,
+          "invalid_tasks": 104,
+          "aggregate_output_tokens_per_second": 16580.8059462938,
+          "valid_tasks_per_second": 6.796463638589093
+        },
+        {
+          "wall_seconds": 58.77088173851371,
+          "requests": 512,
+          "valid_tasks": 405,
+          "invalid_tasks": 107,
+          "aggregate_output_tokens_per_second": 16636.94624066274,
+          "valid_tasks_per_second": 6.8911676670420885
+        },
+        {
+          "wall_seconds": 61.250865523703396,
+          "requests": 512,
+          "valid_tasks": 405,
+          "invalid_tasks": 107,
+          "aggregate_output_tokens_per_second": 16079.299314045873,
+          "valid_tasks_per_second": 6.61215146165191
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash"
+      },
+      "concurrency_per_replica": 8,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1243,
+      "invalid_tasks": 293,
+      "aggregate_output_tokens_per_second": 9138.843352722719,
+      "valid_tasks_per_second": 3.869183506669934,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 5.756937473543076,
+        "median": 4.306877217255533,
+        "p95": 15.23506582248956,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.1748396800012415,
+        "median": 0.08531840750947595,
+        "p95": 0.20143421553075314,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 4.7892626812772505,
+        "median": 3.86296433955431,
+        "p95": 11.948600459378213,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 105.7153086680919,
+          "requests": 512,
+          "valid_tasks": 422,
+          "invalid_tasks": 90,
+          "aggregate_output_tokens_per_second": 9273.283239212571,
+          "valid_tasks_per_second": 3.9918532643642792
+        },
+        {
+          "wall_seconds": 109.76762390322983,
+          "requests": 512,
+          "valid_tasks": 418,
+          "invalid_tasks": 94,
+          "aggregate_output_tokens_per_second": 8918.285421419198,
+          "valid_tasks_per_second": 3.808044532042573
+        },
+        {
+          "wall_seconds": 105.77347665745765,
+          "requests": 512,
+          "valid_tasks": 403,
+          "invalid_tasks": 109,
+          "aggregate_output_tokens_per_second": 9233.36389105199,
+          "valid_tasks_per_second": 3.810028872409066
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash"
+      },
+      "concurrency_per_replica": 16,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1215,
+      "invalid_tasks": 321,
+      "aggregate_output_tokens_per_second": 14059.032935557232,
+      "valid_tasks_per_second": 5.854262441433998,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 7.098274606062357,
+        "median": 5.0517570483498275,
+        "p95": 18.775806497549638,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.18747355790219444,
+        "median": 0.1749916709959507,
+        "p95": 0.3481999801006168,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 5.9521975670146885,
+        "median": 4.537501022219658,
+        "p95": 14.433056764537469,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 68.97721925657243,
+          "requests": 512,
+          "valid_tasks": 409,
+          "invalid_tasks": 103,
+          "aggregate_output_tokens_per_second": 14087.404660161212,
+          "valid_tasks_per_second": 5.929493888100293
+        },
+        {
+          "wall_seconds": 69.80521433800459,
+          "requests": 512,
+          "valid_tasks": 404,
+          "invalid_tasks": 108,
+          "aggregate_output_tokens_per_second": 13950.66270099268,
+          "valid_tasks_per_second": 5.787533264259991
+        },
+        {
+          "wall_seconds": 68.75865499768406,
+          "requests": 512,
+          "valid_tasks": 402,
+          "invalid_tasks": 110,
+          "aggregate_output_tokens_per_second": 14140.590737744198,
+          "valid_tasks_per_second": 5.8465367016492715
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1",
+        "replicas": 8,
+        "tensor_parallel": 1
+      },
+      "concurrency_per_replica": 64,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1207,
+      "invalid_tasks": 329,
+      "aggregate_output_tokens_per_second": 8783.023769070625,
+      "valid_tasks_per_second": 3.6624417186068303,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 21.196909098954468,
+        "median": 15.197077942546457,
+        "p95": 58.60743435844779,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 1.539184331864817,
+        "median": 0.6659488356672227,
+        "p95": 5.636286193039268,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 14.441855309042998,
+        "median": 11.847637827973813,
+        "p95": 33.1860739714466,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 109.64620452094823,
+          "requests": 512,
+          "valid_tasks": 395,
+          "invalid_tasks": 117,
+          "aggregate_output_tokens_per_second": 8825.38528559029,
+          "valid_tasks_per_second": 3.6024958795954864
+        },
+        {
+          "wall_seconds": 108.36538626626134,
+          "requests": 512,
+          "valid_tasks": 408,
+          "invalid_tasks": 104,
+          "aggregate_output_tokens_per_second": 8852.07014021097,
+          "valid_tasks_per_second": 3.7650398716571307
+        },
+        {
+          "wall_seconds": 111.54996752180159,
+          "requests": 512,
+          "valid_tasks": 404,
+          "invalid_tasks": 108,
+          "aggregate_output_tokens_per_second": 8674.310010990243,
+          "valid_tasks_per_second": 3.6216953619555405
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1",
+        "replicas": 8,
+        "tensor_parallel": 1
+      },
+      "concurrency_per_replica": 32,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1214,
+      "invalid_tasks": 322,
+      "aggregate_output_tokens_per_second": 6640.262300703186,
+      "valid_tasks_per_second": 2.7452892834411298,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 19.315948864559687,
+        "median": 13.799526712391526,
+        "p95": 56.089727374957874,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.9287899716988856,
+        "median": 0.3779376628808677,
+        "p95": 5.3314952224027365,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 12.64443401741543,
+        "median": 10.053898194339126,
+        "p95": 30.668269258225337,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 158.36186108458787,
+          "requests": 512,
+          "valid_tasks": 406,
+          "invalid_tasks": 106,
+          "aggregate_output_tokens_per_second": 6172.6036389397605,
+          "valid_tasks_per_second": 2.5637486022164007
+        },
+        {
+          "wall_seconds": 138.77888672240078,
+          "requests": 512,
+          "valid_tasks": 404,
+          "invalid_tasks": 108,
+          "aggregate_output_tokens_per_second": 7084.478217256819,
+          "valid_tasks_per_second": 2.9111056410772385
+        },
+        {
+          "wall_seconds": 145.07130151055753,
+          "requests": 512,
+          "valid_tasks": 404,
+          "invalid_tasks": 108,
+          "aggregate_output_tokens_per_second": 6725.816821385531,
+          "valid_tasks_per_second": 2.784837495723432
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1",
+        "replicas": 8,
+        "tensor_parallel": 1
+      },
+      "concurrency_per_replica": 8,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1222,
+      "invalid_tasks": 314,
+      "aggregate_output_tokens_per_second": 2713.355510295057,
+      "valid_tasks_per_second": 1.1672807260213105,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 16.49022771248868,
+        "median": 11.286673351656646,
+        "p95": 48.4333528035786,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.10884418496668029,
+        "median": 0.09117338480427861,
+        "p95": 0.18570200144313276,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 10.418011414338253,
+        "median": 8.241732283029705,
+        "p95": 25.86611985624768,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 363.0405684718862,
+          "requests": 512,
+          "valid_tasks": 408,
+          "invalid_tasks": 104,
+          "aggregate_output_tokens_per_second": 2609.2455837297307,
+          "valid_tasks_per_second": 1.1238413429037901
+        },
+        {
+          "wall_seconds": 347.3497061477974,
+          "requests": 512,
+          "valid_tasks": 410,
+          "invalid_tasks": 102,
+          "aggregate_output_tokens_per_second": 2734.1206374762387,
+          "valid_tasks_per_second": 1.1803666240199577
+        },
+        {
+          "wall_seconds": 336.48728684335947,
+          "requests": 512,
+          "valid_tasks": 404,
+          "invalid_tasks": 108,
+          "aggregate_output_tokens_per_second": 2804.2456190603675,
+          "valid_tasks_per_second": 1.2006397144747667
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1",
+        "replicas": 8,
+        "tensor_parallel": 1
+      },
+      "concurrency_per_replica": 16,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1216,
+      "invalid_tasks": 320,
+      "aggregate_output_tokens_per_second": 4452.5744188657045,
+      "valid_tasks_per_second": 1.8205108999851707,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 18.325581851377745,
+        "median": 12.562122403178364,
+        "p95": 55.86960762063973,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.765366623931186,
+        "median": 0.18608662020415068,
+        "p95": 8.22120004799217,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 11.836217962688048,
+        "median": 9.618593444116414,
+        "p95": 29.08961502695456,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 228.3328268174082,
+          "requests": 512,
+          "valid_tasks": 408,
+          "invalid_tasks": 104,
+          "aggregate_output_tokens_per_second": 4308.338024416731,
+          "valid_tasks_per_second": 1.7868652777038798
+        },
+        {
+          "wall_seconds": 222.2968111783266,
+          "requests": 512,
+          "valid_tasks": 404,
+          "invalid_tasks": 108,
+          "aggregate_output_tokens_per_second": 4515.710300471781,
+          "valid_tasks_per_second": 1.8173899924993122
+        },
+        {
+          "wall_seconds": 217.3147286158055,
+          "requests": 512,
+          "valid_tasks": 404,
+          "invalid_tasks": 108,
+          "aggregate_output_tokens_per_second": 4539.5404457102695,
+          "valid_tasks_per_second": 1.8590548490352838
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp4-tp2",
+        "replicas": 4,
+        "tensor_parallel": 2,
+        "experimental": true
+      },
+      "concurrency_per_replica": 16,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1224,
+      "invalid_tasks": 312,
+      "aggregate_output_tokens_per_second": 3692.8074604312333,
+      "valid_tasks_per_second": 1.5412442869293956,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 14.759514322241861,
+        "median": 9.529159628786147,
+        "p95": 45.62354991445318,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.18411452203508816,
+        "median": 0.17486791219562292,
+        "p95": 0.29713623761199415,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 9.400400802525231,
+        "median": 7.316388218197972,
+        "p95": 23.565621415153146,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 266.5157503345981,
+          "requests": 512,
+          "valid_tasks": 406,
+          "invalid_tasks": 106,
+          "aggregate_output_tokens_per_second": 3700.813174312268,
+          "valid_tasks_per_second": 1.5233621258416656
+        },
+        {
+          "wall_seconds": 263.4603311838582,
+          "requests": 512,
+          "valid_tasks": 406,
+          "invalid_tasks": 106,
+          "aggregate_output_tokens_per_second": 3693.9261240085566,
+          "valid_tasks_per_second": 1.541028959371759
+        },
+        {
+          "wall_seconds": 264.1874462105334,
+          "requests": 512,
+          "valid_tasks": 412,
+          "invalid_tasks": 100,
+          "aggregate_output_tokens_per_second": 3683.615606869056,
+          "valid_tasks_per_second": 1.5594987797855975
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp4-tp2",
+        "replicas": 4,
+        "tensor_parallel": 2,
+        "experimental": true
+      },
+      "concurrency_per_replica": 8,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1247,
+      "invalid_tasks": 289,
+      "aggregate_output_tokens_per_second": 2077.9162814570414,
+      "valid_tasks_per_second": 0.8798356032344863,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 14.443388770954092,
+        "median": 9.310249955393374,
+        "p95": 44.164652614854276,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.10380679994887032,
+        "median": 0.08973861765116453,
+        "p95": 0.1775991024915129,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 9.170937113956219,
+        "median": 6.937249139882624,
+        "p95": 23.39786399132572,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 467.02767275553197,
+          "requests": 512,
+          "valid_tasks": 417,
+          "invalid_tasks": 95,
+          "aggregate_output_tokens_per_second": 2095.271987260222,
+          "valid_tasks_per_second": 0.8928807099151934
+        },
+        {
+          "wall_seconds": 470.16363956592977,
+          "requests": 512,
+          "valid_tasks": 417,
+          "invalid_tasks": 95,
+          "aggregate_output_tokens_per_second": 2085.269717805387,
+          "valid_tasks_per_second": 0.886925242421953
+        },
+        {
+          "wall_seconds": 480.11891633458436,
+          "requests": 512,
+          "valid_tasks": 413,
+          "invalid_tasks": 99,
+          "aggregate_output_tokens_per_second": 2053.8328452629007,
+          "valid_tasks_per_second": 0.8602035578039782
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp4-tp2",
+        "replicas": 4,
+        "tensor_parallel": 2,
+        "experimental": true
+      },
+      "concurrency_per_replica": 64,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1223,
+      "invalid_tasks": 313,
+      "aggregate_output_tokens_per_second": 8158.887474888974,
+      "valid_tasks_per_second": 3.4197025803188725,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 16.798524025921626,
+        "median": 11.297488636802882,
+        "p95": 52.82170567382127,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.6098505585250678,
+        "median": 0.49670886900275946,
+        "p95": 1.162943135946989,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 11.013113176257926,
+        "median": 8.494281805120409,
+        "p95": 26.264615102903917,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 113.8251839298755,
+          "requests": 512,
+          "valid_tasks": 410,
+          "invalid_tasks": 102,
+          "aggregate_output_tokens_per_second": 8527.163905994328,
+          "valid_tasks_per_second": 3.6020148252305
+        },
+        {
+          "wall_seconds": 131.43851984851062,
+          "requests": 512,
+          "valid_tasks": 409,
+          "invalid_tasks": 103,
+          "aggregate_output_tokens_per_second": 7463.983930515303,
+          "valid_tasks_per_second": 3.11172098157673
+        },
+        {
+          "wall_seconds": 112.36973693035543,
+          "requests": 512,
+          "valid_tasks": 404,
+          "invalid_tasks": 108,
+          "aggregate_output_tokens_per_second": 8598.667456157262,
+          "valid_tasks_per_second": 3.595274057199149
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp4-tp2",
+        "replicas": 4,
+        "tensor_parallel": 2,
+        "experimental": true
+      },
+      "concurrency_per_replica": 32,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1208,
+      "invalid_tasks": 328,
+      "aggregate_output_tokens_per_second": 5839.281320920651,
+      "valid_tasks_per_second": 2.43143959333789,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 15.317233326527154,
+        "median": 10.148823984898627,
+        "p95": 45.39613203215413,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.320013635133364,
+        "median": 0.2910715383477509,
+        "p95": 0.5433094904292375,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 9.79556818937696,
+        "median": 7.488939665257931,
+        "p95": 24.08725956059061,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 149.444829470478,
+          "requests": 512,
+          "valid_tasks": 411,
+          "invalid_tasks": 101,
+          "aggregate_output_tokens_per_second": 6444.297895165711,
+          "valid_tasks_per_second": 2.7501787880937747
+        },
+        {
+          "wall_seconds": 180.59501294326037,
+          "requests": 512,
+          "valid_tasks": 399,
+          "invalid_tasks": 113,
+          "aggregate_output_tokens_per_second": 5349.36698558515,
+          "valid_tasks_per_second": 2.2093633345531996
+        },
+        {
+          "wall_seconds": 166.78516747336835,
+          "requests": 512,
+          "valid_tasks": 398,
+          "invalid_tasks": 114,
+          "aggregate_output_tokens_per_second": 5827.646515120716,
+          "valid_tasks_per_second": 2.386303326784447
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash-eager",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash",
+        "enforce_eager": true,
+        "experimental": true
+      },
+      "concurrency_per_replica": 8,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1224,
+      "invalid_tasks": 312,
+      "aggregate_output_tokens_per_second": 2378.512024706725,
+      "valid_tasks_per_second": 0.9861915902311778,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 22.335071000933265,
+        "median": 16.30035496596247,
+        "p95": 58.58818565425463,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.22635195646216744,
+        "median": 0.21104694157838821,
+        "p95": 0.339499338530004,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 18.411452701974365,
+        "median": 14.018046978861094,
+        "p95": 44.81795954471454,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 419.4020802611485,
+          "requests": 512,
+          "valid_tasks": 412,
+          "invalid_tasks": 100,
+          "aggregate_output_tokens_per_second": 2354.6902757017233,
+          "valid_tasks_per_second": 0.9823508737568982
+        },
+        {
+          "wall_seconds": 411.2077808659524,
+          "requests": 512,
+          "valid_tasks": 407,
+          "invalid_tasks": 105,
+          "aggregate_output_tokens_per_second": 2401.6812082695965,
+          "valid_tasks_per_second": 0.9897672635058332
+        },
+        {
+          "wall_seconds": 410.52828294597566,
+          "requests": 512,
+          "valid_tasks": 405,
+          "invalid_tasks": 107,
+          "aggregate_output_tokens_per_second": 2379.6411613583236,
+          "valid_tasks_per_second": 0.9865337342745197
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash-eager",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash",
+        "enforce_eager": true,
+        "experimental": true
+      },
+      "concurrency_per_replica": 64,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1217,
+      "invalid_tasks": 319,
+      "aggregate_output_tokens_per_second": 9554.632975136501,
+      "valid_tasks_per_second": 4.0125692549309555,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 24.70023639685557,
+        "median": 18.250750082544982,
+        "p95": 64.86498527578078,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.9932085587885618,
+        "median": 0.9172189263626933,
+        "p95": 1.3903365558944643,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 20.849546612820024,
+        "median": 16.192475988995284,
+        "p95": 49.056091491598636,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 99.55355421639979,
+          "requests": 512,
+          "valid_tasks": 404,
+          "invalid_tasks": 108,
+          "aggregate_output_tokens_per_second": 9768.65173378005,
+          "valid_tasks_per_second": 4.058117293550608
+        },
+        {
+          "wall_seconds": 104.2641401104629,
+          "requests": 512,
+          "valid_tasks": 407,
+          "invalid_tasks": 105,
+          "aggregate_output_tokens_per_second": 9249.766976241724,
+          "valid_tasks_per_second": 3.903547274919285
+        },
+        {
+          "wall_seconds": 99.47925151512027,
+          "requests": 512,
+          "valid_tasks": 406,
+          "invalid_tasks": 106,
+          "aggregate_output_tokens_per_second": 9659.984221472941,
+          "valid_tasks_per_second": 4.081253063492244
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash-eager",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash",
+        "enforce_eager": true,
+        "experimental": true
+      },
+      "concurrency_per_replica": 16,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1218,
+      "invalid_tasks": 318,
+      "aggregate_output_tokens_per_second": 4142.7553920926675,
+      "valid_tasks_per_second": 1.7287815859232982,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 22.545035749244562,
+        "median": 16.3461514567025,
+        "p95": 59.117416485678405,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.27192108746870264,
+        "median": 0.21952782617881894,
+        "p95": 0.483685223152861,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 18.688372678718224,
+        "median": 14.598269451409578,
+        "p95": 44.63688585883938,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 220.82188624236733,
+          "requests": 512,
+          "valid_tasks": 411,
+          "invalid_tasks": 101,
+          "aggregate_output_tokens_per_second": 4359.622211284664,
+          "valid_tasks_per_second": 1.8612285538984075
+        },
+        {
+          "wall_seconds": 244.44996621552855,
+          "requests": 512,
+          "valid_tasks": 404,
+          "invalid_tasks": 108,
+          "aggregate_output_tokens_per_second": 3986.1245026349334,
+          "valid_tasks_per_second": 1.6526899400092292
+        },
+        {
+          "wall_seconds": 239.27058940846473,
+          "requests": 512,
+          "valid_tasks": 403,
+          "invalid_tasks": 109,
+          "aggregate_output_tokens_per_second": 4102.631261229602,
+          "valid_tasks_per_second": 1.6842855655444922
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash-eager",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash",
+        "enforce_eager": true,
+        "experimental": true
+      },
+      "concurrency_per_replica": 32,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1227,
+      "invalid_tasks": 309,
+      "aggregate_output_tokens_per_second": 6385.688422727526,
+      "valid_tasks_per_second": 2.711098379821974,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 22.682365527904647,
+        "median": 17.026601943187416,
+        "p95": 62.401515311561525,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.45305079018119915,
+        "median": 0.4943199958652258,
+        "p95": 0.763723814394325,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 18.82237713631548,
+        "median": 14.782540075015277,
+        "p95": 46.65507593424991,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 157.99187859054655,
+          "requests": 512,
+          "valid_tasks": 407,
+          "invalid_tasks": 105,
+          "aggregate_output_tokens_per_second": 6052.874416908291,
+          "valid_tasks_per_second": 2.5760817811071517
+        },
+        {
+          "wall_seconds": 149.37586130015552,
+          "requests": 512,
+          "valid_tasks": 415,
+          "invalid_tasks": 97,
+          "aggregate_output_tokens_per_second": 6473.381921172516,
+          "valid_tasks_per_second": 2.778226658496716
+        },
+        {
+          "wall_seconds": 145.2163526425138,
+          "requests": 512,
+          "valid_tasks": 405,
+          "invalid_tasks": 107,
+          "aggregate_output_tokens_per_second": 6657.576659978451,
+          "valid_tasks_per_second": 2.788942103490289
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp4-tp2-dflash",
+        "replicas": 4,
+        "tensor_parallel": 2,
+        "speculation": "dflash",
+        "experimental": true
+      },
+      "concurrency_per_replica": 16,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1220,
+      "invalid_tasks": 316,
+      "aggregate_output_tokens_per_second": 10692.402437610981,
+      "valid_tasks_per_second": 4.478826840377567,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 5.75775046641138,
+        "median": 4.1799655659124255,
+        "p95": 15.137689997209236,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.17798693072290916,
+        "median": 0.1861901367083192,
+        "p95": 0.29936314676888287,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 4.798796315216047,
+        "median": 3.603013589978218,
+        "p95": 12.031344808172435,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 88.73515651840717,
+          "requests": 512,
+          "valid_tasks": 404,
+          "invalid_tasks": 108,
+          "aggregate_output_tokens_per_second": 10877.537583424168,
+          "valid_tasks_per_second": 4.552874146519305
+        },
+        {
+          "wall_seconds": 93.85187131352723,
+          "requests": 512,
+          "valid_tasks": 410,
+          "invalid_tasks": 102,
+          "aggregate_output_tokens_per_second": 10388.167932667282,
+          "valid_tasks_per_second": 4.368586307995173
+        },
+        {
+          "wall_seconds": 89.80573113821447,
+          "requests": 512,
+          "valid_tasks": 406,
+          "invalid_tasks": 106,
+          "aggregate_output_tokens_per_second": 10827.415886225506,
+          "valid_tasks_per_second": 4.520869602132078
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp4-tp2-dflash",
+        "replicas": 4,
+        "tensor_parallel": 2,
+        "speculation": "dflash",
+        "experimental": true
+      },
+      "concurrency_per_replica": 32,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1199,
+      "invalid_tasks": 337,
+      "aggregate_output_tokens_per_second": 13835.010996971367,
+      "valid_tasks_per_second": 5.706586029048877,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 8.3827033837224,
+        "median": 6.079402408096939,
+        "p95": 22.300683986162767,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.33104253465353395,
+        "median": 0.32393782399594784,
+        "p95": 0.5697906860150397,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 7.091526506312827,
+        "median": 5.396108160726726,
+        "p95": 17.52187366830185,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 71.6861383030191,
+          "requests": 512,
+          "valid_tasks": 407,
+          "invalid_tasks": 105,
+          "aggregate_output_tokens_per_second": 13561.994313188647,
+          "valid_tasks_per_second": 5.6775271989070015
+        },
+        {
+          "wall_seconds": 70.32963490113616,
+          "requests": 512,
+          "valid_tasks": 395,
+          "invalid_tasks": 117,
+          "aggregate_output_tokens_per_second": 13826.561183872871,
+          "valid_tasks_per_second": 5.616409079263098
+        },
+        {
+          "wall_seconds": 68.09233589936048,
+          "requests": 512,
+          "valid_tasks": 397,
+          "invalid_tasks": 115,
+          "aggregate_output_tokens_per_second": 14131.164503185111,
+          "valid_tasks_per_second": 5.830318416257014
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp4-tp2-dflash",
+        "replicas": 4,
+        "tensor_parallel": 2,
+        "speculation": "dflash",
+        "experimental": true
+      },
+      "concurrency_per_replica": 64,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1212,
+      "invalid_tasks": 324,
+      "aggregate_output_tokens_per_second": 15528.224610701734,
+      "valid_tasks_per_second": 6.463300989083772,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 13.376538282255447,
+        "median": 9.89044669829309,
+        "p95": 35.79763591941446,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.5921178511762264,
+        "median": 0.5047743241302669,
+        "p95": 1.129114344716072,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 11.531003676351853,
+        "median": 8.669167825952172,
+        "p95": 27.284074422437698,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 62.27155426517129,
+          "requests": 512,
+          "valid_tasks": 407,
+          "invalid_tasks": 105,
+          "aggregate_output_tokens_per_second": 15587.261494497243,
+          "valid_tasks_per_second": 6.535889537410127
+        },
+        {
+          "wall_seconds": 63.52882160060108,
+          "requests": 512,
+          "valid_tasks": 399,
+          "invalid_tasks": 113,
+          "aggregate_output_tokens_per_second": 15272.1233537066,
+          "valid_tasks_per_second": 6.280613900073111
+        },
+        {
+          "wall_seconds": 61.71990240179002,
+          "requests": 512,
+          "valid_tasks": 406,
+          "invalid_tasks": 106,
+          "aggregate_output_tokens_per_second": 15732.267262493902,
+          "valid_tasks_per_second": 6.57810502286577
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp4-tp2-dflash",
+        "replicas": 4,
+        "tensor_parallel": 2,
+        "speculation": "dflash",
+        "experimental": true
+      },
+      "concurrency_per_replica": 8,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1217,
+      "invalid_tasks": 319,
+      "aggregate_output_tokens_per_second": 6784.44031191723,
+      "valid_tasks_per_second": 2.845316240157386,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 4.724108309979783,
+        "median": 3.41155250556767,
+        "p95": 12.47709497413598,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.08983575316415227,
+        "median": 0.07887038914486766,
+        "p95": 0.175084748538211,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 3.913828223441063,
+        "median": 3.0115582584403455,
+        "p95": 9.512386948335916,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 144.51361650694162,
+          "requests": 512,
+          "valid_tasks": 406,
+          "invalid_tasks": 106,
+          "aggregate_output_tokens_per_second": 6643.263266156549,
+          "valid_tasks_per_second": 2.809423844018865
+        },
+        {
+          "wall_seconds": 140.63510687462986,
+          "requests": 512,
+          "valid_tasks": 404,
+          "invalid_tasks": 108,
+          "aggregate_output_tokens_per_second": 6897.068744468524,
+          "valid_tasks_per_second": 2.872682426018623
+        },
+        {
+          "wall_seconds": 142.57174678053707,
+          "requests": 512,
+          "valid_tasks": 407,
+          "invalid_tasks": 105,
+          "aggregate_output_tokens_per_second": 6816.441700023191,
+          "valid_tasks_per_second": 2.854703047347112
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash-b8192",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash",
+        "max_batched_tokens": 8192,
+        "experimental": true
+      },
+      "concurrency_per_replica": 64,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1221,
+      "invalid_tasks": 315,
+      "aggregate_output_tokens_per_second": 18714.974329915458,
+      "valid_tasks_per_second": 7.820724423507975,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 16.195924811298028,
+        "median": 11.084566998295486,
+        "p95": 41.752550640143454,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.7757200020787423,
+        "median": 0.6867867023684084,
+        "p95": 1.2333952388726175,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 14.212144852084748,
+        "median": 10.28091145073995,
+        "p95": 34.32433856278658,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 50.63897033408284,
+          "requests": 512,
+          "valid_tasks": 410,
+          "invalid_tasks": 102,
+          "aggregate_output_tokens_per_second": 19180.267560580352,
+          "valid_tasks_per_second": 8.096531135903591
+        },
+        {
+          "wall_seconds": 53.59370456263423,
+          "requests": 512,
+          "valid_tasks": 404,
+          "invalid_tasks": 108,
+          "aggregate_output_tokens_per_second": 18162.11452340321,
+          "valid_tasks_per_second": 7.53819881079224
+        },
+        {
+          "wall_seconds": 51.8909696508199,
+          "requests": 512,
+          "valid_tasks": 407,
+          "invalid_tasks": 105,
+          "aggregate_output_tokens_per_second": 18831.90864568012,
+          "valid_tasks_per_second": 7.843368561789233
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash-b8192",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash",
+        "max_batched_tokens": 8192,
+        "experimental": true
+      },
+      "concurrency_per_replica": 8,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1214,
+      "invalid_tasks": 322,
+      "aggregate_output_tokens_per_second": 9368.346331517625,
+      "valid_tasks_per_second": 3.8728903645945607,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 5.65342829301638,
+        "median": 4.0418171267956495,
+        "p95": 15.350956689799204,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.09979534822014102,
+        "median": 0.08605563174933195,
+        "p95": 0.19669128628447652,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 4.703064204626571,
+        "median": 3.613215545658022,
+        "p95": 11.744670234620571,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 104.29903647303581,
+          "requests": 512,
+          "valid_tasks": 409,
+          "invalid_tasks": 103,
+          "aggregate_output_tokens_per_second": 9306.46181233842,
+          "valid_tasks_per_second": 3.9214168589729765
+        },
+        {
+          "wall_seconds": 102.13396756537259,
+          "requests": 512,
+          "valid_tasks": 406,
+          "invalid_tasks": 106,
+          "aggregate_output_tokens_per_second": 9562.244797499827,
+          "valid_tasks_per_second": 3.9751711372627603
+        },
+        {
+          "wall_seconds": 107.0279736071825,
+          "requests": 512,
+          "valid_tasks": 399,
+          "invalid_tasks": 113,
+          "aggregate_output_tokens_per_second": 9243.62077180921,
+          "valid_tasks_per_second": 3.7279973314679635
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash-b8192",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash",
+        "max_batched_tokens": 8192,
+        "experimental": true
+      },
+      "concurrency_per_replica": 16,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1219,
+      "invalid_tasks": 317,
+      "aggregate_output_tokens_per_second": 13836.897722880924,
+      "valid_tasks_per_second": 5.793358650753451,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 7.11052383333966,
+        "median": 5.055894212331623,
+        "p95": 19.204987499397248,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.1840929102121057,
+        "median": 0.16870625456795096,
+        "p95": 0.3390996523667127,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 5.984373985354978,
+        "median": 4.580577896907926,
+        "p95": 14.969388164114207,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 69.72610728815198,
+          "requests": 512,
+          "valid_tasks": 408,
+          "invalid_tasks": 104,
+          "aggregate_output_tokens_per_second": 13873.21101983231,
+          "valid_tasks_per_second": 5.851466772895958
+        },
+        {
+          "wall_seconds": 71.3675066549331,
+          "requests": 512,
+          "valid_tasks": 411,
+          "invalid_tasks": 101,
+          "aggregate_output_tokens_per_second": 13547.019439457625,
+          "valid_tasks_per_second": 5.75892334290469
+        },
+        {
+          "wall_seconds": 69.31973580550402,
+          "requests": 512,
+          "valid_tasks": 400,
+          "invalid_tasks": 112,
+          "aggregate_output_tokens_per_second": 14098.813110629308,
+          "valid_tasks_per_second": 5.770362442267701
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash-b8192",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash",
+        "max_batched_tokens": 8192,
+        "experimental": true
+      },
+      "concurrency_per_replica": 32,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1237,
+      "invalid_tasks": 299,
+      "aggregate_output_tokens_per_second": 16663.360320284533,
+      "valid_tasks_per_second": 7.009442594941919,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 10.514126776160387,
+        "median": 7.511261635925621,
+        "p95": 28.003180055180565,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.39691684874196653,
+        "median": 0.37511504255235195,
+        "p95": 0.6500709247775376,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 8.91710877015612,
+        "median": 6.618665365036577,
+        "p95": 21.987096768571064,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 58.10473508387804,
+          "requests": 512,
+          "valid_tasks": 411,
+          "invalid_tasks": 101,
+          "aggregate_output_tokens_per_second": 16809.903678074053,
+          "valid_tasks_per_second": 7.073433850213657
+        },
+        {
+          "wall_seconds": 58.577828865498304,
+          "requests": 512,
+          "valid_tasks": 417,
+          "invalid_tasks": 95,
+          "aggregate_output_tokens_per_second": 16760.590465964997,
+          "valid_tasks_per_second": 7.118734307437065
+        },
+        {
+          "wall_seconds": 59.793665543198586,
+          "requests": 512,
+          "valid_tasks": 409,
+          "invalid_tasks": 103,
+          "aggregate_output_tokens_per_second": 16425.703142257316,
+          "valid_tasks_per_second": 6.840189446230111
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp4-tp2-dflash-b32768",
+        "replicas": 4,
+        "tensor_parallel": 2,
+        "speculation": "dflash",
+        "max_batched_tokens": 32768,
+        "experimental": true
+      },
+      "concurrency_per_replica": 64,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1201,
+      "invalid_tasks": 335,
+      "aggregate_output_tokens_per_second": 15973.859683232264,
+      "valid_tasks_per_second": 6.600384670678224,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 13.229225233171746,
+        "median": 9.516777279786766,
+        "p95": 35.301402567187324,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.6025006145743342,
+        "median": 0.5282023367471993,
+        "p95": 1.1595845725387335,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 11.411479119703776,
+        "median": 8.511761797126383,
+        "p95": 27.002711422974244,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 60.01007718872279,
+          "requests": 512,
+          "valid_tasks": 398,
+          "invalid_tasks": 114,
+          "aggregate_output_tokens_per_second": 16158.069534731709,
+          "valid_tasks_per_second": 6.632219431219011
+        },
+        {
+          "wall_seconds": 61.37125220242888,
+          "requests": 512,
+          "valid_tasks": 403,
+          "invalid_tasks": 109,
+          "aggregate_output_tokens_per_second": 15844.307637599679,
+          "valid_tasks_per_second": 6.566592427847684
+        },
+        {
+          "wall_seconds": 60.57776237744838,
+          "requests": 512,
+          "valid_tasks": 400,
+          "invalid_tasks": 112,
+          "aggregate_output_tokens_per_second": 15922.625104407636,
+          "valid_tasks_per_second": 6.6030831166670865
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp4-tp2-dflash-b32768",
+        "replicas": 4,
+        "tensor_parallel": 2,
+        "speculation": "dflash",
+        "max_batched_tokens": 32768,
+        "experimental": true
+      },
+      "concurrency_per_replica": 32,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1205,
+      "invalid_tasks": 331,
+      "aggregate_output_tokens_per_second": 13947.898053936067,
+      "valid_tasks_per_second": 5.710800519389343,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 8.328633476057197,
+        "median": 6.118184106424451,
+        "p95": 22.541462138295174,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.33179278463345935,
+        "median": 0.32489411486312747,
+        "p95": 0.5665346910245717,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 6.992914439961169,
+        "median": 5.427117540966719,
+        "p95": 16.98115311539732,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 70.18560869339854,
+          "requests": 512,
+          "valid_tasks": 401,
+          "invalid_tasks": 111,
+          "aggregate_output_tokens_per_second": 14009.139741100242,
+          "valid_tasks_per_second": 5.71342198871201
+        },
+        {
+          "wall_seconds": 70.45411969069391,
+          "requests": 512,
+          "valid_tasks": 395,
+          "invalid_tasks": 117,
+          "aggregate_output_tokens_per_second": 13837.757171335083,
+          "valid_tasks_per_second": 5.606485493454748
+        },
+        {
+          "wall_seconds": 70.36396468989551,
+          "requests": 512,
+          "valid_tasks": 409,
+          "invalid_tasks": 103,
+          "aggregate_output_tokens_per_second": 13997.093602393805,
+          "valid_tasks_per_second": 5.812634376168598
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp4-tp2-dflash-b32768",
+        "replicas": 4,
+        "tensor_parallel": 2,
+        "speculation": "dflash",
+        "max_batched_tokens": 32768,
+        "experimental": true
+      },
+      "concurrency_per_replica": 8,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1207,
+      "invalid_tasks": 329,
+      "aggregate_output_tokens_per_second": 7009.452863860201,
+      "valid_tasks_per_second": 2.885330580015198,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 4.617633833239476,
+        "median": 3.3459763186983764,
+        "p95": 12.580607118783519,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.09266798899928592,
+        "median": 0.078679452650249,
+        "p95": 0.17739262944087386,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 3.8428529198960555,
+        "median": 2.9065874596126378,
+        "p95": 9.571884375531226,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 141.08907922077924,
+          "requests": 512,
+          "valid_tasks": 406,
+          "invalid_tasks": 106,
+          "aggregate_output_tokens_per_second": 6938.113179321333,
+          "valid_tasks_per_second": 2.8776146406390706
+        },
+        {
+          "wall_seconds": 135.73427393008024,
+          "requests": 512,
+          "valid_tasks": 403,
+          "invalid_tasks": 109,
+          "aggregate_output_tokens_per_second": 7177.9144043005535,
+          "valid_tasks_per_second": 2.969036399808602
+        },
+        {
+          "wall_seconds": 141.49959686398506,
+          "requests": 512,
+          "valid_tasks": 398,
+          "invalid_tasks": 114,
+          "aggregate_output_tokens_per_second": 6918.987910199389,
+          "valid_tasks_per_second": 2.8127288615710557
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp4-tp2-dflash-b32768",
+        "replicas": 4,
+        "tensor_parallel": 2,
+        "speculation": "dflash",
+        "max_batched_tokens": 32768,
+        "experimental": true
+      },
+      "concurrency_per_replica": 16,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1229,
+      "invalid_tasks": 307,
+      "aggregate_output_tokens_per_second": 11273.259356845316,
+      "valid_tasks_per_second": 4.721043102071454,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 5.631285384014821,
+        "median": 4.145881720818579,
+        "p95": 15.15430715540424,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.1778469869732362,
+        "median": 0.18233679700642824,
+        "p95": 0.30200686282478273,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 4.69581315427907,
+        "median": 3.6428087917156518,
+        "p95": 11.378910466097295,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 86.90145628340542,
+          "requests": 512,
+          "valid_tasks": 412,
+          "invalid_tasks": 100,
+          "aggregate_output_tokens_per_second": 11335.759400709976,
+          "valid_tasks_per_second": 4.741002252670821
+        },
+        {
+          "wall_seconds": 86.95043764449656,
+          "requests": 512,
+          "valid_tasks": 404,
+          "invalid_tasks": 108,
+          "aggregate_output_tokens_per_second": 11321.403625647037,
+          "valid_tasks_per_second": 4.646325089837783
+        },
+        {
+          "wall_seconds": 86.47193142771721,
+          "requests": 512,
+          "valid_tasks": 413,
+          "invalid_tasks": 99,
+          "aggregate_output_tokens_per_second": 11162.038178906912,
+          "valid_tasks_per_second": 4.776116286303042
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash-no-prefix",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash",
+        "prefix_cache": false,
+        "experimental": true
+      },
+      "concurrency_per_replica": 64,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1227,
+      "invalid_tasks": 309,
+      "aggregate_output_tokens_per_second": 12656.11246274588,
+      "valid_tasks_per_second": 5.306060175629785,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 31.05528175668466,
+        "median": 27.58822702197358,
+        "p95": 68.03483842476271,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 9.005102075445999,
+        "median": 5.9616545885801315,
+        "p95": 23.873988303123042,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 29.098686594443887,
+        "median": 27.105985139962286,
+        "p95": 59.3100465524476,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 77.23973033390939,
+          "requests": 512,
+          "valid_tasks": 410,
+          "invalid_tasks": 102,
+          "aggregate_output_tokens_per_second": 12616.356838472635,
+          "valid_tasks_per_second": 5.308149034539079
+        },
+        {
+          "wall_seconds": 76.98424800112844,
+          "requests": 512,
+          "valid_tasks": 409,
+          "invalid_tasks": 103,
+          "aggregate_output_tokens_per_second": 12678.15202904487,
+          "valid_tasks_per_second": 5.312775153613306
+        },
+        {
+          "wall_seconds": 77.02104327920824,
+          "requests": 512,
+          "valid_tasks": 408,
+          "invalid_tasks": 104,
+          "aggregate_output_tokens_per_second": 12673.951928453216,
+          "valid_tasks_per_second": 5.297253615754894
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash-no-prefix",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash",
+        "prefix_cache": false,
+        "experimental": true
+      },
+      "concurrency_per_replica": 16,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1238,
+      "invalid_tasks": 298,
+      "aggregate_output_tokens_per_second": 10430.873566609625,
+      "valid_tasks_per_second": 4.429130218785209,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 10.772923381022338,
+        "median": 8.079094641376287,
+        "p95": 26.72917789639905,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 1.0433072479160426,
+        "median": 0.5664900178089738,
+        "p95": 4.841163559583947,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 9.199089803923926,
+        "median": 7.2799892742186785,
+        "p95": 21.32081069983542,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 94.72072425857186,
+          "requests": 512,
+          "valid_tasks": 409,
+          "invalid_tasks": 103,
+          "aggregate_output_tokens_per_second": 10393.132101826295,
+          "valid_tasks_per_second": 4.317956848424194
+        },
+        {
+          "wall_seconds": 93.88271495047957,
+          "requests": 512,
+          "valid_tasks": 413,
+          "invalid_tasks": 99,
+          "aggregate_output_tokens_per_second": 10339.954490153368,
+          "valid_tasks_per_second": 4.399105844114602
+        },
+        {
+          "wall_seconds": 90.90967935975641,
+          "requests": 512,
+          "valid_tasks": 416,
+          "invalid_tasks": 96,
+          "aggregate_output_tokens_per_second": 10564.089619098766,
+          "valid_tasks_per_second": 4.57597037993903
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash-no-prefix",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash",
+        "prefix_cache": false,
+        "experimental": true
+      },
+      "concurrency_per_replica": 32,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1212,
+      "invalid_tasks": 324,
+      "aggregate_output_tokens_per_second": 11929.2335733485,
+      "valid_tasks_per_second": 4.953379464633265,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 17.801518507970588,
+        "median": 13.436753096990287,
+        "p95": 45.92465472058393,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 2.8116256720738115,
+        "median": 1.428070924244821,
+        "p95": 11.07985748280771,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 15.68055286952646,
+        "median": 12.436505453195423,
+        "p95": 38.49101259279996,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 81.11367148719728,
+          "requests": 512,
+          "valid_tasks": 404,
+          "invalid_tasks": 108,
+          "aggregate_output_tokens_per_second": 12019.243884847192,
+          "valid_tasks_per_second": 4.980664696749253
+        },
+        {
+          "wall_seconds": 81.09897227492183,
+          "requests": 512,
+          "valid_tasks": 401,
+          "invalid_tasks": 111,
+          "aggregate_output_tokens_per_second": 11962.09979962949,
+          "valid_tasks_per_second": 4.944575606218883
+        },
+        {
+          "wall_seconds": 82.46879214514047,
+          "requests": 512,
+          "valid_tasks": 407,
+          "invalid_tasks": 105,
+          "aggregate_output_tokens_per_second": 11808.381991167349,
+          "valid_tasks_per_second": 4.935200206202884
+        }
+      ]
+    },
+    {
+      "layout": {
+        "name": "dp8-tp1-dflash-no-prefix",
+        "replicas": 8,
+        "tensor_parallel": 1,
+        "speculation": "dflash",
+        "prefix_cache": false,
+        "experimental": true
+      },
+      "concurrency_per_replica": 8,
+      "status": "completed",
+      "requests": 1536,
+      "valid_tasks": 1230,
+      "invalid_tasks": 306,
+      "aggregate_output_tokens_per_second": 7570.161595069524,
+      "valid_tasks_per_second": 3.1784850203416903,
+      "workload_sha256": "000ec701e3409063d41c1633e5f949f606c5be1123fa139de36d52b617881c67",
+      "request_latency_seconds": {
+        "n": 1536,
+        "mean": 7.473574934455731,
+        "median": 5.340744319371879,
+        "p95": 19.255021510180086,
+        "p95_method": "linear interpolation"
+      },
+      "ttft_seconds": {
+        "n": 1536,
+        "mean": 0.49918023402278777,
+        "median": 0.43798359483480453,
+        "p95": 1.5193981828633696,
+        "p95_method": "linear interpolation"
+      },
+      "ttfa_seconds": {
+        "n": 1536,
+        "mean": 6.303648071295053,
+        "median": 4.828731310553849,
+        "p95": 14.914389449637383,
+        "p95_method": "linear interpolation"
+      },
+      "eligible_for_selection": true,
+      "rounds": [
+        {
+          "wall_seconds": 130.2233392028138,
+          "requests": 512,
+          "valid_tasks": 412,
+          "invalid_tasks": 100,
+          "aggregate_output_tokens_per_second": 7506.741924944262,
+          "valid_tasks_per_second": 3.16379538815495
+        },
+        {
+          "wall_seconds": 128.00625582784414,
+          "requests": 512,
+          "valid_tasks": 413,
+          "invalid_tasks": 99,
+          "aggregate_output_tokens_per_second": 7674.226495001643,
+          "valid_tasks_per_second": 3.2264048138041352
+        },
+        {
+          "wall_seconds": 128.74721691850573,
+          "requests": 512,
+          "valid_tasks": 405,
+          "invalid_tasks": 107,
+          "aggregate_output_tokens_per_second": 7530.842399597038,
+          "valid_tasks_per_second": 3.145699065917335
+        }
+      ]
+    }
+  ],
+  "manual_sample_notice": "Unblinded agent diagnostic inspection of five primary sections and four actual figures, not physician adjudication or random accuracy estimate. See Markdown report.",
+  "manual_sample_figures": [
+    {
+      "article_id": "PMC10998798.1",
+      "figure_id": "Fig3"
+    },
+    {
+      "article_id": "PMC12285374.1",
+      "figure_id": "F4"
+    },
+    {
+      "article_id": "PMC13314005.1",
+      "figure_id": "Fig2"
+    },
+    {
+      "article_id": "PMC12802722.1",
+      "figure_id": "F1"
+    }
+  ]
+}

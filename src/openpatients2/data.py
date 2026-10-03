@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import gzip
 import hashlib
 import json
 import os
@@ -37,7 +38,8 @@ def write_json(path: str | Path, value: object) -> None:
 
 
 def read_jsonl(path: str | Path) -> Iterator[dict]:
-    with open(path, encoding="utf-8") as f:
+    opener = gzip.open if str(path).endswith('.gz') else open
+    with opener(path, 'rt', encoding="utf-8") as f:
         for line_number, line in enumerate(f, 1):
             if not line.strip():
                 continue

@@ -1,0 +1,169 @@
+# Cluster CPU download-only pilot: 10 topic strata, 30 case-focused + 10 broader
+# candidates each. Overlapping IDs count in each lane but download only once.
+# Purposive publication-date ordered prefixes, not an unbiased PMC sample.
+# Caps are ceilings, never download targets; expand only in a NEW campaign.
+lanes:
+- name: cardiovascular_case_focused
+  stratum: cardiovascular
+  focus: case_focused
+  query: (cardiac OR cardiovascular OR cardiology OR heart) AND ("case report" OR
+    "case series" OR "case presentation")
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 30
+- name: cardiovascular_broader
+  stratum: cardiovascular
+  focus: broader
+  query: (cardiac OR cardiovascular OR cardiology OR heart)
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: neurology_case_focused
+  stratum: neurology
+  focus: case_focused
+  query: (neurology OR neurologic OR neurological OR brain OR seizure) AND ("case
+    report" OR "case series" OR "case presentation")
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 30
+- name: neurology_broader
+  stratum: neurology
+  focus: broader
+  query: (neurology OR neurologic OR neurological OR brain OR seizure)
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: oncology_case_focused
+  stratum: oncology
+  focus: case_focused
+  query: (oncology OR cancer OR neoplasm OR tumor) AND ("case report" OR "case series"
+    OR "case presentation")
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 30
+- name: oncology_broader
+  stratum: oncology
+  focus: broader
+  query: (oncology OR cancer OR neoplasm OR tumor)
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: infectious_disease_case_focused
+  stratum: infectious_disease
+  focus: case_focused
+  query: (infection OR infectious OR bacterial OR viral) AND ("case report" OR "case
+    series" OR "case presentation")
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 30
+- name: infectious_disease_broader
+  stratum: infectious_disease
+  focus: broader
+  query: (infection OR infectious OR bacterial OR viral)
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: pulmonary_case_focused
+  stratum: pulmonary
+  focus: case_focused
+  query: (pulmonary OR respiratory OR lung) AND ("case report" OR "case series" OR
+    "case presentation")
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 30
+- name: pulmonary_broader
+  stratum: pulmonary
+  focus: broader
+  query: (pulmonary OR respiratory OR lung)
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: gastroenterology_case_focused
+  stratum: gastroenterology
+  focus: case_focused
+  query: (gastrointestinal OR gastroenterology OR hepatic OR liver) AND ("case report"
+    OR "case series" OR "case presentation")
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 30
+- name: gastroenterology_broader
+  stratum: gastroenterology
+  focus: broader
+  query: (gastrointestinal OR gastroenterology OR hepatic OR liver)
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: renal_urology_case_focused
+  stratum: renal_urology
+  focus: case_focused
+  query: (renal OR kidney OR nephrology OR urology) AND ("case report" OR "case series"
+    OR "case presentation")
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 30
+- name: renal_urology_broader
+  stratum: renal_urology
+  focus: broader
+  query: (renal OR kidney OR nephrology OR urology)
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: endocrine_metabolic_case_focused
+  stratum: endocrine_metabolic
+  focus: case_focused
+  query: (endocrine OR diabetes OR metabolic OR thyroid) AND ("case report" OR "case
+    series" OR "case presentation")
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 30
+- name: endocrine_metabolic_broader
+  stratum: endocrine_metabolic
+  focus: broader
+  query: (endocrine OR diabetes OR metabolic OR thyroid)
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: rheumatology_dermatology_case_focused
+  stratum: rheumatology_dermatology
+  focus: case_focused
+  query: (rheumatology OR autoimmune OR dermatology OR skin) AND ("case report" OR
+    "case series" OR "case presentation")
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 30
+- name: rheumatology_dermatology_broader
+  stratum: rheumatology_dermatology
+  focus: broader
+  query: (rheumatology OR autoimmune OR dermatology OR skin)
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: hematology_case_focused
+  stratum: hematology
+  focus: case_focused
+  query: (hematology OR hematologic OR anaemia OR anemia OR thrombosis) AND ("case
+    report" OR "case series" OR "case presentation")
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 30
+- name: hematology_broader
+  stratum: hematology
+  focus: broader
+  query: (hematology OR hematologic OR anaemia OR anemia OR thrombosis)
+  start: '2024-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+max_candidates: 400
+fetch_concurrency: 4
+page_size: 5
+search_partition_limit: 9000
+max_storage_bytes: 4000000000
+min_free_bytes: 10000000000
+max_network_bytes_total: 2000000000
+max_network_bytes_per_invocation: 128000000
+max_requests_per_invocation: 1000
+max_metadata_bytes: 2000000
+max_xml_bytes: 5000000
+max_article_json_bytes: 20000000
+cloud_requests_per_second: 4
+search_requests_per_second: 2

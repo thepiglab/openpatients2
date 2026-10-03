@@ -15,7 +15,8 @@ from .literature_client import LiteratureClient, LiteratureConfig, RateLimiter
 from .pmc_media import cloud_url, metadata_flag
 
 ESEARCH = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi'
-LICENSE_QUERY = '(cc0 license[filter] OR cc by license[filter] OR cc by-nc license[filter] OR cc by-nc-sa license[filter] OR cc by-sa license[filter]) NOT pmc embargo[filter]'
+# Discovery must retain non-CC/custom/unknown OA licenses for the rights gate.
+LICENSE_QUERY = 'open access[filter] NOT pmc embargo[filter]'
 
 
 async def search_candidates(query: str, limit: int = 100, offset: int = 0, *, http=None) -> dict:
@@ -50,11 +51,13 @@ async def fetch_article(client: LiteratureClient, pmcid: str, version: int | Non
         raw, retrieval = await client._text(url, 'metadata')
         meta = json.loads(raw)
         decision = license_decision(meta, [])
-        if not decision['allowed'] or not meta.get('xml_url'):
-            rejected.append({'version':v,'reason':decision['reason']}); continue
+        if not decision['metadata_fetch_allowed'] or not meta.get('xml_url'):
+            rejected.append({'version':v,'reason':decision['reason'] if not decision['metadata_fetch_allowed'] else 'xml_unavailable',
+                             'license':decision}); continue
         candidates.append((v, meta, retrieval))
     if not candidates:
-        return {'pmcid':pmcid, 'status':'ineligible_or_unavailable', 'rejected':rejected}
+        needs_review = any(x['license']['outcome'] == 'review' for x in rejected)
+        return {'pmcid':pmcid, 'status':'license_review' if needs_review else 'ineligible_or_unavailable', 'rejected':rejected}
     # Prefer an unambiguous published article over a manuscript. If several
     # published versions exist require an explicit version instead of guessing.
     published = [x for x in candidates if metadata_flag(x[1].get('is_manuscript')) is False]
@@ -68,7 +71,8 @@ async def fetch_article(client: LiteratureClient, pmcid: str, version: int | Non
         raise ValueError('XML URL does not match article/version')
     xml, info = await client._text(url, 'xml')
     article = parse_article(xml, meta, {'metadata':meta_info,'xml':info})
-    article['status'] = 'eligible' if article['license']['allowed'] else 'license_rejected'
+    article['status'] = ('eligible' if article['license']['allowed'] else
+                         'license_review' if article['license']['outcome'] == 'review' else 'license_rejected')
     if article['status'] == 'eligible':
         from .source_views import attach_source_view, SourceLicenseError
         for kind in dict.fromkeys(source_views):

@@ -1,0 +1,69 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "issue_id": {
+      "minLength": 1,
+      "title": "Issue Id",
+      "type": "string"
+    },
+    "target_id": {
+      "description": "One source-scoped fact, event, edge or coverage unit",
+      "minLength": 1,
+      "title": "Target Id",
+      "type": "string"
+    },
+    "stage": {
+      "enum": [
+        "transport",
+        "parse",
+        "schema",
+        "evidence",
+        "attribution",
+        "clinical",
+        "temporal",
+        "coverage",
+        "terminology",
+        "media",
+        "rights"
+      ],
+      "title": "Stage",
+      "type": "string"
+    },
+    "code": {
+      "minLength": 1,
+      "title": "Code",
+      "type": "string"
+    },
+    "severity": {
+      "enum": [
+        "block",
+        "review"
+      ],
+      "title": "Severity",
+      "type": "string"
+    },
+    "explanation": {
+      "minLength": 1,
+      "title": "Explanation",
+      "type": "string"
+    },
+    "source_unit_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Source Unit Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "issue_id",
+    "target_id",
+    "stage",
+    "code",
+    "severity",
+    "explanation",
+    "source_unit_ids"
+  ],
+  "title": "GateIssue",
+  "type": "object"
+}

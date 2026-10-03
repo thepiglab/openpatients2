@@ -155,7 +155,9 @@ def parse_figures(xml: str, pmcid: str, version: int, media: list[dict], xml_url
             for item in permissions:
                 if local_name(item.tag) in {"license", "copyright-statement"}:
                     rights.append({"type": local_name(item.tag), "text": xml_text(item),
-                                   "url": item.get(XLINK) or item.get("href")})
+                                   "url": item.get(XLINK) or item.get("href"),
+                                   "urls": list(dict.fromkeys(x.get(XLINK) or x.get('href')
+                                       for x in item.iter() if x.get(XLINK) or x.get('href')))})
     figures, assigned = [], set()
     ids = set()
     parents = {kid: parent for parent in article.iter() for kid in parent}

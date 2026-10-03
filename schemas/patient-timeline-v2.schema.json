@@ -1,0 +1,366 @@
+{
+  "$defs": {
+    "LongitudinalEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "minLength": 1,
+          "title": "Event Id",
+          "type": "string"
+        },
+        "record_id": {
+          "minLength": 1,
+          "title": "Record Id",
+          "type": "string"
+        },
+        "episode_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Only an explicitly distinguishable episode; do not invent visits",
+          "title": "Episode Id"
+        },
+        "kind": {
+          "enum": [
+            "presentation",
+            "history",
+            "diagnosis",
+            "test",
+            "treatment",
+            "adverse_event",
+            "outcome",
+            "follow_up",
+            "plan",
+            "other"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "occurrence": {
+          "enum": [
+            "occurred",
+            "planned",
+            "conditional",
+            "unknown"
+          ],
+          "title": "Occurrence",
+          "type": "string"
+        },
+        "description": {
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "fact_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Fact Ids",
+          "type": "array"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/SourceSpan"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "attribution_evidence": {
+          "items": {
+            "$ref": "#/$defs/SourceSpan"
+          },
+          "minItems": 1,
+          "title": "Attribution Evidence",
+          "type": "array"
+        },
+        "times": {
+          "items": {
+            "$ref": "#/$defs/TimeExpression"
+          },
+          "title": "Times",
+          "type": "array"
+        }
+      },
+      "required": [
+        "event_id",
+        "record_id",
+        "episode_id",
+        "kind",
+        "occurrence",
+        "description",
+        "fact_ids",
+        "evidence",
+        "attribution_evidence",
+        "times"
+      ],
+      "title": "LongitudinalEvent",
+      "type": "object"
+    },
+    "Offset": {
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "lower": {
+          "minimum": 0,
+          "title": "Lower",
+          "type": "number"
+        },
+        "upper": {
+          "minimum": 0,
+          "title": "Upper",
+          "type": "number"
+        },
+        "unit": {
+          "enum": [
+            "minute",
+            "hour",
+            "day",
+            "week",
+            "month",
+            "year"
+          ],
+          "title": "Unit",
+          "type": "string"
+        },
+        "precision": {
+          "enum": [
+            "exact",
+            "range",
+            "approximate"
+          ],
+          "title": "Precision",
+          "type": "string"
+        }
+      },
+      "required": [
+        "text",
+        "lower",
+        "upper",
+        "unit",
+        "precision"
+      ],
+      "title": "Offset",
+      "type": "object"
+    },
+    "SourceSpan": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "description": "Versioned article AND representation, e.g. PMC123.1:jats",
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "segment_id": {
+          "minLength": 1,
+          "title": "Segment Id",
+          "type": "string"
+        },
+        "segment_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Segment Sha256",
+          "type": "string"
+        },
+        "start": {
+          "description": "Unicode code points in the immutable segment, inclusive",
+          "minimum": 0,
+          "title": "Start",
+          "type": "integer"
+        },
+        "end": {
+          "description": "Exclusive end, never byte offsets",
+          "exclusiveMinimum": 0,
+          "title": "End",
+          "type": "integer"
+        },
+        "quote": {
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_id",
+        "segment_id",
+        "segment_sha256",
+        "start",
+        "end",
+        "quote"
+      ],
+      "title": "SourceSpan",
+      "type": "object"
+    },
+    "TemporalEdge": {
+      "additionalProperties": false,
+      "properties": {
+        "edge_id": {
+          "minLength": 1,
+          "title": "Edge Id",
+          "type": "string"
+        },
+        "from_event_id": {
+          "title": "From Event Id",
+          "type": "string"
+        },
+        "to_event_id": {
+          "title": "To Event Id",
+          "type": "string"
+        },
+        "relation": {
+          "enum": [
+            "before",
+            "after",
+            "same_time",
+            "during",
+            "overlaps"
+          ],
+          "title": "Relation",
+          "type": "string"
+        },
+        "offset": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Offset"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence": {
+          "description": "Must establish this pair and relation, not just contain a time word",
+          "items": {
+            "$ref": "#/$defs/SourceSpan"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "edge_id",
+        "from_event_id",
+        "to_event_id",
+        "relation",
+        "offset",
+        "evidence"
+      ],
+      "title": "TemporalEdge",
+      "type": "object"
+    },
+    "TimeExpression": {
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "calendar",
+            "relative",
+            "duration",
+            "age",
+            "gestational_age",
+            "postnatal_age",
+            "order_only"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "precision": {
+          "enum": [
+            "exact",
+            "approximate",
+            "range",
+            "unknown"
+          ],
+          "title": "Precision",
+          "type": "string"
+        },
+        "calendar_value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Only literal YYYY, YYYY-MM or YYYY-MM-DD; no publication date substitution",
+          "title": "Calendar Value"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/SourceSpan"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "text",
+        "kind",
+        "precision",
+        "calendar_value",
+        "evidence"
+      ],
+      "title": "TimeExpression",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "patient-timeline/2",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "record_id": {
+      "title": "Record Id",
+      "type": "string"
+    },
+    "events": {
+      "items": {
+        "$ref": "#/$defs/LongitudinalEvent"
+      },
+      "title": "Events",
+      "type": "array"
+    },
+    "edges": {
+      "items": {
+        "$ref": "#/$defs/TemporalEdge"
+      },
+      "title": "Edges",
+      "type": "array"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "record_id",
+    "events",
+    "edges",
+    "limitations"
+  ],
+  "title": "PatientTimeline",
+  "type": "object"
+}

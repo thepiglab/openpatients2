@@ -61,6 +61,12 @@ async def serve_forever(args):
 def parser():
     p = argparse.ArgumentParser(prog="op2", description="Evidence-grounded OpenPatients extraction and cohort research")
     sub = p.add_subparsers(dest="command", required=True)
+    from .acquisition import add_parser as add_corpus_parser
+    add_corpus_parser(sub)
+    from .corpus_stats import add_parser as add_stats_parser
+    add_stats_parser(sub)
+    from .corpus_pilot import add_parser as add_pilot_parser
+    add_pilot_parser(sub)
     cmd = sub.add_parser("article-search", help="Discover license-filtered PMC candidates; articles need a second license check")
     cmd.add_argument("--query", required=True)
     cmd.add_argument("--limit", type=int, default=100)
@@ -239,6 +245,15 @@ def _main(argv=None):
                 result = asyncio.run(smoke(cfg, next(records(cfg.input))))
                 emit(result)
                 return 0 if result["passed"] else 2
+        elif args.command == "corpus":
+            from .acquisition import dispatch
+            result = dispatch(args)
+        elif args.command in {"corpus-profile", "tokenizer-download"}:
+            from .corpus_stats import dispatch
+            result = dispatch(args)
+        elif args.command == "corpus-pilot":
+            from .corpus_pilot import dispatch
+            result = dispatch(args)
         elif args.command == "article-search":
             from .corpus import search_candidates
             result = asyncio.run(search_candidates(args.query, args.limit, args.offset))

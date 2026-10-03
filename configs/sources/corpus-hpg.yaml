@@ -1,0 +1,23 @@
+# Run on cluster storage. Caps are explicit; invoking again resumes the queue.
+# For an inventory-only run use lanes: [] in a copied configuration.
+lanes:
+  - name: case_focused
+    query: '"case report" OR "case series" OR "case presentation"'
+    start: '1990-01-01'
+    end: '2026-10-02'
+  - name: exploration
+    query: 'open access[filter]'
+    start: '1990-01-01'
+    end: '2026-10-02'
+max_candidates: 100000
+page_size: 500
+search_partition_limit: 9000
+max_storage_bytes: 100000000000
+min_free_bytes: 10000000000
+max_network_bytes_per_invocation: 2000000000
+max_requests_per_invocation: 20000
+max_metadata_bytes: 4000000
+max_xml_bytes: 12000000
+max_article_json_bytes: 40000000
+cloud_requests_per_second: 4
+search_requests_per_second: 2

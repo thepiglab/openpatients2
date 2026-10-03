@@ -1,0 +1,162 @@
+{
+  "$defs": {
+    "FieldSupport": {
+      "additionalProperties": false,
+      "properties": {
+        "pointer": {
+          "description": "JSON pointer within one fact, e.g. /dose_unit",
+          "pattern": "^/",
+          "title": "Pointer",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/SourceSpan"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "role": {
+          "enum": [
+            "value",
+            "subject",
+            "negation",
+            "certainty",
+            "time",
+            "table_row",
+            "table_column",
+            "table_header"
+          ],
+          "title": "Role",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pointer",
+        "evidence",
+        "role"
+      ],
+      "title": "FieldSupport",
+      "type": "object"
+    },
+    "SourceSpan": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "description": "Versioned article AND representation, e.g. PMC123.1:jats",
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "segment_id": {
+          "minLength": 1,
+          "title": "Segment Id",
+          "type": "string"
+        },
+        "segment_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Segment Sha256",
+          "type": "string"
+        },
+        "start": {
+          "description": "Unicode code points in the immutable segment, inclusive",
+          "minimum": 0,
+          "title": "Start",
+          "type": "integer"
+        },
+        "end": {
+          "description": "Exclusive end, never byte offsets",
+          "exclusiveMinimum": 0,
+          "title": "End",
+          "type": "integer"
+        },
+        "quote": {
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_id",
+        "segment_id",
+        "segment_sha256",
+        "start",
+        "end",
+        "quote"
+      ],
+      "title": "SourceSpan",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "fact_id": {
+      "minLength": 1,
+      "title": "Fact Id",
+      "type": "string"
+    },
+    "record_id": {
+      "description": "Article-version-scoped patient; never a shared p1 key",
+      "minLength": 1,
+      "title": "Record Id",
+      "type": "string"
+    },
+    "task": {
+      "minLength": 1,
+      "title": "Task",
+      "type": "string"
+    },
+    "collection": {
+      "description": "items, tumors, biomarkers or treatments",
+      "minLength": 1,
+      "title": "Collection",
+      "type": "string"
+    },
+    "value": {
+      "additionalProperties": true,
+      "title": "Value",
+      "type": "object"
+    },
+    "field_support": {
+      "items": {
+        "$ref": "#/$defs/FieldSupport"
+      },
+      "title": "Field Support",
+      "type": "array"
+    },
+    "origin": {
+      "enum": [
+        "article_text",
+        "table",
+        "caption",
+        "visual_annotation"
+      ],
+      "title": "Origin",
+      "type": "string"
+    },
+    "supersedes_fact_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Supersedes Fact Id"
+    }
+  },
+  "required": [
+    "fact_id",
+    "record_id",
+    "task",
+    "collection",
+    "value",
+    "field_support",
+    "origin",
+    "supersedes_fact_id"
+  ],
+  "title": "FactEnvelope",
+  "type": "object"
+}
