@@ -9,6 +9,7 @@ from openpatients2.extraction_contracts import (SourceSpan, FactEnvelope, Covera
 from openpatients2.longitudinal import PatientTimeline, audit_timeline
 from openpatients2.refinement_plan import GateIssue, RepairAttempt, RefinementBudget, plan_refinement
 from openpatients2.corpus_policy import prioritize_article
+from openpatients2.evidence_recovery import resolve_timeline_spans
 
 TEXT = ('Patient 1 was admitted on 2020-03. Surgery was performed 2 days later. '
         'Discharge was 3 days after surgery, 5 days after admission. '
@@ -54,6 +55,69 @@ def test_spans_pin_namespace_hash_unicode_and_offset():
     assert 'source_digest_mismatch' in span_errors(SourceSpan(**span()), {'PMCtest.1:jats': {'b1': TEXT+' changed'}})
     broken = span('2 days later'); broken['start'] += 1; broken['end'] += 1
     assert 'nonliteral_span' in span_errors(SourceSpan(**broken), SOURCES)
+
+
+def test_unique_span_resolution_derives_offsets_and_missing_provenance_only():
+    value = timeline([edge('r1', 'admission', 'surgery', 2)])
+    before = copy.deepcopy(value)
+    for e in value['events']:
+        for s in e['evidence'] + e['attribution_evidence']:
+            s.update(start=999, end=1000)
+            s.pop('source_id'); s.pop('segment_sha256')
+    fixed, report = resolve_timeline_spans(value, 'PMCtest.1:jats', [{'segment_id':'b1','text':TEXT}])
+    assert fixed == before and value != before
+    assert len(report['recoveries']) == 6 and not report['unresolved']
+    assert not report['clinical_content_changed'] and not report['clinical_entailment_verified']
+    assert report['recoveries'][0]['source_sha256'] == HASH
+    assert report['recoveries'][0]['quote_sha256'] == HASH
+    assert audit(fixed)['structural_source_gates_passed']
+
+
+@pytest.mark.parametrize('text,quote', [
+    ('Patient 1: 60 mg. Patient 2: 60 mg.', '60 mg'),
+    ('Day 1: improved. Day 5: improved.', 'improved'),
+    ('a a a', 'a a'),
+])
+def test_unique_span_resolution_refuses_numeric_patient_time_and_overlapping_ambiguity(text, quote):
+    value = {'events':[{'evidence':[{'segment_id':'b1','quote':quote,'start':0,'end':len(quote)}]}]}
+    before = copy.deepcopy(value)
+    fixed, report = resolve_timeline_spans(value, 'PMCtest.1:jats', [{'segment_id':'b1','text':text}])
+    assert fixed == before == value
+    assert report['unresolved'][0]['code'] == 'ambiguous_exact_quote'
+    assert not report['resolved']
+
+
+@pytest.mark.parametrize('changes,code', [
+    ({'source_id':'PMCtest.1:pdf'}, 'conflicting_source_id'),
+    ({'segment_sha256':'a'*64}, 'conflicting_source_digest'),
+    ({'segment_id':'missing'}, 'unknown_source_segment'),
+    ({'quote':'Surgery was performed 7 days later.'}, 'nonliteral_quote'),
+    ({'quote':'Surgery was performed  2 days later.'}, 'nonliteral_quote'),
+])
+def test_unique_span_resolution_refuses_conflicts_and_never_rewrites_medical_claim(changes, code):
+    original = span('Surgery was performed 2 days later.'); original.update(changes)
+    value = {'events':[{'record_id':RID,'description':'Surgery','times':[{'text':'7 days later'}],
+                       'evidence':[original]}], 'edges':[{'offset':{'lower':7,'unit':'day'}}]}
+    before = copy.deepcopy(value)
+    fixed, report = resolve_timeline_spans(value, 'PMCtest.1:jats', [{'segment_id':'b1','text':TEXT}])
+    assert fixed == before == value
+    assert report['unresolved'][0]['code'] == code
+
+
+def test_unique_span_resolution_unicode_offsets_do_not_repair_wrong_patient_or_time():
+    text = 'µ Patient 2 received 60 mg for 2 months.'
+    value = {'record_id':RID,'events':[{'record_id':'PMCtest.1:p2','evidence':[
+        {'segment_id':'b1','quote':'60 mg','start':999,'end':1004}],
+        'times':[{'text':'2 days','evidence':[{'segment_id':'b1','quote':'2 months'}]}]}]}
+    fixed, report = resolve_timeline_spans(value, 'PMCtest.1:jats', [{'segment_id':'b1','text':text}])
+    assert fixed['events'][0]['record_id'] == 'PMCtest.1:p2'
+    assert fixed['events'][0]['times'][0]['text'] == '2 days'
+    assert fixed['events'][0]['evidence'][0]['start'] == text.index('60 mg')
+    assert report['resolved'][0]['source_span'] == [text.index('60 mg'), text.index('60 mg')+5]
+    assert not span_errors(SourceSpan(**fixed['events'][0]['evidence'][0]), {'PMCtest.1:jats':{'b1':text}})
+    assert not report['clinical_entailment_verified']
+    with pytest.raises(ValueError):
+        resolve_timeline_spans(value, 'PMCtest.1:jats', [{'segment_id':'b1','text':text}]*2)
 
 
 def test_partial_calendar_date_retains_precision():
@@ -136,6 +200,75 @@ def test_field_evidence_required_even_for_zero_and_false():
     with pytest.raises(ValidationError): FactEnvelope.model_validate(value)
     value['value'] = {'items':['a']}; value['field_support'][0]['pointer'] = '/items/-1'
     with pytest.raises(ValidationError): FactEnvelope.model_validate(value)
+
+
+def test_normalized_schema_enums_are_provenance_review_not_literal_prose():
+    f = FactEnvelope(fact_id='f1',record_id=RID,task='medications',collection='items',
+        value={'subject':'index_patient','assertion':'present','temporality':'historical',
+               'action':'administered','name':'Surgery','dose_value':2,
+               'time':{'text':'2 days later','relation':'after','anchor':'Surgery'}},
+        field_support=[{'pointer':pointer,'role':'value','evidence':[span(quote)]} for pointer,quote in
+                       [('/name','Surgery'),('/dose_value','2 days later'),('/time/text','2 days later'),
+                        ('/time/anchor','Surgery')]], origin='article_text',supersedes_fact_id=None)
+    result = field_support_report(f,SOURCES)
+    assert result['literal_field_gates_passed']
+    assert result['required_literal_pointers'] == ['/dose_value','/name','/time/anchor','/time/text']
+    assert {x['pointer'] for x in result['normalized_fields']} == {
+        '/subject','/assertion','/temporality','/action','/time/relation'}
+    assert not result['normalized_provenance_gates_passed']
+    assert not result['field_provenance_gates_passed']
+    assert not result['clinical_entailment_verified'] and not result['patient_attribution_verified']
+    assert any(x['code']=='missing_subject_attribution_evidence' for x in result['review_issues'])
+    # Evidence containing "2" cannot establish a 7 mg dose, nor that this is
+    # medication rather than a temporal phrase. Both remain visible to review.
+    f.value['dose_value'] = 7
+    assert 'field_value_not_literal_in_evidence' in codes(field_support_report(f,SOURCES))
+
+
+def test_enum_exemptions_are_schema_specific_and_identity_support_is_role_specific():
+    f = FactEnvelope(fact_id='f1',record_id=RID,task='medications',collection='items',
+        value={'subject':'index_patient','name':'present','unrecognized_enum':'historical','dose_value':20},
+        field_support=[{'pointer':'/subject','role':'value','evidence':[span('Patient 1')]},
+                       {'pointer':'/dose_value','role':'value','evidence':[span('2 days later')]}],
+        origin='article_text',supersedes_fact_id=None)
+    report = field_support_report(f,SOURCES)
+    assert {x['pointer'] for x in report['issues']} == {'/name','/unrecognized_enum','/dose_value'}
+    assert report['review_issues'][0]['code'] == 'missing_subject_attribution_evidence'
+    f.field_support[0].role = 'subject'
+    report = field_support_report(f,SOURCES)
+    assert not report['review_issues']
+    assert not report['patient_attribution_verified']
+
+
+def test_local_registry_metadata_needs_link_review_not_literal_matching():
+    f = FactEnvelope(fact_id='f1',record_id=RID,task='oncology',collection='tumors',
+        value={'tumor_ref':'t1','name':'Surgery','laterality':'left'},
+        field_support=[{'pointer':'/name','role':'value','evidence':[span('Surgery')]}],
+        origin='article_text',supersedes_fact_id=None)
+    report = field_support_report(f,SOURCES)
+    assert report['literal_field_gates_passed'] and report['required_literal_pointers'] == ['/name']
+    assert {x['code'] for x in report['review_issues']} == {'registry_link_unreviewed','normalized_enum_provenance_unreviewed'}
+
+
+def test_invalid_provenance_blocks_even_normalized_enum_and_boolean_review_stays_open():
+    broken = span(); broken['segment_sha256'] = 'a'*64
+    f = FactEnvelope(fact_id='f1',record_id=RID,task='medications',collection='items',
+        value={'assertion':'present','negated':False,'numeric_value':0},
+        field_support=[{'pointer':'/assertion','role':'negation','evidence':[broken]},
+                       {'pointer':'/negated','role':'negation','evidence':[span()]}],
+        origin='article_text',supersedes_fact_id=None)
+    report = field_support_report(f,SOURCES)
+    assert {'source_digest_mismatch','missing_field_evidence'} <= codes(report)
+    assert any(x['code']=='boolean_clinical_claim_unreviewed' for x in report['review_issues'])
+
+
+def test_field_support_cannot_borrow_valid_quotes_from_another_article_patient():
+    f = FactEnvelope(fact_id='f1',record_id='PMCother.1:p1',task='medications',collection='items',
+        value={'name':'Surgery'}, field_support=[{'pointer':'/name','role':'value','evidence':[span('Surgery')]}],
+        origin='article_text',supersedes_fact_id=None)
+    report = field_support_report(f,SOURCES)
+    assert 'fact_source_article_mismatch' in codes(report)
+    assert not report['literal_field_gates_passed']
 
 
 def test_coverage_denominator_and_patient_binding():

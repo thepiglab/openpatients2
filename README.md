@@ -4,6 +4,8 @@
 
 A uv Python project for turning licensed PMC full articles and Open-Patients source cases into evidence-backed patient records. It supports patient discovery, species, 14 clinical sections, cited summaries, relative timelines, actual figure inspection, terminology grounding and cohort queries through OpenAI-compatible endpoints. Serving profiles include experimental Muse Glimmer and Gemma 4 31B layouts for eight B200 GPUs.
 
+The [fixed-source correctness campaign](docs/CORPUS_CORRECTNESS.md) compares whole-article and compact patient inputs on 20 previously downloaded articles, across three seeds. One command schedules CPU preparation, eight-B200 FP8/DFlash inference, source-checklist scoring, reporting and owned-download cleanup. It separates live discovery, first-pass versus delivered facts, timelines, caption/pixel ownership and schema validity.
+
 The [figure attribution and cross-article linkage experiment](reports/FIGURE_ATTRIBUTION_AND_LINKAGE.md) tests panel ownership, specimen context, citation-guided retrieval and explicit follow-up identity links. The article runner now enables a separate per-figure attribution stage by default, and citation plans preserve article-local cases. Synthetic patient composition remains a separate future step.
 
 **A live, budgeted PMC/API pilot is now included**, alongside synthetic CPU/mock demonstrations. No B200 throughput or physician-adjudicated accuracy is claimed. No model weights or ontology releases were downloaded. A source case is not necessarily a unique real patient, and retrieved cohorts are not population-representative.

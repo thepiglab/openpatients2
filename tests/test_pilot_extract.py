@@ -80,7 +80,7 @@ def answer(task, value):
     raise AssertionError(task)
 
 
-def setup_mock(monkeypatch, value, *, count=10, server_max=8192, responses=None, usage=True, malformed=False):
+def setup_mock(monkeypatch, value, *, count=10, server_max=8192, responses=None, usage=True, malformed=False, seed=42):
     events = []
     def tokenize(request):
         assert request.url.path == '/tokenize'
@@ -93,7 +93,7 @@ def setup_mock(monkeypatch, value, *, count=10, server_max=8192, responses=None,
         assert events[-1][0] == 'tokenize'
         body = client.body(task, messages, cap)
         assert 'response_format' not in body and 'structured_outputs' not in body
-        assert (body['temperature'], body['top_p'], body['top_k'], body['seed']) == (1, .95, 64, 42)
+        assert (body['temperature'], body['top_p'], body['top_k'], body['seed']) == (1, .95, 64, seed)
         assert body['chat_template_kwargs'] == {'reasoning_strength': 'medium'}
         assert count + cap + 64 <= server_max
         events.append(('complete', task, messages, cap))
@@ -271,7 +271,8 @@ async def test_item_repair_freezes_supported_neighbors_and_partial_is_not_succes
     assert {'/numeric_value', '/text_value'} <= pointers
     assert '/assertion' not in pointers and '/subject' not in pointers
     assert age['gate_report']['clinical_entailment_verified'] is False
-    assert any(issue['pointer'] == '/subject' for issue in age['gate_report']['issues'])
+    assert any(issue['pointer'] == '/subject' for issue in age['gate_report']['review_issues'])
+    assert age['gate_report']['field_provenance_gates_passed'] is False
 
 
 async def test_direct_arm_does_not_repair_and_first_prompts_match_targeted(tmp_path, monkeypatch):

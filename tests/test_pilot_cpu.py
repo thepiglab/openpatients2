@@ -224,3 +224,43 @@ async def test_empty_profiler_sample_never_becomes_ready(tmp_path, stages, monke
             await pilot_cpu.run_cpu(work,cfg,http=http)
     assert json.loads((work/'cpu.json').read_text())['status'] == 'failed'
     assert [c[0] for c in stages] == ['tokenizer','profile']
+
+
+@pytest.mark.asyncio
+async def test_fixed_fixture_never_discovers_and_pins_reviewed_rosters(tmp_path, stages, monkeypatch):
+    from test_articles import article, roster
+    cfg = config(tmp_path)
+    cfg.pop('source_config')
+    source = tmp_path/'fixture.jsonl.gz'; rosters = tmp_path/'rosters.json'
+    reviewed = []
+    with gzip.open(source,'wt') as handle:
+        for number in (1,2):
+            row = article(); row.update(status='eligible',article_id=f'PMC{number}.1')
+            handle.write(json.dumps(row)+'\n')
+            reviewed.append({'article_id': row['article_id'], 'text_sha256': row['text_sha256'],
+                'review_status': 'source_checked', 'roster': roster(row)})
+    rosters.write_text(json.dumps({'schema_version': 'fixed-rosters/1', 'articles': reviewed}))
+    cfg.update(source_mode='fixed_fixture',fixed_source=str(source),fixed_source_sha256=pilot_cpu.sha256(source),
+        fixed_rosters=str(rosters),fixed_rosters_sha256=pilot_cpu.sha256(rosters),sample_size=2)
+    def forbidden(*args, **kwargs):
+        raise AssertionError('Fixed fixture may not run acquisition')
+    monkeypatch.setattr(pilot_cpu.acquisition,'initialize',forbidden)
+    async with httpx.AsyncClient(transport=httpx.MockTransport(forbidden)) as http:
+        report = await pilot_cpu.run_cpu(tmp_path/'pilot',cfg,http=http)
+    assert report['status'] == 'ready' and report['sample_size'] == 2
+    assert report['source']['cumulative_decoded_network_bytes'] == 0
+    assert report['acquisition_invocations'] == [] and not (tmp_path/'pilot'/'acquisition').exists()
+    assert (tmp_path/'pilot'/'profile'/'rosters.json').read_bytes() == rosters.read_bytes()
+    assert report['hashes']['profile/rosters.json'] == pilot_cpu.sha256(rosters)
+
+
+@pytest.mark.asyncio
+async def test_fixed_fixture_changed_hash_fails_before_tokenizer(tmp_path, stages):
+    cfg = config(tmp_path); cfg.pop('source_config')
+    source = tmp_path/'fixture.gz'; source.write_bytes(b'changed')
+    roster = tmp_path/'rosters'; roster.write_text('{}')
+    cfg.update(source_mode='fixed_fixture',fixed_source=str(source),fixed_source_sha256='0'*64,
+        fixed_rosters=str(roster),fixed_rosters_sha256=pilot_cpu.sha256(roster))
+    with pytest.raises(ValueError,match='hash changed'):
+        await pilot_cpu.run_cpu(tmp_path/'pilot',cfg)
+    assert not stages and not (tmp_path/'pilot'/'acquisition').exists()

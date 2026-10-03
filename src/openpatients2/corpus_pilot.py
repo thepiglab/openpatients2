@@ -12,6 +12,7 @@ import json
 import os
 from pathlib import Path
 import signal
+import tarfile
 import time
 
 import yaml
@@ -21,6 +22,7 @@ from .data import write_json
 from .provenance import json_digest
 
 PATH_KEYS = ('source_config','engine_config','extraction_config','tokenizer_metadata','chat_template')
+FIXED_PATH_KEYS = ('fixed_source','fixed_rosters','fidelity_reference')
 CPU_RESOURCES = {'cpu':(32,'64G','06:00:00'), 'setup':(8,'32G','04:00:00'),
                  'download':(8,'32G','08:00:00'), 'cleanup':(2,'4G','01:00:00'),
                  'report':(2,'4G','01:00:00')}
@@ -35,13 +37,29 @@ def prepare(root, work, config_path):
     root, work = Path(root).resolve(), Path(work).resolve()
     if work.exists(): raise ValueError('Use a new work directory; pilot outputs are never overwritten')
     config = yaml.safe_load(Path(config_path).read_text())
-    for key in PATH_KEYS:
+    fixed = config.get('source_mode') == 'fixed_fixture'
+    paths = tuple(k for k in PATH_KEYS if k != 'source_config' or not fixed) + (FIXED_PATH_KEYS if fixed else ())
+    for key in paths:
         config[key] = str((root / config[key]).resolve())
         if not Path(config[key]).is_file(): raise ValueError('Missing pilot input: '+key)
     if not 1 <= config['sample_size'] <= 48: raise ValueError('Inference sample must contain at most 48 articles')
     if not 1 <= config['workers'] <= 32 or not 1 <= config['max_figures'] <= 12:
         raise ValueError('Pilot CPU/figure limits exceeded')
-    if config['arms'] != ['direct','targeted']: raise ValueError('Keep independent matched direct/targeted arms')
+    if fixed:
+        if config['sample_size'] != 20 or config.get('seeds') != [42,43,44]:
+            raise ValueError('Correctness campaign requires twenty fixed articles and seeds 42,43,44')
+        if config.get('variants') != [
+            {'name':'whole-targeted','arm':'targeted','input_scope':'whole_article'},
+            {'name':'compact-targeted','arm':'targeted','input_scope':'patient_sections'}]:
+            raise ValueError('Correctness campaign requires matched whole and compact targeted variants')
+        if config['matrix'] != [{'context':65536,'prefill':32768}]:
+            raise ValueError('Correctness campaign requires the pinned 64k/32768 layout')
+        for key in FIXED_PATH_KEYS:
+            digest = sha256(config[key])
+            if config.get(key+'_sha256') not in {None,digest}:
+                raise ValueError('Fixed correctness input checksum mismatch: '+key)
+            config[key+'_sha256'] = digest
+    elif config['arms'] != ['direct','targeted']: raise ValueError('Keep independent matched direct/targeted arms')
     if not 1 <= len(config['matrix']) <= 4: raise ValueError('Bound the GPU matrix to at most four cells')
     for cell in config['matrix']:
         if cell['context'] not in {32768,65536} or cell['prefill'] not in {8192,32768}:
@@ -50,12 +68,13 @@ def prepare(root, work, config_path):
         raise ValueError('Duplicate GPU matrix cells')
     # Enforce source/network caps before scheduling any job.
     from .acquisition import AcquisitionConfig
-    AcquisitionConfig.model_validate(yaml.safe_load(Path(config['source_config']).read_text()))
+    if not fixed:
+        AcquisitionConfig.model_validate(yaml.safe_load(Path(config['source_config']).read_text()))
     from .pilot_extract import load_pilot_config
     load_pilot_config(config['extraction_config'])
     work.mkdir(parents=True); (work/'logs').mkdir()
     files = sorted((root/'src/openpatients2').rglob('*.py')) + [root/'uv.lock',root/'pyproject.toml',root/'scripts/corpus_pilot.sbatch']
-    files += [Path(config[k]) for k in PATH_KEYS]
+    files += [Path(config[k]) for k in paths]
     files += sorted((root/'configs/hipergator/glimmer').glob('*'))
     manifest = {str(p):sha256(p) for p in files if p.is_file()}
     campaign = {'version':'corpus-pilot/1','root':str(root),'work':str(work),'config':config,
@@ -150,6 +169,64 @@ def prepare_engine(campaign, sif=None):
     return engine_prepare(source,campaign['root'],work/'engine',False,sif=sif)
 
 
+async def correctness_runs(campaign, destination, endpoints, context):
+    """Discover per seed; condition every comparison on one reviewed roster."""
+    from .pilot_extract import prepare_rosters, run_pilot
+    from .corpus_fidelity import evaluate
+    work = Path(campaign['work']); config = campaign['config']
+    sample = work/'profile/sample.jsonl.gz'; frozen = work/'profile/rosters.json'
+    frozen_hash = sha256(frozen); results = []; discovery = []
+    for index, seed in enumerate(config['seeds']):
+        base = Path(destination)/f'seed{seed}'
+        try:
+            roster_report = await prepare_rosters(config['extraction_config'], sample, base/'discovery',
+                endpoints, context, seed=seed)
+        except Exception as exc:
+            # The reviewed roster is independent of live discovery. A failed
+            # discovery trial must not suppress extraction or pixel evaluation.
+            roster_report = {'status':'failed','error_type':type(exc).__name__,'error':str(exc)}
+            write_json(base/'discovery'/'FAILED.json',roster_report)
+        predicted = roster_report.get('outputs', {}).get('predicted_rosters')
+        if predicted:
+            try:
+                score = evaluate(config['fidelity_reference'], [], discovery=predicted)
+                write_json(base/'discovery'/'fidelity.json', score)
+                roster_report['fidelity'] = score['discovery']
+            except Exception as exc:
+                roster_report.update(status='failed',error='Discovery scoring failed: '+str(exc))
+        discovery.append({'seed':seed, 'report':roster_report})
+        variants = config['variants'] if index % 2 == 0 else list(reversed(config['variants']))
+        for order, variant in enumerate(variants):
+            if sha256(frozen) != frozen_hash:
+                raise ValueError('Hand-reviewed frozen rosters changed during correctness run')
+            write_json(work/'progress.json',{'phase':'extracting','seed':seed,'variant':variant['name'],
+                'input_scope':variant['input_scope'],'order':order,'time_unix':time.time()})
+            try:
+                measured = await run_pilot(config['extraction_config'], sample, base/variant['name'], endpoints,
+                    context, variant['arm'], image_manifest=work/'vision-assets/manifest.json',
+                    frozen_rosters=frozen, input_scope=variant['input_scope'], seed=seed)
+            except Exception as exc:
+                measured = {'status':'failed','error_type':type(exc).__name__,'error':str(exc),
+                            'tokens':{},'valid_tasks':0,'task_count':0}
+                write_json(base/variant['name']/'FAILED.json',measured)
+            if measured.get('outputs'):
+                try:
+                    trial = base/variant['name']
+                    tasks = [read_json(p) for p in sorted((trial/'tasks').glob('*.json'))]
+                    score = evaluate(config['fidelity_reference'], measured['outputs']['patients'],
+                        task_rows=tasks, visual_rows=measured['outputs']['visual_annotations'])
+                    write_json(trial/'fidelity.json', score)
+                    measured['fidelity'] = score
+                    measured['outputs']['fidelity'] = str(trial/'fidelity.json')
+                    write_json(trial/'report.json', measured)
+                except Exception as exc:
+                    measured.update(status='failed',error='Source-fidelity scoring failed: '+str(exc))
+                    write_json(base/variant['name']/'SCORING_FAILED.json',{'error':str(exc)})
+            results.append({'arm':variant['name'],'seed':seed,'input_scope':variant['input_scope'],
+                'order':order,'frozen_rosters_sha256':frozen_hash,'report':measured})
+    return results, discovery
+
+
 async def _gpu_locked(campaign):
     from . import hipergator as hpg
     from .glimmer_benchmark import serving_config, gpu_probe, server_metrics
@@ -172,7 +249,7 @@ async def _gpu_locked(campaign):
             raise ValueError('Checkpoint changed after CPU verification: '+asset['file'])
     if len(os.environ.get('CUDA_VISIBLE_DEVICES','').split(','))!=8:
         raise ValueError('This pilot requires exactly eight GPUs on one node')
-    started=time.monotonic(); results=[]; failed=[]
+    started=time.monotonic(); results=[]; failed=[]; discovery=[]
     baseline=gpu_snapshot()
     for cell in campaign['config']['matrix']:
         label=f'context{cell["context"]}-prefill{cell["prefill"]}'
@@ -196,11 +273,19 @@ async def _gpu_locked(campaign):
                     await replay.run(); await replay.secondary()
                 finally: await replay.close()
             before=await server_metrics(endpoints); write_json(dest/'metrics-before.json',before)
-            for arm in campaign['config']['arms']:
-                write_json(work/'progress.json',{'phase':'extracting','cell':label,'arm':arm,'time_unix':time.time()})
-                report=await run_pilot(campaign['config']['extraction_config'],work/'profile/sample.jsonl.gz',
-                    dest/arm,endpoints,cell['context'],arm,image_manifest=work/'vision-assets/manifest.json')
-                results.append({'cell':cell,'arm':arm,'report':report})
+            if campaign['config'].get('source_mode') == 'fixed_fixture':
+                rows, discovered = await correctness_runs(campaign,dest,endpoints,cell['context'])
+                results.extend({'cell':cell,**row} for row in rows)
+                discovery.extend({'cell':cell,**row} for row in discovered)
+                failed.extend({'cell':cell,'seed':row['seed'],'arm':row.get('arm','discovery'),
+                    'error':row['report'].get('error','Correctness trial failed')}
+                    for row in [*rows,*discovered] if row['report'].get('status') == 'failed')
+            else:
+                for arm in campaign['config']['arms']:
+                    write_json(work/'progress.json',{'phase':'extracting','cell':label,'arm':arm,'time_unix':time.time()})
+                    report=await run_pilot(campaign['config']['extraction_config'],work/'profile/sample.jsonl.gz',
+                        dest/arm,endpoints,cell['context'],arm,image_manifest=work/'vision-assets/manifest.json')
+                    results.append({'cell':cell,'arm':arm,'report':report})
             write_json(dest/'metrics-after.json',await server_metrics(endpoints))
         except Exception as exc:
             failure={'cell':cell,'error_type':type(exc).__name__,'error':str(exc)}
@@ -210,8 +295,10 @@ async def _gpu_locked(campaign):
             await wait_for_release(baseline,dest/'gpu-drain.json')
     result={'status':'completed' if not failed else 'partial','gpu_stage_seconds':time.monotonic()-started,
             'gpus':8,'results':results,'failures':failed,'pixel_expansion':'exact vLLM /tokenize guard',
-            'medical_accuracy':'unadjudicated new sample; inspect source review forms',
-            'throughput_notice':'Diverse sample includes orchestration/retries; distinct from warm repeated prompt tuning.'}
+            'medical_accuracy':('finite source-reviewed checklist; remaining claims and pixel descriptions unadjudicated'
+                if campaign['config'].get('source_mode') == 'fixed_fixture' else 'unadjudicated new sample; inspect source review forms'),
+            'throughput_notice':'Diverse sample includes orchestration/retries; distinct from warm repeated prompt tuning.',
+            'discovery':discovery}
     write_json(work/'gpu.json',result)
     return result
 
@@ -232,22 +319,51 @@ def report(campaign):
     result={'cpu':cpu.get('status','missing'),'gpu':run.get('status','missing'),
             'cleanup':read_json(cleanup).get('status') if cleanup.exists() else 'missing',
             'source_cleanup':read_json(work/'source-cleanup.json').get('status') if (work/'source-cleanup.json').exists() else 'pending',
-            'failures':run.get('failures',[]),'cells':run.get('results',[])}
+            'failures':run.get('failures',[]),'cells':run.get('results',[]),'discovery':run.get('discovery',[]),
+            'source_mode':campaign['config'].get('source_mode','acquisition')}
     write_json(work/'summary.json',result)
-    lines=[]
+    lines=[]; fidelity_lines=[]; discovery_lines=[]
     for row in result['cells']:
         cell, measured=row['cell'],row['report']; tokens=measured['tokens']
         rate=tokens.get('all_gpus_output_tokens_per_second')
         display_rate=f'{rate:.1f}' if rate is not None else 'unavailable'
-        lines.append(f'| {cell["context"]} | {cell["prefill"]} | {row["arm"]} | '
+        lines.append(f'| {cell["context"]} | {cell["prefill"]} | {row.get("seed","—")} | {row["arm"]} | '
                      f'{measured["valid_tasks"]} / {measured["task_count"]-measured["valid_tasks"]} | '
                      f'{display_rate} |')
+        score = measured.get('fidelity', {})
+        if score:
+            first = score['summary']['first_pass']; delivered = score['summary']['delivered']
+            timelines = measured.get('task_statuses_by_domain', {}).get('timeline', {})
+            figures = score['figures']
+            def figure_counts(name):
+                counts = figures[name]['summary']
+                return f'{counts["matched"]}/{counts["required"]} ({counts["unscorable"]} unavailable)'
+            fidelity_lines.append(f'| {row["seed"]} | {row["arm"]} | {first["matched"]}/{first["required"]} | '
+                f'{delivered["matched"]}/{delivered["required"]} | {delivered["missing"]} / {delivered["unscorable"]} | '
+                f'{delivered["forbidden_violations"]}/{delivered["forbidden"]} ({delivered["forbidden_unscorable"]} unavailable) | '
+                f'{timelines.get("valid",0)}/{sum(timelines.values())} | {figure_counts("caption")} | {figure_counts("pixels")} |')
+    for trial in result['discovery']:
+        counts = trial['report'].get('fidelity', {}).get('summary')
+        if counts:
+            discovery_lines.append(f'| {trial["seed"]} | {counts["count_matches"]}/{counts["definitive_articles"]} | '
+                f'{counts["missing_patients"]} | {counts["extra_patients"]} | {counts["unscorable"]} |')
+    correctness = ('\n## Reviewed source checklist\n\n'
+        '| Seed | Scope | First-pass matches | Delivered matches | Missing / unavailable | Forbidden hits | Valid timelines | Caption ownership | Pixel ownership |\n'
+        '| ---: | --- | ---: | ---: | ---: | ---: | ---: | --- | --- |\n' + '\n'.join(fidelity_lines) +
+        '\n\nMatches are finite reference assertions, not comprehensive clinical accuracy. Missing and unavailable remain separate; unavailable forbidden checks do not establish safety. Pixel descriptions still need source/pixel adjudication.\n'
+        '\n## Independent patient discovery\n\n'
+        '| Seed | Correct article counts | Missing patients | Extra patients | Unavailable articles |\n'
+        '| ---: | ---: | ---: | ---: | ---: |\n'+'\n'.join(discovery_lines)+
+        '\n\nMatching a count does not establish matching individual identities. Full source-scoped review forms and per-domain validity counts are saved in each trial.\n') if result['source_mode']=='fixed_fixture' else ''
     (work/'SUMMARY.md').write_text('# Bounded PMC / Glimmer pilot\n\n'+
         f'CPU: {result["cpu"]}; GPU: {result["gpu"]}; checkpoint cleanup: {result["cleanup"]}; article cleanup: {result["source_cleanup"]}.\n\n'+
-        '| Context | Prefill budget | Arm | Valid / invalid tasks | Generated tok/s, all GPUs |\n'+
-        '| ---: | ---: | --- | ---: | ---: |\n'+'\n'.join(lines)+'\n\n'+
+        '| Context | Prefill budget | Seed | Arm | Valid / invalid tasks | Generated tok/s, all GPUs |\n'+
+        '| ---: | ---: | ---: | --- | ---: | ---: |\n'+'\n'.join(lines)+'\n\n'+
+        correctness +
         'CPU lengths: profile/SUMMARY.md. Per-cell extraction counts and input/output token distributions: extraction/*/{direct,targeted}/report.json.\n\n'+
-        'New-source clinical accuracy is pending source adjudication. Field validity and literal evidence checks are separate from entailment and recall.\n')
+        ('Correctness variants share reviewed fixed rosters; live-discovery trials are reported separately. Source-fidelity scores cover only the reviewed reference assertions.\n'
+         if result['source_mode']=='fixed_fixture' else
+         'New-source clinical accuracy is pending source adjudication. Field validity and literal evidence checks are separate from entailment and recall.\n'))
     return result
 
 
@@ -291,8 +407,51 @@ def stage(campaign, phase):
         raise
 
 
+def archive_results(campaign, output):
+    """Export only bounded result paths; omit sources, environments and models."""
+    work = Path(campaign['work']).resolve(); output = Path(output).resolve()
+    if output.exists() or output.is_relative_to(work):
+        raise ValueError('Use a new archive filename outside the campaign')
+    names = ('pilot.json','cpu.json','gpu.json','summary.json','SUMMARY.md','source-cleanup.json',
+             'source-owner.json','progress.json','extraction','logs','vision-assets','profile/counts.jsonl.gz',
+             'profile/profile.json','profile/SUMMARY.md','profile/rosters.json',
+             'profile/token-histograms.png','profile/token-histograms.svg','profile/token-histograms.json',
+             'cpu-error.json','gpu-error.json','source-cleanup-error.json',
+             'engine/setup.json','engine/container-python.json',
+             'engine/results/glimmer-fp8/download.json','engine/results/glimmer-fp8/cleanup.json')
+    files = []
+    for name in names:
+        path = work/name
+        if path.is_symlink():
+            raise ValueError('Result archive refuses symlinks')
+        entries = sorted(path.rglob('*')) if path.is_dir() else [path]
+        for entry in entries:
+            if entry.is_symlink() or not entry.resolve().is_relative_to(work):
+                raise ValueError('Result archive path escaped campaign')
+            if entry.is_file():
+                if entry.suffix == '.sif' or any(part in {'.venv','uv-cache','.cache'} for part in entry.relative_to(work).parts):
+                    continue
+                files.append(entry)
+    total = sum(p.stat().st_size for p in files)
+    if total > 2_000_000_000:
+        raise ValueError('Result export exceeds 2 GB cap')
+    created = False
+    try:
+        with output.open('xb') as handle:
+            created = True
+            with tarfile.open(fileobj=handle, mode='w:gz') as archive:
+                for path in files:
+                    archive.add(path,arcname=str(path.relative_to(work)),recursive=False)
+    except BaseException:
+        if created:
+            output.unlink(missing_ok=True)
+        raise
+    return {'output':str(output),'files':len(files),'uncompressed_bytes':total,'sha256':sha256(output),
+            'scope':'Result reports, extraction audits, logs, scalar profiles and bounded review pixels; source bodies/model caches excluded.'}
+
+
 def add_parser(sub):
-    cmd=sub.add_parser('corpus-pilot',help='CPU sources/token-length study first; explicitly submit GPU sample later')
+    cmd=sub.add_parser('corpus-pilot',help='Bounded CPU preparation, GPU evaluation, reporting and cleanup campaign')
     actions=cmd.add_subparsers(dest='pilot_action',required=True)
     for name in ('prepare','submit-cpu','submit'):
         p=actions.add_parser(name); p.add_argument('--work-dir',required=True)
@@ -301,6 +460,7 @@ def add_parser(sub):
     p=actions.add_parser('submit-gpu'); p.add_argument('--work-dir',required=True); p.add_argument('--sif')
     p=actions.add_parser('stage'); p.add_argument('phase',choices=['cpu','setup','download','gpu','cleanup','report','source-cleanup']); p.add_argument('--work-dir',required=True)
     p=actions.add_parser('status'); p.add_argument('--work-dir',required=True)
+    p=actions.add_parser('export-results'); p.add_argument('--work-dir',required=True); p.add_argument('--output',required=True)
 
 
 def dispatch(args):
@@ -311,7 +471,9 @@ def dispatch(args):
             prepare_engine(campaign,args.sif)
             return submit_chain(campaign,['cpu','setup','download','gpu','cleanup','report','source-cleanup'],'campaign')
         return submit_chain(campaign,['cpu'],'cpu') if args.pilot_action=='submit-cpu' else campaign
-    campaign=load(args.work_dir,check_runtime=not (args.pilot_action=='stage' and args.phase in {'cleanup','source-cleanup'}))
+    campaign=load(args.work_dir,check_runtime=not (args.pilot_action=='export-results' or
+        (args.pilot_action=='stage' and args.phase in {'cleanup','source-cleanup'})))
+    if args.pilot_action=='export-results': return archive_results(campaign,args.output)
     if args.pilot_action=='submit-gpu':
         verify_cpu(campaign); prepare_engine(campaign,args.sif)
         return submit_chain(campaign,['setup','download','gpu','cleanup','report','source-cleanup'],'gpu')

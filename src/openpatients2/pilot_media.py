@@ -131,7 +131,8 @@ async def prepare_media(input_path, output_dir, max_figures=12, max_total_bytes=
             manifest['figures'].append(row)
             try:
                 if not license.get('allowed'): row['status'] = 'article_rights_review'
-                elif figure.get('rights_statements') or figure.get('reuse_status') == 'asset_rights_review':
+                elif (figure.get('rights_statements') or figure.get('reuse_status') == 'asset_rights_review'
+                      or figure.get('fixture_asset_rights_review') == 'required_before_reuse'):
                     row['status'] = 'asset_rights_review'
                 else:
                     asset, skip = _listed_url(article, figure)

@@ -115,3 +115,127 @@ def test_template_library_is_runtime_dependency():
     project=tomllib.loads((ROOT/'pyproject.toml').read_text())
     assert 'jinja2==3.1.6' in project['project']['dependencies']
     assert 'jinja2==3.1.6' not in project['dependency-groups']['dev']
+
+
+def fixed_campaign(tmp_path):
+    import yaml
+    config=yaml.safe_load((ROOT/'configs/pilot/correctness.yaml').read_text())
+    for key in pilot.FIXED_PATH_KEYS:
+        source=tmp_path/(key+'.json');source.write_text('{}')
+        config[key]=str(source)
+    path=tmp_path/'correctness.yaml';path.write_text(yaml.safe_dump(config))
+    return pilot.prepare(ROOT,tmp_path/'correctness',path)
+
+
+def test_fixed_fixture_and_rosters_are_pinned_and_old_configs_still_prepare(tmp_path):
+    campaign=fixed_campaign(tmp_path)
+    assert campaign['config']['source_mode']=='fixed_fixture'
+    assert campaign['config']['sample_size']==20
+    assert campaign['config']['seeds']==[42,43,44]
+    for key in pilot.FIXED_PATH_KEYS:
+        assert campaign['runtime'][campaign['config'][key]]==pilot.sha256(campaign['config'][key])
+    Path(campaign['config']['fixed_rosters']).write_text('changed')
+    with pytest.raises(ValueError,match='runtime changed'):
+        pilot.load(campaign['work'])
+
+
+@pytest.mark.asyncio
+async def test_correctness_runs_share_manual_rosters_and_counterbalance_seed_order(tmp_path,monkeypatch):
+    campaign=fixed_campaign(tmp_path);work=Path(campaign['work'])
+    (work/'profile').mkdir();(work/'profile'/'rosters.json').write_text('{}')
+    calls=[];discoveries=[]
+    async def discover(config,sample,output,endpoints,context,*,seed):
+        discoveries.append(seed)
+        return {'status':'completed','seed':seed,'rosters':str(output/'rosters.json')}
+    async def run(config,sample,output,endpoints,context,arm,**kwargs):
+        calls.append((kwargs['seed'],kwargs['input_scope'],kwargs['frozen_rosters']))
+        return {'tokens':{},'task_count':1,'valid_tasks':1}
+    monkeypatch.setattr('openpatients2.pilot_extract.prepare_rosters',discover,raising=False)
+    monkeypatch.setattr('openpatients2.pilot_extract.run_pilot',run)
+    rows, found=await pilot.correctness_runs(campaign,work/'extraction'/'layout',['mock'],65536)
+    assert discoveries==[42,43,44] and len(rows)==6 and len(found)==3
+    assert [(s,scope) for s,scope,_ in calls]==[(42,'whole_article'),(42,'patient_sections'),
+        (43,'patient_sections'),(43,'whole_article'),(44,'whole_article'),(44,'patient_sections')]
+    assert {str(path) for _,_,path in calls}=={str(work/'profile'/'rosters.json')}
+    assert len({r['frozen_rosters_sha256'] for r in rows})==1
+
+
+def test_result_archive_excludes_source_bodies_models_and_environment(tmp_path):
+    import tarfile
+    campaign=prepared(tmp_path);work=Path(campaign['work'])
+    for name in ('gpu.json','extraction/run/report.json','profile/counts.jsonl.gz','vision-assets/review.image',
+                 'profile/sample.jsonl.gz','articles.jsonl.gz','engine/model/weight.safetensors',
+                 'extraction/.venv/tool','logs/server.sif'):
+        path=work/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_text('small')
+    result=pilot.archive_results(campaign,tmp_path/'results.tar.gz')
+    with tarfile.open(result['output']) as archive:
+        names=set(archive.getnames())
+    assert {'gpu.json','extraction/run/report.json','profile/counts.jsonl.gz','vision-assets/review.image'} <= names
+    assert not {'profile/sample.jsonl.gz','articles.jsonl.gz','engine/model/weight.safetensors',
+                'extraction/.venv/tool','logs/server.sif'} & names
+    with pytest.raises(ValueError,match='new archive'):
+        pilot.archive_results(campaign,tmp_path/'results.tar.gz')
+
+
+@pytest.mark.asyncio
+async def test_live_discovery_failure_keeps_fixed_roster_extraction_trials(tmp_path,monkeypatch):
+    campaign=fixed_campaign(tmp_path);work=Path(campaign['work'])
+    (work/'profile').mkdir();(work/'profile'/'rosters.json').write_text('{}')
+    called=[]
+    async def discover(*args,**kwargs):
+        raise RuntimeError('discovery failed')
+    async def run(*args,**kwargs):
+        called.append((kwargs['seed'],kwargs['input_scope']))
+        return {'tokens':{},'task_count':1,'valid_tasks':1}
+    monkeypatch.setattr('openpatients2.pilot_extract.prepare_rosters',discover,raising=False)
+    monkeypatch.setattr('openpatients2.pilot_extract.run_pilot',run)
+    rows, found=await pilot.correctness_runs(campaign,work/'extraction'/'layout',['mock'],65536)
+    assert len(rows)==len(called)==6 and len(found)==3
+    assert all(r['report']['status']=='failed' for r in found)
+
+
+def test_result_archive_refuses_nested_links_before_creating_archive(tmp_path):
+    campaign=prepared(tmp_path);work=Path(campaign['work'])
+    (work/'extraction').mkdir();outside=tmp_path/'outside';outside.write_text('private')
+    (work/'extraction'/'link').symlink_to(outside)
+    output=tmp_path/'archive.tar.gz'
+    with pytest.raises(ValueError,match='escaped'):
+        pilot.archive_results(campaign,output)
+    assert not output.exists() and outside.read_text()=='private'
+
+
+@pytest.mark.asyncio
+async def test_correctness_scores_saved_sources_outputs_and_discovery_and_renders_summary(tmp_path,monkeypatch):
+    from test_corpus_fidelity import fixture
+    reference, patient = fixture()
+    campaign=fixed_campaign(tmp_path);work=Path(campaign['work'])
+    Path(campaign['config']['fidelity_reference']).write_text(json.dumps(reference))
+    (work/'profile').mkdir();(work/'profile'/'rosters.json').write_text('{}')
+    async def discover(config,sample,output,endpoints,context,*,seed):
+        output.mkdir(parents=True)
+        path=output/'rosters.json'
+        path.write_text(json.dumps({'articles':[{'article_id':'PMC1.1','text_sha256':'text',
+            'roster':{'patients':[{'species':'human'}]}}]}))
+        return {'outputs':{'predicted_rosters':str(path)}}
+    async def run(config,sample,output,endpoints,context,arm,**kwargs):
+        output.mkdir(parents=True); (output/'tasks').mkdir()
+        path=output/'patients.jsonl';path.write_text(json.dumps(patient)+'\n')
+        visuals=output/'visual-annotations.json';visuals.write_text('[]')
+        (output/'tasks'/'observations.json').write_text(json.dumps({'task':'observations',
+            'identity':{'article_id':'PMC1.1','patient_id':'p1'},'status':'valid',
+            'attempts':[{'raw_candidate':patient['sections']['observations']}]}))
+        return {'outputs':{'patients':str(path),'visual_annotations':str(visuals)},
+            'tokens':{'all_gpus_output_tokens_per_second':100},'task_count':1,'valid_tasks':1}
+    monkeypatch.setattr('openpatients2.pilot_extract.prepare_rosters',discover)
+    monkeypatch.setattr('openpatients2.pilot_extract.run_pilot',run)
+    rows,found=await pilot.correctness_runs(campaign,work/'extraction'/'layout',['mock'],65536)
+    assert all(r['report']['fidelity']['summary']['delivered']['matched']==1 for r in rows)
+    assert all(r['report']['fidelity']['summary']['first_pass']['matched']==1 for r in rows)
+    assert all(r['report']['fidelity']['summary']['count_matches']==1 for r in found)
+    cell={'context':65536,'prefill':32768}
+    (work/'gpu.json').write_text(json.dumps({'status':'completed',
+        'results':[{'cell':cell,**r} for r in rows],'discovery':found}))
+    pilot.report(campaign)
+    assert 'Reviewed source checklist' in (work/'SUMMARY.md').read_text()
+    assert 'Independent patient discovery' in (work/'SUMMARY.md').read_text()
+    assert len(list((work/'extraction'/'layout').glob('seed*/*/fidelity.json')))==9

@@ -70,6 +70,17 @@ async def test_rights_conversion_missing_and_unlisted_never_download(tmp_path):
     assert report['bytes'] == report['response_bytes'] == 0
 
 
+async def test_recovered_media_without_asset_rights_is_not_requested(tmp_path):
+    row = article()
+    row['figures'][0]['fixture_asset_rights_review'] = 'required_before_reuse'
+    def forbidden(request):
+        raise AssertionError('Incomplete recovered asset rights must not reach HTTP')
+    async with httpx.AsyncClient(transport=httpx.MockTransport(forbidden)) as client:
+        result = await prepare_media(source(tmp_path, [row]), tmp_path/'out', http=client)
+    assert result['figures'][0]['status'] == 'asset_rights_review'
+    assert result['bytes'] == result['response_bytes'] == 0
+
+
 @pytest.mark.parametrize('body,headers,expected', [
     (PNG[:-1]+b'x', {}, 'MD5'),
     (b'<html>not pixels</html>', {}, 'magic'),

@@ -81,6 +81,63 @@ def test_targeted_repair_cannot_drop_or_add_items(sections,row):
     assert plan.audit()['pending'][0]['item']['evidence'][0]['quote']=='fabricated quotation'
 
 
+def test_targeted_large_failed_set_batches_without_losing_supported_neighbors(sections,row):
+    candidate = two_items(sections)
+    candidate['items'].extend(copy.deepcopy(candidate['items'][1]) for _ in range(9))
+    before = copy.deepcopy(candidate)
+    plan = ItemRepair.create('medications',candidate,row['text'],[])
+    assert plan is not None and len(plan.pending) == 10 and len(plan.repair_batch()) == 8
+    request = json.loads(plan.instruction().split('FAILED_ITEMS_JSON:\n')[1])
+    assert [x['index'] for x in request] == list(range(1,9))
+    good = copy.deepcopy(sections['medications']['items'][0])
+    plan.apply({'items':[copy.deepcopy(good) for _ in range(8)]})
+    assert len(plan.pending) == 2 and len(plan.output()['items']) == 9
+    assert plan.output()['coverage'] == 'limited'
+    assert [x['index'] for x in plan.pending] == [9,10]
+    assert plan.audit()['original_candidate'] == before == candidate
+    assert plan.accepted[0] == candidate['items'][0]
+    assert 'unresolved' in plan.output()['limitations'][-1]
+    plan.instruction(); plan.apply({'items':[copy.deepcopy(good),copy.deepcopy(good)]})
+    assert len(plan.output()['items']) == 11 and not plan.pending
+    assert plan.audit()['accepted_indices'] == list(range(11))
+    assert validate('medications',plan.output(),row['text']).valid
+    # A consumer cannot mutate the plan's frozen facts through an output view.
+    exported = plan.output(); exported['items'][0]['dose_value'] = -999
+    assert plan.output()['items'][0] == before['items'][0]
+
+
+def test_failed_replacements_preserve_original_item_and_do_not_swap_patient(sections,row):
+    candidate = two_items(sections)
+    candidate['items'][1]['duration_text'] = '2 months'
+    before = copy.deepcopy(candidate)
+    plan = ItemRepair.create('medications',candidate,row['text'],[])
+    reply = {'items':[copy.deepcopy(sections['medications']['items'][0])]}
+    reply['items'][0]['subject'] = 'other'
+    plan.apply(reply)
+    assert plan.pending[0]['item'] == before['items'][1]
+    assert 'identity change' in str(plan.trace[-1]['errors'])
+    assert 'duration_text' in str(plan.trace[-1]['errors'])
+    assert plan.output()['items'] == before['items'][:1]
+    assert candidate == before
+    assert plan.audit()['trace'][0]['replacement']['subject'] == 'other'
+
+
+def test_oversized_failed_item_stays_visible_without_preventing_bounded_other_repairs(sections,row):
+    candidate = two_items(sections)
+    candidate['items'][1]['evidence'][0]['quote'] = 'X'*17000
+    candidate['items'].append(copy.deepcopy(two_items(sections)['items'][1]))
+    plan = ItemRepair.create('medications',candidate,row['text'],[])
+    assert [x['index'] for x in plan.repair_batch()] == [2]
+    good = copy.deepcopy(sections['medications']['items'][0])
+    plan.instruction(); plan.apply({'items':[good]})
+    assert [x['index'] for x in plan.pending] == [1]
+    assert plan.pending[0]['item'] == candidate['items'][1]
+    assert not plan.repair_batch() and len(plan.output()['items']) == 2
+    assert plan.output()['coverage'] == 'limited'
+    plan.apply({'items':[]})
+    assert len(plan.pending) == 1 and plan.trace[-1]['decision'] == 'rejected_reply'
+
+
 @pytest.mark.parametrize('repair_succeeds',[True,False])
 async def test_runtime_repairs_only_failed_items_and_exports_partial_honestly(config,sections,repair_succeeds):
     config.tasks=['case_context','medications']

@@ -2,9 +2,10 @@
 from __future__ import annotations
 
 import hashlib
+import re
 from typing import Literal
 from pydantic import Field, model_validator
-from .schemas import StrictModel
+from .schemas import StrictModel, TASK_MODELS
 
 
 class SourceSpan(StrictModel):
@@ -67,10 +68,14 @@ class FactEnvelope(StrictModel):
 
 
 def field_support_report(fact: FactEnvelope, sources):
-    """Coverage of material leaf fields, not an automatic entailment judgment.
+    """Separate literal clinical fields from schema labels and registry links.
 
     The existing domain validator must also validate value in its full section
-    (especially oncology references). Literal support does not prove semantics.
+    (especially oncology references). Schema-derived enums are normalized labels:
+    requiring the literal word ``index_patient`` or ``historical`` is incorrect.
+    Their source/attribution provenance and semantic review remain explicit gates.
+    Unknown tasks/fields receive no exemption. Literal support proves neither
+    entailment nor that a value belongs to this patient, row, or encounter.
     """
     def leaves(value, path=''):
         if isinstance(value, dict):
@@ -80,19 +85,84 @@ def field_support_report(fact: FactEnvelope, sources):
         elif isinstance(value, list):
             for index, child in enumerate(value):
                 yield from leaves(child, path + '/' + str(index))
-        elif value is not None and value != '' and value != 'unknown':
-            yield path
+        elif value is not None and value != '':
+            yield path, value
+
+    schema = TASK_MODELS[fact.task].model_json_schema() if fact.task in TASK_MODELS else {}
+    def dereference(node):
+        while '$ref' in node:
+            node = schema.get('$defs', {}).get(node['$ref'].rsplit('/', 1)[-1], {})
+        alternatives = [x for x in node.get('anyOf', []) if x.get('type') != 'null']
+        return dereference(alternatives[0]) if len(alternatives) == 1 else node
+
+    def field_schema(pointer):
+        node = schema
+        if fact.collection in schema.get('properties', {}):
+            collection = dereference(schema['properties'][fact.collection])
+            if collection.get('type') == 'array':
+                node = dereference(collection.get('items', {}))
+        for token in pointer[1:].split('/'):
+            token = token.replace('~1', '/').replace('~0', '~')
+            node = dereference(node)
+            node = node.get('items', {}) if node.get('type') == 'array' and token.isdigit() else node.get('properties', {}).get(token, {})
+        return dereference(node)
+
+    def lexical(value, quote):
+        if type(value) in {int, float}:
+            tokens = re.findall(r'(?<![\w.])[-+]?\d+(?:\.\d+)?(?![\w.])', quote)
+            return any(float(token) == value for token in tokens)
+        if isinstance(value, str):
+            return value in quote
+        # False/true are clinical claims, not literal source prose. They require
+        # their own provenance and review; a quote alone cannot certify negation.
+        return False
+
     issues = []
-    supported = {s.pointer for s in fact.field_support}
-    for pointer in sorted(set(leaves(fact.value)) - supported):
-        issues.append({'code': 'missing_field_evidence', 'pointer': pointer})
+    review_issues = []
+    normalized = []
+    literal_pointers = []
+    valid_support = {}
     for support in fact.field_support:
         for span in support.evidence:
-            issues.extend({'code': code, 'pointer': support.pointer} for code in span_errors(span, sources))
+            errors = span_errors(span, sources)
+            if span.source_id.split(':', 1)[0] != fact.record_id.split(':', 1)[0]:
+                errors.append('fact_source_article_mismatch')
+            issues.extend({'code': code, 'pointer': support.pointer} for code in errors)
+            if not errors:
+                valid_support.setdefault(support.pointer, []).append((support.role, span))
+    for pointer, value in leaves(fact.value):
+        node = field_schema(pointer)
+        supported = valid_support.get(pointer, [])
+        if 'enum' in node and value in node['enum']:
+            subject = pointer == '/subject'
+            provenance = [s for role, s in supported if not subject or role == 'subject']
+            normalized.append({'pointer': pointer, 'value': value, 'kind': 'schema_enum',
+                'schema_task': fact.task, 'schema_collection': fact.collection,
+                'source_provenance_present': bool(provenance), 'semantic_review': 'unreviewed'})
+            if not provenance:
+                review_issues.append({'code': 'missing_subject_attribution_evidence' if subject else
+                                     'normalized_enum_provenance_unreviewed', 'pointer': pointer})
+            continue
+        if pointer == '/tumor_ref' and node.get('type') == 'string':
+            normalized.append({'pointer': pointer, 'value': value, 'kind': 'local_registry_link',
+                               'semantic_review': 'unreviewed'})
+            review_issues.append({'code': 'registry_link_unreviewed', 'pointer': pointer})
+            continue
+        literal_pointers.append(pointer)
+        if not supported:
+            issues.append({'code': 'missing_field_evidence', 'pointer': pointer})
+        elif type(value) is bool:
+            review_issues.append({'code': 'boolean_clinical_claim_unreviewed', 'pointer': pointer})
+        elif not any(lexical(value, span.quote) for _, span in supported):
+            issues.append({'code': 'field_value_not_literal_in_evidence', 'pointer': pointer})
     if fact.origin == 'visual_annotation':
         issues.append({'code': 'visual_annotation_requires_clinical_adjudication', 'pointer': '/'})
     return {'fact_id': fact.fact_id, 'literal_field_gates_passed': not issues,
-            'clinical_entailment_verified': False, 'issues': issues}
+            'required_literal_pointers': sorted(literal_pointers), 'normalized_fields': normalized,
+            'normalized_provenance_gates_passed': not review_issues,
+            'field_provenance_gates_passed': not issues and not review_issues,
+            'patient_attribution_verified': False, 'clinical_entailment_verified': False,
+            'semantic_field_review': 'unreviewed', 'issues': issues, 'review_issues': review_issues}
 
 
 class CoverageUnit(StrictModel):

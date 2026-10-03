@@ -29,7 +29,7 @@ from .articles import recheck_license
 from .client import APIClient
 from .config import APIConfig, ConfigModel
 from .data import write_json
-from .evidence_recovery import packet_segments, recover_citations
+from .evidence_recovery import packet_segments, recover_citations, resolve_timeline_spans
 from .extraction_contracts import FactEnvelope, FieldSupport, SourceSpan, field_support_report
 from .figure_attribution import (FigureReview, bind_figure_review, figure_messages,
                                  patient_media, validate_figure_review)
@@ -38,6 +38,7 @@ from .longitudinal import PatientTimeline, audit_timeline
 from .output_parser import parse_output
 from .prompts import messages_for
 from .provenance import json_digest
+from .patient_context import discovery_messages, check_patient_roster, frozen_rosters as read_frozen_rosters, patient_view
 from .schemas import TASK_MODELS
 from .targeted_repair import ItemRepair, erased
 from .validation import iter_objects, validate
@@ -52,7 +53,7 @@ class PilotConfig(ConfigModel):
     temperature: Literal[1.0] = 1.0
     top_p: Literal[0.95] = 0.95
     top_k: Literal[64] = 64
-    seed: Literal[42] = 42
+    seed: int = Field(default=42, ge=0, le=2**32-1)
     sample_seed: int = 42
     max_articles: int = Field(default=48, ge=1, le=48)
     max_patients_per_article: int = Field(default=8, ge=1, le=48)
@@ -225,10 +226,20 @@ def literal_field_support(value: dict, evidence_spans: list[dict]) -> list[Field
     return supports
 
 
+def timeline_wire_schema() -> dict:
+    """Ask for literal quotes; deterministic code supplies character positions."""
+    schema = copy.deepcopy(PatientTimeline.model_json_schema())
+    span = schema['$defs']['SourceSpan']
+    computed = {'source_id', 'segment_sha256', 'start', 'end'}
+    span['properties'] = {k: v for k, v in span['properties'].items() if k not in computed}
+    span['required'] = [k for k in span['required'] if k not in computed]
+    return schema
+
+
 def timeline_messages(article: dict, patient: dict, record_id: str, facts: dict[str, str], fact_rows=None) -> list[dict]:
     source_id, _ = sources_for(article)
     source = {'source_id': source_id, 'record_id': record_id, 'target_patient': patient,
-        'segments': [{**s, 'segment_sha256': hashlib.sha256(s['text'].encode()).hexdigest()}
+        'segments': [{k: s[k] for k in ('segment_id', 'kind', 'heading', 'text') if k in s}
                      for s in article['segments']], 'known_fact_ids': list(facts)}
     def registry_value(value):
         if isinstance(value,dict):
@@ -238,8 +249,9 @@ def timeline_messages(article: dict, patient: dict, record_id: str, facts: dict[
     source['fact_registry']=[{'fact_id':row['review_id'],'task':row['task'],'pointer':row['pointer'],
         'candidate_value':registry_value(row['candidate']),'semantic_review':'unreviewed'}
         for row in fact_rows or [] if row['review_id'] in facts]
-    instruction = ('Return patient-timeline/2 JSON. Every evidence and attribution span uses the supplied '
-        'source_id, segment_id and segment_sha256, exact quote, Unicode start inclusive/end exclusive. '
+    instruction = ('Return patient-timeline/2 JSON. Every evidence and attribution span supplies only '
+        'a known segment_id and an exact unique quote. Code derives source_id, segment_sha256 and Unicode '
+        'start/end positions; do not calculate or invent those fields. '
         'Describe only this patient. Include unknown-time events, failed treatments, follow-up and plans, '
         'keeping occurred, planned, conditional and unknown distinct. Never invent encounters or dates. '
         'Times must preserve literal precision. Edges must cite evidence for BOTH events and their relation. '
@@ -249,7 +261,7 @@ def timeline_messages(article: dict, patient: dict, record_id: str, facts: dict[
         'Preserve uncertainty and contradictions.')
     return [{'role': 'system', 'content': SYSTEM}, {'role': 'user', 'content':
         'SOURCE_JSON:\n' + json.dumps(source, ensure_ascii=False) + '\nTASK:\n' + instruction +
-        '\nSCHEMA:\n' + json.dumps(PatientTimeline.model_json_schema())}]
+        '\nSCHEMA:\n' + json.dumps(timeline_wire_schema())}]
 
 
 def safe_messages(messages: list[dict]) -> list[dict]:
@@ -275,8 +287,13 @@ def percentile(values: list[int | float]) -> dict:
 
 
 class PilotRunner:
-    def __init__(self, config, output, endpoints, context, arm_name, *, http=None):
-        self.config = load_pilot_config(config)
+    def __init__(self, config, output, endpoints, context, arm_name, *, http=None, input_scope='whole_article', seed=None):
+        self.config = load_pilot_config(config).model_copy()
+        if seed is not None:
+            self.config = PilotConfig.model_validate({**self.config.model_dump(), 'seed': seed})
+        if input_scope not in {'whole_article', 'patient_sections'}:
+            raise ValueError('Unknown clinical input scope')
+        self.input_scope = input_scope
         self.output = Path(output)
         endpoints = [e.strip() for e in endpoints.split(',')] if isinstance(endpoints, str) else list(endpoints)
         if not endpoints or any(urlparse(e).hostname not in {'localhost', '127.0.0.1', '::1'}
@@ -299,7 +316,7 @@ class PilotRunner:
             'figure_attribution': FigureReview.model_json_schema(),
             'figure_visuals': FigureVisuals.model_json_schema(),
             'pixel_attribution': FigureReview.model_json_schema(),
-            'timeline_v2': PatientTimeline.model_json_schema()}
+            'timeline_v2': timeline_wire_schema()}
         for endpoint in endpoints:
             api = APIConfig(endpoints=[endpoint.rstrip('/')], model=self.config.served_model,
                 model_id=self.config.model_id, revision=self.config.revision,
@@ -415,7 +432,14 @@ class PilotRunner:
                             candidate = parsed.value
                             entry.update(parse_method=parsed.method, parse_transformations=parsed.transformations,
                                          raw_candidate=copy.deepcopy(candidate))
-                            if self.arm == 'targeted':
+                            if task == 'timeline_v2':
+                                candidate, span_audit = resolve_timeline_spans(candidate,
+                                    identity['article_id'] + ':jats', segments)
+                                entry['span_resolution'] = span_audit
+                                if span_audit['unresolved']:
+                                    raise ValueError('timeline_span_unresolved:' + '; '.join(
+                                        x['code'] + ':' + x['path'] for x in span_audit['unresolved']))
+                            elif self.arm == 'targeted':
                                 if task in {'figure_visuals', 'pixel_attribution'}:
                                     from .pilot_media import repair_visual_citations
                                     candidate, citation_audit = repair_visual_citations(candidate, segments)
@@ -453,7 +477,8 @@ class PilotRunner:
                             transports += 1
                             continue
                         break
-                    if self.arm == 'targeted' and repair_rounds < self.config.max_repair_rounds:
+                    if (self.arm == 'targeted' and repair_rounds < self.config.max_repair_rounds
+                            and (plan is None or plan.repair_batch())):
                         repair_rounds += 1; mode = 'repair'
                         continue
                     break
@@ -537,7 +562,13 @@ class PilotRunner:
             'human_review': 'pending', 'model_annotation_review': 'unreviewed'}
 
     async def patient(self, article, roster, patient, reviews, replica):
-        packet = patient_packet(article, roster, patient, scope='whole_article', figure_reviews=reviews)
+        context_article, context_patient, context_audit = article, patient, None
+        if self.input_scope == 'patient_sections':
+            context_article, context_patient, context_audit = patient_view(article, roster, patient)
+        packet = patient_packet(article, roster, context_patient,
+            scope='localized' if self.input_scope == 'patient_sections' else 'whole_article', figure_reviews=reviews)
+        packet['context_selection'] = context_audit
+        packet['input_scope'] = self.input_scope
         rid = packet['record_id']; segments = packet_segments(packet)
         identity = {'article_id': article['article_id'], 'patient_id': patient['patient_id'], 'record_id': rid}
         async def clinical(task):
@@ -546,11 +577,12 @@ class PilotRunner:
             return await self.call(task, messages, self.clinical_checker(task, packet, segments),
                                    identity, replica, segments, packet=packet)
         tasks = await asyncio.gather(*(clinical(task) for task in TASK_MODELS))
-        summary = await self.call('summary', task_messages('summary', article, patient),
-            lambda value: check_article_task('summary', value, article, patient), identity, replica, article['segments'])
+        summary = await self.call('summary', task_messages('summary', context_article, patient),
+            lambda value: check_article_task('summary', value, context_article, patient),
+            identity, replica, context_article['segments'])
         rows = [row for result in tasks for row in review_rows(article, rid, result['task'], result['data'])]
         facts = {row['review_id']: rid for row in rows}
-        _, sources = sources_for(article)
+        _, sources = sources_for(context_article)
         def timeline_checker(value):
             graph = PatientTimeline.model_validate(value)
             if graph.record_id != rid:
@@ -559,8 +591,8 @@ class PilotRunner:
             if not audit['structural_source_gates_passed']:
                 raise ValueError('; '.join(i['code'] for i in audit['issues'] if i['severity'] == 'block'))
             return graph.model_dump()
-        timeline = await self.call('timeline_v2', timeline_messages(article, patient, rid, facts, rows),
-                                  timeline_checker, identity, replica, article['segments'])
+        timeline = await self.call('timeline_v2', timeline_messages(context_article, patient, rid, facts, rows),
+                                  timeline_checker, identity, replica, context_article['segments'])
         rows.extend(review_rows(article, rid, 'summary', summary['data']))
         rows.extend(review_rows(article, rid, 'timeline_v2', timeline['data']))
         all_tasks = [*tasks, summary, timeline]
@@ -570,7 +602,8 @@ class PilotRunner:
                               if row['identity']['article_id'] == article['article_id'])
         bundle = {'schema_version': '2.1.0', 'pilot_contract': 'bounded-extraction/1',
             'source': packet, 'model': {'model_id': self.config.model_id, 'revision': self.config.revision},
-            'arm': self.arm, 'expected_tasks': list(TASK_MODELS),
+            'arm': self.arm, 'input_scope': self.input_scope, 'seed': self.config.seed,
+            'context_selection': context_audit, 'expected_tasks': list(TASK_MODELS),
             'sections': {r['task']: r['data'] for r in tasks},
             'companions': {'summary': summary['data'], 'timeline_v2': timeline['data']},
             'quality': {r['task']: {'status': r['status'], 'errors': r['errors']} for r in all_tasks},
@@ -624,7 +657,8 @@ class PilotRunner:
         if row.get('status') != 'ready':
             raise ValueError('image_manifest_not_ready')
         figure = next(f for f in article['figures'] if f['figure_key'] == row['figure_id'])
-        if figure.get('rights_statements') or figure.get('reuse_status') == 'asset_rights_review':
+        if (figure.get('rights_statements') or figure.get('reuse_status') == 'asset_rights_review'
+                or figure.get('fixture_asset_rights_review') == 'required_before_reuse'):
             raise ValueError('pixel_asset_rights_review_required')
         provenance = row['pixel_provenance']
         if provenance['url'] not in figure['image_urls']:
@@ -704,7 +738,7 @@ class PilotRunner:
             if report['all_gpus_output_tokens_per_second'] is not None else None)
         return report
 
-    async def run(self, articles_path, image_manifest=None):
+    async def run(self, articles_path, image_manifest=None, *, frozen_rosters=None, discovery_only=False):
         started = time.monotonic(); path = Path(articles_path)
         if path.stat().st_size > self.config.max_source_bytes:
             raise ValueError('sample_file_size_limit; prepare an explicit smaller downloaded sample')
@@ -738,9 +772,12 @@ class PilotRunner:
         if len({a.get('article_id') for a in articles}) != len(articles):
             raise ValueError('sample_has_duplicate_article_versions')
         write_json(self.output / 'run-config.json', {'config': self.config.model_dump(), 'arm': self.arm,
-            'context': self.context, 'replicas': len(self.clients), 'input_sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+            'context': self.context, 'input_scope': self.input_scope, 'seed': self.config.seed,
+            'frozen_rosters': str(frozen_rosters) if frozen_rosters else None, 'discovery_only': discovery_only,
+            'replicas': len(self.clients), 'input_sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
             'selected_article_ids': [a.get('article_id') for a in articles],
             'selection': 'lowest deterministic seed/article identity hashes; bounded sample, no population inference'})
+        source_rows_by_id = {a['article_id']: a for a in articles}
         eligible = []
         for index, article in enumerate(articles):
             errors = source_gate(article, self.config)
@@ -749,18 +786,24 @@ class PilotRunner:
             self.article_rows.append(row)
             if not errors:
                 eligible.append((index, article, row))
+        frozen = read_frozen_rosters(frozen_rosters, articles) if frozen_rosters else None
         async def discover(index, article, row):
             replica = index % len(self.clients)
-            roster = await self.call('roster', task_messages('roster', article),
-                lambda value: check_article_task('roster', value, article),
-                {'article_id': article['article_id']}, replica, article['segments'])
+            if frozen is not None:
+                roster = {'task': 'roster', 'identity': {'article_id': article['article_id']},
+                    'status': 'valid', 'data': frozen[article['article_id']], 'errors': [], 'attempts': [],
+                    'origin': 'frozen_source_checked_roster', 'excluded_from_generated_task_metrics': True}
+            else:
+                roster = await self.call('roster', discovery_messages(article),
+                    lambda value: check_patient_roster(value, article),
+                    {'article_id': article['article_id']}, replica, article['segments'])
             row.update(roster=roster, status='roster_failed' if roster['status'] != 'valid' else 'roster_valid')
             return index, article, row
         discovered = await asyncio.gather(*(discover(*item) for item in eligible))
         patients_remaining = self.config.max_patients
         pixel_rows = self.image_rows(image_manifest or self.config.image_manifest)
         scheduled = []
-        for index, article, row in discovered:
+        for index, article, row in ([] if discovery_only else discovered):
             result = row['roster']
             if result['status'] != 'valid':
                 continue
@@ -800,6 +843,9 @@ class PilotRunner:
         report = {'schema_version': 'pilot-extraction-report/1', 'arm': self.arm,
             'model': {'model_id': self.config.model_id, 'revision': self.config.revision},
             'selected_articles': len(articles), 'eligible_articles': len(eligible),
+            'input_scope': self.input_scope, 'seed': self.config.seed, 'discovery_only': discovery_only,
+            'conditioned_on_frozen_rosters': frozen is not None,
+            'roster_scores_are_independent_of_clinical_extraction': frozen is not None,
             'outputs': {'patients': str(self.output / 'patients.jsonl'),
                 'report': str(self.output / 'report.json'), 'attempts': str(self.output / 'attempts.jsonl'),
                 'patient_review_forms': str(self.output / 'review'),
@@ -809,6 +855,16 @@ class PilotRunner:
                             'observed_peak_completions_per_endpoint': self.peak_active},
             'valid_tasks': sum(r['status'] == 'valid' for r in self.results), 'task_count': len(self.results),
             'task_statuses': dict(Counter(r['status'] for r in self.results)),
+            'task_statuses_by_domain': {name: dict(Counter(r['status'] for r in self.results if r['task'] in tasks))
+                for name, tasks in {'clinical': set(TASK_MODELS), 'summary': {'summary'}, 'timeline': {'timeline_v2'},
+                    'patient_discovery': {'roster'}, 'caption_ownership': {'figure_attribution'},
+                    'pixel_description': {'figure_visuals'}, 'pixel_ownership': {'pixel_attribution'}}.items()},
+            'source_span_recovery': {'resolved': sum(len(a.get('span_resolution', {}).get('resolved', []))
+                for r in self.results for a in r['attempts']),
+                'mechanical_changes': sum(len(a.get('span_resolution', {}).get('recoveries', []))
+                    for r in self.results for a in r['attempts']),
+                'unresolved': sum(len(a.get('span_resolution', {}).get('unresolved', []))
+                    for r in self.results for a in r['attempts']), 'clinical_content_changed': False},
             'first_attempt_valid_tasks': sum(bool(r['attempts'] and not r['attempts'][0]['errors']) for r in self.results),
             'articles': self.article_rows, 'wall_seconds': wall, 'tokens': self.token_report(articles, wall),
             'clinical_accuracy_verified': False, 'semantic_coverage_verified': False,
@@ -820,14 +876,31 @@ class PilotRunner:
                 'Supplements are manifests only; missed patients/facts require independent source review.',
                 'Direct and targeted runs are independent arms, not blinded accuracy scores.',
                 'Source-based first prompts match across arms; temporal graph fact registries reflect each arm output.']}
+        if discovery_only:
+            predicted = {'schema_version': 'predicted-rosters/1', 'articles': [
+                {'article_id': a['article_id'], 'text_sha256': source_rows_by_id[a['article_id']]['text_sha256'],
+                 'status': a['roster']['status'], 'roster': a['roster']['data']}
+                for a in self.article_rows if a.get('roster')]}
+            write_json(self.output / 'rosters.json', predicted)
+            report['outputs']['predicted_rosters'] = str(self.output / 'rosters.json')
         write_json(self.output / 'report.json', report)
         return report
 
 
-async def run_pilot(config, articles_path, output, endpoints, context, arm_name, *, image_manifest=None, http=None):
+async def run_pilot(config, articles_path, output, endpoints, context, arm_name, *, image_manifest=None, http=None,
+                    frozen_rosters=None, input_scope='whole_article', seed=None):
     """Run a fresh bounded arm on an already downloaded JSONL(.gz) sample."""
-    runner = PilotRunner(config, output, endpoints, context, arm_name, http=http)
+    runner = PilotRunner(config, output, endpoints, context, arm_name, http=http, input_scope=input_scope, seed=seed)
     try:
-        return await runner.run(articles_path, image_manifest=image_manifest)
+        return await runner.run(articles_path, image_manifest=image_manifest, frozen_rosters=frozen_rosters)
+    finally:
+        await runner.close()
+
+
+async def prepare_rosters(config, articles_path, output, endpoints, context, *, seed=42, http=None):
+    """Evaluate live discovery alone; it does not gate the frozen-roster benchmark."""
+    runner = PilotRunner(config, output, endpoints, context, 'targeted', seed=seed, http=http)
+    try:
+        return await runner.run(articles_path, discovery_only=True)
     finally:
         await runner.close()
