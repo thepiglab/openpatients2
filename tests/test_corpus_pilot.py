@@ -95,3 +95,23 @@ def test_owned_cleanup_survives_changed_cpu_sources(tmp_path,monkeypatch):
     assert pilot.stage(campaign,'cleanup')['status']=='deleted'
     saved['work']='/not-owned';(engine/'campaign.json').write_text(json.dumps(saved))
     with pytest.raises(ValueError,match='owned'): pilot.stage(campaign,'cleanup')
+
+
+def test_single_command_prepares_engine_and_submits_full_chain(tmp_path, monkeypatch):
+    events=[]
+    monkeypatch.setattr(pilot,'prepare_engine',lambda campaign,sif: events.append(('engine',sif)))
+    def submit(campaign, phases, label):
+        events.append((label,phases))
+        return {'status':'released'}
+    monkeypatch.setattr(pilot,'submit_chain',submit)
+    args=SimpleNamespace(pilot_action='submit',work_dir=str(tmp_path/'all'),
+                         config=str(ROOT/'configs/pilot/corpus.yaml'),sif=None)
+    assert pilot.dispatch(args)['status']=='released'
+    assert events==[('engine',None),('campaign',['cpu','setup','download','gpu','cleanup','report','source-cleanup'])]
+
+
+def test_template_library_is_runtime_dependency():
+    import tomllib
+    project=tomllib.loads((ROOT/'pyproject.toml').read_text())
+    assert 'jinja2==3.1.6' in project['project']['dependencies']
+    assert 'jinja2==3.1.6' not in project['dependency-groups']['dev']

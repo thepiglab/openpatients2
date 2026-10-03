@@ -294,9 +294,10 @@ def stage(campaign, phase):
 def add_parser(sub):
     cmd=sub.add_parser('corpus-pilot',help='CPU sources/token-length study first; explicitly submit GPU sample later')
     actions=cmd.add_subparsers(dest='pilot_action',required=True)
-    for name in ('prepare','submit-cpu'):
+    for name in ('prepare','submit-cpu','submit'):
         p=actions.add_parser(name); p.add_argument('--work-dir',required=True)
         p.add_argument('--config',default='configs/pilot/corpus.yaml')
+        if name=='submit': p.add_argument('--sif')
     p=actions.add_parser('submit-gpu'); p.add_argument('--work-dir',required=True); p.add_argument('--sif')
     p=actions.add_parser('stage'); p.add_argument('phase',choices=['cpu','setup','download','gpu','cleanup','report','source-cleanup']); p.add_argument('--work-dir',required=True)
     p=actions.add_parser('status'); p.add_argument('--work-dir',required=True)
@@ -304,8 +305,11 @@ def add_parser(sub):
 
 def dispatch(args):
     root=Path(__file__).resolve().parents[2]
-    if args.pilot_action in {'prepare','submit-cpu'}:
+    if args.pilot_action in {'prepare','submit-cpu','submit'}:
         campaign=prepare(root,args.work_dir,args.config)
+        if args.pilot_action=='submit':
+            prepare_engine(campaign,args.sif)
+            return submit_chain(campaign,['cpu','setup','download','gpu','cleanup','report','source-cleanup'],'campaign')
         return submit_chain(campaign,['cpu'],'cpu') if args.pilot_action=='submit-cpu' else campaign
     campaign=load(args.work_dir,check_runtime=not (args.pilot_action=='stage' and args.phase in {'cleanup','source-cleanup'}))
     if args.pilot_action=='submit-gpu':

@@ -1,7 +1,10 @@
 # Bounded PMC acquisition and Glimmer extraction pilot
 
-Run CPU preparation first. This workflow does not submit GPU work automatically
-and never runs inference over the entire acquired corpus. A download budget is a
+Use `corpus-pilot submit` to queue the full unattended chain: CPU preparation,
+container setup, checkpoint download, GPU sample, checkpoint cleanup, report,
+and article cleanup. Each job waits for its predecessor; only the inference
+job requests GPUs. The separate `submit-cpu` / `submit-gpu` workflow remains
+available for manual inspection. Neither workflow runs inference over the entire acquired corpus. A download budget is a
 ceiling, not an instruction to fill storage.
 
 ## Evidence behind the configuration
@@ -196,3 +199,17 @@ licenses, upstream URLs and rate limits remain unverified. Official PMC remains
 the acquisition path; Paperclip can be tested later as an authenticated discovery
 aid. [Implemented license policy](ARTICLE_LICENSE_POLICY.md) supports appropriate
 CC, public-domain and permissive article grants without blanket relicensing.
+
+## Unattended submission
+
+From the updated repository on HiPerGator:
+
+```bash
+export UV_LINK_MODE=copy
+uv run --locked --python 3.12 --no-dev op2 corpus-pilot submit \
+  --work-dir "/blue/cai6734/ehr_agent/op2-corpus-pilot/run-$(date +%Y%m%d-%H%M%S)"
+```
+
+Jinja2 is a runtime dependency, including in `--no-dev` jobs. Failed stages are
+recorded and readiness checks prevent inference on incomplete CPU inputs.
+Cleanup remains subject to ownership and terminal-state checks.
