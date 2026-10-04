@@ -234,6 +234,19 @@ def test_real_gepa_clinical_adapter_improves_gold_and_never_reflects_test_labels
     for aid in report['splits']['test']:
         assert aid not in json.dumps(reflections)
     assert report['automatic_production_promotion'] is False
+    # Simulate termination after GEPA saved engine state but before the family
+    # was recorded as complete. Resume the actual engine, retaining old traces.
+    optimization=tmp_path/'optimization'
+    components=json.loads((optimization/'components.json').read_text())
+    next(c for c in components if c['component']=='demographics')['status']='failed'
+    (optimization/'components.json').write_text(json.dumps(components))
+    preserved={p:p.read_bytes() for p in (optimization/'demographics').glob('rollout-*/attempts.jsonl')}
+    resumed,resume_report=optimize_prompts(sample,[trial],optimization,
+        {'max_output_tokens':256,'max_retry_tokens':256},['http://localhost:8000/v1'],8192,reference,
+        calls=48,seconds=30,resume=True)
+    row=next(c for c in resume_report['components'] if c['component']=='demographics')
+    assert row['resumed_engine_checkpoint'] and resumed['demographics']=='Preserve exact age.'
+    assert preserved and all(p.read_bytes()==data for p,data in preserved.items())
 
 
 @pytest.mark.parametrize('unit,status',[('10^4/mL','matched_model_fields'),('/mL','conflict'),('10^9/mL','conflict')])

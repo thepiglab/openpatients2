@@ -35,6 +35,7 @@ def validate_plan(config):
     if not 128<=config['gepa_metric_calls_per_prompt']<=256:
         raise ValueError('Bound GEPA to 128–256 task evaluations per prompt')
     if not 600<=config['gepa_seconds']<=7200: raise ValueError('Bound GEPA phase to 10–120 minutes')
+    if not 1<=config.get('gepa_workers',8)<=8: raise ValueError('Use 1–8 concurrent GEPA families')
     for cell in config['matrix']:
         if cell.get('tensor_parallel',1) not in {1,2} or cell.get('speculation','dflash') not in {'dflash',None}:
             raise ValueError('Only TP1/TP2 and DFlash on/off are included')
@@ -42,7 +43,7 @@ def validate_plan(config):
     return True
 
 
-async def run_trials(campaign,destination,endpoints,context,cell,deadline):
+async def run_trials(campaign,destination,endpoints,context,cell,deadline, *, bootstrap_only=False):
     config=campaign['config']; work=Path(campaign['work']); destination=Path(destination)
     sample=work/'profile/sample.jsonl.gz'; frozen=work/'profile/rosters.json'
     base=load_pilot_config(config['extraction_config']).model_dump()
@@ -52,6 +53,21 @@ async def run_trials(campaign,destination,endpoints,context,cell,deadline):
     prompts={}; gepa_report=None
     async def trial(seed,variant, *, source='regression',cached=None):
         name=variant['name']; path=destination/source/f'seed{seed}'/name
+        if campaign['config'].get('separate_gepa') or campaign['config'].get('resume_from'):
+            if (path/'report.json').exists():
+                measured=read_json(path/'report.json')
+                if measured.get('outputs') and measured.get('status')!='failed':
+                    result={'arm':name,'seed':seed,'source_set':source,'input_scope':variant['input_scope'],
+                        'roster_conditioning':variant.get('roster','frozen') if source=='regression' else 'cached',
+                        'cell':cell,'report':measured,'reused_completed_trial':True}
+                    rows.append(result); write_json(destination/'trials.json',rows)
+                    return result
+            if path.exists():
+                # Retain interrupted traces without merging incomplete throughput
+                # denominators into the freshly repeated trial.
+                index=0
+                while path.with_name(path.name+f'-interrupted-{index}').exists(): index+=1
+                path.rename(path.with_name(path.name+f'-interrupted-{index}'))
         if time.monotonic()+config.get('trial_reserve_seconds',900)>=deadline:
             deferred.append({'seed':seed,'arm':name,'source_set':source,'reason':'GPU deadline reserve'})
             return None
@@ -105,7 +121,13 @@ async def run_trials(campaign,destination,endpoints,context,cell,deadline):
         for name in ('baseline','clinical-audit','joint-pixels','coverage-backfill'):
             row=await trial(first,variants[name]); executed.add((first,name))
             if row and row['report'].get('outputs'): bootstrap.append(destination/'regression'/f'seed{first}'/name)
-        if bootstrap and time.monotonic()+900<deadline:
+        if bootstrap_only: return rows,discoveries,deferred
+        if config.get('separate_gepa'):
+            if not (work/'prompt-optimization/report.json').exists():
+                raise ValueError('Separate GEPA stage has not finished; inspect gepa.json')
+            gepa_report=read_json(work/'prompt-optimization/report.json')
+            prompts=read_json(work/'prompt-optimization/best-prompts.json')
+        elif bootstrap and time.monotonic()+900<deadline:
             from .prompt_optimization import optimize_prompts
             # GEPA is synchronous; adapters run async local requests in its worker
             # thread, leaving the scheduler and progress loop responsive.
@@ -114,7 +136,8 @@ async def run_trials(campaign,destination,endpoints,context,cell,deadline):
                 prompts,gepa_report=await asyncio.to_thread(optimize_prompts,sample,bootstrap,
                     work/'prompt-optimization',cfg,endpoints,context,config['fidelity_reference'],
                     seconds=min(config['gepa_seconds'],max(1,deadline-time.monotonic()-900)),
-                    calls=config['gepa_metric_calls_per_prompt'])
+                    calls=config['gepa_metric_calls_per_prompt'],workers=config.get('gepa_workers',8),
+                    resume=(work/'prompt-optimization').exists())
             except Exception as exc:
                 gepa_report={'status':'failed','error':str(exc),'error_type':type(exc).__name__}
                 write_json(work/'prompt-optimization/report.json',gepa_report)

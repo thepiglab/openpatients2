@@ -76,7 +76,7 @@ def test_memory_and_new_compute_processes_both_gate_layout_reuse():
 async def test_failed_gpu_drain_records_owners_and_aborts(tmp_path, monkeypatch):
     baseline = {'devices': {'GPU-a': {'memory_used_mib': 100}}, 'processes': []}
     dirty = {'devices': {'GPU-a': {'memory_used_mib': 2000}}, 'processes': [{'gpu_uuid': 'GPU-a', 'pid': 123}]}
-    monkeypatch.setattr(tuning, 'gpu_snapshot', lambda: dirty)
+    monkeypatch.setattr(tuning, 'gpu_snapshot', lambda expected_gpus=8: dirty)
     with pytest.raises(RuntimeError, match='no next layout'):
         await tuning.wait_for_release(baseline, tmp_path / 'drain.json', timeout=0)
     assert json.loads((tmp_path / 'drain.json').read_text())['current']['processes'][0]['pid'] == 123

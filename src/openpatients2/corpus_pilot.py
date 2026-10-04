@@ -105,6 +105,16 @@ def prepare(root, work, config_path):
     return campaign
 
 
+def campaign_phases(campaign, *, include_cpu=True):
+    phases=(['cpu'] if include_cpu else [])+['setup','download']
+    if campaign['config'].get('separate_gepa'):
+        from .pilot_recovery import bootstrap_complete
+        parent=campaign['config'].get('resume_from')
+        if not parent or not bootstrap_complete(parent,campaign['config']): phases.append('bootstrap')
+        phases.append('gepa')
+    return phases+['gpu','cleanup','report','source-cleanup']
+
+
 def load(work, *, check_runtime=True):
     work = Path(work).resolve(); campaign = read_json(work/'pilot.json')
     if campaign['work'] != str(work) or campaign['config_sha256'] != json_digest(campaign['config']):
@@ -127,14 +137,16 @@ def verify_cpu(campaign):
 
 def job_command(campaign, phase, dependency=None):
     config, root, work = campaign['config'], campaign['root'], Path(campaign['work'])
-    cpus, mem, duration = (32,'250G','12:00:00') if phase=='gpu' else CPU_RESOURCES[phase]
+    gpu_phase=phase in {'gpu','bootstrap','gepa'}
+    cpus, mem, duration = ((16,'96G','03:00:00') if phase=='gepa' else
+        (32,'250G','12:00:00')) if gpu_phase else CPU_RESOURCES[phase]
     args = ['sbatch','--parsable','--nodes=1','--ntasks=1','--no-requeue',
         '--account='+config['account'],'--qos='+config['qos'],'--chdir='+root,
         '--cpus-per-task='+str(cpus),'--mem='+mem,'--time='+duration,
         '--job-name=op2-pilot-'+phase,'--output='+str(work/'logs'/f'{phase}-%j.log'),
-        '--partition='+config['gpu_partition' if phase=='gpu' else 'cpu_partition'],
-        '--gres='+('gpu:b200:8' if phase=='gpu' else 'none')]
-    if phase=='gpu': args.append('--signal=B:TERM@120')
+        '--partition='+config['gpu_partition' if gpu_phase else 'cpu_partition'],
+        '--gres='+('gpu:b200:1' if phase=='gepa' else 'gpu:b200:8' if gpu_phase else 'none')]
+    if gpu_phase: args.append('--signal=B:TERM@120')
     if dependency: args.append('--dependency='+dependency)
     return args+[str(Path(root)/'scripts/corpus_pilot.sbatch'),phase,str(work)]
 
@@ -302,6 +314,9 @@ async def prepare_cpu_campaign(campaign):
     from .pilot_cpu import run_cpu
     from .data import read_jsonl
     work = Path(campaign['work']); config = campaign['config']
+    if config.get('resume_from'):
+        from .pilot_recovery import recover_cpu
+        return recover_cpu(campaign)
     result = await run_cpu(work, config)
     if not config.get('holdout_source_config'): return result
     child = work/'holdout'
@@ -364,7 +379,7 @@ async def prepare_cpu_campaign(campaign):
         raise
 
 
-async def _gpu_locked(campaign):
+async def _gpu_locked(campaign, *, bootstrap_only=False):
     from . import hipergator as hpg
     from .glimmer_benchmark import serving_config, gpu_probe, server_metrics
     from .glimmer_tuning import gpu_snapshot, wait_for_release
@@ -391,13 +406,16 @@ async def _gpu_locked(campaign):
     overnight=campaign['config'].get('experiment')=='overnight_v3'
     deadline=started+campaign['config'].get('gpu_budget_seconds',36000)
     deferred=[]
-    for cell in campaign['config']['matrix']:
+    cells=campaign['config']['matrix'][:1] if bootstrap_only else campaign['config']['matrix']
+    status_path=work/('bootstrap.json' if bootstrap_only else 'gpu.json')
+    for cell in cells:
         label=f'context{cell["context"]}-prefill{cell["prefill"]}'
         if overnight:
             label+=f'-tp{cell.get("tensor_parallel",1)}-'+(cell.get('speculation') or 'ordinary')
             if time.monotonic()+900>=deadline:
                 deferred.append({'cell':cell,'reason':'GPU deadline reserve'}); continue
-        dest=work/'extraction'/label; dest.mkdir(parents=True,exist_ok=False)
+        dest=work/'extraction'/label
+        dest.mkdir(parents=True,exist_ok=bool(campaign['config'].get('separate_gepa') or campaign['config'].get('resume_from')))
         current=copy.deepcopy(engine); current['config']['max_model_len']=cell['context']
         layout={'name':label,'replicas':8,'tensor_parallel':1,'speculation':'dflash',
                 'max_batched_tokens':cell['prefill'],'vision':True}
@@ -408,7 +426,12 @@ async def _gpu_locked(campaign):
         cfg=serving_config(current,model,layout)
         if overnight: cfg.environment['VLLM_SERVER_DEV_MODE']='1'
         gpu_probe(current,model,cfg)
-        group=ServerGroup(cfg,engine['work'],str(dest/'servers'))
+        log_folder=dest/('bootstrap-servers' if bootstrap_only else 'servers')
+        if log_folder.exists():
+            number=0
+            while log_folder.with_name(log_folder.name+f'-{number}').exists(): number+=1
+            log_folder=log_folder.with_name(log_folder.name+f'-{number}')
+        group=ServerGroup(cfg,engine['work'],str(log_folder))
         write_json(work/'progress.json',{'phase':'starting','cell':label,'time_unix':time.time()})
         try:
             await group.start(current['config']['startup_timeout_seconds'])
@@ -425,7 +448,7 @@ async def _gpu_locked(campaign):
             if overnight:
                 from .overnight import run_trials
                 rows,discovered,skipped=await run_trials(campaign,dest,endpoints,cell['context'],cell,
-                    min(deadline,time.monotonic()+cell.get('budget_seconds',36000)))
+                    min(deadline,time.monotonic()+cell.get('budget_seconds',36000)),bootstrap_only=bootstrap_only)
                 results.extend(rows); discovery.extend(discovered); deferred.extend(skipped)
                 failed.extend({'cell':cell,'seed':row['seed'],'arm':row['arm'],'error':row['report'].get('error','Trial failed')}
                     for row in rows if row['report'].get('status')=='failed')
@@ -471,7 +494,7 @@ async def _gpu_locked(campaign):
                     results.append({'cell':cell,'arm':arm,'report':report})
             write_json(dest/'metrics-after.json',await server_metrics(endpoints))
             if overnight:
-                write_json(work/'gpu.json',{'status':'running','results':results,'discovery':discovery,
+                write_json(status_path,{'status':'running','results':results,'discovery':discovery,
                     'failures':failed,'deferred':deferred,'gpu_stage_seconds':time.monotonic()-started})
         except Exception as exc:
             failure={'cell':cell,'error_type':type(exc).__name__,'error':str(exc)}
@@ -485,17 +508,76 @@ async def _gpu_locked(campaign):
                 if campaign['config'].get('source_mode') == 'fixed_fixture' else 'unadjudicated new sample; inspect source review forms'),
             'throughput_notice':'Diverse sample includes orchestration/retries; distinct from warm repeated prompt tuning.',
             'discovery':discovery}
-    write_json(work/'gpu.json',result)
+    write_json(status_path,result)
     return result
 
 
 async def gpu(campaign):
     from .hipergator import model_lock
     work=Path(campaign['work'])
-    if (work/'gpu.json').exists() or (work/'extraction').exists():
+    if (work/'gpu.json').exists() or ((work/'extraction').exists() and not campaign['config'].get('separate_gepa')):
         raise ValueError('GPU experiment already has outputs; use a new campaign')
+    if campaign['config'].get('separate_gepa'):
+        if not (work/'prompt-optimization/report.json').exists() or not (work/'prompt-optimization/best-prompts.json').exists():
+            raise ValueError('GEPA stage did not produce its final receipts; no eight-GPU servers will be started')
     with model_lock(work/'engine'):
         return await _gpu_locked(campaign)
+
+
+async def gepa_stage(campaign):
+    """One B200 serves concurrent independent prompt searches; CPU acquisition is complete."""
+    from . import hipergator as hpg
+    from .glimmer_benchmark import serving_config, gpu_probe, server_metrics
+    from .glimmer_tuning import gpu_snapshot, wait_for_release
+    from .serving import ServerGroup
+    from .pilot_extract import load_pilot_config
+    from .pilot_recovery import bootstrap_paths, bootstrap_complete
+    from .prompt_optimization import optimize_prompts
+    work=Path(campaign['work']); config=campaign['config']
+    verify_cpu(campaign)
+    if not bootstrap_complete(work,config): raise ValueError('GEPA requires four completed bootstrap trials')
+    if len(os.environ.get('CUDA_VISIBLE_DEVICES','').split(','))!=1:
+        raise ValueError('GEPA reserves exactly one B200, with concurrent prompt searches')
+    engine=hpg.read_campaign(work/'engine'); model=engine['config']['models'][0]
+    with hpg.model_lock(work/'engine'):
+        hpg.check_owner(hpg.active_path(engine),engine,model)
+        audit=read_json(work/'engine/results'/model['name']/'download.json')
+        expected={'campaign':engine['id'],'model':model['name'],'audit_sha256':json_digest(audit)}
+        if audit['status']!='ready' or read_json(hpg.active_path(engine)/'ready.json')!=expected:
+            raise ValueError('GEPA checkpoint download is not ready')
+        # Check CPU-recorded sizes/mtimes without rereading model tensors on GPU.
+        for asset in audit['files']:
+            path=(hpg.active_path(engine)/asset['folder']/asset['file']).resolve()
+            if not path.is_relative_to(hpg.active_path(engine)) or path.stat().st_size!=asset['bytes'] or path.stat().st_mtime_ns!=asset['mtime_ns']:
+                raise ValueError('GEPA checkpoint changed after CPU download')
+        current=copy.deepcopy(engine); current['config']['max_model_len']=config['matrix'][0]['context']
+        layout={'name':'gepa','replicas':1,'tensor_parallel':1,'speculation':'dflash',
+                'max_batched_tokens':32768,'vision':True}
+        cfg=serving_config(current,model,layout); cfg.environment['VLLM_SERVER_DEV_MODE']='1'
+        gpu_probe(current,model,cfg)
+        folder=work/'gepa-servers'; baseline=gpu_snapshot(expected_gpus=1); started=time.monotonic()
+        group=ServerGroup(cfg,engine['work'],str(folder))
+        try:
+            write_json(work/'progress.json',{'phase':'gepa_starting','allocated_gpus':1,'time_unix':time.time()})
+            await group.start(current['config']['startup_timeout_seconds'])
+            endpoints=[c['endpoint'] for c in group.commands]
+            write_json(folder/'metrics-before.json',await server_metrics(endpoints))
+            base=load_pilot_config(config['extraction_config']).model_dump()
+            base.update(image_manifest=str(work/'vision-assets/manifest.json'),gpus_per_endpoint=1)
+            write_json(work/'progress.json',{'phase':'gepa_parallel','allocated_gpus':1,
+                'parallel_searches':config.get('gepa_workers',8),'time_unix':time.time()})
+            prompts,report=await asyncio.to_thread(optimize_prompts,work/'profile/sample.jsonl.gz',
+                bootstrap_paths(work,config),work/'prompt-optimization',base,endpoints,cfg.max_model_len,
+                config['fidelity_reference'],seconds=config['gepa_seconds'],calls=config['gepa_metric_calls_per_prompt'],
+                workers=config.get('gepa_workers',8),resume=(work/'prompt-optimization').exists())
+            write_json(folder/'metrics-after.json',await server_metrics(endpoints))
+            result={'status':report['status'],'allocated_gpus':1,'parallel_searches':config.get('gepa_workers',8),
+                'stage_seconds':time.monotonic()-started,'prompt_report':'prompt-optimization/report.json',
+                'selected_supplements':len(prompts)}
+            write_json(work/'gepa.json',result); return result
+        finally:
+            group.stop()
+            await wait_for_release(baseline,folder/'gpu-drain.json')
 
 
 def report(campaign):
@@ -591,10 +673,23 @@ def stage(campaign, phase):
     try:
         if phase=='cpu':
             return asyncio.run(prepare_cpu_campaign(campaign))
-        if phase=='gpu':
-            def interrupted(signum,frame): raise KeyboardInterrupt('Slurm signal '+str(signum))
+        if phase in {'gpu','bootstrap','gepa'}:
+            def interrupted(signum,frame):
+                # A second TERM during process cleanup must not replace the
+                # original interruption with a second teardown exception.
+                signal.signal(signal.SIGTERM,signal.SIG_IGN)
+                raise KeyboardInterrupt('Slurm signal '+str(signum))
             signal.signal(signal.SIGTERM,interrupted)
-            return asyncio.run(gpu(campaign))
+            async def measured_stage():
+                from .gpu_telemetry import monitor
+                async with monitor(work/f'{phase}-telemetry.jsonl'):
+                    if phase=='gepa': return await gepa_stage(campaign)
+                    if phase=='bootstrap':
+                        from .hipergator import model_lock
+                        with model_lock(work/'engine'):
+                            return await _gpu_locked(campaign,bootstrap_only=True)
+                    return await gpu(campaign)
+            return asyncio.run(measured_stage())
         if phase=='report': return report(campaign)
         if phase=='source-cleanup':
             from .pilot_cleanup import cleanup_sources
@@ -630,7 +725,9 @@ def archive_results(campaign, output):
     work = Path(campaign['work']).resolve(); output = Path(output).resolve()
     if output.exists() or output.is_relative_to(work):
         raise ValueError('Use a new archive filename outside the campaign')
-    names = ('pilot.json','cpu.json','gpu.json','summary.json','SUMMARY.md','COMPARISON.md','source-cleanup.json',
+    names = ('pilot.json','cpu.json','gpu.json','bootstrap.json','gepa.json','recovery.json','gepa-servers',
+             'bootstrap-error.json','gepa-error.json','summary.json','SUMMARY.md','COMPARISON.md','source-cleanup.json',
+             'bootstrap-telemetry.jsonl','gepa-telemetry.jsonl','gpu-telemetry.jsonl',
              'source-owner.json','progress.json','review-source-sample.json','extraction','logs','vision-assets','profile/counts.jsonl.gz',
              'profile/profile.json','profile/SUMMARY.md','profile/rosters.json',
              'profile/token-histograms.png','profile/token-histograms.svg','profile/token-histograms.json',
@@ -721,24 +818,45 @@ def add_parser(sub):
         p.add_argument('--config',default='configs/pilot/corpus.yaml')
         if name=='submit': p.add_argument('--sif')
     p=actions.add_parser('submit-gpu'); p.add_argument('--work-dir',required=True); p.add_argument('--sif')
-    p=actions.add_parser('stage'); p.add_argument('phase',choices=['cpu','setup','download','gpu','cleanup','report','source-cleanup']); p.add_argument('--work-dir',required=True)
+    p=actions.add_parser('submit-resume',help='Fork an ended overnight campaign and reuse completed trials/GEPA checkpoints')
+    p.add_argument('--from-work-dir',required=True); p.add_argument('--work-dir',required=True); p.add_argument('--sif')
+    p=actions.add_parser('stage'); p.add_argument('phase',choices=['cpu','setup','download','bootstrap','gepa','gpu','cleanup','report','source-cleanup']); p.add_argument('--work-dir',required=True)
     p=actions.add_parser('status'); p.add_argument('--work-dir',required=True)
     p=actions.add_parser('export-results'); p.add_argument('--work-dir',required=True); p.add_argument('--output',required=True)
 
 
 def dispatch(args):
     root=Path(__file__).resolve().parents[2]
+    if args.pilot_action=='submit-resume':
+        import tempfile
+        from .pilot_recovery import validate_parent
+        parent=Path(args.from_work_dir).resolve(); old=load(parent,check_runtime=False)
+        config=copy.deepcopy(old['config']); oldroot=Path(old['root'])
+        for key in (*PATH_KEYS,*FIXED_PATH_KEYS,'holdout_source_config'):
+            if config.get(key) and Path(config[key]).is_relative_to(oldroot):
+                config[key]=str(root/Path(config[key]).relative_to(oldroot))
+        config.update(resume_from=str(parent),separate_gepa=True,gepa_workers=8)
+        with tempfile.TemporaryDirectory(prefix='op2-recovery-') as temp:
+            path=Path(temp)/'config.yaml'; path.write_text(yaml.safe_dump(config))
+            campaign=prepare(root,args.work_dir,path)
+        validate_parent(campaign,parent)
+        sif=args.sif
+        if not sif and (parent/'engine/setup.json').exists():
+            candidate=read_json(parent/'engine/setup.json').get('sif')
+            if candidate and Path(candidate).is_file(): sif=candidate
+        prepare_engine(campaign,sif)
+        return submit_chain(campaign,campaign_phases(campaign),'campaign')
     if args.pilot_action in {'prepare','submit-cpu','submit'}:
         campaign=prepare(root,args.work_dir,args.config)
         if args.pilot_action=='submit':
             prepare_engine(campaign,args.sif)
-            return submit_chain(campaign,['cpu','setup','download','gpu','cleanup','report','source-cleanup'],'campaign')
+            return submit_chain(campaign,campaign_phases(campaign),'campaign')
         return submit_chain(campaign,['cpu'],'cpu') if args.pilot_action=='submit-cpu' else campaign
     campaign=load(args.work_dir,check_runtime=not (args.pilot_action=='export-results' or
         (args.pilot_action=='stage' and args.phase in {'cleanup','source-cleanup'})))
     if args.pilot_action=='export-results': return archive_results(campaign,args.output)
     if args.pilot_action=='submit-gpu':
         verify_cpu(campaign); prepare_engine(campaign,args.sif)
-        return submit_chain(campaign,['setup','download','gpu','cleanup','report','source-cleanup'],'gpu')
+        return submit_chain(campaign,campaign_phases(campaign,include_cpu=False),'gpu')
     if args.pilot_action=='stage': return stage(campaign,args.phase)
     return report(campaign)

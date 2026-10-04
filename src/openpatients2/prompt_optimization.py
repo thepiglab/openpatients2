@@ -7,6 +7,7 @@ fidelity. Neither validators nor source/schema/system contracts are optimized.
 from __future__ import annotations
 import asyncio
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import copy
 import hashlib
 import json
@@ -136,6 +137,11 @@ class ClinicalAdapter:
         self.examples=examples; self.config=config; self.endpoints=endpoints; self.context=context
         self.output=Path(output); self.reference=reference; self.component=component
         self.number=0; self.deadline=deadline
+        # GEPA can resume its engine checkpoint. Keep previous rollout traces
+        # immutable even when interruption happened before a state save.
+        previous=[int(p.name.rsplit('-',1)[1]) for p in self.output.glob('*-*')
+                  if p.name.startswith(('rollout-','reflection-')) and p.name.rsplit('-',1)[1].isdigit()]
+        self.number=max(previous,default=-1)+1
 
     def evaluate(self,batch,candidate,capture_traces=False):
         from gepa.core.adapter import EvaluationBatch
@@ -202,14 +208,19 @@ class ClinicalAdapter:
         except TimeoutError: return {components_to_update[0]:candidate[components_to_update[0]]}
 
 
-def optimize_prompts(sample, trial_dirs, output, config, endpoints, context, reference_path, *, seconds=7200, calls=32):
+def optimize_prompts(sample, trial_dirs, output, config, endpoints, context, reference_path, *, seconds=7200, calls=32,
+                     workers=8, resume=False):
     import gepa
     from importlib.metadata import version
     if version('gepa')!='0.1.4': raise ValueError('Expected pinned gepa 0.1.4')
-    output=Path(output); output.mkdir(parents=True,exist_ok=False)
+    if not 1<=workers<=8: raise ValueError('Use 1–8 independent GEPA searches')
+    output=Path(output); output.mkdir(parents=True,exist_ok=resume)
     articles={a['article_id']:a for a in read_jsonl(sample)}
     reference=json.loads(Path(reference_path).read_text())
-    split=split_articles(articles); write_json(output/'splits.json',split)
+    split=split_articles(articles)
+    if (output/'splits.json').exists() and json.loads((output/'splits.json').read_text())!=split:
+        raise ValueError('GEPA resume article split changed')
+    write_json(output/'splits.json',split)
     examples=[]; seen=set()
     for trial in map(Path,trial_dirs):
         patients={p['source']['record_id']:p for p in read_jsonl(trial/'patients.jsonl')}
@@ -244,8 +255,31 @@ def optimize_prompts(sample, trial_dirs, output, config, endpoints, context, ref
                 'row':row,'request':request,'facts':[r for r in facts if r['task'] in TASK_MODELS]})
     # image_manifest is runner-compatible and will be removed from overrides.
     clean_config={k:v for k,v in config.items() if k!='image_manifest'}
-    deadline=time.monotonic()+seconds; winners={}; reports=[]
-    for ordinal,component in enumerate(COMPONENTS):
+    manifest={'gepa_version':version('gepa'),'reference_sha256':json_digest(reference),'splits':split,
+        'config_sha256':json_digest(clean_config),
+        'examples_sha256':json_digest([{'identity':e['row']['identity'],'task':e['row']['task'],
+            'request':safe_messages(e['request']),'source_hash':e['article']['text_sha256']} for e in examples])}
+    manifest_path=output/'input-manifest.json'
+    if manifest_path.exists() and json.loads(manifest_path.read_text())!=manifest:
+        raise ValueError('GEPA resume inputs/configuration changed')
+    write_json(manifest_path,manifest)
+    # Each family evolves only its own supplement against immutable bootstrap
+    # examples. Candidate -> evaluation -> reflection remains sequential INSIDE
+    # one search; different families do not depend on each other's candidates.
+    deadline=time.monotonic()+seconds; winners={}; reports={}
+    prior=json.loads((output/'components.json').read_text()) if (output/'components.json').exists() else []
+    prior_winners=json.loads((output/'best-prompts.json').read_text()) if (output/'best-prompts.json').exists() else {}
+    for info in prior:
+        if info['component'] in COMPONENTS and info['status'] in {'completed','insufficient_disjoint_examples'}:
+            if info['status']=='completed':
+                instruction=prior_winners.get(info['component'],info.get('selected_instruction'))
+                if instruction is None: continue
+                winners[info['component']]=prompt_guard(instruction,list(articles.values()))
+            reports[info['component']]={**info,'reused_from_checkpoint':True}
+    pending=[c for c in COMPONENTS if c not in reports]
+    waves=max(1,(len(pending)+workers-1)//workers)
+    share=seconds/waves
+    def search(component):
         eligible=[e for e in examples if e['row']['task']==component or (component=='coverage_repair' and e['row']['task'].startswith('coverage_repair_')) or (component=='repair' and any(a['errors'] for a in e['row']['attempts']))]
         train=[e for e in eligible if e['article']['article_id'] in split['train']][:8]
         val=[e for e in eligible if e['article']['article_id'] in split['validation']][:4]
@@ -255,30 +289,44 @@ def optimize_prompts(sample, trial_dirs, output, config, endpoints, context, ref
         elif time.monotonic()>=deadline:
             info['status']='deferred_time_budget'
         else:
-            component_deadline=min(deadline,time.monotonic()+max(30,
-                (deadline-time.monotonic())/(len(COMPONENTS)-ordinal)))
+            component_deadline=min(deadline,time.monotonic()+share)
             adapter=ClinicalAdapter(eligible,clean_config,endpoints,context,output/component,reference,component,component_deadline)
             try:
+                engine_resumed=(output/component/'gepa/gepa_state.bin').exists()
                 result=gepa.optimize(seed_candidate={component:''},trainset=train,valset=val,adapter=adapter,
                     max_metric_calls=calls,reflection_minibatch_size=min(3,len(train)),skip_perfect_score=False,
                     module_selector='round_robin',seed=5724,run_dir=str(output/component/'gepa'),
                     stop_callbacks=lambda state:time.monotonic()>=component_deadline,raise_on_exception=True)
                 best=max(range(len(result.candidates)),key=lambda i:result.val_aggregate_scores[i])
                 instruction=result.candidates[best][component]
-                winners[component]=prompt_guard(instruction,[e['article'] for e in eligible])
+                instruction=prompt_guard(instruction,[e['article'] for e in eligible])
                 info.update(status='completed',scores=result.val_aggregate_scores,
                     candidate_count=len(result.candidates),metric_calls=result.total_metric_calls,
                     stopped_by_component_wall_budget=time.monotonic()>=component_deadline,
-                    best_index=best,selected_instruction=winners[component])
+                    best_index=best,selected_instruction=instruction,
+                    resumed_engine_checkpoint=engine_resumed)
                 write_json(output/component/'candidates.json',result.candidates)
             except Exception as exc:
                 info.update(status='failed',error_type=type(exc).__name__,error=str(exc))
-        reports.append(info)
-        write_json(output/'progress.json',{'component':component,'status':info['status'],
-            'finished_components':len(reports),'total_components':len(COMPONENTS),'time_unix':time.time()})
-        write_json(output/'components.json',reports); write_json(output/'best-prompts.json',winners)
-    report={'status':'completed' if all(r['status']=='completed' for r in reports) else 'partial',
-        'gepa_version':version('gepa'),'components':reports,'splits':split,
+        return info
+    # Only the coordinator writes shared receipts, avoiding racing .tmp files.
+    # Eight concurrent searches can batch on ONE B200 instead of reserving
+    # eight replicas during small validation sets and single reflection calls.
+    write_json(output/'progress.json',{'phase':'optimizing','workers':workers,'replicas':len(endpoints),
+        'finished_components':len(reports),'total_components':len(COMPONENTS),'pending':pending,'time_unix':time.time()})
+    with ThreadPoolExecutor(max_workers=workers,thread_name_prefix='gepa-family') as pool:
+        futures={pool.submit(search,c):c for c in pending}
+        for future in as_completed(futures):
+            info=future.result(); component=info['component']; reports[component]=info
+            if info['status']=='completed': winners[component]=info['selected_instruction']
+            ordered=[reports[c] for c in COMPONENTS if c in reports]
+            write_json(output/'components.json',ordered); write_json(output/'best-prompts.json',winners)
+            write_json(output/'progress.json',{'phase':'optimizing','component':component,'status':info['status'],
+                'workers':workers,'replicas':len(endpoints),'finished_components':len(reports),
+                'total_components':len(COMPONENTS),'pending':[c for c in pending if c not in reports], 'time_unix':time.time()})
+    ordered=[reports[c] for c in COMPONENTS]
+    report={'status':'completed' if all(r['status']=='completed' for r in ordered) else 'partial',
+        'gepa_version':version('gepa'),'components':ordered,'splits':split,'parallel_searches':workers,
         'test_labels_exposed_to_optimizer':False,'optimized_nonempty_components':sum(bool(v) for v in winners.values()),'automatic_production_promotion':False,
         'clinical_accuracy_established':False,'reward_notice':'Clinical tasks with gold use finite facts + forbidden checks; others structural only.'}
     write_json(output/'report.json',report)

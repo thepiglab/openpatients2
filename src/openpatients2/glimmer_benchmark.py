@@ -263,10 +263,10 @@ def gpu_probe(campaign, model, cfg):
             'assert vllm.__version__==' + repr(cfg.version) + '; '
             'assert "MuseGlimmerForConditionalGeneration" in ModelRegistry.get_supported_archs(); '
             'ReasoningParserManager.get_reasoning_parser("muse_glimmer"); '
-            'assert torch.cuda.device_count()==8; '
-            'assert all(torch.cuda.get_device_capability(i)==(10,0) for i in range(8)); '
+            'assert torch.cuda.device_count()==' + str(cfg.replicas*cfg.tensor_parallel) + '; '
+            'assert all(torch.cuda.get_device_capability(i)==(10,0) for i in range(torch.cuda.device_count())); '
             'print(json.dumps({"vllm":vllm.__version__,"torch":torch.__version__, '
-            '"gpus":[torch.cuda.get_device_name(i) for i in range(8)]}))')
+            '"gpus":[torch.cuda.get_device_name(i) for i in range(torch.cuda.device_count())]}))')
     if model['quantization'] == 'bitsandbytes':
         code += '; from vllm.model_executor.layers.quantization import get_quantization_config; get_quantization_config("bitsandbytes")'
     args = ['apptainer', 'exec', '--nv', '--cleanenv', '--bind', f'{work}:{work}',

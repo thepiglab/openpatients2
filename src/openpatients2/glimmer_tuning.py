@@ -19,7 +19,7 @@ class GPUDrainError(RuntimeError):
     """A layout must never be reused after an ambiguous or incomplete release."""
 
 
-def gpu_snapshot():
+def gpu_snapshot(expected_gpus=8):
     """Record only the allocation's UUIDs, plus their compute-process owners."""
     def query(fields, kind='gpu'):
         try:
@@ -28,12 +28,18 @@ def gpu_snapshot():
         except (OSError, subprocess.SubprocessError) as exc:
             raise GPUDrainError('Cannot verify allocated GPU memory/process state') from exc
         return list(csv.reader(result.stdout.splitlines(), skipinitialspace=True))
-    visible = os.environ['CUDA_VISIBLE_DEVICES'].split(',')
+    visible = (os.environ.get('SLURM_STEP_GPUS') or os.environ.get('SLURM_JOB_GPUS') or
+               os.environ['CUDA_VISIBLE_DEVICES']).split(',')
+    raw=query('uuid,index,memory.used')
     devices = {uuid: {'index': index, 'memory_used_mib': int(memory)}
-               for uuid, index, memory in query('uuid,index,memory.used')
+               for uuid, index, memory in raw
                if index in visible or uuid in visible}
-    if len(devices) != 8:
-        raise GPUDrainError('Cannot identify exactly eight allocated GPU UUIDs; refusing an ambiguous cleanup check')
+    if not devices and len(raw)==expected_gpus:
+        # Some cgroup configurations expose physical indices but remap CUDA
+        # ordinals. A complete, uniquely sized visible inventory is unambiguous.
+        devices={uuid:{'index':index,'memory_used_mib':int(memory)} for uuid,index,memory in raw}
+    if len(devices) != expected_gpus:
+        raise GPUDrainError(f'Cannot identify exactly {expected_gpus} allocated GPU UUIDs; refusing an ambiguous cleanup check')
     processes = [{'gpu_uuid': uuid, 'pid': int(pid), 'name': name, 'memory_mib': memory}
                  for uuid, pid, name, memory in query('gpu_uuid,pid,process_name,used_gpu_memory', 'compute-apps')
                  if uuid in devices]
@@ -52,7 +58,7 @@ def unreleased_gpus(baseline, current, tolerance_mib):
 async def wait_for_release(baseline, output, timeout=120, tolerance_mib=512):
     deadline = time.monotonic() + timeout
     while True:
-        current = gpu_snapshot()
+        current = gpu_snapshot() if len(baseline['devices'])==8 else gpu_snapshot(expected_gpus=len(baseline['devices']))
         remaining = unreleased_gpus(baseline, current, tolerance_mib)
         write_json(output, {'status': 'waiting' if remaining else 'released',
                            'remaining_gpu_uuids': remaining, 'baseline': baseline, 'current': current})

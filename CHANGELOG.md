@@ -1,3 +1,9 @@
+## 2026-10-04 — Parallel GEPA and interruption recovery
+
+- Run independent prompt searches concurrently on one B200; separate eight-B200 bootstrap and extraction jobs so GEPA no longer holds eight idle replicas.
+- Add `corpus-pilot submit-resume` and a single-command recovery launcher. Reuse completed trials/prompts and native GEPA checkpoints in a new owned campaign, including source-sample restoration after cleanup.
+- Preserve interrupted rollouts/trials, validate immutable clinical inputs, and record allocation utilization every 15 seconds.
+
 # Changelog
 
 ## Unreleased — overnight clinical fidelity / GEPA

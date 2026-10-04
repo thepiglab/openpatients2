@@ -10,7 +10,7 @@ export UV_CACHE_DIR="$work/uv-cache"
 export UV_LINK_MODE=copy
 export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 export TOKENIZERS_PARALLELISM=false
-if [[ "$phase" != gpu ]]; then
+if [[ "$phase" != gpu && "$phase" != bootstrap && "$phase" != gepa ]]; then
   export CUDA_VISIBLE_DEVICES=""
   # Dependencies are downloaded/synchronized only in CPU allocations.
   uv sync --locked --extra data --extra plots --extra optimize --no-dev --python 3.12
@@ -18,7 +18,7 @@ fi
 if [[ "$phase" != cpu ]]; then
   if ! command -v apptainer >/dev/null; then module load apptainer; fi
 fi
-if [[ "$phase" == gpu ]]; then
+if [[ "$phase" == gpu || "$phase" == bootstrap || "$phase" == gepa ]]; then
   export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1
 fi
 setsid uv run --python 3.12 --no-sync --offline op2 corpus-pilot stage "$phase" --work-dir "$work" &

@@ -11,7 +11,8 @@ The launcher picks a fresh timestamped sibling folder under
 `/blue/cai6734/ehr_agent/op2-clinical-overnight`. An optional first argument
 sets another new work directory. Submission preflights the entire held job chain,
 then releases CPU preparation → CPU container setup → CPU checkpoint download →
-eight B200s on **one node** → CPU model cleanup → report → CPU article cleanup.
+eight-B200 bootstrap → one-B200 concurrent GEPA → eight B200s on **one node**
+for extraction/layout trials → CPU model cleanup → report → CPU article cleanup.
 No GPU is requested for downloads, tokenization or cleanup. Account/QOS are
 `cai5724`; the GPU allocation requests 32 CPUs / 250 GB / eight B200s / 12 hours.
 
@@ -59,7 +60,7 @@ count, including four TP2 servers. Startup, queue wait and warmup are excluded
 from extraction token rates and included separately in stage duration where
 appropriate. Different clinical/audit work is not an identical throughput load.
 
-The job has a **10-hour work budget inside a 12-hour allocation**, allowing time
+The extraction job has a **10-hour work budget inside a 12-hour allocation**, allowing time
 for shutdown. The primary cell has a seven-hour ceiling; confirmation cells
 have 30-minute ceilings each. A 15-minute reserve prevents starting another full
 extraction trial too close to a cell deadline. Runtime is not padded. Actual
@@ -138,7 +139,12 @@ Related cases across different publications have not been deduplicated, so this
 is article-held-out generalization, not proven patient-held-out generalization.
 
 Each prompt gets up to 128 task evaluations and a fair share of a two-hour GEPA
-wall budget. The same local Glimmer supplies reflection; no extra checkpoint is
+wall budget. Up to eight independent prompt searches run concurrently against one
+B200 server; validation batches and reflection calls can batch on that GPU.
+Candidate evaluation/reflection stays sequential within a search. Bootstrap and
+final extraction comparisons use separate eight-B200 allocations. GEPA reserves
+16 CPUs / 96 GB / one B200 / three hours, including startup/shutdown; the optimizer
+has a two-hour limit. CPU dependencies and model downloads precede all GPU jobs. The same local Glimmer supplies reflection; no extra checkpoint is
 required. Candidate pools, trajectories, scores, split manifests and selected
 supplements are retained. Source identifiers and copied long source passages are
 rejected from supplements. This is a memorization check, not proof against overfitting.
@@ -216,3 +222,64 @@ scp wkieffer@hpg.rc.ufl.edu:/blue/cai6734/ehr_agent/op2-clinical-overnight/RUN-N
 Do not update the running checkout during a campaign: source/config/lockfile
 hashes are pinned. Model and article cleanup can still use ownership receipts
 if code changes after a run.
+
+
+## Cancellation recovery and allocation changes (2026-10-04)
+
+Job 44661767 received SIGTERM while GEPA was running. The previous scheduler
+iterated over 27 families serially; reflection always used replica 0 while eight
+GPUs were reserved. This explains a low-utilization risk, though the diagnostics
+alone do not measure the administrator's GPU utilization window. The saved
+progress listed 23 families through `clinical_inventory`; four remaining families
+were coverage audit, claim audit, coverage repair and repair. Check the receipts
+for actual per-family completion/checkpoint status rather than relying on stdout
+(which can be buffered).
+
+The default chain is now CPU prepare → CPU container setup/download → eight-GPU
+bootstrap → one-GPU concurrent GEPA → eight-GPU extraction/layout comparisons →
+CPU model cleanup → report → CPU source cleanup. GEPA prompts are independent
+because they use frozen bootstrap examples. Applying separately optimized prompts
+together still needs the full pipeline tests; optimizing repair against outputs
+of newly optimized clinical prompts would require a later coordinated round.
+
+GPU stages synchronize no dependencies and download no checkpoints. Each stage
+samples utilization, memory and power with nvidia-smi every 15 seconds in
+`{bootstrap,gepa,gpu}-telemetry.jsonl`, alongside timestamped phase receipts and
+server request logs. Utilization is a measurement to inspect, not a promised
+percentage. Single-GPU GEPA has its own stage timing; it is not an eight-GPU
+throughput comparison.
+
+To continue an ended campaign after updating this checkout:
+
+```bash
+bash scripts/resume_overnight_pilot.sh   /blue/cai6734/ehr_agent/op2-clinical-overnight/run-20261004-012835
+```
+
+This creates a new sibling campaign. CPU recovery copies saved bounded review
+pixels, source/profile snapshots, completed extraction trials, and GEPA artifacts;
+it does not reacquire the corpus. If source cleanup removed samples, regression
+text is restored from the pinned fixture and the selected new-source text from
+`review-source-sample.json`. The old snapshot can lack optional PMID/DOI metadata;
+these remain unknown, while retained source text and recorded text/XML hashes are
+preserved. No new case is substituted. Any surviving pinned CPU file must still
+match its receipt. Symlinks, live parent stages, changed extraction/validator code,
+model/prompt configuration, reference fixtures or trial definitions are refused.
+The original results stay intact; ownership and CPU receipts are regenerated for
+the new work directory. The parent's container is reused if present; cleaned-up
+model weights are downloaded again by the CPU download job.
+
+Completed prompt families are reused from components/best-prompts receipts.
+Unfinished searches use GEPA's native `gepa_state.bin` in their original component
+run directory, with identical article splits and bootstrap inputs. New rollout
+indices start after the last saved directory, preserving traces even from an
+unsaved iteration. If interruption occurred before an engine checkpoint, only
+that search restarts. A saved state may replay the last unsaved iteration. New
+checkpoints additionally pin the optimizer input/configuration manifest.
+
+Completed trials with output receipts are reused, including their original
+throughput measurements (they are marked `reused_completed_trial` and are not
+new-run timings). An interrupted extraction trial is moved to an `-interrupted-N`
+folder and repeated from scratch; incomplete trials do not contribute fabricated
+throughput rates. The available bootstrap is skipped at submission when all four
+receipts exist. Any missing bootstrap trial is regenerated in the bootstrap job.
+The source-checked graph and source identities remain unchanged.
