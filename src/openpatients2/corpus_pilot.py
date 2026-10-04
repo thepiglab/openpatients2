@@ -39,6 +39,7 @@ def prepare(root, work, config_path):
     if work.exists(): raise ValueError('Use a new work directory; pilot outputs are never overwritten')
     config = yaml.safe_load(Path(config_path).read_text())
     fixed = config.get('source_mode') == 'fixed_fixture'
+    overnight = config.get('experiment') == 'overnight_v3'
     paths = tuple(k for k in PATH_KEYS if k != 'source_config' or not fixed) + (FIXED_PATH_KEYS if fixed else ())
     if config.get('holdout_source_config'): paths += ('holdout_source_config',)
     for key in paths:
@@ -48,41 +49,45 @@ def prepare(root, work, config_path):
     if not 1 <= config['workers'] <= 32 or not 1 <= config['max_figures'] <= 12:
         raise ValueError('Pilot CPU/figure limits exceeded')
     if fixed:
-        refinement = config.get('experiment') == 'refinement_v2'
-        expected_seeds = [42,43,44,45] if refinement else [42,43,44]
-        if config['sample_size'] != 20 or config.get('seeds') != expected_seeds:
-            raise ValueError('Correctness campaign requires twenty fixed articles and seeds '+','.join(map(str,expected_seeds)))
-        expected_variants = [
-            {'name':'whole-targeted','arm':'targeted','input_scope':'whole_article'},
-            {'name':'compact-targeted','arm':'targeted','input_scope':'patient_sections'}]
-        if refinement:
+        if overnight:
+            from .overnight import validate_plan
+            validate_plan(config)
+        else:
+            refinement = config.get('experiment') == 'refinement_v2'
+            expected_seeds = [42,43,44,45] if refinement else [42,43,44]
+            if config['sample_size'] != 20 or config.get('seeds') != expected_seeds:
+                raise ValueError('Correctness campaign requires twenty fixed articles and seeds '+','.join(map(str,expected_seeds)))
             expected_variants = [
-                {'name':'whole-legacy','arm':'targeted','input_scope':'whole_article','refinement_policy':'legacy','roster':'frozen'},
-                {'name':'compact-legacy','arm':'targeted','input_scope':'patient_sections','refinement_policy':'legacy','roster':'frozen'},
-                {'name':'compact-refined','arm':'targeted','input_scope':'patient_sections','refinement_policy':'source_aware','roster':'frozen'},
-                {'name':'compact-live','arm':'targeted','input_scope':'patient_sections','refinement_policy':'source_aware','roster':'live'}]
-        if config.get('variants') != expected_variants:
-            raise ValueError('Correctness campaign requires matched whole and compact targeted variants')
-        if config['matrix'] != [{'context':65536,'prefill':32768}]:
-            raise ValueError('Correctness campaign requires the pinned 64k/32768 layout')
+                {'name':'whole-targeted','arm':'targeted','input_scope':'whole_article'},
+                {'name':'compact-targeted','arm':'targeted','input_scope':'patient_sections'}]
+            if refinement:
+                expected_variants = [
+                    {'name':'whole-legacy','arm':'targeted','input_scope':'whole_article','refinement_policy':'legacy','roster':'frozen'},
+                    {'name':'compact-legacy','arm':'targeted','input_scope':'patient_sections','refinement_policy':'legacy','roster':'frozen'},
+                    {'name':'compact-refined','arm':'targeted','input_scope':'patient_sections','refinement_policy':'source_aware','roster':'frozen'},
+                    {'name':'compact-live','arm':'targeted','input_scope':'patient_sections','refinement_policy':'source_aware','roster':'live'}]
+            if config.get('variants') != expected_variants:
+                raise ValueError('Correctness campaign requires matched whole and compact targeted variants')
+            if config['matrix'] != [{'context':65536,'prefill':32768}]:
+                raise ValueError('Correctness campaign requires the pinned 64k/32768 layout')
         for key in FIXED_PATH_KEYS:
             digest = sha256(config[key])
             if config.get(key+'_sha256') not in {None,digest}:
                 raise ValueError('Fixed correctness input checksum mismatch: '+key)
             config[key+'_sha256'] = digest
     elif config['arms'] != ['direct','targeted']: raise ValueError('Keep independent matched direct/targeted arms')
-    if not 1 <= len(config['matrix']) <= 4: raise ValueError('Bound the GPU matrix to at most four cells')
+    if not 1 <= len(config['matrix']) <= (6 if overnight else 4): raise ValueError('Bound the GPU matrix to at most four cells')
     for cell in config['matrix']:
-        if cell['context'] not in {32768,65536} or cell['prefill'] not in {8192,32768}:
+        if cell['context'] not in ({32768,65536,131072} if overnight else {32768,65536}) or cell['prefill'] not in {8192,32768}:
             raise ValueError('Only explicitly validated context/prefill candidates are allowed in this pilot')
-    if len({(c['context'],c['prefill']) for c in config['matrix']}) != len(config['matrix']):
+    if len({(c['context'],c['prefill'],c.get('tensor_parallel',1),c.get('speculation','dflash')) for c in config['matrix']}) != len(config['matrix']):
         raise ValueError('Duplicate GPU matrix cells')
     # Enforce source/network caps before scheduling any job.
     from .acquisition import AcquisitionConfig
     if not fixed:
         AcquisitionConfig.model_validate(yaml.safe_load(Path(config['source_config']).read_text()))
     if config.get('holdout_source_config'):
-        if not fixed or config.get('experiment') != 'refinement_v2' or config.get('holdout_sample_size') != 24:
+        if not fixed or (not overnight and (config.get('experiment') != 'refinement_v2' or config.get('holdout_sample_size') != 24)) or (overnight and not 1<=config.get('holdout_sample_size',0)<=48):
             raise ValueError('Holdout acquisition requires the bounded refinement campaign with 24 articles')
         AcquisitionConfig.model_validate(yaml.safe_load(Path(config['holdout_source_config']).read_text()))
     from .pilot_extract import load_pilot_config
@@ -243,7 +248,8 @@ async def correctness_runs(campaign, destination, endpoints, context):
                     trial = base/variant['name']
                     tasks = [read_json(p) for p in sorted((trial/'tasks').glob('*.json'))]
                     score = evaluate(config['fidelity_reference'], measured['outputs']['patients'],
-                        task_rows=tasks, visual_rows=measured['outputs']['visual_annotations'])
+                        task_rows=tasks, visual_rows=measured['outputs']['visual_annotations'],
+                        discovery=measured['outputs'].get('predicted_rosters') if variant.get('roster')=='live' else None)
                     write_json(trial/'fidelity.json', score)
                     measured['fidelity'] = score
                     measured['outputs']['fidelity'] = str(trial/'fidelity.json')
@@ -274,11 +280,14 @@ async def trial_warmup(endpoints, config, seed):
             try:
                 response = await http.post(base+'/reset_prefix_cache')
                 result['prefix_reset'] = response.is_success
+                if response.is_success and response.content:
+                    body = response.json()
+                    result['prefix_reset'] = (body is True or (isinstance(body,dict) and body.get('success') is True))
                 result['reset_http_status'] = response.status_code
                 response = await http.post(endpoint.rstrip('/')+'/chat/completions', json={
                     'model': config['served_model'], 'messages':[{'role':'user','content':'Return only {"ready":true}.'}],
                     'max_tokens': 128, 'temperature': 1, 'top_p': .95, 'top_k': 64, 'seed':seed,
-                    'chat_template_kwargs':{'reasoning_strength':'medium'}})
+                    'chat_template_kwargs':{'reasoning_strength':config.get('reasoning_strength','medium')}})
                 response.raise_for_status(); result['warmup_completed'] = True
             except (httpx.HTTPError, ValueError) as exc: result['error'] = str(exc)
             return result
@@ -379,13 +388,25 @@ async def _gpu_locked(campaign):
         raise ValueError('This pilot requires exactly eight GPUs on one node')
     started=time.monotonic(); results=[]; failed=[]; discovery=[]
     baseline=gpu_snapshot()
+    overnight=campaign['config'].get('experiment')=='overnight_v3'
+    deadline=started+campaign['config'].get('gpu_budget_seconds',36000)
+    deferred=[]
     for cell in campaign['config']['matrix']:
         label=f'context{cell["context"]}-prefill{cell["prefill"]}'
+        if overnight:
+            label+=f'-tp{cell.get("tensor_parallel",1)}-'+(cell.get('speculation') or 'ordinary')
+            if time.monotonic()+900>=deadline:
+                deferred.append({'cell':cell,'reason':'GPU deadline reserve'}); continue
         dest=work/'extraction'/label; dest.mkdir(parents=True,exist_ok=False)
         current=copy.deepcopy(engine); current['config']['max_model_len']=cell['context']
         layout={'name':label,'replicas':8,'tensor_parallel':1,'speculation':'dflash',
                 'max_batched_tokens':cell['prefill'],'vision':True}
+        if overnight:
+            layout.update(tensor_parallel=cell.get('tensor_parallel',1),
+                replicas=8//cell.get('tensor_parallel',1),speculation=cell.get('speculation'),
+                prefix_cache=cell.get('prefix_cache',True))
         cfg=serving_config(current,model,layout)
+        if overnight: cfg.environment['VLLM_SERVER_DEV_MODE']='1'
         gpu_probe(current,model,cfg)
         group=ServerGroup(cfg,engine['work'],str(dest/'servers'))
         write_json(work/'progress.json',{'phase':'starting','cell':label,'time_unix':time.time()})
@@ -401,7 +422,14 @@ async def _gpu_locked(campaign):
                     await replay.run(); await replay.secondary()
                 finally: await replay.close()
             before=await server_metrics(endpoints); write_json(dest/'metrics-before.json',before)
-            if campaign['config'].get('source_mode') == 'fixed_fixture':
+            if overnight:
+                from .overnight import run_trials
+                rows,discovered,skipped=await run_trials(campaign,dest,endpoints,cell['context'],cell,
+                    min(deadline,time.monotonic()+cell.get('budget_seconds',36000)))
+                results.extend(rows); discovery.extend(discovered); deferred.extend(skipped)
+                failed.extend({'cell':cell,'seed':row['seed'],'arm':row['arm'],'error':row['report'].get('error','Trial failed')}
+                    for row in rows if row['report'].get('status')=='failed')
+            elif campaign['config'].get('source_mode') == 'fixed_fixture':
                 rows, discovered = await correctness_runs(campaign,dest,endpoints,cell['context'])
                 results.extend({'cell':cell,**row} for row in rows)
                 discovery.extend({'cell':cell,**row} for row in discovered)
@@ -442,13 +470,16 @@ async def _gpu_locked(campaign):
                         dest/arm,endpoints,cell['context'],arm,image_manifest=work/'vision-assets/manifest.json')
                     results.append({'cell':cell,'arm':arm,'report':report})
             write_json(dest/'metrics-after.json',await server_metrics(endpoints))
+            if overnight:
+                write_json(work/'gpu.json',{'status':'running','results':results,'discovery':discovery,
+                    'failures':failed,'deferred':deferred,'gpu_stage_seconds':time.monotonic()-started})
         except Exception as exc:
             failure={'cell':cell,'error_type':type(exc).__name__,'error':str(exc)}
             failed.append(failure); write_json(dest/'FAILED.json',failure)
         finally:
             group.stop()  # synchronous; never mask startup failures with await None
             await wait_for_release(baseline,dest/'gpu-drain.json')
-    result={'status':'completed' if not failed else 'partial','gpu_stage_seconds':time.monotonic()-started,
+    result={'status':'completed' if not failed and not deferred else 'partial','deferred':deferred,'gpu_stage_seconds':time.monotonic()-started,
             'gpus':8,'results':results,'failures':failed,'pixel_expansion':'exact vLLM /tokenize guard',
             'medical_accuracy':('finite source-reviewed checklist; remaining claims and pixel descriptions unadjudicated'
                 if campaign['config'].get('source_mode') == 'fixed_fixture' else 'unadjudicated new sample; inspect source review forms'),
@@ -547,6 +578,11 @@ def report(campaign):
          'a failed cache reset makes speed comparisons uncontrolled.\n'
          if result['source_mode']=='fixed_fixture' else
          'New-source clinical accuracy is pending source adjudication. Field validity and literal evidence checks are separate from entailment and recall.\n'))
+    if campaign['config'].get('experiment')=='overnight_v3':
+        from .overnight import write_comparison
+        result['prompt_optimization']=write_comparison(campaign,result)
+        result['deferred']=run.get('deferred',[])
+        write_json(work/'summary.json',result)
     return result
 
 
@@ -594,20 +630,20 @@ def archive_results(campaign, output):
     work = Path(campaign['work']).resolve(); output = Path(output).resolve()
     if output.exists() or output.is_relative_to(work):
         raise ValueError('Use a new archive filename outside the campaign')
-    names = ('pilot.json','cpu.json','gpu.json','summary.json','SUMMARY.md','source-cleanup.json',
+    names = ('pilot.json','cpu.json','gpu.json','summary.json','SUMMARY.md','COMPARISON.md','source-cleanup.json',
              'source-owner.json','progress.json','review-source-sample.json','extraction','logs','vision-assets','profile/counts.jsonl.gz',
              'profile/profile.json','profile/SUMMARY.md','profile/rosters.json',
              'profile/token-histograms.png','profile/token-histograms.svg','profile/token-histograms.json',
              'cpu-error.json','gpu-error.json','source-cleanup-error.json',
              'engine/setup.json','engine/container-python.json',
-             'engine/results/glimmer-fp8/download.json','engine/results/glimmer-fp8/cleanup.json')
+             'prompt-optimization','engine/results/glimmer-fp8/download.json','engine/results/glimmer-fp8/cleanup.json')
     if campaign['config'].get('holdout_source_config'):
         names += ('holdout/cpu.json','holdout/source-owner.json','holdout/vision-assets',
                   'holdout/profile/counts.jsonl.gz','holdout/profile/profile.json','holdout/profile/SUMMARY.md',
                   'holdout/profile/token-histograms.png','holdout/profile/token-histograms.svg',
                   'holdout/profile/token-histograms.json')
     files = []
-    deduplicate = (campaign['config'].get('experiment') == 'refinement_v2' and
+    deduplicate = (campaign['config'].get('experiment') in {'refinement_v2','overnight_v3'} and
                    (work/'gpu.json').exists() and read_json(work/'gpu.json').get('status') == 'completed')
     def redundant_attempts(path):
         task_dir = path.parent/'tasks'
@@ -659,8 +695,8 @@ def archive_results(campaign, output):
                     continue
                 files.append(entry)
     total = sum(p.stat().st_size for p in files)
-    if total > 2_000_000_000:
-        raise ValueError('Result export exceeds 2 GB cap')
+    if total > (32_000_000_000 if campaign['config'].get('experiment')=='overnight_v3' else 2_000_000_000):
+        raise ValueError('Result export exceeds the campaign archive size cap')
     created = False
     try:
         with output.open('xb') as handle:

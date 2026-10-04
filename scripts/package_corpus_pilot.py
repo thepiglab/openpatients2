@@ -13,7 +13,7 @@ def main():
     args=parser.parse_args();root=Path(__file__).resolve().parents[1]
     if args.output.exists(): raise ValueError('Choose a new package filename')
     names=['README.md','CHANGELOG.md','pyproject.toml','uv.lock','LICENSE',
-        'docs/CORPUS_PILOT.md','docs/CORPUS_CORRECTNESS.md','docs/CORPUS_REFINEMENT.md','docs/PMC_ACQUISITION.md','docs/ARTICLE_LICENSE_POLICY.md',
+        'docs/OVERNIGHT_CLINICAL_BENCHMARK.md','docs/CORPUS_PILOT.md','docs/CORPUS_CORRECTNESS.md','docs/CORPUS_REFINEMENT.md','docs/PMC_ACQUISITION.md','docs/ARTICLE_LICENSE_POLICY.md',
         'docs/ROBUST_EXTRACTION_DESIGN.md','docs/PAPERCLIP_EVALUATION.md',
         'reports/GLIMMER_TUNING_20261002.md','reports/GLIMMER_TOKENIZER_SMOKE.json',
         'reports/CORPUS_CORRECTNESS_20261003.md','reports/CORPUS_CORRECTNESS_20261003.json',
@@ -23,7 +23,7 @@ def main():
         'reports/glimmer-token-lengths-nine/token-histograms.json',
         'scripts/corpus_pilot.sbatch','scripts/package_corpus_pilot.py',
         'scripts/smoke_pmc_acquisition.py','scripts/smoke_glimmer_tokenizer.py',
-        'scripts/probe_paperclip.py']
+        'scripts/probe_paperclip.py','scripts/run_overnight_pilot.sh']
     files={root/n for n in names}
     files.update(p for p in root.glob('scripts/hpg_*') if p.is_file() and p.suffix in {'.py','.sbatch','.sh'})
     for folder in ['src/openpatients2','configs/pilot','configs/sources','configs/hipergator',

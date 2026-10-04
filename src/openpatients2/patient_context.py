@@ -19,7 +19,7 @@ def minimal_segments(segments):
             for s in segments]
 
 
-def discovery_messages(article, *, refined=False):
+def discovery_messages(article, *, refined=False, isolated=False):
     schema = copy.deepcopy(Roster.model_json_schema())
     schema['properties'].pop('figures')
     schema['required'] = [k for k in schema['required'] if k != 'figures']
@@ -40,6 +40,10 @@ def discovery_messages(article, *, refined=False):
         'do not output a figures field. Captions can support patient identity when explicitly linked. '
         'Return the complete JSON object, no prose or markdown. Schema validity does not establish completeness.')
     if refined:
+        if isolated:
+            for row, original in zip(source['segments'], article['segments']):
+                row['cross_references'] = original.get('cross_references', [])
+                row['text_with_reference_markers'] = original.get('text_with_reference_markers', original['text'])
         source['references'] = [{k: r[k] for k in ('reference_id', 'citation_text') if k in r}
                                 for r in article.get('references', [])]
         instruction += (' PRIMARY VERSUS CITED CASES: patients contains cases presented as the article\'s '
@@ -48,6 +52,13 @@ def discovery_messages(article, *, refined=False):
             'Keep exact evidence and known origin_reference_ids, or an empty reference list with a limitation '
             'when linkage is uncertain. Do not invent citation IDs or merge identities. Primary count excludes '
             'cited_cases. Background experimental groups and anonymous bed numbers are not cited individual cases.')
+        if isolated:
+            instruction += (' A phrase such as "we previously/recently reported" alone is a cited mention, '
+                'not a newly reported course. Same authors do not establish primary-case status. Only promote '
+                'a prior case when THIS article reports new patient-specific encounters/results or follow-up. '
+                'Use cross_references and text_with_reference_markers to locate origin_reference_ids, while '
+                'all identity quotes must remain literal in the original text field. Validate primary cases '
+                'independently of optional cited-case links. If a bibliography link is uncertain, say so.')
     return [{'role': 'system', 'content': SYSTEM}, {'role': 'user', 'content':
         'SOURCE_JSON:\n' + json.dumps(source, ensure_ascii=False) + '\nTASK:\n' + instruction +
         '\nSCHEMA:\n' + json.dumps(schema)}]
@@ -62,6 +73,30 @@ def check_patient_roster(value, article):
     candidate['figures'] = [{'figure_id': f['figure_key'], 'panel': None,
         'patient_ids': [], 'scope': 'unresolved', 'evidence': []} for f in article['figures']]
     return check_article_task('roster', candidate, article)
+
+
+def isolate_cited_cases(value, article):
+    """Quarantine bad optional links without weakening primary identity gates."""
+    if not isinstance(value, dict):
+        raise ValueError('Patient roster must be an object')
+    primary = copy.deepcopy(value)
+    cited = primary.pop('cited_cases', [])
+    primary['cited_cases'] = []
+    checked = check_patient_roster(primary, article)  # primary failures still block
+    kept, quarantine = [], []
+    if not isinstance(cited, list):
+        return checked, [{'kind':'cited_cases','candidate':cited,'reason':'Expected a list'}]
+    for case in cited:
+        try:
+            check_patient_roster({**primary, 'cited_cases':[case]}, article)
+            kept.append(case)
+        except (ValueError, TypeError, KeyError) as exc:
+            quarantine.append({'kind':'cited_case','candidate':case,'reason':str(exc),
+                               'clinical_entailment_verified':False})
+    checked = check_patient_roster({**primary, 'cited_cases':kept}, article)
+    if quarantine:
+        checked['limitations'].append('Optional cited-case candidates quarantined; primary identities retained.')
+    return checked, quarantine
 
 
 def frozen_rosters(path, articles):

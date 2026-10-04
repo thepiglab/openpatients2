@@ -33,13 +33,17 @@ from .evidence_recovery import packet_segments, recover_citations, resolve_timel
 from .extraction_contracts import FactEnvelope, FieldSupport, SourceSpan, field_support_report
 from .figure_attribution import (FigureReview, bind_figure_review, figure_messages,
                                  patient_media, validate_figure_review)
-from .figure_visuals import FigureVisuals, panel_columns, validate_visuals, visual_messages, partial_visuals
+from .figure_visuals import FigureVisuals, JointFigureAnalysis, panel_columns, validate_visuals, visual_messages, partial_visuals
 from .longitudinal import PatientTimeline, audit_timeline, partial_timeline, canonical_timeline_ids, relative_order
 from .measurements import observation_measurements
 from .output_parser import parse_output
 from .prompts import messages_for
 from .provenance import json_digest
-from .patient_context import discovery_messages, check_patient_roster, frozen_rosters as read_frozen_rosters, patient_view
+from .patient_context import discovery_messages, check_patient_roster, isolate_cited_cases, frozen_rosters as read_frozen_rosters, patient_view
+from .pilot_review import (OrderingReview, ClaimAudit, ordering_schema, ordering_messages,
+    check_ordering, claim_messages, check_claim_audit, panel_aligned_attribution,
+    ClinicalInventory, inventory_messages, check_inventory,
+    CoverageAudit, coverage_messages, check_coverage)
 from .schemas import TASK_MODELS
 from .targeted_repair import ItemRepair, erased, repair_snapshot, changed_accepted_atoms, protected_value_changes
 from .clinical_normalization import normalize_clinical
@@ -50,8 +54,9 @@ class PilotConfig(ConfigModel):
     model_id: Literal['RedHatAI/Muse-Glimmer-30B-FP8-block'] = 'RedHatAI/Muse-Glimmer-30B-FP8-block'
     revision: Literal['1deb4641ff84f9a728dd11b27cac1f6a02a9ed14'] = '1deb4641ff84f9a728dd11b27cac1f6a02a9ed14'
     served_model: str = 'clinical-extractor'
+    gpus_per_endpoint: int = Field(default=1,ge=1,le=2)
     tokenizer_contract: Literal['vllm/0.30.0'] = 'vllm/0.30.0'
-    reasoning_strength: Literal['medium'] = 'medium'
+    reasoning_strength: Literal['low', 'medium', 'high', 'xhigh'] = 'medium'
     temperature: Literal[1.0] = 1.0
     top_p: Literal[0.95] = 0.95
     top_k: Literal[64] = 64
@@ -63,9 +68,9 @@ class PilotConfig(ConfigModel):
     max_figures_per_article: int = Field(default=24, ge=0, le=48)
     max_figures: int = Field(default=12, ge=0, le=12, description='Pixel figures across this entire arm')
     max_calls: int = Field(default=4096, ge=1, le=8192)
-    max_total_tokens: int = Field(default=32_000_000, ge=128, le=32_000_000)
-    max_output_tokens: int = Field(default=16384, ge=128, le=16384)
-    max_retry_tokens: int = Field(default=16384, ge=128, le=16384)
+    max_total_tokens: int = Field(default=32_000_000, ge=128, le=128_000_000)
+    max_output_tokens: int = Field(default=16384, ge=128, le=32768)
+    max_retry_tokens: int = Field(default=16384, ge=128, le=32768)
     require_full_output_budget: bool = True
     min_output_tokens: int = Field(default=128, ge=1, le=8192)
     max_repair_rounds: int = Field(default=1, ge=0, le=2)
@@ -81,6 +86,14 @@ class PilotConfig(ConfigModel):
     robust_contracts: bool = True
     refinement_policy: Literal['legacy', 'source_aware'] = 'source_aware'
     image_manifest: str | None = None
+    isolate_secondary_cases: bool = False
+    review_ordering: bool = False
+    audit_claims: bool = False
+    inventory_clinical_features: bool = False
+    coverage_repair: bool = False
+    focused_pixels: bool = False
+    pixel_strategy: Literal['separate', 'staged', 'joint'] = 'separate'
+    prompt_overrides: dict[str, str] = Field(default_factory=dict)
 
 
 def load_pilot_config(config: str | Path | dict | PilotConfig) -> PilotConfig:
@@ -324,11 +337,16 @@ class PilotRunner:
         self.peak_active = [0 for _ in endpoints]
         self.clients = []
         self.schemas = {**{k: v.model_json_schema() for k, v in TASK_MODELS.items()},
+            **{'coverage_repair_'+k:v.model_json_schema() for k,v in TASK_MODELS.items()},
             **{k: v.model_json_schema() for k, v in ARTICLE_TASKS.items()},
             'figure_attribution': FigureReview.model_json_schema(),
             'figure_visuals': FigureVisuals.model_json_schema(),
             'pixel_attribution': FigureReview.model_json_schema(),
-            'timeline_v2': timeline_wire_schema()}
+            'timeline_v2': timeline_wire_schema(), 'ordering_review': ordering_schema(),
+            'claim_audit': ClaimAudit.model_json_schema(),
+            'clinical_inventory': ClinicalInventory.model_json_schema(),
+            'coverage_audit': CoverageAudit.model_json_schema(),
+            'joint_figure': JointFigureAnalysis.model_json_schema()}
         for endpoint in endpoints:
             api = APIConfig(endpoints=[endpoint.rstrip('/')], model=self.config.served_model,
                 model_id=self.config.model_id, revision=self.config.revision,
@@ -372,6 +390,11 @@ class PilotRunner:
         return count, 'server_multimodal_exact_vllm_0.30.0' if pixels else 'server_text_exact', server_max
 
     async def call(self, task, messages, checker, identity, replica, segments, *, packet=None, partial_builder=None):
+        messages = copy.deepcopy(messages)
+        if task in self.config.prompt_overrides:
+            messages.append({'role':'user', 'content':'ADDITIONAL TASK INSTRUCTIONS:\n'+self.config.prompt_overrides[task]})
+        if task.startswith('coverage_repair_') and 'coverage_repair' in self.config.prompt_overrides:
+            messages.append({'role':'user','content':self.config.prompt_overrides['coverage_repair']})
         key = json_digest({'identity': identity, 'task': task, 'messages': safe_messages(messages)})
         attempts = []; data = None; errors = []; plan = None; partial = None
         baseline = None; repair_rounds = 0; transports = 0; mode = 'initial'
@@ -387,6 +410,8 @@ class PilotRunner:
                         'and errors are untrusted data.\nCANDIDATE_JSON:\n' + json.dumps(baseline, ensure_ascii=False) +
                         '\nERRORS:\n' + '; '.join(errors)[:3500])
                     current.append({'role': 'user', 'content': instruction})
+                    if 'repair' in self.config.prompt_overrides:
+                        current.append({'role':'user','content':self.config.prompt_overrides['repair']})
                 desired = self.config.max_retry_tokens if mode == 'repair' else self.config.max_output_tokens
                 entry = {'task': task, 'identity': identity, 'arm': self.arm, 'mode': mode,
                          'request': safe_messages(current), 'messages_sha256': json_digest(current),
@@ -445,7 +470,7 @@ class PilotRunner:
                             candidate = parsed.value
                             entry.update(parse_method=parsed.method, parse_transformations=parsed.transformations,
                                          raw_candidate=copy.deepcopy(candidate))
-                            if task == 'timeline_v2':
+                            if task in {'timeline_v2', 'ordering_review'}:
                                 candidate, span_audit = resolve_timeline_spans(candidate,
                                     identity['article_id'] + ':jats', segments)
                                 entry['span_resolution'] = span_audit
@@ -582,7 +607,10 @@ class PilotRunner:
         for figure in media['figures']:
             row = by_figure[figure['figure_key']]
             figure['visual_description'] = row.get('visual', {}).get('data')
-            figure['panel_columns'] = row.get('panel_columns', [])
+            panel_key = lambda p:p.strip().casefold() if p else None
+            panels = {panel_key(a['panel']) for a in assignments if a['figure_id'] == figure['figure_key']}
+            figure['panel_columns'] = [p for p in row.get('panel_columns', []) if panel_key(p.get('panel')) in panels]
+            figure['visual_description_scope'] = 'whole figure; only assigned panel_columns are patient associated'
             figure['pixel_provenance'] = row['pixel_provenance']
             figure['clinical_fact_status'] = 'unreviewed_visual_annotation'
             figure['attribution_comparison'] = next((c for c in comparisons if c['figure_id'] == figure['figure_key']), None)
@@ -626,6 +654,14 @@ class PilotRunner:
             return await self.call(task, messages, self.clinical_checker(task, packet, segments),
                                    identity, replica, segments, packet=packet)
         tasks = await asyncio.gather(*(clinical(task) for task in TASK_MODELS))
+        extra_tasks = []
+        inventory = None
+        if self.config.inventory_clinical_features:
+            # The audit sees the complete article, so incorrect compact source
+            # selection cannot hide a missed patient feature from the reviewer.
+            inventory = await self.call('clinical_inventory', inventory_messages(article, patient),
+                lambda value: check_inventory(value, article), identity, replica, article['segments'])
+            extra_tasks.append(inventory)
         summary = await self.call('summary', task_messages('summary', context_article, patient),
             lambda value: check_article_task('summary', value, context_article, patient),
             identity, replica, context_article['segments'])
@@ -644,9 +680,81 @@ class PilotRunner:
                                   refined=self.config.refinement_policy == 'source_aware'),
                                   timeline_checker, identity, replica, context_article['segments'],
                                   partial_builder=lambda value: partial_timeline(value, sources, facts, rid))
+        original_timeline = copy.deepcopy(timeline['data'])
+        if self.config.review_ordering and timeline['data'] is not None:
+            graph = copy.deepcopy(timeline['data'])
+            ordering = await self.call('ordering_review', ordering_messages(context_article, graph),
+                lambda value: check_ordering(value, graph, sources, facts), identity, replica, context_article['segments'])
+            extra_tasks.append(ordering)
+            if ordering['status'] == 'valid':
+                timeline = {**timeline, 'data':{**graph, 'edges':ordering['data']['edges'],
+                    'limitations':graph['limitations']+ordering['data']['limitations']}}
+        audits = []; coverage_audits = []
+        if inventory and inventory['status'] == 'valid':
+            features = [{'inventory_index':i, **f} for i,f in enumerate(inventory['data']['features'])]
+            for start in range(0,len(features),16):
+                batch = features[start:start+16]
+                coverage = await self.call('coverage_audit', coverage_messages(article,patient,batch,rows),
+                    lambda value, batch=batch: check_coverage(value,batch,rows),
+                    {**identity,'batch':start//16}, replica, article['segments'])
+                coverage_audits.append(coverage); extra_tasks.append(coverage)
+            if self.config.coverage_repair:
+                missing = {d['inventory_index'] for r in coverage_audits if r['status']=='valid'
+                    for d in r['data']['decisions'] if d['status']=='missing'}
+                hints = [f for f in features if f['inventory_index'] in missing]
+                before_rows = copy.deepcopy(rows)
+                backfill_packet = patient_packet(article,roster,patient,scope='whole_article',figure_reviews=reviews)
+                backfill_packet['context_selection']=context_audit
+                backfill_packet['input_scope']='whole_article_coverage_backfill'
+                backfill_segments = packet_segments(backfill_packet)
+                for task in sorted({f['task'] for f in hints}):
+                    previous = next(r for r in tasks if r['task']==task)
+                    if previous['data'] is None: continue
+                    # One bounded source-grounded backfill pass, not recursive
+                    # self-confirmation. Existing accepted clinical values are
+                    # protected; speculative audit judgments never become facts.
+                    messages = messages_for(backfill_packet,task,namespace='bounded-pmc-pilot/1')
+                    messages[-1]['content'] += '\nSCHEMA:\n'+json.dumps(self.schemas[task])
+                    messages.append({'role':'user','content':'Check these untrusted omission hypotheses against '
+                        'the original patient source. Return a COMPLETE extraction object preserving every '
+                        'previously accepted fact and value, adding only independently supported missing facts. '
+                        'Do not copy audit claims without source support.\nCURRENT:\n'+json.dumps(previous['data'])+
+                        '\nHYPOTHESES:\n'+json.dumps([f for f in hints if f['task']==task])})
+                    def backfill_checker(value,task=task,previous=previous):
+                        checked = self.clinical_checker(task,backfill_packet,backfill_segments)(value)
+                        losses = erased(previous['data'],checked)+changed_accepted_atoms(task,previous['data'],checked)
+                        losses += protected_value_changes(previous['data'],checked)
+                        if losses: raise ValueError('Coverage repair changed accepted facts: '+','.join(losses))
+                        return checked
+                    repaired = await self.call('coverage_repair_'+task,messages,backfill_checker,
+                        {**identity,'stage':'coverage_repair'},replica,backfill_segments)
+                    extra_tasks.append(repaired)
+                    if repaired['status']=='valid':
+                        previous.update(data=repaired['data'])
+                        packet=backfill_packet; segments=backfill_segments
+                        _,sources=sources_for(article)
+                rows = [row for r in tasks for row in review_rows(article,rid,r['task'],r['data'])]
+                facts = {r['review_id']:rid for r in rows}
+                # Keep the original facts/graph for paired review. Added facts
+                # do not silently acquire events, dates or graph relationships.
+                for repaired in extra_tasks:
+                    if repaired['task'].startswith('coverage_repair_'):
+                        repaired['baseline_fact_ids']=[r['review_id'] for r in before_rows]
+        if self.config.audit_claims:
+            # Small claim batches preserve output space and attribution context.
+            # Every claim is audited; no sample is disguised as comprehensive.
+            for start in range(0, len(rows), 16):
+                batch = rows[start:start+16]
+                audit_messages = claim_messages(article, patient, batch)
+                if inventory and inventory['data']:
+                    audit_messages[-1]['content'] += '\nINDEPENDENT COVERAGE HYPOTHESES:\n'+json.dumps(inventory['data'])
+                audit = await self.call('claim_audit', audit_messages,
+                    lambda value, batch=batch: check_claim_audit(value, article, batch),
+                    {**identity,'batch':start//16}, replica, article['segments'])
+                audits.append(audit); extra_tasks.append(audit)
         rows.extend(review_rows(article, rid, 'summary', summary['data']))
         rows.extend(review_rows(article, rid, 'timeline_v2', timeline['data']))
-        all_tasks = [*tasks, summary, timeline]
+        all_tasks = [*tasks, summary, timeline, *extra_tasks]
         vision = self.patient_vision(article, roster, patient['patient_id'], reviews)
         vision['caption_only_media'] = copy.deepcopy(packet['multimedia'])
         visual_complete = all(row['status'] == 'valid' for row in self.visual_rows
@@ -657,6 +765,11 @@ class PilotRunner:
             'context_selection': context_audit, 'expected_tasks': list(TASK_MODELS),
             'sections': {r['task']: r['data'] for r in tasks},
             'companions': {'summary': summary['data'], 'timeline_v2': timeline['data']},
+            'experimental_reviews': {'timeline_before_order_review':original_timeline,
+                'clinical_inventory':inventory, 'claim_audits':audits,
+                'coverage_audits':coverage_audits,
+                'model_judgments_are_not_accuracy_gold':True, 'facts_automatically_deleted':False,
+                'source_grounded_backfill_requested':self.config.coverage_repair},
             'quality': {r['task']: {'status': r['status'], 'errors': r['errors'],
                 'quarantine': r.get('quarantine', []),
                 'field_normalization': [change for a in r['attempts'] for change in a.get('field_normalization', [])]}
@@ -669,6 +782,14 @@ class PilotRunner:
         if timeline['data'] is not None:
             bundle['timeline_audit'] = audit_timeline(PatientTimeline.model_validate(timeline['data']), sources, facts)
             bundle['relative_timeline'] = relative_order(timeline['data'])
+        events = (timeline['data'] or {}).get('events',[])
+        bundle['patient_state_index'] = {'facts':[{
+            'fact_id':r['review_id'], 'task':r['task'], 'value_as_extracted':r['candidate'],
+            'event_ids':[e['event_id'] for e in events if r['review_id'] in e['fact_ids']],
+            'time_association':'linked_event_unreviewed' if any(r['review_id'] in e['fact_ids'] for e in events) else 'unknown'
+            } for r in rows if r['task'] in TASK_MODELS],
+            'state_carried_forward':False,'synthetic_dates_generated':False,
+            'clinical_fidelity_verified':False}
         bundle['observation_measurements'] = observation_measurements(bundle['sections'].get('observations'), segments)
         if self.config.robust_contracts:
             bundle['coverage_inventory'] = coverage_inventory(article, [rid])
@@ -736,12 +857,34 @@ class PilotRunner:
             self.visual_rows.append(result)
             return result
         refined = self.config.refinement_policy == 'source_aware'
-        visual = await self.call('figure_visuals', visual_messages(article, roster, row['figure_id'], pixels, refined=refined),
-            lambda value: validate_visuals(value, article, row['figure_id'], refined=refined),
-            identity, replica, article['segments'],
-            partial_builder=lambda value: partial_visuals(value, article, row['figure_id']))
-        attribution = await self.call('pixel_attribution', figure_messages(article, roster, row['figure_id'], focused=False, pixels=pixels),
-            lambda value: validate_figure_review(value, article, roster, row['figure_id']), identity, replica, article['segments'])
+        if self.config.pixel_strategy == 'joint':
+            def checker(value):
+                parsed = JointFigureAnalysis.model_validate(value).model_dump()
+                visual_data = validate_visuals(parsed['visual'],article,row['figure_id'],refined=refined)
+                attribution_data = panel_aligned_attribution(parsed['attribution'],visual_data,article,roster,row['figure_id'])
+                return {'visual':visual_data,'attribution':attribution_data}
+            joint = await self.call('joint_figure', visual_messages(article,roster,row['figure_id'],pixels,
+                joint=True,refined=refined,focused=self.config.focused_pixels),checker,identity,replica,article['segments'])
+            visual = {**joint,'data':joint['data']['visual'] if joint['data'] else None}
+            attribution = {**joint,'data':joint['data']['attribution'] if joint['data'] else None}
+        else:
+            visual = await self.call('figure_visuals', visual_messages(article, roster, row['figure_id'], pixels,
+                refined=refined,focused=self.config.focused_pixels),
+                lambda value: validate_visuals(value, article, row['figure_id'], refined=refined),
+                identity, replica, article['segments'],
+                partial_builder=lambda value: partial_visuals(value, article, row['figure_id']))
+            messages = figure_messages(article, roster, row['figure_id'], focused=self.config.focused_pixels, pixels=pixels)
+            def attribution_checker(value):
+                if self.config.pixel_strategy == 'staged':
+                    if visual['data'] is None:
+                        raise ValueError('Panel inventory unavailable; staged attribution is blocked')
+                    return panel_aligned_attribution(value,visual['data'],article,roster,row['figure_id'])
+                return validate_figure_review(value,article,roster,row['figure_id'])
+            if self.config.pixel_strategy == 'staged':
+                messages.append({'role':'user','content':'Use precisely these panel IDs; include every panel, '
+                    'including aggregate/background/unresolved panels, and never substitute a whole figure. '
+                    'This visual inventory is unreviewed, not evidence of identity.\n'+json.dumps(visual['data'])})
+            attribution = await self.call('pixel_attribution',messages,attribution_checker,identity,replica,article['segments'])
         inspected = any(a['response'] and not a['response'].get('error') for r in (visual, attribution) for a in r['attempts'])
         result = {'identity': identity, 'status': 'valid' if visual['status'] == attribution['status'] == 'valid' else 'incomplete',
             'visual': visual, 'attribution': attribution, 'pixel_provenance': row['pixel_provenance'],
@@ -791,13 +934,13 @@ class PilotRunner:
                                   if report['input_tokens'] is not None and report['output_tokens'] is not None else None)
         report['all_gpus_output_tokens_per_second'] = report['output_tokens'] / wall if wall > 0 and report['output_tokens'] is not None else None
         report['reported_only_output_tokens_per_second'] = report['reported_output_tokens'] / wall if wall > 0 else None
-        report['all_gpu_count'] = len(self.clients)
-        report['gpu_topology_assumption'] = 'one GPU per endpoint, fixed TP1 orchestration; override topology for another deployment'
-        report['output_tokens_per_gpu_second'] = (report['all_gpus_output_tokens_per_second'] / len(self.clients)
+        report['all_gpu_count'] = len(self.clients)*self.config.gpus_per_endpoint
+        report['gpu_topology_assumption'] = f'{self.config.gpus_per_endpoint} GPU(s) per endpoint; declared topology'
+        report['output_tokens_per_gpu_second'] = (report['all_gpus_output_tokens_per_second'] / (len(self.clients)*self.config.gpus_per_endpoint)
             if report['all_gpus_output_tokens_per_second'] is not None else None)
         return report
 
-    async def run(self, articles_path, image_manifest=None, *, frozen_rosters=None, discovery_only=False):
+    async def run(self, articles_path, image_manifest=None, *, frozen_rosters=None, cached_rosters=None, discovery_only=False):
         started = time.monotonic(); path = Path(articles_path)
         if path.stat().st_size > self.config.max_source_bytes:
             raise ValueError('sample_file_size_limit; prepare an explicit smaller downloaded sample')
@@ -846,17 +989,48 @@ class PilotRunner:
             if not errors:
                 eligible.append((index, article, row))
         frozen = read_frozen_rosters(frozen_rosters, articles) if frozen_rosters else None
+        cached = None
+        if cached_rosters:
+            if frozen is not None: raise ValueError('Choose reviewed or cached generated rosters')
+            saved = json.loads(Path(cached_rosters).read_text())
+            if saved.get('schema_version') != 'predicted-rosters/1': raise ValueError('Unknown cached roster format')
+            cached = {r['article_id']:r for r in saved['articles']}
+            if len(cached) != len(saved['articles']) or set(cached) != {a['article_id'] for a in articles}:
+                raise ValueError('Cached rosters must cover exactly the selected articles')
+            for a in articles:
+                if cached[a['article_id']]['text_sha256'] != a['text_sha256']:
+                    raise ValueError('Cached roster source hash changed')
         async def discover(index, article, row):
             replica = index % len(self.clients)
             if frozen is not None:
                 roster = {'task': 'roster', 'identity': {'article_id': article['article_id']},
                     'status': 'valid', 'data': frozen[article['article_id']], 'errors': [], 'attempts': [],
                     'origin': 'frozen_source_checked_roster', 'excluded_from_generated_task_metrics': True}
+            elif cached is not None:
+                saved = cached[article['article_id']]
+                data = check_patient_roster(saved['roster'],article) if saved['status']=='valid' else None
+                roster = {'task':'roster','identity':{'article_id':article['article_id']},
+                    'status':saved['status'],'data':data,'errors':[], 'attempts':[],
+                    'origin':'cached_generated_unreviewed_roster','excluded_from_generated_task_metrics':True}
             else:
+                quarantine = []
+                def roster_checker(value):
+                    nonlocal quarantine
+                    if self.config.isolate_secondary_cases:
+                        checked, quarantine = isolate_cited_cases(value, article)
+                        return checked
+                    return check_patient_roster(value, article)
                 roster = await self.call('roster', discovery_messages(article,
-                    refined=self.config.refinement_policy == 'source_aware'),
-                    lambda value: check_patient_roster(value, article),
-                    {'article_id': article['article_id']}, replica, article['segments'])
+                    refined=self.config.refinement_policy == 'source_aware',isolated=self.config.isolate_secondary_cases),
+                    roster_checker, {'article_id': article['article_id']}, replica, article['segments'])
+                if self.config.isolate_secondary_cases:
+                    roster['secondary_case_quarantine'] = quarantine
+                    # Re-save the audited result alongside its original raw attempts.
+                    key = json_digest({'identity':roster['identity'],'task':'roster','messages':safe_messages(
+                        discovery_messages(article,refined=self.config.refinement_policy=='source_aware',isolated=True)+
+                        ([{'role':'user','content':'ADDITIONAL TASK INSTRUCTIONS:\n'+self.config.prompt_overrides['roster']}]
+                         if 'roster' in self.config.prompt_overrides else []))})
+                    write_json(self.output/'tasks'/(key+'.json'),roster)
             row.update(roster=roster, status='roster_failed' if roster['status'] != 'valid' else 'roster_valid')
             return index, article, row
         discovered = await asyncio.gather(*(discover(*item) for item in eligible))
@@ -905,6 +1079,7 @@ class PilotRunner:
             'selected_articles': len(articles), 'eligible_articles': len(eligible),
             'input_scope': self.input_scope, 'seed': self.config.seed, 'discovery_only': discovery_only,
             'conditioned_on_frozen_rosters': frozen is not None,
+            'conditioned_on_cached_generated_rosters': cached is not None,
             'roster_scores_are_independent_of_clinical_extraction': frozen is not None,
             'outputs': {'patients': str(self.output / 'patients.jsonl'),
                 'report': str(self.output / 'report.json'), 'attempts': str(self.output / 'attempts.jsonl'),
@@ -913,6 +1088,17 @@ class PilotRunner:
             'patients_extracted': len(self.patients), 'model_calls': self.calls,
             'measurement_comparison': dict(Counter(m['status'] for p in self.patients
                 for m in p['observation_measurements'])),
+            'clinical_review_signals': {
+                'inventory_features':sum(len((p['experimental_reviews'].get('clinical_inventory') or {}).get('data',{}).get('features',[]))
+                    for p in self.patients if (p['experimental_reviews'].get('clinical_inventory') or {}).get('data')),
+                'claim_decisions':dict(Counter(d['decision'] for p in self.patients
+                    for a in p['experimental_reviews']['claim_audits'] if a['data'] for d in a['data']['decisions'])),
+                'coverage_decisions_before_backfill':dict(Counter(d['status'] for p in self.patients
+                    for a in p['experimental_reviews']['coverage_audits'] if a['data'] for d in a['data']['decisions'])),
+                'possible_missing_facts':sum(len(a['data']['possible_missing_facts']) for p in self.patients
+                    for a in p['experimental_reviews']['claim_audits'] if a['data']),
+                'unlinked_clinical_facts':sum(not f['event_ids'] for p in self.patients for f in p['patient_state_index']['facts']),
+                'model_judgments_are_not_accuracy_gold':True},
             'relative_timelines': {'patients': sum('relative_timeline' in p for p in self.patients),
                 'events': sum(len(p.get('relative_timeline', {}).get('events', [])) for p in self.patients),
                 'ordered_pairs': sum(len(p.get('relative_timeline', {}).get('before_pairs', [])) for p in self.patients),
@@ -925,7 +1111,11 @@ class PilotRunner:
             'task_statuses_by_domain': {name: dict(Counter(r['status'] for r in self.results if r['task'] in tasks))
                 for name, tasks in {'clinical': set(TASK_MODELS), 'summary': {'summary'}, 'timeline': {'timeline_v2'},
                     'patient_discovery': {'roster'}, 'caption_ownership': {'figure_attribution'},
-                    'pixel_description': {'figure_visuals'}, 'pixel_ownership': {'pixel_attribution'}}.items()},
+                    'pixel_description': {'figure_visuals'}, 'pixel_ownership': {'pixel_attribution'},
+                    'joint_pixels':{'joint_figure'}, 'order_review':{'ordering_review'},
+                    'clinical_inventory':{'clinical_inventory'}, 'coverage_audit':{'coverage_audit'},
+                    'coverage_repair':{'coverage_repair_'+k for k in TASK_MODELS},
+                    'claim_audit':{'claim_audit'}}.items()},
             'source_span_recovery': {'resolved': sum(len(a.get('span_resolution', {}).get('resolved', []))
                 for r in self.results for a in r['attempts']),
                 'mechanical_changes': sum(len(a.get('span_resolution', {}).get('recoveries', []))
@@ -943,23 +1133,23 @@ class PilotRunner:
                 'Supplements are manifests only; missed patients/facts require independent source review.',
                 'Direct and targeted runs are independent arms, not blinded accuracy scores.',
                 'Source-based first prompts match across arms; temporal graph fact registries reflect each arm output.']}
-        if discovery_only:
-            predicted = {'schema_version': 'predicted-rosters/1', 'articles': [
-                {'article_id': a['article_id'], 'text_sha256': source_rows_by_id[a['article_id']]['text_sha256'],
-                 'status': a['roster']['status'], 'roster': a['roster']['data']}
-                for a in self.article_rows if a.get('roster')]}
-            write_json(self.output / 'rosters.json', predicted)
-            report['outputs']['predicted_rosters'] = str(self.output / 'rosters.json')
+        # Export discovery for scoring in every extraction run.
+        predicted = {'schema_version': 'predicted-rosters/1', 'articles': [
+            {'article_id': a['article_id'], 'text_sha256': source_rows_by_id[a['article_id']]['text_sha256'],
+             'status': a['roster']['status'], 'roster': a['roster']['data']}
+            for a in self.article_rows if a.get('roster')]}
+        write_json(self.output / 'rosters.json', predicted)
+        report['outputs']['predicted_rosters'] = str(self.output / 'rosters.json')
         write_json(self.output / 'report.json', report)
         return report
 
 
 async def run_pilot(config, articles_path, output, endpoints, context, arm_name, *, image_manifest=None, http=None,
-                    frozen_rosters=None, input_scope='whole_article', seed=None):
+                    frozen_rosters=None, cached_rosters=None, input_scope='whole_article', seed=None):
     """Run a fresh bounded arm on an already downloaded JSONL(.gz) sample."""
     runner = PilotRunner(config, output, endpoints, context, arm_name, http=http, input_scope=input_scope, seed=seed)
     try:
-        return await runner.run(articles_path, image_manifest=image_manifest, frozen_rosters=frozen_rosters)
+        return await runner.run(articles_path, image_manifest=image_manifest, frozen_rosters=frozen_rosters, cached_rosters=cached_rosters)
     finally:
         await runner.close()
 

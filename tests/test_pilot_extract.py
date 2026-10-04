@@ -384,8 +384,9 @@ def test_local_endpoints_pin_settings_and_existing_arm_is_immutable(tmp_path):
     assert config.max_total_tokens == 32_000_000 and config.require_full_output_budget is True
     with pytest.raises(ValueError):
         PilotRunner({}, tmp_path / 'remote', ['https://example.com/v1'], 4096, 'direct')
+    assert PilotConfig(reasoning_strength='high').reasoning_strength == 'high'
     with pytest.raises(ValueError):
-        PilotConfig(reasoning_strength='high')
+        PilotConfig(reasoning_strength='unsupported')
     output = tmp_path / 'exists'; output.mkdir(); (output / 'report.json').write_text('{}')
     with pytest.raises(ValueError, match='independent'):
         PilotRunner({}, output, ['http://localhost:8000/v1'], 4096, 'direct')

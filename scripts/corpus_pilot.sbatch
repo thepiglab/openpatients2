@@ -13,7 +13,7 @@ export TOKENIZERS_PARALLELISM=false
 if [[ "$phase" != gpu ]]; then
   export CUDA_VISIBLE_DEVICES=""
   # Dependencies are downloaded/synchronized only in CPU allocations.
-  uv sync --locked --extra data --extra plots --no-dev --python 3.12
+  uv sync --locked --extra data --extra plots --extra optimize --no-dev --python 3.12
 fi
 if [[ "$phase" != cpu ]]; then
   if ! command -v apptainer >/dev/null; then module load apptainer; fi

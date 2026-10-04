@@ -104,6 +104,23 @@ def observation_measurements(section, segments):
         def search_view(q):
             return COMPOSITE.sub('', FLATTENED.sub('', q.replace(reference or '\0', '')))
         result = parse_measurement(raw) if quote and raw in search_view(quote) else None
+        # A literal numeric-only text_value is not a contradiction of a
+        # separately documented unit. Bind the complete scalar from the SAME
+        # quote; never fill a missing unit from the model alone.
+        if result and result.unit is None and modeled and modeled.unit:
+            complete = []
+            for match in RAW_PATTERN.finditer(search_view(quote)):
+                measured = parse_measurement(match.group(0).strip())
+                if (measured and measured.unit and
+                        (Decimal(measured.magnitude) == Decimal(result.magnitude) or
+                         (result.notation == 'decimal' and Decimal(measured.mantissa) == Decimal(result.mantissa))) and
+                        measured.comparator == result.comparator):
+                    complete.append(measured)
+            if len(complete) == 1:
+                result = complete[0]
+            else:
+                rows.append(row)  # ambiguous/missing source unit, not a conflict
+                continue
         if not result:
             candidates = []
             for q in quotes:

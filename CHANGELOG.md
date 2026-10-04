@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased — overnight clinical fidelity / GEPA
+
+- Adds a single-launch, bounded overnight campaign: 15 extraction ablations, four seeds, five B200 serving layouts, and up to 48 disjoint new sources across 14 specialties.
+- Integrates pinned GEPA prompt searches with article-level train/validation/test separation, finite clinical checklist versus structural-only rewards, candidate traces and no automatic production promotion.
+- Adds independent full-article clinical inventories/coverage/claim audits, protected omission backfill, immutable-event order review and explicit unknown-time patient state indexes.
+- Tests staged versus joint pixel attribution with exact panel inventory coverage and patient-specific panel columns.
+- Fixes numeric-only measurement/unit false conflicts, isolates optional citation-link failures, exports live discovery for scoring and verifies cache reset success on loopback servers.
+- Downloads and cleanup remain CPU-only; GPU work stops within a 10-hour budget, with failed/deferred trials and GEPA coverage in the comparison report.
+
 ## Unreleased — corpus refinement trial
 
 - Adds a one-command CPU→GPU→cleanup campaign with four balanced regression arms and a small disjoint live-discovery sample.

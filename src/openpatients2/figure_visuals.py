@@ -202,8 +202,8 @@ For laboratory panels extract each named marker/result separately in the clinica
 panel into one unnamed observation. All pixel interpretations and diagram relations remain unreviewed.'''
 
 
-def visual_messages(article, roster, figure_id, pixels, *, joint=False, refined=False):
-    messages = figure_messages(article, roster, figure_id, focused=False, pixels=pixels)
+def visual_messages(article, roster, figure_id, pixels, *, joint=False, refined=False, focused=False):
+    messages = figure_messages(article, roster, figure_id, focused=focused, pixels=pixels)
     schema = JointFigureAnalysis if joint else FigureVisuals
     # Drop the attribution schema from the source payload for the independent description arm.
     messages[1]['content'][0]['text'] = messages[1]['content'][0]['text'].split('\nSCHEMA:\n')[0] + '\nSCHEMA:\n' + json.dumps(schema.model_json_schema())

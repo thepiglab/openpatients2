@@ -1,0 +1,227 @@
+# Fourteen specialties; primary case lanes plus broad/animal/aggregate controls.
+# <=1 GB network and <=2 GB stored sources. No GPU downloads.
+lanes:
+- name: cardiovascular_case_focused
+  stratum: cardiovascular
+  focus: case_focused
+  query: (cardiac OR cardiovascular OR cardiology OR heart) AND ("case report" OR
+    "case series" OR "case presentation")
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 20
+- name: cardiovascular_broader
+  stratum: cardiovascular
+  focus: broader
+  query: (cardiac OR cardiovascular OR cardiology OR heart)
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: neurology_case_focused
+  stratum: neurology
+  focus: case_focused
+  query: (neurology OR neurologic OR neurological OR brain OR seizure) AND ("case
+    report" OR "case series" OR "case presentation")
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 20
+- name: neurology_broader
+  stratum: neurology
+  focus: broader
+  query: (neurology OR neurologic OR neurological OR brain OR seizure)
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: oncology_case_focused
+  stratum: oncology
+  focus: case_focused
+  query: (oncology OR cancer OR neoplasm OR tumor) AND ("case report" OR "case series"
+    OR "case presentation")
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 20
+- name: oncology_broader
+  stratum: oncology
+  focus: broader
+  query: (oncology OR cancer OR neoplasm OR tumor)
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: infectious_disease_case_focused
+  stratum: infectious_disease
+  focus: case_focused
+  query: (infection OR infectious OR bacterial OR viral) AND ("case report" OR "case
+    series" OR "case presentation")
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 20
+- name: infectious_disease_broader
+  stratum: infectious_disease
+  focus: broader
+  query: (infection OR infectious OR bacterial OR viral)
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: pulmonary_case_focused
+  stratum: pulmonary
+  focus: case_focused
+  query: (pulmonary OR respiratory OR lung) AND ("case report" OR "case series" OR
+    "case presentation")
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 20
+- name: pulmonary_broader
+  stratum: pulmonary
+  focus: broader
+  query: (pulmonary OR respiratory OR lung)
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: gastroenterology_case_focused
+  stratum: gastroenterology
+  focus: case_focused
+  query: (gastrointestinal OR gastroenterology OR hepatic OR liver) AND ("case report"
+    OR "case series" OR "case presentation")
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 20
+- name: gastroenterology_broader
+  stratum: gastroenterology
+  focus: broader
+  query: (gastrointestinal OR gastroenterology OR hepatic OR liver)
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: renal_urology_case_focused
+  stratum: renal_urology
+  focus: case_focused
+  query: (renal OR kidney OR nephrology OR urology) AND ("case report" OR "case series"
+    OR "case presentation")
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 20
+- name: renal_urology_broader
+  stratum: renal_urology
+  focus: broader
+  query: (renal OR kidney OR nephrology OR urology)
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: endocrine_metabolic_case_focused
+  stratum: endocrine_metabolic
+  focus: case_focused
+  query: (endocrine OR diabetes OR metabolic OR thyroid) AND ("case report" OR "case
+    series" OR "case presentation")
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 20
+- name: endocrine_metabolic_broader
+  stratum: endocrine_metabolic
+  focus: broader
+  query: (endocrine OR diabetes OR metabolic OR thyroid)
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: rheumatology_dermatology_case_focused
+  stratum: rheumatology_dermatology
+  focus: case_focused
+  query: (rheumatology OR autoimmune OR dermatology OR skin) AND ("case report" OR
+    "case series" OR "case presentation")
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 20
+- name: rheumatology_dermatology_broader
+  stratum: rheumatology_dermatology
+  focus: broader
+  query: (rheumatology OR autoimmune OR dermatology OR skin)
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: hematology_case_focused
+  stratum: hematology
+  focus: case_focused
+  query: (hematology OR hematologic OR anaemia OR anemia OR thrombosis) AND ("case
+    report" OR "case series" OR "case presentation")
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 20
+- name: hematology_broader
+  stratum: hematology
+  focus: broader
+  query: (hematology OR hematologic OR anaemia OR anemia OR thrombosis)
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: maternal_perinatal_case_focused
+  stratum: maternal_perinatal
+  focus: case_focused
+  query: (pregnancy OR obstetric OR neonatal OR fetal) AND ("case report" OR "case
+    series" OR "case presentation")
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 20
+- name: maternal_perinatal_broader
+  stratum: maternal_perinatal
+  focus: broader
+  query: (pregnancy OR obstetric OR neonatal OR fetal)
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: pediatric_genetics_case_focused
+  stratum: pediatric_genetics
+  focus: case_focused
+  query: (pediatric OR congenital OR genetic OR child) AND ("case report" OR "case
+    series" OR "case presentation")
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 20
+- name: pediatric_genetics_broader
+  stratum: pediatric_genetics
+  focus: broader
+  query: (pediatric OR congenital OR genetic OR child)
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: toxicology_case_focused
+  stratum: toxicology
+  focus: case_focused
+  query: (poisoning OR toxicity OR overdose OR antidote) AND ("case report" OR "case
+    series" OR "case presentation")
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 20
+- name: toxicology_broader
+  stratum: toxicology
+  focus: broader
+  query: (poisoning OR toxicity OR overdose OR antidote)
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+- name: veterinary_case_focused
+  stratum: veterinary
+  focus: case_focused
+  query: (veterinary OR feline OR canine OR equine) AND ("case report" OR "case series"
+    OR "case presentation")
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 20
+- name: veterinary_broader
+  stratum: veterinary
+  focus: broader
+  query: (veterinary OR feline OR canine OR equine)
+  start: '2022-01-01'
+  end: '2025-12-31'
+  max_candidates: 10
+max_candidates: 420
+fetch_concurrency: 8
+page_size: 10
+search_partition_limit: 9000
+max_storage_bytes: 2000000000
+min_free_bytes: 1000000000
+max_network_bytes_total: 1000000000
+max_network_bytes_per_invocation: 128000000
+max_requests_per_invocation: 1000
+max_metadata_bytes: 2000000
+max_xml_bytes: 5000000
+max_article_json_bytes: 20000000
+cloud_requests_per_second: 4
+search_requests_per_second: 2
