@@ -1,3 +1,11 @@
+## 2026-10-04 — Clinical GEPA overnight follow-up
+
+- Add a single-command fresh campaign comparing checklist and source-grounded model-feedback GEPA profiles across 27 operational prompt families; increase examples, reflection reasoning and bounded search calls, and batch two proposals concurrently.
+- Add live roster bootstrap and replay saved failures directly for repair optimization. Keep model rewards explicitly separate from medical accuracy, retain seed prompts on ties and recompute equal held-out denominators for bootstrap and later trials.
+- Fix concurrent GEPA logging, reconstruct hash-verified legacy source packets, preserve complete bounded source-review packets, and fail source preflight or incomplete discovery registries before downstream extraction.
+- Permit corrections to invalid auxiliary audit IDs, offsets, episode phrases and ownership while retaining accepted clinical values and graph/panel atoms.
+- Compare prompt subsets, backfill, reasoning, live discovery and 64K/128K contexts over three seeds; retain CPU-only acquisition/cleanup and one-GPU GEPA versus eight-GPU extraction allocations.
+
 ## 2026-10-04 — Parallel GEPA and interruption recovery
 
 - Run independent prompt searches concurrently on one B200; separate eight-B200 bootstrap and extraction jobs so GEPA no longer holds eight idle replicas.

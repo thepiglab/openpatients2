@@ -1,6 +1,7 @@
 """CPU-only fork of an ended overnight campaign, preserving saved inference."""
 from __future__ import annotations
 import gzip
+import hashlib
 import json
 from pathlib import Path
 import shutil
@@ -12,6 +13,29 @@ from .provenance import json_digest
 # Changes to orchestration do not invalidate already generated clinical trials.
 # Changes to extraction, validators, prompts, or the fixed clinical labels do.
 SCHEDULERS={'corpus_pilot.py','overnight.py','prompt_optimization.py','pilot_recovery.py','glimmer_benchmark.py','glimmer_tuning.py'}
+
+
+def restore_article(packet):
+    """Recover legacy review packets without inventing text or media metadata."""
+    article = dict(packet)
+    segments = article.get('segments') or []
+    rendered = '\n\n'.join(f'[{s["segment_id"]}] {s.get("heading") or "Article"}\n{s["text"]}' for s in segments)
+    if hashlib.sha256(rendered.encode()).hexdigest() != article.get('text_sha256'):
+        raise ValueError('Recovered canonical source text hash mismatch')
+    if 'text' in article and article['text'] != rendered:
+        raise ValueError('Recovered source text differs from its segments')
+    article['text'] = rendered
+    if 'has_body_text' not in article:
+        article['has_body_text'] = any(s.get('kind') in {'paragraph', 'table'} and
+            (s.get('heading') or '').casefold() not in {'abstract', 'references'} and s.get('text')
+            for s in segments)
+    if 'supplements' not in article:
+        article.update(supplements=[], supplementary_manifest_status='unavailable_in_legacy_snapshot')
+    article.setdefault('status', 'eligible')
+    from .pilot_extract import source_gate, PilotConfig
+    errors = source_gate(article, PilotConfig())
+    if errors: raise ValueError('Recovered source packet failed gates: ' + ','.join(errors))
+    return article
 
 
 def validate_parent(campaign, parent):
@@ -51,7 +75,7 @@ def bootstrap_paths(work, config):
     cell=config['matrix'][0]
     label=f'context{cell["context"]}-prefill{cell["prefill"]}-tp{cell.get("tensor_parallel",1)}-'+(cell.get('speculation') or 'ordinary')
     base=Path(work)/'extraction'/label/'regression'/f'seed{config["seeds"][0]}'
-    return [base/n for n in ('baseline','clinical-audit','joint-pixels','coverage-backfill')]
+    return [base/n for n in config.get('bootstrap_variants',('baseline','clinical-audit','joint-pixels','coverage-backfill'))]
 
 
 def bootstrap_complete(work, config):
@@ -124,7 +148,7 @@ def recover_cpu(campaign):
                 sample.parent.mkdir(parents=True,exist_ok=True)
                 with gzip.open(sample,'wt') as out:
                     for a in review['articles']:
-                        out.write(json.dumps({**a,'status':'eligible'},ensure_ascii=False)+'\n')
+                        out.write(json.dumps(restore_article(a),ensure_ascii=False)+'\n')
             if fingerprint(list(read_jsonl(sample)))!=fingerprint(review['articles']):
                 raise ValueError('Recovered new-source sample changed')
             write_json(holdout/'source-owner.json',{'work':str(holdout),'config_sha256':campaign['config_sha256'],

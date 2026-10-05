@@ -4,6 +4,8 @@
 
 A uv Python project for turning licensed PMC full articles and Open-Patients source cases into evidence-backed patient records. It supports patient discovery, species, 14 clinical sections, cited summaries, relative timelines, actual figure inspection, terminology grounding and cohort queries through OpenAI-compatible endpoints. Serving profiles include experimental Muse Glimmer and Gemma 4 31B layouts for eight B200 GPUs.
 
+The [clinical GEPA overnight campaign](docs/GEPA_CLINICAL_OVERNIGHT.md) compares checklist and source-grounded prompt optimization across 27 prompt families, with repair replay, live roster training examples, 64K/128K extraction, pixels and bounded new sources. Launch the full CPU→bootstrap→GEPA→extraction→cleanup chain with `bash scripts/run_gepa_clinical_overnight.sh` on HiPerGator.
+
 The [fixed-source correctness campaign](docs/CORPUS_CORRECTNESS.md) compares whole-article and compact patient inputs on 20 previously downloaded articles, across three seeds. One command schedules CPU preparation, eight-B200 FP8/DFlash inference, source-checklist scoring, reporting and owned-download cleanup. It separates live discovery, first-pass versus delivered facts, timelines, caption/pixel ownership and schema validity.
 
 The [next refinement campaign](docs/CORPUS_REFINEMENT.md) adds source-aware repair controls, four balanced seeds, live patient discovery, a bounded prospective sample, relative ordered timeline exports, and source-parsed observation magnitudes/units. Strict checklist scoring stays separate from equivalent-representation matches and clinical review.

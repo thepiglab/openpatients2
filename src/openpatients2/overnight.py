@@ -32,10 +32,25 @@ def validate_plan(config):
         PilotConfig.model_validate({**load_pilot_config(config['extraction_config']).model_dump(), **v.get('overrides',{})})
     if not {'baseline','clinical-audit','joint-pixels','gepa'}<=names: raise ValueError('Missing overnight controls')
     if not 3600<=config['gpu_budget_seconds']<=36000: raise ValueError('GPU budget must be 1–10 hours within the 12h job')
-    if not 128<=config['gepa_metric_calls_per_prompt']<=256:
-        raise ValueError('Bound GEPA to 128–256 task evaluations per prompt')
+    if not 128<=config['gepa_metric_calls_per_prompt']<=512:
+        raise ValueError('Bound GEPA to 128–512 task evaluations per prompt')
     if not 600<=config['gepa_seconds']<=7200: raise ValueError('Bound GEPA phase to 10–120 minutes')
     if not 1<=config.get('gepa_workers',8)<=8: raise ValueError('Use 1–8 concurrent GEPA families')
+    profiles=config.get('gepa_profiles',[])
+    if profiles:
+        if len(profiles)!=2 or {p['name'] for p in profiles}!={'checklist','clinical'}:
+            raise ValueError('Compare exactly the checklist and clinical GEPA profiles')
+        if sum(p['seconds'] for p in profiles)>10800: raise ValueError('GEPA profiles exceed three hours')
+        for p in profiles:
+            if not 600<=p['seconds']<=7200 or not 128<=p['calls']<=512: raise ValueError('Invalid GEPA profile budget')
+            options=p['options']
+            if set(options)-{'semantic_feedback','reflection_reasoning','train_examples','validation_examples','minibatch_size','proposals'}:
+                raise ValueError('Unknown GEPA search option')
+            if options.get('reflection_reasoning','high') not in {'medium','high','xhigh'}: raise ValueError('Invalid reflection reasoning')
+            for key,low,high in [('train_examples',4,24),('validation_examples',2,12),('minibatch_size',2,6),('proposals',1,2)]:
+                if not low<=options.get(key,low)<=high: raise ValueError('Invalid GEPA option '+key)
+    if set(config.get('bootstrap_variants',[]))-names: raise ValueError('Unknown bootstrap variant')
+    if config.get('gepa_context',65536) not in {65536,131072}: raise ValueError('Unsupported GEPA context')
     for cell in config['matrix']:
         if cell.get('tensor_parallel',1) not in {1,2} or cell.get('speculation','dflash') not in {'dflash',None}:
             raise ValueError('Only TP1/TP2 and DFlash on/off are included')
@@ -72,7 +87,15 @@ async def run_trials(campaign,destination,endpoints,context,cell,deadline, *, bo
             deferred.append({'seed':seed,'arm':name,'source_set':source,'reason':'GPU deadline reserve'})
             return None
         cfg={**base,**variant.get('overrides',{})}
-        if name=='gepa': cfg['prompt_overrides']=prompts
+        if name.startswith('gepa'):
+            cfg['prompt_overrides']=prompts
+            if name=='gepa-checklist': cfg['prompt_overrides']=read_json(work/'prompt-optimization/checklist/best-prompts.json')
+            elif name=='gepa-clinical-only':
+                from .schemas import TASK_MODELS
+                cfg['prompt_overrides']={k:v for k,v in prompts.items() if k in TASK_MODELS}
+            elif name=='gepa-aux-only':
+                from .schemas import TASK_MODELS
+                cfg['prompt_overrides']={k:v for k,v in prompts.items() if k not in TASK_MODELS}
         if source=='new-sources': cfg['max_articles']=config['holdout_sample_size']
         manifest=work/('holdout/vision-assets/manifest.json' if source=='new-sources' else 'vision-assets/manifest.json')
         inputs=work/'holdout/profile/sample.jsonl.gz' if source=='new-sources' else sample
@@ -118,7 +141,7 @@ async def run_trials(campaign,destination,endpoints,context,cell,deadline, *, bo
     main=cell.get('phase','main')=='main'
     if main:
         first=config['seeds'][0]
-        for name in ('baseline','clinical-audit','joint-pixels','coverage-backfill'):
+        for name in config.get('bootstrap_variants',('baseline','clinical-audit','joint-pixels','coverage-backfill')):
             row=await trial(first,variants[name]); executed.add((first,name))
             if row and row['report'].get('outputs'): bootstrap.append(destination/'regression'/f'seed{first}'/name)
         if bootstrap_only: return rows,discoveries,deferred
@@ -169,7 +192,7 @@ async def run_trials(campaign,destination,endpoints,context,cell,deadline, *, bo
         rotated=selected[index%len(selected):]+selected[:index%len(selected)]
         for v in rotated:
             if (seed,v['name']) in executed: continue
-            if v['name']=='gepa' and not prompts:
+            if v['name'].startswith('gepa') and not prompts:
                 deferred.append({'seed':seed,'arm':'gepa','reason':'No optimized prompts available'})
                 continue
             await trial(seed,v)
@@ -177,10 +200,26 @@ async def run_trials(campaign,destination,endpoints,context,cell,deadline, *, bo
     return rows,discoveries,deferred
 
 
+def heldout_summary(fidelity, ids):
+    """Uniformly score saved check rows, including pre-optimization bootstrap trials."""
+    from collections import Counter
+    result=Counter()
+    for check in fidelity.get('checks',[]):
+        if check['record_id'].split(':')[0] not in ids: continue
+        value=check.get('delivered',{})
+        if check['kind']=='required':
+            result['required']+=1; result['matched']+=bool(value.get('matched'))
+        else:
+            result['forbidden_violations']+=bool(value.get('matched'))
+            result['forbidden_unscorable']+=not value.get('available',False)
+    return result
+
+
 def write_comparison(campaign,result):
     """Readable clinically focused metrics; no self-judged accuracy percentages."""
     from collections import Counter,defaultdict
     work=Path(campaign['work']); rows=result.get('cells',[])
+    split=read_json(work/'prompt-optimization/splits.json') if (work/'prompt-optimization/splits.json').exists() else {}
     groups=defaultdict(list)
     for row in rows:
         cell=row['cell']
@@ -195,9 +234,13 @@ def write_comparison(campaign,result):
         statuses=Counter();gold=Counter();test=Counter(); rates=[]
         for row in trials:
             r=row['report'];statuses.update(r.get('task_statuses_by_domain',{}).get('clinical',{}))
-            for name,counter in [('fidelity',gold),('gepa_test_fidelity',test)]:
+            for name,counter in [('fidelity',gold)]:
                 s=r.get(name,{}).get('summary',{}).get('delivered',{})
                 counter.update({k:s.get(k,0) for k in ('matched','required','forbidden_violations','forbidden_unscorable')})
+            if split:
+                test.update(heldout_summary(r.get('fidelity',{}),set(split['test'])))
+            else:
+                test.update(r.get('gepa_test_fidelity',{}).get('summary',{}).get('delivered',{}))
             rate=r.get('tokens',{}).get('all_gpus_output_tokens_per_second')
             if rate is not None: rates.append(rate)
         source,ctx,prefill,tp,draft,arm=key
@@ -210,6 +253,8 @@ def write_comparison(campaign,result):
         'they exclude startup and queueing. Compare matched arms within a layout. Different context/workloads are different regimes.',
         'Clinical validity counts concern the 14 extraction task classes only. Extra audits are counted separately. '
         'Fact matches use a finite development checklist. New-source accuracy, all remaining claims and pixel interpretations need adjudication.',
+        'GEPA test facts are recomputed from the same saved checklist rows for every arm, including reused bootstrap trials. '
+        'Repeated seeds do not increase the number of independent articles or unique gold facts.',
         '','## Independent model review signals','',
         '| Arm | Inventory features | Claimed missing features before backfill | Claims called unsupported / wrong patient | Clinical facts without event links |',
         '| --- | ---: | ---: | ---: | ---: |']
@@ -231,6 +276,18 @@ def write_comparison(campaign,result):
     for c in optimization.get('components',[]):
         lines.append(f"| {c['component']} | {c['status']} | {c['train_examples']} / {c['validation_examples']} | "
             f"{c.get('metric_calls','—')} | {c.get('candidate_count','—')} |")
+    profiles_path=work/'prompt-optimization/profiles.json'
+    if profiles_path.exists():
+        lines+=['','## GEPA tuning profiles','',
+            '| Profile | Status | Completed families | Nonempty supplements | Families with validation gain |',
+            '| --- | --- | ---: | ---: | ---: |']
+        for name,profile in read_json(profiles_path).items():
+            parts=profile['components']
+            lines.append(f"| {name} | {profile['status']} | {sum(p['status']=='completed' for p in parts)}/{len(parts)} | "
+                f"{profile['optimized_nonempty_components']} | {sum(p.get('validation_gain',0)>0 for p in parts)} |")
+        lines+=['','Clinical-feedback rewards are frozen, unadjudicated model scores. They are never reported as medical accuracy. '
+            'Both profiles keep the empty seed supplement on a validation tie. The clinical profile is designated in advance for '
+            'experimental GEPA arms; held-out scores do not select prompts or alter the evaluation rubric.']
     lines+=['',f"GEPA: {optimization.get('status','missing')}. Components lacking disjoint examples are explicitly unavailable. "
         'Every component has a separate bounded search. Gold-backed clinical rewards and structural-only rewards are different; '
         'winning supplements are experimental, never auto-promoted to production. Splits are by article; cross-publication duplicate patients remain a limitation.',

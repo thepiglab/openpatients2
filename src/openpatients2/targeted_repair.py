@@ -25,20 +25,30 @@ def repair_snapshot(task, value, checker):
     snapshot = deepcopy(value)
     snapshot.pop('limitations', None)
     snapshot.pop('coverage', None)
-    collections = {'timeline_v2': ('events', 'edges'), 'figure_visuals': ('panels',),
+    collections = {'timeline_v2': ('events', 'edges'), 'ordering_review': ('edges',),
+                   'clinical_inventory': ('features',), 'figure_visuals': ('panels',),
                    'figure_attribution': ('assignments',), 'pixel_attribution': ('assignments',),
                    'summary': ('claims',)}.get(task, ())
-    if not collections: return snapshot
     def accepted(candidate):
         try: checker(candidate); return True
         except (ValueError, TypeError, KeyError): return False
+    if task not in TASK_MODELS and not accepted(value):
+        # Invalid audit registries, offsets and ownership are hypotheses, not
+        # accepted clinical facts. Retain the original attempt in the audit log;
+        # allow correction/retraction rather than protecting the known error.
+        snapshot = {k:value[k] for k in ('record_id','figure_id') if k in value}
+        if task in {'claim_audit','coverage_audit','ordering_review','roster','joint_figure'}:
+            return snapshot
+    if not collections: return snapshot
     for collection in collections:
         kept = []
         for item in value.get(collection, []):
             probe = deepcopy(value); probe[collection] = [item]
             if task == 'timeline_v2':
                 if collection == 'events': probe['edges'] = []
-                else: probe['events'] = snapshot['events']
+                else:
+                    probe['events'] = snapshot['events']
+                    probe['edges'] = kept+[item]
             if accepted(probe): kept.append(deepcopy(item))
         snapshot[collection] = kept
     # Figure-level descriptions do not validate a failed panel. Preserve them

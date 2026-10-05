@@ -253,7 +253,7 @@ def patient_packet(article: dict, roster: dict, patient: dict, *, scope: str = '
     raw = {'record_id':f'{article["article_id"]}:{patient["patient_id"]}', 'text':''.join(chunks),
         'source_kind':'published_case_summary', 'pmcid':article['pmcid'],'pmid':article.get('pmid'),'doi':article.get('doi'),
         'dataset_revision':article['xml_sha256'], 'cluster_id':article['pmcid'],
-        'article_source':{k:article.get(k) for k in ('article_id','pmcid','pmid','doi','version','title','authors','source_url','xml_url','xml_sha256','text_sha256','license','retrieval','supplements','figures','references','unassigned_media','parser_version')},
+        'article_source':{k:article.get(k) for k in ('article_id','pmcid','pmid','doi','version','title','authors','source_url','xml_url','xml_sha256','text_sha256','license','retrieval','supplements','supplementary_manifest_status','figures','references','unassigned_media','parser_version')},
         'patient_target':patient, 'packet_spans':spans, 'figure_assignments':assignments,
         'article_roster_digest':json_digest(roster),
         'clinical_source_selection':selection,

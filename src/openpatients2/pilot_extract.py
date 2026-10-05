@@ -336,6 +336,7 @@ class PilotRunner:
         self.active = [0 for _ in endpoints]
         self.peak_active = [0 for _ in endpoints]
         self.clients = []
+        from .gepa_feedback import ClinicalFeedback
         self.schemas = {**{k: v.model_json_schema() for k, v in TASK_MODELS.items()},
             **{'coverage_repair_'+k:v.model_json_schema() for k,v in TASK_MODELS.items()},
             **{k: v.model_json_schema() for k, v in ARTICLE_TASKS.items()},
@@ -346,7 +347,8 @@ class PilotRunner:
             'claim_audit': ClaimAudit.model_json_schema(),
             'clinical_inventory': ClinicalInventory.model_json_schema(),
             'coverage_audit': CoverageAudit.model_json_schema(),
-            'joint_figure': JointFigureAnalysis.model_json_schema()}
+            'joint_figure': JointFigureAnalysis.model_json_schema(),
+            'gepa_assessment': ClinicalFeedback.model_json_schema()}
         for endpoint in endpoints:
             api = APIConfig(endpoints=[endpoint.rstrip('/')], model=self.config.served_model,
                 model_id=self.config.model_id, revision=self.config.revision,
@@ -389,7 +391,8 @@ class PilotRunner:
         # Do not replace this with text tokenization or a hand-waved image bound.
         return count, 'server_multimodal_exact_vllm_0.30.0' if pixels else 'server_text_exact', server_max
 
-    async def call(self, task, messages, checker, identity, replica, segments, *, packet=None, partial_builder=None):
+    async def call(self, task, messages, checker, identity, replica, segments, *, packet=None, partial_builder=None,
+                   repair_from=None):
         messages = copy.deepcopy(messages)
         if task in self.config.prompt_overrides:
             messages.append({'role':'user', 'content':'ADDITIONAL TASK INSTRUCTIONS:\n'+self.config.prompt_overrides[task]})
@@ -399,6 +402,15 @@ class PilotRunner:
         attempts = []; data = None; errors = []; plan = None; partial = None
         baseline = None; repair_rounds = 0; transports = 0; mode = 'initial'
         latest_candidate = None
+        if repair_from is not None:
+            baseline = copy.deepcopy(repair_from.get('raw_candidate'))
+            errors = list(repair_from.get('errors') or ['saved_failed_attempt'])
+            if self.config.refinement_policy == 'source_aware' and task in TASK_MODELS and baseline is not None:
+                baseline, _ = normalize_clinical(task, baseline, segments)
+            latest_candidate = copy.deepcopy(baseline)
+            if packet is not None and self.arm == 'targeted':
+                plan = ItemRepair.create(task, baseline, packet['text'], segments, policy=self.config.refinement_policy)
+            mode = 'repair'
         async with self.slots[replica]:
             client = self.clients[replica]
             while True:
@@ -417,6 +429,9 @@ class PilotRunner:
                          'request': safe_messages(current), 'messages_sha256': json_digest(current),
                          'desired_output_tokens': desired, 'response': None, 'metrics': {},
                          'errors': [], 'replica': replica}
+                if repair_from is not None:
+                    entry['replayed_failure'] = {'errors':repair_from.get('errors'),
+                        'candidate_sha256':json_digest(repair_from.get('raw_candidate'))}
                 try:
                     if self.calls >= self.config.max_calls:
                         raise ValueError('model_call_budget_exhausted')
@@ -1158,6 +1173,13 @@ async def prepare_rosters(config, articles_path, output, endpoints, context, *, 
     """Evaluate live discovery alone; it does not gate the frozen-roster benchmark."""
     runner = PilotRunner(config, output, endpoints, context, 'targeted', seed=seed, http=http)
     try:
-        return await runner.run(articles_path, discovery_only=True)
+        report=await runner.run(articles_path, discovery_only=True)
+        predicted=json.loads(Path(report['outputs']['predicted_rosters']).read_text())
+        expected={a['article_id'] for a in report['articles']}
+        actual=[a['article_id'] for a in predicted['articles']]
+        if not expected or set(actual)!=expected or len(actual)!=len(expected):
+            rejected=[{'article_id':a['article_id'],'errors':a['errors']} for a in report['articles'] if a['status']=='source_rejected']
+            raise ValueError('Discovery cannot provide complete cached source coverage: '+json.dumps(rejected))
+        return report
     finally:
         await runner.close()

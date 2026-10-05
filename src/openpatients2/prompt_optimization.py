@@ -14,9 +14,10 @@ import json
 from pathlib import Path
 import re
 import time
+import threading
 
 from .article_tasks import check_article_task, SYSTEM
-from .corpus_fidelity import _items
+from .corpus_fidelity import _items, _discovery, _figure_arm
 from .data import read_jsonl, write_json
 from .evidence_recovery import packet_segments
 from .fidelity import matches, without_evidence
@@ -29,6 +30,8 @@ from .pilot_review import (check_ordering, check_claim_audit, check_inventory, c
 from .patient_context import isolate_cited_cases
 from .provenance import json_digest
 from .schemas import TASK_MODELS
+from .gepa_feedback import (FamilyLogger, feedback_checker, feedback_messages,
+                            combine_reward, select_examples)
 
 COMPONENTS = [*TASK_MODELS, 'summary','timeline_v2','roster','figure_attribution',
     'figure_visuals','pixel_attribution','joint_figure','ordering_review','clinical_inventory',
@@ -133,15 +136,30 @@ def task_checker(example, runner):
 
 
 class ClinicalAdapter:
-    def __init__(self, examples, config, endpoints, context, output, reference, component, deadline):
+    def __init__(self, examples, config, endpoints, context, output, reference, component, deadline, options=None):
         self.examples=examples; self.config=config; self.endpoints=endpoints; self.context=context
         self.output=Path(output); self.reference=reference; self.component=component
         self.number=0; self.deadline=deadline
+        self.options=options or {}
+        self.directory_lock=threading.Lock()
         # GEPA can resume its engine checkpoint. Keep previous rollout traces
         # immutable even when interruption happened before a state save.
         previous=[int(p.name.rsplit('-',1)[1]) for p in self.output.glob('*-*')
                   if p.name.startswith(('rollout-','reflection-')) and p.name.rsplit('-',1)[1].isdigit()]
         self.number=max(previous,default=-1)+1
+
+    def next_directory(self, prefix):
+        with self.directory_lock:
+            destination=self.output/f'{prefix}-{self.number:05d}'
+            self.number+=1
+            return destination
+
+    def batch_evaluate(self, items, *, capture_traces=True):
+        # Multi-proposal evaluations feed one batched vLLM server; each rollout
+        # retains a private runner/event loop and unique artifact directory.
+        with ThreadPoolExecutor(max_workers=min(2,len(items)) or 1) as pool:
+            futures=[pool.submit(self.evaluate,batch,candidate,capture_traces) for candidate,batch in items]
+            return [f.result() for f in futures]
 
     def evaluate(self,batch,candidate,capture_traces=False):
         from gepa.core.adapter import EvaluationBatch
@@ -150,20 +168,59 @@ class ClinicalAdapter:
                 trajectories=[{'Feedback':'Component wall budget exhausted; not a medical error'} for _ in batch]
                 if capture_traces else None)
         async def run():
-            destination=self.output/f'rollout-{self.number:05d}'; self.number+=1
+            destination=self.next_directory('rollout')
             cfg={**self.config,'prompt_overrides':candidate, 'seed':42,
                  'max_repair_rounds':2 if self.component=='repair' else 0}
             runner=PilotRunner(cfg,destination,self.endpoints,self.context,'targeted')
+            assessor=None
+            if self.options.get('semantic_feedback'):
+                # Candidate repair supplements must never repair the assessor:
+                # that would let the optimized program alter its own metric.
+                assessor=PilotRunner({**self.config,'prompt_overrides':{},'max_repair_rounds':0,'seed':42},
+                    destination/'assessment',self.endpoints,self.context,'targeted')
             async def one(index,e):
                 checker,segments,packet=task_checker(e,runner)
+                repair = next((a for a in e['row']['attempts'] if a.get('errors')),None) if self.component=='repair' else None
                 r=await runner.call(e['row']['task'],e['request'],checker,e['row']['identity'],
-                    index%len(self.endpoints),segments,packet=packet)
+                    index%len(self.endpoints),segments,packet=packet,repair_from=repair)
                 checks=[c for c in self.reference['checks'] if c['record_id']==e['row']['identity'].get('record_id')]
                 score,feedback=reward(e['row']['task'],r['data'],r['status'],checks,gold_task=e['row']['task'].removeprefix('coverage_repair_'))
+                if e['row']['task']=='roster':
+                    ref={**self.reference,'articles':[a for a in self.reference.get('articles',[])
+                        if a['article_id']==e['article']['article_id'] and a.get('count_adjudication')=='source_checked']}
+                    tested=_discovery(ref,[{'article_id':e['article']['article_id'],'data':r['data']}])['articles']
+                    if tested:
+                        score=.2*float(r['status']=='valid')+.4*float(tested[0]['count_match'])+.4*float(tested[0]['species_multiset_match'])
+                        feedback.update(reward_basis='source_checked_count_and_species',required=2,
+                            discovery=tested,individual_identity_accuracy_established=False)
+                if e['row']['task'] in {'figure_attribution','pixel_attribution','joint_figure'}:
+                    ref={**self.reference,'figure_checks':[f for f in self.reference.get('figure_checks',[])
+                        if f['article_id']==e['article']['article_id'] and f['figure_id']==e['row']['identity'].get('figure_id')]}
+                    value=(r['data'] or {}).get('attribution') if e['row']['task']=='joint_figure' else r['data']
+                    tested=_figure_arm(ref,[{'identity':e['row']['identity'],'data':value}])
+                    if tested['checks']:
+                        summary=tested['summary']
+                        score=.2*float(r['status']=='valid')+.8*summary['matched']/summary['required']
+                        feedback.update(reward_basis='source_checked_figure_ownership',required=summary['required'],
+                            figure_checks=tested['checks'],pixel_accuracy_adjudicated=False)
+                if self.options.get('semantic_feedback') and r['data'] is not None:
+                    assessed=await assessor.call('gepa_assessment',feedback_messages(e,r,feedback),
+                        feedback_checker({**e['article'],'segments':segments}),{**e['row']['identity'],'assessed_task':e['row']['task']},
+                        index%len(self.endpoints),segments)
+                    if assessed['status']=='valid':
+                        score=combine_reward(score,feedback,assessed['data'],r['status'])
+                        feedback.update(reward_basis='finite_checks_and_unadjudicated_source_review',
+                            model_review=assessed['data'])
+                    else:
+                        # Do not reward unevaluated candidates as clinically perfect.
+                        score=0.0
+                        feedback.update(assessment_unavailable=True,assessment_errors=assessed['errors'])
                 trace={'Inputs':{'task':e['row']['task'],'target':e['row']['identity'],
                     'prompt_excerpt':json.dumps(safe_messages(e['request']),ensure_ascii=False)[-12000:]},
                     'Generated Outputs':json.dumps(r['data'],ensure_ascii=False)[:12000],
-                    'Feedback':{**feedback,'validation_errors':r['errors']},'score':score}
+                    'Feedback':{**feedback,'validation_errors':r['errors'],
+                        'failed_candidate_excerpt':json.dumps(next((a.get('raw_candidate') for a in r['attempts'] if a.get('errors')),None),ensure_ascii=False)[:12000],
+                        'raw_response_excerpt':((r['attempts'][-1].get('response') or {}).get('content') or '')[:6000]},'score':score}
                 return r,score,trace
             try:
                 return await asyncio.wait_for(asyncio.gather(*(one(i,e) for i,e in enumerate(batch))),
@@ -171,7 +228,9 @@ class ClinicalAdapter:
             except TimeoutError:
                 return [({'data':None},0.0,{'Feedback':'Component wall budget exhausted; not a medical error',
                     'score':0.0}) for _ in batch]
-            finally: await runner.close()
+            finally:
+                await runner.close()
+                if assessor is not None: await assessor.close()
         rows=asyncio.run(run())
         return EvaluationBatch(outputs=[r[0]['data'] for r in rows],scores=[r[1] for r in rows],
             trajectories=[r[2] for r in rows] if capture_traces else None)
@@ -181,9 +240,9 @@ class ClinicalAdapter:
 
     def propose_new_texts(self,candidate,reflective_dataset,components_to_update,**kwargs):
         async def reflect():
-            runner=PilotRunner({**self.config,'max_repair_rounds':1,'prompt_overrides':{}},
-                self.output/f'reflection-{self.number:05d}',self.endpoints,self.context,'targeted')
-            self.number+=1
+            runner=PilotRunner({**self.config,'max_repair_rounds':1,'prompt_overrides':{},
+                'reasoning_strength':self.options.get('reflection_reasoning',self.config.get('reasoning_strength','medium'))},
+                self.next_directory('reflection'),self.endpoints,self.context,'targeted')
             key=components_to_update[0]
             # Existing source/schema/system instructions stay fixed; evolve only
             # additional transferable task instructions. No gold labels from test.
@@ -209,11 +268,12 @@ class ClinicalAdapter:
 
 
 def optimize_prompts(sample, trial_dirs, output, config, endpoints, context, reference_path, *, seconds=7200, calls=32,
-                     workers=8, resume=False):
+                     workers=8, resume=False, options=None):
     import gepa
     from importlib.metadata import version
     if version('gepa')!='0.1.4': raise ValueError('Expected pinned gepa 0.1.4')
     if not 1<=workers<=8: raise ValueError('Use 1–8 independent GEPA searches')
+    options=options or {}
     output=Path(output); output.mkdir(parents=True,exist_ok=resume)
     articles={a['article_id']:a for a in read_jsonl(sample)}
     reference=json.loads(Path(reference_path).read_text())
@@ -230,7 +290,8 @@ def optimize_prompts(sample, trial_dirs, output, config, endpoints, context, ref
         for path in sorted((trial/'tasks').glob('*.json')):
             row=json.loads(path.read_text()); identity=row['identity']; aid=identity['article_id']
             if aid in split['test'] or not row['attempts'] or row['task'] not in COMPONENTS and not row['task'].startswith('coverage_repair_'): continue
-            signature=(aid,identity.get('record_id'),identity.get('figure_id'),identity.get('batch'),row['task'])
+            signature=(aid,identity.get('record_id'),identity.get('figure_id'),identity.get('batch'),row['task'],
+                bool(any(a.get('errors') for a in row['attempts'])))
             if signature in seen: continue
             seen.add(signature)
             request=copy.deepcopy(row['attempts'][0]['request'])
@@ -256,9 +317,11 @@ def optimize_prompts(sample, trial_dirs, output, config, endpoints, context, ref
     # image_manifest is runner-compatible and will be removed from overrides.
     clean_config={k:v for k,v in config.items() if k!='image_manifest'}
     manifest={'gepa_version':version('gepa'),'reference_sha256':json_digest(reference),'splits':split,
-        'config_sha256':json_digest(clean_config),
+        'config_sha256':json_digest(clean_config),'search_options':options,
         'examples_sha256':json_digest([{'identity':e['row']['identity'],'task':e['row']['task'],
-            'request':safe_messages(e['request']),'source_hash':e['article']['text_sha256']} for e in examples])}
+            'request':safe_messages(e['request']),'source_hash':e['article']['text_sha256'],
+            'repair_inputs':[{'errors':a.get('errors'), 'raw_candidate':a.get('raw_candidate')}
+                for a in e['row']['attempts'] if a.get('errors')]} for e in examples])}
     manifest_path=output/'input-manifest.json'
     if manifest_path.exists() and json.loads(manifest_path.read_text())!=manifest:
         raise ValueError('GEPA resume inputs/configuration changed')
@@ -281,21 +344,28 @@ def optimize_prompts(sample, trial_dirs, output, config, endpoints, context, ref
     share=seconds/waves
     def search(component):
         eligible=[e for e in examples if e['row']['task']==component or (component=='coverage_repair' and e['row']['task'].startswith('coverage_repair_')) or (component=='repair' and any(a['errors'] for a in e['row']['attempts']))]
-        train=[e for e in eligible if e['article']['article_id'] in split['train']][:8]
-        val=[e for e in eligible if e['article']['article_id'] in split['validation']][:4]
-        info={'component':component,'train_examples':len(train),'validation_examples':len(val)}
+        train=select_examples(eligible,set(split['train']),options.get('train_examples',8))
+        val=select_examples(eligible,set(split['validation']),options.get('validation_examples',4))
+        info={'component':component,'train_examples':len(train),'validation_examples':len(val),
+            'train_articles':len({e['article']['article_id'] for e in train}),
+            'validation_articles':len({e['article']['article_id'] for e in val}),
+            'semantic_feedback':options.get('semantic_feedback',False)}
         if not train or not val:
             info['status']='insufficient_disjoint_examples'
         elif time.monotonic()>=deadline:
             info['status']='deferred_time_budget'
         else:
             component_deadline=min(deadline,time.monotonic()+share)
-            adapter=ClinicalAdapter(eligible,clean_config,endpoints,context,output/component,reference,component,component_deadline)
+            adapter=ClinicalAdapter(eligible,clean_config,endpoints,context,output/component,reference,component,component_deadline,options)
             try:
                 engine_resumed=(output/component/'gepa/gepa_state.bin').exists()
+                from gepa.strategies.proposal_sampling import IndependentSampling
                 result=gepa.optimize(seed_candidate={component:''},trainset=train,valset=val,adapter=adapter,
-                    max_metric_calls=calls,reflection_minibatch_size=min(3,len(train)),skip_perfect_score=False,
+                    max_metric_calls=calls,reflection_minibatch_size=min(options.get('minibatch_size',3),len(train)),skip_perfect_score=False,
                     module_selector='round_robin',seed=5724,run_dir=str(output/component/'gepa'),
+                    logger=FamilyLogger(output/component/'gepa/run_log.txt'),
+                    candidate_selection_strategy='pareto',batch_sampler='epoch_shuffled',
+                    sampling_strategy=IndependentSampling(n=options.get('proposals',1)),
                     stop_callbacks=lambda state:time.monotonic()>=component_deadline,raise_on_exception=True)
                 best=max(range(len(result.candidates)),key=lambda i:result.val_aggregate_scores[i])
                 instruction=result.candidates[best][component]
@@ -304,6 +374,8 @@ def optimize_prompts(sample, trial_dirs, output, config, endpoints, context, ref
                     candidate_count=len(result.candidates),metric_calls=result.total_metric_calls,
                     stopped_by_component_wall_budget=time.monotonic()>=component_deadline,
                     best_index=best,selected_instruction=instruction,
+                    validation_gain=result.val_aggregate_scores[best]-result.val_aggregate_scores[0],
+                    tie_kept_seed=best==0,
                     resumed_engine_checkpoint=engine_resumed)
                 write_json(output/component/'candidates.json',result.candidates)
             except Exception as exc:
@@ -328,6 +400,7 @@ def optimize_prompts(sample, trial_dirs, output, config, endpoints, context, ref
     report={'status':'completed' if all(r['status']=='completed' for r in ordered) else 'partial',
         'gepa_version':version('gepa'),'components':ordered,'splits':split,'parallel_searches':workers,
         'test_labels_exposed_to_optimizer':False,'optimized_nonempty_components':sum(bool(v) for v in winners.values()),'automatic_production_promotion':False,
-        'clinical_accuracy_established':False,'reward_notice':'Clinical tasks with gold use finite facts + forbidden checks; others structural only.'}
+        'clinical_accuracy_established':False,'search_options':options,
+        'reward_notice':'Finite gold checks and optionally source-grounded model review. Model review is an unadjudicated proxy; structural-only rewards are not clinical accuracy.'}
     write_json(output/'report.json',report)
     return winners,report

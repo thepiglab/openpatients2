@@ -23,7 +23,8 @@ def main():
         'reports/glimmer-token-lengths-nine/token-histograms.json',
         'scripts/corpus_pilot.sbatch','scripts/package_corpus_pilot.py',
         'scripts/smoke_pmc_acquisition.py','scripts/smoke_glimmer_tokenizer.py',
-        'scripts/probe_paperclip.py','scripts/run_overnight_pilot.sh','scripts/resume_overnight_pilot.sh']
+        'scripts/probe_paperclip.py','scripts/run_overnight_pilot.sh','scripts/resume_overnight_pilot.sh',
+        'scripts/run_gepa_clinical_overnight.sh','docs/GEPA_CLINICAL_OVERNIGHT.md']
     files={root/n for n in names}
     files.update(p for p in root.glob('scripts/hpg_*') if p.is_file() and p.suffix in {'.py','.sbatch','.sh'})
     for folder in ['src/openpatients2','configs/pilot','configs/sources','configs/hipergator',

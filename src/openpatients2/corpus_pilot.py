@@ -132,6 +132,17 @@ def verify_cpu(campaign):
         trusted_external = campaign['runtime'].get(str(local)) == digest
         if (not local.is_relative_to(work) and not trusted_external) or sha256(local) != digest:
             raise ValueError('Prepared CPU input changed: '+path)
+    from .pilot_extract import source_gate, load_pilot_config
+    from .data import read_jsonl
+    bounds = load_pilot_config(campaign['config']['extraction_config'])
+    for relative in ('profile/sample.jsonl.gz', 'holdout/profile/sample.jsonl.gz'):
+        source = work/relative
+        if not source.exists(): continue
+        rows = list(read_jsonl(source))
+        if not rows: raise ValueError('Prepared source sample is empty: '+relative)
+        for article in rows:
+            errors = source_gate(article, bounds)
+            if errors: raise ValueError('Prepared source packet failed gates: '+article.get('article_id','unknown')+': '+','.join(errors))
     return ready
 
 
@@ -140,6 +151,7 @@ def job_command(campaign, phase, dependency=None):
     gpu_phase=phase in {'gpu','bootstrap','gepa'}
     cpus, mem, duration = ((16,'96G','03:00:00') if phase=='gepa' else
         (32,'250G','12:00:00')) if gpu_phase else CPU_RESOURCES[phase]
+    if phase=='gepa' and config.get('gepa_profiles'): duration='04:00:00'
     args = ['sbatch','--parsable','--nodes=1','--ntasks=1','--no-requeue',
         '--account='+config['account'],'--qos='+config['qos'],'--chdir='+root,
         '--cpus-per-task='+str(cpus),'--mem='+mem,'--time='+duration,
@@ -339,10 +351,8 @@ async def prepare_cpu_campaign(campaign):
         # Keep only the small selected review surface, including cases where
         # discovery finds no patients. Raw acquisition/download trees are still
         # deleted; these immutable result inputs let reviewers check omissions.
-        review = {'schema_version':'review-source-sample/1','source_set':'heldout_unadjudicated',
-            'clinical_adjudication':'pending','articles':[{k:a[k] for k in (
-                'article_id','pmcid','version','title','authors','license','xml_sha256','text_sha256',
-                'parser_version','retrieval','figures','references','segments') if k in a} for a in selected]}
+        review = {'schema_version':'review-source-sample/2','source_set':'heldout_unadjudicated',
+            'clinical_adjudication':'pending','articles':selected}
         review_bytes = json.dumps(review,ensure_ascii=False).encode()
         if len(review_bytes) > 32_000_000: raise ValueError('Selected source review snapshot exceeds 32 MB')
         review_path = work/'review-source-sample.json'
@@ -535,7 +545,7 @@ async def gepa_stage(campaign):
     from .prompt_optimization import optimize_prompts
     work=Path(campaign['work']); config=campaign['config']
     verify_cpu(campaign)
-    if not bootstrap_complete(work,config): raise ValueError('GEPA requires four completed bootstrap trials')
+    if not bootstrap_complete(work,config): raise ValueError('GEPA requires all configured bootstrap trials')
     if len(os.environ.get('CUDA_VISIBLE_DEVICES','').split(','))!=1:
         raise ValueError('GEPA reserves exactly one B200, with concurrent prompt searches')
     engine=hpg.read_campaign(work/'engine'); model=engine['config']['models'][0]
@@ -550,7 +560,7 @@ async def gepa_stage(campaign):
             path=(hpg.active_path(engine)/asset['folder']/asset['file']).resolve()
             if not path.is_relative_to(hpg.active_path(engine)) or path.stat().st_size!=asset['bytes'] or path.stat().st_mtime_ns!=asset['mtime_ns']:
                 raise ValueError('GEPA checkpoint changed after CPU download')
-        current=copy.deepcopy(engine); current['config']['max_model_len']=config['matrix'][0]['context']
+        current=copy.deepcopy(engine); current['config']['max_model_len']=config.get('gepa_context',config['matrix'][0]['context'])
         layout={'name':'gepa','replicas':1,'tensor_parallel':1,'speculation':'dflash',
                 'max_batched_tokens':32768,'vision':True}
         cfg=serving_config(current,model,layout); cfg.environment['VLLM_SERVER_DEV_MODE']='1'
@@ -566,12 +576,27 @@ async def gepa_stage(campaign):
             base.update(image_manifest=str(work/'vision-assets/manifest.json'),gpus_per_endpoint=1)
             write_json(work/'progress.json',{'phase':'gepa_parallel','allocated_gpus':1,
                 'parallel_searches':config.get('gepa_workers',8),'time_unix':time.time()})
-            prompts,report=await asyncio.to_thread(optimize_prompts,work/'profile/sample.jsonl.gz',
-                bootstrap_paths(work,config),work/'prompt-optimization',base,endpoints,cfg.max_model_len,
-                config['fidelity_reference'],seconds=config['gepa_seconds'],calls=config['gepa_metric_calls_per_prompt'],
-                workers=config.get('gepa_workers',8),resume=(work/'prompt-optimization').exists())
+            profiles=config.get('gepa_profiles') or [{'name':None,'seconds':config['gepa_seconds'],
+                'calls':config['gepa_metric_calls_per_prompt'],'options':{}}]
+            profile_reports={}
+            for profile in profiles:
+                destination=work/'prompt-optimization'
+                if profile['name']: destination=destination/profile['name']
+                prompts,report=await asyncio.to_thread(optimize_prompts,work/'profile/sample.jsonl.gz',
+                    bootstrap_paths(work,config),destination,base,endpoints,cfg.max_model_len,
+                    config['fidelity_reference'],seconds=profile['seconds'],calls=profile['calls'],
+                    workers=config.get('gepa_workers',8),resume=destination.exists(),options=profile['options'])
+                profile_reports[profile['name'] or 'default']=report
+            if config.get('gepa_profiles'):
+                selected=work/'prompt-optimization/clinical'
+                for name in ('report.json','splits.json','components.json','best-prompts.json'):
+                    write_json(work/'prompt-optimization'/name,read_json(selected/name))
+                write_json(work/'prompt-optimization/profiles.json',profile_reports)
+                prompts=read_json(selected/'best-prompts.json')
             write_json(folder/'metrics-after.json',await server_metrics(endpoints))
-            result={'status':report['status'],'allocated_gpus':1,'parallel_searches':config.get('gepa_workers',8),
+            result={'status':'completed' if all(p['status']=='completed' for p in profile_reports.values()) else 'partial',
+                'profiles':{name:p['status'] for name,p in profile_reports.items()},
+                'allocated_gpus':1,'parallel_searches':config.get('gepa_workers',8),
                 'stage_seconds':time.monotonic()-started,'prompt_report':'prompt-optimization/report.json',
                 'selected_supplements':len(prompts)}
             write_json(work/'gepa.json',result); return result

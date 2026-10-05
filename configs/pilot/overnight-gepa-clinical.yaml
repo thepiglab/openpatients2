@@ -1,0 +1,226 @@
+engine_config: configs/hipergator/glimmer-fp8-tuning.yaml
+extraction_config: configs/pilot/glimmer-gepa-clinical.yaml
+tokenizer_metadata: configs/hipergator/glimmer/RedHatAI.metadata.json
+chat_template: configs/hipergator/glimmer/meta-models-chat_template.jinja
+account: cai5724
+qos: cai5724
+cpu_partition: hpg-default
+gpu_partition: hpg-b200
+workers: 32
+sample_size: 20
+seed: 5724
+fetch_batch: 25
+max_invocations: 100
+export_max_bytes: 1000000000
+max_figures: 12
+pixel_total_bytes: 64000000
+historical_regression: false
+separate_gepa: true
+gepa_workers: 8
+matrix:
+- context: 65536
+  prefill: 32768
+  tensor_parallel: 1
+  speculation: dflash
+  phase: main
+  budget_seconds: 23400
+- context: 131072
+  prefill: 32768
+  tensor_parallel: 1
+  speculation: dflash
+  phase: confirmation
+  variants:
+  - clinical-audit
+  - gepa
+  - gepa-checklist
+  - gepa-backfill
+  seeds:
+  - 42
+  - 43
+  budget_seconds: 3600
+arms:
+- targeted
+source_mode: fixed_fixture
+fixed_source: benchmarks/corpus-correctness/articles.jsonl.gz
+fixed_rosters: benchmarks/corpus-correctness/rosters.json
+fidelity_reference: benchmarks/corpus-correctness/reference-v2.json
+seeds:
+- 42
+- 43
+- 44
+variants:
+- name: baseline
+  arm: targeted
+  input_scope: patient_sections
+  roster: frozen
+  overrides: {}
+- name: legacy-control
+  arm: targeted
+  input_scope: patient_sections
+  roster: frozen
+  overrides:
+    isolate_secondary_cases: true
+    focused_pixels: true
+    pixel_strategy: staged
+    refinement_policy: legacy
+- name: focused
+  arm: targeted
+  input_scope: patient_sections
+  roster: frozen
+  overrides: &id001
+    isolate_secondary_cases: true
+    focused_pixels: true
+    pixel_strategy: staged
+- name: clinical-audit
+  arm: targeted
+  input_scope: patient_sections
+  roster: frozen
+  overrides: &id002
+    isolate_secondary_cases: true
+    focused_pixels: true
+    pixel_strategy: staged
+    review_ordering: true
+    inventory_clinical_features: true
+    audit_claims: true
+- name: joint-pixels
+  arm: targeted
+  input_scope: patient_sections
+  roster: frozen
+  overrides:
+    isolate_secondary_cases: true
+    focused_pixels: true
+    pixel_strategy: joint
+    review_ordering: true
+    inventory_clinical_features: true
+    audit_claims: true
+- name: coverage-backfill
+  arm: targeted
+  input_scope: patient_sections
+  roster: frozen
+  overrides:
+    isolate_secondary_cases: true
+    focused_pixels: true
+    pixel_strategy: staged
+    review_ordering: true
+    inventory_clinical_features: true
+    audit_claims: true
+    coverage_repair: true
+- name: live-roster
+  arm: targeted
+  input_scope: patient_sections
+  roster: live
+  overrides: *id001
+- name: gepa
+  arm: targeted
+  input_scope: patient_sections
+  roster: frozen
+  overrides: *id002
+- name: gepa-checklist
+  arm: targeted
+  input_scope: patient_sections
+  roster: frozen
+  overrides: *id002
+- name: gepa-clinical-only
+  arm: targeted
+  input_scope: patient_sections
+  roster: frozen
+  overrides: *id002
+- name: gepa-aux-only
+  arm: targeted
+  input_scope: patient_sections
+  roster: frozen
+  overrides: *id002
+- name: gepa-backfill
+  arm: targeted
+  input_scope: patient_sections
+  roster: frozen
+  overrides:
+    isolate_secondary_cases: true
+    focused_pixels: true
+    pixel_strategy: staged
+    review_ordering: true
+    inventory_clinical_features: true
+    audit_claims: true
+    coverage_repair: true
+- name: gepa-high
+  arm: targeted
+  input_scope: patient_sections
+  roster: frozen
+  overrides:
+    isolate_secondary_cases: true
+    focused_pixels: true
+    pixel_strategy: staged
+    review_ordering: true
+    inventory_clinical_features: true
+    audit_claims: true
+    reasoning_strength: high
+- name: gepa-live
+  arm: targeted
+  input_scope: patient_sections
+  roster: live
+  overrides: *id002
+- name: gepa-joint
+  arm: targeted
+  input_scope: patient_sections
+  roster: frozen
+  overrides:
+    isolate_secondary_cases: true
+    focused_pixels: true
+    pixel_strategy: joint
+    review_ordering: true
+    inventory_clinical_features: true
+    audit_claims: true
+- name: no-repair
+  arm: direct
+  input_scope: patient_sections
+  roster: frozen
+  overrides:
+    isolate_secondary_cases: true
+    focused_pixels: true
+    pixel_strategy: staged
+    max_repair_rounds: 0
+experiment: overnight_v3
+prioritize_reference_figures: true
+reset_between_trials: true
+holdout_source_config: configs/sources/corpus-overnight.yaml
+holdout_sample_size: 24
+holdout_seeds:
+- 42
+- 43
+holdout_variants:
+- clinical-audit
+- gepa-checklist
+- gepa
+- gepa-backfill
+gpu_budget_seconds: 28800
+gepa_seconds: 7200
+gepa_metric_calls_per_prompt: 128
+trial_reserve_seconds: 600
+bootstrap_variants:
+- baseline
+- clinical-audit
+- joint-pixels
+- coverage-backfill
+- live-roster
+gepa_context: 131072
+gepa_profiles:
+- name: checklist
+  seconds: 3600
+  calls: 256
+  options:
+    semantic_feedback: false
+    reflection_reasoning: high
+    train_examples: 24
+    validation_examples: 10
+    minibatch_size: 3
+    proposals: 1
+- name: clinical
+  seconds: 7200
+  calls: 512
+  options:
+    semantic_feedback: true
+    reflection_reasoning: high
+    train_examples: 24
+    validation_examples: 10
+    minibatch_size: 3
+    proposals: 2
