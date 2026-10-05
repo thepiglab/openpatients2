@@ -1,7 +1,6 @@
-"""Two explicitly separated Slurm phases: bounded CPU sources, then GPU sample.
+"""CPU acquisition/cleanup, one-GPU family search and eight-GPU patient trials.
 
-No whole-corpus inference. Model/container acquisition and deletion are CPU jobs;
-the only GPU allocation is one eight-B200 node running already prepared inputs.
+No whole-corpus inference. GPU jobs consume already prepared, owned inputs.
 """
 from __future__ import annotations
 
@@ -39,7 +38,7 @@ def prepare(root, work, config_path):
     if work.exists(): raise ValueError('Use a new work directory; pilot outputs are never overwritten')
     config = yaml.safe_load(Path(config_path).read_text())
     fixed = config.get('source_mode') == 'fixed_fixture'
-    overnight = config.get('experiment') == 'overnight_v3'
+    overnight = config.get('experiment') in {'overnight_v3','bundle_v4'}
     paths = tuple(k for k in PATH_KEYS if k != 'source_config' or not fixed) + (FIXED_PATH_KEYS if fixed else ())
     if config.get('holdout_source_config'): paths += ('holdout_source_config',)
     for key in paths:
@@ -330,6 +329,13 @@ async def prepare_cpu_campaign(campaign):
         from .pilot_recovery import recover_cpu
         return recover_cpu(campaign)
     result = await run_cpu(work, config)
+    if config.get('experiment')=='bundle_v4':
+        import shutil
+        benchmark=work/'benchmark';benchmark.mkdir()
+        for key,name in [('fixed_source','articles.jsonl.gz'),('fixed_rosters','rosters.json'),('fidelity_reference','reference.json')]:
+            target=benchmark/name;shutil.copyfile(config[key],target)
+            result['hashes'][str(target.relative_to(work))]=sha256(target)
+        write_json(work/'cpu.json',result)
     if not config.get('holdout_source_config'): return result
     child = work/'holdout'
     try:
@@ -413,7 +419,7 @@ async def _gpu_locked(campaign, *, bootstrap_only=False):
         raise ValueError('This pilot requires exactly eight GPUs on one node')
     started=time.monotonic(); results=[]; failed=[]; discovery=[]
     baseline=gpu_snapshot()
-    overnight=campaign['config'].get('experiment')=='overnight_v3'
+    overnight=campaign['config'].get('experiment') in {'overnight_v3','bundle_v4'}
     deadline=started+campaign['config'].get('gpu_budget_seconds',36000)
     deferred=[]
     cells=campaign['config']['matrix'][:1] if bootstrap_only else campaign['config']['matrix']
@@ -577,7 +583,7 @@ async def gepa_stage(campaign):
             write_json(work/'progress.json',{'phase':'gepa_parallel','allocated_gpus':1,
                 'parallel_searches':config.get('gepa_workers',8),'time_unix':time.time()})
             profiles=config.get('gepa_profiles') or [{'name':None,'seconds':config['gepa_seconds'],
-                'calls':config['gepa_metric_calls_per_prompt'],'options':{}}]
+                'calls':config['gepa_metric_calls_per_prompt'],'options':config.get('gepa_options',{})}]
             profile_reports={}
             for profile in profiles:
                 destination=work/'prompt-optimization'
@@ -685,10 +691,13 @@ def report(campaign):
          'a failed cache reset makes speed comparisons uncontrolled.\n'
          if result['source_mode']=='fixed_fixture' else
          'New-source clinical accuracy is pending source adjudication. Field validity and literal evidence checks are separate from entailment and recall.\n'))
-    if campaign['config'].get('experiment')=='overnight_v3':
+    if campaign['config'].get('experiment') in {'overnight_v3','bundle_v4'}:
         from .overnight import write_comparison
         result['prompt_optimization']=write_comparison(campaign,result)
         result['deferred']=run.get('deferred',[])
+        if campaign['config'].get('experiment')=='bundle_v4':
+            from .bundle_report import write_bundle_comparison
+            result['joint_program_optimization']=write_bundle_comparison(campaign,result)
         write_json(work/'summary.json',result)
     return result
 
@@ -751,9 +760,9 @@ def archive_results(campaign, output):
     if output.exists() or output.is_relative_to(work):
         raise ValueError('Use a new archive filename outside the campaign')
     names = ('pilot.json','cpu.json','gpu.json','bootstrap.json','gepa.json','recovery.json','gepa-servers',
-             'bootstrap-error.json','gepa-error.json','summary.json','SUMMARY.md','COMPARISON.md','source-cleanup.json',
+             'bootstrap-error.json','gepa-error.json','summary.json','SUMMARY.md','COMPARISON.md','BUNDLE_COMPARISON.md','source-cleanup.json',
              'bootstrap-telemetry.jsonl','gepa-telemetry.jsonl','gpu-telemetry.jsonl',
-             'source-owner.json','progress.json','review-source-sample.json','extraction','logs','vision-assets','profile/counts.jsonl.gz',
+             'source-owner.json','progress.json','review-source-sample.json','benchmark','extraction','logs','vision-assets','profile/counts.jsonl.gz',
              'profile/profile.json','profile/SUMMARY.md','profile/rosters.json',
              'profile/token-histograms.png','profile/token-histograms.svg','profile/token-histograms.json',
              'cpu-error.json','gpu-error.json','source-cleanup-error.json',
@@ -765,7 +774,7 @@ def archive_results(campaign, output):
                   'holdout/profile/token-histograms.png','holdout/profile/token-histograms.svg',
                   'holdout/profile/token-histograms.json')
     files = []
-    deduplicate = (campaign['config'].get('experiment') in {'refinement_v2','overnight_v3'} and
+    deduplicate = (campaign['config'].get('experiment') in {'refinement_v2','overnight_v3','bundle_v4'} and
                    (work/'gpu.json').exists() and read_json(work/'gpu.json').get('status') == 'completed')
     def redundant_attempts(path):
         task_dir = path.parent/'tasks'
@@ -817,7 +826,7 @@ def archive_results(campaign, output):
                     continue
                 files.append(entry)
     total = sum(p.stat().st_size for p in files)
-    if total > (32_000_000_000 if campaign['config'].get('experiment')=='overnight_v3' else 2_000_000_000):
+    if total > (32_000_000_000 if campaign['config'].get('experiment') in {'overnight_v3','bundle_v4'} else 2_000_000_000):
         raise ValueError('Result export exceeds the campaign archive size cap')
     created = False
     try:

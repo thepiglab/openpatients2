@@ -73,3 +73,10 @@
 ## 0.2.0
 
 Initial extraction, validation, serving-profile, benchmark, cohort-index and CPU/mock-tested release.
+## 2026-10-05 — Patient-bundle prompt optimization
+
+- Add a single-command overnight campaign with 31 curated source articles, 305 clinical field checks, identity alignment, relative course nodes/edges, summary concepts and limited hash-bound pixel inventories. Keep test articles and labels outside optimizer feedback.
+- Match independent GEPA rollouts to deployed repairs and add joint optimization of the fresh live patient program across 29 operational prompt components. Require fresh validation, clinical nonregression and no increase in known forbidden facts before selecting a candidate.
+- Compare live/frozen discovery, rewritten prompt subsets, source-grounded completion, pixel ownership, context/prefill budgets and DFlash. Scatter independent calls across replicas and concurrently audit independent batches; record failures, deferred work and pooled throughput.
+- Complete timelines and summaries after clinical backfill, protect earlier supported fact links, recover explicitly named medication routes and reject malformed Creative Commons jurisdictions. Preserve source, candidate and repair audits.
+- Retain CPU-only acquisition/cleanup, one-GPU family search and eight-GPU joint/extraction phases. No model or large article corpus is downloaded locally and no experiment automatically changes production defaults.

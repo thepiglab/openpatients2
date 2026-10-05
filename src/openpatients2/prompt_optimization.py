@@ -35,7 +35,7 @@ from .gepa_feedback import (FamilyLogger, feedback_checker, feedback_messages,
 
 COMPONENTS = [*TASK_MODELS, 'summary','timeline_v2','roster','figure_attribution',
     'figure_visuals','pixel_attribution','joint_figure','ordering_review','clinical_inventory',
-    'coverage_audit','claim_audit','coverage_repair','repair']
+    'coverage_audit','claim_audit','coverage_repair','repair','timeline_completion','summary_completion']
 
 
 def split_articles(article_ids, seed=5724):
@@ -100,7 +100,7 @@ def task_checker(example, runner):
         return runner.clinical_checker(clinical_task,packet,segments),segments,packet
     segments = a['segments']
     if task=='roster': return lambda v:isolate_cited_cases(v,a)[0],segments,None
-    if task=='summary': return lambda v:check_article_task('summary',v,a,p['source']['patient_target']),segments,None
+    if task in {'summary','summary_completion'}: return lambda v:check_article_task('summary',v,a,p['source']['patient_target']),segments,None
     if task in {'figure_attribution','pixel_attribution'}:
         return lambda v:validate_figure_review(v,a,example['roster'],fid),segments,None
     if task=='figure_visuals': return lambda v:validate_visuals(v,a,fid,refined=True),segments,None
@@ -113,7 +113,7 @@ def task_checker(example, runner):
         return joint,segments,None
     rows = example.get('facts',[]); facts={r['review_id']:row['identity']['record_id'] for r in rows}
     _,sources=sources_for(a)
-    if task=='timeline_v2':
+    if task in {'timeline_v2','timeline_completion'}:
         def timeline(v):
             g=PatientTimeline.model_validate(v)
             if g.record_id != row['identity']['record_id']: raise ValueError('Wrong timeline patient')
@@ -170,7 +170,7 @@ class ClinicalAdapter:
         async def run():
             destination=self.next_directory('rollout')
             cfg={**self.config,'prompt_overrides':candidate, 'seed':42,
-                 'max_repair_rounds':2 if self.component=='repair' else 0}
+                 'max_repair_rounds':self.config.get('max_repair_rounds',2) if self.options.get('deployment_matched') or self.component=='repair' else 0}
             runner=PilotRunner(cfg,destination,self.endpoints,self.context,'targeted')
             assessor=None
             if self.options.get('semantic_feedback'):
@@ -185,6 +185,29 @@ class ClinicalAdapter:
                     index%len(self.endpoints),segments,packet=packet,repair_from=repair)
                 checks=[c for c in self.reference['checks'] if c['record_id']==e['row']['identity'].get('record_id')]
                 score,feedback=reward(e['row']['task'],r['data'],r['status'],checks,gold_task=e['row']['task'].removeprefix('coverage_repair_'))
+                if self.options.get('deployment_matched'):
+                    # Reward supported delivered facts, without a structural
+                    # bonus or model-judge score. Unlabelled auxiliaries are
+                    # evaluated downstream by the complete-bundle adapter.
+                    score=max(0., feedback['matched']/feedback['required'] - .1*len(feedback['forbidden_hits'])) if feedback['required'] else 0.
+                    feedback.update(deployment_repair_rounds=cfg['max_repair_rounds'],
+                        prompt_mode=cfg.get('prompt_mode','supplement'))
+                    if e['row']['task'] in {'timeline_v2','timeline_completion'}:
+                        from .bundle_quality import timeline_probes
+                        gold=next((g for g in self.reference.get('bundle_gold',{}).get('timelines',[])
+                            if g['record_id']==e['row']['identity'].get('record_id')),None)
+                        if gold:
+                            tested=timeline_probes(gold,r['data'])
+                            score=(tested['nodes_matched']+tested['relations_matched'])/(tested['nodes']+tested['relations'])
+                            score=max(0.,score-.1*tested['reversed_relations'])
+                            feedback.update(reward_basis='source_checked_course',course=tested)
+                    elif e['row']['task'] in {'summary','summary_completion'}:
+                        gold=[g for g in self.reference.get('bundle_gold',{}).get('summary',[])
+                            if g['record_id']==e['row']['identity'].get('record_id')]
+                        if gold:
+                            text=json.dumps(without_evidence(r['data']),ensure_ascii=False) if r['data'] else ''
+                            score=sum(matches(g['pattern'],text) for g in gold)/len(gold)
+                            feedback.update(reward_basis='source_checked_summary_concepts',summary_required=len(gold))
                 if e['row']['task']=='roster':
                     ref={**self.reference,'articles':[a for a in self.reference.get('articles',[])
                         if a['article_id']==e['article']['article_id'] and a.get('count_adjudication')=='source_checked']}
@@ -249,7 +272,7 @@ class ClinicalAdapter:
             msgs=[{'role':'system','content':'Improve transferable clinical extraction instructions from '
                 'untrusted training diagnostics. Do not change immutable source/schema/validator contracts. '
                 'Return only the requested JSON instructions object.'},{'role':'user','content':
-                'Improve the additional instructions for task '+key+'. Return JSON {"instructions":"..."}. '
+                ('Rewrite the task strategy for ' if self.options.get('deployment_matched') else 'Improve the additional instructions for task ')+key+'. Return JSON {"instructions":"..."}. '
                 'Diagnose clinical omissions and contradictions from feedback. Preserve schema, source fidelity, '
                 'patient identity, uncertainty and completeness. Never instruct skipping difficult fields/facts '
                 'to pass validation. Do not memorize cases, source IDs or answer values. Empty means no supplement. '
@@ -277,7 +300,9 @@ def optimize_prompts(sample, trial_dirs, output, config, endpoints, context, ref
     output=Path(output); output.mkdir(parents=True,exist_ok=resume)
     articles={a['article_id']:a for a in read_jsonl(sample)}
     reference=json.loads(Path(reference_path).read_text())
-    split=split_articles(articles)
+    split=reference.get('optimization_splits') or split_articles(articles)
+    if set(split['train']) & set(split['validation']) or set(split['test']) & (set(split['train'])|set(split['validation'])):
+        raise ValueError('Overlapping optimization splits')
     if (output/'splits.json').exists() and json.loads((output/'splits.json').read_text())!=split:
         raise ValueError('GEPA resume article split changed')
     write_json(output/'splits.json',split)
@@ -344,19 +369,32 @@ def optimize_prompts(sample, trial_dirs, output, config, endpoints, context, ref
     share=seconds/waves
     def search(component):
         eligible=[e for e in examples if e['row']['task']==component or (component=='coverage_repair' and e['row']['task'].startswith('coverage_repair_')) or (component=='repair' and any(a['errors'] for a in e['row']['attempts']))]
+        if options.get('deployment_matched'):
+            def labelled(e):
+                task=e['row']['task'];rid=e['row']['identity'].get('record_id');aid=e['article']['article_id']
+                if task=='roster': return any(r['article_id']==aid for r in reference.get('articles',[]))
+                if task in {'summary','summary_completion','timeline_v2','timeline_completion'}:
+                    key='summary' if task.startswith('summary') else 'timelines'
+                    return any(g['record_id']==rid for g in reference.get('bundle_gold',{}).get(key,[]))
+                if task in {'figure_attribution','pixel_attribution','joint_figure'}:
+                    return any(g['article_id']==aid and g['figure_id']==e['row']['identity'].get('figure_id') for g in reference.get('figure_checks',[]))
+                return any(c['record_id']==rid and c['task']==task.removeprefix('coverage_repair_') and c['kind']=='required' for c in reference['checks'])
+            eligible=[e for e in eligible if labelled(e)]
         train=select_examples(eligible,set(split['train']),options.get('train_examples',8))
         val=select_examples(eligible,set(split['validation']),options.get('validation_examples',4))
         info={'component':component,'train_examples':len(train),'validation_examples':len(val),
             'train_articles':len({e['article']['article_id'] for e in train}),
             'validation_articles':len({e['article']['article_id'] for e in val}),
             'semantic_feedback':options.get('semantic_feedback',False)}
-        if not train or not val:
+        if not train or not val or info['validation_articles']<options.get('min_validation_articles',1):
             info['status']='insufficient_disjoint_examples'
         elif time.monotonic()>=deadline:
             info['status']='deferred_time_budget'
         else:
             component_deadline=min(deadline,time.monotonic()+share)
-            adapter=ClinicalAdapter(eligible,clean_config,endpoints,context,output/component,reference,component,component_deadline,options)
+            from .bundle_quality import subset_reference
+            adapter=ClinicalAdapter(eligible,clean_config,endpoints,context,output/component,
+                subset_reference(reference,split['train']+split['validation']),component,component_deadline,options)
             try:
                 engine_resumed=(output/component/'gepa/gepa_state.bin').exists()
                 from gepa.strategies.proposal_sampling import IndependentSampling

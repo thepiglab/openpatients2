@@ -44,6 +44,18 @@ def normalize_clinical(task, candidate, segments):
                     audit.append({'pointer': path + '/route', 'before': None, 'after': route,
                         'reason': 'explicit_route_in_name_and_own_source_quote',
                         'clinical_entailment_verified': False})
+                elif name and not re.search(r'[\n\r]',name):
+                    # Require direct attachment to THIS named drug. A route
+                    # elsewhere in a paragraph may belong to another drug.
+                    attached = re.findall(r'\b(IV|intravenous|oral|subcutaneous|intramuscular)\s+'
+                        +re.escape(name)+r'\b',quotes,re.I)
+                    routes = {('IV' if word.lower() in {'iv','intravenous'} else word.lower())
+                              for word in attached}
+                    if len(routes)==1:
+                        route=routes.pop();obj['route']=route
+                        audit.append({'pointer':path+'/route','before':None,'after':route,
+                            'reason':'explicit_route_directly_attached_to_named_drug_in_own_evidence',
+                            'clinical_entailment_verified':False})
             for key, child in list(obj.items()):
                 if key != 'evidence': visit(child, path + '/' + key)
     visit(result)

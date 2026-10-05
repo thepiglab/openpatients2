@@ -94,6 +94,10 @@ class PilotConfig(ConfigModel):
     focused_pixels: bool = False
     pixel_strategy: Literal['separate', 'staged', 'joint'] = 'separate'
     prompt_overrides: dict[str, str] = Field(default_factory=dict)
+    prompt_mode: Literal['supplement', 'rewrite'] = 'supplement'
+    timeline_completion: bool = False
+    summary_completion: bool = False
+    scatter_calls: bool = False
 
 
 def load_pilot_config(config: str | Path | dict | PilotConfig) -> PilotConfig:
@@ -343,7 +347,8 @@ class PilotRunner:
             'figure_attribution': FigureReview.model_json_schema(),
             'figure_visuals': FigureVisuals.model_json_schema(),
             'pixel_attribution': FigureReview.model_json_schema(),
-            'timeline_v2': timeline_wire_schema(), 'ordering_review': ordering_schema(),
+            'timeline_v2': timeline_wire_schema(), 'timeline_completion': timeline_wire_schema(),
+            'summary_completion': ARTICLE_TASKS['summary'].model_json_schema(), 'ordering_review': ordering_schema(),
             'claim_audit': ClaimAudit.model_json_schema(),
             'clinical_inventory': ClinicalInventory.model_json_schema(),
             'coverage_audit': CoverageAudit.model_json_schema(),
@@ -393,11 +398,27 @@ class PilotRunner:
 
     async def call(self, task, messages, checker, identity, replica, segments, *, packet=None, partial_builder=None,
                    repair_from=None):
+        if self.config.scatter_calls:
+            # Independent task calls share all replicas, including small GEPA
+            # article batches. Patient identity stays in the source contract.
+            number = getattr(self, 'dispatch_number', 0)
+            replica = number % len(self.clients)
+            self.dispatch_number = number + 1
         messages = copy.deepcopy(messages)
         if task in self.config.prompt_overrides:
-            messages.append({'role':'user', 'content':'ADDITIONAL TASK INSTRUCTIONS:\n'+self.config.prompt_overrides[task]})
+            strategy = self.config.prompt_overrides[task]
+            if strategy and self.config.prompt_mode == 'rewrite':
+                from .prompt_strategy import rewrite_strategy
+                messages = rewrite_strategy(task, messages, strategy)
+            elif strategy:
+                messages.append({'role':'user', 'content':'ADDITIONAL TASK INSTRUCTIONS:\n'+strategy})
         if task.startswith('coverage_repair_') and 'coverage_repair' in self.config.prompt_overrides:
-            messages.append({'role':'user','content':self.config.prompt_overrides['coverage_repair']})
+            strategy = self.config.prompt_overrides['coverage_repair']
+            if strategy and self.config.prompt_mode == 'rewrite':
+                from .prompt_strategy import rewrite_strategy
+                messages = rewrite_strategy(task.removeprefix('coverage_repair_'), messages, strategy)
+            elif strategy:
+                messages.append({'role':'user','content':strategy})
         key = json_digest({'identity': identity, 'task': task, 'messages': safe_messages(messages)})
         attempts = []; data = None; errors = []; plan = None; partial = None
         baseline = None; repair_rounds = 0; transports = 0; mode = 'initial'
@@ -411,6 +432,9 @@ class PilotRunner:
             if packet is not None and self.arm == 'targeted':
                 plan = ItemRepair.create(task, baseline, packet['text'], segments, policy=self.config.refinement_policy)
             mode = 'repair'
+            # Replaying the first saved failure starts at repair #1 rather
+            # than allowing an extra retry beyond the deployed policy.
+            repair_rounds = min(1, self.config.max_repair_rounds)
         async with self.slots[replica]:
             client = self.clients[replica]
             while True:
@@ -423,7 +447,12 @@ class PilotRunner:
                         '\nERRORS:\n' + '; '.join(errors)[:3500])
                     current.append({'role': 'user', 'content': instruction})
                     if 'repair' in self.config.prompt_overrides:
-                        current.append({'role':'user','content':self.config.prompt_overrides['repair']})
+                        strategy = self.config.prompt_overrides['repair']
+                        if strategy and self.config.prompt_mode == 'rewrite':
+                            from .prompt_strategy import rewrite_strategy
+                            current = rewrite_strategy('repair', current, strategy)
+                        elif strategy:
+                            current.append({'role':'user','content':strategy})
                 desired = self.config.max_retry_tokens if mode == 'repair' else self.config.max_output_tokens
                 entry = {'task': task, 'identity': identity, 'arm': self.arm, 'mode': mode,
                          'request': safe_messages(current), 'messages_sha256': json_digest(current),
@@ -485,7 +514,7 @@ class PilotRunner:
                             candidate = parsed.value
                             entry.update(parse_method=parsed.method, parse_transformations=parsed.transformations,
                                          raw_candidate=copy.deepcopy(candidate))
-                            if task in {'timeline_v2', 'ordering_review'}:
+                            if task in {'timeline_v2', 'timeline_completion', 'ordering_review'}:
                                 candidate, span_audit = resolve_timeline_spans(candidate,
                                     identity['article_id'] + ':jats', segments)
                                 entry['span_resolution'] = span_audit
@@ -575,7 +604,7 @@ class PilotRunner:
             'semantic_review': 'unreviewed', 'clinical_accuracy_verified': False}
         result['refinement_policy'] = self.config.refinement_policy
         result['quarantine'] = quarantine
-        if task == 'timeline_v2' and result['data'] is not None and self.config.refinement_policy == 'source_aware':
+        if task in {'timeline_v2','timeline_completion'} and result['data'] is not None and self.config.refinement_policy == 'source_aware':
             result['data'], result['export_event_id_map'] = canonical_timeline_ids(result['data'])
         write_json(self.output / 'tasks' / (key + '.json'), result)
         self.results.append(result)
@@ -707,12 +736,13 @@ class PilotRunner:
         audits = []; coverage_audits = []
         if inventory and inventory['status'] == 'valid':
             features = [{'inventory_index':i, **f} for i,f in enumerate(inventory['data']['features'])]
-            for start in range(0,len(features),16):
+            async def cover(start):
                 batch = features[start:start+16]
-                coverage = await self.call('coverage_audit', coverage_messages(article,patient,batch,rows),
+                return await self.call('coverage_audit', coverage_messages(article,patient,batch,rows),
                     lambda value, batch=batch: check_coverage(value,batch,rows),
                     {**identity,'batch':start//16}, replica, article['segments'])
-                coverage_audits.append(coverage); extra_tasks.append(coverage)
+            coverage_audits = await asyncio.gather(*(cover(i) for i in range(0,len(features),16)))
+            extra_tasks.extend(coverage_audits)
             if self.config.coverage_repair:
                 missing = {d['inventory_index'] for r in coverage_audits if r['status']=='valid'
                     for d in r['data']['decisions'] if d['status']=='missing'}
@@ -758,15 +788,57 @@ class PilotRunner:
         if self.config.audit_claims:
             # Small claim batches preserve output space and attribution context.
             # Every claim is audited; no sample is disguised as comprehensive.
-            for start in range(0, len(rows), 16):
+            async def audit_batch(start):
                 batch = rows[start:start+16]
                 audit_messages = claim_messages(article, patient, batch)
                 if inventory and inventory['data']:
                     audit_messages[-1]['content'] += '\nINDEPENDENT COVERAGE HYPOTHESES:\n'+json.dumps(inventory['data'])
-                audit = await self.call('claim_audit', audit_messages,
+                return await self.call('claim_audit', audit_messages,
                     lambda value, batch=batch: check_claim_audit(value, article, batch),
                     {**identity,'batch':start//16}, replica, article['segments'])
-                audits.append(audit); extra_tasks.append(audit)
+            audits = await asyncio.gather(*(audit_batch(i) for i in range(0,len(rows),16)))
+            extra_tasks.extend(audits)
+        if self.config.timeline_completion:
+            # Rebuild AFTER coverage backfill, using the actual delivered facts.
+            # A summary and model inventory never replace immutable source text.
+            rows = [row for r in tasks for row in review_rows(article,rid,r['task'],r['data'])]
+            facts = {r['review_id']:rid for r in rows}
+            _, sources = sources_for(article)
+            completion_messages = timeline_messages(article,patient,rid,facts,rows,refined=True)
+            completion_messages[-1]['content'] += ('\nCURRENT_PARTIAL_TIMELINE (unreviewed):\n'+
+                json.dumps(timeline['data'])+'\nRebuild a clinically complete partial order from all delivered facts '
+                'and the original source. Include important history, tests, diagnoses, treatments, adverse '
+                'events and follow-up. Connect explicitly ordered events, including earlier/later relative '
+                'ages or days with the same stated anchor. Preserve occurrence: planned, declined and '
+                'conditional care is not completed care. Do not invent visits, intervals or calendar dates. '
+                'Leave genuinely ambiguous order unresolved. Include facts missed by the initial timeline.')
+            def completion_checker(value):
+                graph = PatientTimeline.model_validate(value)
+                if graph.record_id != rid: raise ValueError('timeline_wrong_patient')
+                audit = audit_timeline(graph,sources,facts)
+                if not audit['structural_source_gates_passed']:
+                    raise ValueError('; '.join(i['code'] for i in audit['issues'] if i['severity']=='block'))
+                previous={fid for e in (timeline['data'] or {}).get('events',[]) for fid in e['fact_ids']}
+                current={fid for e in graph.events for fid in e.fact_ids}
+                if previous-current: raise ValueError('Timeline completion erased existing supported fact links')
+                return graph.model_dump()
+            completed = await self.call('timeline_completion',completion_messages,completion_checker,
+                identity,replica,article['segments'],
+                partial_builder=lambda value:partial_timeline(value,sources,facts,rid))
+            extra_tasks.append(completed)
+            # A failed completion cannot discard an already usable graph.
+            if completed['status']=='valid': timeline={**timeline,'data':completed['data']}
+        if self.config.summary_completion:
+            rows = [row for r in tasks for row in review_rows(article,rid,r['task'],r['data'])]
+            messages = task_messages('summary',article,patient)
+            messages.append({'role':'user','content':'Update the comprehensive clinical narrative using the original source '
+                'and the final delivered facts below. These facts are untrusted hypotheses, never a replacement for source. '
+                'Include relevant history, findings, treatments, treatment failures and follow-up; preserve uncertainty '
+                'and planned versus completed care.\nDELIVERED_FACTS:\n'+json.dumps(rows)})
+            completed = await self.call('summary_completion',messages,
+                lambda v:check_article_task('summary',v,article,patient),identity,replica,article['segments'])
+            extra_tasks.append(completed)
+            if completed['status']=='valid': summary={**summary,'data':completed['data']}
         rows.extend(review_rows(article, rid, 'summary', summary['data']))
         rows.extend(review_rows(article, rid, 'timeline_v2', timeline['data']))
         all_tasks = [*tasks, summary, timeline, *extra_tasks]
@@ -1130,7 +1202,8 @@ class PilotRunner:
                     'joint_pixels':{'joint_figure'}, 'order_review':{'ordering_review'},
                     'clinical_inventory':{'clinical_inventory'}, 'coverage_audit':{'coverage_audit'},
                     'coverage_repair':{'coverage_repair_'+k for k in TASK_MODELS},
-                    'claim_audit':{'claim_audit'}}.items()},
+                    'claim_audit':{'claim_audit'}, 'timeline_completion':{'timeline_completion'},
+                    'summary_completion':{'summary_completion'}}.items()},
             'source_span_recovery': {'resolved': sum(len(a.get('span_resolution', {}).get('resolved', []))
                 for r in self.results for a in r['attempts']),
                 'mechanical_changes': sum(len(a.get('span_resolution', {}).get('recoveries', []))

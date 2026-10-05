@@ -4,6 +4,10 @@
 
 A uv Python project for turning licensed PMC full articles and Open-Patients source cases into evidence-backed patient records. It supports patient discovery, species, 14 clinical sections, cited summaries, relative timelines, actual figure inspection, terminology grounding and cohort queries through OpenAI-compatible endpoints. Serving profiles include experimental Muse Glimmer and Gemma 4 31B layouts for eight B200 GPUs.
 
+The [vLLM / B200 lessons learned](docs/VLLM_B200_LESSONS_LEARNED.md) consolidate the measured K2 and Glimmer runs: exact serving recipes, throughput tables, DP/TP and DFlash tradeoffs, context budgets, clinical-quality limits, failed configurations, GPU lifecycle fixes and HiPerGator operating commands.
+
+The [patient-bundle overnight campaign](docs/PATIENT_BUNDLE_OVERNIGHT.md) compares independent and whole-program GEPA with actual repairs, live patient discovery and final timeline/summary completion. It uses 31 bounded sources, 305 clinical checks, reviewed relative-order probes and limited native-pixel labels. Launch all CPU/GPU stages and cleanup with `bash scripts/run_bundle_overnight.sh` on HiPerGator.
+
 The [clinical GEPA overnight campaign](docs/GEPA_CLINICAL_OVERNIGHT.md) compares checklist and source-grounded prompt optimization across 27 prompt families, with repair replay, live roster training examples, 64K/128K extraction, pixels and bounded new sources. Launch the full CPU→bootstrap→GEPA→extraction→cleanup chain with `bash scripts/run_gepa_clinical_overnight.sh` on HiPerGator.
 
 The [fixed-source correctness campaign](docs/CORPUS_CORRECTNESS.md) compares whole-article and compact patient inputs on 20 previously downloaded articles, across three seeds. One command schedules CPU preparation, eight-B200 FP8/DFlash inference, source-checklist scoring, reporting and owned-download cleanup. It separates live discovery, first-pass versus delivered facts, timelines, caption/pixel ownership and schema validity.

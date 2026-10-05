@@ -53,10 +53,11 @@ def license_identity(value: str | None) -> dict | None:
         host, path = (parsed.hostname or '').lower().removeprefix('www.'), parsed.path.rstrip('/')
         url = raw
         if host == 'creativecommons.org':
-            match = re.fullmatch(r'/licenses/(by(?:-nc)?(?:-sa|-nd)?)/(\d+\.\d+)(?:/([a-z-]+))?(?:/(?:legalcode|deed)(?:\.[a-z_-]+)?)?', path, re.I)
+            match = re.fullmatch(r'/licenses/(by(?:-nc)?(?:-sa|-nd)?)/(\d+\.\d+)(?:/([a-z]{2}|igo|legalcode|deed))?(?:/(?:legalcode|deed)(?:\.[a-z_-]+)?)?', path, re.I)
             if match:
                 code, version = 'CC '+match[1].upper(), match[2]
-                jurisdiction = match[3] if match[3] not in {'legalcode','deed'} else None
+                suffix=(match[3] or '').lower()
+                jurisdiction = suffix if suffix and suffix not in {'legalcode','deed'} else None
             else:
                 match = re.fullmatch(r'/publicdomain/(zero|mark)/(\d+\.\d+)(?:/(?:legalcode|deed)(?:\.[a-z_-]+)?)?', path, re.I)
                 if match:

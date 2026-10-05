@@ -16,7 +16,8 @@ VARIANT_FIELDS={'name','arm','input_scope','roster','overrides'}
 
 def validate_plan(config):
     from .pilot_extract import PilotConfig
-    if config.get('source_mode')!='fixed_fixture' or config['sample_size']!=20:
+    bundle=config.get('experiment')=='bundle_v4'
+    if config.get('source_mode')!='fixed_fixture' or config['sample_size']!=(31 if bundle else 20):
         raise ValueError('Overnight trial uses the twenty canonical regression articles')
     if not 2<=len(config['seeds'])<=12 or len(set(config['seeds']))!=len(config['seeds']):
         raise ValueError('Use 2–12 unique seeds')
@@ -36,6 +37,18 @@ def validate_plan(config):
         raise ValueError('Bound GEPA to 128–512 task evaluations per prompt')
     if not 600<=config['gepa_seconds']<=7200: raise ValueError('Bound GEPA phase to 10–120 minutes')
     if not 1<=config.get('gepa_workers',8)<=8: raise ValueError('Use 1–8 concurrent GEPA families')
+    if bundle:
+        from .bundle_quality import validate_bundle_gold
+        from .data import read_jsonl
+        validate_bundle_gold(read_json(config['fidelity_reference']),list(read_jsonl(config['fixed_source'])))
+        if not config.get('separate_gepa') or config.get('gepa_profiles'): raise ValueError('Bundle trial uses one separate deployed GEPA profile')
+        options=config.get('gepa_options',{})
+        if options.get('semantic_feedback') or not options.get('deployment_matched'):
+            raise ValueError('Bundle suite requires source labels and deployed repairs; no self-judge reward')
+        if not 600<=config.get('joint_gepa_seconds',0)<=7200 or not 128<=config.get('joint_gepa_calls',0)<=1024:
+            raise ValueError('Invalid joint program GEPA budget')
+        if config['gpu_budget_seconds']<config['joint_gepa_seconds']+3600:
+            raise ValueError('Reserve time for comparison after joint GEPA')
     profiles=config.get('gepa_profiles',[])
     if profiles:
         if len(profiles)!=2 or {p['name'] for p in profiles}!={'checklist','clinical'}:
@@ -66,6 +79,7 @@ async def run_trials(campaign,destination,endpoints,context,cell,deadline, *, bo
     rows=[]; discoveries=[]; deferred=[]; executed=set(); bootstrap=[]
     variants={v['name']:v for v in config['variants']}
     prompts={}; gepa_report=None
+    independent={}; joint={}
     async def trial(seed,variant, *, source='regression',cached=None):
         name=variant['name']; path=destination/source/f'seed{seed}'/name
         if campaign['config'].get('separate_gepa') or campaign['config'].get('resume_from'):
@@ -88,14 +102,15 @@ async def run_trials(campaign,destination,endpoints,context,cell,deadline, *, bo
             return None
         cfg={**base,**variant.get('overrides',{})}
         if name.startswith('gepa'):
-            cfg['prompt_overrides']=prompts
+            cfg['prompt_overrides']=joint if config.get('experiment')=='bundle_v4' else prompts
+            if name=='gepa-independent': cfg['prompt_overrides']=independent
             if name=='gepa-checklist': cfg['prompt_overrides']=read_json(work/'prompt-optimization/checklist/best-prompts.json')
             elif name=='gepa-clinical-only':
                 from .schemas import TASK_MODELS
-                cfg['prompt_overrides']={k:v for k,v in prompts.items() if k in TASK_MODELS}
+                cfg['prompt_overrides']={k:v for k,v in (independent or prompts).items() if k in TASK_MODELS}
             elif name=='gepa-aux-only':
                 from .schemas import TASK_MODELS
-                cfg['prompt_overrides']={k:v for k,v in prompts.items() if k not in TASK_MODELS}
+                cfg['prompt_overrides']={k:v for k,v in (independent or prompts).items() if k not in TASK_MODELS}
         if source=='new-sources': cfg['max_articles']=config['holdout_sample_size']
         manifest=work/('holdout/vision-assets/manifest.json' if source=='new-sources' else 'vision-assets/manifest.json')
         inputs=work/'holdout/profile/sample.jsonl.gz' if source=='new-sources' else sample
@@ -118,6 +133,14 @@ async def run_trials(campaign,destination,endpoints,context,cell,deadline, *, bo
                     visual_rows=measured['outputs']['visual_annotations'],
                     discovery=measured['outputs']['predicted_rosters'] if conditioning=='live' else None)
                 write_json(path/'fidelity.json',score); measured['fidelity']=score
+                if config.get('experiment')=='bundle_v4':
+                    from .bundle_quality import score_bundle, subset_reference
+                    ref=read_json(config['fidelity_reference'])
+                    media=[t for t in task_rows if t['task'] in {'figure_attribution','pixel_attribution','joint_figure'}]
+                    quality=score_bundle(ref,measured['outputs']['patients'],visual_rows=media,discovery=measured['outputs']['predicted_rosters'],pixel_rows=measured['outputs']['visual_annotations'])
+                    test=score_bundle(subset_reference(ref,ref['optimization_splits']['test']),measured['outputs']['patients'],visual_rows=media,discovery=measured['outputs']['predicted_rosters'],pixel_rows=measured['outputs']['visual_annotations'])
+                    measured.update(bundle_quality=quality,untouched_bundle_test=test)
+                    write_json(path/'bundle-quality.json',quality);write_json(path/'bundle-test.json',test)
                 split_path=work/'prompt-optimization/splits.json'
                 if split_path.exists():
                     split=read_json(split_path); ref=read_json(config['fidelity_reference'])
@@ -170,6 +193,25 @@ async def run_trials(campaign,destination,endpoints,context,cell,deadline, *, bo
     elif (work/'prompt-optimization/best-prompts.json').exists():
         prompts=read_json(work/'prompt-optimization/best-prompts.json')
 
+    if config.get('experiment')=='bundle_v4' and not bootstrap_only:
+        independent=prompts
+        joint_path=work/'prompt-optimization/joint-program'
+        if main and not (joint_path/'report.json').exists():
+            from .bundle_optimization import optimize_bundle
+            write_json(work/'progress.json',{'phase':'joint_program_gepa','allocated_gpus':len(endpoints)*cell.get('tensor_parallel',1),'time_unix':time.time()})
+            try:
+                joint,joint_report=await asyncio.to_thread(optimize_bundle,sample,joint_path,
+                    {**base,'image_manifest':str(work/'vision-assets/manifest.json')},endpoints,context,
+                    config['fidelity_reference'],independent,seconds=min(config['joint_gepa_seconds'],max(1,deadline-time.monotonic()-3600)),
+                    calls=config['joint_gepa_calls'])
+            except Exception as exc:
+                joint_report={'status':'failed','error_type':type(exc).__name__,'error':str(exc)}
+                write_json(joint_path/'report.json',joint_report)
+        if (joint_path/'best-prompts.json').exists(): joint=read_json(joint_path/'best-prompts.json')
+        # An unsuccessful search does not silently relabel independent prompts
+        # as a jointly optimized program. Controls still run and failures persist.
+        prompts=joint
+
     if main and config.get('holdout_source_config'):
         for seed in config['holdout_seeds']:
             if time.monotonic()+900>=deadline:
@@ -192,7 +234,9 @@ async def run_trials(campaign,destination,endpoints,context,cell,deadline, *, bo
         rotated=selected[index%len(selected):]+selected[:index%len(selected)]
         for v in rotated:
             if (seed,v['name']) in executed: continue
-            if v['name'].startswith('gepa') and not prompts:
+            uses_independent=(config.get('experiment')=='bundle_v4' and v['name'] in
+                {'gepa-independent','gepa-clinical-only','gepa-aux-only'})
+            if v['name'].startswith('gepa') and not (independent if uses_independent else prompts):
                 deferred.append({'seed':seed,'arm':'gepa','reason':'No optimized prompts available'})
                 continue
             await trial(seed,v)
