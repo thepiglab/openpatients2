@@ -58,7 +58,8 @@ def test_compact_context_keeps_exact_mixed_tables_captions_and_unresolved_blocks
     view, target, audit = patient_view(value, predicted, predicted['patients'][0])
     retained = {s['segment_id'] for s in view['segments']}
     assert {'b00002', 'b00003', 'b00004', 'b00005', 'b00006'} <= retained
-    assert 'b00001' not in retained  # reviewed background abstract
+    assert 'b00001' in retained  # shared context is visible, not attributed as individual facts
+    assert 'b00001' in audit['shared_context_segment_ids']
     assert set(target['source_segment_ids']) == retained
     original = {s['segment_id']: s['text'] for s in value['segments']}
     assert all(s['text'] == original[s['segment_id']] for s in view['segments'])

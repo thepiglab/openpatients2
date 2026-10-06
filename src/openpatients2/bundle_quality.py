@@ -38,12 +38,18 @@ def validate_bundle_gold(reference, articles):
         if collection:
             if collection not in model.model_fields: raise ValueError('Unknown benchmark collection')
             model=get_args(model.model_fields[collection].annotation)[0]
-        for key,value in check['pattern'].items():
-            if key not in model.model_fields: raise ValueError('Impossible benchmark field: '+key)
-            annotation=model.model_fields[key].annotation
-            values=value.get('one_of',[]) if isinstance(value,dict) else [value]
-            if get_origin(annotation) is Literal and any(isinstance(v,str) and v not in get_args(annotation) for v in values):
-                raise ValueError('Impossible benchmark enum: '+key)
+        def validate_pattern(pattern):
+            if set(pattern)=={'one_of'}:
+                if not pattern['one_of']: raise ValueError('Empty benchmark alternatives')
+                for alternative in pattern['one_of']: validate_pattern(alternative)
+                return
+            for key,value in pattern.items():
+                if key not in model.model_fields: raise ValueError('Impossible benchmark field: '+key)
+                annotation=model.model_fields[key].annotation
+                values=value.get('one_of',[]) if isinstance(value,dict) else [value]
+                if get_origin(annotation) is Literal and any(isinstance(v,str) and v not in get_args(annotation) for v in values):
+                    raise ValueError('Impossible benchmark enum: '+key)
+        validate_pattern(check['pattern'])
     by = {a['article_id']: a for a in articles}
     for row in reference.get('articles',[]):
         if type(row['expected_count']) is not int or row['expected_count']!=len(row.get('identities',[])) or len(row['species'])!=row['expected_count']:
@@ -87,6 +93,11 @@ def align_patients(reference, patients, discovery=None):
     rosters = {r['article_id']:r for r in _rows(discovery,'articles')} if discovery is not None else {}
     for gold in reference.get('articles', []):
         originals = [p for p in rows if p.get('source', {}).get('article_source', {}).get('article_id') == gold['article_id']]
+        if gold.get('evaluation_status')=='unadjudicated':
+            receipt.append({'article_id':gold['article_id'],'expected':gold['expected_count'],
+                'produced':len(originals),'identity_matched':0,'unmapped_or_ambiguous':len(originals),
+                'negative_case_correct':None,'id_mapping':{},'excluded_from_identity_score':True})
+            continue
         expected = gold.get('identities', [])
         choices = []
         for p in originals:
@@ -168,8 +179,9 @@ def score_bundle(reference, patients, *, visual_rows=None, discovery=None, pixel
         summaries.append({'record_id': g['record_id'], 'matched': matches(g['pattern'], text), 'available': bool(value)})
     clinical = scored['summary']['delivered']
     parts = {'clinical': (clinical['matched'], clinical['required'], .60),
-        'identity': (sum(r['identity_matched'] if r['expected'] else r['negative_case_correct'] for r in identities),
-                     sum(r['expected'] or 1 for r in identities), .15),
+        'identity': (sum(r['identity_matched'] if r['expected'] else r['negative_case_correct'] for r in identities
+                         if not r.get('excluded_from_identity_score')),
+                     sum(r['expected'] or 1 for r in identities if not r.get('excluded_from_identity_score')), .15),
         'temporal_nodes': (sum(r['nodes_matched'] for r in timelines), sum(r['nodes'] for r in timelines), .08),
         'temporal_relations': (sum(r['relations_matched'] for r in timelines), sum(r['relations'] for r in timelines), .08),
         'summary': (sum(r['matched'] for r in summaries), len(summaries), .04)}
@@ -205,7 +217,8 @@ def score_bundle(reference, patients, *, visual_rows=None, discovery=None, pixel
     active = {k: v for k, v in parts.items() if v[1]}
     raw = sum(hit / total * weight for hit, total, weight in active.values()) / sum(v[2] for v in active.values()) if active else 0.
     penalty = min(.5, .1 * clinical['forbidden_violations'] + .05 * sum(t['reversed_relations'] for t in timelines)
-                  + .05 * sum(r['unmapped_or_ambiguous'] for r in identities))
+                  + .05 * sum(r['unmapped_or_ambiguous'] for r in identities
+                              if not r.get('excluded_from_identity_score')))
     return {'score': max(0., raw - penalty), 'clinical': clinical, 'parts': {
         k: {'matched': h, 'required': n, 'weight': w} for k, (h, n, w) in active.items()},
         'identities': identities, 'timelines': timelines, 'summaries': summaries, 'figures': figure,'pixels':pixels,

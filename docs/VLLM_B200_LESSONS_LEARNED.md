@@ -1,6 +1,6 @@
 # vLLM on HiPerGator B200s: measured results and operating lessons
 
-Last consolidated: **2026-10-05**. This is the reference for what we actually learned
+Last consolidated: **2026-10-06**. This is the reference for what we actually learned
 from the K2, Glimmer precision, FP8 tuning, corpus, refinement and overnight GEPA
 campaigns. It records successful settings, failed experiments and confounders.
 The detailed reports linked below remain the evidence of record.
@@ -10,7 +10,8 @@ independent TP1 servers on one eight-B200 node, medium reasoning, prefix caching
 and PIECEWISE CUDA graphs. The fastest confirmed repeated-text cell reached
 **18,715 generated tokens/s across eight GPUs**. Complete clinical extraction
 arms generally ran around **5,000–6,500 tokens/s**, with repairs, attribution and
-audits. These are different workloads; the difference does not demonstrate an
+audits; the October 5 bundle suite ran around **8,900–9,600 tokens/s** for most
+medium-reasoning main arms. These are different workloads; the difference does not demonstrate an
 engine regression. Optimize supported, correctly attributed facts and usable
 patient records per GPU-hour, with token throughput as a diagnostic.
 
@@ -32,12 +33,54 @@ user's exclusion of a full BF16 checkpoint is not a claim that every tensor is F
 | Refinement, `run-20261003-153746` | Source-aware repair, quantities, relative chronology and panel scope | [Refinement review](../reports/CORPUS_REFINEMENT_20261003.md) |
 | Overnight recovery, `run-20261004-111240` | Separate one-GPU GEPA, eight-GPU extraction, repaired delivery and explicit partial outcomes | [Overnight review](../reports/OVERNIGHT_CLINICAL_20261004.md) |
 | Clinical GEPA, `run-20261004-204850` | Completed 27-family optimization and 66 trials; source-aware baseline wins strict delivery, focused timelines remain promising | [Clinical GEPA review](../reports/GEPA_CLINICAL_20261005.md) |
+| Bundle GEPA, `run-20261005-171140` | 43 comparisons completed, one ordinary control deferred; four independent rewrites, no validated joint rewrite; compact completion and better gold are next priorities | [Bundle review](../reports/BUNDLE_CLINICAL_20261006.md) |
 
 Historical B200 results use **vLLM 0.30.0**. Failures and recipes here apply to that
 pinned engine, checkpoint, template and workload. They are not compatibility
 claims for every later vLLM release. Hosted Muse Spark, Gemma and Inkling timings
 are not B200 measurements. No comparable completed Nemotron result was found in
 the saved model comparison. Failed access to an endpoint is not a quality score.
+
+### October 5 bundle campaign: allocation and measurement lessons
+
+The main stage took 6.94 hours on eight GPUs, including joint optimization and
+server initialization. Bootstrap took 40.1 minutes on eight GPUs; independent
+component optimization took 47.0 minutes on one GPU. Active-phase telemetry
+sample averages were 83.0% utilization during main extraction, 98.8% during the
+one-GPU searches, and only 42.0% during eight-GPU joint optimization. Small
+sequential rollouts and patient-free minibatches still underfill a pod. Cache
+unchanged parent evaluations and use fewer GPUs for sparse optimizer stages until
+there is enough independent work. These utilization values are sampled phase
+averages, not time-weighted kernel measurements.
+
+The live original-prompt complete arm pooled 8,955 completion tokens/s across
+three main seeds; the independent GEPA arm pooled 8,965. Calculate pooled rates
+as total completion usage divided by total arm wall time, not an unweighted mean
+of rates. A completed ordinary live control ran at 2,843 tok/s; its companion
+ordinary GEPA trial was deferred, so the ordinary quality comparison is incomplete.
+
+Late completion overflowed at 64K before inference because review payloads copied
+facts and evidence repeatedly. Do not try to fix pre-call overflow with reasoning
+strength: compact shared fact/evidence references and route genuine overflow
+selectively. High reasoning under the deployed 16K caps took 1.71× the original
+live arm's pooled time and lost more clinical checks. It is an escalation candidate,
+not an established replacement for medium across every stage.
+
+Reserve validation time **inside** the optimizer's expensive iterations. A stop
+callback between steps does not prevent a last rollout from exhausting the fresh
+confirmation budget. In this run the joint confirmation timed out, yet a
+`completed` optimizer receipt recorded zero score/facts. Missing confirmation must
+be reported as unavailable; it is neither clinical failure evidence nor a passed
+promotion gate. Selected joint prompts were the originals, so arm names alone
+cannot establish which prompt changes ran.
+
+The [October 6 corrections](BUNDLE_CORRECTIONS_20261006.md) move joint search onto
+the existing one-GPU optimization server, add successful-rollout caching and
+component-relevant positive training batches, and enforce confirmation reserves
+inside each rollout. Late completion now uses compact source references and
+serving-token-counted hint batches. These are locally verified changes, not new
+B200 throughput or clinical-quality measurements. Eight replicas still run the
+program comparisons; no serving recipe was changed.
 
 ## 2. The exact successful Glimmer recipe
 
@@ -458,7 +501,8 @@ average per-trial token rates or treat missing usage as zero. Include auxiliary
 and repair calls in evaluation rates; report startup, optimizer time and entire
 GPU-stage duration separately. The new suite keeps the FP8/DFlash serving recipe
 and tests context/prefill/draft confirmations without another unbounded engine
-sweep. Its 9.5-hour main-stage work budget includes joint search and initialization;
+sweep. The corrected suite's eight-hour main-stage work budget includes initialization;
+joint search has a separate 90-minute budget on the one-GPU optimization server;
 deferred experiments remain explicit. An overnight time estimate excludes queues
 and is not a completion guarantee.
 

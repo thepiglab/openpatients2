@@ -16,6 +16,7 @@ max_figures: 12
 pixel_total_bytes: 64000000
 historical_regression: false
 separate_gepa: true
+joint_gepa_in_separate_stage: true
 gepa_workers: 8
 matrix:
 - context: 65536
@@ -23,7 +24,7 @@ matrix:
   tensor_parallel: 1
   speculation: dflash
   phase: main
-  budget_seconds: 25200
+  budget_seconds: 19800
 - context: 131072
   prefill: 32768
   tensor_parallel: 1
@@ -63,7 +64,7 @@ arms:
 source_mode: fixed_fixture
 fixed_source: benchmarks/patient-bundle/articles.jsonl.gz
 fixed_rosters: benchmarks/patient-bundle/rosters.json
-fidelity_reference: benchmarks/patient-bundle/reference.json
+fidelity_reference: benchmarks/patient-bundle/reference-reviewed.json
 seeds:
 - 42
 - 43
@@ -187,7 +188,7 @@ variants:
 experiment: bundle_v4
 prioritize_reference_figures: true
 reset_between_trials: true
-gpu_budget_seconds: 34200
+gpu_budget_seconds: 28800
 gepa_seconds: 5400
 gepa_metric_calls_per_prompt: 512
 trial_reserve_seconds: 600

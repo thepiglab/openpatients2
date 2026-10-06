@@ -14,6 +14,13 @@ jobs end because its source/configuration hashes are pinned.
 
 ## Changes motivated by the last run
 
+The current launcher also includes the [October 6 corrections](BUNDLE_CORRECTIONS_20261006.md):
+alias-safe repairs, compact/token-counted completion batches, unlinked-event
+retention, reviewed gold, and fresh GEPA confirmation with explicit unavailable
+metrics. Both family and joint optimization now use the one-B200 stage; the
+eight-B200 stage compares completed programs. This update has not yet been
+measured on the cluster.
+
 The [October 5 review](../reports/GEPA_CLINICAL_20261005.md) found that independent
 prompt supplements did not beat the strongest baseline on strict delivered
 fields. Many optimization rollouts had zero repairs, whereas evaluation used
@@ -68,8 +75,8 @@ generalize; it cannot create reliable clinical labels by itself.
 | Existing corpus-correctness articles | 20 canonical sources, including negatives |
 | Earlier K2/hosted-model full-text fixtures | 8 sources; one abstract-only source excluded |
 | Previously inspected new-source cases | 3 articles / 4 patients: infant, two aneurysm cases, thyroid case |
-| Total | 31 articles, 30 patient records |
-| Clinical probes | 261 required field assertions, 44 known forbidden assertions, covering all 14 clinical families |
+| Total | 31 articles; historical roster has 30 patients, one illustrative record now unadjudicated |
+| Clinical probes | Reviewed revision: 259 required field assertions, 44 known forbidden assertions; historical revision: 261/44 |
 | Course probes | 53 occurred-event nodes and 41 important before relationships, across 12 patient courses |
 | Summary probes | 53 source-supported course concepts |
 | Figure attribution | 10 source-bound figure/panel ownership probes |
@@ -91,7 +98,9 @@ patients. Newly labelled chronology covers tracheostomy before surgery, repeated
 radioiodine treatments, treatment failure/progression, poisoning courses and
 postoperative follow-up. The label compiler also corrected `C0018`: oncology
 uses `given/ongoing`, rather than medication/procedure action enums. The old
-reference files remain unchanged; comparisons to old runs need the new rubric.
+reference files remain unchanged. The launcher uses `reference-reviewed.json`;
+its targeted source audit records changed labels and the historical reference hash.
+Comparisons to old runs require rescoring under a common rubric.
 
 Preflight verifies source text/XML hashes, literal gold evidence, actual schema
 fields/enums, roster evidence and non-overlapping article splits. Article groups
@@ -173,12 +182,13 @@ the 64K/32K-prefill control. **Prefill budget is not context length.**
 CPU preparation/profiling, dependencies, checkpoint/container download and
 cleanup request no GPU. Bootstrap and complete-program comparison use one node,
 32 CPUs, 250 GB RAM and eight B200s under account/QOS `cai5724`. Independent
-family search requests one B200, 16 CPUs and 96 GB RAM. This preserves the proven
-allocation pattern from the last run. GEPA dependencies are already pinned in
+family and joint search share one B200, 16 CPUs and 96 GB RAM. The joint allocation
+is newly reduced from eight GPUs following the October 5 utilization results.
+GEPA dependencies are already pinned in
 `uv.lock`; CPU jobs install the `optimize` extra into the campaign's uv venv.
 
 Family search is bounded to 90 minutes and joint search to 90 minutes. The main
-GPU allocation has a 9.5-hour work budget inside its 12-hour Slurm limit,
+GPU allocation has an eight-hour work budget inside its 12-hour Slurm limit,
 including server initialization and layout changes. Expect roughly **8–12 active
 hours** across stages based on the earlier run, with substantial uncertainty for
 the larger workload and live discovery. Queue waits are additional. Lower-priority

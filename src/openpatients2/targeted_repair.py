@@ -14,6 +14,11 @@ PROTECTED = ('numeric_value', 'unit', 'dose_value', 'dose_unit', 'dose_text', 'v
 IDENTITY = ('subject', 'record_id', 'patient_id', 'tumor_ref')
 
 
+def canonical_clinical_task(task):
+    name = task.removeprefix('coverage_repair_')
+    return name if name in TASK_MODELS else None
+
+
 def repair_snapshot(task, value, checker):
     """Protect valid atoms, rather than every field of an untrusted draft.
 
@@ -152,7 +157,8 @@ case context and multi-collection oncology stay on full-section retry.
 
     @classmethod
     def create(cls, task, candidate, source, segments, *, policy='source_aware'):
-        if ('items' not in TASK_MODELS[task].model_fields or not isinstance(candidate, dict)
+        task = canonical_clinical_task(task)
+        if (task is None or 'items' not in TASK_MODELS[task].model_fields or not isinstance(candidate, dict)
                 or not isinstance(candidate.get('items'), list) or not candidate['items']):
             return None
         # Do not hide malformed envelope fields or unrelated extra keys by

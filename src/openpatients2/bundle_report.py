@@ -51,6 +51,9 @@ def write_bundle_comparison(campaign,result):
         f'Joint GEPA: {joint.get("status")}; selected original strategies: {joint.get("selected_original","unknown")}. '
         f'Baseline validation facts: {joint.get("baseline_validation_facts","unknown")}; '
         f'candidate confirmation facts: {joint.get("confirmation_validation_facts","unknown")}.','',
+        f'Fresh confirmation complete: {joint.get("confirmation_complete","unknown")}; '
+        f'clinical nonregression gate: {joint.get("clinical_nonregression_gate_passed","unknown")}. '
+        'Missing confirmation is unavailable, not zero medical accuracy.','',
         'Prompt-family search, candidate changes and selection receipts are in prompt-optimization/. '
         'A budget-limited search may not mutate every component; unchanged and underlabelled components are explicit. '
         'No test labels select prompts, no model-judge score enters the bundle objective, and no prompt is promoted to production.','',

@@ -47,8 +47,10 @@ def validate_plan(config):
             raise ValueError('Bundle suite requires source labels and deployed repairs; no self-judge reward')
         if not 600<=config.get('joint_gepa_seconds',0)<=7200 or not 128<=config.get('joint_gepa_calls',0)<=1024:
             raise ValueError('Invalid joint program GEPA budget')
-        if config['gpu_budget_seconds']<config['joint_gepa_seconds']+3600:
+        if not config.get('joint_gepa_in_separate_stage') and config['gpu_budget_seconds']<config['joint_gepa_seconds']+3600:
             raise ValueError('Reserve time for comparison after joint GEPA')
+    if config.get('joint_gepa_in_separate_stage') and (not bundle or not config.get('separate_gepa')):
+        raise ValueError('Separate joint GEPA requires the bundle experiment and separate GEPA stage')
     profiles=config.get('gepa_profiles',[])
     if profiles:
         if len(profiles)!=2 or {p['name'] for p in profiles}!={'checklist','clinical'}:
@@ -196,6 +198,9 @@ async def run_trials(campaign,destination,endpoints,context,cell,deadline, *, bo
     if config.get('experiment')=='bundle_v4' and not bootstrap_only:
         independent=prompts
         joint_path=work/'prompt-optimization/joint-program'
+        if config.get('joint_gepa_in_separate_stage') and not (
+                (joint_path/'report.json').exists() and (joint_path/'best-prompts.json').exists()):
+            raise ValueError('Joint GEPA belongs to the one-GPU stage; final receipts are missing')
         if main and not (joint_path/'report.json').exists():
             from .bundle_optimization import optimize_bundle
             write_json(work/'progress.json',{'phase':'joint_program_gepa','allocated_gpus':len(endpoints)*cell.get('tensor_parallel',1),'time_unix':time.time()})

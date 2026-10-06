@@ -372,7 +372,8 @@ def optimize_prompts(sample, trial_dirs, output, config, endpoints, context, ref
         if options.get('deployment_matched'):
             def labelled(e):
                 task=e['row']['task'];rid=e['row']['identity'].get('record_id');aid=e['article']['article_id']
-                if task=='roster': return any(r['article_id']==aid for r in reference.get('articles',[]))
+                if task=='roster': return any(r['article_id']==aid and r.get('evaluation_status')!='unadjudicated'
+                                              for r in reference.get('articles',[]))
                 if task in {'summary','summary_completion','timeline_v2','timeline_completion'}:
                     key='summary' if task.startswith('summary') else 'timelines'
                     return any(g['record_id']==rid for g in reference.get('bundle_gold',{}).get(key,[]))

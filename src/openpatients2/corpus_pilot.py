@@ -9,6 +9,7 @@ import asyncio
 import copy
 import gzip
 import json
+import math
 import os
 from pathlib import Path
 import signal
@@ -93,6 +94,7 @@ def prepare(root, work, config_path):
     load_pilot_config(config['extraction_config'])
     work.mkdir(parents=True); (work/'logs').mkdir()
     files = sorted((root/'src/openpatients2').rglob('*.py')) + [root/'uv.lock',root/'pyproject.toml',root/'scripts/corpus_pilot.sbatch']
+    files += sorted((root/'src/openpatients2/prompts').glob('*.md'))
     files += [Path(config[k]) for k in paths]
     files += sorted((root/'configs/hipergator/glimmer').glob('*'))
     manifest = {str(p):sha256(p) for p in files if p.is_file()}
@@ -151,6 +153,10 @@ def job_command(campaign, phase, dependency=None):
     cpus, mem, duration = ((16,'96G','03:00:00') if phase=='gepa' else
         (32,'250G','12:00:00')) if gpu_phase else CPU_RESOURCES[phase]
     if phase=='gepa' and config.get('gepa_profiles'): duration='04:00:00'
+    if phase=='gepa' and config.get('joint_gepa_in_separate_stage'):
+        family_seconds=sum(p['seconds'] for p in config.get('gepa_profiles',[])) or config['gepa_seconds']
+        hours=max(int(duration.split(':')[0]),math.ceil((family_seconds+config['joint_gepa_seconds']+1800)/3600))
+        duration=f'{hours:02d}:00:00'
     args = ['sbatch','--parsable','--nodes=1','--ntasks=1','--no-requeue',
         '--account='+config['account'],'--qos='+config['qos'],'--chdir='+root,
         '--cpus-per-task='+str(cpus),'--mem='+mem,'--time='+duration,
@@ -536,8 +542,34 @@ async def gpu(campaign):
     if campaign['config'].get('separate_gepa'):
         if not (work/'prompt-optimization/report.json').exists() or not (work/'prompt-optimization/best-prompts.json').exists():
             raise ValueError('GEPA stage did not produce its final receipts; no eight-GPU servers will be started')
+        if campaign['config'].get('joint_gepa_in_separate_stage'):
+            joint=work/'prompt-optimization/joint-program'
+            if not (joint/'report.json').exists() or not (joint/'best-prompts.json').exists():
+                raise ValueError('Joint GEPA stage did not produce final receipts; no eight-GPU servers will be started')
     with model_lock(work/'engine'):
         return await _gpu_locked(campaign)
+
+
+async def optimize_joint_program(campaign, config, endpoints, context, independent):
+    """Reuse the one-GPU server; a failed search retains explicit original controls."""
+    from .bundle_optimization import optimize_bundle
+    from .prompt_optimization import COMPONENTS
+    work=Path(campaign['work']); settings=campaign['config']
+    destination=work/'prompt-optimization/joint-program'
+    write_json(work/'progress.json',{'phase':'joint_program_gepa','allocated_gpus':1,'time_unix':time.time()})
+    try:
+        prompts,receipt=await asyncio.to_thread(optimize_bundle,work/'profile/sample.jsonl.gz',
+            destination,config,endpoints,context,settings['fidelity_reference'],independent,
+            seconds=settings['joint_gepa_seconds'],calls=settings['joint_gepa_calls'])
+    except Exception as exc:
+        prompts=dict.fromkeys(COMPONENTS,'')
+        receipt={'status':'failed','error_type':type(exc).__name__,'error':str(exc),
+            'selected_original':True,'confirmation_complete':False,'confirmation_score':None,
+            'confirmation_validation_facts':None,'clinical_nonregression_gate_passed':False}
+    receipt['allocated_gpus']=1
+    write_json(destination/'report.json',receipt)
+    write_json(destination/'best-prompts.json',prompts)
+    return receipt
 
 
 async def gepa_stage(campaign):
@@ -599,9 +631,14 @@ async def gepa_stage(campaign):
                     write_json(work/'prompt-optimization'/name,read_json(selected/name))
                 write_json(work/'prompt-optimization/profiles.json',profile_reports)
                 prompts=read_json(selected/'best-prompts.json')
+            joint_report=None
+            if config.get('joint_gepa_in_separate_stage'):
+                joint_report=await optimize_joint_program(campaign,base,endpoints,cfg.max_model_len,prompts)
             write_json(folder/'metrics-after.json',await server_metrics(endpoints))
-            result={'status':'completed' if all(p['status']=='completed' for p in profile_reports.values()) else 'partial',
+            result={'status':'completed' if all(p['status']=='completed' for p in profile_reports.values())
+                    and (joint_report is None or joint_report['status']=='completed') else 'partial',
                 'profiles':{name:p['status'] for name,p in profile_reports.items()},
+                'joint_program_status':joint_report['status'] if joint_report else 'not_requested',
                 'allocated_gpus':1,'parallel_searches':config.get('gepa_workers',8),
                 'stage_seconds':time.monotonic()-started,'prompt_report':'prompt-optimization/report.json',
                 'selected_supplements':len(prompts)}

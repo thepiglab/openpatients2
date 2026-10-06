@@ -4,7 +4,7 @@ Capture the substance, category, reported reaction, reaction type, and severity 
 
 An explicit 'no known drug allergies' is an item with substance='drug allergies', category=drug, assertion=absent. It is NOT an empty array. Missing allergy documentation produces no items and does not mean NKDA. 'Allergy history unknown' can be a documented unknown statement, not an absent allergy. A negative skin test is a test result in observations, not proof that every allergy is absent.
 
-Preserve remote reactions and uncertain causal attribution. 'Possible rash from amoxicillin' has assertion=possible. A family member's allergy is not the index patient's allergy. Separate events when severity or timing differs; do not erase a previous reaction because a later note says NKDA. Flag the conflict in limitations.
+Preserve remote reactions and uncertain causal attribution. 'Possible rash from amoxicillin' has assertion=possible. Concern about food allergy remains possible; a positive skin-prick sensitization result belongs in observations and alone does not establish a confirmed clinical allergy. A family member's allergy is not the index patient's allergy. Separate events when severity or timing differs; do not erase a previous reaction because a later note says NKDA. Flag the conflict in limitations.
 
 Evidence must include the reaction/denial and the substance when available. Do not invent severity, onset date, immune mechanism, or a normalized code.
 

@@ -45,7 +45,8 @@ from .pilot_review import (OrderingReview, ClaimAudit, ordering_schema, ordering
     ClinicalInventory, inventory_messages, check_inventory,
     CoverageAudit, coverage_messages, check_coverage)
 from .schemas import TASK_MODELS
-from .targeted_repair import ItemRepair, erased, repair_snapshot, changed_accepted_atoms, protected_value_changes
+from .targeted_repair import ItemRepair, erased, repair_snapshot, changed_accepted_atoms, protected_value_changes, canonical_clinical_task
+from .prompt_payloads import compact_facts, compact_graph, timeline_retention
 from .clinical_normalization import normalize_clinical
 from .validation import iter_objects, validate
 
@@ -261,14 +262,7 @@ def timeline_messages(article: dict, patient: dict, record_id: str, facts: dict[
     source = {'source_id': source_id, 'record_id': record_id, 'target_patient': patient,
         'segments': [{k: s[k] for k in ('segment_id', 'kind', 'heading', 'text') if k in s}
                      for s in article['segments']], 'known_fact_ids': list(facts)}
-    def registry_value(value):
-        if isinstance(value,dict):
-            return {k:registry_value(v) for k,v in value.items() if k not in {'evidence','documentation_evidence'}}
-        if isinstance(value,list): return [registry_value(v) for v in value]
-        return value
-    source['fact_registry']=[{'fact_id':row['review_id'],'task':row['task'],'pointer':row['pointer'],
-        'candidate_value':registry_value(row['candidate']),'semantic_review':'unreviewed'}
-        for row in fact_rows or [] if row['review_id'] in facts]
+    source['fact_registry']=compact_facts([row for row in fact_rows or [] if row['review_id'] in facts])
     instruction = ('Return patient-timeline/2 JSON. Every evidence and attribution span supplies only '
         'a known segment_id and an exact unique quote. Code derives source_id, segment_sha256 and Unicode '
         'start/end positions; do not calculate or invent those fields. '
@@ -278,7 +272,10 @@ def timeline_messages(article: dict, patient: dict, record_id: str, facts: dict[
         'Do not derive chronology from paragraph order. Keep month/year offsets in their own units. '
         'Use fact_ids only from known_fact_ids for this record; empty is allowed. The registry associates IDs '
         'with unreviewed extracted values: verify every event and link against primary source, not registry alone. '
-        'Preserve uncertainty and contradictions.')
+        'Preserve uncertainty and contradictions. Distinct administrations, assessments or encounters '
+        'with different stated years/ages/days must be separate events, even when mentioned in one sentence. '
+        'Do not merge successive doses or treatment changes into one event. A planned or declined '
+        'treatment must never become an occurred treatment.')
     if refined:
         instruction += (' The primary goal is relative clinical sequence, not dates: distinguish past history, '
             'presentation, investigations, treatment, adverse events or failed response, treatment changes, '
@@ -396,14 +393,7 @@ class PilotRunner:
         # Do not replace this with text tokenization or a hand-waved image bound.
         return count, 'server_multimodal_exact_vllm_0.30.0' if pixels else 'server_text_exact', server_max
 
-    async def call(self, task, messages, checker, identity, replica, segments, *, packet=None, partial_builder=None,
-                   repair_from=None):
-        if self.config.scatter_calls:
-            # Independent task calls share all replicas, including small GEPA
-            # article batches. Patient identity stays in the source contract.
-            number = getattr(self, 'dispatch_number', 0)
-            replica = number % len(self.clients)
-            self.dispatch_number = number + 1
+    def prepared_messages(self, task, messages):
         messages = copy.deepcopy(messages)
         if task in self.config.prompt_overrides:
             strategy = self.config.prompt_overrides[task]
@@ -419,6 +409,38 @@ class PilotRunner:
                 messages = rewrite_strategy(task.removeprefix('coverage_repair_'), messages, strategy)
             elif strategy:
                 messages.append({'role':'user','content':strategy})
+        return messages
+
+    async def partition_facts(self, task, rows, builder, replica):
+        """Count actual serving tokens; split fact hints, never primary source.
+
+        A source-only/single-fact overflow is passed to call() for an explicit
+        failed receipt. It is never hidden by shortening the article or values.
+        """
+        size = len(rows)
+        while True:
+            batch = rows[:size]
+            try:
+                count, _, maximum = await self.token_count(self.clients[replica],
+                    self.prepared_messages(task, builder(batch)))
+            except (httpx.HTTPError, ValueError, TypeError):
+                return batch, rows[size:]  # call() records tokenizer failures
+            required = (self.config.max_output_tokens if self.config.require_full_output_budget
+                        else self.config.min_output_tokens)
+            if count + self.config.context_safety_tokens + required <= min(self.context, maximum) or size <= 1:
+                return batch, rows[size:]
+            size = max(1, size // 2)
+
+    async def call(self, task, messages, checker, identity, replica, segments, *, packet=None, partial_builder=None,
+                   repair_from=None):
+        clinical_task = canonical_clinical_task(task)
+        if self.config.scatter_calls:
+            # Independent task calls share all replicas, including small GEPA
+            # article batches. Patient identity stays in the source contract.
+            number = getattr(self, 'dispatch_number', 0)
+            replica = number % len(self.clients)
+            self.dispatch_number = number + 1
+        messages = self.prepared_messages(task, messages)
         key = json_digest({'identity': identity, 'task': task, 'messages': safe_messages(messages)})
         attempts = []; data = None; errors = []; plan = None; partial = None
         baseline = None; repair_rounds = 0; transports = 0; mode = 'initial'
@@ -426,8 +448,8 @@ class PilotRunner:
         if repair_from is not None:
             baseline = copy.deepcopy(repair_from.get('raw_candidate'))
             errors = list(repair_from.get('errors') or ['saved_failed_attempt'])
-            if self.config.refinement_policy == 'source_aware' and task in TASK_MODELS and baseline is not None:
-                baseline, _ = normalize_clinical(task, baseline, segments)
+            if self.config.refinement_policy == 'source_aware' and clinical_task and baseline is not None:
+                baseline, _ = normalize_clinical(clinical_task, baseline, segments)
             latest_candidate = copy.deepcopy(baseline)
             if packet is not None and self.arm == 'targeted':
                 plan = ItemRepair.create(task, baseline, packet['text'], segments, policy=self.config.refinement_policy)
@@ -529,8 +551,8 @@ class PilotRunner:
                                 else:
                                     candidate, citation_audit = recover_citations(candidate, segments)
                             entry['citation_recovery'] = citation_audit
-                            if self.config.refinement_policy == 'source_aware' and task in TASK_MODELS:
-                                candidate, changes = normalize_clinical(task, candidate, segments)
+                            if self.config.refinement_policy == 'source_aware' and clinical_task:
+                                candidate, changes = normalize_clinical(clinical_task, candidate, segments)
                                 entry['field_normalization'] = changes
                             latest_candidate = copy.deepcopy(candidate)
                             if plan:
@@ -543,11 +565,11 @@ class PilotRunner:
                                 # Whole-object regeneration is never a license to
                                 # delete supported values or neighbors.
                                 protected = (baseline if self.config.refinement_policy == 'legacy'
-                                             else repair_snapshot(task, baseline, checker))
+                                             else repair_snapshot(clinical_task or task, baseline, checker))
                                 losses = erased(protected, candidate)
                                 if self.config.refinement_policy == 'source_aware':
-                                    losses += changed_accepted_atoms(task, protected, candidate)
-                                    if task in TASK_MODELS:
+                                    losses += changed_accepted_atoms(clinical_task or task, protected, candidate)
+                                    if clinical_task:
                                         losses += protected_value_changes(protected,candidate)
                                 entry['repair_protection'] = {'policy': self.config.refinement_policy,
                                     'protected_snapshot': protected, 'erased_paths': losses}
@@ -745,7 +767,7 @@ class PilotRunner:
             extra_tasks.extend(coverage_audits)
             if self.config.coverage_repair:
                 missing = {d['inventory_index'] for r in coverage_audits if r['status']=='valid'
-                    for d in r['data']['decisions'] if d['status']=='missing'}
+                    for d in r['data']['decisions'] if d['status'] in {'missing','uncertain'}}
                 hints = [f for f in features if f['inventory_index'] in missing]
                 before_rows = copy.deepcopy(rows)
                 backfill_packet = patient_packet(article,roster,patient,scope='whole_article',figure_reviews=reviews)
@@ -804,41 +826,57 @@ class PilotRunner:
             rows = [row for r in tasks for row in review_rows(article,rid,r['task'],r['data'])]
             facts = {r['review_id']:rid for r in rows}
             _, sources = sources_for(article)
-            completion_messages = timeline_messages(article,patient,rid,facts,rows,refined=True)
-            completion_messages[-1]['content'] += ('\nCURRENT_PARTIAL_TIMELINE (unreviewed):\n'+
-                json.dumps(timeline['data'])+'\nRebuild a clinically complete partial order from all delivered facts '
+            def completion_messages(batch):
+                messages = timeline_messages(article,patient,rid,facts,batch,refined=True)
+                messages[-1]['content'] += ('\nCURRENT_PARTIAL_TIMELINE (unreviewed):\n'+
+                json.dumps(compact_graph(timeline['data']))+'\nComplete a clinically complete partial order using this batch of delivered fact hints '
                 'and the original source. Include important history, tests, diagnoses, treatments, adverse '
                 'events and follow-up. Connect explicitly ordered events, including earlier/later relative '
                 'ages or days with the same stated anchor. Preserve occurrence: planned, declined and '
                 'conditional care is not completed care. Do not invent visits, intervals or calendar dates. '
-                'Leave genuinely ambiguous order unresolved. Include facts missed by the initial timeline.')
+                'Leave genuinely ambiguous order unresolved. Include facts missed by the initial timeline. '
+                'Retain existing fact links. Preserve existing unlinked events verbatim, including kind, '
+                'occurrence and times; add missing events and edges instead of dropping prior events. '
+                'For existing times/evidence, retrieve the full quotes from the original source segments.')
+                return messages
             def completion_checker(value):
                 graph = PatientTimeline.model_validate(value)
                 if graph.record_id != rid: raise ValueError('timeline_wrong_patient')
                 audit = audit_timeline(graph,sources,facts)
                 if not audit['structural_source_gates_passed']:
                     raise ValueError('; '.join(i['code'] for i in audit['issues'] if i['severity']=='block'))
-                previous={fid for e in (timeline['data'] or {}).get('events',[]) for fid in e['fact_ids']}
-                current={fid for e in graph.events for fid in e.fact_ids}
-                if previous-current: raise ValueError('Timeline completion erased existing supported fact links')
-                return graph.model_dump()
-            completed = await self.call('timeline_completion',completion_messages,completion_checker,
-                identity,replica,article['segments'],
-                partial_builder=lambda value:partial_timeline(value,sources,facts,rid))
-            extra_tasks.append(completed)
-            # A failed completion cannot discard an already usable graph.
-            if completed['status']=='valid': timeline={**timeline,'data':completed['data']}
+                return timeline_retention(timeline['data'], graph.model_dump())
+            pending = rows; batch_number = 0
+            while pending or batch_number == 0:
+                batch, pending = await self.partition_facts('timeline_completion',pending,completion_messages,replica)
+                completed = await self.call('timeline_completion',completion_messages(batch),completion_checker,
+                    {**identity,'completion_batch':batch_number,'hint_fact_ids':[r['review_id'] for r in batch]},
+                    replica,article['segments'],
+                    partial_builder=lambda value:partial_timeline(value,sources,facts,rid))
+                extra_tasks.append(completed); batch_number += 1
+                # A failed completion cannot discard an already usable graph.
+                if completed['status']=='valid': timeline={**timeline,'data':completed['data']}
         if self.config.summary_completion:
             rows = [row for r in tasks for row in review_rows(article,rid,r['task'],r['data'])]
-            messages = task_messages('summary',article,patient)
-            messages.append({'role':'user','content':'Update the comprehensive clinical narrative using the original source '
+            def summary_messages(batch):
+                messages = task_messages('summary',article,patient)
+                messages.append({'role':'user','content':'Update the comprehensive clinical narrative using the original source '
                 'and the final delivered facts below. These facts are untrusted hypotheses, never a replacement for source. '
                 'Include relevant history, findings, treatments, treatment failures and follow-up; preserve uncertainty '
-                'and planned versus completed care.\nDELIVERED_FACTS:\n'+json.dumps(rows)})
-            completed = await self.call('summary_completion',messages,
-                lambda v:check_article_task('summary',v,article,patient),identity,replica,article['segments'])
-            extra_tasks.append(completed)
-            if completed['status']=='valid': summary={**summary,'data':completed['data']}
+                'and planned versus completed care. Source segment references locate the original text; '
+                'verify each value there. Retain the prior supported claims while incorporating this fact batch. '
+                '\nPREVIOUS_SUMMARY_UNREVIEWED:\n'+json.dumps(summary['data'])+
+                '\nDELIVERED_FACTS:\n'+json.dumps(compact_facts(batch))})
+                return messages
+            pending = rows; batch_number = 0
+            while pending or batch_number == 0:
+                batch, pending = await self.partition_facts('summary_completion',pending,summary_messages,replica)
+                completed = await self.call('summary_completion',summary_messages(batch),
+                    lambda v:check_article_task('summary',v,article,patient),
+                    {**identity,'completion_batch':batch_number,'hint_fact_ids':[r['review_id'] for r in batch]},
+                    replica,article['segments'])
+                extra_tasks.append(completed); batch_number += 1
+                if completed['status']=='valid': summary={**summary,'data':completed['data']}
         rows.extend(review_rows(article, rid, 'summary', summary['data']))
         rows.extend(review_rows(article, rid, 'timeline_v2', timeline['data']))
         all_tasks = [*tasks, summary, timeline, *extra_tasks]
@@ -1070,8 +1108,13 @@ class PilotRunner:
         eligible = []
         for index, article in enumerate(articles):
             errors = source_gate(article, self.config)
+            acquisition_license = article.get('license')
+            if not errors:
+                article = {**article,'license':recheck_license(acquisition_license)}
+                source_rows_by_id[article['article_id']] = article
             row = {'article_id': article.get('article_id'), 'source_xml_sha256': article.get('xml_sha256'),
-                   'source_license': article.get('license'), 'status': 'source_rejected' if errors else 'pending', 'errors': errors}
+                   'source_license': article.get('license'), 'acquisition_license':acquisition_license,
+                   'status': 'source_rejected' if errors else 'pending', 'errors': errors}
             self.article_rows.append(row)
             if not errors:
                 eligible.append((index, article, row))

@@ -118,6 +118,9 @@ def frozen_rosters(path, articles):
 def patient_view(article, roster, patient):
     selected = set(patient['source_segment_ids']) | set(roster['unresolved_segment_ids'])
     selected.update(c['segment_id'] for c in patient['identity_evidence'])
+    shared = {s['segment_id'] for s in article['segments']
+              if s.get('kind') == 'abstract' or (s.get('heading') or '').casefold() in {'abstract','introduction'}}
+    selected.update(shared)
     # Table context and captions are never implicitly reduced to a single owner.
     selected.update(s['segment_id'] for s in article['segments']
                     if (s.get('kind') == 'table' or s.get('kind', '').startswith('table_')
@@ -132,10 +135,11 @@ def patient_view(article, roster, patient):
         raise ValueError('Compact patient context is empty')
     view = {**article, 'segments': minimal_segments(kept)}
     target = {**patient, 'source_segment_ids': [s['segment_id'] for s in kept]}
-    audit = {'policy': 'immutable-patient-sections/1', 'source_text_sha256': article['text_sha256'],
+    audit = {'policy': 'immutable-patient-sections/2', 'source_text_sha256': article['text_sha256'],
              'retained_segment_ids': [s['segment_id'] for s in kept],
              'omitted_segment_ids': [s['segment_id'] for s in article['segments'] if s['segment_id'] not in selected],
              'retained_text_sha256': hashlib.sha256('\n\n'.join(s['text'] for s in kept).encode()).hexdigest(),
              'tables_and_captions_retained': True, 'unresolved_blocks_retained': True,
+             'shared_context_segment_ids': sorted(shared),
              'semantic_coverage_verified': False}
     return view, target, audit

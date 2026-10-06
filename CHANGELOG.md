@@ -1,3 +1,11 @@
+## 2026-10-06 — Patient-bundle corrections
+
+- Fix clinical repair aliases; compact and token-count late completion hints while retaining complete primary source text and prior timeline events.
+- Keep cross-domain coverage uncertain, strengthen field-level clinical guidance, retain shared abstract/introduction evidence, and refresh exported license decisions with acquisition provenance.
+- Version reviewed gold separately from historical scores; correct marker representation, allergy certainty and SFT scope, exclude an unadjudicated illustrative record, and add an unsupported tumor-laterality probe.
+- Put original strategies on the joint GEPA frontier, match training batches to component labels, cache successful rollouts, enforce internal deadlines and reserve fresh control/candidate confirmation. Incomplete confirmation is partial/unavailable and retains originals.
+- Reuse one B200 for both optimization stages; reserve eight B200s for bootstrap and program comparisons. CPU acquisition and owned checkpoint/article cleanup remain unchanged.
+
 ## 2026-10-04 — Clinical GEPA overnight follow-up
 
 - Add a single-command fresh campaign comparing checklist and source-grounded model-feedback GEPA profiles across 27 operational prompt families; increase examples, reflection reasoning and bounded search calls, and batch two proposals concurrently.

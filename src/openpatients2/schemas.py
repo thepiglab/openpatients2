@@ -236,10 +236,10 @@ class Observations(Section):
 class Tumor(Fact):
     tumor_ref: str = Field(pattern=r"^t[1-9][0-9]*$", description="Local tumor ID within this section; never identifies a person.")
     name: str
-    primary_site: str | None
+    primary_site: str | None = Field(description='Documented tumor origin for this assessment; distinguish provisional imaging localization from final pathology and metastatic sites.')
     histology: str | None
     grade: str | None
-    laterality: Literal["left", "right", "bilateral", "midline", "unknown"]
+    laterality: Literal["left", "right", "bilateral", "midline", "unknown"] = Field(description='Laterality of the tumor itself, not the operation or symptoms; unknown when unstated.')
     disease_extent: Literal["in_situ", "localized", "regional", "distant_metastatic", "hematologic", "unknown"]
     metastatic_sites: list[str]
     stage_group: str | None
@@ -249,7 +249,7 @@ class Tumor(Fact):
     t_category: str | None
     n_category: str | None
     m_category: str | None
-    disease_status: Literal["active", "remission", "recurrence", "progression", "resolved", "unknown"]
+    disease_status: Literal["active", "remission", "recurrence", "progression", "resolved", "unknown"] = Field(description='Explicitly documented disease status; absence of recurrence alone does not establish remission.')
 
 
 class Biomarker(Fact):

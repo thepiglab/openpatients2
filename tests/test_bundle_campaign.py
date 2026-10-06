@@ -170,6 +170,10 @@ def test_new_benchmark_sources_labels_splits_and_slurm_allocations_are_valid(tmp
     assert campaign_phases(c)==['cpu','setup','download','bootstrap','gepa','gpu','cleanup','report','source-cleanup']
     for phase in ['cpu','setup','download','cleanup','report','source-cleanup']:assert '--gres=none' in job_command(c,phase)
     assert '--gres=gpu:b200:1' in job_command(c,'gepa')
+    assert '--time=04:00:00' in job_command(c,'gepa')
+    assert c['config']['joint_gepa_in_separate_stage'] is True
+    assert c['config']['fidelity_reference'].endswith('reference-reviewed.json')
+    assert str(ROOT/'src/openpatients2/prompts/oncology.md') in c['runtime']
     assert '--gres=gpu:b200:8' in job_command(c,'gpu') and '--nodes=1' in job_command(c,'gpu')
     assert '--cpus-per-task=32' in job_command(c,'gpu') and '--mem=250G' in job_command(c,'gpu')
 
