@@ -1266,3 +1266,28 @@ and address source routing, negative-finding event semantics and the audit
 pointer contract before another expensive optimization run.
 
 Full diagnosis and metrics: [frontier review](../reports/FRONTIER_20261007.md).
+
+## 17. Controlled component run: 2026-10-07 afternoon
+
+`run-20261007-144414` completed all 32 trials on four independent one-B200
+workers in 27.4–35.2 minutes each (2.02 total GPU-hours). Starts were within four
+seconds, so GPU elapsed time was about 35 minutes. Cleanup succeeded. Keep this
+allocation pattern for independent TP1 workloads; this result does not establish
+that workers occupied different nodes or guarantee a particular queue delay.
+
+Baseline full extraction delivered 2051 output tok/GPU-s. Incremental table,
+attribute-audit and episode work delivered 1836, 1864 and 1643 respectively.
+These are different task families and cannot be interpreted as end-to-end
+speedup ratios. Sampled utilization averaged 68–73%, median 99%, including
+initialization/tails. Do not lengthen a useful short run merely to hide startup
+costs in its utilization average.
+
+Validate the complete prompt/schema/parser/validator contract against cached
+real outputs before commissioning another GPU run. Here the table schema asked
+for headings while the prompt/checker required segment IDs. Resolving exact
+row citations on CPU recovered 89 candidate cells and seven reviewed-check hits
+without generation. Likewise 251 valid episode calls concealed quarantined
+additions and worse ordering recall. Always report delivered facts/relations
+and quarantined additions beside protocol validity and tokens/s.
+
+Full analysis: [controlled component review](../reports/CONTROLLED_COMPONENTS_20261007.md).

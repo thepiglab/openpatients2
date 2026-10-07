@@ -25,7 +25,8 @@ from .provenance import json_digest
 from .schemas import TASK_MODELS
 from .table_cells import inventory, patient_scope, CellBatch, cell_messages, check_cell_batch
 
-COMPONENTS=('table-observations','attribute-audit','episode-rebuild')
+COMPONENTS=('table-observations','attribute-audit','episode-rebuild','table-compiled',
+            'source-verification','encounter-state','coverage-pass')
 
 
 def _read(path, limit=128_000_000):
@@ -98,18 +99,19 @@ def cell_is_covered(cell,section):
     return False
 
 
-async def augment_tables(runner,article,roster,patient,bundle,replica):
+async def augment_tables(runner,article,roster,patient,bundle,replica,*,selections=False):
     inv=inventory(article);existing=bundle['sections'].get('observations')
     cells=[c for c in inv['cells'] if patient_scope(c,article,patient)=='target']
     pending=[c for c in cells if not cell_is_covered(c,existing)]
     packet=patient_packet(article,roster,patient,scope='whole_article')
     checker=runner.clinical_checker('observations',packet,article['segments'])
     identity={'article_id':article['article_id'],'patient_id':patient['patient_id'],'record_id':bundle['source']['record_id']}
-    runner.schemas['table_observations']=CellBatch.model_json_schema()
+    from .table_cells import CellSelections, materialize_selections
+    runner.schemas['table_observations']=(CellSelections if selections else CellBatch).model_json_schema()
     async def batch(start):
         selected=pending[start:start+8]
-        return await runner.call('table_observations',cell_messages(article,patient,selected),
-            lambda v:check_cell_batch(v,selected,article,patient,checker),
+        return await runner.call('table_observations',cell_messages(article,patient,selected,selections=selections),
+            lambda v:(materialize_selections if selections else check_cell_batch)(v,selected,article,patient,checker),
             {**identity,'cell_batch':start//8},replica,article['segments'])
     results=await asyncio.gather(*(batch(i) for i in range(0,len(pending),8)))
     accepted=[x for result in results if result['data'] for x in result['data']['accepted']]
@@ -141,6 +143,9 @@ async def run_component_trial(config,articles_path,output,endpoints,context,*,ba
     if component not in COMPONENTS:raise ValueError('Unknown controlled component')
     baseline=Path(baseline_dir);paths={name:baseline/name for name in
         ('report.json','run-config.json','patients.jsonl','rosters.json','visual-annotations.json')}
+    from .architecture_trial import ARMS, qualify_gate, intervene, Answers, Verdicts, EncounterReading
+    if component in ARMS:
+        paths['architecture/gate-qualification.json']=baseline/'architecture/gate-qualification.json'
     hashes={name:_hash(path) for name,path in paths.items()}
     before=_read(paths['report.json']);run_config=_read(paths['run-config.json'])
     # Bound sample loading using the existing selected-source reader.
@@ -153,6 +158,9 @@ async def run_component_trial(config,articles_path,output,endpoints,context,*,ba
     roster_by={r['article_id']:r for r in rosters['articles']}
     if len(roster_by)!=len(rosters['articles']) or set(roster_by)!=set(by_article):raise ValueError('Baseline roster coverage differs')
     runner=PilotRunner(config,output,endpoints,context,'targeted',seed=seed,http=http)
+    runner.schemas.update(independent_source_answers=Answers.model_json_schema(),
+                         independent_source_reconcile=Verdicts.model_json_schema(),
+                         encounter_reading=EncounterReading.model_json_schema())
     started=time.monotonic()
     try:
         for key in ('model_id','revision'):
@@ -166,6 +174,9 @@ async def run_component_trial(config,articles_path,output,endpoints,context,*,ba
             if any(src.get(k)!=a[k] for k in ('text_sha256','xml_sha256')):raise ValueError('Baseline patient source changed')
         write_json(runner.output/'frozen-inputs.json',{'baseline_dir':str(baseline),'sha256':hashes,
             'source_sha256':_hash(articles_path),'baseline_is_generated_not_gold':True})
+        qualification = (await qualify_gate(runner) if component=='table-compiled' else
+            _read(paths['architecture/gate-qualification.json']) if component in ARMS else None)
+        if component in ARMS:write_json(runner.output/'architecture/gate-qualification.json',qualification)
         async def one(index,original):
             bundle=deepcopy(original);rid=bundle['source']['record_id'];article=by_article[bundle['source']['article_source']['article_id']]
             record=roster_by[article['article_id']]
@@ -173,7 +184,9 @@ async def run_component_trial(config,articles_path,output,endpoints,context,*,ba
             roster=record['roster'];patient=next(p for p in roster['patients'] if p['patient_id']==rid.rsplit(':',1)[1])
             original_rows=_rows(article,bundle);replica=index%len(endpoints)
             identity={'article_id':article['article_id'],'patient_id':patient['patient_id'],'record_id':rid}
-            if component=='attribute-audit':
+            if component in ARMS:
+                receipt=await intervene(runner,article,roster,patient,bundle,original_rows,identity,replica,component,qualification)
+            elif component=='attribute-audit':
                 tasks=[{'task':k,'data':deepcopy(bundle['sections'].get(k))} for k in TASK_MODELS]
                 packet=patient_packet(article,roster,patient,scope='whole_article')
                 _,receipt=await challenge_attributes(runner,article,patient,packet,tasks,original_rows,identity,replica)
@@ -183,8 +196,11 @@ async def run_component_trial(config,articles_path,output,endpoints,context,*,ba
                 timeline,_,receipt=await assemble_episodes(runner,article,patient,original_rows,identity,replica,sources)
                 bundle['companions']['timeline_v2']=timeline['data']
                 bundle['quality']['timeline_v2']={k:timeline[k] for k in ('status','errors')}
-            else:receipt=await augment_tables(runner,article,roster,patient,bundle,replica)
+            else:receipt=await augment_tables(runner,article,roster,patient,bundle,replica,selections=component=='table-compiled')
             rows=refresh_bundle(article,bundle,original_rows)
+            if component in ARMS:
+                bundle['component_consistency']['summary_status']='unavailable' if bundle['companions']['summary'] is None else 'frozen_baseline'
+                bundle['component_consistency']['timeline_status']='experimental_source_checked_graph'
             bundle['experimental_reviews']['controlled_component']={'component':component,'receipt':receipt,
                 'baseline_patient_sha256':json_digest(original),'copied_vision_sha256':json_digest(original.get('vision')),
                 'copied_summary_sha256':json_digest(original['companions'].get('summary'))}
@@ -211,13 +227,17 @@ async def run_component_trial(config,articles_path,output,endpoints,context,*,ba
             'cost_scope':'incremental component calls only; baseline cost is retained separately, never free end-to-end throughput',
             'frozen': ['patient_discovery','figure_pixels','figure_attribution','summary'],
             'clinical_facts_frozen':component=='episode-rebuild','whole_bundle_promotion_ready':False}
+        if component in ARMS:
+            provenance['frozen']=['patient_discovery','figure_pixels','figure_attribution']
+            provenance['summary_policy']='Withheld after clinical changes; no stale summary promoted'
         write_json(runner.output/'component-provenance.json',provenance)
         report={'schema_version':'controlled-component-report/1','arm':component,'seed':runner.config.seed,
             'model':before['model'],'patients_extracted':len(runner.patients),'model_calls':runner.calls,
-            'wall_seconds':wall,'tokens':runner.token_report(articles,wall),
+            'wall_seconds':wall,'tokens':runner.token_report(articles+([{'article_id':'authored-gate-probe'}] if component=='table-compiled' else []),wall),
             'task_count':len(runner.results),'valid_tasks':sum(x['status']=='valid' for x in runner.results),
             'task_statuses':dict(Counter(x['status'] for x in runner.results)),
             'component_provenance':provenance,'clinical_accuracy_verified':False,
+            'gate_qualification':qualification,
             'outputs':{'patients':str(runner.output/'patients.jsonl'),'predicted_rosters':str(runner.output/'rosters.json'),
                        'visual_annotations':str(runner.output/'visual-annotations.json'),'report':str(runner.output/'report.json')}}
         write_json(runner.output/'run-config.json',{'config':runner.config.model_dump(),'component':component,'seed':runner.config.seed,

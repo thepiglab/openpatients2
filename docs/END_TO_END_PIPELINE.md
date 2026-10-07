@@ -1,4 +1,4 @@
-> Update: the article acquisition, roster, summary, timeline, vision and EHR-seed stages described below now have pilot implementations. See [ARTICLE_PIPELINE.md](ARTICLE_PIPELINE.md) and the [measured pilot](../reports/ARTICLE_PILOT.md) for current commands and remaining boundaries.
+> Historical design: implementation-status labels below describe the earlier note-based workflow. For the maintained current architecture and ASCII diagrams, read [Pipeline overview](PIPELINE_OVERVIEW.md). Article acquisition, roster, summary, timeline, vision and EHR-seed stages now have pilot implementations; see [ARTICLE_PIPELINE.md](ARTICLE_PIPELINE.md) for workflow commands and boundaries.
 
 # End-to-end source-grounded pipeline
 

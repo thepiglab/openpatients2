@@ -19,21 +19,28 @@ from .provenance import json_digest
 VARIANTS = ('live-complete', 'table-observations', 'attribute-audit', 'episode-rebuild')
 
 
+def campaign_variants(config):
+    if config.get('campaign_kind') == 'clinical-architecture':
+        return ('live-complete', 'source-verification', 'encounter-state', 'coverage-pass')
+    return VARIANTS
+
+
 def validate_plan(config):
     # Retain all existing scheduler/source/serving safeguards. Replacing the arm
     # list only for validation does not change the serialized controlled plan.
     original = {**config, 'campaign_kind': 'frontier', 'variants': list(fc.VARIANTS)}
     fc.validate_plan(original)
+    minutes = 120 if config.get('campaign_kind') == 'clinical-architecture' else 90
     if (config.get('gpu_workers'), config.get('worker_cpus'), config.get('worker_mem_gb'),
-            config.get('gpu_minutes')) != (4, 8, 60, 90):
-        raise ValueError('Controlled components require four independent 1-B200 / 8-CPU / 60-GB / 90-minute workers')
-    if config.get('variants') != list(VARIANTS):
+            config.get('gpu_minutes')) != (4, 8, 60, minutes):
+        raise ValueError('Controlled components require four independent 1-B200 / 8-CPU / 60-GB / bounded workers')
+    if config.get('variants') != list(campaign_variants(config)):
         raise ValueError('Keep the baseline and three independently frozen component arms')
     return True
 
 
 def trial_config(campaign, variant, articles):
-    if variant not in VARIANTS:
+    if variant not in campaign_variants(campaign['config']):
         raise ValueError('Unknown controlled component')
     original = {**campaign, 'config': {**campaign['config'], 'campaign_kind': 'frontier'}}
     # Components use the baseline configuration and its complete output. They do
@@ -58,6 +65,10 @@ def freeze_inputs(baseline, report, assignment, *, work=None):
             if path.is_symlink():
                 raise ValueError('Baseline figure task is a symlink')
             files[str(path)] = sha256(path)
+    gate = baseline / 'architecture/gate-qualification.json'
+    if gate.exists():
+        if gate.is_symlink(): raise ValueError('Gate receipt is a symlink')
+        files[str(gate.resolve())] = sha256(gate)
     for key in ('sample', 'media'):
         path = Path(assignment[key])
         if path.is_symlink() or not path.is_file():
@@ -118,6 +129,9 @@ async def run_trials(campaign, shard, assignment, endpoints, deadline, *, baseli
     if baseline_runner is None:
         from .pilot_extract import run_pilot
         baseline_runner = run_pilot
+        if campaign['config'].get('campaign_kind') == 'clinical-architecture':
+            from .architecture_campaign import corrected_baseline
+            baseline_runner = corrected_baseline
     if component_runner is None:
         from .component_trial import run_component_trial
         component_runner = run_component_trial
@@ -125,18 +139,19 @@ async def run_trials(campaign, shard, assignment, endpoints, deadline, *, baseli
         from .corpus_pilot import trial_warmup
         warmup_runner = trial_warmup
     work = Path(campaign['work']); base = work / 'shards' / f'{shard:03d}'
+    names_allowed = campaign_variants(campaign['config'])
     rows = []
     for index, seed in enumerate(campaign['config']['seeds']):
-        components = list(VARIANTS[1:])
+        components = list(names_allowed[1:])
         offset = (index + shard) % len(components)
-        names = [VARIANTS[0], *components[offset:], *components[:offset]]
-        baseline = base / 'trials' / f'seed{seed}' / VARIANTS[0]
+        names = [names_allowed[0], *components[offset:], *components[:offset]]
+        baseline = base / 'trials' / f'seed{seed}' / names_allowed[0]
         frozen = None
         for name in names:
             trial = base / 'trials' / f'seed{seed}' / name
             row = {'shard': shard, 'seed': seed, 'variant': name, 'articles': assignment['articles']}
             remaining = deadline - time.monotonic()
-            if name != VARIANTS[0] and frozen is None:
+            if name != names_allowed[0] and frozen is None:
                 row.update(status='unavailable', reason='Baseline did not produce a frozen completed export')
             elif remaining < 180:
                 row.update(status='deferred', reason='Worker deadline reserve')
@@ -145,7 +160,7 @@ async def run_trials(campaign, shard, assignment, endpoints, deadline, *, baseli
                 try:
                     async def execute():
                         warmup = await warmup_runner(endpoints, config, seed)
-                        if name == VARIANTS[0]:
+                        if name == names_allowed[0]:
                             result = await baseline_runner(config, assignment['sample'], trial, endpoints,
                                 campaign['config']['context'], 'targeted', input_scope='patient_sections', seed=seed,
                                 image_manifest={**fc.read_json(assignment['media']), 'output_dir': str(work)})
@@ -159,7 +174,7 @@ async def run_trials(campaign, shard, assignment, endpoints, deadline, *, baseli
                         write_json(trial / 'report.json', result)
                         return result
                     result = await asyncio.wait_for(execute(), timeout=remaining)
-                    if name == VARIANTS[0]:
+                    if name == names_allowed[0]:
                         frozen = freeze_inputs(baseline, result, assignment, work=work)
                     else:
                         # Discovery and visual exports must be byte-identical.
@@ -176,7 +191,7 @@ async def run_trials(campaign, shard, assignment, endpoints, deadline, *, baseli
                                figure_task_sha256={name: sha256(trial / 'tasks' / name)
                                                    for name in figure_outputs(trial)})
                 except Exception as error:
-                    if name == VARIANTS[0]:
+                    if name == names_allowed[0]:
                         frozen = None
                     row.update(status='failed', error_type=type(error).__name__, error=str(error))
             rows.append(row)

@@ -29,6 +29,41 @@ class CellBatch(StrictModel):
     cells: list[CellDecision]
 
 
+class CellSelection(StrictModel):
+    cell_id: str
+    status: Literal['extracted', 'not_clinical', 'unresolved']
+    name: str | None
+    kind: Literal['vital', 'laboratory', 'imaging', 'pathology', 'microbiology', 'physiologic', 'other']
+    reason: str = Field(min_length=1)
+
+
+class CellSelections(StrictModel):
+    cells: list[CellSelection]
+
+
+def materialize_selections(value, cells, article, patient, clinical_checker):
+    """Model supplies semantics; CPU owns patient column, result and citations."""
+    selections = CellSelections.model_validate(value).model_dump()
+    by_id = {c['cell_id']: c for c in cells}
+    rows = []
+    for decision in selections['cells']:
+        cell = by_id.get(decision['cell_id']); obs = None
+        if decision['status'] == 'extracted' and cell is not None:
+            scalar = cell['measurement']
+            obs = {'subject': 'index_patient', 'assertion': 'present', 'temporality': 'unknown',
+                'time': {'text': cell['time_header'], 'relation': 'at' if cell['time_header'] else 'unknown',
+                         'anchor': None, 'date_iso': None},
+                'evidence': [{'source_section': cell['segment_id'], 'quote': cell['source_quote']}],
+                'name': decision['name'] or '', 'kind': decision['kind'], 'status': 'resulted',
+                'result_absent_reason': None, 'numeric_value': float(scalar['magnitude']) if scalar else None,
+                'text_value': cell['raw_value'], 'comparator': scalar['comparator'] if scalar else 'unknown',
+                'unit': cell['raw_unit'] or (scalar['unit'] if scalar else None), 'flag': 'unknown',
+                'reference_range_text': None, 'specimen': None, 'method': None, 'body_site': None}
+        rows.append({'cell_id': decision['cell_id'], 'status': decision['status'],
+                     'observation': obs, 'reason': decision['reason']})
+    return check_cell_batch({'cells': rows}, cells, article, patient, clinical_checker)
+
+
 def inventory(article):
     cells=[]; unresolved=[]; preserved=[]
     for s in article['segments']:
@@ -81,13 +116,13 @@ def patient_scope(cell, article, patient):
     return 'target' if column==identities else 'other_patient'
 
 
-def cell_messages(article, patient, cells):
+def cell_messages(article, patient, cells, *, selections=False):
     source_ids={c['segment_id'] for c in cells}
     source_ids.update(q['segment_id'] for q in patient.get('identity_evidence',[]))
     tables={c['table_id'] for c in cells}
     segments=[s for s in article['segments'] if s['segment_id'] in source_ids or
         (s.get('table_id') in tables and s.get('kind')=='table_footnote')]
-    return [{'role':'system','content':
+    messages = [{'role':'system','content':
         'Extract the target patient observations from EVERY supplied table cell. '
         'Cells preserve original patient columns and encounter/time headers. '
         'Return one decision per cell_id. Do not copy another column, reference range, '
@@ -102,6 +137,16 @@ def cell_messages(article, patient, cells):
          '\nSOURCE:\n'+json.dumps(segments,ensure_ascii=False)+
          '\nCELLS:\n'+json.dumps(cells,ensure_ascii=False)+
          '\nSCHEMA:\n'+json.dumps(CellBatch.model_json_schema())}]
+    if selections:
+        messages[0]['content'] = (
+            'Classify EVERY supplied cell for the target patient. Return cell_id, status, name, kind, reason. '
+            'Do not generate values, units, times or quotes: code preserves those immutable source fields. '
+            'Select extracted only for an actual clinical result in the target patient column. '
+            'Missing values, ambiguous ownership or unknown semantics must be unresolved. '
+            'Do not treat reference ranges or aggregate results as patient results. '
+            'Use a source-grounded clinical name; no inferred diagnoses or normality flags.')
+        messages[1]['content'] = messages[1]['content'].split('\nSCHEMA:\n')[0] + '\nSCHEMA:\n' + json.dumps(CellSelections.model_json_schema())
+    return messages
 
 
 def check_cell_batch(value, cells, article, patient, clinical_checker):
@@ -125,6 +170,13 @@ def check_cell_batch(value, cells, article, patient, clinical_checker):
             obs=decision['observation']
             if obs is None or patient_scope(cell,article,patient)!='target':raise ValueError('Unresolved patient column')
             if obs['subject']!='index_patient':raise ValueError('Wrong table observation subject')
+            if not obs['name'].strip():raise ValueError('Missing clinical name')
+            # Older responses followed Evidence's heading contract. Resolve only
+            # the exact full row and that row's actual heading, never arbitrary text.
+            heading=next((s.get('heading') for s in article['segments'] if s['segment_id']==cell['segment_id']),None)
+            for q in obs['evidence']:
+                if heading and q['source_section']==heading and q['quote']==cell['source_quote']:
+                    q['source_section']=cell['segment_id']
             if not any(q['source_section']==cell['segment_id'] and q['quote']==cell['source_quote'] for q in obs['evidence']):
                 raise ValueError('Table result needs complete row/header evidence')
             scalar=cell['measurement']

@@ -4,6 +4,10 @@
 
 A uv Python project for turning licensed PMC full articles and Open-Patients source cases into evidence-backed patient records. It supports patient discovery, species, 14 clinical sections, cited summaries, relative timelines, actual figure inspection, terminology grounding and cohort queries through OpenAI-compatible endpoints. Serving profiles include experimental Muse Glimmer and Gemma 4 31B layouts for eight B200 GPUs.
 
+Start with the [current pipeline overview](docs/PIPELINE_OVERVIEW.md): ASCII diagrams of document parsing, patient extraction, validation/repair, figures, summaries and timelines, plus the independent experimental branches. Update this living overview whenever the pipeline changes.
+
+The [clinical architecture experiment](docs/CLINICAL_ARCHITECTURE_CAMPAIGN.md) compares a table-corrected baseline with independently qualified verification, encounter/chunk extraction and additive source reading. Launch all CPU/GPU stages and cleanup with `bash scripts/run_clinical_architecture.sh`; four independent one-B200 workers need no shared pod.
+
 The [vLLM / B200 lessons learned](docs/VLLM_B200_LESSONS_LEARNED.md) consolidate the measured K2 and Glimmer runs: exact serving recipes, throughput tables, DP/TP and DFlash tradeoffs, context budgets, clinical-quality limits, failed configurations, GPU lifecycle fixes and HiPerGator operating commands.
 
 The [patient-bundle overnight campaign](docs/PATIENT_BUNDLE_OVERNIGHT.md) compares independent and whole-program GEPA with actual repairs, live patient discovery and final timeline/summary completion. It uses 31 bounded sources, 303 reviewed clinical checks (259 required, 44 forbidden), relative-order probes and limited native-pixel labels. The historical 305-check rubric remains unchanged. See the [October 6 corrections](docs/BUNDLE_CORRECTIONS_20261006.md) for repair/context fixes and fresh validation gates. Launch all CPU/GPU stages and cleanup with `bash scripts/run_bundle_overnight.sh` on HiPerGator.

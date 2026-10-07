@@ -1,0 +1,586 @@
+[
+  {
+    "id": "patient-true",
+    "category": "patient",
+    "task": "observations",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1: sodium was 115 mmol/L. Case 2: sodium was 140 mmol/L.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1: sodium was 115 mmol/L"
+        }
+      ]
+    },
+    "candidate": {
+      "name": "sodium",
+      "subject": "index_patient",
+      "numeric_value": 115,
+      "unit": "mmol/L"
+    },
+    "expected_accept": true
+  },
+  {
+    "id": "patient-corrupted",
+    "category": "patient",
+    "task": "observations",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1: sodium was 115 mmol/L. Case 2: sodium was 140 mmol/L.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1: sodium was 115 mmol/L"
+        }
+      ]
+    },
+    "candidate": {
+      "name": "sodium",
+      "subject": "index_patient",
+      "numeric_value": 140,
+      "unit": "mmol/L"
+    },
+    "expected_accept": false
+  },
+  {
+    "id": "encounter-true",
+    "category": "encounter",
+    "task": "observations",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1: sodium on admission was 115 mmol/L; at discharge it was 131 mmol/L.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1: sodium on admission was 115 mmol/L; at discharge it was 131 mmol/L."
+        }
+      ]
+    },
+    "candidate": {
+      "name": "sodium",
+      "numeric_value": 131,
+      "unit": "mmol/L",
+      "time": {
+        "text": "at discharge"
+      }
+    },
+    "expected_accept": true
+  },
+  {
+    "id": "encounter-corrupted",
+    "category": "encounter",
+    "task": "observations",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1: sodium on admission was 115 mmol/L; at discharge it was 131 mmol/L.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1: sodium on admission was 115 mmol/L; at discharge it was 131 mmol/L."
+        }
+      ]
+    },
+    "candidate": {
+      "name": "sodium",
+      "numeric_value": 131,
+      "unit": "mmol/L",
+      "time": {
+        "text": "on admission"
+      }
+    },
+    "expected_accept": false
+  },
+  {
+    "id": "negation-true",
+    "category": "negation",
+    "task": "symptoms_function",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1: examination showed no spasticity.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1: examination showed no spasticity."
+        }
+      ]
+    },
+    "candidate": {
+      "name": "spasticity",
+      "assertion": "absent"
+    },
+    "expected_accept": true
+  },
+  {
+    "id": "negation-corrupted",
+    "category": "negation",
+    "task": "symptoms_function",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1: examination showed no spasticity.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1: examination showed no spasticity."
+        }
+      ]
+    },
+    "candidate": {
+      "name": "spasticity",
+      "assertion": "present"
+    },
+    "expected_accept": false
+  },
+  {
+    "id": "plan-true",
+    "category": "plan",
+    "task": "care_plans",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1: a soft diet was recommended for six weeks. Adherence and completion were not reported.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1: a soft diet was recommended for six weeks"
+        }
+      ]
+    },
+    "candidate": {
+      "name": "soft diet",
+      "action_status": "recommended"
+    },
+    "expected_accept": true
+  },
+  {
+    "id": "plan-corrupted",
+    "category": "plan",
+    "task": "care_plans",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1: a soft diet was recommended for six weeks. Adherence and completion were not reported.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1: a soft diet was recommended for six weeks"
+        }
+      ]
+    },
+    "candidate": {
+      "name": "soft diet",
+      "action_status": "completed"
+    },
+    "expected_accept": false
+  },
+  {
+    "id": "unit-true",
+    "category": "unit",
+    "task": "observations",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1: potassium was 6.4 mmol/L.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1: potassium was 6.4 mmol/L."
+        }
+      ]
+    },
+    "candidate": {
+      "name": "potassium",
+      "numeric_value": 6.4,
+      "unit": "mmol/L"
+    },
+    "expected_accept": true
+  },
+  {
+    "id": "unit-corrupted",
+    "category": "unit",
+    "task": "observations",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1: potassium was 6.4 mmol/L.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1: potassium was 6.4 mmol/L."
+        }
+      ]
+    },
+    "candidate": {
+      "name": "potassium",
+      "numeric_value": 6.4,
+      "unit": "mol/L"
+    },
+    "expected_accept": false
+  },
+  {
+    "id": "value-true",
+    "category": "exponent",
+    "task": "observations",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1: the platelet count was 450 x 10^9/L.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1: the platelet count was 450 x 10^9/L."
+        }
+      ]
+    },
+    "candidate": {
+      "name": "platelet count",
+      "text_value": "450 x 10^9/L"
+    },
+    "expected_accept": true
+  },
+  {
+    "id": "value-corrupted",
+    "category": "exponent",
+    "task": "observations",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1: the platelet count was 450 x 10^9/L.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1: the platelet count was 450 x 10^9/L."
+        }
+      ]
+    },
+    "candidate": {
+      "name": "platelet count",
+      "text_value": "450 x 10^6/L"
+    },
+    "expected_accept": false
+  },
+  {
+    "id": "comparator-true",
+    "category": "comparator",
+    "task": "observations",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1: aldosterone was greater than 40,000 pmol/L.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1: aldosterone was greater than 40,000 pmol/L."
+        }
+      ]
+    },
+    "candidate": {
+      "name": "aldosterone",
+      "numeric_value": 40000,
+      "comparator": ">",
+      "unit": "pmol/L"
+    },
+    "expected_accept": true
+  },
+  {
+    "id": "comparator-corrupted",
+    "category": "comparator",
+    "task": "observations",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1: aldosterone was greater than 40,000 pmol/L.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1: aldosterone was greater than 40,000 pmol/L."
+        }
+      ]
+    },
+    "candidate": {
+      "name": "aldosterone",
+      "numeric_value": 40000,
+      "comparator": "<",
+      "unit": "pmol/L"
+    },
+    "expected_accept": false
+  },
+  {
+    "id": "context-true",
+    "category": "context",
+    "task": "procedures_devices",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1 had a left renal mass. A radical nephrectomy was performed to remove that mass.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1 had a left renal mass"
+        }
+      ]
+    },
+    "candidate": {
+      "name": "radical nephrectomy",
+      "laterality": "left"
+    },
+    "expected_accept": true
+  },
+  {
+    "id": "context-corrupted",
+    "category": "context",
+    "task": "procedures_devices",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1 had a left renal mass. A radical nephrectomy was performed to remove that mass.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1 had a left renal mass"
+        }
+      ]
+    },
+    "candidate": {
+      "name": "radical nephrectomy",
+      "laterality": "right"
+    },
+    "expected_accept": false
+  },
+  {
+    "id": "history-true",
+    "category": "historical",
+    "task": "social_exposures",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1 was exclusively breastfed for six months. Formula was added at seven months; breastfeeding continued.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1 was exclusively breastfed for six months"
+        }
+      ]
+    },
+    "candidate": {
+      "name": "breastfeeding",
+      "assertion": "present",
+      "temporality": "historical",
+      "duration_text": "six months"
+    },
+    "expected_accept": true
+  },
+  {
+    "id": "history-corrupted",
+    "category": "historical",
+    "task": "social_exposures",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1 was exclusively breastfed for six months. Formula was added at seven months; breastfeeding continued.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1 was exclusively breastfed for six months"
+        }
+      ]
+    },
+    "candidate": {
+      "name": "breastfeeding",
+      "assertion": "absent",
+      "temporality": "historical",
+      "duration_text": "six months"
+    },
+    "expected_accept": false
+  },
+  {
+    "id": "aborted-true",
+    "category": "aborted",
+    "task": "procedures_devices",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1: endovascular retrieval was attempted but unsuccessful, and the procedure was aborted.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1: endovascular retrieval was attempted but unsuccessful, and the procedure was aborted."
+        }
+      ]
+    },
+    "candidate": {
+      "name": "endovascular retrieval",
+      "status": "attempted and aborted",
+      "outcome": "unsuccessful"
+    },
+    "expected_accept": true
+  },
+  {
+    "id": "aborted-corrupted",
+    "category": "aborted",
+    "task": "procedures_devices",
+    "source": [
+      {
+        "segment_id": "s1",
+        "heading": "Case 1",
+        "text": "Case 1: endovascular retrieval was attempted but unsuccessful, and the procedure was aborted.",
+        "kind": "paragraph"
+      }
+    ],
+    "patient": {
+      "patient_id": "p1",
+      "label": "Case 1",
+      "identity_evidence": [
+        {
+          "segment_id": "s1",
+          "quote": "Case 1: endovascular retrieval was attempted but unsuccessful, and the procedure was aborted."
+        }
+      ]
+    },
+    "candidate": {
+      "name": "endovascular retrieval",
+      "status": "completed successfully",
+      "outcome": "successful"
+    },
+    "expected_accept": false
+  }
+]
