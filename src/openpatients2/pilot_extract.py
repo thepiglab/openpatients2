@@ -99,6 +99,10 @@ class PilotConfig(ConfigModel):
     timeline_completion: bool = False
     summary_completion: bool = False
     scatter_calls: bool = False
+    experimental_pipeline: Literal['original', 'evidence_ledger'] = 'original'
+    ledger_chunk_characters: int = Field(default=12000, ge=1024, le=32000)
+    ledger_audit: bool = False
+    ledger_delta_timeline: bool = True
 
 
 def load_pilot_config(config: str | Path | dict | PilotConfig) -> PilotConfig:
@@ -333,6 +337,7 @@ class PilotRunner:
         self.arm = arm_name; self.context = context
         self.calls = 0; self.reserved_tokens = 0; self.accounted_tokens = 0; self.attempt_number = 0
         self.results = []; self.patients = []; self.article_rows = []; self.visual_rows = []
+        self.source_ledgers = {}
         self.slots = [asyncio.Semaphore(self.config.concurrency_per_endpoint) for _ in endpoints]
         self.active = [0 for _ in endpoints]
         self.peak_active = [0 for _ in endpoints]
@@ -351,6 +356,12 @@ class PilotRunner:
             'coverage_audit': CoverageAudit.model_json_schema(),
             'joint_figure': JointFigureAnalysis.model_json_schema(),
             'gepa_assessment': ClinicalFeedback.model_json_schema()}
+        from .evidence_ledger import ChunkMap, AttributeAudit
+        from .episode_ledger import ledger_wire_schema
+        self.schemas.update({'ledger_chunk_map':ChunkMap.model_json_schema(),
+            'ledger_attribute_audit':AttributeAudit.model_json_schema(),
+            'ledger_events':ledger_wire_schema(),'ledger_edges':ledger_wire_schema(),
+            **{'ledger_repair_'+k:v.model_json_schema() for k,v in TASK_MODELS.items()}})
         for endpoint in endpoints:
             api = APIConfig(endpoints=[endpoint.rstrip('/')], model=self.config.served_model,
                 model_id=self.config.model_id, revision=self.config.revision,
@@ -705,8 +716,18 @@ class PilotRunner:
         packet['input_scope'] = self.input_scope
         rid = packet['record_id']; segments = packet_segments(packet)
         identity = {'article_id': article['article_id'], 'patient_id': patient['patient_id'], 'record_id': rid}
+        ledger_mode = self.config.experimental_pipeline == 'evidence_ledger'
+        routing = {}
         async def clinical(task):
-            messages = messages_for(packet, task, namespace='bounded-pmc-pilot/1')
+            task_packet, task_segments = packet, segments
+            if ledger_mode:
+                from .evidence_ledger import route_segments, subset_packet
+                selected, receipt = route_segments(article,patient,task,self.source_ledgers.get(article['article_id'],[]))
+                task_packet = subset_packet(packet,article,selected)
+                task_segments = packet_segments(task_packet)
+                routing[task] = receipt | {'segment_ids':sorted(selected),
+                    'request_source_characters':len(task_packet['text'])}
+            messages = messages_for(task_packet, task, namespace='bounded-pmc-pilot/1')
             messages[-1]['content'] += '\nReturn only JSON matching SCHEMA:\n' + json.dumps(self.schemas[task])
             if self.config.refinement_policy == 'source_aware':
                 messages[-1]['content'] += ('\nKeep explicit routes in route fields, not only medication names. '
@@ -717,12 +738,22 @@ class PilotRunner:
                     'Preserve the exact result notation in text_value, including scientific exponents; '
                     'keep reference intervals separate. Do not mistake flattened 109 for an explicit 10^9, '
                     'convert units, or copy a reference threshold as the patient result.')
-            return await self.call(task, messages, self.clinical_checker(task, packet, segments),
-                                   identity, replica, segments, packet=packet)
+            return await self.call(task, messages, self.clinical_checker(task, task_packet, task_segments),
+                                   identity, replica, task_segments, packet=task_packet)
         tasks = await asyncio.gather(*(clinical(task) for task in TASK_MODELS))
         extra_tasks = []
+        attribute_receipt = None; episode_receipt = None
+        if ledger_mode and self.config.ledger_audit:
+            from .ledger_pipeline import challenge_attributes
+            candidate_rows = [row for result in tasks for row in review_rows(article,rid,result['task'],result['data'])]
+            # Rechecks see the complete original source, including passages that
+            # the map did not route. Audit hypotheses never replace source text.
+            full_packet = patient_packet(article,roster,patient,scope='whole_article',figure_reviews=reviews)
+            challenge_tasks,attribute_receipt = await challenge_attributes(self,article,patient,full_packet,
+                tasks,candidate_rows,identity,replica)
+            extra_tasks.extend(challenge_tasks)
         inventory = None
-        if self.config.inventory_clinical_features:
+        if self.config.inventory_clinical_features and not ledger_mode:
             # The audit sees the complete article, so incorrect compact source
             # selection cannot hide a missed patient feature from the reviewer.
             inventory = await self.call('clinical_inventory', inventory_messages(article, patient),
@@ -733,7 +764,7 @@ class PilotRunner:
             identity, replica, context_article['segments'])
         rows = [row for result in tasks for row in review_rows(article, rid, result['task'], result['data'])]
         facts = {row['review_id']: rid for row in rows}
-        _, sources = sources_for(context_article)
+        _, sources = sources_for(article if ledger_mode else context_article)
         def timeline_checker(value):
             graph = PatientTimeline.model_validate(value)
             if graph.record_id != rid:
@@ -742,12 +773,17 @@ class PilotRunner:
             if not audit['structural_source_gates_passed']:
                 raise ValueError('; '.join(i['code'] for i in audit['issues'] if i['severity'] == 'block'))
             return graph.model_dump()
-        timeline = await self.call('timeline_v2', timeline_messages(context_article, patient, rid, facts, rows,
-                                  refined=self.config.refinement_policy == 'source_aware'),
-                                  timeline_checker, identity, replica, context_article['segments'],
-                                  partial_builder=lambda value: partial_timeline(value, sources, facts, rid))
+        if ledger_mode and self.config.ledger_delta_timeline:
+            from .ledger_pipeline import assemble_episodes
+            timeline, delta_tasks, episode_receipt = await assemble_episodes(self,article,patient,rows,identity,replica,sources)
+            extra_tasks.extend(delta_tasks)
+        else:
+            timeline = await self.call('timeline_v2', timeline_messages(context_article, patient, rid, facts, rows,
+                                      refined=self.config.refinement_policy == 'source_aware'),
+                                      timeline_checker, identity, replica, context_article['segments'],
+                                      partial_builder=lambda value: partial_timeline(value, sources, facts, rid))
         original_timeline = copy.deepcopy(timeline['data'])
-        if self.config.review_ordering and timeline['data'] is not None:
+        if self.config.review_ordering and not ledger_mode and timeline['data'] is not None:
             graph = copy.deepcopy(timeline['data'])
             ordering = await self.call('ordering_review', ordering_messages(context_article, graph),
                 lambda value: check_ordering(value, graph, sources, facts), identity, replica, context_article['segments'])
@@ -807,7 +843,7 @@ class PilotRunner:
                 for repaired in extra_tasks:
                     if repaired['task'].startswith('coverage_repair_'):
                         repaired['baseline_fact_ids']=[r['review_id'] for r in before_rows]
-        if self.config.audit_claims:
+        if self.config.audit_claims and not ledger_mode:
             # Small claim batches preserve output space and attribution context.
             # Every claim is audited; no sample is disguised as comprehensive.
             async def audit_batch(start):
@@ -820,7 +856,7 @@ class PilotRunner:
                     {**identity,'batch':start//16}, replica, article['segments'])
             audits = await asyncio.gather(*(audit_batch(i) for i in range(0,len(rows),16)))
             extra_tasks.extend(audits)
-        if self.config.timeline_completion:
+        if self.config.timeline_completion and not ledger_mode:
             # Rebuild AFTER coverage backfill, using the actual delivered facts.
             # A summary and model inventory never replace immutable source text.
             rows = [row for r in tasks for row in review_rows(article,rid,r['task'],r['data'])]
@@ -856,7 +892,7 @@ class PilotRunner:
                 extra_tasks.append(completed); batch_number += 1
                 # A failed completion cannot discard an already usable graph.
                 if completed['status']=='valid': timeline={**timeline,'data':completed['data']}
-        if self.config.summary_completion:
+        if self.config.summary_completion and not ledger_mode:
             rows = [row for r in tasks for row in review_rows(article,rid,r['task'],r['data'])]
             def summary_messages(batch):
                 messages = task_messages('summary',article,patient)
@@ -891,6 +927,8 @@ class PilotRunner:
             'sections': {r['task']: r['data'] for r in tasks},
             'companions': {'summary': summary['data'], 'timeline_v2': timeline['data']},
             'experimental_reviews': {'timeline_before_order_review':original_timeline,
+                'evidence_ledger':{'enabled':ledger_mode,'routes':routing,'attribute_audit':attribute_receipt,
+                    'episode_assembly':episode_receipt,'model_hypotheses_are_not_gold':True},
                 'clinical_inventory':inventory, 'claim_audits':audits,
                 'coverage_audits':coverage_audits,
                 'model_judgments_are_not_accuracy_gold':True, 'facts_automatically_deleted':False,
@@ -1179,6 +1217,9 @@ class PilotRunner:
         async def extract_article(index, article, row, chosen):
             result = row['roster']
             roster = result['data']; replica = index % len(self.clients)
+            if self.config.experimental_pipeline == 'evidence_ledger' and chosen:
+                from .ledger_pipeline import prepare_source_map
+                self.source_ledgers[article['article_id']] = await prepare_source_map(self,article,roster,replica)
             fig_results = await asyncio.gather(*(self.call('figure_attribution', figure_messages(article, roster, figure['figure_key']),
                 lambda value, fid=figure['figure_key']: validate_figure_review(value, article, roster, fid),
                 {'article_id': article['article_id'], 'figure_id': figure['figure_key']}, replica, article['segments'])
@@ -1205,6 +1246,7 @@ class PilotRunner:
         write_json(self.output / 'visual-annotations.json', self.visual_rows)
         wall = time.monotonic() - started
         report = {'schema_version': 'pilot-extraction-report/1', 'arm': self.arm,
+            'experimental_pipeline':self.config.experimental_pipeline,
             'model': {'model_id': self.config.model_id, 'revision': self.config.revision},
             'selected_articles': len(articles), 'eligible_articles': len(eligible),
             'input_scope': self.input_scope, 'seed': self.config.seed, 'discovery_only': discovery_only,

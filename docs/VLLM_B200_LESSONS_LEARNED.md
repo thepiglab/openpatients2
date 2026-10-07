@@ -1138,8 +1138,8 @@ after acquisition cleanup.
 | Is a different FP8/INT8 quantizer stronger? | Not established; identical weight hashes are not a new comparison |
 | Is 8K prefill universally best? | No; 8K/16K/32K rates were close, and real pipeline context/repair loads differ |
 | Is c64 optimal for images or huge contexts? | No; image tests used c2 and require separate memory/latency/quality tuning |
-| Does 128K improve clinical completeness? | Promising two-seed GEPA confirmation, not independent proof; test equal seeds on adjudicated long sources |
-| Does GEPA generalize? | Latest campaign completes both 27-family profiles, but full clinical GEPA delivers 115/129 versus baseline122/129 and held-out41/42 versus42/42. New-source validity improves on only four patients; medical recall remains unadjudicated. Test components separately on a larger independent holdout. |
+| Does 128K improve clinical completeness? | Early two-seed GEPA confirmation was promising, but the 2026-10-07 review finds no convincing global gain. Test matched seeds on adjudicated overflow sources; avoid blanket context escalation. |
+| Does GEPA generalize? | In the 2026-10-07 review, conditions/observations rewrites raise live development checklist delivery from 707/777 to 728/777, but optimizer-held-out delivery falls from 138/147 to 135/147. Joint GEPA retains originals. Test these components separately on new source-reviewed holdouts. |
 | Do visual descriptions and patient attribution work reliably? | Structural gains coexist with incorrect arrows/modalities/composite ownership; adjudicate panels and chart readings |
 | Can we scale ingestion/throughput to the entire corpus? | CPU worker scaling was flat; query discovery was capped; unique-article serving and complete-patient rates remain unmeasured |
 | Are long relative patient histories ready for synthetic EHRs? | Useful events survive, but temporal edges/state links still fail; score chronology and omissions against source-derived gold |
@@ -1165,3 +1165,80 @@ For full run procedures, see [K2](HIPERGATOR_K2.md), [Glimmer](HIPERGATOR_GLIMME
 [current clinical GEPA](GEPA_CLINICAL_OVERNIGHT.md). Future results should update
 this reference with dated evidence; keep unsuccessful experiments and historical
 limitations visible.
+
+## 14. Measured update — run 20261006-142003, reviewed 2026-10-07
+
+Full evidence and limitations:
+[patient-bundle review](../reports/BUNDLE_CLINICAL_20261007.md) and
+[counts/receipts](../reports/BUNDLE_CLINICAL_20261007.metrics.json).
+
+- **Right-sizing joint GEPA worked.** One-GPU independent search averaged 99.4%
+  active utilization; one-GPU joint search averaged 98.9%, versus the previous
+  eight-GPU joint search's 42%. Main eight-GPU extraction averaged 81.6%, median
+  99%. These are phase-tagged device-sample averages, not time-weighted kernel
+  measurements. High utilization does not establish clinical improvement.
+- **Retain DFlash for the current FP8 recipe.** The matched seed-42 original
+  live-complete cells produced 8,858 output tok/s with DFlash and 2,550 with
+  ordinary decoding, a 3.47× rate ratio. Rates aggregate eight GPUs and include
+  auxiliary/repair calls while excluding startup. One seed does not establish
+  clinical equivalence; the companion ordinary `gepa` cell was deferred.
+- **High reasoning and blanket 128K remain unjustified.** High reasoning took
+  about 1.64× the original live-complete arm time, delivering fewer checked
+  clinical facts. Two-seed 128K original trials delivered 472/518 clinical probes
+  and 24/82 ordering probes. Use 64K context/32K prefill, medium reasoning and TP1
+  replicas as the current experimental recipe, escalating documented hard cases.
+- **Completion prompt construction still limits useful work.** All 34 main
+  pre-call context overflows occurred in timeline completion; summary completion
+  had none. Timeline completion was valid in only 487/872 calls. Compact evidence,
+  short locally mapped IDs and additions/edge-only patches are more useful next
+  experiments than universally allocating larger KV caches. Preserve verified
+  event links in code instead of repeatedly regenerating the complete graph.
+- **Use patient outcomes alongside token rates.** Clinical-only GEPA delivered
+  728/777 development probes versus original live-complete's 707/777 at similar
+  token rates (8,498 versus 8,543 tok/s), but scored worse on the optimizer's
+  held-out probes. Extra generated tokens are not extra supported patient facts.
+  The revised reference and repeated seeds are not independent population samples.
+- **Budget partial work explicitly.** Forty-three comparisons completed; one
+  ordinary-decoding comparison was deferred at the main deadline reserve.
+  Allocated GPU-stage wall time summed to 8h 33m across bootstrap, one-GPU
+  optimization and main evaluation, excluding CPU acquisition and queue waiting.
+  Partial completion is different from server failure or failed extraction tasks.
+- **A finished optimizer may select no change.** Joint search completed fresh
+  original-control confirmation, but accepted no mutation. Five group proposals
+  tied or lost on training batches, a timeline/summary reflection failed its
+  requested-key contract, and the last vision rollout exhausted its budget.
+  Reject malformed or schema-conflicting reflection before costly rollouts;
+  optimize only components actually invoked by the evaluated deployment path.
+
+## 15. Proposed independent-GPU pilot — not yet hardware-benchmarked
+
+The [frontier pilot](FRONTIER_PILOT.md) runs four independent one-B200 Slurm jobs,
+each with a TP1 FP8/DFlash server and disjoint article subset. They may run on
+different nodes or start at different times. No cross-node model communication
+is needed because each GPU holds its own model replica. This does not apply to
+a future model that requires tensor parallelism across GPUs.
+
+The default allocation is four times 8 CPUs / 60 GB / one GPU: 32 CPUs, 240 GB,
+four GPUs in total, within cai5724's 32 CPU / 250 GB / eight GPU limit. The optional
+eight-worker plan uses 4 CPUs / 30 GB per worker; it has less per-worker host
+memory and CPU headroom and has not been validated on this cluster. Start with
+four. Independent jobs remove the requirement to find eight free GPUs on one
+node; they do not guarantee shorter queues.
+
+CPU jobs prepare fixtures and dependencies, download one shared checkpoint,
+aggregate results and clean downloads. GPU jobs perform server initialization,
+warmup and inference with local request validation; they do not download models
+or run corpus preparation. Per-worker writable caches are isolated from the
+read-only shared checkpoint. Cleanup waits for all workers and checks ownership.
+
+Each worker has a 90-minute allocation by default, including initialization;
+incomplete cells are explicitly deferred. This is a budget, not a measured
+completion estimate. Never add rates from workers that ran at different times
+and label that number simultaneous throughput. The report uses total generated
+tokens divided by summed measured GPU arm-seconds, plus coverage and clinical
+scores. Startup, queue waiting and missing usage are reported separately.
+
+The [source-ledger experiment](EVIDENCE_LEDGER_DESIGN.md) may reduce repeated
+prefill and oversized timeline prompts, but it adds map/audit calls and may
+reduce prefix reuse. Use supported clinical facts and ordered events per GPU
+time to decide whether it helps; output token rate alone cannot settle this.
