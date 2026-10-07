@@ -5,8 +5,9 @@ import json
 import pytest
 from jsonschema import validate
 
-from openpatients2.episode_ledger import (LedgerDeltaError, apply_ledger_delta, build_ledger,
-    ledger_messages, ledger_timeline, ledger_wire_schema, parse_ledger_delta)
+from openpatients2.episode_ledger import (LedgerDeltaError, apply_ledger_delta,
+    apply_ledger_delta_partial, build_ledger, ledger_messages, ledger_timeline,
+    ledger_wire_schema, parse_ledger_delta, source_ordered_fact_aliases)
 from openpatients2.longitudinal import relative_order
 
 
@@ -301,3 +302,178 @@ def test_prompt_keeps_target_patient_identity_witness_outside_fact_neighborhood(
     messages = ledger_messages(article, patient, ledger(), ['f1'])
     payload = json.loads(messages[1]['content'].split('SOURCE_JSON:\n')[1].split('\nTASK:\n')[0])
     assert payload['source_selection']['selected_segment_ids'] == ['b0', 'b1', 'b7', 's1']
+
+
+@pytest.mark.parametrize('task,kind,quote,extra', [
+    ('symptoms_function', 'test', 'Examination showed no spasticity.', {'name': 'spasticity'}),
+    ('observations', 'test', 'Histopathology showed no melanin pigment.', {'name': 'melanin pigment'}),
+    ('observations', 'test', 'Vascular markers were negative.', {'name': 'vascular markers'}),
+    ('conditions', 'diagnosis', 'The evaluation ruled out melanoma.',
+     {'name': 'melanoma', 'verification_status': 'refuted'}),
+])
+def test_completed_evaluations_can_link_absent_findings_and_refuted_diagnoses(task, kind, quote, extra):
+    sources = {SID: {'s1': quote}}
+    row = dict(review_id='negative-finding', record_id=RID, task=task,
+        candidate=dict(subject='index_patient', assertion='absent', temporality='current',
+                       evidence=[cite(quote)], **extra))
+    a = build_ledger(RID, [row], sources)
+    b, audit = apply_ledger_delta(a, delta(events=[event('n1', quote, kind=kind)],
+        fact_links=[link('n1', 'f1', quote)]), sources)
+    assert ledger_timeline(b)['events'][0]['fact_ids'] == ['negative-finding']
+    assert b['events'][0]['occurrence'] == 'occurred'
+    assert b['facts'][0]['value']['assertion'] == 'absent'
+    assert audit['structural_source_gates_passed']
+    assert not b['facts'][0]['clinical_entailment_verified']
+
+
+@pytest.mark.parametrize('action', ['planned', 'ordered', 'declined', 'cancelled'])
+def test_partial_application_preserves_planned_and_cancelled_treatment_guards(action):
+    planned = fact('immutable-b', SECOND, 10, '2015')
+    planned['candidate']['action'] = action
+    a = ledger([fact('immutable-a', FIRST), planned])
+    before = copy.deepcopy(a)
+    b, audit = apply_ledger_delta_partial(a, delta(events=[event('n1', FIRST), event('n2', SECOND)],
+        fact_links=[link('n1', 'f1', FIRST), link('n2', 'f2', SECOND)]), SOURCES)
+    assert a == before
+    assert len(b['events']) == 2
+    assert [(x['event_id'], x['fact_alias']) for x in b['fact_links']] == [('e1', 'f1')]
+    assert audit['rejected_additions'] == {'events': 0, 'fact_links': 1, 'edges': 0}
+    assert b['quarantine'][-1]['reason'] == 'fact_occurrence_conflict'
+
+
+@pytest.mark.parametrize('task,assertion,temporality', [
+    ('medications', 'absent', 'historical'),
+    ('observations', 'conditional', 'current'),
+    ('observations', 'present', 'future'),
+])
+def test_occurrence_guards_still_reject_negated_interventions_conditional_and_future_facts(task, assertion, temporality):
+    row = fact('guarded', FIRST, task=task)
+    row['candidate'].update(assertion=assertion, temporality=temporality)
+    with pytest.raises(LedgerDeltaError, match='fact_occurrence_conflict'):
+        apply_ledger_delta(ledger([row]), delta(events=[event('n1', FIRST)],
+            fact_links=[link('n1', 'f1', FIRST)]), SOURCES)
+
+
+def test_source_ordered_batches_preserve_aliases_and_use_document_order_and_span_offsets():
+    sources = {SID: {'b10': 'Early finding. Later finding.', 'b2': 'Final finding.'}}
+    def row(fid, segment, quote):
+        return dict(review_id=fid, record_id=RID, task='observations',
+            candidate={'subject': 'index_patient', 'evidence': [{'segment_id': segment, 'quote': quote}]})
+    a = build_ledger(RID, [row('a-final', 'b2', 'Final finding.'),
+        row('b-later', 'b10', 'Later finding.'), row('z-early', 'b10', 'Early finding.')], sources)
+    before = copy.deepcopy(a)
+    assert source_ordered_fact_aliases(a, sources) == ['f3', 'f2', 'f1']
+    article = {'segments': [{'segment_id': 'b2'}, {'segment_id': 'b10'}]}
+    assert source_ordered_fact_aliases(a, sources, article=article) == ['f1', 'f3', 'f2']
+    assert a == before
+    assert [(f['alias'], f['fact_id']) for f in a['facts']] == [
+        ('f1', 'a-final'), ('f2', 'b-later'), ('f3', 'z-early')]
+
+
+def test_distinct_event_semantics_can_share_an_occurrence_anchor():
+    proposals = [event('n1', FIRST), event('n2', FIRST, kind='test', description='Treatment monitoring evaluation')]
+    b, audit = apply_ledger_delta(ledger(), delta(events=proposals), SOURCES)
+    assert len(b['events']) == 2
+    assert b['events'][0]['occurrence_anchor'] == b['events'][1]['occurrence_anchor']
+    assert audit['accepted_event_refs'] == {'n1': 'e1', 'n2': 'e2'}
+
+
+def test_partial_exact_duplicate_proposal_reuses_existing_event_without_mutating_it():
+    a, _ = apply_ledger_delta(ledger(), delta(events=[event('n1', FIRST)]), SOURCES)
+    before = copy.deepcopy(a)
+    b, audit = apply_ledger_delta_partial(a, delta(events=[event('n2', FIRST), event('n3', SECOND)],
+        fact_links=[link('n2', 'f1', FIRST), link('n3', 'f2', SECOND)]), SOURCES)
+    assert a == before
+    assert b['events'][0] == before['events'][0]
+    assert audit['accepted_event_refs'] == {'n2': 'e1', 'n3': 'e2'}
+    assert audit['reused_event_refs'] == {'n2': 'e1'}
+    assert audit['accepted_additions'] == {'events': 1, 'fact_links': 2, 'edges': 0}
+    assert audit['rejected_additions'] == {'events': 0, 'fact_links': 0, 'edges': 0}
+
+
+def test_partial_exact_duplicate_within_batch_maps_both_refs_safely():
+    b, audit = apply_ledger_delta_partial(ledger(), delta(events=[event('n1', FIRST), event('n2', FIRST)],
+        fact_links=[link('n2', 'f1', FIRST)]), SOURCES)
+    assert len(b['events']) == 1
+    assert audit['accepted_event_refs'] == {'n1': 'e1', 'n2': 'e1'}
+    assert audit['reused_event_refs'] == {'n2': 'e1'}
+    assert b['fact_links'][0]['event_id'] == 'e1'
+
+
+def test_partial_invalid_neighboring_link_preserves_good_events_links_and_edges():
+    a = ledger()
+    before = copy.deepcopy(a)
+    b, audit = apply_ledger_delta_partial(a, delta(events=[event('n1', FIRST), event('n2', SECOND)],
+        fact_links=[link('n1', 'f1', FIRST), link('n1', 'f2', FIRST), link('n2', 'f2', SECOND)],
+        edges=[edge('n1', 'n2')]), SOURCES)
+    assert a == before
+    assert audit['accepted_additions'] == {'events': 2, 'fact_links': 2, 'edges': 1}
+    assert audit['rejected_additions'] == {'events': 0, 'fact_links': 1, 'edges': 0}
+    assert b['quarantine'][-1]['reason'] == 'fact_link_outside_fact_evidence'
+    assert relative_order(ledger_timeline(b))['before_pairs'] == [['e1', 'e2']]
+    assert audit['structural_source_gates_passed']
+
+
+def test_partial_bad_event_and_its_dependencies_cannot_discard_independent_valid_event():
+    malformed = event('n1', FIRST)
+    malformed['kind'] = 'invented-kind'
+    b, audit = apply_ledger_delta_partial(ledger(), delta(events=[malformed, event('n2', SECOND)],
+        fact_links=[link('n1', 'f1', FIRST), link('n2', 'f2', SECOND)],
+        edges=[edge('n1', 'n2')]), SOURCES)
+    assert audit['accepted_event_refs'] == {'n2': 'e1'}
+    assert audit['accepted_additions'] == {'events': 1, 'fact_links': 1, 'edges': 0}
+    assert audit['rejected_additions'] == {'events': 1, 'fact_links': 1, 'edges': 1}
+    assert [q['reason'] for q in b['quarantine']] == [
+        'invalid_ledger_addition', 'unknown_event_ref', 'unknown_event_ref']
+
+
+@pytest.mark.parametrize('conflicting', [edge('e2', 'e1'), edge('e1', 'e2', 'same_time')])
+def test_partial_edges_keep_valid_order_and_quarantine_cycle_or_contradictory_tie(conflicting):
+    a = two_events()
+    b, audit = apply_ledger_delta_partial(a, delta(edges=[edge('e1', 'e2'), conflicting]), SOURCES,
+        phase='edges', event_ids=['e1'])
+    assert len(b['edges']) == 1
+    assert b['events'] == a['events'] and b['fact_links'] == a['fact_links']
+    assert audit['rejected_additions']['edges'] == 1
+    assert b['quarantine'][-1]['reason'] == 'contradictory_temporal_order'
+    assert audit['structural_source_gates_passed']
+
+
+def test_partial_distinct_administration_guard_rejects_only_conflicting_link():
+    broad = FIRST + ' ' + SECOND
+    b, audit = apply_ledger_delta_partial(ledger(), delta(events=[event('n1', broad)],
+        fact_links=[link('n1', 'f1', FIRST), link('n1', 'f2', SECOND)]), SOURCES)
+    assert len(b['fact_links']) == 1
+    assert audit['rejected_additions']['fact_links'] == 1
+    assert b['quarantine'][-1]['reason'] == 'distinct_administrations_require_separate_events'
+
+
+def test_partial_duplicate_event_refs_are_ambiguous_and_never_rebind_dependent_links():
+    b, audit = apply_ledger_delta_partial(ledger(), delta(events=[event('n1', FIRST), event('n1', SECOND)],
+        fact_links=[link('n1', 'f1', FIRST)]), SOURCES)
+    assert not b['events'] and not b['fact_links']
+    assert audit['accepted_event_refs'] == {}
+    assert [q['reason'] for q in b['quarantine']] == ['duplicate_event_ref', 'duplicate_event_ref', 'unknown_event_ref']
+
+
+def test_partial_api_preserves_request_scope_source_and_owner_gates():
+    a = two_events()
+    b, audit = apply_ledger_delta_partial(a, delta(fact_links=[link('e1', 'f1', FIRST), link('e2', 'f2', SECOND)],
+        edges=[edge('e1', 'e2')]), SOURCES, phase='events', fact_aliases=['f1'])
+    assert b['events'] == a['events'] and b['fact_links'] == a['fact_links'] and not b['edges']
+    assert [q['reason'] for q in audit['quarantined_additions']] == [
+        'fact_alias_outside_delivered_batch', 'edge_additions_outside_edge_phase']
+    c, report = apply_ledger_delta_partial(a, delta(edges=[edge('e1', 'e2')]), SOURCES,
+        phase='edges', available_segment_ids=['undelivered'])
+    assert not c['edges'] and report['quarantined_additions'][0]['reason'] == 'unresolved_exact_quote'
+    changed = {SID: {'s1': TEXT + ' Mutated original source.'}}
+    with pytest.raises(LedgerDeltaError, match='source_digest_mismatch'):
+        apply_ledger_delta_partial(a, delta(), changed)
+    with pytest.raises(LedgerDeltaError, match='ledger_wrong_patient'):
+        apply_ledger_delta_partial(a, delta(record_id='PMCtest.1:p2'), SOURCES)
+    wrong_owner = ledger()
+    wrong_owner['facts'][0]['record_id'] = 'PMCtest.1:p2'
+    d, report = apply_ledger_delta_partial(wrong_owner, delta(events=[event('n1', FIRST)],
+        fact_links=[link('n1', 'f1', FIRST)]), SOURCES)
+    assert len(d['events']) == 1 and not d['fact_links']
+    assert report['quarantined_additions'][0]['reason'] == 'unknown_or_wrong_patient_fact'

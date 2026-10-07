@@ -12,7 +12,7 @@ import hashlib
 import json
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, ValidationError
 
 from .extraction_contracts import SourceSpan, span_errors
 from .longitudinal import Offset, PatientTimeline, TimeExpression, audit_timeline
@@ -93,9 +93,9 @@ def ledger_wire_schema() -> dict:
     return schema
 
 
-def parse_ledger_delta(value: str | dict | LedgerDelta) -> LedgerDelta:
+def _delta_object(value: str | dict | LedgerDelta) -> dict:
     if isinstance(value, LedgerDelta):
-        return value
+        return value.model_dump()
     if isinstance(value, str):
         def unique_pairs(pairs):
             result = {}
@@ -106,7 +106,13 @@ def parse_ledger_delta(value: str | dict | LedgerDelta) -> LedgerDelta:
             return result
         value = json.loads(value, object_pairs_hook=unique_pairs,
                            parse_constant=lambda x: (_ for _ in ()).throw(ValueError('Nonfinite JSON number: ' + x)))
-    return LedgerDelta.model_validate(value)
+    return value
+
+
+def parse_ledger_delta(value: str | dict | LedgerDelta) -> LedgerDelta:
+    if isinstance(value, LedgerDelta):
+        return value
+    return LedgerDelta.model_validate(_delta_object(value))
 
 
 def _resolve(citation, record_id, sources):
@@ -200,6 +206,50 @@ def ledger_timeline(ledger: dict) -> dict:
                 edges=edges, limitations=deepcopy(ledger['limitations']))
 
 
+def source_ordered_fact_aliases(ledger: dict, sources: dict | None = None, *,
+                                article: dict | None = None) -> list[str]:
+    """Order evidence witnesses for batching without changing immutable aliases.
+
+    Source and segment insertion order is the canonical source order. An article's
+    segment list takes precedence when supplied. Span offsets order facts inside
+    a segment; fact ID breaks ties without implying a clinical time relation.
+    """
+    source_order = {sid: index for index, sid in enumerate(sources or {})}
+    segment_order = {(sid, seg): index for sid, blocks in (sources or {}).items()
+                     for index, seg in enumerate(blocks)}
+    article_order = {segment['segment_id']: index for index, segment in enumerate(
+        (article or {}).get('segments', []))}
+    def witness_key(span):
+        sid, seg = span['source_id'], span['segment_id']
+        if article_order:
+            return (article_order.get(seg, len(article_order)),
+                    source_order.get(sid, len(source_order)), sid, seg, span['start'], span['end'])
+        return (source_order.get(sid, len(source_order)), sid,
+                segment_order.get((sid, seg), len(segment_order)), seg, span['start'], span['end'])
+    def fact_key(fact):
+        return min(witness_key(span) for span in fact['clinical_evidence']), fact['fact_id']
+    return [fact['alias'] for fact in sorted(ledger['facts'], key=fact_key)]
+
+
+def _event_identity(event):
+    """Only an exact source-backed semantic proposal can reuse a node."""
+    return json_digest({key: event[key] for key in ('occurrence_anchor', 'episode_anchor',
+        'kind', 'occurrence', 'description', 'evidence', 'attribution_evidence', 'times')})
+
+
+def _fact_occurrence_conflict(event, fact):
+    if event['occurrence'] != 'occurred':
+        return False
+    value = fact['value']
+    # A completed examination can report an absent finding or refute a diagnosis.
+    # Negated interventions still cannot establish an administration/procedure.
+    absent_intervention = (value.get('assertion') == 'absent'
+                           and fact['task'] in {'medications', 'oncology', 'procedures_devices'})
+    return (absent_intervention or value.get('assertion') == 'conditional'
+            or value.get('temporality') == 'future'
+            or value.get('action') in {'planned', 'ordered', 'declined', 'cancelled'})
+
+
 def _distinct_administrations(facts):
     """Conservative guard for explicit changes in the same named therapy.
 
@@ -231,6 +281,12 @@ def apply_ledger_delta(ledger: dict, value: str | dict | LedgerDelta, sources: d
     Existing nodes, links and edges are retained byte-for-byte. New links to an
     existing event are separate ledger entries; no model can rewrite the node.
     """
+    return _apply_ledger_delta(ledger, value, sources, phase=phase, fact_aliases=fact_aliases,
+                              event_ids=event_ids, available_segment_ids=available_segment_ids)
+
+
+def _apply_ledger_delta(ledger, value, sources, *, phase=None, fact_aliases=None,
+                        event_ids=None, available_segment_ids=None, reuse_exact_events=False):
     delta = parse_ledger_delta(value)
     rid = ledger['record_id']
     def fail(code, **context):
@@ -258,13 +314,11 @@ def apply_ledger_delta(ledger: dict, value: str | dict | LedgerDelta, sources: d
     facts = {f['alias']: f for f in result['facts']}
     events = {e['event_id']: e for e in result['events']}
     refs = {key: key for key in events}
-    anchors = {json_digest(e['occurrence_anchor']): e['event_id'] for e in result['events']}
+    identities = {_event_identity(e): e['event_id'] for e in result['events']}
     for addition in delta.events:
         if addition.event_ref in refs:
             fail('duplicate_event_ref', event_ref=addition.event_ref)
         anchor = resolve(addition.occurrence_anchor)
-        if json_digest(anchor) in anchors:
-            fail('existing_occurrence_requires_fact_link', event_ref=addition.event_ref)
         evidence = [resolve(c) for c in addition.clinical_evidence]
         if not any(_overlap(anchor, span) for span in evidence):
             fail('occurrence_anchor_outside_clinical_evidence', event_ref=addition.event_ref)
@@ -279,9 +333,15 @@ def apply_ledger_delta(ledger: dict, value: str | dict | LedgerDelta, sources: d
             raw = time.model_dump()
             raw['evidence'] = [resolve(c) for c in time.evidence]
             entry['times'].append(TimeExpression.model_validate(raw).model_dump())
+        identity = _event_identity(entry)
+        if identity in identities:
+            if not reuse_exact_events:
+                fail('existing_occurrence_requires_fact_link', event_ref=addition.event_ref)
+            refs[addition.event_ref] = identities[identity]
+            continue
         refs[addition.event_ref] = eid
         events[eid] = entry
-        anchors[json_digest(anchor)] = eid
+        identities[identity] = eid
         result['events'].append(entry)
     def event_id(ref):
         if ref not in refs:
@@ -300,9 +360,7 @@ def apply_ledger_delta(ledger: dict, value: str | dict | LedgerDelta, sources: d
             fail('fact_link_outside_fact_evidence', fact_alias=addition.fact_alias)
         if not any(_overlap(s, e) for s in evidence for e in events[eid]['evidence']):
             fail('fact_link_outside_event_evidence', event_ref=addition.event_ref)
-        if events[eid]['occurrence'] == 'occurred' and (fact['value'].get('assertion') in {'absent', 'conditional'}
-                or fact['value'].get('temporality') == 'future'
-                or fact['value'].get('action') in {'planned', 'ordered', 'declined', 'cancelled'}):
+        if _fact_occurrence_conflict(events[eid], fact):
             fail('fact_occurrence_conflict', fact_alias=addition.fact_alias)
         pair = (eid, fact['fact_id'])
         if pair in existing_links:
@@ -322,12 +380,13 @@ def apply_ledger_delta(ledger: dict, value: str | dict | LedgerDelta, sources: d
             fail('edge_outside_target_event_batch', from_event_id=left, to_event_id=right)
         offset = addition.offset.model_dump() if addition.offset else None
         key = (left, right, addition.relation, json_digest(offset))
+        evidence = [resolve(c) for c in addition.evidence]
         if key in edge_keys:
             continue
         edge_keys.add(key)
         result['edges'].append(dict(edge_id=f'edge{len(result["edges"]) + 1}', from_event_id=left,
             to_event_id=right, relation=addition.relation, offset=offset,
-            evidence=[resolve(c) for c in addition.evidence], clinical_relation_verified=False))
+            evidence=evidence, clinical_relation_verified=False))
     result['limitations'] = list(dict.fromkeys([*result['limitations'], *delta.limitations]))
     graph = PatientTimeline.model_validate(ledger_timeline(result))
     audit = audit_timeline(graph, sources, {f['fact_id']: f['record_id'] for f in facts.values()})
@@ -341,13 +400,88 @@ def apply_ledger_delta(ledger: dict, value: str | dict | LedgerDelta, sources: d
     return result, audit
 
 
+def apply_ledger_delta_partial(ledger: dict, value: str | dict | LedgerDelta, sources: dict, *,
+                               phase: Literal['events', 'edges'] | None = None,
+                               fact_aliases: list[str] | None = None,
+                               event_ids: list[str] | None = None,
+                               available_segment_ids: list[str] | None = None) -> tuple[dict, dict]:
+    """Commit independent valid additions and quarantine each rejected proposal.
+
+    Envelope/patient errors and invalid existing graphs fail the entire request.
+    Each candidate otherwise gets its own strict transaction and full graph audit.
+    Events precede links and edges so rejected event dependencies cannot resolve.
+    Exact duplicate events reuse an existing ID only after resolving and checking
+    all source-backed semantic fields; sharing a sentence never implies identity.
+    The input ledger remains unchanged, including on request-level failure.
+    """
+    raw = _delta_object(value)
+    if not isinstance(raw, dict):
+        raise ValueError('Ledger delta must be an object')
+    # Validate all envelope fields, while allowing an individually malformed
+    # addition to be quarantined rather than discard its valid neighbors.
+    for key in ('events', 'fact_links', 'edges'):
+        if key not in raw or not isinstance(raw[key], list):
+            raise ValueError(f'Ledger delta {key} must be a list')
+    envelope = parse_ledger_delta({**raw, 'events': [], 'fact_links': [], 'edges': []})
+    scope = dict(phase=phase, fact_aliases=fact_aliases, event_ids=event_ids,
+                 available_segment_ids=available_segment_ids)
+    empty = envelope.model_dump()
+    empty['limitations'] = []
+    result, audit = _apply_ledger_delta(ledger, empty, sources, **scope)
+    refs, reused, quarantined = {}, {}, []
+    repeated_refs = Counter(item.get('event_ref') for item in raw['events']
+                            if isinstance(item, dict) and isinstance(item.get('event_ref'), str))
+    models = {'events': EventAddition, 'fact_links': FactLinkAddition, 'edges': EdgeAddition}
+    kinds = {'events': 'event', 'fact_links': 'fact_link', 'edges': 'edge'}
+    for collection in ('events', 'fact_links', 'edges'):
+        for index, proposal in enumerate(raw[collection]):
+            try:
+                addition = models[collection].model_validate(proposal)
+                if collection == 'events' and repeated_refs[addition.event_ref] > 1:
+                    raise LedgerDeltaError([{'code': 'duplicate_event_ref', 'event_ref': addition.event_ref}])
+                item = addition.model_dump()
+                if collection == 'fact_links':
+                    item['event_ref'] = refs.get(item['event_ref'], item['event_ref'])
+                elif collection == 'edges':
+                    for key in ('from_event_ref', 'to_event_ref'):
+                        item[key] = refs.get(item[key], item[key])
+                candidate = {**empty, collection: [item]}
+                updated, candidate_audit = _apply_ledger_delta(result, candidate, sources,
+                    reuse_exact_events=True, **scope)
+            except LedgerDeltaError as exc:
+                issues = deepcopy(exc.issues)
+            except ValidationError as exc:
+                issues = [{'code': 'invalid_ledger_addition',
+                           'errors': exc.errors(include_context=False, include_input=False)}]
+            else:
+                result, audit = updated, candidate_audit
+                if collection == 'events':
+                    ref = addition.event_ref
+                    refs[ref] = candidate_audit['accepted_event_refs'][ref]
+                    if candidate_audit['accepted_additions']['events'] == 0:
+                        reused[ref] = refs[ref]
+                continue
+            quarantined.append({'kind': kinds[collection], 'proposal_index': index,
+                'reason': issues[0]['code'], 'issues': issues, 'proposal': deepcopy(proposal)})
+    result['quarantine'].extend(quarantined)
+    result['limitations'] = list(dict.fromkeys([*result['limitations'], *envelope.limitations]))
+    # Keep audit fields about the accepted graph separate from rejected proposals.
+    audit.update(accepted_event_refs=refs, reused_event_refs=reused,
+        accepted_additions={key: len(result[key]) - len(ledger[key])
+                            for key in ('events', 'fact_links', 'edges')},
+        rejected_additions={key: sum(q['kind'] == kinds[key] for q in quarantined)
+                            for key in ('events', 'fact_links', 'edges')},
+        quarantined_additions=deepcopy(quarantined), partial_application=bool(quarantined))
+    return result, audit
+
+
 def ledger_messages(article: dict, patient: dict, ledger: dict, fact_aliases: list[str] | None = None,
                     *, phase: Literal['events', 'edges'] = 'events', event_ids: list[str] | None = None) -> list[dict]:
     """Batch facts/events while delivering a compact global accepted event index."""
     if phase not in {'events', 'edges'}:
         raise ValueError('Unknown ledger phase')
     known_facts = {f['alias']: f for f in ledger['facts']}
-    aliases = (list(known_facts) if phase == 'events' else []) if fact_aliases is None else fact_aliases
+    aliases = (source_ordered_fact_aliases(ledger, article=article) if phase == 'events' else []) if fact_aliases is None else fact_aliases
     if set(aliases) - known_facts.keys():
         raise ValueError('Unknown fact batch alias')
     known_events = {e['event_id']: e for e in ledger['events']}
@@ -402,7 +536,10 @@ def ledger_messages(article: dict, patient: dict, ledger: dict, fact_aliases: li
         'event clinical evidence. Event links do not prove dose/result/other attributes. '
         'Keep occurred/planned/conditional/unknown separate. Distinct administrations, doses, assessments or stated '
         'years/days/ages must remain distinct events, even in one sentence. A drug name is never an occurrence or episode '
-        'identity. occurrence_anchor must identify ONE occurrence with its documented distinguishing year/day/dose; '
+        'identity. An examination/test/diagnostic evaluation can occur and report an absent finding or refuted diagnosis; '
+        'fact assertion describes the finding, independently of event occurrence. Planned or cancelled treatments '
+        'cannot become occurred administrations. Distinct event semantics may share a source sentence. '
+        'occurrence_anchor must identify ONE occurrence with its documented distinguishing year/day/dose; '
         'episode_anchor identifies an explicitly stated encounter/course, otherwise null. Link an existing occurrence '
         'using fact_links rather than duplicating it. Do not attach unknown-owner or other-patient evidence. '
         'The goal is relative clinical order. Use before/after with offset=null when only order is supported, times=[] '

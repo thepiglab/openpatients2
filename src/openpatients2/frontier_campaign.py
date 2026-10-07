@@ -38,7 +38,17 @@ TERMINAL = {'COMPLETED', 'FAILED', 'CANCELLED', 'TIMEOUT', 'OUT_OF_MEMORY',
 VARIANTS = ('live-complete', 'ledger-delta', 'ledger-audit')
 
 
+def variants(campaign):
+    if campaign['config'].get('campaign_kind') == 'controlled-components':
+        from .controlled_campaign import VARIANTS as controlled_variants
+        return controlled_variants
+    return VARIANTS
+
+
 def validate_plan(config):
+    if config.get('campaign_kind') == 'controlled-components':
+        from .controlled_campaign import validate_plan as validate_components
+        return validate_components(config)
     if config.get('account') != 'cai5724' or config.get('qos') != 'cai5724':
         raise ValueError('This pilot is bounded to the cai5724 account and QoS')
     if type(config.get('gpu_workers')) is not int or config['gpu_workers'] not in (4, 8):
@@ -67,6 +77,9 @@ def validate_plan(config):
 
 
 def trial_config(campaign, variant, articles):
+    if campaign['config'].get('campaign_kind') == 'controlled-components':
+        from .controlled_campaign import trial_config as component_config
+        return component_config(campaign, variant, articles)
     from .pilot_extract import load_pilot_config, PilotConfig
     base = load_pilot_config(campaign['config']['extraction_config']).model_dump()
     if variant not in VARIANTS:
@@ -113,7 +126,7 @@ def prepare(root, work, config_path, *, sif=None, gpu_workers=None, gpu_minutes=
     validate_bundle_gold(read_json(config['fidelity_reference']), articles)
     campaign = {'version': 'frontier-campaign/1', 'root': str(root), 'work': str(work),
                 'config': config, 'config_sha256': json_digest(config), 'created_unix': time.time()}
-    for variant in VARIANTS:
+    for variant in variants(campaign):
         trial_config(campaign, variant, 31)
     files = sorted((root / 'src/openpatients2').rglob('*.py'))
     files += sorted((root / 'src/openpatients2/prompts').glob('*.md'))
@@ -360,6 +373,9 @@ def probe_worker(engine, cfg, destination):
 
 
 async def run_worker(campaign, shard):
+    if campaign['config'].get('campaign_kind') == 'controlled-components':
+        from .controlled_campaign import run_worker as component_worker
+        return await component_worker(campaign, shard)
     from . import hipergator as hpg
     from .pilot_extract import run_pilot
     from .corpus_pilot import trial_warmup
@@ -451,7 +467,7 @@ def aggregate(campaign):
     work = Path(campaign['work'])
     reference = reviewed_reference(campaign)
     planned = {(i, seed, name) for i in range(campaign['config']['gpu_workers'])
-               for seed in campaign['config']['seeds'] for name in VARIANTS}
+               for seed in campaign['config']['seeds'] for name in variants(campaign)}
     rows = {}; workers = []
     for i in range(campaign['config']['gpu_workers']):
         base = work / 'shards' / f'{i:03d}'
@@ -464,7 +480,7 @@ def aggregate(campaign):
                 rows[key] = row
     results = []; exports = {}
     for seed in campaign['config']['seeds']:
-        for name in VARIANTS:
+        for name in variants(campaign):
             patients = []; rosters = []; visuals = []; media = []; missing = []; walls = []; tokens = 0; unknown_usage = 0
             task_count = 0; valid_tasks = 0
             for i in range(campaign['config']['gpu_workers']):
@@ -472,19 +488,52 @@ def aggregate(campaign):
                 if not row or row['status'] != 'completed':
                     missing.append({'shard': i, 'status': row['status'] if row else 'missing'})
                     continue
+                if campaign['config'].get('campaign_kind') == 'controlled-components':
+                    baseline_row = rows.get((i, seed, 'live-complete'))
+                    if (not baseline_row or baseline_row['status'] != 'completed' or
+                            not row.get('frozen_baseline_sha256') or
+                            row['frozen_baseline_sha256'] != baseline_row.get('frozen_baseline_sha256')):
+                        missing.append({'shard': i, 'status': 'unavailable', 'reason': 'Frozen baseline provenance is unavailable'})
+                        continue
+                    baseline_trial = work / 'shards' / f'{i:03d}' / 'trials' / f'seed{seed}' / 'live-complete'
+                    receipt_path = baseline_trial / 'frozen-inputs.json'
+                    if receipt_path.is_symlink():
+                        raise ValueError('Frozen baseline receipt is a symlink')
+                    receipt = read_json(receipt_path)
+                    if (receipt.get('sha256') != row['frozen_baseline_sha256'] or
+                            receipt['sha256'] != json_digest({k: v for k, v in receipt.items() if k != 'sha256'})):
+                        raise ValueError('Frozen baseline receipt changed after trial')
+                    for key in ('patients', 'predicted_rosters', 'visual_annotations'):
+                        pinned = receipt['files'].get(str(Path(baseline_row['report']['outputs'][key]).resolve()))
+                        if pinned != baseline_row.get('output_sha256', {}).get(key):
+                            raise ValueError('Baseline output receipt disagrees with frozen inputs: ' + key)
+                    if name != 'live-complete' and any(row.get('output_sha256', {}).get(key) !=
+                            baseline_row.get('output_sha256', {}).get(key) for key in
+                            ('predicted_rosters', 'visual_annotations')):
+                        raise ValueError('Component changed baseline discovery or visuals')
                 report = row['report']; output = report['outputs']
                 trial = work / 'shards' / f'{i:03d}' / 'trials' / f'seed{seed}' / name
                 for key in ('patients', 'predicted_rosters', 'visual_annotations'):
                     path = Path(output[key])
                     if path.is_symlink() or not path.resolve().is_relative_to(trial.resolve()):
                         raise ValueError('Trial output escaped its isolated shard')
+                    if campaign['config'].get('campaign_kind') == 'controlled-components':
+                        if row.get('output_sha256', {}).get(key) != sha256(path):
+                            raise ValueError('Controlled output changed after trial receipt: ' + key)
                 patients.extend(read_jsonl(output['patients']))
                 rosters.extend(read_json(output['predicted_rosters'])['articles'])
                 visuals.extend(read_json(output['visual_annotations']))
+                delivered_figures = set()
                 for path in sorted((trial / 'tasks').glob('*.json')):
                     task = read_json(path)
                     if task.get('task') in {'figure_attribution', 'pixel_attribution', 'joint_figure'}:
+                        if campaign['config'].get('campaign_kind') == 'controlled-components':
+                            if path.is_symlink() or row.get('figure_task_sha256', {}).get(path.name) != sha256(path):
+                                raise ValueError('Frozen figure prediction changed after trial')
+                            delivered_figures.add(path.name)
                         media.append(task)
+                if campaign['config'].get('campaign_kind') == 'controlled-components' and delivered_figures != set(row.get('figure_task_sha256', {})):
+                    raise ValueError('Frozen figure task inventory changed after trial')
                 walls.append(report.get('wall_seconds', 0))
                 usage = report.get('tokens', {})
                 tokens += usage.get('reported_output_tokens', usage.get('output_tokens') or 0)
@@ -525,7 +574,7 @@ def aggregate(campaign):
         original = exports[(seed, 'live-complete')]
         baseline = list(read_jsonl(original / 'patients.jsonl'))
         baseline_discovery = read_json(original / 'rosters.json')
-        for name in VARIANTS[1:]:
+        for name in variants(campaign)[1:]:
             candidate = exports[(seed, name)]
             pair = paired_evaluate(reference, baseline, list(read_jsonl(candidate / 'patients.jsonl')),
                 splits=reference['optimization_splits'], seed=seed,
@@ -543,9 +592,13 @@ def aggregate(campaign):
               'scoring_scope': 'Full fixed gold once per arm/seed; failed shards retain missing denominators',
               'objective_adequacy': objective_adequacy(reference),
               'clinical_accuracy_verified': False}
+    controlled = campaign['config'].get('campaign_kind') == 'controlled-components'
+    if controlled:
+        result.update(comparison_scope='Each component independently starts from identical fresh-baseline facts, discovery and pixels',
+                      component_inputs_frozen=True)
     write_json(work / 'gpu.json', result)
     write_json(work / 'summary.json', result)
-    lines = ['# Short distributed evidence-ledger pilot', '',
+    lines = ['# ' + ('Controlled frozen-input components' if controlled else 'Short distributed evidence-ledger pilot'), '',
              f'Status: {result["status"]}; paired comparison available: {complete}.', '',
              '| Seed | Arm | Status | Valid tasks | Missing shards | Clinical probes | Ordering probes | Bundle | Output tok/GPU-s |',
              '| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |']
@@ -568,7 +621,13 @@ def aggregate(campaign):
     lines += ['', 'Scores use the full source-reviewed development gold. Missing shards prevent paired comparison.',
               'Test is the existing development split, previously exposed in historical campaigns; it is not new blinded clinical gold.',
               'Output token rates pool usage over summed arm GPU wall, exclude startup/warmup, and do not sum staggered worker rates.',
-              'This is an architectural ablation; no GEPA search or clinical accuracy certification.']
+              ('Each component independently starts from the same baseline. Missing baseline exports make dependent comparisons unavailable.'
+               if controlled else 'This is an architectural ablation; no GEPA search or clinical accuracy certification.'),
+              'No GEPA search; reviewed development checks do not certify clinical accuracy.']
+    if controlled:
+        lines += ['Component rates measure only new component calls; baseline rates include full extraction. Their ratio is not an end-to-end speedup.',
+                  'Changed facts may require frozen summary/timeline reconciliation. Derived component exports are not complete production bundles.',
+                  'Table extraction currently resolves source-grounded Case/Patient N columns; other ownership remains unresolved in the inventory.']
     (work / 'SUMMARY.md').write_text('\n'.join(lines) + '\n')
     return result
 
@@ -591,10 +650,11 @@ def export_results(campaign, output):
         prefix = f'shards/{i:03d}/'
         names += [prefix + name for name in ('worker.json', 'trials.json', 'telemetry.jsonl', 'container-probe.json', 'servers')]
         for seed in campaign['config']['seeds']:
-            for name in VARIANTS:
+            for name in variants(campaign):
                 trial = prefix + f'trials/seed{seed}/{name}/'
                 names += [trial + name for name in ('report.json', 'run-config.json', 'attempts.jsonl', 'patients.jsonl',
-                    'rosters.json', 'visual-annotations.json', 'tasks', 'patients', 'review', 'source-ledgers', 'episode-ledgers')]
+                    'rosters.json', 'visual-annotations.json', 'tasks', 'patients', 'review', 'source-ledgers', 'episode-ledgers',
+                    'component-provenance.json', 'frozen-inputs.json', 'table-cells', 'table-cells.json')]
     allowed_suffixes = {'.json', '.jsonl', '.gz', '.log', '.md', '.image', '.png', '.svg'}
     for name in names:
         path = _safe_path(work, name)

@@ -356,10 +356,10 @@ class PilotRunner:
             'coverage_audit': CoverageAudit.model_json_schema(),
             'joint_figure': JointFigureAnalysis.model_json_schema(),
             'gepa_assessment': ClinicalFeedback.model_json_schema()}
-        from .evidence_ledger import ChunkMap, AttributeAudit
+        from .evidence_ledger import ChunkMap, AttributeIdAudit
         from .episode_ledger import ledger_wire_schema
         self.schemas.update({'ledger_chunk_map':ChunkMap.model_json_schema(),
-            'ledger_attribute_audit':AttributeAudit.model_json_schema(),
+            'ledger_attribute_audit':AttributeIdAudit.model_json_schema(),
             'ledger_events':ledger_wire_schema(),'ledger_edges':ledger_wire_schema(),
             **{'ledger_repair_'+k:v.model_json_schema() for k,v in TASK_MODELS.items()}})
         for endpoint in endpoints:

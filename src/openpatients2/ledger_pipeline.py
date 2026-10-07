@@ -6,7 +6,8 @@ import json
 from .data import write_json
 from .evidence_ledger import (source_chunks, map_messages, check_chunk_map,
     attribute_messages, attribute_source_segments, check_attribute_audit, protect_unchallenged)
-from .episode_ledger import build_ledger, ledger_messages, ledger_timeline, apply_ledger_delta
+from .episode_ledger import (build_ledger, ledger_messages, ledger_timeline,
+    apply_ledger_delta_partial, source_ordered_fact_aliases)
 from .prompts import messages_for
 from .provenance import json_digest
 
@@ -34,7 +35,7 @@ async def challenge_attributes(runner, article, patient, packet, tasks, rows, id
     from .pilot_extract import packet_segments
     async def audit(batch, index):
         return await runner.call('ledger_attribute_audit',attribute_messages(article,patient,batch),
-            lambda value:check_attribute_audit(value,batch,attribute_source_segments(article,patient,batch)),
+            lambda value:check_attribute_audit(value,batch,attribute_source_segments(article,patient,batch),id_contract=True),
             {**identity,'attribute_batch':index},replica,attribute_source_segments(article,patient,batch))
     audits = await asyncio.gather(*(audit(rows[i:i+6],i//6) for i in range(0,len(rows),6)))
     challenges = [c for r in audits if r['status']=='valid' for c in r['data']['challenges']]
@@ -76,8 +77,8 @@ async def challenge_attributes(runner, article, patient, packet, tasks, rows, id
 
 async def assemble_episodes(runner, article, patient, rows, identity, replica, sources):
     ledger = build_ledger(identity['record_id'],rows,sources)
-    calls=[]
-    aliases=[f['alias'] for f in ledger['facts']]
+    calls=[]; delta_audits=[]
+    aliases=source_ordered_fact_aliases(ledger,sources,article=article)
     async def propose(phase,batch,index):
         nonlocal ledger
         messages=ledger_messages(article,patient,ledger,
@@ -88,12 +89,14 @@ async def assemble_episodes(runner, article, patient, rows, identity, replica, s
             'event_ids':batch if phase=='edges' else None,
             'available_segment_ids':payload['source_selection']['selected_segment_ids']}
         def checker(value):
-            apply_ledger_delta(ledger,value,sources,**constraints)
+            apply_ledger_delta_partial(ledger,value,sources,**constraints)
             return value
         row=await runner.call('ledger_'+phase,messages,checker,
             {**identity,'ledger_phase':phase,'batch':index},replica,article['segments'])
         calls.append(row)
-        if row['status']=='valid':ledger,_=apply_ledger_delta(ledger,row['data'],sources,**constraints)
+        if row['status']=='valid':
+            ledger,audit=apply_ledger_delta_partial(ledger,row['data'],sources,**constraints)
+            delta_audits.append({'phase':phase,'batch':index,**audit})
     # Each patient mutates its own ledger; patients/chunks run concurrently.
     for index,start in enumerate(range(0,len(aliases),24)):
         await propose('events',aliases[start:start+24],index)
@@ -105,6 +108,7 @@ async def assemble_episodes(runner, article, patient, rows, identity, replica, s
     errors=[e for r in failed for e in r['errors']]
     if ledger.get('quarantine'):errors.append('episode_fact_quarantine_requires_review')
     if rows and not graph['events']:errors.append('episode_no_events_for_delivered_facts')
+    if any(a.get('partial_application') for a in delta_audits):errors.append('episode_additions_quarantined')
     result={'task':'timeline_v2','identity':identity,'status':'partial' if errors else 'valid',
         'data':graph,'errors':errors, 'attempts':[],
         'origin':'additive_episode_ledger','clinical_accuracy_verified':False}
@@ -113,6 +117,7 @@ async def assemble_episodes(runner, article, patient, rows, identity, replica, s
         'fact_quarantine_summary':ledger.get('fact_quarantine_summary',{}),
         'accepted_event_count':len(graph['events']),'accepted_edge_count':len(graph['edges']),
         'unlinked_fact_ids':[f['fact_id'] for f in ledger['facts'] if f['fact_id'] not in linked],
-        'failed_delta_calls':len(failed),'semantic_order_verified':False}
+        'failed_delta_calls':len(failed),'delta_application_audits':delta_audits,
+        'fact_batch_order':'canonical_source_span','semantic_order_verified':False}
     write_json(runner.output/'episode-ledgers'/(json_digest(identity['record_id'])+'.json'),ledger)
     return result,calls,receipt

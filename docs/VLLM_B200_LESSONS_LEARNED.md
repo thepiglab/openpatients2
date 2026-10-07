@@ -1242,3 +1242,27 @@ The [source-ledger experiment](EVIDENCE_LEDGER_DESIGN.md) may reduce repeated
 prefill and oversized timeline prompts, but it adds map/audit calls and may
 reduce prefix reuse. Use supported clinical facts and ordered events per GPU
 time to decide whether it helps; output token rate alone cannot settle this.
+
+## 16. Measured distributed pilot — run 20261007-112642
+
+The four independent one-B200 jobs completed all 24 shard/seed/arm trials, with
+worker allocation durations of 40.8–50.3 minutes. They started within about
+three seconds in this run, for approximately 50 minutes GPU elapsed time and
+3.05 GPU-hours summed allocation time. CPU preparation, download and queue time
+are excluded. This validates the four-worker 8 CPU / 60 GB host-memory recipe;
+the eight-worker 30 GB option remains untested.
+
+Sampled GPU utilization averaged 78.7–82.5% per worker, median 99%, including
+initialization and tails. No low-utilization cancellation occurred. Keep separate
+jobs and shared read-only model storage; node placement is not established by
+these archived telemetry records, and shorter queues are not guaranteed.
+
+Pooled output rates were 2087 tok/GPU-s for existing live-complete, 2324 for
+ledger-delta and 2463 for ledger-audit, excluding startup/warmup. Higher token
+rates accompanied worse clinical delivery: 456/518, 423/518 and 398/518 checked
+facts respectively. Timeline ordering also regressed. Deployment efficiency
+improved without establishing a new extraction winner. Preserve the baseline
+and address source routing, negative-finding event semantics and the audit
+pointer contract before another expensive optimization run.
+
+Full diagnosis and metrics: [frontier review](../reports/FRONTIER_20261007.md).
