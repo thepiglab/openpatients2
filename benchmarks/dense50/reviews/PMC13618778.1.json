@@ -1,0 +1,73 @@
+{
+  "article_id": "PMC13618778.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "69bd14b7cc917e282f57a8b3e5e82106e70fb50f8027e636ce9ede606244294b",
+  "annotation_sha256": "5220f930f96e125509925bfcea68fed213aa321ecf0e479e013ce54a517169b4",
+  "reviewed_at": "2026-10-09T23:00:55.844151+00:00",
+  "source_segments_read": 18,
+  "facts_reviewed": 64,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Replaced heading-only summaries with source-grounded clinical narratives.",
+    "Expanded timeline with baseline rehabilitation assessment, vitamin D prescription, pretreatment scores, distinct therapy plan and monthly follow-up plan; linked weekly therapy phases to the completed course.",
+    "Preserved unreported EEG result and explicitly unperformed hand-performance assessment; no functional-independence inference.",
+    "Checked all recovered table doses/durations/frequencies against source and retained approximate daily versus stated weekly times without arithmetic substitution.",
+    "Independently reread all18source units and every proposed field/5test representations/4new phases. Verified MRI and blood normal versus EEG result unreported, Woods-Teuber tested hand versus voluntary opposite hand, term birth/prior-history order, weekly versus monthly schedule, and nonperformed hand assessment. Original59facts/summaries retained; no video contents claimed.",
+    "Explicit two-episode count separately numeric, and named referral specialty retained; both rechecked against b00004.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M02: comparator '=' on 15 numeric values (Woods-Teuber scores 9/12/3/3/3/3, Table 1 weekly hours 17/17/16, 'Approximately 2.5 h' (approximation kept in text_value; no comparator printed), 7/6 days a week).",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M03: p1-f002 text_value '12-year-old' literal.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M04: p1-f005 'no history of disease, drug use, or surgery' is a denied history -> assertion=absent, verification_status confirmed->unknown (correct).",
+    "SECTION-SIGNS: six Woods-Teuber scores moved to symptoms_function performance_score; normal range-of-motion and motor examination moved to symptoms_function sign text_value normal; lower-extremity examination recast as absent sign \"Pathological movement\" (quote carries the negation).",
+    "  p1-f020: observations/physiologic -> symptoms_function/sign",
+    "  p1-f021: observations/physiologic -> symptoms_function/sign",
+    "  p1-f027: observations/physiologic -> symptoms_function/sign",
+    "  p1-f037: observations/physiologic -> symptoms_function/performance_score",
+    "  p1-f038: observations/physiologic -> symptoms_function/performance_score",
+    "  p1-f039: observations/physiologic -> symptoms_function/performance_score",
+    "  p1-f040: observations/physiologic -> symptoms_function/performance_score",
+    "  p1-f041: observations/physiologic -> symptoms_function/performance_score",
+    "  p1-f042: observations/physiologic -> symptoms_function/performance_score"
+  ],
+  "unresolved": [
+    "No retained figures. Videos 1 and 2 linked as supplements but not watched; no pixel-derived/video-derived claims.",
+    "Hand performance was not evaluated; improvements in functional independence cannot be inferred from mirror score changes.",
+    "Recovered rehabilitation Table1 original XML read; approximate daily sessions, repetitions and reported weekly totals retained without arithmetic correction."
+  ],
+  "assessment": {
+    "primary_stratum": "neurology",
+    "patient_count": 1,
+    "clinical_course": "two seizures, neurology workup, mirror-movement diagnosis, vitamin D replacement and intensive rehabilitation, sustained three-month score improvement",
+    "rich_trajectory": true,
+    "normal_negative_evidence": true,
+    "serial_measurements": true,
+    "common_workflow": true,
+    "planned_vs_actual_challenge": true,
+    "split": "train",
+    "prior_benchmark_exposure": true,
+    "pixel_reviewed": false,
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 18,
+    "facts_reviewed": 64,
+    "figures_viewed": 0,
+    "key_findings": [
+      "semantic-rules-2026-10 migration verified (15 comparators, 1 age text, 1 absent/confirmed fix); no edits needed.",
+      "SECTION-SIGNS: six Woods-Teuber scores moved to symptoms_function performance_score; normal range-of-motion and motor examination moved to symptoms_function sign text_value normal; lower-extremity examination recast as absent sign \"Pathological movement\" (quote carries the negation)."
+    ],
+    "residual_risks": [
+      "Woods-Teuber scale scores remain in observations; SECTION-SIGNS placement of psychometric/functional scales is an open orchestrator question."
+    ]
+  },
+  "physician_adjudicated": false
+}

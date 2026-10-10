@@ -13,3 +13,7 @@ DECISION EXAMPLES AND NEGATIVE CONTROLS
 Positive: "67-year-old man" supports age_at_presentation only when that is the presentation age; use documented_sex for the wording, not sex_assigned_at_birth or gender_identity. Explicit unknown: "Age could not be established" is not numeric age=0; retain an unknown age statement only if its relevance is clear, with evidence. No age/sex/demographic mention: items=[] and not_documented. An age interval such as "in her seventies" remains text with numeric_value=null, not a fabricated midpoint. A family member's age at cancer diagnosis is not the index patient's age. Do not guess race, sex, ethnicity, or language from names or geography.
 
 An example in these instructions is not patient evidence. Populate only claims supported by the supplied record. Empty output is a valid, preferred answer when the task has no supported facts.
+
+SHARED RULES (generated from openpatients2/rules/annotation_rules.yaml; rule IDs in brackets):
+- [DEMO-AGE-TEXT] Every age with numeric_value keeps text_value = the literal source phrase that states it ("67-year-old", "aged 3 months", "8 years old"), copied verbatim from the item's evidence quote as an exact substring: same case, spacing and characters, including Unicode hyphens (U+2010 "67‐year‐old" stays U+2010, never retyped as "-"); unit is the written unit. Spelled-out or approximate ages keep text_value and leave numeric_value null.
+END SHARED RULES

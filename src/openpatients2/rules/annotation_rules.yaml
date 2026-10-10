@@ -1,0 +1,279 @@
+# Single source of the semantic annotation rules shared by
+#   (a) the Claude sub-agent reference pipeline (benchmarks/dense500 protocol + briefs), and
+#   (b) the local-LLM runtime pipeline (src/openpatients2/prompts/*.md, article_tasks, figure and EHR prompts).
+#
+# Edit THIS file, then regenerate every rendered copy:
+#   PYTHONPATH=src .venv/bin/python -m openpatients2.annotation_rules --write
+# tests/test_annotation_rules.py fails when a rendered block drifts from this file.
+#
+# Fields per rule:
+#   id         stable identifier, cited by validators ([ID] in error messages), reviewers and briefs
+#   title      short name used in the brief checklists
+#   text       the rule; {EVENT_OCCURRENCES}/{TEMPORAL_RELATIONS} are filled from openpatients2.semantic_rules
+#   prompts    runtime prompts that render the rule (prompt file stem, or roster/summary/timeline,
+#              figure_visual, figure_ehr_label, figure_privacy_flags)
+#   docs       reference documents that render the rule text (protocol, backfill); every rule is also
+#              listed in the annotator/parent/re-sign brief checklists
+#   validator  true when openpatients2.semantic_rules (or a contract it names) checks it mechanically
+format: openpatients2-annotation-rules/1
+rules:
+  - id: EVID-NEGATION
+    title: Negations and qualifiers are inside the quotes
+    text: >-
+      Evidence quotes are exact contiguous source text and must contain the words that establish negation,
+      uncertainty, subject and timing. An item with assertion=absent needs its negation cue ("no", "denied",
+      "without", "ruled out", "negative") inside its own quotes, not in a neighbouring sentence.
+    prompts: [system]
+    docs: [protocol]
+    validator: true
+  - id: NAME-LABEL
+    title: name is a concise label; evidence carries the wording
+    text: >-
+      `name` (and other label fields such as substance or action_text) is a concise clinical label for the item:
+      the source term or abbreviation trimmed to the concept (e.g. "serum creatinine", "left nephrectomy"), with no
+      codes, values, dates or invented synonyms. It need not be a literal substring; the exact source wording is
+      carried by the evidence quotes.
+    prompts: [system]
+    docs: [protocol]
+  - id: NO-INFERENCE
+    title: No inference-added facts
+    text: >-
+      Add no fact or attribute that the source does not state: no device "in place" that is only implied, no diagnosis
+      implied by a drug or test, no normal result implied by silence, no ordering implied by paragraph order. Record
+      such implications as an ambiguity or limitation, never as an item.
+    prompts: [system]
+    docs: [protocol]
+  - id: NO-BORROWING
+    title: No borrowed times, routes, sites, indications or settings
+    text: >-
+      Time, route, dose, body site, laterality, indication and care setting must come from the item's own evidence.
+      Never borrow them from a neighbouring sentence about another fact, drug, encounter, table row or patient
+      (e.g. "on admission" from a different finding, "intravenous" from a different drug).
+    prompts: [system]
+    docs: [protocol]
+  - id: TIME-LITERAL
+    title: Time text and anchors are literal or null
+    text: >-
+      time.text must occur literally in the item's own evidence. time.anchor uses the literal source phrase when one
+      exists (case-insensitive substring of the source, e.g. "admission", "surgery"; prefer restoring that phrase over
+      deleting the anchor), otherwise null; never a paraphrase such as "index hospital admission" or "table-relative
+      treatment course". date_iso only for a full date written in the source. relation (at, before, after, ...) needs
+      a time text, anchor or date to relate to: when all three are null, relation is unknown.
+    prompts: [system]
+    docs: [protocol]
+    validator: true
+  - id: NO-COHORT-COPY
+    title: Cohort statements are not copied to individuals
+    text: >-
+      Cohort, series-level, literature-review and general statements ("In our study, there was no mortality",
+      "these tumors usually present with ...", published cases cited by reference) are not facts about an individual
+      patient. Do not copy them to each patient; shared statements apply to several patients only when the source
+      explicitly says so for those patients.
+    prompts: [system, roster]
+    docs: [protocol]
+  - id: ASSERT-ABSENT
+    title: Absent, refuted and not documented
+    text: >-
+      assertion=absent is an explicit source negation for this patient; silence is not absent (no item). For
+      conditions, a diagnosis excluded by workup ("ruled out", "excluded", "CT showed no ...") is assertion=absent with
+      verification_status=refuted; a denied or absent history ("no history of diabetes", "denied hypertension") is
+      assertion=absent with verification_status=unknown. assertion=absent is never combined with
+      verification_status=confirmed, provisional or differential.
+    prompts: [system, conditions]
+    docs: [protocol]
+    validator: true
+  - id: OBS-COMPARATOR
+    title: Numeric results carry a comparator
+    text: >-
+      An observation with numeric_value uses comparator "=" unless the source prints <, <=, >, >= (or "less than",
+      "greater than", "up to") for that value. comparator=unknown is only for items without a numeric value.
+      Upper-bound wording ("up to N", "maximum of N", "at most N", "not exceeding N", "no more than N") is "<=":
+      "fever up to 38°C" is numeric_value 38 with comparator "<=" (">=" for "at least N", "N or more"). A measured
+      peak or maximum stated as a value ("peaked at 6.2 mg/dL", "a peak of 6.2", "Tmax 38.9°C", "SUVmax 8.5") is
+      "=", with the peak/maximum kept in name or text_value; "approximately"/"about" is not a comparator (stays "=").
+    prompts: [observations]
+    docs: [protocol]
+    validator: true
+  - id: OBS-FLAG
+    title: Normal flags; no flags from reference ranges
+    text: >-
+      flag=normal when the source calls that result normal, unremarkable or within normal limits. high/low only when
+      the source says so (or prints an H/L marker or the interval and the classification); never classify a value
+      against outside reference ranges. positive/negative are for qualitative tests (antibody, culture, PCR, stain).
+      A result described only as "normal" is flag=normal, not negative or unknown.
+    prompts: [observations]
+    docs: [protocol]
+    validator: true
+  - id: OBS-NOT-PERFORMED
+    title: Tests not performed
+    text: >-
+      A test the source says was not performed, not done or not available is an observation with
+      status=not_performed, result_absent_reason=not_performed and assertion=present (the non-performance is
+      affirmed). It is not assertion=absent and never a negative result.
+    prompts: [observations]
+    docs: [protocol]
+    validator: true
+  - id: SOC-NEVER
+    title: Never-users are affirmed
+    text: >-
+      status=never only for explicit never-use wording ("never smoked", "has never used drugs", "lifelong non-smoker"),
+      always with assertion=present; status=never with assertion=absent is a double negative and invalid. "No known
+      contact with tuberculosis", "no exposure to ...", "denies alcohol" or "denies current tobacco use" are NOT
+      never-use: record them as assertion=absent with status unknown (or current for a scoped current denial).
+    prompts: [social_exposures]
+    docs: [protocol]
+    validator: true
+  - id: DEMO-AGE-TEXT
+    title: Ages keep the literal source phrase
+    text: >-
+      Every age with numeric_value keeps text_value = the literal source phrase that states it ("67-year-old",
+      "aged 3 months", "8 years old"), copied verbatim from the item's evidence quote as an exact substring: same
+      case, spacing and characters, including Unicode hyphens (U+2010 "67‐year‐old" stays U+2010, never retyped as
+      "-"); unit is the written unit. Spelled-out or approximate ages keep text_value and leave numeric_value null.
+    prompts: [demographics]
+    docs: [protocol]
+    validator: true
+  - id: SECTION-SIGNS
+    title: Signs and clinical scales belong in symptoms_function
+    text: >-
+      Physical-examination signs, including normal or negative examination findings ("no murmur", "abdomen soft",
+      "neurologic examination normal"), and clinical scales or scores belong in symptoms_function (kind=sign or
+      performance_score). An explicitly absent sign is kind=sign with assertion=absent; a scoped normal examination is
+      a sign with text_value "normal" and assertion=present. observations holds laboratory, vital-sign, imaging,
+      pathology, microbiology and physiologic test results. Criterion for a scored instrument: if it rates THIS
+      patient's symptoms, symptom severity, functional status or disability, physical performance, quality of life or
+      acute illness severity (clinician-rated or patient-reported questionnaire, bedside performance test) it goes in
+      symptoms_function as kind=performance_score (functional_status, mental_status or quality_of_life when that is the
+      construct), e.g. GCS, NIHSS, ECOG, mRS, Barthel, pain NRS/VAS, PHQ-9, HADS, IBS-SSS, mMRC dyspnea grade, NEWS,
+      Woods-Teuber mirror-movement scale, MMSE/MoCA screens. If it is a standardized
+      cognitive, intellectual, neuropsychological, developmental or behavioral test battery reported as norm-referenced
+      scores (IQ, index scores, T-scores, percentiles: WISC-R, BRIEF-P, Bayley) or an instrument/lab-like measurement
+      (spirometry, audiometry, polysomnography indices, breath tests), it goes in observations (kind=other or
+      physiologic). Objective physical performance tests measured in physical units or counts stay in observations
+      as measurements (kind=physiologic): Timed Up and Go (s), gait speed (m/s), 6-minute walk distance (m), grip or
+      knee-extension force (kg, N), 30-second chair-stand repetitions (CS-30), and the Life-Space Assessment (LSA) and
+      J-CHS frailty criteria scores as reported; questionnaires and rating scales about the same domain go to
+      symptoms_function. Never record the same score in both sections.
+    prompts: [symptoms_function, observations]
+    docs: [protocol]
+  - id: SECTION-IMAGING
+    title: Diagnostic imaging may also be a procedure
+    text: >-
+      A performed diagnostic imaging study, endoscopy or other diagnostic procedure may also be listed in
+      procedures_devices (kind=procedure, action=completed) when the source describes the procedure itself; its
+      findings and results always go in observations. Listing the procedure never replaces the observation.
+    prompts: [procedures_devices, observations]
+    docs: [protocol]
+  - id: SECTION-CAREPLANS
+    title: care_plans scope
+    text: >-
+      care_plans holds follow-up, referral, monitoring, counseling, rehabilitation and goals-of-care actions, whether
+      still planned or already carried out; action_status records which (planned, recommended, scheduled, declined,
+      completed, unknown). Drug administration belongs in medications and operations/diagnostic procedures in
+      procedures_devices; what a follow-up visit found belongs in outcomes/observations.
+    prompts: [care_plans]
+    docs: [protocol]
+  - id: ONC-BENIGN
+    title: Benign lesions are not oncology tumors
+    text: >-
+      oncology.tumors holds malignant or explicitly suspected-malignant neoplasms. Benign tumors and lesions (adenoma,
+      hemangioma, lipoma, benign or inflammatory polyp, cyst) are conditions, not oncology tumors, unless the source
+      explicitly evaluates them as a possible malignancy (then assertion=possible).
+    prompts: [oncology, conditions]
+    docs: [protocol]
+    validator: true
+  - id: CTX-VITAL-STATUS
+    title: Vital status is consistent with outcomes
+    text: >-
+      case_context.subject_state=deceased_during_course when this patient died during the described course,
+      including follow-up; living_at_presentation only when no death of this patient is reported; cadaver for a
+      pre-existing anatomic specimen. A patient with an outcomes death item (assertion=present) is never
+      living_at_presentation.
+    prompts: [case_context, outcomes]
+    docs: [protocol]
+    validator: true
+  - id: CTX-PER-PATIENT
+    title: case_context describes the one target patient
+    text: >-
+      Each per-patient record describes that one target patient: case_kind=clinical_case (animal for a nonhuman
+      patient, or another single-subject kind) with multiple_index_patients=false, even when the article has several
+      patients. multi_patient/true is only for a whole-article record with no target patient.
+    prompts: [case_context]
+    docs: [protocol]
+    validator: true
+  - id: ROSTER-ORDER
+    title: Patients numbered by first mention
+    text: >-
+      Number patients p1..pn in order of their first mention in the source (the earliest segment and position of each
+      patient's identity evidence), not by importance, age or table position. Patient identifiers are joined on this
+      order downstream.
+    prompts: [roster]
+    docs: [protocol]
+    validator: true
+  - id: TIMELINE-ENUMS
+    title: One timeline vocabulary
+    text: >-
+      Event occurrence is one of {EVENT_OCCURRENCES}: not_occurred for an explicitly cancelled, declined or not-done
+      event; conditional for an if-then plan; unknown when the source does not establish whether it happened.
+      Pairwise relations are one of {TEMPORAL_RELATIONS}; unknown records a pair whose order the source leaves open.
+      Never invent order from paragraph order.
+    prompts: [timeline]
+    docs: [protocol]
+    validator: true
+  - id: MED-ROUTE
+    title: Routes keep the source spelling
+    text: >-
+      medications.route copies the route as written in the item's own evidence ("intravenous", "IV", "orally",
+      "p.o."); do not expand, abbreviate or normalize it, and never borrow a route from another drug. Automated
+      normalizers preserve the literal spelling.
+    prompts: [medications]
+    docs: [protocol]
+    validator: true
+  - id: FIG-LABELS
+    title: No invented panel labels; question marks only inside quotes
+    text: >-
+      Use the panel letters or numbers printed in the caption or on the image; otherwise the panel label is null
+      (whole figure). Caption position words ("left", "upper right", "the image on the left", "Main image") and
+      patient names ("Case 1", "Patient 2") are not printed labels; do not use them as panel labels in the annotation,
+      the visual description panels, or the figure-EHR label and privacy-flag rows that reuse those panel IDs. In
+      visual descriptions a "?" appears only inside quotation marks that transcribe printed
+      text (e.g. “Unstable?”); put uncertainty in limitations.
+    prompts: [figure_visual, figure_ehr_label, figure_privacy_flags]
+    docs: [protocol, backfill]
+    validator: true
+  - id: FIG-EHR-COMPARISON
+    title: Normal-comparison images are non-clinical aids
+    text: >-
+      Normal-comparison, control, atlas or reference images that are not this patient's data are
+      non_clinical_diagnostic_aid and never EHR-includable, even when they are microscopy or radiology. Only panels
+      attributed to a local patient can be includable.
+    prompts: [figure_ehr_label]
+    docs: [protocol, backfill]
+  - id: FIG-PRIVACY
+    title: Privacy flags name categories only
+    text: >-
+      Privacy flags describe the category of visible identifiers (e.g. "patient name in scanner header"), never the
+      identifier values themselves; flags never change EHR includability.
+    prompts: [figure_privacy_flags]
+    docs: [protocol, backfill]
+  - id: MEDIA-UNAVAILABLE
+    title: Unobtainable media are listed, never described
+    text: >-
+      A figure or supplement whose source declares no obtainable asset (no image/video URL, or only an external
+      link such as YouTube) is recorded as unavailable, with a limitation saying it was not viewed. Never describe,
+      classify from content, attribute or extract facts from media you did not view; caption text stays caption
+      evidence. Such media do not block completion: the article is complete, flagged, and the media stay listed as
+      unavailable and not reviewed (media_available=false, content_reviewed=false). A download or rendering failure of
+      a declared asset is not unavailability: retry or report it.
+    prompts: [figure_visual, figure_ehr_label]
+    docs: [protocol, backfill]
+  - id: REF-INTEGRITY
+    title: References point to existing facts and events
+    text: >-
+      Every reference inside a patient record points to an existing id of that same patient: event fact links,
+      temporal relation endpoints, summary claim sources, ambiguity fact links and alternate_representation_of. When a
+      fact or event is removed (e.g. as a duplicate), remove or repoint every reference to it in the same edit.
+    prompts: [timeline]
+    docs: [protocol]
+    validator: true
+

@@ -50,6 +50,68 @@ def test_jats_keeps_rows_captions_supplements_and_drops_references():
     assert not a['supplements'][0]['content_inspected']
 
 
+def test_floating_table_preserves_patient_headers_footnotes_and_existing_ids():
+    baseline = article()
+    floating = '''<floats-group><table-wrap id="T2"><label>Table 2</label>
+    <caption><p>Serial tests</p></caption><table><thead><tr><th>Test</th>
+    <th>Case 1</th><th>Case 2</th></tr></thead><tbody><tr><td>Potassium</td>
+    <td>6.5</td><td>5.1</td></tr></tbody></table><table-wrap-foot><fn><p>
+    Values in mmol/L, at the follow-up visit.</p></fn></table-wrap-foot>
+    </table-wrap></floats-group>'''
+    parsed = parse_article(XML.replace('</article>', floating+'</article>'), baseline['metadata'])
+    assert parsed['segments'][:len(baseline['segments'])] == baseline['segments']
+    added = parsed['segments'][len(baseline['segments']):]
+    assert [s['kind'] for s in added] == ['table_row', 'table_footnote']
+    assert 'Test | Case 1 | Case 2\nPotassium | 6.5 | 5.1' in added[0]['text']
+    assert added[0]['table_id'] == 'T2'
+    assert 'mmol/L, at the follow-up visit' in added[1]['text']
+    assert len([s for s in parsed['segments'] if s.get('table_id') == 'T1']) == 2
+
+
+def test_table_sweep_does_not_promote_reference_or_supplement_tables():
+    table = '<table-wrap id="excluded"><table><tr><td>FOREIGN CASE DATA</td></tr></table></table-wrap>'
+    xml = XML.replace('</ref>', table+'</ref>').replace('</supplementary-material>', table+'</supplementary-material>')
+    parsed = parse_article(xml, article()['metadata'])
+    assert 'FOREIGN CASE DATA' not in parsed['text']
+
+
+@pytest.mark.parametrize('floating', [False, True])
+def test_raster_table_alternative_keeps_structural_evidence_and_rights(floating):
+    from openpatients2.figure_attribution import validate_figure_review
+    table = '''<table-wrap id="T3"><label>Table 3</label><caption><p>Follow-up</p></caption>
+    <alternatives><graphic xlink:href="table3.jpg"/><table><tr><td>Case 1 sodium 140 mmol/L</td></tr></table></alternatives>
+    <permissions><copyright-statement>Separate table rights</copyright-statement></permissions></table-wrap>'''
+    xml = XML.replace('</sec>\n<sec>', '<p>Case 1 results in <xref ref-type="table" rid="T3">Table 3</xref>.</p></sec>\n<sec>', 1)
+    xml = (xml.replace('</article>', '<floats-group>'+table+'</floats-group></article>') if floating
+           else xml.replace('</body>', table+'</body>'))
+    baseline = parse_article(xml.replace('<graphic xlink:href="table3.jpg"/>', ''), article()['metadata'])
+    parsed = parse_article(xml, article()['metadata'])
+    assert parsed['segments'] == baseline['segments']
+    assert parsed['text_sha256'] == baseline['text_sha256']
+    fig = next(f for f in parsed['figures'] if f.get('containing_table_id') == 'T3')
+    row = next(s for s in parsed['segments'] if s.get('table_id') == 'T3')
+    crossref = next(s for s in parsed['segments'] if 'Case 1 results in' in s['text'])
+    assert set(fig['source_segment_ids']) == {row['segment_id'], crossref['segment_id']}
+    assert fig['reuse_status'] == 'asset_rights_review'
+    assert any(r['text'] == 'Separate table rights' for r in fig['rights_statements'])
+    review = {'figure_id': fig['figure_key'], 'limitations': [], 'assignments': [{
+        'panel': None, 'patient_ids': ['p1'], 'scope': 'individual', 'subject': 'patient',
+        'evidence': [{'segment_id': row['segment_id'], 'quote': 'Case 1 sodium 140 mmol/L'}],
+        'rationale': 'Explicit table row identifies Case 1.'}]}
+    validate_figure_review(review, parsed, {'patients': [{'patient_id': 'p1'}]})
+    unrelated = next(s for s in parsed['segments'] if s.get('table_id') == 'T1')
+    review['assignments'][0]['evidence'] = [{'segment_id': unrelated['segment_id'], 'quote': unrelated['text']}]
+    with pytest.raises(ValueError, match='does not reference this figure'):
+        validate_figure_review(review, parsed, {'patients': [{'patient_id': 'p1'}]})
+
+
+def test_raster_tables_in_references_and_supplements_stay_excluded():
+    table = '<table-wrap id="excluded"><graphic xlink:href="excluded.jpg"/><table><tr><td>Foreign</td></tr></table></table-wrap>'
+    xml = XML.replace('</ref>', table+'</ref>').replace('</supplementary-material>', table+'</supplementary-material>')
+    parsed = parse_article(xml, article()['metadata'])
+    assert all('excluded.jpg' not in f['graphic_references'] for f in parsed['figures'])
+
+
 @pytest.mark.parametrize('code', ['CC BY-ND','CC BY-NC-ND',None,'all rights reserved'])
 def test_license_rejects_unknown_and_nd(code):
     m={'license_code':code,'is_pmc_openaccess':True,'is_retracted':False}

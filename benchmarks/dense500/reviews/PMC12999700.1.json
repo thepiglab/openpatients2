@@ -1,0 +1,48 @@
+{
+  "article_id": "PMC12999700.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "40479b4755ffd268760863245c55e404c9286051f61bace6d03a4609c6cb6cb4",
+  "annotation_sha256": "d51faf4d9a1c6fd61a3c1b0bf78961c703e0b227dd09eb78e4dab704f051184b",
+  "reviewed_at": "2026-10-09T22:33:30.202848+00:00",
+  "source_segments_read": 82,
+  "facts_reviewed": 176,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f159 kidney function 'within normal limits': flag=normal [OBS-FLAG]",
+    "M12 anchor nulling verified (paraphrases 'start of bisphosphonate therapy', 'start of immunosuppressive regimen', 'initial treatment of CKD', 'after peritoneal dialysis' were not literal); restored literal anchors: p1-f158..f163 'bisphosphonate therapy', p1-f024/f025 'triple immunosuppressive regimen'; p1-f005/f006 are durations and keep null anchor [TIME-LITERAL]",
+    "M13 p1-e21 occurrence uncertain -> unknown verified (postulated mechanisms)"
+  ],
+  "unresolved": [
+    "Single case report; patient identity is by description only (61-year-old woman); no names or dates beyond years 1997 and 2020.",
+    "Source conflicts (units, values, timing, figure labels) are retained as source_conflict/review_only facts and patient ambiguities; none is reconciled.",
+    "Table 1 values are retained cell by cell against the printed column header; where only the printed unit conflicts (osteocalcin mg/dL, vitamin D ng/L) the number is kept with the text unit or a null unit and the conflict noted; Month-4 cells whose numbers differ from the text remain review_only.",
+    "Bone biopsy not performed, FGF23 not measured, PINP1 and TRAP-5b not determined; postulated mechanisms are review_only.",
+    "Table 3 (types of osteomalacia) and the discussion of bone disease in transplant recipients are background literature, not patient facts.",
+    "Figure pixels are described only in the separate visual submission; caption-layer figure status in this annotation remains not_inspected."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 89,
+    "facts_reviewed": 176,
+    "figures_viewed": 0,
+    "key_findings": [
+      "semantic-rules-2026-10 re-sign: M12/M13 verified, 1 needs-review item resolved, literal anchors restored"
+    ],
+    "residual_risks": [
+      "Table 1 osteocalcin unit printed 'mg/dL' vs narrative ng/mL kept as documented"
+    ]
+  },
+  "physician_adjudicated": false
+}

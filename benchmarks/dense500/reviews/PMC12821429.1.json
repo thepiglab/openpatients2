@@ -1,0 +1,49 @@
+{
+  "article_id": "PMC12821429.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "af423a0bf956208a127066d6f2b382f1b46c762363a44de9e474daaf4c54da26",
+  "annotation_sha256": "c61f4486591ba6854498eb5916c41f4518b24292515a833759ab40b46d81c9e5",
+  "reviewed_at": "2026-10-09T23:02:57.835038+00:00",
+  "source_segments_read": 69,
+  "facts_reviewed": 108,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M02 comparator '=' for EGD polyp ~3 cm (source 'approximately', no <,>), BMI 46.8, Hb 12.1, HbA1c 9.3%.",
+    "Verified M03 age text_value '70-year-old' (p1) and '64-year-old' (p2) literal per patient.",
+    "NR001/NR002 (ONC-BENIGN): removed oncology tumors p1-f055, p2-f064 and their tumor_ref treatments p1-f056, p2-f065 (benign IFP already in conditions; procedures already in procedures_devices); dropped their ids from events/summaries; oncology domain_coverage -> not_documented.",
+    "FIG-LABELS: reports-09-00002-f002 caption position labels \"left\"/\"right\" (no printed letters on pixels) merged into one whole-figure row (panel null) in figures[], visual submission, figure-EHR labels and privacy flags; 10x/40x descriptions, p1 attribution, pathology includability preserved."
+  ],
+  "unresolved": [
+    "Differential-diagnosis Table 1 is generic background (rows for IFP, GIST, leiomyoma, schwannoma etc.), not patient-specific results. No patient-specific PDGFRA/BRAF/molecular result is reported although the Case 1 conclusion says molecular findings support IFP.",
+    "Possible prior-report links by citation only: the Case 1 diagnostic conclusion cites B12 (Buda et al., EMR of a large Vanek tumor) and the Case 2 14-month outcome cites B13 (Fleres et al., gastric IFP with acute intestinal obstruction). The article does not state these are the same patients; no cross-article merge is made and the references are not used as patient facts.",
+    "Abstract states CD34 strongly positive and CD117/DOG1 absent for both cases collectively; per-case DOG1 (Case 1) and CD117/DOG1 (Case 2) results are not separately given in the case text and are kept review-only. Case 1 Ki-67 is 'low' without a number; Case 2 MIB-1 panel appears in the Figure 5 caption with no reported result. Case 1 follow-up endoscopy interval is not stated.",
+    "Care setting: p1 not stated (null); p2 limited to the literal 'During hospitalization'. Dimensions are printed without axis labels (3.3 × 3 × 2 cm; 7 × 5 cm CT vs 2.5 × 7 cm pathology) and kept as single expressions; no growth/shrinkage is inferred. Oncology carries alternate tumor/resection rows for the benign IFP (Vanek’s tumor) without stage/grade; authors' neoplastic-origin discussion is background.",
+    "Figure pixels inspected separately in the visual submission; text results are not taken from the images.",
+    "Figure EHR-label sidecar (figure-ehr-labels) not yet produced for this article at parent review; no supplements listed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 69,
+    "facts_reviewed": 108,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical comparator/age migrations correct.",
+      "Benign IFP removed from oncology in both patients.",
+      "FIG-LABELS: reports-09-00002-f002 caption position labels \"left\"/\"right\" (no printed letters on pixels) merged into one whole-figure row (panel null) in figures[], visual submission, figure-EHR labels and privacy flags; 10x/40x descriptions, p1 attribution, pathology includability preserved."
+    ],
+    "residual_risks": []
+  },
+  "physician_adjudicated": false
+}

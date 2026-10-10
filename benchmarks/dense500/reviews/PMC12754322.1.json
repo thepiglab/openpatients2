@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12754322.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "48cbb63c8ddf419696a2883796da0fb1e44e70e8c302a5be1c462db19d074bea",
+  "annotation_sha256": "20e0b0bdb3ce47546d8d8c7eafbc82566c0c0592c36f640bf07e08ebf019f281",
+  "reviewed_at": "2026-10-09T22:27:02.541035+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 89,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f030 (unhedged 1.5 cm SMA occlusion from figure description) set certainty=ambiguous, scoring=review_only; p1-f029 (suspected wording) kept as scored target and enriched with distal-to-calcification site and figure-description evidence; duplicate p1 ambiguity merged.",
+    "p1-f024/f025 and p2-f020/f021: replaced cross-patient blended \"extensive/marked\" wording with each case's own wording (Case 1 extensive, Case 2 marked) and added Figure 1A/B and 2A/B abdominal-CT axial SMA-ostium evidence.",
+    "Removed unsupported indication on gastroenterology CT re-review (p1-f023, p2-f019) and misused follow_up_duration_text on pre-referral symptom-course rows (p1-f009, p2-f008).",
+    "Diagnostic basis for CMI (p1-f035, p2-f026) limited to documented CT angiography; removed inferred clinical assessment.",
+    "Added related_condition CMI to improvement outcomes p1-f042/p2-f033 and added follow-up outcome rows p1-f049 (about 5 kg regained, post-prandial pain resolved at 11 months) and p2-f040 (about 8 kg at 6 months), linked to follow-up events and summaries.",
+    "Timeline: GCA quiescence relations to symptom onset and rheumatology/PET-CT review changed from before to overlaps; added referral before GI-registrar CT re-review, exam/lab events before final diagnosis, improvement overlaps follow-up, and HTN/HLD overlaps referral for both patients (10 new edges).",
+    "p1-f012 note clarifies non-diagnostic refers to the original CT interpretation.",
+    "semantic-rules-2026-10 re-sign: verified M03 text_value '76-year-old' (p1) and '71-year-old' (p2) literal; verified 4 M02 comparator '=' (no printed comparators; p1-f040/p2-f031 weight regain is 'approximately', no inequality printed); verified 24 M12 nulled anchors were paraphrases.",
+    "Restored M12-nulled anchors with literal source phrases: p1-f004..f011 and p2-f004..f009 'referred to the gastroenterology department' (symptom-history durations); p1-f012 're-reviewed the prior abdominal CT' ('months earlier'); p2-f034 're-reviewed by the gastroenterology registrar' ('several months prior'). Self-describing times ('following stenting', 'over a decade', 'over a year') left null."
+  ],
+  "unresolved": [
+    "Caption-derived author findings and independently inspected image pixels are documented in separate layers. All four original JPEGs were inspected.",
+    "No exact original CT dates, calendar timeline, stenosis percentages, named routine laboratory panels, or specific excluded GI disorders are reported.",
+    "Patient 1 suspected and more definite 1.5 cm SMA occlusion wording refers to the same CTA episode; no serial progression or pixel length measurement inferred.",
+    "Only patient 1 explicitly underwent upper and lower endoscopies. Patient 2 earlier investigations remain unspecified.",
+    "No explicit same-patient prior-report links or family/genetic linkage between index patients. Cited CMI cases and management recommendations are external background.",
+    "Source follow-up is approximately 5 kg regained at 11 months for Case 1 and approximately 8 kg at 6 months for Case 2. No antiplatelet regimen or later outcomes are documented. Readable image device-label text is preserved only in the visual target without assuming axis/model semantics."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 89,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Two index women (76 and 71 years) with CMI due to SMA atherosclerosis; ownership of b00007-b00018 per Case label, b00019-b00022 shared statements duplicated per patient; Figures 1/3 Case 1 and 2/4 Case 2 per b00017/b00018/b00020.",
+      "Negative/normal findings preserved: benign abdominal exam without peritonitis or masses, other labs normal (p1), unremarkable labs (p2), denied GI family history, PET-CT and rheumatology exam negative for GCA reactivation, no corticosteroids during GCA quiescence.",
+      "Only Case 1 had documented upper/lower endoscopy; Case 2 GP investigations unspecified. No celiac stenosis is claimed; only calcification.",
+      "Pixel review: all four JPEGs viewed with magnified crops; F3 BeGraft 7/37 mm and F4 VBX 6-29 dil 8 mm prox, 7 mm (clipped) and Everflex 8-20 dil 6 mm device labels confirmed; these remain pixel-only and are not added as clinical facts.",
+      "semantic-rules-2026-10: M02, M03, M12 verified; 16 anchors restored to literal phrases."
+    ],
+    "residual_risks": [
+      "Exam/lab-before-diagnosis and referral-before-re-review edges rely on case-report structure and the abstract statement that diagnosis was ultimately prompted by GI re-review.",
+      "Stent devices visible only in image labels (Case 2 apparently two devices) are not reflected in text facts.",
+      "F2B arrow tip sits just beside the crosshaired bright focus; visual text describing it as pointing to the focus is an acceptable approximation.",
+      "p1-f040/p2-f031 weight regain recorded with comparator '=' although the source says 'approximately'."
+    ]
+  },
+  "physician_adjudicated": false
+}

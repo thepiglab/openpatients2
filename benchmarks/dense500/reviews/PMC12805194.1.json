@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12805194.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5e42fb1ad89eae98612fdbfac153c780b9f443ff5ccd15d69043629bbdfa6c98",
+  "annotation_sha256": "968f7d3f66be8486f6871478fde2026aa3ec33cfcc5f949dead90eba7d0b7757",
+  "reviewed_at": "2026-10-09T23:00:55.571791+00:00",
+  "source_segments_read": 54,
+  "facts_reviewed": 142,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified all 39 M02 comparator '=' changes against Tables (initial and thyroid-storm labs) and narrative; every printed '<' in those rows (<5, <0.04, <35, <1, <125) is the reference interval, not the result; TSH '<0.01', free T4 '>5.0', total T3 '>500' already carry their printed comparators; 'roughly 8 mg per drop' stays '='.",
+    "Verified M03 age text_value '50-year-old' is the literal index-patient phrase.",
+    "Verified all M12 nulled anchors (e.g. 'initial diagnostic assessment', 'acute post-angiography deterioration', 'intubation', 'hospitalization', 'acute stabilisation') do not occur literally in the source; literal time.text retained. No needs-review items.",
+    "p1-f091 propranolol (runtime-gate MED-ROUTE warning): route 'orally via nasogastric tube' -> literal 'orally via a nasogastric tube' from its own quote.",
+    "SECTION-SIGNS: removed observation p1-f065 (GCS 8); duplicate of symptoms_function performance_score p1-f064; links dropped from event p1-e06 and summary.",
+    "  p1-f065: removed duplicate observation"
+  ],
+  "unresolved": [
+    "Caption-layer visual_status remains not_inspected; actual three images are inspected in separate visual targets.",
+    "Initial clinical signs of HF and retrospective no overtHF retain qualifiers without confirmed overt systolic failure or invented diagnostic reconciliation.",
+    "No unreported initial/poststorm lab high/low flags derived from numerical reference comparisons; only source explicit qualitative results applied.",
+    "T3 quantitative result is totalT3; no freeT3 value invented from broad narrative phrasing.",
+    "Postangiography contribution of iodinated contrast remains author-qualified; no proved single precipitant.",
+    "No postdischarge propranolol dose carried over from ICU NGT80mgq6, no taper schedule/agent or unreported antiplatelet ingredients or medication discontinuations inferred.",
+    "Day3/one-week/one-month anchors remain reported clinical-course relative times without invented calendar dates. No source-specific identity link to cited comparator reports; cited Malani EF25% not index.",
+    "PTU loading precedes first iodine by approximately one hour; recurring PTU maintenance and other ICU therapies are not asserted to be completed before iodine initiation."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 54,
+    "facts_reviewed": 142,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical migrations M02/M03/M12 correct for this article; one non-literal medication route fixed.",
+      "SECTION-SIGNS: removed observation p1-f065 (GCS 8); duplicate of symptoms_function performance_score p1-f064; links dropped from event p1-e06 and summary."
+    ],
+    "residual_risks": [
+      "Prior parent review content otherwise unchanged; figures not re-viewed in this re-sign."
+    ]
+  },
+  "physician_adjudicated": false
+}

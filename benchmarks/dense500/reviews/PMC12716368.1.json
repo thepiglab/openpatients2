@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12716368.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1c191eeb2c95491855beef7c3a400d9128adea4d0ae888363df7449128493f0a",
+  "annotation_sha256": "73718b3451d8dc4843b3df94769f74439e0ce2aa4c3ee4f27eaf035eee4ada11",
+  "reviewed_at": "2026-10-09T23:00:55.895701+00:00",
+  "source_segments_read": 16,
+  "facts_reviewed": 52,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f004 TRD: replaced generalising b00016 conclusion quote with the patient-specific b00012 sentence (\"a patient with severe unipolar depression\"); b00012 coverage -> patient_facts, b00016 -> background.",
+    "p1-f005 suicide attempt: \"Two weeks later\" anchor (mirtazapine start) -> null; added ambiguity (A&E/HTT/mirtazapine anchor).",
+    "p1-f006 no previous mental/physical history: verification refuted -> unknown (negated global history, no specific diagnosis ruled out); assertion stays absent.",
+    "p1-f030 citalopram: added literal duration \"over 10 weeks\" with its evidence.",
+    "p1-e06: removed case_context fact from admission event.",
+    "Schema: event kinds and time kinds/precision re-applied (calendar months approximate without calendar_value, no years invented).",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] M12 anchors were paraphrases; restored literal anchors: p1-f025, p1-f038, p1-f049 -> 'lamotrigine augmentation'; p1-f051, p1-f052 -> 'lamotrigine' (from 'prior to lamotrigine' / '3 weeks post-lamotrigine'); p1-f031 -> 'commenced citalopram'; p1-f034 -> 'arrival to the acute male unit'.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Checked age text_value '45-year-old' and social_exposures facts (no never-use statuses).",
+    "SECTION-SIGNS: PHQ-9 23/27 and 3/27 moved observations -> symptoms_function performance_score; observations now not_documented (no other results reported).",
+    "  p1-f051: observations/other -> symptoms_function/performance_score",
+    "  p1-f052: observations/other -> symptoms_function/performance_score"
+  ],
+  "unresolved": [
+    "Source gives months only (early March, mid-June, early July, early August, mid-September) without years or days; no calendar dates are recorded.",
+    "Follow-up is limited to about 3 weeks after lamotrigine initiation; no later outcome, discharge or relapse information.",
+    "Lamotrigine start date, intermediate titration and concurrent antidepressants are not stated.",
+    "Single case report; authors' causal attribution of improvement to lamotrigine is not independently supported.",
+    "No figures or supplements."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 16,
+    "facts_reviewed": 52,
+    "figures_viewed": 0,
+    "key_findings": [
+      "semantic-rules-2026-10 migration verified: 7 anchor nullings, all restored with literal source phrases.",
+      "Single 45M index patient; all 10 annotator flags checked.",
+      "Partner vs wife kept as separate literal facts with ambiguity; unnamed \"2 antidepressants\" not resolved.",
+      "\"(early August)\" kept on fluoxetine 40 mg (arithmetically consistent with 5-6 weeks to mid-September); alternative attachment recorded.",
+      "Informal admission agreed at A&E kept planned (not carried out then); HTT community care completed.",
+      "SECTION-SIGNS: PHQ-9 23/27 and 3/27 moved observations -> symptoms_function performance_score; observations now not_documented (no other results reported)."
+    ],
+    "residual_risks": [
+      "No years in source; month sequence order assumed within one year only via explicit ordering phrases.",
+      "Concurrency of citalopram/mirtazapine/fluoxetine with lamotrigine unstated.",
+      "Encounter-type items (GP, A&E, sectioning) represented in care_plans for lack of an encounter schema."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -97,11 +97,19 @@ def check_candidate(request, value, articles, packets, legacy):
         article = articles[identity['article_id']]
         return validate_figure_review(value, article, request['roster'], identity['figure_id'])
     record = packets[identity['article_id'] + ':' + identity['patient_id']]
+    # The clinical validator here is deliberately the FROZEN copy shipped inside the hash-pinned fixture
+    # (legacy_validator): this module replays a historical benchmark, and its scores are only comparable
+    # if candidates are gated exactly as they were then. It must not pick up later rule changes
+    # (semantic_rules / rules/annotation_rules.yaml). The per-patient packet rule existed at freeze time
+    # and is the one shared gate applied on top (semantic_rules.case_context_target_errors).
     checked = legacy.validate(task, value, record['text'])
     if not checked.valid:
         raise ValueError('; '.join(checked.errors))
-    if task == 'case_context' and (checked.data['multiple_index_patients'] is not False or checked.data['case_kind'] == 'multi_patient'):
-        raise ValueError('This packet targets ONE specified index patient. case_kind and multiple_index_patients describe that target, not the number of patients in the source article. Use clinical_case (or animal) and multiple_index_patients=false.')
+    if task == 'case_context':
+        from .semantic_rules import case_context_target_errors
+        errors = case_context_target_errors(checked.data)
+        if errors:
+            raise ValueError('; '.join(errors))
     return checked.data
 
 

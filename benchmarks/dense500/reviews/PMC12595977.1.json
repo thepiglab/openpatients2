@@ -1,0 +1,49 @@
+{
+  "article_id": "PMC12595977.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "261be0c4084280855b981e563aa6bd0bd269ee2d43bc78855cb2ef474c6f0cb4",
+  "annotation_sha256": "ccf45d2ccc44ad2581594f6c220474a038f5e6f86754d702f88137238f00f34a",
+  "reviewed_at": "2026-10-09T22:38:57.314650+00:00",
+  "source_segments_read": 43,
+  "facts_reviewed": 75,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Moved undated immunodeficiency/HIV testing out of the admission event.",
+    "Represented initial examination and laboratory phases as overlapping; acetic dressing interval overlaps granulation and graft, without forcing its completion before either.",
+    "semantic-rules-2026-10: verified M03 age '42-year-old', M07 p1-f012 'no imaging studies were performed' -> not_performed with assertion=present, and 49 M12 anchor nullings (paraphrases such as 'index hospital admission').",
+    "TIME-LITERAL: restored literal anchors the source ties to the fact: p1-f061 'negative pressure wound therapy' (after which), p1-f070 'NPWT intervention' (in approximately five weeks), p1-f073 'Hospitalization' (during which). Other nulled anchors left null (time text already literal or no tied phrase).",
+    "MED-ROUTE: removed non-literal routes 'local wound dressing'/'local wound care'/'wound dressings' from p1-f058/p1-f062/p1-f066 (not written in evidence); dressing wording kept in regimen ('Daily wound care with Dakin’s solution', 'acetic acid dressings')."
+  ],
+  "unresolved": [
+    "Initial imaging was explicitly absent; clinical abscess/pyelonephritis attribution is retained without inventing CT evidence, renal laterality or imaging throughout the later course.",
+    "Table WBC 7.03 /µL and reference 4.0–11.0 /µL are literal raw XML; no assumed thousand-cell multiplier. Creatinine 0.4 versus 0.6–1.3 reference differs from generic normal renal-function narrative. Decreased procalcitonin wording coexists with 0.056 and reference <0.1; no value correction or inferred infection exclusion.",
+    "Staphylococcus epidermidis culture is confirmed but true-pathogen status is only suggested by authors, not established causation of pyelonephritis or abscess.",
+    "Abstract hypoalbuminemia has no measured albumin; background cited risk percentages and Dakin 0.1–0.5% concentrations are not patient measurements/doses. Specific endocrine/surgical/infectious-disease team membership comes from general guidelines, not index referrals.",
+    "Acetic acid dressings are stated to continue until discharge while granulation precedes grafting; treatment overlaps graft phase, and no inferred end of dressings before grafting. NPWT phases last 12 days each, first/repeated Dakin phases one week each, coverage approximately five weeks and hospital stay two months retained independently; no invented surgical calendar date or exact cumulative day offsets.",
+    "Figure entries here are caption-layer information. Actual pixels are reviewed in the separate visual-submission layer; their qualitative appearance does not establish exact wound dimensions or percentage graft integration."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "campaign": "semantic-rules-2026-10 re-sign",
+    "source_units_read": 43,
+    "facts_reviewed": 75,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Re-sign 2026-10: M03/M07/M12 verified; 3 literal anchors restored."
+    ],
+    "residual_risks": []
+  },
+  "physician_adjudicated": false
+}

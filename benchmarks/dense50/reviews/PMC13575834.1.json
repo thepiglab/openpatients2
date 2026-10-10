@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC13575834.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8d4e8cf10266ff439370756402e43f898039c6b05355566c2da77b28a3f47602",
+  "annotation_sha256": "2914914bf77f4f2d232eba722ae7ba9a17376a369174d073d714b27bf3737a02",
+  "reviewed_at": "2026-10-09T22:50:03.881011+00:00",
+  "source_segments_read": 110,
+  "facts_reviewed": 20,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Read all 110 retained segments, including all recovered aggregate tables; reviewed both sparse descriptions, all 17 facts, timelines and captions.",
+    "Kept two unlinked case descriptions without claiming they are two different people; did not distribute aggregate age, sex, sedation, histology, margins, events or converted procedures to either description.",
+    "Removed unsupported specimen-photograph modality from panel F; retained the caption claim only.",
+    "Preserved complete lesion removal without inferring histological margin negativity, and no outcome after perforation clipping.",
+    "Personally reread all110 source units including all81 aggregate table units; reviewed expanded20facts and both actual image assets/seven visual scopes. Kept cohort-protocol sedation, histology and cohort statistics outside attributable individual facts; Figure2 visible complete removal is not microscopic R0. Sparse perforation and illustrated case identities remain unresolved rather than assumed distinct.",
+    "opus-fixup: verified the case_context migration diff by reconstructing the reviewed annotation hash: the only change was adding multiple_index_patients=false to p1-f001 and p2-f001 (case_kind already clinical_case). Both records describe one target individual (p1 perforation case, p2 illustrated pyloric TA-ESD patient), as CTX-PER-PATIENT requires; accepted unchanged."
+  ],
+  "unresolved": [
+    "Figure pixels have not been inspected; figure descriptions and patient attribution rely on source captions.",
+    "Retrospective aggregate study; most clinical/statistical findings do not identify individual patients.",
+    "The sparse perforation description and Figure 2 procedure cannot be proven to represent distinct people.",
+    "Two conversions from C-ESD to TA-ESD are reported only as an unlinked group; not expanded into invented patient cases.",
+    "Recovered Tables 1–3 reviewed in full: aggregate cohort characteristics, outcomes and regression models do not resolve individual case identity or yield additional attributable clinical facts.",
+    "Supplementary PDF content not inspected."
+  ],
+  "assessment": {
+    "primary_stratum": "gastrointestinal",
+    "patient_count": 2,
+    "distinct_patient_count_range": [
+      1,
+      2
+    ],
+    "patient_identity_resolved": false,
+    "clinical_course": "sparse intra-procedure complication management and separate unlinked caption procedure; cohort metrics excluded",
+    "rich_trajectory": false,
+    "normal_negative_evidence": false,
+    "serial_measurements": false,
+    "common_workflow": true,
+    "planned_vs_actual_challenge": true,
+    "split": "train",
+    "prior_benchmark_exposure": true,
+    "pixel_reviewed": false,
+    "reviewer": "Claude Opus 5.5 parent",
+    "key_findings": [
+      "opus-fixup: case_context migration (multiple_index_patients=false on both patients) verified against the source."
+    ],
+    "facts_reviewed": 20
+  },
+  "physician_adjudicated": false
+}

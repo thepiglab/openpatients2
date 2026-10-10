@@ -1291,3 +1291,25 @@ additions and worse ordering recall. Always report delivered facts/relations
 and quarantined additions beside protocol validity and tokens/s.
 
 Full analysis: [controlled component review](../reports/CONTROLLED_COMPONENTS_20261007.md).
+
+## 18. Clinical architecture run: 2026-10-07 evening
+
+`run-20261007-174142` completed all 32 trials on four independent one-B200
+workers in 51.7–61.7 minutes per allocation, totaling 3.70 GPU-hours. Model and
+working-source cleanup succeeded. Queue duration and distinct-node placement
+are not established by these worker-duration receipts.
+
+Pooled rates were 1889 output tok/GPU-s for baseline plus tables/qualification,
+2813 for added verification, 3481 for encounter extraction/verification, and
+4071 for added coverage/verification. The latter three are incremental task
+rates, not end-to-end speedups. They accompanied worse delivered clinical and
+ordering scores. Baseline inference used 66.3 summed GPU-minutes; coverage plus
+verification added 50.9 minutes. None of these rates justifies a new serving or
+extraction default.
+
+The independent-worker scheduling arrangement continues to work. The limiting
+problem in this run is extraction contracts: failures of encounter inventories,
+whole-object filtering and timeline generation, including some context overflows.
+Avoid expanding the GPU sweep until a CPU replay and a small inference subset
+establish that new source relationships survive compilation. Detailed evidence:
+[architecture review](../reports/CLINICAL_ARCHITECTURE_20261007.md).

@@ -46,7 +46,12 @@ def iter_objects(value, path: str = ""):
 
 
 def validate(task: str, raw: str | dict, source: str, *, segments: list[dict] | None = None,
-             recover_formatting: bool = False, recover_identical_duplicates: bool = False) -> CheckResult:
+             recover_formatting: bool = False, recover_identical_duplicates: bool = False,
+             target_patient: bool = False) -> CheckResult:
+    """Contract + literal-source checks + the shared semantic rules (semantic_rules, rule IDs in messages).
+
+    target_patient=True applies the per-patient packet rule (CTX-PER-PATIENT) to case_context.
+    """
     result = CheckResult()
     try:
         if isinstance(raw, str):
@@ -119,4 +124,9 @@ def validate(task: str, raw: str | dict, source: str, *, segments: list[dict] | 
                 result.warnings.append(f"{path}/{key}: numeric normalization needs review against evidence")
         if obj.get("numeric_value") is not None and "unit" in obj and obj["unit"] is None:
             result.warnings.append(f"{path}: numeric value has no documented unit")
+    from .semantic_rules import ERROR, case_context_target_errors, section_violations
+    for violation in section_violations(task, result.data, source):
+        (result.errors if violation.severity == ERROR else result.warnings).append(violation.text())
+    if task == "case_context" and target_patient:
+        result.errors.extend(case_context_target_errors(result.data))
     return result

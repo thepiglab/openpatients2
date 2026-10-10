@@ -1,0 +1,50 @@
+{
+  "article_id": "PMC12605513.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0ddda0e0505761ea84eabf1e11fb36212a6942666a67750f0b93027507be2e1a",
+  "annotation_sha256": "aaf77eb55f8e44a12f7527608d7e7ed66c72f23c4c9e32a0e6fdece89f8c3150",
+  "reviewed_at": "2026-10-09T22:25:09.960938+00:00",
+  "source_segments_read": 44,
+  "facts_reviewed": 241,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M03 age text_value p1 '83-year-old' (Case 1, b00005) and p2 '86-year-old' (Case 2, b00017) are the literal phrases for each patient.",
+    "Verified all 92 M12 nulled anchors ('index admission', 'first tabulated sampling', 'first pancreatic-function/autoimmune-profile sampling', 'initial insulin treatment', 'night-time inpatient glucose monitoring') were reviewer paraphrases absent from the source; literal time.text ('Upon admission', 'After 10 days', 'First time', ...) retained.",
+    "Spot-checked table comparators (> 600, > 10.8, < 0.7 printed; others '=') unchanged and correct.",
+    "SECTION-SIGNS: moved p2-f020 'no abnormalities were identified on cardiopulmonary and abdominal examinations' from observations to symptoms_function kind=sign, text_value 'normal', assertion present, body_site kept (scoped normal examination). p2 domain_coverage.symptoms_function updated to documented.",
+    "Anchor restoration: for 67 facts whose paraphrased anchor was nulled by M12, set time.anchor to the literal source phrase the offset is relative to (e.g. 'admission', 'First time' table column, 'endoscopic procedure', 'starting rivaroxaban'); calendar dates, table ages and unstated references left null."
+  ],
+  "unresolved": [
+    "Routine head/abdomen/chest scans have no stated acquisition modality; no assumption they were CT. Independent tests have no invented strict order. Dates, insulin-clearance measurements, HLA/proteomic tests, potassium/beta-blocker treatment, generic plasma exchange/immunosuppression or specific hormone agent not inferred.",
+    "Table follow-up days are relative to first table sampling, not necessarily admission or insulin discontinuation; units/reference/comparators and serial measurement rows remain distinct. p1 main narrative says no hypoglycemia after insulin cessation despite Table2After10days3.14; unresolved timing/clinical mismatch preserved.",
+    "Shared discussion suggests possible concurrent LADA in both patients; positive IA-2/GADA does not establish LADA. DKD attribution is documented; unallocated discussion ESRD-progression wording is not assigned to both individuals. Needle reuse/fat hyperplasia as EIAS mechanism is author speculation.",
+    "Supplement SM1 contains57 numerical glucose measurements/8 unmonitored cells for these two patients with relative day/clock provenance, including p2peak29.6 versus main narrative29.0 and p1PDF6:00Day2lowest3.6 versus narrative04:00. Supplemental-only facts remain in the inspected clinical-document sidecar pending separate validated supplemental-source runtime path.",
+    "Supplement ST1 antibody report has no readable patient identity/date. Three values resemble p1final table but GADA0.8 differs from p1published0.5; ownership/phase remains unresolved, with original pixel readings retained separately.",
+    "Caption-only main figure fields remain distinct from actual main/supplement pixel targets. No anatomical identity from appearance and no exact nodule size derived from photographs."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 44,
+    "facts_reviewed": 241,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical migrations M03/M12 correct; no needs-review items; one normal exam re-sectioned per SECTION-SIGNS."
+    ],
+    "residual_risks": [
+      "Figures not re-viewed in this re-sign."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,44 @@
+{
+  "article_id": "PMC13289299.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c19d49e0d2e7413e661a84ba828c019bf7150c930d6be144e42c7a4ad614ff7c",
+  "annotation_sha256": "7bce3712a8c9c544b67c2e0ff4965d66d507860d08a0e9a261097d5ff80ac1d4",
+  "reviewed_at": "2026-10-09T22:39:05.999087+00:00",
+  "source_segments_read": 16,
+  "facts_reviewed": 79,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M01 case_context p1-f001/p2-f001 multi_patient/true -> clinical_case/false; each record describes only its own patient (95-year-old woman with AD; 66-year-old man with LBD), subject_state living_at_presentation consistent (no death reported); verified M12 nulling of 15 paraphrased anchors",
+    "Restored literal source-tied anchors: 'administration of 5 mg/day donepezil' (p1-f005,f008-f014,f019,f026), 'discontinuation of pramipexole' (p2-f028), 'donepezil dosage was increased to 10 mg/day' (p2-f006,p2-f031 'two days afterward'); 'Two weeks later' (p1-f033,p2-f029) keeps anchor null"
+  ],
+  "unresolved": [
+    "Brief letter: no tables, figures or supplements; individual laboratory tests, imaging, admission dates and absolute timing are not reported.",
+    "Several findings (thought process, MoCA, Young Mania Rating Scale, Naranjo score, examination, laboratory investigations, delirium exclusion, fluctuations and one-year follow-up) are written for “both patients” together; paired values rely on “respectively”.",
+    "Causality (donepezil as the precipitating agent) is the author’s Naranjo “probable” assessment (score 8); it is not recorded as definite.",
+    "The discussion hypothesis (acetylcholine-serotonin shift, “recurrence of hypomania”) and the 12 previously documented patients are literature/background and are not patient facts; the discussion’s “recurrence” wording is not applied to Case 2, who had no reported psychiatric history."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 16,
+    "facts_reviewed": 79,
+    "figures_viewed": 0,
+    "key_findings": [
+      "case_context migration correct (per-patient clinical_case)",
+      "Anchors restored where the source states them"
+    ],
+    "residual_risks": []
+  },
+  "physician_adjudicated": false
+}

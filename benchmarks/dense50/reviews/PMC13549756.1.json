@@ -1,0 +1,51 @@
+{
+  "article_id": "PMC13549756.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f7012542640dfadfa5423d2d5a438ee0578009c33c8dc8b613208bc24bdd0b54",
+  "annotation_sha256": "2406de3db044f1a93198fedfdede4136d2e7385ecc646adb7541ed213b9066b8",
+  "reviewed_at": "2026-10-09T22:25:08.911662+00:00",
+  "source_segments_read": 37,
+  "facts_reviewed": 213,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified 20 M02 comparator '=' changes (Table 1/2 cells and narrative values); the only '<' nearby (aldosterone '<1,000 pmol/L') is the age-related reference range, value 6,750 is plain.",
+    "Verified M03 ages p1 '3 months of age' (b00008 Patient 1) and p3 '5 months of age' (b00010 Patient 3) are the literal phrases for those patients.",
+    "Verified 76 M12 nulled anchors ('age in Table1/Table2', 'symptom period preceding presentation') were reviewer paraphrases; literal 'N Mo'/'24 hours'/'a week' time.text retained.",
+    "NR001 p2-f002: text_value '7 months', quote widened to 'Patient 2 presented at 7 months'. (NR001 resolution: b00009 'Patient 2 presented at 7 months' is this patient's presentation age.)",
+    "MED-ROUTE/NO-INFERENCE: removed route 'topical' from emollients, 1% hydrocortisone and fusidic acid items (p1-f010..f012, p2-f010..f012, p3-f010, p3-f011); their own quotes do not state a route. Routes kept where written ('topical tacrolimus', 'potent topical steroids', 'IV').",
+    "Anchor restoration: for 5 facts whose paraphrased anchor was nulled by M12, set time.anchor to the literal source phrase the offset is relative to (e.g. 'admission', 'First time' table column, 'endoscopic procedure', 'starting rivaroxaban'); calendar dates, table ages and unstated references left null."
+  ],
+  "unresolved": [
+    "Figure pixels were not inspected; visual details are restricted to captions.",
+    "Recovered Tables1/2 and original XML headers/spans reviewed. Urine subtable names Case1/Case3 only; dashes/blank cells are unreported, never negative results.",
+    "Age-specific serial table columns preserved separately from prose discharge-relative chronology; no sampling date reconciliation or range-derived disease assigned.",
+    "Shared discussion leukocytosis/thrombocytosis statement does not explicitly enumerate individual patients; p1 leukocytosis/thrombocytosis not assigned from ambiguous collective statement.",
+    "Abstract describes admission ages 3–7 months, while Case1 electrolyte admission appears at age 9 months. Case narrative retained."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 37,
+    "facts_reviewed": 213,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical migrations M02/M03/M12 correct; one age phrase resolved.",
+      "Removed 8 inferred topical routes flagged by MED-ROUTE."
+    ],
+    "residual_risks": [
+      "Figures not re-viewed in this re-sign."
+    ]
+  },
+  "physician_adjudicated": false
+}

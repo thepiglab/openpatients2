@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Clinical Article Library</title>
+<link rel="stylesheet" href="style.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <button id="toggle-library" class="icon-btn" type="button" aria-label="Show or hide the article list">
+    <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4h11M2.5 8h11M2.5 12h11"/></svg>
+  </button>
+  <a class="brand" href="#" id="brand" title="Boing">
+    <svg class="toad" viewBox="0 0 32 32" aria-hidden="true">
+      <ellipse class="toad-body" cx="16" cy="20.5" rx="12.5" ry="8"/>
+      <circle class="toad-body" cx="10" cy="12.5" r="4.6"/>
+      <circle class="toad-body" cx="22" cy="12.5" r="4.6"/>
+      <circle class="toad-eye" cx="10.4" cy="12" r="1.9"/>
+      <circle class="toad-eye" cx="21.6" cy="12" r="1.9"/>
+      <path class="toad-mouth" d="M11.5 21.5q4.5 3 9 0"/>
+    </svg>
+    <span>Clinical Article Library</span>
+  </a>
+  <div class="topbar-actions">
+    <span id="sync" class="sync" role="status">Connecting…</span>
+    <button id="refresh" class="icon-btn" type="button" aria-label="Refresh" title="Refresh">
+      <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8a5 5 0 1 1-1.5-3.6M13 2.5v3h-3"/></svg>
+    </button>
+    <button id="theme" class="icon-btn" type="button" aria-label="Switch light or dark theme" title="Light / dark">
+      <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 9.5A5.5 5.5 0 0 1 6.5 2.5a5.5 5.5 0 1 0 7 7z"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="workspace">
+  <aside class="library" aria-label="Articles">
+    <div class="library-controls">
+      <label class="search">
+        <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M7 12A5 5 0 1 0 7 2a5 5 0 0 0 0 10zM10.6 10.6L14 14"/></svg>
+        <input id="search" type="search" placeholder="Search articles" aria-label="Search articles" autocomplete="off" spellcheck="false">
+      </label>
+      <div class="filter-row">
+        <select id="status" aria-label="Review status">
+          <option value="">All articles</option>
+          <option value="schema_reviewed">Reviewed</option>
+          <option value="source_reviewed">Source reviewed</option>
+          <option value="pending">Not reviewed yet</option>
+        </select>
+        <select id="specialty" aria-label="Specialty"><option value="">Any specialty</option></select>
+      </div>
+      <p id="counts" class="counts"></p>
+    </div>
+    <nav id="articles" class="article-list" aria-label="Article list"></nav>
+    <p class="library-note">AI reference annotations, not physician-adjudicated.</p>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+  <main class="reader" id="reader">
+    <div class="pane-switch">
+      <button type="button" id="show-source" class="active">Article</button>
+      <button type="button" id="show-record">Extracted record</button>
+    </div>
+    <div class="reading-grid" id="reading-grid">
+      <section class="sheet source-sheet" aria-label="Article">
+        <div class="sheet-bar">
+          <span class="sheet-label">Article</span>
+          <label class="search find">
+            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M7 12A5 5 0 1 0 7 2a5 5 0 0 0 0 10zM10.6 10.6L14 14"/></svg>
+            <input id="text-search" type="search" placeholder="Find in article" aria-label="Find in article" autocomplete="off" spellcheck="false">
+            <span id="find-count" class="find-count" aria-live="polite"></span>
+          </label>
+        </div>
+        <div id="source-scroll" class="sheet-scroll">
+          <header id="article-heading" class="article-head"><h1>Select an article</h1></header>
+          <article id="source" class="article-text"></article>
+        </div>
+      </section>
+
+      <div class="splitter" id="splitter" role="separator" aria-orientation="vertical" aria-label="Resize panes" tabindex="0"></div>
+
+      <section class="sheet record-sheet" aria-label="Extracted record">
+        <div class="sheet-bar">
+          <span class="sheet-label">Extracted record</span>
+          <div id="patients" class="patients" role="tablist" aria-label="Patient"></div>
+        </div>
+        <div id="record" class="sheet-scroll record-content"></div>
+      </section>
+
+      <nav id="sections" class="sections" aria-label="Record sections"></nav>
+    </div>
+  </main>
+</div>
+
+<dialog id="lightbox" class="lightbox">
+  <form method="dialog"><button class="icon-btn lightbox-close" aria-label="Close">✕</button></form>
+  <img id="lightbox-img" alt="">
+  <p id="lightbox-caption"></p>
+</dialog>
+</body>
+</html>

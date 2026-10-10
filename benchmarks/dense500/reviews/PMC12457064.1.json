@@ -1,0 +1,69 @@
+{
+  "article_id": "PMC12457064.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "81aea867cee9fc467f8cfdf2b1dc1202359ea1dc89a8418af928674faef5d520",
+  "annotation_sha256": "4da47061ec62f630d2d55fdfef15dd4fb91cbeee9041941c5a66dd195c7fa7bc",
+  "reviewed_at": "2026-10-09T22:32:51.373287+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 117,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Hyperperfusion syndrome (p1-f010, p2-f008, p3-f009): verification_status unconfirmed -> differential (authors name it a differential judged less likely for \"the described cases\"); evidence adds the differential sentence.",
+    "p1-f017 discharge residual dysphasia no longer cites the untimed Table 1 dysphasia; added p1-f043 Dysphasia (Table 1, untimed).",
+    "p1-f008 infarct: \"patchy\" moved from severity into the name.",
+    "Added explicit MRI negatives as alternate representations: p1-f044 haemorrhagic transformation absent (Day 2 MRI), p2-f040 cerebral infarction absent (Day 4 MRI).",
+    "p3-f032 withdrawal: reasons removed from target field (moved to notes).",
+    "Table-row assignment notes strengthened for p1/p2/p3 table-only facts (row order plus unique treatment/course matches); p2-f034 extubation and p2-e11 gained Table row 2 evidence/normal-power fact.",
+    "Added p3-e08 levetiracetam-then-supportive event (Table 1) with p3-e08 before p3-e07.",
+    "Added 6 supported relations: p1 e03->e06 (patent stent after stenting), e03->e10 (postangiography), e08 overlaps e10 (IV fluids during course); p2 e01->e05, e06->e08 and e06->e09 (deterioration requiring intubation/additional therapy).",
+    "p3 ambiguity added for Figure 5 laterality (image-left findings, no marker, caption left); b00003 coverage extended to all three patients.",
+    "Added one Table 1 summary claim per patient (no new facts).",
+    "Visual submission edited: fig1 \"R\" orientation letter read on magnification (findings on patient left, matching text); fig3 faint letter noted; fig5 ventricle asymmetry added.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M12: anchor 'withdrawal of life-sustained treatments' on p3-f031 was a paraphrase (source: 'life-sustained treatments were withdrawn'); restored literal anchor 'palliative care' from 'The patient dies after 4 days of palliative care.'",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Checked ages (80-year-old, 76-year-old, 94-year-old text_value literal) and timeline vocabulary; no other migration changes."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the 5 figure JPEGs are inspected in the separate visual submission.",
+    "Abstract (2–7 h postprocedure), Discussion (between 1 hour and 7 hours after contrast) and Case 2 (8 h postprocedure) give different deterioration time windows; no per-case CIE onset hour was derived from them.",
+    "Table 1 rows carry no case labels; rows 1-3 were assigned to Cases 1-3 by order and matching treatments/symptoms. Table 1 \"Improvement in less than 1 day\" for Case 1 conflicts with the narrative and is held review_only.",
+    "Case 1 \"3 h: 14 min prearrival\" and \"7 h later\" are kept verbatim; the anchor of \"7 h later\" is not stated.",
+    "Contrast volume was not recorded; route, dose and timing of iopromide are not stated for any case.",
+    "Hyperperfusion-syndrome and CBF discussion refers to \"the described cases\" as a group; the CBF reading is held review_only per patient and HPS is recorded only as less likely/unconfirmed.",
+    "No exact dates, doses, durations of antithrombotic therapy or discharge dates are given; no date_iso assigned.",
+    "Discussion generalities (e.g., CIE for acute ischaemic stroke, risk factors, osmolarity, CADASIL, literature cases and cited references) are background and not assigned to patients.",
+    "Case 3 text uses present tense for death and \"left-sided\" seizures; both retained as printed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 117,
+    "figures_viewed": 5,
+    "key_findings": [
+      "semantic-rules-2026-10 migration verified: 1 anchor nulling, restored with literal phrase.",
+      "Three index patients correctly separated; Table 1 rows 1-3 map uniquely to Cases 1-3 by order and treatment/course (IV fluids only; dexamethasone+levetiracetam with Day-2 extubation; end-of-life care with seizures).",
+      "Case 1 Table \"improvement in less than 1 day\" vs 3-day fluctuating narrative kept source_conflict/review_only.",
+      "Onset windows (abstract 2-7 h, discussion 1-7 h, Case 2 8 h) left unreconciled; Case 1 \"7 h later\" unanchored.",
+      "Hyperbaric treatment recorded only as transfer; air embolus as condition plus procedure complication (alternate representations).",
+      "Case 3 CIE rests on series/discussion statements; SAH refuted by dual-energy CT; \"left-sided\" seizures kept as printed.",
+      "Pooled series facts (Royal Adelaide setting, iopromide in all three, contrast volume not recorded) explicitly address the three cases and are correctly per-patient; group CBF statement stays review_only."
+    ],
+    "residual_risks": [
+      "Table rows are unlabeled; assignment is inferential though each row matches one case uniquely.",
+      "Figure 5 laterality cannot be confirmed from pixels (no marker; findings image-left).",
+      "Medication lists lack timing (pre-admission vs post-procedure)."
+    ]
+  },
+  "physician_adjudicated": false
+}

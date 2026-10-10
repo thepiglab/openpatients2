@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12747116.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3a7645e29bd825336386e976bc6c26434aeb910f8fd50e2fee89daf9d442b51d",
+  "annotation_sha256": "f60cab69d48f00f4b8f1f8185babf1d027384fc7623f6146ca5ab826a957f6be",
+  "reviewed_at": "2026-10-09T22:28:09.585649+00:00",
+  "source_segments_read": 83,
+  "facts_reviewed": 350,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M02 comparator '=' (7 facts; printed values are plain or approximate '≈', no printed <,>), M04 p1-f008 donor 'no other comorbidities' -> unknown (absent history), M12 anchor nulling (233).",
+    "M12: restored time.anchor with the literal source phrase 'transplantation' on 231 biopsy/follow-up facts whose time text is a post-/pre-transplant offset (paraphrase 'kidney transplantation' had been nulled); p3-f089/f090/f091 '13 months later' anchored to literal 'a biopsy for nephrotic range proteinuria'.",
+    "NR001/NR006/NR008: allograft rejection absent -> verification_status refuted (serial biopsies negative for rejection); added per-patient quotes (b00049/b00050/b00051).",
+    "NR002/NR003/NR005: FSGS absent in donor/3-month/6-month biopsies (Table 1 '(none)') -> refuted.",
+    "NR004/NR007/NR009: proteinuria 'No' at first biopsy -> refuted.",
+    "NR010/NR011/NR014/NR015: mixed 'normal except/otherwise normal' results kept flag unknown (abnormal component recorded separately).",
+    "NR012/NR013: p2-f100/p2-f101 text_value trimmed from whole IF sentence to the count phrases; no normal flag on counts."
+  ],
+  "unresolved": [
+    "Three original recipient cases; deceased donors appear as explicitly other-subject characteristics and preimplantation graft specimens, not independent patient courses.",
+    "Actual-pixel analyses are in a separate visual submission. Figure3 patient/specimen ownership is unresolved because caption and discussion do not identify which of the three cases supplied it.",
+    "Abstract says secondary FSGS/proteinuria developed at3,7 and>17years, while detailed biopsies are18months,8years and17years. Abstract timing remains review-only. Patient3 raw XML Table1 last header prints7y, conflicting with17years narrative/caption; table final measurements retain an unspecified time.",
+    "Printed eGFR units mil/min are retained literally in Patients1/2 table, without automatic correction to mL/min or normalization to1.73m². Prose eGFR units are not stated.",
+    "Steroid tape and MP are retained as printed regimen names; no taper schedule, MP expansion, drug route/dose or absolute dates inferred.",
+    "IFTA Patient1 last cell prints0% (≈5%), an inconsistent score/percentage expression retained textually. Sampling variation footnote applies to Patient1 first-biopsy diameter/proportion. Methods count ranges do not agree with every individual table count and are not used to overwrite those counts.",
+    "No source-listed supplements. No explicit same-patient prior-report identity links found; cited cohorts and theoretical therapies remain background.",
+    "Bare0% glomerulosclerosis percentages do not negate FSGS: Patient1 final0% includes one focal lesion. Patient2/3 bare0% entries remain measurement facts without an invented focal-FSGS absence condition.",
+    "Patient3 prose describes lack of fibrosis in donor wedge and early posttransplant biopsies, while Table1 prints IFTA≈5% and≈10% for those samples. Both literal source representations retained; composite IFTA extent is not silently substituted for a pure fibrosis estimate, and no biological reconciliation is asserted."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 83,
+    "facts_reviewed": 350,
+    "figures_viewed": 0,
+    "key_findings": [
+      "All mechanical migrations consistent with source; anchor nulling lost post-transplant reference, restored with literal 'transplantation'.",
+      "15 needs-review items resolved."
+    ],
+    "residual_risks": [
+      "Patient 3 Table 1 '7y Biopsy' vs narrative 17th year conflict unchanged (final table measurements have no time).",
+      "Mixed normal/abnormal pathology results carry flag unknown."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,48 @@
+{
+  "article_id": "PMC12718700.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "04f124c949e08aa7b5ebcf75f450ba166e085635263b761bf55ee9d56e37d868",
+  "annotation_sha256": "605be24c269ea5f8704d9dfd047da4762718fc64064491d20683d8e5db8c7ce6",
+  "reviewed_at": "2026-10-09T22:35:01.035474+00:00",
+  "source_segments_read": 56,
+  "facts_reviewed": 138,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f033 / p3-f051 (review_only Table 1 age conflicts): text_value replaced by the literal table cell '65' / '55' (conflict explanation stays in notes) [DEMO-AGE-TEXT]",
+    "p1-f032, p3-f050 time.anchor restored to literal 'surgery' [TIME-LITERAL]",
+    "Verified migrations: M02 comparator '=' on 10 plain printed values (Hb, CEA, CA19-9, SUVmax, CT size); M03 ages '55-year-old', '75-year-old', '65-year-old' literal for each patient"
+  ],
+  "unresolved": [
+    "Table 1 present-case rows 3 and 1 swap the ages and row numbers relative to the narrative Cases 1 and 3 (and the table labels Case 3 response cCR, not pathological CR, and Case 2 response PR, not stable disease). Rows are linked to cases only by concordant symptoms/treatment/follow-up and table-only values are review-only; no silent reassignment of ages or stages. Six cited literature cases (Table 1 rows 4-9) are background, not original roster.",
+    "No individual dMMR immunostain/assay report, named MSH2 variant coordinates or germline/somatic origin, pembrolizumab dose/schedule/courses (beyond 2 courses before obstruction in Case 3) or named adjacent-organ invasion pathology is supplied. Counterfactual neoadjuvant/nonoperative suggestions are not performed patient treatment.",
+    "Fig. 3B body reference (CT) disagrees with the caption (PET-CT); actual caption labels retained. Case 1 EGD third portion versus PET descending location remains source-specific. No same-patient prior/follow-up publication link or supplement identified.",
+    "Figure pixels were inspected by the Sonnet annotator and recorded only in visual-submissions; fact annotations do not take values from pixels. No physician adjudication.",
+    "Parent decision on Table 1 present-case rows: row 3 matches Case 1 and row 1 matches Case 3 on four concordant fields each (symptom, treatment, Lynch yes, period since diagnosis 62 = 5 y 2 mo and 38 = 3 y 2 mo); only age (and row order) is swapped, consistent with narrative ages repeated in abstract and body. Mapping accepted; table-only values remain review-only because the swapped age shows the rows were transcribed with errors.",
+    "Case 2 Table 1 treatment category \"Unresectable/ recurrent disease\" conflicts with the narrative (pancreaticoduodenectomy recommended and declined; no recurrence). Case 1 cStage label in the table versus narrative pathological pT3N0M0 Stage IIA retained separately."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 56,
+    "facts_reviewed": 138,
+    "figures_viewed": 0,
+    "key_findings": [
+      "semantic-rules-2026-10 re-sign: M02/M03 verified; no needs-review items"
+    ],
+    "residual_risks": [
+      "Table 1 rows 1 and 3 swap ages relative to narrative; kept as review_only source_conflict"
+    ]
+  },
+  "physician_adjudicated": false
+}

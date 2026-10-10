@@ -1,0 +1,48 @@
+{
+  "article_id": "PMC12832053.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "95ed25d8b56ca64b43fa5118cb7879f528cdf72314fce67f8558f9a583ce0fe6",
+  "annotation_sha256": "96849380fe0c7e76f54eb65575d2940a9e693d3545982a048d679a6107be6e8d",
+  "reviewed_at": "2026-10-09T22:23:12.825661+00:00",
+  "source_segments_read": 42,
+  "facts_reviewed": 143,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified all 8 M12 nulled anchors were paraphrases not literal in the source ('period before the index presentation', 'symptom onset', 'Emergency Department examination', 'admission to the Physical Medicine and Rehabilitation Department').",
+    "p1-f018/f019/f020 (fatigue, myalgia, dorsalgia): M12 left time={relation: at, anchor: null} with no time.text, losing the encounter; restored anchor to the literal phrase 'admitted to the Physical Medicine and Rehabilitation Department' from each item's own quote (TIME-LITERAL).",
+    "p1-f030/f031 anchors left null: their own quotes ('On examination, ...') do not name the Emergency Department (NO-BORROWING). No needs-review items."
+  ],
+  "unresolved": [
+    "Figure pixels are described only in the separate visual submission; figures[] keeps caption-layer visual_status not_inspected.",
+    "Table 1 units are typographically damaged for leukocytes (\"109/L\") and thrombocytes (\"109/L9\"); printed units kept, not corrected; \"Phospate\" normalized to Phosphate in names.",
+    "Date and care setting of denosumab administration, discharge timing and discharge destination are not stated; \"Before/After administration/At discharge\" are the only time anchors for Table 1 values.",
+    "No abnormal flags derived from printed reference ranges; flags only where the text states them (hyponatremia, elevated creatinine, low cortisol, elevated ACTH, normal baseline calcium/phosphate/ALP/CRP, normal WBC, upper-normal potassium).",
+    "Causal relationship of denosumab to the adrenal crisis is a temporal/possible association per the authors; Naranjo score 7 is recorded as an author-applied score.",
+    "Figure 1 marker is unlabeled; attribution to p1 rests on the \"(Figures 1-2)\" text citation and the marker position (about T-score -3.5, age about 67-69). The caption itself calls the chart a WHO reference chart."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 42,
+    "facts_reviewed": 143,
+    "figures_viewed": 0,
+    "key_findings": [
+      "M12 correct but lossy for three admission symptoms; literal anchor restored."
+    ],
+    "residual_risks": [
+      "Prior parent review content otherwise unchanged; figures not re-viewed in this re-sign."
+    ]
+  },
+  "physician_adjudicated": false
+}

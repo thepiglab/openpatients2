@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12802722.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "72c471fe304644b231caa8f8098b738d5566a546bea9b7e0978001af13c1d9cc",
+  "annotation_sha256": "978de87b42038216eacf3e311640db7a86fb5afbd2619fa7e8897362e5ac8572",
+  "reviewed_at": "2026-10-09T23:00:55.692625+00:00",
+  "source_segments_read": 65,
+  "facts_reviewed": 311,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M02 comparators (18; none hides a printed <,>), M03 age texts (54/78/54-year-old), M04 p1-f005 absent history -> verification unknown, M09 p2 deceased_during_course (died day 10), M12 anchor nulling (143; paraphrases 'index hospital admission' etc.)",
+    "Restored literal, source-tied time anchors after M12 nulling: 'admission' (p1-f049,p1-f050,p2-f040..f043,p2-f057,p2-f058,p2-f062,p3-f040), 'thrombolysis' (p1-f021,p1-f092,p2-f023,p2-f105,p3-f025,p3-f080), 'rt-PA treatment' (p1-f045), '9 p.m.' (p2-f027..f029, 'At that time' refers to the 9 p.m. deterioration), 'hospitalization' (p3-f038); other offsets (Table 2 'At 48 h', 'Within 48 h', 'On day 9', 'The next day') keep anchor null because the source does not state the reference point",
+    "MED-ROUTE: removed borrowed route intravenous from p1-f020 and p2-f022 (evidence only says IVT/thrombolysis); p3-f024 quote extended to the literal sentence containing intravenous thrombolysis",
+    "NR001 (OBS-FLAG p2-f051): removed the combined pH/ethylene-glycol summary fact; it duplicated p2-f116 (pH returned to normal, flag=normal) and p2-f106 (ethylene glycol <20 mg/dL); dropped from event p2-e009",
+    "SECTION-SIGNS: NIHSS scores (p1 4, p2 5, p3 7 points) moved observations -> symptoms_function performance_score; quotes/time/links unchanged; domain-coverage counts updated (p2 observation count note corrected).",
+    "  p1-f012: observations/other -> symptoms_function/performance_score",
+    "  p2-f018: observations/other -> symptoms_function/performance_score",
+    "  p3-f017: observations/other -> symptoms_function/performance_score"
+  ],
+  "unresolved": [
+    "Raw Table 2 XML bold patient-cell formatting was personally inspected and preserved as marked-abnormal text with the explicit table foot. The runtime flag enum has no generic abnormal value; direction remains unknown unless narrative supports it. Unbolded values are not automatically normal. GFR table mL/min and narrative indexed units remain distinct.",
+    "Clinical annotation retains caption-based figure attribution; actual timeline pixels were inspected and recorded separately in the visual submission.",
+    "First ABG and ethylene-glycol table admission headings disagree with narrative workup timing; collection times remain unresolved. Case 3 calcium 0.24 mmol/L is preserved as printed, not corrected or reinterpreted. Abstract seizure and symptom-free statements do not override detailed Case 3 uncertainty/residual deficits.",
+    "Actual timeline pixels inspected separately. Figure-only exact times, Case2sepsis/day2–9label and Case3DNT-versus-bodyONT terminology retained in visual reference; not forced into literal clinical source segments.",
+    "Literal clock times are preserved exactly in text; current timeline schema has no dedicated time-of-day kind, so order_only is used with exact precision and no calendar date. Unspecified before/after intervals remain order_only with unknown precision."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 65,
+    "facts_reviewed": 311,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Migration changes verified against source; anchors restored only where the source states the reference phrase",
+      "Duplicate mixed pH/EG fact removed (NR001)",
+      "SECTION-SIGNS: NIHSS scores (p1 4, p2 5, p3 7 points) moved observations -> symptoms_function performance_score; quotes/time/links unchanged; domain-coverage counts updated (p2 observation count note corrected)."
+    ],
+    "residual_risks": [
+      "Table 2 Case 2 48 h values differ from narrative 9 h values (pre-existing, documented)"
+    ]
+  },
+  "physician_adjudicated": false
+}

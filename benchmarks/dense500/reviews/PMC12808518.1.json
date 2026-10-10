@@ -1,0 +1,68 @@
+{
+  "article_id": "PMC12808518.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "fe2e337610044d2cabce8bd1c42f92d0e2af0e3d75ab05a55af9112b59fdac29",
+  "annotation_sha256": "9e300957f61086ab17ac098d6f2fda0ae2344d345e28dbfb4f17384b77489691",
+  "reviewed_at": "2026-10-09T22:44:48.026665+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 137,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Case context p1/p2/p3-f004: clinical_case -> multi_patient, multiple_index_patients true, subject_state living_at_presentation; b00015 series evidence added.",
+    "p1-f005 \"no significant medical history\": kept as explicit absent general history but verification confirmed -> unknown (absent+confirmed was contradictory).",
+    "Systemic amyloidosis exclusions p1-f032/p2-f026/p3-f041: verification confirmed -> refuted (assertion absent).",
+    "Removed duplicate p3-f057 (observation copy of p3-f041 systemic-amyloidosis negative) and p3-f028 (chest-tube 8 Fr recorded as an observation); 8 Fr moved into the p3-f027 procedure name (no inferred indication: the source never states why the tube was placed).",
+    "Numeric observations p1-f026/f027/f028, p2-f016/f017/f018: comparator \"=\" added; serum/urine specimens and immunofixation/UPEP/FLC methods added for p1 labs; p2 nodule sizes given method chest x-ray, body sites and the CXR quote.",
+    "p3 comorbidities (calcified nodules under surveillance, OSA on CPAP, HTN, HLD) role history -> comorbidity; Legionnaire disease kept history.",
+    "Time relations/anchors added: p1 4-month symptoms and 3-month improvement, p2 10-years-ago/4-years-ago before presentation and after-a-few-years CT, p3 couple-of-hours symptoms; p3 \"Three years later\" left unanchored.",
+    "p3-f033 VATS: indication persistent left pneumothorax (b00020) and laterality left.",
+    "Timeline: p1-e05 before e08 (typing before diagnosis); new p2-e13 HCL history before e03; new p3-e14 past history before e03; p3 e09->e10 replaced by e08->e10 (discussion: a few years after the VATS diagnoses) because e09 surveillance is ongoing.",
+    "semantic-rules-2026-10 re-sign: M12 nulled 10 paraphrased anchors; parent restored literal source anchors where the reference point is explicit: p1-f008/f009 'presented to the pulmonary clinic', p1-f014 'started on prednisone', p2-f029/f046 'diagnosis of AL amyloidosis', p3-f016/f017 'presented to the emergency room'; p2-f011/f012/f013 ('... years ago') left null (reference point not stated).",
+    "Verified M03 age text_values '53-year-old', '63-year-old', '74-year-old' for p1-p3 are each patient's own literal phrase.",
+    "opus-fixup: p3-f012 'had no history of smoking' status never/assertion present -> assertion absent, status unknown (SOC-NEVER: denied history, no explicit never wording); name 'cigarette smoking' -> 'smoking' (source does not specify cigarettes)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual 4 JPEG images inspected in the separate visual submission.",
+    "No explicit same-patient prior-report linkage identified. The cited cutaneous AL amyloidoma patient in the discussion (b00021) is external and not part of the roster.",
+    "Case 1 M-protein 0.98 mg/dL and IgG/kappa mg/dL units retained as printed, without unit correction.",
+    "Histories and later encounters are separate. Earlier hairy cell leukemia remission is not carried to the later lymph-node encounter with focal hairy cell leukemia involvement. No cancer stage or extent is inferred.",
+    "Future surveillance suggestions and literature statements (b00019, b00021-b00023) are background and do not establish patient-specific testing intervals or outcomes.",
+    "Relative times (\"4-month history\", \"4 years ago\", \"after a few years\", \"Three years later\") have no calendar anchors; no ISO dates are given anywhere in the source.",
+    "Case 1 abstract and discussion say MGUS was found later, but the case narrative reports it in the same workup as the amyloid diagnosis; timing kept unresolved.",
+    "Fig. 2a/2b are cited with garbled text \"(Fig. 2a, Fig. 2ba & b)\"; calcification and the Fig. 2b CT come from captions only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 137,
+    "figures_viewed": 4,
+    "key_findings": [
+      "semantic-rules-2026-10: M03 verified; 7 of 10 nulled anchors restored to literal phrases.",
+      "Three original index patients with explicit Case headings; b00021 cutaneous amyloidoma patient is external and correctly excluded.",
+      "p1 MGUS timing: abstract/discussion \"later\" vs narrative same workup; unresolved and recorded.",
+      "p1 M-protein 0.98 mg/dL and immunofixation-reported IgG/kappa mg/dL kept as printed.",
+      "Fig 2a/2b show an implanted cardiac device, leads and sternal wires that the Case 2 text never mentions; ownership rests on the text citation only; calcification and the Fig 2b CT are caption-only.",
+      "Fig 3 LLL location caption-only; slice shows no pneumothorax.",
+      "No-treatment statements are assertion=absent, not declined; HCL remission not carried to the later node with focal HCL.",
+      "opus-fixup: p3 smoking denial now absent/unknown per SOC-NEVER; p1 'lifelong non-smoker' kept as never."
+    ],
+    "residual_risks": [
+      "p2 Fig 2b CT and p1 labs have no explicit time ordering; p3 EGD untimed beyond the GI bleed.",
+      "Gastric site for p3 MALT only from abstract/discussion.",
+      "Figure-to-patient ownership for Fig 2a/2b is citation-based despite unexplained device hardware."
+    ]
+  },
+  "physician_adjudicated": false
+}

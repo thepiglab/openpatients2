@@ -61,6 +61,8 @@ async def serve_forever(args):
 def parser():
     p = argparse.ArgumentParser(prog="op2", description="Evidence-grounded OpenPatients extraction and cohort research")
     sub = p.add_subparsers(dest="command", required=True)
+    from .viewer import add_parser as add_viewer_parser
+    add_viewer_parser(sub)
     from .acquisition import add_parser as add_corpus_parser
     add_corpus_parser(sub)
     from .corpus_stats import add_parser as add_stats_parser
@@ -233,7 +235,10 @@ def parser():
 def _main(argv=None):
     args = parser().parse_args(argv)
     try:
-        if args.command in {"run", "benchmark", "smoke"}:
+        if args.command == "viewer":
+            from .viewer import dispatch
+            result = dispatch(args)
+        elif args.command in {"run", "benchmark", "smoke"}:
             from .pipeline import run_pipeline, smoke
             from .benchmark import benchmark
             cfg = load_config(args.config)

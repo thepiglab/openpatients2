@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12813576.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "85e917dba8ca3f4c6264c8c275b865ae483feead2c6291476189cf6c39412716",
+  "annotation_sha256": "0b8a5ac59bb9951722c4457582a50b6efbbc09caf8ffe4d62508651ed2108194",
+  "reviewed_at": "2026-10-09T22:43:04.267410+00:00",
+  "source_segments_read": 47,
+  "facts_reviewed": 82,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f043 haemolysis changed from ambiguous/review_only to supported/include while keeping verification provisional and assertion possible: authors state mild/minimal systemic haemolysis; the causal mechanism stays a hypothesis.",
+    "p1-f070 IV fluids indication changed from inferred \"supportive care for acute kidney injury\" to the source wording \"initial supportive care\".",
+    "p1-f075 haemodialysis indication no longer borrows anuria; now \"AKI necessitating urgent dialysis; primarily for ultrafiltration\".",
+    "p1-f007 (no nephrotoxic medications) moved from the PVI procedure event e05 to the baseline event e02.",
+    "Added ordering links e02>e05, e04>e11 (Table 1 day of procedure vs 2 days later), e07>e08, e16>e17.",
+    "Added ambiguity on urine timing (text evening vs Figure 2 caption 1 day after PVI and infographic Day 2), and a Figure 3 day-62 note on the recovery anchor ambiguity.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Restored literal anchors after M12 nulled paraphrases: p1-f005 CABG '1 year prior' -> 'referred to our hospital for PVI'; p1-f033 cola-coloured urine 'later that evening' -> 'discharged at 17:18 h'; p1-f035/f036 fluid/monitoring advice 'The following morning' -> 'contacted the emergency department at 22:30 h'; p1-f037..f039 'On follow-up the next day' -> 'The following morning'.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] p1-f045 LDH: M12 left time with null text/anchor/date and relation 'at'; relation set to 'unknown' (TIME-LITERAL; the own evidence has no time phrase).",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified p1-f072 bumetanide 'once anuria was established' remains self-anchored with anchor null.",
+    "opus-fixup: p1-f037/f038/f039 time relation at -> after: 'On follow-up the next day' is the day after 'The following morning' contact (anchor kept, literal)."
+  ],
+  "unresolved": [
+    "Single case report; no calendar dates are given and none are inferred. Procedure clock times are literal.",
+    "Haemolysis as the cause of the AKI is the authors attribution and mechanism remains hypothetical (suboptimal catheter contact and volume status are not documented facts).",
+    "Table 1 \"Expected in haemolysis\" column and footnote (a) are generic interpretive text, not patient results; no high/low flags were derived from them.",
+    "Table 1 Day-of-PVI blanks and the troponin dash are not-reported cells, not normal values.",
+    "Abstract and main text differ on fluid advice wording, recovery anchor (procedure vs admission) and AKI severity wording; see patient ambiguities.",
+    "Figure 3 chart values and the uncaptioned graphic ytaf669-F5 are described only in the visual submission; the unwrapped portrait graphic is not a patient image."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 47,
+    "facts_reviewed": 82,
+    "figures_viewed": 0,
+    "key_findings": [
+      "M12 anchors restored with literal source phrases; empty-time relation fixed on p1-f045.",
+      "opus-fixup: next-day follow-up symptoms now relation after the morning contact."
+    ],
+    "residual_risks": []
+  },
+  "physician_adjudicated": false
+}

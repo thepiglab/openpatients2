@@ -13,6 +13,7 @@ from typing import Literal
 from pydantic import Field, model_validator
 from .schemas import StrictModel
 from .extraction_contracts import SourceSpan, span_errors
+from .semantic_rules import EVENT_OCCURRENCES, TEMPORAL_RELATIONS
 
 
 class TimeExpression(StrictModel):
@@ -41,7 +42,8 @@ class LongitudinalEvent(StrictModel):
     record_id: str = Field(min_length=1)
     episode_id: str | None = Field(description='Only an explicitly distinguishable episode; do not invent visits')
     kind: Literal['presentation', 'history', 'diagnosis', 'test', 'treatment', 'adverse_event', 'outcome', 'follow_up', 'plan', 'other']
-    occurrence: Literal['occurred', 'planned', 'conditional', 'unknown']
+    # One vocabulary shared with the dense annotation format (semantic_rules, rule TIMELINE-ENUMS).
+    occurrence: Literal[EVENT_OCCURRENCES]
     description: str = Field(min_length=1)
     fact_ids: list[str]
     evidence: list[SourceSpan] = Field(min_length=1)
@@ -73,7 +75,7 @@ class TemporalEdge(StrictModel):
     edge_id: str = Field(min_length=1)
     from_event_id: str
     to_event_id: str
-    relation: Literal['before', 'after', 'same_time', 'during', 'overlaps']
+    relation: Literal[TEMPORAL_RELATIONS] = Field(description='unknown: the source pairs the events but leaves their order open')
     offset: Offset | None
     evidence: list[SourceSpan] = Field(min_length=1, description='Must establish this pair and relation, not just contain a time word')
 
@@ -183,6 +185,8 @@ def audit_timeline(timeline: PatientTimeline, sources, fact_records: dict[str, s
                 constraints[family] += [(left, right, offset.upper * scale), (right, left, -offset.lower * scale)]
         elif edge.relation == 'same_time':
             same_time.append((left, right))
+        elif edge.relation == 'unknown':
+            issue('relation_order_unresolved', edge.edge_id, 'review')
         else:
             issue('interval_relation_not_numerically_resolved', edge.edge_id, 'review')
     # Reachability detects strict cycles, including those that pass through equality.

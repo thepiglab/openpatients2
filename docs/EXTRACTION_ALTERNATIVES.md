@@ -2,6 +2,15 @@
 
 Date: 2026-10-07. **Design proposal; no runtime defaults changed.**
 
+**Result update:** the [implemented architecture experiment](../reports/CLINICAL_ARCHITECTURE_20261007.md)
+completed, but its automatic verifier and encounter replacement regressed.
+Passing authored gate controls did not establish safe natural-case filtering.
+The complementary reader recovered useful candidates before filtering. The
+[next proposed contract](SOURCE_CLAIM_COMPILER_DESIGN.md) removes repeated rich
+object generation and whole-fact rejection from the core path. The original
+proposal below remains historical design context, not an evidence-backed
+recommendation to enable its gate.
+
 A bounded subset is now implemented as the opt-in
 [clinical architecture campaign](CLINICAL_ARCHITECTURE_CAMPAIGN.md). That document
 distinguishes executable experiments from the remaining proposed work. Production

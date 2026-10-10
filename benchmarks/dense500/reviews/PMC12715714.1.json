@@ -1,0 +1,53 @@
+{
+  "article_id": "PMC12715714.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1a5c8427cfced62bb4e43b039583308972164c5dc5016236bc51b279e57bec08",
+  "annotation_sha256": "5084a2064f7fadbd4b53180a46cb218fa0457579ee065142a0e05da7bb1bb7e1",
+  "reviewed_at": "2026-10-09T22:30:53.489183+00:00",
+  "source_segments_read": 43,
+  "facts_reviewed": 142,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f014 manic episode role changed from primary_diagnosis to unknown (Bipolar I is the coded primary diagnosis; the episode is its basis).",
+    "p1-f016 amenorrhea: removed a caveat that had been placed in diagnostic_basis; caveat moved to notes; no month assigned from figure columns.",
+    "Added p1-f141 schizophrenia-spectrum disorder and p1-f142 PMDD as differential (assertion unknown, not refuted) from b00025.",
+    "Added relations e14 before e15 (hyperprolactinemia \"with subsequent amenorrhea\", b00028) and e18 before e20 (brexpiprazole only in Table 1 rows X+5/X+6, COC from X+7).",
+    "Summary no longer states the conflicted Month X+9 olanzapine discontinuation as settled; notes Table 1 still lists olanzapine in X+10.",
+    "Olanzapine conflict ambiguity extended with the pixel finding that Figure 1 draws OLZ into the X+10 column (consistent with Table 1); conflict kept review_only.",
+    "Added ambiguities: which relapse occurred during amenorrhea is not stated (figure shows psychosis peaks in X+2/X+3 without menstruation bars); differentials not formally ruled out.",
+    "Visual submission corrected: the \"dotted-outline\" red menstruation bar at the X+9/X+10 boundary is a solid bar with the dotted month separator drawn over it; added magnified readings of the OLZ bar end (into X+10) and the Li raised step.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] p1-f039 manic flare 'During that cycle': paraphrased anchor (nulled by M12) restored as the literal source phrase 'Month X + 7' (the cycle in which the combined oral contraceptive was initiated, same paragraph b00023).",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M07: p1-f055..f058 serial estradiol/progesterone/LH/FSH measurements ('without serial measurements') are status=not_performed with assertion=present, correct per OBS-NOT-PERFORMED."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected in the annotation; the actual JPEG is inspected in the separate visual submission.",
+    "Months are relative labels (Month X, X + n); no calendar dates, so no date_iso values are recorded.",
+    "Table 1 dose cells are printed as month ranges (minimum-maximum mg/day); single-number cells are recorded as printed. Blank cells are not interpreted as stopped or never given.",
+    "Source conflict: olanzapine discontinuation in Month X + 9 (narrative) versus olanzapine 5-10 mg/day in Month X + 10 (Table 1); both kept, conflicting rows are review_only.",
+    "Hormone mechanisms (hypoestrogenism, HPA activation) are authors' interpretation without hormone measurements and are not recorded as patient findings.",
+    "Supplement SM1 (DataSheet1.pdf) is a CARE reporting checklist reviewed through the supplement manifest; it contributes no clinical facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 43,
+    "facts_reviewed": 142,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Migration changes verified; one anchor restored with literal phrase."
+    ],
+    "residual_risks": []
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12851604.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2ebca316537b5f38b4b2931d174a8ac8c9e11072367f92b9602b0f89aae866f2",
+  "annotation_sha256": "d18d99ac88a9e951ffd75e5203d5d7f5a4396de89424825afabb568ef7e6e099",
+  "reviewed_at": "2026-10-09T22:27:48.753395+00:00",
+  "source_segments_read": 31,
+  "facts_reviewed": 70,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added supported ordering links presentation-before-workup: p1-e01 before p1-e02/e03/e04/e05/e06/e07/e09; p2-e01 before p2-e02/e03/e04/e05/e06 (relations 1->8 and 1->6); ordering ambiguities rewritten accordingly",
+    "p1 ambiguity added: abstract calls CT inconclusive in both cases vs Case 1 narrative no acute ischemia or hemorrhage",
+    "p2-f027 head CT method set to non-contrast-enhanced CT from the b00026 statement covering both cases",
+    "p1-f025 vertebral artery dissection: added b00004 etiologic statement evidence",
+    "semantic-rules-2026-10 re-sign: verified 7 M12 nulled anchors were paraphrases ('presentation to the emergency department').",
+    "Restored p2-f006..f012 time.anchor to the literal phrase 'presented to the emergency department' (symptoms of 'five hours of evolution' before ED presentation)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual 2 JPEGs inspected in the separate visual submission.",
+    "Two-patient case report: timing of tests, examination and treatment is not stated; only presentation-before-treatment ordering is asserted.",
+    "Outcomes, follow-up results, doses/agents of antiplatelet therapy, statin and DVT prophylaxis are not reported.",
+    "Table 1 values retained literally with the authors printed reference text; no flags derived from reference ranges except where text states them.",
+    "The etiologic role of Factor V Leiden/activated protein C resistance in Case 2 is an author hypothesis, not an established cause.",
+    "Case 1 early rehabilitation and vascular risk factor management are documented only in the abstract statement covering both patients."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 31,
+    "facts_reviewed": 70,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Two index patients correctly separated; Table 1 belongs to Case 2 only; background segments excluded",
+      "All 9 Table 1 rows verified literally with printed reference text; only APC resistance and FVL flagged positive (text-stated); Protein C 54 below printed range left unflagged; anticardiolipin kept as one literal cell",
+      "p2 dissection and AF refuted, no history/trauma absent; FVL causality kept as author hypothesis",
+      "p1 rehab and risk-factor management only from the abstract both-patients sentence",
+      "FIG1/FIG2 pixels viewed: axial posterior-fossa MRI triplets with arrows; dissection not visible; FIG2 a resembles an ADC-type map and b a diffusion trace image versus caption DWI/FLAIR labels, recorded uncertain",
+      "semantic-rules-2026-10: M12 verified; 7 anchors restored to literal phrase."
+    ],
+    "residual_risks": [
+      "Order among tests and treatment within each admission is unstated",
+      "FIG2 sequence labels a/b may be mislabeled in the source caption",
+      "Care-plan action_status unknown for risk-factor management, BP optimization and DVT prophylaxis although listed as treatment received/included",
+      "Figure EHR-label and privacy sidecars not yet created (flag-only policy)"
+    ]
+  },
+  "physician_adjudicated": false
+}

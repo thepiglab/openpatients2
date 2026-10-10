@@ -1,0 +1,81 @@
+{
+  "article_id": "PMC12790446.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "bc5d0bfbecbe1e6fc2f1d666872de41d7c5936ad1086830a0a4999f4f71b0148",
+  "annotation_sha256": "b9b4e3f9b92b4f70482a5dc847e74be47c6311d3dc1dde8b35882cf940be8bd3",
+  "reviewed_at": "2026-10-09T23:00:55.611261+00:00",
+  "source_segments_read": 70,
+  "facts_reviewed": 204,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1/p2/p3-f001 case_context: case_kind multi_patient, multiple_index_patients true, subject_state living_at_presentation.",
+    "p1-f067: CT CBD finding now includes the documented CBD stones (was dilation only).",
+    "Added relation p1-e04 (TG18 cholangitis diagnosis) before p1-e08 (same-day cefmetazole start), b00018.",
+    "p1 ambiguity added for Figure 1 caption (lead I T inversion) vs body LBBB.",
+    "p2-f059 caption-only calculous cholecystitis: certainty ambiguous (already review_only).",
+    "Deleted p2-f060 coronary stent device_present (inference: source mentions PCI and stent-related complications but never states stent placement); replaced by a p2 ambiguity note.",
+    "p2 ambiguities added: Fig 3 lead I vs I/aVL; Fig 4 calculous wording; CK 56 below printed range vs normal cardiac markers; collective-only IV antibiotics/recovery.",
+    "p3-f050 cardiology consultation not performed: moved from outcomes(other) to care_plans referral, assertion absent.",
+    "p3-f051/f055/f056 TIMI/CCI/ASA-PS observation kind physiologic -> other.",
+    "p3 ambiguities added: garbled \"White C-reactive protein\" sentence (WBC unflagged), unstated \"same day\" referent, Fig 6 appearance vs contrast-enhanced CT.",
+    "Visual submission FIG6: corrected \"kidneys are not shown\" to unenhanced paravertebral structures (probable upper renal poles) and recorded apparent non-enhancement as limitation.",
+    "semantic-rules-2026-10: verified 69 M02 comparators '=' (no printed <,>), M03 ages '50-year-old'/'50-year-old'/'77-year-old', M04 p1-f004 'no significant medical history' absent+unknown, and 29 M12 anchor nullings (paraphrases; time text literal e.g. 'First Presentation', 'The following day', 'one month ago').",
+    "OBS-NOT-PERFORMED: p2-f051 'no baseline ECG was available for comparison' set to status=not_performed, result_absent_reason=not_performed (was unknown/not_reported).",
+    "SECTION-SIGNS: GCS E4V5M6 totals and E/V/M component facts for p1/p2/p3 moved observations -> symptoms_function performance_score; quotes, ids and event/summary links unchanged.",
+    "  p1-f043: observations/physiologic -> symptoms_function/performance_score",
+    "  p1-f044: observations/physiologic -> symptoms_function/performance_score",
+    "  p1-f045: observations/physiologic -> symptoms_function/performance_score",
+    "  p1-f046: observations/physiologic -> symptoms_function/performance_score",
+    "  p2-f011: observations/physiologic -> symptoms_function/performance_score",
+    "  p2-f012: observations/physiologic -> symptoms_function/performance_score",
+    "  p2-f013: observations/physiologic -> symptoms_function/performance_score",
+    "  p2-f014: observations/physiologic -> symptoms_function/performance_score",
+    "  p3-f009: observations/physiologic -> symptoms_function/performance_score",
+    "  p3-f010: observations/physiologic -> symptoms_function/performance_score",
+    "  p3-f011: observations/physiologic -> symptoms_function/performance_score",
+    "  p3-f012: observations/physiologic -> symptoms_function/performance_score"
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected in this annotation; the six JPEG figures were inspected separately in the visual submission.",
+    "Figure 2 Case 1 caption describes gallbladder inflammation/calculous cholecystitis, differing from the body (CBD dilation/stones, cholangitis); caption-derived diagnosis/findings are review-only without changing labelled ownership.",
+    "Figure 1 caption describes T-wave inversion in lead I whereas the body states preexisting left bundle branch block; Figure 3 caption names lead I only whereas the body names leads I and aVL. Differences are retained, not reconciled.",
+    "Laboratory table values keep their printed reference ranges; abnormal/normal flags are set only where the narrative names the abnormality (e.g. WBC, ALP/γ-GTP, CRP, cardiac markers), not from range comparison alone.",
+    "Case 2 serial troponins were not performed and a prior ECG was unavailable at the presenting facility; stent-related complications were not completely ruled out. Case 3 serial measurements and cardiology consultation were not performed. Single normal markers do not establish definitive exclusion of all cardiac pathology.",
+    "Case 2 IV antibiotics and symptom resolution are documented only collectively in the discussion/abstract, without drug, duration, timing relative to surgery or discharge detail. No cefmetazole is assigned to Case 2.",
+    "Case 1 first-visit care setting is documented only as hospital; Case 2 setting is documented as hospital reached via the Tokyo CCU Network (no ED statement). Case 3 states ED.",
+    "Author cognitive-bias analysis is retrospective/interpretive and not an objectively verified patient finding. TIMI score and author risk label retained without external recalculation. No explicit same-patient prior-report identity links."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "campaign": "semantic-rules-2026-10 re-sign",
+    "source_units_read": 70,
+    "facts_reviewed": 204,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Re-sign 2026-10: migrations verified; one not-available test normalized.",
+      "Three index men (50M cholangitis with next-day return; 50M acute cholecystitis 1 month after STEMI/PCI transferred for lap chole; 77M calculous cholecystitis with same-day lap chole). All 27 table rows checked against values/units/ranges.",
+      "Lab flags only where narrative names abnormality; caption-body conflicts (Fig 1, 2, 3, 4) kept review_only or as ambiguities.",
+      "Fig 2 pixels: arrows at pancreatic-head/hepatoduodenal region, not an enlarged gallbladder - consistent with body CBD findings, caption conflict retained.",
+      "Fig 6 pixels show calcified ring-like gallstone; displayed slices appear unenhanced.",
+      "SECTION-SIGNS: GCS E4V5M6 totals and E/V/M component facts for p1/p2/p3 moved observations -> symptoms_function performance_score; quotes, ids and event/summary links unchanged."
+    ],
+    "residual_risks": [
+      "Case 2 antibiotic agent/timing and recovery documented only collectively.",
+      "Case 1 bile culture timing (presumably ERCP) not stated; event left unlinked.",
+      "Case 3 same-day surgery referent unstated; Fig 1 LBBB vs caption unresolved."
+    ]
+  },
+  "physician_adjudicated": false
+}

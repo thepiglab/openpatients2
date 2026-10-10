@@ -1,0 +1,51 @@
+{
+  "article_id": "PMC12728242.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1848fdae8318ed96349e992baed42189435ea74ccce8d2500fafad9efe7c0609",
+  "annotation_sha256": "7d731da3f2b325064ca5e38b1b787bb0a13c90954d7bb8972a5a30087eb6c0c9",
+  "reviewed_at": "2026-10-09T23:00:55.505581+00:00",
+  "source_segments_read": 85,
+  "facts_reviewed": 215,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M02 comparators on vitals (p1-f107..f110), M03 age '79-year-old', M04 p1-f011/p1-f014 absent history -> verification unknown, M13 p1-e02/p1-e34 uncertain->unknown, M12 nulling of 38 paraphrased anchors ('reported clinical deterioration', 'initial SDEC assessment', 'elective deroofing', ...)",
+    "Restored literal anchor 'surgery' on p1-f207 ('discharged 48 hours after surgery'); 'Day 3', 'four days later', 'the following day', 'on the same day' keep anchor null (no literal reference phrase tied to them)",
+    "SECTION-SIGNS: removed observation p1-f106 (GCS 15/15); the same score is already recorded in symptoms_function p1-f215 (never both sections); links dropped from event p1-e11 and summary.",
+    "  p1-f106: removed duplicate observation"
+  ],
+  "unresolved": [
+    "This text/caption annotation layer does not use pixels; pixel inspection is recorded separately in the visual target and its review receipts.",
+    "Abstract known-cyst history conflicts with body denial of prior hepatic pathology/cyst imaging. No baseline scan or scheduled ultrasound performance is invented.",
+    "Right hepatic CT wording and later segment IV operative location are retained as source-specific claims, without anatomical resolution.",
+    "Next-day return and Day 3 deterioration-lab labeling lack a common explicit day-zero anchor. Exact calendar dates and elective-operation/follow-up intervals are not supplied.",
+    "Day 3 normal-coagulation prose is inconsistent with printed PT/APTT reference intervals; no laboratory-derived diagnosis is invented. Other reference outliers remain literal measurements unless authors explicitly classify them.",
+    "Emergency intervention deferral does not negate later actual elective surgery; supportive prophylaxis/drugs have no unreported agent, dose or route assigned.",
+    "Discussion mesenteric-cyst wording and literature recurrence risks are background, not a second patient diagnosis. No explicit same-patient prior-report linkage identified. No supplements attached.",
+    "Initial ALP 137 U/L versus 30–130 printed interval conflicts with generic normal-enzyme prose; qualifying interpretation is review-only, no unreported high flag or diagnosis is assigned.",
+    "Repeat CT measured collection is perihepatic in body and in-cavity in Figure 2 caption; source descriptions remain separate, not resolved by pixels."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 85,
+    "facts_reviewed": 215,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Migration changes correct against source",
+      "SECTION-SIGNS: removed observation p1-f106 (GCS 15/15); the same score is already recorded in symptoms_function p1-f215 (never both sections); links dropped from event p1-e11 and summary."
+    ],
+    "residual_risks": []
+  },
+  "physician_adjudicated": false
+}

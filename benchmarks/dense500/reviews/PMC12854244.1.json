@@ -1,0 +1,49 @@
+{
+  "article_id": "PMC12854244.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2d361b2de767646fa601a8de0ffebcf10d870178c671b4e34f585d4d546b147c",
+  "annotation_sha256": "c6eb91440d09523204a4b4cc5b65c000f13a3a9413d2fec8143befe95d3f19e0",
+  "reviewed_at": "2026-10-09T22:26:33.680086+00:00",
+  "source_segments_read": 65,
+  "facts_reviewed": 128,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "M12 follow-up: restored literal anchors on nulled paraphrases: \"presented to the emergency department\" (p1-f008..f012), \"emergency department\" (On-arrival vitals/exam/concerns p1-f019..f033,f119,f120,f127), \"exploratory surgery\" (intraoperative and pathology facts p1-f078..f096,f098..f104,f128,f129), \"discharged on postoperative day 3\" (p1-f105..f109), \"damage-control repair\" (p1-f097).",
+    "Dangling relations: p1-f005,f006,f007,f013..f017 had relation before/at with null text/anchor (anchor had been borrowed from neighbouring presentation sentence); set relation=unknown.",
+    "p1-f042 (NR001) deleted: mixed urinalysis summary \"largely unremarkable aside from trace ketones\"; every UA component is already a separate Table 1 observation (p1-f064..f072, ketones Trace p1-f071); removed from event p1-e02 and summary fact_ids.",
+    "Verified M03 age \"44-year-old\", M13 uncertain->unknown on p1-e05/p1-e15."
+  ],
+  "unresolved": [
+    "This text/caption annotation layer does not use pixels; pixel inspection is recorded separately in the visual target and its review receipts.",
+    "Raw XML Tables1–2 fully reviewed;32 admission analyte rows retained. Generic differential-table clinical features/risk factors are not transferred to the patient.",
+    "Electrolyte/BUN interpretation conflict is review-only in both directions. No exact BMI, drug administration regimen, operative duration or blood loss is reported.",
+    "Additional imaging and mesh reinforcement were deferred; no subsequent definitive reconstruction is documented. No explicit same-patient prior-report linkage identified.",
+    "Two-week outpatient follow-up is literal; whether interval starts at surgery or discharge is unreported. Retrospective differential discussion has no supported encounter date or chronology.",
+    "Previous ACE-inhibitor angioedema and pre-existing history explicitly precede emergency presentation; their order relative to24hour symptom onset is not established. Obesity absence is a baseline risk statement, without historical duration."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 65,
+    "facts_reviewed": 128,
+    "figures_viewed": 0,
+    "key_findings": [
+      "migration verified; literal anchors restored; 8 dangling relations set unknown; mixed UA summary removed"
+    ],
+    "residual_risks": [
+      "On-arrival anchor \"emergency department\" is the arrival setting phrase"
+    ]
+  },
+  "physician_adjudicated": false
+}

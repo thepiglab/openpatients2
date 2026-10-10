@@ -25,6 +25,7 @@ from pydantic import Field
 import yaml
 
 from .article_tasks import ARTICLE_TASKS, SYSTEM, check_article_task, patient_packet, task_messages
+from .annotation_rules import prompt_block
 from .articles import recheck_license
 from .client import APIClient
 from .config import APIConfig, ConfigModel
@@ -45,6 +46,8 @@ from .pilot_review import (OrderingReview, ClaimAudit, ordering_schema, ordering
     ClinicalInventory, inventory_messages, check_inventory,
     CoverageAudit, coverage_messages, check_coverage)
 from .schemas import TASK_MODELS
+from .semantic_rules import panel_label_violations
+from .unified_record_flags import media_flags
 from .targeted_repair import ItemRepair, erased, repair_snapshot, changed_accepted_atoms, protected_value_changes, canonical_clinical_task
 from .prompt_payloads import compact_facts, compact_graph, timeline_retention
 from .clinical_normalization import normalize_clinical
@@ -271,7 +274,7 @@ def timeline_messages(article: dict, patient: dict, record_id: str, facts: dict[
         'a known segment_id and an exact unique quote. Code derives source_id, segment_sha256 and Unicode '
         'start/end positions; do not calculate or invent those fields. '
         'Describe only this patient. Include unknown-time events, failed treatments, follow-up and plans, '
-        'keeping occurred, planned, conditional and unknown distinct. Never invent encounters or dates. '
+        'keeping occurred, planned, conditional, not_occurred and unknown distinct. Never invent encounters or dates. '
         'Times must preserve literal precision. Edges must cite evidence for BOTH events and their relation. '
         'Do not derive chronology from paragraph order. Keep month/year offsets in their own units. '
         'Use fact_ids only from known_fact_ids for this record; empty is allowed. The registry associates IDs '
@@ -279,7 +282,7 @@ def timeline_messages(article: dict, patient: dict, record_id: str, facts: dict[
         'Preserve uncertainty and contradictions. Distinct administrations, assessments or encounters '
         'with different stated years/ages/days must be separate events, even when mentioned in one sentence. '
         'Do not merge successive doses or treatment changes into one event. A planned or declined '
-        'treatment must never become an occurred treatment.')
+        'treatment must never become an occurred treatment.\n' + prompt_block('timeline'))
     if refined:
         instruction += (' The primary goal is relative clinical sequence, not dates: distinguish past history, '
             'presentation, investigations, treatment, adverse events or failed response, treatment changes, '
@@ -645,12 +648,10 @@ class PilotRunner:
 
     def clinical_checker(self, task, packet, segments):
         def checker(value):
-            checked = validate(task, value, packet['text'], segments=segments)
+            # target_patient=True: the shared CTX-PER-PATIENT packet rule (semantic_rules).
+            checked = validate(task, value, packet['text'], segments=segments, target_patient=True)
             if not checked.valid:
                 raise ValueError('; '.join(checked.errors))
-            if task == 'case_context' and (checked.data['multiple_index_patients'] is not False or
-                                          checked.data['case_kind'] == 'multi_patient'):
-                raise ValueError('target_packet_requires_one_index_patient')
             return checked.data
         return checker
 
@@ -1015,8 +1016,11 @@ class PilotRunner:
         try:
             pixels = self.pixels(row, article)
         except (ValueError, KeyError, OSError, StopIteration) as exc:
+            # Same availability flags as the reference unified record: a figure whose source declares no
+            # image asset ('missing_image') is unavailable media, listed and never claimed as reviewed.
             result = {'identity': identity, 'status': 'failed', 'errors': [str(exc)],
-                      'pixel_provenance': row.get('pixel_provenance'), 'pixels_inspected': False}
+                      'pixel_provenance': row.get('pixel_provenance'), 'pixels_inspected': False,
+                      **media_flags(row)}
             self.visual_rows.append(result)
             return result
         refined = self.config.refinement_policy == 'source_aware'
@@ -1052,9 +1056,12 @@ class PilotRunner:
         result = {'identity': identity, 'status': 'valid' if visual['status'] == attribution['status'] == 'valid' else 'incomplete',
             'visual': visual, 'attribution': attribution, 'pixel_provenance': row['pixel_provenance'],
             'source_license': article['license'], 'pixels_inspected': inspected,
-            'semantic_review': 'unreviewed', 'pixel_accuracy_verified': False,
+            'semantic_review': 'unreviewed', 'pixel_accuracy_verified': False, **media_flags(row),
             'clinical_fact_status': 'unreviewed_visual_annotation',
-            'panel_columns': list(panel_columns(article['article_id'], visual['data'])) if visual['data'] else []}
+            'panel_columns': list(panel_columns(article['article_id'], visual['data'])) if visual['data'] else [],
+            # FIG-LABELS heuristics (warnings, never a rejection): positional/patient-name panel labels.
+            'label_warnings': [v.text() for v in panel_label_violations((visual['data'] or {}).get('panels'),
+                                                                         row['figure_id'])]}
         self.visual_rows.append(result)
         return result
 

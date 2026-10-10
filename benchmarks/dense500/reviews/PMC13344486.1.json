@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC13344486.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4b0b1929f33f369362b4239c36de8c4999d4832977e09d9784567e7cc73ead19",
+  "annotation_sha256": "2039d2d1850e23856c73465ee8fb612a191b888d0ad31a7f1379a5e4fb0222cb",
+  "reviewed_at": "2026-10-09T22:22:58.805184+00:00",
+  "source_segments_read": 25,
+  "facts_reviewed": 73,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added p1-f073 qualitative observation \"stable platelet count\" (b00011), linked to the workup event and summary.",
+    "Timeline: added supported edges e05 same_time e04 (labs upon presentation), e04→e06 (diagnostic CT after ED presentation), e06→e10 (left renal infarction on CT before left nephrectomy), e04→e10 (nephrectomy on day of admission), e07→e14 (CAPS suspicion before post-operative strong support); relations 18→23.",
+    "[semantic-rules-2026-10 re-sign] Verified M03 age text_value '36-year-old' is the literal phrase for this patient's age in her own evidence."
+  ],
+  "unresolved": [
+    "Figure pixels are inspected in the separate visual submission; this annotation keeps caption-layer visual status not_inspected.",
+    "No explicit same-patient prior-report linkage identified; bibliography alone is not an identity link.",
+    "Body-text Figure 1/2 callouts are reversed relative to the captions and images.",
+    "Acute heparin/anticoagulation, prednisone, any initial CAPS trigger and histopathological small-vessel confirmation are not stated for this patient; general treatment guidance and ICU bacteremia do not establish them.",
+    "No calendar dates, admission/discharge dates or length of stay are given; ordering relies on narrative sequence only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 25,
+    "facts_reviewed": 73,
+    "figures_viewed": 0,
+    "key_findings": [
+      "M03 correct; no annotation edits needed."
+    ],
+    "residual_risks": [
+      "Prior residual risks unchanged."
+    ],
+    "previous_assessment": {
+      "reviewer": "Claude Opus 5.5 parent",
+      "source_units_read": 25,
+      "facts_reviewed": 73,
+      "figures_viewed": 3,
+      "key_findings": [
+        "Single 36F index patient; registry/guideline discussion kept as background; no cited-case attribution.",
+        "Figure callouts in b00010 reversed vs captions; pixels confirm Fig1 = coronal chest CT (pulmonary arteries), Fig2 = abdominal coronal/sagittal CT (aorta/renal/celiac), Fig3 = axial brain CT; annotator mapping by caption/image is correct.",
+        "Differentials TTP/HUS/DIC/HIT kept possible/differential despite \"ruled out\" phrasing; thrombocytopenia/hemolytic anemia absent; no acute heparin/prednisone/initial warfarin inferred; methylprednisolone/IVIG doses, nephrectomy indication and time, post-op neuro events, ICU course, B. cepacia/TMP-SMX, discharge on warfarin and 3-month follow-up verified.",
+        "Visual submission verified against all 3 JPEGs (6 panels); no burned-in identifiers or faces; not edited."
+      ],
+      "residual_risks": [
+        "Exact order of CT, immunomodulatory therapy and nephrectomy on day 1 unstated.",
+        "Abstract \"eventual confirmation\" of LA vs presentation LA unresolved (ambiguity).",
+        "Right cerebellar lesion: body hypodensities vs caption/abstract infarct.",
+        "\"3 months post-initial testing\" anchor undefined."
+      ]
+    }
+  },
+  "physician_adjudicated": false
+}

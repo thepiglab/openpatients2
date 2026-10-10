@@ -101,6 +101,8 @@ def test_no_naked_official_alias_dictionary(tmp_path):
 def make_clinical_index(tmp_path,catalog,assertion='present',subject='index_patient'):
     c,p,db=catalog;row=exported()
     row['sections']['conditions']['items'][0].update(assertion=assertion,subject=subject)
+    if assertion=='absent':  # ASSERT-ABSENT: a negated diagnosis is never 'confirmed'
+        row['sections']['conditions']['items'][0]['verification_status']='refuted'
     linked=link_patient(row,c,p);source=dump(tmp_path/'coded.jsonl',[linked]);index=tmp_path/'index.sqlite'
     build_index(source,str(index),catalog_path=str(db));return index,linked
 

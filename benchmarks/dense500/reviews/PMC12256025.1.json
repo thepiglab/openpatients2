@@ -1,0 +1,67 @@
+{
+  "article_id": "PMC12256025.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "83486910573d1d33efb8a8471f5c527271a23c956f5b345a12140c1cec2b6587",
+  "annotation_sha256": "0c6db76768ae3ed1a008ab20af87d79757be5a532c390b71e65c89e6f4b0e876",
+  "reviewed_at": "2026-10-09T23:02:58.084874+00:00",
+  "source_segments_read": 38,
+  "facts_reviewed": 200,
+  "patients_reviewed": 5,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f002: age text_value set to the literal Table 1 \"Age sex\" cell value \"80\"; header quote added (DEMO-AGE-TEXT)",
+    "p2-f002: age text_value set to the literal Table 1 \"Age sex\" cell value \"75\"; header quote added (DEMO-AGE-TEXT)",
+    "p3-f002: age text_value set to the literal Table 1 \"Age sex\" cell value \"76\"; header quote added (DEMO-AGE-TEXT)",
+    "p4-f002: age text_value set to the literal Table 1 \"Age sex\" cell value \"79\"; header quote added (DEMO-AGE-TEXT)",
+    "p5-f002: age text_value set to the literal Table 1 \"Age sex\" cell value \"80\"; header quote added (DEMO-AGE-TEXT)",
+    "p1-f010: absent Gallstones confirmed -> refuted (Table 1 Gallstones=No; workup-established acalculous cholecystitis); Gallstones header + acalculous quotes added (ASSERT-ABSENT)",
+    "p2-f011: absent Gallstones confirmed -> refuted (Table 1 Gallstones=No; workup-established acalculous cholecystitis); Gallstones header + acalculous quotes added (ASSERT-ABSENT)",
+    "p3-f010: absent Gallstones confirmed -> refuted (Table 1 Gallstones=No; workup-established acalculous cholecystitis); Gallstones header + acalculous quotes added (ASSERT-ABSENT)",
+    "p4-f010: absent Gallstones confirmed -> refuted (Table 1 Gallstones=No; workup-established acalculous cholecystitis); Gallstones header + acalculous quotes added (ASSERT-ABSENT)",
+    "p1-f017: migration-nulled time.anchor restored as the literal Table 1 header phrase \"primary surgery\" (header quote added) (TIME-LITERAL)",
+    "p2-f018: migration-nulled time.anchor restored as the literal Table 1 header phrase \"primary surgery\" (header quote added) (TIME-LITERAL)",
+    "p3-f018: migration-nulled time.anchor restored as the literal Table 1 header phrase \"primary surgery\" (header quote added) (TIME-LITERAL)",
+    "p4-f017: migration-nulled time.anchor restored as the literal Table 1 header phrase \"primary surgery\" (header quote added) (TIME-LITERAL)",
+    "p5-f017: migration-nulled time.anchor restored as the literal Table 1 header phrase \"primary surgery\" (header quote added) (TIME-LITERAL)",
+    "FIG1/FIG3/FIG4 panel labels \"Case 1\"..\"Case 5\": kept; pixels show printed labels \"Case①\"..\"Case⑤\" on each panel (FIG-LABELS)",
+    "FIG-LABELS: figures FIG1-FIG4 panel labels \"Case 1\"..\"Case 5\" renamed to the labels printed on the images (\"Case①\"..\"Case⑤\"), consistently in figures[], visual submission, figure-EHR labels and privacy flags; pixels re-viewed, readings/attribution/includability unchanged."
+  ],
+  "unresolved": [
+    "This text/caption annotation layer does not use pixels; pixel inspection is recorded separately in the visual target and its review receipts.",
+    "Replaced right hepatic artery from SMA with false-lumen SMA narrowing is described in one StanfordA-dissection case; Cases1/2 identity is unresolved and not assigned.",
+    "Pooled wall-thinning, omental/mesocolon containment, focal fibrinoid change/fresh thrombi and no organized thrombi do not establish individual case findings; no patient-level mechanism inferred.",
+    "Perioperative hypoperfusion/redistributed splanchnic flow is an author hypothesis, not confirmed NOMI or a documented hemodynamic measurement in any case.",
+    "The five patient rows are individually extractable. No explicit same-patient prior-publication link identified; literature cases and institutional larger cohorts remain background.",
+    "No individual medications, doses, discharge dates or longitudinal follow-up are reported. Series symptom wording does not establish fever in every pain-negative patient.",
+    "Figure 3 caption refers to contrast loss on CT in each case, whereas Case 3 is explicitly the noncontrast CT/MRI patient; no contrast-enhanced CT finding is newly assigned to Case 3 from that generic caption.",
+    "Introductory series wording describes development 3–10 days after primary surgery, but Table 1 explicitly labels those case-specific intervals as primary surgery to cholecystectomy and separately gives estimated onset-to-cholecystectomy intervals. No individual onset date is calculated or silently equated with the operative interval."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "campaign": "semantic-rules-2026-10 re-sign",
+    "source_units_read": 38,
+    "facts_reviewed": 200,
+    "figures_viewed": 4,
+    "key_findings": [
+      "M12: 5 anchors \"primary cardiovascular surgery\" were paraphrases (nulled correctly); restored the literal header phrase \"primary surgery\"",
+      "M13: p5-e08 author RAS hypothesis uncertain->unknown is correct",
+      "needs-review: 5 ages, 4 gallstone-absent items, 12 printed panel labels resolved",
+      "FIG-LABELS: figures FIG1-FIG4 panel labels \"Case 1\"..\"Case 5\" renamed to the labels printed on the images (\"Case①\"..\"Case⑤\"), consistently in figures[], visual submission, figure-EHR labels and privacy flags; pixels re-viewed, readings/attribution/includability unchanged."
+    ],
+    "residual_risks": [
+      "Table-only ages: text_value is the bare cell number under the \"Age sex\" header"
+    ]
+  },
+  "physician_adjudicated": false
+}

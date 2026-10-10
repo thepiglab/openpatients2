@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12477075.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5e8aafee7a6fc14823a82d6796864714016ff6f5dcef7ad2291889c5b818753f",
+  "annotation_sha256": "23aac014b291bfaf7bd84f36ef151c276a82248cbfbad3970a0119f83243490a",
+  "reviewed_at": "2026-10-09T22:24:18.220497+00:00",
+  "source_segments_read": 46,
+  "facts_reviewed": 147,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Canonical figures[] restored to convention: visual_status not_inspected, visual_description null, attribution_notes rewritten to caption/text attribution without pixel claims (pixel work remains in the visual submission); article limitation reworded accordingly.",
+    "p1-f076 (real-time physiological monitoring via BP monitor/oximeter/ergometer) demoted to ambiguous/review_only: it rests only on the plural b00020 system description, the same basis as review-only device rows p1-f141-f144 (annotator flag 2 inconsistency resolved); patient-specific tele-session content stays in p1-f073/f074.",
+    "Phase 2 summary no longer claims physiology monitoring or 'increased' supervised attendance (source: 'consistently attended supervised sessions'); removed review-only p1-f076/p1-f077 from its fact list; p1-e011 description updated.",
+    "p1-f025 removed non-indication 'oxygen during arterial blood gas assessment'; note distinguishes ABG-time 2 L/min flow from long-term oxygen therapy.",
+    "p1-f001 case context: subject_state living_at_presentation, multiple_index_patients false.",
+    "semantic-rules-2026-10 re-sign: p1-f130 (AECOPD during combined program, absent) verification_status confirmed -> unknown per ASSERT-ABSENT (absence of an event over follow-up, not exclusion by workup).",
+    "Verified mechanical migrations: M02 comparator '=' on 71 numeric observations (no printed <,> on any of those values; Table 1 '<0.3' is the CRP reference range, not the result; Table 2 deltas are signed numbers); M03 age text_value '72-year-old' in own quote; M12 41 non-literal anchors ('Phase 1/2 program start/baseline') nulled; M13 p1-e021 uncertain -> unknown.",
+    "Bare-offset scan: p1-f007-f016 time 'prior to admission' had no anchor; set anchor to the literal 'admission' (inside the time text)."
+  ],
+  "unresolved": [
+    "Single-case article; all patient facts belong to p1. The Methods/Discussion describe external studies (Hansen et al., MCID references, telemonitoring reports) that are not patient facts.",
+    "Figure pixel review (index-patient chest radiograph, generic system schematic, plotted weekly exercise minutes readable only as estimates) is recorded in the visual submission; figures[] here are caption/text attribution only.",
+    "Table 2 values are source-printed (including Delta columns) and not recalculated; Phase 1 and Phase 2 start from different states after an intervening readmission, so cross-phase comparison and the authors' causal/synergy language are not accepted as facts. Dashes in Table 2 are not negative findings.",
+    "Abstract-reported improved adherence conflicts with the limitation that formal adherence was not assessed; kept review-only. SGRQ total, impact and activity did not improve in Phase 2 despite selective narrative improvement.",
+    "No named drugs/doses, smoking history, tele-session frequency/duration, remote-device itemization for this individual, or follow-up beyond the eight-week combined program are provided. Table 1 CRP unit (mg/L) is retained as printed. No supplements."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 46,
+    "facts_reviewed": 147,
+    "figures_viewed": 3,
+    "key_findings": [
+      "semantic-rules-2026-10: migrations verified against source; ASSERT-ABSENT item resolved.",
+      "Single index patient (72M GOLD IV COPD, LTOT); all 46 units incl. both tables and 3 captions read; introduction/rationale/ethics/telemonitoring discussion background; Hansen et al. and MCID references external.",
+      "Verified annotator flags: improved-adherence claim review_only versus no formal adherence assessment; SGRQ total/impact/activity did not improve in Phase 2 and summary says so; cross-phase comparison non-causal; CRP 0.03 mg/L kept as printed; GNRI 86.1 admission vs 88 Phase 1 baseline not equated; Table 2 dashes/deltas as printed; MCID remark review_only.",
+      "All 3 JPEGs viewed: Fig1 index chest radiograph with solid/dotted/dashed yellow arrows; Fig2 generic schematic (mMRC item only in pixels, background); Fig3 parent magnified plot readings agree with all 35 visual estimates (Phase 2 bars ~10,10,8,20,45,5,5,15; tele line ~5,10,10,13,13,10,15,10; Phase 1 bars only 1W-3W)."
+    ],
+    "residual_risks": [
+      "Device provision and real-time monitoring for this patient are implied by the system description only (review-only).",
+      "Figure 3 values are plot estimates; Phase 2 2W/3W bars partly obscured by lines.",
+      "Readmission inpatient treatment and the interval between first discharge and Phase 1 baseline are not described.",
+      "Follow-up limited to the eight-week Phase 2 program."
+    ]
+  },
+  "physician_adjudicated": false
+}

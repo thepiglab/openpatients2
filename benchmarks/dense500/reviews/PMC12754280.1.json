@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC12754280.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "65b880c9fab3ccc887f7e69a9fd20f55cba407537296960741f2b98762aca705",
+  "annotation_sha256": "ace7385aa492d4176694bf9108247875953a501e7e617d804a3af5935809f129",
+  "reviewed_at": "2026-10-09T22:31:22.008658+00:00",
+  "source_segments_read": 48,
+  "facts_reviewed": 106,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f001/p2-f001 case_context: case_kind clinical_case->multi_patient, multiple_index_patients false->true, subject_state living_at_presentation added; abstract two-patient evidence added; care_setting left null (no patient-level setting).",
+    "p1-f008/p2-f008 extrahepatic metastasis: evidence quote lacked the negation (\"extrahepatic metastasis\"); replaced with \"no vascular invasion or extrahepatic metastasis\".",
+    "p1-f006/p2-f006 HCC condition: added size and LI-RADS 5 evidence supporting the severity/diagnostic_basis fields.",
+    "1-year and 6-year CT facts (p1-f040..f043,f048,f049,f010; p2-f041..f044,f050,f051,f010): anchor null -> second DEB-TACE (relation after) with exact Figure 7/8/11/12 caption evidence; caption-only anchoring noted.",
+    "Baseline imaging facts (p1-f013,f022-f024; p2-f013,f021-f023): added caption-supported time \"Baseline\" before first DEB-TACE with Figure 1/2 caption evidence.",
+    "Timeline: added e01 before e02 (known cirrhosis -> screening), e02 before e05 (presentation -> tumor-board recommendation), e04 before e06 (baseline imaging -> first DEB-TACE), e12 overlaps e13 (monitoring includes 6-year CT) for both patients; p2-e09 before p2-e11 (declined LT because CR achieved) and p2-e03 before p2-e14 (AFP elevated then normalized).",
+    "Visual submission F4 whole-figure description: removed unsupported interpretation \"mottled shading at the top is of non-vascular type\" -> neutral \"not interpreted\".",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M03 age text_value '74-year-old' (p1-f002) and '71-year-old' (p2-f002) are the literal phrases for these ages.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M12: 'first DEB-TACE' is not a literal source phrase; nulled anchors accepted for Baseline imaging facts (p1-f013,f022,f023,f024; p2-f013,f021,f022,f023).",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Restored literal anchor 'first drug-eluting bead transarterial chemoembolization' (Figure 5/9 captions) on follow-up facts p1-f038, p1-f046, p2-f039, p2-f048 instead of leaving a null anchor.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] NR001/NR002 (p1-f039, p2-f040): flag left unset; 'normal' qualifies only the background hepatic parenchyma, the study itself shows a necrotic treated mass (complete response), not a normal result.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] MED-ROUTE: doxorubicin route on p1-f031, p1-f035, p2-f032, p2-f036 changed from normalized 'transarterial (via drug-eluting beads)' to literal 'transarterial', with the caption quote containing 'drug-eluting bead transarterial chemoembolization' for that session added as evidence."
+  ],
+  "unresolved": [
+    "Case 1 platelet count is printed \"70/µL\" and retained literally with an explicit low flag; the unit is probably an omission of the 10^3 multiplier but no correction was applied.",
+    "No biopsy/histology, tumor grade, BCLC letter, TNM stage, Child-Pugh class or ECOG is documented; \"early stage\" and \"preserved liver function\" are the only staging/reserve statements and the HCC diagnosis rests on LI-RADS 5 imaging.",
+    "Dates and exact session intervals are not given; post-second-session CT intervals (4 and 6 weeks) and the anchoring of 1-year/6-year CTs to the second session come from figure captions. Response labels are radiological.",
+    "Calcification mechanism (coagulative necrosis/dystrophic) and its role as a late imaging marker are author hypotheses, kept review-only; the cited prior DEB-TACE calcification case is background, not the index patients.",
+    "Figure 1 and Figure 2 captions do not name the case; ownership follows the narrative call-outs in b00018 and b00019. Pixel-level description is in the separate visual submission; the caption-layer figure fields remain not_inspected by convention.",
+    "No supplements; raw source has no tables."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 48,
+    "facts_reviewed": 106,
+    "figures_viewed": 12,
+    "key_findings": [
+      "semantic-rules-2026-10 migration verified: 2 age texts, 12 anchor nullings (4 restored with literal phrase); 2 OBS-FLAG items resolved as not-normal.",
+      "Two original index patients, ownership by Case labels/headings; shared sentences (b00011,b00014,b00015,b00002,b00033) agree with each narrative.",
+      "Case 1 platelets printed 70/µL kept literal with low flag; no unit correction.",
+      "Post-second-session CT intervals (4 wk C1, 6 wk C2) and the 1-/6-year anchors come from captions only; abstract says approximately 1 year after DEB-TACE.",
+      "Doxorubicin 150 mg then 75 mg per session are loaded amounts; no cumulative total; LT not performed (C1 ineligible by age, C2 declined after CR).",
+      "Coagulative-necrosis mechanism review_only/possible; calcification as marker is hypothesis-generating.",
+      "All 12 JPEGs viewed with magnified crops: F7A/F11A show faint peripheral linear/curvilinear specks, F8/F12 ring-like calcific densities; F5/F9 residual nodule not definitively separable; F2B extra small hypointense focus uninterpreted."
+    ],
+    "residual_risks": [
+      "p1 baseline labs (e03) and LT-ineligibility (e11) remain unordered relative to other events because the source gives no timing.",
+      "Personal/family history \"unremarkable\" represented as a personal-history observation plus a family-history fact without specific negatives.",
+      "No histology; HCC diagnosis is imaging-based (LI-RADS 5) final diagnosis."
+    ]
+  },
+  "physician_adjudicated": false
+}

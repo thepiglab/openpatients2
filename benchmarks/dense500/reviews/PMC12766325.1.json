@@ -1,0 +1,48 @@
+{
+  "article_id": "PMC12766325.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b45e7ec1bbcec6e12f2dfc6371ba1ec74ee6cc73ba73162de97851db8efcb87b",
+  "annotation_sha256": "061914d8537c4fce1359ef82e90e95090b0960ceee22692e7c22f92639108ca6",
+  "reviewed_at": "2026-10-09T22:43:26.560530+00:00",
+  "source_segments_read": 55,
+  "facts_reviewed": 93,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: migration made no annotation changes; parent source receipt was stale (annotation hash changed since 2026-10-09T19:35Z) so the canonical annotation was re-reviewed: comparators (>, >=, =) match printed wording, absent items carry negation cues.",
+    "p1-f026 right basal ganglia DWI lesion 'which was asymptomatic': assertion=absent symptom had no negation cue in its quote (EVID-NEGATION gate) -> assertion=present, text_value 'asymptomatic', name 'Asymptomatic status of right basal ganglia DWI lesion'.",
+    "opus-fixup: p1-f026 restored faithful form: assertion absent, name 'Symptoms of right basal ganglia DWI lesion', text_value removed, quote '...which was asymptomatic' kept (cue present). Reverts the earlier recast to a present 'asymptomatic' symptom made to silence a warning."
+  ],
+  "unresolved": [
+    "Only the three original present cases form the roster. Table 1 literature cases/cohorts (Tonetti, Wallace, Baranoski, Tsuji, Aamir et al.) and the review discussion are background, not accepted facts for any index patient; no linkage of a literature row to an index patient is stated.",
+    "The abstract mean follow-up of 12.7 months is an aggregate and is not assigned to individuals; individual Table 1 follow-up values (18, 11, 9 months) are retained, and the narrative gives only lower bounds (more than 1 year, more than 6 months).",
+    "No calendar dates are given; times are literal relative expressions only.",
+    "Antiplatelet agents and doses, and the exact aneurysm size in Case 1, are not reported.",
+    "Figure pixels were inspected separately (visual submission). The figures[] objects retain caption-based attribution and visual_status not_inspected per the canonical convention."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 55,
+    "facts_reviewed": 93,
+    "figures_viewed": 0,
+    "key_findings": [
+      "No mechanical migration on this article; one EVID-NEGATION gate failure fixed.",
+      "opus-fixup: p1-f026 asymptomatic lesion restored as absent symptoms."
+    ],
+    "residual_risks": [
+      "None new."
+    ]
+  },
+  "physician_adjudicated": false
+}

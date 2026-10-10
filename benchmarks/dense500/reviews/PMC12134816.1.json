@@ -1,0 +1,51 @@
+{
+  "article_id": "PMC12134816.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a3b00f56c348bc0c2575ec1791fc14db6750cce277a8b9a470c20a01119d9e2a",
+  "annotation_sha256": "52d866b492d6f73c6a0a1d25f76b4659cf9a2c36624b6fc3ae5801829fd7fc4c",
+  "reviewed_at": "2026-10-09T22:25:02.231488+00:00",
+  "source_segments_read": 109,
+  "facts_reviewed": 255,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified all M02 comparator '=' changes (58) against Table 1-4 rows and narrative; every '<' in those rows is the printed reference range (<0.5, <10.0), not the result, and 'approximately 90%' correctly stays '='.",
+    "Verified M03 age text_value for p2/p3/p4 ('14-year-old','10-year-old','15-year-old') are the literal case-header phrases for each patient.",
+    "Verified all 16 M12 nulled time anchors were paraphrases not occurring literally in the source; time.text literal phrases retained.",
+    "NR001 p1-f002: spelled-out age -> text_value 'Six-year-old', numeric_value removed (DEMO-AGE-TEXT).",
+    "Anchor restoration: for 16 facts whose paraphrased anchor was nulled by M12, set time.anchor to the literal source phrase the offset is relative to (e.g. 'admission', 'First time' table column, 'endoscopic procedure', 'starting rivaroxaban'); calendar dates, table ages and unstated references left null."
+  ],
+  "unresolved": [
+    "Figure pixels were not inspected; visual details are restricted to captions.",
+    "No explicit same-patient prior report links found; protocol/trial/case references are bibliographic only.",
+    "All original4patients individually annotated; group statements explicitly referring to all cases assigned to each, while external trial statistics excluded.",
+    "No unreported tumor molecular markers, cancer-protocol ingredients, heparin doses, precise recurrence-free follow-up durations or weights inferred.",
+    "Scientific table units retained as scaled units rather than multiplied values. FDP dashes denote unreported results.",
+    "Narrative/table intervals and anatomical/modality wording preserved where potentially inconsistent; no independent image inspection performed.",
+    "FIB units corrected in all4 cases to literal source mg/dL. Table3referenced NHL-BFM95 retains unknown actual regimen action. Some summary-table catheter/block/disappearance-duration fields are unlinked because unique episode ownership is not specified."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 109,
+    "facts_reviewed": 255,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical migrations M02/M03/M12 correct for this article; one spelled-out age resolved."
+    ],
+    "residual_risks": [
+      "Prior parent review (2026-10-08) content otherwise unchanged; figures not re-viewed in this re-sign."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12812052.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "305c60d89c523e8a857448717f27c5ad49fb65d57a48d2fc3cce7fe500bc450e",
+  "annotation_sha256": "85342026b58e0fe9842c73ebc69c29c4a8fc8ad3062616d213555c9fc1299f30",
+  "reviewed_at": "2026-10-09T22:19:18.096276+00:00",
+  "source_segments_read": 106,
+  "facts_reviewed": 334,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Corrected fever measurement domain and blank respiratory-distress polarity.",
+    "Separated undated hypoglycemia from admission labs; removed unsupported sequential steroid-course edge.",
+    "Added completed five-month endocrine assessment separately from ongoing replacement therapy; retained conservative action enum with explicit ongoing text.",
+    "[semantic-rules-2026-10 re-sign] Verified all 129 M02 comparator '=' additions: no printed <, >, 'less than' etc. attached to any of those values (approximate 27 mm, renin 1.6 beside aldosterone <60, ARR 73 with '<80' reference all correctly '='). Verified M03 ages (64/72/42-year-old) and M12 nulling of 22 non-literal anchors (e.g. 'prior MRI', 'current admission', 'acute case course' absent from source).",
+    "[semantic-rules-2026-10 re-sign] NR001 (ONC-BENIGN p3-f149): moved 'adrenal adenoma' from oncology.tumors (t2) to conditions (left adrenal adenoma, provisional, left adrenal gland); source concludes 'adenoma rather than an aggressive neoplasm' and later a benign non-functioning lesion, so not a suspected malignancy. No biomarkers/treatments referenced t2; event/summary fact links kept."
+  ],
+  "unresolved": [
+    "Caption-layer visual_status remains not_inspected; actual two MRI images are inspected in separate visual targets.",
+    "Abstract says two cases received steroids, whereas Case3 explicitly received no AH-specific medical/surgical treatment; no unreported Case3 steroid therapy inferred.",
+    "Case1 deranged clotting prose versus normal Table2 clotting profile is retained review-only.",
+    "Clock times in Tables1/4 have GMT context without calendar dates; no cross-day/calendar reconstruction. Units in numeric blood rows use source reference/header where unambiguous; CRP42 Case3 has no unit stated.",
+    "Adrenal lesions were not biopsied or surgically verified; imaging/courses distinguish adenoma from haemorrhagic pseudomass without tissue proof.",
+    "Pooled abstract repeat-imaging resolution/stability is not individually expanded into a Case1 follow-up scan.",
+    "Case3 aspirin/haematologic susceptibility as bleeding contributors is author-qualified; no proven drug toxicity or inherited/somatic JAK2 origin inferred.",
+    "Empiric steroids in b25 and explicit IV hydrocortisone in b29 may be descriptions of the same treatment episode; no sequential separate steroid courses asserted. CarePlan has no ongoing/in_progress enum; ongoing replacement remains explicit in text/current medication, with completed follow-up assessment represented separately."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 106,
+    "facts_reviewed": 334,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical migrations M02/M03/M12 correct for this article.",
+      "One benign lesion moved out of oncology."
+    ],
+    "residual_risks": [
+      "Prior residual risks unchanged."
+    ],
+    "previous_assessment": {
+      "clinical_course": "Personally read all106source units and five rawXML tables,334fact representations and all citations,42clinical sections,40events and final temporal relationships/sixsummaries. Serial admission clock readings checked individually, table MAP preserved rather than recomputed.",
+      "patient_attribution": "Three distinct cases: septic-shock bilateralAH with persistent adrenal insufficiency; COPD/PE unilateralAH without insufficiency; influenza/ET/aspirin patient with hemorrhagic imaging-defined adenoma. Figure1 onlyp1,Figure2 onlyp2.",
+      "uncertainty": "Normal versus deranged clotting source conflict remains review-only. Abstract two steroid cases does not override p3 noAH-specific intervention. Unreported cortisol/ACTH and infection-screen results remain unknown. No biopsy or histologic proof inferred.",
+      "images": "Personally inspected both native MRI images and all final visual fields,2whole-image scopes/12deduplicated citations. Caption dimensions separate from pixels; no lesion calipers. F1 bilateral colored arrows, F2singleyellowarrow. No p3 image.",
+      "coverage": "All14 clinical domains per patient reviewed, including missing domains. AI source review, not physician gold or measured recall."
+    }
+  },
+  "physician_adjudicated": false
+}

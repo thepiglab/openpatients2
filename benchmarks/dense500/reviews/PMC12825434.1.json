@@ -1,0 +1,46 @@
+{
+  "article_id": "PMC12825434.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "71e09c7c091b1d51c614f7cbc1f67bc7bf7bbac9e0deaf8bd34d13d7a9d86572",
+  "annotation_sha256": "eea0b74b7d17076a6c41ebc7f9878df3913e082f29d71ea0e81d2d6e3fce50c4",
+  "reviewed_at": "2026-10-09T22:25:12.517215+00:00",
+  "source_segments_read": 21,
+  "facts_reviewed": 124,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified 22 M02 comparator '=' changes (eGFR, PSV, vitals, troponin, creatinine, echo, stent/wire sizes); no printed comparator adjacent to any of these values.",
+    "Verified M03 text_value '85-year-old' literal for the single patient.",
+    "Verified 14 M12 nulled anchors ('index admission', 'initial troponin T measurement', 'renal angiographic intervention...', 'index hospitalization discharge') were paraphrases; literal time.text retained. No other annotation edits.",
+    "Anchor restoration: for 9 facts whose paraphrased anchor was nulled by M12, set time.anchor to the literal source phrase the offset is relative to (e.g. 'admission', 'First time' table column, 'endoscopic procedure', 'starting rivaroxaban'); calendar dates, table ages and unstated references left null."
+  ],
+  "unresolved": [
+    "One original index patient. Literature/cohort thresholds and medication recommendations are background, not delivered patient therapies. No dialysis, measured RAAS, translesional pressure gradient, drug dose/route beyond source, fixed renal-stent stenosis percentage, calendar dates or long-term follow-up inferred.",
+    "Baseline body/caption creatinine conflict is retained review-only. Immediate post-stent3.9 and short-term follow-up1.5 are caption/text respectively; the chart discharge point is separately inspected pixel evidence.",
+    "Left intervention did not proceed after failed crossing; right wire/balloon/stent and closure are distinct supported stages. Atheroembolism remains a differential. Caption-grounded clinical image companion and actually inspected pixels remain separate."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 21,
+    "facts_reviewed": 124,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical migrations M02/M03/M12 correct; no needs-review items."
+    ],
+    "residual_risks": [
+      "Guidewire/stent dimensions are represented as 'other' observations in addition to the device items (pre-existing choice, not changed). Figures not re-viewed in this re-sign."
+    ]
+  },
+  "physician_adjudicated": false
+}

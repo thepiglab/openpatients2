@@ -1,0 +1,78 @@
+{
+  "article_id": "PMC12825684.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5638cd10481be3a8f4387c7c40464336f0f2ab83d046aa1f6fab07c4a5ef8b77",
+  "annotation_sha256": "b328783cdd2ce953e00a9ec165806f7169f23fac1d63e80f41c67a986b67d3d0",
+  "reviewed_at": "2026-10-09T22:24:58.116765+00:00",
+  "source_segments_read": 96,
+  "facts_reviewed": 144,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f111 (methylprednisolone 500 mg daily) and p1-f121 (MMF 1,000 mg BID): removed routes borrowed from the neighbouring 60 mg IV / 500 mg oral clauses; added ambiguity.",
+    "p1-f120 MMF 500 mg start: added the same-sentence indication \"long-term management of suspected MCTD-associated NSIP\"; both MMF facts now quote the full sentence.",
+    "p1-f057 urinalysis protein: flag unknown -> positive (narrative \"presence of protein\"; table \"Abnormal\" vs Negative).",
+    "p1-f123 echo heart rate: comparator <= -> = (named as stated maximum, \"as fast as 120\").",
+    "p1-f129 condition renamed \"Sinus tachycardia\"; authors' attribution to anemia/anxiety/acute illness moved to notes.",
+    "p1-f134 gastroenterology follow-up: restored literal shared target \"ILD and autoimmune disease\" (annotator note had inferred a colonoscopy-only purpose).",
+    "p1-f015/f016 declined methotrexate/hydroxychloroquine: added \"at that time\" timing anchored to the several-years-earlier serology, full-sentence evidence.",
+    "p1-f004 occupation status unknown -> current (\"active-duty\"); p1-f001 care_setting extended to literal medical floor and ICU.",
+    "p1-f079 BAL statement no longer says \"implied\"; grounded with \"BAL samples tested for acid-fast bacilli\". p1-f107 conflict evidence adds b00004 \"first manifestation of MCTD\".",
+    "Added relations e01->e04, e14->e16, e22->e25 (outpatient EMG/neurology), e14->e28 and e19->e28 (improvement after corticosteroids and MMF).",
+    "source_coverage b00004 background -> patient_facts (cited as conflict evidence).",
+    "Visual submission edited: FIG1 orange reference line is present on all three axial images, not only the first two.",
+    "[semantic-rules-2026-10 re-sign] Verified M03 age (42-year-old) and M12 nulling of 14 non-literal paraphrased anchors (e.g. 'current presentation', 'MMF initiation', 'emergency department presentation'); literal time.text retained on all.",
+    "[semantic-rules-2026-10 re-sign] p1-f017/f018/f019 (2-3 day symptoms): anchor restored as the literal phrase 'presented to the emergency department' from the same source sentence.",
+    "[semantic-rules-2026-10 re-sign] Restored further literal anchors dropped by M12: p1-f014..f016 'at that time' -> 'several years earlier'; p1-f020/f021 -> 'presented to the emergency department'; p1-f073 'the following morning' -> 'admitted to the medical floor'; p1-f117..f119 -> 'Mycophenolate mofetil (MMF) was initiated'."
+  ],
+  "unresolved": [
+    "Figure pixels were inspected separately in the visual submission; the annotation figures[] keep caption-layer status not_inspected by convention.",
+    "MCTD diagnostic certainty is internally inconsistent (abstract confirmed vs body possible/suspected); not reconciled.",
+    "Potassium 5.0 mEq/L is flagged High although equal to the printed upper reference limit; kept as printed.",
+    "Complement C4 is reported as a range (16-27 mg/dL) without a single value; no bounds were split.",
+    "Timing relative to other events is explicit for few events (one- and six-month follow-up CT, ICU transfer the following morning, steroid durations); the rest is ordered only where the text words it. Outpatient colonoscopy, EMG and neurology follow-up are planned/recommended, not documented as completed.",
+    "The article is a single-patient report; no cited cases or supplements are assigned to the patient. Background statements about NSIP/MCTD are not patient facts.",
+    "Possible etiologies for abnormal labs and the tachycardia are authors’ hypotheses and are not recorded as diagnoses."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 96,
+    "facts_reviewed": 144,
+    "figures_viewed": 0,
+    "key_findings": [
+      "M03/M12 correct for this article."
+    ],
+    "residual_risks": [
+      "Prior residual risks unchanged."
+    ],
+    "previous_assessment": {
+      "reviewer": "Claude Opus 5.5 parent",
+      "source_units_read": 96,
+      "facts_reviewed": 144,
+      "figures_viewed": 3,
+      "key_findings": [
+        "Single index patient; background/discussion segments not converted to facts; all Table 1-4 rows present with printed flags/ranges, Table 4 qualitative+quantitative rows merged per antibody with both quotes.",
+        "MCTD certainty conflict correctly quarantined (f107 source_conflict/review_only); NSIP confirmed by biopsy; MCTD possible; MMF indication suspected.",
+        "Pixels: 3x2 axial/coronal CT grids; arrow counts 12/13/12 confirmed; caption-only claims of improvement/resolution kept as caption claims."
+      ],
+      "residual_risks": [
+        "Bronchoscopy, serology, echo, paresthesia report and follow-up CT anchors are largely unordered relative to steroids/discharge.",
+        "K 5.0 flagged High at printed upper limit; C4 printed as a range.",
+        "Merged qualitative/quantitative serology rows could be split by a stricter convention.",
+        "No EHR sidecars for this article (backfilled separately)."
+      ]
+    }
+  },
+  "physician_adjudicated": false
+}

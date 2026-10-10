@@ -1,0 +1,51 @@
+{
+  "article_id": "PMC12812266.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ab89d1f368d3b388da43e74923f23f6af929308def56bfac6d4b084f402f6db4",
+  "annotation_sha256": "82ce86584425fe1c53004234108c557f3c08b455abf9507eb963c6f2ffc3581c",
+  "reviewed_at": "2026-10-09T22:43:48.688392+00:00",
+  "source_segments_read": 28,
+  "facts_reviewed": 126,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M12 anchor nulling (19 paraphrases: 'reported clinical history', 'initial RYGB', 'initial center consultation').",
+    "Restored literal anchors: 'bariatric surgery' on p1-f012/f013/f014 ('At the time of bariatric surgery'); 'RYGB' on p1-f015/f016/f017/f020/f021/f022/f128 ('One year and nine months after surgery', the surgery being the RYGB). 'Initial consultation' table rows and '17 years ago' keep anchor null (time text is self-contained / relative to report).",
+    "EVID-NEGATION gate: p1-f024 refuted 'psychiatric or psychological disorders' ('ruling out' is not a recognised negation cue) recast as an observations result of the transdisciplinary evaluation (text 'ruling out psychiatric or psychological disorders'); p1-f088 'complete resolution of symptoms' and p1-f093 'symptom-free' recast from absent symptoms to present symptom-status items with those literal text values.",
+    "opus-fixup: p1-f088 ('complete resolution of symptoms') and p1-f093 ('symptom-free') restored to assertion absent, name 'Symptoms', text_value removed, accurate clinical_statements; reverts the warning-driven recast to present symptom-status items whose clinical_statements ('Previously reported malnutrition symptoms', 'Symptoms at five-month follow-up') misrepresented the source."
+  ],
+  "unresolved": [
+    "Initial albumin 2.5 prose vs 2.8 table unresolved; both numerical candidates review-only.",
+    "Table 32 labs reference headers supply units; all numeric flags unknown unless author statement is separately reported. Total protein g/d malformed; scaled platelet unit retained.",
+    "Post-surgical lab draw not precisely timed. Following-day discharge anchor uncertain; no exact POD 2/date inferred.",
+    "TALL and hyper-response attribution are authors qualified interpretation, not independent calculation/proven mechanism.",
+    "Generic guidelines and external/cited case ages/outcomes are background; no family-split identity claim.",
+    "Caption-only visual layer remains not_inspected; both actual JPEGs personally viewed and separate visual submission records pixels.",
+    "Pre-surgical laboratory panel has broad before-surgery timing, separate from the author one-month improvement milestone; no exact draw date inferred."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 28,
+    "facts_reviewed": 126,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical anchor nulling correct; literal anchors restored where the source names the reference event.",
+      "opus-fixup: resolved/symptom-free follow-up restored as absent symptoms."
+    ],
+    "residual_risks": [
+      "Table 1 initial-consultation albumin 2.8 vs prose 2.5 g/dL left as previously recorded."
+    ]
+  },
+  "physician_adjudicated": false
+}

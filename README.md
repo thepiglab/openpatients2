@@ -232,3 +232,16 @@ Use upstream vLLM **0.30.0** for the K2 baseline and **Motif's 0.26.0-motif3 for
 Code is MIT. Dataset/model/terminology/engine licenses remain separate. The Open-Patients card specifies CC-BY-SA-4.0, while its upstream PMC-Patients component advertises CC-BY-NC-SA-4.0. Article and figure terms may differ again. All declarations are preserved separately; no blanket training, redistribution or commercial permission is inferred. Do not upload private clinical data to unauthorized endpoints. Public case text can still contain sensitive information, and this project is not a de-identification or HIPAA-compliance certification.
 
 This release is not a trained clinical model, a finished clinical product, a benchmark result on your GPUs, or an implementation of every possible cohort query. It is a tested starting codebase with explicit deployment experiments and clinical data semantics, designed so those validations can be performed rather than assumed.
+
+### Browse articles and extracted records
+
+```bash
+uv run --locked op2 viewer
+```
+
+Open [the article library](http://127.0.0.1:8765) to browse all acquired articles,
+read source text alongside every clinical schema, and follow evidence quotes.
+New reviewed records appear automatically every 15 seconds. Patient timelines,
+figure descriptions, panel attribution, licenses, and JSON downloads are included.
+See [the viewer guide](docs/ARTICLE_VIEWER.md) for another dataset or a portable
+static-site build for hosting.

@@ -11,6 +11,8 @@ from pydantic import Field, model_validator
 from .article_tasks import Citation
 from .figure_attribution import FigureReview, figure_messages, validate_figure_review
 from .schemas import StrictModel
+from .annotation_rules import prompt_block
+from .semantic_rules import visual_question_marks
 
 SCHEMA_VERSION = 'figure-visuals/2'
 
@@ -199,7 +201,8 @@ For clinical risk dashboards is_clinical_chart is true: classify scores as clini
 Put every clearly printed chart/table measurement in readings, preserving the visible series/bed label as series_label;
 do not turn a bed label into a roster patient ID. Describing a printed measurement only in prose is incomplete.
 For laboratory panels extract each named marker/result separately in the clinical tasks; do not collapse a negative
-panel into one unnamed observation. All pixel interpretations and diagram relations remain unreviewed.'''
+panel into one unnamed observation. All pixel interpretations and diagram relations remain unreviewed.
+''' + prompt_block('figure_visual')
 
 
 def visual_messages(article, roster, figure_id, pixels, *, joint=False, refined=False, focused=False):
@@ -227,8 +230,10 @@ def validate_visuals(value, article, figure_id, *, refined=False):
     visit(data)
     if refined:
         for scope in [data, *data['panels']]:
-            if any('?' in scope[k] for k in ('general_description', 'detailed_description')):
-                raise ValueError('Ambiguous visual labels must be omitted from description and recorded in limitations')
+            # FIG-LABELS: a '?' is allowed only inside quotes transcribing printed text (e.g. a flowchart node).
+            if any(visual_question_marks(scope[k]) for k in ('general_description', 'detailed_description')):
+                raise ValueError('[FIG-LABELS] Ambiguous visual labels must be omitted from description and recorded in '
+                                 'limitations; a "?" is allowed only inside quotation marks transcribing printed text')
         for panel in data['panels']:
             # Consistency of the model's own claims; this is not pixel OCR or
             # a guarantee that it transcribed all values or labels correctly.

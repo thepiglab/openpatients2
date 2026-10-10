@@ -13,3 +13,7 @@ DECISION EXAMPLES AND NEGATIVE CONTROLS
 Positive: "Died on hospital day 5" supports death with that relative time, not the publication date. Explicit negative: "No recurrence at 12-month follow-up" is an absent recurrence at that follow-up only, not a cure or lifelong absence. Missing: no follow-up produces items=[], not_documented, not survival, discharge, recovery, or absence of adverse events. Loss to follow-up is not death. "No change" is not necessarily improvement or absence of disease. Preserve follow-up duration and related condition only where explicitly stated; never calculate survival time from a deidentified or unrelated date.
 
 An example in these instructions is not patient evidence. Populate only claims supported by the supplied record. Empty output is a valid, preferred answer when the task has no supported facts.
+
+SHARED RULES (generated from openpatients2/rules/annotation_rules.yaml; rule IDs in brackets):
+- [CTX-VITAL-STATUS] case_context.subject_state=deceased_during_course when this patient died during the described course, including follow-up; living_at_presentation only when no death of this patient is reported; cadaver for a pre-existing anatomic specimen. A patient with an outcomes death item (assertion=present) is never living_at_presentation.
+END SHARED RULES

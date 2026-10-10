@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC12884857.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0acc6674b6c13e7bb610cd13af555c85e4fc8eb262383a12cfb17255b9043af9",
+  "annotation_sha256": "3e8cd1236648e9043e8dc3376eaef469f5b7a379ddbff15b376f4d3129f41cc4",
+  "reviewed_at": "2026-10-09T22:29:48.235606+00:00",
+  "source_segments_read": 25,
+  "facts_reviewed": 134,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added p1-f135 intraoperative PE suspicion (possible/provisional, b00014 'we raised suspicion for PE' before open conversion); it now anchors intraoperative event p1-e06 with minimal blood loss p1-f104.",
+    "Moved p1-f103 (suspected hemodynamically unstable PE due to hypotension requiring vasopressor support) and refuted iatrogenic/hemorrhagic/distributive causes p1-f105-f107 out of intraoperative p1-e06 into new untimed event p1-e21: vasopressor support is documented only in the ICU, so the suspicion cannot be anchored intraoperatively; added only p1-e07 before p1-e21 (hypotension precedes the suspicion it motivates).",
+    "Added edge p1-e13 before p1-e18 (heparin started, filter as contingency b00016; filter 'subsequently' inserted b00009) so DVT imaging/filter cluster is ordered after anticoagulation start rather than linked only by 'unknown'.",
+    "p1-f070 oxygen flow 5 L/min re-represented from a 'resulted' observation to an administered supplemental-oxygen medication (nasal cannula, after extubation); p1-f069 procedure no longer stores flow in 'finding'.",
+    "p1-f075 sPESI 3 points moved from symptoms_function performance_score to observations (prognostic index, not a performance score).",
+    "Removed misused 'finding' fields: p1-f099 (transjugular approach/IR moved into the procedure name), p1-f127 (non-finding meta text); removed p1-f115 target 'catheterization lab' (a location, not a target).",
+    "Summary 1 no longer states medical management failed 'despite' the three drugs (unsupported linkage); summary 2 adds intraoperative suspicion; summary 4 no longer asserts the unstable-PE suspicion was intraoperative.",
+    "Updated PE-suspicion-timing ambiguity to describe the three suspicion layers (f135 intraop, f074 post-extubation, f128 post-workup) and the unanchored f103.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] p1-f002 age: source states only the spelled-out 'fifty-one-year-old'; text_value set to that literal phrase and numeric_value removed per DEMO-AGE-TEXT [NR001].",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] figure-3 panel B kept: pixels viewed, 'B' is printed on the postoperative radiograph (caption prints only (A)) [NR002].",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Restored literal M12 anchors for bare offsets: p1-f041..f047 'after 5 minutes' -> anchor 'suddenly dropped from 99% to 94%'; p1-f053..f055 'After 5 minutes' -> anchor 'ventilated manually with an ambu bag'; p1-f099 IVC filter 'subsequently' -> anchor 'Deep venous thrombosis ultrasound and CT venography'.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M02: 42 '=' comparators, no printed <,>,up to on any result value in source; other M12 nullings (start of the case, re-insufflation, ICU admission) leave self-anchored literal time texts and are correct."
+  ],
+  "unresolved": [
+    "All six figures were viewed at the cached 668-745 px JPEG resolution; fine structures (filter struts, hepatic-vein contrast reflux, septal curvature) and small printed text are limited by resolution.",
+    "Figure 5 panel A caliper readout: the first digit of the printed value (visible part \"0.02 mm\") is not resolvable at pixel level; anatomy-based scaling favours about 30 mm but the digit is not asserted as a clinical value.",
+    "Figure 6 panel B is an axial CT image of both knees, whereas the text names ultrasound for the left popliteal thrombus and the caption names no modality; the article does not say CT venography also imaged the popliteal vein.",
+    "No explicit same-patient prior report link found; references are reviews/guidelines.",
+    "Only ICU discharge on POD 5 is reported; no hospital discharge, filter retrieval, duration of rivaroxaban or long-term recurrence endpoint is documented.",
+    "Several laboratory results are labelled collectively \"remarkable\"; only D-dimer is explicitly marked elevated. No diagnoses are inferred from individual lab or ABG reference comparisons.",
+    "No thrombectomy or thrombolysis is documented as performed; guideline recommendation sentences in the discussion are background."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 25,
+    "facts_reviewed": 134,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Spelled-out age; panel B printed on image; three bare-offset groups re-anchored with literal source phrases."
+    ],
+    "residual_risks": []
+  },
+  "physician_adjudicated": false
+}

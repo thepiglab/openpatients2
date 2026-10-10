@@ -1,0 +1,137 @@
+{
+  "format": "dense-source-additions-proposal/1",
+  "article_id": "PMC13524801.1",
+  "source_text_sha256": "daa08387fe7c1d8aa8e320890e611cb44eee3041496861a6a1914549d248d3b7",
+  "canonical_annotation_sha256": "60ecabf9b25fd37052cd1cfa299b7383f24cd00534c34e29afb25751d07af562",
+  "proposed_updates": [
+    {
+      "fact_id": "p1-f004",
+      "field_updates": {
+        "indication": "hypoplastic left syndrome"
+      },
+      "evidence_to_add": [
+        {
+          "segment_id": "b00050",
+          "quote": "infant with hypoplastic left syndrome following stage 1 palliation"
+        }
+      ],
+      "reason": "Procedure indication is supported by the case phrase; no Norwood subtype, operation anatomy, bypass, shunt or cohort inclusion criteria assigned."
+    },
+    {
+      "fact_id": "p1-f006",
+      "field_updates": {
+        "kind": "other",
+        "method": "Continuous Monitoring of Event Trajectories (CoMET) predictive analytics"
+      },
+      "evidence_to_add": [
+        {
+          "segment_id": "b00050",
+          "quote": "Note the escalation in CoMET scores starting around 9 am with the subsequent diagnosis of NEC occurring around 12 pm."
+        }
+      ],
+      "reason": "Algorithmic instability risk scores are predictions rather than physiological measurements. Do not infer respiratory failure or actual vital values."
+    },
+    {
+      "fact_id": "p1-f008",
+      "field_updates": {
+        "name": "CoMET predicted instability risk at NEC diagnosis",
+        "kind": "other",
+        "method": "Continuous Monitoring of Event Trajectories (CoMET) predictive analytics",
+        "flag": "high",
+        "text_value": "high predicted risk primarily of respiratory instability; markedly increased over the previous 3 h",
+        "time": {
+          "text": "at the time of NEC diagnosis",
+          "relation": "at",
+          "anchor": "NEC diagnosis"
+        }
+      },
+      "evidence_to_add": [
+        {
+          "segment_id": "b00050",
+          "quote": "Left: The patient’s CoMET is large and bright red at the time of NEC diagnosis, emphasizing the current high level of risk, primarily in respect of their risk of respiratory instability. The tail of the CoMET demonstrates that this instability has markedly increased over the previous 3 h."
+        }
+      ],
+      "reason": "High flag refers explicitly to predicted risk. Distinguish prediction from confirmed organ failure and preserve preceding3h trend."
+    },
+    {
+      "fact_id": "p1-f007",
+      "field_updates": {
+        "name": "necrotizing enterocolitis (NEC)",
+        "role": "complication"
+      },
+      "evidence_to_add": [
+        {
+          "segment_id": "b00050",
+          "quote": "the subsequent diagnosis of NEC occurring around 12 pm."
+        }
+      ],
+      "reason": "Standardize source-equivalent duplicate NEC labels. Retain timed and untimed source statements without constructing two separate diseases."
+    }
+  ],
+  "proposed_facts": [
+    {
+      "fact_id": "p1-f009",
+      "task": "outcomes",
+      "collection": "items",
+      "fields": {
+        "subject": "index_patient",
+        "assertion": "present",
+        "event": "complication",
+        "text_value": "necrotizing enterocolitis developed after stage 1 palliation",
+        "related_condition": "necrotizing enterocolitis (NEC)",
+        "time": {
+          "text": "around 12 pm",
+          "relation": "at",
+          "anchor": "NEC diagnosis"
+        }
+      },
+      "evidence": [
+        {
+          "segment_id": "b00050",
+          "quote": "Case presentation of a 4-week-old infant with hypoplastic left syndrome following stage 1 palliation and subsequent development of necrotizing enterocolitis (NEC)."
+        },
+        {
+          "segment_id": "b00050",
+          "quote": "the subsequent diagnosis of NEC occurring around 12 pm."
+        }
+      ],
+      "clinical_statement": "Postpalliation NEC complication, diagnosed around noon",
+      "certainty": "supported",
+      "scoring": "include",
+      "notes": "Cross-task postoperative clinical course; no causal attribution, treatment, recovery, discharge or death inferred."
+    }
+  ],
+  "event_updates": [
+    {
+      "event_id": "p1-e01",
+      "fact_ids_add": [
+        "p1-f003"
+      ],
+      "description": "Stage 1 palliation in the infant with hypoplastic left syndrome",
+      "reason": "Underlying diagnosis contextualizes palliation without assigning a birth/onset date or same4week diagnosis time."
+    },
+    {
+      "event_id": "p1-e03",
+      "fact_ids_add": [
+        "p1-f001",
+        "p1-f002",
+        "p1-f009"
+      ],
+      "description": "NEC diagnosis around noon with high primarily respiratory-domain predicted risk",
+      "reason": "Case age/context belong to illustrative postoperative NEC presentation; age4weeks is not automatically age at palliation."
+    }
+  ],
+  "domain_coverage_updates": {
+    "outcomes": {
+      "status": "documented",
+      "note": "Postpalliation NEC complication; subsequent treatment/outcome not documented."
+    }
+  },
+  "full_field_audit_notes": [
+    "Read all50source units, methods/cohortTable1, results/discussion and all3captions; onlyFig3 contains attributable clinical course. The262patient/296course cohort is not an individually described roster.",
+    "All14models/attributes inspected; case-specific sex, chief symptoms, exact operative subtype/site/findings, NEC stage/severity/basis, drugs/antibiotics, allergies, family/genetic/perinatal history, diet and final outcome are genuinely unreported. Cohort-defined antibiotics, modifiedBellIb stage, eligibility criteria, median lab/physiology values and generic response protocol not assigned to infant.",
+    "No new clinical facts from anonymous dashboard beds. Actual pixels submitted separately. Header metadata does not create clinical calendar timestamps or patient identities.",
+    "Current prior event relation palliation beforeNEC remains supported; no syntheticpalliation age or exact elapsed interval. Source-supported CoMET9am precedes NEC12pm."
+  ],
+  "figure_review_recommendation": "Use the separate pixel submission positional scopes: Fig3left and lower-right selected infant; upper-right multi-bed region unresolved. Do not assign every anonymous ranking row to p1."
+}

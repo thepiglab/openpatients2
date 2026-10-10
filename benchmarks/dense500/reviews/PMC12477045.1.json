@@ -1,0 +1,52 @@
+{
+  "article_id": "PMC12477045.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "dbca67fe9d219209994de8b21628d68c139569cf1c2f6c790cbcc7098f414ca7",
+  "annotation_sha256": "edd7e3fbda5d931caed668233204fe98dc757335eb7d988856e09bc5474e2bf7",
+  "reviewed_at": "2026-10-09T22:24:09.841931+00:00",
+  "source_segments_read": 57,
+  "facts_reviewed": 310,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified all M02 comparator '=' changes (75) against narrative and Table 1; no printed <,> applies to those values ('>6 years' is a duration, '∼15%' approximate stays '=').",
+    "Verified M03 age text_value '14-year-old','60-year-old','72-year-old' are the literal case-header phrases of Case 1/2/3.",
+    "Verified 5 M12 nulled anchors (index presentation, BCD treatment discontinuation, Dd regimen initiation, follow-up after Dd treatment) were paraphrases not literal in the source; literal time.text retained.",
+    "NR001/NR003 p1-f006, p2-f020: 'stable vital signs' is not normal -> flag unknown kept, text_value literal 'stable vital signs'.",
+    "NR002 p1-f084: mixed table cell; text_value narrowed to the urine-protein part, normal renal function stays in p1-f086 (flag normal).",
+    "p2-f005 saphenous surgery '15 years prior': restored M12-nulled anchor with the literal 'presented' (Case 2 presentation) instead of a bare offset."
+  ],
+  "unresolved": [
+    "Exactly three local patients, no cited case from systematic discussion promoted into roster. Background treatment guidelines/mechanisms are not delivered therapies or proven patient mechanisms.",
+    "Original b00054 states Frontiers figure alt text was AI generated. Original case narratives and original caption stain/magnification clauses ground clinical pathology; appended publisher alt descriptions are not independently promoted into clinical findings. Actual pixels remain separately inspected.",
+    "Table/narrative quantities and ordinal staining symbols retained; no inferred reference limits, routes, clone/cancer diagnosis, specimen, synthetic calendar date, restart regimen dose or daratumumab biweekly expansion.",
+    "TCM efficacy and abnormal heavy-chain mechanism are author interpretation/speculation with limited evidence. Article follow-up/sample-size limits retained.",
+    "Clinical image companion is caption-grounded; both actually viewed assets have a separate visual target.",
+    "Both p1 narrative/table creatinine49.44/49.94 and24hourprotein1341.63/1340 numerical candidates are source_conflict/review_only, so no conflicting number is selected as definitive. Source table phase remains unreported."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 57,
+    "facts_reviewed": 310,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical migrations M02/M03/M12 correct for this article; three OBS-FLAG items resolved (stable != normal; mixed cell split).",
+      "M12 nulled anchors restored with literal source phrases where the source states the reference event."
+    ],
+    "residual_risks": [
+      "Prior parent review (2026-10-08) content otherwise unchanged; figures not re-viewed in this re-sign."
+    ]
+  },
+  "physician_adjudicated": false
+}

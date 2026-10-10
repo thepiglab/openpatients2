@@ -1,0 +1,49 @@
+{
+  "article_id": "PMC12586072.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "32c135cfe6b79cff0e3cb3f2725e77c95bc14b5cba647cc0b8eac2dcebcc001f",
+  "annotation_sha256": "29c297771fb425787907745d11591ddf2ddeeadd0da5b9c61aa818d10fb9d8b4",
+  "reviewed_at": "2026-10-09T22:25:06.927766+00:00",
+  "source_segments_read": 94,
+  "facts_reviewed": 487,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Restored time.anchor \"admission\" (literal; tables are Day 0(Admission)-relative) on 319 facts whose paraphrased anchors (\"patient admission day/course\", \"HBV admission\", \"admission/course as labeled in original table\") were nulled by M12; left \"presentation\" and \"more than seven months later\" anchors null.",
+    "p1-f189 (NR001): flag=normal, name \"ALT and AST\", text_value \"returned to normal within 1 month\" (source: \"ALT and AST levels returned to normal within 1 month\").",
+    "Verified M03 ages (28-/23-/25-year-old literal), M05 normal flags (PMH \"unremarkable\"), M07 not_performed (psychometric instruments precluded; no PBC follow-up evaluation completed), M13 uncertain->unknown on p2-e14/p3-e12."
+  ],
+  "unresolved": [
+    "Original XML Tables1–6 reviewed in full, with stable source ownership percase. Dashes/blanks mean unreported results, not negative tests; plus/minus flags preserved independently of numeric titers.",
+    "No figure assets or supplements are listed. No explicit same-patient prior-report linkage identified. Treatment dose/route/duration and exact discharge dates unreported.",
+    "Case1 obstetric counts have unclear current/past scope;Case2/3 gravida0 conflicts with documentedpregnancy. Pregnancy outcomes forCase2/3 and causal relation ofCase1 missed abortion toHBV are not demonstrated.",
+    "Case3 possiblePBC is unconfirmed, and fullHBVDNAclearance is not documented becauseofloss tofollow-up; abstract all-three cure wording is review-only. Qualitative distress is not a formal psychometric anxiety/depression diagnosis.",
+    "Case2 early-course HBV DNA180IU/mL has unresolved Day0 narrative versusDay2 table timing. Both temporal assignments are review-only, with the shared unanchored value represented separately. Case1 disease-course duration origins are not silently converted to admission-day indices."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 94,
+    "facts_reviewed": 487,
+    "figures_viewed": 0,
+    "key_findings": [
+      "semantic-rules-2026-10 migration verified against source",
+      "admission anchors restored literally",
+      "NR001 resolved flag=normal"
+    ],
+    "residual_risks": [
+      "Past medical history \"unremarkable\" kept as observation item with flag=normal"
+    ]
+  },
+  "physician_adjudicated": false
+}

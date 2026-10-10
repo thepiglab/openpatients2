@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC12817410.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e7acd4e8d36ead68caaa048a5d298874d28299b0960392135e3010767f54aeab",
+  "annotation_sha256": "2f112b611a931fe0c563e43a4f5c550510f6c09d2493c8a943827be78816d9df",
+  "reviewed_at": "2026-10-09T22:45:53.767143+00:00",
+  "source_segments_read": 28,
+  "facts_reviewed": 137,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Changed initial suspected pulmonary embolism to possible/differential; kept negative admission CTA separate from confirmed day10 emboli.",
+    "Added separate numeric oxygen-flow fields (3 L/minute at admission and by day16), linked to their support events and existing provenance.",
+    "Removed unsupported strict ordering between completed three-month anticoagulation and three-month follow-up.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M03: p1-f002 text_value '56-year-old' is the literal phrase for this age.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M12: anchors 'emergency presentation', 'early examination after cough/pop', 'hospital course' were paraphrases. Restored literal anchor 'presented to the emergency department' on p1-f011 ('4 days earlier'); p1-f075/f076 ('On hospital day 3') and p1-f137 ('By hospital day 16') are self-contained hospital-day times and keep anchor null.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Checked social facts: 'denied alcohol or recreational drug use' is assertion=absent/status unknown (not never).",
+    "opus-fixup: p1-f119 '3-month follow-up' anchor 'discharge' (borrowed from the Fig. 1 caption, not stated for the body follow-up) -> null, relation after -> unknown; garbled text_value/clinical_statement 'Body follow-up imaging time3months' -> '3-month follow-up'. p1-f120 garbled text_value/clinical_statement tidied to the literal '4 months after discharge' (time unchanged). Both stay source_conflict/review_only."
+  ],
+  "unresolved": [
+    "This text/caption annotation layer does not use pixels; pixel inspection is recorded separately in the visual target and its review receipts.",
+    "Original XML contains no tables. No explicit same-patient prior-report linkage identified; discussion of a different prior fatal case is a comparison.",
+    "Medication doses and exact discharge date are not reported. hsCRP unit preserved as printed without conversion.",
+    "Follow-up radiograph3vs4month timing and broad positive-pressure-device terminology require review.",
+    "No supplementary material, tables or unassigned media identified in original source/XML.",
+    "VAC removal date is unstated, not fixed to hospital day16. Historical A1c assay date and methodology unstated. Source follow-up imaging3/4months and broad no-positive-pressure wording remain quarantined.",
+    "All explicit tests/device settings represented across supported schemas with shared fact provenance; added alternatives do not increase unique-fact counts.",
+    "Three-month anticoagulant-course completion/home rehabilitation is not ordered strictly before the three-month follow-up; they may coincide. Added two numeric oxygen-flow alternatives share original support facts."
+  ],
+  "assessment": {
+    "clinical_course": "Read all 28 source units, all 137 clinical representations across 14 sections, summary, 16 events and 19 relations. Distinguished presentation, day3 air leak and VAC response, day10 PE/enoxaparin and discharge/follow-up. Negative findings, documented normal tests, exact laboratory units and signed VAC pressure preserved.",
+    "uncertainties": "Source no-positive-pressure wording versus HFNC and three-month body versus four-month radiographic follow-up remain explicit. Caption After VAC does not establish removal by day10.",
+    "figures": "Personally viewed all four original assets and inspected all 20 panel descriptions, modality labels, source claims and attribution; no chart or patient caliper data. Caption-supported diagnoses distinct from grayscale pixel descriptions.",
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 28,
+    "facts_reviewed": 137,
+    "figures_viewed": 0,
+    "key_findings": [
+      "semantic-rules-2026-10 migration verified: 1 age text, 4 anchor nullings (1 restored with literal phrase).",
+      "opus-fixup: body 3-month follow-up no longer anchored to discharge."
+    ],
+    "residual_risks": []
+  },
+  "physician_adjudicated": false
+}

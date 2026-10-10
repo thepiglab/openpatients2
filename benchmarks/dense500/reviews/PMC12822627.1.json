@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12822627.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a9dcdc9465bb1b3342e09e965434c4ea2d738219f4ca61bf4726e1e0a9ae5c88",
+  "annotation_sha256": "99b0803ee8fef3169d2017b65306836fc9c0843ad213fae726ff7b73c18cf89f",
+  "reviewed_at": "2026-10-09T22:38:55.329753+00:00",
+  "source_segments_read": 23,
+  "facts_reviewed": 59,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f026–f028 Jan 2025 TSH/FT4/TT3: time relation corrected to \"at\" the literal table date (was \"after\" with a surgery anchor); normal flag kept because the row interpretation and b00011 state normalization",
+    "p1-f055 GH immunostaining: interpretation set to positive (50% of cells stained is literal stain positivity); no co-secretion inferred",
+    "p1-f052 resection complication field reworded from \"None documented\" to the documented \"uncomplicated\"",
+    "Ambiguities: added the Fig 1B caliper-orientation vs caption conflict seen on pixels; narrowed the undated-work-up ambiguity to allow only text-supported pre-surgical order; annual physical vs PCP labs marked compatible but unmerged",
+    "Temporal relations: added 5 supported before-links (incidental finding→work-up and →MRI, referral→Endocrinology evaluation, work-up→resection, MRI→resection of the MRI-identified macroadenoma)",
+    "semantic-rules-2026-10 re-sign: verified 3 M12 anchor nullings (paraphrases 'July 2024 hyperthyroidism finding', 'incidental finding on routine laboratory evaluation', 'July 2024 evaluation'); time texts 'prior', 'July 2024', 'five months earlier' are literal; no source phrase is explicitly named as the reference, anchors stay null.",
+    "ASSERT-ABSENT: p1-f005 'no prior history of thyroid disease' verification_status refuted -> unknown (absent history, not a workup exclusion). p1-f008 RTH refuted kept (excluded by alpha-subunit measurement)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the actual JPEG is inspected in the separate visual submission.",
+    "Dates of the pituitary MRI, alpha subunit, other pituitary hormone panel, RTH/assay-interference work-up and Endocrinology examination are not printed in their own sentences; no times were borrowed, and only text-supported pre-surgical order is linked.",
+    "No patient-level alpha-subunit/TSH molar ratio value, repeat-assay values, medication list, hypertension treatment or post-January 2025 follow-up is documented.",
+    "Table 1 mixes Free T3 (Jul 2024) and Total T3 (Oct 2024, Jan 2025) in one column; kept as separate analytes with their own units.",
+    "The Discussion, Table 2 and Conclusions are generic background/guideline content and were not converted into patient facts or care plans."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "campaign": "semantic-rules-2026-10 re-sign",
+    "source_units_read": 23,
+    "facts_reviewed": 59,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Re-sign 2026-10: M12 verified; p1-f005 refuted -> unknown.",
+      "Single index patient (46M, hypertension); all 23 source units incl. Table 1 rows, Table 2 (generic) and caption read; Discussion/Table 2/Conclusions and b00013 cited cohort statistics are background.",
+      "All 59 facts supported; Table 1 arrows give explicit high flags, Feb 2024 and Jan 2025 normal flags are stated by text/row interpretation.",
+      "Undated work-up results correctly keep null time; parent added only text-supported pre-surgical ordering (abstract \"Further evaluation\", resection of the MRI-identified macroadenoma).",
+      "Pituitary neuroendocrine tumour kept as oncology tumour/biomarker/treatment alternate rows consistent with precedent; GH stain positive as a stain only, no co-secretion.",
+      "Actual Fig 1 viewed and magnified: A coronal with vertical 13.8 mm and horizontal 17.1 mm calipers; B sagittal with a horizontal 15.2 mm caliper contradicting the craniocaudal caption."
+    ],
+    "residual_risks": [
+      "Alpha-subunit/TSH ratio value unprinted; abstract-only claim kept as text.",
+      "Fig 1B axis of the 15.2 mm measurement unresolved.",
+      "Order of MRI relative to the Endocrinology visit and alpha-subunit test unknown."
+    ]
+  },
+  "physician_adjudicated": false
+}

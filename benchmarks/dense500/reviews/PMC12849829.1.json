@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12849829.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0751ab1f33a6e3062cc2c25d9b40ed3b8ee8a4d46519279851eed577d45f268b",
+  "annotation_sha256": "a61715f68514cad1a2478b0ec0f91de3ca33222f6e6f015e9ccd76ea7bf0303e",
+  "reviewed_at": "2026-10-09T22:49:28.178716+00:00",
+  "source_segments_read": 64,
+  "facts_reviewed": 162,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged duplicate dry-eye symptom preserving wind-triggered context and both evidence quotes.",
+    "Moved ICU admission/nephrology transfer into completed care transitions rather than procedures.",
+    "Clarified that Ward T/Z calculations, not the DEXA acquisition, were unperformed.",
+    "Assigned generic epidemiology and hypokalemia algorithm caption to background.",
+    "semantic-rules-2026-10 re-sign: M12 nulled p1-f162/p1-f163 time.anchor ('oral potassium chloride and sodium bicarbonate treatment', not literal); parent restored the literal source phrase 'oral potassium chloride and sodium bicarbonate' (b00054 'treated with oral potassium chloride and sodium bicarbonate ... Ten days later').",
+    "FIG-LABELS: visual-submissions FIG3 detailed descriptions had '?' outside quotes; after viewing pixels, printed labels are now quoted literally (“Mineralocorticod excess?”, “Sureptittuous vomiting/laxative/ diuretic use?”, “Tubolopathy? (eg: Gitelman, Bartter, RTA)”, “Severe hypomegnesia?”); as_documented spellings corrected to printed text.",
+    "opus-fixup (sidecars only, annotation unchanged): visual submission FIG1 positional panels 'Left image'/'Right image' -> one whole-figure row (no printed labels); FIG2 positional 'Upper/Lower left/right' -> printed region titles 'Left Femur' and 'Spine' (image + BMD plot merged per region). figure-ehr-labels and figure-privacy-flags rebuilt on the new panels (visual_target_sha256 updated); parent visual/EHR/privacy receipts re-signed. Annotation figures[] keep whole-figure null panels (caption has no labels)."
+  ],
+  "unresolved": [
+    "Caption-layer visual fields remain text-only; separate actual-pixel target covers all three source figures.",
+    "Presumed primarySjögren with unavailable objective diagnostic tests; no definitive classification or immunosuppressive treatment inferred.",
+    "Femoral-neck T-score discrepancy: prose-1.1 vsTable2leftneck-0.5; retained review-only rather than substituting totalhip/intertrochanteric values.",
+    "Table2percentages retain unknown reference denominator; WardT/Z N/C meansnotcalculated. Table1numericalreference intervals do not generate normal/high/lowflags.",
+    "Initial basiclab draw order versus ICU/nephrology transfer unspecified. Hypokalemia initial1.66 duplicated in prose/table is one occurrence; no invented additional draws.",
+    "Figure3 generic hypokalemia algorithm/generaldiscussion do not become patient therapies or testorders. No exactcalendar dates or ethnicreferencepopulation interpreted aspatientdemographics.",
+    "Ward T/Z N/C refers solely to unperformed score calculations, not to the DEXA acquisition; reported WardBMD/BMC/area and completed scan remain present."
+  ],
+  "assessment": {
+    "clinical_course": "Personally read all64source units, both original XML tables, every populated field in14clinical sections, all162remaining representations and their evidence,15events10edges5summaries. Prior mild hypokalemia, acute weakness/ICU replacement, stabilization/ward evaluation, presumed Sjogren/type1RTA and10dayresponse retain distinct phases.",
+    "conflicts": "Prose femoral-neck T-score-1.1 versus table-0.5 and associated percentage remain3review-only representations. No definitive Sjogren classification, hypercalciuria, immunosuppressive therapy, hemolysis or inferred demographics from reference population.",
+    "visual_review": "Personally viewed all3actual JPEGs and checked7scopes and6citation quotes: ultrasound observations versus author normality; DEXA projections and exact totalBMD/refplot fields; background hypokalemia algorithm including printed ambiguous expressions.",
+    "supplements": "No supplementary material listed.",
+    "reviewer": "Claude Opus 5.5 parent",
+    "key_findings": [
+      "semantic-rules-2026-10: M12 anchors restored to a literal phrase; FIG3 '?' moved inside quotes of printed labels.",
+      "opus-fixup: FIG1/FIG2 positional visual panel labels replaced (null / printed Left Femur, Spine)."
+    ],
+    "facts_reviewed": 162,
+    "figures_viewed": 3
+  },
+  "physician_adjudicated": false
+}

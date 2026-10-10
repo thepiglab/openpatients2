@@ -1,0 +1,75 @@
+{
+  "article_id": "PMC12661979.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "40767802954754f4febb86d4973eb40966d362c09ef13ed319bbedcac608f6d4",
+  "annotation_sha256": "ecfa7ec7ba26aed23a9c463cd0764a5657054ff3cc39e9c33950487f3c7c3ec6",
+  "reviewed_at": "2026-10-09T22:24:18.272569+00:00",
+  "source_segments_read": 46,
+  "facts_reviewed": 220,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "case_context p1-p4: case_kind clinical_case -> multi_patient, multiple_index_patients true, subject_state living_at_presentation, chief_complaint added; per-patient care_setting corrected (P3 surgical/nutrition and P4 neonatal/outpatient care had no gastroenterology follow-up) with b00003 setting evidence",
+    "Venous blood sample facts p1-f026/p2-f030/p3-f030/p4-f031: removed time borrowed from each anthropometry sentence; moved from anthropometry event to laboratory event",
+    "PedsQL domain flags added from each patient narrative: P1 physical normal, emotional/social/school low; P2 physical normal, others low; P3 all four domains low; totals and all P4 scores left unflagged; narrative evidence added",
+    "P4 PedsQL facts: method PedsQL Young Adult Version added from explicit methods >18 rule (P4 is the only participant over 18); removed the limitation saying the version was unstated for every patient",
+    "p4-f024 oral feeding: removed borrowed time \"three months later\" (belongs to gastrostomy removal)",
+    "p4-f011 absent distal fistula: verification_status confirmed -> refuted",
+    "p4-f047/f048 Z-score not applicable: clinical statements corrected (previously said \"documented\"), status not_performed, Table 2 blank-cell evidence added",
+    "Added p4-f056 outcome: generally done well since the definitive procedure (b00034), linked to event/summary",
+    "p1-f022 pneumonia role complication -> unknown (source does not call it a complication); p1-f023 admission count converted from observation to outcomes readmission",
+    "p2-f025 day-12 discharge: anchor esophageal replacement removed (re-operation vs replacement anchor unstated); p2-f024 text clarified",
+    "Endoscopic observations p1-f048, p2-f010, p2-f011: kind physiologic -> other with endoscopy method",
+    "Timeline: added 15 supported before-relations from each replacement event to the previously unordered follow-up evaluation events (labs, PedsQL, imaging/endoscopy, anthropometry, current follow-up)",
+    "Source coverage b00003/b00004 now patient-linked; article limitations add 2014-2019 database window and median follow-up >5 years inconsistencies with patient ages",
+    "semantic-rules-2026-10 re-sign: M12 had nulled 3 paraphrased anchors; parent restored literal source anchors: p2-f006 'initial presentation' -> 'presented' (b-text 'presented two months following ingestion'), p2-f013 and p3-f021 'gastrostomy placement' -> 'gastrostomy tube was placed' (each 'discharged five days later' follows that sentence in its own case).",
+    "Verified M02 comparator '=' on 64 numeric observations: no printed <,<=,>,>= on those values ('BMI < 16' in P4's Table 2 cell is a classification criterion, not the value; '~5 cm' and 'approximately 6 kg' approximations keep '=' with their literal text_value per OBS-COMPARATOR); M03 p2-f005 text_value 'age 9' literal in own quote; M05 p2-f037/p3-f037 Table 2 nutritional classification 'Normal' -> flag normal correct.",
+    "DEMO-AGE-TEXT (gate warnings, not touched by M03): p1-p4 f002/f004 age text_value were descriptions ('current follow-up age', 'age at esophageal replacement'); replaced with the literal Table 1 cells ('Age (yrs)' / 'Age at surgery (years)') from each patient's own row quote: P1 3/2, P2 11/10, P3 6/6, P4 23/2.",
+    "Bare-offset scan: p4-f025 gastrostomy removal 'three months later' anchored to the literal preceding clause 'Oral feeding was successfully initiated'; p1-f020 'after four weeks' left null (reference point, discharge vs follow-up, not explicit)."
+  ],
+  "unresolved": [
+    "Annotation figure fields keep caption-layer status not_inspected; the actual JPEG was inspected in the separate visual submission.",
+    "Figure 1 panel ownership unresolved: no A/B/C/D-to-patient mapping, although all four narratives cite Figure 1.",
+    "Abstract reports anastomotic strictures in all four patients and results describe a stricture/narrowing for each, but the discussion says 3 of 4 patients with strictures \"one of whom required surgical revision\"; no patient is identified as the revised one and no patient-specific negative stricture claim is invented.",
+    "Abstract age-at-surgery range 2-11 years conflicts with Table 1 ages at surgery 2, 10, 6, 2 (maximum 10); table/case-specific values retained.",
+    "Methods say endoscopy used a flexible endoscope under general anesthesia, but the P1 paragraph says a rigid scope; both wordings retained.",
+    "The discussion sentence on PedsQL scores contains garbled wording (\"metformin-induced Cobalamin (B12) deficiency threshold of 60\"); only the clear statement that three patients (aged 3, 6, 11) had psychosocial impairments and the 23-year-old had uniformly high scores is used.",
+    "P1 and P2 paragraphs cite the wrong table for some findings (P1 imaging cites Table 2; P2 endoscopy cites Table 3); text retained as written.",
+    "P4 longitudinal documentation gaps (including a phase lost to follow-up) and the unavailable referring-facility operative report for P3 limit details.",
+    "Series-level surgical technique (isoperistaltic transverse colon graft, retrosternal tunnel, three anastomoses) and \"native esophagus left in situ\" are not patient-specific operative notes; kept review-only except where individual imaging shows a native esophagus (P2, P3).",
+    "No explicit same-patient prior-report linkage identified; cited literature cohorts (Ahmed et al., Coopman et al., Amin et al.) are external and not patient facts.",
+    "PedsQL form per patient: methods state the Young Adult Version was used for participants above 18, which applies only to P4 (23 years); self-report versus parent-proxy forms for P1-P3 are not stated. No pre-operative PedsQL exists, so current scores do not establish change.",
+    "Series-level timing inconsistencies: patients were \"identified from the hospital´s esophageal replacement surgery database over five years (2014-2019)\" and abstract says \"Median follow-up exceeded five years\", yet P4 had replacement at age 2 and is now 23, while P1 (2 to 3 years) and P3 (6 to 6 years) have about one year or less of post-replacement follow-up. No surgery dates or follow-up durations are inferred."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 46,
+    "facts_reviewed": 220,
+    "figures_viewed": 1,
+    "key_findings": [
+      "semantic-rules-2026-10: migrations verified; 3 nulled anchors restored to literal phrases.",
+      "Four index patients correctly separated by Table 1-4 rows and per-patient narratives; age-based discussion attribution (aged 3, 6, 11 vs 23) maps uniquely to P1, P3, P2, P4",
+      "Series-level technique (b00006) and native esophagus in situ (b00037) correctly review_only; P2/P3 native esophagus kept only from their own imaging sentences",
+      "Source conflicts retained: rigid vs flexible scope, abstract age at surgery 2-11 vs Table max 10, wrong table citations, P2 esophago-gastric anastomosis, 3/4 vs all strictures, P4 TEF referral label vs Gross A anatomy",
+      "Figure 1 single JPEG viewed with magnified per-panel crops; visual submission descriptions match pixels; all four panels correctly unresolved"
+    ],
+    "residual_risks": [
+      "P1 Hb 12.4 left unflagged because the narrative grouping is ambiguous",
+      "P2 borderline anaemia linkage from abstract is review_only inference",
+      "PedsQL low/normal flags rely on author wording without printed cut-offs",
+      "Panel-to-patient mapping of Figure 1 unknown; the 8.12 cm stricture dimension is not specified"
+    ]
+  },
+  "physician_adjudicated": false
+}

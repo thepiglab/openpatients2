@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12285374.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0f4179cd0b495bfe140c4bc7315c5de96f2032231408d36108d3b94bbbf06ae9",
+  "annotation_sha256": "2c0e41dd4d29bc1199778571a0cb588059d04b28f2544d9c7b4379e1a3836353",
+  "reviewed_at": "2026-10-09T22:18:18.396157+00:00",
+  "source_segments_read": 34,
+  "facts_reviewed": 108,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M02 comparator '=' on 12 numeric observations (CT/exam dimensions, mitotic index, Ki67) - no printed <,>, up to in source.",
+    "Verified M03 age text_value '50-year-old' (p1) and '55-year-old' (p2) are the literal phrases for each patient.",
+    "NR001 resolved: p2-f009 rectal examination converted from observation to symptoms_function sign 'rectal fullness'; added p2-f043 sign 'rectal mucosa on digital examination' text_value 'normal' (split mixed finding).",
+    "p2-f042 Ki67: text_value 'positive'/flag positive replaced by text_value '2%', no flag (source: 'with 2% Ki67'; no qualitative positive call)."
+  ],
+  "unresolved": [
+    "Figure pixels were not inspected; annotation covers captions only.",
+    "Recovered Table1 literature cases remain secondary/background; current two rows retain their clinical values. No malignant histology inferred from size or mitotic count alone."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 34,
+    "facts_reviewed": 108,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical comparator and age-text migrations correct against source.",
+      "Rectal exam mixed finding split into two exam signs."
+    ],
+    "residual_risks": [
+      "Case 1 Ki67 conflict (text negative vs table 4%) retained as source_conflict."
+    ],
+    "primary_stratum": "oncology",
+    "patient_count": 2,
+    "clinical_course": "two large mesocolon SFTs, preoperative differential, resection and uneventful36/24-month surveillance",
+    "rich_trajectory": true,
+    "normal_negative_evidence": true,
+    "serial_measurements": false,
+    "common_workflow": false,
+    "planned_vs_actual_challenge": true,
+    "split": "train",
+    "prior_benchmark_exposure": true,
+    "pixel_reviewed": false
+  },
+  "physician_adjudicated": false
+}

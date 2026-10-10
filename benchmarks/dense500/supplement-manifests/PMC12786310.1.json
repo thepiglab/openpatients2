@@ -1,0 +1,100 @@
+{
+ "format": "dense-supplement-manifest/1",
+ "article_id": "PMC12786310.1",
+ "source_text_sha256": "92502619c9fa0c398d50235168ddfd32a46c1626689dd583059ec9a70ed1dd08",
+ "source_supplements_sha256": "de638fcd67b9b6db032715acaa81bf7bb54f69128a619c5c7af59c2bcc351c9d",
+ "files": [
+  {
+   "supplement_id": "diagnostics-16-00048-s001",
+   "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC12786310.1/diagnostics-16-00048-s001.zip?md5=97559c3c7cd6f34fee9bae0e31192555",
+   "machine": {
+    "filename": "diagnostics-16-00048-s001.zip",
+    "original_manifest_url": "s3://pmc-oa-opendata/PMC12786310.1/diagnostics-16-00048-s001.zip?md5=97559c3c7cd6f34fee9bae0e31192555",
+    "declared_md5": "97559c3c7cd6f34fee9bae0e31192555",
+    "declared_kind": "supplementary_or_other",
+    "extension": ".zip",
+    "http_content_type": "binary/octet-stream",
+    "bytes": 166614,
+    "download_status": "downloaded",
+    "download_reason": null,
+    "sha256": "cd6b7a7898d75e34b06952174b8412cfdd240aeba657d38c4c76a9946e6de337",
+    "md5_verified": true,
+    "sample_sha256": null,
+    "sample_bytes": null,
+    "tail_sha256": null,
+    "detected_type": "zip",
+    "inspection_status": "peeked",
+    "peek": {
+     "kind": "archive",
+     "format": "zip",
+     "member_count": 1,
+     "uncompressed_bytes": 174952,
+     "members": [
+      {
+       "name": "diagnostics-4010275-supplementary.pdf",
+       "bytes": 174952
+      }
+     ],
+     "member_extensions": {
+      ".pdf": 1
+     },
+     "tool": "zipfile",
+     "dicomdir_present": false
+    },
+    "limitations": [
+     "Members listed from the central directory only; nothing extracted"
+    ],
+    "errors": []
+   },
+   "machine_suggestion": {
+    "content_class": "unknown",
+    "rule": "no_rule"
+   },
+   "review": {
+    "content_class": "clinical_case_table",
+    "content_class_rationale": "Extracted the single member diagnostics-4010275-supplementary.pdf from the ZIP (3 A4 pages) and rendered all pages to PNG: a \"Supplementary Materials\" document with four sections for the index case - (1) emergency-department cardiology consultation text including ECG, POCUS-TTE and left lower-limb venous ultrasound, (2) a CT pulmonary angiography report, (3) Table S1 of serial laboratory results by hospital day 1-4 with reference ranges and legend, and (4) a predischarge echocardiography and lower-limb venous Doppler report.",
+    "classification_basis": "full_content",
+    "patient_scope": "patient_level",
+    "patient_ids": [
+     "p1"
+    ],
+    "ownership_evidence": [
+     {
+      "basis": "article",
+      "segment_id": "b00041",
+      "quote": "Laboratory parameters collected in the Cardiology Department during hospitalization (Table S1)"
+     },
+     {
+      "basis": "article",
+      "segment_id": "b00025",
+      "quote": "Dynamic transthoracic echocardiography performed prior to discharge showed preserved LV systolic function"
+     },
+     {
+      "basis": "article",
+      "segment_id": "b00041",
+      "quote": "1. Cardiology Consultation in the Emergency Department; 2. CT Pulmonary Angiography findings"
+     }
+    ],
+    "ehr_includable": true,
+    "ehr_modality": "document_text",
+    "estimated_counts": {
+     "rows": 47,
+     "frames": null,
+     "pages": 3,
+     "members": 1,
+     "duration_seconds": null,
+     "basis": "Own count of printed test rows in Table S1 (pages 2-3); the PDF has 3 pages and the ZIP has one member."
+    },
+    "notes": "Single-patient article; the main text cites the supplement for this patient's ED consultation, Table S1 laboratory values and predischarge ultrasound, and the PDF itself prints no patient name or date. Contains information not in the main text (additional echo/venous ultrasound/CT detail, serial hospital-day labs, extra panels). Differences from main text noted for the clinical-reference sidecar: the PDF consultation blood pressure differs slightly from the main-text ED value, and Table S1 procalcitonin is printed above its stated reference range whereas the main text calls the day-3 result within the normal range; Table S1 day-1 laboratory values are not the same as the ED Table 1 values. Clinical values are not recorded here; they belong in the supplemental clinical reference and series sidecars (not authored).",
+    "limitations": [
+     "Supplement is a ZIP wrapping a PDF; the dense-supplemental-document-reference contract (supplement_review.py) accepts only PDF assets, so no page-level document sidecar or clinical-reference payload was created and the supplement gate cannot be completed by that route.",
+     "Table S1 uses dashes for untested cells; these are missing cells, not negatives. A blank aPTT cell appears on day 3.",
+     "No printed patient identifier or date; ownership rests on the article text citing the supplement in a single-patient report."
+    ]
+   }
+  }
+ ],
+ "limitations": [
+  "Machine draft: every review block must be completed by a reviewer who inspected the content."
+ ]
+}

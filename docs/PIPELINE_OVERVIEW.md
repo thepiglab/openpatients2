@@ -1,6 +1,13 @@
 # Current pipeline overview
 
-Last checked: **2026-10-07**, after implementation of the clinical architecture experiment.
+Last checked: **2026-10-09**, after adding the unified article record and the optional EHR stages.
+
+The [completed experiment](../reports/CLINICAL_ARCHITECTURE_20261007.md) did not
+justify promoting encounter replacement or automatic verification. Additional
+coverage recovered useful candidate facts, but filtering lost more than it gained.
+The diagrams below still describe the current baseline and experimental paths.
+The proposed [source-claim compiler](SOURCE_CLAIM_COMPILER_DESIGN.md) is a new
+design to test, not an implemented default.
 
 This is the living overview of the full article extraction profile used as our
 current benchmark baseline. Enabled stages depend on the configuration. The
@@ -120,6 +127,71 @@ does not imply that image interpretation is rerun for every patient. Pixel
 inspection depends on available assets and the enabled vision configuration.
 Unresolved attribution and failed or partial tasks remain visible in the output.
 
+## Optional EHR stages and the unified article record
+
+Both the automated pipeline and the dense500 reference release emit the same
+row: `openpatients2-unified-article/1`, one row per article, built by the shared
+[`unified_record`](../src/openpatients2/unified_record.py) builder/validator. The
+four EHR stages are new runtime tasks
+([`ehr_tasks`](../src/openpatients2/ehr_tasks.py)). They are off by default in
+[`EhrStageConfig`](../src/openpatients2/ehr_pipeline.py) and run after a
+baseline run, reusing its bounded call, repair and ledger machinery. Existing
+task contracts and their fingerprints are unchanged.
+
+```text
+   PMC ARTICLES (JATS + figures + supplements)
+                     |
+                     v
+   baseline extraction run (diagram above)
+   patients.jsonl, rosters.json, visual-annotations.json
+                     |
+       +-------------+-------------+-------------------+------------------------+
+       |             |             |                   |                        |
+       v             v             v                   v                        v
+  figure_ehr_   figure_privacy_ supplement_          measurement_series_     (CPU) supplement_assets
+  label         flags           classification       extraction              acquire: capped cache,
+  panel EHR     burned-in text, class / scope /      model picks cell IDs;   hashes, literal peeks
+  category +    anatomy, face;  includable from      code parses values      (input to
+  includable    categories only bounded peek         (no unit conversion)    classification)
+       |             |             |                   |
+       +-------------+------+------+-------------------+
+                            |
+             CPU: same validators as the reference sidecars
+                            |
+                            v
+   unified_record.build_record  <-- the same builder the dense500 export uses
+                            |
+                            v
+   one row per article: patients[] (14 sections, summary, timeline, refs),
+   figures[].panels[] (visual, attribution, ehr, privacy), supplements[],
+   measurement_series, provenance, completion
+                            |
+          +-----------------+------------------+
+          |                                    |
+          v                                    v
+   pipeline: OUT/data/unified.jsonl     release: data/dense_clinical_cases_v1/
+   (completed=false, unreviewed)        data/{train,validation,test}.jsonl
+          |                                    |
+          +---------> unified_scoring <--------+
+                      clinical item names, panel EHR category/includable,
+                      privacy-flag P/R, supplement class, series points
+```
+
+Run (all stages off unless enabled in the YAML):
+
+```sh
+python -m openpatients2.ehr_pipeline --config ehr.yaml --articles sample.jsonl --run-dir RUN \
+    --output OUT --endpoints http://127.0.0.1:8000/v1 --context 131072 \
+    [--image-manifest RUN_MEDIA/vision-assets/manifest.json] [--supplement-assets ACQ_DIR]
+python -m openpatients2.unified_scoring --reference data/dense_clinical_cases_v1/data \
+    --predicted OUT/data/unified.jsonl --out score.json
+```
+
+`ehr.yaml` sets any of `figure_ehr_label`, `figure_privacy_flags` (needs pixels),
+`supplement_classification` (needs acquisition records), and
+`measurement_series_extraction` to true. It may also name `extraction_config`
+for serving limits. Model labels are unreviewed and never mark a row completed.
+
 ## Current experimental branches
 
 The latest controlled campaign runs the baseline once per shard/seed, then
@@ -217,4 +289,6 @@ Implementation references: [source parsing](../src/openpatients2/articles.py),
 [baseline extraction](../src/openpatients2/pilot_extract.py),
 [figure processing](../src/openpatients2/pilot_media.py),
 [component trials](../src/openpatients2/component_trial.py), and
-[ledger stages](../src/openpatients2/ledger_pipeline.py).
+[ledger stages](../src/openpatients2/ledger_pipeline.py),
+[EHR stages](../src/openpatients2/ehr_pipeline.py), and
+[unified record](../src/openpatients2/unified_record.py).

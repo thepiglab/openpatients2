@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC12952432.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e4bb54ff7e90a4e2c4ac72f89df011bb2ca398082794e21d15679ead04868bc4",
+  "annotation_sha256": "d3a063ef10b248ee7d0f35bd4dc0f106376edc499d8a077254ce51828f33f14c",
+  "reviewed_at": "2026-10-09T22:35:23.944513+00:00",
+  "source_segments_read": 46,
+  "facts_reviewed": 100,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Admission vitals p1-f018..f021: quote extended to the full \"Upon admission, ...\" sentence and own time {Upon admission, at, admission} added (previously untimed with a time-less quote).",
+    "p1-f023 renamed \"Normal mental function\" (removed borrowed \"on admission\" from the name); p1-f060 renamed \"Calculated MELD-Na score\" (sentence states no time).",
+    "p1-f024 stable liver/kidney dysfunction: added its own literal time \"on admission\" (in its quote).",
+    "Removed reference-range-derived flags from 30 table-only Table 1 values (p1-f025..f054) that have no printed H/L flag or narrative qualifier; reference ranges retained. Kept explicit flags: ammonia 40 normal, ammonia 810 high (strikingly elevated), lactate 5.9 high (elevated), lactate 10.9 high (rising from an elevated value), procalcitonin high (elevated), CTA normal (unremarkable), EEG negative.",
+    "p1-f063 right lower extremity weakness kind symptom -> sign (observed finding in a patient unresponsive to pain).",
+    "Flag 1 decision: the 17 \"6 Hours\" repeat values stay supported/include with literal time \"6 Hours\", relation unknown, no anchor; the values are unambiguous (810/10.9 match narrative and Figure 1) and only their timing is uncertain. Ambiguity text extended with the Figure 1 pixel position of 810 (about hour 17).",
+    "Added ordering links: e02 overlaps e01 (HE both prior to and after TIPS), e13 overlaps e15 (therapy collectively led to ammonia reduction, b00038), e08 before e16 (repeat labs precede the 72-hour CT under either the table or narrative timing).",
+    "Summary 3 now states the author-level diagnoses it already cited (acute-onset severe hyperammonemia, fulminant ICH, ACLF).",
+    "Source coverage: b00046 (Figure 2 caption, background schematic) disposition figure_caption -> background so the roster no longer lists it unresolved; b00045 note no longer claims pixels uninspected.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M02: comparator '=' on 43 numeric results (Table 1 rows, vitals, MELD/MELD-Na, procalcitonin, ammonia 979/169) — all plain printed values, no <,> in the source.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M03: p1-f002 text_value '53-year-old' literal.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M12: anchors 'preceding events in the case narrative', 'concurrent CVVHD treatment', '72-hour head CT' were paraphrases. Restored literal anchor 'Repeat head CT 72 hours after admission' on p1-f110 ('Twelve hours later' brain death); p1-f076 ('Six hours later') and p1-f098 ('over the next two days') keep anchor null (reference event not stated as a single literal phrase)."
+  ],
+  "unresolved": [
+    "Table 1 repeat column is labelled \"6 Hours\" while the narrative places the decline at twelve hours and then reports repeat labs; literal header kept, no timing asserted.",
+    "Table creatinine and albumin and INR rows print no unit; creatinine unit mg/dL comes from the admission narrative only (6.3 mg/dL vs table 6.29). Heart-rate and blood-pressure units are not printed.",
+    "Text gives final ammonia 169 µmol/L whereas Figure 1 plots lower later points; Figure 1 therapy/event markers are plotted at hours not stated in text (visual submission only).",
+    "Background temperature (33-34 C), mannitol-bolus recommendations and ICP-monitoring suggestions in the discussion are literature statements, not patient-specific performed actions; RASS -4 to -5 is a sedation goal, not an achieved score. Concentrations, doses, and PaCO2/temperature targets for this patient are not reported.",
+    "Discussion statements cite published cohorts and trials; no explicit same-patient prior report is identified and none is attributed to the index patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 46,
+    "facts_reviewed": 100,
+    "figures_viewed": 2,
+    "key_findings": [
+      "semantic-rules-2026-10 migration verified: 43 comparators, 1 age text, 3 anchor nullings (1 restored with literal phrase).",
+      "Single index patient (53M, decompensated alcohol-associated cirrhosis, ESRD, prior TIPS); discussion segments b00025-b00037/b00039 are literature background and correctly kept out of patient facts.",
+      "Table 1 \"6 Hours\" column conflicts in timing with the narrative (repeat labs reported after the 12-h decline) and Figure 1 (810 plotted at about hour 17); values kept, timing left literal/unknown.",
+      "Figure 1 pixels independently measured (axis calibration 8.64 px/h, 0.363 px per umol/L): 40@h2, 810@h17, 979@h40, CVVHD arrow ~h35.6, #1 TPE ~h41, #2 TPE ~h57, herniation ~h79; h76 marker ~162 unlabelled and h78 ~169, matching the visual submission pairing. Plot ends at 135 below the text final 169; HD Session appears only in the figure. Figure timings are not promoted into text facts.",
+      "Grade IV HE kept confirmed as the authors attribute the myoclonus to it; ICH/brain herniation/cerebral edema are author/CT-stated; no ICP values exist.",
+      "Creatinine admission unit mg/dL is from the narrative (6.3 mg/dL, same admission measurement as table 6.29); repeat creatinine, albumin and INR remain unitless as printed.",
+      "Event e10 \"Six hours later\" has an ambiguous anchor; only before-relations to the 12-h decline are asserted, no offset."
+    ],
+    "residual_risks": [
+      "Repeat-lab timing (table 6 Hours vs narrative >12 h vs figure ~17 h) is unresolved in the source.",
+      "Cirrhosis/ESRD are coded as history/historical although clearly ongoing at admission (stable dysfunction, transplant listing); the current state is carried by the admission labs fact.",
+      "e09 abdominal Doppler ultrasound has no supported ordering link."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12559929.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2edf927e7892dda058a1cc62ba601c950390ed795b3850ecef6cc2a63064dbe8",
+  "annotation_sha256": "2ad2850c425eaaa2b35bf3799deaecec319e1b3635c4ecbf204124e45d80d122",
+  "reviewed_at": "2026-10-09T22:35:47.457573+00:00",
+  "source_segments_read": 13,
+  "facts_reviewed": 100,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f001 chief_complaint: annotator synthesis replaced by literal abstract phrase \"persistent psychotic symptoms despite high-dose antipsychotic treatment\"; care_setting \"local psychiatric center\" added with literal evidence.",
+    "p1-f007 tardive dyskinesia: verification confirmed -> provisional (\"consistent with\" on examination); role complication -> unknown (drug causation not stated).",
+    "p1-f004 schizophrenia: removed workup-as-diagnostic-basis (not stated) and the workup quote; p1-f005 TRS kept confirmed as author-stated label with formal criteria noted absent.",
+    "Removed duplicate stop-reason outcome rows p1-f080 (melperone nonadherence) and p1-f081 (treatment discontinued); reasons kept literally in regimen of p1-f044/f045; p1-f068 haloperidol decanoate stop reason added to regimen.",
+    "p1-f062: removed unstated \"(oral)\" route from the 2023 aripiprazole taper.",
+    "p1-f095 removed misused follow_up_duration_text; p1-f100 close monitoring action_status unknown -> completed (\"while maintaining close monitoring\").",
+    "Added p1-f102 follow_up outcome for the previously fact-less \"seen again six weeks later\" event p1-e13.",
+    "Split p1-e12: surgery-clinic hospitalization (f008/f009/f089) vs new p1-e23 psychiatric-drug discontinuation during that admission; restart edge now e23<e14 (restart setting stays ambiguous).",
+    "Added 8 supported edges: e01<e05, e08<e09, e09<e10, e09<e12, e23 overlaps e12, e14<e16, e18<e19, e15<e20 (21 relations, 23 events).",
+    "Removed case_context fact from event p1-e09; summary 3 reworded so restart vs follow-up visit order is not implied.",
+    "semantic-rules-2026-10 re-sign: verified all 22 M12 anchor nullings (paraphrases 'first symptoms', 'discharge from first psychiatric hospitalization', 'aripiprazole LAI initiation', etc. were not literal); no literal source anchor is tied by the source to 'during her university years', '10 days later', 'During subsequent follow-ups', 'Over the ensuing/following weeks', 'Over subsequent years', so anchors stay null with literal time text. No annotation edits."
+  ],
+  "unresolved": [
+    "Single case report: no dates beyond \"Since 2012\" and \"By 2023\"; most intervals (hospitalization timing, restart, depot discontinuation) are relative or unstated.",
+    "Several doses are given only as mg/day or mg/month without route; routes recorded only where stated.",
+    "Discussion sentences about literature, mechanisms and regimen approvals were treated as background, not as patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "campaign": "semantic-rules-2026-10 re-sign",
+    "source_units_read": 13,
+    "facts_reviewed": 100,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Re-sign 2026-10: M12 nulling verified; no needs-review items; no edits.",
+      "Single 52F index patient; all 11 annotator flags checked.",
+      "DSP stays possible/provisional; TD provisional; TRS author-stated.",
+      "First-workup five normal observations kept (explicit named list, \"revealed no abnormalities\"); 2023 MRI/EEG/labs resulted with not_reported.",
+      "Discussion facts limited to patient-specific sentences; cited literature excluded."
+    ],
+    "residual_risks": [
+      "Order of the first hospitalization vs the re-enrollment/melperone episode and vs the initial evaluation is unstated.",
+      "Restart setting (same medical admission or later) and order of restart vs six-week visit unstated.",
+      "Sertraline listed by the source among antipsychotics retained literally."
+    ]
+  },
+  "physician_adjudicated": false
+}

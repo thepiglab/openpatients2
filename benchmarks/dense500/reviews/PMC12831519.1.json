@@ -1,0 +1,52 @@
+{
+  "article_id": "PMC12831519.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "038150b9950c3c3fb51de6f506e482cd47f73df072c926d0a35e46a664459d59",
+  "annotation_sha256": "8eaf507c4eab96040af70c0e21fcdbd3e6a378b8542e4bbb8d28a5eb3cf237cc",
+  "reviewed_at": "2026-10-09T22:44:27.540236+00:00",
+  "source_segments_read": 53,
+  "facts_reviewed": 201,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M02 comparator '=' on 48 numeric observations (vitals, Table 1 labs for cases 1-3, galactomannan); printed '<' values in the table are reference ranges, not results, so '=' is correct.",
+    "Verified M03 age text_value '76-year-old', '43-year-old', '67-year-old' each literal for its own patient.",
+    "Verified M06: p1-f012/p2-f009 'no history of or known contact with tuberculosis' / 'no known contact history of TB' (status=never) now assertion=present per SOC-NEVER; lifetime exposure-history negation, acceptable as never.",
+    "Verified M12: 8 non-literal anchors (e.g. 'start of initial antibiotics', 'ICU stay', 'BAL sampling') absent from source -> null correct; time.text literal in evidence.",
+    "No other annotation changes.",
+    "opus-fixup: p1-f012 ('no history of or known contact with tuberculosis') and p2-f009 ('no known contact history of TB') status never/assertion present -> assertion absent, status unknown per SOC-NEVER (no explicit never wording)."
+  ],
+  "unresolved": [
+    "Three-patient case series from one Sri Lankan tertiary respiratory center; reported count of three individual patients matches the three Case sections; no cited cases from the reference list are assigned to patients.",
+    "Table 1 prints hemoglobin as mg/dl and CRP as mg/dL (reference <6) and count units as ×10^(9)/L; values and units are retained verbatim without conversion, flags or diagnoses derived from reference ranges. Table 1 has no stated sample timing.",
+    "Galactomannan source inconsistencies: Case 1 narrative says sputum galactomannan positive while Table 1 lists serum 2.02; Case 3 Table 1 serum galactomannan is a dash while the discussion cites a positive serum galactomannan for Cases 1 and 3; Case 3 repeat BAL galactomannan 0.53 is called negative despite a printed reference <0.5. Conflicting statements are review-only.",
+    "Discussion claims voriconazole was withheld for drug-induced hepatitis in all three cases; this conflicts with the Case 1 narrative (amphotericin first, then oral voriconazole) and is review-only for Case 1.",
+    "Case 2 BAL TB study result and outcome of the antituberculosis regimen are not reported; Case 2 and 3 timing relative to ICU admission, transfer and bronchoscopy is only partly stated. No discharge dates or long-term follow-up are given for Cases 1 and 3, and no dates appear anywhere in the article.",
+    "No supplements or media beyond the six figures; figure pixels were reviewed separately in the visual submission and are not claimed here."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 53,
+    "facts_reviewed": 201,
+    "figures_viewed": 0,
+    "key_findings": [
+      "All mechanical migrations correct against source.",
+      "opus-fixup: TB-contact denials now absent/unknown per SOC-NEVER."
+    ],
+    "residual_risks": [
+      "TB-contact items use status=never for 'no known contact' wording (scoped by 'known')."
+    ]
+  },
+  "physician_adjudicated": false
+}

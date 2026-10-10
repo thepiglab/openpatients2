@@ -1,0 +1,79 @@
+{
+  "format": "dense-needs-review/1",
+  "article_id": "PMC12747116.1",
+  "generated_by": "semantic-rules-2026-10/1",
+  "generated_at": "2026-10-09T22:28:14.588783+00:00",
+  "instructions": "Resolve each item against the SOURCE (claude_prompts/RESIGN_BRIEF.md): edit the annotation, set resolution (what you decided and why) and resolved_by, regenerate the schema target, then save_review + sign. Items reappear on the next migration run until the data satisfies the rule.",
+  "items": [
+    {
+      "item_id": "NR001",
+      "key": "OBS-FLAG:p1-f084:fields.flag",
+      "migration": "M05_normal_flag",
+      "rule_id": "OBS-FLAG",
+      "target": "p1-f084",
+      "path": "fields.flag",
+      "current": "unknown",
+      "question": "text_value 'Normal except for the FSGS area' uses normal wording; set flag=normal if the source calls THIS result normal, keep negative only for a qualitative negative test, or split mixed findings",
+      "suggestion": "normal",
+      "evidence": "Table 1\nPathology and clinical data at the time of preimplantation donor biopsy and subsequent allograft biopsies.\nPathology and clinical data | Donor biopsy | First biopsy | Second biopsy | Last biopsy\nElectron microscopy | Normal | Normal | Normal | Normal except for the FSGS area\nTable 1\nPathology and clinical data at the time of preimplantation donor biopsy and subsequent allograft biopsies.\nP",
+      "resolution": "Mixed finding \"Normal except for the FSGS area\": not a normal result overall; flag kept unknown (FSGS recorded separately, schema has no abnormal flag).",
+      "resolved_by": "Claude Opus 5.5 parent"
+    },
+    {
+      "item_id": "NR002",
+      "key": "OBS-FLAG:p1-f099:fields.flag",
+      "migration": "M05_normal_flag",
+      "rule_id": "OBS-FLAG",
+      "target": "p1-f099",
+      "path": "fields.flag",
+      "current": "<absent>",
+      "question": "text_value 'enlarged but otherwise normal on light microscopy' uses normal wording; set flag=normal if the source calls THIS result normal, keep negative only for a qualitative negative test, or split mixed findings",
+      "suggestion": "normal",
+      "evidence": "(C–E) Images from the last biopsy of Patients 1, 2 and 3, demonstrating their respective focal segmental areas of glomerulosclerosis highlighted by arrows. There were no features of acute rejection. The remaining glomeruli were enlarged but otherwise normal on light microscopy.\nTable 1\nPathology and clinical data at the time of preimplantation donor biopsy and subsequent allograft biopsies.\nPathol",
+      "resolution": "\"enlarged but otherwise normal\": glomeruli are enlarged (GH, abnormal); mixed finding, flag kept unknown; GH recorded separately.",
+      "resolved_by": "Claude Opus 5.5 parent"
+    },
+    {
+      "item_id": "NR003",
+      "key": "OBS-FLAG:p2-f101:fields.flag",
+      "migration": "M05_normal_flag",
+      "rule_id": "OBS-FLAG",
+      "target": "p2-f101",
+      "path": "fields.flag",
+      "current": "<absent>",
+      "question": "text_value '2 normal appearing glomeruli' uses normal wording; set flag=normal if the source calls THIS result normal, keep negative only for a qualitative negative test, or split mixed findings",
+      "suggestion": "normal",
+      "evidence": "Patient 2: the IF sections contained 2 globally sclerosed and 2 normal appearing glomeruli. Immunostains were negative in the patent glomeruli, and specks of C3 positivity were noted in the sclerotic glomeruli.\nTable 1\nPathology and clinical data at the time of preimplantation donor biopsy and subsequent allograft biopsies.\nPathology and clinical data | Donor biopsy | First biopsy | Second biopsy ",
+      "resolution": "text_value trimmed to \"2 normal appearing glomeruli\"; this is a count of normal-appearing glomeruli, not a test result called normal; flag kept unknown.",
+      "resolved_by": "Claude Opus 5.5 parent"
+    },
+    {
+      "item_id": "NR004",
+      "key": "OBS-FLAG:p2-f115:fields.flag",
+      "migration": "M05_normal_flag",
+      "rule_id": "OBS-FLAG",
+      "target": "p2-f115",
+      "path": "fields.flag",
+      "current": "<absent>",
+      "question": "text_value 'enlarged but otherwise normal on light microscopy' uses normal wording; set flag=normal if the source calls THIS result normal, keep negative only for a qualitative negative test, or split mixed findings",
+      "suggestion": "normal",
+      "evidence": "(C–E) Images from the last biopsy of Patients 1, 2 and 3, demonstrating their respective focal segmental areas of glomerulosclerosis highlighted by arrows. There were no features of acute rejection. The remaining glomeruli were enlarged but otherwise normal on light microscopy.\nTable 1\nPathology and clinical data at the time of preimplantation donor biopsy and subsequent allograft biopsies.\nPathol",
+      "resolution": "Same as NR011: enlarged (abnormal) but otherwise normal; mixed, flag kept unknown.",
+      "resolved_by": "Claude Opus 5.5 parent"
+    },
+    {
+      "item_id": "NR005",
+      "key": "OBS-FLAG:p3-f109:fields.flag",
+      "migration": "M05_normal_flag",
+      "rule_id": "OBS-FLAG",
+      "target": "p3-f109",
+      "path": "fields.flag",
+      "current": "<absent>",
+      "question": "text_value 'enlarged but otherwise normal on light microscopy' uses normal wording; set flag=normal if the source calls THIS result normal, keep negative only for a qualitative negative test, or split mixed findings",
+      "suggestion": "normal",
+      "evidence": "(C–E) Images from the last biopsy of Patients 1, 2 and 3, demonstrating their respective focal segmental areas of glomerulosclerosis highlighted by arrows. There were no features of acute rejection. The remaining glomeruli were enlarged but otherwise normal on light microscopy.\nPatient 3 was a 66‐year‐old with a history of hypertension and diabetes mellitus, when he received a deceased donor kidne",
+      "resolution": "Same as NR011: mixed finding, flag kept unknown.",
+      "resolved_by": "Claude Opus 5.5 parent"
+    }
+  ]
+}
