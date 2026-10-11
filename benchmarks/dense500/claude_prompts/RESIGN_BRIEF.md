@@ -73,14 +73,19 @@ Shared annotation rules (full text: `src/openpatients2/rules/annotation_rules.ya
 | `NO-INFERENCE` | No inference-added facts | review |
 | `NO-BORROWING` | No borrowed times, routes, sites, indications or settings | yes |
 | `TIME-LITERAL` | Time text and anchors are literal or null | yes |
+| `TEMPORALITY` | temporality is unknown unless the evidence labels it | review |
+| `ROSTER-RELATIVES` | Newborn, fetus and relatives stay in the index patient's record | review |
+| `ROSTER-LABEL` | Roster labels describe the patient from the case text; no names | yes |
 | `NO-COHORT-COPY` | Cohort statements are not copied to individuals | review |
 | `ASSERT-ABSENT` | Absent, refuted and not documented | yes |
 | `OBS-COMPARATOR` | Numeric results carry a comparator | yes |
 | `OBS-FLAG` | Normal flags; no flags from reference ranges | yes |
+| `OBS-TABLE-ROWS` | Every patient table cell is an observation | review |
 | `OBS-NOT-PERFORMED` | Tests not performed | yes |
 | `SOC-NEVER` | Never-users are affirmed | yes |
 | `DEMO-AGE-TEXT` | Ages keep the literal source phrase | yes |
 | `DEMO-SEX-WORDING` | Documented sex comes from the source's own words about the patient | review |
+| `ONE-STATEMENT` | One statement, one item, in the section that owns it | review |
 | `SECTION-SIGNS` | Signs and clinical scales belong in symptoms_function | review |
 | `SECTION-IMAGING` | Diagnostic imaging may also be a procedure | review |
 | `SECTION-CAREPLANS` | care_plans scope | review |
@@ -88,6 +93,7 @@ Shared annotation rules (full text: `src/openpatients2/rules/annotation_rules.ya
 | `CTX-VITAL-STATUS` | Vital status is consistent with outcomes | yes |
 | `CTX-PER-PATIENT` | case_context describes the one target patient | yes |
 | `ROSTER-ORDER` | Patients numbered by first mention | yes |
+| `SUMMARY-CLAIMS` | Summary claims are phase paragraphs | review |
 | `TIMELINE-ENUMS` | One timeline vocabulary | yes |
 | `MED-ROUTE` | Routes keep the source spelling | yes |
 | `FIG-LABELS` | No invented panel labels; question marks only inside quotes | yes |

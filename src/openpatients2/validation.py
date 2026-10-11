@@ -47,10 +47,12 @@ def iter_objects(value, path: str = ""):
 
 def validate(task: str, raw: str | dict, source: str, *, segments: list[dict] | None = None,
              recover_formatting: bool = False, recover_identical_duplicates: bool = False,
-             target_patient: bool = False) -> CheckResult:
+             target_patient: bool = False, strict_time: bool = False) -> CheckResult:
     """Contract + literal-source checks + the shared semantic rules (semantic_rules, rule IDs in messages).
 
     target_patient=True applies the per-patient packet rule (CTX-PER-PATIENT) to case_context.
+    strict_time=True (runtime extraction) makes the high-confidence NO-BORROWING/TIME-LITERAL shapes errors
+    (semantic_rules.item_violations); reference gates leave it False.
     """
     result = CheckResult()
     try:
@@ -119,7 +121,7 @@ def validate(task: str, raw: str | dict, source: str, *, segments: list[dict] | 
         if obj.get("numeric_value") is not None and "unit" in obj and obj["unit"] is None:
             result.warnings.append(f"{path}: numeric value has no documented unit")
     from .semantic_rules import ERROR, case_context_target_errors, section_violations
-    for violation in section_violations(task, result.data, source, segments=segments):
+    for violation in section_violations(task, result.data, source, segments=segments, strict_time=strict_time):
         (result.errors if violation.severity == ERROR else result.warnings).append(violation.text())
     if task == "case_context" and target_patient:
         result.errors.extend(case_context_target_errors(result.data))

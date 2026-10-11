@@ -242,6 +242,39 @@ def _sentences(text):
     return [s.strip() for s in out if s.strip()]
 
 
+DEMONSTRATIVE = re.compile(r'\b(these|this|those|such|both|the above|the same)\s+(?:\w+\s+)?\w+', re.I)
+INVESTIGATION_HEAD = re.compile(r'\b(work-?up|tests?|testing|studies|study|investigations?|examinations?|laborator\w*|labs|'
+                                r'results|data|imaging|scans?|panel|screen(?:ing)?|assessments?|measurements?)\b', re.I)
+SENTENCE_FINAL = re.compile(r'[.!?]["”’)\]]*\s*$')
+SCOPING_LEAD = r'\W*(?:(?:on|at|in|by|during|after|before|from|since|within|until|upon)\s+)?'
+
+
+def borrowed_sentence_time(item, segment_tables=None):
+    """NO-BORROWING (strict shape): borrowed_time_quote where every time-holding extra quote is a complete
+    sentence about something else that merely contains the time ("A 24-year-old G1P0 ... presented for her first
+    obstetric visit at 8 weeks gestation." added to a symptom quoted from another sentence). Excluded, because the
+    rule lets them govern what follows: a time that opens its sentence ("On admission, ..."), a heading ending in
+    ':', table/figure captions and bare fragments without sentence-final punctuation."""
+    if not borrowed_time_quote(item, segment_tables):
+        return False
+    text = item['time']['text']
+    holding = [e.get('quote', '') for e in item.get('evidence') or [] if isinstance(e, dict) and text in e.get('quote', '')]
+    label_text = ' '.join(str(item.get(k) or '') for k in LABEL_FIELDS)
+    def stems(value):
+        return {w[:4].casefold() for w in re.findall(r'[A-Za-z]{4,}', value) if w.casefold() not in STOPWORDS}
+    label_stems = stems(label_text)
+    def sentence_about_other(q):
+        rest = q.replace(text, ' ')
+        return (len(re.findall(r'\w+', q)) >= 6 and SENTENCE_FINAL.search(q) is not None
+                and len(_sentences(q)) == 1
+                and re.match(r'\s*(fig(?:ure)?s?\.?|table|video|supplementary)\b', q, re.I) is None
+                and re.match(SCOPING_LEAD + re.escape(text), q, re.I) is None
+                and not (stems(rest) & label_stems)              # shares a label word: may be the fact's sentence
+                and DEMONSTRATIVE.search(rest) is None            # 'These studies were performed on ...'
+                and INVESTIGATION_HEAD.search(rest) is None)      # 'workup ... before delivery' governs results
+    return bool(holding) and all(sentence_about_other(q) for q in holding)
+
+
 def time_in_other_sentence(item, segment_tables=None):
     """NO-BORROWING (span): the time phrase sits in a different sentence of a multi-sentence quote than every
     sentence carrying the fact's content words, and that time sentence is not a scoping/heading sentence
@@ -297,7 +330,11 @@ NEGATED_FINDING_WORD = re.compile(r'\b(afebrile|apyrexi\w*|asymptomatic|symptom[
 # TIME-LITERAL: "by <date/time>" is an upper bound (relation before).
 BY_TIME = re.compile(r'^\s*by\b', re.I)
 # "within <duration> of/after <event>" names its reference point: relation after that anchor, never before it.
-WITHIN_OF = re.compile(r'^\s*within\b.*\b(?:of|after|from)\s+\w', re.I)
+# "of <number>" is part of the duration ("within a time span of 1 week"), not a reference point.
+_NUMBER_WORD = r'(?:\d|an?\b|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|several|few)'
+WITHIN_OF = re.compile(r'^\s*within\b.*\b(?:of|after|from|following|since)\s+(?!' + _NUMBER_WORD + r')\w', re.I)
+# "within <duration>" with no named reference point is an upper bound: relation before, anchor null.
+WITHIN_BARE = re.compile(r'^\s*within\b', re.I)
 
 
 # OBS-COMPARATOR: upper-bound wording printed right before a value ('fever up to 38°C' -> '<=').
@@ -376,9 +413,16 @@ def _fold(text):
     return (text or '').casefold()
 
 
-def item_violations(task, collection, item, source_text=None, path='', *, segment_tables=None):
-    """Rule checks for ONE clinical item (runtime item or partial annotation `fields` + evidence)."""
+def item_violations(task, collection, item, source_text=None, path='', *, segment_tables=None, strict_time=False):
+    """Rule checks for ONE clinical item (runtime item or partial annotation `fields` + evidence).
+
+    strict_time=True (the runtime extraction checker) makes the high-confidence NO-BORROWING / TIME-LITERAL
+    shapes errors, so they trigger the repair round instead of passing with a warning: a time borrowed from a
+    complete extra sentence about something else (borrowed_sentence_time), "by <time>" not recorded as before,
+    "within <duration>" (no reference point) not recorded as before with anchor null, and "within ... of <event>"
+    recorded as before. Reference gates keep them warnings (reviewed references are not re-litigated)."""
     out = []
+    strict = ERROR if strict_time else WARNING
     get = item.get
     def add(rule, severity, message):
         out.append(Violation(rule, severity, path, message))
@@ -405,14 +449,27 @@ def item_violations(task, collection, item, source_text=None, path='', *, segmen
         add('NO-BORROWING', WARNING, f"time.text {time.get('text')!r} is in a different sentence of the quote than the "
             "fact's content; a multi-sentence span does not make another sentence's time this fact's time")
     if borrowed_time_quote(item, segment_tables):
-        add('NO-BORROWING', WARNING, f"time.text {time.get('text')!r} comes only from an extra quote that carries nothing "
-            "else of this fact; a time must come from the fact's own sentence or a governing table row/column/heading")
-    if isinstance(time, dict) and BY_TIME.match(time.get('text') or '') and time.get('relation', 'unknown') != 'before':
-        add('TIME-LITERAL', WARNING, f"time.text {time.get('text')!r} is an upper bound ('by ...'): relation should be "
+        sentence = borrowed_sentence_time(item, segment_tables)
+        add('NO-BORROWING', strict if sentence else WARNING,
+            f"time.text {time.get('text')!r} comes only from an extra quote that carries nothing else of this fact"
+            + (" (a sentence about something else)" if sentence else "") + "; a time must come from the fact's own "
+            "sentence or a governing table row/column/heading: drop that quote and set time.text null, relation unknown")
+    time_text = (time.get('text') or '') if isinstance(time, dict) else ''
+    if BY_TIME.match(time_text) and time.get('relation', 'unknown') != 'before':
+        add('TIME-LITERAL', strict, f"time.text {time_text!r} is an upper bound ('by ...'): relation should be "
             f"'before' (got {time.get('relation', 'unknown')!r})")
-    if isinstance(time, dict) and WITHIN_OF.match(time.get('text') or '') and time.get('relation') == 'before':
-        add('TIME-LITERAL', WARNING, f"time.text {time.get('text')!r} names its reference point ('within … of …'): "
-            "the fact is after that anchor (relation 'after'), not before it")
+    if WITHIN_OF.match(time_text):
+        if time.get('relation') == 'before':
+            add('TIME-LITERAL', strict, f"time.text {time_text!r} names its reference point ('within … of …'): "
+                "the fact is after that anchor (relation 'after'), not before it")
+    elif WITHIN_BARE.match(time_text) and (time.get('relation', 'unknown') != 'before' or time.get('anchor')):
+        # Strict shape: the reference point is supplied by an anchor that the item's own evidence does not state
+        # ("completed within an hour" recorded as after "initial visit"). Other mismatches stay warnings.
+        anchored_elsewhere = bool(time.get('anchor')) and _fold(time['anchor']) not in _fold(quotes)
+        add('TIME-LITERAL', strict if anchored_elsewhere else WARNING,
+            f"time.text {time_text!r} names no reference point ('within <duration>'): it is an upper bound, relation "
+            f"'before' with anchor null (got relation {time.get('relation', 'unknown')!r}, anchor {time.get('anchor')!r}"
+            + (", which this item's evidence does not state" if anchored_elsewhere else '') + ")")
     if (isinstance(time, dict) and time and time.get('relation', 'unknown') != 'unknown'
             and not time.get('text') and not time.get('anchor') and not time.get('date_iso')):
         add('TIME-LITERAL', ERROR, f"time.relation={time.get('relation')!r} with no text, anchor or date dangles; "
@@ -504,14 +561,15 @@ def segment_tables_of(segments):
     return out
 
 
-def section_violations(task, section, source_text=None, *, segments=None):
+def section_violations(task, section, source_text=None, *, segments=None, strict_time=False):
     """Rule checks for one runtime task section (`segments`: packet segments, for table structure)."""
     out = []
     tables = segment_tables_of(segments)
     for collection in COLLECTIONS.get(task, ('items',)):
         for i, item in enumerate(section.get(collection) or []):
             if isinstance(item, dict):
-                out += item_violations(task, collection, item, source_text, f'/{collection}/{i}', segment_tables=tables)
+                out += item_violations(task, collection, item, source_text, f'/{collection}/{i}', segment_tables=tables,
+                                       strict_time=strict_time)
     return out
 
 
@@ -537,6 +595,20 @@ def record_violations(sections, *, target_patient=True):
         out.append(Violation('CTX-VITAL-STATUS', ERROR, '/case_context/subject_state',
                              'the patient died during the described course (outcomes death, assertion=present); '
                              'use subject_state=deceased_during_course'))
+    return out
+
+
+def roster_label_errors(patients, title):
+    """ROSTER-LABEL: a label is written from the case text, not the article title copied or trimmed."""
+    def norm(value):
+        return re.sub(r'\W+', ' ', value or '').strip().casefold()
+    t = norm(title)
+    out = []
+    for p in patients:
+        label = norm(p.get('label'))
+        if t and label and (label == t or (len(label) >= 30 and label in t)):
+            out.append(f"[ROSTER-LABEL] {p.get('patient_id')}: label {p.get('label')!r} is the article title; describe the "
+                       "patient from the case text (age, sex, presentation or diagnosis as stated), with no names")
     return out
 
 
@@ -746,12 +818,18 @@ VALIDATORS = {
                   'reference_gates figure/ehr GLUED-TEXT warnings) (warning: free-text token '
                   'that is not a known word but splits into known words, e.g. "aftersevenmonths"; openpatients2.glued_text)',
     'TIME-LITERAL': 'item_violations (error: anchor not literal in source; relation set with no text/anchor/date; '
-                    'date_iso not a full date written in time.text [date_iso_errors]; warning: "by ..." not before)',
+                    'date_iso not a full date written in time.text [date_iso_errors]; warning, error with '
+                    'strict_time=True in the runtime checker: "by ..." not before, "within ... of <event>" before, '
+                    '"within <duration>" after an anchor its own evidence does not state; warning: other bare '
+                    '"within <duration>" not before with anchor null)',
     'ASSERT-ABSENT': 'item_violations (error: absent condition with confirmed/provisional/differential)',
     'OBS-COMPARATOR': 'item_violations (error: numeric value with comparator unknown; warning: \'=\' for a value printed '
                       'only after upper-bound wording such as "up to")',
     'NO-BORROWING': 'item_violations (warning: time.text only in a time-only/unrelated extra evidence quote, or in a '
-                    'different, non-scoping sentence of a multi-sentence quote than the fact content)',
+                    'different, non-scoping sentence of a multi-sentence quote than the fact content; error with '
+                    'strict_time=True in the runtime checker when the extra quote is a complete sentence about '
+                    'something else [borrowed_sentence_time])',
+    'ROSTER-LABEL': 'roster_label_errors via check_article_task(roster) (error: label is the article title)',
     'OBS-FLAG': 'item_violations (warning: normal text with non-normal flag)',
     'OBS-NOT-PERFORMED': 'item_violations (error: not_performed with assertion=absent)',
     'SOC-NEVER': 'item_violations (error: explicit never-wording with assertion=absent; warning: never without never-wording)',

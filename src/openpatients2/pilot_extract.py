@@ -48,7 +48,7 @@ from .pilot_review import (OrderingReview, ClaimAudit, ordering_schema, ordering
 from .schemas import TASK_MODELS
 from .semantic_rules import panel_label_violations
 from .unified_record_flags import media_flags
-from .targeted_repair import ItemRepair, erased, repair_snapshot, changed_accepted_atoms, protected_value_changes, canonical_clinical_task
+from .targeted_repair import ItemRepair, time_repair_allowed, erased, repair_snapshot, changed_accepted_atoms, protected_value_changes, canonical_clinical_task
 from .prompt_payloads import compact_facts, compact_graph, timeline_retention
 from .clinical_normalization import normalize_clinical
 from .validation import iter_objects, validate
@@ -458,10 +458,10 @@ class PilotRunner:
         key = json_digest({'identity': identity, 'task': task, 'messages': safe_messages(messages)})
         attempts = []; data = None; errors = []; plan = None; partial = None
         baseline = None; repair_rounds = 0; transports = 0; mode = 'initial'
-        latest_candidate = None
+        latest_candidate = None; repair_errors = []
         if repair_from is not None:
             baseline = copy.deepcopy(repair_from.get('raw_candidate'))
-            errors = list(repair_from.get('errors') or ['saved_failed_attempt'])
+            errors = list(repair_from.get('errors') or ['saved_failed_attempt']); repair_errors = list(errors)
             if self.config.refinement_policy == 'source_aware' and clinical_task and baseline is not None:
                 baseline, _ = normalize_clinical(clinical_task, baseline, segments)
             latest_candidate = copy.deepcopy(baseline)
@@ -585,6 +585,8 @@ class PilotRunner:
                                     losses += changed_accepted_atoms(clinical_task or task, protected, candidate)
                                     if clinical_task:
                                         losses += protected_value_changes(protected,candidate)
+                                # A time the gate flagged (NO-BORROWING/TIME-LITERAL) may be corrected or cleared.
+                                losses = [loss for loss in losses if not time_repair_allowed(loss, repair_errors)]
                                 entry['repair_protection'] = {'policy': self.config.refinement_policy,
                                     'protected_snapshot': protected, 'erased_paths': losses}
                                 if losses:
@@ -612,13 +614,22 @@ class PilotRunner:
                         break
                     if (self.arm == 'targeted' and repair_rounds < self.config.max_repair_rounds
                             and (plan is None or plan.repair_batch())):
-                        repair_rounds += 1; mode = 'repair'
+                        repair_rounds += 1; mode = 'repair'; repair_errors = list(errors)
                         continue
                     break
                 except (httpx.HTTPError, ValueError, TypeError, KeyError) as exc:
                     errors = [str(exc)[:4000]]
                     entry['errors'] = errors; attempts.append(entry); self.save_attempt(entry)
                     break
+        time_quarantined = []
+        if plan is not None and plan.pending:
+            # Repair budget spent: an item failing only the strict time gate keeps the fact, not the time.
+            time_quarantined = plan.quarantine_pending_times()
+            if time_quarantined and not plan.pending:
+                try:
+                    data = checker(plan.output()); errors = []
+                except (ValueError, TypeError, KeyError):
+                    data = None
         if plan is not None and plan.pending:
             partial = plan.output()
         quarantine = []
@@ -640,6 +651,8 @@ class PilotRunner:
             'semantic_review': 'unreviewed', 'clinical_accuracy_verified': False}
         result['refinement_policy'] = self.config.refinement_policy
         result['quarantine'] = quarantine
+        if time_quarantined:
+            result['time_quarantined_items'] = [t for t in plan.trace if t.get('decision') == 'accepted_time_quarantined']
         if task in {'timeline_v2','timeline_completion'} and result['data'] is not None and self.config.refinement_policy == 'source_aware':
             result['data'], result['export_event_id_map'] = canonical_timeline_ids(result['data'])
         write_json(self.output / 'tasks' / (key + '.json'), result)
@@ -649,7 +662,8 @@ class PilotRunner:
     def clinical_checker(self, task, packet, segments):
         def checker(value):
             # target_patient=True: the shared CTX-PER-PATIENT packet rule (semantic_rules).
-            checked = validate(task, value, packet['text'], segments=segments, target_patient=True)
+            # strict_time: borrowed-sentence times and misread 'by'/'within' bounds fail (repair round), not warn.
+            checked = validate(task, value, packet['text'], segments=segments, target_patient=True, strict_time=True)
             if not checked.valid:
                 raise ValueError('; '.join(checked.errors))
             return checked.data

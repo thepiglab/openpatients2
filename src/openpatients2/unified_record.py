@@ -198,11 +198,14 @@ def build_figures(source, visual_target, identities, *, labels=None, privacy=Non
         fid = figure.get('figure_key') or figure.get('figure_id')
         row = rows.get(fid)
         base = {'figure_id': fid, 'label': figure.get('label'), 'caption': figure.get('caption'),
-                'review_status': visual_status or ('reviewed' if row else 'not_reviewed'),
+                'review_status': ('not_reviewed' if row and row.get('status') == 'not_reviewed'
+                                  else visual_status or ('reviewed' if row else 'not_reviewed')),
                 'figure_ehr_label': deepcopy(figure_labels.get(fid))}
         if not row or row.get('status') != 'inspected':
-            out.append({**base, 'status': 'unavailable' if row else 'not_reviewed',
-                        'media_available': False if row else None, 'content_reviewed': False,
+            # Only a declared-unavailable figure is unavailable media; a figure that was not run/reviewed is not.
+            unavailable = bool(row) and row.get('status') == 'unavailable'
+            out.append({**base, 'status': 'unavailable' if unavailable else 'not_reviewed',
+                        'media_available': False if unavailable else None, 'content_reviewed': False,
                         'assets': [{'url': a['url'], 'sha256': a['sha256']} for a in (row or {}).get('assets', [])],
                         'general_description': None, 'detailed_description': None, 'panels': [],
                         'limitations': list((row or {}).get('limitations') or [])})

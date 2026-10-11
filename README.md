@@ -57,6 +57,34 @@ uv run python -m openpatients2.unified_scoring --reference data/dense_clinical_c
 review stages); omitted, the defaults apply. `RUN` must be new or empty; results are never overwritten. Details in
 the [pipeline overview](docs/PIPELINE_OVERVIEW.md#end-to-end-local-run).
 
+Before a run, note:
+
+- **The server must be vLLM (or expose vLLM's `/tokenize`).** Every call is budgeted from an exact prompt token
+  count taken from `POST /tokenize` on the endpoint's host; a server without it (plain OpenAI-compatible APIs,
+  hosted routers) fails the call instead of truncating the source. Endpoints must be loopback addresses.
+- **The CLI path is text-only for figures.** Without `--image-manifest` (a prepared `vision-assets` manifest), no
+  pixels are inspected: figures stay `not_reviewed` in the unified rows (they are *not* listed in
+  `unavailable_media`, which is only for figures whose source declares no obtainable asset), and the figure-EHR and
+  privacy stages have nothing to label. Captions are still read as text evidence.
+- **Score against the articles you actually ran.** `unified_scoring` counts every reference article missing from
+  the prediction as a full miss, so scoring a 3-article run against the whole release reports ~1% recall. Build a
+  reference subset first:
+
+  ```bash
+  uv run python -c "import json,sys; ids={json.loads(l)['article_id'] for l in open('OUT/data/unified.jsonl')}; \
+  rows=[l for f in ('train','validation','test') for l in open(f'data/dense_clinical_cases_v1/data/{f}.jsonl') \
+  if json.loads(l)['article_id'] in ids]; open('reference-subset.jsonl','w').writelines(rows)"
+  uv run python -m openpatients2.unified_scoring --reference reference-subset.jsonl \
+      --predicted OUT/data/unified.jsonl --out score.json
+  ```
+
+  Check `coverage.missing_articles` in the score: it should be empty.
+
+The runtime checker is stricter than the reference gates on time attribution: a time borrowed from a complete
+sentence about something else (NO-BORROWING) and misread `by …` / `within …` bounds (TIME-LITERAL) fail the
+section and trigger the repair round; an item still failing only on its time keeps the fact with the time cleared
+(`time_quarantined_items` in the task result).
+
 Rebuild the reference release from reviewed annotations:
 
 ```bash

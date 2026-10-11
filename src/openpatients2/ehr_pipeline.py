@@ -64,9 +64,17 @@ def visual_target_from_pilot(article, visual_rows):
             figures.append({'figure_id': fid, 'status': 'inspected',
                             'assets': [{'url': provenance.get('url'), 'sha256': provenance.get('sha256')}] if provenance else [],
                             'analysis': {'visual': visual, 'attribution': attribution}, 'limitations': []})
-        else:
+        elif not figure.get('image_urls'):
+            # MEDIA-UNAVAILABLE: the source declares no obtainable image asset for this figure.
             figures.append({'figure_id': fid, 'status': 'unavailable', 'assets': [], 'analysis': None,
-                            'limitations': ['No valid pipeline visual analysis for this figure']})
+                            'limitations': ['Source declares no obtainable image asset; figure not viewed']})
+        else:
+            # Not run (no image manifest / no pixel row) or failed is NOT unavailable media: the asset exists,
+            # so the figure stays not_reviewed and is not listed in unavailable_media.
+            reason = (f"Pipeline visual analysis did not produce a valid result (status {row.get('status')!r})" if row
+                      else 'Pipeline visual analysis was not run for this figure (text-only extraction)')
+            figures.append({'figure_id': fid, 'status': 'not_reviewed', 'assets': [], 'analysis': None,
+                            'limitations': [reason]})
     return {'format': 'dense-figure-reference/1', 'article_id': article['article_id'],
             'source_text_sha256': article['text_sha256'], 'figures': figures}
 

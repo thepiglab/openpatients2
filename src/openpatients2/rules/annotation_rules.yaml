@@ -93,6 +93,40 @@ rules:
     prompts: [system]
     docs: [protocol]
     validator: true
+  - id: TEMPORALITY
+    title: temporality is unknown unless the evidence labels it
+    text: >-
+      temporality is not the item's time (that is `time`) and not inferred from the narrative. Default
+      temporality=unknown, including for ordinary findings, test results, treatments and outcomes of the described
+      course, even when the case is told in the past tense. Use historical only when the item's own evidence places
+      it in the patient's history before the presented episode ("history of", "previously diagnosed", "prior",
+      "known", "X years ago", "in childhood"); future only for a planned, scheduled or recommended item that has not
+      yet happened; current only when the evidence says it is ongoing at the time described ("currently", "ongoing",
+      "still", "at present"). Never set temporality from paragraph order, the presentation date or the publication
+      date.
+    prompts: [system]
+    docs: [protocol]
+  - id: ROSTER-RELATIVES
+    title: Newborn, fetus and relatives stay in the index patient's record
+    text: >-
+      In a case about one index patient, a fetus, newborn, mother or other relative mentioned in that case (the
+      delivery, the baby's sex, weight, Apgar score or NICU stay, a family history) is NOT a separate roster patient:
+      their facts stay in the index patient's record with subject fetus, newborn, mother or family_member. A
+      relative is a separate patient only when the article presents them as an additional case with their own
+      individually described clinical course (e.g. "Case 2", a twin with their own workup and treatment, a donor
+      with their own evaluation).
+    prompts: [roster, system]
+    docs: [protocol]
+  - id: ROSTER-LABEL
+    title: Roster labels describe the patient from the case text; no names
+    text: >-
+      A patient label is a short description written from the case text's own identity evidence (age, sex,
+      presentation or diagnosis as the case states them, e.g. "Case 2: 17-day-old infant with cystic biliary
+      atresia"), not the article title copied or trimmed. Labels never contain personal names, initials, record
+      numbers or other identifiers, even when the source prints them.
+    prompts: [roster]
+    docs: [protocol]
+    validator: true
   - id: NO-COHORT-COPY
     title: Cohort statements are not copied to individuals
     text: >-
@@ -136,6 +170,18 @@ rules:
     prompts: [observations]
     docs: [protocol]
     validator: true
+  - id: OBS-TABLE-ROWS
+    title: Every patient table cell is an observation
+    text: >-
+      Each result a table reports for this patient is its own observation: one item per analyte per result cell
+      (per time column, visit or specimen), with the value, unit and comparator from that cell, the time from its
+      column/row heading or caption, the reference interval in reference_range_text, and the row as evidence (plus
+      the caption/heading quote when it supplies the time). Normal and unflagged values are items too (flag=normal
+      only when the table or text calls them normal). Never summarize a table as one item, keep only abnormal rows,
+      or skip a row because the text repeats it; a value stated in both table and text is one item citing both.
+      Rows about other patients or literature cases are not this patient's.
+    prompts: [observations]
+    docs: [protocol]
   - id: OBS-NOT-PERFORMED
     title: Tests not performed
     text: >-
@@ -175,6 +221,21 @@ rules:
     prompts: [demographics]
     docs: [protocol]
     validator: false
+  - id: ONE-STATEMENT
+    title: One statement, one item, in the section that owns it
+    text: >-
+      Record each source statement once per section and in the section that owns it. Never repeat an identical
+      item; serial results are separate items only when value, time or specimen differ. Two sections hold the same
+      statement only where the rules intend both views: a diagnostic procedure and its findings
+      (procedures_devices + observations, SECTION-IMAGING), a cancer treatment in oncology.treatments and in
+      medications or procedures_devices, a malignant diagnosis in conditions and oncology.tumors, a delivery in
+      reproductive_perinatal and a live birth in outcomes. Otherwise choose one: a diagnosis or infection is a
+      condition (an observation only when a test and its result are stated); a drug taken as treatment is
+      medications, not social_exposures (social_exposures keeps tobacco, alcohol, recreational drugs, occupational
+      and environmental exposures and social circumstances); induction of labor or a cesarean is one
+      procedures_devices item, with the delivery itself in reproductive_perinatal.
+    prompts: [system]
+    docs: [protocol]
   - id: SECTION-SIGNS
     title: Signs and clinical scales belong in symptoms_function
     text: >-
@@ -256,6 +317,16 @@ rules:
     prompts: [roster]
     docs: [protocol]
     validator: true
+  - id: SUMMARY-CLAIMS
+    title: Summary claims are phase paragraphs
+    text: >-
+      A patient summary is 1-6 claims (usually 2-5), each a 25-85-word paragraph covering one phase of the course
+      in chronological order: presentation and relevant history; workup and diagnosis; treatment and course
+      (including complications); outcome and follow-up. Merge a thin phase into its neighbour; never split one
+      phase into a claim per sentence or per finding. Each claim cites quotes for every statement it makes and adds
+      no fact the record does not state.
+    prompts: [summary]
+    docs: [protocol]
   - id: TIMELINE-ENUMS
     title: One timeline vocabulary
     text: >-

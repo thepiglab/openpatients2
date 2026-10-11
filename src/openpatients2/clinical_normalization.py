@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import json
 import re
 
 from .semantic_rules import date_iso_errors
@@ -81,4 +82,33 @@ def normalize_clinical(task, candidate, segments):
             for key, child in list(obj.items()):
                 if key != 'evidence': visit(child, path + '/' + key)
     visit(result)
+    # ONE-STATEMENT: an item repeated verbatim within a section (same fields; evidence order ignored) is one fact.
+    for collection in ('items', 'tumors', 'biomarkers', 'treatments'):
+        rows = result.get(collection) if isinstance(result, dict) else None
+        if not isinstance(rows, list):
+            continue
+        kept, seen = [], {}
+        for i, item in enumerate(rows):
+            key = _item_key(item)
+            if key is not None and key in seen:
+                audit.append({'pointer': f'/{collection}/{i}', 'before': deepcopy(item), 'after': None,
+                    'reason': f'exact_duplicate_of_/{collection}/{seen[key]}', 'status': 'removed_duplicate',
+                    'clinical_entailment_verified': False})
+                continue
+            if key is not None:
+                seen[key] = i
+            kept.append(item)
+        result[collection] = kept
     return result, audit
+
+
+def _item_key(item):
+    if not isinstance(item, dict):
+        return None
+    evidence = item.get('evidence')
+    rest = {k: v for k, v in item.items() if k != 'evidence'}
+    try:
+        quotes = sorted(json.dumps(e, sort_keys=True, ensure_ascii=False) for e in evidence or [])
+        return json.dumps(rest, sort_keys=True, ensure_ascii=False) + '\x00' + '\x00'.join(quotes)
+    except TypeError:
+        return None
