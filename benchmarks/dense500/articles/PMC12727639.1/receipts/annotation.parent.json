@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12727639.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1e88781be7c9a75c02d91d93d441170dcfc3cbe6c45413903030fc33d8cd75a6",
+  "annotation_sha256": "192191ac53b581c2c70f05d99638275539c52414a560edc5b93bb0aac714d085",
+  "reviewed_at": "2026-10-11T21:30:24.592108+00:00",
+  "source_segments_read": 23,
+  "facts_reviewed": 162,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f024 (reduced placental perfusion) and p1-f025 (severe fetal hypoxia): authors' causal explanation, not a documented finding; set certainty ambiguous, scoring review_only, verification_status unknown; removed from summary fact links.",
+    "p1-f026 (maternal circulatory failure): verification_status confirmed -> unknown with note that it comes from the causal discussion.",
+    "p1-f052, p1-f087, p1-f118: restored literal anchor 'ICU' for 'After 10 h in the ICU'.",
+    "p1-f087: flag low because the source calls 88/54 mmHg hypotensive.",
+    "p1-f073: replaced invented urine ketone text_value with 'significant abnormality' from the urinalysis sentence.",
+    "p1-f135 note and intubation ambiguity: intubation kept as completed (literal '1.5 h post-intubation'); ambiguity now records that only Figure 1 pixel callouts place intubation in ICU D2 03:30-05:30 and tracheal tube removal at ICU D7, not used as fact times.",
+    "p1-e34: removed care-plan strategy facts p1-f149/f150/f151 that its description does not cover; description narrowed to the complications it links.",
+    "p1-e23 kind follow_up -> outcome (in-ICU day-3 status, not post-discharge follow-up).",
+    "Relations: removed p1-e07 -> p1-e08 (semicolon order only, no literal order); added p1-e08 -> p1-e09 (administered before transferring to the ICU) and p1-e14 -> p1-e23 (ICU D2 vs third day of ICU treatment).",
+    "Figure privacy sidecar fig3: sensitive_anatomy true -> false (schematic cartoon uterus in a mechanism diagram, not real genitalia/perineum/breast)."
+  ],
+  "unresolved": [
+    "Figure pixels are inspected in the separate visual submission; the caption-layer visual status stays not_inspected.",
+    "Figure 1 is a pixel timeline whose callouts add clock-time and ICU-day labels that the text sentences do not state; those labels are not used as fact times because the caption only says The timeline of treatment.",
+    "Discussion passages on pathophysiology, guidelines and published evidence are general statements and are not recorded as patient facts.",
+    "Figures 2 and 3 are general mechanism diagrams, not patient data.",
+    "Which organism came from which culture is not stated; the day of the delivery, of the fetal demise ultrasound and of the heparin doses is not stated in the text."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 23,
+    "facts_reviewed": 162,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (42-year-old woman, 17 weeks 5 days pregnant); roster 1/complete; all 162 facts checked against b00002-b00013 quotes.",
+      "Intubation recorded as completed on literal 1.5 h post-intubation wording, with no time; heparin 100 and 300 units/hour left untimed; organisms not mapped to blood vs nephrostomy urine cultures.",
+      "Suspected urinary sepsis/shock (3 h post-admission) and suspected DIC kept possible/unconfirmed; uroseptic, refractory septic and cardiogenic shock are stated outright later and kept confirmed as separate facts.",
+      "Abstract discharge after nine days in intensive care and case-text discharge to the ward on day 9 kept as separate facts with an ambiguity (abstract does not say ICU vs hospital), not linked as alternate representations.",
+      "Figure 1 is the patient treatment timeline (clock times and ICU days in pixels only); kept diagram_or_schematic/not includable per the runtime category definition (timelines are diagrams); its printed values duplicate text facts and pixel-only times are not used as fact times. Figures 2-3 are general mechanism diagrams."
+    ],
+    "residual_risks": [
+      "Figure 1 pixel callouts carry ICU-day/clock times (e.g. delivery ICU D2 16:40, DIC ICU D2 21:30) that the text lacks; the reference leaves those times null.",
+      "Whether the abstract discharge is the same ICU-to-ward discharge is unresolved.",
+      "Small Fig 1 callout text (Transferred to general ward) is low resolution."
+    ]
+  },
+  "physician_adjudicated": false
+}
