@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12827857.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f9abdd571ba0a24eb55de077fcb52326b6d8f82445d4999e02e827e11eb48362",
+  "annotation_sha256": "7c6dba0bea6364e06ba2f277dacc260602512a693b56d6c025baa86377570da4",
+  "reviewed_at": "2026-10-11T18:54:21.973220+00:00",
+  "source_segments_read": 17,
+  "facts_reviewed": 43,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f022 first rigid bronchoscopy reduced to the undisputed performed procedure (b00005 'attempted' + b00006 'performed without removing the tracheostomy tube'); the merged contradictory finding removed.",
+    "Added p1-f041 (b00005: FB not visualised upon advancing into the trachea) and p1-f042 (b00006: FB above the tube level, dislodged during attempted extraction) as certainty=source_conflict, scoring=review_only; ambiguity and event p1-e10 updated.",
+    "Added p1-f043 observation: X-ray after tracheostomy still showing the subglottic FB (Figure 1 caption), with event p1-e15.",
+    "p1-f013 removed severity='sudden onset' (onset, not severity).",
+    "p1-f040 discharge quote extended so the 'decannulation' anchor is literal.",
+    "Added supporting evidence: croup 'initially managed as croup' (b00001), tracheostomy indication (b00001), unstable condition (b00005), caption for the pre-tracheostomy X-ray.",
+    "Events: p1-e12 time_kind duration->relative ('8 to 10 hours later'); p1-e11 time_precision exact->unknown ('post-operative'); p1-e13 description no longer implies the antibiotics and steroids were given, it says they were prescribed.",
+    "Added six literal temporal relations (e06<e08, e08<e15, e07<e09, e09<e10, e12<e13, e12<e14).",
+    "Summary reworded: two accounts of the first rigid attempt, post-tracheostomy X-ray, antibiotics/steroids prescribed (not given).",
+    "CT-timing ambiguity reworded: the discussion sentence may refer to the second rigid bronchoscopy; case text keeps the CT post-operative."
+  ],
+  "unresolved": [
+    "Discussion sentences on foreign body aspiration in general are literature background and are not patient facts.",
+    "Exact dates and the interval between presentation and tracheostomy are not stated.",
+    "Caption-layer visual status not_inspected; the three JPEGs are inspected in the separate visual target."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 17,
+    "facts_reviewed": 43,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (3-year-old girl); discussion sentences b00009-b00012 restate the case, no cited case was attributed to her.",
+      "The first rigid bronchoscopy is described incompatibly in b00005 and b00006; quarantined rather than merged.",
+      "Figure 1 caption labels a/c antero-posterior and b/d lateral, but pixels show a/c lateral and b/d frontal; recorded in the visual target, caption quoted unchanged.",
+      "IV antibiotics and steroids are 'prescribed' (action ordered); steroid route left null rather than borrowed.",
+      "Tracheostomy as performed is supported by patient-specific wording ('In our case, we performed tracheostomy', abstract, referral with tracheostomy tube)."
+    ],
+    "residual_risks": [
+      "The discussion sentence on CT before the rigid bronchoscope is garbled; CT placement kept as the case text's 'post-operative'.",
+      "Location of the pediatric ward admission relative to the local health center and United Mission Hospital is not stated; no order asserted between e02 and e03.",
+      "Whether 'Intravenous' also governs steroids is grammatically ambiguous; kept null."
+    ]
+  },
+  "physician_adjudicated": false
+}

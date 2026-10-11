@@ -543,7 +543,7 @@
       "subject": "index_patient",
       "assertion": "present",
       "name": "Meropenem",
-      "action": "current",
+      "action": "administered",
       "regimen": "antibiotic therapy"
      },
      "evidence": [
@@ -555,7 +555,7 @@
      "clinical_statement": "Antibiotic therapy with meropenem",
      "certainty": "supported",
      "scoring": "include",
-     "notes": ""
+     "notes": "Named in the drainage decision sentence; the later sentence says antibiotic administration was discontinued (drug not named there)."
     },
     {
      "fact_id": "p1-f022",
@@ -972,10 +972,9 @@
      "collection": "items",
      "fields": {
       "subject": "index_patient",
-      "assertion": "present",
+      "assertion": "absent",
       "event": "complication",
-      "text_value": "Good course without any complications after stent deployment",
-      "temporality": "historical"
+      "text_value": "No complications after stent deployment"
      },
      "evidence": [
       {
@@ -986,7 +985,7 @@
      "clinical_statement": "No complications after stent deployment",
      "certainty": "supported",
      "scoring": "include",
-     "notes": "Abstract statement about both patients."
+     "notes": "Abstract statement made explicitly for both patients; recorded as absent complication."
     },
     {
      "fact_id": "p1-f039",
@@ -1057,6 +1056,30 @@
      "certainty": "supported",
      "scoring": "include",
      "notes": "Abstract statement about both patients; appendiceal wall CT finding recorded separately."
+    },
+    {
+     "fact_id": "p1-f042",
+     "task": "conditions",
+     "collection": "items",
+     "fields": {
+      "subject": "index_patient",
+      "assertion": "present",
+      "name": "Severe inflammation in the deep pelvis",
+      "verification_status": "unknown",
+      "clinical_status": "unknown",
+      "role": "unknown",
+      "body_site": "deep pelvis"
+     },
+     "clinical_statement": "Severe inflammation in the deep pelvis made emergent surgery high risk",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": "Stated as the reason emergent surgery was considered high risk.",
+     "evidence": [
+      {
+       "segment_id": "b00007",
+       "quote": "Emergent surgery was considered high risk due to severe inflammation in the deep pelvis"
+      }
+     ]
     }
    ],
    "events": [
@@ -1121,7 +1144,7 @@
     },
     {
      "event_id": "p1-e04",
-     "description": "Blood tests and abdominal CT at the authors hospital",
+     "description": "Blood tests and abdominal CT",
      "occurrence": "occurred",
      "fact_ids": [
       "p1-f013",
@@ -1132,6 +1155,10 @@
      ],
      "time_text": null,
      "evidence": [
+      {
+       "segment_id": "b00006",
+       "quote": "The result of the blood test demonstrated an increased inflammatory reaction"
+      },
       {
        "segment_id": "b00006",
        "quote": "Abdominal CT scan revealed thickening of the appendix wall and a 40 mm × 30 mm low-density area, adjacent to the rectum in the vesicorectal fossa."
@@ -1145,7 +1172,8 @@
      "occurrence": "planned",
      "fact_ids": [
       "p1-f019",
-      "p1-f020"
+      "p1-f020",
+      "p1-f042"
      ],
      "time_text": "on the second day of hospitalization",
      "evidence": [
@@ -1326,12 +1354,11 @@
     },
     {
      "event_id": "p1-e15",
-     "description": "Good course without complications after stent deployment",
+     "description": "No complications after stent deployment",
      "occurrence": "occurred",
      "fact_ids": [
       "p1-f038",
-      "p1-f040",
-      "p1-f041"
+      "p1-f040"
      ],
      "time_text": null,
      "evidence": [
@@ -1420,6 +1447,28 @@
        "quote": "hence was removed endoscopically. Thereafter, no suggestive recurrence of the abscess was observed"
       }
      ]
+    },
+    {
+     "from_event_id": "p1-e07",
+     "to_event_id": "p1-e12",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00009",
+       "quote": "The internal fistula stent was scheduled to be removed 1 month after the procedure. However, on the 19th day, part of the stent had prolapsed from the anal verge"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e07",
+     "to_event_id": "p1-e15",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00002",
+       "quote": "Following successful stent deployment, both patients experienced good courses without any complications."
+      }
+     ]
     }
    ],
    "summary": [
@@ -1447,7 +1496,7 @@
      ]
     },
     {
-     "text": "Emergent surgery was considered high risk, so pelvic abscess drainage was planned for the second hospital day together with meropenem. EUS showed an abscess adjacent to the rectal wall without visible septa; it was punctured, dilated and a 7-Fr, 4-cm double pigtail catheter was deployed for internal drainage without complications.",
+     "text": "Emergent surgery was considered high risk because of severe inflammation in the deep pelvis, so pelvic abscess drainage was planned for the second hospital day together with meropenem. EUS showed an abscess adjacent to the rectal wall without visible septa; it was punctured, dilated and a 7-Fr, 4-cm double pigtail catheter was deployed for internal drainage without complications.",
      "fact_ids": [
       "p1-f019",
       "p1-f020",
@@ -1458,7 +1507,8 @@
       "p1-f025",
       "p1-f026",
       "p1-f027",
-      "p1-f028"
+      "p1-f028",
+      "p1-f042"
      ]
     },
     {
@@ -1552,6 +1602,34 @@
       }
      ],
      "must_not_infer": "Do not assume the drainage took place on hospital day 2."
+    },
+    {
+     "issue": "The 19th day of the stent prolapse is not anchored in the source (post-procedure or hospital day is not stated); it is ordered after the drainage only because the deployed stent prolapsed.",
+     "fact_ids": [
+      "p1-f033",
+      "p1-f034"
+     ],
+     "evidence": [
+      {
+       "segment_id": "b00009",
+       "quote": "However, on the 19th day, part of the stent had prolapsed from the anal verge"
+      }
+     ],
+     "must_not_infer": "Do not convert the 19th day to a post-procedure day count."
+    },
+    {
+     "issue": "Meropenem is named in the sentence that records the treatment decision; whether it was started before or with the drainage is not stated.",
+     "fact_ids": [
+      "p1-f021",
+      "p1-f030"
+     ],
+     "evidence": [
+      {
+       "segment_id": "b00007",
+       "quote": "in addition to antibiotic therapy with meropenem"
+      }
+     ],
+     "must_not_infer": "Do not assign a start time to meropenem."
     }
    ]
   },
@@ -2532,10 +2610,9 @@
      "collection": "items",
      "fields": {
       "subject": "index_patient",
-      "assertion": "present",
+      "assertion": "absent",
       "event": "complication",
-      "text_value": "Good course without any complications after stent deployment",
-      "temporality": "historical"
+      "text_value": "No complications after stent deployment"
      },
      "evidence": [
       {
@@ -2546,7 +2623,7 @@
      "clinical_statement": "No complications after stent deployment",
      "certainty": "supported",
      "scoring": "include",
-     "notes": "Abstract statement about both patients."
+     "notes": "Abstract statement made explicitly for both patients; recorded as absent complication."
     },
     {
      "fact_id": "p2-f042",
@@ -2617,6 +2694,28 @@
      "certainty": "supported",
      "scoring": "include",
      "notes": "Abstract statement about both patients; appendiceal wall CT finding recorded separately."
+    },
+    {
+     "fact_id": "p2-f045",
+     "task": "outcomes",
+     "collection": "items",
+     "fields": {
+      "subject": "index_patient",
+      "assertion": "present",
+      "event": "other",
+      "text_value": "Favorable postoperative course",
+      "related_condition": "appendicitis"
+     },
+     "clinical_statement": "Favorable postoperative course after laparoscopic appendectomy",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": "Abstract statement made explicitly for both patients.",
+     "evidence": [
+      {
+       "segment_id": "b00002",
+       "quote": "both patients underwent laparoscopic appendectomy, which resulted in favorable postoperative courses"
+      }
+     ]
     }
    ],
    "events": [
@@ -2783,41 +2882,71 @@
     },
     {
      "event_id": "p2-e09",
-     "description": "Abdominal CT showing shrinkage of the abscess; discharge",
+     "description": "Abdominal CT showing shrinkage of the pelvic abscess",
      "occurrence": "occurred",
      "fact_ids": [
-      "p2-f034",
-      "p2-f035"
+      "p2-f034"
      ],
      "time_text": "on the 14th day",
      "evidence": [
       {
        "segment_id": "b00013",
-       "quote": "An abdominal CT scan on the 14th day confirmed shrinkage of the pelvic abscess, and the patient was discharged."
+       "quote": "An abdominal CT scan on the 14th day confirmed shrinkage of the pelvic abscess"
       }
      ],
-     "kind": "follow_up",
+     "kind": "test",
      "time_kind": "relative",
      "time_precision": "exact"
     },
     {
-     "event_id": "p2-e10",
-     "description": "Partial stent prolapse with endoscopic stent removal",
+     "event_id": "p2-e14",
+     "description": "Discharge",
      "occurrence": "occurred",
      "fact_ids": [
-      "p2-f036",
-      "p2-f037"
+      "p2-f035"
+     ],
+     "time_text": null,
+     "evidence": [
+      {
+       "segment_id": "b00013",
+       "quote": "and the patient was discharged"
+      }
+     ],
+     "kind": "outcome"
+    },
+    {
+     "event_id": "p2-e10",
+     "description": "Partial prolapse of the internal fistula stents found on physical examination",
+     "occurrence": "occurred",
+     "fact_ids": [
+      "p2-f036"
      ],
      "time_text": "On the 16th post-procedure day",
      "evidence": [
       {
        "segment_id": "b00013",
-       "quote": "On the 16th post-procedure day, a physical examination revealed partial prolapse of the internal fistula stents from the anal verge due to the reduction of the abscess cavity. Consequently, stents were removed endoscopically."
+       "quote": "On the 16th post-procedure day, a physical examination revealed partial prolapse of the internal fistula stents from the anal verge due to the reduction of the abscess cavity."
       }
      ],
-     "kind": "treatment",
+     "kind": "adverse_event",
      "time_kind": "relative",
      "time_precision": "exact"
+    },
+    {
+     "event_id": "p2-e15",
+     "description": "Endoscopic removal of the stents",
+     "occurrence": "occurred",
+     "fact_ids": [
+      "p2-f037"
+     ],
+     "time_text": null,
+     "evidence": [
+      {
+       "segment_id": "b00013",
+       "quote": "Consequently, stents were removed endoscopically."
+      }
+     ],
+     "kind": "treatment"
     },
     {
      "event_id": "p2-e11",
@@ -2825,7 +2954,8 @@
      "occurrence": "occurred",
      "fact_ids": [
       "p2-f038",
-      "p2-f042"
+      "p2-f042",
+      "p2-f045"
      ],
      "time_text": "4 months after the EUS-drainage procedure",
      "evidence": [
@@ -2857,12 +2987,11 @@
     },
     {
      "event_id": "p2-e13",
-     "description": "Good course without complications after stent deployment",
+     "description": "No complications after stent deployment",
      "occurrence": "occurred",
      "fact_ids": [
       "p2-f041",
-      "p2-f043",
-      "p2-f044"
+      "p2-f043"
      ],
      "time_text": null,
      "evidence": [
@@ -2907,6 +3036,39 @@
        "quote": "Laparoscopic appendectomy was performed 4 months after the EUS-drainage procedure."
       }
      ]
+    },
+    {
+     "from_event_id": "p2-e10",
+     "to_event_id": "p2-e15",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00013",
+       "quote": "a physical examination revealed partial prolapse of the internal fistula stents from the anal verge due to the reduction of the abscess cavity. Consequently, stents were removed endoscopically."
+      }
+     ]
+    },
+    {
+     "from_event_id": "p2-e07",
+     "to_event_id": "p2-e08",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00011",
+       "quote": "consistent with a mature abscess suitable for drainage; EUS-guided drainage was performed on the 7th day of hospitalization"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p2-e08",
+     "to_event_id": "p2-e13",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00002",
+       "quote": "Following successful stent deployment, both patients experienced good courses without any complications."
+      }
+     ]
     }
    ],
    "summary": [
@@ -2946,7 +3108,7 @@
      ]
     },
     {
-     "text": "EUS-guided drainage on the 7th hospital day used a 19G EUS-FNA needle, two guidewires, dilation and two 7 Fr, 4 cm double pigtail catheters without complications. CT on the 14th day confirmed shrinkage and he was discharged. On the 16th post-procedure day partial stent prolapse was found and the stents were removed endoscopically. Laparoscopic appendectomy followed 4 months after the drainage with no evidence of recurrence or complications.",
+     "text": "EUS-guided drainage on the 7th hospital day used a 19G EUS-FNA needle, two guidewires, dilation and two 7 Fr, 4 cm double pigtail catheters without complications. CT on the 14th day confirmed shrinkage, and he was discharged. On the 16th post-procedure day partial stent prolapse was found and the stents were removed endoscopically. Laparoscopic appendectomy followed 4 months after the drainage with a favorable postoperative course and no evidence of recurrence or complications.",
      "fact_ids": [
       "p2-f026",
       "p2-f027",
@@ -2966,7 +3128,8 @@
       "p2-f041",
       "p2-f043",
       "p2-f042",
-      "p2-f044"
+      "p2-f044",
+      "p2-f045"
      ]
     }
    ],
@@ -3030,8 +3193,9 @@
    },
    "ambiguities": [
     {
-     "issue": "The post-procedure day numbers (16th) and the 14th-day CT are stated for different events; the source does not state the day of discharge relative to the drainage, and does not time the stent removal separately from the prolapse sentence.",
+     "issue": "The 14th-day CT sentence also reports discharge, but the time phrase belongs to the CT; the discharge day and the stent-removal day are not stated, and \"the 14th day\" does not say whether it counts from admission or from the procedure.",
      "fact_ids": [
+      "p2-f034",
       "p2-f035",
       "p2-f037"
      ],
@@ -3041,7 +3205,7 @@
        "quote": "An abdominal CT scan on the 14th day confirmed shrinkage of the pelvic abscess, and the patient was discharged."
       }
      ],
-     "must_not_infer": "Do not infer the day count of discharge or the stent-removal day."
+     "must_not_infer": "Do not assign the 14th day to discharge or the 16th post-procedure day to stent removal, and do not convert the 14th day to a post-procedure day."
     }
    ]
   }
@@ -3161,10 +3325,10 @@
      ]
     }
    ],
-   "caption_summary": "Seven-panel figure of one EUS-guided pelvic abscess drainage case: CT, ultrasonography, EUS-FNA with contrast, double pigtail deployment, endoscopic view, follow-up CT and intraoperative image.",
+   "caption_summary": "Seven-panel figure of EUS-guided pelvic abscess drainage: CT, ultrasonography, EUS-FNA with contrast, double pigtail deployment, endoscopic view, follow-up CT and intraoperative image.",
    "visual_status": "not_inspected",
    "visual_description": null,
-   "attribution_notes": "The caption names no patient. Panel a gives 40 mm × 30 mm, which matches patient 1 CT (patient 2 abscess is 50 mm × 30 mm). Other panels are not named for either patient and are left unresolved; panels d and g could fit either patient. Pixels are described in the separate visual submission."
+   "attribution_notes": "The caption names no patient. Panel a gives 40 mm × 30 mm, which matches the patient 1 CT (patient 2 abscess is 50 mm × 30 mm). The other panels are not named for either patient and stay unresolved: panel d shows a single 7 Fr, 4 cm catheter in its caption (patient 1 had one, patient 2 two of the same size), panel b shows transabdominal ultrasonography (reported in the text only for patient 2) and panel e mentions balloon dilatation (not named for either patient), so the cues do not establish one owner."
   }
  ],
  "source_coverage": [
