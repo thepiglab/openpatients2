@@ -75,11 +75,9 @@ def test_runtime_validator_warns_on_glued_free_text_not_on_evidence():
 
 
 @pytest.fixture
-def dense(monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
+def dense():
     import importlib
-    return (importlib.import_module('schema_targets'), importlib.import_module('scan_glued_text'),
-            importlib.import_module('repair_glued_text'))
+    return (importlib.import_module('openpatients2.dense.schema_targets'), importlib.import_module('openpatients2.dense.scan_glued_text'))
 
 
 def _reference():
@@ -90,7 +88,7 @@ def _reference():
 
 def test_materializer_keeps_spaced_text_verbatim(dense):
     """Regression: no export path collapses whitespace (glued text came from annotator-authored literals)."""
-    targets, _, _ = dense
+    targets, _ = dense
     annotation, source = _reference()
     patient = annotation['patients'][0]
     spaced = 'Seen after  seven months and could not be performed'
@@ -100,26 +98,16 @@ def test_materializer_keeps_spaced_text_verbatim(dense):
     assert json.dumps(spaced)[1:-1] in target and json.dumps(spaced + ' (summary)')[1:-1] in target
 
 
-def test_reference_warning_scan_and_high_confidence_repair(dense):
-    _, scan, repair = dense
+def test_reference_warning_and_scan_categories(dense):
+    _, scan = dense
     annotation, source = _reference()
-    patient = annotation['patients'][0]
     assert not [v for v in annotation_violations(annotation, source) if v.rule_id == 'GLUED-TEXT']
     bad = copy.deepcopy(annotation)
     p = bad['patients'][0]
     p['events'][0]['description'] = 'Initial presentation aftersevenmonths'
     p['facts'][0]['notes'] = 'Reviewed couldnotbeperformed'
-    quote_before = json.dumps([f['evidence'] for f in p['facts']])
     warned = [v for v in annotation_violations(bad, source) if v.rule_id == 'GLUED-TEXT']
     assert [v.path for v in warned] == [p['events'][0]['event_id'] + '/description']   # notes are internal: no warning
     findings = scan.scan_annotation(bad, source)
     cats = {f['token']: f['category'] for f in findings}
     assert cats['aftersevenmonths'] == 'exported' and cats['couldnotbeperformed'] == 'internal'
-    changes = repair.plan(bad, source)
-    fixed = repair.apply(bad, changes)
-    q = fixed['patients'][0]
-    assert q['events'][0]['description'] == 'Initial presentation after seven months'
-    assert q['facts'][0]['notes'] == 'Reviewed could not be performed'
-    assert json.dumps([f['evidence'] for f in q['facts']]) == quote_before
-    assert not [c for c in changes if '/evidence/' in c['pointer'] or c['pointer'].endswith(('_id', '/quote'))]
-    assert patient['events'][0]['description'] != 'Initial presentation after seven months'   # input untouched

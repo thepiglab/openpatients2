@@ -1,8 +1,8 @@
 """Draft, validate and sign figure EHR-relevance labels (separate overlay sidecar).
 
-  figure_ehr_review.py ROOT --article ID --draft    # writes articles/ID/figure_ehr_labels.draft.json
-  figure_ehr_review.py ROOT --article ID            # validates articles/ID/figure_ehr_labels.json
-  figure_ehr_review.py ROOT --article ID --role agent|parent --reviewer NAME --notes NOTES
+  op2 dense figure_ehr_review ROOT --article ID --draft    # writes articles/ID/figure_ehr_labels.draft.json
+  op2 dense figure_ehr_review ROOT --article ID            # validates articles/ID/figure_ehr_labels.json
+  op2 dense figure_ehr_review ROOT --article ID --role agent|parent --reviewer NAME --notes NOTES
 
 Needs `articles/ID/visual.json`. Defaults are derived deterministically from
 the reviewed visual record and cannot be edited; reviewers confirm or override
@@ -14,9 +14,9 @@ import json
 from pathlib import Path
 
 from openpatients2.figure_ehr import FORMAT, contract_sha256, draft_labels, validate_labels
-import store
-from sidecar_receipts import base_binding, load_inputs, present, sign, verify
-from validate import digest
+from openpatients2 import dense_store as store
+from openpatients2.dense.sidecar_receipts import base_binding, load_inputs, present, sign, verify
+from openpatients2.dense.validate import digest
 
 KIND = 'figure-ehr'
 STATUS = 'figure_ehr_labels_reviewed'
@@ -54,7 +54,7 @@ def check(root, aid):
 
 
 def sign_review(root, aid, *, role, reviewer, notes):
-    from signing_guard import check_signature
+    from openpatients2.dense.signing_guard import check_signature
     check_signature(reviewer, notes)   # refuse probes before validation/signing
     target, source, annotation, visual, report = check(root, aid)
     return sign(root, KIND, aid, binding(target, source, annotation, visual), report,

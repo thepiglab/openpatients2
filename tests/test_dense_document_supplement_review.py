@@ -32,9 +32,7 @@ def pdf_bytes(count=2):
 
 @pytest.fixture
 def document(tmp_path, monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
-    spec = importlib.util.spec_from_file_location('dense_document_review', ROOT / 'benchmarks/dense500/supplement_review.py')
-    m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+    from openpatients2.dense import supplement_review as m
     # Every provenance test still checks bytes; actual pdfinfo is exercised below.
     monkeypatch.setattr(m, 'pdf_page_count', lambda path: 2)
     data = pdf_bytes(); path = tmp_path / 'document.pdf'; path.write_bytes(data)
@@ -136,8 +134,7 @@ def test_reviewed_document_survives_cache_eviction_but_cannot_resign(document):
 
 def test_pdf_page_count_uses_actual_document(tmp_path,monkeypatch):
     if not shutil.which('pdfinfo'): pytest.skip('Actual PDF validation requires pdfinfo')
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
-    import supplement_review
+    from openpatients2.dense import supplement_review
     path=tmp_path/'actual.pdf'; path.write_bytes(pdf_bytes(3))
     assert supplement_review.pdf_page_count(path)==3
     path.write_bytes(b'not a PDF')

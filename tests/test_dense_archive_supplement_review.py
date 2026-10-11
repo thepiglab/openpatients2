@@ -35,10 +35,7 @@ def make_zip(member_bytes):
 @pytest.fixture
 def archive(tmp_path, monkeypatch):
     root = tmp_path / 'root'; root.mkdir()
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
-    for name in ('supplement_review', 'sidecar_receipts', 'measurement_series_review'):
-        sys.modules.pop(name, None)
-    import supplement_review as m
+    from openpatients2.dense import supplement_review as m
     monkeypatch.setattr(m, 'pdf_page_count', lambda path: 2)
     member = pdf(2); data = make_zip(member)
     zip_path = tmp_path / 'cache' / 's001.zip'; zip_path.parent.mkdir(); zip_path.write_bytes(data)
@@ -103,7 +100,7 @@ def test_zip_members_bound_and_typed_payload_exported(archive):
     item = bundle['patients'][0]['sections']['observations']['items'][0]
     assert item['numeric_value'] == 12.5 and item['evidence'][0]['source_section'] == 'S1:transcription:S1-cell'
     # Measurement series can cite the reviewed member-page transcription.
-    import measurement_series_review as series
+    from openpatients2.dense import measurement_series_review as series
     from openpatients2.measurement_series import validate_series, expected_parse
     transcriptions = series.reviewed_transcriptions(root, AID)
     assert transcriptions[('S1', 'S1-cell')] == '12.5'
@@ -160,7 +157,6 @@ def test_member_page_count_mismatch_uses_actual_pdfinfo(archive, monkeypatch):
         pytest.skip('pdfinfo unavailable')
     m, root, s, a, t, _ = archive
     monkeypatch.undo()
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
     assert m.pdf_page_count(t['assets'][0]['path']) == 2
     t['assets'][0]['page_count'] = 3
     t['assets'][0]['pages'].append(dict(deepcopy(t['assets'][0]['pages'][0]), page=3))
@@ -182,8 +178,7 @@ def test_incomplete_or_mismatched_archive_rejected(archive, change):
 
 def test_extract_writes_bounded_members_and_skeleton(archive, tmp_path, monkeypatch):
     m, root, s, a, t, _ = archive
-    spec = __import__('importlib.util').util.spec_from_file_location('dense_assets_zip', ROOT / 'benchmarks/dense500/supplement_assets.py')
-    assets = __import__('importlib.util').util.module_from_spec(spec); spec.loader.exec_module(assets)
+    from openpatients2.dense import supplement_assets as assets
     data = Path(t['archive']['path']).read_bytes()
     store.path(root, 'supplement-assets', AID, mkdir=True).write_text(json.dumps({'files': [dict(
         supplement_id='S1', url=ZIP_URL, filename='s001.zip', original_manifest_url='s3://x/s001.zip', declared_md5=t['archive']['md5'],

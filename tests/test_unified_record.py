@@ -105,7 +105,6 @@ def test_series_task_never_accepts_typed_values():
 
 @needs_release
 def test_pipeline_builder_round_trip_scores_perfectly_on_reference_article():
-    sys.path.insert(0, str(R))
     from openpatients2 import ehr_tasks
     from openpatients2.ehr_pipeline import unified_from_pipeline
     from openpatients2.unified_scoring import score
@@ -117,7 +116,7 @@ def test_pipeline_builder_round_trip_scores_perfectly_on_reference_article():
     labels, flags, manifest, series, visual, acquisition = (json.loads(p.read_text()) for p in paths)
     source = json.loads(store.path(R, 'sources', AID).read_text())
     annotation = json.loads(store.path(R, 'annotations', AID).read_text())
-    from measurement_series_review import reviewed_transcriptions
+    from openpatients2.dense.measurement_series_review import reviewed_transcriptions
     outputs = {}
     vrows = {f['figure_id']: f for f in visual['figures']}
     outputs['figure_ehr_label'] = ehr_tasks.labels_document(source, visual, [

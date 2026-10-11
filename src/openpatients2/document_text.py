@@ -1,6 +1,6 @@
 """Literal text units of word-processor supplements (DOCX/DOC/RTF/ODT), shared by both pipelines.
 
-One extraction path for the dense reference (`supplement_review.py`, format
+One extraction path for the dense reference (`openpatients2.dense.supplement_review`, format
 `dense-supplemental-text-document-reference/1`) and the runtime (local-LLM) pipeline
 (`ehr_tasks.load_transcriptions` / `unit_transcriptions`): the offline firecrawl-anydoc
 structured model (`to_document`, Inline.text runs only). Hosted OCR and Markdown output are

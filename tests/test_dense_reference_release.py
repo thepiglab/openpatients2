@@ -12,19 +12,10 @@ from openpatients2.dense_store import load as load_store
 store = load_store()
 
 
-def load_module(name,path):
-    spec=importlib.util.spec_from_file_location(name,path)
-    module=importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
 @pytest.fixture
 def release(tmp_path,monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT/'benchmarks/dense500'))
-    validate=load_module('dense_reference_validate',ROOT/'benchmarks/dense500/validate.py')
-    monkeypatch.setitem(sys.modules,'validate',validate)
-    exporter=load_module('dense_reference_export',ROOT/'benchmarks/dense500/export.py')
+    validate=importlib.import_module('openpatients2.dense.validate')
+    exporter=importlib.import_module('openpatients2.dense.export')
     source=ROOT/'benchmarks/dense50'
     reviewed='PMC13624771.1';draft='PMC13624887.1'
     for aid in (reviewed,draft):
@@ -45,6 +36,8 @@ def release(tmp_path,monkeypatch):
     monkeypatch.setattr(exporter,'ROOT',tmp_path)
     monkeypatch.setattr(exporter,'ROOTS',[tmp_path])
     monkeypatch.setattr(exporter,'OUT',out)
+    # Tests may switch the policy by assignment; monkeypatch restores it afterwards.
+    monkeypatch.setattr(exporter,'STALE_RECEIPT_POLICY',exporter.STALE_RECEIPT_POLICY)
     return exporter,validate,tmp_path,out,reviewed,draft
 
 
@@ -123,7 +116,7 @@ def test_changed_annotation_requires_new_source_review(release):
 
 
 def test_review_receipt_requires_structured_assessment(release):
-    from review_record import save_review
+    from openpatients2.dense.review_record import save_review
     _,_,root,_,aid,_=release
     annotation=json.loads(store.path(root, 'annotations', aid).read_text())
     receipt_path=store.path(root, 'reviews', aid)
@@ -165,8 +158,8 @@ def test_uninspected_figure_cannot_have_pixel_description(release):
 
 @pytest.fixture
 def full_target(release):
-    import schema_targets
-    import schema_review
+    from openpatients2.dense import schema_targets
+    from openpatients2.dense import schema_review
     _,_,root,_,aid,_=release
     annotation=json.loads(store.path(root, 'annotations', aid).read_text())
     source=json.loads(store.path(root, 'sources', aid).read_text())
@@ -256,7 +249,7 @@ def test_full_bundle_release_requires_both_current_reviews(release,full_target):
 
 def test_coverage_flags_missing_diagnosis_without_claiming_recall(full_target):
     import copy
-    from coverage_audit import clinical_coverage
+    from openpatients2.dense.coverage_audit import clinical_coverage
     _,_,target,_,_=full_target
     patient=copy.deepcopy(target['patients'][0])
     patient['sections']['oncology']['tumors']=[{'name':'source-documented tumor'}]
@@ -269,7 +262,7 @@ def test_coverage_flags_missing_diagnosis_without_claiming_recall(full_target):
 
 def test_visual_review_binds_assets_and_requires_each_panel(release,tmp_path):
     import copy,hashlib
-    from visual_review import validate_submission
+    from openpatients2.dense.visual_review import validate_submission
     # Synthetic test bytes exercise identity binding, not visual correctness.
     path=tmp_path/'test-image';path.write_bytes(b'image-test-fixture')
     asset={'url':'https://example.invalid/figure.png','sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'path':str(path)}
@@ -317,7 +310,7 @@ def test_reviewed_supplement_inventory_retains_identity_and_completion(release):
 
 
 def test_reviewed_pdf_exports_as_document_not_pixels(release,full_target,monkeypatch):
-    import supplement_review
+    from openpatients2.dense import supplement_review
     exporter,validator,root,out,aid,_=release
     _,_,target,annotation,source=full_target
     source['supplements']=[{'supplement_id':'SM1','assets':[{'url':'https://example.invalid/checklist.pdf'}],

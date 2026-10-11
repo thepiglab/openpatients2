@@ -16,9 +16,7 @@ AID = 'PMC10998798.1'
 
 @pytest.fixture
 def specimen(tmp_path, monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT/'benchmarks/dense500'))
-    spec=importlib.util.spec_from_file_location('dense_supplement_review',ROOT/'benchmarks/dense500/supplement_review.py')
-    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+    from openpatients2.dense import supplement_review as module
     source=json.loads(store.path(ROOT/'benchmarks/dense50','sources',AID).read_text())
     annotation=json.loads(store.path(ROOT/'benchmarks/dense50','annotations',AID).read_text())
     target=json.loads(store.path(ROOT/'benchmarks/dense50','supplement-visual-submissions',AID,sid='MOESM1').read_text())

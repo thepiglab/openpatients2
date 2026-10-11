@@ -26,6 +26,10 @@ def parser():
                          help="Optional EHR stages on a finished extraction run -> unified article rows "
                               "(same as python -m openpatients2.ehr_pipeline; pass --help for its options)")
     cmd.add_argument("ehr_args", nargs=argparse.REMAINDER)
+    cmd = sub.add_parser("dense", add_help=False,
+                         help="Dense reference-set tools: op2 dense <tool> [args] (same as python -m "
+                              "openpatients2.dense.<tool>; `op2 dense --help` lists the tools)")
+    cmd.add_argument("dense_args", nargs=argparse.REMAINDER)
     cmd = sub.add_parser("article-search", help="Discover license-filtered PMC candidates; articles need a second license check")
     cmd.add_argument("--query", required=True)
     cmd.add_argument("--limit", type=int, default=100)
@@ -76,8 +80,40 @@ def parser():
     return p
 
 
+def dense_usage():
+    from .dense import TOOLS
+    width = max(map(len, TOOLS))
+    lines = ["usage: op2 dense <tool> [args...]   (op2 dense <tool> --help for a tool's options)", "",
+             "Tools for benchmarks/dense500 and benchmarks/dense50 (modules in openpatients2.dense):"]
+    lines += [f"  {name:<{width}}  {text}" for name, text in TOOLS.items()]
+    lines += ["", "Validation is the same command WITHOUT --role; a --role call is a signature."]
+    return "\n".join(lines)
+
+
+def dense_main(argv):
+    """Run openpatients2.dense.<tool> as __main__ with the remaining arguments (exits like python -m)."""
+    import runpy
+    from .dense import TOOLS
+    if not argv or argv[0] in ("-h", "--help"):
+        print(dense_usage())
+        return 0 if argv else 2
+    tool, rest = argv[0].replace("-", "_"), argv[1:]
+    if tool not in TOOLS:
+        print(f"op2 dense: unknown tool {argv[0]!r}\n\n{dense_usage()}", file=sys.stderr)
+        return 2
+    saved = sys.argv
+    sys.argv = [f"op2 dense {tool}", *rest]
+    try:
+        runpy.run_module(f"openpatients2.dense.{tool}", run_name="__main__", alter_sys=False)
+    finally:
+        sys.argv = saved
+    return 0
+
+
 def _main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
+    if argv[:1] == ["dense"]:
+        return dense_main(argv[1:])
     if argv[:1] == ["ehr-pipeline"]:
         from .ehr_pipeline import main as ehr_main
         ehr_main(argv[1:])

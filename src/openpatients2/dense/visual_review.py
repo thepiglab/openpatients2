@@ -10,8 +10,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from openpatients2.figure_visuals import validate_joint
-from validate import digest
-import store
+from openpatients2.dense.validate import digest
+from openpatients2 import dense_store as store
 
 
 def identity_digest(annotation):
@@ -73,7 +73,7 @@ def reviewed_visual_target(root,aid):
             ('patient_identity_sha256',identity_digest(annotation)),
             ('patient_ids',sorted(p['patient_id'] for p in annotation['patients']))]:
             if receipt.get(key)!=value:raise ValueError(f'{aid}: stale visual {role} receipt {key}')
-        from signing_guard import receipt_identity_errors
+        from openpatients2.dense.signing_guard import receipt_identity_errors
         if receipt_identity_errors(receipt):raise ValueError(f'{aid}: visual {role} receipt has a placeholder reviewer/notes: {receipt_identity_errors(receipt)}')
         receipts.append(receipt)
     return target,receipts
@@ -84,7 +84,7 @@ if __name__=='__main__':
     p.add_argument('--role',choices=['agent','parent']);p.add_argument('--reviewer');p.add_argument('--notes')
     args=p.parse_args()
     if args.role:
-        from signing_guard import check_signature
+        from openpatients2.dense.signing_guard import check_signature
         check_signature(args.reviewer,args.notes)   # refuse probes before anything is read or written
     target,source,annotation,assets=load_inputs(args.root,args.article)
     report=validate_submission(target,source,annotation,assets)

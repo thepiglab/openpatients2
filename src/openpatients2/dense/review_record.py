@@ -5,15 +5,15 @@ Never batch-create receipts from validator success; validation is not review.
 import json
 from datetime import datetime, timezone
 from pathlib import Path
-import store
-from validate import case_context_errors,digest,semantic_errors,validate
+from openpatients2 import dense_store as store
+from openpatients2.dense.validate import case_context_errors,digest,semantic_errors,validate
 
 REVIEWER='parent assistant'
 
 def save_review(root, annotation, corrections, assessment, *, reviewer=REVIEWER):
     if not isinstance(assessment,dict):
         raise TypeError('assessment must be a structured mapping; put prose in clinical_course or notes')
-    from signing_guard import check_signature
+    from openpatients2.dense.signing_guard import check_signature
     check_signature(reviewer, None, notes_required=False)   # the structured assessment is the review content
     root=Path(root);aid=annotation['article_id'];source=json.loads(store.path(root,'sources',aid).read_text())
     errors=validate(annotation,source)+case_context_errors(annotation)+semantic_errors(annotation,source)

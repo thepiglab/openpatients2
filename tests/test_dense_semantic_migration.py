@@ -9,10 +9,8 @@ store = load_store()
 
 
 def load(monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
-    spec = importlib.util.spec_from_file_location('semantic_migration', ROOT / 'benchmarks/dense500/migrations/semantic_rules_2026_10.py')
-    module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
-    return module
+    from openpatients2.dense import normalize
+    return normalize
 
 
 def fact(fid, task, fields, quote, collection='items', scoring='include', certainty='supported'):

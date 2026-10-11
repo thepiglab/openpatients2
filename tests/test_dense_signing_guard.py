@@ -7,14 +7,12 @@ import sys
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-DENSE = ROOT / 'benchmarks/dense500'
 NOTES = 'Viewed all 4 panels; ultrasound probe label and vendor text, no identifiers.'
 
 
 @pytest.fixture
-def guard(monkeypatch):
-    monkeypatch.syspath_prepend(str(DENSE))
-    import signing_guard
+def guard():
+    from openpatients2.dense import signing_guard
     return signing_guard
 
 
@@ -32,25 +30,25 @@ def test_placeholder_reviewers_and_notes_are_refused(guard):
 
 
 def test_every_signer_refuses_a_probe_without_writing(guard, tmp_path, monkeypatch):
-    import sidecar_receipts
+    from openpatients2.dense import sidecar_receipts
     with pytest.raises(ValueError, match='Refusing to sign'):
         sidecar_receipts.sign(tmp_path, 'figure-ehr', 'A', {}, {}, role='agent', reviewer='x', notes='x')
-    import supplement_review
+    from openpatients2.dense import supplement_review
     with pytest.raises(ValueError, match='Refusing to sign'):
         supplement_review.sign_review(tmp_path, 'A', 'S1', role='agent', reviewer='x', notes='x')
-    import review_record
+    from openpatients2.dense import review_record
     with pytest.raises(ValueError, match='Refusing to sign'):
         review_record.save_review(tmp_path, {'article_id': 'A'}, [], {}, reviewer='x')
-    env = {'PYTHONPATH': f'{ROOT / "src"}:{DENSE}', 'PATH': '/usr/bin:/bin'}
-    for script, extra in (('visual_review.py', []), ('schema_review.py', ['--folder', 'annotations'])):
-        run = subprocess.run([sys.executable, str(DENSE / script), str(tmp_path), '--article', 'A', *extra,
+    env = {'PYTHONPATH': str(ROOT / 'src'), 'PATH': '/usr/bin:/bin'}
+    for script, extra in (('visual_review', []), ('schema_review', ['--folder', 'annotations'])):
+        run = subprocess.run([sys.executable, '-m', f'openpatients2.dense.{script}', str(tmp_path), '--article', 'A', *extra,
                               '--role', 'agent', '--reviewer', 'x', '--notes', 'x'], capture_output=True, text=True, env=env)
         assert run.returncode != 0 and 'without --role' in run.stderr, (script, run.stderr[-500:])
     assert not [p for p in tmp_path.rglob('*') if p.is_file()]   # nothing written
 
 
 def test_stored_placeholder_receipt_is_not_a_review(guard, tmp_path):
-    import sidecar_receipts
+    from openpatients2.dense import sidecar_receipts
     for role, reviewer in (('agent', 'x'), ('parent', 'Claude Opus 5.5 parent')):
         path = sidecar_receipts.receipt_path(tmp_path, 'figure-ehr', role, 'A'); path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps({'role': role, 'reviewer': reviewer, 'inspection_notes': NOTES if role == 'parent' else 'x',

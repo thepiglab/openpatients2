@@ -198,7 +198,7 @@ python -m openpatients2.unified_scoring --reference data/dense_clinical_cases_v1
 for serving limits. Model labels are unreviewed and never mark a row completed.
 `--supplement-assets` / `--supplement-transcriptions` take a dense benchmark root: acquisition records and
 reviewed supplement targets are read from its per-article folders (`articles/<ID>/supplements/`). OUT uses the same
-per-article layout (`OUT/articles/<ID>/figure_ehr_labels.json`, ...), resolved by `benchmarks/dense500/store.py`.
+per-article layout (`OUT/articles/<ID>/figure_ehr_labels.json`, ...), resolved by `openpatients2.dense_store`.
 
 ## Current experimental branches
 

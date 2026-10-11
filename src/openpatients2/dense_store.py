@@ -39,7 +39,6 @@ Kinds keep the old folder names (logical names), so CLI flags such as
 `annotation_folder: "annotations"` are unchanged. Nothing else in the
 repository may build these paths by hand: use `path` / `receipt` (mkdir=True for writers),
 `article_ids` / `matching_ids`, `supplement_ids` / `supplement_targets` and `article_dirs`.
-Migration from the old layout: migrations/per_article_layout.py.
 """
 from pathlib import Path
 import sys
@@ -82,7 +81,7 @@ RECEIPT_KINDS = ('schema', 'visual', 'figure-ehr', 'figure-privacy', 'measuremen
                  'supplement')
 ROLES = ('agent', 'parent')
 VIDEO = 'video-inspections'   # one file per (figure id, role): video_inspection.<FID>.<role>.json
-# Regenerable files (gitignored): rebuilt by acquire.py, schema_targets.py, *_review.py --draft, supplement_assets.py.
+# Regenerable files (gitignored): rebuilt by `op2 dense acquire`, `schema_targets`, `*_review --draft`, `supplement_assets`.
 CACHE_KINDS = ('source-text', 'raw-xml', 'schema-drafts', 'figure-ehr-label-drafts', 'figure-privacy-flag-drafts',
                'measurement-series-drafts', 'supplement-manifest-drafts', 'document-submission-drafts',
                'supplement-archive-members')

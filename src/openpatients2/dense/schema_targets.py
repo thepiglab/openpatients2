@@ -13,7 +13,7 @@ from openpatients2.article_tasks import Roster,Summary,Vision
 from openpatients2.figure_attribution import FigureReview
 from openpatients2.longitudinal import PatientTimeline,annotation_event_time,relative_order
 from openpatients2.validation import validate as validate_runtime
-from validate import digest,validate
+from openpatients2.dense.validate import digest,validate
 
 VERSION='dense-runtime-targets/1'
 
@@ -197,7 +197,7 @@ def with_review_only_items(bundle):
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('root',type=Path);parser.add_argument('--folder',default='drafts');parser.add_argument('--article');args=parser.parse_args();failures=[];count=0
-    import store
+    from openpatients2 import dense_store as store
     for aid in store.matching_ids(args.root,args.folder,args.article):
         try:
             path=store.path(args.root,args.folder,aid)

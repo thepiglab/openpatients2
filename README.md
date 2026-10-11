@@ -15,12 +15,15 @@ living overview whenever the pipeline changes.
 - `src/openpatients2/` — extraction runtime (`pilot_extract`, article parsing, prompts, validation/repair), the
   optional EHR stages (`ehr_pipeline`, `ehr_tasks`), the shared row builder (`unified_record`), scoring
   (`unified_scoring`, `scoring/`), shared annotation rules (`annotation_rules`, `rules/`) and the article viewer.
-- `benchmarks/dense500/` — the dense reference-set project: acquisition, annotation protocol, review/receipt tools,
-  runtime gates and `export.py`, which builds `data/dense_clinical_cases_v1/`. See its [README](benchmarks/dense500/README.md)
+- `src/openpatients2/dense/` — the dense reference-set tools, run as `op2 dense <tool>` (`op2 dense --help`):
+  acquisition, review/receipt tools, rules normalization, runtime gates and `op2 dense export`, which builds
+  `data/dense_clinical_cases_v1/`.
+- `benchmarks/dense500/` — the dense reference-set data and docs only (no code): annotation protocol, agent briefs,
+  selection records and per-article folders. See its [README](benchmarks/dense500/README.md)
   and [annotation protocol](benchmarks/dense500/ANNOTATION_PROTOCOL.md). `benchmarks/dense50/` holds the first retained
   articles and is exported together with dense500. Everything about one article (source, annotation, schema target,
   figure/supplement reviews, EHR sidecars, receipts) lives in one folder, `benchmarks/<root>/articles/<ID>/`, with
-  fixed file names resolved only by `benchmarks/dense500/store.py` (map in the dense500 README).
+  fixed file names resolved only by `openpatients2.dense_store` (map in the dense500 README).
 - `docs/` — [pipeline overview](docs/PIPELINE_OVERVIEW.md), [article viewer](docs/ARTICLE_VIEWER.md),
   [schema review v2.1](docs/SCHEMA_REVIEW_V2_1.md), and the proposed
   [source-claim compiler](docs/SOURCE_CLAIM_COMPILER_DESIGN.md) design.
@@ -46,7 +49,7 @@ python -m openpatients2.unified_scoring --reference data/dense_clinical_cases_v1
 Rebuild the reference release from reviewed annotations:
 
 ```bash
-PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/export.py
+op2 dense export
 ```
 
 ### Browse articles and extracted records

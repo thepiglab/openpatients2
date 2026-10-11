@@ -1,14 +1,14 @@
 # PDF supplement review
 
-PDF supplements use `dense-supplemental-document-reference/1`, separately from the unchanged supplemental image contract. Save one sidecar per source supplement in `articles/ARTICLE/supplements/SUPPLEMENT.document.json`. The concrete HMPV example is `articles/PMC12756086.1/supplements/SM1.document.json`; the Pydantic contract is `DocumentSupplementTarget` in `supplement_review.py`.
+PDF supplements use `dense-supplemental-document-reference/1`, separately from the unchanged supplemental image contract. Save one sidecar per source supplement in `articles/ARTICLE/supplements/SUPPLEMENT.document.json`. The concrete HMPV example is `articles/PMC12756086.1/supplements/SM1.document.json`; the Pydantic contract is `DocumentSupplementTarget` in `src/openpatients2/dense/supplement_review.py`.
 
 Preserve each original source-listed asset URL, MD5 (or null if absent), original manifest URL, filename, SHA256, byte count and exact source license. `media_type` is `application/pdf`. Obtain the actual `page_count` and personally inspect every rendered page. Each page entry requires its one-based page number, `status: inspected`, `inspection_method: rendered_page`, contents, clinical relevance (`administrative`, `clinical_data`, `background`, or `mixed`), relevance notes, supported patient IDs (otherwise empty), rights assessment and limitations. `rights_checked: true` records the actual page check; retain differing printed notices as `rights_basis: page_exception` with `rights_exceptions` notice/interpretation entries. No printed exception does not establish blanket asset licensing; use `unclear` where appropriate. Distinguish an administrative checklist from clinical data. Do not turn blank checklist cells into clinical negatives or create figure/vision output for document pages.
 
 Validate and sign only your own inspection:
 
 ```sh
-.venv/bin/python benchmarks/dense500/supplement_review.py benchmarks/dense500 --article ARTICLE --supplement SUPPLEMENT
-.venv/bin/python benchmarks/dense500/supplement_review.py benchmarks/dense500 --article ARTICLE --supplement SUPPLEMENT --role agent --reviewer 'YOUR REVIEWER IDENTITY' --notes 'Actual full-page inspection notes'
+op2 dense supplement_review benchmarks/dense500 --article ARTICLE --supplement SUPPLEMENT
+op2 dense supplement_review benchmarks/dense500 --article ARTICLE --supplement SUPPLEMENT --role agent --reviewer 'YOUR REVIEWER IDENTITY' --notes 'Actual full-page inspection notes'
 ```
 
 Signing checks actual PDF bytes, original MD5, SHA256, byte count and `pdfinfo` page count. Poppler's `pdfinfo` must be available; its absence cannot be treated as completion. A complete sidecar requires exact source asset coverage and exactly one inspected entry for every PDF page. Partial/unavailable sidecars need limitations and cannot receive completed receipts. Downloading, parsing or rendering alone never establishes human/agent inspection.
@@ -41,11 +41,11 @@ Production `time.text` and `date_iso`, when supplied, must also occur literally 
 
 ## ZIP supplements containing PDFs
 
-A source-listed ZIP is reviewed per member PDF with `dense-supplemental-archive-document-reference/1` (Pydantic `ArchiveDocumentTarget` in `supplement_review.py`). The sidecar goes in the same place: `articles/ARTICLE/supplements/SUPPLEMENT.document.json`.
+A source-listed ZIP is reviewed per member PDF with `dense-supplemental-archive-document-reference/1` (Pydantic `ArchiveDocumentTarget` in `src/openpatients2/dense/supplement_review.py`). The sidecar goes in the same place: `articles/ARTICLE/supplements/SUPPLEMENT.document.json`.
 
 ```sh
-PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/supplement_assets.py acquire benchmarks/dense500 --article ARTICLE
-PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/supplement_assets.py extract benchmarks/dense500 --article ARTICLE --supplement SUPPLEMENT
+op2 dense supplement_assets acquire benchmarks/dense500 --article ARTICLE
+op2 dense supplement_assets extract benchmarks/dense500 --article ARTICLE --supplement SUPPLEMENT
 ```
 
 `extract` checks the cached ZIP hash. It reads the central directory, ignoring `__MACOSX`/`.DS_Store` junk, and writes only the PDF members, under hashed names, into this article's folder of the capped supplement cache (250 MB per member, 30 GB shared cap). It records `articles/ARTICLE/supplements/SUPPLEMENT.archive_members.json` and a skeleton at `articles/ARTICLE/supplements/SUPPLEMENT.document.draft.json`. Copy the skeleton to `articles/ARTICLE/supplements/SUPPLEMENT.document.json`, then inspect every rendered page of every member PDF. Fill `pages` exactly as for PDFs, set `status: inspected`, the classification and a summary, and remove the DRAFT text.
@@ -54,12 +54,12 @@ PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/suppleme
 - Each `assets` entry is one member, with pseudo-URL `ZIP_URL#member=NAME`, `member`, SHA256, bytes, extracted path, `application/pdf`, pdfinfo `page_count` and per-page reviews.
 - Typed clinical transcriptions use that member pseudo-URL as `asset_url`, the member SHA256 as `asset_sha256`, and the one-based member page. Exported supplemental assets carry `member`, `archive_url` and `archive_sha256`.
 - Measurement series cite these rows with `origin: supplement_transcription` once dual-signed.
-- Validation and signing use the same `supplement_review.py ... --supplement SUPPLEMENT [--role agent|parent]` commands. Signing re-hashes the ZIP and every member, re-reads each member from the ZIP and re-checks pdfinfo page counts.
+- Validation and signing use the same `op2 dense supplement_review ... --supplement SUPPLEMENT [--role agent|parent]` commands. Signing re-hashes the ZIP and every member, re-reads each member from the ZIP and re-checks pdfinfo page counts.
 - Receipts also bind `archive_sha256`. Any change to the ZIP, member list, member bytes, pages or payload makes them stale.
 
 ## Video supplements
 
-`supplement_review.py` has no video contract (it reviews PDF pages and image pixels). For a source-listed video file (MP4, MOV, ...) the dual-signed supplement manifest (`supplement_manifest_review.py`, `dense-supplement-manifest/1`) is the content review; no extra sidecar and no schema change is needed. The manifest row satisfies `supplement_review_or_no_supplements` (`openpatients2.supplement_manifest.manifest_gate_supplements`, basis `manifest_video_frames_sampled`) only when all of the following hold:
+`op2 dense supplement_review` has no video contract (it reviews PDF pages and image pixels). For a source-listed video file (MP4, MOV, ...) the dual-signed supplement manifest (`op2 dense supplement_manifest_review`, `dense-supplement-manifest/1`) is the content review; no extra sidecar and no schema change is needed. The manifest row satisfies `supplement_review_or_no_supplements` (`openpatients2.supplement_manifest.manifest_gate_supplements`, basis `manifest_video_frames_sampled`) only when all of the following hold:
 
 - machine block: `download_status: downloaded`, `detected_type: video`, `inspection_status: peeked` (ffprobe duration/frame count read from the cached file);
 - review: `content_class: video`, `classification_basis: full_content`, meaning both reviewers rendered and personally viewed sampled frames (e.g. contact sheets at a fixed interval across the whole duration, plus full-resolution frames where detail matters);
@@ -68,11 +68,11 @@ PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/suppleme
 
 Patient scope, ownership evidence and `ehr_includable`/`ehr_modality: video` follow the ordinary manifest rules. On-screen captions or measurements seen in sampled frames are not transcribed as clinical facts by this path; a reviewer who needs them uses a still-image supplement review of the extracted frames. In `article_checklist.json` the supplement appears under `manifest_reviewed_supplements` with basis `manifest_video_frames_sampled`, the inventory `review_status` is `agent_and_parent_manifest_video_frames_sampled`, and `content_inspected` stays false (no page/pixel sidecar was signed).
 
-**External-link media.** A supplement declared only as an external link (YouTube etc.) has no fetchable PMC asset: acquisition records `download_status: no_declared_asset` (or `rejected_host`). Record it honestly in the manifest: `classification_basis: caption_and_filename_only`, `ehr_includable: false`, and a limitation saying the media was not viewed. It is never a content review. Under the default `UNAVAILABLE_MEDIA_POLICY='complete_flagged'` in `export.py` (the same policy applies to figures recorded `status: unavailable`), the dual-signed row satisfies the gate with basis `manifest_external_media_unavailable`. The article completes, flagged: the checklist lists the supplement in `unavailable_media` (and `unavailable_external_supplement_ids`), the inventory `review_status` is `external_media_unavailable`, `content_inspected` stays false, and the unified record sets `media_available: false` and `content_reviewed: false`. `UNAVAILABLE_MEDIA_POLICY='block'` keeps such articles incomplete.
+**External-link media.** A supplement declared only as an external link (YouTube etc.) has no fetchable PMC asset: acquisition records `download_status: no_declared_asset` (or `rejected_host`). Record it honestly in the manifest: `classification_basis: caption_and_filename_only`, `ehr_includable: false`, and a limitation saying the media was not viewed. It is never a content review. Under the default `UNAVAILABLE_MEDIA_POLICY='complete_flagged'` in `src/openpatients2/dense/export.py` (the same policy applies to figures recorded `status: unavailable`), the dual-signed row satisfies the gate with basis `manifest_external_media_unavailable`. The article completes, flagged: the checklist lists the supplement in `unavailable_media` (and `unavailable_external_supplement_ids`), the inventory `review_status` is `external_media_unavailable`, `content_inspected` stays false, and the unified record sets `media_available: false` and `content_reviewed: false`. `UNAVAILABLE_MEDIA_POLICY='block'` keeps such articles incomplete.
 
 ## Word-processor supplements (DOCX/DOC/RTF/ODT, or such members of a ZIP)
 
-Format `dense-supplemental-text-document-reference/1` (Pydantic `TextDocumentTarget` in `supplement_review.py`). It is reviewed like a PDF, but the unit of inspection is a literal **text unit** instead of a rendered page. Text is extracted offline by `openpatients2.document_text`, using the shipped firecrawl-anydoc structured model (`to_document`, Inline.text runs only). Hosted OCR and Markdown output are disabled in the worker, and nothing is uploaded. There is no lossy fallback: a file anydoc cannot read cannot be completed by this path.
+Format `dense-supplemental-text-document-reference/1` (Pydantic `TextDocumentTarget` in `src/openpatients2/dense/supplement_review.py`). It is reviewed like a PDF, but the unit of inspection is a literal **text unit** instead of a rendered page. Text is extracted offline by `openpatients2.document_text`, using the shipped firecrawl-anydoc structured model (`to_document`, Inline.text runs only). Hosted OCR and Markdown output are disabled in the worker, and nothing is uploaded. There is no lossy fallback: a file anydoc cannot read cannot be completed by this path.
 
 Units come in document order:
 - `paragraph`: one non-blank line.
@@ -82,13 +82,13 @@ DOCX units are cross-checked against the raw `w:t` text of `word/document.xml`. 
 
 ```sh
 # 1. acquire (as for every supplement), then draft the review skeleton (extracts ZIP members into the cache)
-PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/supplement_assets.py extract-text benchmarks/dense500 --article ARTICLE --supplement SID
+op2 dense supplement_assets extract-text benchmarks/dense500 --article ARTICLE --supplement SID
 # 2. copy articles/ARTICLE/supplements/SID.document.draft.json to articles/ARTICLE/supplements/SID.document.json, read EVERY unit
 #    (open the original file too when layout matters), fill `blocks`, status, classification, summary, clinical_data
 # 3. validate (no --role: this is the dry run)
-PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/supplement_review.py benchmarks/dense500 --article ARTICLE --supplement SID
+op2 dense supplement_review benchmarks/dense500 --article ARTICLE --supplement SID
 # 4. sign only after reading every unit (a --role call is a signature)
-PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/supplement_review.py benchmarks/dense500 --article ARTICLE --supplement SID --role agent --reviewer "Claude Sonnet 5.5 annotator" --notes "<what you read>"
+op2 dense supplement_review benchmarks/dense500 --article ARTICLE --supplement SID --role agent --reviewer "Claude Sonnet 5.5 annotator" --notes "<what you read>"
 ```
 
 - **Units and extraction are machine fields; never edit them.** `extraction.units_sha256` binds the units. With the cached file present, validation re-extracts and requires identical units, tool version and nonliteral list.

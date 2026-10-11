@@ -1,8 +1,8 @@
 """Draft, validate and sign per-panel figure privacy/sensitivity flags (flag only).
 
-  figure_privacy_review.py ROOT --article ID --draft    # writes articles/ID/figure_privacy_flags.draft.json
-  figure_privacy_review.py ROOT --article ID            # validates articles/ID/figure_privacy_flags.json
-  figure_privacy_review.py ROOT --article ID --role agent|parent --reviewer NAME --notes NOTES
+  op2 dense figure_privacy_review ROOT --article ID --draft    # writes articles/ID/figure_privacy_flags.draft.json
+  op2 dense figure_privacy_review ROOT --article ID            # validates articles/ID/figure_privacy_flags.json
+  op2 dense figure_privacy_review ROOT --article ID --role agent|parent --reviewer NAME --notes NOTES
 
 Separate from figure_ehr_labels.json (whose receipts stay valid); bound to the visual
 submission. Drafts are pre-filled from reviewer-written figure-ehr rationales,
@@ -14,9 +14,9 @@ import json
 from pathlib import Path
 
 from openpatients2.figure_privacy import FORMAT, contract_sha256, draft_flags, validate_flags
-import store
-from sidecar_receipts import base_binding, load_inputs, present, sign, verify
-from validate import digest
+from openpatients2 import dense_store as store
+from openpatients2.dense.sidecar_receipts import base_binding, load_inputs, present, sign, verify
+from openpatients2.dense.validate import digest
 
 KIND = 'figure-privacy'
 STATUS = 'figure_privacy_flags_reviewed'
@@ -57,7 +57,7 @@ def check(root, aid):
 
 
 def sign_review(root, aid, *, role, reviewer, notes):
-    from signing_guard import check_signature
+    from openpatients2.dense.signing_guard import check_signature
     check_signature(reviewer, notes)   # refuse probes before validation/signing
     target, source, annotation, visual, report = check(root, aid)
     return sign(root, KIND, aid, binding(target, source, annotation, visual), report,

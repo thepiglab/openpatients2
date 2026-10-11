@@ -1,10 +1,10 @@
 """Draft, validate and sign the per-article supplement content manifest.
 
-  supplement_manifest_review.py ROOT --article ID --draft    # writes articles/ID/supplements/manifest.draft.json
-  supplement_manifest_review.py ROOT --article ID            # validates articles/ID/supplements/manifest.json
-  supplement_manifest_review.py ROOT --article ID --role agent|parent --reviewer NAME --notes NOTES
+  op2 dense supplement_manifest_review ROOT --article ID --draft    # writes articles/ID/supplements/manifest.draft.json
+  op2 dense supplement_manifest_review ROOT --article ID            # validates articles/ID/supplements/manifest.json
+  op2 dense supplement_manifest_review ROOT --article ID --role agent|parent --reviewer NAME --notes NOTES
 
-Requires `supplement_assets.py acquire` first. Machine blocks are copied from the
+Requires `op2 dense supplement_assets acquire` first. Machine blocks are copied from the
 acquisition record and cannot be edited; reviewers complete every review block
 after opening the cached file or peek. Signing re-hashes cached bytes; signed
 manifests survive later cache cleanup. Articles without supplements need none.
@@ -15,9 +15,9 @@ import json
 from pathlib import Path
 
 from openpatients2.supplement_manifest import (FORMAT, contract_sha256, draft_manifest, validate_manifest)
-from sidecar_receipts import base_binding, load_inputs, sign, verify
-from validate import digest
-import store
+from openpatients2.dense.sidecar_receipts import base_binding, load_inputs, sign, verify
+from openpatients2.dense.validate import digest
+from openpatients2 import dense_store as store
 
 KIND = 'supplement-manifest'
 STATUS = 'supplement_manifest_reviewed'
@@ -26,7 +26,7 @@ STATUS = 'supplement_manifest_reviewed'
 def _acquisition(root, aid):
     path = store.path(root, 'supplement-assets', aid)
     if not path.exists():
-        raise ValueError('Run supplement_assets.py acquire for this article first')
+        raise ValueError('Run `op2 dense supplement_assets acquire` for this article first')
     return json.loads(path.read_text())
 
 
@@ -70,7 +70,7 @@ def check(root, aid, *, verify_files=True):
 
 
 def sign_review(root, aid, *, role, reviewer, notes):
-    from signing_guard import check_signature
+    from openpatients2.dense.signing_guard import check_signature
     check_signature(reviewer, notes)   # refuse probes before validation/signing
     target, source, annotation, acquisition, report = check(root, aid, verify_files=True)
     return sign(root, KIND, aid, binding(target, source, annotation, acquisition), report,
@@ -82,7 +82,7 @@ def reviewed_manifest(root, aid):
     root = Path(root)
     if not store.path(root, 'supplement-manifests', aid).exists():
         return None
-    from sidecar_receipts import present
+    from openpatients2.dense.sidecar_receipts import present
     if not all(present(root, KIND, aid)):
         return None
     target, source, annotation, acquisition, report = check(root, aid, verify_files=False)

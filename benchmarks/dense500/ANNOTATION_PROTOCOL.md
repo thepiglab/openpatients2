@@ -142,7 +142,7 @@ review complete. No GEPA optimization or GPU campaign is part of annotation.
 
 ## Full patient-bundle review
 
-Run `schema_targets.py ROOT --folder drafts --article ARTICLE_ID` to build the
+Run `op2 dense schema_targets ROOT --folder drafts --article ARTICLE_ID` to build the
 actual Pydantic contracts in `articles/ID/schema_target.draft.json`. For articles with a parent-approved
 `articles/ID/annotation.json`, use that canonical file with `--folder annotations`; do not
 replace parent corrections with an older draft. Generation fills missing nullable
@@ -172,12 +172,12 @@ Before signing, run the runtime gate command on the article; it applies the same
 checker objects the local-LLM pipeline must pass (shared semantic rules, runtime task
 validators on the patient packet, roster order, summary, timeline, figure and EHR
 sidecar round trips) and must report `"passed": true`:
-`PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/reference_gates.py ROOT --article ARTICLE_ID --folder FOLDER`.
-`schema_review.py --role` and `review_record.save_review` refuse to sign on clinical
-gate/semantic errors; `export.py` withholds any article whose gates fail and records
+`op2 dense reference_gates ROOT --article ARTICLE_ID --folder FOLDER`.
+`op2 dense schema_review --role` and `review_record.save_review` refuse to sign on clinical
+gate/semantic errors; `op2 dense export` withholds any article whose gates fail and records
 the reasons in `article_checklist.json` (`withheld`, `runtime_gates`).
 
-Use `schema_review.py ROOT --folder FOLDER --article ARTICLE_ID --role agent
+Use `op2 dense schema_review ROOT --folder FOLDER --article ARTICLE_ID --role agent
 --reviewer NAME --notes NOTES` only after inspection. The parent separately reads
 and reviews that bundle and records a parent receipt. Receipts bind source,
 annotation and full-target hashes. The release exporter requires both full-schema
@@ -201,7 +201,7 @@ and keep their own unresolved/unreviewed state without changing extracted values
 ## Actual figure inspection and independent parent review
 
 The deliverable includes actual pixel annotation, not only captions. Fetch one
-article with `figure_assets.py ROOT --article ID`; the cache is bounded to 1 GB,
+article with `op2 dense figure_assets ROOT --article ID`; the cache is bounded to 1 GB,
 8 MB per asset, and not included in the release. Read each path in its manifest
 with `view_image`. Inspect all original panels, labels, chart axes/series and
 printed values, using bounded magnified inspection where necessary. Unreadable
@@ -219,7 +219,7 @@ patient/shared/aggregate/unresolved attribution. Do not infer identity from look
 Unavailable rows have null analysis and the actual failure; they are incomplete,
 not successful image reviews. No figures means no visual task is applicable.
 
-After actual inspection, `visual_review.py ROOT --article ID --role agent
+After actual inspection, `op2 dense visual_review ROOT --article ID --role agent
 --reviewer NAME --notes NOTES` validates and records the annotator's review.
 The parent must independently view every asset and read every visual output
 against the article before a separate parent receipt. Neither downloading nor
@@ -235,12 +235,12 @@ the annotation, runtime schemas, visual submissions or their receipts. Each has
 its own contract, independent agent and parent receipts (binding source, sidecar,
 asset and patient-identity hashes plus the sidecar contract fingerprint), and
 goes stale on any change. The checklist reports them as `informational_checks`
-outside `completed`. Commands run from the repo root with
-`PYTHONPATH=src:benchmarks/dense500 .venv/bin/python`; `R` = `benchmarks/dense500`.
+outside `completed`. Commands are `op2 dense <tool> ...` (from any directory);
+`R` = `benchmarks/dense500`.
 
 **Supplement manifest** (`dense-supplement-manifest/1`, `R/articles/ID/supplements/manifest.json`),
 required when the source lists supplements:
-1. `R/supplement_assets.py acquire R --article ID` downloads declared files into
+1. `op2 dense supplement_assets acquire R --article ID` downloads declared files into
    `data/.dense-supplement-cache` (hard 30 GB shared cap under a lock, 250 MB per
    file; larger files keep a HEAD size/type plus a 2 MB head sample and, for ZIP,
    a central-directory tail). It writes `R/articles/ID/supplements/assets.json` with hashes,
@@ -248,7 +248,7 @@ required when the source lists supplements:
    PDF page count + first-page text, DOC/DOCX text, ZIP member list, image size,
    whitelisted non-identifying DICOM tags, ffprobe video metadata). Unsupported or
    unavailable files are recorded with their status, never dropped.
-2. `R/supplement_manifest_review.py R --article ID --draft`, then open each cached
+2. `op2 dense supplement_manifest_review R --article ID --draft`, then open each cached
    file (or the peek when only a sample exists) and complete every `review`
    block in a copy at `R/articles/ID/supplements/manifest.json`: `content_class`
    (reporting_checklist, literature_table, clinical_case_table, lab_results,
@@ -265,14 +265,14 @@ required when the source lists supplements:
    methods and code are never EHR-includable; unresolved ownership is never
    includable. Do not put clinical values here: typed facts stay in
    `dense-supplemental-clinical-reference/1`, numeric series in the series sidecar.
-3. Validate with `R/supplement_manifest_review.py R --article ID`; sign with
+3. Validate with `op2 dense supplement_manifest_review R --article ID`; sign with
    `--role agent|parent --reviewer NAME --notes NOTES` only after inspection
    (signing re-hashes the cached files). After both receipts,
-   `R/supplement_assets.py cleanup R --article ID` frees the cache.
+   `op2 dense supplement_assets cleanup R --article ID` frees the cache.
 
 **Figure EHR labels** (`dense-figure-ehr-labels/1`, `R/articles/ID/figure_ehr_labels.json`),
 required when the source has figures, after the visual submission is final:
-`R/figure_ehr_review.py R --article ID --draft` derives a deterministic default
+`op2 dense figure_ehr_review R --article ID --draft` derives a deterministic default
 per panel from the reviewed `image_kind`, modality, chart type/scope and panel
 attribution. Copy to `R/articles/ID/figure_ehr_labels.json` and, for every panel and the
 whole figure, set the final `ehr_category` (clinical_imaging, waveform,
@@ -282,12 +282,12 @@ other), `ehr_includable`, a real `rationale` replacing the DRAFT text, and
 `basis` (pixels_reviewed or visual_record_reviewed). A label that differs from
 the default needs `override_reason`. Only the five patient-data categories can be
 includable, and only for panels attributed to a local patient (external or
-cited-case images are not). Validate/sign with `R/figure_ehr_review.py R
+cited-case images are not). Validate/sign with `op2 dense figure_ehr_review R
 --article ID [--role ...]`. Editing the visual submission makes labels stale.
 
 **Measurement series** (`dense-measurement-series/1`, `R/articles/ID/measurement_series.json`),
 recommended for serial tables and numeric supplements:
-`R/measurement_series_review.py R --article ID --draft` lists every literal
+`op2 dense measurement_series_review R --article ID --draft` lists every literal
 main-article table cell (and CSV/TSV/XLSX supplement cells) with grid
 provenance plus DRAFT candidate row series. Keep real series only; assign
 patients with literal evidence, `measurement_kind`, literal `unit_text` from a
@@ -315,18 +315,18 @@ and the contract fingerprint excludes them, so existing receipts stay current.
 required for every article with figures. Policy is flag only: panels stay
 includable. A separate sidecar bound to the visual submission (so signed
 figure-ehr receipts are unaffected), with its own agent/parent receipts.
-`R/figure_privacy_review.py R --article ID --draft` pre-fills hints from earlier
+`op2 dense figure_privacy_review R --article ID --draft` pre-fills hints from earlier
 reviewer text and known reports. On pixels, set per panel `burned_in_identifiers`
 (none | timestamps_or_device_text | direct_identifiers: names, IDs/MRNs, birth
 dates, operator names, UIDs), `sensitive_anatomy` and `identifiable_face`, each
 flag with a short category description (never the identifier values), and real
-notes. Validate/sign with `R/figure_privacy_review.py R --article ID [--role ...]`.
+notes. Validate/sign with `op2 dense figure_privacy_review R --article ID [--role ...]`.
 
 **Export and gates.** EHR-facing rows (`figure_ehr_labels.jsonl`,
 `supplement_manifests.jsonl`, `measurement_series.jsonl`, article bundles) carry
 `patient_species`, `non_human_patient` and `article_has_non_human_patient`;
 non-human patients are included, flagged. Figure EHR rows carry `privacy_flags`
-from a dual-signed privacy sidecar. `EHR_SIDECAR_GATES` in `export.py` (default
+from a dual-signed privacy sidecar. `EHR_SIDECAR_GATES` in `src/openpatients2/dense/export.py` (default
 False) makes `supplement_manifest_reviewed` and `figure_ehr_labels_reviewed`
 completion gates; measurement series and privacy flags stay informational. A
 supplement whose dual-signed manifest classifies every file as
@@ -344,7 +344,7 @@ motion not reviewed). `article_checklist.json` lists such supplements under
 (e.g. YouTube; `download_status: no_declared_asset`/`rejected_host`) are recorded
 honestly as `caption_and_filename_only` with limitations and are never a content
 review. **Unobtainable media: complete, flagged** (`UNAVAILABLE_MEDIA_POLICY=
-'complete_flagged'` in `export.py`, the default): when an article's only gap is
+'complete_flagged'` in `src/openpatients2/dense/export.py`, the default): when an article's only gap is
 media that cannot be obtained (such an external-link supplement, or a figure the
 dual-signed visual review records as `status: unavailable` because the source
 declares no asset, e.g. a video figure), the article completes. The media stay
@@ -352,8 +352,8 @@ listed in `article_checklist.json` (`unavailable_media`,
 `completed_with_unavailable_media`) and in the unified record (top-level
 `unavailable_media`; per figure/supplement `media_available: false`,
 `content_reviewed: false`), never as reviewed. A failed download of a declared
-asset is not unavailability. `'block'` restores the strict rule. Other clinical-data supplements still need the `supplement_review.py`
-path (details: `SUPPLEMENT_DOCUMENT_REVIEW.md`). Word-processor supplements (DOCX/DOC/RTF/ODT, also inside a ZIP) use `dense-supplemental-text-document-reference/1` via `supplement_assets.py extract-text` (see that file).
+asset is not unavailability. `'block'` restores the strict rule. Other clinical-data supplements still need the `op2 dense supplement_review`
+path (details: `SUPPLEMENT_DOCUMENT_REVIEW.md`). Word-processor supplements (DOCX/DOC/RTF/ODT, also inside a ZIP) use `dense-supplemental-text-document-reference/1` via `op2 dense supplement_assets extract-text` (see that file).
 
 **Document peeks (peek engine `supplement-peek/2`).** With the optional
 `anydoc` extra (`firecrawl-anydoc==0.2.4`, offline only; hosted OCR is banned),
@@ -362,7 +362,7 @@ include `tables` (`rows` with null for merged-over slots, `spans`, `header_rows`
 DOCX lines/cells are cross-checked against the raw XML. Any that are not literal
 are listed in `nonliteral` and cannot be quoted. PDF stays on pdftotext and XLSX
 on the built-in reader. Peeks already acquired are never recomputed:
-`supplement_assets.py peek` is refused once any manifest receipt exists.
+`op2 dense supplement_assets peek` is refused once any manifest receipt exists.
 
 ## Shared annotation rules
 

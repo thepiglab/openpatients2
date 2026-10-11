@@ -4,7 +4,7 @@ All four stages are OFF by default (`EhrStageConfig`). They run on a finished
 `PilotRunner` output directory (patients.jsonl, rosters.json,
 visual-annotations.json), reuse the runner's bounded call/repair/ledger
 machinery and the extraction config's serving limits, and write (OUTPUT uses the same per-article
-layout as the dense benchmark roots, benchmarks/dense500/store.py):
+layout as the dense benchmark roots, openpatients2.dense_store):
 
   OUTPUT/articles/ID/figure_ehr_labels.json       dense-figure-ehr-labels/1
   OUTPUT/articles/ID/figure_privacy_flags.json    dense-figure-privacy-flags/1   (needs pixels)

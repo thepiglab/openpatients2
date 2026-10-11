@@ -9,9 +9,9 @@ from openpatients2.schemas import TASK_MODELS
 from openpatients2.article_tasks import Roster,Summary,Vision
 from openpatients2.figure_attribution import FigureReview
 from openpatients2.longitudinal import PatientTimeline,audit_timeline,relative_order
-from schema_targets import materialize
-from validate import digest
-import store
+from openpatients2.dense.schema_targets import materialize
+from openpatients2.dense.validate import digest
+from openpatients2 import dense_store as store
 
 
 def validate_submission(target,annotation,source):
@@ -89,16 +89,16 @@ def validate_submission(target,annotation,source):
 def main():
     p=argparse.ArgumentParser();p.add_argument('root',type=Path);p.add_argument('--article',required=True);p.add_argument('--folder',default='drafts');p.add_argument('--role',choices=['agent','parent']);p.add_argument('--reviewer');p.add_argument('--notes');args=p.parse_args()
     if args.role:
-        from signing_guard import check_signature
+        from openpatients2.dense.signing_guard import check_signature
         check_signature(args.reviewer,args.notes)   # refuse probes before anything is read or written
     aid=args.article;source=json.loads(store.path(args.root,'sources',aid).read_text());a=json.loads(store.path(args.root,args.folder,aid).read_text());target=json.loads(store.path(args.root,'schema-submissions',aid).read_text())
     report=validate_submission(target,a,source)
     if args.role:
         if not args.reviewer or not args.notes:raise ValueError('Review receipts need reviewer and substantive inspection notes')
-        from validate import case_context_errors
+        from openpatients2.dense.validate import case_context_errors
         if case_context_errors(a):raise ValueError(case_context_errors(a))
-        # The same runtime checker objects the local-LLM pipeline must pass (reference_gates.py).
-        from reference_gates import run_gates
+        # The same runtime checker objects the local-LLM pipeline must pass (reference_gates).
+        from openpatients2.dense.reference_gates import run_gates
         gates=run_gates(args.root,aid,annotation=a,groups=('clinical',))
         if not gates['passed']:raise ValueError(('Runtime gates failed; fix the annotation, regenerate and re-run',gates['errors'][:10]))
         receipt={'article_id':aid,'reviewer':args.reviewer,'role':args.role,'reviewed_at':datetime.now(timezone.utc).isoformat(),'annotation_folder':args.folder,'annotation_sha256':digest(a),'target_sha256':digest(target),'source_text_sha256':source['text_sha256'],'inspection_notes':args.notes,'status':'schema_source_reviewed','physician_adjudicated':False,**report}

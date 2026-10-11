@@ -12,9 +12,10 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from openpatients2.vision import fetch_pixels
-import store
+from openpatients2 import dense_store as store
+from openpatients2.dense import REPO
 
-CACHE = Path(__file__).resolve().parents[2] / 'data/.dense-figure-cache'
+CACHE = REPO / 'data/.dense-figure-cache'
 MAX_IMAGE_BYTES = 8_000_000
 MAX_CACHE_BYTES = 1_000_000_000
 

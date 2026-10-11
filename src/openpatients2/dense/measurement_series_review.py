@@ -1,8 +1,8 @@
 """Draft, validate and sign dense numeric measurement series.
 
-  measurement_series_review.py ROOT --article ID --draft   # writes articles/ID/measurement_series.draft.json
-  measurement_series_review.py ROOT --article ID           # validates articles/ID/measurement_series.json
-  measurement_series_review.py ROOT --article ID --role agent|parent --reviewer NAME --notes NOTES
+  op2 dense measurement_series_review ROOT --article ID --draft   # writes articles/ID/measurement_series.draft.json
+  op2 dense measurement_series_review ROOT --article ID           # validates articles/ID/measurement_series.json
+  op2 dense measurement_series_review ROOT --article ID --role agent|parent --reviewer NAME --notes NOTES
 
 The draft lists every literal main-article table cell (and CSV/TSV/XLSX cells of
 downloaded supplements, capped) plus DRAFT candidate row series. Reviewers keep
@@ -17,9 +17,9 @@ from pathlib import Path
 
 from openpatients2.measurement_series import FORMAT, contract_sha256, draft_series, validate_series
 from openpatients2.supplement_peek import read_delimited, read_xlsx
-from sidecar_receipts import base_binding, load_inputs, present, sign, verify
-from validate import digest
-import store
+from openpatients2.dense.sidecar_receipts import base_binding, load_inputs, present, sign, verify
+from openpatients2.dense.validate import digest
+from openpatients2 import dense_store as store
 
 KIND = 'measurement-series'
 STATUS = 'measurement_series_reviewed'
@@ -31,7 +31,7 @@ def _json(path):
 
 
 def reviewed_transcriptions(root, aid):
-    from supplement_review import reviewed_supplement_targets
+    from openpatients2.dense.supplement_review import reviewed_supplement_targets
     out = {}
     from openpatients2.document_text import reviewed_text
     for target, _ in reviewed_supplement_targets(root, aid):
@@ -117,7 +117,7 @@ def binding(target, source, annotation, manifest, transcriptions):
 
 
 def sign_review(root, aid, *, role, reviewer, notes):
-    from signing_guard import check_signature
+    from openpatients2.dense.signing_guard import check_signature
     check_signature(reviewer, notes)   # refuse probes before validation/signing
     target, source, annotation, manifest, transcriptions, report = check(root, aid, verify_files=True)
     return sign(root, KIND, aid, binding(target, source, annotation, manifest, transcriptions), report,

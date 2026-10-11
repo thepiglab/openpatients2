@@ -15,8 +15,7 @@ AID = 'PMC-clinical-test.1'
 @pytest.fixture
 def clinical(tmp_path, monkeypatch):
     tmp_path = tmp_path / 'clinical'; tmp_path.mkdir()
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
-    import supplement_review as m
+    from openpatients2.dense import supplement_review as m
     monkeypatch.setattr(m, 'pdf_page_count', lambda path: 1)
     data = b'%PDF-1.4\nSynthetic test only'; path = tmp_path / 'table.pdf'; path.write_bytes(data)
     url = 'https://example.invalid/table.pdf'
@@ -73,7 +72,7 @@ def test_production_fields_provenance_missing_cells_and_separate_export(clinical
     assert rows[0]['evidence'][0]==dict(quote='3.6',source_section='SM1:transcription:cell')
     assert rows[1]['assertion']=='unknown' and rows[1]['flag']=='unknown'
     assert rows[1]['numeric_value'] is None and rows[1]['result_absent_reason']=='not_reported'
-    import export as exporter
+    from openpatients2.dense import export as exporter
     records=exporter.supplemental_clinical_records([(t,[{'role':'agent'},{'role':'parent'}])],a,'test')
     assert exporter.patient_supplemental_clinical(records,'p1')[0]['patient']['sections']==patient['sections']
     assert exporter.patient_supplemental_clinical(records,'p2')==[]

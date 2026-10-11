@@ -251,7 +251,7 @@ def contract_sha256():
 
 
 # Classes whose dual-signed, fully inspected manifest rows satisfy the legacy
-# supplement gate. Clinical/patient-data classes still need supplement_review.py.
+# supplement gate. Clinical/patient-data classes still need openpatients2.dense.supplement_review.
 NON_CLINICAL_GATE_CLASSES = frozenset({'reporting_checklist', 'literature_table', 'protocol_methods', 'code'})
 
 
@@ -266,7 +266,7 @@ def non_clinical_supplements(manifest):
         and not f['review']['patient_ids'] and f['review']['ehr_includable'] is False for f in files)}
 
 
-# Video supplements (MP4 etc.) have no page/pixel sidecar in supplement_review.py: the dual-signed
+# Video supplements (MP4 etc.) have no page/pixel sidecar in openpatients2.dense.supplement_review: the dual-signed
 # manifest row IS their content review. A row satisfies the supplement gate when the file was
 # downloaded and machine-probed as a video (ffprobe duration/frame count), the reviewers classified
 # it from the content itself (classification_basis=full_content: frames were sampled and viewed),
@@ -307,7 +307,7 @@ def manifest_gate_supplements(manifest, *, accept_external_unavailable=False):
     'manifest_video_frames_sampled' (downloaded, probed video whose sampled frames were viewed), or, only
     when the caller's policy accepts it, 'manifest_external_media_unavailable' (no declared PMC asset; nothing
     viewed, limitations recorded). A supplement with several files needs every file to qualify; mixed bases
-    are joined with '+'. Patient-data documents/images/tables still need supplement_review.py.
+    are joined with '+'. Patient-data documents/images/tables still need openpatients2.dense.supplement_review.
     """
     rows = {}
     for row in (manifest or {}).get('files', []):

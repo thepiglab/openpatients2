@@ -5,7 +5,7 @@ One implementation serves both pipelines:
 * runtime: `validation.validate` adds `section_violations` to every task result, so
   local-LLM outputs are repaired/rejected by the same rules; `case_context_target_errors`
   is the per-patient packet gate used by the extraction runners;
-* reference: `dense500/validate.py semantic_errors` checks annotation facts, and the
+* reference: `openpatients2.dense.validate.semantic_errors` checks annotation facts, and the
   materialized runtime sections pass through `validation.validate` again, so a
   violating reference cannot be signed or exported.
 
@@ -29,7 +29,7 @@ import re
 # the dense annotation validator and the materializer (no lossy mapping between them).
 EVENT_OCCURRENCES = ('occurred', 'planned', 'conditional', 'not_occurred', 'unknown')
 TEMPORAL_RELATIONS = ('before', 'after', 'same_time', 'during', 'overlaps', 'unknown')
-# Earlier annotation spelling -> canonical value (migrations/semantic_rules_2026_10.py applies it).
+# Earlier annotation spelling -> canonical value (`op2 dense normalize` applies it).
 LEGACY_OCCURRENCE = {'uncertain': 'unknown'}
 
 ERROR, WARNING = 'error', 'warning'

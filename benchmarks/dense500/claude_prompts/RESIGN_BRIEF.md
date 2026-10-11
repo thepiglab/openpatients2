@@ -1,30 +1,28 @@
-# Re-sign campaign brief: shared-rules migration (semantic-rules-2026-10)
+# Re-sign brief: articles whose receipts went stale after a shared-rules normalization
 
 Repo root `/Users/mkieffer/programming/ToadResearch/openpatients2`; `R` = the article's root (`benchmarks/dense500`
-or `benchmarks/dense50`); run from the repo root with `PYTHONPATH=src:benchmarks/dense500 .venv/bin/python`.
+or `benchmarks/dense50`); tools run as `op2 dense <tool> ...` (or `.venv/bin/op2`; any working directory).
 
 ## Signing: a `--role` call is a signature
 
-Never run any `--role` command to probe, test or dry-run a script. It overwrites the existing receipt, which may be another reviewer's valid signature. Run the script WITHOUT `--role` to validate. Sign only after you inspected the content yourself, with your real reviewer identity (e.g. "Claude Sonnet 5.5 annotator", "Claude Opus 5.5 parent") and notes that describe what you checked. `signing_guard.py` refuses placeholder reviewers/notes ("x", "test", under 20 characters, "dry run"), and exports reject receipts that carry them.
+Never run any `--role` command to probe, test or dry-run a script. It overwrites the existing receipt, which may be another reviewer's valid signature. Run the script WITHOUT `--role` to validate. Sign only after you inspected the content yourself, with your real reviewer identity (e.g. "Claude Sonnet 5.5 annotator", "Claude Opus 5.5 parent") and notes that describe what you checked. `openpatients2.dense.signing_guard` refuses placeholder reviewers/notes ("x", "test", under 20 characters, "dry run"), and exports reject receipts that carry them.
 
 ## Event kinds live in the annotation
 
-Set timeline event classification on the annotation event: `kind` (presentation, history, diagnosis, test, treatment, adverse_event, outcome, follow_up, plan, other), and for its `time_text` the `time_kind` (calendar, relative, duration, age, gestational_age, postnatal_age, order_only), `time_precision` (exact, approximate, range, unknown) and `time_calendar_value` (the YYYY[-MM[-DD]] the time text states at its own precision, e.g. "October 26, 2022" -> 2022-10-26, "October 2022" -> 2022-10; calendar times only). `schema_targets.py` reads these fields. Never patch event kinds or time classifications into `schema_target.json` with a script; regenerate instead. The same holds for the roster: set the article-level annotation block `"roster": {"reported_individual_count": N|null, "roster_complete": true|false, "evidence": [{"segment_id": ..., "quote": "<literal text stating the number>"}]}`; `schema_targets.py` reads it, and a submission patched after signing makes the parent's schema receipt stale. `schema_review.py` rejects a submission that disagrees with classification set in the annotation.
+Set timeline event classification on the annotation event: `kind` (presentation, history, diagnosis, test, treatment, adverse_event, outcome, follow_up, plan, other), and for its `time_text` the `time_kind` (calendar, relative, duration, age, gestational_age, postnatal_age, order_only), `time_precision` (exact, approximate, range, unknown) and `time_calendar_value` (the YYYY[-MM[-DD]] the time text states at its own precision, e.g. "October 26, 2022" -> 2022-10-26, "October 2022" -> 2022-10; calendar times only). `op2 dense schema_targets` reads these fields. Never patch event kinds or time classifications into `schema_target.json` with a script; regenerate instead. The same holds for the roster: set the article-level annotation block `"roster": {"reported_individual_count": N|null, "roster_complete": true|false, "evidence": [{"segment_id": ..., "quote": "<literal text stating the number>"}]}`; `op2 dense schema_targets` reads it, and a submission patched after signing makes the parent's schema receipt stale. `op2 dense schema_review` rejects a submission that disagrees with classification set in the annotation.
 
-## What happened
-All 136 annotated articles were migrated to the shared rules (`src/openpatients2/rules/annotation_rules.yaml`, rendered
-into `benchmarks/dense500/ANNOTATION_PROTOCOL.md` "Shared annotation rules" and into the runtime prompts) by
-`benchmarks/dense500/migrations/semantic_rules_2026_10.py`. Nothing was signed, so:
-- every schema receipt (`receipts/schema.agent.json`, `receipts/schema.parent.json`) is stale: the timeline vocabulary was unified
-  (occurrence `uncertain` -> `unknown`, `not_occurred`/`conditional` and relation `unknown`/`during` now exist in both
-  pipelines), so every schema target was regenerated;
-- the parent source receipt (`receipts/annotation.parent.json`) is stale wherever the annotation changed (`annotation_changed` in the report);
-- PMC12689157.1 `figure_ehr_labels.json` changed (normal-comparison panels -> `non_clinical_diagnostic_aid`): both
-  figure-EHR receipts must be re-signed.
-`export.py` withholds every stale article until it is re-signed (reason in `article_checklist.json` -> `withheld`).
+## When this applies
+`op2 dense normalize` brings annotations in line with the shared rules (`src/openpatients2/rules/annotation_rules.yaml`,
+rendered into `benchmarks/dense500/ANNOTATION_PROTOCOL.md` "Shared annotation rules" and into the runtime prompts)
+and regenerates schema targets. It never signs, so after it changes an article:
+- the schema receipts (`receipts/schema.agent.json`, `receipts/schema.parent.json`) are stale when the target changed;
+- the parent source receipt (`receipts/annotation.parent.json`) is stale when the annotation changed;
+- figure-EHR receipts are stale when `figure_ehr_labels.json` changed (normal-comparison panels).
+`op2 dense export` withholds every stale article until it is re-signed (reason in `article_checklist.json` -> `withheld`).
+(The one-off 2026-10 shared-rules backfill that first used this brief is finished.)
 
-Per-article diff (each change with old -> new, by migration) and open items:
-`benchmarks/dense500/migrations/reports/semantic_rules_2026_10.json` -> `articles["<ID>"]`
+Per-article diff (each change with old -> new, by migration) and open items: a dry run writes the report,
+`op2 dense normalize --article <ID> --report <your scratch dir>/normalize.json` -> `articles["<ID>"]`
 (`changes`, `needs_review`, `receipts_going_stale`). Open judgment items for the article, if any:
 `R/articles/<ID>/needs_review.json`.
 
@@ -38,13 +36,13 @@ Per-article diff (each change with old -> new, by migration) and open items:
    null; visual descriptions with `?` outside quotes -> quote the printed text or move it to limitations (then the
    visual, figure-EHR and privacy receipts need re-signing). Write each decision into the item's `resolution` and
    `resolved_by` and into the `corrections` you pass to `save_review`.
-3. Validate (`validate.py R --folder annotations` must not list the article), then
+3. Validate (`op2 dense validate R --folder annotations` must not list the article), then
    `review_record.save_review(...)` as in PARENT_REVIEWER_BRIEF.md step 5 (it refuses on rule errors).
 4. Regenerate and merge the schema target, keeping earlier structural edits, and refresh the needs-review file:
-   `benchmarks/dense500/migrations/semantic_rules_2026_10.py --apply --article <ID> --allow-recent`
+   `op2 dense normalize --apply --article <ID> --allow-recent`
    Inspect `R/articles/<ID>/schema_target.json`, then run the runtime gates until `"passed": true`:
-   `benchmarks/dense500/reference_gates.py R --article <ID>`
-5. Sign `schema_review.py R --folder annotations --article <ID> --role parent --reviewer "Claude Opus 5.5 parent"
+   `op2 dense reference_gates R --article <ID>`
+5. Sign `op2 dense schema_review R --folder annotations --article <ID> --role parent --reviewer "Claude Opus 5.5 parent"
    --notes "<what you verified>"`, plus any visual/figure-EHR/privacy parent receipts listed in
    `receipts_going_stale` or invalidated by your edits. Report: verified changes, resolved items, re-sign needs.
 
@@ -52,10 +50,10 @@ Per-article diff (each change with old -> new, by migration) and open items:
 1. Read the article's report entry, `R/articles/<ID>/receipts/annotation.parent.json` corrections, and the regenerated
    `R/articles/<ID>/schema_target.json` (your receipt binds that exact target). Check the changed attributes against the
    source; if you disagree, report instead of signing.
-2. Run `benchmarks/dense500/reference_gates.py R --article <ID>` (must pass), then re-sign
-   `schema_review.py R --folder annotations --article <ID> --role agent --reviewer "Claude Sonnet 5.5 annotator"
-   --notes "<what you checked>"` and any agent sidecar receipts listed as stale (e.g. `figure_ehr_review.py ... --role agent`).
-3. Never edit annotations or run `--role parent`. The orchestrator runs `export.py` and reports N/500.
+2. Run `op2 dense reference_gates R --article <ID>` (must pass), then re-sign
+   `op2 dense schema_review R --folder annotations --article <ID> --role agent --reviewer "Claude Sonnet 5.5 annotator"
+   --notes "<what you checked>"` and any agent sidecar receipts listed as stale (e.g. `op2 dense figure_ehr_review ... --role agent`).
+3. Never edit annotations or run `--role parent`. The orchestrator runs `op2 dense export` and reports N/500.
 
 ## Shared rules checklist
 

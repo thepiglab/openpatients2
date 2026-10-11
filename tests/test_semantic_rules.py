@@ -101,9 +101,8 @@ def test_normalizer_keeps_route_spelling_and_drops_paraphrased_anchor():
 
 @pytest.fixture
 def dense(monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
     import importlib
-    return importlib.import_module('validate'), importlib.import_module('schema_targets')
+    return importlib.import_module('openpatients2.dense.validate'), importlib.import_module('openpatients2.dense.schema_targets')
 
 
 def test_annotation_and_materialized_target_share_the_rules_and_timeline_vocabulary(dense):
@@ -149,8 +148,7 @@ def test_review_only_facts_are_exported_as_flagged_items(dense):
 
 
 def test_series_round_trip_uses_reviewed_supplement_transcriptions(monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
-    from reference_gates import media_gates
+    from openpatients2.dense.reference_gates import media_gates
     root = ROOT / 'benchmarks/dense500'; aid = 'PMC12786310.1'
     if not store.path(root, 'measurement-series', aid).exists():
         pytest.skip('reference series not present')
@@ -188,8 +186,7 @@ def test_positional_and_patient_name_panel_labels_warn_on_sidecars():
 
 
 def test_reference_gates_report_positional_panel_labels_as_warnings(tmp_path, monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
-    from reference_gates import _panel_label_warnings
+    from openpatients2.dense.reference_gates import _panel_label_warnings
     figure = {'figure_id': 'F1', 'panels': [{'panel': 'left'}, {'panel': 'A'}]}
     visual = {'figures': [{'figure_id': 'F1', 'analysis': {'visual': {'panels': [{'panel': 'left'}, {'panel': 'A'}]}}}]}
     store.path(tmp_path, 'figure-ehr-labels', 'X', mkdir=True).write_text(json.dumps({'figures': [figure]}))
@@ -304,7 +301,7 @@ def test_series_legend_cells_round_trip_in_both_pipelines(monkeypatch):
 def test_event_classification_lives_in_the_annotation(dense, monkeypatch):
     validator, targets = dense
     import importlib
-    schema_review = importlib.import_module('schema_review')
+    schema_review = importlib.import_module('openpatients2.dense.schema_review')
     root = ROOT / 'benchmarks/dense50'
     for aid in store.matching_ids(root, 'annotations', 'PMC*'):   # read-only: first article with a timed event
         annotation = json.loads(store.path(root, 'annotations', aid).read_text())
@@ -339,10 +336,8 @@ def test_event_classification_lives_in_the_annotation(dense, monkeypatch):
 
 
 def test_merge_prefers_annotation_classification_over_old_submission(monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
     import importlib.util
-    spec = importlib.util.spec_from_file_location('semantic_migration_merge', ROOT / 'benchmarks/dense500/migrations/semantic_rules_2026_10.py')
-    module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    from openpatients2.dense import normalize as module
     def target(kind, tkind):
         return {'roster': {'reported_individual_count': 1, 'roster_complete': True, 'limitations': [], 'patients': [{'patient_id': 'p1'}]},
                 'figure_attribution': [], 'patients': [{'source': {'patient_target': {'patient_id': 'p1'}}, 'vision': {},
@@ -452,8 +447,7 @@ def test_uneventful_outcome_is_exempt_and_gate_verdict_is_explicit(monkeypatch):
     assert ('EVID-NEGATION', 'warning') not in rules('outcomes', course)
     assert ('EVID-NEGATION', 'warning') in rules('outcomes', {**course, 'text_value': 'asymptomatic at follow-up'})
     assert ('EVID-NEGATION', 'warning') in rules('procedures_devices', {**course, 'name': 'uneventful surgery'})
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
-    from reference_gates import verdict
+    from openpatients2.dense.reference_gates import verdict
     assert verdict({'article_id': 'A', 'passed': True, 'errors': [], 'warnings': [{}, {}]}) == 'A: PASSED (2 warnings, non-blocking)'
     assert verdict({'article_id': 'A', 'passed': False, 'errors': [{}], 'warnings': [{}]}).startswith('A: FAILED (1 blocking error')
 
@@ -519,7 +513,7 @@ def test_table_heading_governs_time_in_runtime_packets():
 def test_roster_block_in_the_annotation_is_the_single_source(dense):
     validator, targets = dense
     import importlib
-    schema_review = importlib.import_module('schema_review')
+    schema_review = importlib.import_module('openpatients2.dense.schema_review')
     root = ROOT / 'benchmarks/dense50'
     for aid in store.matching_ids(root, 'annotations', 'PMC*'):     # read-only: a clean single-patient article
         annotation = json.loads(store.path(root, 'annotations', aid).read_text())
@@ -545,7 +539,7 @@ def test_roster_block_in_the_annotation_is_the_single_source(dense):
     annotation['roster'] = {'reported_individual_count': 97, 'roster_complete': False,
                             'evidence': [{'segment_id': segment['segment_id'], 'quote': segment['text'][:40]}]}
     assert any('literal evidence quote' in e for e in validator.validate(annotation, source))   # quote does not state 97
-    from validate import roster_block_errors
+    from openpatients2.dense.validate import roster_block_errors
     two = {'patients': [{}, {}], 'roster': {'reported_individual_count': 2, 'roster_complete': True,
                                             'evidence': [{'segment_id': 'b1', 'quote': 'We describe two patients'}]}}
     assert not roster_block_errors(two)
@@ -554,10 +548,8 @@ def test_roster_block_in_the_annotation_is_the_single_source(dense):
 
 
 def test_merge_keeps_old_roster_only_without_annotation_block(monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
     import importlib.util
-    spec = importlib.util.spec_from_file_location('semantic_migration_roster', ROOT / 'benchmarks/dense500/migrations/semantic_rules_2026_10.py')
-    module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    from openpatients2.dense import normalize as module
     import openpatients2.longitudinal as lg
     monkeypatch.setattr(lg, 'relative_order', lambda timeline: [])
     def target(count, complete):
@@ -570,8 +562,7 @@ def test_merge_keeps_old_roster_only_without_annotation_block(monkeypatch):
 
 
 def test_singular_case_statement_supports_roster_count_one(monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
-    from validate import roster_block_errors
+    from openpatients2.dense.validate import roster_block_errors
     def block(quote, count=1):
         return {'patients': [{}], 'roster': {'reported_individual_count': count, 'roster_complete': True,
                                               'evidence': [{'segment_id': 'b1', 'quote': quote}]}}

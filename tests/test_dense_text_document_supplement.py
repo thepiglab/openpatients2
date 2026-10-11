@@ -46,10 +46,7 @@ def docx_bytes():
 @pytest.fixture
 def setup(tmp_path, monkeypatch):
     root = tmp_path / 'root'; root.mkdir()
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
-    for name in ('supplement_review', 'supplement_assets', 'sidecar_receipts', 'measurement_series_review'):
-        sys.modules.pop(name, None)
-    import supplement_assets, supplement_review as m
+    from openpatients2.dense import supplement_assets, supplement_review as m
     member = docx_bytes()
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, 'w') as z:
@@ -128,10 +125,7 @@ def test_complete_review_signs_and_satisfies_the_supplement_gate(setup):
     m.sign_review(root, AID, 'sup1', role='parent', reviewer='Claude synthetic test parent', notes='Independently read all units and facts')
     reviewed = m.reviewed_supplement_targets(root, AID)
     assert len(reviewed) == 1 and reviewed[0][1][0]['status'] == 'source_and_document_text_reviewed'
-    sys.path.insert(0, str(ROOT / 'benchmarks/dense500'))
-    import importlib.util
-    spec = importlib.util.spec_from_file_location('text_doc_export', ROOT / 'benchmarks/dense500/export.py')
-    exporter = importlib.util.module_from_spec(spec); spec.loader.exec_module(exporter)
+    from openpatients2.dense import export as exporter
     inventory = exporter.supplement_inventory(source, reviewed)
     assert exporter.supplement_satisfied(inventory[0])
     assert inventory[0]['review_status'] == 'agent_and_parent_source_and_document_text_reviewed'
@@ -162,9 +156,7 @@ def test_edited_units_nonliteral_quotes_and_missing_coverage_are_rejected(setup)
 
 
 def test_directly_declared_docx(tmp_path, monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
-    sys.modules.pop('supplement_review', None)
-    import supplement_review as m
+    from openpatients2.dense import supplement_review as m
     data = docx_bytes(); path = tmp_path / 'table.docx'; path.write_bytes(data)
     url = 'https://pmc-oa-opendata.s3.amazonaws.com/X.1/table.docx?md5=y'
     asset = dict(url=url, filename='table.docx', original_manifest_url='s3://x/table.docx', md5=hashlib.md5(data).hexdigest())

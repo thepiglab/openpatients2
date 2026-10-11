@@ -12,10 +12,10 @@ automated pipeline uses:
             EHR label / privacy / supplement-manifest / measurement-series round trips
             through ehr_tasks checkers (series with reviewed supplement transcriptions).
 
-Used by schema_review.py --role (clinical gates must pass before a receipt is written) and
-export.py (failing articles are withheld; reasons go to article_checklist.json).
+Used by schema_review --role (clinical gates must pass before a receipt is written) and
+export (failing articles are withheld; reasons go to article_checklist.json).
 
-    PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/reference_gates.py \
+    op2 dense reference_gates \
         benchmarks/dense500 --article ID [--folder annotations] [--groups clinical media]
 """
 import argparse
@@ -23,7 +23,7 @@ import copy
 import json
 from pathlib import Path
 
-import store
+from openpatients2 import dense_store as store
 
 GROUPS = ('clinical', 'media')
 
@@ -44,7 +44,7 @@ def clinical_gates(source, annotation, target):
     from openpatients2.schemas import TASK_MODELS
     from openpatients2.semantic_rules import ERROR, record_violations
     from openpatients2.validation import validate
-    from validate import semantic_violations
+    from openpatients2.dense.validate import semantic_violations
     errors, warnings = [], []
     for v in semantic_violations(annotation, source):
         _add(errors if v.severity == ERROR else warnings, f'annotation.{v.rule_id}', v.text())
@@ -184,7 +184,7 @@ def media_gates(root, source, annotation, target):
                 _add(errors, 'ehr.supplement_classification', exc)
     series = _json(store.path(root, 'measurement-series', aid))
     if series:
-        from measurement_series_review import reviewed_transcriptions
+        from openpatients2.dense.measurement_series_review import reviewed_transcriptions
         try:
             transcriptions = reviewed_transcriptions(root, aid)
         except (ValueError, KeyError, TypeError, FileNotFoundError) as exc:

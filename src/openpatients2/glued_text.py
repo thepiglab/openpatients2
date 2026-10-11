@@ -4,8 +4,8 @@ Shared by both pipelines (rule GLUED-TEXT in rules/annotation_rules.yaml):
 
 * `semantic_rules.item_violations` / `annotation_violations` warn on glued tokens in exported
   free text (runtime model output and dense reference annotations);
-* `benchmarks/dense500/scan_glued_text.py` reports every suspect token with a proposed
-  segmentation, and `benchmarks/dense500/repair_glued_text.py` applies only high-confidence ones.
+* `op2 dense scan_glued_text` (openpatients2.dense.scan_glued_text) reports every suspect token
+  with a proposed segmentation; `apply_segmentations` applies reviewed ones.
 
 A token is suspect when it is not a known word (shipped corpus vocabulary, the article's own
 source tokens, or a simple inflection of either) but splits into known words. The vocabulary

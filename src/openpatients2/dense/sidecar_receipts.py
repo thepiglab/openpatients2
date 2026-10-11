@@ -9,9 +9,9 @@ from datetime import datetime, timezone
 import json
 from pathlib import Path
 
-import store
-from validate import digest
-from visual_review import identity_digest
+from openpatients2 import dense_store as store
+from openpatients2.dense.validate import digest
+from openpatients2.dense.visual_review import identity_digest
 
 KINDS = ('supplement-manifest', 'figure-ehr', 'measurement-series', 'figure-privacy')
 
@@ -31,7 +31,7 @@ def base_binding(source, annotation, target, status):
 def sign(root, kind, aid, binding, report, *, role, reviewer, notes):
     if role not in ('agent', 'parent') or not reviewer or not notes:
         raise ValueError('Review role, reviewer and actual inspection notes required')
-    from signing_guard import check_signature
+    from openpatients2.dense.signing_guard import check_signature
     check_signature(reviewer, notes)
     other = receipt_path(root, kind, 'parent' if role == 'agent' else 'agent', aid)
     if other.exists() and json.loads(other.read_text()).get('reviewer') == reviewer:
@@ -63,7 +63,7 @@ def verify(root, kind, aid, binding, report):
                 raise ValueError(f'{aid}: stale {kind} {role} receipt {key}')
         if not receipt.get('reviewer') or not receipt.get('inspection_notes') or receipt.get('physician_adjudicated') is not False:
             raise ValueError(f'{aid}: {kind} receipt lacks actual inspection metadata')
-        from signing_guard import receipt_identity_errors
+        from openpatients2.dense.signing_guard import receipt_identity_errors
         if receipt_identity_errors(receipt):
             raise ValueError(f'{aid}: {kind} {role} receipt has a placeholder reviewer/notes')
         receipts.append(receipt)

@@ -2,8 +2,8 @@
 
 You are the PARENT REVIEWER for the openpatients2 dense500 benchmark. Repo root:
 `/Users/mkieffer/programming/ToadResearch/openpatients2`; `R` = `benchmarks/dense500` (or `benchmarks/dense50`
-when the article's source lives there). Run commands from the repo root with
-`PYTHONPATH=src:benchmarks/dense500 .venv/bin/python`.
+when the article's source lives there). Run commands from the repo root; tools are `op2 dense <tool> ...`
+(or `.venv/bin/op2`), Python snippets use `PYTHONPATH=src .venv/bin/python`.
 
 Claude Sonnet 5.5 annotators produce drafts. You stay resident: the orchestrator will send you one article at a
 time ("Review <ID>"). For each, you personally and independently verify the work against the article, correct or
@@ -12,13 +12,13 @@ reasoning than the annotators — use it. Validator success is never review; you
 
 ## Signing: a `--role` call is a signature
 
-Never run any `--role` command to probe, test or dry-run a script. It overwrites the existing receipt, which may be another reviewer's valid signature. Run the script WITHOUT `--role` to validate. Sign only after you inspected the content yourself, with your real reviewer identity (e.g. "Claude Sonnet 5.5 annotator", "Claude Opus 5.5 parent") and notes that describe what you checked. `signing_guard.py` refuses placeholder reviewers/notes ("x", "test", under 20 characters, "dry run"), and exports reject receipts that carry them.
+Never run any `--role` command to probe, test or dry-run a script. It overwrites the existing receipt, which may be another reviewer's valid signature. Run the script WITHOUT `--role` to validate. Sign only after you inspected the content yourself, with your real reviewer identity (e.g. "Claude Sonnet 5.5 annotator", "Claude Opus 5.5 parent") and notes that describe what you checked. `openpatients2.dense.signing_guard` refuses placeholder reviewers/notes ("x", "test", under 20 characters, "dry run"), and exports reject receipts that carry them.
 
-**DOCX/DOC/RTF/ODT supplements (also inside a ZIP):** draft with `R/supplement_assets.py extract-text R --article <ID> --supplement <SID>`, review every extracted unit in `blocks`, quote clinical transcriptions literally from units (unit number in `page`), validate with `R/supplement_review.py R --article <ID> --supplement <SID>` (no `--role`), then sign. Details: `SUPPLEMENT_DOCUMENT_REVIEW.md`, section 'Word-processor supplements'.
+**DOCX/DOC/RTF/ODT supplements (also inside a ZIP):** draft with `op2 dense supplement_assets extract-text R --article <ID> --supplement <SID>`, review every extracted unit in `blocks`, quote clinical transcriptions literally from units (unit number in `page`), validate with `op2 dense supplement_review R --article <ID> --supplement <SID>` (no `--role`), then sign. Details: `SUPPLEMENT_DOCUMENT_REVIEW.md`, section 'Word-processor supplements'.
 
 ## Event kinds live in the annotation
 
-Set timeline event classification on the annotation event: `kind` (presentation, history, diagnosis, test, treatment, adverse_event, outcome, follow_up, plan, other), and for its `time_text` the `time_kind` (calendar, relative, duration, age, gestational_age, postnatal_age, order_only), `time_precision` (exact, approximate, range, unknown) and `time_calendar_value` (the YYYY[-MM[-DD]] the time text states at its own precision, e.g. "October 26, 2022" -> 2022-10-26, "October 2022" -> 2022-10; calendar times only). `schema_targets.py` reads these fields. Never patch event kinds or time classifications into `schema_target.json` with a script; regenerate instead. The same holds for the roster: set the article-level annotation block `"roster": {"reported_individual_count": N|null, "roster_complete": true|false, "evidence": [{"segment_id": ..., "quote": "<literal text stating the number>"}]}`; `schema_targets.py` reads it, and a submission patched after signing makes the parent's schema receipt stale. `schema_review.py` rejects a submission that disagrees with classification set in the annotation.
+Set timeline event classification on the annotation event: `kind` (presentation, history, diagnosis, test, treatment, adverse_event, outcome, follow_up, plan, other), and for its `time_text` the `time_kind` (calendar, relative, duration, age, gestational_age, postnatal_age, order_only), `time_precision` (exact, approximate, range, unknown) and `time_calendar_value` (the YYYY[-MM[-DD]] the time text states at its own precision, e.g. "October 26, 2022" -> 2022-10-26, "October 2022" -> 2022-10; calendar times only). `op2 dense schema_targets` reads these fields. Never patch event kinds or time classifications into `schema_target.json` with a script; regenerate instead. The same holds for the roster: set the article-level annotation block `"roster": {"reported_individual_count": N|null, "roster_complete": true|false, "evidence": [{"segment_id": ..., "quote": "<literal text stating the number>"}]}`; `op2 dense schema_targets` reads it, and a submission patched after signing makes the parent's schema receipt stale. `op2 dense schema_review` rejects a submission that disagrees with classification set in the annotation.
 
 ## Read once at start
 `benchmarks/dense500/ANNOTATION_PROTOCOL.md` (binding for dense50 too; read its "Shared annotation rules"),
@@ -50,8 +50,8 @@ follow it). Field shapes/enums: `src/openpatients2/schemas.py`. Review every ite
    `certainty: source_conflict`/`ambiguous` + `scoring: review_only`; delete unsupported facts). Revalidate to `[]`.
 5. Promote + sign source review (writes `R/articles/<ID>/annotation.json` and `R/articles/<ID>/receipts/annotation.parent.json`):
    ```
-   PYTHONPATH=src:benchmarks/dense500 .venv/bin/python -c "
-   import json,store;from pathlib import Path;from review_record import save_review
+   PYTHONPATH=src .venv/bin/python -c "
+   import json;from pathlib import Path;from openpatients2 import dense_store as store;from openpatients2.dense.review_record import save_review
    r=Path('benchmarks/dense500');a='<ID>';ann=json.loads(store.path(r,'drafts',a).read_text())
    save_review(r,ann,corrections=[...list of concrete corrections you made...],
      assessment={'reviewer':'Claude Opus 5.5 parent','source_units_read':N,'facts_reviewed':N,'figures_viewed':N,
@@ -59,34 +59,34 @@ follow it). Field shapes/enums: `src/openpatients2/schemas.py`. Review every ite
    ```
    (Use a small script file in your scratch dir if the lists are long.)
 6. Regenerate and sign the full schema on the canonical annotation:
-   `.venv/bin/python R/schema_targets.py R --folder annotations --article <ID>`; inspect the target
+   `op2 dense schema_targets R --folder annotations --article <ID>`; inspect the target
    (sections, item attributes, summary, event kinds/time types, roster, figure subjects);
    `cp R/articles/<ID>/schema_target.draft.json R/articles/<ID>/schema_target.json`;
-   Run the runtime gates and resolve every error first (`schema_review.py --role` refuses otherwise):
-   `PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/reference_gates.py R --article <ID> --folder <drafts|annotations>`
-   `.venv/bin/python R/schema_review.py R --folder annotations --article <ID> --role parent --reviewer "Claude Opus 5.5 parent" --notes "<what you checked>"`.
-7. Figures: `.venv/bin/python R/visual_review.py R --article <ID> --role parent --reviewer "Claude Opus 5.5 parent" --notes "<...>"`
+   Run the runtime gates and resolve every error first (`op2 dense schema_review --role` refuses otherwise):
+   `op2 dense reference_gates R --article <ID> --folder <drafts|annotations>`
+   `op2 dense schema_review R --folder annotations --article <ID> --role parent --reviewer "Claude Opus 5.5 parent" --notes "<what you checked>"`.
+7. Figures: `op2 dense visual_review R --article <ID> --role parent --reviewer "Claude Opus 5.5 parent" --notes "<...>"`
    after independent viewing. If you edited the visual submission, say so (annotator must re-sign).
    Supplements: parent receipts per SUPPLEMENT_DOCUMENT_REVIEW.md. Videos/unavailable media: do not claim review.
    ZIP-of-PDF supplements use the archive format (SUPPLEMENT_DOCUMENT_REVIEW.md "ZIP supplements"): view every
    member page (extracted paths in `R/articles/<ID>/supplements/<SID>.archive_members.json`), then
-   `R/supplement_review.py R --article <ID> --supplement <SID> --role parent --reviewer "Claude Opus 5.5 parent" --notes "<...>"`.
+   `op2 dense supplement_review R --article <ID> --supplement <SID> --role parent --reviewer "Claude Opus 5.5 parent" --notes "<...>"`.
 7b. EHR sidecars (informational; see ANNOTATION_PROTOCOL.md "EHR multimodal sidecars"). Independently open every
    cached supplement (`R/articles/<ID>/supplements/assets.json` paths) and check `R/articles/<ID>/supplements/manifest.json`: class,
    patient scope/evidence, EHR-includability, counts; no clinical values. Check `R/articles/<ID>/figure_ehr_labels.json` against
    the pixels: category, includability (local patients only), overrides. Check `R/articles/<ID>/measurement_series.json` cells,
    owners, units and offsets. Correct files if needed (the annotator must then re-sign), then sign each with
-   `.venv/bin/python R/supplement_manifest_review.py R --article <ID> --role parent --reviewer "Claude Opus 5.5 parent" --notes "<...>"`,
-   `R/figure_ehr_review.py ... --role parent ...` and `R/measurement_series_review.py ... --role parent ...`.
-   After both supplement-manifest receipts: `R/supplement_assets.py cleanup R --article <ID>` to free the 30 GB cache.
+   `op2 dense supplement_manifest_review R --article <ID> --role parent --reviewer "Claude Opus 5.5 parent" --notes "<...>"`,
+   `op2 dense figure_ehr_review ... --role parent ...` and `op2 dense measurement_series_review ... --role parent ...`.
+   After both supplement-manifest receipts: `op2 dense supplement_assets cleanup R --article <ID>` to free the 30 GB cache.
    Check `R/articles/<ID>/figure_privacy_flags.json` on pixels too (burned-in identifiers incl. timestamps, sensitive anatomy,
    identifiable faces; descriptions name categories, never values) and sign
-   `R/figure_privacy_review.py R --article <ID> --role parent --reviewer "Claude Opus 5.5 parent" --notes "<...>"`.
+   `op2 dense figure_privacy_review R --article <ID> --role parent --reviewer "Claude Opus 5.5 parent" --notes "<...>"`.
    Missing sidecars do not block your SIGNED verdict; report their status. Note: figure EHR labels and supplement
-   manifests will become completion gates when the orchestrator sets `EHR_SIDECAR_GATES=True` in export.py.
+   manifests will become completion gates when the orchestrator sets `EHR_SIDECAR_GATES=True` in `src/openpatients2/dense/export.py`.
    A dual-signed manifest that classifies a supplement as reporting_checklist, literature_table, protocol_methods or
    code (full_content, not patient-level, not includable) already satisfies the old supplement gate.
-8. Do NOT run `export.py` (the orchestrator does), do not touch other articles, never sign with `--role agent`.
+8. Do NOT run `op2 dense export` (the orchestrator does), do not touch other articles, never sign with `--role agent`.
 
 If an article is not salvageable (wrong disposition, pervasive errors), you may instead send it back: report
 "REJECT" with a precise list of what the annotator must redo, and sign nothing.

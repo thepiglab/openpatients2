@@ -14,9 +14,11 @@ import httpx
 
 from openpatients2.corpus import fetch_article, search_candidates
 from openpatients2.literature_client import LiteratureClient, LiteratureConfig
-import store
+from openpatients2 import dense_store as store
 
-ROOT = Path(__file__).resolve().parent
+from openpatients2.dense import DENSE50, DENSE500
+
+ROOT = DENSE500
 LANES = {
     'cardiac': 'cardiac OR myocarditis OR cardiomyopathy OR arrhythmia',
     'vascular': 'aortic OR vascular OR thrombosis OR embolism',
@@ -103,7 +105,7 @@ async def acquire(limit=477):
     manifest_path = ROOT / 'selection.json'
     manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else []
     used = {x['pmcid'] for x in manifest}
-    used.update(aid.split('.')[0] for aid in store.article_ids(ROOT.parent/'dense50', 'sources'))
+    used.update(aid.split('.')[0] for aid in store.article_ids(DENSE50, 'sources'))
     log_path = ROOT / 'acquisition/decisions.json'
     log = json.loads(log_path.read_text()) if log_path.exists() else []
     attempted = {x['pmcid'] for x in log}

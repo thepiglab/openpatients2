@@ -21,9 +21,9 @@ from pydantic import BaseModel, ConfigDict, Field
 from openpatients2.document_text import TEXT_DOCUMENT_TYPES
 from openpatients2.figure_visuals import validate_joint
 from openpatients2.schemas import TASK_MODELS
-from validate import digest
-import store
-from visual_review import identity_digest
+from openpatients2.dense.validate import digest
+from openpatients2 import dense_store as store
+from openpatients2.dense.visual_review import identity_digest
 
 FORMAT = 'dense-supplemental-figure-reference/1'
 DOCUMENT_FORMAT = 'dense-supplemental-document-reference/1'
@@ -968,7 +968,7 @@ def sign_review(root, aid, sid, *, role, reviewer, notes):
     root = Path(root)
     if role not in ('agent', 'parent') or not reviewer or not notes:
         raise ValueError('Review role, reviewer and actual inspection notes required')
-    from signing_guard import check_signature
+    from openpatients2.dense.signing_guard import check_signature
     check_signature(reviewer, notes)
     targets = [t for t in _targets(root, aid) if t.get('supplement_id') == sid]
     if len(targets) != 1:
@@ -1019,7 +1019,7 @@ def reviewed_supplement_targets(root, aid):
                     raise ValueError(f'{aid}/{sid}: stale supplemental {role} receipt {key}')
             if not receipt.get('reviewer') or not receipt.get('inspection_notes') or receipt.get('physician_adjudicated') is not False:
                 raise ValueError('Supplement receipt lacks actual inspection metadata')
-            from signing_guard import receipt_identity_errors
+            from openpatients2.dense.signing_guard import receipt_identity_errors
             if receipt_identity_errors(receipt):
                 raise ValueError(f'{aid}/{sid}: supplemental {role} receipt has a placeholder reviewer/notes')
             receipts.append(receipt)

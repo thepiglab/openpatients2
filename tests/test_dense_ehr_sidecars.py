@@ -23,19 +23,10 @@ AID = 'PMC-test.1'
 HOST = 'https://pmc-oa-opendata.s3.amazonaws.com/PMC-test.1/'
 
 
-def load(name, path):
-    spec = importlib.util.spec_from_file_location(name, path)
-    module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
-    return module
-
-
 @pytest.fixture
 def mods(monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
-    for name in ('sidecar_receipts', 'supplement_manifest_review', 'figure_ehr_review', 'measurement_series_review'):
-        sys.modules.pop(name, None)
-    assets = load('dense_supplement_assets', ROOT / 'benchmarks/dense500/supplement_assets.py')
-    import supplement_manifest_review, figure_ehr_review, measurement_series_review
+    assets = importlib.import_module('openpatients2.dense.supplement_assets')
+    from openpatients2.dense import supplement_manifest_review, figure_ehr_review, measurement_series_review
     return assets, supplement_manifest_review, figure_ehr_review, measurement_series_review
 
 
@@ -367,8 +358,7 @@ def test_pdf_peek_uses_actual_tools(tmp_path):
 
 
 def test_informational_checks_never_change_completion(monkeypatch, tmp_path):
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
-    exporter = load('dense_ehr_export', ROOT / 'benchmarks/dense500/export.py')
+    exporter = importlib.import_module('openpatients2.dense.export')
     monkeypatch.setattr(exporter, 'OUT', tmp_path)
     monkeypatch.setattr(exporter, 'EHR_SIDECAR_GATES', False)
     base = dict(title='t', article_url='https://x', text_sha256='h', annotation_status='annotated',
@@ -400,8 +390,7 @@ def test_informational_checks_never_change_completion(monkeypatch, tmp_path):
 
 
 def test_non_clinical_manifest_satisfies_legacy_supplement_gate(monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
-    exporter = load('dense_ehr_export_gate', ROOT / 'benchmarks/dense500/export.py')
+    exporter = importlib.import_module('openpatients2.dense.export')
     def row(sid, cls, basis='full_content', scope='background', status='downloaded'):
         return {'supplement_id': sid, 'url': sid, 'machine': {'download_status': status},
                 'review': {'content_class': cls, 'classification_basis': basis, 'patient_scope': scope,
@@ -418,8 +407,7 @@ def test_non_clinical_manifest_satisfies_legacy_supplement_gate(monkeypatch):
 
 
 def test_species_flags_on_ehr_rows(monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
-    exporter = load('dense_ehr_export_species', ROOT / 'benchmarks/dense500/export.py')
+    exporter = importlib.import_module('openpatients2.dense.export')
     annotation = {'patients': [{'patient_id': 'p1', 'species': 'nonhuman'}, {'patient_id': 'p2', 'species': 'human'}]}
     assert exporter.species_fields(annotation, ['p1'])['non_human_patient'] is True
     assert exporter.species_fields(annotation, ['p2'])['non_human_patient'] is False
@@ -428,9 +416,7 @@ def test_species_flags_on_ehr_rows(monkeypatch):
 
 
 def privacy_module(monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
-    sys.modules.pop('figure_privacy_review', None)
-    import figure_privacy_review
+    from openpatients2.dense import figure_privacy_review
     return figure_privacy_review
 
 
@@ -587,8 +573,7 @@ def test_repeek_refused_once_manifest_signed(mods, article, tmp_path):
 
 
 def test_video_manifest_review_and_unavailable_media_complete_flagged(monkeypatch, tmp_path):
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
-    exporter = load('dense_ehr_export_video_gate', ROOT / 'benchmarks/dense500/export.py')
+    exporter = importlib.import_module('openpatients2.dense.export')
     sampled = ['Viewed 17 frames sampled every 10 s, not every frame; audio was not inspected.']
     def row(sid, *, status='downloaded', detected='video', basis='full_content', limitations=sampled,
             counts={'frames': 5076, 'duration_seconds': 169.4}):
@@ -666,8 +651,7 @@ def test_video_manifest_review_and_unavailable_media_complete_flagged(monkeypatc
 
 
 def test_stale_visual_or_figure_sidecar_receipt_withholds_the_article(monkeypatch, tmp_path):
-    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
-    exporter = load('dense_ehr_export_withhold', ROOT / 'benchmarks/dense500/export.py')
+    exporter = importlib.import_module('openpatients2.dense.export')
     monkeypatch.setattr(exporter, 'OUT', tmp_path)
     base = dict(title='t', article_url='https://x', text_sha256='h', annotation_status='annotated', source_supplements=[],
                 review_status='parent_source_reviewed', full_schema_review_status='agent_and_parent_source_reviewed',

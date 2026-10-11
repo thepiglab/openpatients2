@@ -7,13 +7,13 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 import yaml
 
-import store
-from validate import digest, validate
-from schema_targets import with_review_only_items
+from openpatients2 import dense_store as store
+from openpatients2.dense.validate import digest, validate
+from openpatients2.dense.schema_targets import with_review_only_items
 
-ROOT=Path(__file__).resolve().parent
-ROOTS=[ROOT.parent/'dense50', ROOT]
-OUT=ROOT.parent.parent/'data/dense_clinical_cases_v1'
+from openpatients2.dense import DENSE50, DENSE500 as ROOT, REPO
+ROOTS=[DENSE50, ROOT]
+OUT=REPO/'data/dense_clinical_cases_v1'
 # The release is the unified one-row-per-article dataset in OUT/data. The old
 # per-type JSONL files are kept only for the viewer/back-compat, under OUT/legacy.
 WRITE_LEGACY=True
@@ -28,7 +28,7 @@ EHR_GATE_CHECKS=('supplement_manifest_reviewed','figure_ehr_labels_reviewed')
 # a re-sign campaign) is exported as not reviewed, with an explicit status, instead
 # of aborting the whole release. 'raise' restores the strict abort.
 STALE_RECEIPT_POLICY='withhold'
-# Every promoted article is run through the RUNTIME checker objects (reference_gates.py: the same
+# Every promoted article is run through the RUNTIME checker objects (reference_gates: the same
 # validators a local-LLM output must pass). Under 'withhold' a failing article is exported as not
 # completed with the reasons in article_checklist.json (`runtime_gate_errors`); 'raise' aborts.
 RUNTIME_GATES=True
@@ -74,7 +74,7 @@ def unavailable_media(row):
 
 
 def supplement_satisfied(s):
-    """Supplement gate: a dual-signed content review (supplement_review.py), or a dual-signed manifest row
+    """Supplement gate: a dual-signed content review (supplement_review), or a dual-signed manifest row
     that is itself the review: non-clinical classification, or a sampled-frame video review
     (see supplement_manifest.manifest_gate_supplements and SUPPLEMENT_DOCUMENT_REVIEW.md)."""
     return s['content_inspected'] or s.get('manifest_non_clinical_reviewed') is True or bool(s.get('manifest_review_basis'))
@@ -116,7 +116,7 @@ def supplement_inventory(source, reviewed=(), manifest=None):
 
 def supplemental_clinical_records(reviewed, annotation, split):
     """Keep supplemental schemas/evidence separate from immutable article sections."""
-    from supplement_review import supplemental_clinical_bundle
+    from openpatients2.dense.supplement_review import supplemental_clinical_bundle
     records = []
     for target, receipts in reviewed:
         bundle = supplemental_clinical_bundle(target, annotation)
@@ -153,11 +153,11 @@ def ehr_sidecar_status(root, aid, source):
     (target, receipts). A stale/invalid sidecar is reported, not exported, and
     does not abort the release for other articles.
     """
-    from supplement_manifest_review import reviewed_manifest
-    from figure_ehr_review import reviewed_figure_ehr
-    from measurement_series_review import reviewed_series
-    from figure_privacy_review import reviewed_privacy_flags
-    from visual_review import reviewed_visual_target
+    from openpatients2.dense.supplement_manifest_review import reviewed_manifest
+    from openpatients2.dense.figure_ehr_review import reviewed_figure_ehr
+    from openpatients2.dense.measurement_series_review import reviewed_series
+    from openpatients2.dense.figure_privacy_review import reviewed_privacy_flags
+    from openpatients2.dense.visual_review import reviewed_visual_target
     has_tables=any(s.get('kind')=='table_row' for s in source.get('segments',[]))
     specs=[('supplement_manifest','supplement-manifests',reviewed_manifest,
             'no_source_supplements' if not source.get('supplements') else None),
@@ -286,7 +286,7 @@ def reviewed_schema_target(root, annotation, source):
     aid=annotation['article_id']
     parent_path=store.receipt(root,'schema','parent',aid)
     if not parent_path.exists():return None
-    from schema_review import validate_submission
+    from openpatients2.dense.schema_review import validate_submission
     target=json.loads(store.path(root,'schema-submissions',aid).read_text())
     receipts=[]
     for role in ('agent','parent'):
@@ -295,7 +295,7 @@ def reviewed_schema_target(root, annotation, source):
                 ('article_id',aid),('annotation_sha256',digest(annotation)),
                 ('target_sha256',digest(target)),('source_text_sha256',source['text_sha256'])]:
             if receipt.get(key)!=value:raise ValueError(f'{aid}: stale/missing {role} schema review {key}')
-        from signing_guard import receipt_identity_errors
+        from openpatients2.dense.signing_guard import receipt_identity_errors
         if receipt_identity_errors(receipt):raise ValueError(f'{aid}: {role} schema review has a placeholder reviewer/notes')
         receipts.append(receipt)
     validate_submission(target,annotation,source)
@@ -472,7 +472,7 @@ def main():
             review_current=True
             gates=None
             if RUNTIME_GATES and annotation_path.exists():
-                from reference_gates import run_gates
+                from openpatients2.dense.reference_gates import run_gates
                 try:
                     gates=run_gates(root,aid)
                 except (ValueError,KeyError,TypeError,FileNotFoundError) as exc:
@@ -504,7 +504,7 @@ def main():
                      'media','image_urls','rights_statements','reuse_status']},
                     'figure_id':fig.get('figure_key') or fig.get('figure_id')}
                     for fig in source.get('figures',[])]
-                from supplement_review import reviewed_supplement_targets
+                from openpatients2.dense.supplement_review import reviewed_supplement_targets
                 try:
                     supplements=reviewed_supplement_targets(root,aid)
                 except (ValueError,KeyError,TypeError,FileNotFoundError) as exc:
@@ -533,7 +533,7 @@ def main():
                     privacy=panel_flags(pt)
                 if 'figure_ehr_labels' in ehr_reviewed:
                     from openpatients2.figure_ehr import label_rows
-                    from visual_review import reviewed_visual_target
+                    from openpatients2.dense.visual_review import reviewed_visual_target
                     lt,lr=ehr_reviewed['figure_ehr_labels']
                     ehr_release['figure_ehr_labels']={**copy.deepcopy(lt),'reviews':lr}
                     labels_map={(f['figure_id'],p['panel']):p['label'] for f in lt['figures'] for p in f['panels']}
@@ -565,7 +565,7 @@ def main():
                 if reviewed:
                     from openpatients2.measurements import observation_measurements
                     from openpatients2.figure_visuals import panel_columns
-                    from visual_review import reviewed_visual_target
+                    from openpatients2.dense.visual_review import reviewed_visual_target
                     target,receipts=reviewed
                     try:
                         visual=reviewed_visual_target(root,aid)
@@ -702,9 +702,9 @@ def main():
     for split in ('train','validation','test'):
         write_jsonl(LEGACY/f'{split}.jsonl',[r for r in final if r['split']==split])
         write_jsonl(LEGACY/f'patients-{split}.jsonl',[r for r in patient_bundles if r['split']==split])
-    from schema_targets import TASK_MODELS,Roster,Summary,Vision,PatientTimeline,FigureReview
+    from openpatients2.dense.schema_targets import TASK_MODELS,Roster,Summary,Vision,PatientTimeline,FigureReview
     from openpatients2.figure_visuals import FigureVisuals,JointFigureAnalysis
-    from supplement_review import DocumentSupplementTarget, ArchiveDocumentTarget
+    from openpatients2.dense.supplement_review import DocumentSupplementTarget, ArchiveDocumentTarget
     contracts={**TASK_MODELS,'roster':Roster,'summary':Summary,'timeline_v2':PatientTimeline,
         'figure_attribution':FigureReview,'caption_vision':Vision,
         'figure_visuals':FigureVisuals,'joint_figure_analysis':JointFigureAnalysis,
@@ -712,7 +712,7 @@ def main():
         'supplement_archive_document':ArchiveDocumentTarget}
     snapshots={name:model.model_json_schema() for name,model in contracts.items()}
     (OUT/'schemas.json').write_text(json.dumps(snapshots,ensure_ascii=False,indent=2)+'\n')
-    from coverage_audit import write_report
+    from openpatients2.dense.coverage_audit import write_report
     write_report(OUT,patient_bundles)
     # Explicit Hub configurations avoid accidentally mixing the source catalog
     # with annotation rows, or loading held-out answers into a default train set.

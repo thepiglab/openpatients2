@@ -175,8 +175,8 @@ def case_context_errors(annotation):
     """Article-derived packet rule (prompts/case_context.md): every per-patient record
     uses case_kind clinical_case/animal and multiple_index_patients=false, even when
     the article has several patients. Enforced when promoting or signing new work
-    (review_record.save_review, schema_review --role); export only warns so articles
-    awaiting migrate_case_context.py are not dropped from the build."""
+    (review_record.save_review, schema_review --role); export only warns
+    (unified_record.case_context_warnings) and `op2 dense normalize` applies the fix (rule CTX-PER-PATIENT)."""
     errors=[]
     for p in annotation.get('patients',[]):
         for f in p.get('facts',[]):
@@ -184,7 +184,7 @@ def case_context_errors(annotation):
             kind=f['fields'].get('case_kind');multiple=f['fields'].get('multiple_index_patients')
             if kind=='multi_patient' or multiple is not False:
                 errors.append(f'{f["fact_id"]}: case_context_packet_rule: per-patient record needs case_kind clinical_case/animal '
-                              f'and multiple_index_patients=false (got {kind!r}, {multiple!r}); run migrate_case_context.py')
+                              f'and multiple_index_patients=false (got {kind!r}, {multiple!r}) [CTX-PER-PATIENT]')
     return errors
 
 
@@ -205,7 +205,7 @@ def semantic_errors(annotation, source):
 if __name__=='__main__':
     ap=argparse.ArgumentParser();ap.add_argument('root',type=Path);ap.add_argument('--folder',default='drafts')
     args=ap.parse_args(); total=0; failed=0
-    import store
+    from openpatients2 import dense_store as store
     for aid in store.article_ids(args.root,args.folder):
         total+=1
         annotation=json.loads(store.path(args.root,args.folder,aid).read_text())

@@ -1,12 +1,12 @@
 """Acquire one article's declared supplements into a bounded, non-release cache.
 
-Commands (run from the repo root, PYTHONPATH=src:benchmarks/dense500):
-  supplement_assets.py acquire ROOT --article ID [--force]
-  supplement_assets.py peek    ROOT --article ID      # recompute peeks from cached files
-  supplement_assets.py status  [ROOT]                 # cache usage and caps
-  supplement_assets.py cleanup ROOT --article ID      # only after dual-signed manifest
-  supplement_assets.py extract ROOT --article ID --supplement SID   # PDF members of a ZIP
-  supplement_assets.py extract-text ROOT --article ID --supplement SID   # DOCX/DOC/RTF/ODT (or such ZIP members)
+Commands (ROOT is benchmarks/dense500 or benchmarks/dense50):
+  op2 dense supplement_assets acquire ROOT --article ID [--force]
+  op2 dense supplement_assets peek    ROOT --article ID      # recompute peeks from cached files
+  op2 dense supplement_assets status  [ROOT]                 # cache usage and caps
+  op2 dense supplement_assets cleanup ROOT --article ID      # only after dual-signed manifest
+  op2 dense supplement_assets extract ROOT --article ID --supplement SID   # PDF members of a ZIP
+  op2 dense supplement_assets extract-text ROOT --article ID --supplement SID   # DOCX/DOC/RTF/ODT (or such ZIP members)
 
 The shared cache has a HARD 30 GB cap enforced under an exclusive lock, and a
 per-file cap. Larger files are never fully downloaded: a HEAD request gives size
@@ -27,9 +27,10 @@ from urllib.parse import urlparse
 import httpx
 
 from openpatients2.supplement_peek import PEEK_VERSION, extension, peek_file
-import store
+from openpatients2 import dense_store as store
+from openpatients2.dense import DENSE500, REPO
 
-CACHE = Path(__file__).resolve().parents[2] / 'data/.dense-supplement-cache'
+CACHE = REPO / 'data/.dense-supplement-cache'
 MAX_CACHE_BYTES = 30_000_000_000      # hard cap for the whole shared cache (30 GB)
 MAX_FILE_BYTES = 250_000_000          # larger files are sampled, never fully downloaded
 HEAD_SAMPLE_BYTES = 2_000_000
@@ -243,7 +244,7 @@ def extract_archive(root, aid, sid, *, cache=None, max_cache=MAX_CACHE_BYTES):
     (`dense-supplemental-archive-document-reference/1`). Only PDF members are
     written, each under a hashed name inside this article's cache folder.
     """
-    from supplement_review import (ARCHIVE_FORMAT, MAX_MEMBER_BYTES, member_url, pdf_page_count,
+    from openpatients2.dense.supplement_review import (ARCHIVE_FORMAT, MAX_MEMBER_BYTES, member_url, pdf_page_count,
                                    zip_member_bytes, zip_members)
     root = Path(root); cache = Path(cache or CACHE)
     source = json.loads(store.path(root, 'sources', aid).read_text())
@@ -301,7 +302,7 @@ def extract_text_documents(root, aid, sid, *, cache=None, max_cache=MAX_CACHE_BY
     `articles/ID/supplements/SID.document.draft.json` (`dense-supplemental-text-document-reference/1`).
     Extraction is not inspection: the reviewer reads every unit and fills `blocks`.
     """
-    from supplement_review import (MAX_MEMBER_BYTES, _text_format, draft_text_document, zip_member_bytes,
+    from openpatients2.dense.supplement_review import (MAX_MEMBER_BYTES, _text_format, draft_text_document, zip_member_bytes,
                                    zip_text_members)
     root = Path(root); cache = Path(cache or CACHE)
     source = json.loads(store.path(root, 'sources', aid).read_text())
@@ -356,7 +357,7 @@ def cleanup(root, aid, *, cache=None, verify=None):
     """Remove an article's cached supplement files once its manifest is dual-signed and current."""
     cache = Path(cache or CACHE)
     if verify is None:
-        from supplement_manifest_review import reviewed_manifest
+        from openpatients2.dense.supplement_manifest_review import reviewed_manifest
         verify = reviewed_manifest
     if verify(Path(root), aid) is None:
         raise ValueError('Supplement manifest lacks valid agent and parent receipts; cache kept')
@@ -372,7 +373,7 @@ def cleanup(root, aid, *, cache=None, verify=None):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('command', choices=['acquire', 'peek', 'status', 'cleanup', 'extract', 'extract-text'])
-    parser.add_argument('root', type=Path, nargs='?', default=Path(__file__).resolve().parent)
+    parser.add_argument('root', type=Path, nargs='?', default=DENSE500)
     parser.add_argument('--article'); parser.add_argument('--force', action='store_true')
     parser.add_argument('--supplement')
     args = parser.parse_args()

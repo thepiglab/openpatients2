@@ -1,10 +1,14 @@
-"""Migrate reference data to the shared annotation rules (src/openpatients2/rules/annotation_rules.yaml).
+"""Normalize reference data to the shared annotation rules (src/openpatients2/rules/annotation_rules.yaml).
+
+Reviewers run this after editing an annotation: it applies the mechanical rule fixes, records
+judgment items in needs_review.json and regenerates the schema target (schema_target.draft.json,
+merged into schema_target.json).
 
 Scope: annotations (articles/<ID>/annotation.json) in dense50 + dense500, plus drafts
 (annotation_draft.json) that have no promoted annotation (a draft
 byte-identical to its annotation is kept identical). Idempotent: a second run changes nothing.
-Dry run by default; `--apply` writes. Nothing is signed: every changed article needs the re-sign
-campaign (claude_prompts/RESIGN_BRIEF.md).
+Dry run by default; `--apply` writes. Nothing is signed: every changed article needs re-signing
+(claude_prompts/RESIGN_BRIEF.md).
 
 Mechanical migrations (applied directly):
   M01 case_context      multi_patient/true -> clinical_case|animal + false            (CTX-PER-PATIENT)
@@ -31,13 +35,11 @@ Judgment migrations (applied only where the source wording is unambiguous, else 
   M11 comparison_panels figure EHR labels whose rationale says normal/healthy comparison or
                         control (not includable) -> non_clinical_diagnostic_aid      (FIG-EHR-COMPARISON)
 
-After an annotation changes, the schema target is regenerated into schema_target.draft.json and merged into
-schema_target.json keeping the reviewers' structural edits (event kinds/time classifications,
-roster count/completeness, attribution subjects/rationales). Because the timeline vocabulary was
-unified, every article's schema target is regenerated (schema fingerprints changed).
+The schema target is regenerated into schema_target.draft.json and merged into schema_target.json
+keeping the reviewers' structural edits (event kinds/time classifications, roster
+count/completeness, attribution subjects/rationales).
 
-  PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/migrations/semantic_rules_2026_10.py \
-      [--apply] [--report PATH] [--skip ID ...] [--article ID ... [--allow-recent]]
+  op2 dense normalize [--apply] [--report PATH] [--skip ID ...] [--article ID ... [--allow-recent]]
 Outputs: the report (per article: changes by migration, needs_review items, schema status) and, with
 --apply, R/articles/<ID>/needs_review.json for articles with open items (resolutions already recorded there
 are preserved across runs).
@@ -48,21 +50,62 @@ from datetime import datetime, timezone
 import json
 from pathlib import Path
 import re
-import sys
 import time
 
-HERE = Path(__file__).resolve().parent
-DENSE = HERE.parent
-sys.path.insert(0, str(DENSE))
-import store  # noqa: E402
-ROOTS = [DENSE.parent / 'dense50', DENSE]
-QUIET_SECONDS = 15 * 60
-VERSION = 'semantic-rules-2026-10/1'
-
-from migrate_case_context import STYLES, diff_paths, migrate_annotation as migrate_case_context, style_of  # noqa: E402
-from openpatients2.semantic_rules import (BENIGN_TUMOR, HISTORY_DENIAL, LEGACY_OCCURRENCE, MALIGNANT,  # noqa: E402
+from openpatients2 import dense_store as store
+from openpatients2.dense import ROOTS
+from openpatients2.semantic_rules import (BENIGN_TUMOR, HISTORY_DENIAL, LEGACY_OCCURRENCE, MALIGNANT,
                                           HYPHENS, NEVER_CUE, NORMAL_CUE, NORMAL_RESULT, POSITIONAL_LABEL,
                                           REFUTED_CUE, literal_span, visual_question_marks)
+
+QUIET_SECONDS = 15 * 60
+VERSION = 'dense-normalize/1'
+# Rewrites keep each file's own JSON formatting (indent, trailing newline).
+STYLES = {'i2': lambda v: json.dumps(v, ensure_ascii=False, indent=2) + '\n',
+          'i2n': lambda v: json.dumps(v, ensure_ascii=False, indent=2),
+          'i1': lambda v: json.dumps(v, ensure_ascii=False, indent=1) + '\n'}
+
+
+def style_of(text):
+    value = json.loads(text)
+    return next((name for name, dump in STYLES.items() if dump(value) == text), None)
+
+
+def diff_paths(a, b, path=''):
+    if type(a) is not type(b):
+        return [path or '/']
+    if isinstance(a, dict):
+        out = []
+        for k in sorted(set(a) | set(b), key=str):
+            if k not in a or k not in b:
+                out.append(f'{path}/{k}')
+            else:
+                out += diff_paths(a[k], b[k], f'{path}/{k}')
+        return out
+    if isinstance(a, list):
+        if len(a) != len(b):
+            return [path or '/']
+        return [p for i, (x, y) in enumerate(zip(a, b)) for p in diff_paths(x, y, f'{path}/{i}')]
+    return [] if a == b else [path or '/']
+
+
+def migrate_case_context(annotation):
+    """Per-patient packet rule (CTX-PER-PATIENT): case_kind multi_patient -> clinical_case|animal and
+    multiple_index_patients -> false on every case_context fact; nothing else changes."""
+    new = copy.deepcopy(annotation); changes = []
+    for p in new['patients']:
+        for f in p['facts']:
+            if f['task'] != 'case_context':
+                continue
+            old = {k: f['fields'].get(k, '<absent>') for k in ('case_kind', 'multiple_index_patients')}
+            if f['fields'].get('case_kind') == 'multi_patient':
+                f['fields']['case_kind'] = 'animal' if p.get('species') == 'nonhuman' else 'clinical_case'
+            if f['fields'].get('multiple_index_patients', None) is not False:
+                f['fields']['multiple_index_patients'] = False
+            newer = {k: f['fields'].get(k) for k in ('case_kind', 'multiple_index_patients')}
+            if old != newer:
+                changes.append({'patient_id': p['patient_id'], 'fact_id': f['fact_id'], 'old': old, 'new': newer})
+    return new, changes
 
 # Printed comparators only; 'approximately'/'~' are not comparators (the value stays '=' and the
 # wording stays in the evidence/text_value).
@@ -422,7 +465,7 @@ def merge_submission(submission, regenerated, annotation=None):
 
 def check_submission(merged, annotation, source):
     """schema_review.validate_submission, but with runtime gate errors reported instead of raised."""
-    import schema_review
+    from openpatients2.dense import schema_review
     original = schema_review.materialize
     schema_review.materialize = lambda a, s: {**original(a, s), 'source_gate_errors': []}
     try:
@@ -461,7 +504,7 @@ def write_needs_review(root, aid, items, apply):
            'generated_at': datetime.now(timezone.utc).isoformat(),
            'instructions': 'Resolve each item against the SOURCE (claude_prompts/RESIGN_BRIEF.md): edit the annotation, '
                            'set resolution (what you decided and why) and resolved_by, regenerate the schema target, '
-                           'then save_review + sign. Items reappear on the next migration run until the data satisfies the rule.',
+                           'then save_review + sign. Items reappear on the next normalize run until the data satisfies the rule.',
            'items': rows}
     if apply:
         if rows:
@@ -486,8 +529,8 @@ def candidates(roots, only=None):
 
 
 def run(apply=False, skip=(), only=None, roots=ROOTS, now=None, allow_recent=False):
-    from schema_targets import materialize
-    from validate import digest, validate
+    from openpatients2.dense.schema_targets import materialize
+    from openpatients2.dense.validate import digest, validate
     now = now or time.time()
     report = {'format': 'dense-migration-report/1', 'migration': VERSION, 'mode': 'apply' if apply else 'dry_run',
               'generated_at': datetime.now(timezone.utc).isoformat(), 'articles': {}}
