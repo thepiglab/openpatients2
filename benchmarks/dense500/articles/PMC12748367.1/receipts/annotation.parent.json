@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12748367.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e61a406478ca8b38a86b8878830c7749dbce0cb9a00581408f828a3d4f8b5f20",
+  "annotation_sha256": "b3bff0affa5e083ddfeff75fcb26c698413bcc6b2ad6d5f6ee4d254b146befde",
+  "reviewed_at": "2026-10-11T21:30:36.421013+00:00",
+  "source_segments_read": 31,
+  "facts_reviewed": 182,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Roster: the source reports one case (\"A 24-year-old nulliparous woman\"); the neonate is no longer a separate patient p2. Its 19 facts and 4 events were moved into p1 with subject newborn (p1-f164..f182, p1-e32..e35); the p2 case_context was dropped; roster stays count 1 and is now complete (true).",
+    "Neonatal lactate elevation no longer carries the time \"within 2 h\" (that phrase governs the resolution); neonatal metabolic acidosis and lactate elevation are marked clinical_status resolved.",
+    "POD 1 pH 7.34 (text cites Table 1, but no Table 1 pH cell is 7.34) set to ambiguous/review_only; Table 1 cells stay included; POD 1 glucose 261 kept with the ambiguity note.",
+    "Temporal relations restricted to literal support: removed cesarean-before-placental-delivery (placental delivery is part of the cesarean) and CSEA-before-cesarean (caption list only); added CSEA before incision (\"Surgical incision was initiated after confirming bilateral sensory block\"), ICU admission, catheter removal and metabolic resolution after the cesarean (\"postoperatively\"), POD 1 before POD 2, skin closure before 2 h postoperative, and spinal anesthesia before fetal delivery before placental delivery from the Figure 2 caption timeline (confirmed on the figure x-axis).",
+    "Self-discontinued follow-up action_status unknown -> declined.",
+    "Obesity, short fasting interval and placental-delivery facts given full contextual quotes instead of one- to five-word fragments.",
+    "Source coverage, limitations, figure attribution note and ambiguity text updated for the single-patient roster."
+  ],
+  "unresolved": [
+    "Single index patient (the mother, \"A 24-year-old nulliparous woman\"); the neonate and the fetal tracing are recorded inside p1 with subject newborn or fetus and are not separate patients, so the roster is one patient and complete.",
+    "Fetal monitoring findings are annotated under p1 with subject fetus; they are not copied to the newborn.",
+    "Table 1 dashes are recorded as not reported in the medical records, not as zero or normal; the three affected cells are PaO2, base excess and lactate at hospital admission.",
+    "Text pH 7.34 by POD 1 cites Table 1 but matches no Table 1 cell; it is review_only. Glucose 261 mg/dL by POD 1 equals the 6 h postoperative cell but is kept separate without reconciliation.",
+    "Figure 2 prints values (ephedrine 4 mg, oxytocin 5U doses, blood loss, amniotic fluid, urine output, anesthesia and surgical times) that the text does not state; these live in the visual submission and are not annotated as text facts.",
+    "Author-suggested DKA precipitants are interpretation and are recorded as possible, review-only.",
+    "Caption-layer visual status not_inspected; the two JPEGs were inspected in the separate visual submission.",
+    "Order of operating-room arrival, spinal anesthesia, delivery and placental delivery rests on the Figure 2 caption, which states that these events are annotated along the x-axis timeline, and on the figure axis itself."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 31,
+    "facts_reviewed": 182,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (mother) with fetal CTG facts as subject fetus and neonatal course as subject newborn, consistent with other single-case obstetric articles in this set.",
+      "All 54 Table 1 cells checked against the table; three dash cells are not_reported per the footnote; text DKA labs and skin-closure pH are the same values and times as the table (alternate representations kept).",
+      "Caption CTG findings are the same tracing the text cites as Fig. 1; alternates kept.",
+      "Authors' likely/possible DKA precipitants kept as possible, review_only.",
+      "Figure 2 printed values (ephedrine 4 mg, oxytocin 5U x3, phenylephrine 1 mg/h, blood loss, amniotic fluid, urine output, anesthesia and surgical times) have no text evidence and stay in visual.json only."
+    ],
+    "residual_risks": [
+      "Order of OR arrival, spinal anesthesia, fetal and placental delivery rests on the Figure 2 caption timeline list and the figure axis.",
+      "POD 1 text values cannot be mapped to Table 1 columns.",
+      "Neonatal discharge \"day 18\" has no stated day zero."
+    ]
+  },
+  "physician_adjudicated": false
+}
