@@ -1136,10 +1136,9 @@
           "fields": {
             "subject": "index_patient",
             "assertion": "present",
-            "name": "Metastatic endometrial carcinoma",
+            "name": "Metastatic disease",
             "tumor_ref": "t2",
             "laterality": "unknown",
-            "primary_site": "endometrium",
             "histology": "unknown",
             "metastatic_sites": [
               "pelvic lymph nodes",
@@ -1164,7 +1163,7 @@
           "clinical_statement": "Metastatic endometrial carcinoma",
           "certainty": "supported",
           "scoring": "include",
-          "notes": "Quote says lesions consistent with metastatic disease; primary site wording comes from the preceding sentence of the case."
+          "notes": "The sentence states metastatic disease without naming the primary; primary site not borrowed from the preceding sentence."
         },
         {
           "fact_id": "p1-f036",
@@ -1236,7 +1235,6 @@
             "name": "Checkpoint inhibitor-based therapy",
             "action": "historical",
             "regimen": "on a clinical trial",
-            "duration_text": "eight months",
             "temporality": "historical",
             "time": {
               "text": null,
@@ -1254,7 +1252,7 @@
           "clinical_statement": "Checkpoint inhibitor-based therapy",
           "certainty": "supported",
           "scoring": "include",
-          "notes": "Duration is inferred only from \"disease progression after eight months\"; the quote states progression after eight months."
+          "notes": "Therapy duration is not stated; progression occurred after eight months."
         },
         {
           "fact_id": "p1-f039",
@@ -1714,39 +1712,19 @@
         },
         {
           "event_id": "p1-e02",
-          "description": "Paclitaxel and carboplatin with complete response by imaging, with immunohistochemical and NGS tumor results",
+          "description": "Paclitaxel and carboplatin with complete response by imaging",
           "occurrence": "occurred",
           "kind": "treatment",
           "fact_ids": [
             "p1-f036",
             "p1-f037",
-            "p1-f011",
-            "p1-f012",
-            "p1-f013",
-            "p1-f014",
-            "p1-f015",
-            "p1-f016",
-            "p1-f017",
-            "p1-f028",
-            "p1-f029",
-            "p1-f030",
-            "p1-f031",
-            "p1-f032",
-            "p1-f033"
+            "p1-f011"
           ],
           "time_text": null,
           "evidence": [
             {
               "segment_id": "b00012",
               "quote": "She received paclitaxel and carboplatin and had a complete response by imaging."
-            },
-            {
-              "segment_id": "b00012",
-              "quote": "Immunohistochemical stains demonstrated patchy ER and PR, p53 overexpression, and retained mismatch repair proteins."
-            },
-            {
-              "segment_id": "b00012",
-              "quote": "HER2 immunohistochemical stain was negative (0+), however NGS showed a pathogenic mutation in HER2 p.G776V."
             }
           ]
         },
@@ -1808,31 +1786,20 @@
         },
         {
           "event_id": "p1-e06",
-          "description": "Start of T-DXd with CA-125 decrease and decreasing size of metastatic lesions on CT",
+          "description": "Start of T-DXd because of the activating HER2 mutation",
           "occurrence": "occurred",
           "kind": "treatment",
           "fact_ids": [
             "p1-f045",
-            "p1-f046",
-            "p1-f019",
-            "p1-f020",
-            "p1-f021",
-            "p1-f026",
-            "p1-f027"
+            "p1-f046"
           ],
-          "time_text": "within six weeks of treatment",
+          "time_text": null,
           "evidence": [
             {
               "segment_id": "b00013",
               "quote": "In light of the activating HER2 mutation, the patient then began T-DXd."
-            },
-            {
-              "segment_id": "b00013",
-              "quote": "Her CA-125 decreased from 177 to 23 within six weeks of treatment, and CT imaging showed decreasing size of metastatic lesions (Fig. 1)."
             }
-          ],
-          "time_kind": "relative",
-          "time_precision": "approximate"
+          ]
         },
         {
           "event_id": "p1-e07",
@@ -1917,6 +1884,78 @@
           ],
           "time_kind": "duration",
           "time_precision": "exact"
+        },
+        {
+          "event_id": "p1-e11",
+          "description": "Tumor immunohistochemistry (HER2 0+, patchy ER and PR, p53 overexpression, retained mismatch repair) and NGS showing HER2 p.G776V",
+          "occurrence": "occurred",
+          "fact_ids": [
+            "p1-f012",
+            "p1-f013",
+            "p1-f014",
+            "p1-f015",
+            "p1-f016",
+            "p1-f017",
+            "p1-f028",
+            "p1-f029",
+            "p1-f030",
+            "p1-f031",
+            "p1-f032",
+            "p1-f033"
+          ],
+          "time_text": null,
+          "kind": "test",
+          "evidence": [
+            {
+              "segment_id": "b00012",
+              "quote": "Immunohistochemical stains demonstrated patchy ER and PR, p53 overexpression, and retained mismatch repair proteins."
+            },
+            {
+              "segment_id": "b00012",
+              "quote": "HER2 immunohistochemical stain was negative (0+), however NGS showed a pathogenic mutation in HER2 p.G776V."
+            }
+          ]
+        },
+        {
+          "event_id": "p1-e12",
+          "description": "CA-125 decreased from 177 to 23 within six weeks of T-DXd",
+          "occurrence": "occurred",
+          "fact_ids": [
+            "p1-f019",
+            "p1-f020"
+          ],
+          "time_text": "within six weeks of treatment",
+          "kind": "test",
+          "time_kind": "relative",
+          "time_precision": "approximate",
+          "evidence": [
+            {
+              "segment_id": "b00013",
+              "quote": "Her CA-125 decreased from 177 to 23 within six weeks of treatment"
+            }
+          ]
+        },
+        {
+          "event_id": "p1-e13",
+          "description": "CT showing decreasing size of metastatic lesions (Fig. 1)",
+          "occurrence": "occurred",
+          "fact_ids": [
+            "p1-f021",
+            "p1-f026",
+            "p1-f027"
+          ],
+          "time_text": null,
+          "kind": "test",
+          "evidence": [
+            {
+              "segment_id": "b00013",
+              "quote": "CT imaging showed decreasing size of metastatic lesions (Fig. 1)"
+            },
+            {
+              "segment_id": "b00028",
+              "quote": "Focal metastatic lesion decreases in size from 33.5 mm x 25.4 mm (left) to 13.2 mm to 5.5 mm (right) with T-DXd treatment over the course of six months."
+            }
+          ]
         }
       ],
       "temporal_relations": [
@@ -1950,6 +1989,65 @@
             {
               "segment_id": "b00013",
               "quote": "She received 12 additional months of T-DXd"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e12",
+          "to_event_id": "p1-e06",
+          "relation": "after",
+          "evidence": [
+            {
+              "segment_id": "b00013",
+              "quote": "Her CA-125 decreased from 177 to 23 within six weeks of treatment"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e13",
+          "to_event_id": "p1-e06",
+          "relation": "after",
+          "evidence": [
+            {
+              "segment_id": "b00028",
+              "quote": "with T-DXd treatment over the course of six months"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e02",
+          "to_event_id": "p1-e05",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00012",
+              "quote": "Paclitaxel and carboplatin were re-administered"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e05",
+          "to_event_id": "p1-e06",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00013",
+              "quote": "the patient then began T-DXd"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e08",
+          "to_event_id": "p1-e09",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00013",
+              "quote": "After cycle 17, T-DXd was held"
+            },
+            {
+              "segment_id": "b00013",
+              "quote": "CT imaging five months later showed progression of her endometrial cancer."
             }
           ]
         }
@@ -2140,6 +2238,38 @@
             "p1-f038",
             "p1-f047"
           ]
+        },
+        {
+          "issue": "The introduction calls Case 1 endometrioid endometrial cancer, while the case text describes high grade endometrial carcinoma with serous and endometrioid features.",
+          "evidence": [
+            {
+              "segment_id": "b00011",
+              "quote": "one with endometrioid endometrial cancer"
+            },
+            {
+              "segment_id": "b00012",
+              "quote": "A 65-year-old woman was diagnosed with recurrent high grade endometrial carcinoma with serous and endometrioid features."
+            }
+          ],
+          "must_not_infer": "Do not reduce the histology to pure endometrioid carcinoma.",
+          "fact_ids": [
+            "p1-f004",
+            "p1-f034"
+          ]
+        },
+        {
+          "issue": "The anchor of \"five months later\" for the CT showing progression is not stated; it follows the sentence about the T-DXd hold.",
+          "evidence": [
+            {
+              "segment_id": "b00013",
+              "quote": "CT imaging five months later showed progression of her endometrial cancer."
+            }
+          ],
+          "must_not_infer": "Do not compute a date or interval from diagnosis.",
+          "fact_ids": [
+            "p1-f024",
+            "p1-f050"
+          ]
         }
       ]
     },
@@ -2248,7 +2378,6 @@
             "role": "primary_diagnosis",
             "laterality": "unknown",
             "body_site": "ovary",
-            "diagnostic_basis": "diagnostic laparoscopy showed unresectable disease",
             "temporality": "current",
             "time": {
               "text": null,
@@ -2501,7 +2630,7 @@
             "subject": "index_patient",
             "assertion": "present",
             "name": "Colonoscopy finding",
-            "kind": "pathology",
+            "kind": "other",
             "status": "resulted",
             "flag": "unknown",
             "comparator": "unknown",
@@ -2542,8 +2671,8 @@
             "text_value": "started to rise",
             "temporality": "current",
             "time": {
-              "text": "for the next 12 months",
-              "relation": "during",
+              "text": null,
+              "relation": "unknown",
               "anchor": null,
               "date_iso": null
             }
@@ -2557,7 +2686,7 @@
           "clinical_statement": "CA-125 level",
           "certainty": "supported",
           "scoring": "include",
-          "notes": "Time wording \"for the next 12 months\" governs the letrozole course; CA-125 rise occurred at that point."
+          "notes": "The rise occurred at the end of the 12 months of resumed letrozole (\"at which point\"); no own time text."
         },
         {
           "fact_id": "p2-f014",
@@ -2788,12 +2917,16 @@
             {
               "segment_id": "b00015",
               "quote": "NGS revealed a large deletion of HER2, including the entirety of exon 16 and a portion of intron 16 (HER2 c.1900_1946 + 854del)."
+            },
+            {
+              "segment_id": "b00015",
+              "quote": "Because of the activating HER2 deletion"
             }
           ],
           "clinical_statement": "HER2",
           "certainty": "supported",
           "scoring": "include",
-          "notes": "Quote describes the deletion as activating in the next sentence; interpretation pathogenic is not stated for this item, left from the activating wording.",
+          "notes": "Interpretation pathogenic maps the source wording \"activating HER2 deletion\"; the source does not use the word pathogenic.",
           "alternate_representation_of": "p2-f016"
         },
         {
@@ -2874,7 +3007,6 @@
             "name": "Multifocal low grade serous carcinoma in the colon",
             "tumor_ref": "t2",
             "laterality": "unknown",
-            "primary_site": "colon",
             "histology": "low grade serous",
             "temporality": "historical",
             "time": {
@@ -2893,7 +3025,7 @@
           "clinical_statement": "Multifocal low grade serous carcinoma in the colon",
           "certainty": "supported",
           "scoring": "include",
-          "notes": "Whether this is spread of the ovarian carcinoma is not stated."
+          "notes": "Whether this is spread of the ovarian carcinoma or a separate primary is not stated; no primary site assigned."
         },
         {
           "fact_id": "p2-f024",
@@ -3024,7 +3156,6 @@
             "assertion": "present",
             "name": "Letrozole",
             "action": "historical",
-            "duration_text": "one year",
             "temporality": "historical",
             "time": {
               "text": null,
@@ -3042,7 +3173,7 @@
           "clinical_statement": "Letrozole",
           "certainty": "supported",
           "scoring": "include",
-          "notes": ""
+          "notes": "\"for one year\" describes the stable disease, not the letrozole duration."
         },
         {
           "fact_id": "p2-f029",
@@ -3162,7 +3293,8 @@
           "clinical_statement": "Radical cytoreductive surgery",
           "certainty": "supported",
           "scoring": "include",
-          "notes": ""
+          "notes": "",
+          "alternate_representation_of": "p2-f008"
         },
         {
           "fact_id": "p2-f033",
@@ -3664,7 +3796,7 @@
               "quote": "She then began oral cyclophosphamide and bevacizumab with disease progression after 6 months."
             }
           ],
-          "time_kind": "duration",
+          "time_kind": "relative",
           "time_precision": "exact"
         },
         {
@@ -3814,13 +3946,61 @@
           ]
         },
         {
-          "from_event_id": "p2-e11",
-          "to_event_id": "p2-e12",
-          "relation": "before",
+          "from_event_id": "p2-e12",
+          "to_event_id": "p2-e11",
+          "relation": "during",
           "evidence": [
             {
               "segment_id": "b00016",
-              "quote": "After cycle 42"
+              "quote": "She remains on T-DXd after over two years. After cycle 42, the patient developed neutropenia requiring a decrease in dose frequency"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p2-e03",
+          "to_event_id": "p2-e06",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00014",
+              "quote": "She resumed letrozole"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p2-e06",
+          "to_event_id": "p2-e07",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00014",
+              "quote": "She then began oral cyclophosphamide and bevacizumab"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p2-e08",
+          "to_event_id": "p2-e09",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00015",
+              "quote": "Because of the activating HER2 deletion, the patient began single agent trastuzumab"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p2-e10",
+          "to_event_id": "p2-e11",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00015",
+              "quote": "She was then treated on a clinical trial targeting the MAPK pathway for eight months when her cancer progressed again."
+            },
+            {
+              "segment_id": "b00016",
+              "quote": "At this time, based on the initial HER2 mutation and excellent prior biochemical response to trastuzumab, the patient began treatment with T-DXd."
             }
           ]
         }
@@ -4883,7 +5063,8 @@
               "relation": "during",
               "anchor": null,
               "date_iso": null
-            }
+            },
+            "setting": "neoadjuvant"
           },
           "evidence": [
             {
@@ -4894,7 +5075,7 @@
           "clinical_statement": "Preoperative external beam pelvic radiation",
           "certainty": "supported",
           "scoring": "include",
-          "notes": ""
+          "notes": "Setting neoadjuvant maps the literal \"preoperative\"."
         },
         {
           "fact_id": "p3-f030",
@@ -5122,7 +5303,7 @@
             "subject": "index_patient",
             "assertion": "present",
             "name": "Trastuzumab deruxtecan (T-DXd) dose reductions",
-            "action": "current",
+            "action": "administered",
             "regimen": "dose reductions",
             "temporality": "historical",
             "time": {
@@ -5475,24 +5656,20 @@
         },
         {
           "event_id": "p3-e10",
-          "description": "Start of T-DXd with partial response on imaging",
+          "description": "Start of T-DXd",
           "occurrence": "occurred",
           "kind": "treatment",
           "fact_ids": [
             "p3-f035",
-            "p3-f036",
-            "p3-f023",
-            "p3-f041"
+            "p3-f036"
           ],
-          "time_text": "about six weeks later",
+          "time_text": null,
           "evidence": [
             {
               "segment_id": "b00019",
-              "quote": "The patient began treatment with T-DXd and imaging about six weeks later showed a partial response to treatment."
+              "quote": "The patient began treatment with T-DXd"
             }
-          ],
-          "time_kind": "relative",
-          "time_precision": "approximate"
+          ]
         },
         {
           "event_id": "p3-e11",
@@ -5527,6 +5704,25 @@
             {
               "segment_id": "b00019",
               "quote": "Side effects of T-DXd included gastrointestinal toxicity and neutropenia, which required dose reductions."
+            }
+          ]
+        },
+        {
+          "event_id": "p3-e13",
+          "description": "Imaging about six weeks after starting T-DXd showing partial response",
+          "occurrence": "occurred",
+          "fact_ids": [
+            "p3-f023",
+            "p3-f041"
+          ],
+          "time_text": "about six weeks later",
+          "kind": "test",
+          "time_kind": "relative",
+          "time_precision": "approximate",
+          "evidence": [
+            {
+              "segment_id": "b00019",
+              "quote": "The patient began treatment with T-DXd and imaging about six weeks later showed a partial response to treatment."
             }
           ]
         }
@@ -5566,6 +5762,50 @@
             {
               "segment_id": "b00018",
               "quote": "Three years later"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p3-e13",
+          "to_event_id": "p3-e10",
+          "relation": "after",
+          "evidence": [
+            {
+              "segment_id": "b00019",
+              "quote": "The patient began treatment with T-DXd and imaging about six weeks later showed a partial response to treatment."
+            }
+          ]
+        },
+        {
+          "from_event_id": "p3-e03",
+          "to_event_id": "p3-e04",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00017",
+              "quote": "the patient was cancer free postoperatively"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p3-e03",
+          "to_event_id": "p3-e05",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00017",
+              "quote": "She received three cycles of adjuvant paclitaxel and carboplatin"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p3-e12",
+          "to_event_id": "p3-e10",
+          "relation": "during",
+          "evidence": [
+            {
+              "segment_id": "b00019",
+              "quote": "Side effects of T-DXd included gastrointestinal toxicity and neutropenia, which required dose reductions."
             }
           ]
         }

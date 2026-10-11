@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC13418951.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b37ea3b23939aa2e01d4dfab5d6934f5e27e55fe092700b4d5cce0a0f90254d5",
+  "annotation_sha256": "7f7078ba1b5a5e83394c3e6bb8279015e0b86ad01c4a67f23ff16d90c1998c72",
+  "reviewed_at": "2026-10-11T18:33:19.301780+00:00",
+  "source_segments_read": 47,
+  "facts_reviewed": 103,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f060 (TED continued after commercial availability): replaced the b00001 \">6 years of TED therapy\" quote with the b00017 sentence \"The patient remained on TED for >3 additional years\"; duration_text changed from \">6 years\" (total therapy, kept in p1-f082) to \">3 additional years\".",
+    "p1-f059 and p1-f060: added the b00001 quote \"Teduglutide (TED), a glucagon-like peptide-2 analog\" so the drug label is grounded; times unchanged because they sit in each fact's own sentence.",
+    "p1-f012/f013/f014 (narrative pre-TED URI inflammation, nonspecific fever, abdominal pain) marked alternate_representation_of Table 1 rows p1-f088/f100/f090: same 1003-day window, the sentence cites Table 1.",
+    "Added p1-f102 (PN calories remained almost unchanged; no time, the \"After 2 years\" sentence is separate) and p1-f103 (PN volume and caloric requirements gradually decreased, reductions began before TED initiation).",
+    "Added ambiguities: seven CRBSIs after transfer vs Table 1 7 CRBSIs in 1003 days (not linked); narrated pneumatosis at age 5/6 vs Table 1 before/after rows; URI inflammation vs infection naming; Table 1 eosinophilic enteritis added to the eosinophilic diagnosis/colonoscopy ambiguity.",
+    "Added 7 temporal relations with literal support: e06<e07 (age 5 vs age 6), e08<e09 (\"subsequently\"), e06<e09 (\"during the treatment period\"), e06<e13, e13<e14, e06<e16, e06<e15."
+  ],
+  "unresolved": [
+    "Table 1 and Table 2 report adverse-event counts and period means for the single patient; Table 2 means have no stated time points, so no serial series is claimed.",
+    "Dose of teduglutide is not stated.",
+    "Table 3 and the discussion describe published studies and are not patient facts.",
+    "Caption-layer visual status not_inspected; the two figure images are reviewed in the visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 47,
+    "facts_reviewed": 103,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single male child with SBS (9 cm residual small bowel, ICV and colon preserved) on teduglutide from age 5 (trial then commercial) for >6 years with complete PN weaning after 6 years.",
+      "Table 1 AE counts recorded per period as outcomes with column-header times; Table 2 period means with ranges, column headers govern time.",
+      "NO-BORROWING warnings on p1-f059/p1-f060 are checker false positives: each time is in the fact's own sentence about TED; the checker does not learn TED from \"Teduglutide (TED)\" because initials do not spell the abbreviation.",
+      "Complete weaning outcome p1-f081 is the same fact as PN stopped p1-f058 (same quote), alternate kept.",
+      "TED holds recorded with CRBSI and catheter break only as the stated reasons.",
+      "Figure 1 and 2 line-chart readings checked against pixels; values are plot estimates."
+    ],
+    "residual_risks": [
+      "Eosinophilic diagnosis named three ways and the two colonoscopy descriptions may be one procedure; kept separate with ambiguity.",
+      "9 cm vs <9 cm residual small bowel kept as ambiguity.",
+      "Age 5 at presentation equals age at TED enrollment; current age not stated.",
+      "measurement_series.json not yet reviewed (draft only)."
+    ]
+  },
+  "physician_adjudicated": false
+}

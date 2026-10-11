@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12554900.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ef07d8cee9120b381fa350a4364139d18545944783667e35b4b2c46e4583b1fd",
+  "annotation_sha256": "7b5b68a30ddff0a6d850e2764da08bf6a15cd64a38a20e1540383270acd37d85",
+  "reviewed_at": "2026-10-11T18:32:08.849896+00:00",
+  "source_segments_read": 30,
+  "facts_reviewed": 138,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f035 metastatic disease tumor: removed primary_site borrowed from the preceding sentence; renamed Metastatic disease.",
+    "p1-f038 checkpoint inhibitor: removed duration_text \"eight months\" (only progression after eight months is stated).",
+    "p1-e02 split: tumor IHC/NGS results moved to new untimed test event p1-e11 (their order relative to first-line chemotherapy is not stated).",
+    "p1-e06 no longer carries the CA-125 time: start of T-DXd split from new p1-e12 CA-125 fall \"within six weeks of treatment\" and p1-e13 CT decreasing lesions (Fig. 1); the six-week time applies only to the CA-125 clause.",
+    "p1 relations added: re-administered paclitaxel/carboplatin after first course, T-DXd \"then\" after the prior lines, CA-125 fall and CT response after T-DXd start, progression CT after the hold.",
+    "p1 ambiguities added: introduction calls Case 1 endometrioid vs case text serous and endometrioid features; unanchored \"five months later\".",
+    "p2-f004 removed inferred diagnostic_basis; p2-f012 colonoscopy finding kind pathology -> other; p2-f013 CA-125 rise: removed borrowed letrozole time.",
+    "p2-f020 HER2 deletion: added \"activating HER2 deletion\" evidence for interpretation; p2-f023 colon carcinoma tumor: removed primary_site colon (not stated; no link to the ovarian primary).",
+    "p2-f028 letrozole: removed duration_text \"one year\" (it describes stable disease); p2-f032 marked alternate of p2-f008; p2-e07 time_kind relative.",
+    "p2 relations: resumed letrozole after first letrozole, cyclophosphamide/bevacizumab \"then\", NGS before trastuzumab (\"Because of\"), MAPK trial before T-DXd (\"At this time\"), neutropenia during (not after) the ongoing T-DXd course.",
+    "p3-f029 radiation setting neoadjuvant (literal preoperative); p3-f037 dose reductions action current -> administered.",
+    "p3-e10 split: T-DXd start no longer carries \"about six weeks later\"; new p3-e13 imaging partial response after start; relations added for postoperative cancer-free status, adjuvant therapy after surgery, side effects during T-DXd."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three figure images were inspected in the separate visual submission.",
+    "No dates are stated; all times are relative durations or order words as written.",
+    "The checkpoint inhibitor in Case 1 and the MAPK-pathway trial drug in Case 2 are not named.",
+    "Discussion states a progression-free survival range of 12-28 months across the three patients; this is a cohort statement and was not copied to individuals.",
+    "Discussion says two of the patients had periods of stability or biomarker response on trastuzumab without naming them."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 30,
+    "facts_reviewed": 138,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Three index patients correctly separated by case paragraphs; trial and literature statistics left as background; PFS 12-28 months range not copied.",
+      "Case 1 MDS kept without a causal role; the discussion attribution to prior chemotherapy is an ambiguity; thrombocytopenia and hyperbilirubinemia recorded as the stated reasons T-DXd was held.",
+      "Case 3 initial diagnosis kept provisional with presumptive stage IIB and no staging system.",
+      "Figure 1 caption sizes kept as printed text, including \"13.2 mm to 5.5 mm\"; Figure 2 legend T-Dxd vs caption T-DXd recorded in the visual review.",
+      "Biomarker tumor_ref left null: no sentence explicitly ties a biomarker result to a specific tumor entry."
+    ],
+    "residual_risks": [
+      "Combination chemotherapy is recorded as single medication items per regimen rather than one item per drug.",
+      "Unnamed therapies (checkpoint inhibitor-based therapy, MAPK-pathway trial, two lines of cytotoxic chemotherapy) remain class-level items.",
+      "Temporality current/historical labels on past observations are not fully consistent."
+    ]
+  },
+  "physician_adjudicated": false
+}

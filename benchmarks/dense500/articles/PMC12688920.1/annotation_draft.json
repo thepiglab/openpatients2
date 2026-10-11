@@ -518,7 +518,7 @@
      "task": "family_genetics",
      "collection": "items",
      "fields": {
-      "subject": "index_patient",
+      "subject": "family_member",
       "assertion": "absent",
       "name": "Notable family history of such conditions",
       "kind": "family_condition",
@@ -1535,7 +1535,7 @@
       "assertion": "present",
       "action_text": "Second follow-up",
       "plan_type": "follow_up",
-      "action_status": "planned",
+      "action_status": "unknown",
       "time": {
        "text": "8 post-op months",
        "relation": "after",
@@ -1552,7 +1552,7 @@
      "clinical_statement": "Second follow-up listed at 8 post-op months and not yet occurred",
      "certainty": "supported",
      "scoring": "include",
-     "notes": ""
+     "notes": "Table 1 marks this follow-up as not occurred; the care-plan status enum has no not-occurred value, so status is unknown and the non-occurrence is carried by event p1-e07 (not_occurred)."
     },
     {
      "fact_id": "p1-f057",
@@ -1646,16 +1646,34 @@
       {
        "segment_id": "b00022",
        "quote": "At her 6-week follow-up, the patient remained asymptomatic."
-      },
-      {
-       "segment_id": "b00016",
-       "quote": "Follow-up (first) | 6 wk post-op"
       }
      ],
      "clinical_statement": "Follow-up visit at 6 weeks",
      "certainty": "supported",
      "scoring": "include",
      "notes": ""
+    },
+    {
+     "fact_id": "p1-f061",
+     "task": "care_plans",
+     "collection": "items",
+     "fields": {
+      "subject": "index_patient",
+      "assertion": "present",
+      "action_text": "Referred to our hospital",
+      "plan_type": "referral",
+      "action_status": "completed"
+     },
+     "evidence": [
+      {
+       "segment_id": "b00002",
+       "quote": "A 2-year-old South Asian female presenting with 13 months of increasing abdominal distention and intermittent fever was referred to our hospital."
+      }
+     ],
+     "clinical_statement": "Referred to the reporting hospital",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": "Not stated whether this is the Table 1 referral to surgeon."
     }
    ],
    "events": [
@@ -1782,13 +1800,13 @@
     },
     {
      "event_id": "p1-e07",
-     "description": "Second follow-up",
-     "occurrence": "planned",
+     "description": "Second follow-up at 8 post-op months, not occurred",
+     "occurrence": "not_occurred",
      "kind": "follow_up",
      "fact_ids": [
       "p1-f056"
      ],
-     "time_text": "8 post-op months (not occurred)",
+     "time_text": "8 post-op months",
      "evidence": [
       {
        "segment_id": "b00017",
@@ -1796,7 +1814,7 @@
       }
      ],
      "time_kind": "relative",
-     "time_precision": "approximate"
+     "time_precision": "exact"
     },
     {
      "event_id": "p1-e08",
@@ -1817,6 +1835,25 @@
       {
        "segment_id": "b00022",
        "quote": "The histopathological analysis of the specimen confirmed the diagnosis of a benign lipoma"
+      }
+     ]
+    },
+    {
+     "event_id": "p1-e09",
+     "description": "Referred and admitted to the reporting hospital with abdominal distention and intermittent fever",
+     "occurrence": "occurred",
+     "kind": "presentation",
+     "fact_ids": [
+      "p1-f061",
+      "p1-f005",
+      "p1-f006",
+      "p1-f007"
+     ],
+     "time_text": null,
+     "evidence": [
+      {
+       "segment_id": "b00010",
+       "quote": "A 2-year-old female was admitted to our hospital with a 13-month history of progressive abdominal distension"
       }
      ]
     }
@@ -1911,6 +1948,17 @@
        "quote": "Follow-up (second) | 8 post-op months (not occurred)"
       }
      ]
+    },
+    {
+     "from_event_id": "p1-e01",
+     "to_event_id": "p1-e09",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00010",
+       "quote": "was admitted to our hospital with a 13-month history of progressive abdominal distension"
+      }
+     ]
     }
    ],
    "summary": [
@@ -1932,7 +1980,8 @@
       "p1-f022",
       "p1-f012",
       "p1-f013",
-      "p1-f014"
+      "p1-f014",
+      "p1-f061"
      ]
     },
     {
@@ -1983,7 +2032,7 @@
      ]
     },
     {
-     "text": "The postoperative period was uneventful with discharge on the fourth postoperative day, and she was asymptomatic at the 6-week follow-up; a second follow-up at 8 post-op months had not yet occurred.",
+     "text": "The postoperative period was uneventful with discharge on the fourth postoperative day, and she was asymptomatic at the 6-week follow-up; a second follow-up at 8 post-op months is listed as not occurred.",
      "fact_ids": [
       "p1-f057",
       "p1-f058",
@@ -2141,6 +2190,24 @@
      "fact_ids": [
       "p1-f005",
       "p1-f052"
+     ]
+    },
+    {
+     "issue": "CT describes internal septations causing compression and rising of the left kidney and spleen, yet the next statement says adjacent organs including the spleen and kidneys were not remarkable.",
+     "evidence": [
+      {
+       "segment_id": "b00020",
+       "quote": "There were also internal septations that led to compression and rising of the left kidney and spleen"
+      },
+      {
+       "segment_id": "b00020",
+       "quote": "Organs adjacent to it, such as the liver, pancreas, spleen, kidneys, and bowel structures, were not remarkable."
+      }
+     ],
+     "must_not_infer": "Do not reconcile mass effect with the not-remarkable statement or infer organ involvement.",
+     "fact_ids": [
+      "p1-f031",
+      "p1-f035"
      ]
     }
    ]
@@ -2439,103 +2506,103 @@
   },
   {
    "segment_id": "b00028",
-   "disposition": "aggregate",
+   "disposition": "background",
    "patient_ids": [],
    "note": "Published literature case in the compendium table, not the index patient."
   },
   {
    "segment_id": "b00029",
-   "disposition": "aggregate",
+   "disposition": "background",
    "patient_ids": [],
    "note": "Published literature case in the compendium table, not the index patient."
   },
   {
    "segment_id": "b00030",
-   "disposition": "aggregate",
+   "disposition": "background",
    "patient_ids": [],
    "note": "Published literature case in the compendium table, not the index patient."
   },
   {
    "segment_id": "b00031",
-   "disposition": "aggregate",
+   "disposition": "background",
    "patient_ids": [],
    "note": "Published literature case in the compendium table, not the index patient."
   },
   {
    "segment_id": "b00032",
-   "disposition": "aggregate",
+   "disposition": "background",
    "patient_ids": [],
    "note": "Published literature case in the compendium table, not the index patient."
   },
   {
    "segment_id": "b00033",
-   "disposition": "aggregate",
+   "disposition": "background",
    "patient_ids": [],
    "note": "Published literature case in the compendium table, not the index patient."
   },
   {
    "segment_id": "b00034",
-   "disposition": "aggregate",
+   "disposition": "background",
    "patient_ids": [],
    "note": "Published literature case in the compendium table, not the index patient."
   },
   {
    "segment_id": "b00035",
-   "disposition": "aggregate",
+   "disposition": "background",
    "patient_ids": [],
    "note": "Published literature case in the compendium table, not the index patient."
   },
   {
    "segment_id": "b00036",
-   "disposition": "aggregate",
+   "disposition": "background",
    "patient_ids": [],
    "note": "Published literature case in the compendium table, not the index patient."
   },
   {
    "segment_id": "b00037",
-   "disposition": "aggregate",
+   "disposition": "background",
    "patient_ids": [],
    "note": "Published literature case in the compendium table, not the index patient."
   },
   {
    "segment_id": "b00038",
-   "disposition": "aggregate",
+   "disposition": "background",
    "patient_ids": [],
    "note": "Published literature case in the compendium table, not the index patient."
   },
   {
    "segment_id": "b00039",
-   "disposition": "aggregate",
+   "disposition": "background",
    "patient_ids": [],
    "note": "Published literature case in the compendium table, not the index patient."
   },
   {
    "segment_id": "b00040",
-   "disposition": "aggregate",
+   "disposition": "background",
    "patient_ids": [],
    "note": "Published literature case in the compendium table, not the index patient."
   },
   {
    "segment_id": "b00041",
-   "disposition": "aggregate",
+   "disposition": "background",
    "patient_ids": [],
    "note": "Published literature case in the compendium table, not the index patient."
   },
   {
    "segment_id": "b00042",
-   "disposition": "aggregate",
+   "disposition": "background",
    "patient_ids": [],
    "note": "Published literature case in the compendium table, not the index patient."
   },
   {
    "segment_id": "b00043",
-   "disposition": "aggregate",
+   "disposition": "background",
    "patient_ids": [],
    "note": "Published literature case in the compendium table, not the index patient."
   },
   {
    "segment_id": "b00044",
-   "disposition": "aggregate",
+   "disposition": "background",
    "patient_ids": [],
    "note": "Published literature case in the compendium table, not the index patient."
   },
