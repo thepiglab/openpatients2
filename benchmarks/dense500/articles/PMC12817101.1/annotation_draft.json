@@ -275,11 +275,12 @@
           "task": "family_genetics",
           "collection": "items",
           "fields": {
-            "subject": "mother",
+            "subject": "family_member",
             "assertion": "absent",
             "name": "Family history of coagulation disorders",
             "kind": "family_condition",
-            "origin": "unknown"
+            "origin": "unknown",
+            "relative": null
           },
           "evidence": [
             {
@@ -287,10 +288,10 @@
               "quote": "no signs of local infection or personal or family history of coagulation disorders"
             }
           ],
-          "clinical_statement": "No family history of coagulation disorders",
+          "clinical_statement": "No family history of coagulation disorders (stated within the maternal history)",
           "certainty": "supported",
           "scoring": "include",
-          "notes": ""
+          "notes": "The negation is part of the description of the mother (\"personal or family history\"); the relatives are not named, so subject is family_member with no relative."
         },
         {
           "fact_id": "p1-f013",
@@ -976,6 +977,10 @@
             {
               "segment_id": "b00006",
               "quote": "Clinical monitoring during the first 48 hours remained uneventful, with progressive improvement of the cord appearance"
+            },
+            {
+              "segment_id": "b00001",
+              "quote": "the appearance of the cord improved significantly within 48 hours"
             }
           ],
           "clinical_statement": "Cord appearance improved progressively",
@@ -1032,7 +1037,7 @@
           "fields": {
             "subject": "index_patient",
             "assertion": "absent",
-            "name": "Primary coagulation disorder as cause of umbilical cord hematoma",
+            "name": "Primary coagulation disorder",
             "verification_status": "refuted"
           },
           "evidence": [
@@ -1066,6 +1071,81 @@
           "certainty": "supported",
           "scoring": "include",
           "notes": ""
+        },
+        {
+          "fact_id": "p1-f046",
+          "task": "observations",
+          "collection": "items",
+          "fields": {
+            "subject": "mother",
+            "assertion": "present",
+            "name": "Complete blood count",
+            "kind": "laboratory",
+            "status": "ordered",
+            "result_absent_reason": "not_reported",
+            "comparator": "unknown",
+            "flag": "unknown"
+          },
+          "evidence": [
+            {
+              "segment_id": "b00004",
+              "quote": "The requested initial assessments included a complete blood count, Rh factor testing, and fasting blood glucose"
+            }
+          ],
+          "clinical_statement": "Complete blood count requested as an initial prenatal assessment; no result reported",
+          "certainty": "supported",
+          "scoring": "include",
+          "notes": "Source says the assessment was requested; whether it was performed and its result are not reported."
+        },
+        {
+          "fact_id": "p1-f047",
+          "task": "observations",
+          "collection": "items",
+          "fields": {
+            "subject": "mother",
+            "assertion": "present",
+            "name": "Rh factor testing",
+            "kind": "laboratory",
+            "status": "ordered",
+            "result_absent_reason": "not_reported",
+            "comparator": "unknown",
+            "flag": "unknown"
+          },
+          "evidence": [
+            {
+              "segment_id": "b00004",
+              "quote": "The requested initial assessments included a complete blood count, Rh factor testing, and fasting blood glucose"
+            }
+          ],
+          "clinical_statement": "Rh factor testing requested as an initial prenatal assessment; no result reported",
+          "certainty": "supported",
+          "scoring": "include",
+          "notes": "Source says the assessment was requested; whether it was performed and its result are not reported."
+        },
+        {
+          "fact_id": "p1-f048",
+          "task": "observations",
+          "collection": "items",
+          "fields": {
+            "subject": "mother",
+            "assertion": "present",
+            "name": "Fasting blood glucose",
+            "kind": "laboratory",
+            "status": "ordered",
+            "result_absent_reason": "not_reported",
+            "comparator": "unknown",
+            "flag": "unknown"
+          },
+          "evidence": [
+            {
+              "segment_id": "b00004",
+              "quote": "The requested initial assessments included a complete blood count, Rh factor testing, and fasting blood glucose"
+            }
+          ],
+          "clinical_statement": "Fasting blood glucose requested as an initial prenatal assessment; no result reported",
+          "certainty": "supported",
+          "scoring": "include",
+          "notes": "Source says the assessment was requested; whether it was performed and its result are not reported."
         }
       ],
       "events": [
@@ -1169,13 +1249,36 @@
             "p1-f041"
           ],
           "time_text": "during the first 48 hours",
-          "time_kind": "duration",
-          "time_precision": "exact",
+          "time_kind": "postnatal_age",
+          "time_precision": "range",
           "kind": "follow_up",
           "evidence": [
             {
               "segment_id": "b00006",
               "quote": "Clinical monitoring during the first 48 hours remained uneventful, with progressive improvement of the cord appearance"
+            }
+          ]
+        },
+        {
+          "event_id": "p1-e06",
+          "description": "Single prenatal visit with initial assessments requested",
+          "occurrence": "occurred",
+          "fact_ids": [
+            "p1-f008",
+            "p1-f046",
+            "p1-f047",
+            "p1-f048"
+          ],
+          "time_text": null,
+          "kind": "test",
+          "evidence": [
+            {
+              "segment_id": "b00004",
+              "quote": "The pregnancy was poorly monitored, characterized by only one prenatal visit"
+            },
+            {
+              "segment_id": "b00004",
+              "quote": "The requested initial assessments included a complete blood count, Rh factor testing, and fasting blood glucose"
             }
           ]
         }
@@ -1189,6 +1292,39 @@
             {
               "segment_id": "b00005",
               "quote": "The umbilical cord was clamped immediately upon delivery"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e06",
+          "to_event_id": "p1-e01",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00004",
+              "quote": "only one prenatal visit"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e01",
+          "to_event_id": "p1-e03",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00001",
+              "quote": "Immediate clinical examination revealed a 5 × 1.5 cm hematoma"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e01",
+          "to_event_id": "p1-e05",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00006",
+              "quote": "Clinical monitoring during the first 48 hours"
             }
           ]
         }
@@ -1325,14 +1461,14 @@
           ]
         },
         {
-          "issue": "The family history of coagulation disorders is stated in the sentence about the mother; whose family history is meant is not explicit.",
+          "issue": "The absent family history of coagulation disorders is stated within the description of the mother (\"personal or family history\"); which relatives were considered is not stated.",
           "evidence": [
             {
               "segment_id": "b00004",
               "quote": "no signs of local infection or personal or family history of coagulation disorders"
             }
           ],
-          "must_not_infer": "Do not assign the family history to a named relative.",
+          "must_not_infer": "Do not assign the family history to a named relative or record it as the mother's own condition.",
           "fact_ids": [
             "p1-f012"
           ]
@@ -1458,9 +1594,9 @@
   ],
   "article_limitations": [
     "Caption-layer visual status not_inspected; the actual JPEG is inspected in the separate visual target.",
-    "Requested initial prenatal assessments (blood count, Rh factor, fasting glucose) are described as requested, not as resulted, and are not recorded as results.",
     "Discussion statements about the likely timing and etiology of the hematoma are author inference and are recorded only as an ambiguity.",
-    "Literature statements about incidence, risk factors and prognosis are not patient facts."
+    "Literature statements about incidence, risk factors and prognosis are not patient facts.",
+    "Requested initial prenatal assessments (complete blood count, Rh factor, fasting glucose) are recorded as ordered with no reported result."
   ],
   "annotation_provenance": {
     "annotator_model": "Claude Sonnet 5.5 annotator",
