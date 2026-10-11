@@ -1,7 +1,7 @@
 {
   "format": "dense-runtime-targets/1",
   "article_id": "PMC13151000.1",
-  "annotation_sha256": "193bcf54978a486b69d844cf1aa6d671d529197fd2a7ca502d2d9560d8a25c85",
+  "annotation_sha256": "48da37a83fac03aecfee811a0d7b300b15d0f4aa5a4408b21719ff9c2233647e",
   "source_text_sha256": "075b1c864ff2179d706ebfe9397a52e9b85a5aca9e70c2a80ee02da7798c519c",
   "schema_fingerprints": {
     "case_context": "d7439310910ef4a7d5e1706c5b9dc8a2b379f132a2562791c059a478b588ec71",
@@ -52,7 +52,8 @@
         ],
         "attribution_limitations": [
           "The discussion lists total bilirubin 18.4 and 7.1 mg/dL \"respectively\" for the two cases, but the case narratives give 7.1 mg/dL for Case 1 (DOL 3) and 18.4 mg/dL for Case 2 (DOL 10), the reverse order.",
-          "The narrative gives DOL 46 for the cholangiogram and says KHPE followed (\"subsequently\"); the exact KHPE date is not stated."
+          "The narrative gives DOL 46 for the cholangiogram and says KHPE followed (\"subsequently\"); the exact KHPE date is not stated.",
+          "The discussion says neither case had 3D reconstructions available for review, while the Figure 1 caption labels panel D a 3D maximum intensity projection MRI."
         ]
       },
       {
@@ -283,10 +284,10 @@
     ],
     "limitations": [
       "Caption-layer visual status not_inspected; the two figure images are inspected in the separate visual submission.",
-      "Case 2 sex is given only by the pronoun \"She\"; no documented_sex fact was recorded for Case 2.",
       "Gestational ages (32+2 and 39+2 weeks) are kept as text; no decimal conversion.",
       "Discussion statements that apply to both cases (epithelial lining, sonography) are recorded for both patients only where the source says \"both of our cases\"; literature statements are not patient facts.",
-      "Discussion bilirubin values (18.4 and 7.1 mg/dL \"respectively\") list the cases in the reverse order of the narratives; recorded as an ambiguity, not as facts."
+      "Discussion bilirubin values (18.4 and 7.1 mg/dL \"respectively\") list the cases in the reverse order of the narratives; recorded as an ambiguity, not as facts.",
+      "Case 2 documented_sex is recorded from the pronoun \"She\" (no explicit sex word), consistent with pronoun-documented sex in other articles of this set."
     ]
   },
   "figure_attribution": [
@@ -611,7 +612,8 @@
           ],
           "attribution_limitations": [
             "The discussion lists total bilirubin 18.4 and 7.1 mg/dL \"respectively\" for the two cases, but the case narratives give 7.1 mg/dL for Case 1 (DOL 3) and 18.4 mg/dL for Case 2 (DOL 10), the reverse order.",
-            "The narrative gives DOL 46 for the cholangiogram and says KHPE followed (\"subsequently\"); the exact KHPE date is not stated."
+            "The narrative gives DOL 46 for the cholangiogram and says KHPE followed (\"subsequently\"); the exact KHPE date is not stated.",
+            "The discussion says neither case had 3D reconstructions available for review, while the Figure 1 caption labels panel D a 3D maximum intensity projection MRI."
           ]
         },
         "source_text_omitted_from_release": true
@@ -781,7 +783,7 @@
               "verification_status": "confirmed",
               "name": "Respiratory failure",
               "clinical_status": "unknown",
-              "role": "primary_diagnosis",
+              "role": "unknown",
               "body_site": null,
               "laterality": "unknown",
               "severity": null,
@@ -806,7 +808,7 @@
               "verification_status": "confirmed",
               "name": "COVID-19 pneumonia",
               "clinical_status": "unknown",
-              "role": "primary_diagnosis",
+              "role": "unknown",
               "body_site": null,
               "laterality": "unknown",
               "severity": null,
@@ -1020,6 +1022,31 @@
           "documentation_status": "documented",
           "documentation_evidence": [],
           "items": [
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": "at 1 and 5 min",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "APGAR (Appearance, pulse, grimace, activity, respiration) score was 7 and 9 at 1 and 5 min, respectively",
+                  "source_section": "b00008"
+                }
+              ],
+              "name": "APGAR score",
+              "kind": "performance_score",
+              "text_value": "7 and 9",
+              "numeric_value": null,
+              "unit": null,
+              "body_site": null,
+              "severity": null,
+              "activity_context": null
+            },
             {
               "subject": "index_patient",
               "assertion": "present",
@@ -1338,6 +1365,10 @@
                 {
                   "quote": "subsequently had KHPE with excision of extrahepatic cystic BA and Roux‐en‐Y hepaticojejunostomy",
                   "source_section": "b00008"
+                },
+                {
+                  "quote": "the infant in Case 1 was unable to have KHPE in the recommended period of DOL 30–45 due to prematurity",
+                  "source_section": "b00013"
                 }
               ],
               "name": "Kasai hepatoportoenterostomy",
@@ -1345,7 +1376,7 @@
               "action": "completed",
               "body_site": null,
               "laterality": "unknown",
-              "indication": "Type III cystic BA",
+              "indication": null,
               "finding": null,
               "complication": null
             },
@@ -1781,6 +1812,10 @@
                 {
                   "quote": "A small proximal bile duct (PBD) was present, measuring 1.3 mm",
                   "source_section": "b00008"
+                },
+                {
+                  "quote": "The PBD measured 1.3 mm in Case 1",
+                  "source_section": "b00016"
                 }
               ],
               "result_absent_reason": null,
@@ -1959,7 +1994,7 @@
               },
               "evidence": [
                 {
-                  "quote": "which was a consistent finding in both of our cases",
+                  "quote": "Caponcelli et al. reported in their study the absence of epithelial lining in the cyst of all their CBA cases, which was a consistent finding in both of our cases",
                   "source_section": "b00016"
                 }
               ],
@@ -2156,6 +2191,36 @@
               "specimen": null,
               "method": "intraoperative cholangiography",
               "body_site": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "prenatal ultrasonographic information was not available for comparison purposes",
+                  "source_section": "b00008"
+                }
+              ],
+              "result_absent_reason": "not_reported",
+              "name": "Prenatal ultrasonographic information",
+              "kind": "imaging",
+              "status": "unknown",
+              "text_value": null,
+              "numeric_value": null,
+              "comparator": "unknown",
+              "unit": null,
+              "flag": "unknown",
+              "reference_range_text": null,
+              "specimen": null,
+              "method": null,
+              "body_site": null
             }
           ]
         },
@@ -2299,31 +2364,6 @@
               ],
               "event": "gravidity_parity",
               "text_value": "Gravida 4 Parity 3",
-              "numeric_value": null,
-              "unit": null,
-              "related_subject": null,
-              "gestational_age_weeks": null,
-              "birth_weight_text": null,
-              "outcome": null
-            },
-            {
-              "subject": "index_patient",
-              "assertion": "present",
-              "temporality": "unknown",
-              "time": {
-                "text": null,
-                "relation": "unknown",
-                "anchor": null,
-                "date_iso": null
-              },
-              "evidence": [
-                {
-                  "quote": "APGAR (Appearance, pulse, grimace, activity, respiration) score was 7 and 9 at 1 and 5 min, respectively",
-                  "source_section": "b00008"
-                }
-              ],
-              "event": "newborn",
-              "text_value": "APGAR score 7 and 9 at 1 and 5 min, respectively",
               "numeric_value": null,
               "unit": null,
               "related_subject": null,
@@ -2565,6 +2605,10 @@
                   "quote": "subsequently had KHPE with excision of extrahepatic cystic BA and Roux‐en‐Y hepaticojejunostomy"
                 },
                 {
+                  "segment_id": "b00013",
+                  "quote": "the infant in Case 1 was unable to have KHPE in the recommended period of DOL 30–45 due to prematurity"
+                },
+                {
                   "segment_id": "b00008",
                   "quote": "The pathology of the excised specimen revealed chronic cystitis with denuded mucosal surface"
                 }
@@ -2602,10 +2646,10 @@
           ],
           "limitations": [
             "Caption-layer visual status not_inspected; the two figure images are inspected in the separate visual submission.",
-            "Case 2 sex is given only by the pronoun \"She\"; no documented_sex fact was recorded for Case 2.",
             "Gestational ages (32+2 and 39+2 weeks) are kept as text; no decimal conversion.",
             "Discussion statements that apply to both cases (epithelial lining, sonography) are recorded for both patients only where the source says \"both of our cases\"; literature statements are not patient facts.",
-            "Discussion bilirubin values (18.4 and 7.1 mg/dL \"respectively\") list the cases in the reverse order of the narratives; recorded as an ambiguity, not as facts."
+            "Discussion bilirubin values (18.4 and 7.1 mg/dL \"respectively\") list the cases in the reverse order of the narratives; recorded as an ambiguity, not as facts.",
+            "Case 2 documented_sex is recorded from the pronoun \"She\" (no explicit sex word), consistent with pronoun-documented sex in other articles of this set."
           ]
         },
         "timeline_v2": {
@@ -2922,7 +2966,8 @@
               "fact_ids": [
                 "p1-f027",
                 "p1-f028",
-                "p1-f029"
+                "p1-f029",
+                "p1-f066"
               ],
               "evidence": [
                 {
@@ -3630,6 +3675,116 @@
                   "quote": "on DOL 55"
                 }
               ]
+            },
+            {
+              "edge_id": "edge8",
+              "from_event_id": "p1-e01",
+              "to_event_id": "p1-e04",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00008",
+                  "segment_sha256": "ab4de203b480e1f7bac877da5b4ec6b3e2c653d4d668fbacf05b6186bbf6b0ae",
+                  "start": 661,
+                  "end": 676,
+                  "quote": "at 12 h of life"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge9",
+              "from_event_id": "p1-e02",
+              "to_event_id": "p1-e01",
+              "relation": "same_time",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00008",
+                  "segment_sha256": "ab4de203b480e1f7bac877da5b4ec6b3e2c653d4d668fbacf05b6186bbf6b0ae",
+                  "start": 224,
+                  "end": 295,
+                  "quote": "The infant required continuous positive airway pressure at the delivery"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge10",
+              "from_event_id": "p1-e04",
+              "to_event_id": "p1-e06",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00008",
+                  "segment_sha256": "ab4de203b480e1f7bac877da5b4ec6b3e2c653d4d668fbacf05b6186bbf6b0ae",
+                  "start": 775,
+                  "end": 848,
+                  "quote": "Over the next few days, the infant's T&D bilirubin levels trended upwards"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge11",
+              "from_event_id": "p1-e14",
+              "to_event_id": "p1-e15",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00008",
+                  "segment_sha256": "ab4de203b480e1f7bac877da5b4ec6b3e2c653d4d668fbacf05b6186bbf6b0ae",
+                  "start": 2224,
+                  "end": 2287,
+                  "quote": "The pathology of the excised specimen revealed chronic cystitis"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge12",
+              "from_event_id": "p1-e14",
+              "to_event_id": "p1-e16",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00008",
+                  "segment_sha256": "ab4de203b480e1f7bac877da5b4ec6b3e2c653d4d668fbacf05b6186bbf6b0ae",
+                  "start": 2451,
+                  "end": 2499,
+                  "quote": "Her postoperative clinical course was uneventful"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge13",
+              "from_event_id": "p1-e17",
+              "to_event_id": "p1-e18",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00008",
+                  "segment_sha256": "ab4de203b480e1f7bac877da5b4ec6b3e2c653d4d668fbacf05b6186bbf6b0ae",
+                  "start": 2513,
+                  "end": 2538,
+                  "quote": "discharged home on DOL 55"
+                },
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00008",
+                  "segment_sha256": "ab4de203b480e1f7bac877da5b4ec6b3e2c653d4d668fbacf05b6186bbf6b0ae",
+                  "start": 2594,
+                  "end": 2622,
+                  "quote": "She is currently 2 years old"
+                }
+              ]
             }
           ],
           "limitations": [
@@ -3951,7 +4106,8 @@
             "fact_ids": [
               "p1-f027",
               "p1-f028",
-              "p1-f029"
+              "p1-f029",
+              "p1-f066"
             ],
             "evidence": [
               {
@@ -4495,37 +4651,20 @@
         "topological_layers": [
           [
             [
-              "p1-e01"
-            ],
-            [
+              "p1-e01",
               "p1-e02"
             ],
             [
               "p1-e03"
             ],
             [
-              "p1-e04"
-            ],
-            [
               "p1-e05"
-            ],
-            [
-              "p1-e06"
             ],
             [
               "p1-e08"
             ],
             [
               "p1-e11"
-            ],
-            [
-              "p1-e15"
-            ],
-            [
-              "p1-e16"
-            ],
-            [
-              "p1-e18"
             ],
             [
               "p1-e19"
@@ -4535,6 +4674,14 @@
             ]
           ],
           [
+            [
+              "p1-e04"
+            ]
+          ],
+          [
+            [
+              "p1-e06"
+            ],
             [
               "p1-e07"
             ]
@@ -4566,9 +4713,120 @@
             [
               "p1-e17"
             ]
+          ],
+          [
+            [
+              "p1-e15"
+            ],
+            [
+              "p1-e16"
+            ],
+            [
+              "p1-e18"
+            ]
           ]
         ],
         "before_pairs": [
+          [
+            "p1-e01",
+            "p1-e04"
+          ],
+          [
+            "p1-e01",
+            "p1-e06"
+          ],
+          [
+            "p1-e01",
+            "p1-e07"
+          ],
+          [
+            "p1-e01",
+            "p1-e09"
+          ],
+          [
+            "p1-e01",
+            "p1-e10"
+          ],
+          [
+            "p1-e01",
+            "p1-e12"
+          ],
+          [
+            "p1-e01",
+            "p1-e13"
+          ],
+          [
+            "p1-e01",
+            "p1-e14"
+          ],
+          [
+            "p1-e01",
+            "p1-e15"
+          ],
+          [
+            "p1-e01",
+            "p1-e16"
+          ],
+          [
+            "p1-e01",
+            "p1-e17"
+          ],
+          [
+            "p1-e01",
+            "p1-e18"
+          ],
+          [
+            "p1-e02",
+            "p1-e04"
+          ],
+          [
+            "p1-e02",
+            "p1-e06"
+          ],
+          [
+            "p1-e02",
+            "p1-e07"
+          ],
+          [
+            "p1-e02",
+            "p1-e09"
+          ],
+          [
+            "p1-e02",
+            "p1-e10"
+          ],
+          [
+            "p1-e02",
+            "p1-e12"
+          ],
+          [
+            "p1-e02",
+            "p1-e13"
+          ],
+          [
+            "p1-e02",
+            "p1-e14"
+          ],
+          [
+            "p1-e02",
+            "p1-e15"
+          ],
+          [
+            "p1-e02",
+            "p1-e16"
+          ],
+          [
+            "p1-e02",
+            "p1-e17"
+          ],
+          [
+            "p1-e02",
+            "p1-e18"
+          ],
+          [
+            "p1-e04",
+            "p1-e06"
+          ],
           [
             "p1-e04",
             "p1-e07"
@@ -4595,7 +4853,19 @@
           ],
           [
             "p1-e04",
+            "p1-e15"
+          ],
+          [
+            "p1-e04",
+            "p1-e16"
+          ],
+          [
+            "p1-e04",
             "p1-e17"
+          ],
+          [
+            "p1-e04",
+            "p1-e18"
           ],
           [
             "p1-e07",
@@ -4619,7 +4889,19 @@
           ],
           [
             "p1-e07",
+            "p1-e15"
+          ],
+          [
+            "p1-e07",
+            "p1-e16"
+          ],
+          [
+            "p1-e07",
             "p1-e17"
+          ],
+          [
+            "p1-e07",
+            "p1-e18"
           ],
           [
             "p1-e09",
@@ -4639,7 +4921,19 @@
           ],
           [
             "p1-e09",
+            "p1-e15"
+          ],
+          [
+            "p1-e09",
+            "p1-e16"
+          ],
+          [
+            "p1-e09",
             "p1-e17"
+          ],
+          [
+            "p1-e09",
+            "p1-e18"
           ],
           [
             "p1-e10",
@@ -4655,7 +4949,19 @@
           ],
           [
             "p1-e10",
+            "p1-e15"
+          ],
+          [
+            "p1-e10",
+            "p1-e16"
+          ],
+          [
+            "p1-e10",
             "p1-e17"
+          ],
+          [
+            "p1-e10",
+            "p1-e18"
           ],
           [
             "p1-e12",
@@ -4667,7 +4973,19 @@
           ],
           [
             "p1-e12",
+            "p1-e15"
+          ],
+          [
+            "p1-e12",
+            "p1-e16"
+          ],
+          [
+            "p1-e12",
             "p1-e17"
+          ],
+          [
+            "p1-e12",
+            "p1-e18"
           ],
           [
             "p1-e13",
@@ -4675,21 +4993,37 @@
           ],
           [
             "p1-e13",
+            "p1-e15"
+          ],
+          [
+            "p1-e13",
+            "p1-e16"
+          ],
+          [
+            "p1-e13",
             "p1-e17"
+          ],
+          [
+            "p1-e13",
+            "p1-e18"
+          ],
+          [
+            "p1-e14",
+            "p1-e15"
+          ],
+          [
+            "p1-e14",
+            "p1-e16"
+          ],
+          [
+            "p1-e17",
+            "p1-e18"
           ]
         ],
         "incomparable_pairs": [
           [
             "p1-e01",
-            "p1-e02"
-          ],
-          [
-            "p1-e01",
             "p1-e03"
-          ],
-          [
-            "p1-e01",
-            "p1-e04"
           ],
           [
             "p1-e01",
@@ -4697,55 +5031,11 @@
           ],
           [
             "p1-e01",
-            "p1-e06"
-          ],
-          [
-            "p1-e01",
-            "p1-e07"
-          ],
-          [
-            "p1-e01",
             "p1-e08"
           ],
           [
             "p1-e01",
-            "p1-e09"
-          ],
-          [
-            "p1-e01",
-            "p1-e10"
-          ],
-          [
-            "p1-e01",
             "p1-e11"
-          ],
-          [
-            "p1-e01",
-            "p1-e12"
-          ],
-          [
-            "p1-e01",
-            "p1-e13"
-          ],
-          [
-            "p1-e01",
-            "p1-e14"
-          ],
-          [
-            "p1-e01",
-            "p1-e15"
-          ],
-          [
-            "p1-e01",
-            "p1-e16"
-          ],
-          [
-            "p1-e01",
-            "p1-e17"
-          ],
-          [
-            "p1-e01",
-            "p1-e18"
           ],
           [
             "p1-e01",
@@ -4761,19 +5051,7 @@
           ],
           [
             "p1-e02",
-            "p1-e04"
-          ],
-          [
-            "p1-e02",
             "p1-e05"
-          ],
-          [
-            "p1-e02",
-            "p1-e06"
-          ],
-          [
-            "p1-e02",
-            "p1-e07"
           ],
           [
             "p1-e02",
@@ -4781,43 +5059,7 @@
           ],
           [
             "p1-e02",
-            "p1-e09"
-          ],
-          [
-            "p1-e02",
-            "p1-e10"
-          ],
-          [
-            "p1-e02",
             "p1-e11"
-          ],
-          [
-            "p1-e02",
-            "p1-e12"
-          ],
-          [
-            "p1-e02",
-            "p1-e13"
-          ],
-          [
-            "p1-e02",
-            "p1-e14"
-          ],
-          [
-            "p1-e02",
-            "p1-e15"
-          ],
-          [
-            "p1-e02",
-            "p1-e16"
-          ],
-          [
-            "p1-e02",
-            "p1-e17"
-          ],
-          [
-            "p1-e02",
-            "p1-e18"
           ],
           [
             "p1-e02",
@@ -4901,27 +5143,11 @@
           ],
           [
             "p1-e04",
-            "p1-e06"
-          ],
-          [
-            "p1-e04",
             "p1-e08"
           ],
           [
             "p1-e04",
             "p1-e11"
-          ],
-          [
-            "p1-e04",
-            "p1-e15"
-          ],
-          [
-            "p1-e04",
-            "p1-e16"
-          ],
-          [
-            "p1-e04",
-            "p1-e18"
           ],
           [
             "p1-e04",
@@ -5057,18 +5283,6 @@
           ],
           [
             "p1-e07",
-            "p1-e15"
-          ],
-          [
-            "p1-e07",
-            "p1-e16"
-          ],
-          [
-            "p1-e07",
-            "p1-e18"
-          ],
-          [
-            "p1-e07",
             "p1-e19"
           ],
           [
@@ -5129,18 +5343,6 @@
           ],
           [
             "p1-e09",
-            "p1-e15"
-          ],
-          [
-            "p1-e09",
-            "p1-e16"
-          ],
-          [
-            "p1-e09",
-            "p1-e18"
-          ],
-          [
-            "p1-e09",
             "p1-e19"
           ],
           [
@@ -5150,18 +5352,6 @@
           [
             "p1-e10",
             "p1-e11"
-          ],
-          [
-            "p1-e10",
-            "p1-e15"
-          ],
-          [
-            "p1-e10",
-            "p1-e16"
-          ],
-          [
-            "p1-e10",
-            "p1-e18"
           ],
           [
             "p1-e10",
@@ -5209,18 +5399,6 @@
           ],
           [
             "p1-e12",
-            "p1-e15"
-          ],
-          [
-            "p1-e12",
-            "p1-e16"
-          ],
-          [
-            "p1-e12",
-            "p1-e18"
-          ],
-          [
-            "p1-e12",
             "p1-e19"
           ],
           [
@@ -5229,31 +5407,11 @@
           ],
           [
             "p1-e13",
-            "p1-e15"
-          ],
-          [
-            "p1-e13",
-            "p1-e16"
-          ],
-          [
-            "p1-e13",
-            "p1-e18"
-          ],
-          [
-            "p1-e13",
             "p1-e19"
           ],
           [
             "p1-e13",
             "p1-e20"
-          ],
-          [
-            "p1-e14",
-            "p1-e15"
-          ],
-          [
-            "p1-e14",
-            "p1-e16"
           ],
           [
             "p1-e14",
@@ -5306,10 +5464,6 @@
           [
             "p1-e16",
             "p1-e20"
-          ],
-          [
-            "p1-e17",
-            "p1-e18"
           ],
           [
             "p1-e17",
@@ -5332,29 +5486,34 @@
             "p1-e20"
           ]
         ],
-        "same_time_groups": [],
+        "same_time_groups": [
+          [
+            "p1-e01",
+            "p1-e02"
+          ]
+        ],
         "interval_relations": [],
         "ordered_event_ids": [
+          "p1-e01",
+          "p1-e02",
           "p1-e04",
+          "p1-e06",
           "p1-e07",
           "p1-e09",
           "p1-e10",
           "p1-e12",
           "p1-e13",
           "p1-e14",
-          "p1-e17"
-        ],
-        "order_unknown_event_ids": [
-          "p1-e01",
-          "p1-e02",
-          "p1-e03",
-          "p1-e05",
-          "p1-e06",
-          "p1-e08",
-          "p1-e11",
           "p1-e15",
           "p1-e16",
-          "p1-e18",
+          "p1-e17",
+          "p1-e18"
+        ],
+        "order_unknown_event_ids": [
+          "p1-e03",
+          "p1-e05",
+          "p1-e08",
+          "p1-e11",
           "p1-e19",
           "p1-e20"
         ],
@@ -5364,7 +5523,7 @@
         "basis": "Source-gated model relations; paragraph order and event kind do not create chronology."
       },
       "reference_provenance": {
-        "annotation_sha256": "193bcf54978a486b69d844cf1aa6d671d529197fd2a7ca502d2d9560d8a25c85",
+        "annotation_sha256": "48da37a83fac03aecfee811a0d7b300b15d0f4aa5a4408b21719ff9c2233647e",
         "materializer_version": "dense-runtime-targets/1",
         "fact_pointers": [
           {
@@ -5537,9 +5696,20 @@
             ]
           },
           {
-            "fact_id": "p1-f015",
+            "fact_id": "p1-f011",
             "task": "symptoms_function",
             "pointer": "/items/0",
+            "source_evidence": [
+              {
+                "segment_id": "b00008",
+                "quote": "APGAR (Appearance, pulse, grimace, activity, respiration) score was 7 and 9 at 1 and 5 min, respectively"
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f015",
+            "task": "symptoms_function",
+            "pointer": "/items/1",
             "source_evidence": [
               {
                 "segment_id": "b00008",
@@ -5550,7 +5720,7 @@
           {
             "fact_id": "p1-f055",
             "task": "symptoms_function",
-            "pointer": "/items/1",
+            "pointer": "/items/2",
             "source_evidence": [
               {
                 "segment_id": "b00008",
@@ -5561,7 +5731,7 @@
           {
             "fact_id": "p1-f056",
             "task": "symptoms_function",
-            "pointer": "/items/2",
+            "pointer": "/items/3",
             "source_evidence": [
               {
                 "segment_id": "b00008",
@@ -5665,6 +5835,10 @@
               {
                 "segment_id": "b00008",
                 "quote": "subsequently had KHPE with excision of extrahepatic cystic BA and Roux‐en‐Y hepaticojejunostomy"
+              },
+              {
+                "segment_id": "b00013",
+                "quote": "the infant in Case 1 was unable to have KHPE in the recommended period of DOL 30–45 due to prematurity"
               }
             ]
           },
@@ -5830,6 +6004,10 @@
               {
                 "segment_id": "b00008",
                 "quote": "A small proximal bile duct (PBD) was present, measuring 1.3 mm"
+              },
+              {
+                "segment_id": "b00016",
+                "quote": "The PBD measured 1.3 mm in Case 1"
               }
             ]
           },
@@ -5895,7 +6073,7 @@
             "source_evidence": [
               {
                 "segment_id": "b00016",
-                "quote": "which was a consistent finding in both of our cases"
+                "quote": "Caponcelli et al. reported in their study the absence of epithelial lining in the cyst of all their CBA cases, which was a consistent finding in both of our cases"
               }
             ]
           },
@@ -5966,6 +6144,17 @@
             ]
           },
           {
+            "fact_id": "p1-f066",
+            "task": "observations",
+            "pointer": "/items/25",
+            "source_evidence": [
+              {
+                "segment_id": "b00008",
+                "quote": "prenatal ultrasonographic information was not available for comparison purposes"
+              }
+            ]
+          },
+          {
             "fact_id": "p1-f006",
             "task": "reproductive_perinatal",
             "pointer": "/items/0",
@@ -6017,17 +6206,6 @@
               {
                 "segment_id": "b00008",
                 "quote": "Gravida 4 Parity 3"
-              }
-            ]
-          },
-          {
-            "fact_id": "p1-f011",
-            "task": "reproductive_perinatal",
-            "pointer": "/items/5",
-            "source_evidence": [
-              {
-                "segment_id": "b00008",
-                "quote": "APGAR (Appearance, pulse, grimace, activity, respiration) score was 7 and 9 at 1 and 5 min, respectively"
               }
             ]
           },
@@ -6500,7 +6678,7 @@
               "verification_status": "confirmed",
               "name": "Respiratory failure",
               "clinical_status": "unknown",
-              "role": "primary_diagnosis",
+              "role": "unknown",
               "body_site": null,
               "laterality": "unknown",
               "severity": null,
@@ -6511,7 +6689,7 @@
               "assertion": "present",
               "name": "Respiratory failure",
               "verification_status": "confirmed",
-              "role": "primary_diagnosis"
+              "role": "unknown"
             },
             "evidence": [
               {
@@ -6548,7 +6726,7 @@
               "verification_status": "confirmed",
               "name": "COVID-19 pneumonia",
               "clinical_status": "unknown",
-              "role": "primary_diagnosis",
+              "role": "unknown",
               "body_site": null,
               "laterality": "unknown",
               "severity": null,
@@ -6559,7 +6737,7 @@
               "assertion": "present",
               "name": "COVID-19 pneumonia",
               "verification_status": "confirmed",
-              "role": "primary_diagnosis"
+              "role": "unknown"
             },
             "evidence": [
               {
@@ -6980,9 +7158,64 @@
             ]
           },
           {
-            "fact_id": "p1-f015",
+            "fact_id": "p1-f011",
             "task": "symptoms_function",
             "pointer": "/items/0",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": "at 1 and 5 min",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "APGAR (Appearance, pulse, grimace, activity, respiration) score was 7 and 9 at 1 and 5 min, respectively",
+                  "source_section": "b00008"
+                }
+              ],
+              "name": "APGAR score",
+              "kind": "performance_score",
+              "text_value": "7 and 9",
+              "numeric_value": null,
+              "unit": null,
+              "body_site": null,
+              "severity": null,
+              "activity_context": null
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "name": "APGAR score",
+              "kind": "performance_score",
+              "text_value": "7 and 9",
+              "time": {
+                "text": "at 1 and 5 min",
+                "relation": "at",
+                "anchor": null
+              }
+            },
+            "evidence": [
+              {
+                "source_id": "PMC13151000.1:jats",
+                "segment_id": "b00008",
+                "segment_sha256": "ab4de203b480e1f7bac877da5b4ec6b3e2c653d4d668fbacf05b6186bbf6b0ae",
+                "start": 297,
+                "end": 401,
+                "quote": "APGAR (Appearance, pulse, grimace, activity, respiration) score was 7 and 9 at 1 and 5 min, respectively"
+              }
+            ],
+            "event_ids": [
+              "p1-e01"
+            ]
+          },
+          {
+            "fact_id": "p1-f015",
+            "task": "symptoms_function",
+            "pointer": "/items/1",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -7031,7 +7264,7 @@
           {
             "fact_id": "p1-f055",
             "task": "symptoms_function",
-            "pointer": "/items/1",
+            "pointer": "/items/2",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -7086,7 +7319,7 @@
           {
             "fact_id": "p1-f056",
             "task": "symptoms_function",
-            "pointer": "/items/2",
+            "pointer": "/items/3",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -7586,6 +7819,10 @@
                 {
                   "quote": "subsequently had KHPE with excision of extrahepatic cystic BA and Roux‐en‐Y hepaticojejunostomy",
                   "source_section": "b00008"
+                },
+                {
+                  "quote": "the infant in Case 1 was unable to have KHPE in the recommended period of DOL 30–45 due to prematurity",
+                  "source_section": "b00013"
                 }
               ],
               "name": "Kasai hepatoportoenterostomy",
@@ -7593,7 +7830,7 @@
               "action": "completed",
               "body_site": null,
               "laterality": "unknown",
-              "indication": "Type III cystic BA",
+              "indication": null,
               "finding": null,
               "complication": null
             },
@@ -7602,8 +7839,7 @@
               "assertion": "present",
               "name": "Kasai hepatoportoenterostomy",
               "kind": "procedure",
-              "action": "completed",
-              "indication": "Type III cystic BA"
+              "action": "completed"
             },
             "evidence": [
               {
@@ -7613,6 +7849,14 @@
                 "start": 2127,
                 "end": 2222,
                 "quote": "subsequently had KHPE with excision of extrahepatic cystic BA and Roux‐en‐Y hepaticojejunostomy"
+              },
+              {
+                "source_id": "PMC13151000.1:jats",
+                "segment_id": "b00013",
+                "segment_sha256": "3826b3d93705564f5d6b865ba9435d6938844e61f7f304717fb333250a6fa360",
+                "start": 267,
+                "end": 369,
+                "quote": "the infant in Case 1 was unable to have KHPE in the recommended period of DOL 30–45 due to prematurity"
               }
             ],
             "event_ids": [
@@ -8488,6 +8732,10 @@
                 {
                   "quote": "A small proximal bile duct (PBD) was present, measuring 1.3 mm",
                   "source_section": "b00008"
+                },
+                {
+                  "quote": "The PBD measured 1.3 mm in Case 1",
+                  "source_section": "b00016"
                 }
               ],
               "result_absent_reason": null,
@@ -8525,6 +8773,14 @@
                 "start": 1465,
                 "end": 1527,
                 "quote": "A small proximal bile duct (PBD) was present, measuring 1.3 mm"
+              },
+              {
+                "source_id": "PMC13151000.1:jats",
+                "segment_id": "b00016",
+                "segment_sha256": "3c3bd7ea57538b7d28090ac516d00d7fb370a1e1f9cb89c560d553d8a3f176b9",
+                "start": 517,
+                "end": 550,
+                "quote": "The PBD measured 1.3 mm in Case 1"
               }
             ],
             "event_ids": []
@@ -8848,7 +9104,7 @@
               },
               "evidence": [
                 {
-                  "quote": "which was a consistent finding in both of our cases",
+                  "quote": "Caponcelli et al. reported in their study the absence of epithelial lining in the cyst of all their CBA cases, which was a consistent finding in both of our cases",
                   "source_section": "b00016"
                 }
               ],
@@ -8882,9 +9138,9 @@
                 "source_id": "PMC13151000.1:jats",
                 "segment_id": "b00016",
                 "segment_sha256": "3c3bd7ea57538b7d28090ac516d00d7fb370a1e1f9cb89c560d553d8a3f176b9",
-                "start": 1091,
+                "start": 980,
                 "end": 1142,
-                "quote": "which was a consistent finding in both of our cases"
+                "quote": "Caponcelli et al. reported in their study the absence of epithelial lining in the cyst of all their CBA cases, which was a consistent finding in both of our cases"
               }
             ],
             "event_ids": []
@@ -9236,6 +9492,64 @@
             "event_ids": []
           },
           {
+            "fact_id": "p1-f066",
+            "task": "observations",
+            "pointer": "/items/25",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "prenatal ultrasonographic information was not available for comparison purposes",
+                  "source_section": "b00008"
+                }
+              ],
+              "result_absent_reason": "not_reported",
+              "name": "Prenatal ultrasonographic information",
+              "kind": "imaging",
+              "status": "unknown",
+              "text_value": null,
+              "numeric_value": null,
+              "comparator": "unknown",
+              "unit": null,
+              "flag": "unknown",
+              "reference_range_text": null,
+              "specimen": null,
+              "method": null,
+              "body_site": null
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "name": "Prenatal ultrasonographic information",
+              "kind": "imaging",
+              "status": "unknown",
+              "result_absent_reason": "not_reported",
+              "comparator": "unknown",
+              "flag": "unknown"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC13151000.1:jats",
+                "segment_id": "b00008",
+                "segment_sha256": "ab4de203b480e1f7bac877da5b4ec6b3e2c653d4d668fbacf05b6186bbf6b0ae",
+                "start": 1040,
+                "end": 1119,
+                "quote": "prenatal ultrasonographic information was not available for comparison purposes"
+              }
+            ],
+            "event_ids": [
+              "p1-e08"
+            ]
+          },
+          {
             "fact_id": "p1-f006",
             "task": "reproductive_perinatal",
             "pointer": "/items/0",
@@ -9480,55 +9794,6 @@
               }
             ],
             "event_ids": []
-          },
-          {
-            "fact_id": "p1-f011",
-            "task": "reproductive_perinatal",
-            "pointer": "/items/5",
-            "value_as_extracted": {
-              "subject": "index_patient",
-              "assertion": "present",
-              "temporality": "unknown",
-              "time": {
-                "text": null,
-                "relation": "unknown",
-                "anchor": null,
-                "date_iso": null
-              },
-              "evidence": [
-                {
-                  "quote": "APGAR (Appearance, pulse, grimace, activity, respiration) score was 7 and 9 at 1 and 5 min, respectively",
-                  "source_section": "b00008"
-                }
-              ],
-              "event": "newborn",
-              "text_value": "APGAR score 7 and 9 at 1 and 5 min, respectively",
-              "numeric_value": null,
-              "unit": null,
-              "related_subject": null,
-              "gestational_age_weeks": null,
-              "birth_weight_text": null,
-              "outcome": null
-            },
-            "value_as_annotated": {
-              "subject": "index_patient",
-              "assertion": "present",
-              "event": "newborn",
-              "text_value": "APGAR score 7 and 9 at 1 and 5 min, respectively"
-            },
-            "evidence": [
-              {
-                "source_id": "PMC13151000.1:jats",
-                "segment_id": "b00008",
-                "segment_sha256": "ab4de203b480e1f7bac877da5b4ec6b3e2c653d4d668fbacf05b6186bbf6b0ae",
-                "start": 297,
-                "end": 401,
-                "quote": "APGAR (Appearance, pulse, grimace, activity, respiration) score was 7 and 9 at 1 and 5 min, respectively"
-              }
-            ],
-            "event_ids": [
-              "p1-e01"
-            ]
           },
           {
             "fact_id": "p1-f052",
@@ -10058,6 +10323,27 @@
               "text_value": "2 years old",
               "numeric_value": 2.0,
               "unit": "years"
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "She was born at 39^(+2) weeks of gestational age",
+                  "source_section": "b00009"
+                }
+              ],
+              "attribute": "documented_sex",
+              "text_value": "female",
+              "numeric_value": null,
+              "unit": null
             }
           ]
         },
@@ -10331,6 +10617,10 @@
                 {
                   "quote": "liver biopsy was performed at 6 months of age, which was significant for bridging fibrosis and nodular regeneration consistent with liver cirrhosis",
                   "source_section": "b00009"
+                },
+                {
+                  "quote": "later required liver transplantation due to cirrhosis",
+                  "source_section": "b00001"
                 }
               ],
               "verification_status": "confirmed",
@@ -10800,7 +11090,7 @@
               "action": "completed",
               "body_site": null,
               "laterality": "unknown",
-              "indication": "Type III cystic BA",
+              "indication": null,
               "finding": null,
               "complication": null
             },
@@ -10861,7 +11151,7 @@
               "time": {
                 "text": "during the procedure",
                 "relation": "during",
-                "anchor": null,
+                "anchor": "procedure",
                 "date_iso": null
               },
               "evidence": [
@@ -10918,6 +11208,10 @@
                 {
                   "quote": "She ultimately underwent living living‐related donor liver transplant at 11 months of age",
                   "source_section": "b00009"
+                },
+                {
+                  "quote": "later required liver transplantation due to cirrhosis",
+                  "source_section": "b00001"
                 }
               ],
               "name": "Living-related donor liver transplant",
@@ -10925,7 +11219,7 @@
               "action": "completed",
               "body_site": null,
               "laterality": "unknown",
-              "indication": null,
+              "indication": "cirrhosis",
               "finding": null,
               "complication": null
             }
@@ -11274,7 +11568,7 @@
               "time": {
                 "text": "during the procedure",
                 "relation": "during",
-                "anchor": null,
+                "anchor": "procedure",
                 "date_iso": null
               },
               "evidence": [
@@ -11489,7 +11783,7 @@
               },
               "evidence": [
                 {
-                  "quote": "which was a consistent finding in both of our cases",
+                  "quote": "Caponcelli et al. reported in their study the absence of epithelial lining in the cyst of all their CBA cases, which was a consistent finding in both of our cases",
                   "source_section": "b00016"
                 }
               ],
@@ -12029,6 +12323,10 @@
                   "quote": "liver biopsy was performed at 6 months of age, which was significant for bridging fibrosis and nodular regeneration consistent with liver cirrhosis"
                 },
                 {
+                  "segment_id": "b00001",
+                  "quote": "later required liver transplantation due to cirrhosis"
+                },
+                {
                   "segment_id": "b00009",
                   "quote": "She ultimately underwent living living‐related donor liver transplant at 11 months of age"
                 },
@@ -12053,10 +12351,10 @@
           ],
           "limitations": [
             "Caption-layer visual status not_inspected; the two figure images are inspected in the separate visual submission.",
-            "Case 2 sex is given only by the pronoun \"She\"; no documented_sex fact was recorded for Case 2.",
             "Gestational ages (32+2 and 39+2 weeks) are kept as text; no decimal conversion.",
             "Discussion statements that apply to both cases (epithelial lining, sonography) are recorded for both patients only where the source says \"both of our cases\"; literature statements are not patient facts.",
-            "Discussion bilirubin values (18.4 and 7.1 mg/dL \"respectively\") list the cases in the reverse order of the narratives; recorded as an ambiguity, not as facts."
+            "Discussion bilirubin values (18.4 and 7.1 mg/dL \"respectively\") list the cases in the reverse order of the narratives; recorded as an ambiguity, not as facts.",
+            "Case 2 documented_sex is recorded from the pronoun \"She\" (no explicit sex word), consistent with pronoun-documented sex in other articles of this set."
           ]
         },
         "timeline_v2": {
@@ -12069,7 +12367,7 @@
               "episode_id": null,
               "kind": "test",
               "occurrence": "occurred",
-              "description": "Prenatal anatomy scan at 13 weeks of gestational age and repeat scan",
+              "description": "Prenatal anatomy scan at 13 weeks of gestational age concerning for pancreatic and choroid plexus cysts",
               "fact_ids": [
                 "p2-f008",
                 "p2-f010"
@@ -12156,7 +12454,8 @@
               "fact_ids": [
                 "p2-f005",
                 "p2-f006",
-                "p2-f007"
+                "p2-f007",
+                "p2-f069"
               ],
               "evidence": [
                 {
@@ -12457,7 +12756,8 @@
                 "p2-f024",
                 "p2-f025",
                 "p2-f026",
-                "p2-f027"
+                "p2-f027",
+                "p2-f028"
               ],
               "evidence": [
                 {
@@ -12504,9 +12804,8 @@
               "episode_id": null,
               "kind": "test",
               "occurrence": "occurred",
-              "description": "No common bile duct visualized; findings concerning for CBA, CC not fully excluded; cholangiogram recommended",
+              "description": "MRCP findings judged concerning for CBA with CC not fully excluded; cholangiogram recommended",
               "fact_ids": [
-                "p2-f028",
                 "p2-f029",
                 "p2-f030",
                 "p2-f031"
@@ -12516,9 +12815,9 @@
                   "source_id": "PMC13151000.1:jats",
                   "segment_id": "b00009",
                   "segment_sha256": "ceb940264c053bb285aea0a17c7fec52f23d8735be3fa84002c93beb1d8c4310",
-                  "start": 1090,
-                  "end": 1172,
-                  "quote": "No common bile duct was visualized proximally nor distally to the cystic structure"
+                  "start": 1174,
+                  "end": 1227,
+                  "quote": "This constellation of findings was concerning for CBA"
                 }
               ],
               "attribution_evidence": [
@@ -13282,6 +13581,217 @@
                   "quote": "post‐transplant"
                 }
               ]
+            },
+            {
+              "edge_id": "edge10",
+              "from_event_id": "p2-e01",
+              "to_event_id": "p2-e02",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00009",
+                  "segment_sha256": "ceb940264c053bb285aea0a17c7fec52f23d8735be3fa84002c93beb1d8c4310",
+                  "start": 322,
+                  "end": 369,
+                  "quote": "the choroid plexus cyst resolved on repeat scan"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge11",
+              "from_event_id": "p2-e01",
+              "to_event_id": "p2-e03",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00009",
+                  "segment_sha256": "ceb940264c053bb285aea0a17c7fec52f23d8735be3fa84002c93beb1d8c4310",
+                  "start": 213,
+                  "end": 265,
+                  "quote": "Prenatal anatomy scan at 13 weeks of gestational age"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge12",
+              "from_event_id": "p2-e03",
+              "to_event_id": "p2-e04",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00009",
+                  "segment_sha256": "ceb940264c053bb285aea0a17c7fec52f23d8735be3fa84002c93beb1d8c4310",
+                  "start": 371,
+                  "end": 427,
+                  "quote": "Postnatally, the infant required phototherapy for 3 days"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge13",
+              "from_event_id": "p2-e07",
+              "to_event_id": "p2-e06",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00009",
+                  "segment_sha256": "ceb940264c053bb285aea0a17c7fec52f23d8735be3fa84002c93beb1d8c4310",
+                  "start": 0,
+                  "end": 29,
+                  "quote": "A 17‐day‐old infant presented"
+                },
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00009",
+                  "segment_sha256": "ceb940264c053bb285aea0a17c7fec52f23d8735be3fa84002c93beb1d8c4310",
+                  "start": 552,
+                  "end": 561,
+                  "quote": "On DOL 10"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge14",
+              "from_event_id": "p2-e09",
+              "to_event_id": "p2-e10",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00009",
+                  "segment_sha256": "ceb940264c053bb285aea0a17c7fec52f23d8735be3fa84002c93beb1d8c4310",
+                  "start": 833,
+                  "end": 895,
+                  "quote": "(Figure 2A,B). Hence, MRCP with Eovist was performed on DOL 17"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge15",
+              "from_event_id": "p2-e10",
+              "to_event_id": "p2-e11",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00009",
+                  "segment_sha256": "ceb940264c053bb285aea0a17c7fec52f23d8735be3fa84002c93beb1d8c4310",
+                  "start": 1174,
+                  "end": 1227,
+                  "quote": "This constellation of findings was concerning for CBA"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge16",
+              "from_event_id": "p2-e11",
+              "to_event_id": "p2-e12",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00009",
+                  "segment_sha256": "ceb940264c053bb285aea0a17c7fec52f23d8735be3fa84002c93beb1d8c4310",
+                  "start": 1353,
+                  "end": 1459,
+                  "quote": "a cholangiogram was recommended for confirmation. On DOL 20, infant underwent intraoperative cholangiogram"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge17",
+              "from_event_id": "p2-e14",
+              "to_event_id": "p2-e13",
+              "relation": "during",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00009",
+                  "segment_sha256": "ceb940264c053bb285aea0a17c7fec52f23d8735be3fa84002c93beb1d8c4310",
+                  "start": 1619,
+                  "end": 1667,
+                  "quote": "Wedge liver biopsy obtained during the procedure"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge18",
+              "from_event_id": "p2-e13",
+              "to_event_id": "p2-e16",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00009",
+                  "segment_sha256": "ceb940264c053bb285aea0a17c7fec52f23d8735be3fa84002c93beb1d8c4310",
+                  "start": 1848,
+                  "end": 1896,
+                  "quote": "The postoperative clinical course was uneventful"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge19",
+              "from_event_id": "p2-e17",
+              "to_event_id": "p2-e18",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00009",
+                  "segment_sha256": "ceb940264c053bb285aea0a17c7fec52f23d8735be3fa84002c93beb1d8c4310",
+                  "start": 1913,
+                  "end": 1938,
+                  "quote": "discharged home on DOL 26"
+                },
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00009",
+                  "segment_sha256": "ceb940264c053bb285aea0a17c7fec52f23d8735be3fa84002c93beb1d8c4310",
+                  "start": 1961,
+                  "end": 1990,
+                  "quote": "normalized at 4 months of age"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge20",
+              "from_event_id": "p2-e21",
+              "to_event_id": "p2-e23",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00009",
+                  "segment_sha256": "ceb940264c053bb285aea0a17c7fec52f23d8735be3fa84002c93beb1d8c4310",
+                  "start": 2409,
+                  "end": 2439,
+                  "quote": "transplant at 11 months of age"
+                },
+                {
+                  "source_id": "PMC13151000.1:jats",
+                  "segment_id": "b00009",
+                  "segment_sha256": "ceb940264c053bb285aea0a17c7fec52f23d8735be3fa84002c93beb1d8c4310",
+                  "start": 2611,
+                  "end": 2639,
+                  "quote": "She is currently 2 years old"
+                }
+              ]
             }
           ],
           "limitations": [
@@ -13299,7 +13809,7 @@
             "episode_id": null,
             "kind": "test",
             "occurrence": "occurred",
-            "description": "Prenatal anatomy scan at 13 weeks of gestational age and repeat scan",
+            "description": "Prenatal anatomy scan at 13 weeks of gestational age concerning for pancreatic and choroid plexus cysts",
             "fact_ids": [
               "p2-f008",
               "p2-f010"
@@ -13386,7 +13896,8 @@
             "fact_ids": [
               "p2-f005",
               "p2-f006",
-              "p2-f007"
+              "p2-f007",
+              "p2-f069"
             ],
             "evidence": [
               {
@@ -13687,7 +14198,8 @@
               "p2-f024",
               "p2-f025",
               "p2-f026",
-              "p2-f027"
+              "p2-f027",
+              "p2-f028"
             ],
             "evidence": [
               {
@@ -13734,9 +14246,8 @@
             "episode_id": null,
             "kind": "test",
             "occurrence": "occurred",
-            "description": "No common bile duct visualized; findings concerning for CBA, CC not fully excluded; cholangiogram recommended",
+            "description": "MRCP findings judged concerning for CBA with CC not fully excluded; cholangiogram recommended",
             "fact_ids": [
-              "p2-f028",
               "p2-f029",
               "p2-f030",
               "p2-f031"
@@ -13746,9 +14257,9 @@
                 "source_id": "PMC13151000.1:jats",
                 "segment_id": "b00009",
                 "segment_sha256": "ceb940264c053bb285aea0a17c7fec52f23d8735be3fa84002c93beb1d8c4310",
-                "start": 1090,
-                "end": 1172,
-                "quote": "No common bile duct was visualized proximally nor distally to the cystic structure"
+                "start": 1174,
+                "end": 1227,
+                "quote": "This constellation of findings was concerning for CBA"
               }
             ],
             "attribution_evidence": [
@@ -14325,15 +14836,6 @@
               "p2-e01"
             ],
             [
-              "p2-e02"
-            ],
-            [
-              "p2-e03"
-            ],
-            [
-              "p2-e04"
-            ],
-            [
               "p2-e05"
             ],
             [
@@ -14346,41 +14848,37 @@
               "p2-e09"
             ],
             [
-              "p2-e11"
-            ],
-            [
               "p2-e14"
             ],
             [
               "p2-e15"
-            ],
-            [
-              "p2-e16"
-            ],
-            [
-              "p2-e18"
-            ],
-            [
-              "p2-e23"
             ]
           ],
           [
+            [
+              "p2-e02"
+            ],
+            [
+              "p2-e03"
+            ],
             [
               "p2-e06"
             ],
             [
               "p2-e10"
+            ]
+          ],
+          [
+            [
+              "p2-e04"
             ],
             [
-              "p2-e20"
+              "p2-e11"
             ]
           ],
           [
             [
               "p2-e12"
-            ],
-            [
-              "p2-e21"
             ]
           ],
           [
@@ -14389,100 +14887,39 @@
             ],
             [
               "p2-e17"
-            ],
-            [
-              "p2-e22"
             ]
           ],
           [
             [
+              "p2-e16"
+            ],
+            [
+              "p2-e18"
+            ],
+            [
               "p2-e19"
+            ]
+          ],
+          [
+            [
+              "p2-e20"
+            ]
+          ],
+          [
+            [
+              "p2-e21"
+            ]
+          ],
+          [
+            [
+              "p2-e22"
+            ],
+            [
+              "p2-e23"
             ]
           ]
         ],
         "before_pairs": [
-          [
-            "p2-e05",
-            "p2-e06"
-          ],
-          [
-            "p2-e07",
-            "p2-e10"
-          ],
-          [
-            "p2-e07",
-            "p2-e12"
-          ],
-          [
-            "p2-e07",
-            "p2-e13"
-          ],
-          [
-            "p2-e07",
-            "p2-e17"
-          ],
-          [
-            "p2-e07",
-            "p2-e19"
-          ],
-          [
-            "p2-e10",
-            "p2-e12"
-          ],
-          [
-            "p2-e10",
-            "p2-e13"
-          ],
-          [
-            "p2-e10",
-            "p2-e17"
-          ],
-          [
-            "p2-e10",
-            "p2-e19"
-          ],
-          [
-            "p2-e12",
-            "p2-e13"
-          ],
-          [
-            "p2-e12",
-            "p2-e17"
-          ],
-          [
-            "p2-e12",
-            "p2-e19"
-          ],
-          [
-            "p2-e13",
-            "p2-e19"
-          ],
-          [
-            "p2-e18",
-            "p2-e20"
-          ],
-          [
-            "p2-e18",
-            "p2-e21"
-          ],
-          [
-            "p2-e18",
-            "p2-e22"
-          ],
-          [
-            "p2-e20",
-            "p2-e21"
-          ],
-          [
-            "p2-e20",
-            "p2-e22"
-          ],
-          [
-            "p2-e21",
-            "p2-e22"
-          ]
-        ],
-        "incomparable_pairs": [
           [
             "p2-e01",
             "p2-e02"
@@ -14496,6 +14933,300 @@
             "p2-e04"
           ],
           [
+            "p2-e03",
+            "p2-e04"
+          ],
+          [
+            "p2-e05",
+            "p2-e06"
+          ],
+          [
+            "p2-e07",
+            "p2-e06"
+          ],
+          [
+            "p2-e07",
+            "p2-e10"
+          ],
+          [
+            "p2-e07",
+            "p2-e11"
+          ],
+          [
+            "p2-e07",
+            "p2-e12"
+          ],
+          [
+            "p2-e07",
+            "p2-e13"
+          ],
+          [
+            "p2-e07",
+            "p2-e16"
+          ],
+          [
+            "p2-e07",
+            "p2-e17"
+          ],
+          [
+            "p2-e07",
+            "p2-e18"
+          ],
+          [
+            "p2-e07",
+            "p2-e19"
+          ],
+          [
+            "p2-e07",
+            "p2-e20"
+          ],
+          [
+            "p2-e07",
+            "p2-e21"
+          ],
+          [
+            "p2-e07",
+            "p2-e22"
+          ],
+          [
+            "p2-e07",
+            "p2-e23"
+          ],
+          [
+            "p2-e09",
+            "p2-e10"
+          ],
+          [
+            "p2-e09",
+            "p2-e11"
+          ],
+          [
+            "p2-e09",
+            "p2-e12"
+          ],
+          [
+            "p2-e09",
+            "p2-e13"
+          ],
+          [
+            "p2-e09",
+            "p2-e16"
+          ],
+          [
+            "p2-e09",
+            "p2-e17"
+          ],
+          [
+            "p2-e09",
+            "p2-e18"
+          ],
+          [
+            "p2-e09",
+            "p2-e19"
+          ],
+          [
+            "p2-e09",
+            "p2-e20"
+          ],
+          [
+            "p2-e09",
+            "p2-e21"
+          ],
+          [
+            "p2-e09",
+            "p2-e22"
+          ],
+          [
+            "p2-e09",
+            "p2-e23"
+          ],
+          [
+            "p2-e10",
+            "p2-e11"
+          ],
+          [
+            "p2-e10",
+            "p2-e12"
+          ],
+          [
+            "p2-e10",
+            "p2-e13"
+          ],
+          [
+            "p2-e10",
+            "p2-e16"
+          ],
+          [
+            "p2-e10",
+            "p2-e17"
+          ],
+          [
+            "p2-e10",
+            "p2-e18"
+          ],
+          [
+            "p2-e10",
+            "p2-e19"
+          ],
+          [
+            "p2-e10",
+            "p2-e20"
+          ],
+          [
+            "p2-e10",
+            "p2-e21"
+          ],
+          [
+            "p2-e10",
+            "p2-e22"
+          ],
+          [
+            "p2-e10",
+            "p2-e23"
+          ],
+          [
+            "p2-e11",
+            "p2-e12"
+          ],
+          [
+            "p2-e11",
+            "p2-e13"
+          ],
+          [
+            "p2-e11",
+            "p2-e16"
+          ],
+          [
+            "p2-e11",
+            "p2-e17"
+          ],
+          [
+            "p2-e11",
+            "p2-e18"
+          ],
+          [
+            "p2-e11",
+            "p2-e19"
+          ],
+          [
+            "p2-e11",
+            "p2-e20"
+          ],
+          [
+            "p2-e11",
+            "p2-e21"
+          ],
+          [
+            "p2-e11",
+            "p2-e22"
+          ],
+          [
+            "p2-e11",
+            "p2-e23"
+          ],
+          [
+            "p2-e12",
+            "p2-e13"
+          ],
+          [
+            "p2-e12",
+            "p2-e16"
+          ],
+          [
+            "p2-e12",
+            "p2-e17"
+          ],
+          [
+            "p2-e12",
+            "p2-e18"
+          ],
+          [
+            "p2-e12",
+            "p2-e19"
+          ],
+          [
+            "p2-e12",
+            "p2-e20"
+          ],
+          [
+            "p2-e12",
+            "p2-e21"
+          ],
+          [
+            "p2-e12",
+            "p2-e22"
+          ],
+          [
+            "p2-e12",
+            "p2-e23"
+          ],
+          [
+            "p2-e13",
+            "p2-e16"
+          ],
+          [
+            "p2-e13",
+            "p2-e19"
+          ],
+          [
+            "p2-e17",
+            "p2-e18"
+          ],
+          [
+            "p2-e17",
+            "p2-e20"
+          ],
+          [
+            "p2-e17",
+            "p2-e21"
+          ],
+          [
+            "p2-e17",
+            "p2-e22"
+          ],
+          [
+            "p2-e17",
+            "p2-e23"
+          ],
+          [
+            "p2-e18",
+            "p2-e20"
+          ],
+          [
+            "p2-e18",
+            "p2-e21"
+          ],
+          [
+            "p2-e18",
+            "p2-e22"
+          ],
+          [
+            "p2-e18",
+            "p2-e23"
+          ],
+          [
+            "p2-e20",
+            "p2-e21"
+          ],
+          [
+            "p2-e20",
+            "p2-e22"
+          ],
+          [
+            "p2-e20",
+            "p2-e23"
+          ],
+          [
+            "p2-e21",
+            "p2-e22"
+          ],
+          [
+            "p2-e21",
+            "p2-e23"
+          ]
+        ],
+        "incomparable_pairs": [
+          [
             "p2-e01",
             "p2-e05"
           ],
@@ -14657,10 +15388,6 @@
           ],
           [
             "p2-e03",
-            "p2-e04"
-          ],
-          [
-            "p2-e03",
             "p2-e05"
           ],
           [
@@ -14881,10 +15608,6 @@
           ],
           [
             "p2-e06",
-            "p2-e07"
-          ],
-          [
-            "p2-e06",
             "p2-e08"
           ],
           [
@@ -14957,39 +15680,11 @@
           ],
           [
             "p2-e07",
-            "p2-e11"
-          ],
-          [
-            "p2-e07",
             "p2-e14"
           ],
           [
             "p2-e07",
             "p2-e15"
-          ],
-          [
-            "p2-e07",
-            "p2-e16"
-          ],
-          [
-            "p2-e07",
-            "p2-e18"
-          ],
-          [
-            "p2-e07",
-            "p2-e20"
-          ],
-          [
-            "p2-e07",
-            "p2-e21"
-          ],
-          [
-            "p2-e07",
-            "p2-e22"
-          ],
-          [
-            "p2-e07",
-            "p2-e23"
           ],
           [
             "p2-e08",
@@ -15053,63 +15748,11 @@
           ],
           [
             "p2-e09",
-            "p2-e10"
-          ],
-          [
-            "p2-e09",
-            "p2-e11"
-          ],
-          [
-            "p2-e09",
-            "p2-e12"
-          ],
-          [
-            "p2-e09",
-            "p2-e13"
-          ],
-          [
-            "p2-e09",
             "p2-e14"
           ],
           [
             "p2-e09",
             "p2-e15"
-          ],
-          [
-            "p2-e09",
-            "p2-e16"
-          ],
-          [
-            "p2-e09",
-            "p2-e17"
-          ],
-          [
-            "p2-e09",
-            "p2-e18"
-          ],
-          [
-            "p2-e09",
-            "p2-e19"
-          ],
-          [
-            "p2-e09",
-            "p2-e20"
-          ],
-          [
-            "p2-e09",
-            "p2-e21"
-          ],
-          [
-            "p2-e09",
-            "p2-e22"
-          ],
-          [
-            "p2-e09",
-            "p2-e23"
-          ],
-          [
-            "p2-e10",
-            "p2-e11"
           ],
           [
             "p2-e10",
@@ -15120,38 +15763,6 @@
             "p2-e15"
           ],
           [
-            "p2-e10",
-            "p2-e16"
-          ],
-          [
-            "p2-e10",
-            "p2-e18"
-          ],
-          [
-            "p2-e10",
-            "p2-e20"
-          ],
-          [
-            "p2-e10",
-            "p2-e21"
-          ],
-          [
-            "p2-e10",
-            "p2-e22"
-          ],
-          [
-            "p2-e10",
-            "p2-e23"
-          ],
-          [
-            "p2-e11",
-            "p2-e12"
-          ],
-          [
-            "p2-e11",
-            "p2-e13"
-          ],
-          [
             "p2-e11",
             "p2-e14"
           ],
@@ -15160,68 +15771,12 @@
             "p2-e15"
           ],
           [
-            "p2-e11",
-            "p2-e16"
-          ],
-          [
-            "p2-e11",
-            "p2-e17"
-          ],
-          [
-            "p2-e11",
-            "p2-e18"
-          ],
-          [
-            "p2-e11",
-            "p2-e19"
-          ],
-          [
-            "p2-e11",
-            "p2-e20"
-          ],
-          [
-            "p2-e11",
-            "p2-e21"
-          ],
-          [
-            "p2-e11",
-            "p2-e22"
-          ],
-          [
-            "p2-e11",
-            "p2-e23"
-          ],
-          [
             "p2-e12",
             "p2-e14"
           ],
           [
             "p2-e12",
             "p2-e15"
-          ],
-          [
-            "p2-e12",
-            "p2-e16"
-          ],
-          [
-            "p2-e12",
-            "p2-e18"
-          ],
-          [
-            "p2-e12",
-            "p2-e20"
-          ],
-          [
-            "p2-e12",
-            "p2-e21"
-          ],
-          [
-            "p2-e12",
-            "p2-e22"
-          ],
-          [
-            "p2-e12",
-            "p2-e23"
           ],
           [
             "p2-e13",
@@ -15233,10 +15788,6 @@
           ],
           [
             "p2-e13",
-            "p2-e16"
-          ],
-          [
-            "p2-e13",
             "p2-e17"
           ],
           [
@@ -15357,37 +15908,13 @@
           ],
           [
             "p2-e17",
-            "p2-e18"
-          ],
-          [
-            "p2-e17",
             "p2-e19"
-          ],
-          [
-            "p2-e17",
-            "p2-e20"
-          ],
-          [
-            "p2-e17",
-            "p2-e21"
-          ],
-          [
-            "p2-e17",
-            "p2-e22"
-          ],
-          [
-            "p2-e17",
-            "p2-e23"
           ],
           [
             "p2-e18",
             "p2-e19"
           ],
           [
-            "p2-e18",
-            "p2-e23"
-          ],
-          [
             "p2-e19",
             "p2-e20"
           ],
@@ -15401,14 +15928,6 @@
           ],
           [
             "p2-e19",
-            "p2-e23"
-          ],
-          [
-            "p2-e20",
-            "p2-e23"
-          ],
-          [
-            "p2-e21",
             "p2-e23"
           ],
           [
@@ -15417,33 +15936,51 @@
           ]
         ],
         "same_time_groups": [],
-        "interval_relations": [],
+        "interval_relations": [
+          {
+            "edge_id": "edge17",
+            "from_event_id": "p2-e14",
+            "to_event_id": "p2-e13",
+            "relation": "during",
+            "offset": null,
+            "evidence": [
+              {
+                "source_id": "PMC13151000.1:jats",
+                "segment_id": "b00009",
+                "segment_sha256": "ceb940264c053bb285aea0a17c7fec52f23d8735be3fa84002c93beb1d8c4310",
+                "start": 1619,
+                "end": 1667,
+                "quote": "Wedge liver biopsy obtained during the procedure"
+              }
+            ]
+          }
+        ],
         "ordered_event_ids": [
+          "p2-e01",
+          "p2-e02",
+          "p2-e03",
+          "p2-e04",
           "p2-e05",
           "p2-e06",
           "p2-e07",
+          "p2-e09",
           "p2-e10",
+          "p2-e11",
           "p2-e12",
           "p2-e13",
+          "p2-e16",
           "p2-e17",
           "p2-e18",
           "p2-e19",
           "p2-e20",
           "p2-e21",
-          "p2-e22"
+          "p2-e22",
+          "p2-e23"
         ],
         "order_unknown_event_ids": [
-          "p2-e01",
-          "p2-e02",
-          "p2-e03",
-          "p2-e04",
           "p2-e08",
-          "p2-e09",
-          "p2-e11",
           "p2-e14",
-          "p2-e15",
-          "p2-e16",
-          "p2-e23"
+          "p2-e15"
         ],
         "layers_are_simultaneous": false,
         "synthetic_dates_generated": false,
@@ -15451,7 +15988,7 @@
         "basis": "Source-gated model relations; paragraph order and event kind do not create chronology."
       },
       "reference_provenance": {
-        "annotation_sha256": "193bcf54978a486b69d844cf1aa6d671d529197fd2a7ca502d2d9560d8a25c85",
+        "annotation_sha256": "48da37a83fac03aecfee811a0d7b300b15d0f4aa5a4408b21719ff9c2233647e",
         "materializer_version": "dense-runtime-targets/1",
         "fact_pointers": [
           {
@@ -15484,6 +16021,17 @@
               {
                 "segment_id": "b00009",
                 "quote": "She is currently 2 years old"
+              }
+            ]
+          },
+          {
+            "fact_id": "p2-f069",
+            "task": "demographics",
+            "pointer": "/items/2",
+            "source_evidence": [
+              {
+                "segment_id": "b00009",
+                "quote": "She was born at 39^(+2) weeks of gestational age"
               }
             ]
           },
@@ -15605,6 +16153,10 @@
               {
                 "segment_id": "b00009",
                 "quote": "liver biopsy was performed at 6 months of age, which was significant for bridging fibrosis and nodular regeneration consistent with liver cirrhosis"
+              },
+              {
+                "segment_id": "b00001",
+                "quote": "later required liver transplantation due to cirrhosis"
               }
             ]
           },
@@ -15847,6 +16399,10 @@
               {
                 "segment_id": "b00009",
                 "quote": "She ultimately underwent living living‐related donor liver transplant at 11 months of age"
+              },
+              {
+                "segment_id": "b00001",
+                "quote": "later required liver transplantation due to cirrhosis"
               }
             ]
           },
@@ -16055,7 +16611,7 @@
             "source_evidence": [
               {
                 "segment_id": "b00016",
-                "quote": "which was a consistent finding in both of our cases"
+                "quote": "Caponcelli et al. reported in their study the absence of epithelial lining in the cyst of all their CBA cases, which was a consistent finding in both of our cases"
               }
             ]
           },
@@ -16472,6 +17028,51 @@
             ],
             "event_ids": [
               "p2-e23"
+            ]
+          },
+          {
+            "fact_id": "p2-f069",
+            "task": "demographics",
+            "pointer": "/items/2",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "She was born at 39^(+2) weeks of gestational age",
+                  "source_section": "b00009"
+                }
+              ],
+              "attribute": "documented_sex",
+              "text_value": "female",
+              "numeric_value": null,
+              "unit": null
+            },
+            "value_as_annotated": {
+              "attribute": "documented_sex",
+              "text_value": "female",
+              "subject": "index_patient",
+              "assertion": "present"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC13151000.1:jats",
+                "segment_id": "b00009",
+                "segment_sha256": "ceb940264c053bb285aea0a17c7fec52f23d8735be3fa84002c93beb1d8c4310",
+                "start": 83,
+                "end": 131,
+                "quote": "She was born at 39^(+2) weeks of gestational age"
+              }
+            ],
+            "event_ids": [
+              "p2-e03"
             ]
           },
           {
@@ -17022,6 +17623,10 @@
                 {
                   "quote": "liver biopsy was performed at 6 months of age, which was significant for bridging fibrosis and nodular regeneration consistent with liver cirrhosis",
                   "source_section": "b00009"
+                },
+                {
+                  "quote": "later required liver transplantation due to cirrhosis",
+                  "source_section": "b00001"
                 }
               ],
               "verification_status": "confirmed",
@@ -17054,6 +17659,14 @@
                 "start": 2201,
                 "end": 2348,
                 "quote": "liver biopsy was performed at 6 months of age, which was significant for bridging fibrosis and nodular regeneration consistent with liver cirrhosis"
+              },
+              {
+                "source_id": "PMC13151000.1:jats",
+                "segment_id": "b00001",
+                "segment_sha256": "87328fe61b211d6ac9132178f9dfbbb5f8e872b633c784b5d0bd5cdaea8a0277",
+                "start": 808,
+                "end": 861,
+                "quote": "later required liver transplantation due to cirrhosis"
               }
             ],
             "event_ids": [
@@ -17958,7 +18571,7 @@
               "action": "completed",
               "body_site": null,
               "laterality": "unknown",
-              "indication": "Type III cystic BA",
+              "indication": null,
               "finding": null,
               "complication": null
             },
@@ -17967,8 +18580,7 @@
               "assertion": "present",
               "name": "Kasai hepatoportoenterostomy",
               "kind": "procedure",
-              "action": "completed",
-              "indication": "Type III cystic BA"
+              "action": "completed"
             },
             "evidence": [
               {
@@ -18095,7 +18707,7 @@
               "time": {
                 "text": "during the procedure",
                 "relation": "during",
-                "anchor": null,
+                "anchor": "procedure",
                 "date_iso": null
               },
               "evidence": [
@@ -18123,7 +18735,7 @@
               "time": {
                 "text": "during the procedure",
                 "relation": "during",
-                "anchor": null
+                "anchor": "procedure"
               },
               "finding": "cholestatic hepatitis with ductular reaction consistent with BA"
             },
@@ -18217,6 +18829,10 @@
                 {
                   "quote": "She ultimately underwent living living‐related donor liver transplant at 11 months of age",
                   "source_section": "b00009"
+                },
+                {
+                  "quote": "later required liver transplantation due to cirrhosis",
+                  "source_section": "b00001"
                 }
               ],
               "name": "Living-related donor liver transplant",
@@ -18224,7 +18840,7 @@
               "action": "completed",
               "body_site": null,
               "laterality": "unknown",
-              "indication": null,
+              "indication": "cirrhosis",
               "finding": null,
               "complication": null
             },
@@ -18238,7 +18854,8 @@
                 "text": "at 11 months of age",
                 "relation": "at",
                 "anchor": null
-              }
+              },
+              "indication": "cirrhosis"
             },
             "evidence": [
               {
@@ -18248,6 +18865,14 @@
                 "start": 2350,
                 "end": 2439,
                 "quote": "She ultimately underwent living living‐related donor liver transplant at 11 months of age"
+              },
+              {
+                "source_id": "PMC13151000.1:jats",
+                "segment_id": "b00001",
+                "segment_sha256": "87328fe61b211d6ac9132178f9dfbbb5f8e872b633c784b5d0bd5cdaea8a0277",
+                "start": 808,
+                "end": 861,
+                "quote": "later required liver transplantation due to cirrhosis"
               }
             ],
             "event_ids": [
@@ -18879,7 +19504,7 @@
               }
             ],
             "event_ids": [
-              "p2-e11"
+              "p2-e10"
             ]
           },
           {
@@ -18957,7 +19582,7 @@
               "time": {
                 "text": "during the procedure",
                 "relation": "during",
-                "anchor": null,
+                "anchor": "procedure",
                 "date_iso": null
               },
               "evidence": [
@@ -18994,7 +19619,7 @@
               "time": {
                 "text": "during the procedure",
                 "relation": "during",
-                "anchor": null
+                "anchor": "procedure"
               }
             },
             "evidence": [
@@ -19399,7 +20024,7 @@
               },
               "evidence": [
                 {
-                  "quote": "which was a consistent finding in both of our cases",
+                  "quote": "Caponcelli et al. reported in their study the absence of epithelial lining in the cyst of all their CBA cases, which was a consistent finding in both of our cases",
                   "source_section": "b00016"
                 }
               ],
@@ -19433,9 +20058,9 @@
                 "source_id": "PMC13151000.1:jats",
                 "segment_id": "b00016",
                 "segment_sha256": "3c3bd7ea57538b7d28090ac516d00d7fb370a1e1f9cb89c560d553d8a3f176b9",
-                "start": 1091,
+                "start": 980,
                 "end": 1142,
-                "quote": "which was a consistent finding in both of our cases"
+                "quote": "Caponcelli et al. reported in their study the absence of epithelial lining in the cyst of all their CBA cases, which was a consistent finding in both of our cases"
               }
             ],
             "event_ids": []

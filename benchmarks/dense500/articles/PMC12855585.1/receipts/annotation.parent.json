@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12855585.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d78ced0c772c3f5204907d95377b787ed28108c7c8343a02ddb55f3bb3e401e4",
+  "annotation_sha256": "3bb9a89ac6fe34dba739317877c61fa5e3650392f5b643033ee086ae9e6b6feb",
+  "reviewed_at": "2026-10-11T19:47:40.155186+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 49,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Ages: '3 weeks of age' (first presentation) is now age_at_presentation; '4-week-old' (age at report, after re-presentation one week later) is age_other.",
+    "Identity evidence changed from 'an otherwise healthy newborn' to 'We report the case of a 4-week-old female neonate'.",
+    "MRI observation and event renamed from 'MRI of the left hip' to 'MRI' (the 'MRI of the left hip' title belongs to the Image 1 ultrasound caption; the MRI caption says pelvis).",
+    "Discussion 'broad-spectrum intravenous antibiotics, such as piperacillin-tazobactam, for 4 weeks' (In our recent case) marked alternate_representation_of the 4-week total course f047; ambiguity text updated.",
+    "Added f049 blood culture negative from 'Both blood and joint fluid cultures were negative' as certainty ambiguous / review_only (repeat vs restatement not stated); linked to the blood-culture ambiguity and event p1-e12.",
+    "Septic arthritis and pyomyositis kept provisional ('consistent with'); added a note that the PCR-confirmed B. fragilis infection is f005 and septic arthritis is not upgraded by inference.",
+    "Added relations: e06 (initial sepsis management) before e07 (re-presentation); e12 (PCR positive) before e13 (metronidazole added, 'subsequently'); e11 (surgical drainage) before e14 (course 'from the date of surgical drainage').",
+    "Summary: removed duplicate fact id and linked the age and sex facts."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two images are inspected in the separate visual submission.",
+    "Table 1 has no time column or caption time; table-only values (platelets, procalcitonin) carry no time.",
+    "No final outcome, discharge or follow-up is stated for this patient.",
+    "Chronology beyond the explicit markers (initially, one week later, subsequently, later) is not established."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 49,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index neonate; all case facts come from b00002, Table 1 rows and the two image captions.",
+      "Table 1 rows carry no time; only the values repeated in the Initial investigations sentence carry that phrase.",
+      "CRP 24 mg/L (initial) and 5 mg/dL (second admission) kept as printed at different timepoints.",
+      "Viewed both images: Image 1 is a two-pane LT/RT hip ultrasound with a red arrow despite the MRI of the left hip caption title (recorded as an ambiguity); Image 2 is a grayscale pelvic MRI without side markers.",
+      "Documented sex is supported by the literal noun phrase female neonate."
+    ],
+    "residual_risks": [
+      "Whether the second negative blood culture is a repeat is not stated (review_only fact).",
+      "Septic arthritis stays provisional although joint fluid PCR was positive; a clinician could read it as confirmed.",
+      "No outcome, discharge or follow-up is reported."
+    ]
+  },
+  "physician_adjudicated": false
+}

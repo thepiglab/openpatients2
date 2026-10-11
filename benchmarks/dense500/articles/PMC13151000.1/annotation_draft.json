@@ -259,13 +259,19 @@
         },
         {
           "fact_id": "p1-f011",
-          "task": "reproductive_perinatal",
+          "task": "symptoms_function",
           "collection": "items",
           "fields": {
             "subject": "index_patient",
             "assertion": "present",
-            "event": "newborn",
-            "text_value": "APGAR score 7 and 9 at 1 and 5 min, respectively"
+            "name": "APGAR score",
+            "kind": "performance_score",
+            "text_value": "7 and 9",
+            "time": {
+              "text": "at 1 and 5 min",
+              "relation": "at",
+              "anchor": null
+            }
           },
           "evidence": [
             {
@@ -273,7 +279,7 @@
               "quote": "APGAR (Appearance, pulse, grimace, activity, respiration) score was 7 and 9 at 1 and 5 min, respectively"
             }
           ],
-          "clinical_statement": "APGAR score 7 at 1 min and 9 at 5 min",
+          "clinical_statement": "APGAR scores 7 and 9 at 1 and 5 minutes",
           "certainty": "supported",
           "scoring": "include",
           "notes": ""
@@ -287,7 +293,7 @@
             "assertion": "present",
             "name": "Respiratory failure",
             "verification_status": "confirmed",
-            "role": "primary_diagnosis"
+            "role": "unknown"
           },
           "evidence": [
             {
@@ -309,7 +315,7 @@
             "assertion": "present",
             "name": "COVID-19 pneumonia",
             "verification_status": "confirmed",
-            "role": "primary_diagnosis"
+            "role": "unknown"
           },
           "evidence": [
             {
@@ -913,6 +919,10 @@
             {
               "segment_id": "b00008",
               "quote": "A small proximal bile duct (PBD) was present, measuring 1.3 mm"
+            },
+            {
+              "segment_id": "b00016",
+              "quote": "The PBD measured 1.3 mm in Case 1"
             }
           ],
           "clinical_statement": "Small proximal bile duct measuring 1.3 mm",
@@ -1216,19 +1226,22 @@
             "assertion": "present",
             "name": "Kasai hepatoportoenterostomy",
             "kind": "procedure",
-            "action": "completed",
-            "indication": "Type III cystic BA"
+            "action": "completed"
           },
           "evidence": [
             {
               "segment_id": "b00008",
               "quote": "subsequently had KHPE with excision of extrahepatic cystic BA and Roux‐en‐Y hepaticojejunostomy"
+            },
+            {
+              "segment_id": "b00013",
+              "quote": "the infant in Case 1 was unable to have KHPE in the recommended period of DOL 30–45 due to prematurity"
             }
           ],
           "clinical_statement": "Kasai hepatoportoenterostomy performed",
           "certainty": "supported",
           "scoring": "include",
-          "notes": ""
+          "notes": "KHPE followed the DOL 46 cholangiogram (\"subsequently\"); no date is stated. The discussion says the infant in Case 1 was unable to have KHPE in the recommended period of DOL 30-45 due to prematurity."
         },
         {
           "fact_id": "p1-f048",
@@ -1518,7 +1531,7 @@
           "evidence": [
             {
               "segment_id": "b00016",
-              "quote": "which was a consistent finding in both of our cases"
+              "quote": "Caponcelli et al. reported in their study the absence of epithelial lining in the cyst of all their CBA cases, which was a consistent finding in both of our cases"
             }
           ],
           "clinical_statement": "Absence of epithelial lining in the cyst, stated as consistent in both cases",
@@ -1685,6 +1698,31 @@
           "certainty": "supported",
           "scoring": "include",
           "notes": ""
+        },
+        {
+          "fact_id": "p1-f066",
+          "task": "observations",
+          "collection": "items",
+          "fields": {
+            "subject": "index_patient",
+            "assertion": "present",
+            "name": "Prenatal ultrasonographic information",
+            "kind": "imaging",
+            "status": "unknown",
+            "result_absent_reason": "not_reported",
+            "comparator": "unknown",
+            "flag": "unknown"
+          },
+          "evidence": [
+            {
+              "segment_id": "b00008",
+              "quote": "prenatal ultrasonographic information was not available for comparison purposes"
+            }
+          ],
+          "clinical_statement": "Prenatal ultrasonographic information was not available for comparison",
+          "certainty": "supported",
+          "scoring": "include",
+          "notes": "The source says the information was not available; it does not say whether prenatal ultrasound was performed."
         }
       ],
       "events": [
@@ -1827,7 +1865,8 @@
           "fact_ids": [
             "p1-f027",
             "p1-f028",
-            "p1-f029"
+            "p1-f029",
+            "p1-f066"
           ],
           "time_text": null,
           "evidence": [
@@ -2166,6 +2205,76 @@
               "quote": "on DOL 55"
             }
           ]
+        },
+        {
+          "from_event_id": "p1-e01",
+          "to_event_id": "p1-e04",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00008",
+              "quote": "at 12 h of life"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e02",
+          "to_event_id": "p1-e01",
+          "relation": "same_time",
+          "evidence": [
+            {
+              "segment_id": "b00008",
+              "quote": "The infant required continuous positive airway pressure at the delivery"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e04",
+          "to_event_id": "p1-e06",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00008",
+              "quote": "Over the next few days, the infant's T&D bilirubin levels trended upwards"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e14",
+          "to_event_id": "p1-e15",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00008",
+              "quote": "The pathology of the excised specimen revealed chronic cystitis"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e14",
+          "to_event_id": "p1-e16",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00008",
+              "quote": "Her postoperative clinical course was uneventful"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e17",
+          "to_event_id": "p1-e18",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00008",
+              "quote": "discharged home on DOL 55"
+            },
+            {
+              "segment_id": "b00008",
+              "quote": "She is currently 2 years old"
+            }
+          ]
         }
       ],
       "summary": [
@@ -2310,6 +2419,23 @@
           "must_not_infer": "Do not assign DOL 46 or any other date to the KHPE.",
           "fact_ids": [
             "p1-f047"
+          ]
+        },
+        {
+          "evidence": [
+            {
+              "segment_id": "b00016",
+              "quote": "neither of the presented cases had 3D reconstructions available for review"
+            },
+            {
+              "segment_id": "b00020",
+              "quote": "3D maximum intensity projection MRI (D)"
+            }
+          ],
+          "issue": "The discussion says neither case had 3D reconstructions available for review, while the Figure 1 caption labels panel D a 3D maximum intensity projection MRI.",
+          "must_not_infer": "Do not infer whether loop visualization was assessed or absent.",
+          "fact_ids": [
+            "p1-f031"
           ]
         }
       ]
@@ -3223,8 +3349,7 @@
             "assertion": "present",
             "name": "Kasai hepatoportoenterostomy",
             "kind": "procedure",
-            "action": "completed",
-            "indication": "Type III cystic BA"
+            "action": "completed"
           },
           "evidence": [
             {
@@ -3295,7 +3420,7 @@
             "time": {
               "text": "during the procedure",
               "relation": "during",
-              "anchor": null
+              "anchor": "procedure"
             },
             "finding": "cholestatic hepatitis with ductular reaction consistent with BA"
           },
@@ -3328,7 +3453,7 @@
             "time": {
               "text": "during the procedure",
               "relation": "during",
-              "anchor": null
+              "anchor": "procedure"
             }
           },
           "evidence": [
@@ -3665,6 +3790,10 @@
             {
               "segment_id": "b00009",
               "quote": "liver biopsy was performed at 6 months of age, which was significant for bridging fibrosis and nodular regeneration consistent with liver cirrhosis"
+            },
+            {
+              "segment_id": "b00001",
+              "quote": "later required liver transplantation due to cirrhosis"
             }
           ],
           "clinical_statement": "Liver cirrhosis on biopsy",
@@ -3686,12 +3815,17 @@
               "text": "at 11 months of age",
               "relation": "at",
               "anchor": null
-            }
+            },
+            "indication": "cirrhosis"
           },
           "evidence": [
             {
               "segment_id": "b00009",
               "quote": "She ultimately underwent living living‐related donor liver transplant at 11 months of age"
+            },
+            {
+              "segment_id": "b00001",
+              "quote": "later required liver transplantation due to cirrhosis"
             }
           ],
           "clinical_statement": "Living-related donor liver transplant at 11 months of age",
@@ -3938,7 +4072,7 @@
           "evidence": [
             {
               "segment_id": "b00016",
-              "quote": "which was a consistent finding in both of our cases"
+              "quote": "Caponcelli et al. reported in their study the absence of epithelial lining in the cyst of all their CBA cases, which was a consistent finding in both of our cases"
             }
           ],
           "clinical_statement": "Absence of epithelial lining in the cyst, stated as consistent in both cases",
@@ -4134,12 +4268,33 @@
           "certainty": "supported",
           "scoring": "include",
           "notes": ""
+        },
+        {
+          "fact_id": "p2-f069",
+          "task": "demographics",
+          "collection": "items",
+          "fields": {
+            "attribute": "documented_sex",
+            "text_value": "female",
+            "subject": "index_patient",
+            "assertion": "present"
+          },
+          "evidence": [
+            {
+              "segment_id": "b00009",
+              "quote": "She was born at 39^(+2) weeks of gestational age"
+            }
+          ],
+          "clinical_statement": "Female infant (documented by the pronoun \"She\")",
+          "certainty": "supported",
+          "scoring": "include",
+          "notes": "The Case 2 infant is referred to only by the pronoun \"She\"/\"Her\"; recorded consistently with pronoun-documented sex elsewhere in this set."
         }
       ],
       "events": [
         {
           "event_id": "p2-e01",
-          "description": "Prenatal anatomy scan at 13 weeks of gestational age and repeat scan",
+          "description": "Prenatal anatomy scan at 13 weeks of gestational age concerning for pancreatic and choroid plexus cysts",
           "occurrence": "occurred",
           "fact_ids": [
             "p2-f008",
@@ -4181,7 +4336,8 @@
           "fact_ids": [
             "p2-f005",
             "p2-f006",
-            "p2-f007"
+            "p2-f007",
+            "p2-f069"
           ],
           "time_text": null,
           "evidence": [
@@ -4314,7 +4470,8 @@
             "p2-f024",
             "p2-f025",
             "p2-f026",
-            "p2-f027"
+            "p2-f027",
+            "p2-f028"
           ],
           "time_text": "on DOL 17",
           "evidence": [
@@ -4330,10 +4487,9 @@
         },
         {
           "event_id": "p2-e11",
-          "description": "No common bile duct visualized; findings concerning for CBA, CC not fully excluded; cholangiogram recommended",
+          "description": "MRCP findings judged concerning for CBA with CC not fully excluded; cholangiogram recommended",
           "occurrence": "occurred",
           "fact_ids": [
-            "p2-f028",
             "p2-f029",
             "p2-f030",
             "p2-f031"
@@ -4342,7 +4498,7 @@
           "evidence": [
             {
               "segment_id": "b00009",
-              "quote": "No common bile duct was visualized proximally nor distally to the cystic structure"
+              "quote": "This constellation of findings was concerning for CBA"
             }
           ],
           "kind": "test"
@@ -4702,6 +4858,139 @@
             {
               "segment_id": "b00009",
               "quote": "post‐transplant"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p2-e01",
+          "to_event_id": "p2-e02",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00009",
+              "quote": "the choroid plexus cyst resolved on repeat scan"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p2-e01",
+          "to_event_id": "p2-e03",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00009",
+              "quote": "Prenatal anatomy scan at 13 weeks of gestational age"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p2-e03",
+          "to_event_id": "p2-e04",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00009",
+              "quote": "Postnatally, the infant required phototherapy for 3 days"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p2-e07",
+          "to_event_id": "p2-e06",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00009",
+              "quote": "A 17‐day‐old infant presented"
+            },
+            {
+              "segment_id": "b00009",
+              "quote": "On DOL 10"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p2-e09",
+          "to_event_id": "p2-e10",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00009",
+              "quote": "(Figure 2A,B). Hence, MRCP with Eovist was performed on DOL 17"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p2-e10",
+          "to_event_id": "p2-e11",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00009",
+              "quote": "This constellation of findings was concerning for CBA"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p2-e11",
+          "to_event_id": "p2-e12",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00009",
+              "quote": "a cholangiogram was recommended for confirmation. On DOL 20, infant underwent intraoperative cholangiogram"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p2-e14",
+          "to_event_id": "p2-e13",
+          "relation": "during",
+          "evidence": [
+            {
+              "segment_id": "b00009",
+              "quote": "Wedge liver biopsy obtained during the procedure"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p2-e13",
+          "to_event_id": "p2-e16",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00009",
+              "quote": "The postoperative clinical course was uneventful"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p2-e17",
+          "to_event_id": "p2-e18",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00009",
+              "quote": "discharged home on DOL 26"
+            },
+            {
+              "segment_id": "b00009",
+              "quote": "normalized at 4 months of age"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p2-e21",
+          "to_event_id": "p2-e23",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00009",
+              "quote": "transplant at 11 months of age"
+            },
+            {
+              "segment_id": "b00009",
+              "quote": "She is currently 2 years old"
             }
           ]
         }
@@ -5267,10 +5556,10 @@
   ],
   "article_limitations": [
     "Caption-layer visual status not_inspected; the two figure images are inspected in the separate visual submission.",
-    "Case 2 sex is given only by the pronoun \"She\"; no documented_sex fact was recorded for Case 2.",
     "Gestational ages (32+2 and 39+2 weeks) are kept as text; no decimal conversion.",
     "Discussion statements that apply to both cases (epithelial lining, sonography) are recorded for both patients only where the source says \"both of our cases\"; literature statements are not patient facts.",
-    "Discussion bilirubin values (18.4 and 7.1 mg/dL \"respectively\") list the cases in the reverse order of the narratives; recorded as an ambiguity, not as facts."
+    "Discussion bilirubin values (18.4 and 7.1 mg/dL \"respectively\") list the cases in the reverse order of the narratives; recorded as an ambiguity, not as facts.",
+    "Case 2 documented_sex is recorded from the pronoun \"She\" (no explicit sex word), consistent with pronoun-documented sex in other articles of this set."
   ],
   "annotation_provenance": {
     "annotator_model": "Claude Sonnet 5.5 annotator",
