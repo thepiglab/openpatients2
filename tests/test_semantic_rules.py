@@ -583,7 +583,7 @@ def test_within_of_names_reference_point():
     assert any('within' in v.text() for v in bad) and not any('within' in v.text() for v in good)
 
 
-@pytest.mark.parametrize('text', ['born nonconsanguineously', 'non-consanguineous parents', 'nonfebrile', 'rules out', 'opted against immediate endotracheal intubation'])
+@pytest.mark.parametrize('text', ['born nonconsanguineously', 'non-consanguineous parents', 'nonfebrile', 'rules out', 'opted against immediate endotracheal intubation', 'precluded initiation of induction therapy'])
 def test_prefix_and_phrase_negation_cues(text):
     from openpatients2.semantic_rules import NEGATION_CUE
     assert NEGATION_CUE.search(text)
