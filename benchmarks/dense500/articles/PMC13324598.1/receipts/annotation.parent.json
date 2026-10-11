@@ -1,11 +1,11 @@
 {
   "article_id": "PMC13324598.1",
-  "reviewer": "parent assistant",
+  "reviewer": "Claude Opus 5.5 parent",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "282e31a20670cae59506d258c4b909bb7b87ffd258068a2e5d8754370cbe3f70",
   "annotation_sha256": "0605f11d546314e654cdf721454cfe84df3d82cdd009b6707cc4942292585650",
-  "reviewed_at": "2026-10-10T02:08:48.031979+00:00",
+  "reviewed_at": "2026-10-11T18:00:50.772122+00:00",
   "source_segments_read": 18,
   "facts_reviewed": 147,
   "patients_reviewed": 6,
@@ -24,7 +24,8 @@
     "Case 5 EP label (p5-f024) set to source_conflict/review_only: the series statement conflicts with the described diffuse suberythroderma.",
     "Added 7 supported order links: baseline examination/diagnosis before week-4 follow-up for every case (PASI \"decreased/reduced/improvement\" wording) and Case 3 screening blood tests before week-16 normalization.",
     "Privacy sidecar: fig003 panels C and D now flag sensitive anatomy (exposed female breasts; bare buttocks in D).",
-    "ROSTER-ORDER: added article-level roster block: reported_individual_count 6 from b00002 \"a case series comprising 6 cases of EP\", roster_complete true (all six cases annotated as p1-p6 in order of first mention)."
+    "ROSTER-ORDER: added article-level roster block: reported_individual_count 6 from b00002 \"a case series comprising 6 cases of EP\", roster_complete true (all six cases annotated as p1-p6 in order of first mention).",
+    "2026-10-11 re-review by Claude Opus 5.5 parent (the earlier parent signatures on this article were not trusted because their notes had been reworded to pass the signing guard): re-read all 18 source segments and re-checked every fact, event kind/time classification, relation, summary and ambiguity of the six patients in annotation.json against the source. Roster verified: reported_individual_count 6 from the literal \"a case series comprising 6 cases of EP\" (b00002), roster_complete true, p1-p6 numbered in first-mention order (Case #1-#6), no cohort statements (b00012) copied to individuals. No errors found; annotation unchanged in this re-review; earlier corrections (EP labels for Cases 1/3 supported, Case 5 EP source_conflict/review_only, added order links) re-checked and kept."
   ],
   "unresolved": [
     "Six-patient case series; the abstract and discussion statements about all treated patients are series-level and were not copied to individuals.",
@@ -37,17 +38,16 @@
     "reviewer": "Claude Opus 5.5 parent",
     "source_units_read": 18,
     "facts_reviewed": 147,
-    "figures_viewed": 3,
+    "figures_viewed": 0,
     "key_findings": [
-      "Six index patients correctly separated and ordered; discussion cohort statements (all improved, well tolerated) not copied.",
-      "Week times come from each fact's own scoping clause; week anchors left null.",
-      "PASI as performance_score, DLQI as quality_of_life, BSA as sign, remission as outcome recovery: consistent with SECTION-SIGNS.",
-      "Uric acid 480 without unit kept unitless; Case 2 normalized blood tests recorded without an inferred abnormal baseline.",
-      "Panel blocks A-D match the tile layout and caption values; faces covered by hands or seen from behind."
+      "Six index patients (Cases #1-#6) correctly separated and numbered p1-p6 in first-mention order; roster count 6 quoted from b00002.",
+      "Discussion cohort statements (all improved, well tolerated) not copied to individuals.",
+      "Event kinds and time classifications re-checked against each case paragraph; no changes needed.",
+      "Uric acid 480 kept unitless; Case 5 EP vs diffuse suberythroderma kept as source_conflict/review_only."
     ],
     "residual_risks": [
-      "Risankizumab regimen only \"standard/labeled dosage\" (150 mg in Case 5); no interval inferred.",
-      "EP vs suberythroderma for Case 5 unresolved."
+      "Figure pixels were not re-viewed in this re-review; visual/figure-EHR/privacy receipts were not re-signed.",
+      "Risankizumab regimen only stated as standard/labeled dosage (150 mg in Case 5); no interval inferred."
     ]
   },
   "physician_adjudicated": false

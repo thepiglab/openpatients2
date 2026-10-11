@@ -2177,10 +2177,10 @@
        "quote": "In the postoperative period, hemoglobin decreased to 70 g/L, which required haemotransfusion of allogeneic blood."
       }
      ],
-     "clinical_statement": "Hemoglobin decreased to 70 g/L in the postoperative period after the first (left hip) surgery",
+     "clinical_statement": "Hemoglobin decreased to 70 g/L in the postoperative period, requiring allogeneic haemotransfusion",
      "certainty": "supported",
      "scoring": "include",
-     "notes": "Source sentence follows the first surgery in May 2023; first-surgery attribution rests on the neighbouring sentence for identification only."
+     "notes": "Time comes from its own sentence. Assignment to the earlier surgery rests on the paragraph narrative and the abstract (transfusion after the left hip surgery); no laterality, date or site is copied into fields. Figure 2 first-hospitalization minimum reads about 74 g/L (see ambiguities)."
     },
     {
      "fact_id": "p1-f083",
@@ -2534,8 +2534,8 @@
       "comparator": "=",
       "unit": "g/L",
       "time": {
-       "text": "First hospitalization",
-       "relation": "during",
+       "text": "after 3 months",
+       "relation": "after",
        "anchor": null,
        "date_iso": null
       },
@@ -2547,10 +2547,10 @@
        "quote": "Conditions | First hospitalization | Second hospitalization\nHGB after 3 months | 121 g/L | 136 g/L"
       }
      ],
-     "clinical_statement": "Hemoglobin 121 g/L after 3 months in the first hospitalization",
+     "clinical_statement": "Hemoglobin 121 g/L after 3 months (Table 1, first hospitalization column)",
      "certainty": "supported",
      "scoring": "include",
-     "notes": ""
+     "notes": "Row header \"HGB after 3 months\" governs the time; the first-hospitalization column governs ownership by the first surgery."
     },
     {
      "fact_id": "p1-f095",
@@ -2785,7 +2785,7 @@
        "anchor": "preoperative period",
        "date_iso": null
       },
-      "temporality": "historical"
+      "temporality": "current"
      },
      "evidence": [
       {
@@ -2824,7 +2824,7 @@
       }
      ],
      "clinical_statement": "Ferric carboxymaltose 1,000 mg one day before the operation per Table 1",
-     "certainty": "ambiguous",
+     "certainty": "source_conflict",
      "scoring": "review_only",
      "notes": "Table timing conflicts with the text timing (first day of the preoperative period); same infusion not double counted."
     },
@@ -3104,7 +3104,7 @@
       "indication": "to prevent thromboembolic complications",
       "time": {
        "text": "within thirteen days after surgery",
-       "relation": "before",
+       "relation": "after",
        "anchor": "surgery",
        "date_iso": null
       }
@@ -3399,7 +3399,7 @@
        "anchor": "hospitalization",
        "date_iso": null
       },
-      "finding": "with Zimmer Wagner implant with shortening osteotomy and derotation plate fixation (Table 1)"
+      "finding": "with Zimmer Wagner implant with shortening osteotomy and derotation plate fixation"
      },
      "evidence": [
       {
@@ -3494,7 +3494,7 @@
      "clinical_statement": "Intraoperative autoreinfusion with blood return of 109 mL",
      "certainty": "supported",
      "scoring": "include",
-     "notes": ""
+     "notes": "109 mL is given in the operation text and Table 1; the discussion gives 120 mL (see ambiguities)."
     },
     {
      "fact_id": "p1-f127",
@@ -3768,7 +3768,7 @@
       }
      ],
      "clinical_statement": "Length of hospitalization 19 days in the second hospitalization per Table 1",
-     "certainty": "ambiguous",
+     "certainty": "source_conflict",
      "scoring": "review_only",
      "notes": "Text states discharge on the 18th day of hospitalization."
     },
@@ -3971,6 +3971,61 @@
      "certainty": "supported",
      "scoring": "include",
      "notes": ""
+    },
+    {
+     "fact_id": "p1-f146",
+     "task": "medications",
+     "collection": "items",
+     "fields": {
+      "subject": "index_patient",
+      "assertion": "absent",
+      "name": "Hemostatics",
+      "action": "unknown",
+      "time": {
+       "text": "Second hospitalization",
+       "relation": "during",
+       "anchor": null,
+       "date_iso": null
+      }
+     },
+     "evidence": [
+      {
+       "segment_id": "b00037",
+       "quote": "Conditions | First hospitalization | Second hospitalization\nНemostatics | + (Sodium etamsylate) | −"
+      }
+     ],
+     "clinical_statement": "No hemostatics in the second hospitalization (Table 1)",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": ""
+    },
+    {
+     "fact_id": "p1-f147",
+     "task": "procedures_devices",
+     "collection": "items",
+     "fields": {
+      "subject": "index_patient",
+      "assertion": "present",
+      "name": "Inpatient conservative treatment",
+      "kind": "nonpharmacologic_therapy",
+      "action": "completed",
+      "indication": "dysplastic coxarthrosis",
+      "temporality": "historical"
+     },
+     "evidence": [
+      {
+       "segment_id": "b00006",
+       "quote": "she received repeated inpatient conservative treatment for dysplastic coxarthrosis"
+      },
+      {
+       "segment_id": "b00006",
+       "quote": "Due to the ineffectiveness of non-surgical therapy and increasing pain syndrome"
+      }
+     ],
+     "clinical_statement": "Repeated inpatient conservative treatment for dysplastic coxarthrosis, ineffective",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": "Type of conservative treatment not specified."
     }
    ],
    "events": [
@@ -3999,7 +4054,8 @@
      "description": "Repeated inpatient conservative treatment for dysplastic coxarthrosis",
      "occurrence": "occurred",
      "fact_ids": [
-      "p1-f006"
+      "p1-f006",
+      "p1-f147"
      ],
      "time_text": null,
      "evidence": [
@@ -4047,7 +4103,7 @@
      ],
      "kind": "adverse_event",
      "time_kind": "relative",
-     "time_precision": "exact"
+     "time_precision": "approximate"
     },
     {
      "event_id": "p1-e05",
@@ -4250,6 +4306,25 @@
      "kind": "history",
      "time_kind": "relative",
      "time_precision": "exact"
+    },
+    {
+     "event_id": "p1-e14",
+     "description": "Rehabilitation therapy (mechanotherapy, kinesiotherapy) and 1st stage of inpatient rehabilitation",
+     "occurrence": "occurred",
+     "fact_ids": [
+      "p1-f128",
+      "p1-f129",
+      "p1-f143",
+      "p1-f142"
+     ],
+     "time_text": null,
+     "evidence": [
+      {
+       "segment_id": "b00016",
+       "quote": "the patient received №5 mechanotherapy and kinesiotherapy as part of rehabilitation therapy"
+      }
+     ],
+     "kind": "treatment"
     }
    ],
    "temporal_relations": [
@@ -4331,6 +4406,50 @@
       {
        "segment_id": "b00020",
        "quote": "A week later, the patient received a repeat infusion of ferric carboxymaltose at a dose of 1,000 mg intravenously."
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e06",
+     "to_event_id": "p1-e07",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00014",
+       "quote": "After informed consent was obtained and the patient’s iron deficiency was determined by assays, the patient received an infusion of ferric carboxymaltose"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e05",
+     "to_event_id": "p1-e08",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00017",
+       "quote": "On the 5th day of hospitalization, the patient underwent total hip replacement of the right hip joint under general anesthesia."
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e03",
+     "to_event_id": "p1-e13",
+     "relation": "during",
+     "evidence": [
+      {
+       "segment_id": "b00046",
+       "quote": "Conditions | First hospitalization | Second hospitalization\nOperation volume | Total left hip arthroplasty with Zimmer Wagner implant with femoral shortening osteotomy. | Total hip replacement of the right hip with Zimmer Wagner implant with shortening osteotomy and derotation plate fixation"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e14",
+     "to_event_id": "p1-e10",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00019",
+       "quote": "The patient was discharged on the 18th day of hospitalization, as she passed the 1st stage of inpatient rehabilitation."
       }
      ]
     }
@@ -4583,6 +4702,23 @@
       {
        "segment_id": "b00059",
        "quote": "conclusions regarding the efficacy of intravenous iron infusion cannot be drawn based on a single case"
+      }
+     ]
+    },
+    {
+     "issue": "Lowest hemoglobin after the first surgery: the text gives 70 g/L, while the Figure 2 first-hospitalization series reads about 74 g/L at its minimum (day 4). Figure readings are approximate.",
+     "fact_ids": [
+      "p1-f082"
+     ],
+     "must_not_infer": "Do not replace the text value with the chart reading.",
+     "evidence": [
+      {
+       "segment_id": "b00006",
+       "quote": "In the postoperative period, hemoglobin decreased to 70 g/L"
+      },
+      {
+       "segment_id": "b00068",
+       "quote": "Dynamics of hemoglobin levels during two hospitalizations."
       }
      ]
     }

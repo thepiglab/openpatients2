@@ -1,7 +1,7 @@
 {
   "format": "dense-runtime-targets/1",
   "article_id": "PMC12586027.1",
-  "annotation_sha256": "eeb91b2774879754652738f1b3a9b1a1b1e67d0fbef16ebba00a42018089f666",
+  "annotation_sha256": "7af93f325f3f98615eec4bd43a22e8c5904ad4e33d5147bce4d6098293d8fd21",
   "source_text_sha256": "d54d9fdd2084164989f07b000dc001900d57b5beef69ea819028329058707e89",
   "schema_fingerprints": {
     "case_context": "d7439310910ef4a7d5e1706c5b9dc8a2b379f132a2562791c059a478b588ec71",
@@ -96,7 +96,8 @@
           "The range of motion sentence is labelled left hip joint although the preceding sentence states the right hip joint movements are painful and limited.",
           "Urine test: one paragraph states the urine test was within normal ranges before and after surgery, while another reports 20–25 leukocytes in the field of view in the urine after the first surgery. Hospitalization to which the normal urine statement applies is not stated.",
           "Table 1 rounds second-hospitalization hemoglobin (97 g/L postoperative, 84 g/L at discharge) versus text values 97.5 g/L and 84.9 g/L; text values are recorded.",
-          "The authors state the latent iron deficiency was probably caused by low absorption due to chronic gastritis and that preoperative iron probably influenced the outcome; these are author interpretations, not recorded as facts."
+          "The authors state the latent iron deficiency was probably caused by low absorption due to chronic gastritis and that preoperative iron probably influenced the outcome; these are author interpretations, not recorded as facts.",
+          "Lowest hemoglobin after the first surgery: the text gives 70 g/L, while the Figure 2 first-hospitalization series reads about 74 g/L at its minimum (day 4). Figure readings are approximate."
         ]
       }
     ],
@@ -398,7 +399,8 @@
             "The range of motion sentence is labelled left hip joint although the preceding sentence states the right hip joint movements are painful and limited.",
             "Urine test: one paragraph states the urine test was within normal ranges before and after surgery, while another reports 20–25 leukocytes in the field of view in the urine after the first surgery. Hospitalization to which the normal urine statement applies is not stated.",
             "Table 1 rounds second-hospitalization hemoglobin (97 g/L postoperative, 84 g/L at discharge) versus text values 97.5 g/L and 84.9 g/L; text values are recorded.",
-            "The authors state the latent iron deficiency was probably caused by low absorption due to chronic gastritis and that preoperative iron probably influenced the outcome; these are author interpretations, not recorded as facts."
+            "The authors state the latent iron deficiency was probably caused by low absorption due to chronic gastritis and that preoperative iron probably influenced the outcome; these are author interpretations, not recorded as facts.",
+            "Lowest hemoglobin after the first surgery: the text gives 70 g/L, while the Figure 2 first-hospitalization series reads about 74 g/L at its minimum (day 4). Figure readings are approximate."
           ]
         },
         "source_text_omitted_from_release": true
@@ -1583,7 +1585,7 @@
             {
               "subject": "index_patient",
               "assertion": "present",
-              "temporality": "historical",
+              "temporality": "current",
               "time": {
                 "text": "on the first day of the preoperative period",
                 "relation": "at",
@@ -1866,7 +1868,7 @@
               "temporality": "unknown",
               "time": {
                 "text": "within thirteen days after surgery",
-                "relation": "before",
+                "relation": "after",
                 "anchor": "surgery",
                 "date_iso": null
               },
@@ -2115,6 +2117,34 @@
               "duration_text": null,
               "indication": null,
               "regimen": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "temporality": "unknown",
+              "time": {
+                "text": "Second hospitalization",
+                "relation": "during",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Conditions | First hospitalization | Second hospitalization\nНemostatics | + (Sodium etamsylate) | −",
+                  "source_section": "b00037"
+                }
+              ],
+              "name": "Hemostatics",
+              "action": "unknown",
+              "ingredient_as_documented": null,
+              "dose_text": null,
+              "dose_value": null,
+              "dose_unit": null,
+              "route": null,
+              "frequency": null,
+              "duration_text": null,
+              "indication": null,
+              "regimen": null
             }
           ]
         },
@@ -2210,7 +2240,7 @@
               "body_site": "right hip joint",
               "laterality": "right",
               "indication": null,
-              "finding": "with Zimmer Wagner implant with shortening osteotomy and derotation plate fixation (Table 1)",
+              "finding": "with Zimmer Wagner implant with shortening osteotomy and derotation plate fixation",
               "complication": null
             },
             {
@@ -2435,6 +2465,35 @@
               "body_site": "veins of the lower extremities",
               "laterality": "unknown",
               "indication": null,
+              "finding": null,
+              "complication": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "she received repeated inpatient conservative treatment for dysplastic coxarthrosis",
+                  "source_section": "b00006"
+                },
+                {
+                  "quote": "Due to the ineffectiveness of non-surgical therapy and increasing pain syndrome",
+                  "source_section": "b00006"
+                }
+              ],
+              "name": "Inpatient conservative treatment",
+              "kind": "nonpharmacologic_therapy",
+              "action": "completed",
+              "body_site": null,
+              "laterality": "unknown",
+              "indication": "dysplastic coxarthrosis",
               "finding": null,
               "complication": null
             }
@@ -3869,8 +3928,8 @@
               "assertion": "present",
               "temporality": "historical",
               "time": {
-                "text": "First hospitalization",
-                "relation": "during",
+                "text": "after 3 months",
+                "relation": "after",
                 "anchor": null,
                 "date_iso": null
               },
@@ -4683,7 +4742,8 @@
               "occurrence": "occurred",
               "description": "Repeated inpatient conservative treatment for dysplastic coxarthrosis",
               "fact_ids": [
-                "p1-f006"
+                "p1-f006",
+                "p1-f147"
               ],
               "evidence": [
                 {
@@ -4792,7 +4852,7 @@
                 {
                   "text": "In the postoperative period",
                   "kind": "relative",
-                  "precision": "exact",
+                  "precision": "approximate",
                   "calendar_value": null,
                   "evidence": [
                     {
@@ -5271,6 +5331,41 @@
                   ]
                 }
               ]
+            },
+            {
+              "event_id": "p1-e14",
+              "record_id": "PMC12586027.1:p1",
+              "episode_id": null,
+              "kind": "treatment",
+              "occurrence": "occurred",
+              "description": "Rehabilitation therapy (mechanotherapy, kinesiotherapy) and 1st stage of inpatient rehabilitation",
+              "fact_ids": [
+                "p1-f128",
+                "p1-f129",
+                "p1-f143",
+                "p1-f142"
+              ],
+              "evidence": [
+                {
+                  "source_id": "PMC12586027.1:jats",
+                  "segment_id": "b00016",
+                  "segment_sha256": "299311a66bf95a4f8d7d8a6d92ac2e49ce0fd397798526cf515bb652af428883",
+                  "start": 438,
+                  "end": 529,
+                  "quote": "the patient received №5 mechanotherapy and kinesiotherapy as part of rehabilitation therapy"
+                }
+              ],
+              "attribution_evidence": [
+                {
+                  "source_id": "PMC12586027.1:jats",
+                  "segment_id": "b00001",
+                  "segment_sha256": "34b62a62f254dd77b6fcdc8508e00cfefe0a87e59e88fb8a9aebe39865055514",
+                  "start": 56,
+                  "end": 113,
+                  "quote": "a 51-year-old patient with latent iron deficiency anaemia"
+                }
+              ],
+              "times": []
             }
           ],
           "edges": [
@@ -5400,6 +5495,74 @@
                   "quote": "A week later, the patient received a repeat infusion of ferric carboxymaltose at a dose of 1,000 mg intravenously."
                 }
               ]
+            },
+            {
+              "edge_id": "edge8",
+              "from_event_id": "p1-e06",
+              "to_event_id": "p1-e07",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12586027.1:jats",
+                  "segment_id": "b00014",
+                  "segment_sha256": "d9625af5e4a6898273879bcd2b9711090eb1d0d347c9b046c0deb9828fbd60d4",
+                  "start": 0,
+                  "end": 153,
+                  "quote": "After informed consent was obtained and the patient’s iron deficiency was determined by assays, the patient received an infusion of ferric carboxymaltose"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge9",
+              "from_event_id": "p1-e05",
+              "to_event_id": "p1-e08",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12586027.1:jats",
+                  "segment_id": "b00017",
+                  "segment_sha256": "97cb29091006ca9c688de0276c2678d66d8c79382685844fa304eb13493a46e0",
+                  "start": 0,
+                  "end": 127,
+                  "quote": "On the 5th day of hospitalization, the patient underwent total hip replacement of the right hip joint under general anesthesia."
+                }
+              ]
+            },
+            {
+              "edge_id": "edge10",
+              "from_event_id": "p1-e03",
+              "to_event_id": "p1-e13",
+              "relation": "during",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12586027.1:jats",
+                  "segment_id": "b00046",
+                  "segment_sha256": "2bde4b49a96a2a0e793b7f5441b44a9c17bfe1b4e2946784801f8945d5ab879c",
+                  "start": 54,
+                  "end": 346,
+                  "quote": "Conditions | First hospitalization | Second hospitalization\nOperation volume | Total left hip arthroplasty with Zimmer Wagner implant with femoral shortening osteotomy. | Total hip replacement of the right hip with Zimmer Wagner implant with shortening osteotomy and derotation plate fixation"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge11",
+              "from_event_id": "p1-e14",
+              "to_event_id": "p1-e10",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12586027.1:jats",
+                  "segment_id": "b00019",
+                  "segment_sha256": "887700620541dfba0581c7c52385849c0b38feea9ec78d9d4c0b4ce927c8e60d",
+                  "start": 0,
+                  "end": 119,
+                  "quote": "The patient was discharged on the 18th day of hospitalization, as she passed the 1st stage of inpatient rehabilitation."
+                }
+              ]
             }
           ],
           "limitations": [
@@ -5470,7 +5633,8 @@
             "occurrence": "occurred",
             "description": "Repeated inpatient conservative treatment for dysplastic coxarthrosis",
             "fact_ids": [
-              "p1-f006"
+              "p1-f006",
+              "p1-f147"
             ],
             "evidence": [
               {
@@ -5579,7 +5743,7 @@
               {
                 "text": "In the postoperative period",
                 "kind": "relative",
-                "precision": "exact",
+                "precision": "approximate",
                 "calendar_value": null,
                 "evidence": [
                   {
@@ -6058,6 +6222,41 @@
                 ]
               }
             ]
+          },
+          {
+            "event_id": "p1-e14",
+            "record_id": "PMC12586027.1:p1",
+            "episode_id": null,
+            "kind": "treatment",
+            "occurrence": "occurred",
+            "description": "Rehabilitation therapy (mechanotherapy, kinesiotherapy) and 1st stage of inpatient rehabilitation",
+            "fact_ids": [
+              "p1-f128",
+              "p1-f129",
+              "p1-f143",
+              "p1-f142"
+            ],
+            "evidence": [
+              {
+                "source_id": "PMC12586027.1:jats",
+                "segment_id": "b00016",
+                "segment_sha256": "299311a66bf95a4f8d7d8a6d92ac2e49ce0fd397798526cf515bb652af428883",
+                "start": 438,
+                "end": 529,
+                "quote": "the patient received №5 mechanotherapy and kinesiotherapy as part of rehabilitation therapy"
+              }
+            ],
+            "attribution_evidence": [
+              {
+                "source_id": "PMC12586027.1:jats",
+                "segment_id": "b00001",
+                "segment_sha256": "34b62a62f254dd77b6fcdc8508e00cfefe0a87e59e88fb8a9aebe39865055514",
+                "start": 56,
+                "end": 113,
+                "quote": "a 51-year-old patient with latent iron deficiency anaemia"
+              }
+            ],
+            "times": []
           }
         ],
         "topological_layers": [
@@ -6075,13 +6274,13 @@
               "p1-e06"
             ],
             [
-              "p1-e07"
-            ],
-            [
               "p1-e12"
             ],
             [
               "p1-e13"
+            ],
+            [
+              "p1-e14"
             ]
           ],
           [
@@ -6091,6 +6290,11 @@
             [
               "p1-e05"
             ],
+            [
+              "p1-e07"
+            ]
+          ],
+          [
             [
               "p1-e08"
             ]
@@ -6115,6 +6319,58 @@
           [
             "p1-e03",
             "p1-e05"
+          ],
+          [
+            "p1-e03",
+            "p1-e08"
+          ],
+          [
+            "p1-e03",
+            "p1-e09"
+          ],
+          [
+            "p1-e03",
+            "p1-e10"
+          ],
+          [
+            "p1-e03",
+            "p1-e11"
+          ],
+          [
+            "p1-e05",
+            "p1-e08"
+          ],
+          [
+            "p1-e05",
+            "p1-e09"
+          ],
+          [
+            "p1-e05",
+            "p1-e10"
+          ],
+          [
+            "p1-e05",
+            "p1-e11"
+          ],
+          [
+            "p1-e06",
+            "p1-e07"
+          ],
+          [
+            "p1-e06",
+            "p1-e08"
+          ],
+          [
+            "p1-e06",
+            "p1-e09"
+          ],
+          [
+            "p1-e06",
+            "p1-e10"
+          ],
+          [
+            "p1-e06",
+            "p1-e11"
           ],
           [
             "p1-e07",
@@ -6143,6 +6399,10 @@
           [
             "p1-e08",
             "p1-e11"
+          ],
+          [
+            "p1-e14",
+            "p1-e10"
           ]
         ],
         "incomparable_pairs": [
@@ -6195,6 +6455,10 @@
             "p1-e13"
           ],
           [
+            "p1-e01",
+            "p1-e14"
+          ],
+          [
             "p1-e02",
             "p1-e03"
           ],
@@ -6239,6 +6503,10 @@
             "p1-e13"
           ],
           [
+            "p1-e02",
+            "p1-e14"
+          ],
+          [
             "p1-e03",
             "p1-e06"
           ],
@@ -6248,27 +6516,15 @@
           ],
           [
             "p1-e03",
-            "p1-e08"
-          ],
-          [
-            "p1-e03",
-            "p1-e09"
-          ],
-          [
-            "p1-e03",
-            "p1-e10"
-          ],
-          [
-            "p1-e03",
-            "p1-e11"
-          ],
-          [
-            "p1-e03",
             "p1-e12"
           ],
           [
             "p1-e03",
             "p1-e13"
+          ],
+          [
+            "p1-e03",
+            "p1-e14"
           ],
           [
             "p1-e04",
@@ -6307,6 +6563,10 @@
             "p1-e13"
           ],
           [
+            "p1-e04",
+            "p1-e14"
+          ],
+          [
             "p1-e05",
             "p1-e06"
           ],
@@ -6316,22 +6576,6 @@
           ],
           [
             "p1-e05",
-            "p1-e08"
-          ],
-          [
-            "p1-e05",
-            "p1-e09"
-          ],
-          [
-            "p1-e05",
-            "p1-e10"
-          ],
-          [
-            "p1-e05",
-            "p1-e11"
-          ],
-          [
-            "p1-e05",
             "p1-e12"
           ],
           [
@@ -6339,24 +6583,8 @@
             "p1-e13"
           ],
           [
-            "p1-e06",
-            "p1-e07"
-          ],
-          [
-            "p1-e06",
-            "p1-e08"
-          ],
-          [
-            "p1-e06",
-            "p1-e09"
-          ],
-          [
-            "p1-e06",
-            "p1-e10"
-          ],
-          [
-            "p1-e06",
-            "p1-e11"
+            "p1-e05",
+            "p1-e14"
           ],
           [
             "p1-e06",
@@ -6365,6 +6593,10 @@
           [
             "p1-e06",
             "p1-e13"
+          ],
+          [
+            "p1-e06",
+            "p1-e14"
           ],
           [
             "p1-e07",
@@ -6375,12 +6607,20 @@
             "p1-e13"
           ],
           [
+            "p1-e07",
+            "p1-e14"
+          ],
+          [
             "p1-e08",
             "p1-e12"
           ],
           [
             "p1-e08",
             "p1-e13"
+          ],
+          [
+            "p1-e08",
+            "p1-e14"
           ],
           [
             "p1-e09",
@@ -6397,6 +6637,10 @@
           [
             "p1-e09",
             "p1-e13"
+          ],
+          [
+            "p1-e09",
+            "p1-e14"
           ],
           [
             "p1-e10",
@@ -6417,28 +6661,59 @@
           [
             "p1-e11",
             "p1-e13"
+          ],
+          [
+            "p1-e11",
+            "p1-e14"
           ],
           [
             "p1-e12",
             "p1-e13"
+          ],
+          [
+            "p1-e12",
+            "p1-e14"
+          ],
+          [
+            "p1-e13",
+            "p1-e14"
           ]
         ],
         "same_time_groups": [],
-        "interval_relations": [],
+        "interval_relations": [
+          {
+            "edge_id": "edge10",
+            "from_event_id": "p1-e03",
+            "to_event_id": "p1-e13",
+            "relation": "during",
+            "offset": null,
+            "evidence": [
+              {
+                "source_id": "PMC12586027.1:jats",
+                "segment_id": "b00046",
+                "segment_sha256": "2bde4b49a96a2a0e793b7f5441b44a9c17bfe1b4e2946784801f8945d5ab879c",
+                "start": 54,
+                "end": 346,
+                "quote": "Conditions | First hospitalization | Second hospitalization\nOperation volume | Total left hip arthroplasty with Zimmer Wagner implant with femoral shortening osteotomy. | Total hip replacement of the right hip with Zimmer Wagner implant with shortening osteotomy and derotation plate fixation"
+              }
+            ]
+          }
+        ],
         "ordered_event_ids": [
           "p1-e03",
           "p1-e04",
           "p1-e05",
+          "p1-e06",
           "p1-e07",
           "p1-e08",
           "p1-e09",
           "p1-e10",
-          "p1-e11"
+          "p1-e11",
+          "p1-e14"
         ],
         "order_unknown_event_ids": [
           "p1-e01",
           "p1-e02",
-          "p1-e06",
           "p1-e12",
           "p1-e13"
         ],
@@ -6448,7 +6723,7 @@
         "basis": "Source-gated model relations; paragraph order and event kind do not create chronology."
       },
       "reference_provenance": {
-        "annotation_sha256": "eeb91b2774879754652738f1b3a9b1a1b1e67d0fbef16ebba00a42018089f666",
+        "annotation_sha256": "7af93f325f3f98615eec4bd43a22e8c5904ad4e33d5147bce4d6098293d8fd21",
         "materializer_version": "dense-runtime-targets/1",
         "fact_pointers": [
           {
@@ -7168,6 +7443,17 @@
             ]
           },
           {
+            "fact_id": "p1-f146",
+            "task": "medications",
+            "pointer": "/items/20",
+            "source_evidence": [
+              {
+                "segment_id": "b00037",
+                "quote": "Conditions | First hospitalization | Second hospitalization\nНemostatics | + (Sodium etamsylate) | −"
+              }
+            ]
+          },
+          {
             "fact_id": "p1-f022",
             "task": "allergies",
             "pointer": "/items/0",
@@ -7304,6 +7590,21 @@
               {
                 "segment_id": "b00012",
                 "quote": "The veins of the lower extremities were examined by ultrasound"
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f147",
+            "task": "procedures_devices",
+            "pointer": "/items/11",
+            "source_evidence": [
+              {
+                "segment_id": "b00006",
+                "quote": "she received repeated inpatient conservative treatment for dysplastic coxarthrosis"
+              },
+              {
+                "segment_id": "b00006",
+                "quote": "Due to the ineffectiveness of non-surgical therapy and increasing pain syndrome"
               }
             ]
           },
@@ -8092,7 +8393,7 @@
               }
             ],
             "clinical_statement": "Ferric carboxymaltose 1,000 mg one day before the operation per Table 1",
-            "certainty": "ambiguous",
+            "certainty": "source_conflict",
             "scoring": "review_only",
             "notes": "Table timing conflicts with the text timing (first day of the preoperative period); same infusion not double counted."
           },
@@ -8119,7 +8420,7 @@
               }
             ],
             "clinical_statement": "Length of hospitalization 19 days in the second hospitalization per Table 1",
-            "certainty": "ambiguous",
+            "certainty": "source_conflict",
             "scoring": "review_only",
             "notes": "Text states discharge on the 18th day of hospitalization."
           }
@@ -10526,7 +10827,7 @@
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
-              "temporality": "historical",
+              "temporality": "current",
               "time": {
                 "text": "on the first day of the preoperative period",
                 "relation": "at",
@@ -10568,7 +10869,7 @@
                 "anchor": "preoperative period",
                 "date_iso": null
               },
-              "temporality": "historical"
+              "temporality": "current"
             },
             "evidence": [
               {
@@ -11129,7 +11430,7 @@
               "temporality": "unknown",
               "time": {
                 "text": "within thirteen days after surgery",
-                "relation": "before",
+                "relation": "after",
                 "anchor": "surgery",
                 "date_iso": null
               },
@@ -11163,7 +11464,7 @@
               "indication": "to prevent thromboembolic complications",
               "time": {
                 "text": "within thirteen days after surgery",
-                "relation": "before",
+                "relation": "after",
                 "anchor": "surgery",
                 "date_iso": null
               }
@@ -11662,6 +11963,62 @@
             "event_ids": []
           },
           {
+            "fact_id": "p1-f146",
+            "task": "medications",
+            "pointer": "/items/20",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "temporality": "unknown",
+              "time": {
+                "text": "Second hospitalization",
+                "relation": "during",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Conditions | First hospitalization | Second hospitalization\nНemostatics | + (Sodium etamsylate) | −",
+                  "source_section": "b00037"
+                }
+              ],
+              "name": "Hemostatics",
+              "action": "unknown",
+              "ingredient_as_documented": null,
+              "dose_text": null,
+              "dose_value": null,
+              "dose_unit": null,
+              "route": null,
+              "frequency": null,
+              "duration_text": null,
+              "indication": null,
+              "regimen": null
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "name": "Hemostatics",
+              "action": "unknown",
+              "time": {
+                "text": "Second hospitalization",
+                "relation": "during",
+                "anchor": null,
+                "date_iso": null
+              }
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12586027.1:jats",
+                "segment_id": "b00037",
+                "segment_sha256": "b5eef87103ab55ea1f47a2f4d2574c4b2e8aab7f68d3c4653b09c38178e1c7ee",
+                "start": 54,
+                "end": 153,
+                "quote": "Conditions | First hospitalization | Second hospitalization\nНemostatics | + (Sodium etamsylate) | −"
+              }
+            ],
+            "event_ids": []
+          },
+          {
             "fact_id": "p1-f022",
             "task": "allergies",
             "pointer": "/items/0",
@@ -11812,7 +12169,7 @@
               "body_site": "right hip joint",
               "laterality": "right",
               "indication": null,
-              "finding": "with Zimmer Wagner implant with shortening osteotomy and derotation plate fixation (Table 1)",
+              "finding": "with Zimmer Wagner implant with shortening osteotomy and derotation plate fixation",
               "complication": null
             },
             "value_as_annotated": {
@@ -11829,7 +12186,7 @@
                 "anchor": "hospitalization",
                 "date_iso": null
               },
-              "finding": "with Zimmer Wagner implant with shortening osteotomy and derotation plate fixation (Table 1)"
+              "finding": "with Zimmer Wagner implant with shortening osteotomy and derotation plate fixation"
             },
             "evidence": [
               {
@@ -12119,7 +12476,9 @@
                 "quote": "the patient received №5 mechanotherapy and kinesiotherapy as part of rehabilitation therapy"
               }
             ],
-            "event_ids": []
+            "event_ids": [
+              "p1-e14"
+            ]
           },
           {
             "fact_id": "p1-f129",
@@ -12167,7 +12526,9 @@
                 "quote": "the patient received №5 mechanotherapy and kinesiotherapy as part of rehabilitation therapy"
               }
             ],
-            "event_ids": []
+            "event_ids": [
+              "p1-e14"
+            ]
           },
           {
             "fact_id": "p1-f130",
@@ -12316,6 +12677,70 @@
               }
             ],
             "event_ids": []
+          },
+          {
+            "fact_id": "p1-f147",
+            "task": "procedures_devices",
+            "pointer": "/items/11",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "she received repeated inpatient conservative treatment for dysplastic coxarthrosis",
+                  "source_section": "b00006"
+                },
+                {
+                  "quote": "Due to the ineffectiveness of non-surgical therapy and increasing pain syndrome",
+                  "source_section": "b00006"
+                }
+              ],
+              "name": "Inpatient conservative treatment",
+              "kind": "nonpharmacologic_therapy",
+              "action": "completed",
+              "body_site": null,
+              "laterality": "unknown",
+              "indication": "dysplastic coxarthrosis",
+              "finding": null,
+              "complication": null
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "name": "Inpatient conservative treatment",
+              "kind": "nonpharmacologic_therapy",
+              "action": "completed",
+              "indication": "dysplastic coxarthrosis",
+              "temporality": "historical"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12586027.1:jats",
+                "segment_id": "b00006",
+                "segment_sha256": "589b6ba7700617ddc9cf630e191a16fdb48c2cfbffb790b69ab35f3738a5191e",
+                "start": 370,
+                "end": 452,
+                "quote": "she received repeated inpatient conservative treatment for dysplastic coxarthrosis"
+              },
+              {
+                "source_id": "PMC12586027.1:jats",
+                "segment_id": "b00006",
+                "segment_sha256": "589b6ba7700617ddc9cf630e191a16fdb48c2cfbffb790b69ab35f3738a5191e",
+                "start": 493,
+                "end": 572,
+                "quote": "Due to the ineffectiveness of non-surgical therapy and increasing pain syndrome"
+              }
+            ],
+            "event_ids": [
+              "p1-e02"
+            ]
           },
           {
             "fact_id": "p1-f047",
@@ -15228,8 +15653,8 @@
               "assertion": "present",
               "temporality": "historical",
               "time": {
-                "text": "First hospitalization",
-                "relation": "during",
+                "text": "after 3 months",
+                "relation": "after",
                 "anchor": null,
                 "date_iso": null
               },
@@ -15263,8 +15688,8 @@
               "comparator": "=",
               "unit": "g/L",
               "time": {
-                "text": "First hospitalization",
-                "relation": "during",
+                "text": "after 3 months",
+                "relation": "after",
                 "anchor": null,
                 "date_iso": null
               },
@@ -16219,7 +16644,9 @@
                 "quote": "Conditions | First hospitalization | Second hospitalization\nRehabilitation | 14 days | 14 days"
               }
             ],
-            "event_ids": []
+            "event_ids": [
+              "p1-e14"
+            ]
           },
           {
             "fact_id": "p1-f143",
@@ -16265,7 +16692,9 @@
                 "quote": "she passed the 1st stage of inpatient rehabilitation"
               }
             ],
-            "event_ids": []
+            "event_ids": [
+              "p1-e14"
+            ]
           }
         ],
         "state_carried_forward": false,

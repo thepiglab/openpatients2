@@ -1,11 +1,11 @@
 {
   "article_id": "PMC12915822.1",
-  "reviewer": "parent assistant",
+  "reviewer": "Claude Opus 5.5 parent",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "a80d771bc4bf92029ca3723edc4bcfdc53a9bd7e695d7649d9f82e99f169fca9",
-  "annotation_sha256": "32d69c8bd4f52114371761c68c4b98b4382f22dd47545c7906edb419100183a5",
-  "reviewed_at": "2026-10-10T02:08:47.980068+00:00",
+  "annotation_sha256": "6536c194fd3de7643d63d3cba7fc612df4498bf157e9cc9bedae170166b4e154",
+  "reviewed_at": "2026-10-11T17:59:58.145427+00:00",
   "source_segments_read": 27,
   "facts_reviewed": 41,
   "patients_reviewed": 1,
@@ -27,7 +27,8 @@
     "p1-f039 note no longer claims the 2-week interval starts at treatment start (anchor not stated).",
     "Ambiguity on rash timing rewritten: e07/e08 before e10 confirmed (same pembrolizumab start, fourth vs sixth cycle); Table 1 onset 12 weeks and \"resolved\" vs narrative \"cleared up significantly\" left unreconciled.",
     "Visual submission Fig 1a: \"knee and shin\" replaced by neutral thigh-to-lower-leg wording plus second leg at the far right (front/back view not certain); EHR-label and privacy sidecars re-bound to the edited visual hash, labels unchanged.",
-    "ROSTER-ORDER: added article-level roster block: reported_individual_count null (source says \"We report a 67-year-old woman\" but never states a number of patients), roster_complete true (the single index patient p1 is annotated; Table 1 literature rows 1-9 stay outside the roster). Evidence b00001."
+    "ROSTER-ORDER: added article-level roster block: reported_individual_count null (source says \"We report a 67-year-old woman\" but never states a number of patients), roster_complete true (the single index patient p1 is annotated; Table 1 literature rows 1-9 stay outside the roster). Evidence b00001.",
+    "2026-10-11 re-review by Claude Opus 5.5 parent (the earlier parent signatures on this article were not trusted because their notes had been reworded to pass the signing guard): re-read all 27 source segments including Table 1 and captions and re-checked every fact, event kind/time classification, relation, summary and ambiguity in annotation.json against the source. Changes: (1) ROSTER-ORDER: roster reported_individual_count null -> 1; the singular case statement \"We report a 67-year-old woman\" (b00001, quoted in the roster evidence) states one patient; roster_complete stays true (p1 only; Table 1 rows 1-9 are literature cases). (2) p1-e03 \"after the second dose\" time_precision exact -> unknown (no interval stated). (3) p1-e17 \"Within 2 weeks\" time_precision approximate -> range (an upper bound). No other errors found; earlier corrections re-checked and kept."
   ],
   "unresolved": [
     "Figure pixels are inspected separately in the visual submission; annotation figure rows keep caption-layer status.",
@@ -39,17 +40,15 @@
     "reviewer": "Claude Opus 5.5 parent",
     "source_units_read": 27,
     "facts_reviewed": 41,
-    "figures_viewed": 3,
+    "figures_viewed": 0,
     "key_findings": [
-      "Single index patient; Table 1 rows 1-9 literature cases and b00006/b00020 cohort statements correctly excluded.",
-      "Pembrolizumab \"declined\"/\"cessation\"/Table \"withdrawal\" correctly recorded as stopped (not patient refusal).",
-      "Combined immunochemotherapy withheld recorded as a regimen-level hold; components not restated (ambiguity kept).",
-      "Anti-Ro negative comes from the patient-specific clause \"were negative in our patient\"; ANA negative from narrative and Table.",
-      "Restaging procedure kept without modality (not stated).",
-      "Pixels: Fig 1a hand/forearm with large crusted erosion plus lower limbs; Fig 1b both lower legs; Fig 2 printed labels HE/IgG/C3/PAS with symbols matching caption; color and grayscale renditions both viewed."
+      "Single index patient (67-year-old woman); Table 1 rows 1-9 and discussion cohort statements are not copied to p1; row 10 (Present case) owned by p1.",
+      "Roster count set to 1 from the literal singular case statement \"We report a 67-year-old woman\" (b00001).",
+      "Event kinds and time classifications re-checked; e03 precision unknown, e17 \"Within 2 weeks\" range.",
+      "Anti-Ro negative supported by \"were negative in our patient\" (b00021); pembrolizumab \"declined\"/\"cessation\" recorded as stopped."
     ],
     "residual_risks": [
-      "Fig 1a content only loosely matches the caption \"upper (a)\" (also shows legs).",
+      "Figure pixels were not re-viewed in this re-review; visual/figure-EHR/privacy receipts were not re-signed.",
       "Whether the grade 1 rash at about 12 weeks was already SCLE is unresolved in the source."
     ]
   },

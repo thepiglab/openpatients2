@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC13317082.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5b00823c2a8e8353c85a1694992011f569745767e2ad72c66a005ab0d99bcf58",
+  "annotation_sha256": "4eda4cb809c64319d7f38bff6c62ab9930ca908340a9a85514da04dd16ea3b51",
+  "reviewed_at": "2026-10-11T17:57:57.801095+00:00",
+  "source_segments_read": 38,
+  "facts_reviewed": 75,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f011 sepsis: removed time borrowed from the death sentence (1 week after her diagnosis times the death, not sepsis onset).",
+    "p1-f070 death: related_condition changed from the carcinoma (inferred) to Sepsis, the stated cause.",
+    "p1-f014/f015 vomiting and diarrhea: one-word quotes extended to the full reporting clause.",
+    "p1-f004, f005, f008, f010: added supporting evidence (colonoscopic confirmation; discussion statements on first presentation, ovarian and sacral/iliac metastases); b00031/b00032 coverage set to patient_facts.",
+    "p1-f059: added Fig. 1e caption evidence (acinar and sheeting patterns separated by desmoplasia).",
+    "Added p1-f074 (Fig. 2a to c caption CT/MRI findings) and p1-f075 (Fig. 2d DWI bony deposits without cortical destruction, missed on CT), linked to p1-e06.",
+    "p1-e05 relinked to the pan CK/CK20/CDX2 results instead of WT-1; added relation p1-e03 before p1-e05 (bone marrow report 10 days later).",
+    "Tumor-marker conflict ambiguity now links the review_only abstract fact p1-f047; new ambiguity for the unstated WT-1 specimen (caption-only, Fig. 1e, f cited with the colonoscopic biopsy).",
+    "Table 1 literature-case rows re-dispositioned from aggregate to background (cited cases, not cohort data).",
+    "Figure panel labels set to the uppercase letters printed on the images, matching the visual submission."
+  ],
+  "unresolved": [
+    "Table 1 and discussion describe previously reported literature cases and cohort statistics; none were attributed to the index patient.",
+    "No calendar dates; admission-relative times are stated in the case text only for some events.",
+    "The abstract states serum tumor markers were within normal ranges while the case text reports CEA 17 ng/ml; retained as a source conflict.",
+    "CK7 immunohistochemistry is listed as performed but its result is not stated in the text.",
+    "Culture results (urine, sputum, blood) are not reported.",
+    "Antibiotic names, doses and routes are not documented."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 38,
+    "facts_reviewed": 75,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient; Table 1 and discussion literature cases correctly excluded.",
+      "Abstract tumor markers normal vs case-text CEA 17 ng/ml kept as review_only source conflict plus ambiguity; CEA kept as the detailed case value.",
+      "Admission-relative times only on facts whose own sentence states them (cultures/marrow request day 2, colonoscopy a week after admission).",
+      "WT-1 negativity is caption-only (panel F blurred); CK7 listed as performed with result not reported; Krukenberg tumor kept provisional (mostly)."
+    ],
+    "residual_risks": [
+      "Diagnosis anchor of death (bone marrow vs colonoscopic diagnosis) is unstated.",
+      "Bone marrow aspirate/biopsy performance date only stated as requested on day 2."
+    ]
+  },
+  "physician_adjudicated": false
+}

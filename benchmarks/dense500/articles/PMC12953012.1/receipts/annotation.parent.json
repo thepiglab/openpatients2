@@ -1,11 +1,11 @@
 {
   "article_id": "PMC12953012.1",
-  "reviewer": "parent assistant",
+  "reviewer": "Claude Opus 5.5 parent",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "1aa562228dec8641fcb27a30d0d81544c64ba3c0f230a9446634a6f49b301cf7",
-  "annotation_sha256": "5c8f7293c904c946981dec65e0a556099e4b45ffc8b9fe5f5ee4bf24da16101b",
-  "reviewed_at": "2026-10-10T02:08:47.954796+00:00",
+  "annotation_sha256": "6c2dea1493d6102d23c88167b8c3b459554348166b403babc0c2303452061f08",
+  "reviewed_at": "2026-10-11T17:58:45.019039+00:00",
   "source_segments_read": 46,
   "facts_reviewed": 76,
   "patients_reviewed": 1,
@@ -25,7 +25,8 @@
     "Decided \"two months later\": time kept on follow-up, absent active lesions and biopsy result since all share one sentence; added the same time to the biopsy procedure f039; anchor stays null (no named anchor event); ambiguity updated.",
     "Source coverage b00003 and b00038 (index-patient statements) given patient_ids p1 instead of empty.",
     "Added supported temporal relations: e05 before e10 (follow-up later than readmission), e05 before e11 (\"Months later ... readmitted\"), e11 before e13 (antibiotics/transfer during that admission), e03 before e14 (\"restarted\" hydralazine).",
-    "ROSTER-ORDER: added article-level roster block: reported_individual_count null (source says \"We present a patient\" but never states a number of patients), roster_complete true (the single index patient p1 is annotated; Table 2 literature cases stay outside the roster). Evidence b00003."
+    "ROSTER-ORDER: added article-level roster block: reported_individual_count null (source says \"We present a patient\" but never states a number of patients), roster_complete true (the single index patient p1 is annotated; Table 2 literature cases stay outside the roster). Evidence b00003.",
+    "2026-10-11 re-review by Claude Opus 5.5 parent (the earlier parent signatures on this article were not trusted because their notes had been reworded to pass the signing guard): re-read all 46 source segments and re-checked every fact, event kind/time classification, relation, summary and ambiguity in annotation.json against the source. Changes: (1) ROSTER-ORDER: roster reported_individual_count null -> 1; the source's singular case statement \"We present a patient\" (b00003, quoted in the roster evidence) states one patient; roster_complete stays true (single index patient p1, Table 2 literature cases outside the roster). (2) p1-e15 \"Within 24 h\" time_precision exact -> range (an upper bound, not an exact interval). No other errors found; earlier corrections (name trimming, f076, two-months-later timing, relations e05-e10, e05-e11, e11-e13, e03-e14) re-checked and kept."
   ],
   "unresolved": [
     "Table 2 literature cases and cohort statements are not copied to the index patient.",
@@ -37,18 +38,17 @@
     "reviewer": "Claude Opus 5.5 parent",
     "source_units_read": 46,
     "facts_reviewed": 76,
-    "figures_viewed": 2,
+    "figures_viewed": 0,
     "key_findings": [
-      "Single index patient (67-year-old man); Table 2 literature rows, b00019/b00037 cohort statements and Table 1 criteria correctly excluded.",
-      "Table 2 acyclovir vs narrative valacyclovir kept as review_only ambiguity; piperacillin-tazobactam route left null (IV attached to vancomycin, ambiguity recorded).",
-      "Hemoglobin 30 g/L unflagged (no flag from reference range; source says only concerning for GI bleed).",
-      "ANCA/MPO/anti-DNase/ANA results untimed: no time stated in their own sentences.",
-      "Authors hypothesis that CSS exacerbated encephalopathy/respiratory failure kept as ambiguity only; hydralazine allergy event kind other accepted.",
-      "Figure 1 A/B H&E and Figure 2 A/B GMS pixels viewed; visual submission accurate (two arrows in 1A only, none in 1B); EHR labels pathology/includable and privacy flags none confirmed."
+      "Single index patient (67-year-old man); Table 2 literature rows, Table 1 criteria and cohort statements (b00019, b00037) are not copied to p1.",
+      "Roster count set to 1 from the literal singular case statement \"We present a patient\" (b00003).",
+      "Event kinds and time classifications re-checked; \"Within 24 h\" reclassified as a range.",
+      "Table 2 acyclovir vs narrative valacyclovir kept as a review_only ambiguity; piperacillin-tazobactam route left null.",
+      "Hemoglobin 30 g/L left unflagged (source gives a reference interval but no classification)."
     ],
     "residual_risks": [
-      "Provisional versus confirmed status of pneumonia and active GI bleed relies on the word \"suspected\" scoping.",
-      "Pathology flags left unknown where source gives no normal/abnormal classification."
+      "Figure pixels were not re-viewed in this re-review; figure annotation entries are caption-level and the visual/figure-EHR/privacy receipts were not re-signed.",
+      "Provisional status of pneumonia and active GI bleed rests on the word \"suspected\"."
     ]
   },
   "physician_adjudicated": false
