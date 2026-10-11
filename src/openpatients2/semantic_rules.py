@@ -39,7 +39,8 @@ NEGATION_CUE = re.compile(
     r"ruled out|rule out|ruling out|excluded?|excluding|exclusion|free of|free from|painless|unable|non-?smok\w*|non-?febrile|sparing|spared|rather than|instead of|avoid(?:ed|ing|ance)?|abstain\w*|\w+-free|lack(?:s|ed|ing)?|"
     r"unremarkable|normal|nil|resolved|resolution|disappeared|asymptomatic|afebrile|apyrexi\w*|apyrexia|uneventful|"
     r"uncomplicated|misdiagnos\w*|impossible|deferred|prevented|cannot|can't|didn't|did not|wasn't|"
-    r"weren't|isn't|aren't)\b|n['’]t\b", re.I)
+    r"weren't|isn't|aren't)\b|n['’]t\b"
+    r"|(?:^|\|)\s*[−–-]\s*(?=\||$)", re.I | re.M)   # a table cell that is just a minus/dash sign ("−" = negative)
 NORMAL_RESULT = re.compile(r'^\s*(normal|unremarkable|within (the )?normal (limits|range)|wnl|normal range|'
                            r'normal as described|normal limits)\s*\.?\s*$', re.I)
 NORMAL_CUE = re.compile(r'\b(normal|unremarkable|within (the )?normal|wnl|no abnormalit)', re.I)
@@ -165,6 +166,10 @@ def _abbreviations(texts):
                 if ''.join(w[0] for w in tail).casefold() == initials:
                     out[initials] = _content_words(' '.join(tail))
                     break
+            else:
+                # A single-word long form abbreviated by its own leading letters: 'Teduglutide (TED)'.
+                if words and len(initials) >= 2 and words[-1].casefold().startswith(initials):
+                    out[initials] = _content_words(words[-1])
     return out
 
 
