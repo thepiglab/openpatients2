@@ -1,0 +1,53 @@
+{
+  "article_id": "PMC12859378.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2057ca010c2d8f05e6c7933462c43b88986620d36b0e25f5c8c77106111af253",
+  "annotation_sha256": "1e76968fc16aa4315acf1d9b6db45bd2e88dcead25eb4449b9c89d20440c8149",
+  "reviewed_at": "2026-10-11T19:11:11.951173+00:00",
+  "source_segments_read": 25,
+  "facts_reviewed": 86,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Roster evidence moved to the earliest literal case statement in b00001 ('We describe the case of a previously healthy 14-year-old female')",
+    "Preoperative Table 1 labs p1-f059..f064 and discharge p1-f081 ('postoperative day 5'): time anchor set to the literal 'surgery' (b00019 'the decision for surgery' refers to this patient's operation); two-week review anchor left null (anchor not stated)",
+    "p1-f072 laparotomy: relation to 'within two hours of presentation' corrected from before to after; indication added from the patient-specific sentence 'In our case, the decision for surgery was guided by the patient's severe and progressive symptoms and the associated risk of bowel ischemia'; the ambiguity that had declined this was removed",
+    "p1-f067 no free peritoneal air on radiography: performed test recorded as assertion present with flag negative (was assertion absent)",
+    "p1-f006 acute abdomen role changed from primary_diagnosis to complication (secondary to large bowel obstruction); p1-f005 large bowel obstruction gained the clinical-assessment quote",
+    "Added p1-f086: no identifiable risk factors ('including the one in this report', b00018)",
+    "Added relation preoperative labs e03 before laparotomy e06; b00018/b00019 coverage changed to patient_facts; summary updated"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three JPEGs are described in the separate visual submission.",
+    "Table 1 WBC appears as 11,000/µL in the table and 11×10^(9)/L in the text; same magnitude, not a conflict.",
+    "No exact calendar dates are given; times are relative to presentation or surgery only where the source states them."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 25,
+    "facts_reviewed": 86,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; history, negatives, exam, vitals, all Table 1 rows with printed reference ranges, imaging, operation, histology and follow-up verified",
+      "Asymptomatic at the two-week review recorded as symptoms absent (p1-f083) with the outcome text free of the negation word; literal wording stays in the evidence",
+      "Gangrene and perforation absent/refuted from intra-operative findings; negative family history uses subject family_member",
+      "Fig 1 air-fluid levels remain caption-only, not claimed from pixels; Fig 3 background wall sign is unreadable non-Latin facility signage, not a patient identifier, device text or imaging header (privacy tier none)"
+    ],
+    "residual_risks": [
+      "Two-week outpatient review is ordered after discharge only by the scheduled-follow-up sentence; its anchor is unstated",
+      "Table 1 hemoglobin and creatinine reference ranges are adult/male ranges as printed"
+    ]
+  },
+  "physician_adjudicated": false
+}

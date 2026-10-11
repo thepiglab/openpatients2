@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12831838.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "18d169e0b884a309509befdff38df5cad14db53e7488138ac5f1d15cdc6b4f47",
+  "annotation_sha256": "05694e14ce46b6bb5c67f0c80fbe5851fde89a98ccdc2ceebd90d92a4c12ea5c",
+  "reviewed_at": "2026-10-11T18:59:34.415927+00:00",
+  "source_segments_read": 19,
+  "facts_reviewed": 63,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f036 Petrie's cast removal now carries its own sentence's time ('At this point', anchored to 'After four months of follow-up') with a quote spanning both sentences, so event p1-e15 no longer carries a time its fact lacks.",
+    "p1-f062 physiotherapy advice and event p1-e17 given the same literal 'At this point' time; relation p1-e15 same_time p1-e17 added.",
+    "p1-f010 and p1-f011 pain onset/worsening anchored to the literal 'presented' with quotes containing it.",
+    "Supporting evidence added: LCPD (b00007 case wording), osteonecrosis and degenerative change (b00006 MRI impression).",
+    "p1-f029 surgery-not-undertaken note keeps the stated reason (financial limitations prevented surgery) and separates the plural discussion 'families opted' wording; ambiguity on plural 'our cases' extended with that quote.",
+    "Added relations p1-e04 before p1-e05 (referral then presentation) and p1-e13 before p1-e14 (discharge with cast, then monthly follow-ups).",
+    "Visual submission Fig 2a/2b femoral-head descriptions corrected against pixels (2a: image-left head uniform, image-right heterogeneous; 2b: image-left round and smooth, image-right flatter and irregular, replacing 'rounder and brighter').",
+    "Figure privacy: R/L laterality markers and ruler scale text are not burned-in identifiers (f1a, f3a, f3b set to none); f1b kept as device text for faint unreadable edge text; drafts regenerated with --draft and labels carried over."
+  ],
+  "unresolved": [
+    "Discussion sentences on Perthes disease in general and cited studies are literature background and are not patient facts.",
+    "Exact dates are not stated; times are relative to presentation or treatment phases as written.",
+    "Caption-layer visual status not_inspected; the three JPEGs are inspected in the separate visual target.",
+    "The caption of Figure 2a says sagittal section while the image pixels look like an axial section; the caption is quoted unchanged and the pixel observation is recorded in the visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 19,
+    "facts_reviewed": 63,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; discussion plural 'our cases' is not a second patient.",
+      "Negated history list kept as five absent facts (fever, chronic steroid use, viral infection, blood dyscrasia, previous surgery) with verification/action unknown per ASSERT-ABSENT.",
+      "'On presentation' literally governs only the antalgic gait; the remaining examination stays untimed in a separate event.",
+      "'for three weeks' assigned to traction only, with an ambiguity; analgesics untimed.",
+      "Fig 2a captioned sagittal but pixels show an axial slice; recorded in the visual target and article limitations, caption unchanged."
+    ],
+    "residual_risks": [
+      "Fig 2 MRI modality is recognised from pixels and the text citation; sequence not assigned.",
+      "Fig 3b genital soft-tissue outline is uncertain; flagged conservatively.",
+      "Exam findings are not literally timed to presentation."
+    ]
+  },
+  "physician_adjudicated": false
+}

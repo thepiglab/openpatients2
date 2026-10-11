@@ -1,11 +1,11 @@
 {
   "article_id": "PMC12554900.1",
-  "reviewer": "parent assistant",
+  "reviewer": "Claude Opus 5.5 parent",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "ef07d8cee9120b381fa350a4364139d18545944783667e35b4b2c46e4583b1fd",
-  "annotation_sha256": "7b5b68a30ddff0a6d850e2764da08bf6a15cd64a38a20e1540383270acd37d85",
-  "reviewed_at": "2026-10-11T18:32:08.849896+00:00",
+  "annotation_sha256": "0253fb8932d2d497844d38a276ba32230862fe73256103063dcac85c93dba8d6",
+  "reviewed_at": "2026-10-11T19:14:37.421196+00:00",
   "source_segments_read": 30,
   "facts_reviewed": 138,
   "patients_reviewed": 3,
@@ -31,7 +31,8 @@
     "p2-f028 letrozole: removed duration_text \"one year\" (it describes stable disease); p2-f032 marked alternate of p2-f008; p2-e07 time_kind relative.",
     "p2 relations: resumed letrozole after first letrozole, cyclophosphamide/bevacizumab \"then\", NGS before trastuzumab (\"Because of\"), MAPK trial before T-DXd (\"At this time\"), neutropenia during (not after) the ongoing T-DXd course.",
     "p3-f029 radiation setting neoadjuvant (literal preoperative); p3-f037 dose reductions action current -> administered.",
-    "p3-e10 split: T-DXd start no longer carries \"about six weeks later\"; new p3-e13 imaging partial response after start; relations added for postoperative cancer-free status, adjuvant therapy after surgery, side effects during T-DXd."
+    "p3-e10 split: T-DXd start no longer carries \"about six weeks later\"; new p3-e13 imaging partial response after start; relations added for postoperative cancer-free status, adjuvant therapy after surgery, side effects during T-DXd.",
+    "p1-f020 CA-125 decrease time \"within six weeks of treatment\": relation before -> after (anchor \"treatment\" kept); source: the patient \"then began T-DXd\" and CA-125 fell within six weeks of that treatment, i.e. after its start. TIME-LITERAL clarified: \"within <duration> of <event>\" is relation after. p1-e12 after p1-e06 relation already consistent."
   ],
   "unresolved": [
     "Caption-layer visual status not_inspected; the three figure images were inspected in the separate visual submission.",
@@ -50,7 +51,8 @@
       "Case 1 MDS kept without a causal role; the discussion attribution to prior chemotherapy is an ambiguity; thrombocytopenia and hyperbilirubinemia recorded as the stated reasons T-DXd was held.",
       "Case 3 initial diagnosis kept provisional with presumptive stage IIB and no staging system.",
       "Figure 1 caption sizes kept as printed text, including \"13.2 mm to 5.5 mm\"; Figure 2 legend T-Dxd vs caption T-DXd recorded in the visual review.",
-      "Biomarker tumor_ref left null: no sentence explicitly ties a biomarker result to a specific tumor entry."
+      "Biomarker tumor_ref left null: no sentence explicitly ties a biomarker result to a specific tumor entry.",
+      "Re-review: \"within <duration> of <event>\" times re-checked against the source; the facts follow their anchor, relation after."
     ],
     "residual_risks": [
       "Combination chemotherapy is recorded as single medication items per regimen rather than one item per drug.",

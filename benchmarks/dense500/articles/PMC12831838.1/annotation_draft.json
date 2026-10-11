@@ -118,6 +118,10 @@
       {
        "segment_id": "b00001",
        "quote": "Despite surgical intervention being the standard for late-onset LCPD, the patient was managed conservatively"
+      },
+      {
+       "segment_id": "b00007",
+       "quote": "surgical treatment is recommended in the literature for late-onset Perthes disease, financial limitations prevented our patient from undergoing surgery"
       }
      ],
      "clinical_statement": "Late-onset Legg-Calvé-Perthes disease",
@@ -144,6 +148,10 @@
       {
        "segment_id": "b00001",
        "quote": "Imaging revealed osteonecrosis of the left femoral head with degenerative changes."
+      },
+      {
+       "segment_id": "b00006",
+       "quote": "Findings were consistent with osteonecrosis and secondary degenerative change"
       }
      ],
      "clinical_statement": "Osteonecrosis of the left femoral head",
@@ -170,6 +178,10 @@
       {
        "segment_id": "b00001",
        "quote": "Imaging revealed osteonecrosis of the left femoral head with degenerative changes."
+      },
+      {
+       "segment_id": "b00006",
+       "quote": "Findings were consistent with osteonecrosis and secondary degenerative change"
       }
      ],
      "clinical_statement": "Degenerative changes of the left femoral head",
@@ -267,13 +279,13 @@
       "time": {
        "text": "three months prior",
        "relation": "before",
-       "anchor": null
+       "anchor": "presented"
       }
      },
      "evidence": [
       {
        "segment_id": "b00003",
-       "quote": "persistent left thigh pain that began three months prior"
+       "quote": "presented with persistent left thigh pain that began three months prior"
       },
       {
        "segment_id": "b00003",
@@ -302,13 +314,13 @@
       "time": {
        "text": "over the past month",
        "relation": "during",
-       "anchor": null
+       "anchor": "presented"
       }
      },
      "evidence": [
       {
        "segment_id": "b00003",
-       "quote": "had worsened over the past month"
+       "quote": "presented with persistent left thigh pain that began three months prior and had worsened over the past month"
       }
      ],
      "clinical_statement": "Left thigh pain worsened over the past month",
@@ -746,7 +758,7 @@
      "clinical_statement": "Surgery not undertaken because of financial limitations",
      "certainty": "supported",
      "scoring": "include",
-     "notes": "Surgery was recommended in the literature but not performed for this patient; financial limitations are the stated reason, not a patient refusal."
+     "notes": "Surgery was recommended in the literature but not performed for this patient; the case text states financial limitations prevented it (not a documented refusal). The plural discussion b00014 says families opted for non-surgical management; see ambiguity."
     },
     {
      "fact_id": "p1-f030",
@@ -901,18 +913,23 @@
       "assertion": "present",
       "name": "Petrie's cast",
       "kind": "device",
-      "action": "removed"
+      "action": "removed",
+      "time": {
+       "text": "At this point",
+       "relation": "at",
+       "anchor": "After four months of follow-up"
+      }
      },
      "evidence": [
       {
        "segment_id": "b00008",
-       "quote": "Petrie's cast was removed"
+       "quote": "After four months of follow-up, the round contour of the femoral head was regained, as shown (Fig. 3a,3b). At this point, Petrie's cast was removed"
       }
      ],
      "clinical_statement": "Petrie's cast removed",
      "certainty": "supported",
      "scoring": "include",
-     "notes": ""
+     "notes": "\"At this point\" refers back to the preceding sentence's \"After four months of follow-up\"."
     },
     {
      "fact_id": "p1-f037",
@@ -1589,12 +1606,17 @@
       "assertion": "present",
       "action_text": "Physiotherapy with non-weight-bearing exercises",
       "plan_type": "other",
-      "action_status": "recommended"
+      "action_status": "recommended",
+      "time": {
+       "text": "At this point",
+       "relation": "at",
+       "anchor": "After four months of follow-up"
+      }
      },
      "evidence": [
       {
        "segment_id": "b00008",
-       "quote": "the patient was advised to begin physiotherapy with non-weight-bearing exercises"
+       "quote": "After four months of follow-up, the round contour of the femoral head was regained, as shown (Fig. 3a,3b). At this point, Petrie's cast was removed, and the patient was advised to begin physiotherapy with non-weight-bearing exercises"
       }
      ],
      "clinical_statement": "Advised to begin physiotherapy with non-weight-bearing exercises",
@@ -1969,13 +1991,16 @@
      "fact_ids": [
       "p1-f062"
      ],
-     "time_text": null,
+     "time_text": "At this point",
      "evidence": [
       {
        "segment_id": "b00008",
-       "quote": "the patient was advised to begin physiotherapy with non-weight-bearing exercises"
+       "quote": "At this point, Petrie's cast was removed, and the patient was advised to begin physiotherapy with non-weight-bearing exercises"
       }
-     ]
+     ],
+     "time_kind": "relative",
+     "time_precision": "unknown",
+     "time_calendar_value": null
     },
     {
      "event_id": "p1-e18",
@@ -2062,6 +2087,43 @@
       {
        "segment_id": "b00008",
        "quote": "the patient was advised to begin physiotherapy with non-weight-bearing exercises. After one week, the patient was instructed to gradually transition to weight-bearing activities."
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e04",
+     "to_event_id": "p1-e05",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00004",
+       "quote": "He was subsequently referred to the Orthopaedics outpatient department of our Tertiary care center"
+      },
+      {
+       "segment_id": "b00005",
+       "quote": "On presentation, the patient displayed an antalgic gait on the left side."
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e13",
+     "to_event_id": "p1-e14",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00007",
+       "quote": "The patient was discharged with the Petrie's cast and was scheduled for monthly follow-ups"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e15",
+     "to_event_id": "p1-e17",
+     "relation": "same_time",
+     "evidence": [
+      {
+       "segment_id": "b00008",
+       "quote": "At this point, Petrie's cast was removed, and the patient was advised to begin physiotherapy with non-weight-bearing exercises"
       }
      ]
     }
@@ -2207,16 +2269,21 @@
    },
    "ambiguities": [
     {
-     "issue": "The discussion uses plural wording (\"In our cases\", \"patient's families\") although one patient is described. The roster stays at one individual.",
+     "issue": "The discussion uses plural wording (\"In our cases\", \"patient's families opted for non-surgical management\") although one patient is described. The roster stays at one individual; the case text says financial limitations prevented surgery, and the discussion's 'families opted' wording is not copied to the patient as a refusal.",
      "evidence": [
       {
        "segment_id": "b00014",
        "quote": "In our cases of late-onset Legg-Calvé-Perthes Disease (LCPD), financial issues necessitated a conservative treatment approach."
+      },
+      {
+       "segment_id": "b00014",
+       "quote": "Rather than forgoing treatment, patient's families opted for non-surgical management"
       }
      ],
      "must_not_infer": "Do not create additional patients or copy discussion statements to the index patient.",
      "fact_ids": [
-      "p1-f001"
+      "p1-f001",
+      "p1-f029"
      ]
     },
     {

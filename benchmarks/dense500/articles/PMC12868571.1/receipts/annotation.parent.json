@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12868571.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "555bcd1f470b97204537bc47a943f69b33748b248c145363471743afa1200c5a",
+  "annotation_sha256": "c6b3f9778900d3462173842aeeae23f6bfd50f7daa46711da89b3905e206945a",
+  "reviewed_at": "2026-10-11T19:14:05.725053+00:00",
+  "source_segments_read": 35,
+  "facts_reviewed": 159,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed 'No neurological sequelae were observed during follow-up' (p1-f045, p2-f045, p3-f035, p4-f034): a series-level sentence that names no patient and does not say 'all' (NO-COHORT-COPY); recorded as an article limitation.",
+    "case_context care_setting (Children's Hospital of Nanjing Medical University) lacked support in its own evidence; added the b00004 sentence that states all four patients were admitted there.",
+    "p1-f016 ataxia: added the b00014 'unsteady standing or gait (4/4)' evidence alongside the abstract statement.",
+    "Added literal temporal relations: e01 ingestion before e03 CNS depression for all four ('within 1–2 h after clonazepam ingestion'); p1 hemoperfusion before post-treatment level; p2 hemoperfusion, CVVH and combined sessions before the stable mental status and the post-treatment level ('after blood purification').",
+    "p2 blood-purification ambiguity reworded: the 8 h plus 20 h 20 min plus 19 h 40 min would add to Table 3's 48 h, but the source never states they are one consecutive course; added the session-duration quote.",
+    "Figure attribution notes corrected: the raw JATS holds each graphic inside its Table 1-3 table-wrap, but the parser gives no caption/segment link, so the attribution check rejects patient assignment; kept unresolved and documented.",
+    "Figure privacy notes for the Table 2 and 3 images corrected (they print no age or sex)."
+  ],
+  "unresolved": [
+    "Case 4 admission is stated as May 2023 while the methods give a 2024 study window; both are kept without correction.",
+    "The abstract states all four children had dizziness, vomiting and ataxia, but Table 1 manifestation lists differ; the abstract-only symptoms are kept as review-only source conflicts.",
+    "The source uses elimination half-life, elimination time and clearance interchangeably for the calculated 66.6-195.4 h and 40.7-118.7 h values; the Table 2 term is kept.",
+    "Narrative and Table 3 descriptions of case 2 blood purification (8 h hemoperfusion then CVVH; two combined sessions; 48 h total) are not reconciled.",
+    "The tablet strength of ingested clonazepam and lithium carbonate is not stated; no mg dose is inferred.",
+    "Caption-layer visual status not_inspected; the three table JPEGs were inspected in the separate visual target.",
+    "No neurological sequelae were observed during follow-up is a series-level sentence that does not name each patient; it is not copied to individual patients.",
+    "Tables 1-3 are also supplied as images inside the JATS table-wrap; the parser lists them as unwrapped graphics without caption links, so they stay unresolved and not EHR-includable although their rows are cases 1-4."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 35,
+    "facts_reviewed": 163,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Four children individually identified as cases 1-4 in text and Tables 1-3; roster 4/complete.",
+      "Kept the review-only conflicts: Case 4 admitted in May 2023 versus the 2024 study window, and abstract dizziness/vomiting for all four versus the Table 1 lists.",
+      "Supportive drugs, gastric lavage plus activated charcoal, normal laboratory panels, CNS depression and complete recovery are applied to each patient only where the sentence says all four or all cases.",
+      "p2 blood purification kept as separate facts: 8 h hemoperfusion, CVVH, two combined sessions and the Table 3 48 h total, with an ambiguity."
+    ],
+    "residual_risks": [
+      "Table images are clinically patient-level for cases 1-4 but stay unresolved and not includable because of the parser linkage gap.",
+      "Time texts from Table 3 cells (for example \"∼ 4\") rely on the column header for their unit and anchor.",
+      "The abstract says lavage was done upon admission and the results say three cases had it within 4 h of admission; case 1 lavage was about 15 h post-ingestion; no admission-relative time is recorded for case 1."
+    ]
+  },
+  "physician_adjudicated": false
+}

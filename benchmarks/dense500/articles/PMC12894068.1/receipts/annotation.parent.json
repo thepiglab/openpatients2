@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12894068.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f7636f8c3355dd5217ed0d8cfaaedda8e13e220bb80856ba31c9034a5a81524b",
+  "annotation_sha256": "e1a34336e712c1be0cfdef96acbdd7230a6569d2a9fb4b4a3a397773a583fe3c",
+  "reviewed_at": "2026-10-11T19:02:58.300012+00:00",
+  "source_segments_read": 19,
+  "facts_reviewed": 66,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f049 metronidazole: removed the combined route 'IV, then oral'; kept as the 26-day course with regimen 'initially IV, then oral'; added p1-f063 (route IV, initial phase) and p1-f064 (route oral, later phase); event p1-e16 links all three",
+    "Added p1-f065 medications HBO with structured regimen '10 daily 90-min sessions at 45 FSW', frequency daily, dose_text 45 FSW, alternate_representation_of p1-f045 (schedule had been only in clinical_statement)",
+    "p1-f045 HBO procedure: removed finding 'tolerated without side effects' not supported by its own quote (tolerance stays in p1-f058)",
+    "Added p1-f066 care_plans: treatment duration guided by imaging and shared decision-making with the family (b00013)",
+    "Figure 1 panel facts p1-f034..f037: evidence narrowed to the caption lead 'Yellow arrows indicate PCC.' plus the panel's own label (previous quotes carried other panels' times); p1-f036/f037 anchor set to literal 'treatment'",
+    "Temporal relations: removed e15/e16/e17 'before' repeat CT e18 (text says metronidazole and diet were discontinued at discharge after HBO initiation, so they did not end before the repeat CT); added e18 during e15 and e16, e11 during e16 and e17 (Fig 1C caption), e12 during e20 (Fig 1D 'after 4 days of HBO' of 10 daily sessions)",
+    "Events: f025 (slight decrease with conservative therapy) moved from post-HBO serial CT event e21 to repeat CT event e18; e22 kind outcome; e25 time_precision range; f066 linked to e23",
+    "Ambiguity on initial CT timing reworded: Fig 1A '10 months before admission' vs Fig 2 pixel 'Day -215' initial presentation, not reconciled",
+    "Summary updated for metronidazole phases, HBO schedule, slight conservative-therapy decrease and shared decision-making"
+  ],
+  "unresolved": [
+    "Figure captions only in this record; pixels viewed in the separate visual submission.",
+    "The text places the resolution CT 6 months after completion of treatment while the Figure 1 caption places it 6 months after hospital admission; both are kept as source conflicts.",
+    "No lab values, dates, or session-level HBO data beyond the stated schedule are reported; Figure 2 day numbers are pixel-only and not recorded as facts.",
+    "Discussion, introduction and conclusion material (mechanisms, literature, risk groups) is background and not attributed to the patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 19,
+    "facts_reviewed": 66,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (7-year-old girl); discussion segments b00011-b00013 correctly attributed to her, background segments excluded",
+      "Resolution CT timing conflict kept as source_conflict/review_only: text '6 months after completion of treatment' vs Fig 1E caption '6 months after hospital admission'; p1-f059 (resolution after HBO initiation) stays scorable",
+      "Fig 1B time 'Day of admission' is the panel's own caption label under the lead 'Yellow arrows indicate PCC.'; remaining NO-BORROWING warning is a checker false positive",
+      "Whether the CT that revealed PCC after the return visit is the Fig 1B day-of-admission CT, and which discharge anchors the 8-month follow-up, remain explicit ambiguities",
+      "Fig 2 day numbers (Day -215 to Day 34) are pixel-only and not recorded as facts; they are consistent with text durations (2, 24, 26 days; 10 HBO sessions)",
+      "Viewed both figures at full and magnified resolution; corrected panel C arrow directions in visual.json"
+    ],
+    "residual_risks": [
+      "8-month follow-up events (e25-e27) are not ordered against the hospitalization because the text does not say which discharge",
+      "Diet discontinuation recorded in care_plans for lack of a stop action in procedures_devices"
+    ]
+  },
+  "physician_adjudicated": false
+}

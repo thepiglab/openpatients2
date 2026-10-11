@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12457179.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "05420125177a67d4f5a047c4210c3ad7741c805a223efad780c6c3c49ba51f9c",
+  "annotation_sha256": "726a303866b3dddcfa64fdd24e94dd6de2bb3ae44ffdc8c79a1054d3e9edec1c",
+  "reviewed_at": "2026-10-11T19:07:17.538968+00:00",
+  "source_segments_read": 47,
+  "facts_reviewed": 108,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f028 (text TIR 61%) and p1-f055 (Table 1 TIR 62% at 3rd visit START empagliflozin) set to source_conflict/review_only: both describe the empagliflozin-initiation timepoint; ambiguity reworded",
+    "HbA1c 6.2% after six months (text) vs 6.4% at 4th visit 14/06/2024 (table) kept as valid at different stated times; ambiguity clarified",
+    "Age conflict (text 14-year-old presenting to the center vs Table 1 13.3 at 1st visit) confirmed as same timepoint; kept review_only, ambiguity clarified",
+    "Added p1-f108 observation: no meaningful change in systolic and diastolic blood pressure 'as confirmed in our patient' (b00035); b00035 coverage changed to patient_facts",
+    "p1-f086 empagliflozin: indication 'persistent hyperglycemia' from its own sentence; p1-f091/f092 ingredient_as_documented 'Empaglifozin' (table spelling)",
+    "p1-f048 HbA1c 8.5% at 1st visit: added text quote",
+    "p1-f100 born full term: subject index_patient (her own birth); p1-f101 related_subject index_patient; p1-f010 alternate_representation_of p1-f101",
+    "Table visit events e02/e10/e07/e11/e12: time_calendar_value set to the literal year (2023/2023/2024/2024/2025)",
+    "Article limitations and summary updated accordingly",
+    "visual.json edited: printed spellings 'SGLT2 inhbitors' (Fig 1) and 'Myocardial strecth' (Fig 2) transcribed literally; Fig 1 alpha-to-beta-cell connector added; Fig 2 diagram relations rebuilt to the actual connector chain (ovals to HEART/GLUCOSE/METABOLISM/VASCULAR PROFILE boxes, onward boxes, arrows into Cardiac and Renal Protection) replacing two shortcut relations"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two JPEG diagrams were inspected in the separate visual target.",
+    "Table 1 age at the first visit (13.3 years) differs from the 14-year-old stated for presentation in the text; both retained as source_conflict, review_only.",
+    "Text values (TIR 61%, HbA1c 6.2% at six months, outcomes after 12 months) are not equated with Table 1 visits; see ambiguities.",
+    "The table prints the renal function row unit as mg/dl for both creatinine and ACR; units kept as printed without conversion.",
+    "No reference-range-derived flags were assigned; table numeric cells are kept as printed.",
+    "Discussion statements about trials and adult studies are cohort or literature content and are not patient facts.",
+    "The maternal thyroid cancer history is the stated reason GLP1-RA was considered less suitable; no GLP1-RA exposure or refusal is recorded. Persistent hyperglycemia is recorded as the empagliflozin indication.",
+    "Table 1 visit headers are numeric dd/mm/yyyy dates; event time_calendar_value carries only the literal year."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 47,
+    "facts_reviewed": 108,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient; Table 1 cells verified cell by cell (age, height, weight, BMI, treatment, HbA1c, TIR, BP, AST/ALT, lipids, creatinine/ACR) with column-header visit times",
+      "ACR unit kept as printed mg/dl from the row header; table drug spelling Empaglifozin preserved",
+      "Insulin reduction kept as planned (decision only); metformin started supported by later dose increase and Table 1",
+      "Table 2 and trial discussion are literature, not patient facts; both figures are background diagrams, not includable"
+    ],
+    "residual_risks": [
+      "Insulin slight reduction may have been carried out but is not separately documented",
+      "time_calendar_value carries only the year for numeric dd/mm/yyyy headers",
+      "p1-f108 blood pressure statement has no stated period"
+    ]
+  },
+  "physician_adjudicated": false
+}
