@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12653712.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c5fc98e7382789580c0a79423544c2c72db9364b3e6d4f554bcf45523eb49316",
+  "annotation_sha256": "9dedc34a97ed8af90ff3f1a383ea5d01cfb031ada1b13f186f3cc1265cfc47c9",
+  "reviewed_at": "2026-10-11T19:57:43.312215+00:00",
+  "source_segments_read": 49,
+  "facts_reviewed": 127,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Figure evidence: checked the annotator-added caption title b00033 (\"Standard Growth Curves for Boys.\"). It is Figure 1's own caption and is the only segment the runtime figure-attribution check recognizes as this figure (the legend b00012 was parsed as a paragraph), so it genuinely links each panel to Figure 1; kept, with attribution notes stating that ownership and the A/B letters come from b00012.",
+    "Added p1-f127 (abstract: stable oxygenation by the time of discharge; relation before, anchor discharge), linked to p1-e12 and the final summary claim.",
+    "p1-e06 now links p1-f044; added relation p1-e05 before p1-e06 (by postnatal day 81 / On postnatal day 101).",
+    "p1-f100: removed a duplicate, shorter Table 2 quote.",
+    "visual.json panels A/B: pixel descriptions corrected (case series lie below -2SD for height about 1-9 Mo and for weight about 2-7 Mo, then near -2SD (height) and -1SD (weight)); figure-EHR and privacy drafts regenerated with --draft and labels carried over unchanged."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the single growth-chart image is reviewed in the separate visual target.",
+    "The stated 43 whole-blood transfusions conflicts with the three listed components; recorded as a source_conflict fact.",
+    "Table 1 standard-month column omitted from facts (reference norms); case column read with rowspan-merged cells.",
+    "Section headings giving phase day ranges are not time evidence for text facts, so text-only facts without their own time stay null.",
+    "Discussion statements about other patients, guidelines and published cases are background, not facts of this patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 49,
+    "facts_reviewed": 127,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single male infant with Dowling-Meara EB simplex; roster 1, identity and sex from \"male infant\", age text newborn, Apgar as performance_score, oxygen route \"to the mouth\" literal.",
+      "43 whole-blood transfusions kept as source_conflict review_only (components 20 + 6 + 7 = 33 and are albumin, globulin and red cell products, recorded separately).",
+      "Table 1 rowspan read correctly: every single-cell row maps to the Case column; times \"N Mo\" at; Standard column omitted as reference norms.",
+      "Table 2 phase times I-IV during, V (311) at; text facts under phase headings left untimed.",
+      "Mother-subject facts (frustration, permissions) kept with subject mother."
+    ],
+    "residual_risks": [
+      "FIG-LABELS normalize item: panel letters A/B are printed only in the legend text (b00012, parsed as a paragraph), not on the image.",
+      "Growth chart extends to about 25 months, beyond discharge; series identity (black vs green) not given."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,7 +1,7 @@
 {
   "format": "dense-runtime-targets/1",
   "article_id": "PMC12653712.1",
-  "annotation_sha256": "ea1c2006fcc19806e779081f769de95edcdaa1bdb490e573e969c99f422b25e5",
+  "annotation_sha256": "9dedc34a97ed8af90ff3f1a383ea5d01cfb031ada1b13f186f3cc1265cfc47c9",
   "source_text_sha256": "c5fc98e7382789580c0a79423544c2c72db9364b3e6d4f554bcf45523eb49316",
   "schema_fingerprints": {
     "case_context": "d7439310910ef4a7d5e1706c5b9dc8a2b379f132a2562791c059a478b588ec71",
@@ -168,7 +168,7 @@
               "quote": "(A) The case followed the standard −2 S.D. for height"
             }
           ],
-          "rationale": "The figure legend text is in segment b00012; panel letters A and B appear there, not as printed labels verified on the image. The curves belong to the index patient."
+          "rationale": "The figure legend text is in segment b00012; panel letters A and B appear there, not as printed labels verified on the image. The curves belong to the index patient. The caption title (b00033) is the figure's own caption and identifies Figure 1 for each panel; patient ownership and the A/B letters come from the legend sentences in b00012, which the parser stored as a paragraph."
         },
         {
           "panel": "B",
@@ -187,7 +187,7 @@
               "quote": "(B) −1 S.D. for weight"
             }
           ],
-          "rationale": "The figure legend text is in segment b00012; panel letters A and B appear there, not as printed labels verified on the image. The curves belong to the index patient."
+          "rationale": "The figure legend text is in segment b00012; panel letters A and B appear there, not as printed labels verified on the image. The curves belong to the index patient. The caption title (b00033) is the figure's own caption and identifies Figure 1 for each panel; patient ownership and the A/B letters come from the legend sentences in b00012, which the parser stored as a paragraph."
         }
       ],
       "limitations": [
@@ -3375,10 +3375,6 @@
               },
               "evidence": [
                 {
-                  "quote": "Phase (Postnatal Days) | Developmental/Clinical Issues | Restriction Status | Habilitation/Rehabilitation Strategy\nV (311) (Discharge)",
-                  "source_section": "b00049"
-                },
-                {
                   "quote": "Phase (Postnatal Days) | Developmental/Clinical Issues | Restriction Status | Habilitation/Rehabilitation Strategy\nV (311) (Discharge) | Developmental delay: Partial sitting achieved; crawling and standing not acquired. Mild hypertonicity and mild ROM restriction in the trunk. | Home Discharge.",
                   "source_section": "b00049"
                 }
@@ -3387,6 +3383,29 @@
               "text_value": "Home discharge",
               "related_condition": null,
               "disposition": "home",
+              "follow_up_duration_text": null,
+              "cause_as_documented": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": "by the time of discharge",
+                "relation": "before",
+                "anchor": "discharge",
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "The child achieved stable head/neck control, symmetrical limb movements, reaching, guided rolling, and stable oxygenation by the time of discharge.",
+                  "source_section": "b00001"
+                }
+              ],
+              "event": "improvement",
+              "text_value": "stable oxygenation",
+              "related_condition": null,
+              "disposition": null,
               "follow_up_duration_text": null,
               "cause_as_documented": null
             }
@@ -3777,7 +3796,7 @@
               ]
             },
             {
-              "text": "Motor milestones were delayed relative to the standard months in Table 1. By discharge on postnatal day 311 he had stable head and neck control, reaching, rolling with prompting and sitting with minimal support, while crawling and standing remained challenging and mild trunk hypertonicity and ROM limitation persisted. No adverse events occurred during rehabilitation, and parents received home instructions at discharge.",
+              "text": "Motor milestones were delayed relative to the standard months in Table 1. By discharge on postnatal day 311 he had stable head and neck control, reaching, rolling with prompting and sitting with minimal support and stable oxygenation, while crawling and standing remained challenging and mild trunk hypertonicity and ROM limitation persisted. No adverse events occurred during rehabilitation, and parents received home instructions at discharge.",
               "evidence": [
                 {
                   "segment_id": "b00048",
@@ -3789,15 +3808,15 @@
                 },
                 {
                   "segment_id": "b00049",
-                  "quote": "Phase (Postnatal Days) | Developmental/Clinical Issues | Restriction Status | Habilitation/Rehabilitation Strategy\nV (311) (Discharge)"
-                },
-                {
-                  "segment_id": "b00049",
                   "quote": "Phase (Postnatal Days) | Developmental/Clinical Issues | Restriction Status | Habilitation/Rehabilitation Strategy\nV (311) (Discharge) | Developmental delay: Partial sitting achieved; crawling and standing not acquired. Mild hypertonicity and mild ROM restriction in the trunk. | Home Discharge."
                 },
                 {
                   "segment_id": "b00019",
                   "quote": "Wound dressings for the face were discontinued but generally maintained for the remaining body parts."
+                },
+                {
+                  "segment_id": "b00001",
+                  "quote": "The child achieved stable head/neck control, symmetrical limb movements, reaching, guided rolling, and stable oxygenation by the time of discharge."
                 }
               ]
             }
@@ -4069,7 +4088,9 @@
               "kind": "other",
               "occurrence": "occurred",
               "description": "Mother permitted to hold the child and take part in blister care",
-              "fact_ids": [],
+              "fact_ids": [
+                "p1-f044"
+              ],
               "evidence": [
                 {
                   "source_id": "PMC12653712.1:jats",
@@ -4346,7 +4367,8 @@
               "occurrence": "occurred",
               "description": "Home discharge",
               "fact_ids": [
-                "p1-f100"
+                "p1-f100",
+                "p1-f127"
               ],
               "evidence": [
                 {
@@ -4511,6 +4533,31 @@
                   "start": 70,
                   "end": 204,
                   "quote": "Phase (Postnatal Days) | Developmental/Clinical Issues | Restriction Status | Habilitation/Rehabilitation Strategy\nV (311) (Discharge)"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge6",
+              "from_event_id": "p1-e05",
+              "to_event_id": "p1-e06",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12653712.1:jats",
+                  "segment_id": "b00008",
+                  "segment_sha256": "d9f8340457529b398d587f314dc1ce906d4eda3f92ce1cfc7ba35f2cdae126a4",
+                  "start": 516,
+                  "end": 535,
+                  "quote": "by postnatal day 81"
+                },
+                {
+                  "source_id": "PMC12653712.1:jats",
+                  "segment_id": "b00011",
+                  "segment_sha256": "14544be07d928b543dd291649ed3d0fd32e6a370bc82d1955ef1acbe6bb221ab",
+                  "start": 0,
+                  "end": 20,
+                  "quote": "On postnatal day 101"
                 }
               ]
             }
@@ -4779,7 +4826,9 @@
             "kind": "other",
             "occurrence": "occurred",
             "description": "Mother permitted to hold the child and take part in blister care",
-            "fact_ids": [],
+            "fact_ids": [
+              "p1-f044"
+            ],
             "evidence": [
               {
                 "source_id": "PMC12653712.1:jats",
@@ -5056,7 +5105,8 @@
             "occurrence": "occurred",
             "description": "Home discharge",
             "fact_ids": [
-              "p1-f100"
+              "p1-f100",
+              "p1-f127"
             ],
             "evidence": [
               {
@@ -5167,6 +5217,26 @@
           ],
           [
             "p1-e04",
+            "p1-e12"
+          ],
+          [
+            "p1-e05",
+            "p1-e06"
+          ],
+          [
+            "p1-e05",
+            "p1-e07"
+          ],
+          [
+            "p1-e05",
+            "p1-e09"
+          ],
+          [
+            "p1-e05",
+            "p1-e10"
+          ],
+          [
+            "p1-e05",
             "p1-e12"
           ],
           [
@@ -5345,31 +5415,11 @@
           ],
           [
             "p1-e05",
-            "p1-e06"
-          ],
-          [
-            "p1-e05",
-            "p1-e07"
-          ],
-          [
-            "p1-e05",
             "p1-e08"
           ],
           [
             "p1-e05",
-            "p1-e09"
-          ],
-          [
-            "p1-e05",
-            "p1-e10"
-          ],
-          [
-            "p1-e05",
             "p1-e11"
-          ],
-          [
-            "p1-e05",
-            "p1-e12"
           ],
           [
             "p1-e06",
@@ -5420,6 +5470,7 @@
         "interval_relations": [],
         "ordered_event_ids": [
           "p1-e04",
+          "p1-e05",
           "p1-e06",
           "p1-e07",
           "p1-e09",
@@ -5430,7 +5481,6 @@
           "p1-e01",
           "p1-e02",
           "p1-e03",
-          "p1-e05",
           "p1-e08",
           "p1-e11"
         ],
@@ -5440,7 +5490,7 @@
         "basis": "Source-gated model relations; paragraph order and event kind do not create chronology."
       },
       "reference_provenance": {
-        "annotation_sha256": "ea1c2006fcc19806e779081f769de95edcdaa1bdb490e573e969c99f422b25e5",
+        "annotation_sha256": "9dedc34a97ed8af90ff3f1a383ea5d01cfb031ada1b13f186f3cc1265cfc47c9",
         "materializer_version": "dense-runtime-targets/1",
         "fact_pointers": [
           {
@@ -6732,11 +6782,18 @@
             "source_evidence": [
               {
                 "segment_id": "b00049",
-                "quote": "Phase (Postnatal Days) | Developmental/Clinical Issues | Restriction Status | Habilitation/Rehabilitation Strategy\nV (311) (Discharge)"
-              },
-              {
-                "segment_id": "b00049",
                 "quote": "Phase (Postnatal Days) | Developmental/Clinical Issues | Restriction Status | Habilitation/Rehabilitation Strategy\nV (311) (Discharge) | Developmental delay: Partial sitting achieved; crawling and standing not acquired. Mild hypertonicity and mild ROM restriction in the trunk. | Home Discharge."
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f127",
+            "task": "outcomes",
+            "pointer": "/items/5",
+            "source_evidence": [
+              {
+                "segment_id": "b00001",
+                "quote": "The child achieved stable head/neck control, symmetrical limb movements, reaching, guided rolling, and stable oxygenation by the time of discharge."
               }
             ]
           },
@@ -6924,7 +6981,7 @@
                     "quote": "(A) The case followed the standard −2 S.D. for height"
                   }
                 ],
-                "rationale": "The figure legend text is in segment b00012; panel letters A and B appear there, not as printed labels verified on the image. The curves belong to the index patient."
+                "rationale": "The figure legend text is in segment b00012; panel letters A and B appear there, not as printed labels verified on the image. The curves belong to the index patient. The caption title (b00033) is the figure's own caption and identifies Figure 1 for each panel; patient ownership and the A/B letters come from the legend sentences in b00012, which the parser stored as a paragraph."
               },
               {
                 "panel": "B",
@@ -6943,7 +7000,7 @@
                     "quote": "(B) −1 S.D. for weight"
                   }
                 ],
-                "rationale": "The figure legend text is in segment b00012; panel letters A and B appear there, not as printed labels verified on the image. The curves belong to the index patient."
+                "rationale": "The figure legend text is in segment b00012; panel letters A and B appear there, not as printed labels verified on the image. The curves belong to the index patient. The caption title (b00033) is the figure's own caption and identifies Figure 1 for each panel; patient ownership and the A/B letters come from the legend sentences in b00012, which the parser stored as a paragraph."
               }
             ],
             "limitations": [
@@ -12660,7 +12717,9 @@
                 "quote": "On postnatal day 101, the mother was permitted to hold the child using sponge cushions and to participate in blister care with the nurses."
               }
             ],
-            "event_ids": []
+            "event_ids": [
+              "p1-e06"
+            ]
           },
           {
             "fact_id": "p1-f014",
@@ -12873,10 +12932,6 @@
               },
               "evidence": [
                 {
-                  "quote": "Phase (Postnatal Days) | Developmental/Clinical Issues | Restriction Status | Habilitation/Rehabilitation Strategy\nV (311) (Discharge)",
-                  "source_section": "b00049"
-                },
-                {
                   "quote": "Phase (Postnatal Days) | Developmental/Clinical Issues | Restriction Status | Habilitation/Rehabilitation Strategy\nV (311) (Discharge) | Developmental delay: Partial sitting achieved; crawling and standing not acquired. Mild hypertonicity and mild ROM restriction in the trunk. | Home Discharge.",
                   "source_section": "b00049"
                 }
@@ -12907,16 +12962,61 @@
                 "segment_id": "b00049",
                 "segment_sha256": "3b6e2422d568193f3beeb7848a8132f480234e905acad2cb43f55b0857ae2854",
                 "start": 70,
-                "end": 204,
-                "quote": "Phase (Postnatal Days) | Developmental/Clinical Issues | Restriction Status | Habilitation/Rehabilitation Strategy\nV (311) (Discharge)"
-              },
-              {
-                "source_id": "PMC12653712.1:jats",
-                "segment_id": "b00049",
-                "segment_sha256": "3b6e2422d568193f3beeb7848a8132f480234e905acad2cb43f55b0857ae2854",
-                "start": 70,
                 "end": 365,
                 "quote": "Phase (Postnatal Days) | Developmental/Clinical Issues | Restriction Status | Habilitation/Rehabilitation Strategy\nV (311) (Discharge) | Developmental delay: Partial sitting achieved; crawling and standing not acquired. Mild hypertonicity and mild ROM restriction in the trunk. | Home Discharge."
+              }
+            ],
+            "event_ids": [
+              "p1-e12"
+            ]
+          },
+          {
+            "fact_id": "p1-f127",
+            "task": "outcomes",
+            "pointer": "/items/5",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": "by the time of discharge",
+                "relation": "before",
+                "anchor": "discharge",
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "The child achieved stable head/neck control, symmetrical limb movements, reaching, guided rolling, and stable oxygenation by the time of discharge.",
+                  "source_section": "b00001"
+                }
+              ],
+              "event": "improvement",
+              "text_value": "stable oxygenation",
+              "related_condition": null,
+              "disposition": null,
+              "follow_up_duration_text": null,
+              "cause_as_documented": null
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "event": "improvement",
+              "text_value": "stable oxygenation",
+              "time": {
+                "text": "by the time of discharge",
+                "relation": "before",
+                "anchor": "discharge",
+                "date_iso": null
+              }
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12653712.1:jats",
+                "segment_id": "b00001",
+                "segment_sha256": "b96d8016b3de6adcca5c5fa328e43a0f922179d8b1145381076b7cf0108ea089",
+                "start": 1452,
+                "end": 1599,
+                "quote": "The child achieved stable head/neck control, symmetrical limb movements, reaching, guided rolling, and stable oxygenation by the time of discharge."
               }
             ],
             "event_ids": [

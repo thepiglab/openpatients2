@@ -2428,10 +2428,6 @@
      "evidence": [
       {
        "segment_id": "b00049",
-       "quote": "Phase (Postnatal Days) | Developmental/Clinical Issues | Restriction Status | Habilitation/Rehabilitation Strategy\nV (311) (Discharge)"
-      },
-      {
-       "segment_id": "b00049",
        "quote": "Phase (Postnatal Days) | Developmental/Clinical Issues | Restriction Status | Habilitation/Rehabilitation Strategy\nV (311) (Discharge) | Developmental delay: Partial sitting achieved; crawling and standing not acquired. Mild hypertonicity and mild ROM restriction in the trunk. | Home Discharge."
       }
      ],
@@ -3148,6 +3144,33 @@
      "certainty": "supported",
      "scoring": "include",
      "notes": ""
+    },
+    {
+     "fact_id": "p1-f127",
+     "task": "outcomes",
+     "collection": "items",
+     "fields": {
+      "subject": "index_patient",
+      "assertion": "present",
+      "event": "improvement",
+      "text_value": "stable oxygenation",
+      "time": {
+       "text": "by the time of discharge",
+       "relation": "before",
+       "anchor": "discharge",
+       "date_iso": null
+      }
+     },
+     "evidence": [
+      {
+       "segment_id": "b00001",
+       "quote": "The child achieved stable head/neck control, symmetrical limb movements, reaching, guided rolling, and stable oxygenation by the time of discharge."
+      }
+     ],
+     "clinical_statement": "Stable oxygenation achieved by the time of discharge",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": "Stated in the abstract; the motor achievements in the same sentence are recorded from the case text (b00023)."
     }
    ],
    "events": [
@@ -3254,7 +3277,9 @@
      "description": "Mother permitted to hold the child and take part in blister care",
      "kind": "other",
      "occurrence": "occurred",
-     "fact_ids": [],
+     "fact_ids": [
+      "p1-f044"
+     ],
      "time_text": "On postnatal day 101",
      "evidence": [
       {
@@ -3365,7 +3390,8 @@
      "kind": "outcome",
      "occurrence": "occurred",
      "fact_ids": [
-      "p1-f100"
+      "p1-f100",
+      "p1-f127"
      ],
      "time_text": "V (311)",
      "evidence": [
@@ -3454,6 +3480,21 @@
        "quote": "Phase (Postnatal Days) | Developmental/Clinical Issues | Restriction Status | Habilitation/Rehabilitation Strategy\nV (311) (Discharge)"
       }
      ]
+    },
+    {
+     "from_event_id": "p1-e05",
+     "to_event_id": "p1-e06",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00008",
+       "quote": "by postnatal day 81"
+      },
+      {
+       "segment_id": "b00011",
+       "quote": "On postnatal day 101"
+      }
+     ]
     }
    ],
    "summary": [
@@ -3498,12 +3539,13 @@
      ]
     },
     {
-     "text": "Motor milestones were delayed relative to the standard months in Table 1. By discharge on postnatal day 311 he had stable head and neck control, reaching, rolling with prompting and sitting with minimal support, while crawling and standing remained challenging and mild trunk hypertonicity and ROM limitation persisted. No adverse events occurred during rehabilitation, and parents received home instructions at discharge.",
+     "text": "Motor milestones were delayed relative to the standard months in Table 1. By discharge on postnatal day 311 he had stable head and neck control, reaching, rolling with prompting and sitting with minimal support and stable oxygenation, while crawling and standing remained challenging and mild trunk hypertonicity and ROM limitation persisted. No adverse events occurred during rehabilitation, and parents received home instructions at discharge.",
      "fact_ids": [
       "p1-f007",
       "p1-f085",
       "p1-f100",
-      "p1-f071"
+      "p1-f071",
+      "p1-f127"
      ]
     }
    ],
@@ -3665,7 +3707,7 @@
    "caption_summary": "Standard growth curves for boys with the case's height and weight plotted against standard Japanese boys.",
    "visual_status": "not_inspected",
    "visual_description": null,
-   "attribution_notes": "The figure legend text is in segment b00012; panel letters A and B appear there, not as printed labels verified on the image. The curves belong to the index patient."
+   "attribution_notes": "The figure legend text is in segment b00012; panel letters A and B appear there, not as printed labels verified on the image. The curves belong to the index patient. The caption title (b00033) is the figure's own caption and identifies Figure 1 for each panel; patient ownership and the A/B letters come from the legend sentences in b00012, which the parser stored as a paragraph."
   }
  ],
  "source_coverage": [
