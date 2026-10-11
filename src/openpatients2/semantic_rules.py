@@ -296,6 +296,8 @@ NEGATED_FINDING_WORD = re.compile(r'\b(afebrile|apyrexi\w*|asymptomatic|symptom[
 
 # TIME-LITERAL: "by <date/time>" is an upper bound (relation before).
 BY_TIME = re.compile(r'^\s*by\b', re.I)
+# "within <duration> of/after <event>" names its reference point: relation after that anchor, never before it.
+WITHIN_OF = re.compile(r'^\s*within\b.*\b(?:of|after|from)\s+\w', re.I)
 
 
 # OBS-COMPARATOR: upper-bound wording printed right before a value ('fever up to 38°C' -> '<=').
@@ -408,6 +410,9 @@ def item_violations(task, collection, item, source_text=None, path='', *, segmen
     if isinstance(time, dict) and BY_TIME.match(time.get('text') or '') and time.get('relation', 'unknown') != 'before':
         add('TIME-LITERAL', WARNING, f"time.text {time.get('text')!r} is an upper bound ('by ...'): relation should be "
             f"'before' (got {time.get('relation', 'unknown')!r})")
+    if isinstance(time, dict) and WITHIN_OF.match(time.get('text') or '') and time.get('relation') == 'before':
+        add('TIME-LITERAL', WARNING, f"time.text {time.get('text')!r} names its reference point ('within … of …'): "
+            "the fact is after that anchor (relation 'after'), not before it")
     if (isinstance(time, dict) and time and time.get('relation', 'unknown') != 'unknown'
             and not time.get('text') and not time.get('anchor') and not time.get('date_iso')):
         add('TIME-LITERAL', ERROR, f"time.relation={time.get('relation')!r} with no text, anchor or date dangles; "

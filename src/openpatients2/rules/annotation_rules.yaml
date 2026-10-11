@@ -86,7 +86,10 @@ rules:
       ("05/06/2025", "20.05.2025") and partial dates ("May 2025") leave date_iso null. relation (at, before, after,
       ...) needs a time text, anchor or date to relate to: when all three are null, relation is unknown. "By <time>"
       is an upper bound with relation before ("by May 20, 2025", "by day 3", "by the next morning"; anchor null
-      unless the source names one), not at, after, until or unknown.
+      unless the source names one), not at, after, until or unknown. "Within <duration>" with no named reference
+      point ("within 24 h", "within two weeks") is likewise an upper bound: relation before, anchor null. "Within
+      <duration> of/after <event>" names its reference point: anchor is that literal event phrase and relation is
+      after ("within two hours of presentation": anchor "presentation", relation after) — never before the anchor.
     prompts: [system]
     docs: [protocol]
     validator: true

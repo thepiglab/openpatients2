@@ -571,3 +571,13 @@ def test_singular_case_statement_supports_roster_count_one(monkeypatch):
         assert not roster_block_errors(block(quote)), quote
     assert roster_block_errors(block('Patients with this disease often present late'))
     assert roster_block_errors({**block('We present a 67-year-old woman', 2), 'patients': [{}, {}]})   # singular != 2
+
+
+def test_within_of_names_reference_point():
+    from openpatients2.semantic_rules import item_violations
+    def item(rel, text):
+        return {'name': 'laparotomy', 'evidence': [{'segment_id': 'b1', 'quote': f'Laparotomy was performed {text}.'}],
+                'time': {'text': text, 'relation': rel, 'anchor': 'presentation', 'date_iso': None}}
+    bad = item_violations('procedures_devices', 'items', item('before', 'within two hours of presentation'), None, '/x')
+    good = item_violations('procedures_devices', 'items', item('after', 'within two hours of presentation'), None, '/x')
+    assert any('within' in v.text() for v in bad) and not any('within' in v.text() for v in good)
