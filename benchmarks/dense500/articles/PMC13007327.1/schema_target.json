@@ -1,7 +1,7 @@
 {
   "format": "dense-runtime-targets/1",
   "article_id": "PMC13007327.1",
-  "annotation_sha256": "3d968b76c734521f16bf1454d451bcf87d3b3308e95f07ef8d61f62e98b8c924",
+  "annotation_sha256": "244190c093c6609a40cce5cd58bb664ba043b541746041760f263b8a951ee4dd",
   "source_text_sha256": "f75e936f886bd84a0c31938ae063f042e378280f9718737c62aa426486447c77",
   "schema_fingerprints": {
     "case_context": "d7439310910ef4a7d5e1706c5b9dc8a2b379f132a2562791c059a478b588ec71",
@@ -53,6 +53,7 @@
           "b00019",
           "b00021",
           "b00022",
+          "b00023",
           "b00024",
           "b00026",
           "b00027",
@@ -60,8 +61,9 @@
           "b00029"
         ],
         "attribution_limitations": [
-          "The source states no functional neonatal ventilator was available for mechanical ventilatory therapy; whether mechanical ventilation was otherwise indicated is not stated.",
-          "The case description does not literally state that the neonate died; death rests on the discussion wording eventual mortality."
+          "Mechanical ventilation was not given because no functional neonatal ventilator was available (equipment/care-access limitation); recorded as mechanical ventilation absent.",
+          "The case section reports cardiopulmonary arrest with unsuccessful resuscitation; the death itself is stated in the discussion sentence about this case (eventual mortality), with no time or cause of death.",
+          "Malrotation with midgut volvulus was the initial (provisional) diagnosis; the operative findings showed no malrotation and normal bowel, and the discussion calls it an initial wrong diagnosis."
         ]
       }
     ],
@@ -77,7 +79,6 @@
       "b00017",
       "b00018",
       "b00020",
-      "b00023",
       "b00025"
     ],
     "unresolved_segment_ids": [],
@@ -115,7 +116,7 @@
       "Caption-layer visual status not_inspected; actual images are reviewed in the separate visual record.",
       "Case narrative appears twice (b00003-b00004 summary and b00010-b00016 detail); facts cite the detailed text and each datum is recorded once.",
       "Maternal and antenatal facts (mother age, parity, antenatal ultrasound) are recorded with subject mother or fetus on the neonate record.",
-      "Death is not literally stated in the case description; it rests on the discussion wording eventual mortality.",
+      "Death is stated in the discussion for this index case ('eventual mortality'); the case section reports only cardiopulmonary arrest with unsuccessful resuscitation, so no time or cause of death is recorded.",
       "Discussion and literature-review text (b00005-b00009, b00017-b00027) is background and not copied to the patient except sentences that explicitly refer to this index patient."
     ]
   },
@@ -287,6 +288,7 @@
             "b00019",
             "b00021",
             "b00022",
+            "b00023",
             "b00024",
             "b00026",
             "b00027",
@@ -294,8 +296,9 @@
             "b00029"
           ],
           "attribution_limitations": [
-            "The source states no functional neonatal ventilator was available for mechanical ventilatory therapy; whether mechanical ventilation was otherwise indicated is not stated.",
-            "The case description does not literally state that the neonate died; death rests on the discussion wording eventual mortality."
+            "Mechanical ventilation was not given because no functional neonatal ventilator was available (equipment/care-access limitation); recorded as mechanical ventilation absent.",
+            "The case section reports cardiopulmonary arrest with unsuccessful resuscitation; the death itself is stated in the discussion sentence about this case (eventual mortality), with no time or cause of death.",
+            "Malrotation with midgut volvulus was the initial (provisional) diagnosis; the operative findings showed no malrotation and normal bowel, and the discussion calls it an initial wrong diagnosis."
           ]
         },
         "source_text_omitted_from_release": true
@@ -347,7 +350,7 @@
               "source_section": "b00012"
             },
             {
-              "quote": "eventual mortality",
+              "quote": "this is the first case described in sub-Saharan Africa, hence the low index of suspicion at presentation which led to an initial wrong diagnosis, delayed intervention time, and eventual mortality",
               "source_section": "b00026"
             }
           ]
@@ -1165,6 +1168,10 @@
                 {
                   "quote": "The bleeding point was identified and a haemostatic agent (Surgicel) applied.",
                   "source_section": "b00016"
+                },
+                {
+                  "quote": "In this index patient, a Surgicel haemostat was placed into the area of the laceration.",
+                  "source_section": "b00024"
                 }
               ],
               "name": "Haemostatic agent (Surgicel) application",
@@ -1249,6 +1256,31 @@
               "laterality": "unknown",
               "indication": null,
               "finding": "all efforts at resuscitation were unsuccessful",
+              "complication": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "necessitating manual ventilation with Ayres T-piece in the postoperative period because there was no functional neonatal ventilator for mechanical ventilatory therapy",
+                  "source_section": "b00016"
+                }
+              ],
+              "name": "Mechanical ventilation",
+              "kind": "procedure",
+              "action": "unknown",
+              "body_site": null,
+              "laterality": "unknown",
+              "indication": null,
+              "finding": null,
               "complication": null
             }
           ]
@@ -1474,14 +1506,14 @@
               "assertion": "present",
               "temporality": "unknown",
               "time": {
-                "text": null,
-                "relation": "unknown",
-                "anchor": null,
+                "text": "Prior to the review",
+                "relation": "before",
+                "anchor": "paediatric surgical review",
                 "date_iso": null
               },
               "evidence": [
                 {
-                  "quote": "a plain abdominal radiograph was done revealing a distended abdomen, and stomach displaced inferiorly with widespread opacity in keeping with a ground-glass appearance of an intrabdominal collection (Fig. 1)",
+                  "quote": "necessitating a paediatric surgical review. Prior to the review a plain abdominal radiograph was done revealing a distended abdomen, and stomach displaced inferiorly with widespread opacity in keeping with a ground-glass appearance of an intrabdominal collection (Fig. 1)",
                   "source_section": "b00014"
                 }
               ],
@@ -1857,6 +1889,31 @@
               "gestational_age_weeks": null,
               "birth_weight_text": "3.1 kg",
               "outcome": null
+            },
+            {
+              "subject": "mother",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Index pregnancy was booked",
+                  "source_section": "b00011"
+                }
+              ],
+              "event": "pregnancy",
+              "text_value": "Index pregnancy was booked",
+              "numeric_value": null,
+              "unit": null,
+              "related_subject": null,
+              "gestational_age_weeks": null,
+              "birth_weight_text": null,
+              "outcome": null
             }
           ]
         },
@@ -1908,13 +1965,17 @@
               },
               "evidence": [
                 {
-                  "quote": "eventual mortality",
+                  "quote": "this is the first case described in sub-Saharan Africa, hence the low index of suspicion at presentation which led to an initial wrong diagnosis, delayed intervention time, and eventual mortality",
                   "source_section": "b00026"
+                },
+                {
+                  "quote": "he suffered a cardiopulmonary arrest and all efforts at resuscitation were unsuccessful",
+                  "source_section": "b00016"
                 }
               ],
               "event": "death",
               "text_value": "eventual mortality",
-              "related_condition": "Grade II splenic injury",
+              "related_condition": null,
               "disposition": null,
               "follow_up_duration_text": null,
               "cause_as_documented": null
@@ -1977,7 +2038,7 @@
                 },
                 {
                   "segment_id": "b00026",
-                  "quote": "eventual mortality"
+                  "quote": "this is the first case described in sub-Saharan Africa, hence the low index of suspicion at presentation which led to an initial wrong diagnosis, delayed intervention time, and eventual mortality"
                 },
                 {
                   "segment_id": "b00003",
@@ -2030,6 +2091,10 @@
                 {
                   "segment_id": "b00012",
                   "quote": "without aggressive resuscitation"
+                },
+                {
+                  "segment_id": "b00011",
+                  "quote": "Index pregnancy was booked"
                 }
               ]
             },
@@ -2058,7 +2123,7 @@
                 },
                 {
                   "segment_id": "b00014",
-                  "quote": "a plain abdominal radiograph was done revealing a distended abdomen, and stomach displaced inferiorly with widespread opacity in keeping with a ground-glass appearance of an intrabdominal collection (Fig. 1)"
+                  "quote": "necessitating a paediatric surgical review. Prior to the review a plain abdominal radiograph was done revealing a distended abdomen, and stomach displaced inferiorly with widespread opacity in keeping with a ground-glass appearance of an intrabdominal collection (Fig. 1)"
                 },
                 {
                   "segment_id": "b00015",
@@ -2099,7 +2164,7 @@
               ]
             },
             {
-              "text": "After transfusion and resuscitation, laparotomy at the 36th hour of life found a 3cm sub capsular splenic laceration and 100 mls of haemoperitoneum with clots, treated with a haemostatic agent (Surgicel) and further whole blood. The final diagnosis was Grade II splenic injury. Six hours post-surgery he had a cardiopulmonary arrest and resuscitation was unsuccessful.",
+              "text": "After transfusion and resuscitation, laparotomy at the 36th hour of life found a 3cm sub capsular splenic laceration and 100 mls of haemoperitoneum with clots, treated with a haemostatic agent (Surgicel) and further whole blood. The final diagnosis was Grade II splenic injury. Six hours post-surgery he had a cardiopulmonary arrest and resuscitation was unsuccessful. Mechanical ventilation was unavailable, so he was ventilated manually; the discussion reports his eventual death.",
               "evidence": [
                 {
                   "segment_id": "b00016",
@@ -2142,6 +2207,10 @@
                   "quote": "The bleeding point was identified and a haemostatic agent (Surgicel) applied."
                 },
                 {
+                  "segment_id": "b00024",
+                  "quote": "In this index patient, a Surgicel haemostat was placed into the area of the laceration."
+                },
+                {
                   "segment_id": "b00016",
                   "quote": "another 60 mls of whole blood transfused intraoperatively"
                 },
@@ -2175,11 +2244,19 @@
                 },
                 {
                   "segment_id": "b00026",
-                  "quote": "eventual mortality"
+                  "quote": "this is the first case described in sub-Saharan Africa, hence the low index of suspicion at presentation which led to an initial wrong diagnosis, delayed intervention time, and eventual mortality"
+                },
+                {
+                  "segment_id": "b00016",
+                  "quote": "he suffered a cardiopulmonary arrest and all efforts at resuscitation were unsuccessful"
                 },
                 {
                   "segment_id": "b00019",
                   "quote": "no etiology from trauma was established"
+                },
+                {
+                  "segment_id": "b00016",
+                  "quote": "necessitating manual ventilation with Ayres T-piece in the postoperative period because there was no functional neonatal ventilator for mechanical ventilatory therapy"
                 }
               ]
             }
@@ -2188,7 +2265,7 @@
             "Caption-layer visual status not_inspected; actual images are reviewed in the separate visual record.",
             "Case narrative appears twice (b00003-b00004 summary and b00010-b00016 detail); facts cite the detailed text and each datum is recorded once.",
             "Maternal and antenatal facts (mother age, parity, antenatal ultrasound) are recorded with subject mother or fetus on the neonate record.",
-            "Death is not literally stated in the case description; it rests on the discussion wording eventual mortality.",
+            "Death is stated in the discussion for this index case ('eventual mortality'); the case section reports only cardiopulmonary arrest with unsuccessful resuscitation, so no time or cause of death is recorded.",
             "Discussion and literature-review text (b00005-b00009, b00017-b00027) is background and not copied to the patient except sentences that explicitly refer to this index patient."
           ]
         },
@@ -2236,12 +2313,10 @@
               "episode_id": null,
               "kind": "presentation",
               "occurrence": "occurred",
-              "description": "Distended abdomen and respiratory distress noticed; intranasal oxygen and intravenous fluids given",
+              "description": "Distended abdomen and respiratory distress noticed",
               "fact_ids": [
                 "p1-f016",
-                "p1-f017",
-                "p1-f018",
-                "p1-f019"
+                "p1-f017"
               ],
               "evidence": [
                 {
@@ -2292,8 +2367,7 @@
               "fact_ids": [
                 "p1-f020",
                 "p1-f021",
-                "p1-f022",
-                "p1-f023"
+                "p1-f022"
               ],
               "evidence": [
                 {
@@ -2441,31 +2515,18 @@
               "episode_id": null,
               "kind": "test",
               "occurrence": "occurred",
-              "description": "Plain abdominal radiograph, surgical review, nasogastric tube and abdominal paracentesis",
+              "description": "Plain abdominal radiograph",
               "fact_ids": [
-                "p1-f029",
-                "p1-f030",
-                "p1-f031",
-                "p1-f032",
-                "p1-f033",
-                "p1-f034"
+                "p1-f029"
               ],
               "evidence": [
                 {
                   "source_id": "PMC13007327.1:jats",
                   "segment_id": "b00014",
                   "segment_sha256": "6bdab8c1793ab9ec267f0a7496bdf2c250ea3c9a609213a5927bfd2fe0ede39b",
-                  "start": 213,
-                  "end": 280,
-                  "quote": "a plain abdominal radiograph was done revealing a distended abdomen"
-                },
-                {
-                  "source_id": "PMC13007327.1:jats",
-                  "segment_id": "b00015",
-                  "segment_sha256": "69fb661a1572ca144b7a11dc0e48dd9ad26863f402d1e0956db90588ae8233cf",
-                  "start": 81,
-                  "end": 149,
-                  "quote": "He had a nasogastric tube passed to decompress the stomach and bowel"
+                  "start": 193,
+                  "end": 250,
+                  "quote": "Prior to the review a plain abdominal radiograph was done"
                 }
               ],
               "attribution_evidence": [
@@ -2478,7 +2539,24 @@
                   "quote": "A 2-day old male"
                 }
               ],
-              "times": []
+              "times": [
+                {
+                  "text": "Prior to the review",
+                  "kind": "order_only",
+                  "precision": "unknown",
+                  "calendar_value": null,
+                  "evidence": [
+                    {
+                      "source_id": "PMC13007327.1:jats",
+                      "segment_id": "b00014",
+                      "segment_sha256": "6bdab8c1793ab9ec267f0a7496bdf2c250ea3c9a609213a5927bfd2fe0ede39b",
+                      "start": 193,
+                      "end": 250,
+                      "quote": "Prior to the review a plain abdominal radiograph was done"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "event_id": "p1-e07",
@@ -2486,11 +2564,9 @@
               "episode_id": null,
               "kind": "test",
               "occurrence": "occurred",
-              "description": "Repeat packed cell volume and whole blood transfusion",
+              "description": "Repeat packed cell volume",
               "fact_ids": [
-                "p1-f036",
-                "p1-f037",
-                "p1-f038"
+                "p1-f036"
               ],
               "evidence": [
                 {
@@ -2601,7 +2677,8 @@
               "description": "Delayed recovery from anaesthesia with manual ventilation",
               "fact_ids": [
                 "p1-f050",
-                "p1-f051"
+                "p1-f051",
+                "p1-f059"
               ],
               "evidence": [
                 {
@@ -2646,13 +2723,12 @@
               "event_id": "p1-e10",
               "record_id": "PMC13007327.1:p1",
               "episode_id": null,
-              "kind": "outcome",
+              "kind": "adverse_event",
               "occurrence": "occurred",
               "description": "Cardiopulmonary arrest with unsuccessful resuscitation",
               "fact_ids": [
                 "p1-f052",
-                "p1-f053",
-                "p1-f057"
+                "p1-f053"
               ],
               "evidence": [
                 {
@@ -2711,6 +2787,188 @@
                   "start": 0,
                   "end": 66,
                   "quote": "An initial diagnosis of malrotation with midgut volvulus was made."
+                }
+              ],
+              "attribution_evidence": [
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00003",
+                  "segment_sha256": "ca1c26f17606c534fac25c7ce591c8af684a5f924f55f3dc1d7df7acc033fc38",
+                  "start": 0,
+                  "end": 16,
+                  "quote": "A 2-day old male"
+                }
+              ],
+              "times": []
+            },
+            {
+              "event_id": "p1-e12",
+              "record_id": "PMC13007327.1:p1",
+              "episode_id": null,
+              "kind": "treatment",
+              "occurrence": "occurred",
+              "description": "Intranasal oxygen and intravenous fluids started",
+              "fact_ids": [
+                "p1-f018",
+                "p1-f019"
+              ],
+              "evidence": [
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00012",
+                  "segment_sha256": "36cd55192964e5b8068289aa15e4041451fe92e9cf9c58a9145bfed12fa1ddee",
+                  "start": 221,
+                  "end": 303,
+                  "quote": "He was subsequently placed on intranasal oxygen at 1 L/min and intravenous fluids."
+                }
+              ],
+              "attribution_evidence": [
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00003",
+                  "segment_sha256": "ca1c26f17606c534fac25c7ce591c8af684a5f924f55f3dc1d7df7acc033fc38",
+                  "start": 0,
+                  "end": 16,
+                  "quote": "A 2-day old male"
+                }
+              ],
+              "times": []
+            },
+            {
+              "event_id": "p1-e13",
+              "record_id": "PMC13007327.1:p1",
+              "episode_id": null,
+              "kind": "other",
+              "occurrence": "occurred",
+              "description": "Paediatric surgical review",
+              "fact_ids": [
+                "p1-f030"
+              ],
+              "evidence": [
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00014",
+                  "segment_sha256": "6bdab8c1793ab9ec267f0a7496bdf2c250ea3c9a609213a5927bfd2fe0ede39b",
+                  "start": 149,
+                  "end": 191,
+                  "quote": "necessitating a paediatric surgical review"
+                }
+              ],
+              "attribution_evidence": [
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00003",
+                  "segment_sha256": "ca1c26f17606c534fac25c7ce591c8af684a5f924f55f3dc1d7df7acc033fc38",
+                  "start": 0,
+                  "end": 16,
+                  "quote": "A 2-day old male"
+                }
+              ],
+              "times": []
+            },
+            {
+              "event_id": "p1-e14",
+              "record_id": "PMC13007327.1:p1",
+              "episode_id": null,
+              "kind": "test",
+              "occurrence": "occurred",
+              "description": "Nasogastric decompression and abdominal paracentesis after the surgical review",
+              "fact_ids": [
+                "p1-f031",
+                "p1-f032",
+                "p1-f033",
+                "p1-f034"
+              ],
+              "evidence": [
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00015",
+                  "segment_sha256": "69fb661a1572ca144b7a11dc0e48dd9ad26863f402d1e0956db90588ae8233cf",
+                  "start": 0,
+                  "end": 189,
+                  "quote": "Following the surgical review, it was noted that he had not yet moved his bowel. He had a nasogastric tube passed to decompress the stomach and bowel, and an abdominal paracentesis was done"
+                }
+              ],
+              "attribution_evidence": [
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00003",
+                  "segment_sha256": "ca1c26f17606c534fac25c7ce591c8af684a5f924f55f3dc1d7df7acc033fc38",
+                  "start": 0,
+                  "end": 16,
+                  "quote": "A 2-day old male"
+                }
+              ],
+              "times": [
+                {
+                  "text": "Following the surgical review",
+                  "kind": "order_only",
+                  "precision": "unknown",
+                  "calendar_value": null,
+                  "evidence": [
+                    {
+                      "source_id": "PMC13007327.1:jats",
+                      "segment_id": "b00015",
+                      "segment_sha256": "69fb661a1572ca144b7a11dc0e48dd9ad26863f402d1e0956db90588ae8233cf",
+                      "start": 0,
+                      "end": 189,
+                      "quote": "Following the surgical review, it was noted that he had not yet moved his bowel. He had a nasogastric tube passed to decompress the stomach and bowel, and an abdominal paracentesis was done"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "event_id": "p1-e15",
+              "record_id": "PMC13007327.1:p1",
+              "episode_id": null,
+              "kind": "treatment",
+              "occurrence": "occurred",
+              "description": "Fresh whole blood transfusion and resuscitation before laparotomy",
+              "fact_ids": [
+                "p1-f037",
+                "p1-f038"
+              ],
+              "evidence": [
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00016",
+                  "segment_sha256": "c8181a6cbb929b50f61e13e84cd4204ab1d2c2ff26b5d1a12fb23fc01287de87",
+                  "start": 178,
+                  "end": 331,
+                  "quote": "He was subsequently transfused with 60 ml of fresh whole blood and worked up for an emergency exploratory laparotomy after being adequately resuscitated."
+                }
+              ],
+              "attribution_evidence": [
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00003",
+                  "segment_sha256": "ca1c26f17606c534fac25c7ce591c8af684a5f924f55f3dc1d7df7acc033fc38",
+                  "start": 0,
+                  "end": 16,
+                  "quote": "A 2-day old male"
+                }
+              ],
+              "times": []
+            },
+            {
+              "event_id": "p1-e16",
+              "record_id": "PMC13007327.1:p1",
+              "episode_id": null,
+              "kind": "outcome",
+              "occurrence": "occurred",
+              "description": "Death (eventual mortality)",
+              "fact_ids": [
+                "p1-f057"
+              ],
+              "evidence": [
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00026",
+                  "segment_sha256": "2303c12c8377af032b5a02e0fdd33327ff1087d8a569265a4fc5acc57e8acd9c",
+                  "start": 33,
+                  "end": 228,
+                  "quote": "this is the first case described in sub-Saharan Africa, hence the low index of suspicion at presentation which led to an initial wrong diagnosis, delayed intervention time, and eventual mortality"
                 }
               ],
               "attribution_evidence": [
@@ -2860,6 +3118,167 @@
                   "quote": "in the postoperative period"
                 }
               ]
+            },
+            {
+              "edge_id": "edge7",
+              "from_event_id": "p1-e02",
+              "to_event_id": "p1-e12",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00012",
+                  "segment_sha256": "36cd55192964e5b8068289aa15e4041451fe92e9cf9c58a9145bfed12fa1ddee",
+                  "start": 221,
+                  "end": 268,
+                  "quote": "He was subsequently placed on intranasal oxygen"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge8",
+              "from_event_id": "p1-e04",
+              "to_event_id": "p1-e05",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00013",
+                  "segment_sha256": "035f1412cf422f69b3cc5ed42775c080fcff18a636b968988f78f2fd5a5a5fd8",
+                  "start": 242,
+                  "end": 266,
+                  "quote": "on the first day of life"
+                },
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00014",
+                  "segment_sha256": "6bdab8c1793ab9ec267f0a7496bdf2c250ea3c9a609213a5927bfd2fe0ede39b",
+                  "start": 0,
+                  "end": 15,
+                  "quote": "By the next day"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge9",
+              "from_event_id": "p1-e05",
+              "to_event_id": "p1-e13",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00014",
+                  "segment_sha256": "6bdab8c1793ab9ec267f0a7496bdf2c250ea3c9a609213a5927bfd2fe0ede39b",
+                  "start": 0,
+                  "end": 191,
+                  "quote": "By the next day, the baby was noted to be deteriorating, evident by poor urinary output, worsening respiration and progressive abdominal distention, necessitating a paediatric surgical review"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge10",
+              "from_event_id": "p1-e06",
+              "to_event_id": "p1-e13",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00014",
+                  "segment_sha256": "6bdab8c1793ab9ec267f0a7496bdf2c250ea3c9a609213a5927bfd2fe0ede39b",
+                  "start": 193,
+                  "end": 250,
+                  "quote": "Prior to the review a plain abdominal radiograph was done"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge11",
+              "from_event_id": "p1-e13",
+              "to_event_id": "p1-e14",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00015",
+                  "segment_sha256": "69fb661a1572ca144b7a11dc0e48dd9ad26863f402d1e0956db90588ae8233cf",
+                  "start": 0,
+                  "end": 29,
+                  "quote": "Following the surgical review"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge12",
+              "from_event_id": "p1-e07",
+              "to_event_id": "p1-e15",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00016",
+                  "segment_sha256": "c8181a6cbb929b50f61e13e84cd4204ab1d2c2ff26b5d1a12fb23fc01287de87",
+                  "start": 178,
+                  "end": 208,
+                  "quote": "He was subsequently transfused"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge13",
+              "from_event_id": "p1-e15",
+              "to_event_id": "p1-e08",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00016",
+                  "segment_sha256": "c8181a6cbb929b50f61e13e84cd4204ab1d2c2ff26b5d1a12fb23fc01287de87",
+                  "start": 245,
+                  "end": 330,
+                  "quote": "worked up for an emergency exploratory laparotomy after being adequately resuscitated"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge14",
+              "from_event_id": "p1-e11",
+              "to_event_id": "p1-e08",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00026",
+                  "segment_sha256": "2303c12c8377af032b5a02e0fdd33327ff1087d8a569265a4fc5acc57e8acd9c",
+                  "start": 151,
+                  "end": 204,
+                  "quote": "an initial wrong diagnosis, delayed intervention time"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge15",
+              "from_event_id": "p1-e08",
+              "to_event_id": "p1-e16",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC13007327.1:jats",
+                  "segment_id": "b00026",
+                  "segment_sha256": "2303c12c8377af032b5a02e0fdd33327ff1087d8a569265a4fc5acc57e8acd9c",
+                  "start": 179,
+                  "end": 228,
+                  "quote": "delayed intervention time, and eventual mortality"
+                }
+              ]
             }
           ],
           "limitations": [
@@ -2911,12 +3330,10 @@
             "episode_id": null,
             "kind": "presentation",
             "occurrence": "occurred",
-            "description": "Distended abdomen and respiratory distress noticed; intranasal oxygen and intravenous fluids given",
+            "description": "Distended abdomen and respiratory distress noticed",
             "fact_ids": [
               "p1-f016",
-              "p1-f017",
-              "p1-f018",
-              "p1-f019"
+              "p1-f017"
             ],
             "evidence": [
               {
@@ -2967,8 +3384,7 @@
             "fact_ids": [
               "p1-f020",
               "p1-f021",
-              "p1-f022",
-              "p1-f023"
+              "p1-f022"
             ],
             "evidence": [
               {
@@ -3116,31 +3532,18 @@
             "episode_id": null,
             "kind": "test",
             "occurrence": "occurred",
-            "description": "Plain abdominal radiograph, surgical review, nasogastric tube and abdominal paracentesis",
+            "description": "Plain abdominal radiograph",
             "fact_ids": [
-              "p1-f029",
-              "p1-f030",
-              "p1-f031",
-              "p1-f032",
-              "p1-f033",
-              "p1-f034"
+              "p1-f029"
             ],
             "evidence": [
               {
                 "source_id": "PMC13007327.1:jats",
                 "segment_id": "b00014",
                 "segment_sha256": "6bdab8c1793ab9ec267f0a7496bdf2c250ea3c9a609213a5927bfd2fe0ede39b",
-                "start": 213,
-                "end": 280,
-                "quote": "a plain abdominal radiograph was done revealing a distended abdomen"
-              },
-              {
-                "source_id": "PMC13007327.1:jats",
-                "segment_id": "b00015",
-                "segment_sha256": "69fb661a1572ca144b7a11dc0e48dd9ad26863f402d1e0956db90588ae8233cf",
-                "start": 81,
-                "end": 149,
-                "quote": "He had a nasogastric tube passed to decompress the stomach and bowel"
+                "start": 193,
+                "end": 250,
+                "quote": "Prior to the review a plain abdominal radiograph was done"
               }
             ],
             "attribution_evidence": [
@@ -3153,7 +3556,24 @@
                 "quote": "A 2-day old male"
               }
             ],
-            "times": []
+            "times": [
+              {
+                "text": "Prior to the review",
+                "kind": "order_only",
+                "precision": "unknown",
+                "calendar_value": null,
+                "evidence": [
+                  {
+                    "source_id": "PMC13007327.1:jats",
+                    "segment_id": "b00014",
+                    "segment_sha256": "6bdab8c1793ab9ec267f0a7496bdf2c250ea3c9a609213a5927bfd2fe0ede39b",
+                    "start": 193,
+                    "end": 250,
+                    "quote": "Prior to the review a plain abdominal radiograph was done"
+                  }
+                ]
+              }
+            ]
           },
           {
             "event_id": "p1-e07",
@@ -3161,11 +3581,9 @@
             "episode_id": null,
             "kind": "test",
             "occurrence": "occurred",
-            "description": "Repeat packed cell volume and whole blood transfusion",
+            "description": "Repeat packed cell volume",
             "fact_ids": [
-              "p1-f036",
-              "p1-f037",
-              "p1-f038"
+              "p1-f036"
             ],
             "evidence": [
               {
@@ -3276,7 +3694,8 @@
             "description": "Delayed recovery from anaesthesia with manual ventilation",
             "fact_ids": [
               "p1-f050",
-              "p1-f051"
+              "p1-f051",
+              "p1-f059"
             ],
             "evidence": [
               {
@@ -3321,13 +3740,12 @@
             "event_id": "p1-e10",
             "record_id": "PMC13007327.1:p1",
             "episode_id": null,
-            "kind": "outcome",
+            "kind": "adverse_event",
             "occurrence": "occurred",
             "description": "Cardiopulmonary arrest with unsuccessful resuscitation",
             "fact_ids": [
               "p1-f052",
-              "p1-f053",
-              "p1-f057"
+              "p1-f053"
             ],
             "evidence": [
               {
@@ -3399,6 +3817,188 @@
               }
             ],
             "times": []
+          },
+          {
+            "event_id": "p1-e12",
+            "record_id": "PMC13007327.1:p1",
+            "episode_id": null,
+            "kind": "treatment",
+            "occurrence": "occurred",
+            "description": "Intranasal oxygen and intravenous fluids started",
+            "fact_ids": [
+              "p1-f018",
+              "p1-f019"
+            ],
+            "evidence": [
+              {
+                "source_id": "PMC13007327.1:jats",
+                "segment_id": "b00012",
+                "segment_sha256": "36cd55192964e5b8068289aa15e4041451fe92e9cf9c58a9145bfed12fa1ddee",
+                "start": 221,
+                "end": 303,
+                "quote": "He was subsequently placed on intranasal oxygen at 1 L/min and intravenous fluids."
+              }
+            ],
+            "attribution_evidence": [
+              {
+                "source_id": "PMC13007327.1:jats",
+                "segment_id": "b00003",
+                "segment_sha256": "ca1c26f17606c534fac25c7ce591c8af684a5f924f55f3dc1d7df7acc033fc38",
+                "start": 0,
+                "end": 16,
+                "quote": "A 2-day old male"
+              }
+            ],
+            "times": []
+          },
+          {
+            "event_id": "p1-e13",
+            "record_id": "PMC13007327.1:p1",
+            "episode_id": null,
+            "kind": "other",
+            "occurrence": "occurred",
+            "description": "Paediatric surgical review",
+            "fact_ids": [
+              "p1-f030"
+            ],
+            "evidence": [
+              {
+                "source_id": "PMC13007327.1:jats",
+                "segment_id": "b00014",
+                "segment_sha256": "6bdab8c1793ab9ec267f0a7496bdf2c250ea3c9a609213a5927bfd2fe0ede39b",
+                "start": 149,
+                "end": 191,
+                "quote": "necessitating a paediatric surgical review"
+              }
+            ],
+            "attribution_evidence": [
+              {
+                "source_id": "PMC13007327.1:jats",
+                "segment_id": "b00003",
+                "segment_sha256": "ca1c26f17606c534fac25c7ce591c8af684a5f924f55f3dc1d7df7acc033fc38",
+                "start": 0,
+                "end": 16,
+                "quote": "A 2-day old male"
+              }
+            ],
+            "times": []
+          },
+          {
+            "event_id": "p1-e14",
+            "record_id": "PMC13007327.1:p1",
+            "episode_id": null,
+            "kind": "test",
+            "occurrence": "occurred",
+            "description": "Nasogastric decompression and abdominal paracentesis after the surgical review",
+            "fact_ids": [
+              "p1-f031",
+              "p1-f032",
+              "p1-f033",
+              "p1-f034"
+            ],
+            "evidence": [
+              {
+                "source_id": "PMC13007327.1:jats",
+                "segment_id": "b00015",
+                "segment_sha256": "69fb661a1572ca144b7a11dc0e48dd9ad26863f402d1e0956db90588ae8233cf",
+                "start": 0,
+                "end": 189,
+                "quote": "Following the surgical review, it was noted that he had not yet moved his bowel. He had a nasogastric tube passed to decompress the stomach and bowel, and an abdominal paracentesis was done"
+              }
+            ],
+            "attribution_evidence": [
+              {
+                "source_id": "PMC13007327.1:jats",
+                "segment_id": "b00003",
+                "segment_sha256": "ca1c26f17606c534fac25c7ce591c8af684a5f924f55f3dc1d7df7acc033fc38",
+                "start": 0,
+                "end": 16,
+                "quote": "A 2-day old male"
+              }
+            ],
+            "times": [
+              {
+                "text": "Following the surgical review",
+                "kind": "order_only",
+                "precision": "unknown",
+                "calendar_value": null,
+                "evidence": [
+                  {
+                    "source_id": "PMC13007327.1:jats",
+                    "segment_id": "b00015",
+                    "segment_sha256": "69fb661a1572ca144b7a11dc0e48dd9ad26863f402d1e0956db90588ae8233cf",
+                    "start": 0,
+                    "end": 189,
+                    "quote": "Following the surgical review, it was noted that he had not yet moved his bowel. He had a nasogastric tube passed to decompress the stomach and bowel, and an abdominal paracentesis was done"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "event_id": "p1-e15",
+            "record_id": "PMC13007327.1:p1",
+            "episode_id": null,
+            "kind": "treatment",
+            "occurrence": "occurred",
+            "description": "Fresh whole blood transfusion and resuscitation before laparotomy",
+            "fact_ids": [
+              "p1-f037",
+              "p1-f038"
+            ],
+            "evidence": [
+              {
+                "source_id": "PMC13007327.1:jats",
+                "segment_id": "b00016",
+                "segment_sha256": "c8181a6cbb929b50f61e13e84cd4204ab1d2c2ff26b5d1a12fb23fc01287de87",
+                "start": 178,
+                "end": 331,
+                "quote": "He was subsequently transfused with 60 ml of fresh whole blood and worked up for an emergency exploratory laparotomy after being adequately resuscitated."
+              }
+            ],
+            "attribution_evidence": [
+              {
+                "source_id": "PMC13007327.1:jats",
+                "segment_id": "b00003",
+                "segment_sha256": "ca1c26f17606c534fac25c7ce591c8af684a5f924f55f3dc1d7df7acc033fc38",
+                "start": 0,
+                "end": 16,
+                "quote": "A 2-day old male"
+              }
+            ],
+            "times": []
+          },
+          {
+            "event_id": "p1-e16",
+            "record_id": "PMC13007327.1:p1",
+            "episode_id": null,
+            "kind": "outcome",
+            "occurrence": "occurred",
+            "description": "Death (eventual mortality)",
+            "fact_ids": [
+              "p1-f057"
+            ],
+            "evidence": [
+              {
+                "source_id": "PMC13007327.1:jats",
+                "segment_id": "b00026",
+                "segment_sha256": "2303c12c8377af032b5a02e0fdd33327ff1087d8a569265a4fc5acc57e8acd9c",
+                "start": 33,
+                "end": 228,
+                "quote": "this is the first case described in sub-Saharan Africa, hence the low index of suspicion at presentation which led to an initial wrong diagnosis, delayed intervention time, and eventual mortality"
+              }
+            ],
+            "attribution_evidence": [
+              {
+                "source_id": "PMC13007327.1:jats",
+                "segment_id": "b00003",
+                "segment_sha256": "ca1c26f17606c534fac25c7ce591c8af684a5f924f55f3dc1d7df7acc033fc38",
+                "start": 0,
+                "end": 16,
+                "quote": "A 2-day old male"
+              }
+            ],
+            "times": []
           }
         ],
         "topological_layers": [
@@ -3410,9 +4010,6 @@
               "p1-e04"
             ],
             [
-              "p1-e05"
-            ],
-            [
               "p1-e06"
             ],
             [
@@ -3422,16 +4019,33 @@
           [
             [
               "p1-e02"
+            ],
+            [
+              "p1-e05"
             ]
           ],
           [
             [
               "p1-e03"
+            ],
+            [
+              "p1-e12"
+            ],
+            [
+              "p1-e13"
             ]
           ],
           [
             [
               "p1-e07"
+            ],
+            [
+              "p1-e14"
+            ]
+          ],
+          [
+            [
+              "p1-e15"
             ]
           ],
           [
@@ -3445,6 +4059,9 @@
             ],
             [
               "p1-e10"
+            ],
+            [
+              "p1-e16"
             ]
           ]
         ],
@@ -3474,6 +4091,18 @@
             "p1-e10"
           ],
           [
+            "p1-e01",
+            "p1-e12"
+          ],
+          [
+            "p1-e01",
+            "p1-e15"
+          ],
+          [
+            "p1-e01",
+            "p1-e16"
+          ],
+          [
             "p1-e02",
             "p1-e03"
           ],
@@ -3494,6 +4123,18 @@
             "p1-e10"
           ],
           [
+            "p1-e02",
+            "p1-e12"
+          ],
+          [
+            "p1-e02",
+            "p1-e15"
+          ],
+          [
+            "p1-e02",
+            "p1-e16"
+          ],
+          [
             "p1-e03",
             "p1-e07"
           ],
@@ -3510,6 +4151,42 @@
             "p1-e10"
           ],
           [
+            "p1-e03",
+            "p1-e15"
+          ],
+          [
+            "p1-e03",
+            "p1-e16"
+          ],
+          [
+            "p1-e04",
+            "p1-e05"
+          ],
+          [
+            "p1-e04",
+            "p1-e13"
+          ],
+          [
+            "p1-e04",
+            "p1-e14"
+          ],
+          [
+            "p1-e05",
+            "p1-e13"
+          ],
+          [
+            "p1-e05",
+            "p1-e14"
+          ],
+          [
+            "p1-e06",
+            "p1-e13"
+          ],
+          [
+            "p1-e06",
+            "p1-e14"
+          ],
+          [
             "p1-e07",
             "p1-e08"
           ],
@@ -3522,12 +4199,60 @@
             "p1-e10"
           ],
           [
+            "p1-e07",
+            "p1-e15"
+          ],
+          [
+            "p1-e07",
+            "p1-e16"
+          ],
+          [
             "p1-e08",
             "p1-e09"
           ],
           [
             "p1-e08",
             "p1-e10"
+          ],
+          [
+            "p1-e08",
+            "p1-e16"
+          ],
+          [
+            "p1-e11",
+            "p1-e08"
+          ],
+          [
+            "p1-e11",
+            "p1-e09"
+          ],
+          [
+            "p1-e11",
+            "p1-e10"
+          ],
+          [
+            "p1-e11",
+            "p1-e16"
+          ],
+          [
+            "p1-e13",
+            "p1-e14"
+          ],
+          [
+            "p1-e15",
+            "p1-e08"
+          ],
+          [
+            "p1-e15",
+            "p1-e09"
+          ],
+          [
+            "p1-e15",
+            "p1-e10"
+          ],
+          [
+            "p1-e15",
+            "p1-e16"
           ]
         ],
         "incomparable_pairs": [
@@ -3548,6 +4273,14 @@
             "p1-e11"
           ],
           [
+            "p1-e01",
+            "p1-e13"
+          ],
+          [
+            "p1-e01",
+            "p1-e14"
+          ],
+          [
             "p1-e02",
             "p1-e04"
           ],
@@ -3564,6 +4297,14 @@
             "p1-e11"
           ],
           [
+            "p1-e02",
+            "p1-e13"
+          ],
+          [
+            "p1-e02",
+            "p1-e14"
+          ],
+          [
             "p1-e03",
             "p1-e04"
           ],
@@ -3580,8 +4321,16 @@
             "p1-e11"
           ],
           [
-            "p1-e04",
-            "p1-e05"
+            "p1-e03",
+            "p1-e12"
+          ],
+          [
+            "p1-e03",
+            "p1-e13"
+          ],
+          [
+            "p1-e03",
+            "p1-e14"
           ],
           [
             "p1-e04",
@@ -3608,6 +4357,18 @@
             "p1-e11"
           ],
           [
+            "p1-e04",
+            "p1-e12"
+          ],
+          [
+            "p1-e04",
+            "p1-e15"
+          ],
+          [
+            "p1-e04",
+            "p1-e16"
+          ],
+          [
             "p1-e05",
             "p1-e06"
           ],
@@ -3632,6 +4393,18 @@
             "p1-e11"
           ],
           [
+            "p1-e05",
+            "p1-e12"
+          ],
+          [
+            "p1-e05",
+            "p1-e15"
+          ],
+          [
+            "p1-e05",
+            "p1-e16"
+          ],
+          [
             "p1-e06",
             "p1-e07"
           ],
@@ -3650,14 +4423,46 @@
           [
             "p1-e06",
             "p1-e11"
+          ],
+          [
+            "p1-e06",
+            "p1-e12"
+          ],
+          [
+            "p1-e06",
+            "p1-e15"
+          ],
+          [
+            "p1-e06",
+            "p1-e16"
           ],
           [
             "p1-e07",
             "p1-e11"
           ],
           [
+            "p1-e07",
+            "p1-e12"
+          ],
+          [
+            "p1-e07",
+            "p1-e13"
+          ],
+          [
+            "p1-e07",
+            "p1-e14"
+          ],
+          [
             "p1-e08",
-            "p1-e11"
+            "p1-e12"
+          ],
+          [
+            "p1-e08",
+            "p1-e13"
+          ],
+          [
+            "p1-e08",
+            "p1-e14"
           ],
           [
             "p1-e09",
@@ -3665,11 +4470,83 @@
           ],
           [
             "p1-e09",
-            "p1-e11"
+            "p1-e12"
+          ],
+          [
+            "p1-e09",
+            "p1-e13"
+          ],
+          [
+            "p1-e09",
+            "p1-e14"
+          ],
+          [
+            "p1-e09",
+            "p1-e16"
           ],
           [
             "p1-e10",
-            "p1-e11"
+            "p1-e12"
+          ],
+          [
+            "p1-e10",
+            "p1-e13"
+          ],
+          [
+            "p1-e10",
+            "p1-e14"
+          ],
+          [
+            "p1-e10",
+            "p1-e16"
+          ],
+          [
+            "p1-e11",
+            "p1-e12"
+          ],
+          [
+            "p1-e11",
+            "p1-e13"
+          ],
+          [
+            "p1-e11",
+            "p1-e14"
+          ],
+          [
+            "p1-e11",
+            "p1-e15"
+          ],
+          [
+            "p1-e12",
+            "p1-e13"
+          ],
+          [
+            "p1-e12",
+            "p1-e14"
+          ],
+          [
+            "p1-e12",
+            "p1-e15"
+          ],
+          [
+            "p1-e12",
+            "p1-e16"
+          ],
+          [
+            "p1-e13",
+            "p1-e15"
+          ],
+          [
+            "p1-e13",
+            "p1-e16"
+          ],
+          [
+            "p1-e14",
+            "p1-e15"
+          ],
+          [
+            "p1-e14",
+            "p1-e16"
           ]
         ],
         "same_time_groups": [],
@@ -3678,24 +4555,28 @@
           "p1-e01",
           "p1-e02",
           "p1-e03",
-          "p1-e07",
-          "p1-e08",
-          "p1-e09",
-          "p1-e10"
-        ],
-        "order_unknown_event_ids": [
           "p1-e04",
           "p1-e05",
           "p1-e06",
-          "p1-e11"
+          "p1-e07",
+          "p1-e08",
+          "p1-e09",
+          "p1-e10",
+          "p1-e11",
+          "p1-e12",
+          "p1-e13",
+          "p1-e14",
+          "p1-e15",
+          "p1-e16"
         ],
+        "order_unknown_event_ids": [],
         "layers_are_simultaneous": false,
         "synthetic_dates_generated": false,
         "clinical_sequence_verified": false,
         "basis": "Source-gated model relations; paragraph order and event kind do not create chronology."
       },
       "reference_provenance": {
-        "annotation_sha256": "3d968b76c734521f16bf1454d451bcf87d3b3308e95f07ef8d61f62e98b8c924",
+        "annotation_sha256": "244190c093c6609a40cce5cd58bb664ba043b541746041760f263b8a951ee4dd",
         "materializer_version": "dense-runtime-targets/1",
         "fact_pointers": [
           {
@@ -3717,7 +4598,7 @@
               },
               {
                 "segment_id": "b00026",
-                "quote": "eventual mortality"
+                "quote": "this is the first case described in sub-Saharan Africa, hence the low index of suspicion at presentation which led to an initial wrong diagnosis, delayed intervention time, and eventual mortality"
               }
             ]
           },
@@ -4063,6 +4944,10 @@
               {
                 "segment_id": "b00016",
                 "quote": "The bleeding point was identified and a haemostatic agent (Surgicel) applied."
+              },
+              {
+                "segment_id": "b00024",
+                "quote": "In this index patient, a Surgicel haemostat was placed into the area of the laceration."
               }
             ]
           },
@@ -4096,6 +4981,17 @@
               {
                 "segment_id": "b00016",
                 "quote": "Six hours post-surgery, he suffered a cardiopulmonary arrest and all efforts at resuscitation were unsuccessful."
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f059",
+            "task": "procedures_devices",
+            "pointer": "/items/9",
+            "source_evidence": [
+              {
+                "segment_id": "b00016",
+                "quote": "necessitating manual ventilation with Ayres T-piece in the postoperative period because there was no functional neonatal ventilator for mechanical ventilatory therapy"
               }
             ]
           },
@@ -4183,7 +5079,7 @@
             "source_evidence": [
               {
                 "segment_id": "b00014",
-                "quote": "a plain abdominal radiograph was done revealing a distended abdomen, and stomach displaced inferiorly with widespread opacity in keeping with a ground-glass appearance of an intrabdominal collection (Fig. 1)"
+                "quote": "necessitating a paediatric surgical review. Prior to the review a plain abdominal radiograph was done revealing a distended abdomen, and stomach displaced inferiorly with widespread opacity in keeping with a ground-glass appearance of an intrabdominal collection (Fig. 1)"
               }
             ]
           },
@@ -4320,6 +5216,17 @@
             ]
           },
           {
+            "fact_id": "p1-f060",
+            "task": "reproductive_perinatal",
+            "pointer": "/items/5",
+            "source_evidence": [
+              {
+                "segment_id": "b00011",
+                "quote": "Index pregnancy was booked"
+              }
+            ]
+          },
+          {
             "fact_id": "p1-f028",
             "task": "outcomes",
             "pointer": "/items/0",
@@ -4337,7 +5244,11 @@
             "source_evidence": [
               {
                 "segment_id": "b00026",
-                "quote": "eventual mortality"
+                "quote": "this is the first case described in sub-Saharan Africa, hence the low index of suspicion at presentation which led to an initial wrong diagnosis, delayed intervention time, and eventual mortality"
+              },
+              {
+                "segment_id": "b00016",
+                "quote": "he suffered a cardiopulmonary arrest and all efforts at resuscitation were unsuccessful"
               }
             ]
           },
@@ -4475,7 +5386,7 @@
                   "source_section": "b00012"
                 },
                 {
-                  "quote": "eventual mortality",
+                  "quote": "this is the first case described in sub-Saharan Africa, hence the low index of suspicion at presentation which led to an initial wrong diagnosis, delayed intervention time, and eventual mortality",
                   "source_section": "b00026"
                 }
               ]
@@ -4518,9 +5429,9 @@
                 "source_id": "PMC13007327.1:jats",
                 "segment_id": "b00026",
                 "segment_sha256": "2303c12c8377af032b5a02e0fdd33327ff1087d8a569265a4fc5acc57e8acd9c",
-                "start": 210,
+                "start": 33,
                 "end": 228,
-                "quote": "eventual mortality"
+                "quote": "this is the first case described in sub-Saharan Africa, hence the low index of suspicion at presentation which led to an initial wrong diagnosis, delayed intervention time, and eventual mortality"
               }
             ],
             "event_ids": []
@@ -5630,7 +6541,7 @@
               }
             ],
             "event_ids": [
-              "p1-e06"
+              "p1-e14"
             ]
           },
           {
@@ -5691,7 +6602,7 @@
               }
             ],
             "event_ids": [
-              "p1-e02"
+              "p1-e12"
             ]
           },
           {
@@ -5749,7 +6660,7 @@
               }
             ],
             "event_ids": [
-              "p1-e02"
+              "p1-e12"
             ]
           },
           {
@@ -5809,7 +6720,7 @@
               }
             ],
             "event_ids": [
-              "p1-e07"
+              "p1-e15"
             ]
           },
           {
@@ -5970,7 +6881,7 @@
               }
             ],
             "event_ids": [
-              "p1-e06"
+              "p1-e14"
             ]
           },
           {
@@ -6023,7 +6934,7 @@
               }
             ],
             "event_ids": [
-              "p1-e06"
+              "p1-e14"
             ]
           },
           {
@@ -6074,7 +6985,7 @@
               }
             ],
             "event_ids": [
-              "p1-e07"
+              "p1-e15"
             ]
           },
           {
@@ -6164,6 +7075,10 @@
                 {
                   "quote": "The bleeding point was identified and a haemostatic agent (Surgicel) applied.",
                   "source_section": "b00016"
+                },
+                {
+                  "quote": "In this index patient, a Surgicel haemostat was placed into the area of the laceration.",
+                  "source_section": "b00024"
                 }
               ],
               "name": "Haemostatic agent (Surgicel) application",
@@ -6191,6 +7106,14 @@
                 "start": 524,
                 "end": 601,
                 "quote": "The bleeding point was identified and a haemostatic agent (Surgicel) applied."
+              },
+              {
+                "source_id": "PMC13007327.1:jats",
+                "segment_id": "b00024",
+                "segment_sha256": "f968811e4a6902aaacc856347f6ab1c33c23ca81c4ead35a3507b5d7ba4d7605",
+                "start": 901,
+                "end": 988,
+                "quote": "In this index patient, a Surgicel haemostat was placed into the area of the laceration."
               }
             ],
             "event_ids": [
@@ -6360,6 +7283,57 @@
             ],
             "event_ids": [
               "p1-e10"
+            ]
+          },
+          {
+            "fact_id": "p1-f059",
+            "task": "procedures_devices",
+            "pointer": "/items/9",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "necessitating manual ventilation with Ayres T-piece in the postoperative period because there was no functional neonatal ventilator for mechanical ventilatory therapy",
+                  "source_section": "b00016"
+                }
+              ],
+              "name": "Mechanical ventilation",
+              "kind": "procedure",
+              "action": "unknown",
+              "body_site": null,
+              "laterality": "unknown",
+              "indication": null,
+              "finding": null,
+              "complication": null
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "name": "Mechanical ventilation",
+              "kind": "procedure",
+              "action": "unknown",
+              "laterality": "unknown"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC13007327.1:jats",
+                "segment_id": "b00016",
+                "segment_sha256": "c8181a6cbb929b50f61e13e84cd4204ab1d2c2ff26b5d1a12fb23fc01287de87",
+                "start": 819,
+                "end": 985,
+                "quote": "necessitating manual ventilation with Ayres T-piece in the postoperative period because there was no functional neonatal ventilator for mechanical ventilatory therapy"
+              }
+            ],
+            "event_ids": [
+              "p1-e09"
             ]
           },
           {
@@ -6729,9 +7703,7 @@
                 "quote": "Other biochemical analyses were also normal."
               }
             ],
-            "event_ids": [
-              "p1-e03"
-            ]
+            "event_ids": []
           },
           {
             "fact_id": "p1-f024",
@@ -6806,14 +7778,14 @@
               "assertion": "present",
               "temporality": "unknown",
               "time": {
-                "text": null,
-                "relation": "unknown",
-                "anchor": null,
+                "text": "Prior to the review",
+                "relation": "before",
+                "anchor": "paediatric surgical review",
                 "date_iso": null
               },
               "evidence": [
                 {
-                  "quote": "a plain abdominal radiograph was done revealing a distended abdomen, and stomach displaced inferiorly with widespread opacity in keeping with a ground-glass appearance of an intrabdominal collection (Fig. 1)",
+                  "quote": "necessitating a paediatric surgical review. Prior to the review a plain abdominal radiograph was done revealing a distended abdomen, and stomach displaced inferiorly with widespread opacity in keeping with a ground-glass appearance of an intrabdominal collection (Fig. 1)",
                   "source_section": "b00014"
                 }
               ],
@@ -6840,16 +7812,21 @@
               "text_value": "distended abdomen, and stomach displaced inferiorly with widespread opacity in keeping with a ground-glass appearance of an intrabdominal collection",
               "comparator": "unknown",
               "flag": "unknown",
-              "body_site": "abdomen"
+              "body_site": "abdomen",
+              "time": {
+                "text": "Prior to the review",
+                "relation": "before",
+                "anchor": "paediatric surgical review"
+              }
             },
             "evidence": [
               {
                 "source_id": "PMC13007327.1:jats",
                 "segment_id": "b00014",
                 "segment_sha256": "6bdab8c1793ab9ec267f0a7496bdf2c250ea3c9a609213a5927bfd2fe0ede39b",
-                "start": 213,
+                "start": 149,
                 "end": 420,
-                "quote": "a plain abdominal radiograph was done revealing a distended abdomen, and stomach displaced inferiorly with widespread opacity in keeping with a ground-glass appearance of an intrabdominal collection (Fig. 1)"
+                "quote": "necessitating a paediatric surgical review. Prior to the review a plain abdominal radiograph was done revealing a distended abdomen, and stomach displaced inferiorly with widespread opacity in keeping with a ground-glass appearance of an intrabdominal collection (Fig. 1)"
               }
             ],
             "event_ids": [
@@ -6913,7 +7890,7 @@
               }
             ],
             "event_ids": [
-              "p1-e06"
+              "p1-e14"
             ]
           },
           {
@@ -7532,6 +8509,53 @@
             ]
           },
           {
+            "fact_id": "p1-f060",
+            "task": "reproductive_perinatal",
+            "pointer": "/items/5",
+            "value_as_extracted": {
+              "subject": "mother",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Index pregnancy was booked",
+                  "source_section": "b00011"
+                }
+              ],
+              "event": "pregnancy",
+              "text_value": "Index pregnancy was booked",
+              "numeric_value": null,
+              "unit": null,
+              "related_subject": null,
+              "gestational_age_weeks": null,
+              "birth_weight_text": null,
+              "outcome": null
+            },
+            "value_as_annotated": {
+              "subject": "mother",
+              "assertion": "present",
+              "event": "pregnancy",
+              "text_value": "Index pregnancy was booked"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC13007327.1:jats",
+                "segment_id": "b00011",
+                "segment_sha256": "fe5447a4c8cb779de3fb9259acf005826ce6c236dbe7504c69d29423c76f3ab6",
+                "start": 0,
+                "end": 26,
+                "quote": "Index pregnancy was booked"
+              }
+            ],
+            "event_ids": []
+          },
+          {
             "fact_id": "p1-f028",
             "task": "outcomes",
             "pointer": "/items/0",
@@ -7599,13 +8623,17 @@
               },
               "evidence": [
                 {
-                  "quote": "eventual mortality",
+                  "quote": "this is the first case described in sub-Saharan Africa, hence the low index of suspicion at presentation which led to an initial wrong diagnosis, delayed intervention time, and eventual mortality",
                   "source_section": "b00026"
+                },
+                {
+                  "quote": "he suffered a cardiopulmonary arrest and all efforts at resuscitation were unsuccessful",
+                  "source_section": "b00016"
                 }
               ],
               "event": "death",
               "text_value": "eventual mortality",
-              "related_condition": "Grade II splenic injury",
+              "related_condition": null,
               "disposition": null,
               "follow_up_duration_text": null,
               "cause_as_documented": null
@@ -7614,21 +8642,28 @@
               "subject": "index_patient",
               "assertion": "present",
               "event": "death",
-              "text_value": "eventual mortality",
-              "related_condition": "Grade II splenic injury"
+              "text_value": "eventual mortality"
             },
             "evidence": [
               {
                 "source_id": "PMC13007327.1:jats",
                 "segment_id": "b00026",
                 "segment_sha256": "2303c12c8377af032b5a02e0fdd33327ff1087d8a569265a4fc5acc57e8acd9c",
-                "start": 210,
+                "start": 33,
                 "end": 228,
-                "quote": "eventual mortality"
+                "quote": "this is the first case described in sub-Saharan Africa, hence the low index of suspicion at presentation which led to an initial wrong diagnosis, delayed intervention time, and eventual mortality"
+              },
+              {
+                "source_id": "PMC13007327.1:jats",
+                "segment_id": "b00016",
+                "segment_sha256": "c8181a6cbb929b50f61e13e84cd4204ab1d2c2ff26b5d1a12fb23fc01287de87",
+                "start": 1011,
+                "end": 1098,
+                "quote": "he suffered a cardiopulmonary arrest and all efforts at resuscitation were unsuccessful"
               }
             ],
             "event_ids": [
-              "p1-e10"
+              "p1-e16"
             ]
           },
           {
@@ -7689,7 +8724,7 @@
               }
             ],
             "event_ids": [
-              "p1-e06"
+              "p1-e13"
             ]
           }
         ],

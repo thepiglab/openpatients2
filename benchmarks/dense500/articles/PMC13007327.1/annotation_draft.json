@@ -55,7 +55,7 @@
       },
       {
        "segment_id": "b00026",
-       "quote": "eventual mortality"
+       "quote": "this is the first case described in sub-Saharan Africa, hence the low index of suspicion at presentation which led to an initial wrong diagnosis, delayed intervention time, and eventual mortality"
       }
      ],
      "clinical_statement": "Male neonate with splenic injury who died after laparotomy",
@@ -790,12 +790,17 @@
       "text_value": "distended abdomen, and stomach displaced inferiorly with widespread opacity in keeping with a ground-glass appearance of an intrabdominal collection",
       "comparator": "unknown",
       "flag": "unknown",
-      "body_site": "abdomen"
+      "body_site": "abdomen",
+      "time": {
+       "text": "Prior to the review",
+       "relation": "before",
+       "anchor": "paediatric surgical review"
+      }
      },
      "evidence": [
       {
        "segment_id": "b00014",
-       "quote": "a plain abdominal radiograph was done revealing a distended abdomen, and stomach displaced inferiorly with widespread opacity in keeping with a ground-glass appearance of an intrabdominal collection (Fig. 1)"
+       "quote": "necessitating a paediatric surgical review. Prior to the review a plain abdominal radiograph was done revealing a distended abdomen, and stomach displaced inferiorly with widespread opacity in keeping with a ground-glass appearance of an intrabdominal collection (Fig. 1)"
       }
      ],
      "clinical_statement": "Radiograph showed displaced stomach and ground-glass opacity",
@@ -1277,6 +1282,10 @@
       {
        "segment_id": "b00016",
        "quote": "The bleeding point was identified and a haemostatic agent (Surgicel) applied."
+      },
+      {
+       "segment_id": "b00024",
+       "quote": "In this index patient, a Surgicel haemostat was placed into the area of the laceration."
       }
      ],
      "clinical_statement": "Haemostatic agent (Surgicel) applied",
@@ -1537,19 +1546,22 @@
       "subject": "index_patient",
       "assertion": "present",
       "event": "death",
-      "text_value": "eventual mortality",
-      "related_condition": "Grade II splenic injury"
+      "text_value": "eventual mortality"
      },
      "evidence": [
       {
        "segment_id": "b00026",
-       "quote": "eventual mortality"
+       "quote": "this is the first case described in sub-Saharan Africa, hence the low index of suspicion at presentation which led to an initial wrong diagnosis, delayed intervention time, and eventual mortality"
+      },
+      {
+       "segment_id": "b00016",
+       "quote": "he suffered a cardiopulmonary arrest and all efforts at resuscitation were unsuccessful"
       }
      ],
      "clinical_statement": "Patient died",
      "certainty": "supported",
      "scoring": "include",
-     "notes": "Death stated as eventual mortality in the discussion; the case report states only that resuscitation efforts were unsuccessful."
+     "notes": "Death of this index case stated in the discussion ('this is the first case described ... eventual mortality'); no time or cause of death stated, so none recorded."
     },
     {
      "fact_id": "p1-f058",
@@ -1574,6 +1586,50 @@
      "certainty": "supported",
      "scoring": "include",
      "notes": "Source says no etiology from trauma was established, not that trauma was excluded."
+    },
+    {
+     "fact_id": "p1-f059",
+     "task": "procedures_devices",
+     "collection": "items",
+     "fields": {
+      "subject": "index_patient",
+      "assertion": "absent",
+      "name": "Mechanical ventilation",
+      "kind": "procedure",
+      "action": "unknown",
+      "laterality": "unknown"
+     },
+     "evidence": [
+      {
+       "segment_id": "b00016",
+       "quote": "necessitating manual ventilation with Ayres T-piece in the postoperative period because there was no functional neonatal ventilator for mechanical ventilatory therapy"
+      }
+     ],
+     "clinical_statement": "Mechanical ventilation was not given postoperatively because no functional neonatal ventilator was available; manual ventilation was used instead.",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": "Not given because of equipment unavailability (care-access limitation), not declined or cancelled."
+    },
+    {
+     "fact_id": "p1-f060",
+     "task": "reproductive_perinatal",
+     "collection": "items",
+     "fields": {
+      "subject": "mother",
+      "assertion": "present",
+      "event": "pregnancy",
+      "text_value": "Index pregnancy was booked"
+     },
+     "evidence": [
+      {
+       "segment_id": "b00011",
+       "quote": "Index pregnancy was booked"
+      }
+     ],
+     "clinical_statement": "The index pregnancy was booked (antenatal care registered).",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": ""
     }
    ],
    "events": [
@@ -1597,13 +1653,11 @@
     },
     {
      "event_id": "p1-e02",
-     "description": "Distended abdomen and respiratory distress noticed; intranasal oxygen and intravenous fluids given",
+     "description": "Distended abdomen and respiratory distress noticed",
      "occurrence": "occurred",
      "fact_ids": [
       "p1-f016",
-      "p1-f017",
-      "p1-f018",
-      "p1-f019"
+      "p1-f017"
      ],
      "time_text": "4 hours after birth",
      "evidence": [
@@ -1624,8 +1678,7 @@
      "fact_ids": [
       "p1-f020",
       "p1-f021",
-      "p1-f022",
-      "p1-f023"
+      "p1-f022"
      ],
      "time_text": "5 hours after birth",
      "evidence": [
@@ -1682,37 +1735,29 @@
     },
     {
      "event_id": "p1-e06",
-     "description": "Plain abdominal radiograph, surgical review, nasogastric tube and abdominal paracentesis",
+     "description": "Plain abdominal radiograph",
      "occurrence": "occurred",
      "fact_ids": [
-      "p1-f029",
-      "p1-f030",
-      "p1-f031",
-      "p1-f032",
-      "p1-f033",
-      "p1-f034"
+      "p1-f029"
      ],
-     "time_text": null,
+     "time_text": "Prior to the review",
      "evidence": [
       {
        "segment_id": "b00014",
-       "quote": "a plain abdominal radiograph was done revealing a distended abdomen"
-      },
-      {
-       "segment_id": "b00015",
-       "quote": "He had a nasogastric tube passed to decompress the stomach and bowel"
+       "quote": "Prior to the review a plain abdominal radiograph was done"
       }
      ],
-     "kind": "test"
+     "kind": "test",
+     "time_kind": "order_only",
+     "time_precision": "unknown",
+     "time_calendar_value": null
     },
     {
      "event_id": "p1-e07",
-     "description": "Repeat packed cell volume and whole blood transfusion",
+     "description": "Repeat packed cell volume",
      "occurrence": "occurred",
      "fact_ids": [
-      "p1-f036",
-      "p1-f037",
-      "p1-f038"
+      "p1-f036"
      ],
      "time_text": "2nd day after birth (31 hours of life)",
      "evidence": [
@@ -1763,7 +1808,8 @@
      "occurrence": "occurred",
      "fact_ids": [
       "p1-f050",
-      "p1-f051"
+      "p1-f051",
+      "p1-f059"
      ],
      "time_text": "postoperative period",
      "evidence": [
@@ -1783,8 +1829,7 @@
      "occurrence": "occurred",
      "fact_ids": [
       "p1-f052",
-      "p1-f053",
-      "p1-f057"
+      "p1-f053"
      ],
      "time_text": "Six hours post-surgery",
      "evidence": [
@@ -1793,7 +1838,7 @@
        "quote": "Six hours post-surgery, he suffered a cardiopulmonary arrest and all efforts at resuscitation were unsuccessful."
       }
      ],
-     "kind": "outcome",
+     "kind": "adverse_event",
      "time_kind": "relative",
      "time_precision": "exact",
      "time_calendar_value": null
@@ -1813,6 +1858,94 @@
       }
      ],
      "kind": "diagnosis"
+    },
+    {
+     "event_id": "p1-e12",
+     "description": "Intranasal oxygen and intravenous fluids started",
+     "occurrence": "occurred",
+     "fact_ids": [
+      "p1-f018",
+      "p1-f019"
+     ],
+     "time_text": null,
+     "evidence": [
+      {
+       "segment_id": "b00012",
+       "quote": "He was subsequently placed on intranasal oxygen at 1 L/min and intravenous fluids."
+      }
+     ],
+     "kind": "treatment"
+    },
+    {
+     "event_id": "p1-e13",
+     "description": "Paediatric surgical review",
+     "occurrence": "occurred",
+     "fact_ids": [
+      "p1-f030"
+     ],
+     "time_text": null,
+     "evidence": [
+      {
+       "segment_id": "b00014",
+       "quote": "necessitating a paediatric surgical review"
+      }
+     ],
+     "kind": "other"
+    },
+    {
+     "event_id": "p1-e14",
+     "description": "Nasogastric decompression and abdominal paracentesis after the surgical review",
+     "occurrence": "occurred",
+     "fact_ids": [
+      "p1-f031",
+      "p1-f032",
+      "p1-f033",
+      "p1-f034"
+     ],
+     "time_text": "Following the surgical review",
+     "evidence": [
+      {
+       "segment_id": "b00015",
+       "quote": "Following the surgical review, it was noted that he had not yet moved his bowel. He had a nasogastric tube passed to decompress the stomach and bowel, and an abdominal paracentesis was done"
+      }
+     ],
+     "kind": "test",
+     "time_kind": "order_only",
+     "time_precision": "unknown",
+     "time_calendar_value": null
+    },
+    {
+     "event_id": "p1-e15",
+     "description": "Fresh whole blood transfusion and resuscitation before laparotomy",
+     "occurrence": "occurred",
+     "fact_ids": [
+      "p1-f037",
+      "p1-f038"
+     ],
+     "time_text": null,
+     "evidence": [
+      {
+       "segment_id": "b00016",
+       "quote": "He was subsequently transfused with 60 ml of fresh whole blood and worked up for an emergency exploratory laparotomy after being adequately resuscitated."
+      }
+     ],
+     "kind": "treatment"
+    },
+    {
+     "event_id": "p1-e16",
+     "description": "Death (eventual mortality)",
+     "occurrence": "occurred",
+     "fact_ids": [
+      "p1-f057"
+     ],
+     "time_text": null,
+     "evidence": [
+      {
+       "segment_id": "b00026",
+       "quote": "this is the first case described in sub-Saharan Africa, hence the low index of suspicion at presentation which led to an initial wrong diagnosis, delayed intervention time, and eventual mortality"
+      }
+     ],
+     "kind": "outcome"
     }
    ],
    "temporal_relations": [
@@ -1897,6 +2030,109 @@
        "quote": "in the postoperative period"
       }
      ]
+    },
+    {
+     "from_event_id": "p1-e02",
+     "to_event_id": "p1-e12",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00012",
+       "quote": "He was subsequently placed on intranasal oxygen"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e04",
+     "to_event_id": "p1-e05",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00013",
+       "quote": "on the first day of life"
+      },
+      {
+       "segment_id": "b00014",
+       "quote": "By the next day"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e05",
+     "to_event_id": "p1-e13",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00014",
+       "quote": "By the next day, the baby was noted to be deteriorating, evident by poor urinary output, worsening respiration and progressive abdominal distention, necessitating a paediatric surgical review"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e06",
+     "to_event_id": "p1-e13",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00014",
+       "quote": "Prior to the review a plain abdominal radiograph was done"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e13",
+     "to_event_id": "p1-e14",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00015",
+       "quote": "Following the surgical review"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e07",
+     "to_event_id": "p1-e15",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00016",
+       "quote": "He was subsequently transfused"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e15",
+     "to_event_id": "p1-e08",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00016",
+       "quote": "worked up for an emergency exploratory laparotomy after being adequately resuscitated"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e11",
+     "to_event_id": "p1-e08",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00026",
+       "quote": "an initial wrong diagnosis, delayed intervention time"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e08",
+     "to_event_id": "p1-e16",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00026",
+       "quote": "delayed intervention time, and eventual mortality"
+      }
+     ]
     }
    ],
    "summary": [
@@ -1921,7 +2157,8 @@
       "p1-f012",
       "p1-f013",
       "p1-f014",
-      "p1-f015"
+      "p1-f015",
+      "p1-f060"
      ]
     },
     {
@@ -1947,7 +2184,7 @@
      ]
     },
     {
-     "text": "After transfusion and resuscitation, laparotomy at the 36th hour of life found a 3cm sub capsular splenic laceration and 100 mls of haemoperitoneum with clots, treated with a haemostatic agent (Surgicel) and further whole blood. The final diagnosis was Grade II splenic injury. Six hours post-surgery he had a cardiopulmonary arrest and resuscitation was unsuccessful.",
+     "text": "After transfusion and resuscitation, laparotomy at the 36th hour of life found a 3cm sub capsular splenic laceration and 100 mls of haemoperitoneum with clots, treated with a haemostatic agent (Surgicel) and further whole blood. The final diagnosis was Grade II splenic injury. Six hours post-surgery he had a cardiopulmonary arrest and resuscitation was unsuccessful. Mechanical ventilation was unavailable, so he was ventilated manually; the discussion reports his eventual death.",
      "fact_ids": [
       "p1-f037",
       "p1-f038",
@@ -1970,7 +2207,8 @@
       "p1-f055",
       "p1-f056",
       "p1-f057",
-      "p1-f058"
+      "p1-f058",
+      "p1-f059"
      ]
     }
    ],
@@ -2040,10 +2278,11 @@
        "quote": "because there was no functional neonatal ventilator for mechanical ventilatory therapy"
       }
      ],
-     "issue": "The source states no functional neonatal ventilator was available for mechanical ventilatory therapy; whether mechanical ventilation was otherwise indicated is not stated.",
-     "must_not_infer": "Do not record mechanical ventilation as planned, declined or not performed.",
+     "issue": "Mechanical ventilation was not given because no functional neonatal ventilator was available (equipment/care-access limitation); recorded as mechanical ventilation absent.",
+     "must_not_infer": "Do not record mechanical ventilation as declined, cancelled or clinically not indicated, and do not infer that its absence caused the arrest.",
      "fact_ids": [
-      "p1-f051"
+      "p1-f051",
+      "p1-f059"
      ]
     },
     {
@@ -2054,14 +2293,32 @@
       },
       {
        "segment_id": "b00026",
-       "quote": "eventual mortality"
+       "quote": "this is the first case described in sub-Saharan Africa, hence the low index of suspicion at presentation which led to an initial wrong diagnosis, delayed intervention time, and eventual mortality"
       }
      ],
-     "issue": "The case description does not literally state that the neonate died; death rests on the discussion wording eventual mortality.",
-     "must_not_infer": "Do not infer a time or cause of death beyond the cardiopulmonary arrest six hours post-surgery.",
+     "issue": "The case section reports cardiopulmonary arrest with unsuccessful resuscitation; the death itself is stated in the discussion sentence about this case (eventual mortality), with no time or cause of death.",
+     "must_not_infer": "Do not assign a time of death (e.g. six hours post-surgery) or a cause of death; the death event is ordered only after the laparotomy.",
      "fact_ids": [
       "p1-f057",
       "p1-f052"
+     ]
+    },
+    {
+     "evidence": [
+      {
+       "segment_id": "b00016",
+       "quote": "An initial diagnosis of malrotation with complicated midgut volvulus was made."
+      },
+      {
+       "segment_id": "b00029",
+       "quote": "no evidence of mal-rotation"
+      }
+     ],
+     "issue": "Malrotation with midgut volvulus was the initial (provisional) diagnosis; the operative findings showed no malrotation and normal bowel, and the discussion calls it an initial wrong diagnosis.",
+     "must_not_infer": "Do not record malrotation or volvulus as confirmed.",
+     "fact_ids": [
+      "p1-f035",
+      "p1-f046"
      ]
     }
    ]
@@ -2298,9 +2555,11 @@
   },
   {
    "segment_id": "b00023",
-   "disposition": "background",
-   "patient_ids": [],
-   "note": "Background, literature discussion or article administration; not index-patient facts."
+   "disposition": "patient_facts",
+   "patient_ids": [
+    "p1"
+   ],
+   "note": "Background; one clause refers to this index patient radiograph (ground-glass appearance), already covered."
   },
   {
    "segment_id": "b00024",
@@ -2353,7 +2612,7 @@
   "Caption-layer visual status not_inspected; actual images are reviewed in the separate visual record.",
   "Case narrative appears twice (b00003-b00004 summary and b00010-b00016 detail); facts cite the detailed text and each datum is recorded once.",
   "Maternal and antenatal facts (mother age, parity, antenatal ultrasound) are recorded with subject mother or fetus on the neonate record.",
-  "Death is not literally stated in the case description; it rests on the discussion wording eventual mortality.",
+  "Death is stated in the discussion for this index case ('eventual mortality'); the case section reports only cardiopulmonary arrest with unsuccessful resuscitation, so no time or cause of death is recorded.",
   "Discussion and literature-review text (b00005-b00009, b00017-b00027) is background and not copied to the patient except sentences that explicitly refer to this index patient."
  ],
  "annotation_provenance": {

@@ -7,7 +7,12 @@
   "roster": {
     "reported_individual_count": null,
     "roster_complete": true,
-    "evidence": []
+    "evidence": [
+      {
+        "segment_id": "b00001",
+        "quote": "We report a monochorionic diamniotic twin pregnancy"
+      }
+    ]
   },
   "patients": [
     {
@@ -714,8 +719,8 @@
             "flag": "unknown",
             "temporality": "current",
             "time": {
-              "text": "23+3 weeks",
-              "relation": "at",
+              "text": null,
+              "relation": "unknown",
               "anchor": null
             }
           },
@@ -728,7 +733,7 @@
           "clinical_statement": "Ultrasound-confirmed demise of one twin",
           "certainty": "supported",
           "scoring": "include",
-          "notes": ""
+          "notes": "'23+3 weeks' is the gestational age at presentation; when the confirming ultrasound was done is not stated in this sentence."
         },
         {
           "fact_id": "p1-f029",
@@ -1447,6 +1452,66 @@
               "quote": "At 28+3 weeks"
             }
           ]
+        },
+        {
+          "from_event_id": "p1-e02",
+          "to_event_id": "p1-e04",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00006",
+              "quote": "Anomaly scan at 18 weeks"
+            },
+            {
+              "segment_id": "b00006",
+              "quote": "Repeat scan at 23 weeks"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e02",
+          "to_event_id": "p1-e03",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00006",
+              "quote": "Anomaly scan at 18 weeks"
+            },
+            {
+              "segment_id": "b00004",
+              "quote": "at 23+3 weeks"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e07",
+          "to_event_id": "p1-e08",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00007",
+              "quote": "given antenatal corticosteroids to enhance fetal lung maturity"
+            },
+            {
+              "segment_id": "b00001",
+              "quote": "pregnancy was prolonged by 10 weeks with expectant management. At 28+3 weeks, an emergency cesarean section was performed"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e08",
+          "to_event_id": "p1-e09",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00017",
+              "quote": "the absence of maternal postoperative complications"
+            },
+            {
+              "segment_id": "b00009",
+              "quote": "The mother recovered uneventfully and was discharged on day three."
+            }
+          ]
         }
       ],
       "summary": [
@@ -1540,7 +1605,30 @@
           "note": "Source-grounded facts retained."
         }
       },
-      "ambiguities": []
+      "ambiguities": [
+        {
+          "evidence": [
+            {
+              "segment_id": "b00008",
+              "quote": "The other twin was anomalous and showed no signs of living activity."
+            },
+            {
+              "segment_id": "b00021",
+              "quote": "Gross appearance of the deceased co-twin delivered in MCDA pregnancy."
+            }
+          ],
+          "issue": "The deceased co-twin (demise at 17 weeks, anomalous, sex undetermined, shown in Figure 1) is recorded as fetus-subject facts in the mother record, not as a roster patient; antenatal fetus-subject facts may refer to either twin (fetal heart sounds and normal appearance refer to the surviving twin).",
+          "must_not_infer": "Do not attribute the co-twin anomalies or Figure 1 to the surviving neonate, and do not infer the nature of the anomaly.",
+          "fact_ids": [
+            "p1-f008",
+            "p1-f009",
+            "p1-f018",
+            "p1-f019",
+            "p1-f027",
+            "p1-f029"
+          ]
+        }
+      ]
     },
     {
       "patient_id": "p2",
@@ -2085,6 +2173,31 @@
           "certainty": "supported",
           "scoring": "include",
           "notes": ""
+        },
+        {
+          "fact_id": "p2-f023",
+          "task": "observations",
+          "collection": "items",
+          "fields": {
+            "subject": "index_patient",
+            "assertion": "present",
+            "name": "Birth weight for gestational age",
+            "kind": "other",
+            "status": "resulted",
+            "text_value": "birth weight consistent with gestational age",
+            "comparator": "unknown",
+            "flag": "unknown"
+          },
+          "evidence": [
+            {
+              "segment_id": "b00013",
+              "quote": "the surviving twin had reasonable APGAR scores and birth weight consistent with gestational age"
+            }
+          ],
+          "clinical_statement": "The surviving twin had birth weight consistent with gestational age.",
+          "certainty": "supported",
+          "scoring": "include",
+          "notes": "The gestational age itself is not stated for the neonate."
         }
       ],
       "events": [
@@ -2096,7 +2209,8 @@
             "p2-f003",
             "p2-f004",
             "p2-f005",
-            "p2-f002"
+            "p2-f002",
+            "p2-f023"
           ],
           "time_text": null,
           "evidence": [
@@ -2172,11 +2286,22 @@
               "quote": "During hospital course, the child received supportive therapy along with antibiotics, He improved and was discharged after two months"
             }
           ]
+        },
+        {
+          "from_event_id": "p2-e01",
+          "to_event_id": "p2-e02",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00001",
+              "quote": "The surviving twin weighed 1350 grams at birth and required neonatal intensive care unit care for respiratory distress and sepsis"
+            }
+          ]
         }
       ],
       "summary": [
         {
-          "text": "A male surviving twin was delivered by emergency cesarean section weighing 1350 grams with APGAR scores of 7/10 and 8/10. He required NICU care for respiratory distress treated with surfactant, hyperkalemia, septic shock, AKI, left lung collapse, apnea of prematurity, pneumonia and stage II retinopathy of prematurity, and received supportive therapy and antibiotics. He improved and was discharged after two months weighing 2180 grams in a stable condition with no active complication.",
+          "text": "A male surviving twin was delivered weighing 1350 grams with APGAR scores of 7/10 and 8/10 and birth weight consistent with gestational age. He required NICU care for respiratory distress treated with surfactant, hyperkalemia, septic shock, AKI, left lung collapse, apnea of prematurity, pneumonia and stage II retinopathy of prematurity, and received supportive therapy and antibiotics. He improved and was discharged after two months weighing 2180 grams in a stable condition with no active complication.",
           "fact_ids": [
             "p2-f002",
             "p2-f003",
@@ -2196,7 +2321,8 @@
             "p2-f018",
             "p2-f019",
             "p2-f020",
-            "p2-f021"
+            "p2-f021",
+            "p2-f023"
           ]
         }
       ],
@@ -2258,7 +2384,29 @@
           "note": "No patient-specific documentation in retained source."
         }
       },
-      "ambiguities": []
+      "ambiguities": [
+        {
+          "evidence": [
+            {
+              "segment_id": "b00009",
+              "quote": "The neonate required NICU care for respiratory distress (treated with surfactant), hyperkalemia, septic shock, AKI, left lung collapse, apnea of prematurity, pneumonia and retinopathy of prematurity of stage II."
+            }
+          ],
+          "issue": "The source lists the NICU conditions without labelling which were primary diagnoses or complications, and gives no per-condition resolution or timing; discharge was with no active complication.",
+          "must_not_infer": "Do not assign condition roles, resolution dates or the neonate gestational age from the maternal cesarean sentence.",
+          "fact_ids": [
+            "p2-f007",
+            "p2-f008",
+            "p2-f009",
+            "p2-f010",
+            "p2-f011",
+            "p2-f012",
+            "p2-f013",
+            "p2-f014",
+            "p2-f015"
+          ]
+        }
+      ]
     }
   ],
   "figures": [

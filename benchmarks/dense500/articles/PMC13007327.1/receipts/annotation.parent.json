@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC13007327.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f75e936f886bd84a0c31938ae063f042e378280f9718737c62aa426486447c77",
+  "annotation_sha256": "244190c093c6609a40cce5cd58bb664ba043b541746041760f263b8a951ee4dd",
+  "reviewed_at": "2026-10-11T19:33:24.585339+00:00",
+  "source_segments_read": 29,
+  "facts_reviewed": 60,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f057 death and p1-f001: b00026 quote extended to the full clause showing it is about this case ('this is the first case described ... eventual mortality'); added b00016 unsuccessful-resuscitation quote; removed inferred related_condition",
+    "p1-e10 no longer carries the death fact; new event p1-e16 death with null time, ordered only after the laparotomy (b00026 'delayed intervention time, and eventual mortality')",
+    "Split bundled events so descriptions imply no unstated times: oxygen/IV fluids (p1-e12, after presentation 'subsequently'), surgical review (p1-e13), NG tube/paracentesis (p1-e14 'Following the surgical review'), transfusion/resuscitation (p1-e15 'subsequently', before laparotomy); radiograph event p1-e06 now radiograph only; removed untimed 'other biochemical analyses' from the 5-hour FBC event",
+    "Added 9 literal relations (e02<e12, e04<e05, e05<e13, e06<e13, e13<e14, e07<e15, e15<e08, e11<e08, e08<e16)",
+    "p1-f029 radiograph: added literal time 'Prior to the review' (before, anchor 'paediatric surgical review')",
+    "Added p1-f059 mechanical ventilation absent (no functional neonatal ventilator) and revised the ventilator ambiguity; added p1-f060 maternal 'Index pregnancy was booked'",
+    "p1-f047 Surgicel: added b00024 index-patient quote; added malrotation provisional-then-refuted ambiguity; revised death limitation; b00023 coverage marked patient_facts",
+    "visual.json F1: 'exposure label' reworded to printed 'EXP:' label (abbreviation not stated); cropped text located below the left film; figure-EHR and privacy drafts regenerated with labels carried over; privacy F1 description revised (date category, possible patient-details line, value not copied)"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual images are reviewed in the separate visual record.",
+    "Case narrative appears twice (b00003-b00004 summary and b00010-b00016 detail); facts cite the detailed text and each datum is recorded once.",
+    "Maternal and antenatal facts (mother age, parity, antenatal ultrasound) are recorded with subject mother or fetus on the neonate record.",
+    "Death is stated in the discussion for this index case ('eventual mortality'); the case section reports only cardiopulmonary arrest with unsuccessful resuscitation, so no time or cause of death is recorded.",
+    "Discussion and literature-review text (b00005-b00009, b00017-b00027) is background and not copied to the patient except sentences that explicitly refer to this index patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 29,
+    "facts_reviewed": 60,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single male neonate; death stated in discussion sentence about this case (b00026) and consistent with b00027 'as observed in this index case'; subject_state deceased_during_course kept",
+      "Maternal/fetal antenatal facts kept with subject mother/fetus on the neonate record per the Subject enum",
+      "Time conventions checked: '4/5 hours after birth' and 'Six hours post-surgery' after+literal anchor; 'By the next day' before; '36th hour of life' at",
+      "Malrotation with midgut volvulus provisional, malrotation refuted by caption 'no evidence of mal-rotation'",
+      "F1 photographed films with R/L markers, printed 'EXP:' date label and a cropped unreadable line; F2 operative field; both attributed to p1"
+    ],
+    "residual_risks": [
+      "Meaning of the radiograph 'EXP:' label unknown; cropped bottom line may be patient details but is unreadable",
+      "Anaemia (p1-f056) rests on a discussion sentence 'as seen in this patient'",
+      "Volvulus itself is not explicitly refuted, only malrotation"
+    ]
+  },
+  "physician_adjudicated": false
+}
