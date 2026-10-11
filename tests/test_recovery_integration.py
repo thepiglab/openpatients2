@@ -7,12 +7,11 @@ import pytest
 
 from openpatients2.client import APIClient, Completion
 from openpatients2.data import read_jsonl
-from openpatients2.demo import transport
 from openpatients2.evidence_recovery import recover_citations, segment_errors
 from openpatients2.output_parser import parse_output, OutputParseError
-from openpatients2.pipeline import run_pipeline
 from openpatients2.targeted_repair import ItemRepair
 from openpatients2.validation import validate
+from synthetic_fixtures import transport
 
 
 def test_duplicate_recovery_is_opt_in_audited_and_type_strict():
@@ -148,33 +147,6 @@ def test_oversized_failed_item_stays_visible_without_preventing_bounded_other_re
     assert plan.output()['coverage'] == 'limited'
     plan.apply({'items':[]})
     assert len(plan.pending) == 1 and plan.trace[-1]['decision'] == 'rejected_reply'
-
-
-@pytest.mark.parametrize('repair_succeeds',[True,False])
-async def test_runtime_repairs_only_failed_items_and_exports_partial_honestly(config,sections,repair_succeeds):
-    config.tasks=['case_context','medications']
-    calls=[];good=transport()
-    async def handler(request):
-        body=json.loads(request.content)
-        if 'EXTRACTION_TASK: medications' not in body['messages'][-1]['content']:
-            return await good.handle_async_request(request)
-        calls.append(body)
-        data=two_items(sections) if len(calls)==1 else copy.deepcopy(sections['medications'])
-        if len(calls)>1:
-            data['items']=data['items'][:1]
-            if not repair_succeeds:data['items'][0]['evidence'][0]['quote']='still fabricated'
-        return httpx.Response(200,text='data: '+json.dumps({'choices':[{'delta':{'content':json.dumps(data)},'finish_reason':'stop'}]})+'\n\ndata: [DONE]\n\n')
-    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as http:
-        report=await run_pipeline(config,client=APIClient(config.api,http))
-    assert len(calls)==2 and 'TARGETED ITEM REPAIR' in calls[1]['messages'][-1]['content']
-    p=next(read_jsonl(Path(config.output)/'patients.jsonl'))
-    assert p['quality']['medications']['status']==('valid' if repair_succeeds else 'partial')
-    assert p['complete_for_scope'] is repair_succeeds
-    assert len(p['sections']['medications']['items'])==(2 if repair_succeeds else 1)
-    assert p['sections']['medications']['items'][0]==sections['medications']['items'][0]
-    assert report['attempts']==3
-    attempts=list(read_jsonl(Path(config.output)/'attempts.jsonl'))
-    assert any('fabricated quotation' in a['generation']['content'] for a in attempts)
 
 
 async def test_article_call_uses_same_targeted_repair_and_persists_audit(tmp_path,sections,row):

@@ -2,7 +2,12 @@
 
 Last checked: **2026-10-09**, after adding the unified article record and the optional EHR stages.
 
-The [completed experiment](../reports/CLINICAL_ARCHITECTURE_20261007.md) did not
+On 2026-10-10 the experimental campaign code, configs, reports and their docs (marked "archived" below) were
+moved out of the repository to `~/openpatients2-archive-2026-10-10/` (`ARCHIVE_INDEX.md` there); every archived
+tracked file is still available at git commit `c66587d`. The campaign-orchestration CLI (`op2 corpus-pilot`,
+HiPerGator/Slurm launchers) went with them; the baseline runner itself (`pilot_extract.run_pilot`) remains.
+
+The completed experiment (`reports/CLINICAL_ARCHITECTURE_20261007.md`, archived) did not
 justify promoting encounter replacement or automatic verification. Additional
 coverage recovered useful candidate facts, but filtering lost more than it gained.
 The diagrams below still describe the current baseline and experimental paths.
@@ -222,13 +227,13 @@ These branches are not chained together. Patient discovery, figure descriptions
 and figure attribution are frozen between comparisons. Changes to clinical facts
 may require later summary/timeline reconciliation; component exports flag that
 limitation. The baseline remains the retained extraction approach. See the
-[controlled campaign](CONTROLLED_COMPONENTS.md) for commands and the
-[latest results](../reports/CONTROLLED_COMPONENTS_20261007.md) for measured gains,
+controlled campaign (`docs/CONTROLLED_COMPONENTS.md`, archived) for commands and the
+latest results (`reports/CONTROLLED_COMPONENTS_20261007.md`, archived) for measured gains,
 failures, and the diagnostic table replay.
 
 ## New opt-in architecture experiment
 
-The [clinical architecture campaign](CLINICAL_ARCHITECTURE_CAMPAIGN.md) is
+The clinical architecture campaign (`docs/CLINICAL_ARCHITECTURE_CAMPAIGN.md`, archived) is
 implemented for the next comparison; no clinical gains are yet measured:
 
 ```text
@@ -269,7 +274,7 @@ encounter-aware source reading. Finer attribute edits, independently reviewed
 state queries and more complete encounter coreference remain candidates. All
 interventions must demonstrate fidelity gains before replacing baseline stages.
 
-The [alternative architecture proposal](EXTRACTION_ALTERNATIVES.md) develops
+The alternative architecture proposal (`docs/EXTRACTION_ALTERNATIVES.md`, archived) develops
 source coverage accounting, independent verification questions, encounter/state
 extraction and corruption tests for qualifying gates before they edit records.
 Its first bounded experiment is now implemented; the broader design is not a
@@ -288,7 +293,7 @@ Implementation references: [source parsing](../src/openpatients2/articles.py),
 [article tasks](../src/openpatients2/article_tasks.py),
 [baseline extraction](../src/openpatients2/pilot_extract.py),
 [figure processing](../src/openpatients2/pilot_media.py),
-[component trials](../src/openpatients2/component_trial.py), and
+component trials (`src/openpatients2/component_trial.py`, archived), and
 [ledger stages](../src/openpatients2/ledger_pipeline.py),
 [EHR stages](../src/openpatients2/ehr_pipeline.py), and
 [unified record](../src/openpatients2/unified_record.py).

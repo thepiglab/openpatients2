@@ -40,16 +40,15 @@ Set timeline event classification on the annotation event: `kind` (presentation,
 
 ## Mode A — new article (no draft exists)
 Write `R/drafts/<ID>.json` (`schema_version: dense-article-annotation/1`) doing the 5 protocol passes.
-You may write a small builder script in your scratch area (or reuse class `Build` in
-`benchmarks/dense50/annotator2_build.py`), but the JSON is what counts. Set
-`annotation_provenance.annotator_model` to `"Claude Sonnet 5.5 annotator"`, `prior_predictions_consulted: false`,
+You may write a small builder script in your own scratch area (do not add it to the repo), but the JSON is what
+counts. Set `annotation_provenance.annotator_model` to `"Claude Sonnet 5.5 annotator"`, `prior_predictions_consulted: false`,
 `status: "draft"`. Never consult other model predictions or other articles' annotations for content.
 
 ## Mode B — finishing an in-flight draft (draft exists from a prior GPT-6.1 Sol annotator)
 Do not trust it. Re-read the whole source and audit the draft source→output (omissions) and
 output→source (unsupported claims, wrong patient, timing, polarity, units, planned-vs-done, suspected-vs-confirmed).
 Fix it in place in `R/drafts/<ID>.json` and add `"Claude Sonnet 5.5 annotator audit"` as an extra entry in
-`annotation_provenance.passes`. If `R/REVIEW_CHECKPOINT.md` lists requested items for this article, address them.
+`annotation_provenance.passes`.
 If `R/annotations/<ID>.json` already exists (parent-approved), do NOT touch drafts; stop and report.
 
 ## Steps (both modes)

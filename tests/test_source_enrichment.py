@@ -10,8 +10,7 @@ from openpatients2.data import prepare, read_jsonl
 from openpatients2.literature_client import (LiteratureClient, LiteratureConfig, LiteratureError,
                                             MetadataCache, RateLimiter, ID_CONVERTER)
 from openpatients2.pmc_media import CLOUD, cloud_url
-from openpatients2.source_enrichment import enrich_sources
-from openpatients2.sources_demo import fixture_metadata, fixture_xml, fixture_transport, PMID, PMCID
+from synthetic_fixtures import PMCID, PMID, fixture_metadata, fixture_transport, fixture_xml
 
 
 @pytest.fixture(autouse=True)
@@ -34,74 +33,6 @@ def prepared(tmp_path, rows=None):
     src.write_text("\n".join(json.dumps(r) for r in rows))
     prepare(str(src), str(dest), "fixture-revision", "ncbi/Open-Patients")
     return dest
-
-
-@pytest.mark.asyncio
-async def test_same_paper_lookup_once_no_media_requested(tmp_path, cfg):
-    source = prepared(tmp_path)
-    calls = []
-    out = tmp_path / "enriched.jsonl"
-    async with httpx.AsyncClient(transport=fixture_transport(calls)) as http:
-        report = await enrich_sources(str(source), str(out), cfg, http=http)
-    rows = list(read_jsonl(out))
-    assert report["records"] == 2
-    assert report["unique_pmc_articles"] == 1
-    assert report["network"]["xml_requests"] == 1
-    assert report["network"]["metadata_requests"] == 1
-    assert report["network"]["identifier_requests"] == 1
-    assert report["network"]["image_requests"] == 0
-    assert len(calls) == 4
-    assert rows[0]["original_row"] != rows[1]["original_row"]
-    assert rows[0]["multimedia"] == rows[1]["multimedia"]
-    assert rows[0]["provenance"]["article"]["pmid"] == PMID
-    assert rows[0]["provenance"]["article"]["pmcid"] == PMCID
-    assert rows[0]["provenance"]["article"]["pubmed_url"].endswith(PMID + "/")
-    assert rows[0]["multimedia"]["has_image_urls"] is True
-    assert not list(tmp_path.rglob("*.jpg"))
-    assert not list(tmp_path.rglob("*.xml"))
-
-
-@pytest.mark.asyncio
-async def test_second_run_offline_uses_cache_without_requests(tmp_path, cfg):
-    source = prepared(tmp_path)
-    async with httpx.AsyncClient(transport=fixture_transport()) as http:
-        await enrich_sources(str(source), str(tmp_path / "first.jsonl"), cfg, http=http)
-    cfg.offline = True
-    async def forbidden(request):
-        raise AssertionError("Offline run must not access the network")
-    async with httpx.AsyncClient(transport=httpx.MockTransport(forbidden)) as http:
-        report = await enrich_sources(str(source), str(tmp_path / "offline.jsonl"), cfg, http=http)
-    assert report["records_with_article_image_urls"] == 2
-    assert report["network"]["article_cache_hits"] == 1
-    assert report["network"]["identifier_cache_hits"] == 1
-    assert "xml_requests" not in report["network"]
-
-
-@pytest.mark.asyncio
-async def test_offline_cache_miss_unknown_not_absent(tmp_path, cfg):
-    source = prepared(tmp_path)
-    cfg.offline = True
-    result = tmp_path / "out.jsonl"
-    report = await enrich_sources(str(source), str(result), cfg)
-    row = next(read_jsonl(result))
-    assert row["multimedia"]["status"] == "not_checked_offline"
-    assert row["multimedia"]["has_figures"] is None
-    assert report["records"] == 2
-
-
-@pytest.mark.asyncio
-async def test_network_failure_preserves_every_row_and_pmid_link(tmp_path, cfg):
-    source = prepared(tmp_path)
-    async def fail(request):
-        raise httpx.ConnectError("no DNS", request=request)
-    result = tmp_path / "out.jsonl"
-    async with httpx.AsyncClient(transport=httpx.MockTransport(fail)) as http:
-        report = await enrich_sources(str(source), str(result), cfg, http=http)
-    assert report["failed_records"] == 2
-    assert report["records"] == 2
-    rows = list(read_jsonl(result))
-    assert all(x["multimedia"]["has_figures"] is None for x in rows)
-    assert all(x["provenance"]["article"]["pubmed_url"] for x in rows)
 
 
 @pytest.mark.asyncio
@@ -154,17 +85,6 @@ async def test_homogeneous_batches_and_max_batch_size(cfg):
             assert {r.url.params["idtype"] for r in calls} == {"pmid", "doi"}
         finally:
             await client.close()
-
-
-@pytest.mark.asyncio
-async def test_explicit_pmcid_does_not_need_identifier_api(tmp_path, cfg):
-    source = prepared(tmp_path, [{"_id": "local", "description": "Fixture.", "PMCID": PMCID}])
-    calls = []
-    async with httpx.AsyncClient(transport=fixture_transport(calls)) as http:
-        out = tmp_path / "out.jsonl"
-        await enrich_sources(str(source), str(out), cfg, http=http)
-    assert not any(ID_CONVERTER in url for url in calls)
-    assert next(read_jsonl(out))["provenance"]["article"]["pmid"] == PMID
 
 
 @pytest.mark.asyncio
@@ -289,54 +209,6 @@ async def test_retry_after_429(cfg, monkeypatch):
             assert client.stats["retries"] == 1
         finally:
             await client.close()
-
-
-@pytest.mark.asyncio
-async def test_conflicting_metadata_does_not_attach_images_to_case(tmp_path, cfg):
-    source = prepared(tmp_path)
-    base = fixture_transport()
-    async def handler(request):
-        response = await base.handle_async_request(request)
-        if request.url.path.endswith(".json"):
-            m = response.json()
-            m["pmid"] = "77777777"
-            return httpx.Response(200, json=m)
-        if request.url.path.endswith(".xml"):
-            return httpx.Response(200, text=fixture_xml(pmid="77777777"))
-        return response
-    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as http:
-        out = tmp_path / "out.jsonl"
-        await enrich_sources(str(source), str(out), cfg, http=http)
-    row = next(read_jsonl(out))
-    assert row["multimedia"]["status"] == "identifier_conflict"
-    assert row["multimedia"]["image_urls"] == []
-
-
-@pytest.mark.asyncio
-async def test_missing_contact_email_fails_before_network(tmp_path, cfg, monkeypatch):
-    monkeypatch.delenv("NCBI_EMAIL")
-    source = prepared(tmp_path)
-    with pytest.raises(ValueError, match="NCBI_EMAIL"):
-        await enrich_sources(str(source), str(tmp_path / "out.jsonl"), cfg)
-    assert not (tmp_path / "out.jsonl").exists()
-
-
-@pytest.mark.asyncio
-async def test_no_article_record_does_not_need_api_email(tmp_path, cfg, monkeypatch):
-    monkeypatch.delenv("NCBI_EMAIL")
-    source = prepared(tmp_path, [{"_id": "usmle-1", "description": "Question."}])
-    result = tmp_path / "out.jsonl"
-    report = await enrich_sources(str(source), str(result), cfg)
-    assert report["network"] == {"image_requests": 0, "image_bytes_downloaded": 0}
-    assert next(read_jsonl(result))["multimedia"]["status"] == "no_article_identifier"
-
-
-@pytest.mark.asyncio
-async def test_source_enrichment_refuses_gpu_allocation(tmp_path, cfg, monkeypatch):
-    source = prepared(tmp_path)
-    monkeypatch.setenv("SLURM_JOB_GPUS", "0,1")
-    with pytest.raises(ValueError, match="CPU-only"):
-        await enrich_sources(str(source), str(tmp_path / "out.jsonl"), cfg)
 
 
 def test_cache_ttl_and_explicit_stale_offline_marker(tmp_path):

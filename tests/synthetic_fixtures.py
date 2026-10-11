@@ -1,20 +1,17 @@
-"""Hand-authored SYNTHETIC fixtures and mock HTTP transport, not a model benchmark.
+"""Hand-authored SYNTHETIC test fixtures and mock HTTP transports (no real clinical records).
 
-No real clinical records and no real GPU performance measurements are included.
+Moved here from the archived `openpatients2.demo` and `openpatients2.sources_demo` modules
+(see the 2026-10-10 archive, git c66587d) so tests of active code keep their fixtures.
 """
 from __future__ import annotations
 
-import copy
 import json
 from pathlib import Path
 
 import httpx
 
-from .client import APIClient
-from .config import APIConfig, PipelineConfig
-from .data import normalize, write_json
-from .pipeline import run_pipeline
-from .schemas import TASK_MODELS
+from openpatients2.data import normalize
+from openpatients2.schemas import TASK_MODELS
 
 
 SOURCE = (
@@ -129,26 +126,49 @@ def transport(sections: dict | None = None, calls: list | None = None) -> httpx.
     return httpx.MockTransport(handle)
 
 
-async def run_demo(destination: str) -> dict:
-    out = Path(destination)
-    out.mkdir(parents=True, exist_ok=True)
-    source = out / "synthetic-input.jsonl"
-    source.write_text(json.dumps(example_record()) + "\n", encoding="utf-8")
-    config = PipelineConfig(input=str(source), output=str(out / "extraction"),
-        api=APIConfig(endpoints=["http://mock.invalid/v1"], model="hand-authored-fixture", model_id="NOT_A_MODEL", revision="fixture-v1"),
-        require_token_profile=False, patient_concurrency=1)
-    async with httpx.AsyncClient(transport=transport()) as http:
-        report = await run_pipeline(config, client=APIClient(config.api, http))
-    report["device_benchmark_status"] = "MOCK_ONLY_NO_GPU_NO_CLINICAL_MODEL"
-    report["validated_new_records_per_hour"] = None
-    report["wall_seconds"] = None
-    write_json(out / "extraction" / "report.json", report)
-    from .warehouse import build_index, query_cohort
-    database = out / "cohorts.sqlite"
-    if not database.exists():
-        build_index(str(out / "extraction" / "patients.jsonl"), str(database))
-    spec = {"name": "synthetic demonstrator only", "source_kinds": ["synthetic_fixture"], "criteria": [
-        {"id": "cancer", "domain": "oncology_tumors", "where": [{"field": "primary_site", "value": "lung"}, {"field": "stage_group", "value": "IV"}]},
-        {"id": "marker", "domain": "oncology_biomarkers", "linked_to": "cancer", "where": [{"field": "gene", "value": "EGFR"}, {"field": "interpretation", "value": "positive"}]}]}
-    cohort = query_cohort(str(database), spec, str(out / "cohort.jsonl"))
-    return {"mode": "hand-authored synthetic fixtures + mock HTTP; NOT inference", "extraction": report, "cohort": cohort}
+PMID = "90000001"
+PMCID = "PMC99990001"
+
+
+def fixture_metadata(pmcid: str = PMCID, pmid: str = PMID, version: int = 1, images: bool = True) -> dict:
+    root = f"s3://pmc-oa-opendata/{pmcid}.{version}"
+    return {"pmcid": pmcid, "pmid": pmid, "version": version, "doi": "10.9999/synthetic-demo",
+            "license_code": "CC BY", "is_pmc_openaccess": "yes", "is_manuscript": "no", "is_retracted": "no",
+            "xml_url": f"{root}/{pmcid}.{version}.xml?md5=synthetic-fixture-not-a-real-digest",
+            "media_urls": [f"{root}/case-f1.jpg?md5=synthetic-fixture-not-a-real-digest",
+                           f"{root}/case-supplement.xlsx?md5=synthetic-fixture-not-a-real-digest"] if images else []}
+
+
+def fixture_xml(pmcid: str = PMCID, pmid: str = PMID, figures: bool = True) -> str:
+    body = '''<fig id="F1"><label>Figure 1</label><caption><p>SYNTHETIC EXAMPLE: case A (panel a), case B (panel b). Not real patient imagery.</p></caption><graphic xlink:href="case-f1"/></fig>''' if figures else "<p>SYNTHETIC EXAMPLE without figure markup.</p>"
+    return f'''<?xml version="1.0" encoding="UTF-8"?><article xmlns:xlink="http://www.w3.org/1999/xlink"><front><article-meta><article-id pub-id-type="pmc">{pmcid}</article-id><article-id pub-id-type="pmid">{pmid}</article-id><permissions><license>Fixture license text; not permission for any real image.</license></permissions></article-meta></front><body>{body}</body></article>'''
+
+
+def fixture_transport(calls: list | None = None) -> httpx.MockTransport:
+    calls = calls if calls is not None else []
+    async def handler(request: httpx.Request):
+        calls.append(str(request.url))
+        if request.url.host == "pmc.ncbi.nlm.nih.gov":
+            values = []
+            for ident in request.url.params["ids"].split(","):
+                if ident in {"90000001", "90000002", "90000003"}:
+                    values.append({"requested-id": ident, "pmid": ident,
+                                   "pmcid": f"PMC9999{int(ident) - 90000000:04d}"})
+                else:
+                    values.append({"requested-id": ident, "errmsg": "fixture: no PMC mapping"})
+            return httpx.Response(200, json={"status": "ok", "records": values})
+        if request.url.path == "/":
+            prefix = request.url.params["prefix"]
+            key = prefix + "1.json"
+            return httpx.Response(200, text=f'<ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><IsTruncated>false</IsTruncated><Contents><Key>{key}</Key></Contents></ListBucketResult>', headers={"content-type": "application/xml"})
+        if request.url.path.endswith(".json"):
+            pmcid = Path(request.url.path).name.split(".")[0]
+            pmid = str(90000000 + int(pmcid[-4:]))
+            return httpx.Response(200, json=fixture_metadata(pmcid, pmid, images=pmid == "90000001"))
+        if request.url.path.endswith(".xml"):
+            pmcid = Path(request.url.path).name.split(".")[0]
+            pmid = str(90000000 + int(pmcid[-4:]))
+            return httpx.Response(200, text=fixture_xml(pmcid, pmid, figures=pmid != "90000002"),
+                                  headers={"content-type": "application/xml"})
+        raise AssertionError(f"No image/media body may be requested: {request.url}")
+    return httpx.MockTransport(handler)

@@ -23,7 +23,7 @@ Set timeline event classification on the annotation event: `kind` (presentation,
 ## Read once at start
 `benchmarks/dense500/ANNOTATION_PROTOCOL.md` (binding for dense50 too; read its "Shared annotation rules"),
 `benchmarks/dense500/claude_prompts/LESSONS.md`, `benchmarks/dense500/claude_prompts/ANNOTATOR_BRIEF.md`,
-`R/SUPPLEMENT_DOCUMENT_REVIEW.md`, and skim `R/REVIEW_CHECKPOINT.md` (the prior parent's style of findings).
+and `R/SUPPLEMENT_DOCUMENT_REVIEW.md`.
 Field MEANING: `src/openpatients2/rules/annotation_rules.yaml` and the runtime prompts
 `src/openpatients2/prompts/system.md` + `prompts/<task>.md` (the local LLM receives the same text; the reference must
 follow it). Field shapes/enums: `src/openpatients2/schemas.py`. Review every item of the checklist at the end.

@@ -6,13 +6,10 @@ from pathlib import Path
 import httpx
 import pytest
 
-from openpatients2.agreement import cluster_map
 from openpatients2.client import APIClient
 from openpatients2.data import normalize, prepare, read_jsonl, input_fingerprint
-from openpatients2.demo import transport
-from openpatients2.pipeline import run_pipeline
 from openpatients2.provenance import OPEN_PATIENTS, build_provenance, from_url
-from openpatients2.warehouse import build_index, query_cohort
+from synthetic_fixtures import transport
 
 
 def test_preserve_all_original_fields_and_types_without_mutation():
@@ -106,15 +103,6 @@ def test_duplicate_source_ids_preserve_every_row_and_order(tmp_path):
     assert output.read_text() == first
 
 
-def test_same_article_cases_share_statistical_and_distillation_cluster():
-    a = normalize({"_id": "pmc-23193287-1", "description": "Case A."})
-    b = normalize({"_id": "pmc-23193287-2", "description": "Case B."})
-    c = normalize({"_id": "pmc-99999999-1", "description": "Different case."})
-    groups = cluster_map({x["record_id"]: x for x in [a, b, c]})
-    assert groups[a["record_id"]] == groups[b["record_id"]]
-    assert groups[c["record_id"]] != groups[b["record_id"]]
-
-
 def test_original_and_media_provenance_are_in_input_identity():
     row = normalize({"_id": "x", "description": "Case."})
     old = input_fingerprint(row)
@@ -122,28 +110,3 @@ def test_original_and_media_provenance_are_in_input_identity():
     assert input_fingerprint(row) != old
 
 
-@pytest.mark.asyncio
-async def test_full_source_reaches_extraction_index_and_cohort(config, tmp_path):
-    # Preserve user-added fields, original note and provenance across every stage.
-    raw = json.loads(Path(config.input).read_text())["original_row"]
-    raw["external_column"] = {"keep": [1, None, False]}
-    row = normalize(raw)
-    row["multimedia"] = {"status": "not_checked_offline", "image_urls": [], "has_image_urls": None}
-    Path(config.input).write_text(json.dumps(row) + "\n")
-    async with httpx.AsyncClient(transport=transport()) as http:
-        await run_pipeline(config, client=APIClient(config.api, http))
-    patient = next(read_jsonl(Path(config.output) / "patients.jsonl"))
-    task = next(read_jsonl(Path(config.output) / "extractions.jsonl"))
-    assert patient["source"]["original_row"] == raw
-    assert task["source"]["original_row"] == raw
-    index = tmp_path / "db.sqlite"
-    build_index(str(Path(config.output) / "patients.jsonl"), str(index))
-    with sqlite3.connect(index) as db:
-        assert db.execute("SELECT count(*) FROM source_articles").fetchone()[0] == 1
-    spec = {"source_kinds": [row["source_kind"]], "include_nonclinical_context": True,
-            "criteria": [{"id": "cancer", "domain": "conditions", "where": [{"field": "name", "op": "contains", "value": "lung"}]}]}
-    output = tmp_path / "cohort.jsonl"
-    query_cohort(str(index), spec, str(output))
-    cohort = next(read_jsonl(output))
-    assert cohort["source"]["original_row"] == raw
-    assert cohort["source"]["multimedia"] == row["multimedia"]

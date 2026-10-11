@@ -377,21 +377,6 @@ async def test_competing_pixel_and_caption_patients_remain_explicit_candidates(t
     assert patient['clinical_accuracy_verified'] is False
 
 
-def test_local_endpoints_pin_settings_and_existing_arm_is_immutable(tmp_path):
-    assert load_pilot_config('configs/pilot/glimmer-extraction.yaml').max_articles == 48
-    config = load_pilot_config('configs/pilot/glimmer-extraction.yaml')
-    assert config.max_output_tokens == config.max_retry_tokens == 16384
-    assert config.max_total_tokens == 32_000_000 and config.require_full_output_budget is True
-    with pytest.raises(ValueError):
-        PilotRunner({}, tmp_path / 'remote', ['https://example.com/v1'], 4096, 'direct')
-    assert PilotConfig(reasoning_strength='high').reasoning_strength == 'high'
-    with pytest.raises(ValueError):
-        PilotConfig(reasoning_strength='unsupported')
-    output = tmp_path / 'exists'; output.mkdir(); (output / 'report.json').write_text('{}')
-    with pytest.raises(ValueError, match='independent'):
-        PilotRunner({}, output, ['http://localhost:8000/v1'], 4096, 'direct')
-
-
 async def test_parallel_tokenization_cannot_overrun_shared_call_budget(tmp_path, monkeypatch):
     value = article(); sent = []
     async def tokenize(request):

@@ -1,7 +1,7 @@
 # Compile patient records from source claims
 
 Proposal, 2026-10-07. **Not implemented or benchmarked.** No production default
-changes. Motivated by the [architecture results](../reports/CLINICAL_ARCHITECTURE_20261007.md).
+changes. Motivated by the architecture results (`reports/CLINICAL_ARCHITECTURE_20261007.md`, archived 2026-10-10; git `c66587d`).
 
 The experimental coverage pass contains more required clinical information than
 the baseline before verification, but its gate removes enough to reverse the

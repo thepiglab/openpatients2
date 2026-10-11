@@ -7,8 +7,6 @@ from pydantic import ValidationError
 from openpatients2.extraction_contracts import (SourceSpan, FactEnvelope, CoverageUnit,
     field_support_report, coverage_report, span_errors)
 from openpatients2.longitudinal import PatientTimeline, audit_timeline
-from openpatients2.refinement_plan import GateIssue, RepairAttempt, RefinementBudget, plan_refinement
-from openpatients2.corpus_policy import prioritize_article
 from openpatients2.evidence_recovery import resolve_timeline_spans
 
 TEXT = ('Patient 1 was admitted on 2020-03. Surgery was performed 2 days later. '
@@ -287,47 +285,9 @@ def test_duplicate_coverage_cannot_hide_uninspected_source():
     assert 'invalid_duplicate_chain' in codes(coverage_report([a,b], ['a','b'], [], SOURCES))
 
 
-def issue(target='f1', stage='schema'):
-    return GateIssue(issue_id=target+stage, target_id=target, stage=stage, code='bad_field', severity='block',
-                     explanation='Needs source-specific repair', source_unit_ids=['b1'])
-
-
-def attempt(outcome='improved', digest='b'*64, tokens=100):
-    return RepairAttempt(record_id=RID, source_digest=HASH, target_id='f1', stage='schema',
-                         candidate_digest=digest, remaining_issue_codes=['bad_field'], outcome=outcome, tokens=tokens)
-
-
-def test_repairs_budgeted_and_stopped_on_no_progress_or_patient_mixup():
-    result = plan_refinement(RID, HASH, [issue()], [attempt('unchanged')])
-    assert not result['jobs'] and result['held'][0]['reason'] == 'no_progress_or_regression'
-    other = attempt(); other.record_id = 'PMCtest.1:p2'
-    with pytest.raises(ValueError): plan_refinement(RID, HASH, [issue()], [other])
-    result = plan_refinement(RID, HASH, [issue(), issue('f2')], [], RefinementBudget(max_calls=1))
-    assert len(result['jobs']) == 1 and len(result['held']) == 1
-    result = plan_refinement(RID, HASH, [issue()], [attempt()], RefinementBudget(max_total_tokens=100))
-    assert not result['jobs']
-
-
-def test_rights_block_cannot_be_fixed_by_model_and_one_call_per_target():
-    result = plan_refinement(RID, HASH, [issue(stage='rights'), issue('f2')], [])
-    assert not result['jobs'] and len(result['held']) == 2
-    result = plan_refinement(RID, HASH, [issue(), issue(stage='attribution')], [])
-    assert len(result['jobs']) == 1 and result['jobs'][0]['stage'] == 'attribution'
-    assert result['jobs'][0]['accepted_neighbors'] == 'frozen'
-    assert not result['automatic_clinical_edits']
-
-
 def article():
     return {'article_id':'PMCtest.1', 'xml_sha256':HASH, 'title':'Research observations', 'article_type':'research-article',
         'license':{'allowed':True, 'code':'CC BY-NC-SA', 'raw_code':'CC BY-NC-SA', 'statements':[]},
         'segments':[{'segment_id':'b1', 'kind':'paragraph', 'heading':'Results', 'text':TEXT}], 'figures':[]}
 
 
-def test_noncase_reports_and_animals_are_not_dropped_by_priority():
-    value = article()
-    result = prioritize_article(value)
-    assert result['route'] == 'exploration_screen' and result['species_filter'] == 'none'
-    value['title'] = 'Veterinary case report'
-    assert prioritize_article(value)['route'] == 'priority_screen'
-    value['license']['raw_code'] = 'CC BY-ND'
-    assert prioritize_article(value)['route'] == 'quarantine'
