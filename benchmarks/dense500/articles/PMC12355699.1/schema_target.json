@@ -1,7 +1,7 @@
 {
   "format": "dense-runtime-targets/1",
   "article_id": "PMC12355699.1",
-  "annotation_sha256": "dfbb7facfb15e90ec413842d4902a18fab5c06d42099c5afc1d9ad939fb3742e",
+  "annotation_sha256": "e196ebcde79a52c4eb07bd22f706e148515e769197c0d99733dffc8894be65af",
   "source_text_sha256": "782034cee926978636f25cc23cb867a523e05baec4d0e4276393218513d7e3e8",
   "schema_fingerprints": {
     "case_context": "d7439310910ef4a7d5e1706c5b9dc8a2b379f132a2562791c059a478b588ec71",
@@ -427,7 +427,7 @@
             },
             {
               "subject": "index_patient",
-              "assertion": "present",
+              "assertion": "possible",
               "temporality": "current",
               "time": {
                 "text": null,
@@ -442,9 +442,9 @@
                 }
               ],
               "verification_status": "unconfirmed",
-              "name": "Causal association of disseminated BCG infection with BCG vaccination",
+              "name": "Disseminated BCG infection causally associated with BCG vaccination",
               "clinical_status": "unknown",
-              "role": "unknown",
+              "role": "complication",
               "body_site": null,
               "laterality": "unknown",
               "severity": null,
@@ -503,7 +503,7 @@
             {
               "subject": "index_patient",
               "assertion": "present",
-              "temporality": "historical",
+              "temporality": "current",
               "time": {
                 "text": "In April 2023",
                 "relation": "at",
@@ -596,51 +596,31 @@
               "assertion": "present",
               "temporality": "unknown",
               "time": {
-                "text": "November 29, 2022",
-                "relation": "at",
-                "anchor": null,
+                "text": "November 29, 2022 (within 24 hours of birth)",
+                "relation": "after",
+                "anchor": "birth",
                 "date_iso": "2022-11-29"
               },
               "evidence": [
                 {
-                  "quote": "A male infant was administered one dose of BCG vaccine on November 29, 2022 (within 24 hours of birth)",
+                  "quote": "was administered one dose of BCG vaccine on November 29, 2022 (within 24 hours of birth).",
+                  "source_section": "b00006"
+                },
+                {
+                  "quote": "the dose was 0.1 mL containing 0.05 mg of BCG.",
+                  "source_section": "b00006"
+                },
+                {
+                  "quote": "The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm.",
                   "source_section": "b00006"
                 }
               ],
               "name": "BCG vaccine",
               "action": "administered",
               "ingredient_as_documented": null,
-              "dose_text": null,
-              "dose_value": null,
-              "dose_unit": null,
-              "route": null,
-              "frequency": null,
-              "duration_text": null,
-              "indication": null,
-              "regimen": null
-            },
-            {
-              "subject": "index_patient",
-              "assertion": "present",
-              "temporality": "unknown",
-              "time": {
-                "text": null,
-                "relation": "unknown",
-                "anchor": null,
-                "date_iso": null
-              },
-              "evidence": [
-                {
-                  "quote": "the dose was 0.1 mL containing 0.05 mg of BCG. The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm.",
-                  "source_section": "b00006"
-                }
-              ],
-              "name": "BCG vaccine (dose detail)",
-              "action": "administered",
-              "ingredient_as_documented": null,
               "dose_text": "0.1 mL containing 0.05 mg of BCG",
-              "dose_value": null,
-              "dose_unit": null,
+              "dose_value": 0.1,
+              "dose_unit": "mL",
               "route": "intracutaneously",
               "frequency": null,
               "duration_text": null,
@@ -1172,7 +1152,15 @@
               "evidence": [
                 {
                   "segment_id": "b00006",
-                  "quote": "A male infant was administered one dose of BCG vaccine on November 29, 2022 (within 24 hours of birth)"
+                  "quote": "was administered one dose of BCG vaccine on November 29, 2022 (within 24 hours of birth)."
+                },
+                {
+                  "segment_id": "b00006",
+                  "quote": "the dose was 0.1 mL containing 0.05 mg of BCG."
+                },
+                {
+                  "segment_id": "b00006",
+                  "quote": "The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm."
                 },
                 {
                   "segment_id": "b00007",
@@ -1271,8 +1259,7 @@
               "occurrence": "occurred",
               "description": "BCG vaccination",
               "fact_ids": [
-                "p1-f007",
-                "p1-f008"
+                "p1-f007"
               ],
               "evidence": [
                 {
@@ -1319,7 +1306,7 @@
               "episode_id": null,
               "kind": "presentation",
               "occurrence": "occurred",
-              "description": "Onset of high fever",
+              "description": "Sudden unprovoked bouts of high fever",
               "fact_ids": [
                 "p1-f009"
               ],
@@ -2063,8 +2050,7 @@
             "occurrence": "occurred",
             "description": "BCG vaccination",
             "fact_ids": [
-              "p1-f007",
-              "p1-f008"
+              "p1-f007"
             ],
             "evidence": [
               {
@@ -2111,7 +2097,7 @@
             "episode_id": null,
             "kind": "presentation",
             "occurrence": "occurred",
-            "description": "Onset of high fever",
+            "description": "Sudden unprovoked bouts of high fever",
             "fact_ids": [
               "p1-f009"
             ],
@@ -2963,7 +2949,7 @@
         "basis": "Source-gated model relations; paragraph order and event kind do not create chronology."
       },
       "reference_provenance": {
-        "annotation_sha256": "dfbb7facfb15e90ec413842d4902a18fab5c06d42099c5afc1d9ad939fb3742e",
+        "annotation_sha256": "e196ebcde79a52c4eb07bd22f706e148515e769197c0d99733dffc8894be65af",
         "materializer_version": "dense-runtime-targets/1",
         "fact_pointers": [
           {
@@ -3098,25 +3084,22 @@
             "source_evidence": [
               {
                 "segment_id": "b00006",
-                "quote": "A male infant was administered one dose of BCG vaccine on November 29, 2022 (within 24 hours of birth)"
-              }
-            ]
-          },
-          {
-            "fact_id": "p1-f008",
-            "task": "medications",
-            "pointer": "/items/1",
-            "source_evidence": [
+                "quote": "was administered one dose of BCG vaccine on November 29, 2022 (within 24 hours of birth)."
+              },
               {
                 "segment_id": "b00006",
-                "quote": "the dose was 0.1 mL containing 0.05 mg of BCG. The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm."
+                "quote": "the dose was 0.1 mL containing 0.05 mg of BCG."
+              },
+              {
+                "segment_id": "b00006",
+                "quote": "The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm."
               }
             ]
           },
           {
             "fact_id": "p1-f018",
             "task": "medications",
-            "pointer": "/items/2",
+            "pointer": "/items/1",
             "source_evidence": [
               {
                 "segment_id": "b00007",
@@ -3127,7 +3110,7 @@
           {
             "fact_id": "p1-f020",
             "task": "medications",
-            "pointer": "/items/3",
+            "pointer": "/items/2",
             "source_evidence": [
               {
                 "segment_id": "b00007",
@@ -3138,7 +3121,7 @@
           {
             "fact_id": "p1-f021",
             "task": "medications",
-            "pointer": "/items/4",
+            "pointer": "/items/3",
             "source_evidence": [
               {
                 "segment_id": "b00007",
@@ -3149,7 +3132,7 @@
           {
             "fact_id": "p1-f022",
             "task": "medications",
-            "pointer": "/items/5",
+            "pointer": "/items/4",
             "source_evidence": [
               {
                 "segment_id": "b00007",
@@ -3160,7 +3143,7 @@
           {
             "fact_id": "p1-f023",
             "task": "medications",
-            "pointer": "/items/6",
+            "pointer": "/items/5",
             "source_evidence": [
               {
                 "segment_id": "b00007",
@@ -3171,7 +3154,7 @@
           {
             "fact_id": "p1-f024",
             "task": "medications",
-            "pointer": "/items/7",
+            "pointer": "/items/6",
             "source_evidence": [
               {
                 "segment_id": "b00007",
@@ -3182,7 +3165,7 @@
           {
             "fact_id": "p1-f025",
             "task": "medications",
-            "pointer": "/items/8",
+            "pointer": "/items/7",
             "source_evidence": [
               {
                 "segment_id": "b00007",
@@ -3563,7 +3546,7 @@
             "pointer": "/items/2",
             "value_as_extracted": {
               "subject": "index_patient",
-              "assertion": "present",
+              "assertion": "possible",
               "temporality": "current",
               "time": {
                 "text": null,
@@ -3578,9 +3561,9 @@
                 }
               ],
               "verification_status": "unconfirmed",
-              "name": "Causal association of disseminated BCG infection with BCG vaccination",
+              "name": "Disseminated BCG infection causally associated with BCG vaccination",
               "clinical_status": "unknown",
-              "role": "unknown",
+              "role": "complication",
               "body_site": null,
               "laterality": "unknown",
               "severity": null,
@@ -3588,11 +3571,11 @@
             },
             "value_as_annotated": {
               "subject": "index_patient",
-              "assertion": "present",
-              "name": "Causal association of disseminated BCG infection with BCG vaccination",
+              "assertion": "possible",
+              "name": "Disseminated BCG infection causally associated with BCG vaccination",
               "verification_status": "unconfirmed",
               "clinical_status": "unknown",
-              "role": "unknown",
+              "role": "complication",
               "temporality": "current"
             },
             "evidence": [
@@ -3732,7 +3715,7 @@
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
-              "temporality": "historical",
+              "temporality": "current",
               "time": {
                 "text": "In April 2023",
                 "relation": "at",
@@ -3761,7 +3744,7 @@
               "verification_status": "confirmed",
               "clinical_status": "unknown",
               "role": "complication",
-              "temporality": "historical",
+              "temporality": "current",
               "body_site": "injection site",
               "time": {
                 "text": "In April 2023",
@@ -3907,81 +3890,31 @@
               "assertion": "present",
               "temporality": "unknown",
               "time": {
-                "text": "November 29, 2022",
-                "relation": "at",
-                "anchor": null,
+                "text": "November 29, 2022 (within 24 hours of birth)",
+                "relation": "after",
+                "anchor": "birth",
                 "date_iso": "2022-11-29"
               },
               "evidence": [
                 {
-                  "quote": "A male infant was administered one dose of BCG vaccine on November 29, 2022 (within 24 hours of birth)",
+                  "quote": "was administered one dose of BCG vaccine on November 29, 2022 (within 24 hours of birth).",
                   "source_section": "b00006"
-                }
-              ],
-              "name": "BCG vaccine",
-              "action": "administered",
-              "ingredient_as_documented": null,
-              "dose_text": null,
-              "dose_value": null,
-              "dose_unit": null,
-              "route": null,
-              "frequency": null,
-              "duration_text": null,
-              "indication": null,
-              "regimen": null
-            },
-            "value_as_annotated": {
-              "subject": "index_patient",
-              "assertion": "present",
-              "name": "BCG vaccine",
-              "action": "administered",
-              "time": {
-                "text": "November 29, 2022",
-                "relation": "at",
-                "anchor": null,
-                "date_iso": "2022-11-29"
-              }
-            },
-            "evidence": [
-              {
-                "source_id": "PMC12355699.1:jats",
-                "segment_id": "b00006",
-                "segment_sha256": "46f04183bee7da466099b0008e153c505a7e50c40a07568426dcb0e087ef7f50",
-                "start": 8,
-                "end": 110,
-                "quote": "A male infant was administered one dose of BCG vaccine on November 29, 2022 (within 24 hours of birth)"
-              }
-            ],
-            "event_ids": [
-              "p1-e01"
-            ]
-          },
-          {
-            "fact_id": "p1-f008",
-            "task": "medications",
-            "pointer": "/items/1",
-            "value_as_extracted": {
-              "subject": "index_patient",
-              "assertion": "present",
-              "temporality": "unknown",
-              "time": {
-                "text": null,
-                "relation": "unknown",
-                "anchor": null,
-                "date_iso": null
-              },
-              "evidence": [
+                },
                 {
-                  "quote": "the dose was 0.1 mL containing 0.05 mg of BCG. The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm.",
+                  "quote": "the dose was 0.1 mL containing 0.05 mg of BCG.",
+                  "source_section": "b00006"
+                },
+                {
+                  "quote": "The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm.",
                   "source_section": "b00006"
                 }
               ],
-              "name": "BCG vaccine (dose detail)",
+              "name": "BCG vaccine",
               "action": "administered",
               "ingredient_as_documented": null,
               "dose_text": "0.1 mL containing 0.05 mg of BCG",
-              "dose_value": null,
-              "dose_unit": null,
+              "dose_value": 0.1,
+              "dose_unit": "mL",
               "route": "intracutaneously",
               "frequency": null,
               "duration_text": null,
@@ -3991,9 +3924,17 @@
             "value_as_annotated": {
               "subject": "index_patient",
               "assertion": "present",
-              "name": "BCG vaccine (dose detail)",
+              "name": "BCG vaccine",
               "action": "administered",
+              "time": {
+                "text": "November 29, 2022 (within 24 hours of birth)",
+                "relation": "after",
+                "anchor": "birth",
+                "date_iso": "2022-11-29"
+              },
               "dose_text": "0.1 mL containing 0.05 mg of BCG",
+              "dose_value": 0.1,
+              "dose_unit": "mL",
               "route": "intracutaneously"
             },
             "evidence": [
@@ -4001,9 +3942,25 @@
                 "source_id": "PMC12355699.1:jats",
                 "segment_id": "b00006",
                 "segment_sha256": "46f04183bee7da466099b0008e153c505a7e50c40a07568426dcb0e087ef7f50",
+                "start": 22,
+                "end": 111,
+                "quote": "was administered one dose of BCG vaccine on November 29, 2022 (within 24 hours of birth)."
+              },
+              {
+                "source_id": "PMC12355699.1:jats",
+                "segment_id": "b00006",
+                "segment_sha256": "46f04183bee7da466099b0008e153c505a7e50c40a07568426dcb0e087ef7f50",
                 "start": 193,
+                "end": 239,
+                "quote": "the dose was 0.1 mL containing 0.05 mg of BCG."
+              },
+              {
+                "source_id": "PMC12355699.1:jats",
+                "segment_id": "b00006",
+                "segment_sha256": "46f04183bee7da466099b0008e153c505a7e50c40a07568426dcb0e087ef7f50",
+                "start": 240,
                 "end": 334,
-                "quote": "the dose was 0.1 mL containing 0.05 mg of BCG. The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm."
+                "quote": "The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm."
               }
             ],
             "event_ids": [
@@ -4013,7 +3970,7 @@
           {
             "fact_id": "p1-f018",
             "task": "medications",
-            "pointer": "/items/2",
+            "pointer": "/items/1",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -4065,7 +4022,7 @@
           {
             "fact_id": "p1-f020",
             "task": "medications",
-            "pointer": "/items/3",
+            "pointer": "/items/2",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -4122,7 +4079,7 @@
           {
             "fact_id": "p1-f021",
             "task": "medications",
-            "pointer": "/items/4",
+            "pointer": "/items/3",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -4179,7 +4136,7 @@
           {
             "fact_id": "p1-f022",
             "task": "medications",
-            "pointer": "/items/5",
+            "pointer": "/items/4",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -4235,7 +4192,7 @@
           {
             "fact_id": "p1-f023",
             "task": "medications",
-            "pointer": "/items/6",
+            "pointer": "/items/5",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -4298,7 +4255,7 @@
           {
             "fact_id": "p1-f024",
             "task": "medications",
-            "pointer": "/items/7",
+            "pointer": "/items/6",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -4351,7 +4308,7 @@
           {
             "fact_id": "p1-f025",
             "task": "medications",
-            "pointer": "/items/8",
+            "pointer": "/items/7",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -5306,9 +5263,9 @@
                 }
               ],
               "verification_status": "confirmed",
-              "name": "Causal association of disseminated BCG infection with BCG vaccination",
+              "name": "Disseminated BCG infection causally associated with BCG vaccination",
               "clinical_status": "unknown",
-              "role": "unknown",
+              "role": "complication",
               "body_site": null,
               "laterality": "unknown",
               "severity": null,
@@ -5353,6 +5310,10 @@
                 {
                   "quote": "Mycobacterium tuberculosis complex infection was detected in the blood, marrow, and alveolar lavage fluid via NGS on January 10, 2023, and the type was bovine.",
                   "source_section": "b00011"
+                },
+                {
+                  "quote": "mixed infections of multiple pathogens (Pneumocystis jirovecii, Mycobacterium tuberculosis complex, Mycoplasma pneumoniae, Rotavirus group A, Enterobacter Hornii, Enterobacter cloaca, novel coronavirus Omicron BF.7, Epstein – Barr virus, fungi, norovirus) occurred repeatedly",
+                  "source_section": "b00012"
                 }
               ],
               "verification_status": "confirmed",
@@ -5382,31 +5343,6 @@
               ],
               "verification_status": "confirmed",
               "name": "Pneumocystis jirovecii infection",
-              "clinical_status": "unknown",
-              "role": "complication",
-              "body_site": null,
-              "laterality": "unknown",
-              "severity": null,
-              "diagnostic_basis": null
-            },
-            {
-              "subject": "index_patient",
-              "assertion": "present",
-              "temporality": "current",
-              "time": {
-                "text": null,
-                "relation": "unknown",
-                "anchor": null,
-                "date_iso": null
-              },
-              "evidence": [
-                {
-                  "quote": "mixed infections of multiple pathogens (Pneumocystis jirovecii, Mycobacterium tuberculosis complex, Mycoplasma pneumoniae, Rotavirus group A, Enterobacter Hornii, Enterobacter cloaca, novel coronavirus Omicron BF.7, Epstein – Barr virus, fungi, norovirus) occurred repeatedly",
-                  "source_section": "b00012"
-                }
-              ],
-              "verification_status": "confirmed",
-              "name": "Mycobacterium tuberculosis complex infection",
               "clinical_status": "unknown",
               "role": "complication",
               "body_site": null,
@@ -5739,7 +5675,7 @@
                 }
               ],
               "name": "Rash",
-              "kind": "symptom",
+              "kind": "sign",
               "text_value": null,
               "numeric_value": null,
               "unit": null,
@@ -5764,11 +5700,11 @@
                 }
               ],
               "name": "Rash spreading throughout the body",
-              "kind": "symptom",
+              "kind": "sign",
               "text_value": null,
               "numeric_value": null,
               "unit": null,
-              "body_site": "whole body",
+              "body_site": "throughout the body",
               "severity": null,
               "activity_context": null
             },
@@ -5885,51 +5821,31 @@
               "assertion": "present",
               "temporality": "unknown",
               "time": {
-                "text": "September 3, 2022",
-                "relation": "at",
-                "anchor": null,
+                "text": "September 3, 2022 (within 24 hours of birth)",
+                "relation": "after",
+                "anchor": "birth",
                 "date_iso": "2022-09-03"
               },
               "evidence": [
                 {
-                  "quote": "A female infant was administered one dose of BCG vaccine on September 3, 2022 (within 24 hours of birth)",
+                  "quote": "was administered one dose of BCG vaccine on September 3, 2022 (within 24 hours of birth).",
+                  "source_section": "b00009"
+                },
+                {
+                  "quote": "the dose was 0.1 mL containing 0.05 mg of BCG.",
+                  "source_section": "b00009"
+                },
+                {
+                  "quote": "The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm.",
                   "source_section": "b00009"
                 }
               ],
               "name": "BCG vaccine",
               "action": "administered",
               "ingredient_as_documented": null,
-              "dose_text": null,
-              "dose_value": null,
-              "dose_unit": null,
-              "route": null,
-              "frequency": null,
-              "duration_text": null,
-              "indication": null,
-              "regimen": null
-            },
-            {
-              "subject": "index_patient",
-              "assertion": "present",
-              "temporality": "unknown",
-              "time": {
-                "text": null,
-                "relation": "unknown",
-                "anchor": null,
-                "date_iso": null
-              },
-              "evidence": [
-                {
-                  "quote": "the dose was 0.1 mL containing 0.05 mg of BCG. The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm.",
-                  "source_section": "b00009"
-                }
-              ],
-              "name": "BCG vaccine (dose detail)",
-              "action": "administered",
-              "ingredient_as_documented": null,
               "dose_text": "0.1 mL containing 0.05 mg of BCG",
-              "dose_value": null,
-              "dose_unit": null,
+              "dose_value": 0.1,
+              "dose_unit": "mL",
               "route": "intracutaneously",
               "frequency": null,
               "duration_text": null,
@@ -5950,43 +5866,19 @@
                 {
                   "quote": "On October 28, 2022, she was administered one dose of a reassortant rotavirus vaccine, live, oral, pentavalent (Vero cells).",
                   "source_section": "b00010"
+                },
+                {
+                  "quote": "the dose was 2 mL containing 2.2 × 10^(6) U reassortant rotavirus G1, 2.8 × 10^(6) U reassortant rotavirus G2, 2.2 × 10^(6) U reassortant rotavirus G3, 2.0 × 10^(6) U reassortant rotavirus G4, and 2.3 × 10^(6) U reassortant rotavirus P1A[8].",
+                  "source_section": "b00010"
                 }
               ],
               "name": "Reassortant rotavirus vaccine, live, oral, pentavalent (Vero cells)",
               "action": "administered",
               "ingredient_as_documented": null,
-              "dose_text": null,
-              "dose_value": null,
-              "dose_unit": null,
-              "route": "oral",
-              "frequency": null,
-              "duration_text": null,
-              "indication": null,
-              "regimen": null
-            },
-            {
-              "subject": "index_patient",
-              "assertion": "present",
-              "temporality": "unknown",
-              "time": {
-                "text": null,
-                "relation": "unknown",
-                "anchor": null,
-                "date_iso": null
-              },
-              "evidence": [
-                {
-                  "quote": "the dose was 2 mL containing",
-                  "source_section": "b00010"
-                }
-              ],
-              "name": "Reassortant rotavirus vaccine dose detail",
-              "action": "administered",
-              "ingredient_as_documented": null,
               "dose_text": "2 mL",
               "dose_value": 2.0,
               "dose_unit": "mL",
-              "route": null,
+              "route": "oral",
               "frequency": null,
               "duration_text": null,
               "indication": null,
@@ -6315,7 +6207,7 @@
                 }
               ],
               "result_absent_reason": null,
-              "name": "Proportions of inhibitory T-cell and B lymphocyte subsets",
+              "name": "Proportion of inhibitory T-cell subsets",
               "kind": "laboratory",
               "status": "resulted",
               "text_value": "significantly reduced",
@@ -6417,6 +6309,36 @@
               "specimen": "alveolar lavage fluid",
               "method": "NGS",
               "body_site": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": "On November 29, 2022",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": "2022-11-29"
+              },
+              "evidence": [
+                {
+                  "quote": "On November 29, 2022, blood tests indicated decreased levels of IgA, IgG, and IgM, and the proportions of inhibitory T-cell and B lymphocyte subsets were significantly reduced.",
+                  "source_section": "b00011"
+                }
+              ],
+              "result_absent_reason": null,
+              "name": "Proportion of B lymphocyte subsets",
+              "kind": "laboratory",
+              "status": "resulted",
+              "text_value": "significantly reduced",
+              "numeric_value": null,
+              "comparator": "unknown",
+              "unit": null,
+              "flag": "low",
+              "reference_range_text": null,
+              "specimen": "blood",
+              "method": null,
+              "body_site": null
             }
           ]
         },
@@ -6499,6 +6421,10 @@
                   "source_section": "b00012"
                 },
                 {
+                  "quote": "On the basis of SCID, mixed infections of multiple pathogens (Pneumocystis jirovecii, Mycobacterium tuberculosis complex, Mycoplasma pneumoniae, Rotavirus group A, Enterobacter Hornii, Enterobacter cloaca, novel coronavirus Omicron BF.7, Epstein – Barr virus, fungi, norovirus) occurred repeatedly and then septic shock, pulmonary hemorrhage, acute respiratory distress syndrome, and systemic multi-organ and multi-system failure, which led to death.",
+                  "source_section": "b00012"
+                },
+                {
                   "quote": "Outcome | recovery | death | recovery",
                   "source_section": "b00022"
                 }
@@ -6528,11 +6454,23 @@
               "evidence": [
                 {
                   "segment_id": "b00009",
-                  "quote": "A female infant was administered one dose of BCG vaccine on September 3, 2022 (within 24 hours of birth)"
+                  "quote": "was administered one dose of BCG vaccine on September 3, 2022 (within 24 hours of birth)."
+                },
+                {
+                  "segment_id": "b00009",
+                  "quote": "the dose was 0.1 mL containing 0.05 mg of BCG."
+                },
+                {
+                  "segment_id": "b00009",
+                  "quote": "The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm."
                 },
                 {
                   "segment_id": "b00010",
                   "quote": "On October 28, 2022, she was administered one dose of a reassortant rotavirus vaccine, live, oral, pentavalent (Vero cells)."
+                },
+                {
+                  "segment_id": "b00010",
+                  "quote": "the dose was 2 mL containing 2.2 × 10^(6) U reassortant rotavirus G1, 2.8 × 10^(6) U reassortant rotavirus G2, 2.2 × 10^(6) U reassortant rotavirus G3, 2.0 × 10^(6) U reassortant rotavirus G4, and 2.3 × 10^(6) U reassortant rotavirus P1A[8]."
                 },
                 {
                   "segment_id": "b00011",
@@ -6565,6 +6503,10 @@
                 {
                   "segment_id": "b00011",
                   "quote": "Mycobacterium tuberculosis complex infection was detected in the blood, marrow, and alveolar lavage fluid via NGS on January 10, 2023, and the type was bovine."
+                },
+                {
+                  "segment_id": "b00012",
+                  "quote": "mixed infections of multiple pathogens (Pneumocystis jirovecii, Mycobacterium tuberculosis complex, Mycoplasma pneumoniae, Rotavirus group A, Enterobacter Hornii, Enterobacter cloaca, novel coronavirus Omicron BF.7, Epstein – Barr virus, fungi, norovirus) occurred repeatedly"
                 }
               ]
             },
@@ -6582,6 +6524,10 @@
                 {
                   "segment_id": "b00012",
                   "quote": "She died on October 2, 2023."
+                },
+                {
+                  "segment_id": "b00012",
+                  "quote": "On the basis of SCID, mixed infections of multiple pathogens (Pneumocystis jirovecii, Mycobacterium tuberculosis complex, Mycoplasma pneumoniae, Rotavirus group A, Enterobacter Hornii, Enterobacter cloaca, novel coronavirus Omicron BF.7, Epstein – Barr virus, fungi, norovirus) occurred repeatedly and then septic shock, pulmonary hemorrhage, acute respiratory distress syndrome, and systemic multi-organ and multi-system failure, which led to death."
                 },
                 {
                   "segment_id": "b00022",
@@ -6619,8 +6565,7 @@
               "occurrence": "occurred",
               "description": "BCG vaccination",
               "fact_ids": [
-                "p2-f007",
-                "p2-f008"
+                "p2-f007"
               ],
               "evidence": [
                 {
@@ -6669,8 +6614,7 @@
               "occurrence": "occurred",
               "description": "Rotavirus vaccination",
               "fact_ids": [
-                "p2-f009",
-                "p2-f010"
+                "p2-f009"
               ],
               "evidence": [
                 {
@@ -6820,7 +6764,8 @@
                 "p2-f019",
                 "p2-f020",
                 "p2-f021",
-                "p2-f022"
+                "p2-f022",
+                "p2-f049"
               ],
               "evidence": [
                 {
@@ -7057,7 +7002,6 @@
               "description": "Repeated mixed infections and organ failure leading to death",
               "fact_ids": [
                 "p2-f035",
-                "p2-f036",
                 "p2-f037",
                 "p2-f038",
                 "p2-f039",
@@ -7087,6 +7031,42 @@
                   "start": 648,
                   "end": 795,
                   "quote": "then septic shock, pulmonary hemorrhage, acute respiratory distress syndrome, and systemic multi-organ and multi-system failure, which led to death"
+                }
+              ],
+              "attribution_evidence": [
+                {
+                  "source_id": "PMC12355699.1:jats",
+                  "segment_id": "b00009",
+                  "segment_sha256": "f24c27ef5599ebe529624a32601a41fab79a65e88a460d274be0ba7ffb0337f1",
+                  "start": 0,
+                  "end": 23,
+                  "quote": "Case 2: A female infant"
+                }
+              ],
+              "times": []
+            },
+            {
+              "event_id": "p2-e11",
+              "record_id": "PMC12355699.1:p2",
+              "episode_id": null,
+              "kind": "presentation",
+              "occurrence": "occurred",
+              "description": "Rashes spread throughout the body with fever, cough and lymphadenopathy",
+              "fact_ids": [
+                "p2-f012",
+                "p2-f013",
+                "p2-f014",
+                "p2-f015",
+                "p2-f016"
+              ],
+              "evidence": [
+                {
+                  "source_id": "PMC12355699.1:jats",
+                  "segment_id": "b00011",
+                  "segment_sha256": "f51d8c5bd9ea4599ff84d52af6ab1ad328167bc86d734c6c65d05f5d4d629bb9",
+                  "start": 122,
+                  "end": 249,
+                  "quote": "The rashes then spread throughout the body, accompanied by fever, cough, and lymphadenopathy (left armpit and bilateral groin)."
                 }
               ],
               "attribution_evidence": [
@@ -7277,6 +7257,48 @@
                   "quote": "She died on October 2, 2023."
                 }
               ]
+            },
+            {
+              "edge_id": "edge8",
+              "from_event_id": "p2-e03",
+              "to_event_id": "p2-e11",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12355699.1:jats",
+                  "segment_id": "b00011",
+                  "segment_sha256": "f51d8c5bd9ea4599ff84d52af6ab1ad328167bc86d734c6c65d05f5d4d629bb9",
+                  "start": 72,
+                  "end": 164,
+                  "quote": "rashes were found on the infant’s back and hands. The rashes then spread throughout the body"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge9",
+              "from_event_id": "p2-e10",
+              "to_event_id": "p2-e08",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12355699.1:jats",
+                  "segment_id": "b00012",
+                  "segment_sha256": "9c671af0687f0643199f4654fbab4f7a3899aa3abcfc48422f67b97935819277",
+                  "start": 777,
+                  "end": 795,
+                  "quote": "which led to death"
+                },
+                {
+                  "source_id": "PMC12355699.1:jats",
+                  "segment_id": "b00012",
+                  "segment_sha256": "9c671af0687f0643199f4654fbab4f7a3899aa3abcfc48422f67b97935819277",
+                  "start": 317,
+                  "end": 345,
+                  "quote": "She died on October 2, 2023."
+                }
+              ]
             }
           ],
           "limitations": [
@@ -7296,8 +7318,7 @@
             "occurrence": "occurred",
             "description": "BCG vaccination",
             "fact_ids": [
-              "p2-f007",
-              "p2-f008"
+              "p2-f007"
             ],
             "evidence": [
               {
@@ -7346,8 +7367,7 @@
             "occurrence": "occurred",
             "description": "Rotavirus vaccination",
             "fact_ids": [
-              "p2-f009",
-              "p2-f010"
+              "p2-f009"
             ],
             "evidence": [
               {
@@ -7497,7 +7517,8 @@
               "p2-f019",
               "p2-f020",
               "p2-f021",
-              "p2-f022"
+              "p2-f022",
+              "p2-f049"
             ],
             "evidence": [
               {
@@ -7734,7 +7755,6 @@
             "description": "Repeated mixed infections and organ failure leading to death",
             "fact_ids": [
               "p2-f035",
-              "p2-f036",
               "p2-f037",
               "p2-f038",
               "p2-f039",
@@ -7777,6 +7797,42 @@
               }
             ],
             "times": []
+          },
+          {
+            "event_id": "p2-e11",
+            "record_id": "PMC12355699.1:p2",
+            "episode_id": null,
+            "kind": "presentation",
+            "occurrence": "occurred",
+            "description": "Rashes spread throughout the body with fever, cough and lymphadenopathy",
+            "fact_ids": [
+              "p2-f012",
+              "p2-f013",
+              "p2-f014",
+              "p2-f015",
+              "p2-f016"
+            ],
+            "evidence": [
+              {
+                "source_id": "PMC12355699.1:jats",
+                "segment_id": "b00011",
+                "segment_sha256": "f51d8c5bd9ea4599ff84d52af6ab1ad328167bc86d734c6c65d05f5d4d629bb9",
+                "start": 122,
+                "end": 249,
+                "quote": "The rashes then spread throughout the body, accompanied by fever, cough, and lymphadenopathy (left armpit and bilateral groin)."
+              }
+            ],
+            "attribution_evidence": [
+              {
+                "source_id": "PMC12355699.1:jats",
+                "segment_id": "b00009",
+                "segment_sha256": "f24c27ef5599ebe529624a32601a41fab79a65e88a460d274be0ba7ffb0337f1",
+                "start": 0,
+                "end": 23,
+                "quote": "Case 2: A female infant"
+              }
+            ],
+            "times": []
           }
         ],
         "topological_layers": [
@@ -7804,6 +7860,9 @@
           [
             [
               "p2-e04"
+            ],
+            [
+              "p2-e11"
             ]
           ],
           [
@@ -7857,6 +7916,10 @@
             "p2-e08"
           ],
           [
+            "p2-e01",
+            "p2-e11"
+          ],
+          [
             "p2-e02",
             "p2-e03"
           ],
@@ -7881,6 +7944,10 @@
             "p2-e08"
           ],
           [
+            "p2-e02",
+            "p2-e11"
+          ],
+          [
             "p2-e03",
             "p2-e04"
           ],
@@ -7899,6 +7966,10 @@
           [
             "p2-e03",
             "p2-e08"
+          ],
+          [
+            "p2-e03",
+            "p2-e11"
           ],
           [
             "p2-e04",
@@ -7938,6 +8009,10 @@
           ],
           [
             "p2-e07",
+            "p2-e08"
+          ],
+          [
+            "p2-e10",
             "p2-e08"
           ]
         ],
@@ -7975,12 +8050,20 @@
             "p2-e10"
           ],
           [
+            "p2-e04",
+            "p2-e11"
+          ],
+          [
             "p2-e05",
             "p2-e09"
           ],
           [
             "p2-e05",
             "p2-e10"
+          ],
+          [
+            "p2-e05",
+            "p2-e11"
           ],
           [
             "p2-e06",
@@ -7991,6 +8074,10 @@
             "p2-e10"
           ],
           [
+            "p2-e06",
+            "p2-e11"
+          ],
+          [
             "p2-e07",
             "p2-e09"
           ],
@@ -7999,16 +8086,28 @@
             "p2-e10"
           ],
           [
+            "p2-e07",
+            "p2-e11"
+          ],
+          [
             "p2-e08",
             "p2-e09"
           ],
           [
             "p2-e08",
-            "p2-e10"
+            "p2-e11"
           ],
           [
             "p2-e09",
             "p2-e10"
+          ],
+          [
+            "p2-e09",
+            "p2-e11"
+          ],
+          [
+            "p2-e10",
+            "p2-e11"
           ]
         ],
         "same_time_groups": [],
@@ -8021,11 +8120,12 @@
           "p2-e05",
           "p2-e06",
           "p2-e07",
-          "p2-e08"
+          "p2-e08",
+          "p2-e10",
+          "p2-e11"
         ],
         "order_unknown_event_ids": [
-          "p2-e09",
-          "p2-e10"
+          "p2-e09"
         ],
         "layers_are_simultaneous": false,
         "synthetic_dates_generated": false,
@@ -8033,7 +8133,7 @@
         "basis": "Source-gated model relations; paragraph order and event kind do not create chronology."
       },
       "reference_provenance": {
-        "annotation_sha256": "dfbb7facfb15e90ec413842d4902a18fab5c06d42099c5afc1d9ad939fb3742e",
+        "annotation_sha256": "e196ebcde79a52c4eb07bd22f706e148515e769197c0d99733dffc8894be65af",
         "materializer_version": "dense-runtime-targets/1",
         "fact_pointers": [
           {
@@ -8125,6 +8225,10 @@
               {
                 "segment_id": "b00011",
                 "quote": "Mycobacterium tuberculosis complex infection was detected in the blood, marrow, and alveolar lavage fluid via NGS on January 10, 2023, and the type was bovine."
+              },
+              {
+                "segment_id": "b00012",
+                "quote": "mixed infections of multiple pathogens (Pneumocystis jirovecii, Mycobacterium tuberculosis complex, Mycoplasma pneumoniae, Rotavirus group A, Enterobacter Hornii, Enterobacter cloaca, novel coronavirus Omicron BF.7, Epstein – Barr virus, fungi, norovirus) occurred repeatedly"
               }
             ]
           },
@@ -8140,7 +8244,7 @@
             ]
           },
           {
-            "fact_id": "p2-f036",
+            "fact_id": "p2-f037",
             "task": "conditions",
             "pointer": "/items/6",
             "source_evidence": [
@@ -8151,7 +8255,7 @@
             ]
           },
           {
-            "fact_id": "p2-f037",
+            "fact_id": "p2-f038",
             "task": "conditions",
             "pointer": "/items/7",
             "source_evidence": [
@@ -8162,7 +8266,7 @@
             ]
           },
           {
-            "fact_id": "p2-f038",
+            "fact_id": "p2-f039",
             "task": "conditions",
             "pointer": "/items/8",
             "source_evidence": [
@@ -8173,7 +8277,7 @@
             ]
           },
           {
-            "fact_id": "p2-f039",
+            "fact_id": "p2-f040",
             "task": "conditions",
             "pointer": "/items/9",
             "source_evidence": [
@@ -8184,7 +8288,7 @@
             ]
           },
           {
-            "fact_id": "p2-f040",
+            "fact_id": "p2-f041",
             "task": "conditions",
             "pointer": "/items/10",
             "source_evidence": [
@@ -8195,7 +8299,7 @@
             ]
           },
           {
-            "fact_id": "p2-f041",
+            "fact_id": "p2-f042",
             "task": "conditions",
             "pointer": "/items/11",
             "source_evidence": [
@@ -8206,7 +8310,7 @@
             ]
           },
           {
-            "fact_id": "p2-f042",
+            "fact_id": "p2-f043",
             "task": "conditions",
             "pointer": "/items/12",
             "source_evidence": [
@@ -8217,7 +8321,7 @@
             ]
           },
           {
-            "fact_id": "p2-f043",
+            "fact_id": "p2-f044",
             "task": "conditions",
             "pointer": "/items/13",
             "source_evidence": [
@@ -8228,20 +8332,9 @@
             ]
           },
           {
-            "fact_id": "p2-f044",
-            "task": "conditions",
-            "pointer": "/items/14",
-            "source_evidence": [
-              {
-                "segment_id": "b00012",
-                "quote": "mixed infections of multiple pathogens (Pneumocystis jirovecii, Mycobacterium tuberculosis complex, Mycoplasma pneumoniae, Rotavirus group A, Enterobacter Hornii, Enterobacter cloaca, novel coronavirus Omicron BF.7, Epstein – Barr virus, fungi, norovirus) occurred repeatedly"
-              }
-            ]
-          },
-          {
             "fact_id": "p2-f045",
             "task": "conditions",
-            "pointer": "/items/15",
+            "pointer": "/items/14",
             "source_evidence": [
               {
                 "segment_id": "b00012",
@@ -8252,7 +8345,7 @@
           {
             "fact_id": "p2-f046",
             "task": "conditions",
-            "pointer": "/items/16",
+            "pointer": "/items/15",
             "source_evidence": [
               {
                 "segment_id": "b00012",
@@ -8263,7 +8356,7 @@
           {
             "fact_id": "p2-f047",
             "task": "conditions",
-            "pointer": "/items/17",
+            "pointer": "/items/16",
             "source_evidence": [
               {
                 "segment_id": "b00012",
@@ -8274,7 +8367,7 @@
           {
             "fact_id": "p2-f048",
             "task": "conditions",
-            "pointer": "/items/18",
+            "pointer": "/items/17",
             "source_evidence": [
               {
                 "segment_id": "b00012",
@@ -8355,47 +8448,37 @@
             "source_evidence": [
               {
                 "segment_id": "b00009",
-                "quote": "A female infant was administered one dose of BCG vaccine on September 3, 2022 (within 24 hours of birth)"
-              }
-            ]
-          },
-          {
-            "fact_id": "p2-f008",
-            "task": "medications",
-            "pointer": "/items/1",
-            "source_evidence": [
+                "quote": "was administered one dose of BCG vaccine on September 3, 2022 (within 24 hours of birth)."
+              },
               {
                 "segment_id": "b00009",
-                "quote": "the dose was 0.1 mL containing 0.05 mg of BCG. The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm."
+                "quote": "the dose was 0.1 mL containing 0.05 mg of BCG."
+              },
+              {
+                "segment_id": "b00009",
+                "quote": "The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm."
               }
             ]
           },
           {
             "fact_id": "p2-f009",
             "task": "medications",
-            "pointer": "/items/2",
+            "pointer": "/items/1",
             "source_evidence": [
               {
                 "segment_id": "b00010",
                 "quote": "On October 28, 2022, she was administered one dose of a reassortant rotavirus vaccine, live, oral, pentavalent (Vero cells)."
-              }
-            ]
-          },
-          {
-            "fact_id": "p2-f010",
-            "task": "medications",
-            "pointer": "/items/3",
-            "source_evidence": [
+              },
               {
                 "segment_id": "b00010",
-                "quote": "the dose was 2 mL containing"
+                "quote": "the dose was 2 mL containing 2.2 × 10^(6) U reassortant rotavirus G1, 2.8 × 10^(6) U reassortant rotavirus G2, 2.2 × 10^(6) U reassortant rotavirus G3, 2.0 × 10^(6) U reassortant rotavirus G4, and 2.3 × 10^(6) U reassortant rotavirus P1A[8]."
               }
             ]
           },
           {
             "fact_id": "p2-f027",
             "task": "medications",
-            "pointer": "/items/4",
+            "pointer": "/items/2",
             "source_evidence": [
               {
                 "segment_id": "b00012",
@@ -8406,7 +8489,7 @@
           {
             "fact_id": "p2-f028",
             "task": "medications",
-            "pointer": "/items/5",
+            "pointer": "/items/3",
             "source_evidence": [
               {
                 "segment_id": "b00012",
@@ -8417,7 +8500,7 @@
           {
             "fact_id": "p2-f029",
             "task": "medications",
-            "pointer": "/items/6",
+            "pointer": "/items/4",
             "source_evidence": [
               {
                 "segment_id": "b00012",
@@ -8428,7 +8511,7 @@
           {
             "fact_id": "p2-f030",
             "task": "medications",
-            "pointer": "/items/7",
+            "pointer": "/items/5",
             "source_evidence": [
               {
                 "segment_id": "b00012",
@@ -8439,7 +8522,7 @@
           {
             "fact_id": "p2-f031",
             "task": "medications",
-            "pointer": "/items/8",
+            "pointer": "/items/6",
             "source_evidence": [
               {
                 "segment_id": "b00012",
@@ -8450,7 +8533,7 @@
           {
             "fact_id": "p2-f032",
             "task": "medications",
-            "pointer": "/items/9",
+            "pointer": "/items/7",
             "source_evidence": [
               {
                 "segment_id": "b00021",
@@ -8547,6 +8630,17 @@
             ]
           },
           {
+            "fact_id": "p2-f049",
+            "task": "observations",
+            "pointer": "/items/7",
+            "source_evidence": [
+              {
+                "segment_id": "b00011",
+                "quote": "On November 29, 2022, blood tests indicated decreased levels of IgA, IgG, and IgM, and the proportions of inhibitory T-cell and B lymphocyte subsets were significantly reduced."
+              }
+            ]
+          },
+          {
             "fact_id": "p2-f018",
             "task": "family_genetics",
             "pointer": "/items/0",
@@ -8565,6 +8659,10 @@
               {
                 "segment_id": "b00012",
                 "quote": "She died on October 2, 2023."
+              },
+              {
+                "segment_id": "b00012",
+                "quote": "On the basis of SCID, mixed infections of multiple pathogens (Pneumocystis jirovecii, Mycobacterium tuberculosis complex, Mycoplasma pneumoniae, Rotavirus group A, Enterobacter Hornii, Enterobacter cloaca, novel coronavirus Omicron BF.7, Epstein – Barr virus, fungi, norovirus) occurred repeatedly and then septic shock, pulmonary hemorrhage, acute respiratory distress syndrome, and systemic multi-organ and multi-system failure, which led to death."
               },
               {
                 "segment_id": "b00022",
@@ -8857,9 +8955,9 @@
                 }
               ],
               "verification_status": "confirmed",
-              "name": "Causal association of disseminated BCG infection with BCG vaccination",
+              "name": "Disseminated BCG infection causally associated with BCG vaccination",
               "clinical_status": "unknown",
-              "role": "unknown",
+              "role": "complication",
               "body_site": null,
               "laterality": "unknown",
               "severity": null,
@@ -8868,10 +8966,10 @@
             "value_as_annotated": {
               "subject": "index_patient",
               "assertion": "present",
-              "name": "Causal association of disseminated BCG infection with BCG vaccination",
+              "name": "Disseminated BCG infection causally associated with BCG vaccination",
               "verification_status": "confirmed",
               "clinical_status": "unknown",
-              "role": "unknown",
+              "role": "complication",
               "temporality": "current"
             },
             "evidence": [
@@ -8963,6 +9061,10 @@
                 {
                   "quote": "Mycobacterium tuberculosis complex infection was detected in the blood, marrow, and alveolar lavage fluid via NGS on January 10, 2023, and the type was bovine.",
                   "source_section": "b00011"
+                },
+                {
+                  "quote": "mixed infections of multiple pathogens (Pneumocystis jirovecii, Mycobacterium tuberculosis complex, Mycoplasma pneumoniae, Rotavirus group A, Enterobacter Hornii, Enterobacter cloaca, novel coronavirus Omicron BF.7, Epstein – Barr virus, fungi, norovirus) occurred repeatedly",
+                  "source_section": "b00012"
                 }
               ],
               "verification_status": "confirmed",
@@ -8998,6 +9100,14 @@
                 "start": 719,
                 "end": 878,
                 "quote": "Mycobacterium tuberculosis complex infection was detected in the blood, marrow, and alveolar lavage fluid via NGS on January 10, 2023, and the type was bovine."
+              },
+              {
+                "source_id": "PMC12355699.1:jats",
+                "segment_id": "b00012",
+                "segment_sha256": "9c671af0687f0643199f4654fbab4f7a3899aa3abcfc48422f67b97935819277",
+                "start": 368,
+                "end": 643,
+                "quote": "mixed infections of multiple pathogens (Pneumocystis jirovecii, Mycobacterium tuberculosis complex, Mycoplasma pneumoniae, Rotavirus group A, Enterobacter Hornii, Enterobacter cloaca, novel coronavirus Omicron BF.7, Epstein – Barr virus, fungi, norovirus) occurred repeatedly"
               }
             ],
             "event_ids": [
@@ -9057,61 +9167,9 @@
             ]
           },
           {
-            "fact_id": "p2-f036",
-            "task": "conditions",
-            "pointer": "/items/6",
-            "value_as_extracted": {
-              "subject": "index_patient",
-              "assertion": "present",
-              "temporality": "current",
-              "time": {
-                "text": null,
-                "relation": "unknown",
-                "anchor": null,
-                "date_iso": null
-              },
-              "evidence": [
-                {
-                  "quote": "mixed infections of multiple pathogens (Pneumocystis jirovecii, Mycobacterium tuberculosis complex, Mycoplasma pneumoniae, Rotavirus group A, Enterobacter Hornii, Enterobacter cloaca, novel coronavirus Omicron BF.7, Epstein – Barr virus, fungi, norovirus) occurred repeatedly",
-                  "source_section": "b00012"
-                }
-              ],
-              "verification_status": "confirmed",
-              "name": "Mycobacterium tuberculosis complex infection",
-              "clinical_status": "unknown",
-              "role": "complication",
-              "body_site": null,
-              "laterality": "unknown",
-              "severity": null,
-              "diagnostic_basis": null
-            },
-            "value_as_annotated": {
-              "subject": "index_patient",
-              "assertion": "present",
-              "name": "Mycobacterium tuberculosis complex infection",
-              "verification_status": "confirmed",
-              "clinical_status": "unknown",
-              "role": "complication",
-              "temporality": "current"
-            },
-            "evidence": [
-              {
-                "source_id": "PMC12355699.1:jats",
-                "segment_id": "b00012",
-                "segment_sha256": "9c671af0687f0643199f4654fbab4f7a3899aa3abcfc48422f67b97935819277",
-                "start": 368,
-                "end": 643,
-                "quote": "mixed infections of multiple pathogens (Pneumocystis jirovecii, Mycobacterium tuberculosis complex, Mycoplasma pneumoniae, Rotavirus group A, Enterobacter Hornii, Enterobacter cloaca, novel coronavirus Omicron BF.7, Epstein – Barr virus, fungi, norovirus) occurred repeatedly"
-              }
-            ],
-            "event_ids": [
-              "p2-e10"
-            ]
-          },
-          {
             "fact_id": "p2-f037",
             "task": "conditions",
-            "pointer": "/items/7",
+            "pointer": "/items/6",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -9163,7 +9221,7 @@
           {
             "fact_id": "p2-f038",
             "task": "conditions",
-            "pointer": "/items/8",
+            "pointer": "/items/7",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -9215,7 +9273,7 @@
           {
             "fact_id": "p2-f039",
             "task": "conditions",
-            "pointer": "/items/9",
+            "pointer": "/items/8",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -9267,7 +9325,7 @@
           {
             "fact_id": "p2-f040",
             "task": "conditions",
-            "pointer": "/items/10",
+            "pointer": "/items/9",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -9319,7 +9377,7 @@
           {
             "fact_id": "p2-f041",
             "task": "conditions",
-            "pointer": "/items/11",
+            "pointer": "/items/10",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -9371,7 +9429,7 @@
           {
             "fact_id": "p2-f042",
             "task": "conditions",
-            "pointer": "/items/12",
+            "pointer": "/items/11",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -9423,7 +9481,7 @@
           {
             "fact_id": "p2-f043",
             "task": "conditions",
-            "pointer": "/items/13",
+            "pointer": "/items/12",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -9475,7 +9533,7 @@
           {
             "fact_id": "p2-f044",
             "task": "conditions",
-            "pointer": "/items/14",
+            "pointer": "/items/13",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -9527,7 +9585,7 @@
           {
             "fact_id": "p2-f045",
             "task": "conditions",
-            "pointer": "/items/15",
+            "pointer": "/items/14",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -9579,7 +9637,7 @@
           {
             "fact_id": "p2-f046",
             "task": "conditions",
-            "pointer": "/items/16",
+            "pointer": "/items/15",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -9631,7 +9689,7 @@
           {
             "fact_id": "p2-f047",
             "task": "conditions",
-            "pointer": "/items/17",
+            "pointer": "/items/16",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -9683,7 +9741,7 @@
           {
             "fact_id": "p2-f048",
             "task": "conditions",
-            "pointer": "/items/18",
+            "pointer": "/items/17",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -9753,7 +9811,7 @@
                 }
               ],
               "name": "Rash",
-              "kind": "symptom",
+              "kind": "sign",
               "text_value": null,
               "numeric_value": null,
               "unit": null,
@@ -9765,7 +9823,7 @@
               "subject": "index_patient",
               "assertion": "present",
               "name": "Rash",
-              "kind": "symptom",
+              "kind": "sign",
               "body_site": "back and hands",
               "time": {
                 "text": "October 29, 2022",
@@ -9809,11 +9867,11 @@
                 }
               ],
               "name": "Rash spreading throughout the body",
-              "kind": "symptom",
+              "kind": "sign",
               "text_value": null,
               "numeric_value": null,
               "unit": null,
-              "body_site": "whole body",
+              "body_site": "throughout the body",
               "severity": null,
               "activity_context": null
             },
@@ -9821,8 +9879,8 @@
               "subject": "index_patient",
               "assertion": "present",
               "name": "Rash spreading throughout the body",
-              "kind": "symptom",
-              "body_site": "whole body"
+              "kind": "sign",
+              "body_site": "throughout the body"
             },
             "evidence": [
               {
@@ -9834,7 +9892,9 @@
                 "quote": "The rashes then spread throughout the body"
               }
             ],
-            "event_ids": []
+            "event_ids": [
+              "p2-e11"
+            ]
           },
           {
             "fact_id": "p2-f013",
@@ -9881,7 +9941,9 @@
                 "quote": "accompanied by fever, cough, and lymphadenopathy (left armpit and bilateral groin)"
               }
             ],
-            "event_ids": []
+            "event_ids": [
+              "p2-e11"
+            ]
           },
           {
             "fact_id": "p2-f014",
@@ -9928,7 +9990,9 @@
                 "quote": "accompanied by fever, cough, and lymphadenopathy (left armpit and bilateral groin)"
               }
             ],
-            "event_ids": []
+            "event_ids": [
+              "p2-e11"
+            ]
           },
           {
             "fact_id": "p2-f015",
@@ -9976,7 +10040,9 @@
                 "quote": "accompanied by fever, cough, and lymphadenopathy (left armpit and bilateral groin)"
               }
             ],
-            "event_ids": []
+            "event_ids": [
+              "p2-e11"
+            ]
           },
           {
             "fact_id": "p2-f016",
@@ -10024,7 +10090,9 @@
                 "quote": "accompanied by fever, cough, and lymphadenopathy (left armpit and bilateral groin)"
               }
             ],
-            "event_ids": []
+            "event_ids": [
+              "p2-e11"
+            ]
           },
           {
             "fact_id": "p2-f007",
@@ -10035,81 +10103,31 @@
               "assertion": "present",
               "temporality": "unknown",
               "time": {
-                "text": "September 3, 2022",
-                "relation": "at",
-                "anchor": null,
+                "text": "September 3, 2022 (within 24 hours of birth)",
+                "relation": "after",
+                "anchor": "birth",
                 "date_iso": "2022-09-03"
               },
               "evidence": [
                 {
-                  "quote": "A female infant was administered one dose of BCG vaccine on September 3, 2022 (within 24 hours of birth)",
+                  "quote": "was administered one dose of BCG vaccine on September 3, 2022 (within 24 hours of birth).",
                   "source_section": "b00009"
-                }
-              ],
-              "name": "BCG vaccine",
-              "action": "administered",
-              "ingredient_as_documented": null,
-              "dose_text": null,
-              "dose_value": null,
-              "dose_unit": null,
-              "route": null,
-              "frequency": null,
-              "duration_text": null,
-              "indication": null,
-              "regimen": null
-            },
-            "value_as_annotated": {
-              "subject": "index_patient",
-              "assertion": "present",
-              "name": "BCG vaccine",
-              "action": "administered",
-              "time": {
-                "text": "September 3, 2022",
-                "relation": "at",
-                "anchor": null,
-                "date_iso": "2022-09-03"
-              }
-            },
-            "evidence": [
-              {
-                "source_id": "PMC12355699.1:jats",
-                "segment_id": "b00009",
-                "segment_sha256": "f24c27ef5599ebe529624a32601a41fab79a65e88a460d274be0ba7ffb0337f1",
-                "start": 8,
-                "end": 112,
-                "quote": "A female infant was administered one dose of BCG vaccine on September 3, 2022 (within 24 hours of birth)"
-              }
-            ],
-            "event_ids": [
-              "p2-e01"
-            ]
-          },
-          {
-            "fact_id": "p2-f008",
-            "task": "medications",
-            "pointer": "/items/1",
-            "value_as_extracted": {
-              "subject": "index_patient",
-              "assertion": "present",
-              "temporality": "unknown",
-              "time": {
-                "text": null,
-                "relation": "unknown",
-                "anchor": null,
-                "date_iso": null
-              },
-              "evidence": [
+                },
                 {
-                  "quote": "the dose was 0.1 mL containing 0.05 mg of BCG. The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm.",
+                  "quote": "the dose was 0.1 mL containing 0.05 mg of BCG.",
+                  "source_section": "b00009"
+                },
+                {
+                  "quote": "The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm.",
                   "source_section": "b00009"
                 }
               ],
-              "name": "BCG vaccine (dose detail)",
+              "name": "BCG vaccine",
               "action": "administered",
               "ingredient_as_documented": null,
               "dose_text": "0.1 mL containing 0.05 mg of BCG",
-              "dose_value": null,
-              "dose_unit": null,
+              "dose_value": 0.1,
+              "dose_unit": "mL",
               "route": "intracutaneously",
               "frequency": null,
               "duration_text": null,
@@ -10119,9 +10137,17 @@
             "value_as_annotated": {
               "subject": "index_patient",
               "assertion": "present",
-              "name": "BCG vaccine (dose detail)",
+              "name": "BCG vaccine",
               "action": "administered",
+              "time": {
+                "text": "September 3, 2022 (within 24 hours of birth)",
+                "relation": "after",
+                "anchor": "birth",
+                "date_iso": "2022-09-03"
+              },
               "dose_text": "0.1 mL containing 0.05 mg of BCG",
+              "dose_value": 0.1,
+              "dose_unit": "mL",
               "route": "intracutaneously"
             },
             "evidence": [
@@ -10129,9 +10155,25 @@
                 "source_id": "PMC12355699.1:jats",
                 "segment_id": "b00009",
                 "segment_sha256": "f24c27ef5599ebe529624a32601a41fab79a65e88a460d274be0ba7ffb0337f1",
+                "start": 24,
+                "end": 113,
+                "quote": "was administered one dose of BCG vaccine on September 3, 2022 (within 24 hours of birth)."
+              },
+              {
+                "source_id": "PMC12355699.1:jats",
+                "segment_id": "b00009",
+                "segment_sha256": "f24c27ef5599ebe529624a32601a41fab79a65e88a460d274be0ba7ffb0337f1",
                 "start": 195,
+                "end": 241,
+                "quote": "the dose was 0.1 mL containing 0.05 mg of BCG."
+              },
+              {
+                "source_id": "PMC12355699.1:jats",
+                "segment_id": "b00009",
+                "segment_sha256": "f24c27ef5599ebe529624a32601a41fab79a65e88a460d274be0ba7ffb0337f1",
+                "start": 242,
                 "end": 336,
-                "quote": "the dose was 0.1 mL containing 0.05 mg of BCG. The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm."
+                "quote": "The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm."
               }
             ],
             "event_ids": [
@@ -10141,7 +10183,7 @@
           {
             "fact_id": "p2-f009",
             "task": "medications",
-            "pointer": "/items/2",
+            "pointer": "/items/1",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -10156,14 +10198,18 @@
                 {
                   "quote": "On October 28, 2022, she was administered one dose of a reassortant rotavirus vaccine, live, oral, pentavalent (Vero cells).",
                   "source_section": "b00010"
+                },
+                {
+                  "quote": "the dose was 2 mL containing 2.2 × 10^(6) U reassortant rotavirus G1, 2.8 × 10^(6) U reassortant rotavirus G2, 2.2 × 10^(6) U reassortant rotavirus G3, 2.0 × 10^(6) U reassortant rotavirus G4, and 2.3 × 10^(6) U reassortant rotavirus P1A[8].",
+                  "source_section": "b00010"
                 }
               ],
               "name": "Reassortant rotavirus vaccine, live, oral, pentavalent (Vero cells)",
               "action": "administered",
               "ingredient_as_documented": null,
-              "dose_text": null,
-              "dose_value": null,
-              "dose_unit": null,
+              "dose_text": "2 mL",
+              "dose_value": 2.0,
+              "dose_unit": "mL",
               "route": "oral",
               "frequency": null,
               "duration_text": null,
@@ -10181,59 +10227,7 @@
                 "relation": "at",
                 "anchor": null,
                 "date_iso": "2022-10-28"
-              }
-            },
-            "evidence": [
-              {
-                "source_id": "PMC12355699.1:jats",
-                "segment_id": "b00010",
-                "segment_sha256": "fd066ccec35a7d0d0fe28a20de3674144e0652a11c2c7d09bbee46e57f82d968",
-                "start": 0,
-                "end": 124,
-                "quote": "On October 28, 2022, she was administered one dose of a reassortant rotavirus vaccine, live, oral, pentavalent (Vero cells)."
-              }
-            ],
-            "event_ids": [
-              "p2-e02"
-            ]
-          },
-          {
-            "fact_id": "p2-f010",
-            "task": "medications",
-            "pointer": "/items/3",
-            "value_as_extracted": {
-              "subject": "index_patient",
-              "assertion": "present",
-              "temporality": "unknown",
-              "time": {
-                "text": null,
-                "relation": "unknown",
-                "anchor": null,
-                "date_iso": null
               },
-              "evidence": [
-                {
-                  "quote": "the dose was 2 mL containing",
-                  "source_section": "b00010"
-                }
-              ],
-              "name": "Reassortant rotavirus vaccine dose detail",
-              "action": "administered",
-              "ingredient_as_documented": null,
-              "dose_text": "2 mL",
-              "dose_value": 2.0,
-              "dose_unit": "mL",
-              "route": null,
-              "frequency": null,
-              "duration_text": null,
-              "indication": null,
-              "regimen": null
-            },
-            "value_as_annotated": {
-              "subject": "index_patient",
-              "assertion": "present",
-              "name": "Reassortant rotavirus vaccine dose detail",
-              "action": "administered",
               "dose_text": "2 mL",
               "dose_value": 2,
               "dose_unit": "mL"
@@ -10243,9 +10237,17 @@
                 "source_id": "PMC12355699.1:jats",
                 "segment_id": "b00010",
                 "segment_sha256": "fd066ccec35a7d0d0fe28a20de3674144e0652a11c2c7d09bbee46e57f82d968",
+                "start": 0,
+                "end": 124,
+                "quote": "On October 28, 2022, she was administered one dose of a reassortant rotavirus vaccine, live, oral, pentavalent (Vero cells)."
+              },
+              {
+                "source_id": "PMC12355699.1:jats",
+                "segment_id": "b00010",
+                "segment_sha256": "fd066ccec35a7d0d0fe28a20de3674144e0652a11c2c7d09bbee46e57f82d968",
                 "start": 209,
-                "end": 237,
-                "quote": "the dose was 2 mL containing"
+                "end": 450,
+                "quote": "the dose was 2 mL containing 2.2 × 10^(6) U reassortant rotavirus G1, 2.8 × 10^(6) U reassortant rotavirus G2, 2.2 × 10^(6) U reassortant rotavirus G3, 2.0 × 10^(6) U reassortant rotavirus G4, and 2.3 × 10^(6) U reassortant rotavirus P1A[8]."
               }
             ],
             "event_ids": [
@@ -10255,7 +10257,7 @@
           {
             "fact_id": "p2-f027",
             "task": "medications",
-            "pointer": "/items/4",
+            "pointer": "/items/2",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -10312,7 +10314,7 @@
           {
             "fact_id": "p2-f028",
             "task": "medications",
-            "pointer": "/items/5",
+            "pointer": "/items/3",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -10369,7 +10371,7 @@
           {
             "fact_id": "p2-f029",
             "task": "medications",
-            "pointer": "/items/6",
+            "pointer": "/items/4",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -10426,7 +10428,7 @@
           {
             "fact_id": "p2-f030",
             "task": "medications",
-            "pointer": "/items/7",
+            "pointer": "/items/5",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -10483,7 +10485,7 @@
           {
             "fact_id": "p2-f031",
             "task": "medications",
-            "pointer": "/items/8",
+            "pointer": "/items/6",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -10539,7 +10541,7 @@
           {
             "fact_id": "p2-f032",
             "task": "medications",
-            "pointer": "/items/9",
+            "pointer": "/items/7",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -10860,7 +10862,7 @@
                 }
               ],
               "result_absent_reason": null,
-              "name": "Proportions of inhibitory T-cell and B lymphocyte subsets",
+              "name": "Proportion of inhibitory T-cell subsets",
               "kind": "laboratory",
               "status": "resulted",
               "text_value": "significantly reduced",
@@ -10876,7 +10878,7 @@
             "value_as_annotated": {
               "subject": "index_patient",
               "assertion": "present",
-              "name": "Proportions of inhibitory T-cell and B lymphocyte subsets",
+              "name": "Proportion of inhibitory T-cell subsets",
               "kind": "laboratory",
               "status": "resulted",
               "text_value": "significantly reduced",
@@ -11103,6 +11105,71 @@
             ]
           },
           {
+            "fact_id": "p2-f049",
+            "task": "observations",
+            "pointer": "/items/7",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": "On November 29, 2022",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": "2022-11-29"
+              },
+              "evidence": [
+                {
+                  "quote": "On November 29, 2022, blood tests indicated decreased levels of IgA, IgG, and IgM, and the proportions of inhibitory T-cell and B lymphocyte subsets were significantly reduced.",
+                  "source_section": "b00011"
+                }
+              ],
+              "result_absent_reason": null,
+              "name": "Proportion of B lymphocyte subsets",
+              "kind": "laboratory",
+              "status": "resulted",
+              "text_value": "significantly reduced",
+              "numeric_value": null,
+              "comparator": "unknown",
+              "unit": null,
+              "flag": "low",
+              "reference_range_text": null,
+              "specimen": "blood",
+              "method": null,
+              "body_site": null
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "name": "Proportion of B lymphocyte subsets",
+              "kind": "laboratory",
+              "status": "resulted",
+              "text_value": "significantly reduced",
+              "comparator": "unknown",
+              "flag": "low",
+              "specimen": "blood",
+              "time": {
+                "text": "On November 29, 2022",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": "2022-11-29"
+              }
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12355699.1:jats",
+                "segment_id": "b00011",
+                "segment_sha256": "f51d8c5bd9ea4599ff84d52af6ab1ad328167bc86d734c6c65d05f5d4d629bb9",
+                "start": 250,
+                "end": 426,
+                "quote": "On November 29, 2022, blood tests indicated decreased levels of IgA, IgG, and IgM, and the proportions of inhibitory T-cell and B lymphocyte subsets were significantly reduced."
+              }
+            ],
+            "event_ids": [
+              "p2-e05"
+            ]
+          },
+          {
             "fact_id": "p2-f018",
             "task": "family_genetics",
             "pointer": "/items/0",
@@ -11174,6 +11241,10 @@
                   "source_section": "b00012"
                 },
                 {
+                  "quote": "On the basis of SCID, mixed infections of multiple pathogens (Pneumocystis jirovecii, Mycobacterium tuberculosis complex, Mycoplasma pneumoniae, Rotavirus group A, Enterobacter Hornii, Enterobacter cloaca, novel coronavirus Omicron BF.7, Epstein – Barr virus, fungi, norovirus) occurred repeatedly and then septic shock, pulmonary hemorrhage, acute respiratory distress syndrome, and systemic multi-organ and multi-system failure, which led to death.",
+                  "source_section": "b00012"
+                },
+                {
                   "quote": "Outcome | recovery | death | recovery",
                   "source_section": "b00022"
                 }
@@ -11206,6 +11277,14 @@
                 "start": 317,
                 "end": 345,
                 "quote": "She died on October 2, 2023."
+              },
+              {
+                "source_id": "PMC12355699.1:jats",
+                "segment_id": "b00012",
+                "segment_sha256": "9c671af0687f0643199f4654fbab4f7a3899aa3abcfc48422f67b97935819277",
+                "start": 346,
+                "end": 796,
+                "quote": "On the basis of SCID, mixed infections of multiple pathogens (Pneumocystis jirovecii, Mycobacterium tuberculosis complex, Mycoplasma pneumoniae, Rotavirus group A, Enterobacter Hornii, Enterobacter cloaca, novel coronavirus Omicron BF.7, Epstein – Barr virus, fungi, norovirus) occurred repeatedly and then septic shock, pulmonary hemorrhage, acute respiratory distress syndrome, and systemic multi-organ and multi-system failure, which led to death."
               },
               {
                 "source_id": "PMC12355699.1:jats",
@@ -11573,7 +11652,7 @@
             },
             {
               "subject": "index_patient",
-              "assertion": "present",
+              "assertion": "possible",
               "temporality": "current",
               "time": {
                 "text": null,
@@ -11588,9 +11667,9 @@
                 }
               ],
               "verification_status": "unconfirmed",
-              "name": "Causal association of disseminated BCG infection with BCG vaccination",
+              "name": "Disseminated BCG infection causally associated with BCG vaccination",
               "clinical_status": "unknown",
-              "role": "unknown",
+              "role": "complication",
               "body_site": null,
               "laterality": "unknown",
               "severity": null,
@@ -11647,11 +11726,11 @@
               ],
               "name": "Hypersomnia",
               "kind": "symptom",
-              "text_value": null,
+              "text_value": "sudden hypersomnia",
               "numeric_value": null,
               "unit": null,
               "body_site": null,
-              "severity": "sudden",
+              "severity": null,
               "activity_context": null
             },
             {
@@ -11676,7 +11755,7 @@
               "numeric_value": null,
               "unit": null,
               "body_site": null,
-              "severity": "sudden",
+              "severity": null,
               "activity_context": null
             },
             {
@@ -11717,51 +11796,31 @@
               "assertion": "present",
               "temporality": "unknown",
               "time": {
-                "text": "June 2, 2024",
-                "relation": "at",
-                "anchor": null,
+                "text": "June 2, 2024 (within 24 hours of birth)",
+                "relation": "after",
+                "anchor": "birth",
                 "date_iso": "2024-06-02"
               },
               "evidence": [
                 {
-                  "quote": "A male infant was administered one dose of BCG vaccine on June 2, 2024 (within 24 hours of birth)",
+                  "quote": "was administered one dose of BCG vaccine on June 2, 2024 (within 24 hours of birth).",
+                  "source_section": "b00013"
+                },
+                {
+                  "quote": "the dose was 0.1 mL containing 0.05 mg of BCG.",
+                  "source_section": "b00013"
+                },
+                {
+                  "quote": "The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm.",
                   "source_section": "b00013"
                 }
               ],
               "name": "BCG vaccine",
               "action": "administered",
               "ingredient_as_documented": null,
-              "dose_text": null,
-              "dose_value": null,
-              "dose_unit": null,
-              "route": null,
-              "frequency": null,
-              "duration_text": null,
-              "indication": null,
-              "regimen": null
-            },
-            {
-              "subject": "index_patient",
-              "assertion": "present",
-              "temporality": "unknown",
-              "time": {
-                "text": null,
-                "relation": "unknown",
-                "anchor": null,
-                "date_iso": null
-              },
-              "evidence": [
-                {
-                  "quote": "the dose was 0.1 mL containing 0.05 mg of BCG. The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm.",
-                  "source_section": "b00013"
-                }
-              ],
-              "name": "BCG vaccine (dose detail)",
-              "action": "administered",
-              "ingredient_as_documented": null,
               "dose_text": "0.1 mL containing 0.05 mg of BCG",
-              "dose_value": null,
-              "dose_unit": null,
+              "dose_value": 0.1,
+              "dose_unit": "mL",
               "route": "intracutaneously",
               "frequency": null,
               "duration_text": null,
@@ -12439,7 +12498,7 @@
             },
             {
               "subject": "index_patient",
-              "assertion": "present",
+              "assertion": "possible",
               "temporality": "unknown",
               "time": {
                 "text": "Genetic testing on July 16, 2024",
@@ -12530,7 +12589,15 @@
               "evidence": [
                 {
                   "segment_id": "b00013",
-                  "quote": "A male infant was administered one dose of BCG vaccine on June 2, 2024 (within 24 hours of birth)"
+                  "quote": "was administered one dose of BCG vaccine on June 2, 2024 (within 24 hours of birth)."
+                },
+                {
+                  "segment_id": "b00013",
+                  "quote": "the dose was 0.1 mL containing 0.05 mg of BCG."
+                },
+                {
+                  "segment_id": "b00013",
+                  "quote": "The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm."
                 },
                 {
                   "segment_id": "b00014",
@@ -12601,8 +12668,7 @@
               "occurrence": "occurred",
               "description": "BCG vaccination",
               "fact_ids": [
-                "p3-f007",
-                "p3-f008"
+                "p3-f007"
               ],
               "evidence": [
                 {
@@ -13248,8 +13314,7 @@
             "occurrence": "occurred",
             "description": "BCG vaccination",
             "fact_ids": [
-              "p3-f007",
-              "p3-f008"
+              "p3-f007"
             ],
             "evidence": [
               {
@@ -13984,7 +14049,7 @@
         "basis": "Source-gated model relations; paragraph order and event kind do not create chronology."
       },
       "reference_provenance": {
-        "annotation_sha256": "dfbb7facfb15e90ec413842d4902a18fab5c06d42099c5afc1d9ad939fb3742e",
+        "annotation_sha256": "e196ebcde79a52c4eb07bd22f706e148515e769197c0d99733dffc8894be65af",
         "materializer_version": "dense-runtime-targets/1",
         "fact_pointers": [
           {
@@ -14108,25 +14173,22 @@
             "source_evidence": [
               {
                 "segment_id": "b00013",
-                "quote": "A male infant was administered one dose of BCG vaccine on June 2, 2024 (within 24 hours of birth)"
-              }
-            ]
-          },
-          {
-            "fact_id": "p3-f008",
-            "task": "medications",
-            "pointer": "/items/1",
-            "source_evidence": [
+                "quote": "was administered one dose of BCG vaccine on June 2, 2024 (within 24 hours of birth)."
+              },
               {
                 "segment_id": "b00013",
-                "quote": "the dose was 0.1 mL containing 0.05 mg of BCG. The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm."
+                "quote": "the dose was 0.1 mL containing 0.05 mg of BCG."
+              },
+              {
+                "segment_id": "b00013",
+                "quote": "The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm."
               }
             ]
           },
           {
             "fact_id": "p3-f027",
             "task": "medications",
-            "pointer": "/items/2",
+            "pointer": "/items/1",
             "source_evidence": [
               {
                 "segment_id": "b00014",
@@ -14137,7 +14199,7 @@
           {
             "fact_id": "p3-f028",
             "task": "medications",
-            "pointer": "/items/3",
+            "pointer": "/items/2",
             "source_evidence": [
               {
                 "segment_id": "b00014",
@@ -14148,7 +14210,7 @@
           {
             "fact_id": "p3-f029",
             "task": "medications",
-            "pointer": "/items/4",
+            "pointer": "/items/3",
             "source_evidence": [
               {
                 "segment_id": "b00014",
@@ -14159,7 +14221,7 @@
           {
             "fact_id": "p3-f030",
             "task": "medications",
-            "pointer": "/items/5",
+            "pointer": "/items/4",
             "source_evidence": [
               {
                 "segment_id": "b00014",
@@ -14170,7 +14232,7 @@
           {
             "fact_id": "p3-f031",
             "task": "medications",
-            "pointer": "/items/6",
+            "pointer": "/items/5",
             "source_evidence": [
               {
                 "segment_id": "b00021",
@@ -14181,7 +14243,7 @@
           {
             "fact_id": "p3-f032",
             "task": "medications",
-            "pointer": "/items/7",
+            "pointer": "/items/6",
             "source_evidence": [
               {
                 "segment_id": "b00014",
@@ -14192,7 +14254,7 @@
           {
             "fact_id": "p3-f033",
             "task": "medications",
-            "pointer": "/items/8",
+            "pointer": "/items/7",
             "source_evidence": [
               {
                 "segment_id": "b00014",
@@ -14203,7 +14265,7 @@
           {
             "fact_id": "p3-f034",
             "task": "medications",
-            "pointer": "/items/9",
+            "pointer": "/items/8",
             "source_evidence": [
               {
                 "segment_id": "b00014",
@@ -14214,7 +14276,7 @@
           {
             "fact_id": "p3-f035",
             "task": "medications",
-            "pointer": "/items/10",
+            "pointer": "/items/9",
             "source_evidence": [
               {
                 "segment_id": "b00014",
@@ -14661,7 +14723,7 @@
             "pointer": "/items/2",
             "value_as_extracted": {
               "subject": "index_patient",
-              "assertion": "present",
+              "assertion": "possible",
               "temporality": "current",
               "time": {
                 "text": null,
@@ -14676,9 +14738,9 @@
                 }
               ],
               "verification_status": "unconfirmed",
-              "name": "Causal association of disseminated BCG infection with BCG vaccination",
+              "name": "Disseminated BCG infection causally associated with BCG vaccination",
               "clinical_status": "unknown",
-              "role": "unknown",
+              "role": "complication",
               "body_site": null,
               "laterality": "unknown",
               "severity": null,
@@ -14686,11 +14748,11 @@
             },
             "value_as_annotated": {
               "subject": "index_patient",
-              "assertion": "present",
-              "name": "Causal association of disseminated BCG infection with BCG vaccination",
+              "assertion": "possible",
+              "name": "Disseminated BCG infection causally associated with BCG vaccination",
               "verification_status": "unconfirmed",
               "clinical_status": "unknown",
-              "role": "unknown",
+              "role": "complication",
               "temporality": "current"
             },
             "evidence": [
@@ -14786,11 +14848,11 @@
               ],
               "name": "Hypersomnia",
               "kind": "symptom",
-              "text_value": null,
+              "text_value": "sudden hypersomnia",
               "numeric_value": null,
               "unit": null,
               "body_site": null,
-              "severity": "sudden",
+              "severity": null,
               "activity_context": null
             },
             "value_as_annotated": {
@@ -14798,13 +14860,13 @@
               "assertion": "present",
               "name": "Hypersomnia",
               "kind": "symptom",
-              "severity": "sudden",
               "time": {
                 "text": "On June 8, 2024",
                 "relation": "at",
                 "anchor": null,
                 "date_iso": "2024-06-08"
-              }
+              },
+              "text_value": "sudden hypersomnia"
             },
             "evidence": [
               {
@@ -14846,7 +14908,7 @@
               "numeric_value": null,
               "unit": null,
               "body_site": null,
-              "severity": "sudden",
+              "severity": null,
               "activity_context": null
             },
             "value_as_annotated": {
@@ -14854,7 +14916,6 @@
               "assertion": "present",
               "name": "Ashen complexion",
               "kind": "sign",
-              "severity": "sudden",
               "time": {
                 "text": "On June 8, 2024",
                 "relation": "at",
@@ -14943,81 +15004,31 @@
               "assertion": "present",
               "temporality": "unknown",
               "time": {
-                "text": "June 2, 2024",
-                "relation": "at",
-                "anchor": null,
+                "text": "June 2, 2024 (within 24 hours of birth)",
+                "relation": "after",
+                "anchor": "birth",
                 "date_iso": "2024-06-02"
               },
               "evidence": [
                 {
-                  "quote": "A male infant was administered one dose of BCG vaccine on June 2, 2024 (within 24 hours of birth)",
+                  "quote": "was administered one dose of BCG vaccine on June 2, 2024 (within 24 hours of birth).",
                   "source_section": "b00013"
-                }
-              ],
-              "name": "BCG vaccine",
-              "action": "administered",
-              "ingredient_as_documented": null,
-              "dose_text": null,
-              "dose_value": null,
-              "dose_unit": null,
-              "route": null,
-              "frequency": null,
-              "duration_text": null,
-              "indication": null,
-              "regimen": null
-            },
-            "value_as_annotated": {
-              "subject": "index_patient",
-              "assertion": "present",
-              "name": "BCG vaccine",
-              "action": "administered",
-              "time": {
-                "text": "June 2, 2024",
-                "relation": "at",
-                "anchor": null,
-                "date_iso": "2024-06-02"
-              }
-            },
-            "evidence": [
-              {
-                "source_id": "PMC12355699.1:jats",
-                "segment_id": "b00013",
-                "segment_sha256": "66f1a29e797b1a9de3da7fe57aee9dbab0536acfa125baca8218dece5ca68881",
-                "start": 8,
-                "end": 105,
-                "quote": "A male infant was administered one dose of BCG vaccine on June 2, 2024 (within 24 hours of birth)"
-              }
-            ],
-            "event_ids": [
-              "p3-e01"
-            ]
-          },
-          {
-            "fact_id": "p3-f008",
-            "task": "medications",
-            "pointer": "/items/1",
-            "value_as_extracted": {
-              "subject": "index_patient",
-              "assertion": "present",
-              "temporality": "unknown",
-              "time": {
-                "text": null,
-                "relation": "unknown",
-                "anchor": null,
-                "date_iso": null
-              },
-              "evidence": [
+                },
                 {
-                  "quote": "the dose was 0.1 mL containing 0.05 mg of BCG. The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm.",
+                  "quote": "the dose was 0.1 mL containing 0.05 mg of BCG.",
+                  "source_section": "b00013"
+                },
+                {
+                  "quote": "The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm.",
                   "source_section": "b00013"
                 }
               ],
-              "name": "BCG vaccine (dose detail)",
+              "name": "BCG vaccine",
               "action": "administered",
               "ingredient_as_documented": null,
               "dose_text": "0.1 mL containing 0.05 mg of BCG",
-              "dose_value": null,
-              "dose_unit": null,
+              "dose_value": 0.1,
+              "dose_unit": "mL",
               "route": "intracutaneously",
               "frequency": null,
               "duration_text": null,
@@ -15027,9 +15038,17 @@
             "value_as_annotated": {
               "subject": "index_patient",
               "assertion": "present",
-              "name": "BCG vaccine (dose detail)",
+              "name": "BCG vaccine",
               "action": "administered",
+              "time": {
+                "text": "June 2, 2024 (within 24 hours of birth)",
+                "relation": "after",
+                "anchor": "birth",
+                "date_iso": "2024-06-02"
+              },
               "dose_text": "0.1 mL containing 0.05 mg of BCG",
+              "dose_value": 0.1,
+              "dose_unit": "mL",
               "route": "intracutaneously"
             },
             "evidence": [
@@ -15037,9 +15056,25 @@
                 "source_id": "PMC12355699.1:jats",
                 "segment_id": "b00013",
                 "segment_sha256": "66f1a29e797b1a9de3da7fe57aee9dbab0536acfa125baca8218dece5ca68881",
+                "start": 22,
+                "end": 106,
+                "quote": "was administered one dose of BCG vaccine on June 2, 2024 (within 24 hours of birth)."
+              },
+              {
+                "source_id": "PMC12355699.1:jats",
+                "segment_id": "b00013",
+                "segment_sha256": "66f1a29e797b1a9de3da7fe57aee9dbab0536acfa125baca8218dece5ca68881",
                 "start": 199,
+                "end": 245,
+                "quote": "the dose was 0.1 mL containing 0.05 mg of BCG."
+              },
+              {
+                "source_id": "PMC12355699.1:jats",
+                "segment_id": "b00013",
+                "segment_sha256": "66f1a29e797b1a9de3da7fe57aee9dbab0536acfa125baca8218dece5ca68881",
+                "start": 246,
                 "end": 340,
-                "quote": "the dose was 0.1 mL containing 0.05 mg of BCG. The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm."
+                "quote": "The BCG vaccine was administered intracutaneously in the deltoid muscle of the left upper arm."
               }
             ],
             "event_ids": [
@@ -15049,7 +15084,7 @@
           {
             "fact_id": "p3-f027",
             "task": "medications",
-            "pointer": "/items/2",
+            "pointer": "/items/1",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -15105,7 +15140,7 @@
           {
             "fact_id": "p3-f028",
             "task": "medications",
-            "pointer": "/items/3",
+            "pointer": "/items/2",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -15161,7 +15196,7 @@
           {
             "fact_id": "p3-f029",
             "task": "medications",
-            "pointer": "/items/4",
+            "pointer": "/items/3",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -15218,7 +15253,7 @@
           {
             "fact_id": "p3-f030",
             "task": "medications",
-            "pointer": "/items/5",
+            "pointer": "/items/4",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -15274,7 +15309,7 @@
           {
             "fact_id": "p3-f031",
             "task": "medications",
-            "pointer": "/items/6",
+            "pointer": "/items/5",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -15326,7 +15361,7 @@
           {
             "fact_id": "p3-f032",
             "task": "medications",
-            "pointer": "/items/7",
+            "pointer": "/items/6",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -15389,7 +15424,7 @@
           {
             "fact_id": "p3-f033",
             "task": "medications",
-            "pointer": "/items/8",
+            "pointer": "/items/7",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -15442,7 +15477,7 @@
           {
             "fact_id": "p3-f034",
             "task": "medications",
-            "pointer": "/items/9",
+            "pointer": "/items/8",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -15495,7 +15530,7 @@
           {
             "fact_id": "p3-f035",
             "task": "medications",
-            "pointer": "/items/10",
+            "pointer": "/items/9",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -16381,7 +16416,7 @@
             "pointer": "/items/3",
             "value_as_extracted": {
               "subject": "index_patient",
-              "assertion": "present",
+              "assertion": "possible",
               "temporality": "unknown",
               "time": {
                 "text": "Genetic testing on July 16, 2024",
@@ -16407,7 +16442,7 @@
             },
             "value_as_annotated": {
               "subject": "index_patient",
-              "assertion": "present",
+              "assertion": "possible",
               "name": "DOCK11 exon 13 duplication",
               "kind": "genetic_test",
               "gene": "DOCK11",

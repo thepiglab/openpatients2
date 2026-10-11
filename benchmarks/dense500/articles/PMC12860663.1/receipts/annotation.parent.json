@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12860663.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3596280510aa8d40c8f2c67393e701c0cd94b049393457a7e88687ff94e39a97",
+  "annotation_sha256": "8a913465664064b22c90c740fc1b9b6b020d3c391f1ca18b6de77cbe792e316f",
+  "reviewed_at": "2026-10-11T19:38:50.737247+00:00",
+  "source_segments_read": 16,
+  "facts_reviewed": 88,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f074 discharge 'after 15 days of admission' set to certainty source_conflict / review_only to match p1-f075 'hospital stay of 14 days'; p1-f075 event changed other -> discharge; both cross-referenced in notes and the existing ambiguity",
+    "p1-f073 'Calcium gluconate extravasation': verification_status confirmed -> unknown, certainty ambiguous, scoring review_only; only the discussion presupposes 'the extravasation' for this patient (no documented event, site, time or drug); ambiguity added",
+    "p1-f058 standalone condition 'ABO setting' removed; folded into p1-f057 as 'Neonatal hyperbilirubinemia with ABO setting' with the blood-group quote; event p1-e14 reference removed",
+    "p1-f027 25-hydroxy cholecalciferol flag unknown -> low (source classifies the value as Vitamin D insufficiency)",
+    "p1-f040 IV calcium gluconate: indication 'symptomatic hypocalcemia' added from the abstract sentence about this patient",
+    "p1-f041 calcium normalization: literal time 'after almost 72 hours of continuous infusion' (after, anchor 'continuous infusion') added",
+    "p1-f048 avoidance of massage: action_status unknown -> completed and plan_type counseling -> other; quote extended to 'Conservative management was done with ... avoidance of massage at the involved sites.'",
+    "Added p1-f081 irritability at follow up (b00009) and p1-f082 oxygen stopped 'by day five of admission' (before, anchor admission; linked to p1-e11)",
+    "Added caption-only facts p1-f083..f085 (hard lumps over dorsum of hand, dorsum of forearm, ankle) and p1-f086..f089 (X-ray thighs, forearm linear calcification, ankle; infantogram multiple soft tissue calcifications), no time, not linked to events",
+    "Added relations p1-e16 after p1-e14 ('about one week after discharge from the hospital') and p1-e17 after p1-e16 ('At follow up ... As there were multiple lesions, X-ray was done.')",
+    "Summary 3 rewritten to state both discharge durations and oxygen weaning; article limitation and caption source_coverage notes updated",
+    "Visual submission edited: f1 panel 1C notes a faint pinkish-red tint over the dorsum of the foot; f2 panel 2C re-described from pixels as both lower legs with ankles and feet (was 'two limbs ... hand or foot bones'); f3 header text described as only partly legible and deliberately not transcribed (was 'not legible'); figure EHR and privacy drafts regenerated with --draft and reviewed labels/flags carried over (f3 privacy description wording updated)"
+  ],
+  "unresolved": [
+    "Management of neonatal sepsis per unit protocol is not itemized in the source, so no antimicrobial drugs are recorded.",
+    "Resolution at 12 weeks was clinical; the authors state radiological confirmation was not obtained.",
+    "Case section gives discharge after 15 days of admission, the discussion a hospital stay of 14 days; both kept, not reconciled.",
+    "Caption-layer visual status not_inspected; the three image files are inspected in the visual submission.",
+    "Lump sites (hand, forearm, ankle) and radiograph sites (thighs, forearm, ankle, infantogram) are stated only in figure captions; their timing is not stated, so these facts are not linked to timeline events."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 16,
+    "facts_reviewed": 88,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single male neonate (36 weeks 5 days, 2500 g) admitted on day 4 of life with jaundice, fever, poor feeding, oliguria; hyperbilirubinemia 19.9 mg/dl, total/ionized calcium 6.5/3.2 mg/dl; treated with IV 10% calcium gluconate, phototherapy, sepsis management per unit protocol (not itemized, correctly not recorded as drugs)",
+      "Discharge after 15 days (case) vs 14-day stay (discussion) kept as a quarantined source conflict on both facts",
+      "Calcifications at previous cannulation sites at one-week follow-up, X-ray soft tissue calcification without bone extension, osteomyelitis ruled out, biopsy/ultrasound declined, resolved clinically after 12 weeks without radiological confirmation",
+      "Procedure action enum has no started value, so phototherapy and feeding facts keep action unknown; medications use started where the source says switched/started",
+      "All 3 figures (7 panels) viewed on pixels; f3 header text not transcribed and flagged direct_identifiers; 2A and f3 flagged for genital region"
+    ],
+    "residual_risks": [
+      "Calcifications and lumps are not distinguishable on the low-resolution photographed films and photos; panel findings rest on captions",
+      "Extravasation for this patient is presupposed only in the discussion and kept review_only",
+      "\"after 12 weeks\" has no literal reference point, so its anchor is null"
+    ]
+  },
+  "physician_adjudicated": false
+}

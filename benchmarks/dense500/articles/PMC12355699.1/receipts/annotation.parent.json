@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12355699.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "782034cee926978636f25cc23cb867a523e05baec4d0e4276393218513d7e3e8",
+  "annotation_sha256": "e196ebcde79a52c4eb07bd22f706e148515e769197c0d99733dffc8894be65af",
+  "reviewed_at": "2026-10-11T19:44:12.596717+00:00",
+  "source_segments_read": 41,
+  "facts_reviewed": 109,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1/p2/p3 BCG vaccine: merged the separate 'dose detail' facts (f008, alternate_representation_of f007) into the single administration fact f007; dose 0.1 mL containing 0.05 mg and route 'intracutaneously' now carried by their own literal sentences about the same BCG vaccine dose as extra evidence quotes; removed f008.",
+    "p1/p2/p3 BCG vaccine time: time.text 'November 29, 2022 (within 24 hours of birth)' (resp. September 3, 2022 / June 2, 2024), relation after, anchor 'birth', date_iso kept, per the TIME-LITERAL within-of rule.",
+    "p2 rotavirus vaccine: merged dose-detail fact f010 (fragment quote) into f009 with dose 2 mL and the full dose sentence as evidence; route 'oral' kept from the product name in the administration sentence; removed f010.",
+    "p1/p2/p3 f006 causality: renamed to 'Disseminated BCG infection causally associated with BCG vaccination', role complication; p2 confirmed (named case 2); p1/p3 assertion possible + unconfirmed ('the other two cases ... inconclusive but could not be disregarded').",
+    "p2: removed duplicate Mycobacterium tuberculosis complex infection condition f036; its mixed-infection quote added to f026 (time stays from the NGS sentence).",
+    "p2 f022 split: inhibitory T-cell subset proportion (f022) and new B lymphocyte subset proportion (f049).",
+    "p2 f034 death: added the full b00012 cause sentence as evidence for cause_as_documented.",
+    "p2: rash f011/f012 kind sign; spread body_site 'throughout the body'; new untimed event p2-e11 (rash spread with fever, cough, lymphadenopathy) after p2-e03 per 'then'; the October 29 date sentence does not scope the next sentence, so those facts stay untimed.",
+    "p2: added relation p2-e10 (mixed infections/organ failure) before p2-e08 death ('which led to death').",
+    "p3: removed 'sudden' as severity of hypersomnia/ashen complexion (onset word, kept in text_value); DOCK11 exon 13 duplication assertion possible ('suspected to be duplicated').",
+    "p1: injection-site abscess temporality current; event p1-e02 description no longer says 'onset'."
+  ],
+  "unresolved": [
+    "The article has no figures or supplements; no visual review applies.",
+    "Table 1 has no time scope; table-sourced facts (age of onset, outcomes, treatment classes) carry no time.",
+    "Several sentences state events without a date (treatment regimens, recovery); no order is inferred from paragraph order. Case 3 'Two weeks later' has no named reference point.",
+    "The causal-association statement names case 2 as confirmed and 'the other two cases' as inconclusive; cases 1 and 3 are inferred only by that exclusion.",
+    "Discussion statements about the three cases in aggregate (JAK3, TNF and TLR2 defects; only one had an injection-site abscess) are not assigned to individuals.",
+    "Case 1 text mentions HSCT on July 11, 2023 before giving the drug regimen; the drug start dates are not stated."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 41,
+    "facts_reviewed": 109,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Three index infants (Cases 1-3) correctly separated; Table 1 columns attributed by case order; PID and disseminated BCG infection stated explicitly for all three cases.",
+      "Every fact, quote, time and relation checked against the source; variant facts stay untimed because the variant sentences state no date; Case 3 Two weeks later has no literal anchor and stays unanchored.",
+      "Case 2 mixed-infection conditions each have their literal pathogen name in the shared quote (source spellings Enterobacter Hornii / cloaca kept; fungi labelled Fungal infection).",
+      "Discussion aggregate statements (JAK3/TNF/TLR2 defects, only one injection-site abscess) left unassigned.",
+      "No figures, supplements or videos in the source."
+    ],
+    "residual_risks": [
+      "Causality for cases 1 and 3 relies on the phrase the other two cases, which names them only by exclusion of case 2.",
+      "Treatment regimen start dates are not stated; drug facts and Case 2 complications are untimed and unordered relative to dated events.",
+      "Case 2 laboratory and genetic dates are reported out of order in the source (genetic analysis November 2 before blood tests November 29); kept as written."
+    ]
+  },
+  "physician_adjudicated": false
+}

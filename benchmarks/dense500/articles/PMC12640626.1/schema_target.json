@@ -1,7 +1,7 @@
 {
   "format": "dense-runtime-targets/1",
   "article_id": "PMC12640626.1",
-  "annotation_sha256": "e568417cfca0b1834246db9a6d5bd7660cb2b26fb7f9c2421fe338b4d4fcf92c",
+  "annotation_sha256": "a1dc29dea69b146ca947cf35c3cb1487ae0a8c8be2e48116c282902acb41ebab",
   "source_text_sha256": "9be13f266356d78d56ba94cb83b9056944601b27e77ad603e8d548fb2f7b5ceb",
   "schema_fingerprints": {
     "case_context": "d7439310910ef4a7d5e1706c5b9dc8a2b379f132a2562791c059a478b588ec71",
@@ -837,6 +837,31 @@
                 }
               ],
               "name": "Petechiae",
+              "kind": "sign",
+              "text_value": null,
+              "numeric_value": null,
+              "unit": null,
+              "body_site": null,
+              "severity": null,
+              "activity_context": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "In our case, all three patients presented with hepatosplenomegaly, petechiae, and thrombocytopenia.",
+                  "source_section": "b00063"
+                }
+              ],
+              "name": "Hepatosplenomegaly",
               "kind": "sign",
               "text_value": null,
               "numeric_value": null,
@@ -1802,7 +1827,7 @@
               "histology": "AMKL (M7)",
               "grade": null,
               "laterality": "unknown",
-              "disease_extent": "unknown",
+              "disease_extent": "hematologic",
               "metastatic_sites": [],
               "stage_group": null,
               "stage_system": null,
@@ -2053,7 +2078,7 @@
               ]
             },
             {
-              "text": "Examination showed abdominal distension, hepatomegaly, pallor, petechiae and dependent edema, with symptoms appearing within the first 24 hours of life. Laboratory tests showed anemia, thrombocytopenia and leukocyte lineage rejuvenation; TORCH infections and neonatal lupus were excluded; echocardiography and MRI findings and a bone marrow biopsy were reported.",
+              "text": "Examination showed abdominal distension, hepatomegaly (hepatosplenomegaly per the discussion), pallor, petechiae and dependent edema, with symptoms appearing within the first 24 hours of life. Laboratory tests showed anemia, thrombocytopenia and leukocyte lineage rejuvenation; TORCH infections and neonatal lupus were excluded; echocardiography and MRI findings and a bone marrow biopsy were reported.",
               "evidence": [
                 {
                   "segment_id": "b00009",
@@ -2090,6 +2115,10 @@
                 {
                   "segment_id": "b00010",
                   "quote": "A bone marrow biopsy was performed, including genetic analysis of the bone marrow."
+                },
+                {
+                  "segment_id": "b00063",
+                  "quote": "In our case, all three patients presented with hepatosplenomegaly, petechiae, and thrombocytopenia."
                 }
               ]
             },
@@ -3103,7 +3132,7 @@
         "basis": "Source-gated model relations; paragraph order and event kind do not create chronology."
       },
       "reference_provenance": {
-        "annotation_sha256": "e568417cfca0b1834246db9a6d5bd7660cb2b26fb7f9c2421fe338b4d4fcf92c",
+        "annotation_sha256": "a1dc29dea69b146ca947cf35c3cb1487ae0a8c8be2e48116c282902acb41ebab",
         "materializer_version": "dense-runtime-targets/1",
         "fact_pointers": [
           {
@@ -3305,6 +3334,17 @@
             "fact_id": "p1-f035",
             "task": "symptoms_function",
             "pointer": "/items/5",
+            "source_evidence": [
+              {
+                "segment_id": "b00063",
+                "quote": "In our case, all three patients presented with hepatosplenomegaly, petechiae, and thrombocytopenia."
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f054",
+            "task": "symptoms_function",
+            "pointer": "/items/6",
             "source_evidence": [
               {
                 "segment_id": "b00063",
@@ -4668,6 +4708,53 @@
               "subject": "index_patient",
               "assertion": "present",
               "name": "Petechiae",
+              "kind": "sign"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12640626.1:jats",
+                "segment_id": "b00063",
+                "segment_sha256": "913db43ce105167b084cc6fca48faa4fb4c5b0e850722715d76e9827d1984785",
+                "start": 607,
+                "end": 706,
+                "quote": "In our case, all three patients presented with hepatosplenomegaly, petechiae, and thrombocytopenia."
+              }
+            ],
+            "event_ids": []
+          },
+          {
+            "fact_id": "p1-f054",
+            "task": "symptoms_function",
+            "pointer": "/items/6",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "In our case, all three patients presented with hepatosplenomegaly, petechiae, and thrombocytopenia.",
+                  "source_section": "b00063"
+                }
+              ],
+              "name": "Hepatosplenomegaly",
+              "kind": "sign",
+              "text_value": null,
+              "numeric_value": null,
+              "unit": null,
+              "body_site": null,
+              "severity": null,
+              "activity_context": null
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "name": "Hepatosplenomegaly",
               "kind": "sign"
             },
             "evidence": [
@@ -6679,7 +6766,7 @@
               "histology": "AMKL (M7)",
               "grade": null,
               "laterality": "unknown",
-              "disease_extent": "unknown",
+              "disease_extent": "hematologic",
               "metastatic_sites": [],
               "stage_group": null,
               "stage_system": null,
@@ -6700,7 +6787,8 @@
                 "text": "21st day of life",
                 "relation": "at",
                 "anchor": null
-              }
+              },
+              "disease_extent": "hematologic"
             },
             "evidence": [
               {
@@ -9534,7 +9622,7 @@
               "histology": "AMKL",
               "grade": null,
               "laterality": "unknown",
-              "disease_extent": "unknown",
+              "disease_extent": "hematologic",
               "metastatic_sites": [],
               "stage_group": null,
               "stage_system": null,
@@ -9916,9 +10004,7 @@
                 "p2-f009",
                 "p2-f010",
                 "p2-f011",
-                "p2-f012",
-                "p2-f006",
-                "p2-f007"
+                "p2-f012"
               ],
               "evidence": [
                 {
@@ -9973,11 +10059,8 @@
               "episode_id": null,
               "kind": "presentation",
               "occurrence": "occurred",
-              "description": "Onset of symptoms prenatally",
-              "fact_ids": [
-                "p2-f013",
-                "p2-f016"
-              ],
+              "description": "Onset of symptoms prenatally (specific symptoms not named)",
+              "fact_ids": [],
               "evidence": [
                 {
                   "source_id": "PMC12640626.1:jats",
@@ -10679,6 +10762,48 @@
                   "quote": "Week 4 of life, Result"
                 }
               ]
+            },
+            {
+              "edge_id": "edge3",
+              "from_event_id": "p2-e02",
+              "to_event_id": "p2-e01",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12640626.1:jats",
+                  "segment_id": "b00063",
+                  "segment_sha256": "913db43ce105167b084cc6fca48faa4fb4c5b0e850722715d76e9827d1984785",
+                  "start": 784,
+                  "end": 845,
+                  "quote": "The symptoms were observed prenatally only in the second case"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge4",
+              "from_event_id": "p2-e05",
+              "to_event_id": "p2-e11",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12640626.1:jats",
+                  "segment_id": "b00025",
+                  "segment_sha256": "eec12cc925383accf776adfdd538193cf5656dddc648eec5d0dbb30e3a4af5de",
+                  "start": 510,
+                  "end": 532,
+                  "quote": "Week 2 of life, Result"
+                },
+                {
+                  "source_id": "PMC12640626.1:jats",
+                  "segment_id": "b00038",
+                  "segment_sha256": "22b6dcacf233809110acf59d1d8cb2b0508ff473106da616d78222fb81f770b5",
+                  "start": 126,
+                  "end": 229,
+                  "quote": "After bone marrow aspiration and trephine biopsy on the 26th day of life, a diagnosis of AMKL was made."
+                }
+              ]
             }
           ],
           "limitations": [
@@ -10704,9 +10829,7 @@
               "p2-f009",
               "p2-f010",
               "p2-f011",
-              "p2-f012",
-              "p2-f006",
-              "p2-f007"
+              "p2-f012"
             ],
             "evidence": [
               {
@@ -10761,11 +10884,8 @@
             "episode_id": null,
             "kind": "presentation",
             "occurrence": "occurred",
-            "description": "Onset of symptoms prenatally",
-            "fact_ids": [
-              "p2-f013",
-              "p2-f016"
-            ],
+            "description": "Onset of symptoms prenatally (specific symptoms not named)",
+            "fact_ids": [],
             "evidence": [
               {
                 "source_id": "PMC12640626.1:jats",
@@ -11420,9 +11540,6 @@
         "topological_layers": [
           [
             [
-              "p2-e01"
-            ],
-            [
               "p2-e02"
             ],
             [
@@ -11444,9 +11561,6 @@
               "p2-e10"
             ],
             [
-              "p2-e11"
-            ],
-            [
               "p2-e12"
             ],
             [
@@ -11455,17 +11569,27 @@
           ],
           [
             [
+              "p2-e01"
+            ],
+            [
               "p2-e05"
             ]
           ],
           [
             [
               "p2-e06"
+            ],
+            [
+              "p2-e11"
             ]
           ]
         ],
         "before_pairs": [
           [
+            "p2-e02",
+            "p2-e01"
+          ],
+          [
             "p2-e04",
             "p2-e05"
           ],
@@ -11474,17 +11598,21 @@
             "p2-e06"
           ],
           [
+            "p2-e04",
+            "p2-e11"
+          ],
+          [
             "p2-e05",
             "p2-e06"
+          ],
+          [
+            "p2-e05",
+            "p2-e11"
           ]
         ],
         "incomparable_pairs": [
           [
             "p2-e01",
-            "p2-e02"
-          ],
-          [
-            "p2-e01",
             "p2-e03"
           ],
           [
@@ -11629,10 +11757,6 @@
           ],
           [
             "p2-e04",
-            "p2-e11"
-          ],
-          [
-            "p2-e04",
             "p2-e12"
           ],
           [
@@ -11654,10 +11778,6 @@
           [
             "p2-e05",
             "p2-e10"
-          ],
-          [
-            "p2-e05",
-            "p2-e11"
           ],
           [
             "p2-e05",
@@ -11783,19 +11903,19 @@
         "same_time_groups": [],
         "interval_relations": [],
         "ordered_event_ids": [
-          "p2-e04",
-          "p2-e05",
-          "p2-e06"
-        ],
-        "order_unknown_event_ids": [
           "p2-e01",
           "p2-e02",
+          "p2-e04",
+          "p2-e05",
+          "p2-e06",
+          "p2-e11"
+        ],
+        "order_unknown_event_ids": [
           "p2-e03",
           "p2-e07",
           "p2-e08",
           "p2-e09",
           "p2-e10",
-          "p2-e11",
           "p2-e12",
           "p2-e13"
         ],
@@ -11805,7 +11925,7 @@
         "basis": "Source-gated model relations; paragraph order and event kind do not create chronology."
       },
       "reference_provenance": {
-        "annotation_sha256": "e568417cfca0b1834246db9a6d5bd7660cb2b26fb7f9c2421fe338b4d4fcf92c",
+        "annotation_sha256": "a1dc29dea69b146ca947cf35c3cb1487ae0a8c8be2e48116c282902acb41ebab",
         "materializer_version": "dense-runtime-targets/1",
         "fact_pointers": [
           {
@@ -13074,9 +13194,7 @@
                 "quote": "Mother had a mild respiratory infection in the third trimester."
               }
             ],
-            "event_ids": [
-              "p2-e01"
-            ]
+            "event_ids": []
           },
           {
             "fact_id": "p2-f010",
@@ -13798,7 +13916,6 @@
               }
             ],
             "event_ids": [
-              "p2-e02",
               "p2-e03"
             ]
           },
@@ -13897,7 +14014,6 @@
               }
             ],
             "event_ids": [
-              "p2-e02",
               "p2-e03"
             ]
           },
@@ -17685,7 +17801,7 @@
               "histology": "AMKL",
               "grade": null,
               "laterality": "unknown",
-              "disease_extent": "unknown",
+              "disease_extent": "hematologic",
               "metastatic_sites": [],
               "stage_group": null,
               "stage_system": null,
@@ -17706,7 +17822,8 @@
                 "text": "26th day of life",
                 "relation": "at",
                 "anchor": null
-              }
+              },
+              "disease_extent": "hematologic"
             },
             "evidence": [
               {
@@ -17943,9 +18060,7 @@
                 "quote": "Mother had a mild respiratory infection in the third trimester."
               }
             ],
-            "event_ids": [
-              "p2-e01"
-            ]
+            "event_ids": []
           },
           {
             "fact_id": "p2-f008",
@@ -19303,7 +19418,7 @@
               "dose_text": null,
               "dose_value": null,
               "dose_unit": null,
-              "route": null,
+              "route": "intravenous",
               "frequency": null,
               "duration_text": null,
               "indication": null,
@@ -19342,8 +19457,8 @@
               "assertion": "present",
               "temporality": "unknown",
               "time": {
-                "text": null,
-                "relation": "unknown",
+                "text": "38th day of life",
+                "relation": "at",
                 "anchor": null,
                 "date_iso": null
               },
@@ -19364,6 +19479,118 @@
               "duration_text": null,
               "indication": null,
               "regimen": "AML-BFM 2017 protocol"
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Treatment was started according to the HLH-2004 protocol with dexamethasone, tocilizumab, intravenous immunoglobulin (IVIG), and etoposide.",
+                  "source_section": "b00053"
+                }
+              ],
+              "name": "Dexamethasone",
+              "action": "started",
+              "ingredient_as_documented": null,
+              "dose_text": null,
+              "dose_value": null,
+              "dose_unit": null,
+              "route": null,
+              "frequency": null,
+              "duration_text": null,
+              "indication": null,
+              "regimen": "HLH-2004 protocol"
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Treatment was started according to the HLH-2004 protocol with dexamethasone, tocilizumab, intravenous immunoglobulin (IVIG), and etoposide.",
+                  "source_section": "b00053"
+                }
+              ],
+              "name": "Tocilizumab",
+              "action": "started",
+              "ingredient_as_documented": null,
+              "dose_text": null,
+              "dose_value": null,
+              "dose_unit": null,
+              "route": null,
+              "frequency": null,
+              "duration_text": null,
+              "indication": null,
+              "regimen": "HLH-2004 protocol"
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Treatment was started according to the HLH-2004 protocol with dexamethasone, tocilizumab, intravenous immunoglobulin (IVIG), and etoposide.",
+                  "source_section": "b00053"
+                }
+              ],
+              "name": "Intravenous immunoglobulin (IVIG)",
+              "action": "started",
+              "ingredient_as_documented": null,
+              "dose_text": null,
+              "dose_value": null,
+              "dose_unit": null,
+              "route": "intravenous",
+              "frequency": null,
+              "duration_text": null,
+              "indication": null,
+              "regimen": "HLH-2004 protocol"
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Treatment was started according to the HLH-2004 protocol with dexamethasone, tocilizumab, intravenous immunoglobulin (IVIG), and etoposide.",
+                  "source_section": "b00053"
+                }
+              ],
+              "name": "Etoposide",
+              "action": "started",
+              "ingredient_as_documented": null,
+              "dose_text": null,
+              "dose_value": null,
+              "dose_unit": null,
+              "route": null,
+              "frequency": null,
+              "duration_text": null,
+              "indication": null,
+              "regimen": "HLH-2004 protocol"
             }
           ]
         },
@@ -19992,7 +20219,7 @@
               "histology": "AMKL (subtype M7)",
               "grade": null,
               "laterality": "unknown",
-              "disease_extent": "unknown",
+              "disease_extent": "hematologic",
               "metastatic_sites": [],
               "stage_group": null,
               "stage_system": null,
@@ -20040,8 +20267,8 @@
               "assertion": "present",
               "temporality": "unknown",
               "time": {
-                "text": null,
-                "relation": "unknown",
+                "text": "38th day of life",
+                "relation": "at",
                 "anchor": null,
                 "date_iso": null
               },
@@ -20401,11 +20628,15 @@
                 {
                   "segment_id": "b00053",
                   "quote": "Congenital HLH was not confirmed."
+                },
+                {
+                  "segment_id": "b00053",
+                  "quote": "Treatment was started according to the HLH-2004 protocol with dexamethasone, tocilizumab, intravenous immunoglobulin (IVIG), and etoposide."
                 }
               ]
             },
             {
-              "text": "Bone marrow biopsy on the 17th day showed numerous blasts consistent with megakaryoblasts; AMKL (M7) was diagnosed on the 38th day of life and AML-BFM 2017 treatment was started. She then developed desaturation, edema, metabolic acidosis, sepsis due to Stenotrophomonas maltophilia and other complications, was transferred to the intensive care unit, and died.",
+              "text": "A bone marrow biopsy was performed on the 17th day of life and a follow-up bone marrow aspirate showed numerous blasts consistent with megakaryoblasts; AMKL (M7) was diagnosed on the 38th day of life and AML-BFM 2017 treatment was started. After diagnosis she had desaturation episodes, weight loss, peripheral edema, hypoalbuminemia, hepatomegaly and tachycardia; she worsened and was transferred to the intensive care unit for metabolic acidosis and desaturation, sepsis due to Stenotrophomonas maltophilia was diagnosed, she developed further complications and died shortly afterward.",
               "evidence": [
                 {
                   "segment_id": "b00053",
@@ -20484,15 +20715,13 @@
               "episode_id": null,
               "kind": "presentation",
               "occurrence": "occurred",
-              "description": "Birth at 40 weeks of gestation after a pregnancy complicated by gestational diabetes mellitus and a viral infection",
+              "description": "Birth at 40 weeks of gestation after a pregnancy complicated by gestational diabetes mellitus",
               "fact_ids": [
                 "p3-f007",
                 "p3-f008",
                 "p3-f009",
                 "p3-f010",
-                "p3-f011",
-                "p3-f012",
-                "p3-f014"
+                "p3-f011"
               ],
               "evidence": [
                 {
@@ -20844,7 +21073,11 @@
                 "p3-f027",
                 "p3-f028",
                 "p3-f029",
-                "p3-f030"
+                "p3-f030",
+                "p3-f071",
+                "p3-f072",
+                "p3-f073",
+                "p3-f074"
               ],
               "evidence": [
                 {
@@ -20882,10 +21115,9 @@
               "episode_id": null,
               "kind": "test",
               "occurrence": "occurred",
-              "description": "Bone marrow biopsy on the 17th day of life with congenital HLH not confirmed",
+              "description": "Bone marrow biopsy on the 17th day of life",
               "fact_ids": [
-                "p3-f031",
-                "p3-f023"
+                "p3-f031"
               ],
               "evidence": [
                 {
@@ -20893,8 +21125,8 @@
                   "segment_id": "b00053",
                   "segment_sha256": "9fe43539a9ec63a660c0954b151f7d58254dbec34a41f1383fc05599a38351fa",
                   "start": 236,
-                  "end": 330,
-                  "quote": "On the 17th day of life, a bone marrow biopsy was performed. Congenital HLH was not confirmed."
+                  "end": 296,
+                  "quote": "On the 17th day of life, a bone marrow biopsy was performed."
                 }
               ],
               "attribution_evidence": [
@@ -20927,8 +21159,8 @@
                       "segment_id": "b00053",
                       "segment_sha256": "9fe43539a9ec63a660c0954b151f7d58254dbec34a41f1383fc05599a38351fa",
                       "start": 236,
-                      "end": 330,
-                      "quote": "On the 17th day of life, a bone marrow biopsy was performed. Congenital HLH was not confirmed."
+                      "end": 296,
+                      "quote": "On the 17th day of life, a bone marrow biopsy was performed."
                     }
                   ]
                 }
@@ -21430,15 +21662,13 @@
             "episode_id": null,
             "kind": "presentation",
             "occurrence": "occurred",
-            "description": "Birth at 40 weeks of gestation after a pregnancy complicated by gestational diabetes mellitus and a viral infection",
+            "description": "Birth at 40 weeks of gestation after a pregnancy complicated by gestational diabetes mellitus",
             "fact_ids": [
               "p3-f007",
               "p3-f008",
               "p3-f009",
               "p3-f010",
-              "p3-f011",
-              "p3-f012",
-              "p3-f014"
+              "p3-f011"
             ],
             "evidence": [
               {
@@ -21790,7 +22020,11 @@
               "p3-f027",
               "p3-f028",
               "p3-f029",
-              "p3-f030"
+              "p3-f030",
+              "p3-f071",
+              "p3-f072",
+              "p3-f073",
+              "p3-f074"
             ],
             "evidence": [
               {
@@ -21828,10 +22062,9 @@
             "episode_id": null,
             "kind": "test",
             "occurrence": "occurred",
-            "description": "Bone marrow biopsy on the 17th day of life with congenital HLH not confirmed",
+            "description": "Bone marrow biopsy on the 17th day of life",
             "fact_ids": [
-              "p3-f031",
-              "p3-f023"
+              "p3-f031"
             ],
             "evidence": [
               {
@@ -21839,8 +22072,8 @@
                 "segment_id": "b00053",
                 "segment_sha256": "9fe43539a9ec63a660c0954b151f7d58254dbec34a41f1383fc05599a38351fa",
                 "start": 236,
-                "end": 330,
-                "quote": "On the 17th day of life, a bone marrow biopsy was performed. Congenital HLH was not confirmed."
+                "end": 296,
+                "quote": "On the 17th day of life, a bone marrow biopsy was performed."
               }
             ],
             "attribution_evidence": [
@@ -21873,8 +22106,8 @@
                     "segment_id": "b00053",
                     "segment_sha256": "9fe43539a9ec63a660c0954b151f7d58254dbec34a41f1383fc05599a38351fa",
                     "start": 236,
-                    "end": 330,
-                    "quote": "On the 17th day of life, a bone marrow biopsy was performed. Congenital HLH was not confirmed."
+                    "end": 296,
+                    "quote": "On the 17th day of life, a bone marrow biopsy was performed."
                   }
                 ]
               }
@@ -22740,7 +22973,7 @@
         "basis": "Source-gated model relations; paragraph order and event kind do not create chronology."
       },
       "reference_provenance": {
-        "annotation_sha256": "e568417cfca0b1834246db9a6d5bd7660cb2b26fb7f9c2421fe338b4d4fcf92c",
+        "annotation_sha256": "a1dc29dea69b146ca947cf35c3cb1487ae0a8c8be2e48116c282902acb41ebab",
         "materializer_version": "dense-runtime-targets/1",
         "fact_pointers": [
           {
@@ -23196,6 +23429,50 @@
               {
                 "segment_id": "b00053",
                 "quote": "On the 38th day of life, a diagnosis of AMKL (subtype M7) was made, and treatment was started according to the AML-BFM 2017 protocol."
+              }
+            ]
+          },
+          {
+            "fact_id": "p3-f071",
+            "task": "medications",
+            "pointer": "/items/5",
+            "source_evidence": [
+              {
+                "segment_id": "b00053",
+                "quote": "Treatment was started according to the HLH-2004 protocol with dexamethasone, tocilizumab, intravenous immunoglobulin (IVIG), and etoposide."
+              }
+            ]
+          },
+          {
+            "fact_id": "p3-f072",
+            "task": "medications",
+            "pointer": "/items/6",
+            "source_evidence": [
+              {
+                "segment_id": "b00053",
+                "quote": "Treatment was started according to the HLH-2004 protocol with dexamethasone, tocilizumab, intravenous immunoglobulin (IVIG), and etoposide."
+              }
+            ]
+          },
+          {
+            "fact_id": "p3-f073",
+            "task": "medications",
+            "pointer": "/items/7",
+            "source_evidence": [
+              {
+                "segment_id": "b00053",
+                "quote": "Treatment was started according to the HLH-2004 protocol with dexamethasone, tocilizumab, intravenous immunoglobulin (IVIG), and etoposide."
+              }
+            ]
+          },
+          {
+            "fact_id": "p3-f074",
+            "task": "medications",
+            "pointer": "/items/8",
+            "source_evidence": [
+              {
+                "segment_id": "b00053",
+                "quote": "Treatment was started according to the HLH-2004 protocol with dexamethasone, tocilizumab, intravenous immunoglobulin (IVIG), and etoposide."
               }
             ]
           },
@@ -23963,9 +24240,7 @@
                 "quote": "The pregnancy was complicated by gestational diabetes mellitus (GDM, type 2) and a viral infection during the second trimester."
               }
             ],
-            "event_ids": [
-              "p3-e01"
-            ]
+            "event_ids": []
           },
           {
             "fact_id": "p3-f018",
@@ -24220,9 +24495,7 @@
                 "quote": "Congenital HLH was not confirmed."
               }
             ],
-            "event_ids": [
-              "p3-e08"
-            ]
+            "event_ids": []
           },
           {
             "fact_id": "p3-f030",
@@ -25546,7 +25819,7 @@
               "dose_text": null,
               "dose_value": null,
               "dose_unit": null,
-              "route": null,
+              "route": "intravenous",
               "frequency": null,
               "duration_text": null,
               "indication": null,
@@ -25557,7 +25830,8 @@
               "assertion": "present",
               "name": "Intravenous immunoglobulin (IVIG)",
               "action": "stopped",
-              "regimen": "HLH-2004 protocol"
+              "regimen": "HLH-2004 protocol",
+              "route": "intravenous"
             },
             "evidence": [
               {
@@ -25635,8 +25909,8 @@
               "assertion": "present",
               "temporality": "unknown",
               "time": {
-                "text": null,
-                "relation": "unknown",
+                "text": "38th day of life",
+                "relation": "at",
                 "anchor": null,
                 "date_iso": null
               },
@@ -25663,7 +25937,12 @@
               "assertion": "present",
               "name": "AML-BFM 2017 protocol",
               "action": "started",
-              "regimen": "AML-BFM 2017 protocol"
+              "regimen": "AML-BFM 2017 protocol",
+              "time": {
+                "text": "38th day of life",
+                "relation": "at",
+                "anchor": null
+              }
             },
             "evidence": [
               {
@@ -25677,6 +25956,219 @@
             ],
             "event_ids": [
               "p3-e10"
+            ]
+          },
+          {
+            "fact_id": "p3-f071",
+            "task": "medications",
+            "pointer": "/items/5",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Treatment was started according to the HLH-2004 protocol with dexamethasone, tocilizumab, intravenous immunoglobulin (IVIG), and etoposide.",
+                  "source_section": "b00053"
+                }
+              ],
+              "name": "Dexamethasone",
+              "action": "started",
+              "ingredient_as_documented": null,
+              "dose_text": null,
+              "dose_value": null,
+              "dose_unit": null,
+              "route": null,
+              "frequency": null,
+              "duration_text": null,
+              "indication": null,
+              "regimen": "HLH-2004 protocol"
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "name": "Dexamethasone",
+              "action": "started",
+              "regimen": "HLH-2004 protocol"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12640626.1:jats",
+                "segment_id": "b00053",
+                "segment_sha256": "9fe43539a9ec63a660c0954b151f7d58254dbec34a41f1383fc05599a38351fa",
+                "start": 0,
+                "end": 139,
+                "quote": "Treatment was started according to the HLH-2004 protocol with dexamethasone, tocilizumab, intravenous immunoglobulin (IVIG), and etoposide."
+              }
+            ],
+            "event_ids": [
+              "p3-e07"
+            ]
+          },
+          {
+            "fact_id": "p3-f072",
+            "task": "medications",
+            "pointer": "/items/6",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Treatment was started according to the HLH-2004 protocol with dexamethasone, tocilizumab, intravenous immunoglobulin (IVIG), and etoposide.",
+                  "source_section": "b00053"
+                }
+              ],
+              "name": "Tocilizumab",
+              "action": "started",
+              "ingredient_as_documented": null,
+              "dose_text": null,
+              "dose_value": null,
+              "dose_unit": null,
+              "route": null,
+              "frequency": null,
+              "duration_text": null,
+              "indication": null,
+              "regimen": "HLH-2004 protocol"
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "name": "Tocilizumab",
+              "action": "started",
+              "regimen": "HLH-2004 protocol"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12640626.1:jats",
+                "segment_id": "b00053",
+                "segment_sha256": "9fe43539a9ec63a660c0954b151f7d58254dbec34a41f1383fc05599a38351fa",
+                "start": 0,
+                "end": 139,
+                "quote": "Treatment was started according to the HLH-2004 protocol with dexamethasone, tocilizumab, intravenous immunoglobulin (IVIG), and etoposide."
+              }
+            ],
+            "event_ids": [
+              "p3-e07"
+            ]
+          },
+          {
+            "fact_id": "p3-f073",
+            "task": "medications",
+            "pointer": "/items/7",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Treatment was started according to the HLH-2004 protocol with dexamethasone, tocilizumab, intravenous immunoglobulin (IVIG), and etoposide.",
+                  "source_section": "b00053"
+                }
+              ],
+              "name": "Intravenous immunoglobulin (IVIG)",
+              "action": "started",
+              "ingredient_as_documented": null,
+              "dose_text": null,
+              "dose_value": null,
+              "dose_unit": null,
+              "route": "intravenous",
+              "frequency": null,
+              "duration_text": null,
+              "indication": null,
+              "regimen": "HLH-2004 protocol"
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "name": "Intravenous immunoglobulin (IVIG)",
+              "action": "started",
+              "regimen": "HLH-2004 protocol",
+              "route": "intravenous"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12640626.1:jats",
+                "segment_id": "b00053",
+                "segment_sha256": "9fe43539a9ec63a660c0954b151f7d58254dbec34a41f1383fc05599a38351fa",
+                "start": 0,
+                "end": 139,
+                "quote": "Treatment was started according to the HLH-2004 protocol with dexamethasone, tocilizumab, intravenous immunoglobulin (IVIG), and etoposide."
+              }
+            ],
+            "event_ids": [
+              "p3-e07"
+            ]
+          },
+          {
+            "fact_id": "p3-f074",
+            "task": "medications",
+            "pointer": "/items/8",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Treatment was started according to the HLH-2004 protocol with dexamethasone, tocilizumab, intravenous immunoglobulin (IVIG), and etoposide.",
+                  "source_section": "b00053"
+                }
+              ],
+              "name": "Etoposide",
+              "action": "started",
+              "ingredient_as_documented": null,
+              "dose_text": null,
+              "dose_value": null,
+              "dose_unit": null,
+              "route": null,
+              "frequency": null,
+              "duration_text": null,
+              "indication": null,
+              "regimen": "HLH-2004 protocol"
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "name": "Etoposide",
+              "action": "started",
+              "regimen": "HLH-2004 protocol"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12640626.1:jats",
+                "segment_id": "b00053",
+                "segment_sha256": "9fe43539a9ec63a660c0954b151f7d58254dbec34a41f1383fc05599a38351fa",
+                "start": 0,
+                "end": 139,
+                "quote": "Treatment was started according to the HLH-2004 protocol with dexamethasone, tocilizumab, intravenous immunoglobulin (IVIG), and etoposide."
+              }
+            ],
+            "event_ids": [
+              "p3-e07"
             ]
           },
           {
@@ -26959,7 +27451,7 @@
               "histology": "AMKL (subtype M7)",
               "grade": null,
               "laterality": "unknown",
-              "disease_extent": "unknown",
+              "disease_extent": "hematologic",
               "metastatic_sites": [],
               "stage_group": null,
               "stage_system": null,
@@ -26980,7 +27472,8 @@
                 "text": "38th day of life",
                 "relation": "at",
                 "anchor": null
-              }
+              },
+              "disease_extent": "hematologic"
             },
             "evidence": [
               {
@@ -27064,8 +27557,8 @@
               "assertion": "present",
               "temporality": "unknown",
               "time": {
-                "text": null,
-                "relation": "unknown",
+                "text": "38th day of life",
+                "relation": "at",
                 "anchor": null,
                 "date_iso": null
               },
@@ -27090,7 +27583,12 @@
               "tumor_ref": "t1",
               "name": "AML-BFM 2017 protocol",
               "modality": "systemic",
-              "action": "ongoing"
+              "action": "ongoing",
+              "time": {
+                "text": "38th day of life",
+                "relation": "at",
+                "anchor": null
+              }
             },
             "evidence": [
               {
@@ -27154,9 +27652,7 @@
                 "quote": "She is also a carrier of the factor V Leiden mutation."
               }
             ],
-            "event_ids": [
-              "p3-e01"
-            ]
+            "event_ids": []
           },
           {
             "fact_id": "p3-f007",

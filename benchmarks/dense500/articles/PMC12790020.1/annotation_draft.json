@@ -685,12 +685,16 @@
       "kind": "procedure",
       "action": "completed",
       "laterality": "unknown",
-      "finding": "hyperostotic bone completely excised via a single burr hole and bone cutting with a drill system"
+      "finding": "hyperostotic bone completely excised via a single burr hole and bone cutting with a drill system; complete en bloc excision of involved bone (Fig.2 f caption)"
      },
      "evidence": [
       {
        "segment_id": "b00009",
        "quote": "hyperostotic bone was completely excised via a single burr hole and bone cutting with a drill system"
+      },
+      {
+       "segment_id": "b00027",
+       "quote": "(f) Complete en bloc excision of involved bone."
       }
      ],
      "clinical_statement": "Hyperostotic bone completely excised via a single burr hole and bone cutting with a drill system",
@@ -764,7 +768,7 @@
        "quote": "Closure was done without performing cranioplasty"
       }
      ],
-     "clinical_statement": "Closure done without cranioplasty",
+     "clinical_statement": "Wound closure done",
      "certainty": "supported",
      "scoring": "include",
      "notes": ""
@@ -1438,6 +1442,28 @@
        "quote": "thus confirming a diagnosis of MNTI"
       }
      ]
+    },
+    {
+     "from_event_id": "p1-e04",
+     "to_event_id": "p1-e05",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00015",
+       "quote": "our preoperative differentials were meningioma, osteoma, and fibrous dysplasia"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e05",
+     "to_event_id": "p1-e09",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00001",
+       "quote": "Complete excision of the tumor in both cases was performed with no postoperative complications or recurrence of the tumor at six-month follow-up"
+      }
+     ]
     }
    ],
    "summary": [
@@ -1541,7 +1567,7 @@
     },
     "oncology": {
      "status": "not_documented",
-     "note": "No patient-specific documentation in retained source."
+     "note": "MNTI is recorded as a confirmed condition only: the source calls MNTI mostly benign and never evaluates either tumor as a possible malignancy (ONC-BENIGN)."
     },
     "family_genetics": {
      "status": "not_documented",
@@ -1553,7 +1579,7 @@
     },
     "social_exposures": {
      "status": "documented",
-     "note": "Source-grounded facts retained."
+     "note": "Only the up-to-date immunization statement is recorded (social_exposures domain other, no vaccines named); no social or exposure history is given."
     },
     "outcomes": {
      "status": "documented",
@@ -1588,6 +1614,23 @@
      "issue": "The discussion says urinary VMA was not done in our case, in the singular, while the series has two patients.",
      "must_not_infer": "Do not record VMA as not performed for either patient.",
      "fact_ids": []
+    },
+    {
+     "evidence": [
+      {
+       "segment_id": "b00001",
+       "quote": "CT and MRI in both of these cases showed extra-axial lesions"
+      },
+      {
+       "segment_id": "b00008",
+       "quote": "magnetic resonance imaging (MRI) was not done"
+      }
+     ],
+     "issue": "The abstract says CT and MRI in both cases showed extra-axial lesions, but the case 1 report says MRI was not done.",
+     "must_not_infer": "Do not record an MRI or an extra-axial MRI finding for case 1; keep MRI as not performed per the case report.",
+     "fact_ids": [
+      "p1-f026"
+     ]
     }
    ]
   },
@@ -1684,7 +1727,6 @@
       "kind": "symptom",
       "text_value": "rapidly growing",
       "body_site": "right temporal scalp",
-      "severity": "rapidly growing",
       "time": {
        "text": "for three weeks",
        "relation": "during",
@@ -2479,9 +2521,13 @@
       {
        "segment_id": "b00013",
        "quote": "Surgical wide local excision of the lesion was performed via a curvilinear incision given in front of the right ear"
+      },
+      {
+       "segment_id": "b00013",
+       "quote": "approximately 4.5 x 4 x 4.5 cm of thickened bone was removed along with soft grayish tissue attached with dura"
       }
      ],
-     "clinical_statement": "Wide local excision via a curvilinear incision in front of the right ear",
+     "clinical_statement": "Wide local excision via a curvilinear incision in front of the right ear, removing approximately 4.5 x 4 x 4.5 cm of thickened bone with soft grayish tissue attached to the dura",
      "certainty": "supported",
      "scoring": "include",
      "notes": "Incision side is stated as in front of the right ear."
@@ -2527,7 +2573,7 @@
        "quote": "Closure was done without any cranioplasty"
       }
      ],
-     "clinical_statement": "Closure done without cranioplasty",
+     "clinical_statement": "Wound closure done",
      "certainty": "supported",
      "scoring": "include",
      "notes": ""
@@ -2686,7 +2732,7 @@
      "fields": {
       "subject": "index_patient",
       "assertion": "present",
-      "event": "improvement",
+      "event": "other",
       "text_value": "doing fine",
       "time": {
        "text": "on follow-up at six months",
@@ -2862,6 +2908,32 @@
      "certainty": "supported",
      "scoring": "include",
      "notes": "Statement explicitly covers both patients of the series."
+    },
+    {
+     "fact_id": "p2-f053",
+     "task": "observations",
+     "collection": "items",
+     "fields": {
+      "subject": "index_patient",
+      "assertion": "present",
+      "kind": "imaging",
+      "status": "resulted",
+      "name": "MRI dural attachment",
+      "comparator": "unknown",
+      "flag": "unknown",
+      "method": "T1-weighted with contrast axial view",
+      "text_value": "contrast enhancement of the lesion and dural attachment"
+     },
+     "evidence": [
+      {
+       "segment_id": "b00029",
+       "quote": "(d & e) T1-weighted with contrast axial view showing contrast enhancement of the lesion and dural attachment."
+      }
+     ],
+     "clinical_statement": "Contrast-enhanced T1-weighted axial MRI showing contrast enhancement of the lesion and dural attachment (Fig.4 d and e caption)",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": "Caption-derived finding for this patient (Fig.4 d-e); the enhancement overlaps p2-f033 but the dural attachment is stated only in the caption."
     }
    ],
    "events": [
@@ -2918,7 +2990,8 @@
       "p2-f031",
       "p2-f032",
       "p2-f033",
-      "p2-f034"
+      "p2-f034",
+      "p2-f053"
      ],
      "time_text": null,
      "evidence": [
@@ -3049,6 +3122,50 @@
        "quote": "the diagnosis of MNTI was confirmed"
       }
      ]
+    },
+    {
+     "from_event_id": "p2-e02",
+     "to_event_id": "p2-e04",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00012",
+       "quote": "So based on history, examination, and radiology, our differentials were meningioma and fibrous dysplasia."
+      }
+     ]
+    },
+    {
+     "from_event_id": "p2-e03",
+     "to_event_id": "p2-e04",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00012",
+       "quote": "So based on history, examination, and radiology, our differentials were meningioma and fibrous dysplasia."
+      }
+     ]
+    },
+    {
+     "from_event_id": "p2-e04",
+     "to_event_id": "p2-e05",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00015",
+       "quote": "our preoperative differentials were meningioma, osteoma, and fibrous dysplasia"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p2-e05",
+     "to_event_id": "p2-e08",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00001",
+       "quote": "Complete excision of the tumor in both cases was performed with no postoperative complications or recurrence of the tumor at six-month follow-up"
+      }
+     ]
     }
    ],
    "summary": [
@@ -3079,7 +3196,7 @@
      ]
     },
     {
-     "text": "CT showed a well-defined extra-axial lesion with right temporal bone and sphenoid hyperostosis, sylvian fissure obliteration and temporal lobe compression; MRI showed an extra-axial lesion with avid contrast enhancement and hyperostosis. The differentials were meningioma and fibrous dysplasia.",
+     "text": "CT showed a well-defined extra-axial lesion with right temporal bone and sphenoid hyperostosis, sylvian fissure obliteration and temporal lobe compression; MRI showed an extra-axial lesion with avid contrast enhancement, dural attachment and hyperostosis. The differentials were meningioma and fibrous dysplasia.",
      "fact_ids": [
       "p2-f022",
       "p2-f023",
@@ -3095,7 +3212,8 @@
       "p2-f033",
       "p2-f034",
       "p2-f035",
-      "p2-f036"
+      "p2-f036",
+      "p2-f053"
      ]
     },
     {
@@ -3155,7 +3273,7 @@
     },
     "oncology": {
      "status": "not_documented",
-     "note": "No patient-specific documentation in retained source."
+     "note": "MNTI is recorded as a confirmed condition only: the source calls MNTI mostly benign and never evaluates either tumor as a possible malignancy (ONC-BENIGN)."
     },
     "family_genetics": {
      "status": "not_documented",
@@ -3167,7 +3285,7 @@
     },
     "social_exposures": {
      "status": "documented",
-     "note": "Source-grounded facts retained."
+     "note": "Only the up-to-date immunization statement is recorded (social_exposures domain other, no vaccines named); no social or exposure history is given."
     },
     "outcomes": {
      "status": "documented",
@@ -3932,7 +4050,8 @@
   "The two cases are treated between April and May 2024 with a gap of one month; no calendar time is assigned to either patient.",
   "Fig.4 caption (g) describes the T2-weighted coronal lesion as hypointense whereas the main text says hyperintense on T2; both are kept as source conflict, review-only facts for patient 2.",
   "The discussion states urinary VMA was not done in our case (singular) and that neuroblastoma and rhabdomyosarcoma were ruled out on history and examination, without naming a patient; neither is recorded as a patient fact.",
-  "Discussion and literature-review text is background and not copied to the patients, except statements that explicitly cover both patients (immunohistochemistry not done, disease-free follow-up)."
+  "Discussion and literature-review text is background and not copied to the patients, except statements that explicitly cover both patients (immunohistochemistry not done, disease-free follow-up).",
+  "The abstract states that CT and MRI in both cases showed extra-axial lesions, whereas the case 1 report says MRI was not done; case 1 keeps MRI as not performed and no extra-axial finding is recorded for case 1."
  ],
  "annotation_provenance": {
   "annotator_model": "Claude Sonnet 5.5 annotator",
