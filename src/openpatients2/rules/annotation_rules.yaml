@@ -165,6 +165,16 @@ rules:
     prompts: [demographics]
     docs: [protocol]
     validator: true
+  - id: DEMO-SEX-WORDING
+    title: Documented sex comes from the source's own words about the patient
+    text: >-
+      documented_sex is supported by the source's own wording about this patient: a sex/gender noun ("woman", "boy",
+      "male neonate") or a pronoun that unambiguously refers to the patient ("She was admitted…", "his mother") —
+      quote that word in the evidence. Never infer it from names, photographs, diagnoses or organs. It does not
+      establish sex_assigned_at_birth or gender_identity.
+    prompts: [demographics]
+    docs: [protocol]
+    validator: false
   - id: SECTION-SIGNS
     title: Signs and clinical scales belong in symptoms_function
     text: >-

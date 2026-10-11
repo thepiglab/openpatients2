@@ -16,4 +16,5 @@ An example in these instructions is not patient evidence. Populate only claims s
 
 SHARED RULES (generated from openpatients2/rules/annotation_rules.yaml; rule IDs in brackets):
 - [DEMO-AGE-TEXT] Every age with numeric_value keeps text_value = the literal source phrase that states it ("67-year-old", "aged 3 months", "8 years old"), copied verbatim from the item's evidence quote as an exact substring: same case, spacing and characters, including Unicode hyphens (U+2010 "67‐year‐old" stays U+2010, never retyped as "-"); unit is the written unit. Spelled-out or approximate ages keep text_value and leave numeric_value null.
+- [DEMO-SEX-WORDING] documented_sex is supported by the source's own wording about this patient: a sex/gender noun ("woman", "boy", "male neonate") or a pronoun that unambiguously refers to the patient ("She was admitted…", "his mother") — quote that word in the evidence. Never infer it from names, photographs, diagnoses or organs. It does not establish sex_assigned_at_birth or gender_identity.
 END SHARED RULES

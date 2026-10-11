@@ -77,6 +77,7 @@ Shared annotation rules (full text: `src/openpatients2/rules/annotation_rules.ya
 | `OBS-NOT-PERFORMED` | Tests not performed | yes |
 | `SOC-NEVER` | Never-users are affirmed | yes |
 | `DEMO-AGE-TEXT` | Ages keep the literal source phrase | yes |
+| `DEMO-SEX-WORDING` | Documented sex comes from the source's own words about the patient | review |
 | `SECTION-SIGNS` | Signs and clinical scales belong in symptoms_function | review |
 | `SECTION-IMAGING` | Diagnostic imaging may also be a procedure | review |
 | `SECTION-CAREPLANS` | care_plans scope | review |
