@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC12831626.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "69eda54bbd49e57978ae3280b3a33d4ebe6b848175284b164c3f2b6ad2aac1d9",
+  "annotation_sha256": "cf09ea472c6a8ed10226a882deeeeea1adbb1555d9211b0d628280560b23fc14",
+  "reviewed_at": "2026-10-11T21:58:12.406109+00:00",
+  "source_segments_read": 34,
+  "facts_reviewed": 61,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f056 (symptoms absent, 'By postoperative day 10, she was completely asymptomatic'): removed text_value 'completely asymptomatic' so the negation word is not recorded as the value of an absent item; kept as the EVID-NEGATION representation. Confirmed the annotator's earlier deletion of a present outcome 'Completely asymptomatic' was correct under EVID-NEGATION (asymptomatic -> symptoms absent; negation word never a present text_value), not warning-driven reshaping.",
+    "p1-f058 long-term follow-up: assertion absent -> unknown; source says long-term follow-up data were not available, not that no follow-up occurred.",
+    "p1-e07 (ambulating independently, postoperative day one): unlinked p1-f050 (minimal postoperative pain, timed only 'Postoperatively') so the event does not lend it a day-one time.",
+    "Added relation p1-e04 (preoperative diagnosis) before p1-e05 (cystectomy), supported by the literal word 'preoperative' in 'The preoperative diagnosis was serous cystadenoma of the left ovary.'",
+    "figure_privacy_flags.json FIG2: sensitive_anatomy true -> false; the panel shows internal intraperitoneal operative tissue only, outside the genitalia/perineum/breast category (consistent with the unflagged pelvic MRI and specimen panels)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the 3 JPEGs are inspected in the separate visual target.",
+    "Table 1 values carry no printed flags; only CA 19-9 is flagged high from the text, and non-CA 19-9 tumor markers are recorded as a general normal statement.",
+    "Cyst sizes differ between abstract, ultrasonography and MRI; recorded as printed without reconciliation.",
+    "Figure 3 caption labels only panel A.",
+    "Long-term follow-up, scarring and adhesion formation were not available or not assessed per the case text."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 34,
+    "facts_reviewed": 61,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (20-year-old nulliparous professional bowler); all 61 facts checked quote-by-quote against b00002-b00034 including all 10 Table 1 rows.",
+      "Cyst sizes 9 cm (abstract), 72 x 58 mm (transvaginal US) and 92 x 72 x 60 mm (MRI) are different modality/source statements, all recorded as facts; kept as an ambiguity without reconciliation, not a source conflict.",
+      "Table 1 'Preoperative' times come from the governing table caption; CA 19-9 flag high is supported by 'mild elevation'; the tumor-marker normal statement stays one general fact with no per-analyte flags.",
+      "Discussion b00029 ('in the present case') is patient-specific: scarring/adhesion assessment and adhesion imaging recorded as not_performed, second-look surgery absent.",
+      "Relation p1-e03 before p1-e05 rests on the literal 'Preoperative' laboratory heading; other relations rest on stated postoperative days.",
+      "Three absent history facts (medical, surgical, family) share one quote that contains the negation; acceptable as separate domains.",
+      "All 3 images (5 panels) viewed at native resolution; Figure 3 panel B letter is printed on the image (FIG-LABELS allows it) though the caption labels only A."
+    ],
+    "residual_risks": [
+      "Which Table 1 analytes the authors count as tumor markers is not stated; normal flags were not assigned per analyte.",
+      "Event p1-e10 (asymptomatic by postoperative day 10) is not ordered relative to the day-4 and day-23 events beyond their stated times."
+    ]
+  },
+  "physician_adjudicated": false
+}
