@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12756370.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8c66c306312679617496eab9e6a84da82a00eebe3a6b54022e653bb65bc50de7",
+  "annotation_sha256": "45b9aa842a4c648e2ffc51aa0501c3f45de5a285c73da226415b8800911f3731",
+  "reviewed_at": "2026-10-11T20:23:00.907029+00:00",
+  "source_segments_read": 44,
+  "facts_reviewed": 70,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f057 c.836del variant identity restored to supported/include (identity and maternal origin agree across sources); only the ACMG class conflicts",
+    "Added p1-f070 (text: c.836del pathogenic, b00025) as source_conflict/review_only paired with p1-f058 (Table 3: Likely pathogenic); ambiguity and summary links updated",
+    "p1-f040 text_value no longer contains the figure citation",
+    "p1-f063 parental mitral regurgitation: added b00033 'minor mitral valve regurgitation in both' evidence",
+    "Added literal relation prenatal ultrasounds (Prenatal period) before birth (day 0); e1 time_precision range; e7 'Postmortem (day 61)' time_kind postnatal_age",
+    "Article and visual limitation: Figure 1m titles c.2905+1G>A 'Intron 27' vs text 'exon 27'",
+    "visual.json: removed doubled periods in pixel observations of panels c-k and added the Intron/exon limitation to panel m; figure-EHR and privacy drafts regenerated with --draft and reviewed labels/flags carried over"
+  ],
+  "unresolved": [
+    "Cardiac auscultation and a detailed physical examination could not be documented because of the rapid deterioration.",
+    "The text calls both MYBPC3 variants pathogenic whereas Table 3 classifies c.836del as Likely pathogenic; the two classifications are kept as a review-only source-conflict pair; the variant identity itself is included.",
+    "Table 1 places lethargy onset on postnatal day 58 and death on day 60, while the case text gives presentation at 2 months with sudden-onset lethargy; not reconciled.",
+    "Western blot confirmation was not obtained because protein extraction from formalin-fixed autopsy tissue was unsuccessful; whether the blot was run is not stated.",
+    "Parental details (age, ethnicity) and family history \"unremarkable\" are stated for the parents; broad family history is not expanded into explicit negatives.",
+    "The comparison with a published patient (Wessels et al., Patient 1) in the discussion is a cited case and is not attributed to this patient.",
+    "Caption-layer visual status is not_inspected; the figure image was inspected separately in the visual submission.",
+    "Figure 1m titles the c.2905+1G>A variant \"Intron 27\" whereas the text gives \"exon 27\"; not reconciled."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 44,
+    "facts_reviewed": 70,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single proband; parents only as family_member facts (carrier status, mitral regurgitation, no significant hypertrophy, asymptomatic, surveillance, IVF/PGT)",
+      "alternate_representation_of links checked: f029->f028 (death), f056->f055 (c.2905+1G>A Table 3), f062->f061 (parental carrier status) are each the same fact",
+      "Western blot kept status unknown: extraction failed and the source never says the blot was or was not run",
+      "Table 1 day 58 symptom onset vs sudden onset at 2 months kept as ambiguity; Table 1 row times literal and relations follow printed time points",
+      "All 13 panels viewed; panel l is an unlabelled-in-caption pedigree (printed letter l), no privacy flags warranted"
+    ],
+    "residual_risks": [
+      "Parental care plans keep action_status unknown although Table 1 says surveillance was initiated",
+      "Histology findings rest on captions; not independently diagnosed from pixels"
+    ]
+  },
+  "physician_adjudicated": false
+}
