@@ -111,3 +111,8 @@ def test_reference_warning_and_scan_categories(dense):
     findings = scan.scan_annotation(bad, source)
     cats = {f['token']: f['category'] for f in findings}
     assert cats['aftersevenmonths'] == 'exported' and cats['couldnotbeperformed'] == 'internal'
+
+
+def test_cryo_prefix_compound_is_not_glued():
+    from openpatients2.glued_text import glued_findings
+    assert glued_findings('Embryos were cryopreserved for later transfer.') == []

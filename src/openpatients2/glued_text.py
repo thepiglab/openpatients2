@@ -44,7 +44,7 @@ PREFIXES = frozenset('''non mid post pre peri intra inter sub supra anti hyper h
 para pseudo neo micro macro over under out self auto de dis ex poly mono uni infra retro ultra cardio gastro neuro hepato
 nephro immuno endo epi hemi counter hydro hydroxy chromo electro angio osteo myo cyto histo radio laparo thoraco
 broncho echo entero colo procto uro gyneco hepatico pancreatico cholangio esophago oesophago duodeno jejuno ileo
-spleno lympho hemato haemato thrombo leuko leuco aorto ilio femoro'''.split())
+spleno lympho hemato haemato thrombo leuko leuco aorto ilio femoro cryo'''.split())
 LABEL_WORDS = frozenset('''table tables figure figures fig case cases patient patients column columns cell cells row rows
 segment segments panel panels supplementary appendix video'''.split())
 # Image/report-description vocabulary (visual and EHR sidecars describe pixels, not the article text).
