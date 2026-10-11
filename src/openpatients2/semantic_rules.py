@@ -36,7 +36,7 @@ ERROR, WARNING = 'error', 'warning'
 
 NEGATION_CUE = re.compile(
     r"\b(no|not|non|none|neither|nor|never|without|absent|absence|denie[sd]|deny|denying|negative|"
-    r"ruled out|rule out|ruling out|excluded?|excluding|exclusion|free of|free from|painless|unable|non-?smok\w*|non-?febrile|sparing|spared|rather than|instead of|avoid(?:ed|ing|ance)?|abstain\w*|\w+-free|lack(?:s|ed|ing)?|"
+    r"ruled out|rule out|ruling out|excluded?|excluding|exclusion|free of|free from|painless|unnecessary|not required|not needed|unable|non-?smok\w*|non-?febrile|sparing|spared|rather than|instead of|avoid(?:ed|ing|ance)?|abstain\w*|\w+-free|lack(?:s|ed|ing)?|"
     r"unremarkable|normal|nil|resolved|resolution|disappeared|asymptomatic|afebrile|apyrexi\w*|apyrexia|uneventful|"
     r"uncomplicated|misdiagnos\w*|impossible|deferred|prevented|cannot|can't|didn't|did not|wasn't|"
     r"weren't|isn't|aren't)\b|n['’]t\b"

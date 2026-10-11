@@ -53,7 +53,7 @@ NUMBER_WORDS = {w: i for i, w in enumerate('zero one two three four five six sev
 # "a patient", "one patient", "an infant").
 # Hyphens include the Unicode variants PMC text often uses (U+2010 hyphen, U+2011 non-breaking hyphen, en dash).
 SINGLE_CASE = re.compile(r'\b(?:a|an|one)\s+(?:(?:\d+|[a-z]+)[-\u2010\u2011\u2013\s](?:year|month|week|day)s?'
-                         r'[-\u2010\u2011\u2013\s]old\s+|(?:[a-z\-\u2010\u2011]+\s+){0,3})?(?:patient|case|man|woman|male|female|boy|girl|child|infant|neonate|'
+                         r'[-\u2010\u2011\u2013\s]old\s+|(?:[a-z0-9\-\u2010\u2011]+\s+){0,4})?(?:patient|case|man|woman|male|female|boy|girl|child|infant|neonate|'
                          r'newborn|adolescent|gentleman|lady|individual|person|subject|dog|cat|horse)\b', re.I)
 
 
