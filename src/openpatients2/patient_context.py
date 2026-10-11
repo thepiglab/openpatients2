@@ -11,6 +11,7 @@ import hashlib
 import json
 from pathlib import Path
 
+from .annotation_rules import prompt_block
 from .article_tasks import Roster, SYSTEM, check_article_task
 
 
@@ -59,6 +60,9 @@ def discovery_messages(article, *, refined=False, isolated=False):
                 'Use cross_references and text_with_reference_markers to locate origin_reference_ids, while '
                 'all identity quotes must remain literal in the original text field. Validate primary cases '
                 'independently of optional cited-case links. If a bibliography link is uncertain, say so.')
+    # Shared roster rules (ROSTER-ORDER, NO-COHORT-COPY): check_patient_roster enforces the p1..pn
+    # first-mention order, so the live discovery prompt must state it too.
+    instruction += '\n' + prompt_block('roster')
     return [{'role': 'system', 'content': SYSTEM}, {'role': 'user', 'content':
         'SOURCE_JSON:\n' + json.dumps(source, ensure_ascii=False) + '\nTASK:\n' + instruction +
         '\nSCHEMA:\n' + json.dumps(schema)}]

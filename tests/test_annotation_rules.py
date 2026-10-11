@@ -63,3 +63,14 @@ def test_one_timeline_vocabulary_in_both_pipelines():
     assert get_args(TemporalEdge.model_fields['relation'].annotation) == semantic_rules.TEMPORAL_RELATIONS
     assert get_args(EventAddition.model_fields['occurrence'].annotation) == semantic_rules.EVENT_OCCURRENCES
     assert get_args(EdgeAddition.model_fields['relation'].annotation) == semantic_rules.TEMPORAL_RELATIONS
+
+
+def test_live_discovery_prompt_carries_roster_rules():
+    # op2 extract discovers patients with patient_context.discovery_messages (not article_tasks.INSTRUCTIONS);
+    # its checker enforces ROSTER-ORDER, so the prompt the local model sees must state the rule.
+    from openpatients2.patient_context import discovery_messages
+    article = {'article_id': 'PMC1.1', 'title': 'T', 'segments': [{'segment_id': 's1', 'kind': 'paragraph',
+                                                                   'heading': None, 'text': 'A 67-year-old man.'}]}
+    for refined in (False, True):
+        text = discovery_messages(article, refined=refined)[1]['content']
+        assert '[ROSTER-ORDER]' in text and '[NO-COHORT-COPY]' in text
