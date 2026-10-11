@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC13364825.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5aed4acb82d0f8453f5851c17ca1112f969cc54a3d1965bd09ff1e35b7d4a3cc",
+  "annotation_sha256": "290b8487292d1901082822ce6e7e0532bcb0dbc1df1e0d97960299782abfce51",
+  "reviewed_at": "2026-10-11T19:28:48.260304+00:00",
+  "source_segments_read": 22,
+  "facts_reviewed": 29,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "ROSTER-ORDER: the abstract names 'a newborn born to a mother' before the mother, so the patients were renumbered (newborn p1, mother p2) across facts, events, relations, summaries, ambiguities, figures and source coverage; identity evidence now cites b00001 for both. The visual submission attribution was swapped to match (p2 for F1, p1+p2 for F2).",
+    "Mother ELISA 40.3 NTU: flag set positive from the source statement that serological testing confirmed strongyloidiasis (b00001 quote added); cutoff kept as reference text.",
+    "Treatment timing conflict: deferral care plan (now p2-f020, b00010 plus b00001 quote) set source_conflict/review_only; added p2-f025 'treatment continued until after delivery' (b00016) as a separate source_conflict/review_only medication with its own unknown-occurrence event p2-e08; ambiguity relinked.",
+    "Levothyroxine temporality set unknown to match action unknown (current use not stated).",
+    "Added relations: microadenoma diagnosis before presentation (b00009 'one year prior'); symptoms overlap presentation (b00007/b00009).",
+    "Newborn stool test: added the b00011 quote on three infant stool samples collected one month postpartum.",
+    "Figure-EHR and privacy drafts regenerated after the visual edit and the reviewed labels/flags carried over."
+  ],
+  "unresolved": [
+    "Roster: the abstract names the newborn before the mother in the same sentence, so the newborn is p1 and the mother p2 by first mention; no number of individuals is stated literally, so reported_individual_count is null and both individuals are in the roster.",
+    "The newborn is identified only by the stool testing and the statement that it was born to the index mother; no age, sex, gestational age at birth or birth weight is given.",
+    "Discussion and introduction statements on strongyloidiasis, transmission and screening are general background and are not copied to patients.",
+    "Segment b00016 says treatment continued until after delivery, which conflicts with the deferral stated in b00001 and b00010; both statements are kept as source_conflict review_only facts.",
+    "Caption-layer visual status not_inspected; actual images inspected in the separate visual target."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 22,
+    "facts_reviewed": 30,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Two individuals: newborn (p1, only negative stool testing and refuted infection) and the 38-year-old pregnant mother (p2) with confirmed strongyloidiasis treated with ivermectin postpartum.",
+      "No literal count of individuals is stated, so reported_individual_count stays null with roster_complete true.",
+      "Breast milk is a maternal specimen (b00010/b00016 'maternal milk') and stays with the mother; its time 'one month after birth' is in its own b00001 sentence.",
+      "Fig 1 (agar plate and larvae) belongs to the mother's stool culture; Fig 2 gel lanes 1 and 3 are maternal, lane 2 the infant's, 4-5 controls; both figures viewed on pixels."
+    ],
+    "residual_risks": [
+      "The deferral and the 'continued until after delivery' statements cannot be reconciled from the source and are review_only.",
+      "Order of milk/infant sampling relative to the ivermectin course is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -327,7 +327,12 @@
       "kind": "performance_score",
       "text_value": "6",
       "numeric_value": 6,
-      "temporality": "unknown"
+      "temporality": "unknown",
+      "time": {
+       "text": null,
+       "relation": "after",
+       "anchor": "second fall"
+      }
      },
      "evidence": [
       {
@@ -338,7 +343,7 @@
      "clinical_statement": "Pain NRS 6 after the second fall",
      "certainty": "supported",
      "scoring": "include",
-     "notes": ""
+     "notes": "'after which' places this after the second fall; the 'one month prior to presentation' time belongs to the fall, not to the pain reading, so time.text stays null."
     },
     {
      "fact_id": "p1-f013",
@@ -349,7 +354,12 @@
       "assertion": "present",
       "name": "Worsened coccygeal pain",
       "kind": "symptom",
-      "temporality": "unknown"
+      "temporality": "unknown",
+      "time": {
+       "text": null,
+       "relation": "after",
+       "anchor": "second fall"
+      }
      },
      "evidence": [
       {
@@ -360,7 +370,7 @@
      "clinical_statement": "Pain worsened after the second fall despite continued pharmacologic treatment",
      "certainty": "supported",
      "scoring": "include",
-     "notes": ""
+     "notes": "'after which' places this after the second fall; the 'one month prior to presentation' time belongs to the fall, not to the pain reading, so time.text stays null."
     },
     {
      "fact_id": "p1-f014",
@@ -553,7 +563,7 @@
      "clinical_statement": "Pain NRS 2 at the 2-week follow-up",
      "certainty": "supported",
      "scoring": "include",
-     "notes": "Time from the abstract sentence naming 2 weeks and 2 months after the procedure."
+     "notes": "Time from the abstract sentence stating NRS 2 at follow-ups 2 weeks and 2 months after the procedure; consistent with the case text (NRS 2 at 2 weeks, remained 2 at 2 months)."
     },
     {
      "fact_id": "p1-f022",
@@ -631,7 +641,7 @@
      "clinical_statement": "Acetaminophen prescribed after the initial dislocation",
      "certainty": "supported",
      "scoring": "include",
-     "notes": "Prescribed with a stated symptom effect; no dose or route given."
+     "notes": "Prescribed at the outside hospital; 'which maintained her symptoms' and later 'continued pharmacologic treatment' indicate it was taken. No dose or route given."
     },
     {
      "fact_id": "p1-f025",
@@ -652,7 +662,7 @@
      "clinical_statement": "NSAIDs prescribed after the initial dislocation",
      "certainty": "supported",
      "scoring": "include",
-     "notes": "Class named only; no specific agent."
+     "notes": "Class named only; no specific agent. Taken per 'which maintained her symptoms'."
     },
     {
      "fact_id": "p1-f026",
@@ -687,18 +697,23 @@
       "dose_text": "1 mL of 2%",
       "dose_value": 1,
       "dose_unit": "mL",
-      "regimen": "Mixture of 1 mL of 2% mepivacaine, 8 mL of 0.9% normal saline, and 5 mg of dexamethasone"
+      "regimen": "Mixture of 1 mL of 2% mepivacaine, 8 mL of 0.9% normal saline, and 5 mg of dexamethasone",
+      "route": "caudal epidural"
      },
      "evidence": [
       {
        "segment_id": "b00003",
        "quote": "A mixture of 1 mL of 2% mepivacaine, 8 mL of 0.9% normal saline, and 5 mg of dexamethasone was injected."
+      },
+      {
+       "segment_id": "b00001",
+       "quote": "an ultrasound-guided caudal epidural block was performed using mepivacaine and dexamethasone"
       }
      ],
      "clinical_statement": "Mepivacaine 1 mL of 2% injected in a mixture",
      "certainty": "supported",
      "scoring": "include",
-     "notes": "Route is not stated in this sentence."
+     "notes": "Route from the abstract sentence that names this drug in the caudal epidural block; dose from the case-text mixture sentence."
     },
     {
      "fact_id": "p1-f028",
@@ -723,7 +738,7 @@
      "clinical_statement": "0.9% normal saline 8 mL injected in a mixture",
      "certainty": "supported",
      "scoring": "include",
-     "notes": ""
+     "notes": "Saline is named only in the mixture sentence, which states no route; route left null rather than borrowed from the needle-placement sentence."
     },
     {
      "fact_id": "p1-f029",
@@ -737,18 +752,23 @@
       "dose_text": "5 mg",
       "dose_value": 5,
       "dose_unit": "mg",
-      "regimen": "Mixture of 1 mL of 2% mepivacaine, 8 mL of 0.9% normal saline, and 5 mg of dexamethasone"
+      "regimen": "Mixture of 1 mL of 2% mepivacaine, 8 mL of 0.9% normal saline, and 5 mg of dexamethasone",
+      "route": "caudal epidural"
      },
      "evidence": [
       {
        "segment_id": "b00003",
        "quote": "A mixture of 1 mL of 2% mepivacaine, 8 mL of 0.9% normal saline, and 5 mg of dexamethasone was injected."
+      },
+      {
+       "segment_id": "b00001",
+       "quote": "an ultrasound-guided caudal epidural block was performed using mepivacaine and dexamethasone"
       }
      ],
      "clinical_statement": "Dexamethasone 5 mg injected in a mixture",
      "certainty": "supported",
      "scoring": "include",
-     "notes": ""
+     "notes": "Route from the abstract sentence that names this drug in the caudal epidural block; dose from the case-text mixture sentence."
     },
     {
      "fact_id": "p1-f030",
@@ -759,7 +779,7 @@
       "assertion": "present",
       "name": "Local anesthesia of the skin",
       "action": "administered",
-      "indication": "needle insertion"
+      "indication": null
      },
      "evidence": [
       {
@@ -770,7 +790,7 @@
      "clinical_statement": "Local anesthesia of the skin at the needle insertion site",
      "certainty": "supported",
      "scoring": "include",
-     "notes": "Agent not named."
+     "notes": "Agent, dose and route not named; applied to the skin at the needle insertion site."
     },
     {
      "fact_id": "p1-f031",
@@ -805,7 +825,7 @@
       "assertion": "absent",
       "name": "Sedation",
       "kind": "procedure",
-      "action": "completed"
+      "action": "unknown"
      },
      "evidence": [
       {
@@ -827,7 +847,7 @@
       "assertion": "absent",
       "name": "Anxiolysis",
       "kind": "procedure",
-      "action": "completed"
+      "action": "unknown"
      },
      "evidence": [
       {
@@ -914,7 +934,7 @@
      "fields": {
       "subject": "index_patient",
       "assertion": "present",
-      "name": "Butterfly catheter advancement toward the sacral hiatus with needle redirection into the epidural space",
+      "name": "Butterfly catheter advancement and needle redirection into the epidural space",
       "kind": "procedure",
       "action": "completed",
       "body_site": "sacral hiatus"
@@ -1578,7 +1598,32 @@
      "note": "Source-grounded facts retained."
     }
    },
-   "ambiguities": []
+   "ambiguities": [
+    {
+     "issue": "Agents of the continued pharmacologic treatment after the second fall are not named",
+     "evidence": [
+      {
+       "segment_id": "b00003",
+       "quote": "after which her pain worsened despite continued pharmacologic treatment"
+      }
+     ],
+     "must_not_infer": "Do not name acetaminophen or NSAIDs as the continued agents; the source does not say which drugs were continued."
+    },
+    {
+     "issue": "Case-text NRS 2 sentence has no time of its own",
+     "evidence": [
+      {
+       "segment_id": "b00003",
+       "quote": "Her pain intensity decreased significantly to an NRS score of 2, accompanied by noticeable functional improvement."
+      },
+      {
+       "segment_id": "b00001",
+       "quote": "At follow-up evaluations conducted 2 weeks and 2 months after the procedure, her pain had decreased to an NRS score of 2"
+      }
+     ],
+     "must_not_infer": "The 2-week time comes from the abstract sentence that states it, not from the neighbouring case-text sentence."
+    }
+   ]
   }
  ],
  "figures": [
@@ -1751,14 +1796,18 @@
   {
    "segment_id": "b00006",
    "disposition": "background",
-   "patient_ids": [],
-   "note": "Discussion of caudal epidural block and rationale; general statements."
+   "patient_ids": [
+    "p1"
+   ],
+   "note": "Discussion of caudal epidural block; includes the authors' rationale for choosing the block and 2% mepivacaine with dexamethasone in this patient (no new clinical facts)."
   },
   {
    "segment_id": "b00007",
    "disposition": "background",
-   "patient_ids": [],
-   "note": "Discussion, comparison with prior reports and limitations."
+   "patient_ids": [
+    "p1"
+   ],
+   "note": "Discussion; restates this patient's course (initial response, worsening, improvement after the block) and limitations; no new clinical facts."
   },
   {
    "segment_id": "b00008",

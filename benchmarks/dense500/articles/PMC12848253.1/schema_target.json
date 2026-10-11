@@ -1,7 +1,7 @@
 {
   "format": "dense-runtime-targets/1",
   "article_id": "PMC12848253.1",
-  "annotation_sha256": "2a03bb35b2e817e18ef91a45710c5043da9c2964140a81253d9debbb27acb803",
+  "annotation_sha256": "a3f5975840370ceedda4665afcbf1661fe88ec1b4c24de8ba025ad9082bc7716",
   "source_text_sha256": "408bfdd6baa028d94e4f3d6175538d6e79ab9f19402ba9f33806307ede569a7d",
   "schema_fingerprints": {
     "case_context": "d7439310910ef4a7d5e1706c5b9dc8a2b379f132a2562791c059a478b588ec71",
@@ -53,8 +53,9 @@
         ],
         "attribution_limitations": [
           "The third-episode text says the prior two episodes also began with throat pain, while the first episode is described as anterior chest pain and the second as chest pain radiating from the lower ribs toward the throat.",
-          "The case presentation says high-intensity breath-holding exercises were avoided after the first discharge, while the discussion says rigorous breath-hold training began soon after swimming resumed during the first two episodes.",
-          "Incomplete healing of bronchial tissue is a proposed explanation, not a proven mechanism; no interval imaging confirmed radiographic resolution between episodes."
+          "The case text says high-intensity breath-holding was avoided after the first discharge without a duration; the abstract gives two weeks and the discussion says rigorous breath-hold training began soon after swimming resumed in the first two episodes. The accounts are compatible but the exact avoidance period after the second episode is not stated.",
+          "Incomplete healing of bronchial tissue is a proposed explanation, not a proven mechanism; no interval imaging confirmed radiographic resolution between episodes.",
+          "The source counts both three episodes of SPM and 'three recurrences' / 'three recurrent episodes'; the case text describes three episodes in total (first plus two recurrences)."
         ]
       }
     ],
@@ -100,8 +101,8 @@
       "Caption-layer visual status not_inspected; the two CT images were inspected in the separate visual submission.",
       "The second episode was a presumptive clinical diagnosis without CT; the case text and abstract use presumptive/probable wording.",
       "Exact dates are not given; all timing is relative to other episodes, discharge or presentation.",
-      "Discussion statements about breath-holding practice conflict with the case presentation (see ambiguities).",
-      "Literature statements in the introduction and discussion are background and were not copied to the patient."
+      "Literature statements in the introduction and discussion are background and were not copied to the patient.",
+      "Breath-holding avoidance duration is given only in the abstract (two weeks after the first episode); see ambiguities."
     ]
   },
   "figure_attribution": [
@@ -260,8 +261,9 @@
           ],
           "attribution_limitations": [
             "The third-episode text says the prior two episodes also began with throat pain, while the first episode is described as anterior chest pain and the second as chest pain radiating from the lower ribs toward the throat.",
-            "The case presentation says high-intensity breath-holding exercises were avoided after the first discharge, while the discussion says rigorous breath-hold training began soon after swimming resumed during the first two episodes.",
-            "Incomplete healing of bronchial tissue is a proposed explanation, not a proven mechanism; no interval imaging confirmed radiographic resolution between episodes."
+            "The case text says high-intensity breath-holding was avoided after the first discharge without a duration; the abstract gives two weeks and the discussion says rigorous breath-hold training began soon after swimming resumed in the first two episodes. The accounts are compatible but the exact avoidance period after the second episode is not stated.",
+            "Incomplete healing of bronchial tissue is a proposed explanation, not a proven mechanism; no interval imaging confirmed radiographic resolution between episodes.",
+            "The source counts both three episodes of SPM and 'three recurrences' / 'three recurrent episodes'; the case text describes three episodes in total (first plus two recurrences)."
           ]
         },
         "source_text_omitted_from_release": true
@@ -642,11 +644,11 @@
               ],
               "name": "Chest pain",
               "kind": "symptom",
-              "text_value": "sharp, squeezing, worse with deep inspiration and movement",
+              "text_value": "acute-onset; sharp, squeezing; worse with deep inspiration and movement",
               "numeric_value": null,
               "unit": null,
               "body_site": "anterior chest",
-              "severity": "acute-onset",
+              "severity": null,
               "activity_context": null
             },
             {
@@ -884,6 +886,34 @@
               "duration_text": null,
               "indication": null,
               "regimen": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "His initial episode resolved with observation and analgesics",
+                  "source_section": "b00009"
+                }
+              ],
+              "name": "Analgesics",
+              "action": "administered",
+              "ingredient_as_documented": null,
+              "dose_text": null,
+              "dose_value": null,
+              "dose_unit": null,
+              "route": null,
+              "frequency": null,
+              "duration_text": null,
+              "indication": null,
+              "regimen": null
             }
           ]
         },
@@ -954,7 +984,7 @@
               "assertion": "present",
               "temporality": "current",
               "time": {
-                "text": "Following admission and bed rest",
+                "text": "Following admission",
                 "relation": "after",
                 "anchor": "admission",
                 "date_iso": null
@@ -1299,7 +1329,7 @@
               "status": "resulted",
               "text_value": "no remarkable findings",
               "numeric_value": null,
-              "comparator": "=",
+              "comparator": "unknown",
               "unit": null,
               "flag": "normal",
               "reference_range_text": null,
@@ -1329,7 +1359,7 @@
               "status": "resulted",
               "text_value": "no remarkable findings",
               "numeric_value": null,
-              "comparator": "=",
+              "comparator": "unknown",
               "unit": null,
               "flag": "normal",
               "reference_range_text": null,
@@ -1359,7 +1389,7 @@
               "status": "resulted",
               "text_value": "no remarkable lesion",
               "numeric_value": null,
-              "comparator": "=",
+              "comparator": "unknown",
               "unit": null,
               "flag": "normal",
               "reference_range_text": null,
@@ -1389,7 +1419,7 @@
               "status": "resulted",
               "text_value": "small amount of mediastinal emphysema extending from the left supraclavicular region to the area surrounding the left main bronchus",
               "numeric_value": null,
-              "comparator": "=",
+              "comparator": "unknown",
               "unit": null,
               "flag": "unknown",
               "reference_range_text": null,
@@ -1419,9 +1449,9 @@
               "status": "resulted",
               "text_value": "no apparent pleural effusion or fluid collection",
               "numeric_value": null,
-              "comparator": "=",
+              "comparator": "unknown",
               "unit": null,
-              "flag": "negative",
+              "flag": "unknown",
               "reference_range_text": null,
               "specimen": null,
               "method": null,
@@ -1449,7 +1479,7 @@
               "status": "resulted",
               "text_value": "no remarkable findings",
               "numeric_value": null,
-              "comparator": "=",
+              "comparator": "unknown",
               "unit": null,
               "flag": "normal",
               "reference_range_text": null,
@@ -1479,7 +1509,7 @@
               "status": "resulted",
               "text_value": "left-sided mediastinal emphysema, similar to the previous episode",
               "numeric_value": null,
-              "comparator": "=",
+              "comparator": "unknown",
               "unit": null,
               "flag": "unknown",
               "reference_range_text": null,
@@ -1573,10 +1603,8 @@
           "items": []
         },
         "social_exposures": {
-          "coverage": "limited",
-          "limitations": [
-            "Source-conflicted/ambiguous candidates are retained separately, not accepted as clinical facts."
-          ],
+          "coverage": "complete",
+          "limitations": [],
           "documentation_status": "documented",
           "documentation_evidence": [],
           "items": [
@@ -1622,6 +1650,30 @@
               ],
               "domain": "exercise",
               "name": "Breath-holding techniques during training",
+              "status": "current",
+              "amount_text": null,
+              "frequency": null,
+              "duration_text": null,
+              "pack_years": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "During the first two episodes, the patient gradually resumed swimming within two weeks and began rigorous breath‑hold training soon thereafter.",
+                  "source_section": "b00009"
+                }
+              ],
+              "domain": "exercise",
+              "name": "Rigorous breath-hold training after resuming swimming",
               "status": "current",
               "amount_text": null,
               "frequency": null,
@@ -1780,13 +1832,13 @@
               "temporality": "current",
               "time": {
                 "text": null,
-                "relation": "unknown",
-                "anchor": null,
+                "relation": "after",
+                "anchor": "rehabilitation sessions",
                 "date_iso": null
               },
               "evidence": [
                 {
-                  "quote": "after which the patient remained free of recurrent SPM",
+                  "quote": "The rehabilitation sessions were completed over three months, after which the patient remained free of recurrent SPM.",
                   "source_section": "b00005"
                 }
               ],
@@ -1823,10 +1875,8 @@
           ]
         },
         "care_plans": {
-          "coverage": "limited",
-          "limitations": [
-            "Source-conflicted/ambiguous candidates are retained separately, not accepted as clinical facts."
-          ],
+          "coverage": "complete",
+          "limitations": [],
           "documentation_status": "documented",
           "documentation_evidence": [],
           "items": [
@@ -1871,6 +1921,33 @@
               ],
               "action_text": "Physical activity resumed with gradual increases in intensity",
               "plan_type": "other",
+              "target": null,
+              "responsible_specialty": null,
+              "urgency": null,
+              "action_status": "completed"
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "current",
+              "time": {
+                "text": "Following discharge",
+                "relation": "after",
+                "anchor": "discharge",
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Following discharge, high-intensity breath-holding exercises were avoided.",
+                  "source_section": "b00003"
+                },
+                {
+                  "quote": "He improved with conservative treatment and returned to full training within one month, avoiding intense breath-holding for two weeks.",
+                  "source_section": "b00001"
+                }
+              ],
+              "action_text": "High-intensity breath-holding exercises avoided",
+              "plan_type": "counseling",
               "target": null,
               "responsible_specialty": null,
               "urgency": null,
@@ -1966,7 +2043,7 @@
               "target": null,
               "responsible_specialty": null,
               "urgency": null,
-              "action_status": "unknown"
+              "action_status": "completed"
             },
             {
               "subject": "index_patient",
@@ -2035,7 +2112,7 @@
               "target": null,
               "responsible_specialty": null,
               "urgency": null,
-              "action_status": "unknown"
+              "action_status": "completed"
             },
             {
               "subject": "index_patient",
@@ -2058,7 +2135,7 @@
               "target": null,
               "responsible_specialty": null,
               "urgency": null,
-              "action_status": "unknown"
+              "action_status": "completed"
             },
             {
               "subject": "index_patient",
@@ -2077,6 +2154,29 @@
                 }
               ],
               "action_text": "Rehabilitation sessions completed",
+              "plan_type": "other",
+              "target": null,
+              "responsible_specialty": null,
+              "urgency": null,
+              "action_status": "completed"
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "in the first and second episodes, the rest period was limited to two weeks",
+                  "source_section": "b00009"
+                }
+              ],
+              "action_text": "Rest period limited to two weeks",
               "plan_type": "other",
               "target": null,
               "responsible_specialty": null,
@@ -2236,7 +2336,7 @@
                 },
                 {
                   "segment_id": "b00005",
-                  "quote": "after which the patient remained free of recurrent SPM"
+                  "quote": "The rehabilitation sessions were completed over three months, after which the patient remained free of recurrent SPM."
                 },
                 {
                   "segment_id": "b00009",
@@ -2249,8 +2349,8 @@
             "Caption-layer visual status not_inspected; the two CT images were inspected in the separate visual submission.",
             "The second episode was a presumptive clinical diagnosis without CT; the case text and abstract use presumptive/probable wording.",
             "Exact dates are not given; all timing is relative to other episodes, discharge or presentation.",
-            "Discussion statements about breath-holding practice conflict with the case presentation (see ambiguities).",
-            "Literature statements in the introduction and discussion are background and were not copied to the patient."
+            "Literature statements in the introduction and discussion are background and were not copied to the patient.",
+            "Breath-holding avoidance duration is given only in the abstract (two weeks after the first episode); see ambiguities."
           ]
         },
         "timeline_v2": {
@@ -2408,7 +2508,8 @@
                 "p1-f046",
                 "p1-f047",
                 "p1-f048",
-                "p1-f049"
+                "p1-f049",
+                "p1-f069"
               ],
               "evidence": [
                 {
@@ -2457,7 +2558,8 @@
               "occurrence": "occurred",
               "description": "Physical activity resumed two weeks later with gradual increases in intensity",
               "fact_ids": [
-                "p1-f050"
+                "p1-f050",
+                "p1-f051"
               ],
               "evidence": [
                 {
@@ -2983,6 +3085,82 @@
                   "quote": "Two months post-discharge, resistance training was commenced with attention to diaphragmatic breathing, and swimming was progressively reintroduced."
                 }
               ]
+            },
+            {
+              "edge_id": "edge6",
+              "from_event_id": "p1-e01",
+              "to_event_id": "p1-e02",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12848253.1:jats",
+                  "segment_id": "b00003",
+                  "segment_sha256": "43d349e6296a1a6dc09fb2b70e4e95316ced13ca8f2d869e8f78b1af45e52204",
+                  "start": 304,
+                  "end": 436,
+                  "quote": "He reported having experienced occasional mild chest discomfort in the morning for the past six months, particularly after swimming."
+                }
+              ]
+            },
+            {
+              "edge_id": "edge7",
+              "from_event_id": "p1-e04",
+              "to_event_id": "p1-e05",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12848253.1:jats",
+                  "segment_id": "b00003",
+                  "segment_sha256": "43d349e6296a1a6dc09fb2b70e4e95316ced13ca8f2d869e8f78b1af45e52204",
+                  "start": 1827,
+                  "end": 1985,
+                  "quote": "Physical activity was resumed two weeks later, with gradual increases in intensity. Following discharge, high-intensity breath-holding exercises were avoided."
+                }
+              ]
+            },
+            {
+              "edge_id": "edge8",
+              "from_event_id": "p1-e09",
+              "to_event_id": "p1-e10",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12848253.1:jats",
+                  "segment_id": "b00005",
+                  "segment_sha256": "c6ee327fe6ff3a621735931dd3863dbcf3e2a37b9dd6b0952f2c14e404317dc9",
+                  "start": 332,
+                  "end": 496,
+                  "quote": "He reported that the symptoms were similar to his prior two episodes, which had also begun with throat pain, and he therefore presented to our emergency department."
+                }
+              ]
+            },
+            {
+              "edge_id": "edge9",
+              "from_event_id": "p1-e11",
+              "to_event_id": "p1-e12",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12848253.1:jats",
+                  "segment_id": "b00005",
+                  "segment_sha256": "c6ee327fe6ff3a621735931dd3863dbcf3e2a37b9dd6b0952f2c14e404317dc9",
+                  "start": 938,
+                  "end": 1018,
+                  "quote": "Physical activity, including land-based training, was restricted for two months."
+                },
+                {
+                  "source_id": "PMC12848253.1:jats",
+                  "segment_id": "b00005",
+                  "segment_sha256": "c6ee327fe6ff3a621735931dd3863dbcf3e2a37b9dd6b0952f2c14e404317dc9",
+                  "start": 1129,
+                  "end": 1189,
+                  "quote": "Two months post-discharge, resistance training was commenced"
+                }
+              ]
             }
           ],
           "limitations": [
@@ -3145,7 +3323,8 @@
               "p1-f046",
               "p1-f047",
               "p1-f048",
-              "p1-f049"
+              "p1-f049",
+              "p1-f069"
             ],
             "evidence": [
               {
@@ -3194,7 +3373,8 @@
             "occurrence": "occurred",
             "description": "Physical activity resumed two weeks later with gradual increases in intensity",
             "fact_ids": [
-              "p1-f050"
+              "p1-f050",
+              "p1-f051"
             ],
             "evidence": [
               {
@@ -3633,25 +3813,24 @@
               "p1-e01"
             ],
             [
-              "p1-e02"
-            ],
-            [
               "p1-e03"
             ],
             [
               "p1-e04"
             ],
             [
-              "p1-e05"
-            ],
-            [
               "p1-e08"
             ],
             [
-              "p1-e10"
+              "p1-e13"
+            ]
+          ],
+          [
+            [
+              "p1-e02"
             ],
             [
-              "p1-e13"
+              "p1-e05"
             ]
           ],
           [
@@ -3660,53 +3839,130 @@
             ],
             [
               "p1-e07"
-            ],
-            [
-              "p1-e11"
-            ],
-            [
-              "p1-e12"
             ]
           ],
           [
             [
               "p1-e09"
             ]
+          ],
+          [
+            [
+              "p1-e10"
+            ]
+          ],
+          [
+            [
+              "p1-e11"
+            ]
+          ],
+          [
+            [
+              "p1-e12"
+            ]
           ]
         ],
         "before_pairs": [
-          [
-            "p1-e02",
-            "p1-e07"
-          ],
-          [
-            "p1-e02",
-            "p1-e09"
-          ],
-          [
-            "p1-e05",
-            "p1-e06"
-          ],
-          [
-            "p1-e07",
-            "p1-e09"
-          ],
-          [
-            "p1-e10",
-            "p1-e11"
-          ],
-          [
-            "p1-e10",
-            "p1-e12"
-          ]
-        ],
-        "incomparable_pairs": [
           [
             "p1-e01",
             "p1-e02"
           ],
           [
             "p1-e01",
+            "p1-e07"
+          ],
+          [
+            "p1-e01",
+            "p1-e09"
+          ],
+          [
+            "p1-e01",
+            "p1-e10"
+          ],
+          [
+            "p1-e01",
+            "p1-e11"
+          ],
+          [
+            "p1-e01",
+            "p1-e12"
+          ],
+          [
+            "p1-e02",
+            "p1-e07"
+          ],
+          [
+            "p1-e02",
+            "p1-e09"
+          ],
+          [
+            "p1-e02",
+            "p1-e10"
+          ],
+          [
+            "p1-e02",
+            "p1-e11"
+          ],
+          [
+            "p1-e02",
+            "p1-e12"
+          ],
+          [
+            "p1-e04",
+            "p1-e05"
+          ],
+          [
+            "p1-e04",
+            "p1-e06"
+          ],
+          [
+            "p1-e05",
+            "p1-e06"
+          ],
+          [
+            "p1-e07",
+            "p1-e09"
+          ],
+          [
+            "p1-e07",
+            "p1-e10"
+          ],
+          [
+            "p1-e07",
+            "p1-e11"
+          ],
+          [
+            "p1-e07",
+            "p1-e12"
+          ],
+          [
+            "p1-e09",
+            "p1-e10"
+          ],
+          [
+            "p1-e09",
+            "p1-e11"
+          ],
+          [
+            "p1-e09",
+            "p1-e12"
+          ],
+          [
+            "p1-e10",
+            "p1-e11"
+          ],
+          [
+            "p1-e10",
+            "p1-e12"
+          ],
+          [
+            "p1-e11",
+            "p1-e12"
+          ]
+        ],
+        "incomparable_pairs": [
+          [
+            "p1-e01",
             "p1-e03"
           ],
           [
@@ -3723,27 +3979,7 @@
           ],
           [
             "p1-e01",
-            "p1-e07"
-          ],
-          [
-            "p1-e01",
             "p1-e08"
-          ],
-          [
-            "p1-e01",
-            "p1-e09"
-          ],
-          [
-            "p1-e01",
-            "p1-e10"
-          ],
-          [
-            "p1-e01",
-            "p1-e11"
-          ],
-          [
-            "p1-e01",
-            "p1-e12"
           ],
           [
             "p1-e01",
@@ -3771,18 +4007,6 @@
           ],
           [
             "p1-e02",
-            "p1-e10"
-          ],
-          [
-            "p1-e02",
-            "p1-e11"
-          ],
-          [
-            "p1-e02",
-            "p1-e12"
-          ],
-          [
-            "p1-e02",
             "p1-e13"
           ],
           [
@@ -3827,14 +4051,6 @@
           ],
           [
             "p1-e04",
-            "p1-e05"
-          ],
-          [
-            "p1-e04",
-            "p1-e06"
-          ],
-          [
-            "p1-e04",
             "p1-e07"
           ],
           [
@@ -3923,18 +4139,6 @@
           ],
           [
             "p1-e07",
-            "p1-e10"
-          ],
-          [
-            "p1-e07",
-            "p1-e11"
-          ],
-          [
-            "p1-e07",
-            "p1-e12"
-          ],
-          [
-            "p1-e07",
             "p1-e13"
           ],
           [
@@ -3956,18 +4160,6 @@
           [
             "p1-e08",
             "p1-e13"
-          ],
-          [
-            "p1-e09",
-            "p1-e10"
-          ],
-          [
-            "p1-e09",
-            "p1-e11"
-          ],
-          [
-            "p1-e09",
-            "p1-e12"
           ],
           [
             "p1-e09",
@@ -3976,10 +4168,6 @@
           [
             "p1-e10",
             "p1-e13"
-          ],
-          [
-            "p1-e11",
-            "p1-e12"
           ],
           [
             "p1-e11",
@@ -3993,7 +4181,9 @@
         "same_time_groups": [],
         "interval_relations": [],
         "ordered_event_ids": [
+          "p1-e01",
           "p1-e02",
+          "p1-e04",
           "p1-e05",
           "p1-e06",
           "p1-e07",
@@ -4003,9 +4193,7 @@
           "p1-e12"
         ],
         "order_unknown_event_ids": [
-          "p1-e01",
           "p1-e03",
-          "p1-e04",
           "p1-e08",
           "p1-e13"
         ],
@@ -4015,7 +4203,7 @@
         "basis": "Source-gated model relations; paragraph order and event kind do not create chronology."
       },
       "reference_provenance": {
-        "annotation_sha256": "2a03bb35b2e817e18ef91a45710c5043da9c2964140a81253d9debbb27acb803",
+        "annotation_sha256": "a3f5975840370ceedda4665afcbf1661fe88ec1b4c24de8ba025ad9082bc7716",
         "materializer_version": "dense-runtime-targets/1",
         "fact_pointers": [
           {
@@ -4272,6 +4460,17 @@
               {
                 "segment_id": "b00003",
                 "quote": "was taking no medications"
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f069",
+            "task": "medications",
+            "pointer": "/items/1",
+            "source_evidence": [
+              {
+                "segment_id": "b00009",
+                "quote": "His initial episode resolved with observation and analgesics"
               }
             ]
           },
@@ -4540,6 +4739,17 @@
             ]
           },
           {
+            "fact_id": "p1-f057",
+            "task": "social_exposures",
+            "pointer": "/items/2",
+            "source_evidence": [
+              {
+                "segment_id": "b00009",
+                "quote": "During the first two episodes, the patient gradually resumed swimming within two weeks and began rigorous breath‑hold training soon thereafter."
+              }
+            ]
+          },
+          {
             "fact_id": "p1-f048",
             "task": "outcomes",
             "pointer": "/items/0",
@@ -4612,7 +4822,7 @@
             "source_evidence": [
               {
                 "segment_id": "b00005",
-                "quote": "after which the patient remained free of recurrent SPM"
+                "quote": "The rehabilitation sessions were completed over three months, after which the patient remained free of recurrent SPM."
               }
             ]
           },
@@ -4650,9 +4860,24 @@
             ]
           },
           {
-            "fact_id": "p1-f055",
+            "fact_id": "p1-f051",
             "task": "care_plans",
             "pointer": "/items/2",
+            "source_evidence": [
+              {
+                "segment_id": "b00003",
+                "quote": "Following discharge, high-intensity breath-holding exercises were avoided."
+              },
+              {
+                "segment_id": "b00001",
+                "quote": "He improved with conservative treatment and returned to full training within one month, avoiding intense breath-holding for two weeks."
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f055",
+            "task": "care_plans",
+            "pointer": "/items/3",
             "source_evidence": [
               {
                 "segment_id": "b00004",
@@ -4663,7 +4888,7 @@
           {
             "fact_id": "p1-f056",
             "task": "care_plans",
-            "pointer": "/items/3",
+            "pointer": "/items/4",
             "source_evidence": [
               {
                 "segment_id": "b00009",
@@ -4674,7 +4899,7 @@
           {
             "fact_id": "p1-f058",
             "task": "care_plans",
-            "pointer": "/items/4",
+            "pointer": "/items/5",
             "source_evidence": [
               {
                 "segment_id": "b00005",
@@ -4685,7 +4910,7 @@
           {
             "fact_id": "p1-f061",
             "task": "care_plans",
-            "pointer": "/items/5",
+            "pointer": "/items/6",
             "source_evidence": [
               {
                 "segment_id": "b00005",
@@ -4696,7 +4921,7 @@
           {
             "fact_id": "p1-f062",
             "task": "care_plans",
-            "pointer": "/items/6",
+            "pointer": "/items/7",
             "source_evidence": [
               {
                 "segment_id": "b00005",
@@ -4707,7 +4932,7 @@
           {
             "fact_id": "p1-f063",
             "task": "care_plans",
-            "pointer": "/items/7",
+            "pointer": "/items/8",
             "source_evidence": [
               {
                 "segment_id": "b00005",
@@ -4718,7 +4943,7 @@
           {
             "fact_id": "p1-f064",
             "task": "care_plans",
-            "pointer": "/items/8",
+            "pointer": "/items/9",
             "source_evidence": [
               {
                 "segment_id": "b00005",
@@ -4729,7 +4954,7 @@
           {
             "fact_id": "p1-f065",
             "task": "care_plans",
-            "pointer": "/items/9",
+            "pointer": "/items/10",
             "source_evidence": [
               {
                 "segment_id": "b00005",
@@ -4740,68 +4965,27 @@
           {
             "fact_id": "p1-f066",
             "task": "care_plans",
-            "pointer": "/items/10",
+            "pointer": "/items/11",
             "source_evidence": [
               {
                 "segment_id": "b00005",
                 "quote": "The rehabilitation sessions were completed over three months"
               }
             ]
-          }
-        ],
-        "quarantined_facts": [
-          {
-            "fact_id": "p1-f057",
-            "task": "social_exposures",
-            "collection": "items",
-            "fields": {
-              "domain": "exercise",
-              "name": "Rigorous breath-hold training after resuming swimming",
-              "status": "current",
-              "temporality": "historical",
-              "subject": "index_patient",
-              "assertion": "present"
-            },
-            "evidence": [
-              {
-                "segment_id": "b00009",
-                "quote": "began rigorous breath‑hold training soon thereafter"
-              }
-            ],
-            "clinical_statement": "Began rigorous breath-hold training soon after resuming swimming during the first two episodes",
-            "certainty": "source_conflict",
-            "scoring": "review_only",
-            "notes": "Conflicts with the case presentation statement that high-intensity breath-holding exercises were avoided after the first discharge."
           },
           {
-            "fact_id": "p1-f051",
+            "fact_id": "p1-f070",
             "task": "care_plans",
-            "collection": "items",
-            "fields": {
-              "action_text": "High-intensity breath-holding exercises avoided",
-              "plan_type": "counseling",
-              "action_status": "completed",
-              "temporality": "current",
-              "subject": "index_patient",
-              "assertion": "present",
-              "time": {
-                "text": "Following discharge",
-                "relation": "after",
-                "anchor": "discharge"
-              }
-            },
-            "evidence": [
+            "pointer": "/items/12",
+            "source_evidence": [
               {
-                "segment_id": "b00003",
-                "quote": "Following discharge, high-intensity breath-holding exercises were avoided."
+                "segment_id": "b00009",
+                "quote": "in the first and second episodes, the rest period was limited to two weeks"
               }
-            ],
-            "clinical_statement": "High-intensity breath-holding exercises avoided after discharge",
-            "certainty": "source_conflict",
-            "scoring": "review_only",
-            "notes": "The discussion states rigorous breath-hold training began soon after swimming resumed in the first two episodes; both descriptions are kept."
+            ]
           }
         ],
+        "quarantined_facts": [],
         "synthetic_dates_generated": false,
         "missing_fields_policy": "Required nullable attributes=null; absent optional categorical knowledge=unknown; no clinical values inferred."
       },
@@ -5582,19 +5766,19 @@
               ],
               "name": "Chest pain",
               "kind": "symptom",
-              "text_value": "sharp, squeezing, worse with deep inspiration and movement",
+              "text_value": "acute-onset; sharp, squeezing; worse with deep inspiration and movement",
               "numeric_value": null,
               "unit": null,
               "body_site": "anterior chest",
-              "severity": "acute-onset",
+              "severity": null,
               "activity_context": null
             },
             "value_as_annotated": {
               "name": "Chest pain",
               "kind": "symptom",
-              "text_value": "sharp, squeezing, worse with deep inspiration and movement",
+              "text_value": "acute-onset; sharp, squeezing; worse with deep inspiration and movement",
               "body_site": "anterior chest",
-              "severity": "acute-onset",
+              "severity": null,
               "temporality": "current",
               "subject": "index_patient",
               "assertion": "present",
@@ -6090,6 +6274,68 @@
             "event_ids": []
           },
           {
+            "fact_id": "p1-f069",
+            "task": "medications",
+            "pointer": "/items/1",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "His initial episode resolved with observation and analgesics",
+                  "source_section": "b00009"
+                }
+              ],
+              "name": "Analgesics",
+              "action": "administered",
+              "ingredient_as_documented": null,
+              "dose_text": null,
+              "dose_value": null,
+              "dose_unit": null,
+              "route": null,
+              "frequency": null,
+              "duration_text": null,
+              "indication": null,
+              "regimen": null
+            },
+            "value_as_annotated": {
+              "name": "Analgesics",
+              "action": "administered",
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "dose_text": null,
+              "dose_value": null,
+              "dose_unit": null,
+              "route": null,
+              "frequency": null,
+              "duration_text": null,
+              "indication": null,
+              "regimen": null,
+              "ingredient_as_documented": null
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12848253.1:jats",
+                "segment_id": "b00009",
+                "segment_sha256": "3a65dd49a80a404905de0c05980ff262631f54ee9a6941f62463b57a2f815fe7",
+                "start": 284,
+                "end": 344,
+                "quote": "His initial episode resolved with observation and analgesics"
+              }
+            ],
+            "event_ids": [
+              "p1-e04"
+            ]
+          },
+          {
             "fact_id": "p1-f016",
             "task": "allergies",
             "pointer": "/items/0",
@@ -6196,7 +6442,7 @@
               "assertion": "present",
               "temporality": "current",
               "time": {
-                "text": "Following admission and bed rest",
+                "text": "Following admission",
                 "relation": "after",
                 "anchor": "admission",
                 "date_iso": null
@@ -6224,7 +6470,7 @@
               "subject": "index_patient",
               "assertion": "present",
               "time": {
-                "text": "Following admission and bed rest",
+                "text": "Following admission",
                 "relation": "after",
                 "anchor": "admission"
               }
@@ -6842,7 +7088,7 @@
               "status": "resulted",
               "text_value": "no remarkable findings",
               "numeric_value": null,
-              "comparator": "=",
+              "comparator": "unknown",
               "unit": null,
               "flag": "normal",
               "reference_range_text": null,
@@ -6854,7 +7100,7 @@
               "name": "Echocardiography",
               "kind": "imaging",
               "status": "resulted",
-              "comparator": "=",
+              "comparator": "unknown",
               "flag": "normal",
               "temporality": "current",
               "text_value": "no remarkable findings",
@@ -6901,7 +7147,7 @@
               "status": "resulted",
               "text_value": "no remarkable findings",
               "numeric_value": null,
-              "comparator": "=",
+              "comparator": "unknown",
               "unit": null,
               "flag": "normal",
               "reference_range_text": null,
@@ -6913,7 +7159,7 @@
               "name": "Electrocardiogram",
               "kind": "physiologic",
               "status": "resulted",
-              "comparator": "=",
+              "comparator": "unknown",
               "flag": "normal",
               "temporality": "current",
               "text_value": "no remarkable findings",
@@ -6960,7 +7206,7 @@
               "status": "resulted",
               "text_value": "no remarkable lesion",
               "numeric_value": null,
-              "comparator": "=",
+              "comparator": "unknown",
               "unit": null,
               "flag": "normal",
               "reference_range_text": null,
@@ -6972,7 +7218,7 @@
               "name": "Chest X-ray",
               "kind": "imaging",
               "status": "resulted",
-              "comparator": "=",
+              "comparator": "unknown",
               "flag": "normal",
               "temporality": "current",
               "text_value": "no remarkable lesion",
@@ -7020,7 +7266,7 @@
               "status": "resulted",
               "text_value": "small amount of mediastinal emphysema extending from the left supraclavicular region to the area surrounding the left main bronchus",
               "numeric_value": null,
-              "comparator": "=",
+              "comparator": "unknown",
               "unit": null,
               "flag": "unknown",
               "reference_range_text": null,
@@ -7032,7 +7278,7 @@
               "name": "Chest CT mediastinal emphysema",
               "kind": "imaging",
               "status": "resulted",
-              "comparator": "=",
+              "comparator": "unknown",
               "flag": "unknown",
               "temporality": "current",
               "text_value": "small amount of mediastinal emphysema extending from the left supraclavicular region to the area surrounding the left main bronchus",
@@ -7080,9 +7326,9 @@
               "status": "resulted",
               "text_value": "no apparent pleural effusion or fluid collection",
               "numeric_value": null,
-              "comparator": "=",
+              "comparator": "unknown",
               "unit": null,
-              "flag": "negative",
+              "flag": "unknown",
               "reference_range_text": null,
               "specimen": null,
               "method": null,
@@ -7092,8 +7338,8 @@
               "name": "CT pleural effusion or fluid collection",
               "kind": "imaging",
               "status": "resulted",
-              "comparator": "=",
-              "flag": "negative",
+              "comparator": "unknown",
+              "flag": "unknown",
               "temporality": "current",
               "text_value": "no apparent pleural effusion or fluid collection",
               "subject": "index_patient",
@@ -7139,7 +7385,7 @@
               "status": "resulted",
               "text_value": "no remarkable findings",
               "numeric_value": null,
-              "comparator": "=",
+              "comparator": "unknown",
               "unit": null,
               "flag": "normal",
               "reference_range_text": null,
@@ -7151,7 +7397,7 @@
               "name": "Chest radiography",
               "kind": "imaging",
               "status": "resulted",
-              "comparator": "=",
+              "comparator": "unknown",
               "flag": "normal",
               "temporality": "current",
               "text_value": "no remarkable findings",
@@ -7199,7 +7445,7 @@
               "status": "resulted",
               "text_value": "left-sided mediastinal emphysema, similar to the previous episode",
               "numeric_value": null,
-              "comparator": "=",
+              "comparator": "unknown",
               "unit": null,
               "flag": "unknown",
               "reference_range_text": null,
@@ -7211,7 +7457,7 @@
               "name": "Chest CT mediastinal emphysema",
               "kind": "imaging",
               "status": "resulted",
-              "comparator": "=",
+              "comparator": "unknown",
               "flag": "unknown",
               "temporality": "current",
               "text_value": "left-sided mediastinal emphysema, similar to the previous episode",
@@ -7439,6 +7685,54 @@
                 "start": 118,
                 "end": 177,
                 "quote": "He reported using breath‑holding techniques during training"
+              }
+            ],
+            "event_ids": []
+          },
+          {
+            "fact_id": "p1-f057",
+            "task": "social_exposures",
+            "pointer": "/items/2",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "During the first two episodes, the patient gradually resumed swimming within two weeks and began rigorous breath‑hold training soon thereafter.",
+                  "source_section": "b00009"
+                }
+              ],
+              "domain": "exercise",
+              "name": "Rigorous breath-hold training after resuming swimming",
+              "status": "current",
+              "amount_text": null,
+              "frequency": null,
+              "duration_text": null,
+              "pack_years": null
+            },
+            "value_as_annotated": {
+              "domain": "exercise",
+              "name": "Rigorous breath-hold training after resuming swimming",
+              "status": "current",
+              "temporality": "historical",
+              "subject": "index_patient",
+              "assertion": "present"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12848253.1:jats",
+                "segment_id": "b00009",
+                "segment_sha256": "3a65dd49a80a404905de0c05980ff262631f54ee9a6941f62463b57a2f815fe7",
+                "start": 917,
+                "end": 1060,
+                "quote": "During the first two episodes, the patient gradually resumed swimming within two weeks and began rigorous breath‑hold training soon thereafter."
               }
             ],
             "event_ids": []
@@ -7763,13 +8057,13 @@
               "temporality": "current",
               "time": {
                 "text": null,
-                "relation": "unknown",
-                "anchor": null,
+                "relation": "after",
+                "anchor": "rehabilitation sessions",
                 "date_iso": null
               },
               "evidence": [
                 {
-                  "quote": "after which the patient remained free of recurrent SPM",
+                  "quote": "The rehabilitation sessions were completed over three months, after which the patient remained free of recurrent SPM.",
                   "source_section": "b00005"
                 }
               ],
@@ -7786,16 +8080,21 @@
               "text_value": "Remained free of recurrent SPM",
               "related_condition": "Spontaneous pneumomediastinum",
               "temporality": "current",
-              "subject": "index_patient"
+              "subject": "index_patient",
+              "time": {
+                "text": null,
+                "relation": "after",
+                "anchor": "rehabilitation sessions"
+              }
             },
             "evidence": [
               {
                 "source_id": "PMC12848253.1:jats",
                 "segment_id": "b00005",
                 "segment_sha256": "c6ee327fe6ff3a621735931dd3863dbcf3e2a37b9dd6b0952f2c14e404317dc9",
-                "start": 1340,
-                "end": 1394,
-                "quote": "after which the patient remained free of recurrent SPM"
+                "start": 1278,
+                "end": 1395,
+                "quote": "The rehabilitation sessions were completed over three months, after which the patient remained free of recurrent SPM."
               }
             ],
             "event_ids": [
@@ -7963,9 +8262,75 @@
             ]
           },
           {
-            "fact_id": "p1-f055",
+            "fact_id": "p1-f051",
             "task": "care_plans",
             "pointer": "/items/2",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "current",
+              "time": {
+                "text": "Following discharge",
+                "relation": "after",
+                "anchor": "discharge",
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Following discharge, high-intensity breath-holding exercises were avoided.",
+                  "source_section": "b00003"
+                },
+                {
+                  "quote": "He improved with conservative treatment and returned to full training within one month, avoiding intense breath-holding for two weeks.",
+                  "source_section": "b00001"
+                }
+              ],
+              "action_text": "High-intensity breath-holding exercises avoided",
+              "plan_type": "counseling",
+              "target": null,
+              "responsible_specialty": null,
+              "urgency": null,
+              "action_status": "completed"
+            },
+            "value_as_annotated": {
+              "action_text": "High-intensity breath-holding exercises avoided",
+              "plan_type": "counseling",
+              "action_status": "completed",
+              "temporality": "current",
+              "subject": "index_patient",
+              "assertion": "present",
+              "time": {
+                "text": "Following discharge",
+                "relation": "after",
+                "anchor": "discharge"
+              }
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12848253.1:jats",
+                "segment_id": "b00003",
+                "segment_sha256": "43d349e6296a1a6dc09fb2b70e4e95316ced13ca8f2d869e8f78b1af45e52204",
+                "start": 1911,
+                "end": 1985,
+                "quote": "Following discharge, high-intensity breath-holding exercises were avoided."
+              },
+              {
+                "source_id": "PMC12848253.1:jats",
+                "segment_id": "b00001",
+                "segment_sha256": "14800fa9cc6648da72edc2f9a664e6e3826db26865102b3c8bfe957a6ba74967",
+                "start": 557,
+                "end": 691,
+                "quote": "He improved with conservative treatment and returned to full training within one month, avoiding intense breath-holding for two weeks."
+              }
+            ],
+            "event_ids": [
+              "p1-e05"
+            ]
+          },
+          {
+            "fact_id": "p1-f055",
+            "task": "care_plans",
+            "pointer": "/items/3",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -8019,7 +8384,7 @@
           {
             "fact_id": "p1-f056",
             "task": "care_plans",
-            "pointer": "/items/3",
+            "pointer": "/items/4",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -8071,7 +8436,7 @@
           {
             "fact_id": "p1-f058",
             "task": "care_plans",
-            "pointer": "/items/4",
+            "pointer": "/items/5",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -8121,7 +8486,7 @@
           {
             "fact_id": "p1-f061",
             "task": "care_plans",
-            "pointer": "/items/5",
+            "pointer": "/items/6",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -8143,12 +8508,12 @@
               "target": null,
               "responsible_specialty": null,
               "urgency": null,
-              "action_status": "unknown"
+              "action_status": "completed"
             },
             "value_as_annotated": {
               "action_text": "Attending sessions with a sports trainer at a clinic",
               "plan_type": "other",
-              "action_status": "unknown",
+              "action_status": "completed",
               "temporality": "current",
               "subject": "index_patient",
               "assertion": "present",
@@ -8175,7 +8540,7 @@
           {
             "fact_id": "p1-f062",
             "task": "care_plans",
-            "pointer": "/items/6",
+            "pointer": "/items/7",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -8229,7 +8594,7 @@
           {
             "fact_id": "p1-f063",
             "task": "care_plans",
-            "pointer": "/items/7",
+            "pointer": "/items/8",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -8283,7 +8648,7 @@
           {
             "fact_id": "p1-f064",
             "task": "care_plans",
-            "pointer": "/items/8",
+            "pointer": "/items/9",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -8305,12 +8670,12 @@
               "target": null,
               "responsible_specialty": null,
               "urgency": null,
-              "action_status": "unknown"
+              "action_status": "completed"
             },
             "value_as_annotated": {
               "action_text": "Resistance training commenced with attention to diaphragmatic breathing",
               "plan_type": "other",
-              "action_status": "unknown",
+              "action_status": "completed",
               "temporality": "current",
               "subject": "index_patient",
               "assertion": "present",
@@ -8337,7 +8702,7 @@
           {
             "fact_id": "p1-f065",
             "task": "care_plans",
-            "pointer": "/items/9",
+            "pointer": "/items/10",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -8359,12 +8724,12 @@
               "target": null,
               "responsible_specialty": null,
               "urgency": null,
-              "action_status": "unknown"
+              "action_status": "completed"
             },
             "value_as_annotated": {
               "action_text": "Swimming progressively reintroduced",
               "plan_type": "other",
-              "action_status": "unknown",
+              "action_status": "completed",
               "temporality": "current",
               "subject": "index_patient",
               "assertion": "present",
@@ -8391,7 +8756,7 @@
           {
             "fact_id": "p1-f066",
             "task": "care_plans",
-            "pointer": "/items/10",
+            "pointer": "/items/11",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -8441,6 +8806,53 @@
             "event_ids": [
               "p1-e13"
             ]
+          },
+          {
+            "fact_id": "p1-f070",
+            "task": "care_plans",
+            "pointer": "/items/12",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "in the first and second episodes, the rest period was limited to two weeks",
+                  "source_section": "b00009"
+                }
+              ],
+              "action_text": "Rest period limited to two weeks",
+              "plan_type": "other",
+              "target": null,
+              "responsible_specialty": null,
+              "urgency": null,
+              "action_status": "completed"
+            },
+            "value_as_annotated": {
+              "action_text": "Rest period limited to two weeks",
+              "plan_type": "other",
+              "action_status": "completed",
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12848253.1:jats",
+                "segment_id": "b00009",
+                "segment_sha256": "3a65dd49a80a404905de0c05980ff262631f54ee9a6941f62463b57a2f815fe7",
+                "start": 416,
+                "end": 490,
+                "quote": "in the first and second episodes, the rest period was limited to two weeks"
+              }
+            ],
+            "event_ids": []
           }
         ],
         "state_carried_forward": false,
