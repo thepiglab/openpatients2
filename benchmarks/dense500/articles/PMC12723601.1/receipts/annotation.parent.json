@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC12723601.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5ec7b832428946c08a9c22bf62061562921cd8edce03ae055ba9a81b4ee8ab86",
+  "annotation_sha256": "9a39f90f263c5a2e22711097ff4c24d2eecdac6a3acb652aeceff92129182f65",
+  "reviewed_at": "2026-10-11T21:45:24.411235+00:00",
+  "source_segments_read": 76,
+  "facts_reviewed": 154,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f010 (pre-eclampsia, discussion suggestion): time changed from \"before delivery\" (which times the proteinuria and hypertension) to the literal \"preceding the onset of RCN\", anchor \"onset of RCN\", relation before.",
+    "p1-f009 (pre-eclampsia, Table 2): removed a non-clinical diagnostic_basis (\"listed in Table 2\"); note rewritten; stays ambiguous review_only.",
+    "p1-f022 (DIC during obstetric bleeding): anchor set to the literal phrase \"obstetric bleeding\".",
+    "Added p1-f153 Hypertension (present, confirmed, include, no time): existence of hypertension is not in conflict; only onset timing conflicts and stays on review_only p1-f011/p1-f012.",
+    "Added p1-f154 darbepoetin α (administered, post-discharge, include) from the Figure 4 caption expansion DPA = darbepoetin α, consistent with the pixel-reviewed Figure 4 bar; chart-only dose and extent not copied.",
+    "p1-f053/p1-f054 notes and the treatment ambiguity rewritten: the Figure 4 agents (sodium bicarbonate, DPA, daprodustat) are the patient treatments recorded in visual.json, not to be denied; only their mapping to the four-year text statement, doses and extents are not inferred.",
+    "Event p1-e27 (dialysis discontinued): time_text set to null and both conflict sides (p1-f147, p1-f148) linked, so the timeline does not pick one anchor.",
+    "Added six literally supported relations: e05 overlaps e04 (intraoperative and postoperative bleeding), e07 before e14 (anuric after transfer), e12 before e13 (CT prompting endovascular intervention), e17 before e21, e21 before e22, e22 before e24 (stated day numbers 3, 11, 23, 35).",
+    "Added a structured ambiguity for the two OBS-FLAG normalize items (loss of normal cytologic features; largely maintained a normal morphology): flag stays unknown.",
+    "Summary, article limitation and b00076 coverage note updated for p1-f153/p1-f154."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEG figures were inspected separately in visual.json.",
+    "Figure 4 treatment bars name sodium bicarbonate, DPA (darbepoetin α per the caption) and daprodustat with doses; these are the patient treatments and are recorded in visual.json. Only darbepoetin α is a text fact (caption-named, p1-f154); chart-only names, doses and bar extents are not copied into text facts. Figure 2 treatment bars and both creatinine curves are visual estimates only.",
+    "Hypertension timing (after cesarean section versus before delivery) and the anchor of dialysis discontinuation (6 months after discharge versus about 6 months post-onset) are source conflicts kept review_only.",
+    "Pre-eclampsia status is a suspicion in the text and a listed pregnancy disorder in Table 2; kept provisional or review_only.",
+    "Table 2 rows 1 to 11 are cited published cases and are not index-patient facts; only the present-case row 12 is used.",
+    "Table 1 flags high or low are taken only from narrative wording; reference intervals are kept as printed without classification.",
+    "Authors speculation on pathogenesis and the effect of biopsy timing is recorded as an ambiguity, not as a fact."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 76,
+    "facts_reviewed": 154,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (32-year-old Mongolian primigravida); Table 2 rows 1-11 are cited published cases and excluded; row 12 used.",
+      "All 38 Table 1 rows present with printed values, units and ranges; high/low flags only where the narrative names the abnormality (leukocytosis, severe anemia, thrombocytopenia, hyponatremia, hyperkalemia, prolonged PT, low fibrinogen, increased FDP, decreased haptoglobin, elevated liver enzymes).",
+      "Source conflicts kept review_only on the conflicting attribute only: hypertension onset (after cesarean vs before delivery) and dialysis-discontinuation anchor (6 months after discharge vs about 6 months post-onset).",
+      "Pre-eclampsia tiers: suspected at 39 weeks (provisional, include); Table 2 listing (ambiguous, review_only); discussion suggestion (possible, review_only).",
+      "ADAMTS13 activity 77 % with printed range > 0.78 kept as printed, ambiguous review_only; narrative \"no significant decrease\" kept include.",
+      "Mongolian recorded literally as ethnicity_as_documented with a note that nationality vs ethnicity is not stated.",
+      "All four figures viewed at full resolution; chart readings and bar extents stay estimated in visual.json and none became a fact."
+    ],
+    "residual_risks": [
+      "Day numbering (3rd, 11th, 23rd, 35th, 48th, 53rd day) is assumed to share one reference; only the 22nd day is stated as after admission, so anchors stay null.",
+      "Sodium bicarbonate and daprodustat are named only in Figure 4 pixels and therefore exist only in visual.json, not as text facts.",
+      "Narrative haptoglobin (decreased, flag low) and the Table 1 admission haptoglobin (flag unknown) are kept as separate facts although the value is identical."
+    ]
+  },
+  "physician_adjudicated": false
+}
