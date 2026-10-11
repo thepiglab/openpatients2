@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC12739554.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7791a7821efc374083439c7600b7bc571172d9f3778d8a4924b6fca7c08794ef",
+  "annotation_sha256": "24e19cf64eb935494e7b73deb876e65c6b6ef84c5777f4677969a495d06f36bd",
+  "reviewed_at": "2026-10-11T18:05:31.470516+00:00",
+  "source_segments_read": 112,
+  "facts_reviewed": 309,
+  "patients_reviewed": 10,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p8-f012 (P4.2 CD63): table evidence was borrowed from the P4.1 row (b00034); repointed to her own row b00035",
+    "p2-f020, p3-f015: \"Combined\" granule secretion defect renamed to platelet granule secretion defect with the explicit FC sentence as evidence (combined defect is stated literally only for P1)",
+    "p2-f026: quote extended so the paternal side of the grandfather is inside the evidence",
+    "p6-f017, p6-f018 (P3.2): derived kinship mother/sister replaced by literal relatives (paternal grandmother of the index patient, the father's sister) and flagged in a new ambiguity; P3.2 summary no longer calls them his mother and sister",
+    "p7-f016, p8-f016: added the surveillance-offered quote that the fact name relies on",
+    "p8-f020: removed text_value \"none\" from the absent intracranial hemorrhage item",
+    "p1-f033, p9-f021: bone marrow cellularity quote extended to include \"Bone marrow aspirations\"",
+    "p10-f023, p10-f024 (P6 flow cytometry text minimal reduction vs Table 1 not impaired): certainty source_conflict, scoring review_only",
+    "Added ambiguity for P2.3 CD62 (text mild reduction vs table borderline vs discussion no clear defect)",
+    "Added documented_sex for P2.2 (father), P3.2 (father) and P5 (he)",
+    "Added relations p1-e02 before p1-e03 and p3-e03 before p3-e04"
+  ],
+  "unresolved": [
+    "Figures 1-7 were inspected in the separate visual submission; this annotation keeps caption-level visual status.",
+    "Table 1 columns were read from span markers: LTA agent and percentage cells, a \"Platelets\" cell inside the aggregometry group, then flow cytometry; the platelet-count cell is a median or minimum per footnote 1.",
+    "Flags low on aggregometry values rely on the Table 1 footnote definition of reduced aggregation (< 60%).",
+    "P2.3 age differs between text (30-year-old) and Table 1 (40 y); P4.1 and P4.2 table platelet counts differ from the text ranges; none reconciled.",
+    "Several data are \"data not shown\" (family 4 flow cytometry, CNV in P2.2 and P2.3) and are recorded as stated without values.",
+    "Supplement SM1 (Table_1.DOCX) lists gene panel contents only and holds no patient data.",
+    "Cohort-level statements, literature comparisons and guideline recommendations in the Discussion are not recorded as patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 112,
+    "facts_reviewed": 309,
+    "figures_viewed": 7,
+    "key_findings": [
+      "10 patients from 6 families; roster order P1, P2.1, P2.2, P2.3, P3.1, P3.2, P4.1, P4.2, P5, P6 follows Table 1 and the case paragraphs (methods mention P5 only as a label)",
+      "LTA flag low applied only to values below the Table 1 footnote cutoff (< 60%); P6 collagen 71% left unflagged",
+      "Conflicts quarantined review_only: P2.3 age 30 vs 40 y, P4.1 115 and P4.2 208 table counts vs text ranges, P6 flow cytometry text vs table",
+      "RUNX1-FPDMM per patient rests on the cohort sentence plus each patient's own variant evidence",
+      "Supplement SM1 DOCX read in full: two gene-panel lists, protocol_methods, no patient data"
+    ],
+    "residual_risks": [
+      "Table 1 platelet counts mix medians and minima (footnote 1) and are kept as table values",
+      "P5 table median 127 G/L counts only post-chemotherapy values yet equals the text count at diagnosis",
+      "Figure 1 readings are approximate"
+    ]
+  },
+  "physician_adjudicated": false
+}

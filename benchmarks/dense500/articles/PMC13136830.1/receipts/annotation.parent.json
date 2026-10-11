@@ -1,0 +1,53 @@
+{
+  "article_id": "PMC13136830.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3472c13a67af36ce544b21feaa9e8c030744b86c86d55d55b36e4b10c8722406",
+  "annotation_sha256": "d3f05c1559268033c8859f3756eb851636dfa0922c1407e4fb5b7fc5b9b9fa93",
+  "reviewed_at": "2026-10-11T18:18:13.591131+00:00",
+  "source_segments_read": 14,
+  "facts_reviewed": 96,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Earlier parent pass: added 12 genetic-test observation counterparts (f085-f096); linked tumors t1-t6 and oncology treatments as alternates; avapritinib own evidence and indication; platelets 48 flag low; f038 text_value; f005 body_site removed; untimed c-KIT VAF and imaging facts moved to untimed events e17/e18; Table 1 Our case rows transcribed in visual.json with CD2 limitation.",
+    "Follow-up: removed relations e02->e03, e07->e08 and e08->e10 because no quote literally states that order.",
+    "Follow-up: e07 description no longer names the PB/BM c-KIT discrepancy (now in e17); undated blood-count improvement f077 moved from the 'after four months' event e10 to new untimed event e19.",
+    "Follow-up: dropped alternate_representation_of from per-gene panel biomarkers f067-f071 to the panel-level observation f096 (not the same fact); f096 kept as the single negative panel result."
+  ],
+  "unresolved": [
+    "Table 1 exists only as an image with no text segments; rows labelled Our case contain items not found in the text (for example pruritus, denosumab) and were not extracted as facts.",
+    "Figure 1 pixels were reviewed in the separate visual submission; the annotation figures keep the caption-only convention.",
+    "Dates for the first-line treatments, restaging imaging and several tests are not stated; times were left null unless the fact or its governing sentence states them.",
+    "Literature cases, cited studies, trials and mechanism discussion are not patient facts.",
+    "Table 1 Our case cells (e.g. pruritus, denosumab, CD2+ MC Yes, Spleen >15 cm) are transcribed from pixels in the visual submission only; they are not quotable article text and are not annotation facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 14,
+    "facts_reviewed": 96,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient: ISM 2014, SSM-CLL March 2023, CLL progression March 2024, acalabrutinib 100 then 200 mg, avapritinib avoided, midostaurin declined, CLL PR by February 2025, SM PR, KIT D816V absent on PB NGS, October 2025 counts.",
+      "Time-specific tumor entries t1-t6; 2025 KIT negative linked to t6, TP53 to t3 via b00009, IGHV unlinked.",
+      "Every remaining temporal relation is supported by a quote stating the order or by calendar times; event membership no longer implies times the source does not give.",
+      "Figure 1 arrows and Table 1 Our case rows checked on pixels."
+    ],
+    "residual_risks": [
+      "Table 1 Our case content exists only as image pixels and is not in the patient facts.",
+      "disease_status remission for partial remission is the nearest enum value.",
+      "Several events (initial workup, acalabrutinib start, blood-count improvement) are only partially ordered."
+    ]
+  },
+  "physician_adjudicated": false
+}

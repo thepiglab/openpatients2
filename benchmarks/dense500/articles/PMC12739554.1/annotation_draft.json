@@ -932,7 +932,7 @@
       },
       {
        "segment_id": "b00087",
-       "quote": "reduced cellularity in both evaluated patients (P1 and P5)"
+       "quote": "Bone marrow aspirations in our cohort revealed reduced cellularity in both evaluated patients (P1 and P5)"
       }
      ],
      "clinical_statement": "Bone marrow cellularity",
@@ -1273,6 +1273,21 @@
       {
        "segment_id": "b00045",
        "quote": "To validate the finding and define deletion size, we performed a microarray analysis."
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e02",
+     "to_event_id": "p1-e03",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00044",
+       "quote": "the person was referred for further analysis"
+      },
+      {
+       "segment_id": "b00045",
+       "quote": "At the first presentation at our clinic"
       }
      ]
     }
@@ -1929,7 +1944,7 @@
      "fields": {
       "subject": "index_patient",
       "assertion": "present",
-      "name": "Combined platelet granule secretion defect",
+      "name": "Platelet granule secretion defect",
       "verification_status": "confirmed",
       "role": "unknown",
       "clinical_status": "unknown",
@@ -1937,11 +1952,15 @@
      },
      "evidence": [
       {
+       "segment_id": "b00043",
+       "quote": "In FC analysis, three of the eight investigated individuals showed a clear granule secretion defect (Figure 1: P1, P2.1, and P2.2)."
+      },
+      {
        "segment_id": "b00072",
        "quote": "FC analysis identified a distinct granule secretion defect in three of the eight investigated individuals (P1, P2.1, and P2.2)"
       }
      ],
-     "clinical_statement": "Combined platelet granule secretion defect",
+     "clinical_statement": "Clear platelet granule secretion defect on flow cytometry",
      "certainty": "supported",
      "scoring": "include",
      "notes": ""
@@ -2093,13 +2112,13 @@
      "evidence": [
       {
        "segment_id": "b00049",
-       "quote": "the grandfather died of MDS/AML with an MLL deletion"
+       "quote": "The paternal family history was remarkable: the grandfather died of MDS/AML with an MLL deletion"
       }
      ],
      "clinical_statement": "Grandfather died of MDS/AML with an MLL deletion",
      "certainty": "supported",
      "scoring": "include",
-     "notes": "Source says \"The paternal family history was remarkable: the grandfather ...\"; paternal side taken from that sentence."
+     "notes": ""
     },
     {
      "fact_id": "p2-f027",
@@ -2846,7 +2865,7 @@
      "fields": {
       "subject": "index_patient",
       "assertion": "present",
-      "name": "Combined platelet granule secretion defect",
+      "name": "Platelet granule secretion defect",
       "verification_status": "confirmed",
       "role": "unknown",
       "clinical_status": "unknown",
@@ -2854,11 +2873,15 @@
      },
      "evidence": [
       {
+       "segment_id": "b00043",
+       "quote": "In FC analysis, three of the eight investigated individuals showed a clear granule secretion defect (Figure 1: P1, P2.1, and P2.2)."
+      },
+      {
        "segment_id": "b00072",
        "quote": "FC analysis identified a distinct granule secretion defect in three of the eight investigated individuals (P1, P2.1, and P2.2)"
       }
      ],
-     "clinical_statement": "Combined platelet granule secretion defect",
+     "clinical_statement": "Clear platelet granule secretion defect on flow cytometry",
      "certainty": "supported",
      "scoring": "include",
      "notes": ""
@@ -3653,6 +3676,27 @@
      "certainty": "supported",
      "scoring": "include",
      "notes": "Table 1 Family history for malignancy column lists \"Yes\"; relatives are not specified in the table."
+    },
+    {
+     "fact_id": "p3-f043",
+     "task": "demographics",
+     "collection": "items",
+     "fields": {
+      "subject": "index_patient",
+      "assertion": "present",
+      "attribute": "documented_sex",
+      "text_value": "father"
+     },
+     "evidence": [
+      {
+       "segment_id": "b00048",
+       "quote": "his father (P2.2"
+      }
+     ],
+     "clinical_statement": "father",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": "Sex from the kinship term father."
     }
    ],
    "events": [
@@ -3871,6 +3915,17 @@
       {
        "segment_id": "b00051",
        "quote": "The patient subsequently underwent successful HSCT, with normalization of platelet counts observed post-transplant."
+      }
+     ]
+    },
+    {
+     "from_event_id": "p3-e03",
+     "to_event_id": "p3-e04",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00050",
+       "quote": "Before the donation, the father (P2.2) underwent bone marrow evaluation"
       }
      ]
     }
@@ -4869,6 +4924,28 @@
       }
      ],
      "must_not_infer": "Order of detection between family members."
+    },
+    {
+     "issue": "CD62 exposure for P2.3: the text reports a mild reduction for all three tested family members, Table 1 calls it borderline, and the discussion lists P2.3 among individuals without a clear granule secretion defect.",
+     "fact_ids": [
+      "p4-f014",
+      "p4-f015"
+     ],
+     "must_not_infer": "Do not classify P2.3 as having a granule secretion defect.",
+     "evidence": [
+      {
+       "segment_id": "b00052",
+       "quote": "a mild reduction of CD62-P exposure was seen for all three tested family members"
+      },
+      {
+       "segment_id": "b00029",
+       "quote": "Borderline CD62 exposure and reduced CD63 exposure only compared to day control"
+      },
+      {
+       "segment_id": "b00073",
+       "quote": "no clear granule secretion defect could be identified by FC (P2.3, P4.1, P4.2, P5, and P6)"
+      }
+     ]
     }
    ]
   },
@@ -6106,10 +6183,10 @@
      "fields": {
       "subject": "family_member",
       "assertion": "present",
-      "name": "Paternal grandmother of the index patient (his mother) with lifelong thrombocytopenia and AML at age 67, recently died",
+      "name": "Paternal grandmother of the index patient with lifelong thrombocytopenia and AML at age 67, recently died",
       "kind": "family_condition",
       "origin": "unknown",
-      "relative": "mother",
+      "relative": "paternal grandmother of the index patient",
       "age_at_diagnosis_text": "at the age of 67 years"
      },
      "evidence": [
@@ -6118,10 +6195,10 @@
        "quote": "The paternal grandmother had lifelong thrombocytopenia and was diagnosed with AML at the age of 67 years and recently died."
       }
      ],
-     "clinical_statement": "Paternal grandmother of the index patient (his mother) with lifelong thrombocytopenia and AML at age 67, recently died",
+     "clinical_statement": "Paternal grandmother of the index patient (P3.1): lifelong thrombocytopenia, AML at age 67, recently died",
      "certainty": "supported",
      "scoring": "include",
-     "notes": "Kinship derived from \"paternal grandmother\" of the index girl whose father is P3.2."
+     "notes": "Relative kept as the source names her (index patient's paternal grandmother); that she is P3.2's mother is a kinship derivation, flagged in ambiguities."
     },
     {
      "fact_id": "p6-f018",
@@ -6130,10 +6207,10 @@
      "fields": {
       "subject": "family_member",
       "assertion": "present",
-      "name": "Sister died at age 3 of acute lymphoblastic leukemia",
+      "name": "Father's sister died at age 3 of acute lymphoblastic leukemia",
       "kind": "family_condition",
       "origin": "unknown",
-      "relative": "sister",
+      "relative": "father's sister",
       "age_at_diagnosis_text": "at the age of 3 years"
      },
      "evidence": [
@@ -6142,10 +6219,10 @@
        "quote": "The father’s sister died at the age of 3 years due to acute lymphoblastic leukemia (ALL)"
       }
      ],
-     "clinical_statement": "Sister died at age 3 of acute lymphoblastic leukemia",
+     "clinical_statement": "The father’s sister (father of the index patient is P3.2) died at age 3 of ALL",
      "certainty": "supported",
      "scoring": "include",
-     "notes": "Source says \"the father’s sister\" (father of the index girl)."
+     "notes": "Relative kept literal (\"the father’s sister\"); being P3.2's own sister is a kinship derivation, flagged in ambiguities."
     },
     {
      "fact_id": "p6-f019",
@@ -6199,6 +6276,27 @@
      "certainty": "supported",
      "scoring": "include",
      "notes": "Table 1 Family history for malignancy column lists \"Yes\"; relatives are not specified in the table."
+    },
+    {
+     "fact_id": "p6-f021",
+     "task": "demographics",
+     "collection": "items",
+     "fields": {
+      "subject": "index_patient",
+      "assertion": "present",
+      "attribute": "documented_sex",
+      "text_value": "father"
+     },
+     "evidence": [
+      {
+       "segment_id": "b00053",
+       "quote": "The girl’s father also had thrombocytopenia"
+      }
+     ],
+     "clinical_statement": "father",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": "Sex from the kinship term father."
     }
    ],
    "events": [
@@ -6303,7 +6401,7 @@
      ]
     },
     {
-     "text": "He carries the heterozygous pathogenic RUNX1 variant c.602G > A; no platelet function analysis was performed. His mother had lifelong thrombocytopenia and AML at 67 and died, and his sister died at 3 years of ALL.",
+     "text": "He carries the heterozygous pathogenic RUNX1 variant c.602G > A; no platelet function analysis was performed. The index girl's paternal grandmother had lifelong thrombocytopenia and AML at 67 and died, and the father’s sister died at 3 years of ALL.",
      "fact_ids": [
       "p6-f016",
       "p6-f015",
@@ -6374,7 +6472,26 @@
      "note": "No patient-specific documentation in retained source."
     }
    },
-   "ambiguities": []
+   "ambiguities": [
+    {
+     "issue": "Family history for P3.2 is stated from the index girl's perspective (\"paternal grandmother\", \"the father’s sister\"). Recording these relatives for P3.2 relies on P3.2 being the girl's father; relatives are kept in the source wording, not converted to \"mother\"/\"sister\".",
+     "fact_ids": [
+      "p6-f017",
+      "p6-f018"
+     ],
+     "must_not_infer": "Do not restate the relatives as P3.2's mother and sister as if the source said so.",
+     "evidence": [
+      {
+       "segment_id": "b00053",
+       "quote": "The paternal grandmother had lifelong thrombocytopenia and was diagnosed with AML at the age of 67 years and recently died."
+      },
+      {
+       "segment_id": "b00053",
+       "quote": "The father’s sister died at the age of 3 years due to acute lymphoblastic leukemia (ALL)"
+      }
+     ]
+    }
+   ]
   },
   {
    "patient_id": "p7",
@@ -6812,6 +6929,10 @@
       {
        "segment_id": "b00058",
        "quote": "The father did not want to get tested, and no blood counts are available so far."
+      },
+      {
+       "segment_id": "b00058",
+       "quote": "He was not investigated, but surveillance was offered."
       }
      ],
      "clinical_statement": "Father declined testing; no blood counts available; surveillance offered",
@@ -7608,7 +7729,7 @@
        "quote": "Both siblings showed borderline normal CD63 exposure after stimulation with ADP and normal CD62-P exposure (data not shown)."
       },
       {
-       "segment_id": "b00034",
+       "segment_id": "b00035",
        "quote": "borderline CD63 exposure^(3)"
       }
      ],
@@ -7711,6 +7832,10 @@
       {
        "segment_id": "b00058",
        "quote": "The father did not want to get tested, and no blood counts are available so far."
+      },
+      {
+       "segment_id": "b00058",
+       "quote": "He was not investigated, but surveillance was offered."
       }
      ],
      "clinical_statement": "Father declined testing; no blood counts available; surveillance offered",
@@ -7796,8 +7921,7 @@
       "subject": "index_patient",
       "assertion": "absent",
       "name": "Intracranial hemorrhage",
-      "kind": "symptom",
-      "text_value": "none"
+      "kind": "symptom"
      },
      "evidence": [
       {
@@ -8712,7 +8836,7 @@
      "evidence": [
       {
        "segment_id": "b00087",
-       "quote": "reduced cellularity in both evaluated patients (P1 and P5)"
+       "quote": "Bone marrow aspirations in our cohort revealed reduced cellularity in both evaluated patients (P1 and P5)"
       }
      ],
      "clinical_statement": "Bone marrow cellularity",
@@ -9307,6 +9431,27 @@
      "certainty": "supported",
      "scoring": "include",
      "notes": "Table 1 Family history for malignancy column lists \"No\"."
+    },
+    {
+     "fact_id": "p9-f043",
+     "task": "demographics",
+     "collection": "items",
+     "fields": {
+      "subject": "index_patient",
+      "assertion": "present",
+      "attribute": "documented_sex",
+      "text_value": "he"
+     },
+     "evidence": [
+      {
+       "segment_id": "b00062",
+       "quote": "he has no significant symptoms"
+      }
+     ],
+     "clinical_statement": "he",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": "Sex from the pronoun used for P5."
     }
    ],
    "events": [
@@ -10270,8 +10415,8 @@
       }
      ],
      "clinical_statement": "Platelet CD62 and CD63 exposure after thrombin (narrative)",
-     "certainty": "supported",
-     "scoring": "include",
+     "certainty": "source_conflict",
+     "scoring": "review_only",
      "notes": "Table 1 lists flow cytometry as \"Not impaired\"; see ambiguities."
     },
     {
@@ -10300,8 +10445,8 @@
       }
      ],
      "clinical_statement": "Platelet CD62 and CD63 exposure (table)",
-     "certainty": "supported",
-     "scoring": "include",
+     "certainty": "source_conflict",
+     "scoring": "review_only",
      "notes": "\"Not impaired\" is not the source word \"normal\"; flag left unknown."
     },
     {

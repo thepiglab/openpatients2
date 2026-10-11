@@ -49,7 +49,9 @@ Per-article diff (each change with old -> new, by migration) and open items: a d
 ## Sonnet 5.5 annotator (after the parent has signed)
 1. Read the article's report entry, `R/articles/<ID>/receipts/annotation.parent.json` corrections, and the regenerated
    `R/articles/<ID>/schema_target.json` (your receipt binds that exact target). Check the changed attributes against the
-   source; if you disagree, report instead of signing.
+   source; if you disagree, report instead of signing. Your signature covers EVERY change the parent made: check each
+   listed correction (added/removed/moved facts, events, relations, alternate_representation_of links, quarantines,
+   visual edits) before signing — a gate pass is not a substitute. If you cannot check something, don't sign; report it.
 2. Run `op2 dense reference_gates R --article <ID>` (must pass), then re-sign
    `op2 dense schema_review R --folder annotations --article <ID> --role agent --reviewer "Claude Sonnet 5.5 annotator"
    --notes "<what you checked>"` and any agent sidecar receipts listed as stale (e.g. `op2 dense figure_ehr_review ... --role agent`).
