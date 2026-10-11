@@ -581,3 +581,9 @@ def test_within_of_names_reference_point():
     bad = item_violations('procedures_devices', 'items', item('before', 'within two hours of presentation'), None, '/x')
     good = item_violations('procedures_devices', 'items', item('after', 'within two hours of presentation'), None, '/x')
     assert any('within' in v.text() for v in bad) and not any('within' in v.text() for v in good)
+
+
+@pytest.mark.parametrize('text', ['born nonconsanguineously', 'non-consanguineous parents', 'nonfebrile', 'rules out'])
+def test_prefix_and_phrase_negation_cues(text):
+    from openpatients2.semantic_rules import NEGATION_CUE
+    assert NEGATION_CUE.search(text)
