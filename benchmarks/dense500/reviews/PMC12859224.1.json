@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "dcbbeb31f6c7bb4bc8e3f399739c404a147882efef7f50f715a1409428aa1e40",
-  "annotation_sha256": "451a1a9c95cf16a45f04b67faf765a64c80769527e9309b9ec85b5a6f2c0fbcd",
-  "reviewed_at": "2026-10-09T22:29:22.445339+00:00",
+  "annotation_sha256": "c444e148876937dd5012892ad9509e7a29224b6065758775a208190821f45bea",
+  "reviewed_at": "2026-10-10T02:14:28.114819+00:00",
   "source_segments_read": 21,
   "facts_reviewed": 156,
   "patients_reviewed": 2,
@@ -20,13 +20,16 @@
     "all captions and panel attribution"
   ],
   "corrections": [
-    "semantic-rules-2026-10 re-sign: verified all 24 M02 comparators '=' against evidence (no hidden '<'; printed '<0.3' and '<12' facts already carry '<'), M03 age texts '67-year-old' (case 1) and '55-year-old' (case 2) literal per patient. No annotation edits."
+    "semantic-rules-2026-10 re-sign: verified all 24 M02 comparators '=' against evidence (no hidden '<'; printed '<0.3' and '<12' facts already carry '<'), M03 age texts '67-year-old' (case 1) and '55-year-old' (case 2) literal per patient. No annotation edits.",
+    "GLUED-TEXT (cleanup pass 2): repair tool not applied (it left 'narrative12-15nm' and the 'Case1/Case2' tokens glued); fixed by hand in ambiguities, article_limitations and notes (wording only, source spellings): 'class III', 'creatinine 1.6 ... table 2.0', 'Body fibril 12-15 nm, table 10-15 nm and caption approximately 10-15 nm', 'Case 1'/'Case 2', 'Table 1', '1 g induction', 'approximately 0.5'. Patient labels already spaced and unchanged.",
+    "glue4 GLUED-TEXT (fix_label_digit_glue.py, all 12 proposed visual-submission field edits reviewed and applied): visual-submission Case1/Case2 -> 'Case 1'/'Case 2' in Figure 1 attribution rationales (assignments 0-7), panel 4/5 limitations and figure/visual limitations (source prints 'Case 1'/'Case 2'; Figure 1 viewed: only panel letters A-H are printed, no case labels). visual_target_sha256 recomputed in figure-EHR labels and privacy flags; visual, figure-EHR and privacy receipts re-signed.",
+    "glue4 ROSTER block added: reported_individual_count 2, roster_complete true (p1, p2 annotated); evidence b00010 'In this case series, we present 2 patients with biopsy-proven FGN and a history of SLE'. The 3 previously published cases are cited literature, not roster patients."
   ],
   "unresolved": [
-    "Two local index cases only. Three cited Table1 reports and unreported other local FGN cases are outside index roster.",
+    "Two local index cases only. Three cited Table 1 reports and unreported other local FGN cases are outside index roster.",
     "Association of SLE and FGN is not established causation; possible mechanisms are author speculation, not proven patient mechanisms.",
     "No individual RAAS inhibitor, blood-pressure drug, unstated doses/routes, maintenance dose amount, calendar dates or test assays inferred.",
-    "Case1 C3/C4 negative versus ↓/↓ and creatinine1.6 versus2.0; Case2 fibril diameter ranges differ between narrative/table/caption. Preserve distinct source statements without invented timing/correction.",
+    "Case 1 C3/C4 negative versus ↓/↓ and creatinine 1.6 versus 2.0; Case 2 fibril diameter ranges differ between narrative/table/caption. Preserve distinct source statements without invented timing/correction.",
     "Clinical companion represents caption-grounded findings; actual inspected biopsy figure is maintained in separate visual target/receipts."
   ],
   "assessment": {
@@ -37,8 +40,11 @@
     "reviewer": "Claude Opus 5.5 parent",
     "facts_reviewed": 156,
     "key_findings": [
-      "2026-10 re-sign (Claude Opus 5.5 parent): migration verified, no edits needed."
-    ]
+      "2026-10 re-sign (Claude Opus 5.5 parent): migration verified, no edits needed.",
+      "Cleanup pass 2: 19 glued text values fixed by hand; no time-only quotes in this article."
+    ],
+    "residual_risks": [],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
   },
   "physician_adjudicated": false
 }

@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "e7acd4e8d36ead68caaa048a5d298874d28299b0960392135e3010767f54aeab",
-  "annotation_sha256": "2f112b611a931fe0c563e43a4f5c550510f6c09d2493c8a943827be78816d9df",
-  "reviewed_at": "2026-10-09T22:45:53.767143+00:00",
+  "annotation_sha256": "4449896c3bb9c78420b637ec3e07bba183162c95ac88410846560de54d73a9c6",
+  "reviewed_at": "2026-10-10T01:57:08.945919+00:00",
   "source_segments_read": 28,
   "facts_reviewed": 137,
   "patients_reviewed": 1,
@@ -26,15 +26,20 @@
     "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M03: p1-f002 text_value '56-year-old' is the literal phrase for this age.",
     "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M12: anchors 'emergency presentation', 'early examination after cough/pop', 'hospital course' were paraphrases. Restored literal anchor 'presented to the emergency department' on p1-f011 ('4 days earlier'); p1-f075/f076 ('On hospital day 3') and p1-f137 ('By hospital day 16') are self-contained hospital-day times and keep anchor null.",
     "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Checked social facts: 'denied alcohol or recreational drug use' is assertion=absent/status unknown (not never).",
-    "opus-fixup: p1-f119 '3-month follow-up' anchor 'discharge' (borrowed from the Fig. 1 caption, not stated for the body follow-up) -> null, relation after -> unknown; garbled text_value/clinical_statement 'Body follow-up imaging time3months' -> '3-month follow-up'. p1-f120 garbled text_value/clinical_statement tidied to the literal '4 months after discharge' (time unchanged). Both stay source_conflict/review_only."
+    "opus-fixup: p1-f119 '3-month follow-up' anchor 'discharge' (borrowed from the Fig. 1 caption, not stated for the body follow-up) -> null, relation after -> unknown; garbled text_value/clinical_statement 'Body follow-up imaging time3months' -> '3-month follow-up'. p1-f120 garbled text_value/clinical_statement tidied to the literal '4 months after discharge' (time unchanged). Both stay source_conflict/review_only.",
+    "p1-f137: time 'By hospital day 16' relation unknown -> before (TIME-LITERAL 'by <time>' = no later than)",
+    "GLUED-TEXT (cleanup pass 2): repair tool not applied (it left 'smoking1.25pack-years' and most 'day3'/'Day10' tokens); fixed by hand (wording only, source spellings) across names, clinical_statements, text_value/finding, event descriptions, summary, ambiguities, limitations and notes: e.g. 'Age 56 years', 'type 2 diabetes', 'Former smoking 1.25 pack-years, quit 11 years earlier' (p1-f016), 'nasal cannula oxygen 3 L/minute', 'Saturation improved 86%→93%' (p1-f035), 'Sinus tachycardia 108 beats/min' (p1-f042, p1-f124), 'Day 3/Day 10/Day 15/day 16' in imaging and oxygen fact names, 'Completed 3-month dabigatran course' (p1-f111), 'Walking 10,000 steps' (p1-f116, p1-e08, summary), 'body 3-month versus caption 4-month' (p1-f131), 'Fig. 1B to 3 months while caption assigns 4 months' (ambiguity).",
+    "NO-BORROWING/TIME-ONLY QUOTES: p1-f025..p1-f029 (denied cough, nausea, vomiting, chest pain, diarrhea) took 'On arrival' from a separate sentence about weakness/hiccups; p1-f075/p1-f076 (no crepitus/respiratory distress on examination) took 'On hospital day 3' from the preceding complaint sentence. Times removed, time-only quotes dropped, 'day 3' removed from the two clinical_statements; ordering is kept by existing membership in events p1-e01 and p1-e03.",
+    "Cleanup3 GLUED visual submission: 'printed/caption4month ... case-body3month' -> 'printed/caption 4-month ... the case-body 3-month', 'Fig1B body3month versus caption/printed4month' -> 'Fig 1B body 3-month versus caption/printed 4-month', 'Fig1–4' -> 'Fig 1–4', 'on day10;' -> 'on day 10;'; Figures 1 and 3 re-viewed on pixels (printed 'Four months after discharge', 'After VAC hospital day 10'); visual_target_sha256 refreshed in figure-EHR labels and privacy flags.",
+    "Cleanup3 annotation free text: no glued tokens; no annotation change."
   ],
   "unresolved": [
     "This text/caption annotation layer does not use pixels; pixel inspection is recorded separately in the visual target and its review receipts.",
     "Original XML contains no tables. No explicit same-patient prior-report linkage identified; discussion of a different prior fatal case is a comparison.",
     "Medication doses and exact discharge date are not reported. hsCRP unit preserved as printed without conversion.",
-    "Follow-up radiograph3vs4month timing and broad positive-pressure-device terminology require review.",
+    "Follow-up radiograph 3- vs 4-month timing and broad positive-pressure-device terminology require review.",
     "No supplementary material, tables or unassigned media identified in original source/XML.",
-    "VAC removal date is unstated, not fixed to hospital day16. Historical A1c assay date and methodology unstated. Source follow-up imaging3/4months and broad no-positive-pressure wording remain quarantined.",
+    "VAC removal date is unstated, not fixed to hospital day 16. Historical A1c assay date and methodology unstated. Source follow-up imaging 3/4 months and broad no-positive-pressure wording remain quarantined.",
     "All explicit tests/device settings represented across supported schemas with shared fact provenance; added alternatives do not increase unique-fact counts.",
     "Three-month anticoagulant-course completion/home rehabilitation is not ordered strictly before the three-month follow-up; they may coincide. Added two numeric oxygen-flow alternatives share original support facts."
   ],
@@ -48,9 +53,13 @@
     "figures_viewed": 0,
     "key_findings": [
       "semantic-rules-2026-10 migration verified: 1 age text, 4 anchor nullings (1 restored with literal phrase).",
-      "opus-fixup: body 3-month follow-up no longer anchored to discharge."
+      "opus-fixup: body 3-month follow-up no longer anchored to discharge.",
+      "TIME-LITERAL 2026-10 'by <time>' audit: 1 fact(s) set to relation before after reading each source sentence",
+      "Cleanup pass 2: ~70 glued text values fixed by hand; 7 borrowed times nulled, none kept.",
+      "Cleanup3: visual prose respaced only."
     ],
-    "residual_risks": []
+    "residual_risks": [],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
   },
   "physician_adjudicated": false
 }

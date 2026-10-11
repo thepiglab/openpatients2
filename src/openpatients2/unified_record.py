@@ -267,9 +267,12 @@ def build_supplements(source, *, manifest=None, reviewed=(), statuses=None, pres
                             'classification': target['document_classification'],
                             'contents_summary': target['contents_summary'],
                             'archive': {k: target['archive'][k] for k in ('url', 'sha256', 'md5', 'members')} if target.get('archive') else None,
-                            'assets': [{k: deepcopy(a.get(k)) for k in ('url', 'member', 'sha256', 'page_count', 'pages')}
+                            'assets': [{k: deepcopy(a.get(k)) for k in ('url', 'member', 'sha256', 'page_count', 'pages',
+                                                                        'media_type', 'extraction', 'units', 'blocks')
+                                        if k in a or k in ('url', 'member', 'sha256', 'page_count', 'pages')}
                                        for a in target['assets']]}
-                owners |= {pid for a in target['assets'] for p in a['pages'] for pid in p['patient_ids']}
+                owners |= {pid for a in target['assets'] for p in a.get('pages', []) + a.get('blocks', [])
+                           for pid in p['patient_ids']}
             if target.get('clinical_data'):
                 clinical = deepcopy(target['clinical_data'])
                 owners |= {pid for f in clinical['facts'] for pid in f['patient_ids']}

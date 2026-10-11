@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "03faab40634210b7a28605d40a1bbd76843a4843354dcf2dbf7e35dc7df48977",
-  "annotation_sha256": "96771b50f4fc2196ccba401fcc620a1864d4a3e55c019b671a33f89d6ddeb206",
-  "reviewed_at": "2026-10-09T22:28:17.588884+00:00",
+  "annotation_sha256": "7e58564ba2593ee19119210834806e6578d849ab054f2f8ddde81e22ecc8ab15",
+  "reviewed_at": "2026-10-11T02:18:48.512219+00:00",
   "source_segments_read": 16,
   "facts_reviewed": 105,
   "patients_reviewed": 1,
@@ -25,7 +25,11 @@
     "Kept administered calcium-sensing receptor agonist class; cinacalcet is only an example, not a confirmed ingredient.",
     "Added supported diagnostic and scintigraphy phase ordering without inventing exact dates or time-zero.",
     "Condensed whole-paragraph statements into atomic clinical statements and focused literal evidence, preserving specimen and temporal anchors.",
-    "semantic-rules-2026-10 re-sign: verified 42 M02 comparator '=' additions (p1-f072 citrate 109 mg/day: the printed '>150' is the reference range, value itself '='); verified M03 p1-f002 '13-year-old' literal; verified 8 M12 nulled anchors were paraphrases with no literal time-zero in the source ('After 3 weeks' unanchored; scintigraphy '15 minutes later'/'2 hours later' injection not stated; 'while awaiting surgery' self-describing) — left null."
+    "semantic-rules-2026-10 re-sign: verified 42 M02 comparator '=' additions (p1-f072 citrate 109 mg/day: the printed '>150' is the reference range, value itself '='); verified M03 p1-f002 '13-year-old' literal; verified 8 M12 nulled anchors were paraphrases with no literal time-zero in the source ('After 3 weeks' unanchored; scintigraphy '15 minutes later'/'2 hours later' injection not stated; 'while awaiting surgery' self-describing) — left null.",
+    "Glued text (cleanup pass 2): applied repair_glued_text.py (23 tokens: before ESWL, after 3 weeks, high PTH, stone analysis, ambiguity text) and hand-respaced stone sizes 'up to 0.5×0.6 cm'/'pair 0.5×0.8 cm' (p1-f062, f064-f067), 'IV bisphosphonate', '77.76 mg/day', 'low citrate 109 mg/day', '2 hour'.",
+    "NO-BORROWING: p1-f084 iPTH and p1-f085 25-hydroxy vitamin D took 'After 3 weeks' from a time-only fragment of the preceding calcium/ALP sentence; their own sentence states no time. Removed the fragment quote and nulled time (relation unknown); ordering kept via the follow-up event p1-e013, which groups the same follow-up laboratory paragraph.",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (3 whitelisted label/number or number/unit spacing edits outside quotes in annotations (3); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=1, roster_complete=true, evidence b00004 \"we report a recent case of pHPT presenting as bilateral renal stones in a 13-year-old boy\"; 1 patients annotated in first-mention order."
   ],
   "unresolved": [
     "One original pediatric index patient; introductory/cohort cases and generic medication/genetic syndromes remain background.",
@@ -39,7 +43,8 @@
     "limitations": "Source-backed AI reference; not physician adjudication or measured exhaustive recall.",
     "reviewer": "Claude Opus 5.5 parent",
     "key_findings": [
-      "semantic-rules-2026-10: M02 (42), M03 (1), M12 (8) verified correct; no needs-review items; no annotation edits."
+      "semantic-rules-2026-10: M02 (42), M03 (1), M12 (8) verified correct; no needs-review items; no annotation edits.",
+      "Cleanup pass 2: glued text respaced; borrowed three-week time removed from iPTH and vitamin D (event membership kept)."
     ],
     "residual_risks": []
   },

@@ -32,9 +32,9 @@ def _json(path):
 def reviewed_transcriptions(root, aid):
     from supplement_review import reviewed_supplement_targets
     out = {}
+    from openpatients2.document_text import reviewed_text
     for target, _ in reviewed_supplement_targets(root, aid):
-        for t in (target.get('clinical_data') or {}).get('transcriptions', []):
-            out[(target['supplement_id'], t['transcription_id'])] = t['text']
+        out.update(reviewed_text(target))   # clinical transcriptions (+ extracted units of text documents)
     return out
 
 

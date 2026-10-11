@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "6e47e711890d283a2d2cecfe06637ecd31390f308d37a57df1c4f2de30f0458e",
-  "annotation_sha256": "a0d73c25cd7218b5e902ca53cf18f45808ce056676e127c79162a8306507e762",
-  "reviewed_at": "2026-10-09T22:36:19.269747+00:00",
+  "annotation_sha256": "2e1a2f03c8fd129f07d4ccbf754fe6f212f9e20d6cc027c863717227c5a706fa",
+  "reviewed_at": "2026-10-10T01:05:50.243877+00:00",
   "source_segments_read": 53,
   "facts_reviewed": 180,
   "patients_reviewed": 3,
@@ -21,7 +21,13 @@
   ],
   "corrections": [
     "semantic-rules-2026-10 re-sign: verified M05 p1-f046 GAD 1st test flag negative->normal (source: 'which was normal the first time'); verified M12 nulling of 8 paraphrased anchors",
-    "Restored literal source-tied anchors: 'first test' (p1-f045,p1-f047: '61 days after the first test'), 'prior discharge' (p3-f052: 'three months after her prior discharge'); 'over one month', 'two weeks', 'one year later' keep anchor null (no literal reference phrase tied to them)"
+    "Restored literal source-tied anchors: 'first test' (p1-f045,p1-f047: '61 days after the first test'), 'prior discharge' (p3-f052: 'three months after her prior discharge'); 'over one month', 'two weeks', 'one year later' keep anchor null (no literal reference phrase tied to them)",
+    "p1-f021: time 'By hospital day 40' relation at -> before (TIME-LITERAL 'by <time>' = no later than); anchor 'hospital day' kept (named in phrase)",
+    "p1-f022: time 'By hospital day 40' relation at -> before (TIME-LITERAL 'by <time>' = no later than); anchor 'hospital day' kept (named in phrase)",
+    "p1-f023: time 'By hospital day 40' relation at -> before (TIME-LITERAL 'by <time>' = no later than); anchor 'hospital day' kept (named in phrase)",
+    "p1-f060: time 'By hospital day 40' relation at -> before (TIME-LITERAL 'by <time>' = no later than); anchor 'hospital day' kept (named in phrase)",
+    "p1-f061: time 'By hospital day 40' relation at -> before (TIME-LITERAL 'by <time>' = no later than); anchor 'hospital day' kept (named in phrase)",
+    "Cleanup2 TIME-ONLY/NO-BORROWING p3-f039 (GAD antibody 2nd test): time '367 days after the original test' is in the same source sentence as the GAD result ('This time, 367 days after the original test, VGKC was 91 pmol/L and GAD was perplexingly positive at 134.5 IU/mL'); kept the time and replaced the result quote plus the separate time-only fragment with that single governing span. No glued text in this article."
   ],
   "unresolved": [
     "Caption-layer visual status not_inspected; actual figure pixels inspected in the separate visual submission.",
@@ -39,7 +45,9 @@
     "facts_reviewed": 180,
     "figures_viewed": 0,
     "key_findings": [
-      "Migration changes correct; anchors restored where the source states them"
+      "Migration changes correct; anchors restored where the source states them",
+      "TIME-LITERAL 2026-10 'by <time>' audit: 5 fact(s) set to relation before after reading each source sentence",
+      "Cleanup2: p3-f039 time kept with governing same-sentence quote."
     ],
     "residual_risks": []
   },

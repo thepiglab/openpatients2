@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "da0b5b1bd7634758071b2a3c88b02fd196c9a8c19d1c2c503ab1cb3e6eea68ea",
-  "annotation_sha256": "98276ea238331fa946cf5d0ab8b4b24d4ae93ad2237d0d152c7aa318260ecd30",
-  "reviewed_at": "2026-10-09T22:20:59.079977+00:00",
+  "annotation_sha256": "0dc305b891243195c107a1a8bebe03f7866338636218035686c172f110907577",
+  "reviewed_at": "2026-10-10T02:16:59.361057+00:00",
   "source_segments_read": 72,
   "facts_reviewed": 107,
   "patients_reviewed": 1,
@@ -20,7 +20,12 @@
     "all captions and panel attribution"
   ],
   "corrections": [
-    "semantic-rules-2026-10 re-sign: verified both M02 comparator '=' changes against b00014: body condition '3/5' and rectal temperature '38.5 ºC' are plain printed values with no comparator. No needs-review items; no annotation edits."
+    "semantic-rules-2026-10 re-sign: verified both M02 comparator '=' changes against b00014: body condition '3/5' and rectal temperature '38.5 ºC' are plain printed values with no comparator. No needs-review items; no annotation edits.",
+    "Cleanup3 NEGATION p1-f019: present functional_status 'Asymptomatic' (text_value 'asymptomatic') -> symptoms_function 'Symptoms', kind symptom, assertion absent; quote 'asymptomatic stray cat' keeps the cue.",
+    "Cleanup3 GLUED visual submission: 'toFig1' -> 'to Fig. 1' (Fig1 attribution rationale), 'and200μm' -> 'and 200 μm' (Fig3 panels a/b limitations); figure-EHR label and privacy-flag visual_target_sha256 refreshed; figures re-viewed on pixels.",
+    "glue4 GLUED-TEXT (fix_label_digit_glue.py, all 3 proposed edits reviewed and applied): text_value '... highlighted abnormal in Table1' -> 'Table 1' in p1-f021, p1-f028, p1-f054 (source prints 'Table 1').",
+    "glue4 ROSTER block added: reported_individual_count null (single-animal case report; no literal number of animals stated), roster_complete true (the one stray cat, p1, is annotated); evidence b00001 'were removed from the internal part of the spermatic cord from asymptomatic stray cat in Spain'. The previously patched schema-submission count 1 had no literal source number and is null on regeneration.",
+    "glue4 ROSTER update (orchestrator ruling: a singular case statement is evidence for count 1): reported_individual_count null -> 1, roster_complete true (p1 annotated); evidence b00004 'in a naturally infected cat ...'."
   ],
   "unresolved": [
     "Figure pixels were not inspected; visual details are restricted to captions.",
@@ -33,7 +38,8 @@
     "facts_reviewed": 107,
     "figures_viewed": 0,
     "key_findings": [
-      "Mechanical migration M02 correct for this article (2 changes)."
+      "Mechanical migration M02 correct for this article (2 changes).",
+      "Cleanup3: asymptomatic recorded as absent symptoms; visual-submission glued text respaced."
     ],
     "residual_risks": [
       "Prior parent review content otherwise unchanged; figures not re-viewed in this re-sign."

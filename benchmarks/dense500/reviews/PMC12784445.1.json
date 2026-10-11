@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "f5aae6e1e366d4e00d33fcd9a109d243c5dedc8d61ed753710ac5629f763e9e6",
-  "annotation_sha256": "c56965550f17b11e3291521a14b0e7a19f0bd927bf25903b6f623492d62a1fb7",
-  "reviewed_at": "2026-10-09T22:38:03.995620+00:00",
+  "annotation_sha256": "793c1201465c96745628bfb2882444c64c37e63fb4c321a2b6164fd4579f2475",
+  "reviewed_at": "2026-10-11T02:23:32.958278+00:00",
   "source_segments_read": 24,
   "facts_reviewed": 63,
   "patients_reviewed": 1,
@@ -21,11 +21,16 @@
   ],
   "corrections": [
     "semantic-rules-2026-10 re-sign: verified M02 comparators (troponin-T 165/690 ng/L '='; LVEF '~35%' '=' with text_value and note keeping the approximation, no printed <,>), M03 age '79-year-old', M12 nulling of paraphrased anchors on 'Four days later' (p1-f040,p1-f043,p1-f057): the source does not say whether it is four days after the MRI or the 2:1 AV block, so anchor stays null",
-    "NR001/NR002 (FIG-LABELS FIG3): viewed pixels, frames are unlettered; caption positions 'left'/'right' are not printed labels, so the two annotation panel rows were merged into one whole-figure row (panel null). Visual submission already used panel null; not edited"
+    "NR001/NR002 (FIG-LABELS FIG3): viewed pixels, frames are unlettered; caption positions 'left'/'right' are not printed labels, so the two annotation panel rows were merged into one whole-figure row (panel null). Visual submission already used panel null; not edited",
+    "Cleanup3 GLUED visual submission FIG4: 'and84.7mm(AHA)' -> 'and 84.7 mm (AHA)' (figure description and bullseye panels e/f; printed text verified on pixels as '84.7 mm (AHA)'), plus 'quantitative16-wedge' -> 'quantitative 16-wedge'; figure-EHR label and privacy-flag visual_target_sha256 refreshed; all six available figures re-viewed on pixels.",
+    "Cleanup3 GLUED annotation article_limitations[1]: 'Video1' -> 'Video 1' (printed label 'Video 1').",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (8 whitelisted label/number or number/unit spacing edits outside quotes in visual-submissions (8); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. Viewed FIG1, FIG4 and FIG5: printed text reads 'Speed: 25 mm/sec', 'Limb: 10 mm/mV', 'Chest: 10.0 mm/mV' and '84.7 mm (AHA)', so additionally hand-spaced the colons, '(AHA)' and 'Panele/Panelf'->'Panel e/Panel f' in those visual_cue fields.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=1, roster_complete=true, evidence b00002 \"We report a 79-year-old woman\"; 1 patients annotated in first-mention order.",
+    "GLUED-TEXT follow-up: respaced visual-submission FIG4 panels e/f limitations 'The printed84.7mm(AHA) label' -> 'The printed 84.7 mm (AHA) label' (2), FIG4 limitation 'All32' -> 'All 32', and FIG1/FIG5 filter string 'F50-0.05-150 Hz' -> 'F 50~ 0.05-150 Hz' (visual cues and descriptions) to match the printed ECG text viewed on the images; visual_target_sha256 recomputed in figure-EHR/privacy sidecars."
   ],
   "unresolved": [
     "Figure pixels were not inspected; visual details are restricted to captions.",
-    "Video1 and figures not visually inspected. No longer-term EF/AV-conduction recovery, pacing burden or survival endpoint reported.",
+    "Video 1 and figures not visually inspected. No longer-term EF/AV-conduction recovery, pacing burden or survival endpoint reported.",
     "Taken for PPCI does not establish that PCI was actually performed. No AKI diagnosis inferred from qualitative renal derangement.",
     "No explicit same-patient prior-report link found; cited prior case reports are described as other literature cases, not evidence of identity."
   ],
@@ -36,7 +41,8 @@
     "figures_viewed": 1,
     "key_findings": [
       "Migration changes correct against source",
-      "FIG3 invented position labels removed from annotation figures"
+      "FIG3 invented position labels removed from annotation figures",
+      "Cleanup3: visual-submission glued text respaced (FIG4)."
     ],
     "residual_risks": []
   },

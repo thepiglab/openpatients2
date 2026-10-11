@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "71e09c7c091b1d51c614f7cbc1f67bc7bf7bbac9e0deaf8bd34d13d7a9d86572",
-  "annotation_sha256": "eea0b74b7d17076a6c41ebc7f9878df3913e082f29d71ea0e81d2d6e3fce50c4",
-  "reviewed_at": "2026-10-09T22:25:12.517215+00:00",
+  "annotation_sha256": "a2f4a95177db0b0da602dc0dba3ce947dc505ce305d8215885d75ff382a150fc",
+  "reviewed_at": "2026-10-10T01:25:39.191383+00:00",
   "source_segments_read": 21,
   "facts_reviewed": 124,
   "patients_reviewed": 1,
@@ -23,11 +23,14 @@
     "semantic-rules-2026-10 re-sign: verified 22 M02 comparator '=' changes (eGFR, PSV, vitals, troponin, creatinine, echo, stent/wire sizes); no printed comparator adjacent to any of these values.",
     "Verified M03 text_value '85-year-old' literal for the single patient.",
     "Verified 14 M12 nulled anchors ('index admission', 'initial troponin T measurement', 'renal angiographic intervention...', 'index hospitalization discharge') were paraphrases; literal time.text retained. No other annotation edits.",
-    "Anchor restoration: for 9 facts whose paraphrased anchor was nulled by M12, set time.anchor to the literal source phrase the offset is relative to (e.g. 'admission', 'First time' table column, 'endoscopic procedure', 'starting rivaroxaban'); calendar dates, table ages and unstated references left null."
+    "Anchor restoration: for 9 facts whose paraphrased anchor was nulled by M12, set time.anchor to the literal source phrase the offset is relative to (e.g. 'admission', 'First time' table column, 'endoscopic procedure', 'starting rivaroxaban'); calendar dates, table ages and unstated references left null.",
+    "Glued text (cleanup pass 2): applied repair_glued_text.py (3 tokens: 'repeated labetalol', 'measured RAAS', 'pressure gradient') and hand-respaced 'hydralazine IV' (must_not_infer reworded minimally to 'No inferred /L unit, hydralazine IV route, ...'), creatinine values 'body 1.6–1.9 versus Figure 3 caption 1.6–9', 'Follow-up 1.5', 'discharge 1.5', 'post-stent 3.9', 'follow-up 1.5' in ambiguities/limitations and p1-f115 notes.",
+    "NO-BORROWING review: p1-f116 outpatient creatinine keeps 'short-term outpatient follow-up' — the Figure 3 caption quote states the same 1.5 mg/dL value in the same clause, so it is not a time-only quote. No change.",
+    "p1-f116 time.text changed from the caption wording 'short-term outpatient follow-up' to 'outpatient follow-up' from the fact's own narrative sentence ('At outpatient follow-up, his creatinine returned to baseline at 1.5 mg/dL'); caption quote retained as corroborating evidence of the same value."
   ],
   "unresolved": [
     "One original index patient. Literature/cohort thresholds and medication recommendations are background, not delivered patient therapies. No dialysis, measured RAAS, translesional pressure gradient, drug dose/route beyond source, fixed renal-stent stenosis percentage, calendar dates or long-term follow-up inferred.",
-    "Baseline body/caption creatinine conflict is retained review-only. Immediate post-stent3.9 and short-term follow-up1.5 are caption/text respectively; the chart discharge point is separately inspected pixel evidence.",
+    "Baseline body/caption creatinine conflict is retained review-only. Immediate post-stent 3.9 and short-term follow-up 1.5 are caption/text respectively; the chart discharge point is separately inspected pixel evidence.",
     "Left intervention did not proceed after failed crossing; right wire/balloon/stent and closure are distinct supported stages. Atheroembolism remains a differential. Caption-grounded clinical image companion and actually inspected pixels remain separate."
   ],
   "assessment": {
@@ -36,7 +39,8 @@
     "facts_reviewed": 124,
     "figures_viewed": 0,
     "key_findings": [
-      "Mechanical migrations M02/M03/M12 correct; no needs-review items."
+      "Mechanical migrations M02/M03/M12 correct; no needs-review items.",
+      "Cleanup pass 2: glued numeric/ambiguity text respaced; outpatient creatinine time verified as governed."
     ],
     "residual_risks": [
       "Guidewire/stent dimensions are represented as 'other' observations in addition to the device items (pre-existing choice, not changed). Figures not re-viewed in this re-sign."

@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "0cf7ba904d9a6053ca7cf5621ebb28b217efd74230e0fc995a3e50d1aa71e4a9",
-  "annotation_sha256": "497bc860bad7021e307548de07b3b298289c61fd17efc97c8f1890f38f7f5a64",
-  "reviewed_at": "2026-10-09T22:29:45.614361+00:00",
+  "annotation_sha256": "68770cdf39d3ec06539e87f1080d84733ec9d55abb8a9fbeb0dc8ea3374f8c70",
+  "reviewed_at": "2026-10-10T01:59:28.924050+00:00",
   "source_segments_read": 24,
   "facts_reviewed": 120,
   "patients_reviewed": 1,
@@ -22,14 +22,18 @@
   "corrections": [
     "Following-days interval marked approximate; one-week oral supplement course encoded as duration.",
     "Global image-inspection limitation scoped to caption layer, with independent actual-image target.",
-    "semantic-rules-2026-10 re-sign: verified M12 anchor 'CsA dose escalation' (paraphrase) nulled on p1-f012/p1-f013; p1-f012 is the escalation itself ('over 1 year' is its own duration, anchor left null); p1-f013 trough monitoring anchor restored with literal source phrase 'dose escalation'."
+    "semantic-rules-2026-10 re-sign: verified M12 anchor 'CsA dose escalation' (paraphrase) nulled on p1-f012/p1-f013; p1-f012 is the escalation itself ('over 1 year' is its own duration, anchor left null); p1-f013 trough monitoring anchor restored with literal source phrase 'dose escalation'.",
+    "Glued text (cleanup pass 2): applied repair_glued_text.py (3 tokens: 'within 48 hours' in p1-e23 and p1-f093 notes, 'first 14 hospital days' in Figure 1 panel description) and hand-respaced 'within 48 h'/'within hours', 'Figure 1', 'Table 1' (ambiguity, article_limitations), 'Day 10' (p1-e011), '24-hour urine 1.10 g/m²/day and UPCR 623 mg/mmol' (p1-f116), 'over 1 year' (p1-f119), 'figure 1' (p1-f054/f055 notes). 'MgSO4' is a chemical formula and stays. No time-only quotes or negation-word rows for this article.",
+    "Cleanup3 GLUED visual submission (Figure 1 chart, Figure 2 algorithm): respaced letter-digit and punctuation glue by hand, e.g. 'days0–14' -> 'days 0–14', 'printed0.14,0.61,0.75 beside day10/11/14' -> 'printed 0.14, 0.61, 0.75 beside day 10/11/14', 'eGFR(mL/min/1.73m²),0–120', 'ticks0,2,4,...,14', 'approximatelyday10'/'approximatelydays10–14' -> 'approximately day 10'/'approximately days 10–14', 'x approximately0..14', 'left0–6axis'/'right0–120axis', 'hospital day10/11/14', 'day0.7–1.3'...'day10.6–14', 'below3 ... approximately3.4arounddays8–10 and approaches4.7on day14', 'First14hospitaldays', 'Figure1/Figure3', 'False(left)'/'True(right)'/'No(left)'/'Yes(right)', '>13mEq/g' -> '> 13 mEq/g' and '<20mmol/L'/'>20mmol/L' -> '< 20 mmol/L'/'> 20 mmol/L' (matching the spaced printed text in the image), 'boxes<20and>20mmol/L'; Figures 1 and 2 re-viewed on pixels; no values, labels or ownership changed; visual_target_sha256 refreshed in figure-EHR labels and privacy flags.",
+    "Cleanup3 TIME p1-f014 CsA: 'several months before admission' kept - its sentence 'This dose was maintained for several months before admission' refers back to the escalated CsA dose (governs the fact per the Cleanup3 ruling).",
+    "Cleanup3 annotation free text: no glued tokens; no annotation change."
   ],
   "unresolved": [
     "Caption-layer visual fields remain text-only; a separate actual-pixel visual submission covers all three source images.",
     "No FEMg or baseline magnesium; likely cyclosporine etiology does not prove causality or renal magnesium wasting.",
     "Abstract normal renal function/basic panel versus untimed discussion transient renal impairment is review-only; detailed named normal/low labs retained.",
-    "Figure1 precise values/treatment bars not stated in retained text are described in separate actual-pixel targets, not fabricated text quotes.",
-    "No completed outpatient follow-up or CsA restart. Generic Table1/algorithm guidance not patient-specific orders."
+    "Figure 1 precise values/treatment bars not stated in retained text are described in separate actual-pixel targets, not fabricated text quotes.",
+    "No completed outpatient follow-up or CsA restart. Generic Table 1/algorithm guidance not patient-specific orders."
   ],
   "assessment": {
     "clinical_course": "Personally read all24 source units and original generic monitoring table, all120 representations including2review-only ambiguities, all14 clinical schemas,23timeline phases/21edges and5summary claims. Case includes steroid failure/high CsA dose escalation, shock/resuscitation, refractory potassium, day10tetany and first Mg0.14, IV then oral Mg response, temporary CsA hold and planned follow-up. No proven renal Mg wasting or completed follow-up inferred.",
@@ -38,7 +42,9 @@
     "reviewer": "Claude Opus 5.5 parent",
     "facts_reviewed": 120,
     "key_findings": [
-      "2026-10 re-sign (Claude Opus 5.5 parent): migration verified; one anchor restored with literal phrase."
+      "2026-10 re-sign (Claude Opus 5.5 parent): migration verified; one anchor restored with literal phrase.",
+      "Cleanup pass 2: glued free text respaced; no meaning changes.",
+      "Cleanup3: visual chart/algorithm prose respaced; CsA time kept under the refers-back ruling."
     ]
   },
   "physician_adjudicated": false

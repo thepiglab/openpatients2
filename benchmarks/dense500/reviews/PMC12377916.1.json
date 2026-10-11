@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12377916.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8a14a4d1e735ea3d1baada5b62568024f3521a9049c2a67aab978780d126902a",
+  "annotation_sha256": "2dab533b9b61bb347a92b310c651b6f58d00735724e2ba9522926f4dab13b746",
+  "reviewed_at": "2026-10-10T00:40:45.646460+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 89,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f027, p2-f032, p3-f030: series-level \"In our series, no bowel perforation or related complications were observed\" copied to each patient (NO-COHORT-COPY); recorded as article limitation; summary sentences removed.",
+    "p2: merged p2-f011 (partial communication with the abdominal cavity) into p2-f012 (partial fascial dehiscence with bowel exposure) as one POD 19 item with abstract, text and Fig. 3 caption quotes; references repointed.",
+    "p2-f016 necrotic tissue timed On POD 19 from Fig. 3 caption quote and linked to event p2-e04.",
+    "p1: added ambiguity for abstract POD 9/POD 34 and \"suture closure\" versus text rPOD 9/rPOD 34 and \"fascial repair\".",
+    "F1 attribution note: panel A appears identical to Fig. 2A on pixels but stays unresolved (no ownership evidence).",
+    "Source coverage: b00010 protocol -> background, b00018 series discussion -> aggregate."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual 4 JPEGs inspected in the separate visual submission.",
+    "Protocol statements in b00010 (normal saline instillation, dressing changes every 48-72 h, starting pressure 125 vs 50 mmHg, definition of wound healing) are stated for the institutional protocol, not individually for each patient, and were not copied to individual patients as facts; patient-specific pressures come from each case narrative.",
+    "Discussion durations (healing within 28-32 days after NPWTi-d initiation in 2 cases; 29 days in one case) are aggregate and are not assigned to patients; case 2 final healing is explicitly unconfirmed.",
+    "Case 3 POD 55 wound state differs between text (fully epithelialized) and Fig. 4 caption (sutured closed).",
+    "Cause of case 2 sigmoid perforation, histology/stage of cecal and rectal cancers, and diagnostic tests are not described.",
+    "No laboratory, imaging or microbiology results are reported for any patient; observations are not documented.",
+    "Series-level statement \"In our series, no bowel perforation or related complications were observed\" (b00018) is not copied to individual patients (rule NO-COHORT-COPY); likewise the aggregate healing durations in b00019."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 93,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Three index patients numbered by case order; F2/F3/F4 are cases 1-3 by caption; F1 methods figure unresolved.",
+      "Protocol (b00010) and discussion durations (b00019) correctly kept out of patient facts.",
+      "Case 3 POD 40 suture closure / POD 55 fully epithelialized (text) vs \"sutured closed on POD 55\" (Fig. 4D caption) kept as ambiguity.",
+      "Ileocecal resection and Hartmann procedures are not recorded as oncology treatments; intent is not stated.",
+      "F4A ruler strip carries device-brand text with blank fields; pubic hair at the lower edge; flags confirmed on pixels."
+    ],
+    "residual_risks": [
+      "SSI for case 2 rests on the case-series framing (b00009/b00003) plus \"severe infection\"; the case 2 text never says SSI.",
+      "Final healing time for case 2 unknown; aggregate 28-32/29-day durations unassigned.",
+      "Cancer histology/stage and the cause of the sigmoid perforation are not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

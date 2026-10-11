@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC12734214.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "33c8e8070b890e79c53689a9e1c0aacce2e330b33bf4000eeaf2eac37c708b85",
+  "annotation_sha256": "cec9f2faab860b6ec991f44a072b08a6326d1060f64d3b7a996a851482be3993",
+  "reviewed_at": "2026-10-11T02:41:03.008107+00:00",
+  "source_segments_read": 46,
+  "facts_reviewed": 166,
+  "patients_reviewed": 11,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "ROSTER-ORDER: Table 2 ID 4 is individually identified in b00010 (\"Only one patient (ID 4) ... comorbid psoriatic arthritis\") before Table 2, so renumbered it p1 (with that quote as first identity evidence); Table 2 IDs 1-3 became p2-p4, IDs 5-11 unchanged; all fact/event/relation/summary/ambiguity ids repointed",
+    "Added article limitation: Figure 1B DLQI bars (about 2.6 IV, about 0.4 SC) do not match Table 2 DLQI means 4.27 and 0.00",
+    "Added article limitation documenting the first-mention numbering"
+  ],
+  "unresolved": [
+    "Retrospective case series: only Table 2 gives individual-level values (age, sex, IV and SC months, PASI, DLQI, total treatment time); there is no narrative per patient and no individual dates.",
+    "Cohort statements (means, 81% or 81.8% PASI no-worsening, DLQI improvement in 100%, PGA 8:3 and 10:1, TSQM-9 scores) are not copied to individuals; individual PGA and TSQM-9 values are not reported.",
+    "Statements that explicitly cover all patients (moderate to severe plaque psoriasis vulgaris, IV-IFX 5 mg/kg, failed traditional systemic therapy, self-administered SC-IFX for 12 months, full compliance, at least 12 months follow-up, no adverse reactions) are recorded for each patient with that wording in the evidence.",
+    "Table 2 total treatment time for the row with IV 9 and SC 12 months prints 22 rather than 21; kept as printed and flagged review_only.",
+    "The abstract says DLQI improved in 100% of patients, but Table 2 lists one patient with DLQI 0 under both IV and SC; the text also cites Table 1 for PASI scores that appear in the table labelled Table 2, and Figure 1B for TSQM percentages that belong to Figure 2B. None reconciled.",
+    "PASI and DLQI assessment timepoints are given only at cohort level (SC initiation and 48 weeks, TSQM-9 at end of IV and after 12 months SC); individual cells carry no timepoint.",
+    "Caption-layer visual status is not_inspected; the three charts are inspected in the visual submission.",
+    "Patients are numbered by first mention: Table 2 ID 4 is individually named in the methods text (comorbid psoriatic arthritis) before the table, so it is p1; Table 2 IDs 1-3 are p2-p4 and IDs 5-11 keep p5-p11.",
+    "Figure 1B DLQI bars (read about 2.6 for IV and about 0.4 for SC) do not match the Table 2 DLQI means (4.27 and 0.00) or the text value 0.00 after switching; not reconciled."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 46,
+    "facts_reviewed": 166,
+    "figures_viewed": 3,
+    "key_findings": [
+      "All 11 Table 2 rows checked cell by cell (age, sex, IV months, PASI, DLQI, SC months, TTT); values match; 6 F / 5 M matches text",
+      "Table ID 3 TTT 22 vs IV 9 + SC 12 = 21 kept as printed, ambiguous review_only; all other rows sum correctly",
+      "Per-patient copies limited to statements explicitly about all patients (moderate-severe disease, IV 5 mg/kg by trained personnel, prior failed traditional systemic therapy without naming agents, SC self-administered 12 months, full compliance, at least 12 months follow-up, no adverse reactions in any patient)",
+      "DLQI improved in 100% conflicts with Table 2 ID 6 (0 and 0); Table 1/Figure 1B mis-citations kept as limitations only",
+      "Three aggregate figures viewed; bar readings estimated_from_plot; no patient attribution"
+    ],
+    "residual_risks": [
+      "Individual PASI/DLQI cells carry no assessment timepoint",
+      "Renumbering means p1 is Table 2 ID 4; downstream consumers must not assume table-row order"
+    ]
+  },
+  "physician_adjudicated": false
+}

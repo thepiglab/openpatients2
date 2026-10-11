@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC12646710.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3460d9931763330d2e4055bcc189facb5144978f5ed8d2497cc6e1e1f988d806",
+  "annotation_sha256": "d40a2c9211be51e165a23c043bcdf2d5d2fd6c43d3707c0f260cce9ef1867a82",
+  "reviewed_at": "2026-10-10T00:31:44.325761+00:00",
+  "source_segments_read": 11,
+  "facts_reviewed": 85,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged duplicate buying-spree symptom p1-f028 into p1-f029 (both quotes kept; references repointed).",
+    "Merged duplicate transient-hypertension adverse effect p1-f072 into p1-f071 (references repointed).",
+    "Deleted care plan p1-f078: abstract \"Nifedipine was offered\" restates the administered nifedipine (p1-f062); drug administration is not a care plan; offered/administered wording kept as ambiguity.",
+    "p1-f014 removed paraphrased time anchor \"ESK-NS\" (anchor null).",
+    "p1-f010 removed episode duration from the severity field.",
+    "p1-f012 suicide attempts given their own literal time \"in 2017 and 2019\" with an extended quote.",
+    "p1-f035 added quote for \"moderately severe\" severity.",
+    "p1-f048 By-phrase relation unknown -> before, consistent with other \"By <month>\" items.",
+    "p1-f058 prior lithium dose action current -> historical.",
+    "p1-f059 lithium increase given literal indication \"To prevent any potentially unrecognized hypomania\" (b00007).",
+    "p1-f066/f067 removed \"personal preference\" as indication of declined ECT/rTMS (reason for refusal, not indication).",
+    "Side-effect ambiguity expanded: attribution to the ESK-NS course with concomitant drugs; b00008 discussion sentence noted.",
+    "Added event p1-e22 (side effects throughout treatment) and relations e03<e05, e08<e10, e20 after e10, e22 after e10; e20 linked to SBP<160, no-symptom and no-complication facts.",
+    "Visual submission Figure 1: corrected esketamine arrow (upward, shaft from just left of 2023 to beyond 2024) and buying-spree bar position (between 2023 and 2024, near 2024).",
+    "Figure EHR label Figure 2 rationale corrected (no bars); privacy Figure 1 notes corrected (no PHQ-9 values); Figure 2 flagged timestamps_or_device_text for printed day-level assessment dates."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual 2 images inspected in the separate visual submission.",
+    "Fifth depressive episode dated December 2023 in text/Figure 2 but 2024 in the Figure 1 caption; both retained.",
+    "Esketamine dose per administration, CTA result and exact start dates of monthly and second induction phases are not stated.",
+    "Discussion statements about esketamine approvals, hypertension monitoring and published studies are background, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 11,
+    "facts_reviewed": 88,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient, 62-year-old man with TR bipolar II depression; all clinical facts in b00001-b00004, b00006-b00007 and captions.",
+      "Fifth-episode dating conflict (Fig1 caption/pixels 2024 vs text/Fig2 December 2023) kept as source_conflict review_only p1-f015.",
+      "Nifedipine administered per case text; abstract \"offered\" kept as ambiguity only.",
+      "Side effects attributed by the authors to the ESK-NS treatment course (\"the treatment\", \"after each administration\"); kept as adverse effects with an ambiguity about concomitant drugs.",
+      "Maintenance 2.1/2.2 frequencies and day-level PHQ-9 dates exist only in Figure 2 pixels (visual submission), not text."
+    ],
+    "residual_risks": [
+      "Esketamine dose, CTA result and the start dates of monthly dosing and second induction are not stated.",
+      "Businessman vs retired in 2012 unresolved.",
+      "\"By <month>\" PHQ-9 times use relation before (upper bound); exact assessment dates only in Figure 2."
+    ]
+  },
+  "physician_adjudicated": false
+}

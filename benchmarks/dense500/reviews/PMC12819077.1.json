@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "4cb148ec9908c44a2aab2cf9d22aa011749e491fdcbc7bc572334f6588c628c3",
-  "annotation_sha256": "b6601986f3a1ff24718794e60ebff32d434e147635b9bb0476ce9784a37089fc",
-  "reviewed_at": "2026-10-09T23:00:55.947518+00:00",
+  "annotation_sha256": "739eaab843b8bb36262eb96fa427d58cc582a8b997709aadefd4a8e1f983d1d7",
+  "reviewed_at": "2026-10-10T02:16:47.869023+00:00",
   "source_segments_read": 17,
   "facts_reviewed": 104,
   "patients_reviewed": 1,
@@ -23,7 +23,10 @@
     "semantic-rules-2026-10 re-sign: verified M03 age '50-year-old' and M12 nulling of 8 paraphrased anchors",
     "Restored literal source-tied anchors: 'discharge' (p1-f024), 'lidocaine infusion' (p1-f050, 'The lidocaine infusion was paused after four days of therapy'), 'primary closure' (p1-f055), 'initial block' (p1-f069,p1-f075), 'salvage stellate ganglion blockade' (p1-f076); 'five days later' (p1-f064) and IABP 'two days' (p1-f072) keep anchor null because the reference is not stated unambiguously",
     "OBS-COMPARATOR: p1-f032 VT rate \"up to 214 beats/min\" comparator = -> <= (upper-bound wording, not a stated peak value).",
-    "  p1-f032: comparator = -> <="
+    "  p1-f032: comparator = -> <=",
+    "glue4 GLUED-TEXT (fix_label_digit_glue.py, the single proposed edit reviewed and applied): visual-submission Figure 1 attribution rationale 'references Figure1.' -> 'references Figure 1.' (source prints 'Figure 1'; the cardiac MRI image has no printed text, viewed). visual_target_sha256 recomputed in figure-EHR labels and privacy flags; visual, figure-EHR and privacy receipts re-signed.",
+    "glue4 ROSTER block added: reported_individual_count null (single-case report; no literal number stated), roster_complete true (p1 annotated); evidence b00004 'This report presents a case of severe DSP cardiomyopathy'. The previously patched schema-submission count 1 had no literal source number and is null on regeneration.",
+    "glue4 ROSTER update (orchestrator ruling: a singular case statement is evidence for count 1): reported_individual_count null -> 1, roster_complete true (p1 annotated); evidence b00004 'presents a case of ...'."
   ],
   "unresolved": [
     "This text/caption annotation layer does not use pixels; pixel inspection is recorded separately in the visual target and its review receipts.",

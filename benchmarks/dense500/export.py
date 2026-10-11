@@ -32,7 +32,8 @@ STALE_RECEIPT_POLICY='withhold'
 # completed with the reasons in article_checklist.json (`runtime_gate_errors`); 'raise' aborts.
 RUNTIME_GATES=True
 # Page-reviewed supplements (PDF, or PDF members of a declared ZIP): never image panels.
-DOCUMENT_SUPPLEMENT_FORMATS=('dense-supplemental-document-reference/1','dense-supplemental-archive-document-reference/1')
+DOCUMENT_SUPPLEMENT_FORMATS=('dense-supplemental-document-reference/1','dense-supplemental-archive-document-reference/1',
+                             'dense-supplemental-text-document-reference/1')
 # Media that cannot be obtained: a figure the dual-signed visual review records as status
 # 'unavailable' (the source declares no asset; limitations required) and a supplement declared
 # only as an external link (no fetchable PMC asset, e.g. YouTube; the dual-signed manifest row is
@@ -93,6 +94,8 @@ def supplement_inventory(source, reviewed=(), manifest=None):
         external=external_unavailable_supplements(manifest)
     def status(sid):
         if sid in completed:
+            if completed[sid][0].get('format')=='dense-supplemental-text-document-reference/1':
+                return 'agent_and_parent_source_and_document_text_reviewed'
             return ('agent_and_parent_source_and_document_pages_reviewed'
                     if completed[sid][0].get('format') in DOCUMENT_SUPPLEMENT_FORMATS
                     else 'agent_and_parent_source_and_pixels_reviewed')
@@ -359,8 +362,17 @@ def write_checklist(statistics, manifest):
             articles[aid]['runtime_gates']=row['runtime_gates']
         withheld=[r for r in (row['review_status'],row['full_schema_review_status'])
                   if r in ('stale_source_review_receipt','invalid_annotation','stale_schema_receipt','invalid_schema_target','runtime_gate_failed')]
+        if row.get('pixel_review_status')=='stale_visual_receipt':
+            withheld.append('stale_visual_receipt')
+        if any(sidecars.get(n)=='stale_or_invalid' for n in ('figure_ehr_labels','figure_privacy_flags')):
+            withheld.append('stale_figure_sidecar_receipt')
+        if any(sidecars.get(n)=='stale_or_invalid' for n in ('supplement_manifest','measurement_series')):
+            withheld.append('stale_sidecar_receipt')
+        if row.get('stale_supplement_receipt'):
+            withheld.append('stale_supplement_receipt')
         if withheld:
-            articles[aid]['withheld']={'statuses':withheld,'reason':row.get('withheld_reason'),
+            articles[aid]['withheld']={'statuses':withheld,'reason':row.get('withheld_reason') or row.get('stale_supplement_receipt')
+                                       or '; '.join(f'{k}: {v}' for k,v in (row.get('ehr_sidecar_errors') or {}).items())[:500] or None,
                 'runtime_gate_errors':(row.get('runtime_gates') or {}).get('errors',[])[:10]}
     checklist={
         'format':'dense-article-checklist/1',
@@ -492,7 +504,12 @@ def main():
                     'figure_id':fig.get('figure_key') or fig.get('figure_id')}
                     for fig in source.get('figures',[])]
                 from supplement_review import reviewed_supplement_targets
-                supplements=reviewed_supplement_targets(root,aid)
+                try:
+                    supplements=reviewed_supplement_targets(root,aid)
+                except (ValueError,KeyError,TypeError,FileNotFoundError) as exc:
+                    if STALE_RECEIPT_POLICY!='withhold':
+                        raise
+                    supplements=[]; row['stale_supplement_receipt']=str(exc)[:500]
                 row['source_supplements']=supplement_inventory(source,supplements,manifest=signed_manifest)
                 record['source_supplements']=row['source_supplements']
                 documents=[(st,sr) for st,sr in supplements if st.get('format') in DOCUMENT_SUPPLEMENT_FORMATS]
@@ -549,7 +566,15 @@ def main():
                     from openpatients2.figure_visuals import panel_columns
                     from visual_review import reviewed_visual_target
                     target,receipts=reviewed
-                    visual=reviewed_visual_target(root,aid)
+                    try:
+                        visual=reviewed_visual_target(root,aid)
+                    except (ValueError,KeyError,TypeError,FileNotFoundError) as exc:
+                        # A stale visual receipt (e.g. the patient identity hash changed after a label respacing)
+                        # withholds THIS article with a reason; it never aborts the release.
+                        if STALE_RECEIPT_POLICY!='withhold':
+                            raise
+                        visual=None; row['pixel_review_status']='stale_visual_receipt'
+                        row['withheld_reason']=str(exc)[:500]
                     visual_rows=[]
                     if visual:
                         from openpatients2.figure_ehr import derive_default
@@ -573,7 +598,7 @@ def main():
                             'panel_ehr':[{'article_id':aid,'figure_id':r['figure_id'],'panel':r['panel'],'patient_ids':r['patient_ids'],
                                           **{k:copy.deepcopy(r[k]) for k in EHR_PANEL_FIELDS}} for r in visual_rows]})
                         figure_panels.extend(visual_rows)
-                    elif not source.get('figures'):
+                    elif not source.get('figures') and row['pixel_review_status']!='stale_visual_receipt':
                         row['pixel_review_status']='no_source_figures'
                     supplemental_rows=[]
                     for st,sr in supplements:

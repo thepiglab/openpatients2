@@ -1,0 +1,53 @@
+{
+  "article_id": "PMC12723276.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "88d83a63168f9ff5e2a6094f1f2235df64cf27a35211fd711e57f2ec2df89f5e",
+  "annotation_sha256": "36541f1bf8861b88129668a25bb5214a10f0514084217e507ee6a2506cee5ef5",
+  "reviewed_at": "2026-10-11T02:43:26.537816+00:00",
+  "source_segments_read": 10,
+  "facts_reviewed": 34,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Deleted p1-f026 dapsone allergies adverse_effect item: source gives elevated creatinine only as the reason for discontinuation, not as a dapsone reaction (NO-INFERENCE); ambiguity added; allergies domain set not_documented",
+    "p1-f031 \"Within 3 months of starting therapy\": relation after -> before (upper bound), literal anchor starting therapy kept",
+    "p1-f023 prednisone: removed inferred indication eosinophilia",
+    "Event p1-e02 now links Fig 2B/2C histology facts p1-f013/p1-f014 to the biopsy",
+    "Added p1-f035 clinical remission induced on dupilumab (b00006)",
+    "Ambiguity added: from Puerto Rico has no schema field and must not become race/ethnicity"
+  ],
+  "unresolved": [
+    "Figure captions only in this record; pixels viewed in the separate visual submission.",
+    "No dates, eosinophil counts, creatinine values, prednisone doses or routes of administration are reported.",
+    "Discussion of the literature (other cases, cohort of 158 patients, mechanisms) is background and not attributed to the patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 10,
+    "facts_reviewed": 34,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient; case text, discussion patient sentences and both captions checked against every fact.",
+      "\"eosonophils\" kept literally in the Fig 2A quote; Fig 2A folded into the text biopsy fact because the text cites Fig 2 for that biopsy; 2B/2C kept as separate caption-only findings without borrowed time.",
+      "Fig 1 caption sites (left lower extremity, upper/lower back) vs text back and arms kept as ambiguity; all panels attributed to p1.",
+      "\"months after\" (after) and \"long history\" (since) left as literal times; no invented order between prednisone courses and other therapies.",
+      "Visual descriptions verified on pixels and appropriately hedged (cell types not claimed)."
+    ],
+    "residual_risks": [
+      "Dupilumab dose sentence names no drug; drug identity taken from the immediately preceding decision sentence included in the evidence.",
+      "No dates, counts or creatinine values in the source."
+    ]
+  },
+  "physician_adjudicated": false
+}

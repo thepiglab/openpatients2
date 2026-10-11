@@ -299,6 +299,9 @@ class PointSelection(_Strict):
     offset_unit: Literal['seconds', 'minutes', 'hours', 'days', 'weeks', 'months', 'years'] | None
     offset_anchor_text: str | None
     offset_basis: str | None
+    # Optional documented cell meaning (refused/discontinued/...) from a printed legend cell (context role).
+    cell_status: Literal['refused', 'discontinued', 'held', 'not_given', 'prn_or_emergency'] | None = None
+    legend_cell_id: str | None = None
 
 
 class SeriesSelection(_Strict):
@@ -322,7 +325,9 @@ Group value cells into series: one series = one measurement for one patient (or 
 Refer to cells ONLY by cell_id; never type a number. measurement_name must be text from the name cell. Use time_cell_id for the
 column/row header giving the time point, with time_text copied from that cell; set offset_value/offset_unit only when the number
 is printed in time_text (or 0 for the first/baseline point, with offset_basis). unit_text must be copied from the cell named by
-unit_cell_id (e.g. a reference-range or header cell). Patient ownership needs a literal quote from an article segment or a cell;
+unit_cell_id (e.g. a reference-range or header cell). Set cell_status (refused, discontinued, held, not_given,
+prn_or_emergency) only when a printed legend/footnote cell (legend_cell_id) defines the cell's token or footnote marker;
+a dash is never zero. Patient ownership needs a literal quote from an article segment or a cell;
 aggregate/cohort tables are 'aggregate'. Skip rows that are not serial measurements. Do not convert units.'''
 
 
@@ -350,7 +355,9 @@ def check_series(value, source, annotation, draft, transcriptions=None):
                            'time': {'time_cell_id': p.time_cell_id, 'time_text': p.time_text, 'offset_value': p.offset_value,
                                     'offset_unit': p.offset_unit, 'offset_anchor_text': p.offset_anchor_text,
                                     'offset_basis': p.offset_basis},
-                           'parse_status': status, 'parsed': parsed, 'unit_text': p.unit_text, 'unit_cell_id': p.unit_cell_id})
+                           'parse_status': status, 'parsed': parsed, 'unit_text': p.unit_text, 'unit_cell_id': p.unit_cell_id,
+                           **({'cell_status': p.cell_status, 'legend_cell_id': p.legend_cell_id}
+                              if p.cell_status or p.legend_cell_id else {})})
         series.append({'series_id': f's{i}', 'measurement_name': s.measurement_name, 'name_cell_id': s.name_cell_id,
                        'measurement_kind': s.measurement_kind, 'ownership': s.ownership, 'patient_ids': s.patient_ids,
                        'ownership_evidence': [e.model_dump() for e in s.ownership_evidence],
@@ -397,10 +404,12 @@ def load_transcriptions(folder, article_id):
     out = {}
     if not folder:
         return out
+    from .document_text import reviewed_text
     for path in sorted(Path(folder).glob(f'{article_id}*.json')):
         target = json.loads(path.read_text())
-        for t in (target.get('clinical_data') or {}).get('transcriptions', []):
-            out[(target['supplement_id'], t['transcription_id'])] = t['text']
+        if target.get('supplement_id'):
+            # Text-document sidecars also offer every extracted unit (the same text reviewers read).
+            out.update(reviewed_text(target))
     return out
 
 
@@ -446,7 +455,8 @@ def output_from_sidecar(task, sidecar_part):
                             'ownership_evidence': s['ownership_evidence'], 'reference_range_cell_id': s['reference_range_cell_id'],
                             'points': [{'value_cell_id': p['value_cell_id'], **{k: p['time'][k] for k in ('time_cell_id', 'time_text',
                                         'offset_value', 'offset_unit', 'offset_anchor_text', 'offset_basis')},
-                                        'unit_cell_id': p['unit_cell_id'], 'unit_text': p['unit_text']} for p in s['points']]}
+                                        'unit_cell_id': p['unit_cell_id'], 'unit_text': p['unit_text'],
+                                        **{k: p[k] for k in ('cell_status', 'legend_cell_id') if p.get(k) is not None}} for p in s['points']]}
                            for s in sidecar_part['series']]}
     raise ValueError(task)
 

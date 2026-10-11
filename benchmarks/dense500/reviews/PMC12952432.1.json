@@ -1,11 +1,11 @@
 {
   "article_id": "PMC12952432.1",
-  "reviewer": "parent assistant",
+  "reviewer": "Claude Opus 5.5 parent",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "e4bb54ff7e90a4e2c4ac72f89df011bb2ca398082794e21d15679ead04868bc4",
   "annotation_sha256": "d3a063ef10b248ee7d0f35bd4dc0f106376edc499d8a077254ce51828f33f14c",
-  "reviewed_at": "2026-10-09T22:35:23.944513+00:00",
+  "reviewed_at": "2026-10-10T01:13:01.907793+00:00",
   "source_segments_read": 46,
   "facts_reviewed": 100,
   "patients_reviewed": 1,
@@ -31,7 +31,8 @@
     "Source coverage: b00046 (Figure 2 caption, background schematic) disposition figure_caption -> background so the roster no longer lists it unresolved; b00045 note no longer claims pixels uninspected.",
     "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M02: comparator '=' on 43 numeric results (Table 1 rows, vitals, MELD/MELD-Na, procalcitonin, ammonia 979/169) — all plain printed values, no <,> in the source.",
     "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M03: p1-f002 text_value '53-year-old' literal.",
-    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M12: anchors 'preceding events in the case narrative', 'concurrent CVVHD treatment', '72-hour head CT' were paraphrases. Restored literal anchor 'Repeat head CT 72 hours after admission' on p1-f110 ('Twelve hours later' brain death); p1-f076 ('Six hours later') and p1-f098 ('over the next two days') keep anchor null (reference event not stated as a single literal phrase)."
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M12: anchors 'preceding events in the case narrative', 'concurrent CVVHD treatment', '72-hour head CT' were paraphrases. Restored literal anchor 'Repeat head CT 72 hours after admission' on p1-f110 ('Twelve hours later' brain death); p1-f076 ('Six hours later') and p1-f098 ('over the next two days') keep anchor null (reference event not stated as a single literal phrase).",
+    "[cleanup2 glued/time-only] No glued-text dry-run diff. p1-f098 (high-volume TPE) kept time over the next two days: it is in the facts own sentence High volume TPE was performed concurrently with CVVHD over the next two days.; NO-BORROWING warning is an abbreviation false positive (TPE vs therapeutic plasma exchange). Annotation unchanged."
   ],
   "unresolved": [
     "Table 1 repeat column is labelled \"6 Hours\" while the narrative places the decline at twelve hours and then reports repeat labs; literal header kept, no timing asserted.",
@@ -52,7 +53,8 @@
       "Figure 1 pixels independently measured (axis calibration 8.64 px/h, 0.363 px per umol/L): 40@h2, 810@h17, 979@h40, CVVHD arrow ~h35.6, #1 TPE ~h41, #2 TPE ~h57, herniation ~h79; h76 marker ~162 unlabelled and h78 ~169, matching the visual submission pairing. Plot ends at 135 below the text final 169; HD Session appears only in the figure. Figure timings are not promoted into text facts.",
       "Grade IV HE kept confirmed as the authors attribute the myoclonus to it; ICH/brain herniation/cerebral edema are author/CT-stated; no ICP values exist.",
       "Creatinine admission unit mg/dL is from the narrative (6.3 mg/dL, same admission measurement as table 6.29); repeat creatinine, albumin and INR remain unitless as printed.",
-      "Event e10 \"Six hours later\" has an ambiguous anchor; only before-relations to the 12-h decline are asserted, no offset."
+      "Event e10 \"Six hours later\" has an ambiguous anchor; only before-relations to the 12-h decline are asserted, no offset.",
+      "Cleanup pass 2: glued free text repaired and time-only evidence quotes resolved against source (NO-BORROWING/TIME-LITERAL)."
     ],
     "residual_risks": [
       "Repeat-lab timing (table 6 Hours vs narrative >12 h vs figure ~17 h) is unresolved in the source.",

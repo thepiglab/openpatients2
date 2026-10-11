@@ -4,6 +4,7 @@ import argparse
 from collections import Counter
 import hashlib
 import json
+import re
 from pathlib import Path
 import types
 from typing import Annotated, Union, get_args, get_origin
@@ -42,6 +43,47 @@ def partial_errors(value, annotation, path):
         return []
     except Exception as error:
         return [f'{path}: {str(error).splitlines()[0]}']
+
+
+NUMBER_WORDS = {w: i for i, w in enumerate('zero one two three four five six seven eight nine ten eleven twelve thirteen '
+                                             'fourteen fifteen sixteen seventeen eighteen nineteen twenty'.split())}
+
+
+# A singular indefinite case statement supports a count of 1 ("We present a 67-year-old woman", "a case of",
+# "a patient", "one patient", "an infant").
+# Hyphens include the Unicode variants PMC text often uses (U+2010 hyphen, U+2011 non-breaking hyphen, en dash).
+SINGLE_CASE = re.compile(r'\b(?:a|an|one)\s+(?:(?:\d+|[a-z]+)[-\u2010\u2011\u2013\s](?:year|month|week|day)s?'
+                         r'[-\u2010\u2011\u2013\s]old\s+|(?:[a-z\-\u2010\u2011]+\s+){0,3})?(?:patient|case|man|woman|male|female|boy|girl|child|infant|neonate|'
+                         r'newborn|adolescent|gentleman|lady|individual|person|subject|dog|cat|horse)\b', re.I)
+
+
+def roster_block_errors(annotation):
+    """Optional article-level `roster` block: the single source of the roster's reported count/completeness.
+
+    {'reported_individual_count': int|None, 'roster_complete': bool, 'evidence': [{segment_id, quote}]}.
+    A count needs a literal quote (checked like every quote) that states that number (digits or a number word);
+    a complete roster cannot contradict the count or the annotated patients."""
+    block = annotation.get('roster')
+    if block is None:
+        return []
+    errors = []
+    if not isinstance(block, dict) or set(block) - {'reported_individual_count', 'roster_complete', 'evidence'}:
+        return ['roster: block must be {reported_individual_count, roster_complete, evidence}']
+    count, complete, evidence = block.get('reported_individual_count'), block.get('roster_complete'), block.get('evidence') or []
+    if count is not None and (not isinstance(count, int) or isinstance(count, bool) or count < 0):
+        errors.append('roster: reported_individual_count must be a non-negative integer or null')
+    if not isinstance(complete, bool):
+        errors.append('roster: roster_complete must be true or false')
+    if not all(isinstance(e, dict) and e.get('segment_id') and e.get('quote') for e in evidence):
+        errors.append('roster: evidence items are {segment_id, quote}')
+    if isinstance(count, int) and not isinstance(count, bool):
+        words = {w for e in evidence for w in re.findall(r'[a-z]+|\d+', e.get('quote', '').casefold())}
+        single = count == 1 and any(SINGLE_CASE.search(e.get('quote', '')) for e in evidence)
+        if not evidence or not (single or str(count) in words or any(NUMBER_WORDS.get(w) == count for w in words)):
+            errors.append(f'roster: reported_individual_count {count} needs a literal evidence quote stating that number')
+        if complete is True and count != len(annotation.get('patients', [])):
+            errors.append('roster: a complete roster must have exactly reported_individual_count annotated patients')
+    return errors
 
 
 def validate(annotation, source):
@@ -95,6 +137,10 @@ def validate(annotation, source):
             require(bool(event.get('evidence')),f'{event["event_id"]}: evidence')
             literal=event.get('time_text')
             require(literal is None or any(literal in e['quote'] for e in event['evidence']),f'{event["event_id"]}: nonliteral time')
+            # Optional classification (kind, time_kind, time_precision, time_calendar_value): set here, never patched
+            # into schema submissions.
+            from openpatients2.longitudinal import annotation_event_errors
+            errors += annotation_event_errors(event)
         for relation in p.get('temporal_relations',[]):
             a,b=relation['from_event_id'],relation['to_event_id']; r=relation['relation']
             require(a in eids and b in eids,f'{pid}: foreign temporal event')
@@ -109,6 +155,7 @@ def validate(annotation, source):
         for summary in p.get('summary',[]):
             require(bool(summary['fact_ids']) and set(summary['fact_ids'])<=fids,f'{pid}: summary references')
     require(len(all_facts)==len(set(all_facts)),'duplicate article fact ID')
+    errors += roster_block_errors(annotation)
     coverage=annotation.get('source_coverage',[])
     require(Counter(x['segment_id'] for x in coverage)==Counter(segments.keys()), 'source coverage incomplete/duplicate')
     for c in coverage:

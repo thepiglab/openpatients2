@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "04f124c949e08aa7b5ebcf75f450ba166e085635263b761bf55ee9d56e37d868",
-  "annotation_sha256": "605be24c269ea5f8704d9dfd047da4762718fc64064491d20683d8e5db8c7ce6",
-  "reviewed_at": "2026-10-09T22:35:01.035474+00:00",
+  "annotation_sha256": "a5e5aefdefd24b4388ef2d9ac41c40e0457ee59a005b05ffb890abdd364b2b6f",
+  "reviewed_at": "2026-10-11T02:19:13.218410+00:00",
   "source_segments_read": 56,
   "facts_reviewed": 138,
   "patients_reviewed": 3,
@@ -22,7 +22,10 @@
   "corrections": [
     "p1-f033 / p3-f051 (review_only Table 1 age conflicts): text_value replaced by the literal table cell '65' / '55' (conflict explanation stays in notes) [DEMO-AGE-TEXT]",
     "p1-f032, p3-f050 time.anchor restored to literal 'surgery' [TIME-LITERAL]",
-    "Verified migrations: M02 comparator '=' on 10 plain printed values (Hb, CEA, CA19-9, SUVmax, CT size); M03 ages '55-year-old', '75-year-old', '65-year-old' literal for each patient"
+    "Verified migrations: M02 comparator '=' on 10 plain printed values (Hb, CEA, CA19-9, SUVmax, CT size); M03 ages '55-year-old', '75-year-old', '65-year-old' literal for each patient",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (6 whitelisted label/number or number/unit spacing edits outside quotes in annotations (6); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. Rejected fixer edit to F4 panel B description: the scale bar prints \"5mm\" glued, so it is now quoted as printed text (“5mm”) instead of respaced. Hand-respaced F3 description_from_caption 'Borrmann2 lesion5–6cm' -> 'Borrmann 2 lesion 5–6 cm' (caption: Borrmann type 2 lesion, 5–6 cm). visual_target_sha256 recomputed in figure-EHR/privacy sidecars after the quoting edit.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=3, roster_complete=true, evidence b00001 \"We report 3 cases of MSI-H/dMMR DA.\"; 3 patients annotated in first-mention order.",
+    "GLUED-TEXT pass 4 (hand): p3 summary recurrence-free3 years2 months -> recurrence-free 3 years 2 months."
   ],
   "unresolved": [
     "Table 1 present-case rows 3 and 1 swap the ages and row numbers relative to the narrative Cases 1 and 3 (and the table labels Case 3 response cCR, not pathological CR, and Case 2 response PR, not stable disease). Rows are linked to cases only by concordant symptoms/treatment/follow-up and table-only values are review-only; no silent reassignment of ages or stages. Six cited literature cases (Table 1 rows 4-9) are background, not original roster.",

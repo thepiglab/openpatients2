@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12872334.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2b737413b17c9d5d716367284a7835da298ce27f0b5746fdd1624d54c34f0f5d",
+  "annotation_sha256": "ad4787cf8bb8e9a4b0649a4ef854238d7e448291189e8ea1055eabb500e23af1",
+  "reviewed_at": "2026-10-11T02:23:38.501325+00:00",
+  "source_segments_read": 16,
+  "facts_reviewed": 99,
+  "patients_reviewed": 6,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Patch-test observations (14 items): Day-4 (96-hour) reading moved out of method back into time.text, governed by the Table 1 footnote quote already in each item evidence; gates pass without warning",
+    "Allergies: 8 positive patch-test sensitisations with a row-level relevance statement promoted from ambiguous/review_only to supported/include, reaction_type allergy, relevance cell added to evidence (p5 also cites b00003 All reactions were clinically relevant)",
+    "p4 cobalt chloride allergy kept review_only as source_conflict (row relevance names only nickel and dichromate vs cohort all reactions relevant); new ambiguity added",
+    "Ages: unit years removed (no unit printed; DEMO-AGE-TEXT)",
+    "Added Hobbies: not relevant social_exposures item for each of the six patients",
+    "Added p1 Other comorbidities: None as an absent condition",
+    "Dichromate/bichromate ambiguity linked to its facts; article limitations updated for relevance handling and the p6 dash cell"
+  ],
+  "unresolved": [
+    "No figures or supplements are listed for this article; no visual task applies.",
+    "Clinical data are table-based; no dates, dermatitis course, treatment duration or outcomes are stated per patient.",
+    "Patch test grades (1+, 2+, 3+) are kept as ordinal text; the grading scale is not defined in the source.",
+    "The Day-4 reading and 48-hour occlusion are footnote-level and apply to all table results.",
+    "Table lists spondylarthritis while the footnote abbreviation list defines PsA; no psoriatic arthritis is recorded.",
+    "Cohort conclusions (b00003, b00004) are not copied to individuals, except that b00003 \"All reactions were clinically relevant\" is cited with Patient 5's unspecified \"Relevant\" cell. Patient 6 relevance cell \"—\" is not recorded as a fact.",
+    "Positive patch tests are recorded as contact allergies only with the row's relevance statement; Patient 4 cobalt is review_only because its relevance is unresolved."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 16,
+    "facts_reviewed": 99,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Six patients map one-to-one to Table 1 rows; roster 6 complete",
+      "b00002 referral (suspected ACD) and patch-test-without-discontinuation sentences are explicitly scoped to these patients; per-drug indications map uniquely (bimekizumab p1, risankizumab p2, guselkumab p3-p4, adalimumab p5-p6)",
+      "Posology footnotes a-d are keyed by superscript to each row biologic",
+      "Spondylarthritis kept literal; footnote PsA abbreviation is unused and not mapped",
+      "No figures or supplements"
+    ],
+    "residual_risks": [
+      "Contact-allergy representation of positive relevant patch tests is a judgment; runtime prompt treats sensitisation alone as observation",
+      "Footnote posology is standard drug posology; whether each patient followed it exactly is not separately stated"
+    ]
+  },
+  "physician_adjudicated": false
+}

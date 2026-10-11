@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "6b7d817ac3b396159a24b36de94731bf20f5501c86a22ff737164bb67f231c72",
-  "annotation_sha256": "3530e9ea51f5b2ebee829e02f8b00c9c2efc92e8a70986f2846a5d143fd7d3b8",
-  "reviewed_at": "2026-10-09T22:21:29.013957+00:00",
+  "annotation_sha256": "db988941de42f326ab02585b019fe45afb52f1a2923bcb2bab9705bf8d4d73f2",
+  "reviewed_at": "2026-10-10T01:10:54.304458+00:00",
   "source_segments_read": 19,
   "facts_reviewed": 40,
   "patients_reviewed": 1,
@@ -27,7 +27,9 @@
     "p1-f030: migration-nulled paraphrase anchor \"OTSC placement\" restored as literal \"placement of an over-the-scope clip\" (TIME-LITERAL)",
     "p1-f040: migration-nulled paraphrase anchor \"OTSC placement\" restored as literal \"placement of an over-the-scope clip\" (TIME-LITERAL)",
     "p1-f006/p1-f029/p1-f030: names stripped of timing (\"seven days before presentation\", \"48hours after OTSC placement\", \"48hour\") (NAME-LABEL)",
-    "p1-f006: anchor stays null (\"7 days earlier\"; presentation not in its own quote, no borrowing)"
+    "p1-f006: anchor stays null (\"7 days earlier\"; presentation not in its own quote, no borrowing)",
+    "GLUED-TEXT cleanup: p1-f002 clinical_statement 'Age30years' -> 'Age 30 years'; p1-f029 clinical_statement 'Repeat endoscopy48hours after OTSC placement' -> 'Repeat endoscopy 48 hours after OTSC placement' (wording only)",
+    "GLUED-TEXT manual cleanup (11 values, wording only): p1-f022 text_value/clinical_statement '5cm distal to GEJ' -> '5 cm distal to GEJ'; notes/ambiguity 'narrative5cm distal toGEJ', 'fistula5cm distal toGEJ', 'aboveGEJ', 'says5cm' respaced; 'Fujinon250' -> 'Fujinon 250' (source spelling); '48hour' -> '48-hour' in p1-f030 clinical_statement and p1-e05 description"
   ],
   "unresolved": [
     "Figure pixels have not been inspected; figure descriptions and patient attribution rely on source captions.",
@@ -44,9 +46,12 @@
     "figures_viewed": 0,
     "key_findings": [
       "M03 \"30-year-old\" literal",
-      "M12: 7 paraphrase anchors (presentation, OTSC placement) correctly nulled; 6 restored with literal source phrases"
+      "M12: 7 paraphrase anchors (presentation, OTSC placement) correctly nulled; 6 restored with literal source phrases",
+      "Cleanup pass 2: 2 glued tokens repaired by repair_glued_text.py; no time-only quote rows for this article",
+      "Cleanup pass 2 (second sweep): 11 further glued values respaced"
     ],
-    "residual_risks": []
+    "residual_risks": [],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
   },
   "physician_adjudicated": false
 }

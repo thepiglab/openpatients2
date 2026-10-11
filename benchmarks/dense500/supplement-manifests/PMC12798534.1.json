@@ -1,0 +1,100 @@
+{
+  "format": "dense-supplement-manifest/1",
+  "article_id": "PMC12798534.1",
+  "source_text_sha256": "3f6ef2e9ed8637dd469623136d54b4f5121ab34ea5df540512e057ed446182f2",
+  "source_supplements_sha256": "8cedc70fca30292beb5eff3f8f713b0b2a36cb9959375a923ee7226dc21907b8",
+  "files": [
+    {
+      "supplement_id": "sup1",
+      "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC12798534.1/rkaf150_supplementary_data.zip?md5=50f8cc2a8e49c7fd9866c3dc6fb90bef",
+      "machine": {
+        "filename": "rkaf150_supplementary_data.zip",
+        "original_manifest_url": "s3://pmc-oa-opendata/PMC12798534.1/rkaf150_supplementary_data.zip?md5=50f8cc2a8e49c7fd9866c3dc6fb90bef",
+        "declared_md5": "50f8cc2a8e49c7fd9866c3dc6fb90bef",
+        "declared_kind": "supplementary_or_other",
+        "extension": ".zip",
+        "http_content_type": "binary/octet-stream",
+        "bytes": 15336,
+        "download_status": "downloaded",
+        "download_reason": null,
+        "sha256": "30943c03f0887a9057d6cb099ffbe2f155a88e2748400fe879238959588847e8",
+        "md5_verified": true,
+        "sample_sha256": null,
+        "sample_bytes": null,
+        "tail_sha256": null,
+        "detected_type": "zip",
+        "inspection_status": "peeked",
+        "peek": {
+          "kind": "archive",
+          "format": "zip",
+          "member_count": 1,
+          "uncompressed_bytes": 18416,
+          "members": [
+            {
+              "name": "Supplementary Table S1.docx",
+              "bytes": 18416
+            }
+          ],
+          "member_extensions": {
+            ".docx": 1
+          },
+          "tool": "zipfile",
+          "dicomdir_present": false
+        },
+        "limitations": [
+          "Members listed from the central directory only; nothing extracted"
+        ],
+        "errors": []
+      },
+      "machine_suggestion": {
+        "content_class": "unknown",
+        "rule": "no_rule"
+      },
+      "review": {
+        "content_class": "clinical_case_table",
+        "content_class_rationale": "Opened the single ZIP member Supplementary Table S1.docx and read its table: 12 numbered case rows plus a Total row, with columns for type of infection and antibiotic use 6 months before and 6 months after dual biologic agents.",
+        "classification_basis": "full_content",
+        "patient_scope": "patient_level",
+        "patient_ids": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5",
+          "p6",
+          "p7",
+          "p8",
+          "p9",
+          "p10",
+          "p11",
+          "p12"
+        ],
+        "ownership_evidence": [
+          {
+            "basis": "article",
+            "segment_id": "b00025",
+            "quote": "Supplementary Table S1 shows which bacterial infections occurred in each case 6 months prior to and 6 months after dual biologic therapy."
+          }
+        ],
+        "ehr_includable": true,
+        "ehr_modality": "structured_table",
+        "estimated_counts": {
+          "rows": 12,
+          "frames": null,
+          "pages": null,
+          "members": 1,
+          "duration_seconds": null,
+          "basis": "Counted the 12 numbered case rows in the docx table (a Total row follows); one ZIP member listed by the machine peek"
+        },
+        "notes": "Case numbers 1 to 12 in the table correspond to the Table 1 patient numbers by the article statement that Supplementary Table S1 gives infections for each case; no printed identifiers or dates. Patient-level infection and antibiotic facts exist only here, not in the article text, so they are not in the quote-grounded annotation.",
+        "limitations": [
+          "The docx lies inside a ZIP; the supplement_review.py PDF/image path does not cover docx members, so typed clinical transcriptions were not created.",
+          "Only the table text was read from the docx XML; rendering/layout and any non-table content were not viewed."
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "Machine draft: every review block must be completed by a reviewer who inspected the content."
+  ]
+}

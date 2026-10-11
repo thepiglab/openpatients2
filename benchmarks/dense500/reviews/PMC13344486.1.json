@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "4b0b1929f33f369362b4239c36de8c4999d4832977e09d9784567e7cc73ead19",
-  "annotation_sha256": "2039d2d1850e23856c73465ee8fb612a191b888d0ad31a7f1379a5e4fb0222cb",
-  "reviewed_at": "2026-10-09T22:22:58.805184+00:00",
+  "annotation_sha256": "77f409b4c6b2fcc7cb0a40b9899b2bfef3980bc0a1f6a9dfcc98039ae798762a",
+  "reviewed_at": "2026-10-10T01:54:38.625121+00:00",
   "source_segments_read": 25,
   "facts_reviewed": 73,
   "patients_reviewed": 1,
@@ -22,7 +22,9 @@
   "corrections": [
     "Added p1-f073 qualitative observation \"stable platelet count\" (b00011), linked to the workup event and summary.",
     "Timeline: added supported edges e05 same_time e04 (labs upon presentation), e04→e06 (diagnostic CT after ED presentation), e06→e10 (left renal infarction on CT before left nephrectomy), e04→e10 (nephrectomy on day of admission), e07→e14 (CAPS suspicion before post-operative strong support); relations 18→23.",
-    "[semantic-rules-2026-10 re-sign] Verified M03 age text_value '36-year-old' is the literal phrase for this patient's age in her own evidence."
+    "[semantic-rules-2026-10 re-sign] Verified M03 age text_value '36-year-old' is the literal phrase for this patient's age in her own evidence.",
+    "Cleanup3 EVID-NEGATION p1-f071: follow-up outcome 'patient remained asymptomatic at follow-up visit' (present) -> 'Symptoms at follow-up visit' with assertion absent; quote (b00015, same sentence as the '3 months post-initial testing' time) unchanged.",
+    "Cleanup3 TIME p1-f050 Amaurosis: kept 'post-operative period' - the lead sentence 'the post-operative period was complicated by the development of neurological symptoms' scopes the next sentence, which names one of those symptoms ('She reported a brief episode of amaurosis'); both sentences stay in the quote; the remaining NO-BORROWING span warning is this scoping-lead false positive."
   ],
   "unresolved": [
     "Figure pixels are inspected in the separate visual submission; this annotation keeps caption-layer visual status not_inspected.",
@@ -37,7 +39,8 @@
     "facts_reviewed": 73,
     "figures_viewed": 0,
     "key_findings": [
-      "M03 correct; no annotation edits needed."
+      "M03 correct; no annotation edits needed.",
+      "Cleanup3: asymptomatic follow-up re-polarised to absent symptoms; scoped post-operative amaurosis time kept."
     ],
     "residual_risks": [
       "Prior residual risks unchanged."

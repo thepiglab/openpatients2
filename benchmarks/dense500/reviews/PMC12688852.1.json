@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12688852.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "086050b8a73da315e9d2e0019d361091fdde0d6ac8d058bd343e7a5e0ac619ff",
+  "annotation_sha256": "f3d6f6319da5764d303a688af232fdf565fdcc612220861a16b534cd77876a84",
+  "reviewed_at": "2026-10-10T02:16:57.323938+00:00",
+  "source_segments_read": 25,
+  "facts_reviewed": 92,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f006 \"colicky\" moved from severity to text_value; p1-f016/f017 \"rapidly developed\" removed from severity; p1-f024 \"persistent\" moved to text_value",
+    "p1-f025..f031 ICU-admission vitals/support: split anchor quotes replaced by one contiguous quote from the governing sentence (no time-only extra quote)",
+    "p1-f076/f077 WBC/PCT normalization: time-only extra quote replaced by the single governing sentence",
+    "p1-f048 CRRT indication (inferred from sentence order) removed",
+    "p1-f089 abstract \"full clinical recovery\" quarantined as source_conflict/review_only vs case-text \"clinical improvement\" (p1-f090)",
+    "p1-f091/f092 caption-only text_value trimmed to literal \"fluctuations\"",
+    "Added relations e05->e07 (surgery then deterioration on imipenem/vancomycin, abstract) and e08->e10 (meropenem+vancomycin then culture-directed levofloxacin+meropenem)",
+    "glue4 GLUED-TEXT: fix_label_digit_glue.py proposals REJECTED for this article. All 21 proposed edits were number+unit respacings ('4.5g QD', '1g Q8H', '0.3g QD', ...) in the Figure 1 visual description, panel description and chart-reading visual_cue; the timeline figure itself prints these doses glued (viewed: 'Piperacillin/tazobactam 4.5g QD', 'Meropenem 1g Q8H+', 'Aztreonam 1g QD'), and the description transcribes that printed text, so it is left as printed. Visual submission, figure-EHR labels and privacy flags unchanged.",
+    "glue4 ROSTER block added: reported_individual_count null (single-case report; no literal number stated), roster_complete true (the one described patient p1 is annotated); evidence b00007 'Here, a case of sepsis caused by E gallinarum following rectal cancer surgery is presented'.",
+    "glue4 ROSTER update (orchestrator ruling: a singular case statement is evidence for count 1): reported_individual_count null -> 1, roster_complete true (p1 annotated); evidence b00007 'a case of sepsis ...'."
+  ],
+  "unresolved": [
+    "Figure 1 and Figure 2 are image-only timeline/graph content; their printed dates, drug doses and plotted values are not source-text segments and are recorded only in the visual submission, never as typed facts.",
+    "Case dates (admission, surgery, culture) appear only in Figure 1 pixels; the text gives only relative times. Figure 1 also lists piperacillin/tazobactam before imipenem-cilastatin, which the text does not state.",
+    "Discussion sections contain literature and cohort statements about E gallinarum and colorectal cancer surgery; none are copied to the index patient.",
+    "Post-discharge follow-up is not documented."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 25,
+    "facts_reviewed": 92,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single 55F index patient; rectal cancer resected elsewhere 3 months earlier; urgent laparotomy, septic shock/MODS, wound culture E gallinarum POD 8, culture-directed levofloxacin+meropenem, de-escalation, discharge",
+      "Fig 1 dates (May 26 admission, May 27 laparotomy, June 4 culture, June 18 discharge) and piperacillin/tazobactam are pixel-only; kept out of typed facts",
+      "Fig 2 30 plotted WBC/temperature values verified as plausible estimates against axes; 27-5 WBC ~3.4 matches text 3.43",
+      "WBC 3.43 with printed range but no classification correctly unflagged; mNGS not_performed correct; quail source is speculation only"
+    ],
+    "residual_risks": [
+      "Pre-operative empiric antibiotic unnamed in text (Fig 1 shows piperacillin/tazobactam)",
+      "e06/e07 and e08/e09 order left unknown",
+      "PCT unit ng/L literal, possibly a unit error in source"
+    ]
+  },
+  "physician_adjudicated": false
+}

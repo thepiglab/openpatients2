@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "df24e243285dac525234c3de17d4c88362e9f0e34b5fc49f272ca03a0e49903d",
-  "annotation_sha256": "a1c5c68be76a88a51181aeb6ec352278dd1c1ccf6491607e96a46c626d1d178c",
-  "reviewed_at": "2026-10-09T22:40:52.025627+00:00",
+  "annotation_sha256": "af53a0367e856d495bc94d22892f8115b5811012a0ef2b7fa1bb499ea307a070",
+  "reviewed_at": "2026-10-10T01:21:54.579568+00:00",
   "source_segments_read": 22,
   "facts_reviewed": 84,
   "patients_reviewed": 1,
@@ -26,12 +26,13 @@
     "Added explicit source test procedures, anatomical sites and source laboratory context; maintained drain is a device.",
     "semantic-rules-2026-10: verified M02 comparators '=' (approximate wording, no printed <,>), M03 age '37-year-old', 8 M12 anchor nullings.",
     "TIME-LITERAL: restored literal anchors tied by the source: p1-f048 'right pleural drainage tube was placed' (same sentence: 'in the first 24 hours'), p1-f070/p1-f071 'thoracotomy' (the only operation; drains removed 'on postoperative day seven'). 'One month later' facts left without anchor (no explicit tie).",
-    "ASSERT-ABSENT: p1-f059 biliary obstruction verification_status refuted -> unknown (\"the absence of biliary obstruction\" names no excluding test/workup)."
+    "ASSERT-ABSENT: p1-f059 biliary obstruction verification_status refuted -> unknown (\"the absence of biliary obstruction\" names no excluding test/workup).",
+    "Glued text (cleanup pass 2): applied repair_glued_text.py (9 tokens: Age 37 years, segment VIII, segments VII/VIII, first 24 hours) and hand-respaced approximately 50% (p1-f036), drained 2000 mL and postoperative day 7 (event descriptions), 19.3k/19,300/µL ambiguity text and Figure 1/2 labels in article_limitations. No time-only quotes or negation-word rows for this article."
   ],
   "unresolved": [
     "Clinical figure companion remains caption-only; actual image inspection and pixel interpretations are recorded separately in visual-submissions and its receipts.",
     "Initial drainage antibiotic/culture identity and later piperacillin-tazobactam dose/route/frequency/duration are unreported; drained-fluid culture site remains unspecified.",
-    "A/B in operative Figure2 denote anatomical landmarks, not separate panels or patients. Figure1 uses explicit1a/1b panel labels.",
+    "A/B in operative Figure 2 denote anatomical landmarks, not separate panels or patients. Figure 1 uses explicit 1a/1b panel labels.",
     "No ERCP, biliary hypertension, malignancy, cirrhosis or Klebsiella infection inferred from general background. No explicit same-patient prior-publication link identified.",
     "Initial versus relapse testing and output rates are distinct phases; exact operation/discharge dates and follow-up duration are not supplied.",
     "The laboratory table generically heads its rows Serum Parameter, including blood-cell counts; actual specimen collection details are not established. Six-month symptom history is separated from the initial diagnostic encounter. Diagnostic procedure rows and result rows may represent the same underlying test."
@@ -43,7 +44,8 @@
     "facts_reviewed": 84,
     "figures_viewed": 0,
     "key_findings": [
-      "Re-sign 2026-10: migrations verified; 3 literal anchors restored."
+      "Re-sign 2026-10: migrations verified; 3 literal anchors restored.",
+      "Cleanup pass 2: glued text respaced; no other changes."
     ],
     "residual_risks": []
   },

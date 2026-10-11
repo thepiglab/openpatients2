@@ -22,7 +22,12 @@ rules:
     text: >-
       Evidence quotes are exact contiguous source text and must contain the words that establish negation,
       uncertainty, subject and timing. An item with assertion=absent needs its negation cue ("no", "denied",
-      "without", "ruled out", "negative") inside its own quotes, not in a neighbouring sentence.
+      "without", "ruled out", "negative") inside its own quotes, not in a neighbouring sentence. A word that negates a
+      specific finding is that finding with assertion=absent, and the quote keeps the word: "afebrile"/"apyrexial" ->
+      fever, assertion=absent; "asymptomatic"/"symptom-free" -> the named symptoms (or symptoms), assertion=absent;
+      "pain-free" -> pain, assertion=absent; "uneventful recovery" -> the complications it excludes, assertion=absent
+      (or an outcome stated as such). Never record the negation word as a present item's text_value, and never invert
+      polarity to silence a warning.
     prompts: [system]
     docs: [protocol]
     validator: true
@@ -35,6 +40,17 @@ rules:
       carried by the evidence quotes.
     prompts: [system]
     docs: [protocol]
+  - id: GLUED-TEXT
+    title: Free text is normal spaced prose
+    text: >-
+      Every free-text field you write (name, text_value, clinical_statement, event descriptions, summaries,
+      limitations, ambiguities, captions, notes) is normal prose with a space between words: "after seven months",
+      "could not be performed", "by month 9", never "aftersevenmonths", "couldnotbeperformed" or "bymonth9". Never
+      drop spaces to shorten text; shorten by choosing fewer words. Abbreviations and terms keep their source spelling
+      ("HbA1c", "IL-6", "Roux-en-Y").
+    prompts: [system]
+    docs: [protocol]
+    validator: true
   - id: NO-INFERENCE
     title: No inference-added facts
     text: >-
@@ -48,17 +64,29 @@ rules:
     text: >-
       Time, route, dose, body site, laterality, indication and care setting must come from the item's own evidence.
       Never borrow them from a neighbouring sentence about another fact, drug, encounter, table row or patient
-      (e.g. "on admission" from a different finding, "intravenous" from a different drug).
+      (e.g. "on admission" from a different finding, "intravenous" from a different drug). A fact's time comes from
+      its own evidence sentence or from a table row, column, heading or footnote, or a figure caption's lead sentence,
+      that structurally governs it. Adding an extra
+      evidence quote whose only role is to supply a time (a neighbouring sentence, or a bare "By Day 3" / "On day 7"
+      fragment) is borrowing: leave time.text null (relation unknown) when the fact's own sentence states no time. A
+      quote that spans several sentences does not make one sentence's time the time of a fact stated in another,
+      unless the time sentence scopes what follows ("On admission:", "On admission, ..." heading the findings, a
+      table or figure caption).
     prompts: [system]
     docs: [protocol]
+    validator: true
   - id: TIME-LITERAL
     title: Time text and anchors are literal or null
     text: >-
       time.text must occur literally in the item's own evidence. time.anchor uses the literal source phrase when one
       exists (case-insensitive substring of the source, e.g. "admission", "surgery"; prefer restoring that phrase over
       deleting the anchor), otherwise null; never a paraphrase such as "index hospital admission" or "table-relative
-      treatment course". date_iso only for a full date written in the source. relation (at, before, after, ...) needs
-      a time text, anchor or date to relate to: when all three are null, relation is unknown.
+      treatment course". date_iso (YYYY-MM-DD) only for a full calendar date written in time.text: the ISO literal or
+      an unambiguous month-name form ("May 20, 2025", "20 May 2025" -> 2025-05-20); all-numeric non-ISO dates
+      ("05/06/2025", "20.05.2025") and partial dates ("May 2025") leave date_iso null. relation (at, before, after,
+      ...) needs a time text, anchor or date to relate to: when all three are null, relation is unknown. "By <time>"
+      is an upper bound with relation before ("by May 20, 2025", "by day 3", "by the next morning"; anchor null
+      unless the source names one), not at, after, until or unknown.
     prompts: [system]
     docs: [protocol]
     validator: true
@@ -78,7 +106,8 @@ rules:
       conditions, a diagnosis excluded by workup ("ruled out", "excluded", "CT showed no ...") is assertion=absent with
       verification_status=refuted; a denied or absent history ("no history of diabetes", "denied hypertension") is
       assertion=absent with verification_status=unknown. assertion=absent is never combined with
-      verification_status=confirmed, provisional or differential.
+      verification_status=confirmed, provisional or differential. Example: "He was afebrile" is
+      symptoms_function fever (kind=sign) with assertion=absent, not a present sign named "afebrile".
     prompts: [system, conditions]
     docs: [protocol]
     validator: true
@@ -206,7 +235,11 @@ rules:
     text: >-
       Number patients p1..pn in order of their first mention in the source (the earliest segment and position of each
       patient's identity evidence), not by importance, age or table position. Patient identifiers are joined on this
-      order downstream.
+      order downstream. reported_individual_count is the number of individual patients the source states (literal, e.g.
+      "two patients" -> 2; a singular indefinite case statement such as "We present a 67-year-old woman", "a case of
+      ...", "a patient", "one patient" -> 1), else null; roster_complete is true only when every stated individual is in the roster. In the
+      dense annotation these are the article-level roster block (reported_individual_count, roster_complete, evidence
+      quote stating the number), which the materializer reads; never patch them into schema submissions.
     prompts: [roster]
     docs: [protocol]
     validator: true
@@ -216,7 +249,10 @@ rules:
       Event occurrence is one of {EVENT_OCCURRENCES}: not_occurred for an explicitly cancelled, declined or not-done
       event; conditional for an if-then plan; unknown when the source does not establish whether it happened.
       Pairwise relations are one of {TEMPORAL_RELATIONS}; unknown records a pair whose order the source leaves open.
-      Never invent order from paragraph order.
+      Never invent order from paragraph order. Event kind and the time kind/precision (and a literal calendar value)
+      are classified on the event itself; in the dense annotation they are the event's kind, time_kind,
+      time_precision and time_calendar_value fields. The materializer reads them; never patch event kinds or time
+      classifications into schema submissions by script.
     prompts: [timeline]
     docs: [protocol]
     validator: true

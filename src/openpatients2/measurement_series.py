@@ -58,6 +58,21 @@ class TimePoint(StrictModel):
     offset_basis: str | None
 
 
+# Documented literal cell meanings (additive, optional): a table legend/footnote that the source prints
+# gives a cell token ('-', 'd/c') or footnote marker ('(a)') a meaning. Never inferred without that legend.
+CellStatus = Literal['refused', 'discontinued', 'held', 'not_given', 'prn_or_emergency']
+CELL_STATUS_WORDS = {
+    'refused': r'refus|declin',
+    'discontinued': r'discontinu|d/c|stopp|ceas',
+    'held': r'\bheld\b|withheld|\bhold\b',
+    'not_given': r'not (?:given|administered)|omitted|missed',
+    'prn_or_emergency': r'emergen|as[- ]needed|\bprn\b|p\.r\.n|\bstat\b|rescue|urgent',
+}
+# Fields added after dense-measurement-series/1 was first signed. They default to null, so earlier documents
+# are unchanged and valid; the contract fingerprint excludes them so existing receipts stay current.
+ADDITIVE_POINT_FIELDS = ('cell_status', 'legend_cell_id')
+
+
 class Point(StrictModel):
     point_id: str = Field(min_length=1)
     value_cell_id: str
@@ -66,6 +81,8 @@ class Point(StrictModel):
     parsed: dict | None
     unit_text: str | None
     unit_cell_id: str | None
+    cell_status: CellStatus | None = None
+    legend_cell_id: str | None = None
 
 
 class OwnershipEvidence(StrictModel):
@@ -148,11 +165,82 @@ def table_grid(source):
     return grid
 
 
+# Trailing footnote markers on a table cell: '^(a)', '^(b,c)', '^a', '*', '†', '‡', '§', '¶'.
+FOOTNOTE = re.compile(r'(?:\^\(\s*([A-Za-z0-9*†‡§¶#]{1,3}(?:\s*,\s*[A-Za-z0-9*†‡§¶#]{1,3})*)\s*\)|\^([A-Za-z*†‡§¶#])|([*†‡§¶#]))\s*$')
+ROUTES = r'(?:PO|IM|IV|SC|SQ|SL|PR|INH|IN|TD|NG|PEG|IO|ID|po|im|iv|sc|sq|sl|pr)'
+DOSE_PART = re.compile(r'(' + r'[+-]?(?:\d+(?:\.\d+)?|\.\d+)' + r')\s*(mg|µg|ug|g|mL|ml|IU|U|units?|mEq|mmol)?\s*(' + ROUTES + r')')
+DOSE_CELL = re.compile(r'(?P<parts>' + DOSE_PART.pattern + r'(?:\s*\+\s*' + DOSE_PART.pattern + r')*)'
+                       r'(?:\s*[×x]\s*(?P<times>\d{1,2}))?')
+
+
+def split_footnotes(raw_text):
+    """(core text, [footnote markers]) with trailing markers removed; the raw cell stays literal elsewhere."""
+    core, markers = raw_text.strip(), []
+    while True:
+        m = FOOTNOTE.search(core)
+        if not m or m.start() == 0:
+            break
+        found = m.group(1) or m.group(2) or m.group(3)
+        markers = [x.strip() for x in found.split(',')] + markers
+        core = core[:m.start()].rstrip()
+    return core, markers
+
+
+def parse_dose_cell(core):
+    """'5 IM', '10 PO', '5 IM × 3', '5 IM + 5 PO' -> components with literal route and multiplicity."""
+    m = DOSE_CELL.fullmatch(core)
+    if not m:
+        return None
+    components = [{'magnitude': n, 'unit': u or None, 'route': r} for n, u, r in DOSE_PART.findall(m.group('parts'))]
+    return {'kind': 'dose_components', 'components': components,
+            'multiplicity': int(m.group('times')) if m.group('times') else None}
+
+
 def expected_parse(raw_text):
+    """Deterministic parse of one literal cell (recomputed by the validator; never typed by hand).
+
+    Order (backward compatible): missing token -> scalar measurement of the raw cell -> after stripping
+    trailing footnote markers, missing token / scalar / dose components (value + literal route, '× n'
+    multiplicity, '+' combinations). Footnote markers are kept in `parsed.footnote_markers`; their meaning
+    comes only from a documented legend (Point.cell_status + legend_cell_id)."""
     if raw_text.strip().casefold() in MISSING:
         return 'missing_cell', None
     measured = parse_measurement(raw_text.strip())
-    return ('parsed', measured.model_dump()) if measured else ('unparseable', None)
+    if measured:
+        return 'parsed', measured.model_dump()
+    core, markers = split_footnotes(raw_text)
+    if markers and core.casefold() in MISSING:
+        return 'missing_cell', None
+    if markers:
+        measured = parse_measurement(core)
+        if measured:
+            return 'parsed', {**measured.model_dump(), 'raw_text': raw_text, 'footnote_markers': markers}
+    dose = parse_dose_cell(core)
+    if dose:
+        return 'parsed', {'raw_text': raw_text, **dose, 'footnote_markers': markers}
+    return 'unparseable', None
+
+
+def cell_status_errors(point, value_cell, legend_cell):
+    """A documented cell status needs a literal legend cell naming the cell token or one of its markers and
+    wording that states the status."""
+    if point.cell_status is None:
+        return ['legend_cell_id without cell_status'] if point.legend_cell_id else []
+    if legend_cell is None:
+        return [f'{point.point_id}: cell_status {point.cell_status!r} needs legend_cell_id (the printed legend/footnote)']
+    if legend_cell.role != 'context':
+        return [f'{point.point_id}: legend cell must be a context cell (the printed legend/footnote)']
+    legend = legend_cell.raw_text
+    core, markers = split_footnotes(value_cell.raw_text)
+    names_token = bool(core) and not re.fullmatch(r'[\d.\s]+', core) and (
+        re.search(r'(?<!\w)' + re.escape(core) + r'(?!\w)', legend) or
+        (core in ('-', '–', '—') and re.search(r'[-–—]', legend)))
+    names_marker = any(re.search(r'(?:\^\(?|\(|^|\s)' + re.escape(m) + r'(?:\)|\s|[:.=,])', legend) for m in markers)
+    if not (names_token or names_marker):
+        return [f'{point.point_id}: legend does not name the cell token {core!r} or its markers {markers}']
+    if not re.search(CELL_STATUS_WORDS[point.cell_status], legend, re.I):
+        return [f'{point.point_id}: legend does not state {point.cell_status!r}']
+    return []
 
 
 def _check_cell(cell, source, grid, segments, transcriptions, manifest_files, file_reader):
@@ -236,6 +324,9 @@ def validate_series(target, source, annotation, *, transcriptions=None, manifest
             status, parsed = expected_parse(value.raw_text)
             if (point.parse_status, point.parsed) != (status, parsed):
                 raise ValueError(f'{point.point_id}: parsed value must equal the deterministic parse of the raw cell ({status})')
+            problems = cell_status_errors(point, value, need(point.legend_cell_id) if point.legend_cell_id else None)
+            if problems:
+                raise ValueError(problems[0])
             if point.unit_text is not None:
                 if point.unit_cell_id is None or point.unit_text not in need(point.unit_cell_id).raw_text:
                     raise ValueError(f'{point.point_id}: unit_text must be literal in its unit cell')
@@ -270,6 +361,28 @@ def validate_series(target, source, annotation, *, transcriptions=None, manifest
             'attributed_series': sum(bool(s.patient_ids) for s in data.series),
             'measurement_kinds': dict(sorted(kinds.items())), 'coverage': data.coverage,
             'clinical_accuracy_measured': False}
+
+
+LEGEND_SPLIT = re.compile(r'(?<=[.;]["”’])\s+|(?<=[.;])\s+')
+
+
+def legend_cells(source):
+    """Literal `context` cells for table footnote/legend segments: the whole footnote plus each sentence/entry,
+    so a point's cell_status can cite the printed legend (legend_cell_id) in both pipelines."""
+    out = []
+    for seg in source.get('segments', []):
+        if seg.get('kind') != 'table_footnote' or not seg.get('text', '').strip():
+            continue
+        text = seg['text']
+        pieces = [x.strip() for x in LEGEND_SPLIT.split(text) if x and x.strip()]
+        for k, piece in enumerate([text] + (pieces if len(pieces) > 1 else [])):
+            if piece not in text:
+                continue
+            out.append(dict(cell_id=f'{seg["segment_id"]}-fn' + ('' if k == 0 else str(k)), origin='article_text',
+                            role='context', segment_id=seg['segment_id'], table_id=None, grid_row=None, column_index=None,
+                            supplement_id=None, transcription_id=None, asset_url=None, asset_sha256=None, sheet=None,
+                            row_index=None, page=None, raw_text=piece))
+    return out
 
 
 def draft_series(source, *, supplement_cells=()):
@@ -320,6 +433,7 @@ def draft_series(source, *, supplement_cells=()):
                            reference_range_cell_id=f'{sid}-c{reference_col}' if reference_col is not None and reference_col < len(row_cells) else None,
                            points=points, scoring='review_only',
                            notes=f'{DRAFT_MARK} candidate row series; confirm it is a series, assign owner/kind/units/offsets or delete'))
+    cells += legend_cells(source)
     cells += list(supplement_cells)
     return {'format': FORMAT, 'article_id': source['article_id'], 'source_text_sha256': source['text_sha256'],
             'coverage': 'limited', 'cells': cells, 'series': series, 'excluded_cells': [],
@@ -330,10 +444,17 @@ def series_rows(article_id, target, split=None):
     cells = {c['cell_id']: c for c in target['cells']}
     for s in target['series']:
         referenced = {s['name_cell_id'], s.get('reference_range_cell_id')} | {
-            cid for p in s['points'] for cid in (p['value_cell_id'], p['time']['time_cell_id'], p['unit_cell_id'])}
+            cid for p in s['points'] for cid in (p['value_cell_id'], p['time']['time_cell_id'], p['unit_cell_id'],
+                                                  p.get('legend_cell_id'))}
         yield {'format': FORMAT, 'article_id': article_id, **s, 'split': split,
                'cells': [cells[c] for c in sorted(c for c in referenced if c)]}
 
 
 def contract_sha256():
-    return json_digest(MeasurementSeries.model_json_schema())
+    # Additive optional fields (ADDITIVE_POINT_FIELDS) are excluded: documents without them are unchanged,
+    # so receipts signed before they existed stay current; documents using them are bound by target_sha256.
+    schema = MeasurementSeries.model_json_schema()
+    point = schema['$defs']['Point']
+    for name in ADDITIVE_POINT_FIELDS:
+        point['properties'].pop(name, None)
+    return json_digest(schema)

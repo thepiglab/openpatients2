@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "40767802954754f4febb86d4973eb40966d362c09ef13ed319bbedcac608f6d4",
-  "annotation_sha256": "ecfa7ec7ba26aed23a9c463cd0764a5657054ff3cc39e9c33950487f3c7c3ec6",
-  "reviewed_at": "2026-10-09T22:24:18.272569+00:00",
+  "annotation_sha256": "028b2f2d8c6f9e22174477091fa38ded1d6b8cb95ce891217951a287d3968dcb",
+  "reviewed_at": "2026-10-11T02:17:59.051541+00:00",
   "source_segments_read": 46,
   "facts_reviewed": 220,
   "patients_reviewed": 4,
@@ -36,7 +36,11 @@
     "semantic-rules-2026-10 re-sign: M12 had nulled 3 paraphrased anchors; parent restored literal source anchors: p2-f006 'initial presentation' -> 'presented' (b-text 'presented two months following ingestion'), p2-f013 and p3-f021 'gastrostomy placement' -> 'gastrostomy tube was placed' (each 'discharged five days later' follows that sentence in its own case).",
     "Verified M02 comparator '=' on 64 numeric observations: no printed <,<=,>,>= on those values ('BMI < 16' in P4's Table 2 cell is a classification criterion, not the value; '~5 cm' and 'approximately 6 kg' approximations keep '=' with their literal text_value per OBS-COMPARATOR); M03 p2-f005 text_value 'age 9' literal in own quote; M05 p2-f037/p3-f037 Table 2 nutritional classification 'Normal' -> flag normal correct.",
     "DEMO-AGE-TEXT (gate warnings, not touched by M03): p1-p4 f002/f004 age text_value were descriptions ('current follow-up age', 'age at esophageal replacement'); replaced with the literal Table 1 cells ('Age (yrs)' / 'Age at surgery (years)') from each patient's own row quote: P1 3/2, P2 11/10, P3 6/6, P4 23/2.",
-    "Bare-offset scan: p4-f025 gastrostomy removal 'three months later' anchored to the literal preceding clause 'Oral feeding was successfully initiated'; p1-f020 'after four weeks' left null (reference point, discharge vs follow-up, not explicit)."
+    "Bare-offset scan: p4-f025 gastrostomy removal 'three months later' anchored to the literal preceding clause 'Oral feeding was successfully initiated'; p1-f020 'after four weeks' left null (reference point, discharge vs follow-up, not explicit).",
+    "TIME-ONLY QUOTES: anthropometric facts p1-f028..f032, p2-f032..f036, p3-f032..f036, p4-f033..f035 kept their age times ('At 3 years of age'/'At 11 years'/'At 6 years'/'At 23 years'), which are governed by the same prose sentence and by the Table 2 Age (years) column; the bare time-only evidence quote was replaced by the full governing sentence ('At N years..., the patient measured ... (Table 2).') that states both the age and the value",
+    "NEGATION WORDS: 'uneventful' outcomes p1-f011, p2-f024, p3-f020, p3-f024, p4-f022 kept as present outcomes because the source states each as the outcome of the course/procedure ('was uneventful')",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (1 whitelisted label/number or number/unit spacing edits outside quotes in annotations (1); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=4, roster_complete=true, evidence b00001 \"We report the long-term outcomes of four patients\"; 4 patients annotated in first-mention order."
   ],
   "unresolved": [
     "Annotation figure fields keep caption-layer status not_inspected; the actual JPEG was inspected in the separate visual submission.",
@@ -62,14 +66,16 @@
       "Four index patients correctly separated by Table 1-4 rows and per-patient narratives; age-based discussion attribution (aged 3, 6, 11 vs 23) maps uniquely to P1, P3, P2, P4",
       "Series-level technique (b00006) and native esophagus in situ (b00037) correctly review_only; P2/P3 native esophagus kept only from their own imaging sentences",
       "Source conflicts retained: rigid vs flexible scope, abstract age at surgery 2-11 vs Table max 10, wrong table citations, P2 esophago-gastric anastomosis, 3/4 vs all strictures, P4 TEF referral label vs Gross A anatomy",
-      "Figure 1 single JPEG viewed with magnified per-panel crops; visual submission descriptions match pixels; all four panels correctly unresolved"
+      "Figure 1 single JPEG viewed with magnified per-panel crops; visual submission descriptions match pixels; all four panels correctly unresolved",
+      "Cleanup pass 2: no glued text; 18 time facts kept with governing-sentence quotes, 0 nulled; 5 'uneventful' outcomes kept present (source-stated outcomes)"
     ],
     "residual_risks": [
       "P1 Hb 12.4 left unflagged because the narrative grouping is ambiguous",
       "P2 borderline anaemia linkage from abstract is review_only inference",
       "PedsQL low/normal flags rely on author wording without printed cut-offs",
       "Panel-to-patient mapping of Figure 1 unknown; the 8.12 cm stricture dimension is not specified"
-    ]
+    ],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
   },
   "physician_adjudicated": false
 }

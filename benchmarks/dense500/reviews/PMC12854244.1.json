@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "2d361b2de767646fa601a8de0ffebcf10d870178c671b4e34f585d4d546b147c",
-  "annotation_sha256": "c6eb91440d09523204a4b4cc5b65c000f13a3a9413d2fec8143befe95d3f19e0",
-  "reviewed_at": "2026-10-09T22:26:33.680086+00:00",
+  "annotation_sha256": "c0d781b63595d52ee87cace83dd936a68a47c3dc88c51691feebc6a7e6749444",
+  "reviewed_at": "2026-10-10T01:20:39.637903+00:00",
   "source_segments_read": 65,
   "facts_reviewed": 128,
   "patients_reviewed": 1,
@@ -23,15 +23,19 @@
     "M12 follow-up: restored literal anchors on nulled paraphrases: \"presented to the emergency department\" (p1-f008..f012), \"emergency department\" (On-arrival vitals/exam/concerns p1-f019..f033,f119,f120,f127), \"exploratory surgery\" (intraoperative and pathology facts p1-f078..f096,f098..f104,f128,f129), \"discharged on postoperative day 3\" (p1-f105..f109), \"damage-control repair\" (p1-f097).",
     "Dangling relations: p1-f005,f006,f007,f013..f017 had relation before/at with null text/anchor (anchor had been borrowed from neighbouring presentation sentence); set relation=unknown.",
     "p1-f042 (NR001) deleted: mixed urinalysis summary \"largely unremarkable aside from trace ketones\"; every UA component is already a separate Table 1 observation (p1-f064..f072, ketones Trace p1-f071); removed from event p1-e02 and summary fact_ids.",
-    "Verified M03 age \"44-year-old\", M13 uncertain->unknown on p1-e05/p1-e15."
+    "Verified M03 age \"44-year-old\", M13 uncertain->unknown on p1-e05/p1-e15.",
+    "GLUED-TEXT cleanup: repair_glued_text.py applied (4 tokens, diff reviewed: 'Age44years', 'the24hour', 'to24hour', 'all32lab') plus manual fixes in 16 values ('operative4cmfascial' -> 'operative 4 cm fascial', 'day3' -> 'day 3', 'systolicBP128mmHg' -> 'systolic BP 128 mmHg', CBC/differential/lactate findings spaced, 'repair:4cm' -> 'repair: 4 cm', 'over24hours' -> 'over 24 hours', 'Table1'/'Tables1–2', 'rawXMLtables', 'BPcomponent', 'beforeED'). Wording only; no values changed",
+    "TIME-ONLY QUOTES p1-f019 (general appearance) and p1-f111..f114 (two-week follow-up outcomes): time phrase in the same sentence; kept and merged into one contiguous governing quote",
+    "TIME-ONLY QUOTES p1-f020..f024, p1-f119, p1-f120 (presentation vital signs), p1-f031 (concern for SIRS, same vitals sentence) and p1-f127 (exam/vital-sign assessment): 'On arrival' came from a separate sentence; time.text changed to the literal 'on presentation' from the facts' own 'Vital signs on presentation were ...' sentence (quotes extended to that governing span), extra 'On arrival' quote dropped",
+    "TIME-ONLY QUOTES p1-f025..f030 (abdominal exam findings/mass/skin changes), p1-f032 (suspected peritonitis) and p1-f033 (concern for strangulated hernia): their sentences state no time and 'On arrival' belongs to a different sentence; time nulled (relation unknown), extra quote dropped. Order remains carried by membership in event p1-e01 (emergency department presentation)"
   ],
   "unresolved": [
     "This text/caption annotation layer does not use pixels; pixel inspection is recorded separately in the visual target and its review receipts.",
-    "Raw XML Tables1–2 fully reviewed;32 admission analyte rows retained. Generic differential-table clinical features/risk factors are not transferred to the patient.",
+    "Raw XML Tables 1–2 fully reviewed; 32 admission analyte rows retained. Generic differential-table clinical features/risk factors are not transferred to the patient.",
     "Electrolyte/BUN interpretation conflict is review-only in both directions. No exact BMI, drug administration regimen, operative duration or blood loss is reported.",
     "Additional imaging and mesh reinforcement were deferred; no subsequent definitive reconstruction is documented. No explicit same-patient prior-report linkage identified.",
     "Two-week outpatient follow-up is literal; whether interval starts at surgery or discharge is unreported. Retrospective differential discussion has no supported encounter date or chronology.",
-    "Previous ACE-inhibitor angioedema and pre-existing history explicitly precede emergency presentation; their order relative to24hour symptom onset is not established. Obesity absence is a baseline risk statement, without historical duration."
+    "Previous ACE-inhibitor angioedema and pre-existing history explicitly precede emergency presentation; their order relative to 24 hour symptom onset is not established. Obesity absence is a baseline risk statement, without historical duration."
   ],
   "assessment": {
     "reviewer": "Claude Opus 5.5 parent",
@@ -39,11 +43,13 @@
     "facts_reviewed": 128,
     "figures_viewed": 0,
     "key_findings": [
-      "migration verified; literal anchors restored; 8 dangling relations set unknown; mixed UA summary removed"
+      "migration verified; literal anchors restored; 8 dangling relations set unknown; mixed UA summary removed",
+      "Cleanup pass 2: glued text repaired (tool + manual); 23 time-only-quote facts reviewed: 5 kept with merged same-sentence spans, 9 retimed to the literal own-sentence 'on presentation', 8 nulled (event p1-e01 keeps order); 1 vitals-sentence condition retimed; no negation-word rows"
     ],
     "residual_risks": [
       "On-arrival anchor \"emergency department\" is the arrival setting phrase"
-    ]
+    ],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
   },
   "physician_adjudicated": false
 }

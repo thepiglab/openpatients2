@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "dbca67fe9d219209994de8b21628d68c139569cf1c2f6c790cbcc7098f414ca7",
-  "annotation_sha256": "edd7e3fbda5d931caed668233204fe98dc757335eb7d988856e09bc5474e2bf7",
-  "reviewed_at": "2026-10-09T22:24:09.841931+00:00",
+  "annotation_sha256": "e644ee565fc613a38c6ecc27599f241c0171593c9c18d777f51f5f730e58fe1b",
+  "reviewed_at": "2026-10-11T02:17:48.368969+00:00",
   "source_segments_read": 57,
   "facts_reviewed": 310,
   "patients_reviewed": 3,
@@ -25,7 +25,10 @@
     "Verified 5 M12 nulled anchors (index presentation, BCD treatment discontinuation, Dd regimen initiation, follow-up after Dd treatment) were paraphrases not literal in the source; literal time.text retained.",
     "NR001/NR003 p1-f006, p2-f020: 'stable vital signs' is not normal -> flag unknown kept, text_value literal 'stable vital signs'.",
     "NR002 p1-f084: mixed table cell; text_value narrowed to the urine-protein part, normal renal function stays in p1-f086 (flag normal).",
-    "p2-f005 saphenous surgery '15 years prior': restored M12-nulled anchor with the literal 'presented' (Case 2 presentation) instead of a bare offset."
+    "p2-f005 saphenous surgery '15 years prior': restored M12-nulled anchor with the literal 'presented' (Case 2 presentation) instead of a bare offset.",
+    "cleanup-2 GLUED-TEXT: applied repair_glued_text.py (9 high-confidence tokens: notforced->not forced x3, tablefluctuation0->table fluctuation 0, after2018->after 2018, within2months/afterdiscontinuation, for8doses->for 8 doses x2, and24hourprotein1341->and 24 hour protein 1341) and manually spaced remaining letter-digit/unit glue in exported free text: protein3+/blood3+, CaseN/case1, Figure1A-C/Figure2, Table1, over12months, over1year, approximately15%, dexamethasone20mg, from17thdose->from 17th dose, examination2018, age72, ambiguity numbers (creatinine 49.94 versus narrative 49.44 μmol/L; protein 1340 versus 1341.63 mg; 0.2–1.0 g/d; lowest 0.2 g/day; IgG1–4 negative; κ 51.40, λ 28.19 ratio 3.14), <1.5 g/day. Source spellings confirmed; quotes/ids/enums untouched; no meaning change. No time-only quote rows for this article.",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (4 whitelisted label/number or number/unit spacing edits outside quotes in visual-submissions (4); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. Also hand-spaced 'Figures1/2'->'Figures 1/2' in the same four attribution rationales.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=3, roster_complete=true, evidence b00002 \"three PGNMID patients\"; 3 patients annotated in first-mention order."
   ],
   "unresolved": [
     "Exactly three local patients, no cited case from systematic discussion promoted into roster. Background treatment guidelines/mechanisms are not delivered therapies or proven patient mechanisms.",
@@ -33,7 +36,7 @@
     "Table/narrative quantities and ordinal staining symbols retained; no inferred reference limits, routes, clone/cancer diagnosis, specimen, synthetic calendar date, restart regimen dose or daratumumab biweekly expansion.",
     "TCM efficacy and abnormal heavy-chain mechanism are author interpretation/speculation with limited evidence. Article follow-up/sample-size limits retained.",
     "Clinical image companion is caption-grounded; both actually viewed assets have a separate visual target.",
-    "Both p1 narrative/table creatinine49.44/49.94 and24hourprotein1341.63/1340 numerical candidates are source_conflict/review_only, so no conflicting number is selected as definitive. Source table phase remains unreported."
+    "Both p1 narrative/table creatinine 49.44/49.94 and 24 hour protein 1341.63/1340 numerical candidates are source_conflict/review_only, so no conflicting number is selected as definitive. Source table phase remains unreported."
   ],
   "assessment": {
     "reviewer": "Claude Opus 5.5 parent",
@@ -42,7 +45,8 @@
     "figures_viewed": 0,
     "key_findings": [
       "Mechanical migrations M02/M03/M12 correct for this article; three OBS-FLAG items resolved (stable != normal; mixed cell split).",
-      "M12 nulled anchors restored with literal source phrases where the source states the reference event."
+      "M12 nulled anchors restored with literal source phrases where the source states the reference event.",
+      "Cleanup-2: glued free text repaired; no borrowed-time facts flagged."
     ],
     "residual_risks": [
       "Prior parent review (2026-10-08) content otherwise unchanged; figures not re-viewed in this re-sign."

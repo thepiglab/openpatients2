@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "0ddda0e0505761ea84eabf1e11fb36212a6942666a67750f0b93027507be2e1a",
-  "annotation_sha256": "aaf77eb55f8e44a12f7527608d7e7ed66c72f23c4c9e32a0e6fdece89f8c3150",
-  "reviewed_at": "2026-10-09T22:25:09.960938+00:00",
+  "annotation_sha256": "365f1395f5284a243114387e05c134fb26c9f3bc50f1c36404ef42a41b1cf0a2",
+  "reviewed_at": "2026-10-11T02:29:13.230907+00:00",
   "source_segments_read": 44,
   "facts_reviewed": 241,
   "patients_reviewed": 2,
@@ -24,14 +24,18 @@
     "Verified all 92 M12 nulled anchors ('index admission', 'first tabulated sampling', 'first pancreatic-function/autoimmune-profile sampling', 'initial insulin treatment', 'night-time inpatient glucose monitoring') were reviewer paraphrases absent from the source; literal time.text ('Upon admission', 'After 10 days', 'First time', ...) retained.",
     "Spot-checked table comparators (> 600, > 10.8, < 0.7 printed; others '=') unchanged and correct.",
     "SECTION-SIGNS: moved p2-f020 'no abnormalities were identified on cardiopulmonary and abdominal examinations' from observations to symptoms_function kind=sign, text_value 'normal', assertion present, body_site kept (scoped normal examination). p2 domain_coverage.symptoms_function updated to documented.",
-    "Anchor restoration: for 67 facts whose paraphrased anchor was nulled by M12, set time.anchor to the literal source phrase the offset is relative to (e.g. 'admission', 'First time' table column, 'endoscopic procedure', 'starting rivaroxaban'); calendar dates, table ages and unstated references left null."
+    "Anchor restoration: for 67 facts whose paraphrased anchor was nulled by M12, set time.anchor to the literal source phrase the offset is relative to (e.g. 'admission', 'First time' table column, 'endoscopic procedure', 'starting rivaroxaban'); calendar dates, table ages and unstated references left null.",
+    "Cleanup2 GLUED-TEXT: repaired 33 glued values by hand (repair tool covered only 10 tokens and left e.g. 'contains57', 'p2peak29.6', 'narrative04:00'): 'after22:00' -> 'after 22:00' (p1-f071), 'Table2After10days3.14' -> 'Table 2 (After 10 days: 3.14)', 'p1PDF6:00Day2lowest3.6' -> 'p1 PDF 6:00 Day 2 lowest 3.6', 'GADA0.8'/'p1published0.5', lab-value glue in p1-f127/p1-f131/p2-f103 findings and p1 event 3 ('FBG11.45' -> 'FBG 11.45', etc.), 'glucose4.9–20.2', 'at6–15', reference ranges '< 1.1COI' -> '< 1.1 COI' (source spacing) in p2-f079..f082, plus internal notes/provenance. Quotes, ids, figure attribution notes untouched. No time-only quote rows for this article.",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (7 whitelisted label/number or number/unit spacing edits outside quotes in annotations (6), visual-submissions (1); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. Figure f1 viewed: no printed text on the image; the respaced rationale is reviewer prose.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=2, roster_complete=true, evidence b00001 \"This article reports two cases of exogenous insulin antibody syndrome (EIAS)\"; 2 patients annotated in first-mention order.",
+    "GLUED-TEXT pass 4 follow-up: f1 panel clinical_significance prose Case1 -> Case 1 (source spelling); visual_target_sha256 recomputed."
   ],
   "unresolved": [
     "Routine head/abdomen/chest scans have no stated acquisition modality; no assumption they were CT. Independent tests have no invented strict order. Dates, insulin-clearance measurements, HLA/proteomic tests, potassium/beta-blocker treatment, generic plasma exchange/immunosuppression or specific hormone agent not inferred.",
-    "Table follow-up days are relative to first table sampling, not necessarily admission or insulin discontinuation; units/reference/comparators and serial measurement rows remain distinct. p1 main narrative says no hypoglycemia after insulin cessation despite Table2After10days3.14; unresolved timing/clinical mismatch preserved.",
+    "Table follow-up days are relative to first table sampling, not necessarily admission or insulin discontinuation; units/reference/comparators and serial measurement rows remain distinct. p1 main narrative says no hypoglycemia after insulin cessation despite Table 2 (After 10 days: 3.14); unresolved timing/clinical mismatch preserved.",
     "Shared discussion suggests possible concurrent LADA in both patients; positive IA-2/GADA does not establish LADA. DKD attribution is documented; unallocated discussion ESRD-progression wording is not assigned to both individuals. Needle reuse/fat hyperplasia as EIAS mechanism is author speculation.",
-    "Supplement SM1 contains57 numerical glucose measurements/8 unmonitored cells for these two patients with relative day/clock provenance, including p2peak29.6 versus main narrative29.0 and p1PDF6:00Day2lowest3.6 versus narrative04:00. Supplemental-only facts remain in the inspected clinical-document sidecar pending separate validated supplemental-source runtime path.",
-    "Supplement ST1 antibody report has no readable patient identity/date. Three values resemble p1final table but GADA0.8 differs from p1published0.5; ownership/phase remains unresolved, with original pixel readings retained separately.",
+    "Supplement SM1 contains 57 numerical glucose measurements/8 unmonitored cells for these two patients with relative day/clock provenance, including p2 peak 29.6 versus main narrative 29.0 and p1 PDF 6:00 Day 2 lowest 3.6 versus narrative 04:00. Supplemental-only facts remain in the inspected clinical-document sidecar pending separate validated supplemental-source runtime path.",
+    "Supplement ST1 antibody report has no readable patient identity/date. Three values resemble p1 final table but GADA 0.8 differs from p1 published 0.5; ownership/phase remains unresolved, with original pixel readings retained separately.",
     "Caption-only main figure fields remain distinct from actual main/supplement pixel targets. No anatomical identity from appearance and no exact nodule size derived from photographs."
   ],
   "assessment": {
@@ -40,7 +44,8 @@
     "facts_reviewed": 241,
     "figures_viewed": 0,
     "key_findings": [
-      "Mechanical migrations M03/M12 correct; no needs-review items; one normal exam re-sectioned per SECTION-SIGNS."
+      "Mechanical migrations M03/M12 correct; no needs-review items; one normal exam re-sectioned per SECTION-SIGNS.",
+      "Cleanup2: glued text repaired by hand in limitations, ambiguities, findings and reference ranges."
     ],
     "residual_risks": [
       "Figures not re-viewed in this re-sign."

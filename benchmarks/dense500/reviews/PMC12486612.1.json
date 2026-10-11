@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12486612.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0d9c2fa48a5c3b70da19e67c27f71246aeef2c9a6086508c4c6b06dd1177056c",
+  "annotation_sha256": "246b814e86f67f22f78bf935486cb0bcc4e2792fcbbfde5255b81cad176941db",
+  "reviewed_at": "2026-10-10T02:12:17.183654+00:00",
+  "source_segments_read": 36,
+  "facts_reviewed": 441,
+  "patients_reviewed": 6,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "NO-BORROWING audit of every extra time-only quote: removed borrowed times from p1-f038/f039/f040 (Day 7 vitals), f043 and f128 (Day 8), f105/f106 (Day 14), f125 (Day 17 catheter), f129 (Day 15-17 nutrition); quotes narrowed to the fact sentence",
+    "p1-f008/f010/f047/f126 EEG and refuted delirium/consciousness disturbance: replaced the borrowed \"By Day 10\" vital-sign sentence with the explicit b00028 \"EEG conducted on Day 10\" sentence (and Fig. 1 caption); time Day 10",
+    "p1-f033 removed non-time \"In addition\" time text; p1-f099 dantrolene NMS indication now grounded by b00028",
+    "Added p1-f146 Day 28 walking, f147 daily-activity engagement, f148 speech improvement on olanzapine 2.5 mg, f149 IV fluids reduced to 1000 mL/day, f150 IV fluids stopped Day 17; event p1-e28 with 2 relations",
+    "Added ambiguities: untimed narrative-continuation facts (p1); abstract aggregate guanfacine adverse effects not copied to p2-p4",
+    "Cleanup3 TIME (kept, ruling): p1-f019 'After undergoing pylorus-preserving gastrectomy' kept - 'Retrospectively, these were early signs of catatonia' refers back to the symptoms listed in the gastrectomy sentence, which is quoted; p1-f047/p1-f126 'Day 10' kept - the Discussion sentence 'EEG conducted on Day 10 ...' and the Fig. 1 caption 'EEG (day10)' are this same EEG; p3-f006 'At the admission' kept - 'These symptoms met the diagnostic criteria for catatonia' refers back to the admission presentation sentence, which is quoted. Remaining NO-BORROWING warnings are these anaphoric/caption-governed times.",
+    "Cleanup3 GLUED visual submission Fig1/Fig2 attribution rationales: 'this EEG (day10) and the caption labels it EEG (day10)' -> 'this Day 10 EEG and the caption labels it \"EEG (day10)\"' (same for day45; the caption's own 'day10'/'day45' spelling kept only inside quotes); figure-EHR label and privacy-flag visual_target_sha256 refreshed; both EEG figures re-viewed.",
+    "glue4 GLUED-TEXT (fix_label_digit_glue.py, both proposed edits reviewed and applied): figure caption_summary 'EEG (day10)' -> 'EEG (day 10)' (Fig. 1) and 'EEG (day45)' -> 'EEG (day 45)' (Fig. 2).",
+    "glue4 ROSTER block added: reported_individual_count null, roster_complete true. The source states 'five cases' for the series (b00007) and separately describes 'another noteworthy case' (b00029, the 53-year-old guanfacine dropout, p6); no literal total of six individuals is stated, so the count is null; all six described individuals (p1-p6) are annotated, so the roster is complete."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two EEG JPEGs are inspected in the separate visual submission.",
+    "Table 1 uses +/- notation read as present before treatment / absent after treatment, per its own caption; it is the only source for waxy flexibility, posturing, stereotypy and mannerism, and some signs listed in the narrative (e.g. Patient 1 echolalia early after gastrectomy) differ in timing from the table.",
+    "Day numbering in Patient 1 is as printed (Day 1 = first lorazepam at the study hospital); no calendar dates exist for any patient.",
+    "Causal statements (drug triggers, guanfacine efficacy, adverse effects of guanfacine) are the authors' hypotheses and recorded as ambiguities, not accepted facts.",
+    "The additional 53-year-old woman (guanfacine dropout) is outside the five-patient series; aggregate counts in the abstract refer to the five series patients only.",
+    "No supplementary material is listed in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 36,
+    "facts_reviewed": 441,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Table 1 fully expanded: 12 criteria x 5 patients = 91 facts (+/- pairs, -/- single absent) verified cell by cell",
+      "p6 (53-year-old dropout) is a local individually described patient and kept on the roster after p5 by first mention",
+      "p1 NMS provisional, delirium/epilepsy/consciousness disturbance refuted by stated EEG; malignant catatonia confirmed",
+      "p5 taper vs abrupt benzodiazepine discontinuation and SIADH/hyponatremia kept provisional with ambiguities",
+      "EEG Fig1/Fig2 viewed: 12 scalp channels + EOG + ECG, no identifiers, attributed to p1",
+      "Cleanup3: anaphoric/caption-governed times kept per ruling; visual rationale glue fixed."
+    ],
+    "residual_risks": [
+      "Timeline events still group untimed continuation facts with the preceding day-marked event as narrative sequence",
+      "Guanfacine adverse-effect causality only in aggregate abstract statement",
+      "p1 echolalia narrative (previous hospital) vs Table 1 -/-"
+    ]
+  },
+  "physician_adjudicated": false
+}

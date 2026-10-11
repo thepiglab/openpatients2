@@ -1,0 +1,51 @@
+{
+  "article_id": "PMC12843839.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "96b6beec28bda33f6db4bf4ee8fe127ab523e4dcaccf7fdd07a62257f1f01bf4",
+  "annotation_sha256": "7a92475f5e1f2fd2e1a72c544bf9f8124896e66aa1253c33ab0fb02bc6874eb6",
+  "reviewed_at": "2026-10-10T00:59:56.218991+00:00",
+  "source_segments_read": 40,
+  "facts_reviewed": 81,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Summary: removed unsupported \"vital signs were stable\" and listed the literal initial vital signs instead.",
+    "Added p1-f081 outcome discharge (text states follow-up \"after discharge\"; HD 42 date is figure-only and not used) with event p1-e34 and relation e34 before e32.",
+    "Added relations e16<e18 (day 2 vs day 6 cultures) and e24<e25 (day 15/19 cultures before day 21 chemoport removal).",
+    "Added patient ambiguity listing Figure 1 vs text day disagreements (blood culture HD 10 vs 12th day, fluconazole HD 18-38 vs 22 days, micafungin HD 14-17 vs identification day 15, discharge HD 42 figure-only).",
+    "Schema submission: re-applied annotator event/time kinds after regeneration; vague relative times (following admission, after identification, during treatment, after catheter removal, after completion of treatment) set to precision unknown; new discharge event kind outcome."
+  ],
+  "unresolved": [
+    "Tables 1 and 2 summarize published literature cases and are not index-patient data.",
+    "Figure 1 pixels are recorded in the visual submission; the annotation figure row keeps the caption-layer status.",
+    "Day-2 and day-12 blood culture results and the specimen of the day-6 Acinetobacter culture are not stated; discharge date and outcome beyond 6-month follow-up are not reported."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 40,
+    "facts_reviewed": 81,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient; Tables 1-2 are literature cases (aggregate) and are not copied to p1.",
+      "Method sentences (Xpert, VIDAS, Vitek 2, Biotyper) describe the patient own tests and are not time/route borrowing; kept.",
+      "Fluconazole MIC flag high is the source classification (\"despite the high MIC\") of that value; kept.",
+      "Nivolumab colitis kept as possible adverse effect (\"probably caused\"); day-2 and day-12 culture results not stated, kept as status unknown."
+    ],
+    "residual_risks": [
+      "Figure 1 and text disagree on several hospital days; unreconciled.",
+      "\"initially\" times for meropenem/vancomycin and micafungin are vague order-only times."
+    ]
+  },
+  "physician_adjudicated": false
+}

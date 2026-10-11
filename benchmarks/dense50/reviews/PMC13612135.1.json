@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "dfcb96fabd4e469821976781d55e3f3dd74546725f9981784651a0334cc4f434",
-  "annotation_sha256": "3c780d50bbc772ac1499387d61336eefc3e7ea4510a2772cf6b2d01c3c349129",
-  "reviewed_at": "2026-10-09T22:33:54.251428+00:00",
+  "annotation_sha256": "4a99d088a80c61979c1b2471d45288ed1058f1d24a8d6a4cef1a7513cdc16c93",
+  "reviewed_at": "2026-10-10T02:01:09.272177+00:00",
   "source_segments_read": 15,
   "facts_reviewed": 47,
   "patients_reviewed": 1,
@@ -21,7 +21,9 @@
   ],
   "corrections": [
     "semantic-rules-2026-10 re-sign: verified M02 comparator '=' on PSA 137 ng/mL, CEA 102.6 ng/mL, lesion 14 cm (the printed '<4' is the reference range, not the value) and M03 age text '76-year-old'.",
-    "M12: p1-f004 'for 1 year' anchor 'known prostate carcinoma' nulled (correct, duration text kept); p1-f047 'after two cycles of therapy' anchor 'RLT cycles' nulled -> restored literal anchor '177 Lu-PSMA radioligand therapy' (Fig. 2 caption)."
+    "M12: p1-f004 'for 1 year' anchor 'known prostate carcinoma' nulled (correct, duration text kept); p1-f047 'after two cycles of therapy' anchor 'RLT cycles' nulled -> restored literal anchor '177 Lu-PSMA radioligand therapy' (Fig. 2 caption).",
+    "Cleanup3 GLUED p1-f031 name 'Figure1 prostate tracer uptake' -> 'Figure 1 prostate tracer uptake'.",
+    "Cleanup3 GLUED visual submission (11 fields): Fig. 2 detailed description 'A (anterior, left 3) and B (posterior, right 3)', 'column labels 1ST CYCLE, 2ND CYCLE, 3RD CYCLE' (as printed), 'the 200 mCi dose'; limitations 'is 800×477 pixels', 'Original 800×414'; attribution rationales 'explicit Fig. 1/Fig. 2 case linkage' (source spelling); figure-EHR label and privacy-flag visual_target_sha256 refreshed; both figures re-viewed."
   ],
   "unresolved": [
     "Figure pixels were not inspected; visual details are restricted to captions.",
@@ -35,7 +37,8 @@
     "facts_reviewed": 47,
     "figures_viewed": 0,
     "key_findings": [
-      "Mechanical migrations correct; one anchor restored with literal phrase."
+      "Mechanical migrations correct; one anchor restored with literal phrase.",
+      "Cleanup3: glued name and visual text respaced; no time/negation items."
     ],
     "residual_risks": [
       "None new."

@@ -1,11 +1,11 @@
 {
   "article_id": "PMC12645162.1",
-  "reviewer": "parent assistant",
+  "reviewer": "Claude Opus 5.5 parent",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "e6f6bbf63410262cb1c630a7bd12c967e659f1ee390fe327e98f716c068323d9",
-  "annotation_sha256": "c627c7ea8ee9ac1d1566440f19bd0152f9325889c568e2ecc7b348ddcd4ab280",
-  "reviewed_at": "2026-10-09T22:45:21.613818+00:00",
+  "annotation_sha256": "6ba30c068f3eb62b6da03b0866dad2dc533f1ed072d551a595028ebbcb7d597d",
+  "reviewed_at": "2026-10-10T01:07:32.272795+00:00",
   "source_segments_read": 41,
   "facts_reviewed": 61,
   "patients_reviewed": 1,
@@ -22,7 +22,13 @@
   "corrections": [
     "semantic-rules-2026-10 re-sign: no mechanical migration changes for this article; schema target regenerated for the unified timeline vocabulary and inspected.",
     "p1-f004 (runtime-gate DEMO-AGE-TEXT warning): age text_value '8 years of age at last reported follow-up' was not literal; set to the literal spelled-out phrase 'eight years of age' (quote 'At eight years of age') and removed numeric_value per the spelled-out-age rule.",
-    "opus-fixup: p1-f003 age text_value 'prenatal, 26 weeks of gestation' (not literal) -> literal source phrase '26 weeks of gestation'."
+    "opus-fixup: p1-f003 age text_value 'prenatal, 26 weeks of gestation' (not literal) -> literal source phrase '26 weeks of gestation'.",
+    "p1-f020: time 'By six months of age' relation until -> before (TIME-LITERAL 'by <time>' = no later than)",
+    "p1-f021: time 'By six months of age' relation until -> before (TIME-LITERAL 'by <time>' = no later than)",
+    "p1-f036: time 'By six months of age' relation until -> before (TIME-LITERAL 'by <time>' = no later than)",
+    "[cleanup2 glued/time-only] No glued-text dry-run diff for this article.",
+    "[cleanup2 glued/time-only] p1-f014 (duplicated renal pelvis/incomplete duplicated ureter condition): time 'At three months of age' came only from the preceding MRU sentence; the fact's own sentence states no time -> time text/anchor/date null, relation unknown, time-only quote removed. Ordering remains via membership in event p1-e06 (MRU at three months).",
+    "[cleanup2 glued/time-only] p1-f034 (dilated renal pelvis 29.83 mm): time now governed by Table 1 row '3 months | MRU | ... duplicated renal pelvis dilated (29.83 mm)'; time-only sentence fragment replaced by that row quote and time.text set to the literal '3 months' (relation at)."
   ],
   "unresolved": [
     "Caption-layer visual status is not_inspected in the annotation; actual pixels are inspected in the separate visual submission.",
@@ -41,7 +47,9 @@
     "figures_viewed": 0,
     "key_findings": [
       "No migration changes; one DEMO-AGE-TEXT violation (non-literal age text) fixed.",
-      "opus-fixup: prenatal diagnosis age text made literal."
+      "opus-fixup: prenatal diagnosis age text made literal.",
+      "TIME-LITERAL 2026-10 'by <time>' audit: 3 fact(s) set to relation before after reading each source sentence",
+      "Cleanup pass 2: glued free text repaired and time-only evidence quotes resolved against source (NO-BORROWING/TIME-LITERAL)."
     ],
     "residual_risks": [
       "Prior parent review content otherwise unchanged; figures not re-viewed in this re-sign."

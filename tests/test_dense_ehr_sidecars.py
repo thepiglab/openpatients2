@@ -663,3 +663,25 @@ def test_video_manifest_review_and_unavailable_media_complete_flagged(monkeypatc
     assert media_flags({'status': 'missing_image'}) == {'media_available': False, 'content_reviewed': False,
                                                          'unavailable_reason': 'no_declared_asset'}
     assert media_flags({'status': 'fetch_failed'})['media_available'] is None
+
+
+def test_stale_visual_or_figure_sidecar_receipt_withholds_the_article(monkeypatch, tmp_path):
+    monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
+    exporter = load('dense_ehr_export_withhold', ROOT / 'benchmarks/dense500/export.py')
+    monkeypatch.setattr(exporter, 'OUT', tmp_path)
+    base = dict(title='t', article_url='https://x', text_sha256='h', annotation_status='annotated', source_supplements=[],
+                review_status='parent_source_reviewed', full_schema_review_status='agent_and_parent_source_reviewed',
+                pixel_review_status='agent_and_parent_reviewed', runtime_gates={'passed': True},
+                ehr_sidecar_status={'supplement_manifest': 'no_source_supplements', 'figure_ehr_labels': 'agent_and_parent_reviewed'})
+    rows = [dict(base, article_id='OK'),
+            dict(base, article_id='S', pixel_review_status='stale_visual_receipt',
+                 withheld_reason='S: stale visual agent receipt patient_identity_sha256',
+                 ehr_sidecar_status={**base['ehr_sidecar_status'], 'figure_ehr_labels': 'stale_or_invalid'})]
+    stats = {k: 0 for k in ('acquired_candidate_articles', 'drafted_articles', 'parent_source_reviewed_articles',
+                            'full_schema_reviewed_articles', 'pixel_reviewed_articles', 'reviewed_no_figure_inventories', 'reviewed_facts')}
+    exporter.write_checklist({**stats, 'target_articles': 2}, rows)
+    checklist = json.loads((tmp_path / 'article_checklist.json').read_text())
+    assert checklist['articles']['OK']['completed'] and not checklist['articles']['S']['completed']
+    assert checklist['articles']['S']['withheld']['statuses'] == ['stale_visual_receipt', 'stale_figure_sidecar_receipt']
+    assert 'patient_identity_sha256' in checklist['articles']['S']['withheld']['reason']
+    assert checklist['withheld_articles'] == 1

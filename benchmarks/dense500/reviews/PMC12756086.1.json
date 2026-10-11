@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "06ecec2ff652acf18469308e56bc23a3de3a7072ccdf77aca295d55e854373cb",
-  "annotation_sha256": "6a00aca43086d5c8f21a214ce9d947ba1f1d9e9adb04b282f0919e14e3aaa2ad",
-  "reviewed_at": "2026-10-09T23:23:48.200914+00:00",
+  "annotation_sha256": "004f0b60b6582ca7c830b6d9c001cd97f2fffe2d728ce22259689affd2f6512b",
+  "reviewed_at": "2026-10-10T02:15:42.058144+00:00",
   "source_segments_read": 40,
   "facts_reviewed": 149,
   "patients_reviewed": 1,
@@ -23,18 +23,22 @@
     "semantic-rules-2026-10 re-sign: verified M02 comparator unknown->'=' for Table 1 approximate values (P/F ≈ 124, MAP ≈35, CRP ~18): no <, >, <=, >= printed, approximation kept in text_value; M03 age text '58-year-old' literal; M12 anchor 'clinical-course day' (paraphrase) nulled - time texts are the literal Table 1 Day column values (0, 1–2, 3 (72 h)); the table never states its day origin in words, so no literal anchor restored. No annotation edits.",
     "SECTION-SIGNS: removed observation p1-f030 (admission GCS 9); duplicate of symptoms_function p1-f142 with the same quote; links dropped from event/summary.",
     "  p1-f030: removed duplicate observation",
-    "REF-INTEGRITY: p1-f142 (GCS 9, symptoms_function) dropped stale alternate_representation_of 'p1-f030' (removed duplicate); it is now the sole GCS record. Removed its text_value 'Rapidly progressive cognitive decline' (not the GCS value; cognitive decline already p1-f029) and rewrote notes."
+    "REF-INTEGRITY: p1-f142 (GCS 9, symptoms_function) dropped stale alternate_representation_of 'p1-f030' (removed duplicate); it is now the sole GCS record. Removed its text_value 'Rapidly progressive cognitive decline' (not the GCS value; cognitive decline already p1-f029) and rewrote notes.",
+    "Cleanup2 GLUED-TEXT: repaired 107 glued free-text values by hand/regex (the repair tool proposed only 6 of them): Day/day + number ('Day0' -> 'Day 0', 'Days1–2' -> 'Days 1–2', 'day2CRRT' -> 'day 2 CRRT', etc.) in observation names, clinical statements, event descriptions, ambiguities and limitations; 'following48hours', 'around72hours', 'consentYes', 'to1μg/kg/min' (p1-f085 regimen), 'Prednisone25mg/day', 'hMPV1' -> 'hMPV-1' (source spelling), 'type1' -> 'type 1', 'February2025', 'Source160/100mmHg', 'Table1'. Quotes, ids, time fields untouched.",
+    "Cleanup2 TIME-ONLY p1-f047 (pH 7.0) and p1-f053 (PCT < 0.3 ng/mL): time '0' is the Day cell of the Table 1 row that governs these values; kept, and the table quote now starts at the row's Day cell ('0 | ED presentation | pH 7.0…') so the governing span is quoted.",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (2 whitelisted label/number or number/unit spacing edits outside quotes in visual-submissions (2); 'Figure1'->'Figure 1', 'Figure2'->'Figure 2'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. Also hand-respaced 'Single58-year-old' -> 'Single 58-year-old' in the same two fig1/fig2 attribution rationales and 'a Figure2 reference' -> 'a Figure 2 reference' in the fig2 clinical_significance statement (both missed by the tool). Figures fig1/fig2 viewed: they print only A/P/R/L orientation letters, so no printed text is affected.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=1, roster_complete=true, evidence b00004 \"This report describes a critically ill patient who developed hMPV-related septic shock complicated by bacterial superinfection.\"; 1 patients annotated in first-mention order."
   ],
   "unresolved": [
     "This text/caption annotation layer does not use pixels; pixel inspection is recorded separately in the visual target and its review receipts.",
-    "Original XML Table1 is fully retained; no additional omitted tables identified. PaCO2/PaO2/PCT/lactate units omitted at later table timepoints are not inferred.",
-    "SM1 Data_Sheet_1.pdf actually downloaded with source MD5 verified, rendered and inspected completely: one-page completed CARE checklist containing manuscript line references and consentYes. No additional patient clinical values. PDF supplemental review gate remains pending separate contract/parent review; no completed image-supplement receipt claimed.",
-    "Exact follow-up CT date, patient-perspective follow-up interval and post-day5 urine-output/renal laboratory course are unreported. No explicit same-patient prior-report linkage identified.",
+    "Original XML Table 1 is fully retained; no additional omitted tables identified. PaCO2/PaO2/PCT/lactate units omitted at later table timepoints are not inferred.",
+    "SM1 Data_Sheet_1.pdf actually downloaded with source MD5 verified, rendered and inspected completely: one-page completed CARE checklist containing manuscript line references and consent Yes. No additional patient clinical values. PDF supplemental review gate remains pending separate contract/parent review; no completed image-supplement receipt claimed.",
+    "Exact follow-up CT date, patient-perspective follow-up interval and post-day 5 urine-output/renal laboratory course are unreported. No explicit same-patient prior-report linkage identified.",
     "Location in Italy is a care-setting detail, not evidence of ethnicity/nationality. Viral–bacterial gateway mechanism is an author hypothesis, not an assayed patient mechanism.",
     "Viral-load quantification unreported is not a definite nonperformed test. Initial multiplex-PCR negatives are assigned to early result phase, not later culture phase; time of culture growth/blood finalization not reported.",
     "Home therapy initiation/vaccination dates, antimicrobial switch day, fluconazole administration and drug routes are unknown. Later gas/PCT/lactate units remain unreported. Patient-perspective report is undated without forced postdischarge encounter.",
     "Added twenty shared-provenance schema alternatives; no extra unique clinical facts or new inferred assays.",
-    "Days1–2 table measurements are not forced entirely before day2CRRT; only deterioration onset leading to CRRT is ordered before therapy."
+    "Days 1–2 table measurements are not forced entirely before day 2 CRRT; only deterioration onset leading to CRRT is ordered before therapy."
   ],
   "assessment": {
     "clinical_course": "Personally read all40 retained source segments, original XML Table1 with nine chronological rows, every populated field across all14 clinical sections (150 representations), all19events/16edges, summary and image ownership. Initial BAL PCR negative for pneumococcus is distinct from later positive culture. Suspected vancomycin toxicity remains possible; fluconazole preference is not a documented administered regimen. Persistent day5 anuria survives CRRT withdrawal. Missing later ABG/PCT/lactate units are not inferred. Patient perspective and follow-up CT remain undated.",
@@ -47,7 +51,8 @@
     "key_findings": [
       "2026-10 re-sign (Claude Opus 5.5 parent): migration verified, no edits needed.",
       "SECTION-SIGNS: removed observation p1-f030 (admission GCS 9); duplicate of symptoms_function p1-f142 with the same quote; links dropped from event/summary.",
-      "Dangling alternate_representation_of on p1-f142 after p1-f030 removal fixed; GCS 9 retained once (b00006)."
+      "Dangling alternate_representation_of on p1-f142 after p1-f030 removal fixed; GCS 9 retained once (b00006).",
+      "Cleanup2: extensive Day-number glue repaired; table-governed Day 0 times kept with row-prefixed quotes."
     ],
     "source_units_read": 40,
     "figures_viewed": 0,

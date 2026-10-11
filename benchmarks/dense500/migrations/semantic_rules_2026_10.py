@@ -371,14 +371,20 @@ ANNOTATION_MIGRATIONS = (m01_case_context, m02_comparator, m03_age_text, m04_abs
                          m12_time_anchor, m13_occurrence)
 
 
-def merge_submission(submission, regenerated):
-    """Regenerated clinical content + the reviewers' permitted structural edits from the old submission."""
+def merge_submission(submission, regenerated, annotation=None):
+    """Regenerated clinical content + the reviewers' permitted structural edits from the old submission.
+
+    Event kind / time classification set in the annotation (the single source) wins; the old submission's
+    directly edited classification is only a fallback for events whose annotation does not set it."""
+    classified = {e['event_id']: e for p in (annotation or {}).get('patients', []) for e in p.get('events', [])}
     from openpatients2.longitudinal import relative_order
     new = copy.deepcopy(regenerated)
     new['review_status'] = submission.get('review_status', regenerated.get('review_status'))
-    # roster: reviewers may set the reported count/completeness and drop the pending notice.
-    for key in ('reported_individual_count', 'roster_complete', 'limitations'):
-        new['roster'][key] = copy.deepcopy(submission['roster'][key])
+    # roster: the annotation's roster block is the single source; older submissions' reviewed
+    # count/completeness (and dropped pending notice) are only a fallback when the annotation has none.
+    if (annotation or {}).get('roster') is None:
+        for key in ('reported_individual_count', 'roster_complete', 'limitations'):
+            new['roster'][key] = copy.deepcopy(submission['roster'][key])
     for got, want in zip(submission['figure_attribution'], new['figure_attribution']):
         for x, y in zip(got['assignments'], want['assignments']):
             y['subject'] = x['subject']; y['rationale'] = x['rationale']
@@ -393,11 +399,15 @@ def merge_submission(submission, regenerated):
             old = old_events.get(e['event_id'])
             if old is None:
                 continue
-            e['kind'] = old['kind']
+            own = classified.get(e['event_id'], {})
+            if 'kind' not in own:
+                e['kind'] = old['kind']
             if len(old['times']) == len(e['times']):
                 for t, o in zip(e['times'], old['times']):
-                    for field in ('kind', 'precision', 'calendar_value'):
-                        t[field] = o[field]
+                    for field, key in (('kind', 'time_kind'), ('precision', 'time_precision'),
+                                       ('calendar_value', 'time_calendar_value')):
+                        if key not in own:
+                            t[field] = o[field]
         want['relative_timeline'] = relative_order(want['companions']['timeline_v2'])
         want['vision']['figure_attribution'] = [f for f in new['figure_attribution']
                                                 if any(want['source']['patient_target']['patient_id'] in x['patient_ids'] for x in f['assignments'])]
@@ -505,7 +515,7 @@ def run(apply=False, skip=(), only=None, roots=ROOTS, now=None, allow_recent=Fal
             entry['runtime_gate_errors_after_migration'] = [e['error'][:200] for e in regenerated['source_gate_errors']][:20]
             if sub_path.exists():
                 submission = json.loads(sub_path.read_text())
-                merged = merge_submission(submission, regenerated)
+                merged = merge_submission(submission, regenerated, new)
                 check_submission(merged, new, source)
                 entry['submission_changed'] = merged != submission
         except (ValueError, KeyError, StopIteration) as exc:

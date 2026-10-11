@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "f7012542640dfadfa5423d2d5a438ee0578009c33c8dc8b613208bc24bdd0b54",
-  "annotation_sha256": "2406de3db044f1a93198fedfdede4136d2e7385ecc646adb7541ed213b9066b8",
-  "reviewed_at": "2026-10-09T22:25:08.911662+00:00",
+  "annotation_sha256": "b535910c288c7658abcb5454954a66f5df7f88bb851b403772243c9f6963215d",
+  "reviewed_at": "2026-10-11T02:23:10.258624+00:00",
   "source_segments_read": 37,
   "facts_reviewed": 213,
   "patients_reviewed": 3,
@@ -25,14 +25,16 @@
     "Verified 76 M12 nulled anchors ('age in Table1/Table2', 'symptom period preceding presentation') were reviewer paraphrases; literal 'N Mo'/'24 hours'/'a week' time.text retained.",
     "NR001 p2-f002: text_value '7 months', quote widened to 'Patient 2 presented at 7 months'. (NR001 resolution: b00009 'Patient 2 presented at 7 months' is this patient's presentation age.)",
     "MED-ROUTE/NO-INFERENCE: removed route 'topical' from emollients, 1% hydrocortisone and fusidic acid items (p1-f010..f012, p2-f010..f012, p3-f010, p3-f011); their own quotes do not state a route. Routes kept where written ('topical tacrolimus', 'potent topical steroids', 'IV').",
-    "Anchor restoration: for 5 facts whose paraphrased anchor was nulled by M12, set time.anchor to the literal source phrase the offset is relative to (e.g. 'admission', 'First time' table column, 'endoscopic procedure', 'starting rivaroxaban'); calendar dates, table ages and unstated references left null."
+    "Anchor restoration: for 5 facts whose paraphrased anchor was nulled by M12, set time.anchor to the literal source phrase the offset is relative to (e.g. 'admission', 'First time' table column, 'endoscopic procedure', 'starting rivaroxaban'); calendar dates, table ages and unstated references left null.",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (50 whitelisted label/number or number/unit spacing edits outside quotes in annotations (50); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures. (Case1/2/3 -> Case 1/2/3, Table1/Table2 -> Table 1/Table 2, 48/44g/L -> 48/44 g/L, 3.19kg/4.34kg -> kg spaced; source writes 'Case 1', 'Table 1'). Rejected 3 of its edits as wrong: 'Table12-month' -> 'Table 12-month' and 'Table8-month' -> 'Table 8-month' (there is no Table 12 or Table 8; meaning is the Table 1 12-month / 8-month column); hand-rewrote these as p1-e09 '12-month serial laboratory assessment (Table 1)', p3-e09 '8-month serial labs and growth (Tables 1 and 2)', and '12-month table values' / '8-month table measurements' in the p1/p3 summaries. Also hand-spaced the remaining number glue the fixer does not cover (spacing only, verified no other characters changed): all 9 patient summary texts (e.g. at3months -> at 3 months, sodium129mmol/L -> sodium 129 mmol/L, 1%hydrocortisone -> 1% hydrocortisone, 21stcentile -> 21st centile, totalprotein -> total protein, NGfeeding -> NG feeding), event descriptions p2 (with 24-hour; sodium 131 mmol/L) and p3 (sodium 3 mmol/kg/day), p1-f045 text_value (lists 59th at 20 months), p1 ambiguities 3/4, p3 fact notes 'At-presentation 5-month', article limitation 'Tables 1/2'.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=3, roster_complete=true, evidence b00001 \"We present a case series of 3 children, aged 3 to 7 months\"; 3 patients annotated in first-mention order."
   ],
   "unresolved": [
     "Figure pixels were not inspected; visual details are restricted to captions.",
-    "Recovered Tables1/2 and original XML headers/spans reviewed. Urine subtable names Case1/Case3 only; dashes/blank cells are unreported, never negative results.",
+    "Recovered Tables 1/2 and original XML headers/spans reviewed. Urine subtable names Case 1/Case 3 only; dashes/blank cells are unreported, never negative results.",
     "Age-specific serial table columns preserved separately from prose discharge-relative chronology; no sampling date reconciliation or range-derived disease assigned.",
     "Shared discussion leukocytosis/thrombocytosis statement does not explicitly enumerate individual patients; p1 leukocytosis/thrombocytosis not assigned from ambiguous collective statement.",
-    "Abstract describes admission ages 3–7 months, while Case1 electrolyte admission appears at age 9 months. Case narrative retained."
+    "Abstract describes admission ages 3–7 months, while Case 1 electrolyte admission appears at age 9 months. Case narrative retained."
   ],
   "assessment": {
     "reviewer": "Claude Opus 5.5 parent",

@@ -1,11 +1,11 @@
 {
   "article_id": "PMC12940158.1",
-  "reviewer": "parent assistant",
+  "reviewer": "Claude Opus 5.5 parent",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "b2fbe677f2b4a28d839eca180a2d2460454c8c63d6837ec584e4c938cc5e0455",
-  "annotation_sha256": "1d2d8fbc599ba1adaf92b746ef007941969aeda1982f49cb4e93d5cc423bcd84",
-  "reviewed_at": "2026-10-09T23:00:55.926583+00:00",
+  "annotation_sha256": "8e2495e6976fe76d7292373fa87df9e96ef4dac13ab13c7d4bd1e29f65dc1368",
+  "reviewed_at": "2026-10-10T01:13:19.616613+00:00",
   "source_segments_read": 56,
   "facts_reviewed": 104,
   "patients_reviewed": 1,
@@ -38,7 +38,9 @@
     "SECTION-SIGNS: IBS-SSS >300 and IBS-SSS decrease >175 -> symptoms_function performance_score; EQ-5D QoL increase >=40% -> quality_of_life. numeric_value dropped where the source gives a bound (symptoms_function has no comparator); literal bound kept in text_value.",
     "  p1-f070: observations/other -> symptoms_function/performance_score",
     "  p1-f078: observations/other -> symptoms_function/performance_score",
-    "  p1-f079: observations/other -> symptoms_function/quality_of_life"
+    "  p1-f079: observations/other -> symptoms_function/quality_of_life",
+    "p1-f100: time 'By 4 months post-FMT' relation unknown -> before (TIME-LITERAL 'by <time>' = no later than); anchor 'FMT' kept (named in phrase)",
+    "cleanup-2 NO-BORROWING review p1-f069 (failed prior therapies): time 'from 2020 to 2023' kept — the Figure 1 caption phrase 'unsuccessful treatments from 2020 to 2023' states the failed treatments and their period in the same phrase, so the time is governed (warning is a wording mismatch: 'unsuccessful treatments' vs 'therapies ... no clinical response'). No annotation edit; no glued-text repair diff for this article."
   ],
   "unresolved": [
     "Clinically important content that is printed only in Figure 1 pixels (names of failed antispasmodics, pregabalin, amitriptyline, fentanyl, SSRIs, phage therapy, rifaximin, ciprofloxacin, amoxicillin, metronidazole and diets; FMT and sampling dates; serial IBS-SSS, EQ5D5L and BSS values) is in the visual submission only, not in text-grounded facts.",
@@ -59,7 +61,9 @@
       "Burning sensation persisted at 1 year (abstract; Figure 1 \"No modification\"); discussion \"remission\" not widened.",
       "Figures 2 and 3 are the patient serial stool samples with the donor material as a reference column; individual p1 patient_specimen attribution accepted.",
       "Supplement SM0325 DOCX opened in full (Tables S1/S2 and decoded Figure S1): sequencing QC and literature comparison, protocol_methods/background, not includable; parent manifest receipt signed and cache cleaned.",
-      "SECTION-SIGNS: IBS-SSS >300 and IBS-SSS decrease >175 -> symptoms_function performance_score; EQ-5D QoL increase >=40% -> quality_of_life. numeric_value dropped where the source gives a bound (symptoms_function has no comparator); literal bound kept in text_value."
+      "SECTION-SIGNS: IBS-SSS >300 and IBS-SSS decrease >175 -> symptoms_function performance_score; EQ-5D QoL increase >=40% -> quality_of_life. numeric_value dropped where the source gives a bound (symptoms_function has no comparator); literal bound kept in text_value.",
+      "TIME-LITERAL 2026-10 'by <time>' audit: 1 fact(s) set to relation before after reading each source sentence",
+      "Cleanup-2: 1 time-quote fact reviewed and kept (same-phrase caption time); no edits."
     ],
     "residual_risks": [
       "Table 1 rows are undated and the flag mapping from a single Negative/Normal column is a test-type reading, not a printed flag.",

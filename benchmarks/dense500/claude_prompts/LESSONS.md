@@ -33,3 +33,12 @@ Coverage / form
 - Duplicate entries (e.g. 28 duplicate procedures); clinical_statement copying whole paragraphs — keep statements concise with focused quotes.
 - Quotes too short to establish timing — include the context that establishes time.
 - Source conflicts kept explicit (certainty=source_conflict, scoring=review_only), never reconciled.
+Gate warnings (Claude pass, 2026-10)
+- Warnings are non-blocking signals, not targets. Never reshape data to silence one: don't move a governed time into
+  `method`, don't merge "sparing the scalp, nails, palms" into one present sign, don't drop a caption-governed time.
+  Record what the source says; if the warning is a checker false positive, leave it and say so in your report.
+- Never borrow an attribute (drug name, route, site, time) from a neighbouring sentence; never invent a text_value.
+- Free text you write yourself is spaced ("Case 1", "5 mm", "+++ RBCs"); keep glued text only when transcribing what a
+  figure prints glued. Never copy identifier values (IDs, dates of birth, names) into any field — flag only.
+- Never hand-edit hashes. After a visual-submission edit, regenerate figure-EHR/privacy drafts with the tools' --draft
+  and carry the reviewed labels/flags over.

@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12796522.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "76d3f2dd62f2980181e20c42eef5123521df4532670cfcaafd13067e2d7f93ba",
+  "annotation_sha256": "e302bab7e423acb4a37fbf55c5b53b11df5ce96875213605207548554bafe6e4",
+  "reviewed_at": "2026-10-11T02:32:02.151646+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 68,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Pre-treatment GPPGA mean 3.3 and its three components (each 3 out of 4, mean 3) quarantined as source_conflict/review_only with a new ambiguity; summary no longer states 3.3",
+    "p1-f037 pustule exam time relation before/anchor Spesolimab -> at the 28th of November, anchor null",
+    "p1-f011 spesolimab: indication now GPP flare-up with b00009 single-dose quote; regimen single intravenous dose; note that dose date is not stated",
+    "p1-f012 metformin evidence extended to include diabetes for the indication",
+    "p1-f018 DLQI kind performance_score -> quality_of_life",
+    "p1-f005/p1-f006 clinical_status active -> unknown (not stated)",
+    "p1-f002 age unit years -> year (written unit)",
+    "p1-f009/p1-f010 regimen reduced to cream; p1-f027 method hematoxylin and eosin from Fig 1 caption",
+    "Added p1-f068 no specific aggravating factors (absent)",
+    "Events e03/e05/e06 linked to all their visit facts; b00002 source coverage set to patient_facts; Fig 3-6 panel body_part from captions",
+    "Visual submission fig6 panel D description corrected: faint whitish scale-like patches are visible on the thigh; figure-EHR and privacy sidecars rebound via the official --draft output with reviewer labels carried over; fig6 B/C privacy notes corrected (no undergarments in frame)"
+  ],
+  "unresolved": [
+    "The date of the spesolimab dose is not stated; the 28th of November pre-treatment date has no year, and day 10 and day 31 are given relative to the dose.",
+    "The pre-treatment GPPGA score and the day 10 and day 31 symptom statements carry no time of their own in their sentences; their timing is carried by the timeline events.",
+    "Fig 3 to Fig 6 captions do not say which panel is pre-treatment, day 10 or day 31; no per-panel timepoint is assigned.",
+    "Trial and literature statements (Effisayil-1, Effisayil-2, Brigenti et al, Morita et al, Elewski et al) in the discussion are not facts about the index patient.",
+    "No hospitalization history is recorded as a fact beyond the source statement of no prior hospitalizations, which has no matching schema item.",
+    "The pre-treatment GPPGA mean (3.3) is inconsistent with its stated components (each 3); kept review_only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 68,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Single patient; discussion trials and cited cases (Effisayil-1/2, Brigenti, Morita, Elewski) kept out",
+      "Dose date not stated; 28 November exam lacks a year; no date derived",
+      "Day-10 and day-31 sentences after the opening visit sentence carry no own time; times left null and carried by events",
+      "Fig 3-6 captions do not map panels to pre/day 10/day 31; Fig 6 has four panels for three timepoints; left unassigned",
+      "Non-smoker as tobacco absent/current, NKA as all_allergies absent, family history absent all checked against SOC-NEVER and allergy prompt",
+      "Fig 4-6 undergarment-covered pelvis not sensitive anatomy; Fig 2 lower face flagged as identifiable face (conservative)"
+    ],
+    "residual_risks": [
+      "No prior hospitalizations has no schema item and stays in limitations",
+      "Panel-level timepoints unknown for Fig 3-6"
+    ]
+  },
+  "physician_adjudicated": false
+}

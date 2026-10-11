@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "ab89d1f368d3b388da43e74923f23f6af929308def56bfac6d4b084f402f6db4",
-  "annotation_sha256": "82ce86584425fe1c53004234108c557f3c08b455abf9507eb963c6f2ffc3581c",
-  "reviewed_at": "2026-10-09T22:43:48.688392+00:00",
+  "annotation_sha256": "5c90f5b19ee3c90e897ab1a004102796190427f4c7fa85f5afea7f0a5a2eab72",
+  "reviewed_at": "2026-10-11T02:21:02.612988+00:00",
   "source_segments_read": 28,
   "facts_reviewed": 126,
   "patients_reviewed": 1,
@@ -23,7 +23,13 @@
     "semantic-rules-2026-10 re-sign: verified M12 anchor nulling (19 paraphrases: 'reported clinical history', 'initial RYGB', 'initial center consultation').",
     "Restored literal anchors: 'bariatric surgery' on p1-f012/f013/f014 ('At the time of bariatric surgery'); 'RYGB' on p1-f015/f016/f017/f020/f021/f022/f128 ('One year and nine months after surgery', the surgery being the RYGB). 'Initial consultation' table rows and '17 years ago' keep anchor null (time text is self-contained / relative to report).",
     "EVID-NEGATION gate: p1-f024 refuted 'psychiatric or psychological disorders' ('ruling out' is not a recognised negation cue) recast as an observations result of the transdisciplinary evaluation (text 'ruling out psychiatric or psychological disorders'); p1-f088 'complete resolution of symptoms' and p1-f093 'symptom-free' recast from absent symptoms to present symptom-status items with those literal text values.",
-    "opus-fixup: p1-f088 ('complete resolution of symptoms') and p1-f093 ('symptom-free') restored to assertion absent, name 'Symptoms', text_value removed, accurate clinical_statements; reverts the warning-driven recast to present symptom-status items whose clinical_statements ('Previously reported malnutrition symptoms', 'Symptoms at five-month follow-up') misrepresented the source."
+    "opus-fixup: p1-f088 ('complete resolution of symptoms') and p1-f093 ('symptom-free') restored to assertion absent, name 'Symptoms', text_value removed, accurate clinical_statements; reverts the warning-driven recast to present symptom-status items whose clinical_statements ('Previously reported malnutrition symptoms', 'Symptoms at five-month follow-up') misrepresented the source.",
+    "TIME-ONLY QUOTES nulled: p1-f020 (normocytic normochromic anemia), p1-f021 (severe malnutrition), p1-f022 (prose albumin 2.5 g/dL) and p1-f128 (anemia morphology) carried 'One year and nine months after surgery' only via a separate time-only quote from the preceding consultation sentence; the workup sentence itself has no time, so fact time set to null (relation unknown) and the time-only quote dropped; order is kept by their existing membership in event p1-e004 (initial center presentation and malnutrition workup)",
+    "TIME-ONLY QUOTES kept: p1-f089 (body weight 72 kg) and p1-f090 (BMI 28 kg/m²) are in the same sentence as 'Three months following the revisional surgery'; evidence merged into the single governing span",
+    "NEGATION WORDS: p1-f079 'uneventful recovery' and p1-f092 'remains symptom-free ... at five months' kept as present outcomes (source states them as the recovery/follow-up outcome)",
+    "GLUED-TEXT: only an internal provenance token ('original28segment') flagged by the tool; repaired by repair_glued_text.py. Caption-derived 'imagesA)'/'day oneThe' mirror the source caption text and were left unchanged",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (5 whitelisted label/number or number/unit spacing edits outside quotes in annotations (2), visual-submissions (3); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. Viewed both figures: printed overlay text (GASTRO-GASTRO ANASTOMOSIS, 3 CM, organ labels) is untouched; the respaced Figure 1A/B and Figure 2 mentions are reviewer prose.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=1, roster_complete=true, evidence b00002 \"We discuss the case of a 55-year-old female\"; 1 patients annotated in first-mention order."
   ],
   "unresolved": [
     "Initial albumin 2.5 prose vs 2.8 table unresolved; both numerical candidates review-only.",
@@ -41,11 +47,13 @@
     "figures_viewed": 0,
     "key_findings": [
       "Mechanical anchor nulling correct; literal anchors restored where the source names the reference event.",
-      "opus-fixup: resolved/symptom-free follow-up restored as absent symptoms."
+      "opus-fixup: resolved/symptom-free follow-up restored as absent symptoms.",
+      "Cleanup pass 2: 1 internal glued token repaired; 2 time facts kept (merged governing quote), 4 nulled (order via event p1-e004); 2 negation-word outcomes kept present"
     ],
     "residual_risks": [
       "Table 1 initial-consultation albumin 2.8 vs prose 2.5 g/dL left as previously recorded."
-    ]
+    ],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
   },
   "physician_adjudicated": false
 }

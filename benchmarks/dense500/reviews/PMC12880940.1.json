@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "ba775b21a08071fcd623c45e9a108c5c4306d1569b633c9fece904afdbab65ee",
-  "annotation_sha256": "2d6698d11a51074c5266fa864864bbbf9f4cea28584c1d9244e07108fa3d8e1c",
-  "reviewed_at": "2026-10-09T22:27:59.587153+00:00",
+  "annotation_sha256": "1136e682fab0dcd831eedbf9bf228b79fdfccad6c0b4561bef9eac65d2a850ba",
+  "reviewed_at": "2026-10-11T02:29:43.506652+00:00",
   "source_segments_read": 20,
   "facts_reviewed": 114,
   "patients_reviewed": 2,
@@ -24,11 +24,16 @@
     "SECTION-SIGNS: moved exam findings p1-f013, p1-f014, p1-f015 (apical impulse), p1-f018 (anicteric skin/sclerae), p2-f019 (impaired peripheral perfusion), p2-f021 (corneal reflexes intact), p2-f022 (symmetric withdrawal to pain) from observations to symptoms_function kind=sign",
     "OBS-FLAG: p2-f051/p2-f052 blood pressure flag unknown -> low ('Blood pressure was low (84/60 mmHg)')",
     "TIME-LITERAL: p1-f030/p1-f031 restored anchor 'first examination' (literal: 'expanded compared with the first examination') for 'after 12 days'",
-    "Needs-review p1-f050/p2-f048: flag kept unknown (IDH criterion 'surrounded by normal myocardial tissue' is not a normal result)"
+    "Needs-review p1-f050/p2-f048: flag kept unknown (IDH criterion 'surrounded by normal myocardial tissue' is not a normal result)",
+    "Glued text (cleanup pass 2): applied repair_glued_text.py (5 tokens, internal notes/provenance only) and hand-respaced 'All 6 actual figures' and 'Fig 5/6' in article_limitations[1]. No time-only quotes or negation-word rows for this article.",
+    "Cleanup3 GLUED visual submission: ECG descriptions/pixel observations respaced to the printed calibrations ('25 mm/s', '10 mm/mV', 'printed 189 bpm' header on f4, verified on pixels) and 'I, II, III, aVR, aVL, aVF'; limitations 'Fig. 5 ECG and Fig. 6 echo' (f5/f6); attribution rationales/limitations 'Case 1', 'Case 2', 'Figures 5/6', 'Figure 5/6'; f2 'RA, RV, LA and LV' and clinical-significance 'Case 1' (34 strings); figure-EHR label and privacy-flag visual_target_sha256 refreshed; all six figures re-viewed on pixels (privacy flags confirmed: f1 timestamp header, f4 name/ID header, f6 none).",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (5 whitelisted label/number or number/unit spacing edits outside quotes in annotations (1), visual-submissions (4); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. Viewed f5 (echo panels A-D): it prints no figure numbers; the respaced Fig. 5/Fig. 6 mentions are reviewer prose.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=2, roster_complete=true, evidence b00002 \"by reporting two cases of IDH confirmed by echocardiography\"; 2 patients annotated in first-mention order.",
+    "GLUED-TEXT pass 4 follow-up: privacy-flag prefill evidence for the ECG figure respaced to match the printed header (25 mm/s, 10 mm/mV, printed 189 bpm), verified on the image."
   ],
   "unresolved": [
     "No explicit same-patient prior/follow-up publication link identified in original source; literature citations alone not treated as shared patients.",
-    "All6 actual figures inspected into separate visual submission. Body callouts Fig5/6 are reversed relative to assets/captions; no corrected clinical modality inferred from source inconsistency."
+    "All 6 actual figures inspected into separate visual submission. Body callouts Fig 5/6 are reversed relative to assets/captions; no corrected clinical modality inferred from source inconsistency."
   ],
   "assessment": {
     "reviewer": "Claude Opus 5.5 parent",
@@ -37,7 +42,9 @@
     "figures_viewed": 0,
     "key_findings": [
       "Mechanical migrations correct",
-      "Exam signs relocated per SECTION-SIGNS"
+      "Exam signs relocated per SECTION-SIGNS",
+      "Cleanup pass 2: glued text respaced; no clinical changes.",
+      "Cleanup3: visual-submission glued text respaced across all six figures."
     ],
     "residual_risks": [
       "Figures not re-viewed in this re-sign pass (no figure sidecar changes)"

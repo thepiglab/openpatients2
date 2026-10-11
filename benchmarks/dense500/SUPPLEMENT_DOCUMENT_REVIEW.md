@@ -69,3 +69,42 @@ PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/suppleme
 Patient scope, ownership evidence and `ehr_includable`/`ehr_modality: video` follow the ordinary manifest rules. On-screen captions or measurements seen in sampled frames are not transcribed as clinical facts by this path; a reviewer who needs them uses a still-image supplement review of the extracted frames. In `article_checklist.json` the supplement appears under `manifest_reviewed_supplements` with basis `manifest_video_frames_sampled`, the inventory `review_status` is `agent_and_parent_manifest_video_frames_sampled`, and `content_inspected` stays false (no page/pixel sidecar was signed).
 
 **External-link media.** A supplement declared only as an external link (YouTube etc.) has no fetchable PMC asset: acquisition records `download_status: no_declared_asset` (or `rejected_host`). Record it honestly in the manifest: `classification_basis: caption_and_filename_only`, `ehr_includable: false`, and a limitation saying the media was not viewed. It is never a content review. Under the default `UNAVAILABLE_MEDIA_POLICY='complete_flagged'` in `export.py` (the same policy applies to figures recorded `status: unavailable`), the dual-signed row satisfies the gate with basis `manifest_external_media_unavailable`. The article completes, flagged: the checklist lists the supplement in `unavailable_media` (and `unavailable_external_supplement_ids`), the inventory `review_status` is `external_media_unavailable`, `content_inspected` stays false, and the unified record sets `media_available: false` and `content_reviewed: false`. `UNAVAILABLE_MEDIA_POLICY='block'` keeps such articles incomplete.
+
+## Word-processor supplements (DOCX/DOC/RTF/ODT, or such members of a ZIP)
+
+Format `dense-supplemental-text-document-reference/1` (Pydantic `TextDocumentTarget` in `supplement_review.py`). It is reviewed like a PDF, but the unit of inspection is a literal **text unit** instead of a rendered page. Text is extracted offline by `openpatients2.document_text`, using the shipped firecrawl-anydoc structured model (`to_document`, Inline.text runs only). Hosted OCR and Markdown output are disabled in the worker, and nothing is uploaded. There is no lossy fallback: a file anydoc cannot read cannot be completed by this path.
+
+Units come in document order:
+- `paragraph`: one non-blank line.
+- `table_row`: one table row, cells joined by ` | `, with `table`/`row` coordinates and the raw `cells`.
+
+DOCX units are cross-checked against the raw `w:t` text of `word/document.xml`. Units that do not match are listed in `extraction.nonliteral_units` and may not be quoted.
+
+```sh
+# 1. acquire (as for every supplement), then draft the review skeleton (extracts ZIP members into the cache)
+PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/supplement_assets.py extract-text benchmarks/dense500 --article ARTICLE --supplement SID
+# 2. copy document-submission-drafts/ARTICLE.supplements.SID.json to document-submissions/, read EVERY unit
+#    (open the original file too when layout matters), fill `blocks`, status, classification, summary, clinical_data
+# 3. validate (no --role: this is the dry run)
+PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/supplement_review.py benchmarks/dense500 --article ARTICLE --supplement SID
+# 4. sign only after reading every unit (a --role call is a signature)
+PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/supplement_review.py benchmarks/dense500 --article ARTICLE --supplement SID --role agent --reviewer "Claude Sonnet 5.5 annotator" --notes "<what you read>"
+```
+
+- **Units and extraction are machine fields; never edit them.** `extraction.units_sha256` binds the units. With the cached file present, validation re-extracts and requires identical units, tool version and nonliteral list.
+- **Blocks.** `blocks` play the role of PDF page reviews. Each block covers a consecutive run `first_unit..last_unit`, and together the blocks cover every unit exactly once, in order. Each block records:
+  - `inspection_method`: `extracted_text`, or `extracted_text_and_rendered_document`;
+  - `contents`;
+  - `clinical_relevance` (administrative / clinical_data / background / mixed) and notes;
+  - `patient_ids`;
+  - rights fields;
+  - limitations.
+- **Clinical transcriptions:**
+  - cite the asset URL (a member pseudo-URL `ZIP_URL#member=NAME` inside a ZIP) and its SHA256;
+  - put the **unit number in `page`**, with `panel: null`;
+  - their text must be literal in that unit (a whole table row, e.g. `1 | acute cystitis | yes`, or part of it). Use the conventional id `A<asset>-U<unit>` (e.g. `A1-U0003`).
+- **Facts and coverage.** Facts, ownership evidence, coverage and dash-cell rules are exactly as for PDFs. A fact's owners must be listed on the block containing its units, and every clinical block needs at least one clinical transcription.
+- **ZIP archives.** The `archive` block keeps the declared ZIP. All word-processor members must be reviewed; any other member makes the review `partial`. Receipts bind `archive_sha256`.
+- **Receipts and export.** Receipts have status `source_and_document_text_reviewed`. Export reports `agent_and_parent_source_and_document_text_reviewed`, and the supplement satisfies `supplement_review_or_no_supplements`.
+- **Runtime pipeline.** It reads the same text: `ehr_tasks.load_transcriptions` and `measurement_series_review.reviewed_transcriptions` offer every literal unit under the same `A<asset>-U<unit>` ids (`openpatients2.document_text.reviewed_text`). Local models and measurement series can therefore cite the reviewed units.
+

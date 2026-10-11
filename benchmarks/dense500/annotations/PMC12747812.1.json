@@ -1070,7 +1070,7 @@
           "clinical_statement": "Serum iron: 152",
           "certainty": "supported",
           "scoring": "include",
-          "notes": "Exact number/unit/reference range retained. Sampling time is unspecified across admissions, and no author qualitative flag is attributed to this exact Table3 draw. Later repeat normalization is a distinct event."
+          "notes": "Exact number/unit/reference range retained. Sampling time is unspecified across admissions, and no author qualitative flag is attributed to this exact Table 3 draw. Later repeat normalization is a distinct event."
         },
         {
           "fact_id": "p1-f042",
@@ -1097,7 +1097,7 @@
           "clinical_statement": "Transferrin: 215",
           "certainty": "supported",
           "scoring": "include",
-          "notes": "Exact number/unit/reference range retained. Sampling time is unspecified across admissions, and no author qualitative flag is attributed to this exact Table3 draw. Later repeat normalization is a distinct event."
+          "notes": "Exact number/unit/reference range retained. Sampling time is unspecified across admissions, and no author qualitative flag is attributed to this exact Table 3 draw. Later repeat normalization is a distinct event."
         },
         {
           "fact_id": "p1-f043",
@@ -1124,7 +1124,7 @@
           "clinical_statement": "Ferritin: 982.7",
           "certainty": "supported",
           "scoring": "include",
-          "notes": "Exact number/unit/reference range retained. Sampling time is unspecified across admissions, and no author qualitative flag is attributed to this exact Table3 draw. Later repeat normalization is a distinct event."
+          "notes": "Exact number/unit/reference range retained. Sampling time is unspecified across admissions, and no author qualitative flag is attributed to this exact Table 3 draw. Later repeat normalization is a distinct event."
         },
         {
           "fact_id": "p1-f044",
@@ -1151,7 +1151,7 @@
           "clinical_statement": "Transferrin saturation: 50",
           "certainty": "supported",
           "scoring": "include",
-          "notes": "Exact number/unit/reference range retained. Sampling time is unspecified across admissions, and no author qualitative flag is attributed to this exact Table3 draw. Later repeat normalization is a distinct event."
+          "notes": "Exact number/unit/reference range retained. Sampling time is unspecified across admissions, and no author qualitative flag is attributed to this exact Table 3 draw. Later repeat normalization is a distinct event."
         },
         {
           "fact_id": "p1-f045",
@@ -1178,7 +1178,7 @@
           "clinical_statement": "Ceruloplasmin: 29.2",
           "certainty": "supported",
           "scoring": "include",
-          "notes": "Exact number/unit/reference range retained. Sampling time is unspecified across admissions, and no author qualitative flag is attributed to this exact Table3 draw. Later repeat normalization is a distinct event."
+          "notes": "Exact number/unit/reference range retained. Sampling time is unspecified across admissions, and no author qualitative flag is attributed to this exact Table 3 draw. Later repeat normalization is a distinct event."
         },
         {
           "fact_id": "p1-f046",
@@ -2368,13 +2368,21 @@
           "evidence": [
             {
               "segment_id": "b00045",
-              "quote": "Three months later, the patient was readmitted with elevated liver enzymes and coagulopathy, but without encephalopathy, while on venlafaxine treatment. This second hospitalization reinforced the suspicion of antidepressant-related drug-induced liver injury (DILI), prompting withdrawal of the medication. N-acetylcysteine therapy was initiated, resulting in favorable clinical and biochemical evolution, with resolution of symptoms and gradual decline of hepatocellular and cholestatic markers and hyperbilirubinemia. Both the discontinuation of the antidepressant and the initiation of N-acetylcysteine occurred on day one of hospitalization, after which a progressive improvement in liver injury markers was observed, as illustrated in Figure 1."
+              "quote": "Three months later, the patient was readmitted with elevated liver enzymes and coagulopathy, but without encephalopathy, while on venlafaxine treatment."
+            },
+            {
+              "segment_id": "b00045",
+              "quote": "This second hospitalization reinforced the suspicion of antidepressant-related drug-induced liver injury (DILI), prompting withdrawal of the medication."
+            },
+            {
+              "segment_id": "b00045",
+              "quote": "Both the discontinuation of the antidepressant and the initiation of N-acetylcysteine occurred on day one of hospitalization"
             }
           ],
           "clinical_statement": "venlafaxine",
           "certainty": "supported",
           "scoring": "include",
-          "notes": ""
+          "notes": "Day one of hospitalization comes from the sentence that explicitly dates the discontinuation of the antidepressant (venlafaxine, named in the readmission sentence)."
         },
         {
           "fact_id": "p1-f094",
@@ -2766,7 +2774,7 @@
             "subject": "index_patient",
             "assertion": "present",
             "event": "recovery",
-            "text_value": "remained asymptomatic following antidepressant discontinuation with slow progressive biochemical normalization",
+            "text_value": "slow but progressive normalization of hepatic biochemical tests following antidepressant discontinuation",
             "related_condition": "antidepressant-associated liver injury",
             "cause_as_documented": "antidepressant discontinuation"
           },
@@ -2776,7 +2784,28 @@
               "quote": "following antidepressant discontinuation, the patient remained asymptomatic with slow but progressive normalization of hepatic biochemical tests"
             }
           ],
-          "clinical_statement": "Asymptomatic after antidepressant cessation",
+          "clinical_statement": "Biochemical recovery after antidepressant cessation",
+          "certainty": "supported",
+          "scoring": "include",
+          "notes": "The absent symptoms (\"remained asymptomatic\") are recorded separately as p1-f130 (assertion absent)."
+        },
+        {
+          "fact_id": "p1-f130",
+          "task": "symptoms_function",
+          "collection": "items",
+          "fields": {
+            "subject": "index_patient",
+            "assertion": "absent",
+            "name": "Symptoms after antidepressant discontinuation",
+            "kind": "symptom"
+          },
+          "evidence": [
+            {
+              "segment_id": "b00049",
+              "quote": "following antidepressant discontinuation, the patient remained asymptomatic"
+            }
+          ],
+          "clinical_statement": "No symptoms after antidepressant discontinuation.",
           "certainty": "supported",
           "scoring": "include",
           "notes": ""
@@ -3811,7 +3840,8 @@
             "p1-f104",
             "p1-f105",
             "p1-f109",
-            "p1-f129"
+            "p1-f129",
+            "p1-f130"
           ],
           "time_text": "more than one year",
           "evidence": [
@@ -4409,7 +4439,7 @@
           ]
         },
         {
-          "description": "Table3 exact draw-level results carry no qualitative flags inferred from reference ranges. The later narrative iron/ACE normalization has unspecified timing and does not supply normal flags to those numeric draws. Retrospective no-RUCAM documentation does not get a second-biopsy date; the final etiologic synthesis specifically relies on the second biopsy.",
+          "description": "Table 3 exact draw-level results carry no qualitative flags inferred from reference ranges. The later narrative iron/ACE normalization has unspecified timing and does not supply normal flags to those numeric draws. Retrospective no-RUCAM documentation does not get a second-biopsy date; the final etiologic synthesis specifically relies on the second biopsy.",
           "evidence": [
             {
               "segment_id": "b00048",

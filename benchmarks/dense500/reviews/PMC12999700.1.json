@@ -1,11 +1,11 @@
 {
   "article_id": "PMC12999700.1",
-  "reviewer": "parent assistant",
+  "reviewer": "Claude Opus 5.5 parent",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "40479b4755ffd268760863245c55e404c9286051f61bace6d03a4609c6cb6cb4",
-  "annotation_sha256": "d51faf4d9a1c6fd61a3c1b0bf78961c703e0b227dd09eb78e4dab704f051184b",
-  "reviewed_at": "2026-10-09T22:33:30.202848+00:00",
+  "annotation_sha256": "7dac80485af65b56476612cacdb3d93157cc27c5b6701a1a8ba1098931ed3adf",
+  "reviewed_at": "2026-10-10T01:43:34.103232+00:00",
   "source_segments_read": 82,
   "facts_reviewed": 176,
   "patients_reviewed": 1,
@@ -22,7 +22,8 @@
   "corrections": [
     "p1-f159 kidney function 'within normal limits': flag=normal [OBS-FLAG]",
     "M12 anchor nulling verified (paraphrases 'start of bisphosphonate therapy', 'start of immunosuppressive regimen', 'initial treatment of CKD', 'after peritoneal dialysis' were not literal); restored literal anchors: p1-f158..f163 'bisphosphonate therapy', p1-f024/f025 'triple immunosuppressive regimen'; p1-f005/f006 are durations and keep null anchor [TIME-LITERAL]",
-    "M13 p1-e21 occurrence uncertain -> unknown verified (postulated mechanisms)"
+    "M13 p1-e21 occurrence uncertain -> unknown verified (postulated mechanisms)",
+    "cleanup-3 NO-BORROWING: '(six months post-transplant)' is in the first sentence of b00020 only; 'As a result, calcifediol ... was added ..., without introducing antiresorptive therapy.' is a later sentence with no time -> p1-f140 (antiresorptive therapy not started) and p1-f139 (calcifediol started; same borrowed span, not flagged by the scan) time nulled (text/anchor null, relation unknown) and the multi-sentence time quote dropped; own-clause quotes kept. Order kept by event p1-e12 membership. Same-sentence facts p1-f147/f148/f149 and Fig. 3 caption-governed p1-f150 keep the time."
   ],
   "unresolved": [
     "Single case report; patient identity is by description only (61-year-old woman); no names or dates beyond years 1997 and 2020.",
@@ -38,7 +39,8 @@
     "facts_reviewed": 176,
     "figures_viewed": 0,
     "key_findings": [
-      "semantic-rules-2026-10 re-sign: M12/M13 verified, 1 needs-review item resolved, literal anchors restored"
+      "semantic-rules-2026-10 re-sign: M12/M13 verified, 1 needs-review item resolved, literal anchors restored",
+      "cleanup-3: borrowed six-month time removed from calcifediol start and antiresorptive not-started; event p1-e12 keeps order."
     ],
     "residual_risks": [
       "Table 1 osteocalcin unit printed 'mg/dL' vs narrative ng/mL kept as documented"

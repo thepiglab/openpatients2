@@ -1417,7 +1417,7 @@
             "subject": "index_patient",
             "assertion": "present",
             "event": "follow_up",
-            "text_value": "asymptomatic with full neurological recovery",
+            "text_value": "full neurological recovery",
             "follow_up_duration_text": "three-month follow-up",
             "time": {
               "text": "three-month follow-up",
@@ -1431,21 +1431,52 @@
               "quote": "She remained asymptomatic with full neurological recovery at three-month follow-up."
             }
           ],
-          "clinical_statement": "Asymptomatic with full neurological recovery at three-month follow-up",
+          "clinical_statement": "Full neurological recovery at three-month follow-up",
           "certainty": "supported",
           "scoring": "include",
           "notes": "Anchor of the three months is not stated; abstract gives two months (see ambiguities)."
         },
         {
-          "fact_id": "p1-f050",
-          "task": "outcomes",
+          "fact_id": "p1-f053",
+          "task": "symptoms_function",
           "collection": "items",
           "fields": {
             "subject": "index_patient",
-            "assertion": "present",
-            "event": "follow_up",
-            "text_value": "asymptomatic",
-            "follow_up_duration_text": "two months",
+            "assertion": "absent",
+            "name": "Symptoms",
+            "kind": "symptom",
+            "body_site": null,
+            "severity": null,
+            "temporality": "current",
+            "time": {
+              "text": "three-month follow-up",
+              "relation": "at",
+              "anchor": null
+            }
+          },
+          "evidence": [
+            {
+              "segment_id": "b00008",
+              "quote": "She remained asymptomatic with full neurological recovery at three-month follow-up."
+            }
+          ],
+          "clinical_statement": "Remained asymptomatic (no symptoms) at three-month follow-up",
+          "certainty": "supported",
+          "scoring": "include",
+          "notes": ""
+        },
+        {
+          "fact_id": "p1-f050",
+          "task": "symptoms_function",
+          "collection": "items",
+          "fields": {
+            "subject": "index_patient",
+            "assertion": "absent",
+            "name": "Symptoms",
+            "kind": "symptom",
+            "body_site": null,
+            "severity": null,
+            "temporality": "current",
             "time": {
               "text": "two months",
               "relation": "at",
@@ -1458,7 +1489,7 @@
               "quote": "She remained asymptomatic at two months."
             }
           ],
-          "clinical_statement": "Asymptomatic at two months (abstract)",
+          "clinical_statement": "Remained asymptomatic (no symptoms) at two months (abstract)",
           "certainty": "supported",
           "scoring": "include",
           "notes": "Anchor of the two months is not stated; body text gives three-month follow-up (see ambiguities)."
@@ -1805,7 +1836,8 @@
           "fact_ids": [
             "p1-f049",
             "p1-f047",
-            "p1-f048"
+            "p1-f048",
+            "p1-f053"
           ],
           "time_text": "three-month follow-up",
           "evidence": [

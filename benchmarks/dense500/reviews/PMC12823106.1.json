@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12823106.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c8be7954663242aafb76b7f446024198095abbd263259ceea0aba4d2edbd23b5",
+  "annotation_sha256": "0a601427472aed9d3cfe0a0350d17a2f449d648531b4130839e36dec5f627381",
+  "reviewed_at": "2026-10-11T02:20:04.327429+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 58,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f042 systemic-agent workup moved from care_plans to observations (kind other, status historical, result_absent_reason not_reported)",
+    "p1-f043 and p1-f045 phototherapy moved from care_plans to procedures_devices (nonpharmacologic_therapy, assertion absent, action unknown)",
+    "p1-f046 methotrexate non-candidacy moved from care_plans to medications (assertion absent, action unknown); acitretin split out as p1-f058",
+    "Added p1-f055 observation: past elevated transaminases (text elevated, flag high, no values)",
+    "Added p1-f056 social_exposures alcohol (alcohol use disorder, status unknown) and p1-f057 access_to_care (work schedule prevented phototherapy)",
+    "p1-f032/p1-f033 evidence extended to include plaque psoriasis so the indication is in the items own quote",
+    "p1-f038 evidence extended to the full as-needed phrase; as needed kept on both topicals with ambiguity retained",
+    "p1-f044 target and p1-f051 related_condition removed (not in their own evidence, NO-BORROWING)",
+    "p1-f008 vitiligo: diagnostic_basis reduced to clinical examination, body_site back, left arm, fingers, and face added with May 2025 exam evidence",
+    "Event p1-e03 kind follow_up -> history; p1-e05 linked to new facts; added relation p1-e02 before p1-e03",
+    "Domain coverage for procedures_devices and observations changed to documented; summary wording so -> and",
+    "Article limitation on absent test results reworded to acknowledge past elevated transaminases and the unreported workup"
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the three JPEG figures are inspected in the separate visual submission.",
+    "The supplement is a CARE checklist PDF listed without patient clinical content; see the supplement manifest.",
+    "Vitiligo is first documented at the November 2023 follow-up; the onset date and the baseline state are not stated, and a causal role of risankizumab-rzaa is not established by the authors.",
+    "No laboratory values, imaging or biopsy are reported (only past elevated transaminases without values and an unreported systemic-agent workup); vitiligo and psoriasis status rest on clinical examination.",
+    "Discussion statements about published cases, literature and mechanisms are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 58,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; discussion paragraphs b00009-b00011 cite literature cases (guselkumab, tildrakizumab) that are correctly kept out of the patient",
+      "Vitiligo-risankizumab link kept as allergies adverse_effect assertion possible, ambiguous/review_only: authors say associated but raise coincidence and koebnerization",
+      "Moderate (original diagnosis), extensive (Nov 2022) and severe (introduction, untimed) severity kept as separate condition facts with an ambiguity; 30% (abstract) vs over 30% (narrative) BSA kept textual with ambiguity",
+      "Exam findings at Nov 2022/Nov 2023/May 2025 carry null time (sentences lack own time) and are linked via events, consistent with NO-BORROWING",
+      "Baseline absence of vitiligo not stated; recorded only as ambiguity",
+      "Figures F1-F3 viewed: clinical photographs consistent with captions and visual submission; supplement SD1 viewed: CARE checklist, no clinical data"
+    ],
+    "residual_risks": [
+      "Scope of as needed (both topicals vs clobetasol only) is a reading choice",
+      "Methotrexate/acitretin non-candidacy represented as negated medications with action unknown; schema has no contraindicated action"
+    ]
+  },
+  "physician_adjudicated": false
+}

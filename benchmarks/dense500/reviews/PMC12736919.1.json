@@ -1,11 +1,11 @@
 {
   "article_id": "PMC12736919.1",
-  "reviewer": "parent assistant",
+  "reviewer": "Claude Opus 5.5 parent",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "e00c855f9e3ec039de1f828a7c20e4e9986447846ab7404b6cfb349685a81b94",
-  "annotation_sha256": "8090f79eb0a22572f0b34907f2a7af5fb071abb72f169cd62e743266a91061d6",
-  "reviewed_at": "2026-10-09T22:25:22.126260+00:00",
+  "annotation_sha256": "7518a92077f6a9e9e83d02061ab5eccfcdf56099c0eb4cb083e89f5212f391ec",
+  "reviewed_at": "2026-10-10T01:09:09.482939+00:00",
   "source_segments_read": 40,
   "facts_reviewed": 104,
   "patients_reviewed": 1,
@@ -27,7 +27,9 @@
     "SECTION-SIGNS: moved clinical scale scores from observations to symptoms_function kind=performance_score (mMRC p1-f042/f043/f048/f049, Borg p1-f054/f055, LCADL p1-f056/f057, HADS-Anxiety p1-f058/f059; status/comparator dropped, numeric values/units/times kept); moved 'cardiovascular examination ... stable' (p1-f071) to symptoms_function kind=sign. 6MWT and sit-to-stand stay physiologic observations.",
     "Anchor restoration: for 5 facts whose paraphrased anchor was nulled by M12, set time.anchor to the literal source phrase the offset is relative to (e.g. 'admission', 'First time' table column, 'endoscopic procedure', 'starting rivaroxaban'); calendar dates, table ages and unstated references left null.",
     "SOC-NEVER review of M06: p1-f029 'denied any recreational drug use' is a denial, not stated lifetime never-use; changed to assertion=absent, status=unknown (not never-use).",
-    "p1-f044: time restored as relation after, anchor 'hospital-based pulmonary rehabilitation program' (literal; 'discontinuation of regular physical activity after a hospital-based pulmonary rehabilitation program')."
+    "p1-f044: time restored as relation after, anchor 'hospital-based pulmonary rehabilitation program' (literal; 'discontinuation of regular physical activity after a hospital-based pulmonary rehabilitation program').",
+    "cleanup-2 NO-BORROWING/TIME-LITERAL: p1-f048..f059 (baseline/Week 16 mMRC, 6MWT, 10x Sit-to-Stand, Borg, LCADL, HADS-Anxiety): time is governed by the same Table 1 row (b00036 'Baseline (Week 0) | Assessments | ...', b00038 'Week 16 | Post-intervention Assessments | ...'); kept time and replaced the separate value-cell + time-only quotes with one contiguous row span from the Date/Interval cell through the value; narrative quotes kept.",
+    "cleanup-2 p1-f112 outcome: evidence row quote extended to the governing table row 'Week 16 | Outcomes | Improved functional capacity, ...'; time.text changed from 'After 16 weeks' (narrative scope sentence) to the row's literal 'Week 16'; text_value trimmed of the appended 'after 16 weeks' so it carries the outcome only. No glued-text changes needed."
   ],
   "unresolved": [
     "No figures are present in the original source.",
@@ -46,7 +48,8 @@
     "figures_viewed": 0,
     "key_findings": [
       "Mechanical migrations correct; M12 left one vacuous time (fixed). 11 scale/exam items re-sectioned per SECTION-SIGNS.",
-      "M06 never-user migration was WRONG here: denial/absent-history wording is not never-use; corrected to absent/unknown."
+      "M06 never-user migration was WRONG here: denial/absent-history wording is not never-use; corrected to absent/unknown.",
+      "Cleanup-2: 13 time-quote facts reviewed; all times governed by the same Table 1 row, kept with row-span evidence."
     ],
     "residual_risks": [
       "Figures not re-viewed in this re-sign."

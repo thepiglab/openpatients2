@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "2900f4e3c218ea4d9a4c7183524c731d2cebb934cd88b9f7989d22c74dfb3836",
-  "annotation_sha256": "b5b874faa1200e5b968bd7df6f78c7d031bf1b53ed9ca1fc019abaf30799c95e",
-  "reviewed_at": "2026-10-09T22:24:49.052943+00:00",
+  "annotation_sha256": "719d22ac66fe1c254edc0801ab350f60bf343c442ccf048da50aa47e277ac449",
+  "reviewed_at": "2026-10-10T01:50:11.885389+00:00",
   "source_segments_read": 39,
   "facts_reviewed": 76,
   "patients_reviewed": 1,
@@ -35,7 +35,9 @@
     "Summary, observations domain note and b00031 source-coverage note updated for f076.",
     "[semantic-rules-2026-10 re-sign] Verified M12 nulling of 2 non-literal anchors ('EUPD diagnosis', 'revised diagnosis of PDD'); time.text on both remains literal in own evidence.",
     "[semantic-rules-2026-10 re-sign] p1-f074: anchor replaced with the literal phrase 'revised diagnosis' from its own evidence.",
-    "[semantic-rules-2026-10 re-sign] p1-f047: anchor restored as the literal phrase 'EUPD formulation' (DBT started after diagnosis)."
+    "[semantic-rules-2026-10 re-sign] p1-f047: anchor restored as the literal phrase 'EUPD formulation' (DBT started after diagnosis).",
+    "[cleanup2 glued/time-only] No glued-text dry-run diff. p1-f015 (low mood) kept time 'dating back to adolescence' (relation since): the quoted sentence 'she described a chronic depressive baseline dating back to adolescence' describes the same chronic low-mood state as the presenting 'lifelong, pervasive low mood' in the same paragraph, so the time is the fact's own, not borrowed. NO-BORROWING warning is a lexical false positive (no word overlap with the label). Annotation unchanged.",
+    "Cleanup3 NO-BORROWING p1-f015 Low mood: time 'dating back to adolescence' came from the separate sentence about the 'chronic depressive baseline' (b00005), not the low-mood sentence; time nulled (text/anchor null, relation unknown) and the time-only quote dropped; quotes 'lifelong, pervasive low mood' and 'most days, almost all the time' kept; order kept via event p1-e01 membership."
   ],
   "unresolved": [
     "Single case report with one index patient; no figures and no supplements, so no visual or supplement review applies.",
@@ -50,7 +52,9 @@
     "facts_reviewed": 76,
     "figures_viewed": 0,
     "key_findings": [
-      "M12 correct for this article."
+      "M12 correct for this article.",
+      "Cleanup pass 2: glued free text repaired and time-only evidence quotes resolved against source (NO-BORROWING/TIME-LITERAL).",
+      "Cleanup3: borrowed adolescence time removed from low-mood symptom."
     ],
     "residual_risks": [
       "Prior residual risks unchanged."

@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "c19d49e0d2e7413e661a84ba828c019bf7150c930d6be144e42c7a4ad614ff7c",
-  "annotation_sha256": "7bce3712a8c9c544b67c2e0ff4965d66d507860d08a0e9a261097d5ff80ac1d4",
-  "reviewed_at": "2026-10-09T22:39:05.999087+00:00",
+  "annotation_sha256": "0ae4b3056ac0941844b1212898b870ab7d398429a1691f562dc28406227306ca",
+  "reviewed_at": "2026-10-10T01:51:03.286753+00:00",
   "source_segments_read": 16,
   "facts_reviewed": 79,
   "patients_reviewed": 2,
@@ -21,7 +21,12 @@
   ],
   "corrections": [
     "semantic-rules-2026-10 re-sign: verified M01 case_context p1-f001/p2-f001 multi_patient/true -> clinical_case/false; each record describes only its own patient (95-year-old woman with AD; 66-year-old man with LBD), subject_state living_at_presentation consistent (no death reported); verified M12 nulling of 15 paraphrased anchors",
-    "Restored literal source-tied anchors: 'administration of 5 mg/day donepezil' (p1-f005,f008-f014,f019,f026), 'discontinuation of pramipexole' (p2-f028), 'donepezil dosage was increased to 10 mg/day' (p2-f006,p2-f031 'two days afterward'); 'Two weeks later' (p1-f033,p2-f029) keeps anchor null"
+    "Restored literal source-tied anchors: 'administration of 5 mg/day donepezil' (p1-f005,f008-f014,f019,f026), 'discontinuation of pramipexole' (p2-f028), 'donepezil dosage was increased to 10 mg/day' (p2-f006,p2-f031 'two days afterward'); 'Two weeks later' (p1-f033,p2-f029) keeps anchor null",
+    "TIME-ONLY QUOTES kept: Case 1 manic episode p1-f005, symptoms p1-f008..f014, new-onset alcohol p1-f019 and donepezil reaction p1-f026 keep 'six weeks after the administration of 5 mg/day donepezil' because the immediately following sentence 'This symptomatology began ...' explicitly scopes the listed symptoms; the symptom-list sentence and the onset sentence were merged into one contiguous governing quote (b00004)",
+    "p2-f006 (Case 2 manic episode) kept 'two days afterward': the time is in the same sentence as 'the patient exhibited symptoms consistent with mania'; remaining NO-BORROWING warning is a checker false positive (manic episode vs 'mania' wording)",
+    "cleanup3 NO-BORROWING: 'six weeks after the administration of 5 mg/day donepezil' is stated only in the trailing sentence 'This symptomatology began ...' (b00004), not in the facts' own sentence and not a leading scope; fact-level time nulled (relation unknown) for p1-f005 (manic episode), p1-f008..f014 (symptoms), p1-f019 (new-onset alcohol consumption) and p1-f026 (donepezil adverse reaction). b00004 quotes trimmed to the symptom-list sentence; notes record that the onset is carried by event p1-e06 (time_text unchanged), of which all ten facts are members.",
+    "cleanup3 NO-BORROWING review (no change): p2-f006 keeps 'two days afterward' — its quote 'Two weeks later, the donepezil dosage was increased to 10 mg/day, and two days afterward the patient exhibited symptoms consistent with mania ...' is the fact's own sentence (warning is a checker false positive: 'mania' vs name 'Manic episode').",
+    "cleanup3 revert per orchestrator ruling: 'This symptomatology began six weeks after the administration of 5 mg/day donepezil.' refers back to the listed symptoms and governs them; original time (after, anchor 'administration of 5 mg/day donepezil'), notes and contiguous symptom-list + onset span restored on p1-f005, p1-f008..f014, p1-f019, p1-f026."
   ],
   "unresolved": [
     "Brief letter: no tables, figures or supplements; individual laboratory tests, imaging, admission dates and absolute timing are not reported.",
@@ -36,9 +41,12 @@
     "figures_viewed": 0,
     "key_findings": [
       "case_context migration correct (per-patient clinical_case)",
-      "Anchors restored where the source states them"
+      "Anchors restored where the source states them",
+      "Cleanup pass 2: no glued text; 11 time facts kept (governing quotes merged), 0 nulled; no negation-word rows"
     ],
-    "residual_risks": []
+    "residual_risks": [],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09",
+    "cleanup3": "final sweep (sidecar respacing, span/time-only quotes, negation) 2026-10-09"
   },
   "physician_adjudicated": false
 }

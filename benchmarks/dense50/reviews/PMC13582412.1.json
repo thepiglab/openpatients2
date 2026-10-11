@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "c5765ae40de9f984ea49d1758d6592e70f856bd25d4d7693ad3cdc11a41098d3",
-  "annotation_sha256": "5d3231d475019c2193fd4da656d7cd1dc08b8b876ac8aa38cf62b0511c8e6243",
-  "reviewed_at": "2026-10-09T22:19:58.211862+00:00",
+  "annotation_sha256": "a9f122fd07d15e38257e7e8057ec100661b3df334c4274d8405044a5946099fa",
+  "reviewed_at": "2026-10-10T02:15:20.889490+00:00",
   "source_segments_read": 28,
   "facts_reviewed": 165,
   "patients_reviewed": 2,
@@ -26,7 +26,10 @@
     "Preserved initial pathologic stage separately from later clinicoradiologic recurrence, unstated later scan modality, and undated nodal biopsy relative to nephrectomy.",
     "Kept GATA3 result unreported and HMB45N/A unscored; no guessed stain negative or administered everolimus.",
     "[semantic-rules-2026-10 re-sign] Verified 15 M02 comparator '=' additions (no printed comparator on those values), M03 ages (65-year-old p1, 55-year-old p2 from each case's own narrative) and M04 (p1-f006, p2-f005 'no other significant medical history' absent+confirmed -> verification_status unknown: denied history, not refuted by workup).",
-    "[semantic-rules-2026-10 re-sign] NR001 (DEMO-AGE-TEXT p1-f053): set text_value to the literal Table 1 Age/sex cell '63/M' for the table age 63; fact stays source_conflict/review_only against narrative 65-year-old."
+    "[semantic-rules-2026-10 re-sign] NR001 (DEMO-AGE-TEXT p1-f053): set text_value to the literal Table 1 Age/sex cell '63/M' for the table age 63; fact stays source_conflict/review_only against narrative 65-year-old.",
+    "glue4 GLUED-TEXT: fix_label_digit_glue.py proposal (Patient2 -> 'Patient 2') REJECTED in favour of the source's own form; hand-applied in the visual submission: 'tumor2' -> 'tumor #2' (panel L clinical-significance statement, figure/visual/attribution limitations, assignment 11 rationale), 'Patient2'/'patient2' -> 'Patient #2' (assignment 11 rationale, panel L statement); the caption and case text print 'tumor #2' and 'Patient #2'. Figure 1 viewed: only panel letters A-L are printed. visual_target_sha256 recomputed in figure-EHR labels and privacy flags; visual, figure-EHR and privacy receipts re-signed.",
+    "glue4 ROSTER block added: reported_individual_count 2, roster_complete true (p1, p2 annotated); evidence b00006 'this report describes two cases of MTOR-mutated eosinophilic RCC'. Cited literature cases (Tjota et al., Calio et al.) are not roster patients.",
+    "glue4 GLUED-TEXT hand fix: p1-f080 clinical_statement 'Actual2022periportal radiation; ...' -> 'Actual 2022 periportal radiation; no dose/fractions specified.' (source: 'received radiation for increasing periportal abdominal lymphadenopathy in 2022')."
   ],
   "unresolved": [
     "Three secondary literature cases are excluded. This article updates a previously reported patient 1 (Tjota 2021); panel L belongs to patient 2, while A–K ownership remains unresolved.",

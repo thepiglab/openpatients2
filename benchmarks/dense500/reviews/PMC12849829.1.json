@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "0751ab1f33a6e3062cc2c25d9b40ed3b8ee8a4d46519279851eed577d45f268b",
-  "annotation_sha256": "a61715f68514cad1a2478b0ec0f91de3ca33222f6e6f015e9ccd76ea7bf0303e",
-  "reviewed_at": "2026-10-09T22:49:28.178716+00:00",
+  "annotation_sha256": "754d62423cbad0289d4d506d6872e133168d38c5af4d0d227e2af163a02187af",
+  "reviewed_at": "2026-10-11T02:18:38.656294+00:00",
   "source_segments_read": 64,
   "facts_reviewed": 162,
   "patients_reviewed": 1,
@@ -26,16 +26,23 @@
     "Assigned generic epidemiology and hypokalemia algorithm caption to background.",
     "semantic-rules-2026-10 re-sign: M12 nulled p1-f162/p1-f163 time.anchor ('oral potassium chloride and sodium bicarbonate treatment', not literal); parent restored the literal source phrase 'oral potassium chloride and sodium bicarbonate' (b00054 'treated with oral potassium chloride and sodium bicarbonate ... Ten days later').",
     "FIG-LABELS: visual-submissions FIG3 detailed descriptions had '?' outside quotes; after viewing pixels, printed labels are now quoted literally (“Mineralocorticod excess?”, “Sureptittuous vomiting/laxative/ diuretic use?”, “Tubolopathy? (eg: Gitelman, Bartter, RTA)”, “Severe hypomegnesia?”); as_documented spellings corrected to printed text.",
-    "opus-fixup (sidecars only, annotation unchanged): visual submission FIG1 positional panels 'Left image'/'Right image' -> one whole-figure row (no printed labels); FIG2 positional 'Upper/Lower left/right' -> printed region titles 'Left Femur' and 'Spine' (image + BMD plot merged per region). figure-ehr-labels and figure-privacy-flags rebuilt on the new panels (visual_target_sha256 updated); parent visual/EHR/privacy receipts re-signed. Annotation figures[] keep whole-figure null panels (caption has no labels)."
+    "opus-fixup (sidecars only, annotation unchanged): visual submission FIG1 positional panels 'Left image'/'Right image' -> one whole-figure row (no printed labels); FIG2 positional 'Upper/Lower left/right' -> printed region titles 'Left Femur' and 'Spine' (image + BMD plot merged per region). figure-ehr-labels and figure-privacy-flags rebuilt on the new panels (visual_target_sha256 updated); parent visual/EHR/privacy receipts re-signed. Annotation figures[] keep whole-figure null panels (caption has no labels).",
+    "p1-f011: time 'by the morning of admission' relation at -> before (TIME-LITERAL 'by <time>' = no later than); anchor 'morning of admission' kept (named in phrase)",
+    "[cleanup2 glued/time-only] repair_glued_text.py --apply: 89 tokens in 42 values; every diff line read, no mis-splits (source typo 'Posivite' kept).",
+    "[cleanup2 glued/time-only] Manual glued-text fixes (17 phrases): serum potassium 1.66 mmol/L; HCO3 15.4 mmol/L, pH 7.235, pCO2 37.3 mmHg (2 fields); oral K, head/neck; IV potassium; strength 5/5; regional densitometry table / femoral neck T; RNP, Coombs; oral KCl, NaHCO3; serum K normalized 3.95; ambiguity prose (femoral neck T -1.1 vs Table 2 neck -0.5; dose assigned only to NaHCO3, no dose invented for KCl); 'Patient scan ownership ... Figure 1/2' in FIG1/FIG2 attribution notes; limitations (vs Table 2 left neck, Ward T/Z, Ward BMD, initial 1.66, Figure 3). Spacing only, meaning unchanged.",
+    "[cleanup2 glued/time-only] No time-only quote rows for this article; no NO-BORROWING warnings. Pre-existing FIG-LABELS warning on FIG2 panel 'Left Femur' (visual sidecars) left untouched as out of scope.",
+    "[cleanup3 labels/sidecar glue/times/negation] Visual submission text respaced only (annotation unchanged): FIG2 DEXA 'age55', 'prints20 through90 in steps10', 'between50 and60', 'Table2'; FIG3 'Note1'..'Note3'/'note3' -> spaced. Checked against FIG1-FIG3 pixels; visual_target_sha256 updated in figure-ehr-labels and figure-privacy-flags. FIG2 panel labels 'Left Femur'/'Spine' kept: both are region titles printed on the image (FIG-LABELS warning on 'Left' is a position-word false positive).",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (1 whitelisted label/number or number/unit spacing edits outside quotes in annotations (1); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=1, roster_complete=true, evidence b00001 \"We report a case of a 55-year-old woman\"; 1 patients annotated in first-mention order."
   ],
   "unresolved": [
     "Caption-layer visual fields remain text-only; separate actual-pixel target covers all three source figures.",
-    "Presumed primarySjögren with unavailable objective diagnostic tests; no definitive classification or immunosuppressive treatment inferred.",
-    "Femoral-neck T-score discrepancy: prose-1.1 vsTable2leftneck-0.5; retained review-only rather than substituting totalhip/intertrochanteric values.",
-    "Table2percentages retain unknown reference denominator; WardT/Z N/C meansnotcalculated. Table1numericalreference intervals do not generate normal/high/lowflags.",
-    "Initial basiclab draw order versus ICU/nephrology transfer unspecified. Hypokalemia initial1.66 duplicated in prose/table is one occurrence; no invented additional draws.",
-    "Figure3 generic hypokalemia algorithm/generaldiscussion do not become patient therapies or testorders. No exactcalendar dates or ethnicreferencepopulation interpreted aspatientdemographics.",
-    "Ward T/Z N/C refers solely to unperformed score calculations, not to the DEXA acquisition; reported WardBMD/BMC/area and completed scan remain present."
+    "Presumed primary Sjögren with unavailable objective diagnostic tests; no definitive classification or immunosuppressive treatment inferred.",
+    "Femoral-neck T-score discrepancy: prose -1.1 vs Table 2 left neck -0.5; retained review-only rather than substituting total hip/intertrochanteric values.",
+    "Table 2 percentages retain unknown reference denominator; Ward T/Z N/C means not calculated. Table 1 numerical reference intervals do not generate normal/high/low flags.",
+    "Initial basic lab draw order versus ICU/nephrology transfer unspecified. Hypokalemia initial 1.66 duplicated in prose/table is one occurrence; no invented additional draws.",
+    "Figure 3 generic hypokalemia algorithm/general discussion do not become patient therapies or test orders. No exact calendar dates or ethnic reference population interpreted as patient demographics.",
+    "Ward T/Z N/C refers solely to unperformed score calculations, not to the DEXA acquisition; reported Ward BMD/BMC/area and completed scan remain present."
   ],
   "assessment": {
     "clinical_course": "Personally read all64source units, both original XML tables, every populated field in14clinical sections, all162remaining representations and their evidence,15events10edges5summaries. Prior mild hypokalemia, acute weakness/ICU replacement, stabilization/ward evaluation, presumed Sjogren/type1RTA and10dayresponse retain distinct phases.",
@@ -45,7 +52,10 @@
     "reviewer": "Claude Opus 5.5 parent",
     "key_findings": [
       "semantic-rules-2026-10: M12 anchors restored to a literal phrase; FIG3 '?' moved inside quotes of printed labels.",
-      "opus-fixup: FIG1/FIG2 positional visual panel labels replaced (null / printed Left Femur, Spine)."
+      "opus-fixup: FIG1/FIG2 positional visual panel labels replaced (null / printed Left Femur, Spine).",
+      "TIME-LITERAL 2026-10 'by <time>' audit: 1 fact(s) set to relation before after reading each source sentence",
+      "Cleanup pass 2: glued free text repaired and time-only evidence quotes resolved against source (NO-BORROWING/TIME-LITERAL).",
+      "Cleanup pass 3: patient labels and sidecar text respaced; span/time-only quotes and negation-word items resolved against the source (NO-BORROWING/TIME-LITERAL/EVID-NEGATION)."
     ],
     "facts_reviewed": 162,
     "figures_viewed": 3

@@ -252,7 +252,9 @@ def patient_packet(article: dict, roster: dict, patient: dict, *, scope: str = '
         chunk = prefix+s['text']+'\n\n'
         spans.append({'segment_id':s['segment_id'],'heading':s['heading'], 'start':cursor+len(prefix),
                       'end':cursor+len(prefix)+len(s['text']),
-                      **{k:s[k] for k in ('asset_span','page','region') if k in s}})
+                      **{k:s[k] for k in ('asset_span','page','region') if k in s},
+                      **({'table_id':s['table_id']} if s.get('table_id') else {}),
+                      **({'figure_id':s['figure_id']} if s.get('kind') == 'figure_caption' and s.get('figure_id') else {})})
         chunks.append(chunk); cursor+=len(chunk)
     assignments = [f for f in roster['figures'] if patient['patient_id'] in f['patient_ids']]
     raw = {'record_id':f'{article["article_id"]}:{patient["patient_id"]}', 'text':''.join(chunks),

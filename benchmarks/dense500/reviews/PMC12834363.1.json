@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "5b9aabc2fa47003b3ecf22fbe72dd6fe393dfd7c1547e51abb699619036d49e5",
-  "annotation_sha256": "97bf246ac69c9f71ce7ec5d40965a068e9e618df85a8fcb638b3c467fe4591a7",
-  "reviewed_at": "2026-10-09T22:23:00.599102+00:00",
+  "annotation_sha256": "bfdf97e89eb1e132b9dc4f1ce3ad686d5c9b4e59bc7bc6884e0c29d066635f60",
+  "reviewed_at": "2026-10-10T02:14:25.560005+00:00",
   "source_segments_read": 65,
   "facts_reviewed": 143,
   "patients_reviewed": 1,
@@ -24,11 +24,17 @@
     "Separated prior surgery in2008 from untimed family/medical history, kept partial chronology and follow-up anchors.",
     "Quarantined conclusion compressive-symptom resolution because presentation explicitly denies these symptoms; preserved paramedian/pyramidal source terminology.",
     "semantic-rules-2026-10 re-sign: M12 nulled p1-f004 ('index hospital presentation') and p1-f008 ('hospital presentation') anchors; p1-f008 restored to the literal phrase in its own quote 'presented to our hospital'; p1-f004 ('in 2008', absolute year) left null.",
-    "Verified M03 p1-f002 text_value '53-year-old' literal in own quote."
+    "Verified M03 p1-f002 text_value '53-year-old' literal in own quote.",
+    "cleanup-2 GLUED-TEXT: applied repair_glued_text.py (2 tokens: approximately 16 years in article limitation; internal provenance) and manually spaced 'blood-loss 50mm' (limitation) plus internal notes (PTT 38.30/printed 25–35, Fig 7, to 50 mL); 'Chloride lVl' is the literal table label and was kept.",
+    "cleanup-2 TIME: p1-f033..f056 (Table 1 labs) keep 'on the day of surgery' — governed by the Table 1 heading 'Laboratory results for the patient on the day of surgery'; the time-only quote was replaced by that heading span (remaining NO-BORROWING warning is the known table-heading false positive).",
+    "cleanup-2 TIME nulled (text/anchor null, relation unknown; extra time-only quote dropped): p1-f091, f093-f097 ('postoperative course' was a separate sentence, not a scoping statement) and p1-f128-f141 ('At postoperative follow-up visits' is in the first sentence of b00050 only, not the facts' own sentences). Order is preserved by existing event membership (p1-e018 postoperative course, p1-e019 follow-up visits).",
+    "cleanup-2 2b negation word: p1-f141 outcome text_value 'Remained asymptomatic ...' replaced by the stated outcome 'Overall recovery consistent with complete resolution of the effects of the massive retrosternal goiter' (clinical_statement aligned); the absent symptoms are already p1-f139/f140 (assertion=absent).",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (4 whitelisted label/number or number/unit spacing edits outside quotes in annotations (4); '50mm'->'50 mm', '50mm.'->'50 mm.', '50mL,'->'50 mL,'); every edit read against the source. Source prints the malformed blood loss as 'approximately 50mm'; that literal stays in the evidence quote, and only the reviewer-written text_value/statement/limitation were respaced (unit not corrected).",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=1, roster_complete=true, evidence b00001 \"We report the case of a 53-year-old woman who presented to our hospital with a gradually enlarging anterior neck mass\"; 1 patient annotated in first-mention order."
   ],
   "unresolved": [
-    "Unknown earlier operation type/extent; no derived index date from 2008 and approximately16years.",
-    "Malformed blood-loss50mm retained, not corrected.",
+    "Unknown earlier operation type/extent; no derived index date from 2008 and approximately 16 years.",
+    "Malformed blood-loss 50 mm retained, not corrected.",
     "Paramedian/pyramidal lobe naming discrepancy and mild CT narrowing versus no compression language retained.",
     "Baseline denies compressive symptoms; conclusion resolution claim review-only, no invented prior symptom.",
     "No drug regimen, discharge date or follow-up duration reported; no implied levothyroxine/analgesic/anesthetic.",
@@ -41,7 +47,8 @@
     "limitations": "AI source-grounded reference review, not physician adjudication or measured recall.",
     "reviewer": "Claude Opus 5.5 parent",
     "key_findings": [
-      "semantic-rules-2026-10: M03 verified; one nulled anchor restored to a literal phrase."
+      "semantic-rules-2026-10: M03 verified; one nulled anchor restored to a literal phrase.",
+      "Cleanup-2: 24 table-heading lab times kept; 20 borrowed postoperative/follow-up times nulled; asymptomatic outcome rephrased."
     ]
   },
   "physician_adjudicated": false

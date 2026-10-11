@@ -14,6 +14,12 @@ reasoning than the annotators — use it. Validator success is never review; you
 
 Never run any `--role` command to probe, test or dry-run a script. It overwrites the existing receipt, which may be another reviewer's valid signature. Run the script WITHOUT `--role` to validate. Sign only after you inspected the content yourself, with your real reviewer identity (e.g. "Claude Sonnet 5.5 annotator", "Claude Opus 5.5 parent") and notes that describe what you checked. `signing_guard.py` refuses placeholder reviewers/notes ("x", "test", under 20 characters, "dry run"), and exports reject receipts that carry them.
 
+**DOCX/DOC/RTF/ODT supplements (also inside a ZIP):** draft with `R/supplement_assets.py extract-text R --article <ID> --supplement <SID>`, review every extracted unit in `blocks`, quote clinical transcriptions literally from units (unit number in `page`), validate with `R/supplement_review.py R --article <ID> --supplement <SID>` (no `--role`), then sign. Details: `SUPPLEMENT_DOCUMENT_REVIEW.md`, section 'Word-processor supplements'.
+
+## Event kinds live in the annotation
+
+Set timeline event classification on the annotation event: `kind` (presentation, history, diagnosis, test, treatment, adverse_event, outcome, follow_up, plan, other), and for its `time_text` the `time_kind` (calendar, relative, duration, age, gestational_age, postnatal_age, order_only), `time_precision` (exact, approximate, range, unknown) and `time_calendar_value` (the YYYY[-MM[-DD]] the time text states at its own precision, e.g. "October 26, 2022" -> 2022-10-26, "October 2022" -> 2022-10; calendar times only). `schema_targets.py` reads these fields. Never patch event kinds or time classifications into `schema-submissions/` with a script; regenerate instead. The same holds for the roster: set the article-level annotation block `"roster": {"reported_individual_count": N|null, "roster_complete": true|false, "evidence": [{"segment_id": ..., "quote": "<literal text stating the number>"}]}`; `schema_targets.py` reads it, and a submission patched after signing makes the parent's schema receipt stale. `schema_review.py` rejects a submission that disagrees with classification set in the annotation.
+
 ## Read once at start
 `benchmarks/dense500/ANNOTATION_PROTOCOL.md` (binding for dense50 too; read its "Shared annotation rules"),
 `benchmarks/dense500/claude_prompts/LESSONS.md`, `benchmarks/dense500/claude_prompts/ANNOTATOR_BRIEF.md`,
@@ -106,8 +112,9 @@ Shared annotation rules (full text: `src/openpatients2/rules/annotation_rules.ya
 | --- | --- | --- |
 | `EVID-NEGATION` | Negations and qualifiers are inside the quotes | yes |
 | `NAME-LABEL` | name is a concise label; evidence carries the wording | review |
+| `GLUED-TEXT` | Free text is normal spaced prose | yes |
 | `NO-INFERENCE` | No inference-added facts | review |
-| `NO-BORROWING` | No borrowed times, routes, sites, indications or settings | review |
+| `NO-BORROWING` | No borrowed times, routes, sites, indications or settings | yes |
 | `TIME-LITERAL` | Time text and anchors are literal or null | yes |
 | `NO-COHORT-COPY` | Cohort statements are not copied to individuals | review |
 | `ASSERT-ABSENT` | Absent, refuted and not documented | yes |

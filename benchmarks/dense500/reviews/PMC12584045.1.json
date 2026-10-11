@@ -1,0 +1,70 @@
+{
+  "article_id": "PMC12584045.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f52d243084b84bbebb1c7f015d064420914e795116e86640f4d5efc4e72367d1",
+  "annotation_sha256": "0b9b34964dd8be0f03bab76c425811270090843abae8747a5319524d07f19d2c",
+  "reviewed_at": "2026-10-10T01:41:19.836102+00:00",
+  "source_segments_read": 39,
+  "facts_reviewed": 126,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "DVT p1-f008 and PE p1-f009: replaced borrowed presentation date with their own literal \"In November 2023\" (b00002); DVT moved from presentation event e02 to diagnostic event e03.",
+    "CTPA p1-f095: removed borrowed \"November 25, 2023\" time (CTPA date not stated).",
+    "Psychoeducation p1-f097/p1-f124: removed borrowed \"By July 1\" time; new untimed event p1-e21 with an unknown relation to e17.",
+    "Xanomeline-trospium increase p1-f091: removed borrowed \"By June 3\" time (own sentence \"Consequently ...\" has no date).",
+    "All \"By <date>\" times without an anchor set to relation before (upper bound), replacing at.",
+    "date_iso left null throughout: the runtime gate keeps date_iso only for ISO dates literally present (none are written in ISO form).",
+    "Cefepime/vancomycin: \"empiric\" moved from indication to regimen.",
+    "TRS p1-f005 and seizure disorder p1-f007 clinical_status active -> unknown (not stated); case_context care_setting reduced to literal emergency department.",
+    "Clozapine regimen p1-f072 action current -> historical, anchor \"1998\" removed.",
+    "p1-f121 no-adverse-effect outcome given discussion evidence b00030.",
+    "Added p1-f125 (multiple failed antipsychotic trials before clozapine 1998) and p1-f126 (caregiver mother hospitalized, niece collateral at Aug 26 session; not family_genetics).",
+    "Added ambiguity: abstract aripiprazole 15 mg/day vs text 20/30 mg; added relation e04 before e06; e01 limited to clozapine/remission facts; summary wording \"by June 3\"/\"On June 17\" aligned to source.",
+    "NO-BORROWING/TIME-ONLY QUOTES (cleanup pass 2): p1-f049 and p1-f116 (June 17 paragraph), p1-f065, p1-f066, p1-f118 (July 29 paragraph) and p1-f079, p1-f088, p1-f089, p1-f090, p1-f092, p1-f093 (inpatient-admission paragraph) had time.text supplied only by a separate lead sentence about other findings; time removed, the time-only quote dropped and the date phrase removed from clinical_statement. Ordering is kept by the existing dated events p1-e13/p1-e16/p1-e19, whose fact membership the paragraph structure supports.",
+    "p1-f056..p1-f061 keep 'By July 14': the paragraph opens with 'By July 14, significant clinical stabilization was evident.' and the following sentences describe that stabilization (same treatment as p1-f051..f055); the separate time-only quote was merged into one contiguous governing span of segment b00021.",
+    "p1-f089/p1-f090: evidence quote 'was initiated at 50/20 mg BID and titrated to 100/20 mg BID.' lacked the drug name; replaced by the full sentence starting 'Xanomeline–trospium a muscarinic ...'.",
+    "p1-f009 keeps 'In November 2023' (abstract sentence 'In November 2023, he developed acute deep vein thrombosis and PE' states the PE and its time together).",
+    "cleanup-3 NO-BORROWING: 'At follow-up on May 20, 2025' is in the first sentence of b00017 only; p1-f041 (mild paranoid ideation), p1-f042 (affect stable), p1-f043 (aggression/emotional dysregulation absent) and p1-f108 (community outings etc.) are in later sentences -> time nulled (text/anchor null, relation unknown) and quotes trimmed to each fact's own sentence (f041 quote now the full sentence ending 'mild paranoid ideation persisted.'). Order kept by event p1-e14 membership.",
+    "cleanup-3 NO-BORROWING: 'During an August 26 telehealth session' governs only the first sentence of b00023 (bizarre behaviors absent, p1-f067 kept); p1-f068 (calm and cooperative), p1-f069 (safety-seeking behaviors absent) and p1-f070 (psychotic symptoms absent) are in the next sentence -> time nulled, quote trimmed to that sentence; order kept by event p1-e20 membership. f068/f069 were not flagged by the scan but had the identical borrowed time."
+  ],
+  "unresolved": [
+    "Single-patient case report; no figures, tables or supplements in the source.",
+    "Discharge date of the April 15-May 9, 2025 admission is implied by the admission range only.",
+    "Dates without a year (June 3, June 17, July 1, July 14, July 29, August 26) follow the 2025 sequence by narrative order only; no year is stated for them, so no date_iso is assigned.",
+    "Blood culture result, DVT site/side, and the nature of the pre-1998 antipsychotic trials are not reported."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 39,
+    "facts_reviewed": 124,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient; b00001/b00004-b00009/b00026/b00029/b00031 and back matter are background.",
+      "Clozapine VTE/PE kept as an adverse effect: the authors attribute it (\"known association with VTE\", \"life-threatening adverse event\").",
+      "\"Resolution of positive symptoms\" conclusion kept as source_conflict review_only against persisting paranoid ideation/self-talk.",
+      "Remission \"26 years\" vs \"over 25 years\" is an ambiguity, not a conflict.",
+      "No figures, tables or supplements.",
+      "Cleanup pass 2: 11 borrowed paragraph-lead times removed, 6 July 14 facts kept with a contiguous governing span; no glued text in this article.",
+      "cleanup-3: 7 borrowed follow-up/telehealth times nulled; event membership keeps order."
+    ],
+    "residual_risks": [
+      "DVT side/veins, blood-culture result and empiric antibiotic target unstated.",
+      "Year-less follow-up dates (June 3 to August 26) are 2025 by narrative order only.",
+      "Discharge date of the April-May 2025 admission given only as the admission range end."
+    ],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
+  },
+  "physician_adjudicated": false
+}

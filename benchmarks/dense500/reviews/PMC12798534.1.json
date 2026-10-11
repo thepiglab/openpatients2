@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12798534.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3f6ef2e9ed8637dd469623136d54b4f5121ab34ea5df540512e057ed446182f2",
+  "annotation_sha256": "821abc1c7f9c17d42e8b65d53a3a384d008773a4f6a19c4589b298f218f550a5",
+  "reviewed_at": "2026-10-10T01:45:28.283125+00:00",
+  "source_segments_read": 36,
+  "facts_reviewed": 156,
+  "patients_reviewed": 12,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "All 16 conventional DMARD items (p1-p12): moved \"during overlap\" out of regimen text into time {text: during overlap, relation: during, anchor: overlap}, governed by the Table 1 column heading \"Conventional DMARD use during overlap\" (one representation per fact).",
+    "After-window corticosteroid events for p2, p4, p7, p8, p12: relation to the dual biologic overlap event changed from after to during; Figure 1 caption says the window is 6 months after starting dual biologic therapy and each overlap (41.7-186.0 weeks) exceeds that window.",
+    "p8: merged duplicate after-window corticosteroid items p8-f014/p8-f016 into p8-f014 with both listed reasons as indication; references repointed."
+  ],
+  "unresolved": [
+    "Supplementary Table S1 (a docx inside rkaf150_supplementary_data.zip) lists per-case bacterial infections and antibiotic use 6 months before and after dual biologic therapy; it is not part of the article text, so those facts are not in the quote-grounded annotation and appear only in the supplement manifest review.",
+    "Figure 1 corticosteroid amounts per case are chart readings in the visual submission only; they are not text-grounded facts.",
+    "Cohort means, medians, confidence intervals, infection counts and the Figure 1 total bars are series-level and are not copied to individual patients.",
+    "Source conflict: the text lists patient 1 among patients with corticosteroid use for RA exacerbation before dual biologic therapy while the Figure 1 chart plots 0 mg before for case 1 and a nonzero amount for case 2, whose reason is not listed in the text.",
+    "Table 1 ages carry no stated reference time; they are recorded as age_other.",
+    "Retrospective chart review: courses of antibiotics or corticosteroids may have been missed according to the authors."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 36,
+    "facts_reviewed": 156,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Twelve Table 1 patients numbered by row; RA from explicit series inclusion statement applied to all; Table 1 ages kept as age_other with literal cells.",
+      "Patient 1 before-window corticosteroid (text lists patient 1 for RA exacerbation) conflicts with Figure 1 pixels (case 1 0/0; case 2 180 before with no text reason); kept as source_conflict review_only; no chart-only p2 fact.",
+      "Figure 1 pixels read: per-case before/after bars sum to the 5550/2890 Total bars; cohort total not assigned to patients.",
+      "Parenthetical week splits (p1 TNFi 51.7/82.4, p4 253/22.4 and 83.4/22.4) left unassigned to individual drugs.",
+      "Supplementary Table S1 DOCX opened locally: per-case infections and antibiotics exist but are not in the quote-grounded annotation; extraction awaits the DOCX document-review path."
+    ],
+    "residual_risks": [
+      "Supplement S1 per-case infections/antibiotics/pneumonia hospitalization are not yet extracted as supplemental clinical facts.",
+      "Corticosteroid doses per case exist only as chart readings in the visual submission.",
+      "DMARD column-heading times raise non-blocking NO-BORROWING heuristic warnings; the heading structurally governs each cell."
+    ]
+  },
+  "physician_adjudicated": false
+}

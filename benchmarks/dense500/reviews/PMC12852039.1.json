@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "2c26cc18d5a6fec5fe36dfc8dd4adeac521ca1ccc5e4955e15c6724af111f17c",
-  "annotation_sha256": "0592c7fd94b02ffcd10a44a86a7e1ec37e4dac9f9d44edd0b6f425e5733aeb42",
-  "reviewed_at": "2026-10-09T22:24:49.425243+00:00",
+  "annotation_sha256": "084d49ad757a2ad2812912e8aa6419e9965ad6e0f56252c3c8df2b57936779f5",
+  "reviewed_at": "2026-10-10T01:47:37.579838+00:00",
   "source_segments_read": 79,
   "facts_reviewed": 126,
   "patients_reviewed": 1,
@@ -29,7 +29,9 @@
     "Domain coverage notes for family_genetics/reproductive_perinatal/social_exposures corrected (copy-pasted oncology note) and procedures count updated.",
     "semantic-rules-2026-10 re-sign: verified M03 p1-f002 text_value '37-year-old' literal in own quote; verified all 20 M12 nulled anchors were paraphrases.",
     "Restored M12-nulled anchors with literal source phrases: p1-f007..f012 'hospitalized in June 2021'; p1-f013 'computed tomography (CT) pulmonary angiogram performed during this hospitalization'; p1-f016 'discharge from the hospital'; p1-f017 'discharge from the hospital' with relation at->after ('Twenty-one days after discharge'); p1-f039..f041 'repeat CT pulmonary angiogram' ('seven days later'); p1-f134..f137 'Serial chest CT scans' ('Throughout this follow-up period'). p1-f032 and p1-f034..f036 left null (self-describing time text).",
-    "OBS-FLAG NR001: kept p1-f100 sputum culture flag=negative — narrative b00016 states sputum cultures 'were negative'."
+    "OBS-FLAG NR001: kept p1-f100 sputum culture flag=negative — narrative b00016 states sputum cultures 'were negative'.",
+    "cleanup3 EVID-NEGATION: p1-f134 was a present outcome with text_value 'remained asymptomatic throughout CT follow-up'; re-recorded as symptoms_function 'symptoms during follow-up' with assertion=absent (quote 'Throughout this follow-up period, the patient remained asymptomatic' keeps the word; time unchanged; still a member of event p1-e020 with the specific absent recurrences p1-f135..f137).",
+    "cleanup3 EVID-NEGATION: p1-f126 (active necrotizing infection, absent/unconfirmed) quote widened to its full own sentence so the negation basis ('completely negative microbiologic and autoimmune evaluation ... rather than active necrotizing infection') supporting the diagnostic_basis field is inside the quote; polarity unchanged."
   ],
   "unresolved": [
     "Figure 1 caption dates for panels A (July 11) and B (August 7), 2021 conflict with the narrative months of the index admission (June) and readmission (July); final resolution is complete in the body/abstract but near-complete with minimal residual changes in the caption. Neither conflict is reconciled.",
@@ -56,7 +58,8 @@
       "Order of bronchoscopy relative to the 7-day follow-up CT is unstated.",
       "Index steroid/antibiotic indications left null although the body sentence grammatically ties the triad to hypercapnic respiratory failure.",
       "Figure EHR-label sidecar not yet produced (coordinator to request after promotion)."
-    ]
+    ],
+    "cleanup3": "final sweep (sidecar respacing, span/time-only quotes, negation) 2026-10-09"
   },
   "physician_adjudicated": false
 }

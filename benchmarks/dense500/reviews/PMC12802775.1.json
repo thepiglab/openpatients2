@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "0ad4392b01b5e21afee870fbc195f2c3cc65a4e4be6899f2557a90573845cb10",
-  "annotation_sha256": "97421a56be4ed21824b6f73e462c08175342facc452a5414ad25c28811ab6412",
-  "reviewed_at": "2026-10-09T22:34:30.374998+00:00",
+  "annotation_sha256": "3dda34806c9696d1f5221f639221e7ecbe9a6f85a50253c38c0358a798857a67",
+  "reviewed_at": "2026-10-10T01:44:46.086081+00:00",
   "source_segments_read": 34,
   "facts_reviewed": 283,
   "patients_reviewed": 4,
@@ -26,7 +26,13 @@
     "Explicitly represented suspected AF/cardioembolism, unknown loop results and PFO closure not performed.",
     "semantic-rules-2026-10 re-sign: verified M03 age text_values (literal '39-year-old', '46-year-old', '59-year-old', '68-year-old' and Table 1 cells '38','46','59','68') and M12 anchor nulling (paraphrases 'index stroke', 'CPAP initiation', 'reported follow-up', 'OSA diagnosis', 'case description' were not literal).",
     "Restored literal anchors after M12 nulling: anchor 'stroke' for 49 facts whose time text is 'N months/years post-stroke' or 'Age when stroke occurred' (p1-f004,f060-f065,f069-f072; p2-f004,f059,f060,f069-f072; p3-f004,f041,f042,f045,f046,f048-f052,f056-f064; p4-f004,f045-f047,f050,f056,f058-f063); anchor 'starting CPAP therapy' for 8 facts timed '1 month after starting CPAP therapy' (p1-f066,f067,f073-f075; p2-f063,f073-f075). Bare 'later'/'To date'/'2 days after a 5 h flight' anchors left null (source does not name the reference).",
-    "NR001 (p2-f027 ECG flag): kept unknown; mixed normal rhythm with possible anterior infarct."
+    "NR001 (p2-f027 ECG flag): kept unknown; mixed normal rhythm with possible anterior infarct.",
+    "Glued text (cleanup pass 2): applied repair_glued_text.py (109 tokens, every segmentation checked) and hand-respaced the remaining exported text: CPAP adherence text_value/clinical_statement for p1-f066, p3-f051, p3-f052, p4-f056 (spaces after colons/commas, '6 h', '100% last 30 nights', '30 days'), p2-f061 '8–20 cm H2O', p4-f049 'Auto-CPAP 11–15 cm', p4-e017 'patient 4', p1 age ambiguity ('Body 39-year-old ... Table 1 age 38'), p4 'Forced 6-month', figure F1 attribution note 'p4 PSG', plus internal coverage/provenance notes. Patient labels ('Patient1' etc.) left as-is because they feed the visual/figure identity hash; 'Beta2 GP' is source spelling.",
+    "NO-BORROWING / TIME-LITERAL (cleanup pass 2): all 40 time-only-quote rows reviewed. Every post-stroke / post-CPAP time is stated in the same narrative sentence as the result (or in the verbless continuation of the same polysomnography report for O2 nadir / sleep time <90%), so the times are kept and the fragment + bare-time quotes were replaced by one contiguous governing span (p1-f061/f065/f066/f069-f075, p2-f060/f062/f063/f069-f075, p3-f046/f049/f056-f064, p4-f046/f058-f063); Table 2 row quotes are kept alongside. p4-f045 dropped its redundant bare time fragment (own sentence carries it).",
+    "NO-BORROWING: p1-f067 'The patient tolerated CPAP well.' is a separate sentence (after the adherence definition) with no time of its own; time nulled (relation unknown) and the borrowed '1 month after starting CPAP therapy' quote removed.",
+    "Cleanup3 LABELS: patient labels respaced 'Patient1:'..'Patient4:' -> 'Patient 1:'..'Patient 4:' (identity hash changes; visual, figure-EHR and privacy receipts re-signed by parent, agent re-sign needed).",
+    "Cleanup3 GLUED visual submission F1: description respaced (Patient 1-4 headings, PFO closure, CPAP start, initial follow-up, all four timeline rows); panel limitation rewritten as 'Body-text receipt at 5 months versus displayed “CPAP started” at 4 months retained; no month 6 visit is forced.' after checking pixels and Case 4 text; figure-EHR/privacy visual hashes refreshed.",
+    "Cleanup3 TIME p2-f069 and p4-f045 reviewed and kept: the time-bearing quote is the fact's own sentence (p2: 'Six months post-stroke, a home sleep study showed severe OSA with AHI of 36.3' restates the same pAHI; p4: 'Exactly 2 months post-stroke, the patient underwent an additional sleep study' is the procedure itself); scanner warnings are false positives."
   ],
   "unresolved": [
     "Four individual cases are explicitly enumerated. Discussion b00024 instead mentions five subjects and gives an inconsistent patient-2 profile; ownership remains unresolved and no fifth patient is invented.",
@@ -45,7 +51,9 @@
     "facts_reviewed": 283,
     "figures_viewed": 0,
     "key_findings": [
-      "Re-sign 2026-10: migrations verified; 57 literal anchors restored; 1 needs-review item resolved."
+      "Re-sign 2026-10: migrations verified; 57 literal anchors restored; 1 needs-review item resolved.",
+      "Cleanup pass 2: glued CPAP/adherence text respaced; post-stroke times kept with governing-sentence quotes; CPAP-tolerance time un-borrowed.",
+      "Cleanup3: patient labels and F1 visual text respaced; two flagged times verified as governed by the fact's own sentence."
     ],
     "residual_risks": []
   },

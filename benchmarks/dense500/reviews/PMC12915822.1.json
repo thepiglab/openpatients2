@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12915822.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a80d771bc4bf92029ca3723edc4bcfdc53a9bd7e695d7649d9f82e99f169fca9",
+  "annotation_sha256": "32d69c8bd4f52114371761c68c4b98b4382f22dd47545c7906edb419100183a5",
+  "reviewed_at": "2026-10-10T02:08:47.980068+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 41,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Source coverage b00018 (Table 1 row 10 \"Present case\") reassigned from background to patient_facts p1.",
+    "p1-f023 (pembrolizumab adverse effect SCLE in allergies) marked alternate_representation_of p1-f005; p1-f031 (Figure 2 caption histology) marked alternate_representation_of p1-f028.",
+    "Removed anti-Ro p1-f027 from the ANA \"during the initial workup\" event e12 (time belonged to ANA only); added untimed test event p1-e18 for anti-Ro.",
+    "p1-f011 cisplatin evidence extended to the full sentence that supports its oropharyngeal carcinoma indication.",
+    "p1-f039 note no longer claims the 2-week interval starts at treatment start (anchor not stated).",
+    "Ambiguity on rash timing rewritten: e07/e08 before e10 confirmed (same pembrolizumab start, fourth vs sixth cycle); Table 1 onset 12 weeks and \"resolved\" vs narrative \"cleared up significantly\" left unreconciled.",
+    "Visual submission Fig 1a: \"knee and shin\" replaced by neutral thigh-to-lower-leg wording plus second leg at the far right (front/back view not certain); EHR-label and privacy sidecars re-bound to the edited visual hash, labels unchanged.",
+    "ROSTER-ORDER: added article-level roster block: reported_individual_count null (source says \"We report a 67-year-old woman\" but never states a number of patients), roster_complete true (the single index patient p1 is annotated; Table 1 literature rows 1-9 stay outside the roster). Evidence b00001."
+  ],
+  "unresolved": [
+    "Figure pixels are inspected separately in the visual submission; annotation figure rows keep caption-layer status.",
+    "Table 1 rows 1 to 9 are published literature cases and are not facts about the index patient; only the Present case row (row 10) matches the index patient.",
+    "Discussion statements on irAE frequency, risk factors, drug causes of SCLE and typical presentation are literature background, not facts about the patient.",
+    "Restaging modality and findings, stage and extent of the oropharyngeal carcinoma, number of cisplatin doses and cycles, and date of pembrolizumab discontinuation are not stated."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 41,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; Table 1 rows 1-9 literature cases and b00006/b00020 cohort statements correctly excluded.",
+      "Pembrolizumab \"declined\"/\"cessation\"/Table \"withdrawal\" correctly recorded as stopped (not patient refusal).",
+      "Combined immunochemotherapy withheld recorded as a regimen-level hold; components not restated (ambiguity kept).",
+      "Anti-Ro negative comes from the patient-specific clause \"were negative in our patient\"; ANA negative from narrative and Table.",
+      "Restaging procedure kept without modality (not stated).",
+      "Pixels: Fig 1a hand/forearm with large crusted erosion plus lower limbs; Fig 1b both lower legs; Fig 2 printed labels HE/IgG/C3/PAS with symbols matching caption; color and grayscale renditions both viewed."
+    ],
+    "residual_risks": [
+      "Fig 1a content only loosely matches the caption \"upper (a)\" (also shows legs).",
+      "Whether the grade 1 rash at about 12 weeks was already SCLE is unresolved in the source."
+    ]
+  },
+  "physician_adjudicated": false
+}

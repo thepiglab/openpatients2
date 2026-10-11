@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "48cbb63c8ddf419696a2883796da0fb1e44e70e8c302a5be1c462db19d074bea",
-  "annotation_sha256": "20e0b0bdb3ce47546d8d8c7eafbc82566c0c0592c36f640bf07e08ebf019f281",
-  "reviewed_at": "2026-10-09T22:27:02.541035+00:00",
+  "annotation_sha256": "45fbe3aec399ede1bf98079df226c6b01d295e8d943f52c7e74b7e85e552272d",
+  "reviewed_at": "2026-10-10T01:22:06.505572+00:00",
   "source_segments_read": 27,
   "facts_reviewed": 89,
   "patients_reviewed": 2,
@@ -28,7 +28,9 @@
     "Timeline: GCA quiescence relations to symptom onset and rheumatology/PET-CT review changed from before to overlaps; added referral before GI-registrar CT re-review, exam/lab events before final diagnosis, improvement overlaps follow-up, and HTN/HLD overlaps referral for both patients (10 new edges).",
     "p1-f012 note clarifies non-diagnostic refers to the original CT interpretation.",
     "semantic-rules-2026-10 re-sign: verified M03 text_value '76-year-old' (p1) and '71-year-old' (p2) literal; verified 4 M02 comparator '=' (no printed comparators; p1-f040/p2-f031 weight regain is 'approximately', no inequality printed); verified 24 M12 nulled anchors were paraphrases.",
-    "Restored M12-nulled anchors with literal source phrases: p1-f004..f011 and p2-f004..f009 'referred to the gastroenterology department' (symptom-history durations); p1-f012 're-reviewed the prior abdominal CT' ('months earlier'); p2-f034 're-reviewed by the gastroenterology registrar' ('several months prior'). Self-describing times ('following stenting', 'over a decade', 'over a year') left null."
+    "Restored M12-nulled anchors with literal source phrases: p1-f004..f011 and p2-f004..f009 'referred to the gastroenterology department' (symptom-history durations); p1-f012 're-reviewed the prior abdominal CT' ('months earlier'); p2-f034 're-reviewed by the gastroenterology registrar' ('several months prior'). Self-describing times ('following stenting', 'over a decade', 'over a year') left null.",
+    "NO-BORROWING (cleanup pass 2): p2-f009 prior GP GI investigations no longer borrows 'past year' from the preceding sentence about symptom progression; the investigations sentence states no time, so time is null (relation unknown) and the time-only quote was dropped.",
+    "Glued text (cleanup pass 2): applied repair_glued_text.py (1 internal provenance token) and hand-respaced 'documented 15-month/12-month' (p1-f048/p2-f039 notes) and 'Figure 3 to Case 1 and Figure 4 to Case 2' in figure attribution notes."
   ],
   "unresolved": [
     "Caption-derived author findings and independently inspected image pixels are documented in separate layers. All four original JPEGs were inspected.",
@@ -48,7 +50,8 @@
       "Negative/normal findings preserved: benign abdominal exam without peritonitis or masses, other labs normal (p1), unremarkable labs (p2), denied GI family history, PET-CT and rheumatology exam negative for GCA reactivation, no corticosteroids during GCA quiescence.",
       "Only Case 1 had documented upper/lower endoscopy; Case 2 GP investigations unspecified. No celiac stenosis is claimed; only calcification.",
       "Pixel review: all four JPEGs viewed with magnified crops; F3 BeGraft 7/37 mm and F4 VBX 6-29 dil 8 mm prox, 7 mm (clipped) and Everflex 8-20 dil 6 mm device labels confirmed; these remain pixel-only and are not added as clinical facts.",
-      "semantic-rules-2026-10: M02, M03, M12 verified; 16 anchors restored to literal phrases."
+      "semantic-rules-2026-10: M02, M03, M12 verified; 16 anchors restored to literal phrases.",
+      "Cleanup pass 2: Case 2 GP investigations time un-borrowed; glued notes respaced."
     ],
     "residual_risks": [
       "Exam/lab-before-diagnosis and referral-before-re-review edges rely on case-report structure and the abstract statement that diagnosis was ultimately prompted by GI re-review.",

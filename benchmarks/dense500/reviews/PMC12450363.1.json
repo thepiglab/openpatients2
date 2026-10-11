@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "7e82d0eb2b28a1e7650190686bf241a71cf832402856b339dee00a5a2d481bff",
-  "annotation_sha256": "430db5eed7f0cda26a40d443d70e8d4cbc863ad44f6db38b3a6237553f9be12c",
-  "reviewed_at": "2026-10-09T22:30:28.228387+00:00",
+  "annotation_sha256": "b34c9ed5bfbfd902c089acd941cc09bb782df01f497e108b937ad6121b712140",
+  "reviewed_at": "2026-10-10T01:19:54.792553+00:00",
   "source_segments_read": 35,
   "facts_reviewed": 68,
   "patients_reviewed": 1,
@@ -25,13 +25,14 @@
     "Separated differential consideration, CT-based exclusion, alternative suspicion and operative confirmation; discharge intention is not completed discharge.",
     "Follow-up consultation is procedure, and visual clinical meaning cites both surgery and measurement caption.",
     "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] p1-f006 abdominal pain 'four-day history': paraphrased anchor 'ED presentation' (nulled by M12) restored as the literal source phrase 'emergency department' (b00006 'attends the emergency department with a four-day history').",
-    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M02 '=' on p1-f062/f063 (4x4 cm phlegmon dimensions, no printed comparator) and M12 nulling of p1-f005 paraphrase 'current emergency presentation' (time text 'several years earlier' kept)."
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M02 '=' on p1-f062/f063 (4x4 cm phlegmon dimensions, no printed comparator) and M12 nulling of p1-f005 paraphrase 'current emergency presentation' (time text 'several years earlier' kept).",
+    "Glued text (cleanup pass 2): applied repair_glued_text.py (1 token: 'Age 48 years') and hand-respaced remaining exported text: 'over 38°C' (p1-f008), '4×4 cm phlegmon' (p1-f055), 'inferred 10³' (p1-f023 notes), 'Table 1' and 'via CT' in article_limitations. No time-only quotes or negation-word rows for this article."
   ],
   "unresolved": [
     "Clinical figure facts and attribution use source captions; actual-pixel analysis is recorded in the separately reviewed visual submission.",
-    "Raw XML Table1 is preventive-method background, not individual procedure details or measurements. No supplements. No explicit same-patient prior-report linkage identified.",
+    "Raw XML Table 1 is preventive-method background, not individual procedure details or measurements. No supplements. No explicit same-patient prior-report linkage identified.",
     "Printed WBC/neutrophil units and quantities retained without multiplier correction. Caption AI stump measurement is review-only; no calibrated pixel measurement establishes its accuracy.",
-    "Overview says diagnosed viaCT, while detailed case emphasizes initially suspected alternative etiology and definitive operative confirmation; no definitive earlier CT diagnosis time assigned.",
+    "Overview says diagnosed via CT, while detailed case emphasizes initially suspected alternative etiology and definitive operative confirmation; no definitive earlier CT diagnosis time assigned.",
     "Home discharge is described as indicated, so planned discharge/regimen is preserved. One-month follow-up relative anchor and exact histology availability date are unspecified. Counterfactual preference for laparoscopy is not an actual planned/performed laparoscopic operation."
   ],
   "assessment": {
@@ -42,7 +43,8 @@
     "facts_reviewed": 68,
     "figures_viewed": 0,
     "key_findings": [
-      "Migration changes verified; one anchor restored with literal phrase."
+      "Migration changes verified; one anchor restored with literal phrase.",
+      "Cleanup pass 2: glued free text respaced; no meaning changes."
     ],
     "residual_risks": []
   },

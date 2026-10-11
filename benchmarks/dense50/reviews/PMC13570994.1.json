@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "4f721b04e965e0d3a4cbc497674eb7284b9f38e1a35c17bb7636e16b045131f7",
-  "annotation_sha256": "5ff1fcc9a2c99d1e7702bbca2ae8b377bc075d6faa003b91c15fc34794c3b5a7",
-  "reviewed_at": "2026-10-09T22:25:09.697853+00:00",
+  "annotation_sha256": "fe228859c723acd403517eb60c492f10e4fb3cffd744126147f3bba6ab6045ea",
+  "reviewed_at": "2026-10-11T02:18:50.673353+00:00",
   "source_segments_read": 42,
   "facts_reviewed": 103,
   "patients_reviewed": 2,
@@ -21,7 +21,9 @@
   ],
   "corrections": [
     "semantic-rules-2026-10 re-sign: verified M03 age text_value '70-year-old' (p1) and '78-year-old' (p2) are the literal phrases of each case's own presentation sentence (not the other patient's).",
-    "Verified M12 nulled anchor 'presentation' (p1-f009) is not literal in the source; time.text 'for several days' is a self-contained duration from its own quote, so the anchor stays null rather than borrowing 'presented' from another sentence. No needs-review items; no annotation edits."
+    "Verified M12 nulled anchor 'presentation' (p1-f009) is not literal in the source; time.text 'for several days' is a self-contained duration from its own quote, so the anchor stays null rather than borrowing 'presented' from another sentence. No needs-review items; no annotation edits.",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (15 whitelisted label/number or number/unit spacing edits outside quotes in annotations (4), visual-submissions (11); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. Also hand-spaced p1 summary 'A70-year-old'->'A 70-year-old' and 'symptomatic6.1cm ExtentIV'->'symptomatic 6.1 cm Extent IV' (source spelling).",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=2, roster_complete=true, evidence b00003 \"The BIS2T was used to treat 2 patients.\"; 2 patients annotated in first-mention order."
   ],
   "unresolved": [
     "Figure pixels have not been inspected; figure descriptions and patient attribution rely on source captions.",

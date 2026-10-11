@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "65b880c9fab3ccc887f7e69a9fd20f55cba407537296960741f2b98762aca705",
-  "annotation_sha256": "ace7385aa492d4176694bf9108247875953a501e7e617d804a3af5935809f129",
-  "reviewed_at": "2026-10-09T22:31:22.008658+00:00",
+  "annotation_sha256": "488dacd4ff1afeb568990b51301503a3c6da3e6b9ed5fc657ee0e9f42bf46493",
+  "reviewed_at": "2026-10-10T01:43:45.479582+00:00",
   "source_segments_read": 48,
   "facts_reviewed": 106,
   "patients_reviewed": 2,
@@ -31,7 +31,9 @@
     "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M12: 'first DEB-TACE' is not a literal source phrase; nulled anchors accepted for Baseline imaging facts (p1-f013,f022,f023,f024; p2-f013,f021,f022,f023).",
     "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Restored literal anchor 'first drug-eluting bead transarterial chemoembolization' (Figure 5/9 captions) on follow-up facts p1-f038, p1-f046, p2-f039, p2-f048 instead of leaving a null anchor.",
     "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] NR001/NR002 (p1-f039, p2-f040): flag left unset; 'normal' qualifies only the background hepatic parenchyma, the study itself shows a necrotic treated mass (complete response), not a normal result.",
-    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] MED-ROUTE: doxorubicin route on p1-f031, p1-f035, p2-f032, p2-f036 changed from normalized 'transarterial (via drug-eluting beads)' to literal 'transarterial', with the caption quote containing 'drug-eluting bead transarterial chemoembolization' for that session added as evidence."
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] MED-ROUTE: doxorubicin route on p1-f031, p1-f035, p2-f032, p2-f036 changed from normalized 'transarterial (via drug-eluting beads)' to literal 'transarterial', with the caption quote containing 'drug-eluting bead transarterial chemoembolization' for that session added as evidence.",
+    "Cleanup3 TIME p1-f022, p1-f024, p2-f021, p2-f023 (mass size and LI-RADS category from the case narrative): time 'Baseline' came only from the Figure 1/2 caption title quote, which does not govern the narrative sentence -> time nulled (relation unknown), caption-title quote dropped; size clinical statements no longer say 'baseline'.",
+    "Cleanup3 TIME p1-f023, p2-f022 (enhancement pattern, evidence includes the Figure 1/2 caption panel text): time 'Baseline' kept because the caption title governs that caption content; caption title and panel text merged into one contiguous quote."
   ],
   "unresolved": [
     "Case 1 platelet count is printed \"70/µL\" and retained literally with an explicit low flag; the unit is probably an omission of the 10^3 multiplier but no correction was applied.",
@@ -53,7 +55,8 @@
       "Post-second-session CT intervals (4 wk C1, 6 wk C2) and the 1-/6-year anchors come from captions only; abstract says approximately 1 year after DEB-TACE.",
       "Doxorubicin 150 mg then 75 mg per session are loaded amounts; no cumulative total; LT not performed (C1 ineligible by age, C2 declined after CR).",
       "Coagulative-necrosis mechanism review_only/possible; calcification as marker is hypothesis-generating.",
-      "All 12 JPEGs viewed with magnified crops: F7A/F11A show faint peripheral linear/curvilinear specks, F8/F12 ring-like calcific densities; F5/F9 residual nodule not definitively separable; F2B extra small hypointense focus uninterpreted."
+      "All 12 JPEGs viewed with magnified crops: F7A/F11A show faint peripheral linear/curvilinear specks, F8/F12 ring-like calcific densities; F5/F9 residual nodule not definitively separable; F2B extra small hypointense focus uninterpreted.",
+      "Cleanup3: 4 borrowed 'Baseline' times nulled, 2 caption-governed times kept with contiguous quotes."
     ],
     "residual_risks": [
       "p1 baseline labs (e03) and LT-ineligibility (e11) remain unordered relative to other events because the source gives no timing.",

@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "2edf927e7892dda058a1cc62ba601c950390ed795b3850ecef6cc2a63064dbe8",
-  "annotation_sha256": "2ad2850c425eaaa2b35bf3799deaecec319e1b3635c4ecbf204124e45d80d122",
-  "reviewed_at": "2026-10-09T22:35:47.457573+00:00",
+  "annotation_sha256": "261daecd1e6929df8691c00c5399ae8547737f7258ddc82217115b920c2275eb",
+  "reviewed_at": "2026-10-10T01:16:19.231853+00:00",
   "source_segments_read": 13,
   "facts_reviewed": 100,
   "patients_reviewed": 1,
@@ -30,7 +30,13 @@
     "Split p1-e12: surgery-clinic hospitalization (f008/f009/f089) vs new p1-e23 psychiatric-drug discontinuation during that admission; restart edge now e23<e14 (restart setting stays ambiguous).",
     "Added 8 supported edges: e01<e05, e08<e09, e09<e10, e09<e12, e23 overlaps e12, e14<e16, e18<e19, e15<e20 (21 relations, 23 events).",
     "Removed case_context fact from event p1-e09; summary 3 reworded so restart vs follow-up visit order is not implied.",
-    "semantic-rules-2026-10 re-sign: verified all 22 M12 anchor nullings (paraphrases 'first symptoms', 'discharge from first psychiatric hospitalization', 'aripiprazole LAI initiation', etc. were not literal); no literal source anchor is tied by the source to 'during her university years', '10 days later', 'During subsequent follow-ups', 'Over the ensuing/following weeks', 'Over subsequent years', so anchors stay null with literal time text. No annotation edits."
+    "semantic-rules-2026-10 re-sign: verified all 22 M12 anchor nullings (paraphrases 'first symptoms', 'discharge from first psychiatric hospitalization', 'aripiprazole LAI initiation', etc. were not literal); no literal source anchor is tied by the source to 'during her university years', '10 days later', 'During subsequent follow-ups', 'Over the ensuing/following weeks', 'Over subsequent years', so anchors stay null with literal time text. No annotation edits.",
+    "p1-f057: time 'By 2023' relation unknown -> before (TIME-LITERAL 'by <time>' = no later than)",
+    "p1-f058: time 'By 2023' relation unknown -> before (TIME-LITERAL 'by <time>' = no later than)",
+    "p1-f059: time 'By 2023' relation unknown -> before (TIME-LITERAL 'by <time>' = no later than)",
+    "p1-f060: time 'By 2023' relation unknown -> before (TIME-LITERAL 'by <time>' = no later than)",
+    "p1-f061: time 'By 2023' relation unknown -> before (TIME-LITERAL 'by <time>' = no later than)",
+    "TIME-ONLY QUOTE p1-f032 (increased social engagement) and p1-f033 (began watching television): 'Over the ensuing weeks, the patient demonstrated significant clinical improvement.' explicitly scopes the next sentence that itemizes the improvement, so the time is governed and kept; the two separate quotes were merged into one contiguous governing span"
   ],
   "unresolved": [
     "Single case report: no dates beyond \"Since 2012\" and \"By 2023\"; most intervals (hospitalization timing, restart, depot discontinuation) are relative or unstated.",
@@ -48,13 +54,16 @@
       "Single 52F index patient; all 11 annotator flags checked.",
       "DSP stays possible/provisional; TD provisional; TRS author-stated.",
       "First-workup five normal observations kept (explicit named list, \"revealed no abnormalities\"); 2023 MRI/EEG/labs resulted with not_reported.",
-      "Discussion facts limited to patient-specific sentences; cited literature excluded."
+      "Discussion facts limited to patient-specific sentences; cited literature excluded.",
+      "TIME-LITERAL 2026-10 'by <time>' audit: 5 fact(s) set to relation before after reading each source sentence",
+      "Cleanup pass 2: no glued-text diff; 2 time-only-quote facts kept with a merged scoping span; no negation-word rows"
     ],
     "residual_risks": [
       "Order of the first hospitalization vs the re-enrollment/melperone episode and vs the initial evaluation is unstated.",
       "Restart setting (same medical admission or later) and order of restart vs six-week visit unstated.",
       "Sertraline listed by the source among antipsychotics retained literally."
-    ]
+    ],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
   },
   "physician_adjudicated": false
 }

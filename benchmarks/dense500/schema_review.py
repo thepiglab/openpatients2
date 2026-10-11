@@ -46,6 +46,14 @@ def validate_submission(target,annotation,source):
         relative_order(timeline.model_dump())
         if got['relative_timeline']!=relative_order(timeline.model_dump()):raise ValueError('Regenerate relative_timeline after changing event classifications')
         original=want['companions']['timeline_v2'];copy_got=copy.deepcopy(timeline.model_dump())
+        # Classification set in the annotation is the single source: the submission must match it exactly.
+        own={e['event_id']:e for p in annotation['patients'] for e in p.get('events',[])}
+        for e,old in zip(copy_got['events'],original['events']):
+            a_ev=own.get(e['event_id'],{})
+            if 'kind' in a_ev and e['kind']!=old['kind']:raise ValueError(f"{e['event_id']}: event kind is set in the annotation; change it there and regenerate")
+            for time,oldtime in zip(e['times'],old['times']):
+                for field,key in (('kind','time_kind'),('precision','time_precision'),('calendar_value','time_calendar_value')):
+                    if key in a_ev and time[field]!=oldtime[field]:raise ValueError(f"{e['event_id']}: time {field} is set in the annotation; change it there and regenerate")
         for e,old in zip(copy_got['events'],original['events']):
             e['kind']=old['kind']
             for time,oldtime in zip(e['times'],old['times']):
@@ -64,6 +72,9 @@ def validate_submission(target,annotation,source):
         if clean!=want:raise ValueError('Figure ownership changes belong in the source annotation')
     if len(target['figure_attribution'])!=len(expected['figure_attribution']):raise ValueError('Missing figure')
     r=copy.deepcopy(target['roster']);er=expected['roster']
+    if annotation.get('roster') is not None:
+        for key in ('reported_individual_count','roster_complete'):
+            if target['roster'][key]!=er[key]:raise ValueError(f'roster.{key} is set in the annotation roster block; change it there and regenerate')
     for key in ('reported_individual_count','roster_complete'):r[key]=er[key]
     # The reviewer may remove this generated pending-review notice. Actual
     # source limitations remain immutable unless the annotation changes first.

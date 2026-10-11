@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "127d13fd877ab3c4e08375687d2752f8cfd4967768a4172fa49301936362cacb",
-  "annotation_sha256": "b42d697c7fcbb2c81392e472a1545107961af3dcddfe71a61184216010131812",
-  "reviewed_at": "2026-10-09T22:33:22.055455+00:00",
+  "annotation_sha256": "c969c782d6e1b81bdefe0fdaa096d568a6aebeda31e2f4eafdbb8456a6df1a9d",
+  "reviewed_at": "2026-10-10T02:16:58.616328+00:00",
   "source_segments_read": 18,
   "facts_reviewed": 46,
   "patients_reviewed": 1,
@@ -27,11 +27,14 @@
     "Inspected full-schema temporal gates: expanded the listed narrow fact citations to include the actual source sentence establishing visit timing; no measurement or time value changed.",
     "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] p1-f005/f006 'for three days': paraphrased anchor 'three days before presentation' (nulled by M12) restored as literal 'presented to our clinic'.",
     "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] SECTION-SIGNS: moved examination findings and pain scale from observations to symptoms_function: p1-f013 fibrous cord (sign), p1-f015/f016 active flexion/abduction 170 degrees (sign), p1-f035 range of motion entirely restored (sign), p1-f017 baseline VAS 5 and p1-f036 posttreatment VAS 1 (performance_score; scale anchors kept in text_value).",
-    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M02 '=' on ROM/VAS/lymph node 23x8 mm values (no printed comparators), M03 age text '39-year-old', M04 p1-f007 'no history of trauma' absent/unknown (not confirmed)."
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M02 '=' on ROM/VAS/lymph node 23x8 mm values (no printed comparators), M03 age text '39-year-old', M04 p1-f007 'no history of trauma' absent/unknown (not confirmed).",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (4 whitelisted label/number or number/unit spacing edits outside quotes in annotations (4); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. (23×8mm -> 23×8 mm in notes/summary, Table1 -> Table 1) plus hand fix 'single23×8 mm' -> 'single 23×8 mm' in p1 fact notes.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=None, roster_complete=true, evidence b00004 \"A 39-year-old female physiotherapist presented to our clinic with complaints of left shoulder pain and axillary swelling for three days\"; 1 patients annotated in first-mention order.",
+    "ROSTER-ORDER update (singular case statement = count 1): roster reported_individual_count null -> 1, roster_complete true, evidence b00003 \"we present a rare case of IAWS\"; 1 patient annotated."
   ],
   "unresolved": [
     "Figure pixels were not inspected; annotation covers captions only.",
-    "Recovered Table1 contains only previously reported literature cases, not the current39-year-old patient; secondary patients/outcome scores remain background."
+    "Recovered Table 1 contains only previously reported literature cases, not the current39-year-old patient; secondary patients/outcome scores remain background."
   ],
   "assessment": {
     "primary_stratum": "musculoskeletal",

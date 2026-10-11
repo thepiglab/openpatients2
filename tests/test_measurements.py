@@ -91,3 +91,30 @@ def test_source_range_dimension_or_composite_is_not_silently_split(quote,raw,num
     assert observation_measurements(section, segments)[0]['measurement'] is None
     section['items'][0]['evidence'][0]['quote'] = 'Fabricated sodium 115 mmol/L'
     assert observation_measurements(section, segments)[0]['measurement'] is None
+
+
+def test_dose_cells_footnotes_and_documented_cell_status():
+    from types import SimpleNamespace as NS
+    from openpatients2.measurement_series import ADDITIVE_POINT_FIELDS, Point, cell_status_errors, contract_sha256, expected_parse
+    assert expected_parse('-') == expected_parse('-^(b)') == ('missing_cell', None)
+    status, parsed = expected_parse('5 IM + 5 PO^(a)')
+    assert status == 'parsed' and parsed['components'] == [{'magnitude': '5', 'unit': None, 'route': 'IM'},
+                                                           {'magnitude': '5', 'unit': None, 'route': 'PO'}]
+    assert parsed['footnote_markers'] == ['a'] and parsed['raw_text'] == '5 IM + 5 PO^(a)'
+    assert expected_parse('5 IM × 3^(a)')[1]['multiplicity'] == 3
+    assert expected_parse('d/c') == ('unparseable', None)
+    assert expected_parse('12.3 mg/dL')[1]['unit'] == 'mg/dL'      # scalar cells unchanged
+    legend = NS(role='context', raw_text='- = refusal; d/c = discontinuation; (a) emergency or as needed dose')
+    def point(status, legend_id='L1'):
+        return Point.model_validate({'point_id': 'p', 'value_cell_id': 'v', 'time': {'time_cell_id': None, 'time_text': None,
+            'offset_value': None, 'offset_unit': None, 'offset_anchor_text': None, 'offset_basis': None},
+            'parse_status': 'missing_cell', 'parsed': None, 'unit_text': None, 'unit_cell_id': None,
+            'cell_status': status, 'legend_cell_id': legend_id})
+    assert not cell_status_errors(point('refused'), NS(raw_text='-^(b)'), legend)
+    assert not cell_status_errors(point('discontinued'), NS(raw_text='d/c'), legend)
+    assert not cell_status_errors(point('prn_or_emergency'), NS(raw_text='5 IM^(a)'), legend)
+    assert cell_status_errors(point('held'), NS(raw_text='d/c'), legend)            # legend never says held
+    assert cell_status_errors(point('refused', None), NS(raw_text='-'), None)       # no legend, no status
+    # Additive fields default to null and are excluded from the contract fingerprint (existing receipts stay current).
+    schema = Point.model_json_schema()
+    assert set(ADDITIVE_POINT_FIELDS) <= set(schema['properties']) and contract_sha256()

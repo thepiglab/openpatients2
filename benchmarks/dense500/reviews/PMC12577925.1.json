@@ -1,0 +1,53 @@
+{
+  "article_id": "PMC12577925.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "98942bd0af4c9ac8950fea83d19e115e3ef2d04ce6ae4f0ce9d3ec8733ba8d99",
+  "annotation_sha256": "5053efb66a1f1f457ba8b8530e9bd317042da86891f64687508d60c522f825d2",
+  "reviewed_at": "2026-10-11T03:10:41.191254+00:00",
+  "source_segments_read": 88,
+  "facts_reviewed": 148,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Time consistency: Table 1/2/3 titles and headers state no time, so no table cell carries a time. Removed \"During the first day of admission\" and the text quotes from table facts p1-f032 (Hb), p1-f039 (platelets), p1-f040 (WBC); this resolves the NO-BORROWING warnings on Total WBC rather than masking them.",
+    "Added text facts p1-f146 (Hb 16.3 g/dL), p1-f147 (platelets 40 × 10^(9)/L, flag low from \"remained significantly low\"), p1-f148 (WBC 8.40 × 10^(9)/L) with time from their own b00018 sentence, each alternate_representation_of the Table 1 fact; event p1-e07 now links these.",
+    "p1-f039 table platelets: flag low -> unknown (table prints no classification), text_value \"40*\" kept verbatim; asterisk ambiguity linked to p1-f039.",
+    "Linked ordered tests p1-f057..f061 to empty event p1-e04; linked CRP/ESR/LDH to p1-e08 (inflammatory markers received later that day; values keep null time); split malaria negative into new event p1-e15 without time.",
+    "Added relation p1-e02 before p1-e03 (b00015 \"Based on these findings, the patient was admitted\"); updated the time limitation."
+  ],
+  "unresolved": [
+    "The article has no figures or supplements; no visual review applies.",
+    "Citrate-sample platelet count conflicts between the text (191 x10^9/L) and Table 3 (157.0 x10^3/uL); both kept as source_conflict.",
+    "Table 1, 2 and 3 titles and headers state no time, so table cells carry no time; the first-day time is recorded only on the text statements of platelets, WBC and hemoglobin (alternate representations of the Table 1 cells). Vital signs carry no time of their own.",
+    "Table 1 platelet count 40 carries an undefined asterisk."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 88,
+    "facts_reviewed": 148,
+    "figures_viewed": 0,
+    "key_findings": [
+      "All Table 1 (20 rows), Table 2 (3) and Table 3 (20 rows, EDTA and citrate columns) cells match the source values, units and reference ranges.",
+      "Citrate platelets 191 (text) vs 157.0 (Table 3) kept source_conflict review_only in both facts.",
+      "Platelet units prepared kept as planned/possible procedure with conditional event, not given; dengue kept possible/provisional (serology negative, never stated ruled out).",
+      "\"Non-smoker\" kept assertion absent, status unknown; \"Later that day\" kept only on the inflammatory-marker group fact, not borrowed onto CRP/ESR/LDH values."
+    ],
+    "residual_risks": [
+      "Undefined asterisk on Table 1 platelet 40*.",
+      "Vital-sign paragraph opens with \"Upon admission\"; vital values left without time (only the hemodynamic stability sign carries it).",
+      "Text and table duplicates both materialize in observations (linked by alternate_representation_of)."
+    ]
+  },
+  "physician_adjudicated": false
+}

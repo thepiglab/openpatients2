@@ -1,7 +1,7 @@
 {
   "format": "dense-runtime-targets/1",
   "article_id": "PMC12736019.1",
-  "annotation_sha256": "81eb34e92a517c028da55cdc296b68c5e437b615d14d9790a2b469f1e3497a3b",
+  "annotation_sha256": "fbbdb3c2d18f07f4f4e8d32774b6d7dbd82b27a56d6cf439dd87a7310a197f7d",
   "source_text_sha256": "7f7aec2413bb90d34e1c7520c8800a2c540fed84087d0c79739406e0a1e563a1",
   "schema_fingerprints": {
     "case_context": "d7439310910ef4a7d5e1706c5b9dc8a2b379f132a2562791c059a478b588ec71",
@@ -902,6 +902,56 @@
               "kind": "performance_score",
               "text_value": "1",
               "numeric_value": 1.0,
+              "unit": null,
+              "body_site": null,
+              "severity": null,
+              "activity_context": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "temporality": "current",
+              "time": {
+                "text": "three-month follow-up",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "She remained asymptomatic with full neurological recovery at three-month follow-up.",
+                  "source_section": "b00008"
+                }
+              ],
+              "name": "Symptoms",
+              "kind": "symptom",
+              "text_value": null,
+              "numeric_value": null,
+              "unit": null,
+              "body_site": null,
+              "severity": null,
+              "activity_context": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "temporality": "current",
+              "time": {
+                "text": "two months",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "She remained asymptomatic at two months.",
+                  "source_section": "b00001"
+                }
+              ],
+              "name": "Symptoms",
+              "kind": "symptom",
+              "text_value": null,
+              "numeric_value": null,
               "unit": null,
               "body_site": null,
               "severity": null,
@@ -1994,33 +2044,10 @@
                 }
               ],
               "event": "follow_up",
-              "text_value": "asymptomatic with full neurological recovery",
+              "text_value": "full neurological recovery",
               "related_condition": null,
               "disposition": null,
               "follow_up_duration_text": "three-month follow-up",
-              "cause_as_documented": null
-            },
-            {
-              "subject": "index_patient",
-              "assertion": "present",
-              "temporality": "unknown",
-              "time": {
-                "text": "two months",
-                "relation": "at",
-                "anchor": null,
-                "date_iso": null
-              },
-              "evidence": [
-                {
-                  "quote": "She remained asymptomatic at two months.",
-                  "source_section": "b00001"
-                }
-              ],
-              "event": "follow_up",
-              "text_value": "asymptomatic",
-              "related_condition": null,
-              "disposition": null,
-              "follow_up_duration_text": "two months",
               "cause_as_documented": null
             },
             {
@@ -3119,7 +3146,8 @@
               "fact_ids": [
                 "p1-f049",
                 "p1-f047",
-                "p1-f048"
+                "p1-f048",
+                "p1-f053"
               ],
               "evidence": [
                 {
@@ -4301,7 +4329,8 @@
             "fact_ids": [
               "p1-f049",
               "p1-f047",
-              "p1-f048"
+              "p1-f048",
+              "p1-f053"
             ],
             "evidence": [
               {
@@ -5190,7 +5219,7 @@
         "basis": "Source-gated model relations; paragraph order and event kind do not create chronology."
       },
       "reference_provenance": {
-        "annotation_sha256": "81eb34e92a517c028da55cdc296b68c5e437b615d14d9790a2b469f1e3497a3b",
+        "annotation_sha256": "fbbdb3c2d18f07f4f4e8d32774b6d7dbd82b27a56d6cf439dd87a7310a197f7d",
         "materializer_version": "dense-runtime-targets/1",
         "fact_pointers": [
           {
@@ -5372,6 +5401,28 @@
               {
                 "segment_id": "b00008",
                 "quote": "The patient was discharged on day 11 (NIHSS 1)"
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f053",
+            "task": "symptoms_function",
+            "pointer": "/items/6",
+            "source_evidence": [
+              {
+                "segment_id": "b00008",
+                "quote": "She remained asymptomatic with full neurological recovery at three-month follow-up."
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f050",
+            "task": "symptoms_function",
+            "pointer": "/items/7",
+            "source_evidence": [
+              {
+                "segment_id": "b00001",
+                "quote": "She remained asymptomatic at two months."
               }
             ]
           },
@@ -5813,20 +5864,9 @@
             ]
           },
           {
-            "fact_id": "p1-f050",
-            "task": "outcomes",
-            "pointer": "/items/5",
-            "source_evidence": [
-              {
-                "segment_id": "b00001",
-                "quote": "She remained asymptomatic at two months."
-              }
-            ]
-          },
-          {
             "fact_id": "p1-f051",
             "task": "outcomes",
-            "pointer": "/items/6",
+            "pointer": "/items/5",
             "source_evidence": [
               {
                 "segment_id": "b00014",
@@ -6892,6 +6932,120 @@
             ],
             "event_ids": [
               "p1-e15"
+            ]
+          },
+          {
+            "fact_id": "p1-f053",
+            "task": "symptoms_function",
+            "pointer": "/items/6",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "temporality": "current",
+              "time": {
+                "text": "three-month follow-up",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "She remained asymptomatic with full neurological recovery at three-month follow-up.",
+                  "source_section": "b00008"
+                }
+              ],
+              "name": "Symptoms",
+              "kind": "symptom",
+              "text_value": null,
+              "numeric_value": null,
+              "unit": null,
+              "body_site": null,
+              "severity": null,
+              "activity_context": null
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "name": "Symptoms",
+              "kind": "symptom",
+              "body_site": null,
+              "severity": null,
+              "temporality": "current",
+              "time": {
+                "text": "three-month follow-up",
+                "relation": "at",
+                "anchor": null
+              }
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12736019.1:jats",
+                "segment_id": "b00008",
+                "segment_sha256": "2c40552141e5b03045a42b533b223b0c7843f38bee3438a10fed16fd129cab21",
+                "start": 660,
+                "end": 743,
+                "quote": "She remained asymptomatic with full neurological recovery at three-month follow-up."
+              }
+            ],
+            "event_ids": [
+              "p1-e18"
+            ]
+          },
+          {
+            "fact_id": "p1-f050",
+            "task": "symptoms_function",
+            "pointer": "/items/7",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "temporality": "current",
+              "time": {
+                "text": "two months",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "She remained asymptomatic at two months.",
+                  "source_section": "b00001"
+                }
+              ],
+              "name": "Symptoms",
+              "kind": "symptom",
+              "text_value": null,
+              "numeric_value": null,
+              "unit": null,
+              "body_site": null,
+              "severity": null,
+              "activity_context": null
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "name": "Symptoms",
+              "kind": "symptom",
+              "body_site": null,
+              "severity": null,
+              "temporality": "current",
+              "time": {
+                "text": "two months",
+                "relation": "at",
+                "anchor": null
+              }
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12736019.1:jats",
+                "segment_id": "b00001",
+                "segment_sha256": "f2ce8893ae73a355b03a31d83a237d0df76c9f8c322944efcc99b292d00cd90f",
+                "start": 723,
+                "end": 763,
+                "quote": "She remained asymptomatic at two months."
+              }
+            ],
+            "event_ids": [
+              "p1-e19"
             ]
           },
           {
@@ -9052,7 +9206,7 @@
                 }
               ],
               "event": "follow_up",
-              "text_value": "asymptomatic with full neurological recovery",
+              "text_value": "full neurological recovery",
               "related_condition": null,
               "disposition": null,
               "follow_up_duration_text": "three-month follow-up",
@@ -9062,7 +9216,7 @@
               "subject": "index_patient",
               "assertion": "present",
               "event": "follow_up",
-              "text_value": "asymptomatic with full neurological recovery",
+              "text_value": "full neurological recovery",
               "follow_up_duration_text": "three-month follow-up",
               "time": {
                 "text": "three-month follow-up",
@@ -9085,62 +9239,9 @@
             ]
           },
           {
-            "fact_id": "p1-f050",
-            "task": "outcomes",
-            "pointer": "/items/5",
-            "value_as_extracted": {
-              "subject": "index_patient",
-              "assertion": "present",
-              "temporality": "unknown",
-              "time": {
-                "text": "two months",
-                "relation": "at",
-                "anchor": null,
-                "date_iso": null
-              },
-              "evidence": [
-                {
-                  "quote": "She remained asymptomatic at two months.",
-                  "source_section": "b00001"
-                }
-              ],
-              "event": "follow_up",
-              "text_value": "asymptomatic",
-              "related_condition": null,
-              "disposition": null,
-              "follow_up_duration_text": "two months",
-              "cause_as_documented": null
-            },
-            "value_as_annotated": {
-              "subject": "index_patient",
-              "assertion": "present",
-              "event": "follow_up",
-              "text_value": "asymptomatic",
-              "follow_up_duration_text": "two months",
-              "time": {
-                "text": "two months",
-                "relation": "at",
-                "anchor": null
-              }
-            },
-            "evidence": [
-              {
-                "source_id": "PMC12736019.1:jats",
-                "segment_id": "b00001",
-                "segment_sha256": "f2ce8893ae73a355b03a31d83a237d0df76c9f8c322944efcc99b292d00cd90f",
-                "start": 723,
-                "end": 763,
-                "quote": "She remained asymptomatic at two months."
-              }
-            ],
-            "event_ids": [
-              "p1-e19"
-            ]
-          },
-          {
             "fact_id": "p1-f051",
             "task": "outcomes",
-            "pointer": "/items/6",
+            "pointer": "/items/5",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "absent",

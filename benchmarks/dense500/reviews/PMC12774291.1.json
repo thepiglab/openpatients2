@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "52eaa2d63de089d7037280d1d07c3d1dcf0189c260768794e5cc43d0716e2523",
-  "annotation_sha256": "7391ff15cd055928999d0956821720bb238a6a5b16fd96a9284a92ee4ff70bb8",
-  "reviewed_at": "2026-10-09T22:34:23.599320+00:00",
+  "annotation_sha256": "bb48aae50d53aeed90b3422b0d93ea7282649dcef5aa9db24017db099336ab60",
+  "reviewed_at": "2026-10-11T02:19:22.417390+00:00",
   "source_segments_read": 30,
   "facts_reviewed": 207,
   "patients_reviewed": 2,
@@ -26,14 +26,28 @@
     "Added explicit b18 recurrent-episode provenance to Figure3 patient/panel assignments.",
     "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M02: p1-f052 comparator '=' for the plain printed '1-Hz' discharges.",
     "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified 105 M12 anchor nullings (all paraphrases such as 'initial aphasic attack onset', 'recurrent attack onset'). Restored literal anchors on 46 facts: 'onset' for every 'N minutes/hours after onset' / '2.5 years post onset' time (p1 and p2), 'last attack' for p1-f083..f085 and p2-f106..f110, 'MRI' for p1-f041/f042 ('immediately after MRI'), 'onset of the second brain infarct' for p1-f013, '5 mg intravenous diazepam' for p2-f056/f088 ('immediately'), 'transferred to a rehabilitation hospital' for p2-f078, 'discharged from that hospital' for p2-f079.",
-    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Left anchor null for hospital-day times ('On Day N'), age-at times, 'at midnight' and 'four months earlier' (no literal reference phrase stated for them)."
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Left anchor null for hospital-day times ('On Day N'), age-at times, 'at midnight' and 'four months earlier' (no literal reference phrase stated for them).",
+    "p2-f073: time 'By Day 4' relation after -> before (TIME-LITERAL 'by <time>' = no later than)",
+    "p2-f104: time 'By Day 4' relation after -> before (TIME-LITERAL 'by <time>' = no later than)",
+    "[cleanup2 glued/time-only] repair_glued_text.py --apply: 51 tokens in 49 values (Day N, N hours, IV drug etc.).",
+    "[cleanup2 glued/time-only] Manual glued-text fixes (71 values, spacing/hyphenation only): Case1:/Case2: labels, DayN/vsDayN, age57/59, NNminute/NNhour/2.5year -> hyphenated attributive forms, dose/levetiracetam/Levetiracetam N mg, IVdiazepam5mg, IVlevetiracetam, after500mg, at22h, after10h, readmission/episode 2.5 years, Fig 2A caption, Figure 1E, PMID/DOI numbers, actual 3 JPEGs, vs caption, 3-year follow-up.",
+    "[cleanup2 glued/time-only] p1-f021/p1-f022 (normal muscle power, sense of pain): 'at 50 minutes after onset' came from a separate earlier sentence; own sentence has no time -> time nulled (relation unknown), time-only quote dropped; order kept via membership in event p1-e06.",
+    "[cleanup2 glued/time-only] p2-f014/f015/f017 (brain metastases, their body sites, prior brain MRI): kept 'four months earlier' - own sentence says 'At the same time' explicitly referring to the lung adenocarcinoma diagnosis four months earlier; evidence replaced by the one contiguous governing span.",
+    "[cleanup2 glued/time-only] p2-f068 (recall of Day 1 events) and p2-f102 (recall of recurrent onset): kept 'On Day 2'/'on Day 3' - own sentence 'At that time' explicitly refers to the immediately preceding Day 2 / Day 3 statement; evidence replaced by contiguous governing span. Also fixed relation after -> at (the recall occurred on that day; anchor null).",
+    "[cleanup2 glued/time-only] No other changes.",
+    "[cleanup2 glued/time-only] Patient labels kept as previously signed (Case1:/Case2: spacing not changed) because label is bound by the visual/figure-EHR/figure-privacy patient-identity receipts; index_subject_description carries the spaced form.",
+    "cleanup3 patient labels respaced: 'Case1:61-year-old ...' -> 'Case 1: 61-year-old ...', 'Case2:80-year-old ...' -> 'Case 2: 80-year-old ...'.",
+    "cleanup3 NO-BORROWING: p2-f014 (brain metastases) and p2-f017 (prior brain MRI) no longer take 'four months earlier' from the lung-adenocarcinoma sentence; own sentence ('At the same time, ... on MRI (Figure 2A).') plus the governing Figure 2A caption quote ('A: T1-weighted imaging four months before the first attack ... indicating metastatic tumors'), time 'four months before the first attack' (before), matching p2-f016. p2-f015 (body-text metastasis sites) time nulled, quote trimmed to its own sentence. p2-f102 (recall at Day 3) time nulled (own sentence only says 'At that time'), quote trimmed to own sentence; ordering kept by event p2-e21 (on Day 3) membership.",
+    "cleanup3 sidecar GLUED-TEXT: visual-submissions prose respaced (Case1/Case2, PanelsA/B(/C), RT. LAT/LT. LAT/RT. MED/LT. MED view lists, Z legend 'with 7 ... and 0', 'prints 0/7', Day 6/Day 7, 'body text Day 6 conflicts with caption Day 7', 'source 1 Hz claim in Fig 1C', 'at 2.5 years', Figure 3A/3B); figure-ehr-labels and figure-privacy-flags visual_target_sha256 updated; parent visual, figure-EHR and privacy receipts re-signed.",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (13 whitelisted label/number or number/unit spacing edits outside quotes in annotations (13); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. (50min/80min/90min -> 50 min/80 min/90 min in activity_context and diagnostic_basis; source says '50 minutes', '80 minutes', '90 minutes').",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=2, roster_complete=true, evidence b00001 \"Here, we present two cases with ASE.\"; 2 patients annotated in first-mention order."
   ],
   "unresolved": [
-    "Caption-layer pixels not_inspected; actual3JPEGs reviewed separately in visual targets.",
-    "p1 re-report explicit prior-patient identity REF9 PMID33264155 DOI10.1097/WNN.0000000000000248 requires family-split check; no prior report clinical facts imported.",
-    "p1 follow-up SPECT Day6 body vsDay7 caption conflict; both exact claims review-only.",
-    "p2 prior brain metastasis exact sites conflict body right cerebellar/leftoccipital vscaption vermis/bilateraloccipital; general brain metastases retained.",
-    "p2 post-IVlevetiracetam convulsive seizure stated affirmatively; no silent negation repair or drug toxicity attribution.",
+    "Caption-layer pixels not_inspected; actual 3 JPEGs reviewed separately in visual targets.",
+    "p1 re-report explicit prior-patient identity REF9 PMID 33264155 DOI 10.1097/WNN.0000000000000248 requires family-split check; no prior report clinical facts imported.",
+    "p1 follow-up SPECT Day 6 body vs Day 7 caption conflict; both exact claims review-only.",
+    "p2 prior brain metastasis exact sites conflict body right cerebellar/left occipital vs caption vermis/bilateral occipital; general brain metastases retained.",
+    "p2 post-IV levetiracetam convulsive seizure stated affirmatively; no silent negation repair or drug toxicity attribution.",
     "Antiseizure maintenance frequency, several routes and additional phenytoin dose unreported; no daily-dose assumption.",
     "Generic treatment recommendations/literature cohort outcomes not index delivered care; source consciousness conclusion retained as author-supported interpretation."
   ],
@@ -46,9 +60,13 @@
     "facts_reviewed": 207,
     "figures_viewed": 0,
     "key_findings": [
-      "semantic-rules-2026-10 migration verified: 1 comparator, 105 anchor nullings (46 restored with literal source phrases)."
+      "semantic-rules-2026-10 migration verified: 1 comparator, 105 anchor nullings (46 restored with literal source phrases).",
+      "TIME-LITERAL 2026-10 'by <time>' audit: 2 fact(s) set to relation before after reading each source sentence",
+      "Cleanup pass 2: glued free text repaired and time-only evidence quotes resolved against source (NO-BORROWING/TIME-LITERAL).",
+      "Cleanup pass 2: glued free text repaired and time-only evidence quotes resolved against source (NO-BORROWING/TIME-LITERAL)."
     ],
-    "residual_risks": []
+    "residual_risks": [],
+    "cleanup3": "final sweep (sidecar respacing, span/time-only quotes, negation) 2026-10-09"
   },
   "physician_adjudicated": false
 }

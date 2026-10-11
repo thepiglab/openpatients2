@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "45370e59a4770edc53c15fdf125908648bc5c05f1b7b1b8a6d1eea0aecea5d5d",
-  "annotation_sha256": "ab4feec8e799b7f693ea9dcb459fe04cad6b40101fe9cbb665fcae979f875d85",
-  "reviewed_at": "2026-10-09T22:30:50.021900+00:00",
+  "annotation_sha256": "d32b89a8883cfc768d63d7de1630faa9785e4d80da3d48e54d55d45df39b4b2e",
+  "reviewed_at": "2026-10-10T02:14:06.907022+00:00",
   "source_segments_read": 18,
   "facts_reviewed": 88,
   "patients_reviewed": 1,
@@ -20,12 +20,15 @@
     "all captions and panel attribution"
   ],
   "corrections": [
-    "semantic-rules-2026-10 re-sign (no parent edits): verified M02 comparator '=' on 14 observations (vitals, admission/later labs, sizes; all printed as plain values, no <,>) and M03 age text_value '87-year-old' (literal phrase in p1-f002 evidence 'An 87-year-old man')."
+    "semantic-rules-2026-10 re-sign (no parent edits): verified M02 comparator '=' on 14 observations (vitals, admission/later labs, sizes; all printed as plain values, no <,>) and M03 age text_value '87-year-old' (literal phrase in p1-f002 evidence 'An 87-year-old man').",
+    "Cleanup2 GLUED-TEXT: repair tool split 3 tokens (ambiguity 'and93', limitation 'twogallstone', internal provenance 'and18segments'); manual fixes: ambiguity 'RR28 and 93%on2L' -> 'respiratory rate 28 and 93% on 2 L' (source wording), limitation 'and3L/two gallstone laparotomy report' -> 'and the laparotomy report with 3 L of bile and two gallstones', ambiguity 'postoperative day4' -> 'postoperative day 4'. Source spelling '8Fr' kept. No time-only quotes in this article.",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (1 whitelisted label/number or number/unit spacing edits outside quotes in annotations (1); 'POD4'->'POD 4'); every edit read against the source.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=1, roster_complete=true, evidence b00001 \"We report the case of an 87-year-old man who presented with right upper quadrant pain\"; 1 patient annotated in first-mention order."
   ],
   "unresolved": [
     "Antibiotic doses/frequencies/durations, sedation drugs, regular-medication doses/routes/indications and original calendar dates were not reported.",
     "Postoperative drain-removal relative wording retained without invented day numbering; follow-up duration not reported.",
-    "Discussion literature patients and3L/twogallstone laparotomy report are external/background, not additional local cases.",
+    "Discussion literature patients and the laparotomy report with 3 L of bile and two gallstones are external/background, not additional local cases.",
     "Clinical figure companion remains a text-only caption layer; actual pixels and their interpretations are independently recorded in visual-submissions with image-bound receipts."
   ],
   "assessment": {
@@ -34,7 +37,8 @@
     "facts_reviewed": 88,
     "figures_viewed": 0,
     "key_findings": [
-      "Mechanical migrations correct against the source."
+      "Mechanical migrations correct against the source.",
+      "Cleanup2: glued text repaired in ambiguities and article limitations."
     ],
     "residual_risks": [
       "None new from the migration."

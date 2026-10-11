@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "85e917dba8ca3f4c6264c8c275b865ae483feead2c6291476189cf6c39412716",
-  "annotation_sha256": "0b8a5ac59bb9951722c4457582a50b6efbbc09caf8ffe4d62508651ed2108194",
-  "reviewed_at": "2026-10-09T22:43:04.267410+00:00",
+  "annotation_sha256": "e778e30a5bebadddd6ea8d74c73004a615d48506cf8fa7cea567e88d0eaa13e3",
+  "reviewed_at": "2026-10-11T02:20:05.919429+00:00",
   "source_segments_read": 47,
   "facts_reviewed": 82,
   "patients_reviewed": 1,
@@ -29,7 +29,13 @@
     "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Restored literal anchors after M12 nulled paraphrases: p1-f005 CABG '1 year prior' -> 'referred to our hospital for PVI'; p1-f033 cola-coloured urine 'later that evening' -> 'discharged at 17:18 h'; p1-f035/f036 fluid/monitoring advice 'The following morning' -> 'contacted the emergency department at 22:30 h'; p1-f037..f039 'On follow-up the next day' -> 'The following morning'.",
     "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] p1-f045 LDH: M12 left time with null text/anchor/date and relation 'at'; relation set to 'unknown' (TIME-LITERAL; the own evidence has no time phrase).",
     "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified p1-f072 bumetanide 'once anuria was established' remains self-anchored with anchor null.",
-    "opus-fixup: p1-f037/f038/f039 time relation at -> after: 'On follow-up the next day' is the day after 'The following morning' contact (anchor kept, literal)."
+    "opus-fixup: p1-f037/f038/f039 time relation at -> after: 'On follow-up the next day' is the day after 'The following morning' contact (anchor kept, literal).",
+    "p1-f080: time 'By 2 months after admission' relation after -> before (TIME-LITERAL 'by <time>' = no later than); anchor 'admission' kept (named in phrase)",
+    "p1-f081: time 'By 2 months after admission' relation after -> before (TIME-LITERAL 'by <time>' = no later than); anchor 'admission' kept (named in phrase)",
+    "p1-f082: time 'By 2 months after admission' relation after -> before (TIME-LITERAL 'by <time>' = no later than); anchor 'admission' kept (named in phrase)",
+    "Cleanup3 GLUED visual submission ytaf669-F3 (renal chart) measured quantity visual_cue: 'clearenace' is the printed right-axis typo (verified on pixels), not glued text; the printed legend and axis labels are now in quotation marks (“Creatinin clearence (24/h)”, “Creatinin clearenace 24h”) to mark them as transcribed printed text; figure-EHR label and privacy-flag visual_target_sha256 refreshed; all six figures re-viewed on pixels.",
+    "GLUED-TEXT pass 4: rejected fix_label_digit_glue.py for this article; its 3 proposed edits ('Urine Production (ml/24h)' -> '(ml/24 h)') would alter the legend text that figure ytaf669-F3 prints glued exactly so (re-viewed); visual submission left unchanged.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=1, roster_complete=true, evidence b00002 \"We report the case of a 62-year-old male\"; 1 patients annotated in first-mention order."
   ],
   "unresolved": [
     "Single case report; no calendar dates are given and none are inferred. Procedure clock times are literal.",
@@ -46,7 +52,9 @@
     "figures_viewed": 0,
     "key_findings": [
       "M12 anchors restored with literal source phrases; empty-time relation fixed on p1-f045.",
-      "opus-fixup: next-day follow-up symptoms now relation after the morning contact."
+      "opus-fixup: next-day follow-up symptoms now relation after the morning contact.",
+      "TIME-LITERAL 2026-10 'by <time>' audit: 3 fact(s) set to relation before after reading each source sentence",
+      "Cleanup3: printed axis typo quoted as printed text in the visual submission."
     ],
     "residual_risks": []
   },

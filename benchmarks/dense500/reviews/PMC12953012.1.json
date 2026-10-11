@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC12953012.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1aa562228dec8641fcb27a30d0d81544c64ba3c0f230a9446634a6f49b301cf7",
+  "annotation_sha256": "5c8f7293c904c946981dec65e0a556099e4b45ffc8b9fe5f5ee4bf24da16101b",
+  "reviewed_at": "2026-10-10T02:08:47.954796+00:00",
+  "source_segments_read": 46,
+  "facts_reviewed": 76,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Trimmed qualifier text from condition/medication/procedure names (f018 HIAV, f024 sepsis, f027 disseminated herpes zoster, f043 pneumonia, f021 antibiotics, f039/f040 skin biopsy); qualifiers stay in assertion/verification_status and notes (NAME-LABEL).",
+    "Added p1-f076 pathology observation: concomitant vasculitis noted on biopsy, from the Table 2 current-case row (omitted in draft); linked to e17 and summary.",
+    "Decided \"two months later\": time kept on follow-up, absent active lesions and biopsy result since all share one sentence; added the same time to the biopsy procedure f039; anchor stays null (no named anchor event); ambiguity updated.",
+    "Source coverage b00003 and b00038 (index-patient statements) given patient_ids p1 instead of empty.",
+    "Added supported temporal relations: e05 before e10 (follow-up later than readmission), e05 before e11 (\"Months later ... readmitted\"), e11 before e13 (antibiotics/transfer during that admission), e03 before e14 (\"restarted\" hydralazine).",
+    "ROSTER-ORDER: added article-level roster block: reported_individual_count null (source says \"We present a patient\" but never states a number of patients), roster_complete true (the single index patient p1 is annotated; Table 2 literature cases stay outside the roster). Evidence b00003."
+  ],
+  "unresolved": [
+    "Table 2 literature cases and cohort statements are not copied to the index patient.",
+    "Outside hospital courses are described without dates; times are kept relative as stated.",
+    "Antibiotic and corticosteroid agents, doses and routes are only as stated; unspecified details are left null.",
+    "Figure pixels were inspected in the separate visual submission; figure descriptions in this annotation remain caption-level."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 46,
+    "facts_reviewed": 76,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (67-year-old man); Table 2 literature rows, b00019/b00037 cohort statements and Table 1 criteria correctly excluded.",
+      "Table 2 acyclovir vs narrative valacyclovir kept as review_only ambiguity; piperacillin-tazobactam route left null (IV attached to vancomycin, ambiguity recorded).",
+      "Hemoglobin 30 g/L unflagged (no flag from reference range; source says only concerning for GI bleed).",
+      "ANCA/MPO/anti-DNase/ANA results untimed: no time stated in their own sentences.",
+      "Authors hypothesis that CSS exacerbated encephalopathy/respiratory failure kept as ambiguity only; hydralazine allergy event kind other accepted.",
+      "Figure 1 A/B H&E and Figure 2 A/B GMS pixels viewed; visual submission accurate (two arrows in 1A only, none in 1B); EHR labels pathology/includable and privacy flags none confirmed."
+    ],
+    "residual_risks": [
+      "Provisional versus confirmed status of pneumonia and active GI bleed relies on the word \"suspected\" scoping.",
+      "Pathology flags left unknown where source gives no normal/abnormal classification."
+    ]
+  },
+  "physician_adjudicated": false
+}

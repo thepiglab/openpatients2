@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "e6a71bd4f884e577584e132fed55a8e76e657be263cb13fc13510ee6274d07ab",
-  "annotation_sha256": "e2306221c5eff30c4f927382c1933968b8f7e2a7b76400bdb00e689d90fbf105",
-  "reviewed_at": "2026-10-09T22:32:07.105852+00:00",
+  "annotation_sha256": "6379238153c5d0f6a0dd0d6fab05ceb21fda9dcf48e859acc94411e440112fa5",
+  "reviewed_at": "2026-10-10T01:31:21.883796+00:00",
   "source_segments_read": 13,
   "facts_reviewed": 82,
   "patients_reviewed": 1,
@@ -20,7 +20,10 @@
     "all captions and panel attribution"
   ],
   "corrections": [
-    "semantic-rules-2026-10 re-sign: verified M02 comparator '=' on 18 plain-number values (Tg, ATA with reference_range_text kept, SUVmax table/caption values, Krenning/miPSMA scores; the printed '<' belongs to the reference interval, not the result; SUVmax range '3.1–4.3' stays textual), M03 age '72-year-old'. No further edits needed."
+    "semantic-rules-2026-10 re-sign: verified M02 comparator '=' on 18 plain-number values (Tg, ATA with reference_range_text kept, SUVmax table/caption values, Krenning/miPSMA scores; the printed '<' belongs to the reference interval, not the result; SUVmax range '3.1–4.3' stays textual), M03 age '72-year-old'. No further edits needed.",
+    "Cleanup2 GLUED-TEXT (manual; no repair-tool diff): fixed in notes, clinical statements, ambiguities and provenance: 'to2017' (x4), 'age72years'/'the2017thyroidectomy', 'both2023and2024scans' (x2), '6.6GBq' (x2), 'in2017', 'to9.8'/'reports9.83', ambiguity 2 'Figure1/Tg64/for2017.../labelsng/dL/usesng/mL/Printed2025Tg2813/narrative2568/Figure3', ambiguity 3 'Header72-year'/'at2017'. Nuclide '68Ga' kept.",
+    "Cleanup2 p1-f016/f018 RAI 100 mCi (2023) / 150 mCi (2024): the year is in the dose phrase of the same sentence; kept, and replaced the bare fragments with the governing span 'two cycles of RAI with 100 mCi (2023) [and 150 mCi (2024]'. The scintigraphy quote is indication evidence, not time-only, and stays. clinical_statement 'RAI: 150 mCi (2024' (unbalanced) -> 'RAI 150 mCi in 2024'; f016 likewise.",
+    "Cleanup2 p1-f043 follow-up thyroglobulin 249 ng/mL: 'On 6 weekly follow-ups' is in the same sentence; kept and dropped the redundant fragment so the full governing sentence is the evidence."
   ],
   "unresolved": [
     "Figure pixels were not inspected; annotation covers captions only.",
@@ -33,7 +36,8 @@
     "facts_reviewed": 82,
     "figures_viewed": 0,
     "key_findings": [
-      "Mechanical migrations correct; no open needs-review items"
+      "Mechanical migrations correct; no open needs-review items",
+      "Cleanup2: 3 same-sentence times kept with governing quotes; glued prose repaired."
     ],
     "residual_risks": [
       "Figures not re-viewed (no figure sidecar change)"

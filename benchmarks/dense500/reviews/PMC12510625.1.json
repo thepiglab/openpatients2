@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC12510625.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8fd4ae69b09a50419852b52c168496a0657d8b9e9872d00be01b80e2dc68450e",
+  "annotation_sha256": "4b1d770c4b8ad6481f5e2c1851272ccaad5c6738531bcef9be51d8e152b5a4a4",
+  "reviewed_at": "2026-10-10T00:35:14.163700+00:00",
+  "source_segments_read": 67,
+  "facts_reviewed": 121,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f102 haloperidol \"up to 15 mg\": removed unsupported \"cumulative amount\" regimen claim (Table pre-day-40 haloperidol sums far above 15 mg); ambiguity added",
+    "p1-f105 dual-LAI regimen marked alternate_representation_of p1-f097 (haloperidol decanoate day 40)",
+    "p1-f106 allergies no-adverse-effect marked alternate_representation_of outcomes p1-f119 (same statement, not double counted)",
+    "Removed derived non-literal duration_text (\"days 12 to 28\" etc.) from grouped refusal facts f053/f066/f069/f075/f093; range kept in regimen/notes",
+    "Added ambiguity: \"lack of emergency medications after dual LAI\" vs 1 emergency dose in 2 weeks and Table day-47 emergency haloperidol"
+  ],
+  "unresolved": [
+    "No figures or supplements in the source.",
+    "Table day cells keep the printed values; \"-\" is patient refusal and blank cells are not interpreted as refusal or administration.",
+    "Quetiapine narrative and Table disagree on adherence days; both retained.",
+    "Discharge and post-discharge course are not documented.",
+    "Narrative \"lack of emergency medications\" after dual LAI conflicts with 1 emergency dose (text) and Table day-47 emergency haloperidol; recorded as ambiguity."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 67,
+    "facts_reviewed": 121,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Every Table cell (55 days x 6 drugs) checked against medication facts: all doses, routes, emergency footnotes, refusals and d/c cells represented; blanks not interpreted",
+      "Quetiapine narrative (5 adherent days after day 20) vs Table (day 20 then days 30-34) kept with narrative review_only",
+      "Time anchor \"Admit\" is literal from the Table header \"Day of Admit\"",
+      "Background segments b00002-b00004 are literature/cohort statements, correctly unassigned",
+      "Schizoaffective (history) and TRS (authors framing) both retained with ambiguity"
+    ],
+    "residual_risks": [
+      "Narrative \"On day 10 prescribed clozapine 100 mg\" vs Table 100 mg from day 8 left unreconciled (prescribing vs administration)",
+      "Discharge undocumented",
+      "Nonadherence and incarceration placed in social_exposures domain other"
+    ]
+  },
+  "physician_adjudicated": false
+}

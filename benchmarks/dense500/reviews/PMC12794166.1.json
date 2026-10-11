@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12794166.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4160e4c424b2e51400118534b0cedc1cf6e74e7292662bd92573a2b0d665b8d5",
+  "annotation_sha256": "9c73e780ab1ed36a6729cd995751d2055ce446b248816085b24b5a069f17fd8e",
+  "reviewed_at": "2026-10-10T01:21:57.178274+00:00",
+  "source_segments_read": 16,
+  "facts_reviewed": 57,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f034 colonoscopy finding: quote narrowed to the finding sentence and November 21, 2022 time removed (NO-BORROWING); date kept on procedure p1-f024 and event p1-e07; ambiguity added",
+    "p1-f026 WMT procedure marked alternate_representation_of medication p1-f023",
+    "p1-f010 active chronic enteritis condition marked alternate_representation_of pathology observation p1-f035; role comorbidity -> unknown",
+    "p1-f056 newborn growth outcome marked alternate of p1-f008; p1-f057 follow-up care plan marked alternate of outcome p1-f053",
+    "Added temporal relation p1-e10 before p1-e11 (diagnosis of ribotype 027 CDI before WMT for that CDI)",
+    "Added ambiguity on diarrhea resolution timing relative to the third infusion; note on limited colonoscopy extent on p1-f024"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the actual JPEG is inspected in the separate visual submission.",
+    "Cefdinir dose beyond a single capsule and its route are not stated.",
+    "Dates of WMT infusions are not stated, so treatment is ordered only by the relative statements in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 16,
+    "facts_reviewed": 57,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (pregnant woman); newborn facts correctly subject=newborn inside p1",
+      "Cohort/literature statistics in b00005, b00011-b00013 correctly excluded",
+      "Stool, lab and biopsy dates unstated: left null with ambiguity",
+      "Fecal culture/rotavirus/blood routine no abnormalities -> flag normal; physical exam no abnormalities -> scoped normal sign",
+      "time_calendar_value left null for month-name dates pending validator fix"
+    ],
+    "residual_risks": [
+      "Diarrhea-resolution vs WMT course relation recorded as overlaps from 'after the second infusion'",
+      "Figure caption white exudate not distinguishable on pixels; caption claim kept as author claim",
+      "WMT dual-represented as medication and procedure"
+    ]
+  },
+  "physician_adjudicated": false
+}

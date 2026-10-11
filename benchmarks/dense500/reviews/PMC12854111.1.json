@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "39046c46c6f5100d23b08d8c4510d1da1f4bdd826787552cdd6c554210fde329",
-  "annotation_sha256": "804aaf08cad73d7ab5277ae5464ae040a82d2af2f86581282cc34d5c57ec2804",
-  "reviewed_at": "2026-10-09T22:30:56.428153+00:00",
+  "annotation_sha256": "0dbf1c828bee12bbc947f1fbc44852022f3a620355e8f8ba0a30988055663c8f",
+  "reviewed_at": "2026-10-10T01:17:31.528329+00:00",
   "source_segments_read": 52,
   "facts_reviewed": 150,
   "patients_reviewed": 1,
@@ -23,7 +23,9 @@
     "M12 follow-up: p1-f142 anchor restored to literal \"memantine\" (nulled paraphrase \"memantine 20 mg/day\").",
     "SECTION-SIGNS: p1-f065 initial neurological examination \"non-focal\" moved from observations to symptoms_function kind=sign, text_value \"non-focal\".",
     "BRIEF-P and WISC-R psychometric test scores kept in observations (instrument test results, not bedside clinical scales).",
-    "p1-f041/p1-f042 (IVMP, IVIG): added b00001 quote \"The patient received immunotherapy including intravenous methylprednisolone, intravenous immunoglobulin, and rituximab\" so route \"intravenous\" is in each item's own evidence (MED-ROUTE)."
+    "p1-f041/p1-f042 (IVMP, IVIG): added b00001 quote \"The patient received immunotherapy including intravenous methylprednisolone, intravenous immunoglobulin, and rituximab\" so route \"intravenous\" is in each item's own evidence (MED-ROUTE).",
+    "p1-f133: time 'By the 18th month of follow-up with conventional treatments' relation until -> before (TIME-LITERAL 'by <time>' = no later than); anchor 'conventional treatments' kept (named in phrase)",
+    "TIME-ONLY QUOTE kept: p1-f142 (marked improvement in verbal fluency/academic/social functioning) is in the same abstract sentence as 'While 20 mg/day dose of memantine was administering during 6 months'; the separate time-only quote and outcome quote were merged into the single governing span"
   ],
   "unresolved": [
     "Caption-layer visual status not_inspected; the single JPEG was inspected separately in the visual submission.",
@@ -41,11 +43,14 @@
     "figures_viewed": 0,
     "key_findings": [
       "M12 verified and literal anchor restored",
-      "neurological exam moved to symptoms_function"
+      "neurological exam moved to symptoms_function",
+      "TIME-LITERAL 2026-10 'by <time>' audit: 1 fact(s) set to relation before after reading each source sentence",
+      "Cleanup pass 2: no glued text; 1 time fact kept with merged governing quote, 0 nulled; no negation-word rows"
     ],
     "residual_risks": [
       "Psychometric scores could alternatively be performance_score items"
-    ]
+    ],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
   },
   "physician_adjudicated": false
 }

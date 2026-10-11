@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "0c6580eb0e977d3826bc8311e526d5d22dd5d4bac5d762acd9d9accdecf594c4",
-  "annotation_sha256": "bc57ac5edb6802c14b5276c3ab17edd36d8295bbfd84ca8307baf0fe06c2f7fc",
-  "reviewed_at": "2026-10-09T22:45:04.508259+00:00",
+  "annotation_sha256": "a1cba9ae0c0f0610b83a97dbf8074829f71cd6cd5895a8e41e68066cbebd6b14",
+  "reviewed_at": "2026-10-10T02:11:43.671025+00:00",
   "source_segments_read": 95,
   "facts_reviewed": 256,
   "patients_reviewed": 3,
@@ -24,7 +24,11 @@
     "Corrected Figure4 Day16–21 plotted temperatures, Figure6 vertical ticks and unsupported Day32 steroid transition estimate.",
     "Replaced misleading global uninspected-pixels statement while retaining text-only companion limitation and separate actual visual target.",
     "semantic-rules-2026-10 re-sign: verified M03 text_value '20-year-old' (p1), '42-year-old' (p2), '57-year-old' (p3) literal in own quotes; verified M09 p1-f001 and p3-f001 subject_state living_at_presentation -> deceased_during_course ('Two months into follow-up, it was found that the patient had died'; 'During a telephone follow-up 1 month later, we were informed that the patient had passed away').",
-    "opus-fixup: p2-f013 'fever up to 38°C' comparator '=' -> '<=' (schema comparator enum includes '<='; OBS-COMPARATOR lists 'up to')."
+    "opus-fixup: p2-f013 'fever up to 38°C' comparator '=' -> '<=' (schema comparator enum includes '<='; OBS-COMPARATOR lists 'up to').",
+    "GLUED-TEXT cleanup: 'after21days' -> 'after 21 days' in p2-f057 text_value and clinical_statement; 'after10full' -> 'after 10 full' in event p3-e06 description (wording only, meaning unchanged)",
+    "cleanup3 sidecar GLUED-TEXT: visual-submissions fig2/fig4/fig6 prose respaced (towardDAY21 -> toward DAY21, near38.1 °C on Day2 -> near 38.1 °C on Day 2, around36.2 -> around 36.2, Days4–15/Days19–20, about39 -> about 39, day16 peak39.8°C -> day 16 peak 39.8 °C, below37.5 -> below 37.5, near35.4 °C at Day34 -> near 35.4 °C at Day 34, methylprednisolone40mg -> methylprednisolone 40mg); printed box labels DAY1/DAY7/DAY9:mNGS/DAY21 kept as printed; figure-ehr-labels and figure-privacy-flags visual_target_sha256 updated; parent visual, figure-EHR and privacy receipts re-signed. Annotation unchanged.",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (103 whitelisted label/number or number/unit spacing edits outside quotes in annotations (100), visual-submissions (3); e.g. 'Day7 WBC'->'Day 7 WBC', 'day23'->'day 23', 'Case3'->'Case 3', '24h'->'24 h'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. Rejected the tool's spacing of the printed fig6 band labels (figure prints '40mg/30mg/20mg' glued): the visual description and visual_cue now quote the printed labels \"Methylprednisolone 40mg\"/\"30mg\"/\"20mg\" instead; fig6 viewed.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=3, roster_complete=true, evidence b00001 \"This study thoroughly examined the disease through three case reports and a literature review.\"; 3 patients annotated in first-mention order."
   ],
   "unresolved": [
     "This text/caption annotation layer does not use pixels; pixel inspection is recorded separately in the visual target and its review receipts.",
@@ -42,10 +46,13 @@
     "reviewer": "Claude Opus 5.5 parent",
     "key_findings": [
       "semantic-rules-2026-10: M03 (3) and M09 (2) verified correct; no needs-review items; no annotation edits.",
-      "opus-fixup: 'up to' fever comparator now '<='."
+      "opus-fixup: 'up to' fever comparator now '<='.",
+      "Cleanup pass 2: 3 glued tokens repaired by repair_glued_text.py (diff reviewed); no time-only quote or negation-word rows for this article"
     ],
     "residual_risks": [],
-    "facts_reviewed": 256
+    "facts_reviewed": 256,
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09",
+    "cleanup3": "final sweep (sidecar respacing, span/time-only quotes, negation) 2026-10-09"
   },
   "physician_adjudicated": false
 }

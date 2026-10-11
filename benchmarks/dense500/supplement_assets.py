@@ -6,6 +6,7 @@ Commands (run from the repo root, PYTHONPATH=src:benchmarks/dense500):
   supplement_assets.py status  [ROOT]                 # cache usage and caps
   supplement_assets.py cleanup ROOT --article ID      # only after dual-signed manifest
   supplement_assets.py extract ROOT --article ID --supplement SID   # PDF members of a ZIP
+  supplement_assets.py extract-text ROOT --article ID --supplement SID   # DOCX/DOC/RTF/ODT (or such ZIP members)
 
 The shared cache has a HARD 30 GB cap enforced under an exclusive lock, and a
 per-file cap. Larger files are never fully downloaded: a HEAD request gives size
@@ -291,6 +292,65 @@ def extract_archive(root, aid, sid, *, cache=None, max_cache=MAX_CACHE_BYTES):
     return record
 
 
+def extract_text_documents(root, aid, sid, *, cache=None, max_cache=MAX_CACHE_BYTES):
+    """Review skeleton for a word-processor supplement (DOCX/DOC/RTF/ODT, or such members of one ZIP).
+
+    Units are extracted offline by openpatients2.document_text (anydoc Inline.text; no hosted OCR).
+    ZIP members are written under hashed names into this article's cache folder. Writes the skeleton
+    `document-submission-drafts/ID.supplements.SID.json` (`dense-supplemental-text-document-reference/1`).
+    Extraction is not inspection: the reviewer reads every unit and fills `blocks`.
+    """
+    from supplement_review import (MAX_MEMBER_BYTES, _text_format, draft_text_document, zip_member_bytes,
+                                   zip_text_members)
+    root = Path(root); cache = Path(cache or CACHE)
+    source = json.loads((root / 'sources' / f'{aid}.json').read_text())
+    acquisition = json.loads((root / 'supplement-assets' / f'{aid}.json').read_text())
+    rows = [r for r in acquisition['files'] if r['supplement_id'] == sid]
+    if not rows or any(r.get('download_status') != 'downloaded' for r in rows):
+        raise ValueError('Text-document extraction needs fully downloaded supplement assets')
+    for r in rows:
+        if hashlib.sha256(Path(r['path']).read_bytes()).hexdigest() != r['sha256']:
+            raise ValueError('Cached supplement bytes changed after acquisition')
+    declared = {a['url']: a for s in source.get('supplements', []) if s['supplement_id'] == sid for a in s.get('assets', [])}
+    archive = None
+    if len(rows) == 1 and rows[0].get('detected_type') == 'zip':
+        row = rows[0]
+        docs, others = zip_text_members(row['path'])
+        if not docs:
+            raise ValueError('ZIP has no DOCX/DOC/RTF/ODT members')
+        folder = cache / aid / 'members'; files = []
+        cache.mkdir(parents=True, exist_ok=True)
+        with (cache / '.lock').open('a') as lock:
+            fcntl.flock(lock, fcntl.LOCK_EX)
+            used = cache_usage(cache); folder.mkdir(parents=True, exist_ok=True)
+            for name in docs:
+                data = zip_member_bytes(row['path'], name, MAX_MEMBER_BYTES)
+                target = folder / (hashlib.sha256(f'{sid}/{name}'.encode()).hexdigest()[:40] + '.' + _text_format(name))
+                if not target.exists():
+                    if used + len(data) > max_cache:
+                        raise CacheFull('Shared 30 GB supplement cache cap reached; clean up signed articles first')
+                    target.write_bytes(data); used += len(data)
+                files.append(({'url': row['url']}, target, name))
+        archive = {'url': row['url'], 'original_manifest_url': row.get('original_manifest_url'), 'filename': row['filename'],
+                   'md5': row.get('declared_md5'), 'sha256': row['sha256'], 'bytes': row['bytes'], 'path': row['path'],
+                   'source_license': source['license'], 'media_type': 'application/zip', 'members': docs, 'other_members': others}
+    else:
+        files = []
+        for r in rows:
+            if _text_format(r.get('filename') or r['url']) is None:
+                raise ValueError(f"{r.get('filename')}: not a DOCX/DOC/RTF/ODT asset")
+            files.append(({**declared.get(r['url'], {}), 'url': r['url']}, Path(r['path']), None))
+    skeleton = draft_text_document(source, sid, files)
+    skeleton['archive'] = archive
+    if archive and archive['other_members']:
+        skeleton['limitations'].append(f"Non-document members not reviewable by this path: {archive['other_members']}")
+    drafts = root / 'document-submission-drafts'; drafts.mkdir(exist_ok=True)
+    (drafts / f'{aid}.supplements.{sid}.json').write_text(json.dumps(skeleton, ensure_ascii=False, indent=2) + '\n')
+    return {'draft': f'document-submission-drafts/{aid}.supplements.{sid}.json',
+            'assets': [{'url': a['url'], 'units': len(a['units']), 'nonliteral_units': a['extraction']['nonliteral_units']}
+                       for a in skeleton['assets']]}
+
+
 def cleanup(root, aid, *, cache=None, verify=None):
     """Remove an article's cached supplement files once its manifest is dual-signed and current."""
     cache = Path(cache or CACHE)
@@ -310,7 +370,7 @@ def cleanup(root, aid, *, cache=None, verify=None):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('command', choices=['acquire', 'peek', 'status', 'cleanup', 'extract'])
+    parser.add_argument('command', choices=['acquire', 'peek', 'status', 'cleanup', 'extract', 'extract-text'])
     parser.add_argument('root', type=Path, nargs='?', default=Path(__file__).resolve().parent)
     parser.add_argument('--article'); parser.add_argument('--force', action='store_true')
     parser.add_argument('--supplement')
@@ -330,6 +390,10 @@ if __name__ == '__main__':
         if not args.supplement:
             parser.error('--supplement is required')
         result = extract_archive(args.root, args.article, args.supplement)
+    elif args.command == 'extract-text':
+        if not args.supplement:
+            parser.error('--supplement is required')
+        result = extract_text_documents(args.root, args.article, args.supplement)
     elif args.command == 'peek':
         result = repeek(args.root, args.article, force=args.force)
     else:

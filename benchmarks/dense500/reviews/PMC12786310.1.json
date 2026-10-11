@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "92502619c9fa0c398d50235168ddfd32a46c1626689dd583059ec9a70ed1dd08",
-  "annotation_sha256": "05254330147a1dcfd19018d034ecc92888404f5d2feee112772888fc868875b3",
-  "reviewed_at": "2026-10-09T22:44:07.201226+00:00",
+  "annotation_sha256": "a2f21c4b1da23bbbf5c65fac938ae3a789f6f4954c51ff8ca7f8463695242448",
+  "reviewed_at": "2026-10-10T01:06:27.383525+00:00",
   "source_segments_read": 154,
   "facts_reviewed": 202,
   "patients_reviewed": 1,
@@ -26,7 +26,9 @@
     "p1-f030 comprehensive normal physical examination moved observations -> symptoms_function kind=sign text_value 'normal' [SECTION-SIGNS]",
     "p1-f174 time.anchor restored to literal 'completion of thrombolysis'; p1-f185 anchor 'admission' [TIME-LITERAL]",
     "Verified migrations: M02 comparator '=' on 78 plain table/narrative numbers (no hidden <,>; hs-CRP '>30', IVC '<50%', obstruction '>80%', weight '>65 kg' keep their printed comparators); M03 age text '65-year-old'; M04 p1-f010 'no other known cardiovascular or respiratory disease' -> unknown",
-    "opus-fixup: p1-f121 (pulmonary/myocardial infection), p1-f122 (acute MI), p1-f123 (aortic dissection) verification refuted -> unknown: source says only 'in the absence of any anamnestic or clinical evidence suggestive of' them (negative rapid flu/COVID tests do not exclude infection generally); clinical_statements rewritten per item."
+    "opus-fixup: p1-f121 (pulmonary/myocardial infection), p1-f122 (acute MI), p1-f123 (aortic dissection) verification refuted -> unknown: source says only 'in the absence of any anamnestic or clinical evidence suggestive of' them (negative rapid flu/COVID tests do not exclude infection generally); clinical_statements rewritten per item.",
+    "p1-f178: time 'by day 4 of hospitalization' relation at -> before (TIME-LITERAL 'by <time>' = no later than)",
+    "NO-BORROWING/time-only quote: p1-f124 (RV diameter), p1-f128 (RV-RA gradient), p1-f129 (TAPSE): bare quote 'Performed at 14:00' replaced by the governing b00016 sentence span 'Performed at 14:00, the POCUS-TTE examination confirmed ... demonstrating severe RV dilation (46 mm ...)' / '... TAPSE = 12 mm)' / '... pressure gradient 40 mmHg]', which states the same measurement in the same sentence as the time; time 'at 14:00' kept"
   ],
   "unresolved": [
     "Supplement diagnostics-16-00048-s001 (ZIP; cardiology consultation, CTPA findings, Table S1 laboratory data, predischarge ultrasound) is declared but its content is outside the main-text annotation; only main-text statements about it are retained (see supplement manifest).",
@@ -41,12 +43,15 @@
     "figures_viewed": 0,
     "key_findings": [
       "semantic-rules-2026-10 re-sign: migrations verified against source; 5 needs-review items resolved; SECTION-SIGNS and ASSERT-ABSENT refinements",
-      "opus-fixup: three clinically-absent differentials now verification unknown."
+      "opus-fixup: three clinically-absent differentials now verification unknown.",
+      "TIME-LITERAL 2026-10 'by <time>' audit: 1 fact(s) set to relation before after reading each source sentence",
+      "Cleanup pass 2: 3 time facts kept (time governed by the same narrative sentence reporting the value); no glued text"
     ],
     "residual_risks": [
       "Wells/Geneva/sPESI/BOVA risk scores kept in observations as prediction scores",
       "Table 2 sPESI 'Systolic BP >= 100 mmHg | No' conflicts with BP 139/104 (kept as printed)"
-    ]
+    ],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
   },
   "physician_adjudicated": false
 }

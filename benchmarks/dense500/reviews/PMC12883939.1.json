@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "de095047b7c421f349d4fa1317f9d7dbe3f9a3a98a896f8a6a3c415b5926d2d1",
-  "annotation_sha256": "4e13fb227323993e66672cf19484cd9d31a785c9bd08c9332c77ec61735145eb",
-  "reviewed_at": "2026-10-09T22:32:34.861596+00:00",
+  "annotation_sha256": "ffe894a0e81c1cc2a8ded51cf8d8f1602caaee0a898a5b1c9361b541e26bf47a",
+  "reviewed_at": "2026-10-10T01:28:57.837372+00:00",
   "source_segments_read": 11,
   "facts_reviewed": 63,
   "patients_reviewed": 1,
@@ -25,13 +25,14 @@
     "Read all14schemas and six actual CT/venography panels; no right-renal thrombosis, kidney functional status or AngioJet complication inferred.",
     "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Restored literal anchors after M12 nulled paraphrases ('admission', 'before admission', 'current admission' are not source words; source says 'admitted'): p1-f004/f005/f006/f008 -> 'admitted to the vascular surgery department'; p1-f014..f016 thromboses -> 'Contrast-enhanced CT venography'; p1-f033 thrombectomy after '20-minutes dwell time' -> 'recombinant tissue plasminogen activator (rt-PA)'.",
     "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M03 age text '29-year-old' (b00004), M13 p1-e14 occurrence uncertain->unknown (presumed caudal block), and M12 nullings on p1-f039/f048/f053/f054 whose literal time texts are self-anchored.",
-    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] p1-f032 rt-PA route paraphrase replaced by the literal source wording 'injected into the thrombotic infrarenal IVC' (MED-ROUTE; other sites remain in dose_text/evidence)."
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] p1-f032 rt-PA route paraphrase replaced by the literal source wording 'injected into the thrombotic infrarenal IVC' (MED-ROUTE; other sites remain in dose_text/evidence).",
+    "Cleanup2 GLUED-TEXT: hand-repaired the p1 summary (tool proposed only 'and20'): 'a7-Fr Mach1' -> 'a 7-Fr Mach 1' (source spelling), 'stated5mg' -> 'stated 5 mg', 'and20-minute', 'before20mm×6cm' -> 'before 20 mm × 6 cm', 'rivaroxaban10mg' -> 'rivaroxaban 10 mg'; limitation 'rt-PA5mg' -> 'rt-PA 5 mg'; internal provenance note. Quotes untouched; no time-only quote rows for this article."
   ],
   "unresolved": [
     "Figure pixels have not been inspected; figure descriptions and patient attribution rely on source captions.",
     "Original XML contains no tables. No explicit same-patient prior-report linkage identified.",
     "Caudal block is reported/presumed; no exact dates, kidney-function measurements, thrombophilia results or dose allocation by thrombolysis site are stated. Generic AngioJet hematuria/AKI risks are not observed patient complications.",
-    "Individual rheumatology tests/specimens/results are not named; no invented assay panel. Angioplasty sequence/parameters unspecified. rt-PA5mg is not multiplied by three targets. Prior block remains reported/presumed; chronic lesion cause and causal contribution unconfirmed."
+    "Individual rheumatology tests/specimens/results are not named; no invented assay panel. Angioplasty sequence/parameters unspecified. rt-PA 5 mg is not multiplied by three targets. Prior block remains reported/presumed; chronic lesion cause and causal contribution unconfirmed."
   ],
   "assessment": {
     "clinical_course": "29M, chronic renal/suprarenal IVC occlusion with acute left renal/infrarenal/iliofemoral thrombi. Temporaryfilter, aspiration, rtPA/20minute dwell/rheolytic thrombectomy, filter removal and20mmx6cmHerculesstent; no complications and2yearpatency on10mgdailyoralrivaroxaban.",
@@ -42,7 +43,8 @@
     "facts_reviewed": 63,
     "figures_viewed": 0,
     "key_findings": [
-      "M12 anchors restored with literal source phrases; rt-PA route made literal."
+      "M12 anchors restored with literal source phrases; rt-PA route made literal.",
+      "Cleanup2: summary/limitation glue repaired."
     ],
     "residual_risks": []
   },

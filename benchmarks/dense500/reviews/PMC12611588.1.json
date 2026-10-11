@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "27b3154330531c4c8bebdd931c19a89d656dacfef6bb19f31f35cb3058a437ab",
-  "annotation_sha256": "7511a4dbc65aba2ba8ee928b24d8502c7531a4ca9e9d18160666a0bb6aa2af32",
-  "reviewed_at": "2026-10-09T22:20:14.705409+00:00",
+  "annotation_sha256": "717880b008f132459551bfad182f837f0a21cd9e6211d22f37f3616633f78086",
+  "reviewed_at": "2026-10-10T01:49:37.107422+00:00",
   "source_segments_read": 23,
   "facts_reviewed": 108,
   "patients_reviewed": 3,
@@ -22,7 +22,8 @@
   "corrections": [
     "semantic-rules-2026-10 re-sign: verified M03 age text_value '8‐year‐old' (p1), '9‐year‐old' (p2), '15‐year‐old' (p3) are each patient's literal phrase (source hyphen U+2010 preserved).",
     "Verified M12: p1-f021 time.anchor 'initially normal fecal calprotectin' is not a literal source phrase -> null is correct; time.text 'in 6 months' literal in its evidence.",
-    "No other annotation changes."
+    "No other annotation changes.",
+    "Cleanup3 EVID-NEGATION p3-f031: follow-up outcome 'Asymptomatic on azathioprine 100 mg daily at current follow-up' (present) -> 'Symptoms on azathioprine 100 mg daily at current follow-up' with assertion absent; quote 'She is currently on 100 mg of azathioprine daily and remains asymptomatic.' unchanged (absent symptoms also in p3-f030)."
   ],
   "unresolved": [
     "Figures were inspected in a separate visual submission; the annotation keeps visual_status not_inspected per the canonical convention and uses captions only for clinical claims.",
@@ -38,7 +39,8 @@
     "facts_reviewed": 108,
     "figures_viewed": 0,
     "key_findings": [
-      "Mechanical age-text and anchor-null migrations correct."
+      "Mechanical age-text and anchor-null migrations correct.",
+      "Cleanup3: asymptomatic follow-up outcome re-polarised to absent symptoms."
     ],
     "residual_risks": []
   },

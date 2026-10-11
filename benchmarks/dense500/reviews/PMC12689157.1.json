@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "496c512576b46593b7c6d324bfbd6a28c7103fc9a5d48c590176cf5ff7b64820",
-  "annotation_sha256": "1a2edeeeab475eff323977181992aaae3c3f43a260c2b7a372937dd2caeaab73",
-  "reviewed_at": "2026-10-09T22:26:42.335954+00:00",
+  "annotation_sha256": "f73bc9cc97917d1dcecdc8cd8902962ceec5d5828f07827ffba7abf4f4b0eaeb",
+  "reviewed_at": "2026-10-10T01:18:02.976313+00:00",
   "source_segments_read": 48,
   "facts_reviewed": 128,
   "patients_reviewed": 1,
@@ -23,12 +23,13 @@
     "semantic-rules-2026-10 re-sign: p1-f010 Obesity verification_status confirmed -> unknown (absent patient risk-factor history, ASSERT-ABSENT); NR001 resolved",
     "NR002 resolved: p1-f079 flag kept unknown (pattern 'mimicked the normal hepatic lobular architecture' is not a result called normal)",
     "Verified migration: M02 comparator '=' on 18 plain-number BP/lesion-dimension facts (no printed <,>); M04 p1-f008 diabetes 'no history' -> unknown; M06 p1-f009 reverted; M11 F4 normal-liver-lobule panels -> non_clinical_diagnostic_aid (caption 'in normal liver lobules', pixels viewed)",
-    "p1-f009 alcohol: 'There had no history of alcohol consumption' has no explicit never-wording -> assertion=absent, status=unknown (SOC-NEVER; M06 never/present was wrong)"
+    "p1-f009 alcohol: 'There had no history of alcohol consumption' has no explicit never-wording -> assertion=absent, status=unknown (SOC-NEVER; M06 never/present was wrong)",
+    "GLUED-TEXT (cleanup pass 2): repair_glued_text.py applied to 2 internal provenance tokens ('all30panels' -> 'all 30 panels', 'CarePlans' -> 'Care Plans'); manual fixes in ambiguities/article_limitations: 'Fig1C' -> 'Fig. 1C', 'Figure4' -> 'Figure 4' (x2), 'Figure1C' -> 'Figure 1C' (source spells these with a space). Wording only."
   ],
   "unresolved": [
     "Original operation/laboratory dates, drug names/doses/routes, and individualized follow-up measurements were not reported.",
-    "Normal-liver comparison Figure4 donor is undocumented; no local patient attribution inferred.",
-    "Source labels Figure1C liver angiography although actual panels use ultrasound-format presentation; technique detail remains unstated.",
+    "Normal-liver comparison Figure 4 donor is undocumented; no local patient attribution inferred.",
+    "Source labels Figure 1C liver angiography although actual panels use ultrasound-format presentation; technique detail remains unstated.",
     "HCC was a conflicting initial interpretation; final source diagnosis is benign MNFIL. Hepatitis B→MNFIL causal hypothesis is speculative.",
     "Clinical figure companion is the caption-only layer; actual image pixels and image-bound reviews are in the separate visual target."
   ],
@@ -39,11 +40,13 @@
     "figures_viewed": 1,
     "key_findings": [
       "All mechanical migrations for this article verified against source",
-      "Fig. 4 is a normal-liver comparison, not patient data"
+      "Fig. 4 is a normal-liver comparison, not patient data",
+      "Cleanup pass 2: 6 glued tokens fixed (2 tool, 4 manual); no time-only quotes in this article; EVID-NEGATION warning on p1-f112 (HCC refuted by 'confirmed to be benign') is a non-blocking checker limitation."
     ],
     "residual_risks": [
       "Only Fig. 4 re-viewed in this re-sign pass; other figures unchanged since prior parent review"
-    ]
+    ],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
   },
   "physician_adjudicated": false
 }

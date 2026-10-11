@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC13592934.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "61b180367306e4a7d7702309e3841feea5f1b5441b16e0c6887cb523650548f4",
+  "annotation_sha256": "5673b88d4db5204b2b0f45019d9d67622845eb910fd3a70b08b551ae4f5d0fe2",
+  "reviewed_at": "2026-10-10T01:41:29.117330+00:00",
+  "source_segments_read": 57,
+  "facts_reviewed": 231,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged duplicate February 19 chest CT facts (f126 into f125) adding the phase 1 CT sentence as evidence",
+    "Merged duplicate remission outcome f221 into f217; split abstract outcome f218 so hemoptysis stopped and renal function improved join f201/f206 and f218 keeps only immune status normal",
+    "Urea 33.2 mmol/L given its own literal time On the same day from the full sentence it shares with creatinine 653",
+    "Bailin capsules given time In November 2010 from its own sentence lead clause",
+    "Meropenem and caspofungin indication infection not controlled from their own contiguous sentence",
+    "Removed misused indication from cyclophosphamide stop (reason kept in notes) and ambiguous infection prophylaxis indication from mycophenolate (ambiguity added)",
+    "Quarantined Table 1 rows 40 to 24 mg (f164-f168) as source_conflict review_only because Figure 2 prints different taper dates; text taper 40 to 8 mg (f161) quarantined against Table 1 ending at 4 mg",
+    "Quarantined B lymphocyte count 0 from March 8 (f183) as source_conflict with Figure 3 printing 0.04 on 2024/4/8; removed it from the summary",
+    "Added 12 supported temporal relations (history to presentation, February 14 to 15, meropenem and caspofungin start to stop, rituximab to PR3 and B-cell follow-up, April 3 regimen to response) and removed heparin protocol from the April 3 monitoring event",
+    "Visual submission F2 PR3 sequence description corrected on pixels (second rise to 1276.1 and 673 then 708.8); privacy notes for F1H, F3 and F4 corrected; sidecar visual hashes refreshed"
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected in this annotation; the four actual figure images are described in the separate visual submission.",
+    "Abstract states AAV and ANCA-associated nephritis were diagnosed more than 9 months earlier, while the main text diagnoses AAV on February 18, 2024; both kept, the abstract facts review only.",
+    "Table 1 and the Figure 2 annotation give different methylprednisolone tablet dates and doses; the text taper endpoint (8 mg) differs from Table 1 (4 mg).",
+    "Three February 15 laboratory values are garbled in print (hemoglobin, lymphocyte, antithrombin III) and are kept as text, review only.",
+    "Most admission laboratory values, examination findings and several treatment steps have no date of their own in the source and are left untimed.",
+    "The discussion cites skin photographs as Fig. 4G and H, but they are panels G and H of Figure 1.",
+    "No renal biopsy histology exists: the biopsy was declined by the patient and family.",
+    "The article does not state the antibiotic route for meropenem and caspofungin or the agents for anticoagulation, gastric protection and calcium supplementation."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 57,
+    "facts_reviewed": 233,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single 84-year-old man with AAV on CKD; all case segments and Table 1 read, discussion literature and guideline sentences kept off the patient",
+      "February 15 lab list lead clause On February 15 is the sentence opening that scopes the whole semicolon list; kept; admission b00010 labs correctly untimed",
+      "Abstract 9-month AAV history conflicts with February 18 diagnosis, kept review only",
+      "Table 1 vs Figure 2 steroid taper and text vs Figure 3 B-cell conflicts confirmed on pixels and quarantined",
+      "Discussion Fig. 4G and H mis-citation confirmed: skin photos are Figure 1 G and H"
+    ],
+    "residual_risks": [
+      "On the same day reference day for creatinine 653 and urea 33.2 is unstated",
+      "Garbled February 15 hemoglobin, lymphocyte and antithrombin III values kept as text review only",
+      "Caption CT findings (pleural effusion changes) are not verifiable on single axial slices",
+      "Unspecified anticoagulation, gastric protection and calcium agents kept as generic measures",
+      "Figure 2 SCr curve values not read beyond printed labels"
+    ]
+  },
+  "physician_adjudicated": false
+}

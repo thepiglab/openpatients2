@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12592069.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9a4889914333f59b95ee1b3f07849dbc41350df61572d6c6391e737bb252a1f7",
+  "annotation_sha256": "23497775fbadefecb417fbde9f68b32f768dc42c5a808cd245d27c6c4b98106f",
+  "reviewed_at": "2026-10-11T02:32:52.749931+00:00",
+  "source_segments_read": 48,
+  "facts_reviewed": 115,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f095 week-24 inhaler fact: removed borrowed drug name budesonide/formoterol (sentence says only \"the inhaled dose\"); renamed inhaled therapy, route inhaled; ambiguity added (NO-BORROWING)",
+    "p1-f028 expiratory wheezes: removed inferred body_site lungs (NO-INFERENCE)",
+    "p1-f044 flexural eruptions: moved \"persisted despite improvement\" out of severity into text_value persisted",
+    "p1-f010/p1-f011 cyclosporine-related transaminase elevation and hypertension: removed non-basis diagnostic_basis",
+    "p1-f048 baseline AEC 1,000 cells/ul: flag high (source prints interval and calls it eosinophilia)",
+    "Deleted p1-f056 (baseline IgG4 \"measured\" statement with invented text_value and no result; duplicates Table 2 baseline facts f070/f074/f078)",
+    "p1-f089 dupilumab start: added indication with extended b00022 quote",
+    "Added p1-f111 pruritus decreased at 6 weeks, p1-f112 sleep normalized by week 24, p1-f113 Table 1 week-48 efficacy cell, p1-f114 improvement during dupilumab therapy, p1-f115 skin almost clear at 48 weeks, p1-f116 Table 1 six-week efficacy cell",
+    "Events: linked baseline sIgE/IgG4/spirometry/Table-1 eosinophil facts and review_only IgG4 conflict facts to their visits; e06->e07 relation evidence replaced with b00032 (AIT started once improvement achieved)"
+  ],
+  "unresolved": [
+    "Annotation figure entries keep the canonical not_inspected state; pixel inspection is recorded in the visual submission.",
+    "Single patient; the authors state a single case cannot establish causality or isolate the effect of AIT from dupilumab.",
+    "Table 2 analyte label (rDer f 1) conflicts with the text (rDer p 2); the affected IgG4 facts are review_only.",
+    "Time of the Figure 2 photographs (40 weeks per caption) differs from the 48-week outcome visit.",
+    "AIT product naming differs between the text (Clustek), the funding statement (Inmunotek SL) and Table 1 (Immunotek)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 48,
+    "facts_reviewed": 115,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient; all case text, Table 1 (6 rows), Table 2 (3 rows), captions and patient testimonial checked against facts.",
+      "IgG4 second analyte conflict confirmed on pixels: Figure 1 subplot and Table 2 say rDer f 1, text says rDer p 2 with identical values; kept source_conflict review_only for both labels.",
+      "Figure 2 caption 40 weeks vs text week 48 kept as ambiguity; Clustek is the product, Inmunotek/Immunotek the manufacturer spellings, kept literal.",
+      "\"By the end of week 24\"/\"By week 48\" relation before per TIME-LITERAL; table columns After X weeks relation at.",
+      "Eosinophils in 10^9/L kept as text-only table values alongside cells/ul narrative values."
+    ],
+    "residual_risks": [
+      "Table 2 time origin (from dupilumab or AIT start) not stated; treated as relative text only.",
+      "Paragraph-leading times in b00024/b00025 applied to following sentences of the same paragraph as scoping phrases.",
+      "Patient testimonial (b00039) recorded as patient-reported outcomes; discontinued medications unspecified.",
+      "Visual submission says a ring is on each hand; pixels show one ring on one hand per row (minor, not edited)."
+    ]
+  },
+  "physician_adjudicated": false
+}

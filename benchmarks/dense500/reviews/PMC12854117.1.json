@@ -1,0 +1,67 @@
+{
+  "article_id": "PMC12854117.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "700c5bbd127c7bd1e567af92f0dd60ae7ea037f3ca63c75ca30aea1dabd5381c",
+  "annotation_sha256": "6c8034f9ec40dca72058e2aa20e22a65768166eaa5eeb958b80cafac89b6f511",
+  "reviewed_at": "2026-10-10T00:43:08.015141+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 137,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f010/f011/f012 refuted infectious/metabolic/structural causes: evidence widened to the full contiguous stated workup (normal syphilis/HIV, thyroid, glucose... + CT + exclusion sentence) instead of CT sentence alone; f012 structural exclusion set ambiguous/review_only because it rests on the conflicting CT",
+    "p1-f052/f053 discharge PANSS 7/BPRS 5: removed borrowed time \"discharged after 1 month\" (NO-BORROWING); quotes narrowed to the score sentence; moved to new untimed event p1-e14; summary and ambiguity updated",
+    "p1-f055 CT \"no significant abnormalities\" flag unknown -> normal (still review_only conflict)",
+    "p1-f065 substance abuse screening marked alternate_representation_of p1-f057 toxicology screen; ambiguity added for \"can be performed\" wording",
+    "p2-f030 zonisamide self-stop: duration moved to new review_only source_conflict p2-f043 (one week text vs 5 d Figure 2)",
+    "p2-f033 risperidone oral solution: added literal route \"oral\"",
+    "Added p1-f089..f091 (emotional instability, impulsiveness, unpredictable crying/laughing after switch), p1-f092 disorganized thinking, p1-f093 earlier symptoms alleviated with olanzapine, p1-f094 substance-induced mental disorder differential",
+    "Added relations p1-e06 before e08, e02 before e03, e08 before e10; ambiguity + limitation for duplicated passage in b00011",
+    "p1-f051: time 'by day 6' relation at -> before (TIME-LITERAL 'by <time>' = no later than)",
+    "p1-f078: time 'by day 6' relation at -> before (TIME-LITERAL 'by <time>' = no later than)",
+    "p1-f083: time 'by day 4' relation at -> before (TIME-LITERAL 'by <time>' = no later than)"
+  ],
+  "unresolved": [
+    "Figure pixels are inspected in the separate visual submission; figure-only values (e.g. Case 1 PANSS 81/BPRS 80 on day 3 and PANSS 20/BPRS 10 on day 6; Case 2 zonisamide 200 mg/day and 6-month discharge scores) are not in the text-based facts.",
+    "Case 1 head CT conflicts: brain atrophy (Case section) versus no significant abnormalities (Discussion); both kept review_only.",
+    "Case 2 psychotic symptoms are attributed both to trauma (diagnosis) and to zonisamide (Discussion); causal attribution remains the authors' judgment.",
+    "Case 2 self-stopping of zonisamide is one week in the text and 5 days in Figure 2.",
+    "Case 2 PANSS/BPRS have no stated time in the text; repeated after the narrative.",
+    "Discussion sentences about zonisamide pharmacology, approvals, off-label uses, doses above 100 mg/day and 2% psychosis incidence are literature/background and not assigned to either patient (cited references 1-10).",
+    "Case 1 consent statement mentions the subject and his parents; not assigned as a clinical fact.",
+    "Hospital and institution names appear in the source and are not extracted as facts.",
+    "Case 2 paragraph b00011 repeats the same treatment passage twice verbatim (editorial duplication); annotated once.",
+    "Case 1 discharge PANSS 7/BPRS 5 left untimed in text facts (adjacent-sentence time not borrowed); Figure 1 prints them under \"Discharged\"."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 137,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Two index patients, ownership clean; no cited cases assigned",
+      "Case 1 head CT brain atrophy vs no significant abnormalities kept as review_only conflict",
+      "Case 1 \"normal\" pre-medication mental state vs 2-year-earlier symptoms kept review_only",
+      "Case 2 psychosis attributed to trauma (diagnosis) and zonisamide (possible adverse effect) - both kept with ambiguity",
+      "Figure-only values (Case 1 day-3/day-6 scores, Case 2 zonisamide 200 mg/d, 6-month discharge scores) remain in visual submission only",
+      "TIME-LITERAL 2026-10 'by <time>' audit: 3 fact(s) set to relation before after reading each source sentence"
+    ],
+    "residual_risks": [
+      "Schizophrenia/epileptic/primary psychosis refuted on clinical reasoning rather than tests",
+      "Case 1 olanzapine 20 mg/day initial vs 10 mg BID admission and later 15 mg/day reduction timing only partly anchored",
+      "Case 2 chronology between discharge period, seizure and hospitalizations is loosely ordered"
+    ]
+  },
+  "physician_adjudicated": false
+}

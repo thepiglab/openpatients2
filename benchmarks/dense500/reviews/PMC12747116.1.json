@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "3a7645e29bd825336386e976bc6c26434aeb910f8fd50e2fee89daf9d442b51d",
-  "annotation_sha256": "f60cab69d48f00f4b8f1f8185babf1d027384fc7623f6146ca5ab826a957f6be",
-  "reviewed_at": "2026-10-09T22:28:09.585649+00:00",
+  "annotation_sha256": "78d05620974cd48f4069f6518494188948b9dea9068406d9feefa9c9be018e0a",
+  "reviewed_at": "2026-10-10T01:55:06.342791+00:00",
   "source_segments_read": 83,
   "facts_reviewed": 350,
   "patients_reviewed": 3,
@@ -26,18 +26,24 @@
     "NR002/NR003/NR005: FSGS absent in donor/3-month/6-month biopsies (Table 1 '(none)') -> refuted.",
     "NR004/NR007/NR009: proteinuria 'No' at first biopsy -> refuted.",
     "NR010/NR011/NR014/NR015: mixed 'normal except/otherwise normal' results kept flag unknown (abnormal component recorded separately).",
-    "NR012/NR013: p2-f100/p2-f101 text_value trimmed from whole IF sentence to the count phrases; no normal flag on counts."
+    "NR012/NR013: p2-f100/p2-f101 text_value trimmed from whole IF sentence to the count phrases; no normal flag on counts.",
+    "GLUED-TEXT cleanup: repair_glued_text.py applied (18 tokens in 15 values, diff reviewed; e.g. 'graft13months' -> 'graft 13 months', 'with2-week' -> 'with 2-week', figure notes 'toPatients1/2/3' -> 'to Patients 1/2/3')",
+    "GLUED-TEXT manual cleanup of remaining glued tokens (~48 values incl. internal notes): 'mapsC–E'/'whileA/B' in fig-0001 note, 'Patient1/2/3' -> 'Patient 1/2/3', 'last36-month', 'prompting8th-year', 'to35.5', 'and3-week', 'above35', 'Bare0%'/'percentage0%', 'assign3/7/>17-year', 'header7y versus17th-year', 'Table1'/'Figure3', and article limitations ('at3,7 and>17years' -> 'at 3, 7 and >17 years', 'to1.73m²' -> 'to 1.73 m²'). Wording only; no values or meanings changed",
+    "Cleanup3 TIME p3-f088 FSGS: time '17^(th) year' kept (its own sentence 'At the 17^(th) year, a biopsy ... FSGS'); redundant whole-paragraph quote removed so the time is not drawn from a multi-sentence span.",
+    "Cleanup3 TIME p3-f106/f107/f108 (Figure 2C EM findings): the narrative-paragraph quote was removed; time.text changed from the narrative '17^(th) year' to the governing Figure 2 caption phrase 'seventeen‐year‐old' ('(C) A seventeen‐year‐old biopsy from Patient 3 ...' heads panel C); relation after / anchor transplantation unchanged; duplicate caption quote in p3-f106 removed.",
+    "Cleanup3 GLUED visual submission: 'A(top) andB(middle)' -> 'A (top) and B (middle)', 'ofPatients1/2/3' -> 'of Patients 1/2/3', 'Patient1/2/3' and 'Patient1'/'Patient2'/'Patient3' -> 'Patient 1/2/3' etc., 'a200μm'/'readable200μm'/'and200μm' -> '200 μm' spaced, 'andB'/'broadC'/'andC' respaced, 'printed2μm'/'printed6μm', 'labeled100μm'/'labeled6μm'/'labeled4μm' respaced, 'Light-microscopyA'/'electron-microscopyB'/'electron-microscopyC' respaced, 'CL,Mes' -> 'CL, Mes', 'Figure3' -> 'Figure 3'; all three figures re-viewed on pixels; figure-EHR label and privacy-flag visual_target_sha256 refreshed.",
+    "Cleanup3 TIME p3-f107/f108: evidence made one contiguous Figure 2 caption span starting at the panel lead '(C) A seventeen‐year‐old biopsy from Patient 3 ...' through the fact's own sentence, so the caption phrase that scopes panel C is visibly the governing time (remaining NO-BORROWING warning is the accepted caption-scoping exception)."
   ],
   "unresolved": [
     "Three original recipient cases; deceased donors appear as explicitly other-subject characteristics and preimplantation graft specimens, not independent patient courses.",
-    "Actual-pixel analyses are in a separate visual submission. Figure3 patient/specimen ownership is unresolved because caption and discussion do not identify which of the three cases supplied it.",
-    "Abstract says secondary FSGS/proteinuria developed at3,7 and>17years, while detailed biopsies are18months,8years and17years. Abstract timing remains review-only. Patient3 raw XML Table1 last header prints7y, conflicting with17years narrative/caption; table final measurements retain an unspecified time.",
-    "Printed eGFR units mil/min are retained literally in Patients1/2 table, without automatic correction to mL/min or normalization to1.73m². Prose eGFR units are not stated.",
+    "Actual-pixel analyses are in a separate visual submission. Figure 3 patient/specimen ownership is unresolved because caption and discussion do not identify which of the three cases supplied it.",
+    "Abstract says secondary FSGS/proteinuria developed at 3, 7 and >17 years, while detailed biopsies are 18 months, 8 years and 17 years. Abstract timing remains review-only. Patient 3 raw XML Table 1 last header prints 7y, conflicting with 17 years narrative/caption; table final measurements retain an unspecified time.",
+    "Printed eGFR units mil/min are retained literally in Patients 1/2 table, without automatic correction to mL/min or normalization to 1.73 m². Prose eGFR units are not stated.",
     "Steroid tape and MP are retained as printed regimen names; no taper schedule, MP expansion, drug route/dose or absolute dates inferred.",
-    "IFTA Patient1 last cell prints0% (≈5%), an inconsistent score/percentage expression retained textually. Sampling variation footnote applies to Patient1 first-biopsy diameter/proportion. Methods count ranges do not agree with every individual table count and are not used to overwrite those counts.",
+    "IFTA Patient 1 last cell prints 0% (≈5%), an inconsistent score/percentage expression retained textually. Sampling variation footnote applies to Patient 1 first-biopsy diameter/proportion. Methods count ranges do not agree with every individual table count and are not used to overwrite those counts.",
     "No source-listed supplements. No explicit same-patient prior-report identity links found; cited cohorts and theoretical therapies remain background.",
-    "Bare0% glomerulosclerosis percentages do not negate FSGS: Patient1 final0% includes one focal lesion. Patient2/3 bare0% entries remain measurement facts without an invented focal-FSGS absence condition.",
-    "Patient3 prose describes lack of fibrosis in donor wedge and early posttransplant biopsies, while Table1 prints IFTA≈5% and≈10% for those samples. Both literal source representations retained; composite IFTA extent is not silently substituted for a pure fibrosis estimate, and no biological reconciliation is asserted."
+    "Bare 0% glomerulosclerosis percentages do not negate FSGS: Patient 1 final 0% includes one focal lesion. Patient 2/3 bare 0% entries remain measurement facts without an invented focal-FSGS absence condition.",
+    "Patient 3 prose describes lack of fibrosis in donor wedge and early posttransplant biopsies, while Table 1 prints IFTA ≈5% and ≈10% for those samples. Both literal source representations retained; composite IFTA extent is not silently substituted for a pure fibrosis estimate, and no biological reconciliation is asserted."
   ],
   "assessment": {
     "reviewer": "Claude Opus 5.5 parent",
@@ -46,12 +52,15 @@
     "figures_viewed": 0,
     "key_findings": [
       "All mechanical migrations consistent with source; anchor nulling lost post-transplant reference, restored with literal 'transplantation'.",
-      "15 needs-review items resolved."
+      "15 needs-review items resolved.",
+      "Cleanup pass 2: glued text repaired (tool + manual); no time-only-quote or negation-word rows for this article",
+      "Cleanup3: Figure 2C EM facts now take their time from the caption; visual prose respaced."
     ],
     "residual_risks": [
       "Patient 3 Table 1 '7y Biopsy' vs narrative 17th year conflict unchanged (final table measurements have no time).",
       "Mixed normal/abnormal pathology results carry flag unknown."
-    ]
+    ],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
   },
   "physician_adjudicated": false
 }

@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "261be0c4084280855b981e563aa6bd0bd269ee2d43bc78855cb2ef474c6f0cb4",
-  "annotation_sha256": "ccf45d2ccc44ad2581594f6c220474a038f5e6f86754d702f88137238f00f34a",
-  "reviewed_at": "2026-10-09T22:38:57.314650+00:00",
+  "annotation_sha256": "a1bf414a7776ac8965919809890d1f987fdacfb52143ad86b8ed9445d7654057",
+  "reviewed_at": "2026-10-10T01:24:07.019494+00:00",
   "source_segments_read": 43,
   "facts_reviewed": 75,
   "patients_reviewed": 1,
@@ -24,7 +24,14 @@
     "Represented initial examination and laboratory phases as overlapping; acetic dressing interval overlaps granulation and graft, without forcing its completion before either.",
     "semantic-rules-2026-10: verified M03 age '42-year-old', M07 p1-f012 'no imaging studies were performed' -> not_performed with assertion=present, and 49 M12 anchor nullings (paraphrases such as 'index hospital admission').",
     "TIME-LITERAL: restored literal anchors the source ties to the fact: p1-f061 'negative pressure wound therapy' (after which), p1-f070 'NPWT intervention' (in approximately five weeks), p1-f073 'Hospitalization' (during which). Other nulled anchors left null (time text already literal or no tied phrase).",
-    "MED-ROUTE: removed non-literal routes 'local wound dressing'/'local wound care'/'wound dressings' from p1-f058/p1-f062/p1-f066 (not written in evidence); dressing wording kept in regimen ('Daily wound care with Dakin’s solution', 'acetic acid dressings')."
+    "MED-ROUTE: removed non-literal routes 'local wound dressing'/'local wound care'/'wound dressings' from p1-f058/p1-f062/p1-f066 (not written in evidence); dressing wording kept in regimen ('Daily wound care with Dakin’s solution', 'acetic acid dressings').",
+    "Cleanup2 GLUED-TEXT: repair tool fixed 1 internal provenance token ('text43units' -> 'text 43 units'); no exported glued text.",
+    "Cleanup2 NO-BORROWING p1-f019/f020/f021/f024/f025 (unable to ambulate, no abdominal tenderness/masses, no necrosis/cellulitis): 'Upon admission' was borrowed from the separate preceding sentence about alert/malnutrition; time nulled (relation unknown), time-only quote dropped, 'at admission' removed from clinical_statement; facts stay in admission-examination event p1-e005.",
+    "Cleanup2 p1-f022/f023 (left thigh wound, purulent discharge): kept 'Upon admission'; replaced the borrowed b00008 quote with the governing abstract span 'Upon admission, he presented with an extensive purulent wound' (b00002).",
+    "Cleanup2 p1-f029 hypoglycemia: kept 'initial laboratory tests' -- the Table 1 sentence itself states 'critically low glucose levels'; moved that governing quote first.",
+    "Cleanup2 p1-f030-f033 (hyponatremia, hypochloremia, hypocalcemia, hyperphosphatemia) and p1-f034 (renal function normal): stated in separate sentences, not the 'initial laboratory tests' sentence; time nulled and time-only quote dropped (the corresponding Table 1 lab observations keep their table-governed time; event p1-e006 membership unchanged).",
+    "Cleanup2 p1-f049 urinalysis: kept 'Upon admission'; replaced the borrowed b00008 sentence and the fragment with the governing same-sentence quote 'Upon admission, a wound culture was obtained, yielding growth of Staphylococcus epidermidis along with a positive urinalysis.'",
+    "Cleanup2 p1-f056 piperacillin-tazobactam: 'Upon admission to our unit' came from the preceding electrolyte/nutrition sentence; time nulled, time-only quote dropped; duration_text '10 days after admission' kept from its own sentence."
   ],
   "unresolved": [
     "Initial imaging was explicitly absent; clinical abscess/pyelonephritis attribution is retained without inventing CT evidence, renal laterality or imaging throughout the later course.",
@@ -41,7 +48,8 @@
     "facts_reviewed": 75,
     "figures_viewed": 0,
     "key_findings": [
-      "Re-sign 2026-10: M03/M07/M12 verified; 3 literal anchors restored."
+      "Re-sign 2026-10: M03/M07/M12 verified; 3 literal anchors restored.",
+      "Cleanup2: 9 borrowed admission/initial-lab times nulled, 4 kept with governing quotes."
     ],
     "residual_risks": []
   },

@@ -11,7 +11,7 @@ from pydantic import BaseModel
 from openpatients2.schemas import TASK_MODELS
 from openpatients2.article_tasks import Roster,Summary,Vision
 from openpatients2.figure_attribution import FigureReview
-from openpatients2.longitudinal import PatientTimeline,relative_order
+from openpatients2.longitudinal import PatientTimeline,annotation_event_time,relative_order
 from openpatients2.validation import validate as validate_runtime
 from validate import digest,validate
 
@@ -83,10 +83,14 @@ def materialize(a,s):
     for f in assignments:
         for pid in f['patient_ids']:patient_blocks[pid].update(e['segment_id'] for e in f['evidence'])
     classified=set().union(*patient_blocks.values()) if patient_blocks else set()
-    roster=Roster.model_validate({'disposition':a['disposition'],'reported_individual_count':None,'roster_complete':False,
+    # The annotation's `roster` block is the single source of the reported count/completeness; without it the
+    # roster awaits explicit review (pending notice), and merges fall back to the reviewed submission's values.
+    rb=a.get('roster')
+    pending=[] if rb is not None else ['Reported distinct count and roster completeness await explicit schema review; cited-case discovery is not automatically completed.']
+    roster=Roster.model_validate({'disposition':a['disposition'],'reported_individual_count':(rb or {}).get('reported_individual_count'),'roster_complete':bool((rb or {}).get('roster_complete',False)),
         'patients':[{'patient_id':p['patient_id'],'label':p['label'],'species':p['species'],'species_as_documented':p.get('species_as_documented'),'identity_evidence':citations(p['identity_evidence']),'source_segment_ids':sorted(patient_blocks[p['patient_id']]),'attribution_limitations':[x.get('issue') or x.get('description') or json.dumps(x,ensure_ascii=False) for x in p.get('ambiguities',[])]} for p in a['patients']],
         'cited_cases':[],'background_segment_ids':[x['segment_id'] for x in a['source_coverage'] if x['segment_id'] not in classified and x['disposition']=='background'],'unresolved_segment_ids':[x['segment_id'] for x in a['source_coverage'] if x['segment_id'] not in classified and x['disposition']!='background'],'figures':assignments,
-        'limitations':a['article_limitations']+['Reported distinct count and roster completeness await explicit schema review; cited-case discovery is not automatically completed.']}).model_dump()
+        'limitations':a['article_limitations']+pending}).model_dump()
     bundles=[];source_gate_errors=[]
     for p in a['patients']:
         pid=p['patient_id'];rid=f'{aid}:{pid}';sections={};links=[];quarantine=[]
@@ -138,8 +142,11 @@ def materialize(a,s):
             # One timeline vocabulary (semantic_rules.EVENT_OCCURRENCES): copied, never remapped.
             occurrence=e['occurrence']
             domains={facts[f]['task'] for f in e['fact_ids']};kind='plan' if occurrence=='planned' else {'observations':'test','medications':'treatment','procedures_devices':'treatment','outcomes':'outcome','conditions':'diagnosis'}.get(next(iter(domains)),'other') if len(domains)==1 else 'other'
+            # The annotation is the single source of event/time classification (kind, time_kind, time_precision,
+            # time_calendar_value); the heuristic kind and order_only/unknown time are only defaults.
+            kind=e.get('kind',kind)
             times=[]
-            if e.get('time_text'):times=[{'text':e['time_text'],'kind':'order_only','precision':'unknown','calendar_value':None,'evidence':spans(e['evidence'])}]
+            if e.get('time_text'):times=[annotation_event_time(e,spans(e['evidence']))]
             events.append({'event_id':e['event_id'],'record_id':rid,'episode_id':None,'kind':kind,'occurrence':occurrence,'description':e['description'],'fact_ids':[f for f in e['fact_ids'] if f in included],'evidence':spans(e['evidence']),'attribution_evidence':spans(p['identity_evidence']),'times':times})
         for i,e in enumerate(p['temporal_relations']):
             edges.append({'edge_id':f'edge{i+1}','from_event_id':e['from_event_id'],'to_event_id':e['to_event_id'],'relation':e['relation'],'offset':None,'evidence':spans(e['evidence'])})

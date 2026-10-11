@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "a1c11342ccc8e0d148026d934e6ac2886d128425b2dd0a07fa91ed281026b0e0",
-  "annotation_sha256": "b5c46547bb5eab5427a9ad29e20fe70469cc3cf21887db07b21df153920c2444",
-  "reviewed_at": "2026-10-09T22:24:15.697580+00:00",
+  "annotation_sha256": "08e78a7c0ca1ae53a265728672bcae7c48c162c8f0de5e9d517882ddde69a334",
+  "reviewed_at": "2026-10-10T01:07:04.988526+00:00",
   "source_segments_read": 45,
   "facts_reviewed": 186,
   "patients_reviewed": 3,
@@ -32,7 +32,11 @@
     "[semantic-rules-2026-10 re-sign] Verified M03 ages (19/29/23-year-old, each case's own sentence) and M12 nulling of 23 non-literal anchors (e.g. 'initial transfer to Adult Cardiology', 'ICU admission', 'ECMO cannulation' not literal in source).",
     "[semantic-rules-2026-10 re-sign] M12 side effect fixed: 11 facts were left with time.relation='at' but no text/anchor. Restored anchors with literal source phrases for the encounter each paragraph describes: 'transferred to the Adult Cardiology Department' (p1-f027/f029/f030, and p1-f031..f033 'Three months later'), 'transferred to our hospital' (p2-f026/f027/f032/f033/f034), 'referred from the Pediatric Department to the Adult Cardiology Clinic' (p3-f026..f029), 'admitted to the intensive care unit' (p3-f035, p3-f039/f040 'The following day'), 'cannulation' (p3-f043), 'application for LVAD implantation was submitted' (p3-f046 'after eight days').",
     "[semantic-rules-2026-10 re-sign] p2-f028 (dyspnea): anchor restored as the literal phrase 'transferred to our hospital' from its own evidence, relation at.",
-    "[semantic-rules-2026-10 re-sign] DEMO-AGE-TEXT warnings fixed: age_at_diagnosis facts p1/p2/p3-f007 (DMD) and -f008 (DCM) had label text_values ('Duchenne muscular dystrophy diagnosis'); set text_value to the literal Table cell (5/14, 6/20, 10/20), diagnosis kept in clinical_statement/notes."
+    "[semantic-rules-2026-10 re-sign] DEMO-AGE-TEXT warnings fixed: age_at_diagnosis facts p1/p2/p3-f007 (DMD) and -f008 (DCM) had label text_values ('Duchenne muscular dystrophy diagnosis'); set text_value to the literal Table cell (5/14, 6/20, 10/20), diagnosis kept in clinical_statement/notes.",
+    "Cleanup2 TIME/NO-BORROWING: 48 Table 1 facts (p1/p2/p3 height, weight, BSA, NT-proBNP, LVEF, TAPSE, RV s', INTERMACS, PVR, PAP index under the 'Preoperative patient’s characteristics' section row; LVAD type/speed/flow/PI/PP under 'The day of LVAD implantation'; early RV failure/TR under 'Postoperative outcomes') keep their time because the table section heading row structurally governs those rows; the bare heading quote was replaced by the governing table span 'Variables | Case 1 | Case 2 | Case 3\\n<heading>'.",
+    "Cleanup2 NO-BORROWING p1-f033 thrombectomy: 'Three months later' is in the preceding STEMI/ED-visit sentence, not the thrombectomy sentence; time nulled (relation unknown). STEMI quote kept as indication support; order kept via event p1-e02.",
+    "Cleanup2 NO-BORROWING p2-f054 ICH, p2-f055 brain CT, p2-f056 declined surgery: 'POD 122' is only in the preceding mental-status sentence; time nulled (relation unknown) and the time-only quote dropped; order kept via events p2-e13/p2-e14.",
+    "Cleanup2 GLUED-TEXT: repair tool's only candidate ('validator' -> 'valid at or') is a false positive and was not applied; reworded figure attribution_notes 'attribution validator' -> 'attribution validation check' (same meaning) to clear the warning."
   ],
   "unresolved": [
     "Caption-layer visual_status is not_inspected in this annotation; the four actual images are inspected in the separate visual submission.",
@@ -51,7 +55,8 @@
     "facts_reviewed": 186,
     "figures_viewed": 0,
     "key_findings": [
-      "M12 nulls anchors correctly but leaves dangling relation values when time.text is also null."
+      "M12 nulls anchors correctly but leaves dangling relation values when time.text is also null.",
+      "Cleanup2: table section headings govern Table 1 rows; 4 narrative facts lost borrowed times."
     ],
     "residual_risks": [
       "Prior residual risks unchanged."

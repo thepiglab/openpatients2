@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "daa08387fe7c1d8aa8e320890e611cb44eee3041496861a6a1914549d248d3b7",
-  "annotation_sha256": "adbbd8c190f5b4d572119e4a68b94c03e81bbc39376391ba2114dbebe11c75d6",
-  "reviewed_at": "2026-10-09T22:37:42.729131+00:00",
+  "annotation_sha256": "a39ef9304d538addbacabb90886431c5db2280cece4053bd36c6efc9e594a01d",
+  "reviewed_at": "2026-10-10T01:59:04.783457+00:00",
   "source_segments_read": 50,
   "facts_reviewed": 9,
   "patients_reviewed": 1,
@@ -28,11 +28,14 @@
     "FIG-LABELS: Fig3 panel labels 'Lower right','Left','Upper right' (caption position words, no printed letters on the image) set to null; region kept in description_from_caption.",
     "semantic-rules-2026-10: verified M12 nulling of p1-f006 anchor 'CoMET escalation' (paraphrase; time text 'around 9 am' is a literal clock time).",
     "FIG-LABELS: Fig3 rows labelled 'Lower right','Left','Upper right' (caption position words; no printed letters on the image) merged into one whole-figure row panel=null attributed to p1; attribution_notes record the unattributable other-bed rows.",
-    "FIG-LABELS: Fig1 rows 'Left','Right' (caption position words, no printed letters) merged into one whole-figure background row panel=null."
+    "FIG-LABELS: Fig1 rows 'Left','Right' (caption position words, no printed letters) merged into one whole-figure background row panel=null.",
+    "Cleanup pass 3 GLUED-TEXT: article_limitations 'Only Fig3 caption provides' -> 'Only the Fig. 3 caption provides'.",
+    "Cleanup pass 3 GLUED-TEXT (visual submission, viewed Fig1-Fig3 pixels): respaced all digit-glued descriptions, readings, chart titles, caption claims and limitations to match the printed dashboard/plot text ('reads 7WPICU', 'time to next update 12:55', '2024-09-17 14:15 EDT', 'labelled 88, 89, ...', '3 HR INSTABILITY', 'numeric INST entries', 'Panel a/b', 'VIS 0', '24 HRS/48 HRS/72 HRS', 'Nov 09 11:45 EST', 'bed 88', 'INST 4.60', '96 = 3.90 ...', 'around 9 am/12 pm', 'Figure 1'); values unchanged. Privacy prefill evidence synced; figure-ehr-labels/figure-privacy-flags visual_target_sha256 updated.",
+    "Cleanup pass 3 NO-BORROWING review: p1-f009 NEC complication keeps time 'around 12 pm' — its second quote 'the subsequent diagnosis of NEC occurring around 12 pm.' is the fact's own sentence (names NEC); the remaining gate warning is a heuristic miss (NEC abbreviation not learned)."
   ],
   "unresolved": [
     "Figure pixels were not inspected; visual details are restricted to captions.",
-    "Only Fig3 caption provides individual patient information. Cohort demographics, outcome proportions, drug-related definitions and monitoring protocols were not assigned to this infant.",
+    "Only the Fig. 3 caption provides individual patient information. Cohort demographics, outcome proportions, drug-related definitions and monitoring protocols were not assigned to this infant.",
     "Individual medications, NEC stage, sex, laboratory values and follow-up outcome are not provided. CoMET numeric scores and pixels not inspected."
   ],
   "assessment": {
@@ -40,15 +43,17 @@
     "campaign": "semantic-rules-2026-10 re-sign",
     "source_units_read": 50,
     "facts_reviewed": 9,
-    "figures_viewed": 0,
+    "figures_viewed": 3,
     "key_findings": [
       "Re-sign 2026-10: M12 verified; Fig3 invented positional panel labels removed after viewing pixels.",
-      "Re-sign 2026-10: M12 verified; Fig3 invented positional panel labels nulled after viewing pixels."
+      "Re-sign 2026-10: M12 verified; Fig3 invented positional panel labels nulled after viewing pixels.",
+      "Cleanup pass 3: Fig1-Fig3 visual text respaced after viewing pixels; one article-limitation glue fixed; p1-f009 time retained as governed."
     ],
     "residual_risks": [
       "visual-submissions/figure-ehr-labels/figure-privacy-flags for Fig3 still use positional region names ('left','upper right: ...','lower right'); not flagged by gates, left unchanged.",
       "visual-submissions/figure-ehr-labels/privacy flags for Fig3 still use positional panel names ('left','upper right: ...','lower right'); not flagged by gates, left unchanged."
-    ]
+    ],
+    "cleanup3": "final sweep 2026-10-09: glued sidecar text, span/time-only quotes, negation words"
   },
   "physician_adjudicated": false
 }

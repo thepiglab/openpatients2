@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC12719424.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d29909eb1208c6db7b2ba96144ea07cd6941ba8e2a5d793da234b1ade7fce05b",
+  "annotation_sha256": "b5d0979ab0e9874345d07b70b6a3dd2ecbe95cceff688c5850527974cb6d520c",
+  "reviewed_at": "2026-10-11T02:24:17.692889+00:00",
+  "source_segments_read": 29,
+  "facts_reviewed": 225,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f067: merged Figure 2 caption panel (a) baseline CT findings and caption time Baseline into the HRCT observation (same study cited as Figure 2A).",
+    "p1-f080: added Figure 2 caption (b) evidence; follow-up CT timed at 6 months from its own caption; moved to new event p1-e21. Kidney values in the same text sentence stay untimed.",
+    "p1-f096: removed borrowed indication (kidney impairment is the stated reason for plasma exchange, not hemodialysis).",
+    "p1-f090, p2-f100: methylprednisolone taper action current -> administered (completed 6-week course).",
+    "p1-f102, p2-f114: narrowed to remission within 3 months; dialysis independence kept once.",
+    "p1-f103 -> alternate_representation_of p1-f098; p1-f105 -> p1-f099; p2-f110 -> p2-f106 (one representation per fact).",
+    "p2-f091: WBC nadir flag low (source says leukopenia) and own-sentence time During the total follow-up period.",
+    "Added p1-f106, p1-f107 (Figure 1A/B caption histology), p2-f116 (Figure 1C/D caption histology), p2-f117 (Figure 3 caption ultrasound), p2-f118 (rapidly progressive glomerulonephritis).",
+    "p2-e08: unlinked p2-f032 (persisting scrotal swelling sentence has no time of its own).",
+    "p1 relation e16->e17 changed before -> unknown (remission by 6 months could precede 3 months; discussion says within 3 months).",
+    "Added supported relations: p1 e01->e03, e08=e04, e12->e15, e12->e18, e16->e19, e16->e21; p2 e02->e01, e03->e01, e09->e10, e12->e15.",
+    "Added ambiguities: Figure 4 LVEF 55-60% at 6 months vs text 3 months (p1); Figure 4 Day 21 avacopan vs 15 days after day 7 and figure-only RTX maintenance (p2); caption markedly increased vs text preserved vascularity (p2).",
+    "Visual submission: f1 panel C letter is in the lower right corner (was lower left); added f4 limitation on LVEF timing; rebound figure-EHR and privacy sidecars to the edited visual hash.",
+    "GLUED-TEXT pass 4: rejected fix_label_digit_glue.py for this article; all 14 proposed edits (Cre=2.9mg/dL, UProt 24h=340mg, UProt 24h= 800mg) are transcriptions of text that figure 4 prints glued exactly so (re-viewed), so the visual submission is left unchanged.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=2, roster_complete=true, evidence b00001 \"We report two patients with newly diagnosed AAV\"; 2 patients annotated in first-mention order.",
+    "OBS-FLAG needs-review NR001 (p2-f042 kidney ultrasonography): kept flag=unknown; source b00009 states a mixed finding (normal-sized kidneys with increased cortical echogenicity) and does not call the overall result normal. Resolution recorded in needs-review."
+  ],
+  "unresolved": [
+    "Figure pixel inspection is recorded in the separate visual submission; figure entries here keep caption-level attribution only.",
+    "Figure 4 timeline contains values (for example BVAS 0 at 3 months and Day 5 or Day 7 treatment start) that the main text does not state; they are image-only and were not turned into facts.",
+    "Case 1 follow-up values in the sentence after the 6-month remission statement carry no time phrase of their own and are left untimed.",
+    "Discussion statements about both patients are used only where the source says both or our case or our patient; ADVOCATE trial data and literature are not copied to patients."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 29,
+    "facts_reviewed": 225,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Two index patients correctly separated; discussion shared statements used only where both patients or our case/patient are named.",
+      "ESKD discussion label kept review_only against AKI in case text; N. gonorrhoeae kept as an observation only.",
+      "Case 1 kidney values after the remission sentence remain untimed; Figure 4 image-only values not turned into facts.",
+      "Absent findings (no hematuria, no global sclerosis, no vegetations) kept as observations assertion absent with negative flag, matching prior parent convention."
+    ],
+    "residual_risks": [
+      "Anchor of the 1/3/6-month follow-up times (admission vs treatment start) is not stated in the text.",
+      "Remission timing conflict (by 6 months vs within 3 months) left as stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

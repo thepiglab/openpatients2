@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "30a1ab08ff28861641960d8c31dbd4661eeaa6388c699e764ddf6fe963e1c5ae",
-  "annotation_sha256": "cf65661326d2dc6e31b5b1e0263788c06698008619496535fd9d843155caa972",
-  "reviewed_at": "2026-10-09T22:24:09.959620+00:00",
+  "annotation_sha256": "d912cae6773c7531c2df5f92d34b06f19a38201ed1bb9807eba0ed12bd4a5f5a",
+  "reviewed_at": "2026-10-10T02:16:56.599872+00:00",
   "source_segments_read": 17,
   "facts_reviewed": 69,
   "patients_reviewed": 1,
@@ -23,7 +23,12 @@
     "semantic-rules-2026-10 re-sign: verified M03 age text_value '53-year-old' is the literal phrase for the index patient (b00004).",
     "Verified 2 M12 nulled anchors ('acute recurrent left-leg symptom onset', 'venous intervention') were paraphrases not literal in the source; literal time.text retained.",
     "NR001 p1-f030 CBC 'normal except mild anemia': mixed result, flag left unknown (not normal); anemia carried by p1-f032 Hb flag low and p1-f031; CMP p1-f029 flag normal. No annotation change.",
-    "p1-f057 'postoperative day 2': restored M12-nulled anchor ('venous intervention') with the literal 'mechanical thrombectomy'."
+    "p1-f057 'postoperative day 2': restored M12-nulled anchor ('venous intervention') with the literal 'mechanical thrombectomy'.",
+    "Cleanup2 GLUED-TEXT: repair_glued_text.py applied 2 tokens (quantifies2missed in notes, Abstract2missed in ambiguities); manually spaced remaining glued tokens: 'hemoglobin11.7g/dL' -> 'hemoglobin 11.7 g/dL' (finding, clinical_statement, summary), 'day2'/'POD2' -> 'day 2'/'POD 2' (event description, summary), 'out2days' -> 'out 2 days' (ambiguity), 'Annotator2'/'complete17-source-unit' (provenance). Spacing only, values match source. No time-only quotes flagged for this article.",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (3 whitelisted label/number or number/unit spacing edits outside quotes in visual-submissions (3); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. Edits respace body figure cross-references in attribution rationales (not printed figure text); figures viewed.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=None, roster_complete=true, evidence b00001 \"A 53-year-old woman, with a history of DVT of the lower extremity four years prior, presented to the emergency department\"; 1 patients annotated in first-mention order.",
+    "GLUED-TEXT hand fix (visual submission, Figure 2 descriptions): \"labelled100mm\" -> \"labelled 100 mm\" (printed scale reads \"100 mm\", viewed); visual_target_sha256 recomputed.",
+    "ROSTER-ORDER update (singular case statement = count 1): roster reported_individual_count null -> 1, roster_complete true, evidence b00001 \"A 53-year-old woman, with a history of DVT of the lower extremity four years prior, presented to the emergency department\"; 1 patient annotated."
   ],
   "unresolved": [
     "No explicit same-patient publication linkage found. Long-term post-discharge follow-up not reported; indefinite anticoagulation recommendation is not a demonstrated outcome.",
@@ -39,7 +44,8 @@
     "figures_viewed": 0,
     "key_findings": [
       "Mechanical migrations M03/M12 correct; one OBS-FLAG item resolved without edit (mixed CBC result).",
-      "M12 nulled anchors restored with literal source phrases where the source states the reference event."
+      "M12 nulled anchors restored with literal source phrases where the source states the reference event.",
+      "Cleanup2: glued text spaced; no meaning change."
     ],
     "residual_risks": [
       "Prior parent review content otherwise unchanged; figures not re-viewed in this re-sign."

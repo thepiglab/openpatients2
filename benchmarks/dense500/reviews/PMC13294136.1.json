@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "adf2d028054332f77d74e9f226ee29e77abd4d991088c77fbc6fb19f80bddb9b",
-  "annotation_sha256": "0607eb6b431b20d78b0be42b3855b9f64a2df9c46a85b14c94e365ef612e3e53",
-  "reviewed_at": "2026-10-09T22:39:30.197682+00:00",
+  "annotation_sha256": "8f93956258bc28e576ac6024ff4a258386f8e5cdb00a253c3f5edf3788101aed",
+  "reviewed_at": "2026-10-10T01:21:08.787951+00:00",
   "source_segments_read": 11,
   "facts_reviewed": 102,
   "patients_reviewed": 2,
@@ -35,7 +35,8 @@
     "p2-f035/f037 \"within 72 hours\" anchor named initiation of oral diazepam with the pooled b00002 sentence as evidence; ambiguity kept on 5 mg dose vs titration.",
     "Ambiguities/limitations updated (Two weeks later anchor, post-ICU diagnostic basis, clozapine monotherapy dose, pooled 48-72 h usage).",
     "semantic-rules-2026-10 re-sign: verified M01 case_context (p1-f001, p2-f001 multi_patient/true -> clinical_case/false; each record describes its own patient) and 21 M12 anchor nullings (paraphrases such as 'index admission', 'oral diazepam addition', 'inpatient stay').",
-    "Restored literal anchors contained in the facts' own time text: p1-f018, p1-f032 anchor 'remission for catatonic symptoms' ('After remission for catatonic symptoms'); p1-f039 anchor 'transferred to our inpatient clinic'. Other bare offsets ('One year earlier', 'within 24/48/72 hours', 'In the following days', 'Over the subsequent years') keep anchor null: the source does not name their reference in the same statement."
+    "Restored literal anchors contained in the facts' own time text: p1-f018, p1-f032 anchor 'remission for catatonic symptoms' ('After remission for catatonic symptoms'); p1-f039 anchor 'transferred to our inpatient clinic'. Other bare offsets ('One year earlier', 'within 24/48/72 hours', 'In the following days', 'Over the subsequent years') keep anchor null: the source does not name their reference in the same statement.",
+    "p1-f051: time 'by 48 hours' relation after -> before (TIME-LITERAL 'by <time>' = no later than)"
   ],
   "unresolved": [
     "Article has no figures or supplements; no visual work applicable.",
@@ -56,13 +57,16 @@
       "Two index patients (61F, 62F, bipolar disorder, catatonia treated with oral diazepam); no figures or supplements.",
       "DSM-5 \"both cases\" diagnosis attached to each index catatonia only; later p1 episodes have no stated diagnostic basis.",
       "Tapers kept as action unknown with regimen text (no completion stated); ICU \"all psychiatric medications tapered and discontinued\" = stopped.",
-      "p2 most-recent hospitalization vs five admissions left unresolved; p2 72 h anchor rests on pooled statement."
+      "p2 most-recent hospitalization vs five admissions left unresolved; p2 72 h anchor rests on pooled statement.",
+      "TIME-LITERAL 2026-10 'by <time>' audit: 1 fact(s) set to relation before after reading each source sentence",
+      "Cleanup pass 2: TIME-ONLY QUOTE review p1-f010 (recurrent catatonic symptoms): 'Two weeks later, she presented to the emergency department with decreased motor activity and verbalization, reduced oral intake, stereotypic movement, and fixed gaze.' itself describes the recurrent catatonic presentation, so the time is the fact's own and kept; NO-BORROWING warning judged a checker false positive (symptom list vs condition name). No glued-text diff, no negation-word rows; annotation unchanged"
     ],
     "residual_risks": [
       "Anchor of p1 \"After three months\" and \"Two weeks later\" unknown.",
       "Whether p1 \"recurrence of catatonic symptoms\" before 5 mg/day maintenance is the outpatient episode or a later one is unstated.",
       "Joint lab/imaging negative result scope (unbalanced parentheses) and imaging region unstated."
-    ]
+    ],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
   },
   "physician_adjudicated": false
 }

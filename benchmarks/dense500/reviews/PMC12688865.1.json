@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12688865.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d034fa8c4f0720405f6db061854bf8d3a12281491d1f7fe0716c1feb57e0036a",
+  "annotation_sha256": "112f8bc9eda837a868e2ddd2d077465510d0c49fc993f3ab2ed7d2cce6aa9951",
+  "reviewed_at": "2026-10-10T00:45:54.559576+00:00",
+  "source_segments_read": 46,
+  "facts_reviewed": 104,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f028 \"afebrile\" re-represented as fever sign assertion=absent (negation cue), text_value removed",
+    "p1-f022/f023 \"occasional\" moved from severity to text_value \"occasionally\" (frequency, not severity)",
+    "p1-f031 text_value corrected to literal \"1 point\"",
+    "p1-f075 body_site \"rectum and sigmoid colon\" removed (borrowed from background definition b00007)",
+    "p1-f083 invented body_site \"rectosigmoid / anal anastomotic site\" removed",
+    "p1-f073 fresh frozen plasma given the same literal indication as albumin (same sentence)",
+    "p1-f065 abstract colonoscopy evidence (complete healing) added",
+    "Added p1-f104 spinal anesthesia for the terminal ileostomy",
+    "Table 2 POD ambiguity expanded: article/Fig 1 count POD from Altemeier, title says following ileostomy; anchors/offsets stay null",
+    "Added ambiguities: reversal/colonoscopy timing (4 months later vs post-discharge vs after surgery); untimed mechanical ventilation and Fig 7 CT date vs figure-only timeline CTs",
+    "Added 6 temporal relations (e03->e05, e05->e06, e10->e15, e05->e14, e07->e13); caption-only time additions considered and rejected under NO-BORROWING"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual 8 images are inspected in the separate visual submission.",
+    "Figure 1 timeline prints events not in the narrative (extubation on POD 10, CT on POD 9 and POD 14, discharge on POD 26); these are visual-record items only, not text facts.",
+    "Figure 3 caption mentions thoracic imaging; panel letters used in the narrative are not printed in the caption.",
+    "Table 2 POD anchor is ambiguous (title says following terminal ileostomy); no reference intervals are given so no high/low flags are derived from values.",
+    "Discussion/background sentences (ISGRC grading, incidence, risk factors, recommendations) are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 46,
+    "facts_reviewed": 104,
+    "figures_viewed": 8,
+    "key_findings": [
+      "Single index patient; Altemeier Jan 1 2024, leak Jan 5 (POD 4), terminal ileostomy + self-designed irrigation catheter, sepsis SOFA 8, discharge Jan 27, reversal after 4-month colonoscopy",
+      "Levofloxacin route intravenous is supported by abstract sentence naming both meropenem and levofloxacin",
+      "No anastomotic stricture: refuted by stated colonoscopy",
+      "Figure 1 timeline carries figure-only events (extubation POD 10, CTs POD 9/14, discharge POD 26) kept in visual record only"
+    ],
+    "residual_risks": [
+      "Table 2 POD reference point unresolved",
+      "Abstract places IV meropenem/levofloxacin concurrent with ileostomy while body starts them Jan 2; levofloxacin stop never stated",
+      "Prolapse length 6 cm (exam) vs 8 cm (intraoperative) are separate measurements"
+    ]
+  },
+  "physician_adjudicated": false
+}

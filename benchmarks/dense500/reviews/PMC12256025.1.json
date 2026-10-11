@@ -1,11 +1,11 @@
 {
   "article_id": "PMC12256025.1",
-  "reviewer": "Claude Opus 5.5 parent",
+  "reviewer": "parent assistant",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "83486910573d1d33efb8a8471f5c527271a23c956f5b345a12140c1cec2b6587",
-  "annotation_sha256": "0c6db76768ae3ed1a008ab20af87d79757be5a532c390b71e65c89e6f4b0e876",
-  "reviewed_at": "2026-10-09T23:02:58.084874+00:00",
+  "annotation_sha256": "5b0a466d9f42f47fc3468ebbe1ff827fe15ce22a982ae9ca4e7d66fb85c17703",
+  "reviewed_at": "2026-10-10T01:10:54.125503+00:00",
   "source_segments_read": 38,
   "facts_reviewed": 200,
   "patients_reviewed": 5,
@@ -35,11 +35,13 @@
     "p4-f017: migration-nulled time.anchor restored as the literal Table 1 header phrase \"primary surgery\" (header quote added) (TIME-LITERAL)",
     "p5-f017: migration-nulled time.anchor restored as the literal Table 1 header phrase \"primary surgery\" (header quote added) (TIME-LITERAL)",
     "FIG1/FIG3/FIG4 panel labels \"Case 1\"..\"Case 5\": kept; pixels show printed labels \"Case①\"..\"Case⑤\" on each panel (FIG-LABELS)",
-    "FIG-LABELS: figures FIG1-FIG4 panel labels \"Case 1\"..\"Case 5\" renamed to the labels printed on the images (\"Case①\"..\"Case⑤\"), consistently in figures[], visual submission, figure-EHR labels and privacy flags; pixels re-viewed, readings/attribution/includability unchanged."
+    "FIG-LABELS: figures FIG1-FIG4 panel labels \"Case 1\"..\"Case 5\" renamed to the labels printed on the images (\"Case①\"..\"Case⑤\"), consistently in figures[], visual submission, figure-EHR labels and privacy flags; pixels re-viewed, readings/attribution/includability unchanged.",
+    "GLUED-TEXT cleanup: 'gradeIIIb' -> 'grade IIIb' in p5-f037 text_value and clinical_statement and p5 summary/0; 'StanfordA' -> 'Stanford A' and 'Cases1/2' -> 'Cases 1/2' in article_limitations/1 (wording only, meaning unchanged)",
+    "GLUED-TEXT manual cleanup (15 note/summary values, wording only): 'Cases1–3 or5.' -> 'Cases 1–3 or 5.', 'Case3' -> 'Case 3', 'Case5.' -> 'Case 5.'"
   ],
   "unresolved": [
     "This text/caption annotation layer does not use pixels; pixel inspection is recorded separately in the visual target and its review receipts.",
-    "Replaced right hepatic artery from SMA with false-lumen SMA narrowing is described in one StanfordA-dissection case; Cases1/2 identity is unresolved and not assigned.",
+    "Replaced right hepatic artery from SMA with false-lumen SMA narrowing is described in one Stanford A-dissection case; Cases 1/2 identity is unresolved and not assigned.",
     "Pooled wall-thinning, omental/mesocolon containment, focal fibrinoid change/fresh thrombi and no organized thrombi do not establish individual case findings; no patient-level mechanism inferred.",
     "Perioperative hypoperfusion/redistributed splanchnic flow is an author hypothesis, not confirmed NOMI or a documented hemodynamic measurement in any case.",
     "The five patient rows are individually extractable. No explicit same-patient prior-publication link identified; literature cases and institutional larger cohorts remain background.",
@@ -57,11 +59,14 @@
       "M12: 5 anchors \"primary cardiovascular surgery\" were paraphrases (nulled correctly); restored the literal header phrase \"primary surgery\"",
       "M13: p5-e08 author RAS hypothesis uncertain->unknown is correct",
       "needs-review: 5 ages, 4 gallstone-absent items, 12 printed panel labels resolved",
-      "FIG-LABELS: figures FIG1-FIG4 panel labels \"Case 1\"..\"Case 5\" renamed to the labels printed on the images (\"Case①\"..\"Case⑤\"), consistently in figures[], visual submission, figure-EHR labels and privacy flags; pixels re-viewed, readings/attribution/includability unchanged."
+      "FIG-LABELS: figures FIG1-FIG4 panel labels \"Case 1\"..\"Case 5\" renamed to the labels printed on the images (\"Case①\"..\"Case⑤\"), consistently in figures[], visual submission, figure-EHR labels and privacy flags; pixels re-viewed, readings/attribution/includability unchanged.",
+      "Cleanup pass 2: 5 glued tokens repaired (4 by repair_glued_text.py, 1 manual); no time-only quote rows for this article",
+      "Cleanup pass 2 (second sweep): 15 further glued note/summary values respaced"
     ],
     "residual_risks": [
       "Table-only ages: text_value is the bare cell number under the \"Age sex\" header"
-    ]
+    ],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
   },
   "physician_adjudicated": false
 }

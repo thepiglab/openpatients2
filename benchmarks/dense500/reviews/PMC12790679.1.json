@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12790679.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c784c1047cb27905407d91e3cb774d09bed3349c7a970e9a64535d169a413862",
+  "annotation_sha256": "b5baed0aa2602e4b7a123f267386cb78b53e2667a4e75a69dd9516eaf60b99fb",
+  "reviewed_at": "2026-10-10T01:26:44.362878+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 76,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f022 physical examination text_value changed from the negation phrase \"no noteworthy findings\" to \"normal\" (SECTION-SIGNS scoped normal examination); wording kept in quote",
+    "p1-f056 transthoracic echocardiography: added the body quote \"a transthoracic echocardiogram showed no significant findings\" to the single TTE fact (abstract normal findings and body no significant findings are consistent; one representation)",
+    "p1-e05 admission examination event now links p1-f023 and p1-f024 (no signs of endocarditis or pocket infection) with their own evidence sentence",
+    "Added relation p1-e12 before p1-e13 (negative blood culture following completion of four weeks of antibiotics)",
+    "Summary: claims now mention every linked fact (rigors, absent loss of consciousness and seizure-like features, pet dog versus no domesticated-animal contact, infection of unknown origin) and no longer place the fluctuating temperature at admission, since that sentence is scoped to examination only"
+  ],
+  "unresolved": [
+    "Figure pixels are inspected separately in the visual submission; the annotation figure row keeps the caption-only convention.",
+    "No dates, doses or durations are given for most antibiotics; no original pacemaker implant date is given.",
+    "Blood culture counts differ between the abstract and body text; see ambiguities."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 76,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient, man in his 70s; discussion and introduction are background apart from the b00025 sentence about reimplantation in this case, used only as ordering evidence for negative culture before reimplantation",
+      "Positive culture fact uses the abstract quote (three sets, coagulase-negative); body says three sets initially negative and later repeated cultures positive; ambiguity retained and count not inferred from body",
+      "Vancomycin discontinued after sensitivity testing yet a four-week vancomycin course after removal: both kept as literal facts with an ambiguity; no restart inferred; triple regimen names only two drugs",
+      "Likely lead endocarditis (provisional, b00011) and TOE-confirmed vegetation (confirmed, b00013) are distinct claims from distinct sentences, not duplicates; TOE procedure is an alternate representation of the TOE observation per SECTION-IMAGING",
+      "Pet dog ownership and no interaction with farm or domesticated animals both kept literally with an ambiguity",
+      "Figure 1 pixels viewed: single TOE sector with depth ticks, probe angle, HR readout, ECG trace and a red arrow; no identifiers; lead and vegetation not separable on pixels, size is a caption claim"
+    ],
+    "residual_risks": [
+      "Abstract and body differ in blood culture counts; the positive-culture count of three sets rests on the abstract only",
+      "Antibiotic regimen description is internally inconsistent; no doses, dates or durations except the four-week vancomycin course",
+      "No dates; ordering between positive culture, TOE and regimen changes partly follows narrative and is only linked where explicit"
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -9,7 +9,7 @@ import datetime
 from collections import Counter
 from copy import deepcopy
 import re
-from typing import Literal
+from typing import Literal, get_args
 from pydantic import Field, model_validator
 from .schemas import StrictModel
 from .extraction_contracts import SourceSpan, span_errors
@@ -28,7 +28,10 @@ class TimeExpression(StrictModel):
         if not any(self.text in s.quote for s in self.evidence):
             raise ValueError('Time phrase must be literal in its own evidence')
         if self.calendar_value is not None:
-            if self.kind != 'calendar' or self.calendar_value not in self.text:
+            # Shared literal-date parser (semantic_rules.calendar_values): the value must be derivable from the
+            # literal text at its own precision ('October 26, 2022' -> 2022-10-26, 'October 2022' -> 2022-10).
+            from .semantic_rules import calendar_values
+            if self.kind != 'calendar' or self.calendar_value not in calendar_values(self.text):
                 raise ValueError('Calendar normalization must preserve literal source precision')
             value = self.calendar_value
             if not re.fullmatch(r'\d{4}(?:-\d{2}(?:-\d{2})?)?', value):
@@ -55,6 +58,46 @@ class LongitudinalEvent(StrictModel):
         if self.kind == 'plan' and self.occurrence == 'occurred':
             raise ValueError('A documented plan does not establish its completion')
         return self
+
+
+# Annotation timeline events (dense reference format) may carry the same classifications as the runtime
+# contract, so the annotation is the single source and materialization never needs submission patches:
+#   kind, time_kind, time_precision, time_calendar_value  (all optional; absent -> materializer defaults).
+EVENT_KINDS = get_args(LongitudinalEvent.model_fields['kind'].annotation)
+TIME_KINDS = get_args(TimeExpression.model_fields['kind'].annotation)
+TIME_PRECISIONS = get_args(TimeExpression.model_fields['precision'].annotation)
+ANNOTATION_EVENT_CLASSIFICATION = ('kind', 'time_kind', 'time_precision', 'time_calendar_value')
+
+
+def annotation_event_errors(event):
+    """Schema checks for the optional classification fields of one annotation event."""
+    errors = []
+    eid = event.get('event_id', '?')
+    if 'kind' in event and event['kind'] not in EVENT_KINDS:
+        errors.append(f'{eid}: kind {event["kind"]!r} not in {EVENT_KINDS}')
+    if event.get('kind') == 'plan' and event.get('occurrence') == 'occurred':
+        errors.append(f'{eid}: a plan event cannot have occurred')
+    timed = ('time_kind', 'time_precision', 'time_calendar_value')
+    if any(k in event for k in timed) and not event.get('time_text'):
+        errors.append(f'{eid}: time classification needs time_text')
+    if 'time_kind' in event and event['time_kind'] not in TIME_KINDS:
+        errors.append(f'{eid}: time_kind {event["time_kind"]!r} not in {TIME_KINDS}')
+    if 'time_precision' in event and event['time_precision'] not in TIME_PRECISIONS:
+        errors.append(f'{eid}: time_precision {event["time_precision"]!r} not in {TIME_PRECISIONS}')
+    value = event.get('time_calendar_value')
+    from .semantic_rules import calendar_values
+    if value is not None and (event.get('time_kind') != 'calendar' or not isinstance(value, str)
+                              or value not in calendar_values(event.get('time_text'))):
+        errors.append(f'{eid}: time_calendar_value must be the YYYY[-MM[-DD]] that time_text states (ISO or month-name '
+                      'form, same precision) with time_kind calendar')
+    return errors
+
+
+def annotation_event_time(event, evidence):
+    """Runtime TimeExpression dict for an annotation event's literal time_text (classification from the annotation)."""
+    return {'text': event['time_text'], 'kind': event.get('time_kind', 'order_only'),
+            'precision': event.get('time_precision', 'unknown'), 'calendar_value': event.get('time_calendar_value'),
+            'evidence': evidence}
 
 
 class Offset(StrictModel):

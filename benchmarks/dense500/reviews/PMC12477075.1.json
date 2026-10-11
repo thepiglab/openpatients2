@@ -1,11 +1,11 @@
 {
   "article_id": "PMC12477075.1",
-  "reviewer": "parent assistant",
+  "reviewer": "Claude Opus 5.5 parent",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "5e8aafee7a6fc14823a82d6796864714016ff6f5dcef7ad2291889c5b818753f",
-  "annotation_sha256": "23aac014b291bfaf7bd84f36ef151c276a82248cbfbad3970a0119f83243490a",
-  "reviewed_at": "2026-10-09T22:24:18.220497+00:00",
+  "annotation_sha256": "92876901e4f4d512c0ed0e83d29c2a25b79a10b85d4fe612b3276b8986593862",
+  "reviewed_at": "2026-10-10T01:06:48.549221+00:00",
   "source_segments_read": 46,
   "facts_reviewed": 147,
   "patients_reviewed": 1,
@@ -27,7 +27,11 @@
     "p1-f001 case context: subject_state living_at_presentation, multiple_index_patients false.",
     "semantic-rules-2026-10 re-sign: p1-f130 (AECOPD during combined program, absent) verification_status confirmed -> unknown per ASSERT-ABSENT (absence of an event over follow-up, not exclusion by workup).",
     "Verified mechanical migrations: M02 comparator '=' on 71 numeric observations (no printed <,> on any of those values; Table 1 '<0.3' is the CRP reference range, not the result; Table 2 deltas are signed numbers); M03 age text_value '72-year-old' in own quote; M12 41 non-literal anchors ('Phase 1/2 program start/baseline') nulled; M13 p1-e021 uncertain -> unknown.",
-    "Bare-offset scan: p1-f007-f016 time 'prior to admission' had no anchor; set anchor to the literal 'admission' (inside the time text)."
+    "Bare-offset scan: p1-f007-f016 time 'prior to admission' had no anchor; set anchor to the literal 'admission' (inside the time text).",
+    "[cleanup2 glued/time-only] No glued-text dry-run diff for this article.",
+    "[cleanup2 glued/time-only] Time-only quotes: p1-f007..f013 (PFT values) kept 'prior to admission' - same source sentence ('Pulmonary function tests conducted prior to admission revealed ...'); the two quotes were merged into one contiguous governing span ending at the fact's own value.",
+    "[cleanup2 glued/time-only] p1-f014..f016 (sedentary lifestyle, driving to weekly outpatient visits, remaining indoors) kept 'Prior to admission' - same sentence; evidence replaced with one contiguous span from 'Prior to admission, he had led' through the fact's own clause.",
+    "[cleanup2 glued/time-only] p1-f037..f044 (Table 1 lab rows) kept 'at admission': the table caption 'Laboratory findings at admission and reference ranges' structurally governs every row; caption quote retained as the governing heading (residual heuristic NO-BORROWING warning is a false positive for a table heading)."
   ],
   "unresolved": [
     "Single-case article; all patient facts belong to p1. The Methods/Discussion describe external studies (Hansen et al., MCID references, telemonitoring reports) that are not patient facts.",
@@ -45,7 +49,8 @@
       "semantic-rules-2026-10: migrations verified against source; ASSERT-ABSENT item resolved.",
       "Single index patient (72M GOLD IV COPD, LTOT); all 46 units incl. both tables and 3 captions read; introduction/rationale/ethics/telemonitoring discussion background; Hansen et al. and MCID references external.",
       "Verified annotator flags: improved-adherence claim review_only versus no formal adherence assessment; SGRQ total/impact/activity did not improve in Phase 2 and summary says so; cross-phase comparison non-causal; CRP 0.03 mg/L kept as printed; GNRI 86.1 admission vs 88 Phase 1 baseline not equated; Table 2 dashes/deltas as printed; MCID remark review_only.",
-      "All 3 JPEGs viewed: Fig1 index chest radiograph with solid/dotted/dashed yellow arrows; Fig2 generic schematic (mMRC item only in pixels, background); Fig3 parent magnified plot readings agree with all 35 visual estimates (Phase 2 bars ~10,10,8,20,45,5,5,15; tele line ~5,10,10,13,13,10,15,10; Phase 1 bars only 1W-3W)."
+      "All 3 JPEGs viewed: Fig1 index chest radiograph with solid/dotted/dashed yellow arrows; Fig2 generic schematic (mMRC item only in pixels, background); Fig3 parent magnified plot readings agree with all 35 visual estimates (Phase 2 bars ~10,10,8,20,45,5,5,15; tele line ~5,10,10,13,13,10,15,10; Phase 1 bars only 1W-3W).",
+      "Cleanup pass 2: glued free text repaired and time-only evidence quotes resolved against source (NO-BORROWING/TIME-LITERAL)."
     ],
     "residual_risks": [
       "Device provision and real-time monitoring for this patient are implied by the system description only (review-only).",

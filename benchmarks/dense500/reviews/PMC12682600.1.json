@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "d9f3c51cbe37a4fe3f0038c2279acd263a88bae1b0f380ff53609835fc83968c",
-  "annotation_sha256": "2eafc8b7588fdc30884d1f1f56ab06d91ac815f3e668ade43d8f9a1d0ca2bac6",
-  "reviewed_at": "2026-10-09T22:42:04.383675+00:00",
+  "annotation_sha256": "85f40611965d264125d31fd17860491ebab1625b7a3714b2af2f7f12dc0e450b",
+  "reviewed_at": "2026-10-10T01:17:05.989988+00:00",
   "source_segments_read": 37,
   "facts_reviewed": 84,
   "patients_reviewed": 2,
@@ -33,7 +33,9 @@
     "Catatonia diagnoses (p1-f005, p2-f006): added the introduction statement that both patients experienced moderate to severe catatonia as supporting evidence for confirmed status; no per-patient severity assigned.",
     "semantic-rules-2026-10 re-sign: verified all 34 M12 nulled anchors were paraphrases.",
     "Restored M12-nulled anchors with literal source phrases: p1-f005,f017-f021,f023 'assessed by the Consultation‐Liaison psychiatry team'; p1-f006,f016 'discharged from another psychiatric hospital's inpatient unit'; p1-f030-f032,f043 'started on oral Risperidone'; p1-f040 'given oral Lorazepam 1 mg twice daily'; p2-f008 'administered Invega Sustenna 234 mg intramuscularly'; p2-f017,f018,f033,f034 'treated with Risperidone 1 mg twice a day'; p2-f022,f023 'admitted to the psychiatric hospital'. Self-describing times (ED, inpatient medical unit stay, ER arrival, since discharge, prior to the LAI) left null.",
-    "opus-fixup: p1-f002/p2-f002 age text_value restored to the literal source spelling with U+2010 hyphens ('20‐year‐old', '24‐year‐old') per DEMO-AGE-TEXT."
+    "opus-fixup: p1-f002/p2-f002 age text_value restored to the literal source spelling with U+2010 hyphens ('20‐year‐old', '24‐year‐old') per DEMO-AGE-TEXT.",
+    "TIME-ONLY QUOTES p1-f018/f019/f020 ('On evaluation'), p1-f025..f029 ('On Day 3'), p1-f031/f032 ('While on this regimen') and p2-f018 ('After 3 weeks of treatment'): each time phrase is in the same sentence as the finding/medication, so the times are governed and kept; the separate time fragment and finding fragment were merged into one contiguous governing quote per fact",
+    "TIME-ONLY QUOTE review p1-f006 / p2-f008 (paliperidone adverse-effect catatonia): the onset quotes ('our 20-year-old male patient who developed symptoms within a day after discharge'; 'our female patient's symptoms manifested 6 weeks post-injection') state the onset of this patient's reaction itself, so the times are the fact's own and kept (residual NO-BORROWING warning judged a checker false positive)"
   ],
   "unresolved": [
     "Two-patient case series (Case 1 and Case 2) plus a literature review: Table 1 rows (Johnson et al., Tu et al., Coffey, McKeown et al., Xiong et al., Mall et al.) and discussion statements describe published cases or general knowledge and are not extracted as facts of the index patients.",
@@ -54,7 +56,8 @@
       "Main defect was time borrowing across sentences (p1 presenting findings, p1 grandiosity, p2 lorazepam continuation).",
       "Case 1 loading-dose timing is internally inconsistent in the source (day of discharge vs during admission, last dose day before current admission).",
       "semantic-rules-2026-10: M12 verified; 21 anchors restored to literal phrases.",
-      "opus-fixup: age text_value made byte-literal (U+2010)."
+      "opus-fixup: age text_value made byte-literal (U+2010).",
+      "Cleanup pass 2: no glued-text diff; 13 time-only-quote facts reviewed, all kept (11 merged into governing same-sentence spans, 2 reaction-onset statements kept); no negation-word rows"
     ],
     "residual_risks": [
       "Schizophrenia verification left unknown (history only); catatonia confirmed on BFCRS and author framing; autoimmune encephalitis refuted from the explicit exclusion statement.",
@@ -62,7 +65,8 @@
       "Sertraline/benztropine share one indication clause, kept verbatim on both.",
       "'Originally from Jamaica' has no demographic field and stays in the case description.",
       "Abdominal imaging modality unstated; result recorded as source-stated negative."
-    ]
+    ],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
   },
   "physician_adjudicated": false
 }

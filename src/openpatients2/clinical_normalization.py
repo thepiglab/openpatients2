@@ -4,6 +4,8 @@ from __future__ import annotations
 from copy import deepcopy
 import re
 
+from .semantic_rules import date_iso_errors
+
 
 def normalize_clinical(task, candidate, segments):
     """Quarantine unbound times and copy explicit medication routes into fields.
@@ -28,8 +30,7 @@ def normalize_clinical(task, candidate, segments):
             time = obj.get('time')
             if bound and isinstance(time, dict) and (
                     (time.get('text') and time['text'] not in quotes) or
-                    (time.get('date_iso') and (time['date_iso'] not in quotes or
-                                              time['date_iso'] not in (time.get('text') or '')))):
+                    (time.get('date_iso') and date_iso_errors(time['date_iso'], time.get('text'), quotes))):
                 unknown = {'text': None, 'relation': 'unknown', 'anchor': None, 'date_iso': None}
                 audit.append({'pointer': path + '/time', 'before': deepcopy(time), 'after': unknown,
                     'reason': 'time_not_bound_to_own_literal_evidence', 'status': 'quarantined_association',

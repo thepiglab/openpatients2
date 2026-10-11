@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12758943.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7eeae9281f7ce3499c61f1540d95031e0e515a980bfd6e55934b7cd36c9a8412",
+  "annotation_sha256": "afae41f8f4910162f00c77dfcc91a0d2fa7a6d3c9d2328e288f1bd08792986e1",
+  "reviewed_at": "2026-10-11T02:54:44.683759+00:00",
+  "source_segments_read": 47,
+  "facts_reviewed": 254,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f247 Hb 161 g/L: removed the time \"within just six months\", which governs the drop to 30 g/L, not the date of the 161 value (NO-BORROWING).",
+    "Added p1-f253 haemoglobin 101 after IV iron infusion with the printed unit g/dL, certainty source_conflict, scoring review_only (Table 1 reports g/L); linked to the unit ambiguity.",
+    "Added p1-f254 medication \"oral maintenance therapy\" (route oral, administered, after parenteral repletion): the sentence is in the \"In this patient\" management paragraph in past tense; agent/dose/time not inferred; ambiguity rewritten and linked.",
+    "Fixed ambiguity on initial platelets/MCV: fact_ids pointed to methylmalonic acid/homocysteine (p1-f053/f054); repointed to p1-f041/p1-f042.",
+    "Added events p1-e28 (oral maintenance therapy) and p1-e29 (Hb rise after IV iron) and relations e28 after e20, e29 after e26, e26 after e25, e22 after e20 with literal evidence; summary mentions oral maintenance therapy.",
+    "Measurement series: unit_text for CRP, bilirubin, LDH, folate and anti-intrinsic factor points carried the reference-limit number (\"5 mg/L\", \"21 µmol/L\", \"250 U/L\", \"3.0 µg/L\", \"20 U/mL\"); corrected to the literal unit only (55 points).",
+    "Figure privacy flags FIG3 note claimed coloured arrows; corrected (FIG3 has no arrows)."
+  ],
+  "unresolved": [
+    "Figures 1-4 were inspected in the separate visual submission; this annotation keeps caption-level visual status.",
+    "Table 1 dash cells are recorded as not done per the table legend; no zero values were substituted.",
+    "Folate 1.1 at the GP visit has no stated unit.",
+    "Platelet, MCV and Day 10 platelet text values conflict with Table 1 and are kept review-only without reconciliation.",
+    "Hb 101 g/dL (text) versus g/L (Table 1) and the Table 2 reference to day 19 are not corrected."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 47,
+    "facts_reviewed": 254,
+    "figures_viewed": 4,
+    "key_findings": [
+      "All 165 Table 1 cells and 3 Table 2 cells checked programmatically against the source rows: values, comparators, reference ranges, day columns and dash = not_performed per legend all match; bilirubin Day 25 = 186 is literal in the cell.",
+      "Text-vs-table conflicts (initial platelets 18 / MCV 122 vs Day 1 30/102; platelets 223 within 10 days vs Day 10 144) kept source_conflict review_only.",
+      "Omeprazole \"long-term\" duration comes from a discussion sentence about this patient (\"this patient's haemoglobin dropped ... Factors contributing included ... long-term use of omeprazole\"), same drug, so not borrowing; kept.",
+      "Intramedullary haemolysis kept provisional (\"indicated\"); folate 1.1 at GP visit kept without unit.",
+      "Figures 1-4 viewed: blood film tear-drop cell (red arrow), hypersegmented neutrophil (green arrow), low- and high-power marrow trephine (yellow and green arrows on FIG4); visual descriptions accurate, all p1 pathology, includable, no privacy flags."
+    ],
+    "residual_risks": [
+      "Table 2 title refers to day 19, which is not a Table 1 column; recorded as ambiguity only.",
+      "Day 25 neutrophils 0.3 with WBC 3.2 and bilirubin 186 may be source typos; retained as printed.",
+      "Oral maintenance therapy agent unknown."
+    ]
+  },
+  "physician_adjudicated": false
+}

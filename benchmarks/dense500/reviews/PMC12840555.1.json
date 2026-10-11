@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12840555.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "848c3fb82be2326d5d8ac87a20f1561e1b7da60d67109d13f3da393cfbedc833",
+  "annotation_sha256": "df345250a35acc64bc3783fe00c58992920774bf04d0a3b1eb05dbab82aff013",
+  "reviewed_at": "2026-10-11T02:21:45.391579+00:00",
+  "source_segments_read": 140,
+  "facts_reviewed": 186,
+  "patients_reviewed": 5,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Privacy: patient labels changed from initials to Case 1..Case 5; no initials remain in free text (literal evidence quotes unchanged)",
+    "Timeline: added p1-e05 before p1-e06 (cUS prompted testing), p2-e04 before p2-e05 (neutropenia prompted testing), p2-e01 before p2-e03, p3-e01 before p3-e03, p4-e01 before p4-e02, p4-e04 before p4-e07 (severe condition prompted valganciclovir), p5-e01 before p5-e02",
+    "p4-f035 two-week extension marked alternate_representation_of p4-f034 so it is not counted as a second course",
+    "Added p5-f031 follow-up care plan (During follow-up) and set p5 care_plans documented",
+    "Visual submission FIG6 description corrected: connector lines go to Europe or the United States, none to Asia; sidecar visual hashes refreshed",
+    "Cleanup3 GLUED visual submission f005: truncated printed word now quoted as printed (“Pulsed electric field treatme”, cut off at the box edge) in figure and panel descriptions after checking pixels; figure-EHR/privacy visual hashes refreshed. p5-f025 'Acquired asymptomatic CMV infection' reviewed and kept: a present infection qualified as asymptomatic (source diagnosis term), not a negated finding.",
+    "GLUED-TEXT pass 4: rejected the fixer edit to figure children-13-00046-f005 descriptions (18h-10 d -> 18 h-10 d) because the infographic prints \"(18h-10 d)\" glued (figure viewed); instead the printed definition is quoted as printed text (“Freeze-Thawing: -20°C for a variable time (18h-10 d)”) in the figure/panel detailed descriptions and pixel observation; visual_target_sha256 recomputed in figure-EHR/privacy sidecars.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=5, roster_complete=true, evidence b00015 \"We describe a series of five cases of postnatally acquired CMV infection (pCMV) in newborns\"; 5 patients annotated in first-mention order."
+  ],
+  "unresolved": [
+    "Narrative review with a five-case series (Section 3, Table 1); Sections 1-2 and 4-11, Tables 2-3 and all figures are literature review or background and are not patient facts.",
+    "Table 1 columns 1-5 are mapped to Cases 1-5 by position; table viral loads and sex/milk rows carry no collection dates, so none were assigned.",
+    "Table 1 \"N/A\" for CMV DNA in maternal milk (Cases 1, 2, 4, 5) is legend-defined \"not available\" and was not recorded as a test; it neither establishes that the test was performed nor that milk was uninfected.",
+    "Case 4 discharge respiratory support is stated inconsistently (heated high-flow ventilation vs without any ventilatory support); both kept as review-only source conflicts.",
+    "The series summary (b00022) counts three of five infections as asymptomatic and names no patients; it was not copied to any case.",
+    "Gestational age at birth is written as weeks + days in the table and weeks (+ days/7) in the narrative; values kept as printed without recomputing weeks.",
+    "Figure pixels were inspected in the separate visual submission; the annotation figures[] keep caption-layer status."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 140,
+    "facts_reviewed": 186,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Five index infants (Cases 1-5) numbered by first mention; Table 1 columns 1-5 map to the narrative cases by position and values agree (GA, sex, treatment)",
+      "Table 1 cells are governed by their column and row headers; no times borrowed into undated viral loads",
+      "Case 4 discharge ventilatory-support contradiction kept review_only; Case 3 NEC kept provisional from table possible NEC",
+      "Series-level asymptomatic/triggering summary and institutional transfusion policy not copied to individuals",
+      "All six figures are background or aggregate, not EHR-includable",
+      "Cleanup3: one truncated printed word quoted in the f005 visual description; no annotation change."
+    ],
+    "residual_risks": [
+      "Case 3 anchor of Seven days after this diagnosis not fixed",
+      "Case 2 GA 28 weeks narrative vs 28 + 5/7 table",
+      "Evidence quotes still contain source initials as literal text"
+    ]
+  },
+  "physician_adjudicated": false
+}

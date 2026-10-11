@@ -106,6 +106,21 @@ def _panel_label_warnings(root, aid, visual, warnings):
         _add(warnings, 'figure.FIG-LABELS', f'{v.text()} (in {", ".join(folders)})')
 
 
+SIDECAR_FOLDERS = (('visual', 'visual-submissions'), ('figure_ehr', 'figure-ehr-labels'),
+                   ('privacy', 'figure-privacy-flags'), ('supplement_manifest', 'supplement-manifests'),
+                   ('measurement_series', 'measurement-series'))
+
+
+def _glued_sidecar_warnings(root, source, visual, warnings):
+    """GLUED-TEXT (warning): reviewer-written free text in the article's visual and EHR sidecars."""
+    from openpatients2.semantic_rules import sidecar_glued_violations
+    text = '\n'.join(s['text'] for s in source['segments'])
+    for kind, folder in SIDECAR_FOLDERS:
+        doc = visual if kind == 'visual' else _json(Path(root) / folder / f"{source['article_id']}.json")
+        for v in sidecar_glued_violations(kind, doc or {}, text):
+            _add(warnings, f'{folder}.GLUED-TEXT', v.text())
+
+
 def media_gates(root, source, annotation, target):
     """Figure and EHR-sidecar runtime checkers on the article's reviewed (or submitted) files."""
     from openpatients2 import ehr_tasks
@@ -135,6 +150,7 @@ def media_gates(root, source, annotation, target):
             _add(errors, 'figure.text_attribution', f"{fr['figure_id']}: {exc}")
     rows = {f['figure_id']: f for f in (visual or {}).get('figures', [])}
     _panel_label_warnings(root, aid, visual, warnings)
+    _glued_sidecar_warnings(root, source, visual, warnings)
     for folder, task, status, checker, assemble in (
             ('figure-ehr-labels', 'figure_ehr_label', 'labeled', ehr_tasks.check_figure_ehr, ehr_tasks.labels_document),
             ('figure-privacy-flags', 'figure_privacy_flags', 'flagged', ehr_tasks.check_privacy, ehr_tasks.flags_document)):
@@ -172,10 +188,11 @@ def media_gates(root, source, annotation, target):
         except (ValueError, KeyError, TypeError, FileNotFoundError) as exc:
             transcriptions = {}; _add(warnings, 'ehr.series_transcriptions', exc)
         try:
-            # The reference's own transcription cells are annotator-defined; the runtime draft adds them
-            # so the round trip exercises check_series with the reviewed transcriptions.
+            # The reference's own annotator-defined cells (supplement transcriptions, literal article-text
+            # cells such as table-footnote legends cited by cell_status) are added to the runtime draft so the
+            # round trip exercises check_series; validate_series re-checks every cell literally.
             draft = ehr_tasks.series_draft(source, transcriptions,
-                                           [c for c in series['cells'] if c['origin'] == 'supplement_transcription'])
+                                           [c for c in series['cells'] if c['origin'] in ('supplement_transcription', 'article_text')])
             ehr_tasks.check_series(ehr_tasks.output_from_sidecar('measurement_series_extraction', series),
                                    source, annotation, draft, transcriptions)
         except (ValueError, KeyError, TypeError) as exc:
@@ -197,6 +214,15 @@ def run_gates(root, aid, *, annotation=None, folder='annotations', groups=GROUPS
     return {'article_id': aid, 'groups': list(groups), 'passed': not errors, 'errors': errors, 'warnings': warnings}
 
 
+def verdict(report):
+    """One human-readable line: warnings are heuristics for a reviewer and never block."""
+    w, e = len(report['warnings']), len(report['errors'])
+    if report['passed']:
+        return f"{report['article_id']}: PASSED ({w} warning{'s' if w != 1 else ''}, non-blocking)"
+    return (f"{report['article_id']}: FAILED ({e} blocking error{'s' if e != 1 else ''}; "
+            f"{w} warning{'s' if w != 1 else ''}, non-blocking)")
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument('root', type=Path); p.add_argument('--article', required=True)
@@ -204,6 +230,7 @@ def main():
     args = p.parse_args()
     report = run_gates(args.root, args.article, folder=args.folder, groups=tuple(args.groups))
     print(json.dumps(report, ensure_ascii=False, indent=1))
+    print(verdict(report))
     raise SystemExit(0 if report['passed'] else 1)
 
 

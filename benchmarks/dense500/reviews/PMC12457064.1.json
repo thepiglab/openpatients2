@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "81aea867cee9fc467f8cfdf2b1dc1202359ea1dc89a8418af928674faef5d520",
-  "annotation_sha256": "4da47061ec62f630d2d55fdfef15dd4fb91cbeee9041941c5a66dd195c7fa7bc",
-  "reviewed_at": "2026-10-09T22:32:51.373287+00:00",
+  "annotation_sha256": "82385ff83328358c89c0a18ae9b54be23a5389be50d32a33b9630c607de7184a",
+  "reviewed_at": "2026-10-10T00:43:09.676527+00:00",
   "source_segments_read": 27,
   "facts_reviewed": 117,
   "patients_reviewed": 3,
@@ -32,7 +32,9 @@
     "Added one Table 1 summary claim per patient (no new facts).",
     "Visual submission edited: fig1 \"R\" orientation letter read on magnification (findings on patient left, matching text); fig3 faint letter noted; fig5 ventricle asymmetry added.",
     "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M12: anchor 'withdrawal of life-sustained treatments' on p3-f031 was a paraphrase (source: 'life-sustained treatments were withdrawn'); restored literal anchor 'palliative care' from 'The patient dies after 4 days of palliative care.'",
-    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Checked ages (80-year-old, 76-year-old, 94-year-old text_value literal) and timeline vocabulary; no other migration changes."
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Checked ages (80-year-old, 76-year-old, 94-year-old text_value literal) and timeline vocabulary; no other migration changes.",
+    "p1-f041: time 'by 72 h postonset of CIE' relation until -> before (TIME-LITERAL 'by <time>' = no later than); anchor 'onset of CIE' kept (named in phrase)",
+    "p2-f036: time 'by 72 h postonset of CIE' relation until -> before (TIME-LITERAL 'by <time>' = no later than); anchor 'onset of CIE' kept (named in phrase)"
   ],
   "unresolved": [
     "Caption-layer visual status not_inspected; the 5 figure JPEGs are inspected in the separate visual submission.",
@@ -57,7 +59,8 @@
       "Onset windows (abstract 2-7 h, discussion 1-7 h, Case 2 8 h) left unreconciled; Case 1 \"7 h later\" unanchored.",
       "Hyperbaric treatment recorded only as transfer; air embolus as condition plus procedure complication (alternate representations).",
       "Case 3 CIE rests on series/discussion statements; SAH refuted by dual-energy CT; \"left-sided\" seizures kept as printed.",
-      "Pooled series facts (Royal Adelaide setting, iopromide in all three, contrast volume not recorded) explicitly address the three cases and are correctly per-patient; group CBF statement stays review_only."
+      "Pooled series facts (Royal Adelaide setting, iopromide in all three, contrast volume not recorded) explicitly address the three cases and are correctly per-patient; group CBF statement stays review_only.",
+      "TIME-LITERAL 2026-10 'by <time>' audit: 2 fact(s) set to relation before after reading each source sentence"
     ],
     "residual_risks": [
       "Table rows are unlabeled; assignment is inferential though each row matches one case uniquely.",

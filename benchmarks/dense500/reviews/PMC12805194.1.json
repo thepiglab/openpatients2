@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "5e42fb1ad89eae98612fdbfac153c780b9f443ff5ccd15d69043629bbdfa6c98",
-  "annotation_sha256": "968f7d3f66be8486f6871478fde2026aa3ec33cfcc5f949dead90eba7d0b7757",
-  "reviewed_at": "2026-10-09T23:00:55.571791+00:00",
+  "annotation_sha256": "a98f841c1653b1ca7af479fac5a857f5d3f81d676c09732ae1cc7f23f06be5c6",
+  "reviewed_at": "2026-10-10T02:16:47.053731+00:00",
   "source_segments_read": 54,
   "facts_reviewed": 142,
   "patients_reviewed": 1,
@@ -25,16 +25,26 @@
     "Verified all M12 nulled anchors (e.g. 'initial diagnostic assessment', 'acute post-angiography deterioration', 'intubation', 'hospitalization', 'acute stabilisation') do not occur literally in the source; literal time.text retained. No needs-review items.",
     "p1-f091 propranolol (runtime-gate MED-ROUTE warning): route 'orally via nasogastric tube' -> literal 'orally via a nasogastric tube' from its own quote.",
     "SECTION-SIGNS: removed observation p1-f065 (GCS 8); duplicate of symptoms_function performance_score p1-f064; links dropped from event p1-e06 and summary.",
-    "  p1-f065: removed duplicate observation"
+    "  p1-f065: removed duplicate observation",
+    "p1-f113: time 'By day 3' relation after -> before (TIME-LITERAL 'by <time>' = no later than)",
+    "p1-f114: time 'By day 3' relation after -> before (TIME-LITERAL 'by <time>' = no later than)",
+    "Cleanup2 GLUED-TEXT: repair tool split 11 tokens (Age 50 years, TRAb 8 positive, via NGT, methimazole 30 mg daily, after PTU, mg daily, type II, explicitly NGT, final dose, draw date). Manual fixes (~40 tokens) checked against source spellings: troponin I 1.2 ng/mL, EF 65%, grade I, 42 mm, GCS 8, total/free T3/T4, BWPS 70/threshold 45, titrated to 80 mg, roughly 8 mg per drop, peripheral T4->T3 conversion, cortisol 32 ug/dL, Anti-TPO 350, day 3, loading dose 600 mg, then q6h, Malani EF 25%, overt HF, post-RAI; summary 2 rewritten from mis-split dose strings to 'propranolol 80 mg q6h, PTU 600 mg load then 250 mg q4h, hydrocortisone 100 mg q8h, piperacillin-tazobactam 4.5 g q8h' and 'TSH <0.01 uIU/mL, free T4 >5 ng/dL, total T3 >500 ng/dL' (source values). Source spelling HCO3 kept.",
+    "Cleanup2 p1-f061/f062 (marked sinus tachycardia, heart rate 130-140): 'Shortly after the procedure' is in the same sentence; kept time and replaced the result quote plus the time-only fragment with the single governing span.",
+    "Cleanup2 NO-BORROWING p1-f133/f134 (no further chest pain / arrhythmias): stated in the 'Notably ...' sentence, not the 'On follow-up three months post-RAI' sentence; time nulled (relation unknown), time-only quote dropped, clinical_statement made explicit; facts remain in follow-up event p1-e16.",
+    "[cleanup3 labels/sidecar glue/times/negation] p1-f129..f132 (repeat echocardiogram; chamber sizes normal; EF 65%; no segmental wall motion abnormalities): time 'three months post-RAI' sat in the preceding euthyroid sentence, not the echo sentence ('Notably, ... a repeat echocardiogram showed ...'); times nulled (relation unknown), the 4-sentence span and the time-only fragment replaced by the echo sentence itself, names/statements no longer say 'follow-up'; ordering remains via event p1-e16 (NO-BORROWING).",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (3 whitelisted label/number or number/unit spacing edits outside quotes in visual-submissions (3); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. Edits respace body figure cross-references in attribution rationales (not printed figure text); figures viewed.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=None, roster_complete=true, evidence b00001 \"A 50-year-old male patient with no known thyroid problems presented to the hospital\"; 1 patients annotated in first-mention order.",
+    "GLUED-TEXT hand fix (visual submission): limitation \"heart rate130–140bpm\" -> \"heart rate 130–140 bpm\"; visual_target_sha256 recomputed.",
+    "ROSTER-ORDER update (singular case statement = count 1): roster reported_individual_count null -> 1, roster_complete true, evidence b00003 \"Here, we will present a case of thyroid storm secondary to previously undiagnosed Graves’ disease\"; 1 patient annotated."
   ],
   "unresolved": [
     "Caption-layer visual_status remains not_inspected; actual three images are inspected in separate visual targets.",
-    "Initial clinical signs of HF and retrospective no overtHF retain qualifiers without confirmed overt systolic failure or invented diagnostic reconciliation.",
+    "Initial clinical signs of HF and retrospective no overt HF retain qualifiers without confirmed overt systolic failure or invented diagnostic reconciliation.",
     "No unreported initial/poststorm lab high/low flags derived from numerical reference comparisons; only source explicit qualitative results applied.",
-    "T3 quantitative result is totalT3; no freeT3 value invented from broad narrative phrasing.",
+    "T3 quantitative result is total T3; no free T3 value invented from broad narrative phrasing.",
     "Postangiography contribution of iodinated contrast remains author-qualified; no proved single precipitant.",
-    "No postdischarge propranolol dose carried over from ICU NGT80mgq6, no taper schedule/agent or unreported antiplatelet ingredients or medication discontinuations inferred.",
-    "Day3/one-week/one-month anchors remain reported clinical-course relative times without invented calendar dates. No source-specific identity link to cited comparator reports; cited Malani EF25% not index.",
+    "No postdischarge propranolol dose carried over from ICU NGT 80 mg q6, no taper schedule/agent or unreported antiplatelet ingredients or medication discontinuations inferred.",
+    "Day 3/one-week/one-month anchors remain reported clinical-course relative times without invented calendar dates. No source-specific identity link to cited comparator reports; cited Malani EF 25% not index.",
     "PTU loading precedes first iodine by approximately one hour; recurring PTU maintenance and other ICU therapies are not asserted to be completed before iodine initiation."
   ],
   "assessment": {
@@ -44,7 +54,10 @@
     "figures_viewed": 0,
     "key_findings": [
       "Mechanical migrations M02/M03/M12 correct for this article; one non-literal medication route fixed.",
-      "SECTION-SIGNS: removed observation p1-f065 (GCS 8); duplicate of symptoms_function performance_score p1-f064; links dropped from event p1-e06 and summary."
+      "SECTION-SIGNS: removed observation p1-f065 (GCS 8); duplicate of symptoms_function performance_score p1-f064; links dropped from event p1-e06 and summary.",
+      "TIME-LITERAL 2026-10 'by <time>' audit: 2 fact(s) set to relation before after reading each source sentence",
+      "Cleanup2: extensive glued prose repaired; 2 same-sentence times kept, 2 borrowed follow-up times nulled.",
+      "Cleanup pass 3: patient labels and sidecar text respaced; span/time-only quotes and negation-word items resolved against the source (NO-BORROWING/TIME-LITERAL/EVID-NEGATION)."
     ],
     "residual_risks": [
       "Prior parent review content otherwise unchanged; figures not re-viewed in this re-sign."

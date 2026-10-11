@@ -1,11 +1,11 @@
 {
   "article_id": "PMC12803527.1",
-  "reviewer": "parent assistant",
+  "reviewer": "Claude Opus 5.5 parent",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "bf8b593e55849870431fea7a682fc11b38fb3b2ab566b4c5877cdb19d9f77fbd",
-  "annotation_sha256": "7dfc0132aacffa2f8fb71d26efab9f1012aae9c35d4323ca3dcb20a421033985",
-  "reviewed_at": "2026-10-09T21:08:44.380924+00:00",
+  "annotation_sha256": "1252f0bab12fa7d09975f1d9d4edfc35057f8b8e1fc134e01ffcbfaa3cfd7fdb",
+  "reviewed_at": "2026-10-10T01:42:31.392500+00:00",
   "source_segments_read": 42,
   "facts_reviewed": 85,
   "patients_reviewed": 1,
@@ -25,7 +25,8 @@
     "Timeline: added e19 before e09 (relapse/pseudo-flare concern then empirical methylprednisolone), e04 before e09 (abstract: presentation then empirical corticosteroids), e01 before e05 (2014 diagnosis before admission); added abstract follow-up evidence to e15/e16 before e17",
     "Summary 2: removed borrowed \"Admission labs\" timing (labs untimed), added temperature/CBC values and the readmission with blurred vision and worsened mental status (+f028,f029,f079)",
     "Summary 4: added absence of typical infection signs attributed to immunosuppressive therapy (+f032,f014)",
-    "Ambiguity on ED/admission/readmission now states only the abstract presentation->steroid order is linked"
+    "Ambiguity on ED/admission/readmission now states only the abstract presentation->steroid order is linked",
+    "cleanup-3 NO-BORROWING: '3 weeks later' is in the first sentence of b00014 ('On neuro-ophthalmic examination 3 weeks later, the patient returned to her baseline status.'), which states the return to baseline (p1-f083, time kept); the visual acuity, Ishihara, Humphrey 24-2 and OCT RNFL results (p1-f069..p1-f078) are separate sentences -> time nulled (text/anchor/date null, relation unknown) and each quote trimmed to the fact's own sentence. Order kept by event p1-e17 membership."
   ],
   "unresolved": [
     "Caption-layer visual status not_inspected; pixels are described only in the separate visual submission.",
@@ -47,7 +48,8 @@
       "Two worsened-mental-status facts (readmission vs post-steroid) kept separate; same-episode identity unstated",
       "CRP high from source \"elevated\"; AQP4 FACS positive per source; CBC units kept as 10^(3)/uL text, no conversion",
       "Fig 1 pixels: axial orbital MRI with AFR/PHL labels, no side marker or arrows; caption claims kept separate",
-      "SD1 DOCX opened: CARE checklist with section-name locations only; administrative"
+      "SD1 DOCX opened: CARE checklist with section-name locations only; administrative",
+      "cleanup-3: 10 borrowed '3 weeks later' times on follow-up visual function results nulled; event p1-e17 keeps order."
     ],
     "residual_risks": [
       "ED presentation vs admission vs readmission chronology remains ambiguous; steroid course not placed relative to readmission",

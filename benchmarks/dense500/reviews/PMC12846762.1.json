@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12846762.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6bc4e9c84ae80b79cb7f08fda09f8c26d2fed32e0080a02fb5953c9c7af2d11f",
+  "annotation_sha256": "68c5d01ef4db15fe2715d872246a1c9e33a6faa3c56a1954b75834c7081771bb",
+  "reviewed_at": "2026-10-11T02:20:35.679513+00:00",
+  "source_segments_read": 46,
+  "facts_reviewed": 134,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f020..f024: added body b00024 and Table 3 one-year cells with the governing column header as own evidence; removed body_site from JOA score",
+    "p1-f040: trimmed evidence to the removal sentence and removed time borrowed from the preceding During surgery sentence",
+    "p1-f054: removed Upon admission time carried only by the preceding sentence; evidence now the lab sentences b00006/b00007",
+    "p1-f118: normalization of inflammatory markers set supported/include (not contradicted by Table 2)",
+    "p1-f046: added Figure 3 caption NPWT continuous negative pressure and dressing change every two to three days",
+    "Added p1-f130 fistula sign, p1-f131/f132 erythema and swelling (Fig 1a caption), p1-f133 intraoperative adequate bone stock and viable soft tissue, p1-f134 irrigation medication (alternate of p1-f042)",
+    "Timeline: added events e10 referral, e11 pre-revision Table 3 assessment, e12 Day X labs, e13 X+1 day to X+7 weeks labs, e14 X+1 year labs, e15 uneventful postoperative course; linked f057/f065/f068/f128 and moved referral out of admission event",
+    "Relations: e04 before e05 via preoperative arthrocentesis (was unknown); added e02-e03, e03-e10, e10-e04, e11-e05, e05-e07 (Fig 4 caption), e07-e09, e05-e13, e12-e13, e13-e14, e05-e15; e12-e05 unknown",
+    "Added ambiguity: Day X undefined (Table 2 Day X equals admission values vs Figure 4 X at CLAP start)",
+    "Visual submission FIG1b/1c descriptions corrected (arrow at medial proximal humerus below humeral cup; no humeral head interpretation on MRI); sidecar visual hashes refreshed",
+    "cleanup-3 EVID-NEGATION: p1-f013 present sign 'Afebrile' (text_value 'afebrile') -> 'Fever', kind sign, assertion absent; time 'Upon admission' kept (same sentence), quote unchanged ('Upon admission, the patient was afebrile'). p1-f126 'The postoperative course was uneventful' kept as a source-stated present outcome.",
+    "GLUED-TEXT pass 4: rejected fix_label_digit_glue.py for this article; all its proposed edits (X+2weeks/X+6weeks, (2weeks)/(4weeks)/(6weeks) -> spaced) would alter tick and bar labels that FIG4 prints glued exactly so (re-viewed); visual submission left unchanged.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=1, roster_complete=true, evidence b00001 \"We report a case of delayed PJI after RSA\"; 1 patients annotated in first-mention order."
+  ],
+  "unresolved": [
+    "Single case report; discussion statements about the literature and CLAP in general are not patient facts.",
+    "Abstract and body text conflict on infection onset timing and on which components show osteolysis; both versions are retained, the abstract-only version as review_only.",
+    "Table 2 WBC unit and per-drug antibiotic durations (Figure 4) are inconsistent with or absent from the text; not reconciled.",
+    "Day X in Table 2 and Figure 4 is not defined in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 46,
+    "facts_reviewed": 134,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Single index patient; abstract-body conflicts on onset timing and osteolysis extent kept review_only",
+      "Table 2 WBC unit x10^2/uL inconsistent with values; all WBC Table 2 points review_only",
+      "Figure 4 shows antibiotics concurrent with CLAP from X with per-drug durations, conflicting with text followed by six weeks; CLAP-antibiotic relation unknown",
+      "Two prior-hospital procedures kept separate with ambiguity",
+      "cleanup-3: afebrile re-polarised to absent fever; uneventful outcome kept."
+    ],
+    "residual_risks": [
+      "Day X anchor undefined so Table 2 offsets are relative only",
+      "Debridement with insert exchange and modular component exchange may be one operation",
+      "Table 2 caption claims normal range despite CRP 1.3 at X+1 day"
+    ]
+  },
+  "physician_adjudicated": false
+}
