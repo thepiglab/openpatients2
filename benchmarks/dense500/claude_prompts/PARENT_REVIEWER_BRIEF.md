@@ -14,6 +14,8 @@ reasoning than the annotators — use it. Validator success is never review; you
 
 Never run any `--role` command to probe, test or dry-run a script. It overwrites the existing receipt, which may be another reviewer's valid signature. Run the script WITHOUT `--role` to validate. Sign only after you inspected the content yourself, with your real reviewer identity (e.g. "Claude Sonnet 5.5 annotator", "Claude Opus 5.5 parent") and notes that describe what you checked. `openpatients2.dense.signing_guard` refuses placeholder reviewers/notes ("x", "test", under 20 characters, "dry run"), and exports reject receipts that carry them.
 
+**Patient identity binds the figure receipts.** Visual, figure-EHR and privacy receipts bind the patient identity (roster, patient numbering, identity-evidence quotes). If you renumber patients, change the roster, or edit any identity-evidence quote, those receipts go stale even though the per-tool validators don't say so: re-sign your parent visual/figure-EHR/privacy receipts too, and tell Sonnet to re-sign its agent ones.
+
 **DOCX/DOC/RTF/ODT supplements (also inside a ZIP):** draft with `op2 dense supplement_assets extract-text R --article <ID> --supplement <SID>`, review every extracted unit in `blocks`, quote clinical transcriptions literally from units (unit number in `page`), validate with `op2 dense supplement_review R --article <ID> --supplement <SID>` (no `--role`), then sign. Details: `SUPPLEMENT_DOCUMENT_REVIEW.md`, section 'Word-processor supplements'.
 
 ## Event kinds live in the annotation

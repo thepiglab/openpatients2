@@ -55,6 +55,9 @@ Per-article diff (each change with old -> new, by migration) and open items: a d
 2. Run `op2 dense reference_gates R --article <ID>` (must pass), then re-sign
    `op2 dense schema_review R --folder annotations --article <ID> --role agent --reviewer "Claude Sonnet 5.5 annotator"
    --notes "<what you checked>"` and any agent sidecar receipts listed as stale (e.g. `op2 dense figure_ehr_review ... --role agent`).
+   If the parent renumbered patients, changed the roster or edited an identity-evidence quote, your visual / figure-EHR /
+   privacy agent receipts are stale too (they bind patient identity; the per-tool validators don't report it): re-view
+   the figures and re-sign them.
 3. Never edit annotations or run `--role parent`. The orchestrator runs `op2 dense export` and reports N/500.
 
 ## Shared rules checklist
