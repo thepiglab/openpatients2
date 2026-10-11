@@ -1,11 +1,11 @@
 {
   "article_id": "PMC12588875.1",
-  "reviewer": "parent assistant",
+  "reviewer": "Claude Opus 5.5 parent",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "7adc7e7c17acde92a11498ec4bcb0749d0f946dde0f121696d7fe3a5c0a0fc78",
-  "annotation_sha256": "d2b13ed88e188f68e8c94301f9ccc259cecfd3627d181aef3ca95c639a464029",
-  "reviewed_at": "2026-10-10T01:51:02.263067+00:00",
+  "annotation_sha256": "fc88211f556870164f0182ce5512a1130594c4f40310badddab14dba729e98f1",
+  "reviewed_at": "2026-10-11T23:49:38.419443+00:00",
   "source_segments_read": 33,
   "facts_reviewed": 119,
   "patients_reviewed": 1,
@@ -20,19 +20,7 @@
     "all captions and panel attribution"
   ],
   "corrections": [
-    "Removed p1-f098 (review-only 'SIT absent/refuted' row from b00021). In context (b00016 defines the Kartagener triad as chronic sinusitis, bronchiectasis, ciliary dysfunction; SIT is the confirmed final diagnosis), 'none of which were present' means the triad was not fulfilled; it is loose wording, not a clinical conflict about SIT. Ambiguity, article limitation, source-coverage and f096 notes rewritten; summary no longer mentions an SIT-denial conflict.",
-    "Removed p1-f093 ('Kartagener possible/differential' from 'unlikely'); its b00016 quote moved to p1-f094 (Kartagener excluded/refuted) as the intermediate judgement.",
-    "p1-f050 chest radiograph: indication 'after stabilization' (a timing, not an indication) -> 'asthma exacerbation' with b00019 evidence.",
-    "Added p1-f121 otorrhea absent (b00016), linked to e11.",
-    "Added relation p1-e05 (acute management) before p1-e07 (radiograph 'After stabilization'); e04->e05 'before' now additionally grounded by the admission SpO2 90% 'on room air' preceding supplemental oxygen.",
-    "p1-f043 other systemic examinations unremarkable: observation kind physiologic -> other.",
-    "semantic-rules-2026-10 re-sign: verified M02 comparators (=, no printed </>), M03 age text '45‐year‐old', M04 (denied history -> unknown; malrotation/structural heart disease -> refuted), M12 anchors nulled (paraphrase; times keep literal '24/02/2024').",
-    "ASSERT-ABSENT resolutions: p1-f045 (renamed 'Pneumonia'), p1-f114, p1-f116 -> refuted (excluded by exam/CT); p1-f085, p1-f086, p1-f088 -> unknown (clinical absence/denied history).",
-    "opus-fixup: p1-f045 Pneumonia verification_status refuted -> unknown: source only says the exacerbation was 'without signs of pneumonia' (clinical absence, no workup exclusion); consistent with p1-f085/f086.",
-    "NO-BORROWING review (cleanup pass 2): the 24/02/2024 date on the CT, echocardiogram and ECG facts is kept because the source sentence 'These studies were performed on the patient's second day of admission ... [24/02/2024]' explicitly scopes the CT/TTE/ECG studies described just before it. For the b00014 facts (p1-f061 no bronchiectasis, p1-f062/f064 echocardiogram, p1-f065-f069 and p1-f111 ECG) the fragment plus separate time quote was replaced by one contiguous governing span ending with the dated sentence. CT facts p1-f055-f060/f112 keep their b00013 quote plus the b00014 dated sentence (different paragraph; the remaining NO-BORROWING warning there is a referential false positive). No glued text in exported fields.",
-    "cleanup3 NO-BORROWING: 24/02/2024 is stated only in the trailing sentence 'These studies were performed on the patient's second day of admission ... [24/02/2024]' (b00014), which does not lead/scope the findings; fact-level time nulled (relation unknown) for p1-f055..f062, f064..f069, f111, f112 (16 CT/echo/ECG procedure and result facts). Time remains on event p1-e09 (time_text 'second day of admission'), which all 16 facts are members of.",
-    "cleanup3 evidence trimmed to each fact's own sentence: p1-f055..f060/f112 dropped the time-only extra quote (p1-f055 now also quotes 'The scan showed no bronchiectasis ...' supporting its finding field); p1-f061 -> CT bronchiectasis sentence only; p1-f062/f064 -> echocardiogram sentence only; p1-f065..f069/f111 -> ECG sentence only. clinical_statement of p1-f055/f062/f065 no longer asserts 'admission day 2'; notes explain the event-level date.",
-    "cleanup3 revert per orchestrator ruling: the trailing sentence 'These studies were performed on ... [24/02/2024].' refers back to the CT/echo/ECG and governs them; time 24/02/2024 (at) restored on p1-f055..f062, f064..f069, f111, f112 with original statements/notes. Evidence = own sentence + referring-back sentence: ECG facts one contiguous span; CT facts two quotes (b00013 + b00014); p1-f055 also keeps 'The scan showed no bronchiectasis ...'; p1-f061 (scan sentence) and p1-f062/f064 (echo sentence) now two quotes instead of a span through other facts' sentences."
+    "TIME-LITERAL: p1-f049 time 'within 48 h' relation after/anchor 'acute management' -> relation before/anchor null. The source gives 'within 48 h' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged."
   ],
   "unresolved": [
     "Figure pixels are described in the visual submission only; the annotation figure record keeps caption-only status.",
@@ -47,25 +35,14 @@
   "assessment": {
     "reviewer": "Claude Opus 5.5 parent",
     "source_units_read": 33,
-    "facts_reviewed": 119,
-    "figures_viewed": 1,
+    "facts_reviewed": 1,
+    "figures_viewed": 0,
     "key_findings": [
-      "Single index patient (45M Ethiopian); Table S1/b00023 African cases are external literature, not roster members.",
-      "Isolated SIT confirmed by radiograph/CT/echo/ECG and final-diagnosis sentence; Kartagener/PCD excluded clinically only - nNO 'if performed' and gene testing 'unwarranted' stay review-only not_performed, no negative results inferred.",
-      "Admission day 2 = symptom day 6 = 24/02/2024 for CT/TTE/ECG and the post-stabilization radiograph; burned-in CT stamps read 2/24/2025 (verified in pixels); year left unreconciled, date_iso null.",
-      "Ultrasound appears only in the Conclusion (b00025) and generic b00022 imaging sentence; kept review-only.",
-      "Figure 1 actual JPEG: A = axial + coronal chest, B = axial upper abdomen + coronal; marker positions match caption sides relative to printed R/L; coronal-A blue arrowhead and B aorta unmarked/undefined; radiantviewer trial banner and *** masked fields present.",
-      "2026-10 re-sign (Claude Opus 5.5 parent): migration changes verified against source; 6 ASSERT-ABSENT items resolved.",
-      "opus-fixup: p1-f045 absent pneumonia now verification unknown.",
-      "Cleanup pass 2: scoped '[24/02/2024]' study date kept for CT/TTE/ECG; ECG/echo quotes now one contiguous governing span."
+      "Targeted TIME-LITERAL correction of 1 'within <duration>' facts (p1-f049): each source sentence was read; none ties the duration to an event in the same phrase, so relation set to before with anchor null. No other fields or facts changed."
     ],
     "residual_risks": [
-      "Study year conflict (text 2024 vs image stamp 2025).",
-      "Supplement ccr371425-supitem-0001 (.doc Table S1) not reviewed; supplement gate remains open by instruction.",
-      "Exact start of acute management relative to admission is inferred from room-air SpO2 and 'after stabilization' wording.",
-      "Excellent-prognosis statement may be generic to isolated SIT (kept review-only)."
-    ],
-    "cleanup3": "final sweep (sidecar respacing, span/time-only quotes, negation) 2026-10-09"
+      "Targeted pass only; the rest of the article was not re-reviewed in this pass."
+    ]
   },
   "physician_adjudicated": false
 }

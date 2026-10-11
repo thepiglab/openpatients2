@@ -1,11 +1,11 @@
 {
   "article_id": "PMC12312621.1",
-  "reviewer": "parent assistant",
+  "reviewer": "Claude Opus 5.5 parent",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "ec2cd0ab830308145ca6f3122de099f0faefbff2a582db6e934daafdd9b84d9f",
-  "annotation_sha256": "ed7147ac1c2cde0a19eed75c5dfe58c0b57d88f5ec7ad46f36aee0ba6edb4ff2",
-  "reviewed_at": "2026-10-09T22:27:30.867701+00:00",
+  "annotation_sha256": "e9debb131973510cebb89e5222123b04d7dd10db420ab88eec1b29881c6a48c7",
+  "reviewed_at": "2026-10-11T23:49:38.077021+00:00",
   "source_segments_read": 37,
   "facts_reviewed": 152,
   "patients_reviewed": 3,
@@ -20,13 +20,7 @@
     "all captions and panel attribution"
   ],
   "corrections": [
-    "Case context for p1-p3 set to case_kind multi_patient, multiple_index_patients true, subject_state living_at_presentation, with b00005 three-patient evidence (article reports three index cases).",
-    "p3-f029 oral SPS 'commenced' (shared all-patients paragraph b00009) demoted to source_conflict/review_only: the Case 3 narrative gives IGI alone in the emergency room and SPS only as a discharge recommendation (p3-f049); p3 summary no longer lists SPS as given.",
-    "p3-f032/f033 spironolactone and candesartan discontinuation moved out of the emergency-room event p3-e003 into new untimed event p3-e008 (narrative places the sentence after home follow-up; timing vs discharge unstated); only p3-e002 before p3-e008 asserted.",
-    "p1-f013/f014 ACEi and spironolactone start now carry the stated relative time '5 days following' before emergency room admission, with the full sentence as evidence.",
-    "semantic-rules-2026-10 re-sign: verified 27 M02 comparators '=' (no printed </> ; p2-f036 '~5.18' keeps approximate wording in text_value), M03 age texts '72-year-old'/'58-year-old'/'94-year-old' each literal for its own case, M12 anchor nulling (paraphrases).",
-    "M12 follow-up: p1-f013/p1-f014 ('5 days following', relation before) anchor restored with literal source phrase 'admitted to the emergency room' instead of a bare offset.",
-    "MED-ROUTE: p1-f026/p2-f030 route set to literal 'delivered by a nebulizer'; p3-f028 route 'inhaled' removed (not written in its evidence; the nebulizer wording belongs to the case-1/2 sentence)."
+    "TIME-LITERAL: p1-f034 time 'within 6 h' relation after/anchor 'addition of SZC' -> relation before/anchor null. The source gives 'within 6 h' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged."
   ],
   "unresolved": [
     "Floating Table I was missing in initial normalization, inspected in raw XML, then added by parent source repair; this draft uses repaired source hashes and exact appended segments.",
@@ -39,19 +33,13 @@
   "assessment": {
     "reviewer": "Claude Opus 5.5 parent",
     "source_units_read": 37,
-    "facts_reviewed": 152,
+    "facts_reviewed": 1,
     "figures_viewed": 0,
     "key_findings": [
-      "Three index patients (72M liver transplant/HFrEF; 58F obese diabetic HFpEF; 94F HFpEF/IHD/LBBB) mapped consistently to Table I columns; all narrative, shared-paragraph, discussion and 14 Table I rows/footnote read.",
-      "Verified annotator flags: AKI narrated only for case 1 (p2/p3 AKI rows review_only); Table I K mEq/dl vs narrative mEq/l kept review_only without conversion; IGI 36 h vs 32nd-hour termination review_only; SZC 6.3->5.5 not equated with normokalemia; IV furosemide case 3 only; unattributed K 5.5 discharge sentence not assigned; footnote conflicts (rosuvastatin/no k, unused h, I/i, ASGH/GH, unlabeled 140/85, 1,33) preserved; case 2 1-week 4.5 vs June 8 4.5 separate; case 3 creatinine 1.33 vs 1.44 unreconciled; ACEi+aldactone wording vs candesartan noted; BRASH remark not a negative.",
-      "Shared all-patients statements (calcium gluconate, IGI, salbutamol, frequent K monitoring, RAASi stop) accepted for each case where not contradicted; case 3 SPS contradicted and quarantined.",
-      "2026-10 re-sign (Claude Opus 5.5 parent): migration verified; 2 anchors restored with literal phrase; no needs-review items."
+      "Targeted TIME-LITERAL correction of 1 'within <duration>' facts (p1-f034): each source sentence was read; none ties the duration to an event in the same phrase, so relation set to before with anchor null. No other fields or facts changed."
     ],
     "residual_risks": [
-      "Table I potassium unit typo (mEq/dl) leaves all table K values review_only; only narrative K values are scorable.",
-      "Shared-paragraph treatments (calcium gluconate, salbutamol) for cases 2/3 rely on an all-patients statement, not case narratives.",
-      "Date-of-presentation table cells kept as text observations; whether they mark detection or hospital presentation is not stated.",
-      "No discharge documented for cases 1 and 2."
+      "Targeted pass only; the rest of the article was not re-reviewed in this pass."
     ]
   },
   "physician_adjudicated": false

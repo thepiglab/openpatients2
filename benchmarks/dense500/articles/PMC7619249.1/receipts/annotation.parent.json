@@ -1,11 +1,11 @@
 {
   "article_id": "PMC7619249.1",
-  "reviewer": "parent assistant",
+  "reviewer": "Claude Opus 5.5 parent",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "726b48f79e0d89f05c1ddde3b84d4192c7a1cf9aab75fefa94dced002c46fb0f",
-  "annotation_sha256": "646ec177a95cd5e8548aeb091123449cc68fc51da46f895a9153cf56b3843420",
-  "reviewed_at": "2026-10-10T01:49:28.403113+00:00",
+  "annotation_sha256": "60bc8ca1a023ccc51166d194384b97bda5ee7a862a3a5654b2aa90ab6431e746",
+  "reviewed_at": "2026-10-11T23:49:38.785929+00:00",
   "source_segments_read": 36,
   "facts_reviewed": 266,
   "patients_reviewed": 6,
@@ -20,16 +20,7 @@
     "all captions and panel attribution"
   ],
   "corrections": [
-    "Kept source conflicts in Case5 calcineurin drug and recurrence timing, Case6 native renal diagnosis, table-wide histology and pooled debridement counts unresolved.",
-    "Linked Case2 FESS/debridement and Case6 excision/debridement within possibly shared surgical episodes without inventing second procedures.",
-    "Removed bilateral biopsy-site inference from Case5; both-leg rash does not establish which leg was sampled.",
-    "Kept later Case4 ankle antifungal indication suspected, MPA ingredient literal and dose-reduction quantities unspecified.",
-    "semantic-rules-2026-10: verified M13 occurrence 'uncertain'->'unknown' on p3-e12/p4-e15/p5-e13/p6-e13 (unresolved table/body alternatives) and M12 nulling of paraphrased anchor on p2-f025/p2-f026.",
-    "TIME-LITERAL: restored literal same-sentence anchor 'presented one year after transplantation' on p2-f025/p2-f026 ('1-month history', relation before).",
-    "Cleanup2 GLUED-TEXT: hand-rewrote article_limitations 1 and 3–12 as spaced prose with unchanged meaning (e.g. 'among18bibliographic', 'Case5 infection5months versus0.58years table', 'tableleftelbowjoint' -> \"table 'left elbow joint'\", 'noothercomplications', 'spans6patients ... unresolvedindividualownership', 'threepatientsdebridement versus4tablecells', 'individualMPAdose', 'Uncontrolledhyperglycemia', 'Studyperiod2010–2022 ... narrated2024graftfailure'); figure F1 attribution_notes ('Panelsd–f explicitlyCase5 fromb9 ... identifya–c ... afterCase6') spaced; 'CaseN' -> 'Case N', 'Table1' -> 'Table 1', 'creatinine1.8' etc. in summaries, names (p5-f036..f038), indications, text values and notes (34 values); internal provenance passes. The repair tool's segmentation (e.g. 'three patients debridement') was not applied. Quotes, ids, patient labels untouched.",
-    "Cleanup2: p5-f028 (Pruritus, absent) EVID-NEGATION warning is a checker false positive; 'nonpruritic' in the quote is the negation. No time-only quote rows for this article.",
-    "cleanup3 sidecar GLUED-TEXT: visual-submissions F1 prose respaced (Panelsa/b/d/e -> Panels a/b/d/e, individuala–c -> individual a–c, Panelsa–c -> Panels a–c, Case5/Case6 -> Case 5/Case 6); figure-ehr-labels and figure-privacy-flags visual_target_sha256 updated; parent visual, figure-EHR and privacy receipts re-signed.",
-    "cleanup3 EVID-NEGATION review: p5-f028 pruritus absent is correct ('nonpruritic maculopapular rash' - negating prefix inside the quote; the warning is a cue-list false positive); clinical_statement corrected from 'Pruritus' (read as present) to 'No pruritus (nonpruritic maculopapular rash over both legs)'."
+    "TIME-LITERAL: p5-f025 time 'within 4 months' relation after/anchor 'kidney transplantation' -> relation before/anchor null. The source gives 'within 4 months' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged."
   ],
   "unresolved": [
     "This text/caption annotation layer does not use pixels; pixel inspection is recorded separately in the visual target and its review receipts.",
@@ -48,16 +39,15 @@
   ],
   "assessment": {
     "reviewer": "Claude Opus 5.5 parent",
-    "campaign": "semantic-rules-2026-10 re-sign",
     "source_units_read": 36,
-    "facts_reviewed": 266,
+    "facts_reviewed": 1,
     "figures_viewed": 0,
     "key_findings": [
-      "Re-sign 2026-10: M12/M13 verified; 2 literal anchors restored.",
-      "Cleanup2: limitations and figure attribution notes rewritten as spaced prose; visual target changed (figure attribution notes)."
+      "Targeted TIME-LITERAL correction of 1 'within <duration>' facts (p5-f025): each source sentence was read; none ties the duration to an event in the same phrase, so relation set to before with anchor null. No other fields or facts changed."
     ],
-    "residual_risks": [],
-    "cleanup3": "final sweep (sidecar respacing, span/time-only quotes, negation) 2026-10-09"
+    "residual_risks": [
+      "Targeted pass only; the rest of the article was not re-reviewed in this pass."
+    ]
   },
   "physician_adjudicated": false
 }

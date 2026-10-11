@@ -1,11 +1,11 @@
 {
   "article_id": "PMC13294136.1",
-  "reviewer": "parent assistant",
+  "reviewer": "Claude Opus 5.5 parent",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "adf2d028054332f77d74e9f226ee29e77abd4d991088c77fbc6fb19f80bddb9b",
-  "annotation_sha256": "8f93956258bc28e576ac6024ff4a258386f8e5cdb00a253c3f5edf3788101aed",
-  "reviewed_at": "2026-10-10T01:21:08.787951+00:00",
+  "annotation_sha256": "faeea9abeabd4f10afecb90de2c754cc48fd0e726c7f2d6204d572db42710ede",
+  "reviewed_at": "2026-10-11T23:49:38.644729+00:00",
   "source_segments_read": 11,
   "facts_reviewed": 102,
   "patients_reviewed": 2,
@@ -20,23 +20,8 @@
     "all captions and panel attribution"
   ],
   "corrections": [
-    "case_context (p1,p2): case_kind clinical_case -> multi_patient, multiple_index_patients false -> true (two-patient case series, b00002).",
-    "p1 case_context care_setting reduced to stated \"inpatient\" (inpatient clinic/ED/ICU belonged to later episodes); p2 care_setting to literal \"inpatient unit\".",
-    "p1-f010 post-ICU episode: verification confirmed -> unknown, renamed \"Catatonic symptoms (recurrent episode after ICU stay)\", \"Two weeks later\" anchor ICU stay -> null; added literal \"catatonic symptoms resolved\" evidence.",
-    "p1-f023..f027, p1-f059: removed borrowed \"ICU stay\" anchor from \"Two weeks later\"; f059 readmission kept with explicit \"fourth day of hospitalization\" evidence.",
-    "p1-f058 pneumonia outcome event complication -> other (no stated complication relationship).",
-    "p1-f007 delirium kept as considered differential (assertion possible, not refuted); clinical_status unknown, note clarified.",
-    "p1-f044/f045 CT and MRI merged into one imaging observation (one joint result with labs; body region unstated; unbalanced parentheses noted); p1-f045 removed.",
-    "p1-f043 labs specimen \"blood/urine\" added (literal).",
-    "p1-f031 lamotrigine split: maintenance at admission vs new p1-f062 lamotrigine 300 mg/day at discharge (linked to discharge event p1-e11).",
-    "p1 timeline: e15->e16 (\"After three months\", no anchor) set to unknown; added supported edges e11<e16, e02<e04, e03<e05, e12<e15.",
-    "p2-f012 depressive symptoms moved from conditions (verification confirmed) to symptoms_function.",
-    "p2-f006 removed admission count from severity field; p2-f039 removed misused follow_up_duration_text; p2-f021 clozapine 100 mg/day prior regimen action current -> historical.",
-    "p2-f035/f037 \"within 72 hours\" anchor named initiation of oral diazepam with the pooled b00002 sentence as evidence; ambiguity kept on 5 mg dose vs titration.",
-    "Ambiguities/limitations updated (Two weeks later anchor, post-ICU diagnostic basis, clozapine monotherapy dose, pooled 48-72 h usage).",
-    "semantic-rules-2026-10 re-sign: verified M01 case_context (p1-f001, p2-f001 multi_patient/true -> clinical_case/false; each record describes its own patient) and 21 M12 anchor nullings (paraphrases such as 'index admission', 'oral diazepam addition', 'inpatient stay').",
-    "Restored literal anchors contained in the facts' own time text: p1-f018, p1-f032 anchor 'remission for catatonic symptoms' ('After remission for catatonic symptoms'); p1-f039 anchor 'transferred to our inpatient clinic'. Other bare offsets ('One year earlier', 'within 24/48/72 hours', 'In the following days', 'Over the subsequent years') keep anchor null: the source does not name their reference in the same statement.",
-    "p1-f051: time 'by 48 hours' relation after -> before (TIME-LITERAL 'by <time>' = no later than)"
+    "TIME-LITERAL: p2-f034 time 'Within one hour' relation after/anchor 'oral diazepam 5 mg' -> relation before/anchor null. The source gives 'Within one hour' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged.",
+    "TIME-LITERAL: p2-f036 time 'Within one hour' relation after/anchor 'oral diazepam 5 mg' -> relation before/anchor null. The source gives 'Within one hour' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged."
   ],
   "unresolved": [
     "Article has no figures or supplements; no visual work applicable.",
@@ -48,25 +33,15 @@
   ],
   "assessment": {
     "reviewer": "Claude Opus 5.5 parent",
-    "campaign": "semantic-rules-2026-10 re-sign",
     "source_units_read": 11,
-    "facts_reviewed": 102,
+    "facts_reviewed": 2,
     "figures_viewed": 0,
     "key_findings": [
-      "Re-sign 2026-10: M01 and M12 verified; 3 literal anchors restored.",
-      "Two index patients (61F, 62F, bipolar disorder, catatonia treated with oral diazepam); no figures or supplements.",
-      "DSM-5 \"both cases\" diagnosis attached to each index catatonia only; later p1 episodes have no stated diagnostic basis.",
-      "Tapers kept as action unknown with regimen text (no completion stated); ICU \"all psychiatric medications tapered and discontinued\" = stopped.",
-      "p2 most-recent hospitalization vs five admissions left unresolved; p2 72 h anchor rests on pooled statement.",
-      "TIME-LITERAL 2026-10 'by <time>' audit: 1 fact(s) set to relation before after reading each source sentence",
-      "Cleanup pass 2: TIME-ONLY QUOTE review p1-f010 (recurrent catatonic symptoms): 'Two weeks later, she presented to the emergency department with decreased motor activity and verbalization, reduced oral intake, stereotypic movement, and fixed gaze.' itself describes the recurrent catatonic presentation, so the time is the fact's own and kept; NO-BORROWING warning judged a checker false positive (symptom list vs condition name). No glued-text diff, no negation-word rows; annotation unchanged"
+      "Targeted TIME-LITERAL correction of 2 'within <duration>' facts (p2-f034, p2-f036): each source sentence was read; none ties the duration to an event in the same phrase, so relation set to before with anchor null. No other fields or facts changed."
     ],
     "residual_risks": [
-      "Anchor of p1 \"After three months\" and \"Two weeks later\" unknown.",
-      "Whether p1 \"recurrence of catatonic symptoms\" before 5 mg/day maintenance is the outpatient episode or a later one is unstated.",
-      "Joint lab/imaging negative result scope (unbalanced parentheses) and imaging region unstated."
-    ],
-    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
+      "Targeted pass only; the rest of the article was not re-reviewed in this pass."
+    ]
   },
   "physician_adjudicated": false
 }

@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "1aa562228dec8641fcb27a30d0d81544c64ba3c0f230a9446634a6f49b301cf7",
-  "annotation_sha256": "6c2dea1493d6102d23c88167b8c3b459554348166b403babc0c2303452061f08",
-  "reviewed_at": "2026-10-11T17:58:45.019039+00:00",
+  "annotation_sha256": "8e3b3f3aa382f73737237279bf50ba0d7c014a234ea40e25d25fcdeccff45b11",
+  "reviewed_at": "2026-10-11T23:49:38.598221+00:00",
   "source_segments_read": 46,
   "facts_reviewed": 76,
   "patients_reviewed": 1,
@@ -20,13 +20,10 @@
     "all captions and panel attribution"
   ],
   "corrections": [
-    "Trimmed qualifier text from condition/medication/procedure names (f018 HIAV, f024 sepsis, f027 disseminated herpes zoster, f043 pneumonia, f021 antibiotics, f039/f040 skin biopsy); qualifiers stay in assertion/verification_status and notes (NAME-LABEL).",
-    "Added p1-f076 pathology observation: concomitant vasculitis noted on biopsy, from the Table 2 current-case row (omitted in draft); linked to e17 and summary.",
-    "Decided \"two months later\": time kept on follow-up, absent active lesions and biopsy result since all share one sentence; added the same time to the biopsy procedure f039; anchor stays null (no named anchor event); ambiguity updated.",
-    "Source coverage b00003 and b00038 (index-patient statements) given patient_ids p1 instead of empty.",
-    "Added supported temporal relations: e05 before e10 (follow-up later than readmission), e05 before e11 (\"Months later ... readmitted\"), e11 before e13 (antibiotics/transfer during that admission), e03 before e14 (\"restarted\" hydralazine).",
-    "ROSTER-ORDER: added article-level roster block: reported_individual_count null (source says \"We present a patient\" but never states a number of patients), roster_complete true (the single index patient p1 is annotated; Table 2 literature cases stay outside the roster). Evidence b00003.",
-    "2026-10-11 re-review by Claude Opus 5.5 parent (the earlier parent signatures on this article were not trusted because their notes had been reworded to pass the signing guard): re-read all 46 source segments and re-checked every fact, event kind/time classification, relation, summary and ambiguity in annotation.json against the source. Changes: (1) ROSTER-ORDER: roster reported_individual_count null -> 1; the source's singular case statement \"We present a patient\" (b00003, quoted in the roster evidence) states one patient; roster_complete stays true (single index patient p1, Table 2 literature cases outside the roster). (2) p1-e15 \"Within 24 h\" time_precision exact -> range (an upper bound, not an exact interval). No other errors found; earlier corrections (name trimming, f076, two-months-later timing, relations e05-e10, e05-e11, e11-e13, e03-e14) re-checked and kept."
+    "TIME-LITERAL: p1-f052 time 'Within 24 h' relation after/anchor 'restarted on hydralazine' -> relation before/anchor null. The source gives 'Within 24 h' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged.",
+    "TIME-LITERAL: p1-f053 time 'Within 24 h' relation after/anchor 'restarted on hydralazine' -> relation before/anchor null. The source gives 'Within 24 h' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged.",
+    "TIME-LITERAL: p1-f054 time 'Within 24 h' relation after/anchor 'restarted on hydralazine' -> relation before/anchor null. The source gives 'Within 24 h' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged.",
+    "TIME-LITERAL: p1-f055 time 'Within 24 h' relation after/anchor 'restarted on hydralazine' -> relation before/anchor null. The source gives 'Within 24 h' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged."
   ],
   "unresolved": [
     "Table 2 literature cases and cohort statements are not copied to the index patient.",
@@ -37,18 +34,13 @@
   "assessment": {
     "reviewer": "Claude Opus 5.5 parent",
     "source_units_read": 46,
-    "facts_reviewed": 76,
+    "facts_reviewed": 4,
     "figures_viewed": 0,
     "key_findings": [
-      "Single index patient (67-year-old man); Table 2 literature rows, Table 1 criteria and cohort statements (b00019, b00037) are not copied to p1.",
-      "Roster count set to 1 from the literal singular case statement \"We present a patient\" (b00003).",
-      "Event kinds and time classifications re-checked; \"Within 24 h\" reclassified as a range.",
-      "Table 2 acyclovir vs narrative valacyclovir kept as a review_only ambiguity; piperacillin-tazobactam route left null.",
-      "Hemoglobin 30 g/L left unflagged (source gives a reference interval but no classification)."
+      "Targeted TIME-LITERAL correction of 4 'within <duration>' facts (p1-f052, p1-f053, p1-f054, p1-f055): each source sentence was read; none ties the duration to an event in the same phrase, so relation set to before with anchor null. No other fields or facts changed."
     ],
     "residual_risks": [
-      "Figure pixels were not re-viewed in this re-review; figure annotation entries are caption-level and the visual/figure-EHR/privacy receipts were not re-signed.",
-      "Provisional status of pneumonia and active GI bleed rests on the word \"suspected\"."
+      "Targeted pass only; the rest of the article was not re-reviewed in this pass."
     ]
   },
   "physician_adjudicated": false

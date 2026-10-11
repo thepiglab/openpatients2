@@ -1,11 +1,11 @@
 {
   "article_id": "PMC12811543.1",
-  "reviewer": "parent assistant",
+  "reviewer": "Claude Opus 5.5 parent",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "17caab3ebb5826cd402abb1e39ed9fd2051bd90fac5a98f95d3569275fb24c91",
-  "annotation_sha256": "0c59b561c1e176116996a926600fe7e890972395f1ed216cf4077f3ebfdd89a5",
-  "reviewed_at": "2026-10-10T02:14:16.141913+00:00",
+  "annotation_sha256": "aa2c244d041da2e61cc382ebf166ccd2f716bf3bfe4238f60905674af3e5fbf1",
+  "reviewed_at": "2026-10-11T23:49:38.570079+00:00",
   "source_segments_read": 36,
   "facts_reviewed": 133,
   "patients_reviewed": 1,
@@ -20,34 +20,23 @@
     "all captions and panel attribution"
   ],
   "corrections": [
-    "Quarantined conflicting implantation/recurrence dates, first-DRT intervals, anticoagulation targets and AF subtypes; retained supported AF diagnosis and relative sequence.",
-    "Added baseline and serial performed tests, implanted device distinct from implantation procedure, numeric leak thresholds, genetic results and adherence status.",
-    "Separated CT recurrence, immediate LMWH switch and subsequent TEE confirmation.",
-    "Kept possible occult bleeding/prerenal azotemia and unexcluded less-likely WRN distinct; no post-LMWH resolution invented.",
-    "Reviewed final 133 representations including 13 review-only alternatives and all actual image descriptions.",
-    "semantic-rules-2026-10 re-sign: verified M02 comparators '=' (no printed inequalities), M03 age text '72-year-old', M04 'no history of ...' conditions -> unknown, M06 'lifelong nonsmoker' status=never assertion=present (true never-use), M12 paraphrase anchors nulled (times keep literal text), M13 p1-e016 apixaban 'may be considered' uncertain->unknown.",
-    "M12 follow-up: p1-f087 recovery 'within 1 month' anchor restored with literal source phrase 'November 2023' (the abnormalities it resolves were reported 'In November 2023').",
-    "cleanup-2 GLUED-TEXT: applied repair_glued_text.py (18 high-confidence tokens, mostly internal notes plus the exported date-conflict ambiguity issue) and manually spaced the remaining glue: ambiguity issue rewritten as spaced prose with identical content ('Implant date Feb 16, 2023 timeline versus April 2023 narrative; ... recurrent DRT Dec 2024 timeline/narrative versus Dec 2023/8 months caption ...; Warfarin target 2–3 timeline versus 2.5–3 narrative; AF paroxysmal case versus persistent risk discussion'), LAA finding 'maximum orifice 27 mm', BP component statements 'source 138/82 mmHg', 'Implanted device size 30 mm', 'November 6, 2023' in statement/summary, figure 5 panel 'conflicting Dec 2023 caption', and two internal notes. Quotes/ids/enums untouched; no meaning change. No time-only quote rows for this article.",
-    "cleanup3 sidecar GLUED-TEXT: visual-submissions prose respaced (Printed27.3mm versus caption27mm -> Printed 27.3 mm versus caption 27 mm; RAO 31 CAU 44 / RAO 33 CRA 16 and 3D Beats 1 as printed; reads 2023-02-13; less than 5 mm; Caption reports 50 days and body 8 weeks; include 50 and 140 with a nearby −16 label; conflicting Dec 2023 caption; Caption reports December 2023/eight months, body/timeline December 2024 and abstract 22 months; orientation values 135/180). figure-ehr-labels and figure-privacy-flags visual_target_sha256 updated; parent visual, figure-EHR and privacy receipts re-signed. Annotation unchanged.",
-    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (2 whitelisted label/number or number/unit spacing edits outside quotes in annotations (2); 'PDL<5mm'->'PDL<5 mm', 'flow<5mm'->'flow<5 mm'); every edit read against the source.",
-    "ROSTER-ORDER: added article-level roster block reported_individual_count=1, roster_complete=true, evidence b00005 \"We present a rare case of recurrent large thrombus formation following LAAC using the Watchman FLX device.\"; 1 patient annotated in first-mention order."
+    "TIME-LITERAL: p1-f087 time 'within 1 month' relation after/anchor 'November 2023' -> relation before/anchor null. The source gives 'within 1 month' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged."
   ],
   "unresolved": [
     "No explicit same-patient prior/follow-up publication linkage identified; cited cases/cohorts remain background. No outcome after LMWH switch documented.",
     "This text/caption annotation layer does not use pixels; pixel inspection is recorded separately in the visual target and its review receipts."
   ],
   "assessment": {
-    "clinical_course": "Personally read all 36 source units and raw source metadata, all final clinical fields in 14 schemas, 22 events/19 edges and summary. Prior warfarin bleeding/reluctance led to LAAC; early DRT treated with warfarin resolved, later recurred amid adherence/monitoring issues. Explicit November 6, 2023 resolution date retained while conflicting date/target alternatives remain quarantined.",
-    "media": "Personally inspected all five original JPEG assets, all 13 scopes and 18 distinct citations. CT measurements, rendered thrombus appearances and TEE claims compared to caption/body; numerical overlays remain pixel evidence and ambiguous source intervals are not resolved by guessing.",
-    "limitations": "Source-grounded AI review, not physician adjudication or measured exhaustive recall; no outcome after LMWH supplied.",
     "reviewer": "Claude Opus 5.5 parent",
-    "facts_reviewed": 133,
+    "source_units_read": 36,
+    "facts_reviewed": 1,
+    "figures_viewed": 0,
     "key_findings": [
-      "2026-10 re-sign (Claude Opus 5.5 parent): migration verified; one anchor restored with literal phrase.",
-      "Cleanup-2: glued free text repaired; no borrowed-time facts flagged."
+      "Targeted TIME-LITERAL correction of 1 'within <duration>' facts (p1-f087): each source sentence was read; none ties the duration to an event in the same phrase, so relation set to before with anchor null. No other fields or facts changed."
     ],
-    "residual_risks": [],
-    "cleanup3": "final sweep (sidecar respacing, span/time-only quotes, negation) 2026-10-09"
+    "residual_risks": [
+      "Targeted pass only; the rest of the article was not re-reviewed in this pass."
+    ]
   },
   "physician_adjudicated": false
 }

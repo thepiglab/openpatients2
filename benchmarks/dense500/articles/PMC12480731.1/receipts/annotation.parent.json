@@ -1,11 +1,11 @@
 {
   "article_id": "PMC12480731.1",
-  "reviewer": "parent assistant",
+  "reviewer": "Claude Opus 5.5 parent",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "981383b57bcf606e40b353787eea8f49795b95d9338e5fa5b4a80735b7b286b7",
-  "annotation_sha256": "da613e2c39d08d989281f0fc08659e52d00ca4c515630675c81abe949b64e4aa",
-  "reviewed_at": "2026-10-10T02:14:20.638742+00:00",
+  "annotation_sha256": "e68e648c335935c830cd7c517b125610b3330db1055e8941abb4b3463d11006c",
+  "reviewed_at": "2026-10-11T23:49:38.119418+00:00",
   "source_segments_read": 34,
   "facts_reviewed": 113,
   "patients_reviewed": 3,
@@ -20,16 +20,9 @@
     "all captions and panel attribution"
   ],
   "corrections": [
-    "Added article-level roster block: reported_individual_count 3, roster_complete true, evidence b00001 \"we report three cases of chronic photodermatitis treated with upadacitinib\".",
-    "Removed p2-f031 (possible ciclosporin adverse effect with neurological symptoms): causation is not stated, only temporal sequence and \"Consequently ... stopped\" (NO-INFERENCE); kept as ambiguity with rewritten issue/must_not_infer.",
-    "p2-f029 neurological symptoms time relation changed from after/anchor \"ciclosporin\" to during/anchor \"tapering ciclosporin\".",
-    "Removed duplicate photosensitivity-reaction signs p2-f021, p3-f028, p3-f029; the reactions remain in the photosensitivity test observations p2-f020 and p3-f027 (one representation per fact); p2-f022 itch score kept.",
-    "Linked p2-f039 (possible hydroxychloroquine adverse effect) as alternate_representation_of p2-f037 (drug reaction condition) and p1-f035 (possible upadacitinib side effect) as alternate_representation_of p1-f034 (weight gain).",
-    "Moved non-severity qualifiers out of severity: p1-f011 \"chronic\" and p3-f006 \"superficially scaling\" now text_value.",
-    "Added lesion-description evidence quote (soft hyphen preserved) to p3-f001 case_context chief complaint.",
-    "p1 ambiguity on \"no history of any medical illness\" extended to name Kartagener syndrome as well as asthma and atopic dermatitis; links the condition facts.",
-    "p2 summary no longer says ciclosporin caused the neurological symptoms; it states the symptoms developed during tapering and the drug was then stopped.",
-    "Added caption-documented follow-up events p1-e13 (week 24 photograph) and p2-e16 (week 20 photographs) with before-relations from the upadacitinib start events."
+    "TIME-LITERAL: p2-f020 time 'within 24 h' relation after/anchor 'photosensitivity test' -> relation before/anchor null. The source gives 'within 24 h' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged.",
+    "TIME-LITERAL: p2-f022 time 'within 24 h' relation after/anchor 'photosensitivity test' -> relation before/anchor null. The source gives 'within 24 h' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged.",
+    "TIME-LITERAL: p3-f027 time 'within 24 h' relation after/anchor 'photosensitivity test' -> relation before/anchor null. The source gives 'within 24 h' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged."
   ],
   "unresolved": [
     "Figure pixels were inspected separately in the visual submission; the annotation figures[] keep caption-layer status.",
@@ -42,19 +35,13 @@
   "assessment": {
     "reviewer": "Claude Opus 5.5 parent",
     "source_units_read": 34,
-    "facts_reviewed": 117,
-    "figures_viewed": 3,
+    "facts_reviewed": 3,
+    "figures_viewed": 0,
     "key_findings": [
-      "Three Qatari men (35, 56, 33 years) numbered in order of first mention; Table 1 rows Patient 1-3 match the case order.",
-      "All 18 Table 1 cells verified against facts and the measurement-series sidecar; narrative NRS ranges (9-10/10) differ from single table values without being conflicts.",
-      "Discussion \"monotherapy in all three patients\" is a series statement contradicted for patient 2 (upadacitinib with topical tacrolimus); kept as ambiguity, no monotherapy fact.",
-      "Patient 1 \"no history of any medical illness\" contradicts documented Kartagener syndrome, asthma and atopic dermatitis; kept as ambiguity, no absent-history item.",
-      "Figure 2 panel b shows the dorsum of both hands although the caption groups a and b under nose and cheek; caption-layer body_part left null.",
-      "Qatari nationality not recorded as race or ethnicity."
+      "Targeted TIME-LITERAL correction of 3 'within <duration>' facts (p2-f020, p2-f022, p3-f027): each source sentence was read; none ties the duration to an event in the same phrase, so relation set to before with anchor null. No other fields or facts changed."
     ],
     "residual_risks": [
-      "Week 2 and Week 10 table timepoints are relative to therapy initiation only by column structure; anchors left null.",
-      "Patient 1 weight gain attribution to upadacitinib rests on \"the medication\" in context; recorded as possible only."
+      "Targeted pass only; the rest of the article was not re-reviewed in this pass."
     ]
   },
   "physician_adjudicated": false

@@ -1,11 +1,11 @@
 {
   "article_id": "PMC12747464.1",
-  "reviewer": "parent assistant",
+  "reviewer": "Claude Opus 5.5 parent",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "b0c3a5e3619fbddb6ade8a1e026ef4f26f1d3c9cc27663633520d42450c7f486",
-  "annotation_sha256": "5cb272aa3059c2d731ee8c2f4936dbf2103b964b0097f865d4e2895e02b8af51",
-  "reviewed_at": "2026-10-10T01:19:17.009156+00:00",
+  "annotation_sha256": "4e97558ecbac959e43a46e4e28c4f309253e8eb65b9a46513c056a02f12bdc16",
+  "reviewed_at": "2026-10-11T23:49:38.517553+00:00",
   "source_segments_read": 30,
   "facts_reviewed": 75,
   "patients_reviewed": 1,
@@ -20,14 +20,12 @@
     "all captions and panel attribution"
   ],
   "corrections": [
-    "Added evidence-backed pre-pump history/function/lifestyle links without ordering the dosing error against the two-week or three-month follow-ups.",
-    "Preserved conflicting early CGM percentages and ACR elevation as four review-only candidates.",
-    "Corrected AGP figure classification: no diagnostic imaging modality; all visible Figure1 percentile labels including5% retained.",
-    "semantic-rules-2026-10 re-sign: M12 nulled p1-f065/p1-f066 anchor 'glycemic stabilization' (paraphrase); parent restored the literal anchor 'stabilization' from the item's own quote ('transitioned back to insulin pens until stabilization').",
-    "Verified M03 age text_values: p1-f002 '72-year-old' and p1-f005 'age of 14 years' (age_at_diagnosis) are the literal phrases for those ages in each item's own quote.",
-    "MED-ROUTE (gate warning): p1-f048 route 'subcutaneous infusion' -> 'subcutaneous', the route word as written in its own quote ('continuous subcutaneous insulin infusion').",
-    "GLUED-TEXT (cleanup pass 2): repair tool NOT applied (it mis-segmented 'to2week/3month' and missed most glued tokens); fixed by hand in exported and internal free text (wording only): 'At3months TAR15/TIR83/TBR2% and CV30.2%' -> 'At 3 months TAR 15/TIR 83/TBR 2% and CV 30.2%' (p1-f058), 'Within2weeks' -> 'Within 2 weeks' (p1-e013), 'at age14'/'in2022' (p1-e001/e002), 'Age72', 'diagnosis14', 'decreased to7.7%' (p1-f053), 'FreeStyle Libre2' -> 'FreeStyle Libre 2' (p1-f072..f074 name/statement, source spelling), notes on p1-f027/f028 ('ACR 1.48 mg/mmol', 'limit 2.5', 'ref <2.5'), 'Figure 2' notes, ambiguities/article_limitations ('Table 1 ACR 1.48 mg/mmol', 'Stage 3a', 'TAR 16/TIR 82/TBR 2%', 'very-high 7/high 22/target 70/low 1/very-low 0%', 'Sept 6–19, Sept 23–Oct 6, Dec 12–25', 'relative to 2-week/3-month results'), source_coverage notes and provenance passes.",
-    "TIME-ONLY QUOTES reviewed, all kept: p1-f033..f038 'Before pump initiation' is the case-presentation subheading (segment b00007) that structurally governs b00008-b00018 including the medication sentence; p1-f044..f046 'during the two weeks preceding initiation' comes from the Figure 1 caption that the TAR/TIR/TBR sentence explicitly cites, and the caption quote also supports the specimen (interstitial glucose); p1-f004 'at the age of 14 years' is in the T1DM sentence itself (checker false positive on the T1DM abbreviation)."
+    "TIME-LITERAL: p1-f049 time 'Within two weeks' relation after/anchor 'pump initiation' -> relation before/anchor null. The source gives 'Within two weeks' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged.",
+    "TIME-LITERAL: p1-f050 time 'Within two weeks' relation after/anchor 'pump initiation' -> relation before/anchor null. The source gives 'Within two weeks' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged.",
+    "TIME-LITERAL: p1-f051 time 'Within two weeks' relation after/anchor 'pump initiation' -> relation before/anchor null. The source gives 'Within two weeks' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged.",
+    "TIME-LITERAL: p1-f052 time 'Within two weeks' relation after/anchor 'pump initiation' -> relation before/anchor null. The source gives 'Within two weeks' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged.",
+    "TIME-LITERAL: p1-f053 time 'Within two weeks' relation after/anchor 'pump initiation' -> relation before/anchor null. The source gives 'Within two weeks' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged.",
+    "TIME-LITERAL: p1-f072 time 'Within two weeks' relation after/anchor 'pump initiation' -> relation before/anchor null. The source gives 'Within two weeks' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged."
   ],
   "unresolved": [
     "Narrative mildly elevated ACR conflicts with Table 1 ACR 1.48 mg/mmol and male reference <2.5; qualitative elevation retained as review-only candidate. Author nephropathy/Stage 3a attribution preserved, no reconstructed renal diagnosis.",
@@ -37,16 +35,16 @@
     "Cited McGregor pancreatectomy/pancreatic cancer case and geriatric cohorts in discussion are external/background, not index-patient oncology, surgery, dementia or laboratory targets. Caption layer remains separate from actual inspected AGP pixels; no precise curve readings invented."
   ],
   "assessment": {
-    "clinical_course": "Personally reviewed all30sourceunits, raw laboratory table,75factrepresentations with58distinctcitations,all14runtimeclinicalsections,21events20edges3summaries. Exact drug doses/frequencies, renal-unit wording, pre-pump severe hypoglycemia and separate pump-error episode checked. No assumed medication routes, glucose nadir, pump resumption or exact error date.",
-    "media": "Personally inspected all3actualAGP images and all visual fields across12chart regions/81printedreadings. Generic target recommendations separated from patient observations; GMI not equated with laboratory HbA1c; captions/source statements distinct from pixel measurements.",
-    "limitations": "AI source-grounded reference; no physician adjudication or empirical recall estimate. Source disagreements remain explicit.",
     "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 30,
+    "facts_reviewed": 6,
+    "figures_viewed": 0,
     "key_findings": [
-      "semantic-rules-2026-10: M03 verified; nulled anchors restored to literal 'stabilization'.",
-      "Cleanup pass 2: ~35 glued tokens fixed by hand (tool not applied); 10 time facts kept (heading/caption-governed), none nulled."
+      "Targeted TIME-LITERAL correction of 6 'within <duration>' facts (p1-f049, p1-f050, p1-f051, p1-f052, p1-f053, p1-f072): each source sentence was read; none ties the duration to an event in the same phrase, so relation set to before with anchor null. No other fields or facts changed."
     ],
-    "residual_risks": [],
-    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
+    "residual_risks": [
+      "Targeted pass only; the rest of the article was not re-reviewed in this pass."
+    ]
   },
   "physician_adjudicated": false
 }

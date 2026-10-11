@@ -1,11 +1,11 @@
 {
   "article_id": "PMC12586072.1",
-  "reviewer": "parent assistant",
+  "reviewer": "Claude Opus 5.5 parent",
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "32c135cfe6b79cff0e3cb3f2725e77c95bc14b5cba647cc0b8eac2dcebcc001f",
-  "annotation_sha256": "eb44a953653fe2ee489d8254adadaa4c69dd73a79c350ea8018a89f61ddc7e5c",
-  "reviewed_at": "2026-10-10T02:13:56.738993+00:00",
+  "annotation_sha256": "12d5804a5713b2f136866bf69b0fc89e877c819d82c4015ce0dba63cf7dfb70a",
+  "reviewed_at": "2026-10-11T23:49:38.366633+00:00",
   "source_segments_read": 94,
   "facts_reviewed": 487,
   "patients_reviewed": 3,
@@ -20,16 +20,7 @@
     "all captions and panel attribution"
   ],
   "corrections": [
-    "Restored time.anchor \"admission\" (literal; tables are Day 0(Admission)-relative) on 319 facts whose paraphrased anchors (\"patient admission day/course\", \"HBV admission\", \"admission/course as labeled in original table\") were nulled by M12; left \"presentation\" and \"more than seven months later\" anchors null.",
-    "p1-f189 (NR001): flag=normal, name \"ALT and AST\", text_value \"returned to normal within 1 month\" (source: \"ALT and AST levels returned to normal within 1 month\").",
-    "Verified M03 ages (28-/23-/25-year-old literal), M05 normal flags (PMH \"unremarkable\"), M07 not_performed (psychometric instruments precluded; no PBC follow-up evaluation completed), M13 uncertain->unknown on p2-e14/p3-e12.",
-    "Glued text (cleanup pass 2): applied repair_glued_text.py (98 tokens; the two patient-label rewrites were reverted because labels feed receipt identity) and hand-respaced remaining exported text: G3P1, LMP dates, disease-course day 10/16, gravida 0, HBV DNA 180/1900 IU/mL, day 0/day 2, antibody M2, Case 1/2/3 and Tables 1–6 in clinical statements, names, findings, ambiguities and article_limitations. Patient labels p2/p3 left glued (identity hash); case_context index_subject_description already spaced.",
-    "NO-BORROWING: p1-f008 normal liver function/CBC no longer borrows 'Day -6' from the timeline line about HBsAg; its 'At that time' refers to the b00005 hospitalization 'for a missed abortion 6 days earlier', so time is now '6 days earlier' (before, anchor admission) with that governing sentence quoted.",
-    "NO-BORROWING: p1-f019 dropped the redundant fragment quote (time comes from its own sentence b00007). p1-f021/f022, p2-f016, p3-f019 bilirubin values now quote the single governing timeline entry 'Day 0 (Admission): ... TBil ...' instead of a value fragment plus a separate time-only/whole-paragraph quote.",
-    "[cleanup3 labels/sidecar glue/times/negation] Patient labels respaced: 'Case1:28-year-old' -> 'Case 1: 28-year-old'; 'at8weeks'/'at10weeks' -> 'at 8 weeks'/'at 10 weeks'; 'acuteHBV/possiblePBC' -> 'acute HBV/possible PBC' (GLUED-TEXT).",
-    "[cleanup3 labels/sidecar glue/times/negation] p1-f008 liver function/CBC normal: time '6 days earlier' came only from the neighbouring hospitalization sentence (own sentence says only 'At that time'); time nulled (relation unknown), extra time-only quote dropped, name/statement no longer say 'pre-admission'/'6 days before'; ordering stays via event p1-e01 (Day -6) membership (NO-BORROWING).",
-    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (3 whitelisted label/number or number/unit spacing edits outside quotes in annotations (3); 'Table1'->'Table 1', 'Day10.'->'Day 10.', 'Table3'->'Table 3', 'Day2'->'Day 2'); every edit read against the source.",
-    "ROSTER-ORDER: added article-level roster block reported_individual_count=3, roster_complete=true, evidence b00001 \"This case series reports three pregnant women with acute hepatitis B virus (AHB) infection, exploring their clinical outcomes and comorbid anxiety.\"; 3 patients annotated in first-mention order."
+    "TIME-LITERAL: p2-f036 time 'within one month' relation after/anchor 'admission' -> relation before/anchor null. The source gives 'within one month' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged."
   ],
   "unresolved": [
     "Original XML Tables 1–6 reviewed in full, with stable source ownership per case. Dashes/blanks mean unreported results, not negative tests; plus/minus flags preserved independently of numeric titers.",
@@ -41,17 +32,13 @@
   "assessment": {
     "reviewer": "Claude Opus 5.5 parent",
     "source_units_read": 94,
-    "facts_reviewed": 487,
+    "facts_reviewed": 1,
     "figures_viewed": 0,
     "key_findings": [
-      "semantic-rules-2026-10 migration verified against source",
-      "admission anchors restored literally",
-      "NR001 resolved flag=normal",
-      "Cleanup pass 2: glued text respaced (labels untouched); admission-day bilirubin quotes cite their Day 0 timeline entry; Day -6 normal tests re-timed to the governing '6 days earlier' sentence.",
-      "Cleanup pass 3: patient labels and sidecar text respaced; span/time-only quotes and negation-word items resolved against the source (NO-BORROWING/TIME-LITERAL/EVID-NEGATION)."
+      "Targeted TIME-LITERAL correction of 1 'within <duration>' facts (p2-f036): each source sentence was read; none ties the duration to an event in the same phrase, so relation set to before with anchor null. No other fields or facts changed."
     ],
     "residual_risks": [
-      "Past medical history \"unremarkable\" kept as observation item with flag=normal"
+      "Targeted pass only; the rest of the article was not re-reviewed in this pass."
     ]
   },
   "physician_adjudicated": false
