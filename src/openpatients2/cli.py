@@ -22,6 +22,19 @@ def parser():
     sub = p.add_subparsers(dest="command", required=True)
     from .viewer import add_parser as add_viewer_parser
     add_viewer_parser(sub)
+    cmd = sub.add_parser("extract", help="Baseline local-LLM extraction over an articles JSONL(.gz) -> the run directory "
+                                         "op2 ehr-pipeline consumes (patients.jsonl, rosters.json, visual-annotations.json)")
+    cmd.add_argument("--articles", required=True, help="Already downloaded articles JSONL(.gz) (e.g. op2 article-fetch output)")
+    cmd.add_argument("--output", required=True, help="New or empty run directory; existing results are never overwritten")
+    cmd.add_argument("--endpoints", required=True, help="Comma-separated loopback OpenAI-compatible /v1 endpoints")
+    cmd.add_argument("--context", type=int, required=True, help="Serving context length in tokens")
+    cmd.add_argument("--config", help="Extraction YAML (PilotConfig: limits, sampling, stage switches); defaults if omitted")
+    cmd.add_argument("--arm", choices=["targeted", "direct"], default="targeted")
+    cmd.add_argument("--input-scope", choices=["whole_article", "patient_sections"], default="whole_article")
+    cmd.add_argument("--seed", type=int)
+    cmd.add_argument("--image-manifest", help="vision-assets manifest.json for figure pixel stages")
+    cmd.add_argument("--frozen-rosters", help="Condition on a fixed patient roster file instead of live discovery")
+    cmd.add_argument("--cached-rosters", help="Reuse rosters.json from an earlier run of the same articles")
     cmd = sub.add_parser("ehr-pipeline", add_help=False,
                          help="Optional EHR stages on a finished extraction run -> unified article rows "
                               "(same as python -m openpatients2.ehr_pipeline; pass --help for its options)")
@@ -80,6 +93,19 @@ def parser():
     return p
 
 
+def run_extract(args):
+    """`op2 extract`: thin wrapper over pilot_extract.run_pilot (loads the config with load_pilot_config)."""
+    from .pilot_extract import load_pilot_config, run_pilot
+    config = load_pilot_config(args.config if args.config else {})
+    report = asyncio.run(run_pilot(config, args.articles, args.output, args.endpoints, args.context, args.arm,
+                                   image_manifest=args.image_manifest, frozen_rosters=args.frozen_rosters,
+                                   cached_rosters=args.cached_rosters, input_scope=args.input_scope, seed=args.seed))
+    # The full report is in RUN/report.json; print only the summary and the next step.
+    keys = ("arm", "selected_articles", "eligible_articles", "patients_extracted", "model_calls", "outputs")
+    return {"run_dir": str(args.output), **{k: report[k] for k in keys if k in report},
+            "next": f"op2 ehr-pipeline --run-dir {args.output} --articles {args.articles} ..."}
+
+
 def dense_usage():
     from .dense import TOOLS
     width = max(map(len, TOOLS))
@@ -123,6 +149,8 @@ def _main(argv=None):
         if args.command == "viewer":
             from .viewer import dispatch
             result = dispatch(args)
+        elif args.command == "extract":
+            result = run_extract(args)
         elif args.command == "article-search":
             from .corpus import search_candidates
             result = asyncio.run(search_candidates(args.query, args.limit, args.offset))

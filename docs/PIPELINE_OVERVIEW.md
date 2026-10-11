@@ -4,7 +4,8 @@ Last checked: **2026-10-09**, after adding the unified article record and the op
 
 On 2026-10-10 the experimental campaign code, configs, reports and their docs (marked "archived" below) were
 removed from the repository; every removed tracked file is still available at git commit `c66587d`. The campaign-orchestration CLI (`op2 corpus-pilot`,
-HiPerGator/Slurm launchers) went with them; the baseline runner itself (`pilot_extract.run_pilot`) remains.
+HiPerGator/Slurm launchers) went with them; the baseline runner itself (`pilot_extract.run_pilot`) remains and is
+launched with `op2 extract` (see [End-to-end local run](#end-to-end-local-run)).
 
 The completed experiment (`reports/CLINICAL_ARCHITECTURE_20261007.md`, archived) did not
 justify promoting encounter replacement or automatic verification. Additional
@@ -180,6 +181,27 @@ task contracts and their fingerprints are unchanged.
                       clinical item names, panel EHR category/includable,
                       privacy-flag P/R, supplement class, series points
 ```
+
+## End-to-end local run
+
+Three commands, all against loopback OpenAI-compatible `/v1` endpoints (the runner refuses any other host) and an
+already downloaded articles JSONL(.gz) (`op2 article-fetch`); nothing is acquired or served by these commands.
+
+```text
+ sample.jsonl --op2 extract--> RUN/ --op2 ehr-pipeline--> OUT/data/unified.jsonl --unified_scoring--> score.json
+                               patients.jsonl                                       vs data/dense_clinical_cases_v1
+                               rosters.json, visual-annotations.json, report.json
+```
+
+```sh
+op2 extract --articles sample.jsonl --output RUN --endpoints http://127.0.0.1:8000/v1 --context 131072 \
+    [--config extract.yaml] [--arm targeted|direct] [--input-scope whole_article|patient_sections] [--seed N] \
+    [--image-manifest MEDIA/vision-assets/manifest.json] [--frozen-rosters FILE | --cached-rosters RUN0/rosters.json]
+```
+
+`op2 extract` is a thin wrapper over `pilot_extract.run_pilot`: `--config` is a `PilotConfig` YAML loaded with
+`load_pilot_config` (defaults when omitted); `RUN` must be new or empty (arms are independent, results immutable).
+It prints a summary; the full report is `RUN/report.json`. `RUN` is then the `--run-dir` of the EHR stages:
 
 Run (all stages off unless enabled in the YAML):
 

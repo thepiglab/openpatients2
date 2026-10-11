@@ -36,15 +36,26 @@ uv run pytest -q
 uv run op2 --help
 ```
 
-Run the optional EHR stages on a finished extraction run and score the result against the reference release:
+### End-to-end local pipeline (extract → EHR stages → score)
+
+Against a local OpenAI-compatible server (loopback `/v1` endpoints only), on an already downloaded articles JSONL
+(e.g. from `op2 article-fetch`):
 
 ```bash
+# 1. baseline extraction -> RUN/ (patients.jsonl, rosters.json, visual-annotations.json, report.json)
+uv run op2 extract --articles sample.jsonl --output RUN \
+    --endpoints http://127.0.0.1:8000/v1 --context 131072 [--config extract.yaml] [--arm targeted|direct]
+# 2. optional EHR stages on that run -> OUT/data/unified.jsonl
 uv run op2 ehr-pipeline --config ehr.yaml --articles sample.jsonl --run-dir RUN \
     --output OUT --endpoints http://127.0.0.1:8000/v1 --context 131072
-# equivalently: python -m openpatients2.ehr_pipeline ...
-python -m openpatients2.unified_scoring --reference data/dense_clinical_cases_v1/data \
+# 3. score against the reference release
+uv run python -m openpatients2.unified_scoring --reference data/dense_clinical_cases_v1/data \
     --predicted OUT/data/unified.jsonl --out score.json
 ```
+
+`extract.yaml` is a `PilotConfig` (`openpatients2.pilot_extract`: call/token/figure limits, sampling seed, optional
+review stages); omitted, the defaults apply. `RUN` must be new or empty; results are never overwritten. Details in
+the [pipeline overview](docs/PIPELINE_OVERVIEW.md#end-to-end-local-run).
 
 Rebuild the reference release from reviewed annotations:
 

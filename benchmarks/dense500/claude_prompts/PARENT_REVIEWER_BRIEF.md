@@ -67,7 +67,7 @@ follow it). Field shapes/enums: `src/openpatients2/schemas.py`. Review every ite
    `op2 dense schema_review R --folder annotations --article <ID> --role parent --reviewer "Claude Opus 5.5 parent" --notes "<what you checked>"`.
 7. Figures: `op2 dense visual_review R --article <ID> --role parent --reviewer "Claude Opus 5.5 parent" --notes "<...>"`
    after independent viewing. If you edited the visual submission, say so (annotator must re-sign).
-   Supplements: parent receipts per SUPPLEMENT_DOCUMENT_REVIEW.md. Videos/unavailable media: do not claim review.
+   Supplements: parent receipts per SUPPLEMENT_DOCUMENT_REVIEW.md. Videos: see "Videos" below; unavailable media: do not claim review.
    ZIP-of-PDF supplements use the archive format (SUPPLEMENT_DOCUMENT_REVIEW.md "ZIP supplements"): view every
    member page (extracted paths in `R/articles/<ID>/supplements/<SID>.archive_members.json`), then
    `op2 dense supplement_review R --article <ID> --supplement <SID> --role parent --reviewer "Claude Opus 5.5 parent" --notes "<...>"`.
@@ -90,6 +90,21 @@ follow it). Field shapes/enums: `src/openpatients2/schemas.py`. Review every ite
 
 If an article is not salvageable (wrong disposition, pervasive errors), you may instead send it back: report
 "REJECT" with a precise list of what the annotator must redo, and sign nothing.
+
+## Videos
+For every `R/articles/<ID>/video_inspection.<FID>.agent.json` (and every video `op2 dense video_frames R --article <ID>
+--list` shows that the annotator did not inspect, which you report): run the same
+`op2 dense video_frames R --article <ID> --video <FILENAME> --every <s> --max-frames <n>` as the agent's `sampling`
+(cached files are reused; `asset.sha256` and the frame hashes must match the agent sidecar) and Read EVERY frame.
+Check `pixel_observations` against the frames and `author_context` against the source, correct the agent sidecar if
+needed (say so; the annotator re-checks it), then write `R/articles/<ID>/video_inspection.<FID>.parent.json`
+(`format: dense-video-frame-parent-review/1`, exemplar `benchmarks/dense500/articles/PMC12790481.1`): `reviewer`,
+`reviewed_at`, `source_text_sha256`, `agent_sidecar_sha256` (sha256 of the agent file), `asset_sha256`,
+`frames_actually_viewed` (path/sha256/bytes), `assessment`, `continuous_motion_inspected: false`,
+`audio_inspected: false`, `completion_gate_satisfied: false`, `limitations`, `physician_adjudicated: false`.
+A video supplement is signed through the supplement manifest as usual (`manifest_video_frames_sampled`). Video
+sidecars are informational: the image-only figure row stays `unavailable`. Afterwards free the cache with
+`op2 dense video_frames R --article <ID> --cleanup` (removes only the video and its frames).
 
 ## Report to orchestrator (≤250 words)
 `<ID>: SIGNED` or `REJECT`; counts (facts kept/added/removed/quarantined, events, relations, figures viewed);

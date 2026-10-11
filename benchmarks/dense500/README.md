@@ -68,10 +68,20 @@ repository checkout. `R` below is `benchmarks/dense500` or `benchmarks/dense50`.
 | 6 schema review | `op2 dense schema_review R --folder ... --article ID` | `receipts/schema.*.json` | annotation, schema target, source |
 | 7 parent source review | `openpatients2.dense.review_record.save_review` | `annotation.json`, `receipts/annotation.parent.json` | draft, source |
 | 8 supplements | `op2 dense supplement_assets acquire\|peek\|extract\|extract-text\|status\|cleanup`, `op2 dense supplement_manifest_review`, `op2 dense supplement_review R --article ID --supplement SID` | `supplements/*`, `receipts/supplement-manifest.*`, `receipts/supplement.SID.*` | source, annotation, cache |
+| 8b videos | `op2 dense video_frames R --article ID [--list] [--video FILE] [--every S] [--max-frames N] [--cleanup]` | frames in `data/.dense-figure-cache/ID/video-*` (reviewer writes `video_inspection.<FID>.<role>.json`) | `source.json`, PMC |
 | 9 EHR sidecars | `op2 dense figure_ehr_review`, `figure_privacy_review`, `measurement_series_review` (`R --article ID [--draft]`) | `figure_ehr_labels`, `figure_privacy_flags`, `measurement_series` + receipts | visual, source, annotation, supplements |
 | 10 normalize | `op2 dense normalize [--article ID ...] [--apply]` after any annotation edit | annotation fixes, `needs_review.json`, schema targets | annotation, source |
 | 11 gates | `op2 dense reference_gates R --article ID [--folder annotations]` | (report) | everything above |
 | 12 release | `op2 dense export` | `data/dense_clinical_cases_v1/` | both roots |
+
+Videos: a source-listed PMC MP4 (figure media such as `VID1`, a supplement asset, or an `unassigned_media` video) is
+obtainable, not "unavailable". `op2 dense video_frames` downloads it into the shared figure cache (same lock and 1 GB
+cap as `figure_assets`, per-file cap as `supplement_assets`), verifies the source MD5, probes it with `ffprobe` and
+samples full-resolution PNG frames with the system `ffmpeg` at fixed timestamps across the whole duration, printing
+paths, timestamps, hashes and a `video_inspection_template`. Reviewers view every frame and record a video figure as
+`video_inspection.<FID>.agent.json` / `.parent.json` (the image-only `visual.json` row stays `unavailable`); a video
+supplement is reviewed in the supplement manifest (`manifest_video_frames_sampled`). Procedure: "Videos" in
+`claude_prompts/ANNOTATOR_BRIEF.md` and `PARENT_REVIEWER_BRIEF.md`. The parent frees the cache with `--cleanup`.
 
 `op2 dense scan_glued_text [--root R]` is a read-only report of glued words. `op2 viewer` reads `source.json`,
 `annotation.json`, `schema_target.json`, `visual.json` and their receipts live.

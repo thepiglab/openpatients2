@@ -106,6 +106,30 @@ If `R/articles/<ID>/annotation.json` already exists (parent-approved), do NOT to
 5. NEVER write `R/articles/<ID>/annotation.json`, any `R/articles/<ID>/receipts/*.parent.json`, never run anything with `--role parent`,
    never run `op2 dense export`, and never edit another article's files.
 
+## Videos
+A PMC-hosted video the source lists (figure media such as `VID1`, a supplement asset, or an `unassigned_media`
+entry with kind video, often a `*-pmcvs_normal.mp4` transcode) is obtainable, not unavailable (MEDIA-UNAVAILABLE:
+a download failure is not unavailability). `op2 dense video_frames R --article <ID> --list` shows each video and its
+owning figure/supplement (no network).
+1. `op2 dense video_frames R --article <ID> --video <FILENAME> [--every 2] [--max-frames 60]` (prefer the original
+   over its `-pmcvs_normal` copy). It downloads the MP4 into the figure cache, checks the source MD5, probes it and
+   writes full-resolution frame PNGs at fixed timestamps across the whole duration; it prints every frame path and
+   timestamp plus a `video_inspection_template`. Read EVERY frame PNG (they are already `.png`).
+2. Video figure (`figure_id` set): in `visual.json` the figure row stays `status: unavailable`, `assets: []` (the
+   figure contract is image-only) with a limitation saying the MP4 was frame-sampled separately and naming the
+   sidecar. Write `R/articles/<ID>/video_inspection.<FID>.agent.json` from the template (exemplar:
+   `benchmarks/dense500/articles/PMC12790481.1`): keep `asset`, `media_probe`, `sampling` (only frames you viewed);
+   fill `pixel_observations` (`sample_interval_seconds` + what is visible, no inference), `author_context` (patient ids,
+   subject, literal evidence quotes, rationale) and `limitations` (sampling scope; audio and continuous motion not
+   reviewed). Frames never add clinical facts; facts still come from the text.
+3. Video supplement (`supplement_id` only): the supplement manifest row is the review (SUPPLEMENT_DOCUMENT_REVIEW.md
+   "Video supplements"): after `supplement_assets acquire`, set `content_class: video`, `classification_basis:
+   full_content`, `estimated_counts.duration_seconds`, and a limitation naming the sampling (e.g. "frames sampled every
+   2 s from 0 to 84 s; audio and continuous motion not reviewed").
+4. A video owned by neither (no figure or supplement links it): view the frames, record it as
+   `video_inspection.<file stem>.agent.json`, and flag it in your report.
+Never run `--cleanup` (the parent does after its review).
+
 ## Report back (concise, ≤300 words)
 Article ID, mode, patients, fact/event/relation counts, figures inspected, supplements, validator results,
 receipts signed, and a bullet list of every uncertainty / source conflict / thing the parent should look at hardest.

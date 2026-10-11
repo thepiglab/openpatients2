@@ -26,6 +26,7 @@ TOOLS = {
     'figure_ehr_review': 'Draft / validate / sign figure EHR labels',
     'figure_privacy_review': 'Draft / validate / sign figure privacy flags',
     'measurement_series_review': 'Draft / validate / sign measurement series',
+    'video_frames': 'Download a source-listed PMC video into the figure cache and sample frames for review (--list, --cleanup)',
     'supplement_assets': 'Acquire / peek / extract supplementary files (cache-managed)',
     'supplement_manifest_review': 'Draft / validate / sign the supplement manifest',
     'supplement_review': 'Validate / sign a supplement content review',
