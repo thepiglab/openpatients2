@@ -3,8 +3,7 @@
 Last checked: **2026-10-09**, after adding the unified article record and the optional EHR stages.
 
 On 2026-10-10 the experimental campaign code, configs, reports and their docs (marked "archived" below) were
-moved out of the repository to `~/openpatients2-archive-2026-10-10/` (`ARCHIVE_INDEX.md` there); every archived
-tracked file is still available at git commit `c66587d`. The campaign-orchestration CLI (`op2 corpus-pilot`,
+removed from the repository; every removed tracked file is still available at git commit `c66587d`. The campaign-orchestration CLI (`op2 corpus-pilot`,
 HiPerGator/Slurm launchers) went with them; the baseline runner itself (`pilot_extract.run_pilot`) remains.
 
 The completed experiment (`reports/CLINICAL_ARCHITECTURE_20261007.md`, archived) did not

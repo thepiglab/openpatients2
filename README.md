@@ -66,8 +66,8 @@ Open-Patients K2/Motif batch pipeline and demo (`op2 demo/run/benchmark/serve/ex
 terminology grounding and knowledge graph, reasoning studies, HiPerGator/Glimmer/K2 serving benchmarks, the corpus
 pilot, GEPA, patient-bundle, controlled-component, frontier and clinical-architecture campaigns, their configs,
 scripts, reports, docs and tests, plus the multi-annotator proposal folders and builder scripts of the dense projects.
-Everything is in `~/openpatients2-archive-2026-10-10/` (see `ARCHIVE_INDEX.md` there), and every archived tracked file
-can be restored from git commit `c66587d`.
+They were removed from the working tree (along with untracked local run outputs of those campaigns); every removed
+tracked file can be restored from git commit `c66587d` (`git checkout c66587d -- <path>`).
 
 ## Safety, licenses and scope
 
