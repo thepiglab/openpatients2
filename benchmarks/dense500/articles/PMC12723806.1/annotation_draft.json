@@ -1589,7 +1589,6 @@
       "status": "not_performed",
       "flag": "unknown",
       "comparator": "unknown",
-      "text_value": "not yet investigated",
       "result_absent_reason": "not_performed",
       "body_site": "arteries"
      },
@@ -1616,7 +1615,6 @@
       "status": "not_performed",
       "flag": "unknown",
       "comparator": "unknown",
-      "text_value": "Not investigated to date",
       "result_absent_reason": "not_performed"
      },
      "evidence": [
@@ -2624,12 +2622,21 @@
       "assertion": "present",
       "name": "Rickets",
       "verification_status": "confirmed",
-      "role": "complication"
+      "role": "complication",
+      "time": {
+       "text": "by two years of age",
+       "relation": "before",
+       "anchor": null
+      }
      },
      "evidence": [
       {
        "segment_id": "b00041",
        "quote": "she subsequently developed rickets"
+      },
+      {
+       "segment_id": "b00004",
+       "quote": "Rickets were noted by two years of age."
       }
      ],
      "clinical_statement": "Subsequently developed rickets",
@@ -2943,7 +2950,6 @@
       "status": "not_performed",
       "flag": "unknown",
       "comparator": "unknown",
-      "text_value": "was not collected",
       "result_absent_reason": "not_performed",
       "time": {
        "text": "at the time of diagnosis",
@@ -3218,6 +3224,9 @@
       "subject": "index_patient",
       "assertion": "present",
       "event": "newborn",
+      "text_value": "Birthweight 2.55 kg",
+      "numeric_value": 2.55,
+      "unit": "kg",
       "birth_weight_text": "2.55 kg"
      },
      "evidence": [
@@ -3616,6 +3625,47 @@
        "quote": "at the age of 7 yr"
       }
      ]
+    },
+    {
+     "from_event_id": "p3-e01",
+     "to_event_id": "p3-e02",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00041",
+       "quote": "Calcifications were noted on USS imaging at 29-wk’ gestation"
+      },
+      {
+       "segment_id": "b00041",
+       "quote": "Extensive arterial calcifications were present at birth"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p3-e02",
+     "to_event_id": "p3-e03",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00041",
+       "quote": "following birth and continued until 8 mo of age"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p3-e03",
+     "to_event_id": "p3-e04",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00041",
+       "quote": "continued until 8 mo of age"
+      },
+      {
+       "segment_id": "b00041",
+       "quote": "Phosphate and calcitriol were commenced at 2 yr of age"
+      }
+     ]
     }
    ],
    "summary": [
@@ -3718,7 +3768,7 @@
    },
    "ambiguities": [
     {
-     "issue": "Table 1 says \"Treated with etidronate from 29 wk gestation\" without naming who was treated, while the narrative says maternal etidronate; recorded as maternal per the narrative.",
+     "issue": "Table 1 says \"Treated with etidronate from 29 wk gestation\" without naming who was treated, while the narrative says maternal etidronate; recorded as maternal per the narrative. The abstract says bisphosphonate treatment was instituted in the pre-natal period without naming the recipient.",
      "evidence": [
       {
        "segment_id": "b00041",
@@ -3727,6 +3777,10 @@
       {
        "segment_id": "b00029",
        "quote": "Treated with etidronate from 29 wk gestation"
+      },
+      {
+       "segment_id": "b00004",
+       "quote": "Bisphosphonate treatment was instituted in both the pre- and post-natal periods"
       }
      ],
      "must_not_infer": "Do not record etidronate as given to the patient directly.",
@@ -5745,7 +5799,12 @@
       "assertion": "present",
       "name": "Respiratory support at birth",
       "kind": "nonpharmacologic_therapy",
-      "action": "completed"
+      "action": "completed",
+      "time": {
+       "text": "at birth",
+       "relation": "at",
+       "anchor": "birth"
+      }
      },
      "evidence": [
       {
@@ -5804,13 +5863,14 @@
     },
     {
      "fact_id": "p5-f037",
-     "task": "reproductive_perinatal",
+     "task": "symptoms_function",
      "collection": "items",
      "fields": {
       "subject": "index_patient",
       "assertion": "present",
-      "event": "newborn",
-      "text_value": "Apgar scores 5,5"
+      "name": "Apgar scores",
+      "kind": "performance_score",
+      "text_value": "5,5"
      },
      "evidence": [
       {
@@ -5818,7 +5878,7 @@
        "quote": "Apgar scores 5,5"
       }
      ],
-     "clinical_statement": "Apgar scores 5,5",
+     "clinical_statement": "Apgar scores 5 and 5",
      "certainty": "supported",
      "scoring": "include",
      "notes": ""
@@ -5954,8 +6014,7 @@
       "assertion": "present",
       "action_text": "ENPP1 enzyme replacement compassionate access",
       "plan_type": "other",
-      "action_status": "planned",
-      "target": "ENPP1 deficiency"
+      "action_status": "planned"
      },
      "evidence": [
       {
@@ -5964,6 +6023,27 @@
       }
      ],
      "clinical_statement": "Compassionate access to ENPP1 enzyme replacement in progress; not documented as given",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": ""
+    },
+    {
+     "fact_id": "p5-f043",
+     "task": "reproductive_perinatal",
+     "collection": "items",
+     "fields": {
+      "subject": "index_patient",
+      "assertion": "absent",
+      "event": "pregnancy",
+      "text_value": "significant antenatal history"
+     },
+     "evidence": [
+      {
+       "segment_id": "b00029",
+       "quote": "No significant antenatal history"
+      }
+     ],
+     "clinical_statement": "No significant antenatal history",
      "certainty": "supported",
      "scoring": "include",
      "notes": ""
@@ -5993,7 +6073,7 @@
      "description": "Emergency Department rapid respiratory deterioration requiring cardiac compressions",
      "occurrence": "occurred",
      "fact_ids": [
-      "p5-f034",
+      "p5-f008",
       "p5-f032"
      ],
      "time_text": null,
@@ -6078,6 +6158,29 @@
       }
      ],
      "kind": "diagnosis"
+    },
+    {
+     "event_id": "p5-e07",
+     "description": "Birth at 37 wk with respiratory support, CPAP for 2 wk, then discharged home",
+     "occurrence": "occurred",
+     "fact_ids": [
+      "p5-f036",
+      "p5-f034",
+      "p5-f035",
+      "p5-f037",
+      "p5-f038",
+      "p5-f043"
+     ],
+     "time_text": "at birth",
+     "time_kind": "relative",
+     "time_precision": "exact",
+     "kind": "other",
+     "evidence": [
+      {
+       "segment_id": "b00029",
+       "quote": "Born at 37 wkRequired respiratory support at birth with Apgar scores 5,5CPAP for 2 wk then discharged home"
+      }
+     ]
     }
    ],
    "temporal_relations": [
@@ -6111,6 +6214,21 @@
       {
        "segment_id": "b00043",
        "quote": "prior to genetic confirmation"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p5-e07",
+     "to_event_id": "p5-e01",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00029",
+       "quote": "Required respiratory support at birth"
+      },
+      {
+       "segment_id": "b00043",
+       "quote": "A 3-month-old male presented"
       }
      ]
     }
@@ -7368,6 +7486,33 @@
      "certainty": "supported",
      "scoring": "include",
      "notes": ""
+    },
+    {
+     "fact_id": "p6-f046",
+     "task": "conditions",
+     "collection": "items",
+     "fields": {
+      "subject": "index_patient",
+      "assertion": "present",
+      "name": "ENPP1 deficiency",
+      "verification_status": "confirmed",
+      "role": "primary_diagnosis",
+      "diagnostic_basis": "Homozygous ENPP1 pathogenic variant"
+     },
+     "evidence": [
+      {
+       "segment_id": "b00045",
+       "quote": "The 6 cases presented highlight the diverse phenotype, diagnostic process and clinical management of ENPP1 deficiency"
+      },
+      {
+       "segment_id": "b00044",
+       "quote": "A homozygous ENPP1 pathogenic variant c.2467del.p.(Gln823Lysfs*4) was confirmed."
+      }
+     ],
+     "clinical_statement": "ENPP1 deficiency (homozygous pathogenic ENPP1 variant)",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": "The discussion explicitly describes all six presented cases as ENPP1 deficiency; Table 1 gives no ARHR2/GACI label for Case 6."
     }
    ],
    "events": [
@@ -7418,7 +7563,8 @@
      "occurrence": "occurred",
      "fact_ids": [
       "p6-f036",
-      "p6-f037"
+      "p6-f037",
+      "p6-f046"
      ],
      "time_text": null,
      "evidence": [
@@ -7483,6 +7629,25 @@
       }
      ],
      "kind": "plan"
+    },
+    {
+     "event_id": "p6-e07",
+     "description": "Multifocal calcification improved without treatment over the first year of life",
+     "occurrence": "occurred",
+     "fact_ids": [
+      "p6-f044",
+      "p6-f023"
+     ],
+     "time_text": "over first year of life",
+     "time_kind": "postnatal_age",
+     "time_precision": "range",
+     "kind": "outcome",
+     "evidence": [
+      {
+       "segment_id": "b00032",
+       "quote": "Improved without treatment over first year of life"
+      }
+     ]
     }
    ],
    "temporal_relations": [
@@ -7498,6 +7663,43 @@
       {
        "segment_id": "b00044",
        "quote": "commenced at 2 yr of age"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p6-e01",
+     "to_event_id": "p6-e02",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00007",
+       "quote": "Presented at 2 wk of age with right shoulder discomfort, with evidence of glenohumeral joint calcification. Further imaging revealed"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p6-e04",
+     "to_event_id": "p6-e05",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00031",
+       "quote": "noted at 15 mo of age, formally diagnosed at 2 yr of age"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p6-e01",
+     "to_event_id": "p6-e04",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00007",
+       "quote": "Presented at 2 wk of age"
+      },
+      {
+       "segment_id": "b00031",
+       "quote": "noted at 15 mo of age"
       }
      ]
     }
@@ -7606,6 +7808,20 @@
      "fact_ids": [
       "p6-f031",
       "p6-f017"
+     ]
+    },
+    {
+     "evidence": [
+      {
+       "segment_id": "b00053",
+       "quote": "Spontaneous improvement of calcifications in GACI, as seen in Case 6, has been extensively described."
+      }
+     ],
+     "issue": "The discussion cites Case 6 as an example of spontaneous improvement of calcifications in GACI, but Table 1 and the narrative do not label Case 6 as GACI.",
+     "must_not_infer": "Do not record a GACI diagnosis for Case 6.",
+     "fact_ids": [
+      "p6-f046",
+      "p6-f016"
      ]
     }
    ]
