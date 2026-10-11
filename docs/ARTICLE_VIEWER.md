@@ -65,7 +65,7 @@ uv run --locked op2 viewer \
 Repeat `--source-root` for multiple annotation workspaces with the same layout.
 The export uses the existing JSONL contracts: manifest, annotations, patient
 bundles, article bundles, and reviewed figure/supplement outputs. Sources are
-`SOURCE_ROOT/sources/ARTICLE_ID.json`. Source and review discovery happen on each
+`SOURCE_ROOT/articles/ARTICLE_ID/source.json`. Source and review discovery happen on each
 refresh, including files added after the server starts.
 
 ## Hosting a website later

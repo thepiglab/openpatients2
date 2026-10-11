@@ -6,6 +6,8 @@ import sys
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
+from openpatients2.dense_store import load as load_store
+store = load_store()
 AID = 'PMC-glue-test.1'
 
 
@@ -42,24 +44,24 @@ def test_plan_apply_recomputes_visual_digest_and_lists_stale_receipts(fixer, tmp
     privacy = {'visual_target_sha256': json_digest(visual), 'figures': [{'figure_id': 'F1', 'panels': [{'panel': None, 'notes': 'none'}]}]}
     for folder, doc in (('sources', source), ('annotations', annotation), ('visual-submissions', visual),
                         ('figure-ehr-labels', labels), ('figure-privacy-flags', privacy)):
-        (root / folder).mkdir(); (root / folder / f'{AID}.json').write_text(json.dumps(doc, indent=2) + '\n')
+        store.path(root, folder, AID, mkdir=True).write_text(json.dumps(doc, indent=2) + '\n')
     for folder in ('reviews', 'schema-agent-reviews', 'visual-agent-reviews', 'figure-ehr-parent-reviews', 'figure-privacy-agent-reviews'):
-        (root / folder).mkdir(); (root / folder / f'{AID}.json').write_text('{}')
+        store.path(root, folder, AID, mkdir=True).write_text('{}')
     before = {p: p.read_bytes() for p in root.rglob('*.json')}
     plan = fixer.plan_article(root, AID)
     assert {p: p.read_bytes() for p in root.rglob('*.json')} == before          # planning writes nothing
     assert set(plan['changed_files']) == {'annotations', 'visual-submissions', 'figure-ehr-labels', 'figure-privacy-flags'}
-    assert plan['stale_receipts'] == sorted(f'{f}/{AID}.json' for f in ('reviews', 'schema-agent-reviews', 'visual-agent-reviews',
+    assert plan['stale_receipts'] == sorted(str(store.path(root, f, AID).relative_to(root)) for f in ('reviews', 'schema-agent-reviews', 'visual-agent-reviews',
                                                                          'figure-ehr-parent-reviews', 'figure-privacy-agent-reviews'))
     fixer.apply(root, plan)
-    new_annotation = json.loads((root / 'annotations' / f'{AID}.json').read_text())
+    new_annotation = json.loads(store.path(root, 'annotations', AID).read_text())
     assert new_annotation['patients'][0]['label'] == 'Case 1'
     assert new_annotation['patients'][0]['facts'][0]['fields']['text_value'] == '35 mm cyst'
     assert new_annotation['patients'][0]['facts'][0]['evidence'] == annotation['patients'][0]['facts'][0]['evidence']
-    new_visual = json.loads((root / 'visual-submissions' / f'{AID}.json').read_text())
+    new_visual = json.loads(store.path(root, 'visual-submissions', AID).read_text())
     assert new_visual['figures'][0]['analysis']['visual']['general_description'] == 'Case 1 axial CT'
     assert new_visual['figures'][0]['analysis']['visual']['detailed_description'] == 'Printed "Day3" label'
     for folder in ('figure-ehr-labels', 'figure-privacy-flags'):
-        assert json.loads((root / folder / f'{AID}.json').read_text())['visual_target_sha256'] == json_digest(new_visual)
-    assert json.loads((root / 'figure-ehr-labels' / f'{AID}.json').read_text())['figures'][0]['panels'][0]['label']['rationale'] == 'Case 1 imaging'
+        assert json.loads(store.path(root, folder, AID).read_text())['visual_target_sha256'] == json_digest(new_visual)
+    assert json.loads(store.path(root, 'figure-ehr-labels', AID).read_text())['figures'][0]['panels'][0]['label']['rationale'] == 'Case 1 imaging'
     assert not fixer.plan_article(root, AID)['changed_files']                     # idempotent

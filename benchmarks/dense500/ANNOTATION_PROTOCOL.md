@@ -25,8 +25,8 @@ and figure attribution. A populated schema does not establish clinical truth.
 
 ## Deliverable for each article
 
-Write `drafts/<article_id>.json`. Read its full `sources/<article_id>.json` and
-`source-text/<article_id>.txt`. Use `schema_version: dense-article-annotation/1`.
+Write `articles/<article_id>/annotation_draft.json`. Read its full `articles/<article_id>/source.json` and
+`articles/<article_id>/source.txt`. Use `schema_version: dense-article-annotation/1`.
 
 Top-level keys:
 - `article_id`, `text_sha256`, `xml_sha256` (copy from source metadata).
@@ -143,14 +143,14 @@ review complete. No GEPA optimization or GPU campaign is part of annotation.
 ## Full patient-bundle review
 
 Run `schema_targets.py ROOT --folder drafts --article ARTICLE_ID` to build the
-actual Pydantic contracts in `schema-drafts/`. For articles with a parent-approved
-`annotations/` file, use that canonical file with `--folder annotations`; do not
+actual Pydantic contracts in `articles/ID/schema_target.draft.json`. For articles with a parent-approved
+`articles/ID/annotation.json`, use that canonical file with `--folder annotations`; do not
 replace parent corrections with an older draft. Generation fills missing nullable
 attributes with null and unknown categorical attributes with unknown. It never
 supplies a missing substantive clinical value. Inspect those defaults against the
 source: an attribute that was documented must be added to the source annotation.
 
-Copy a reviewed target into `schema-submissions/`. Review the actual full clinical
+Copy a reviewed target to `articles/ID/schema_target.json`. Review the actual full clinical
 sections, citation identifiers, summary, event kinds and time types, partial event
 order, roster completeness and figure/panel subjects. Clinical values, ownership
 and chronology changes belong in the fact annotation first, followed by regeneration.
@@ -207,7 +207,7 @@ with `view_image`. Inspect all original panels, labels, chart axes/series and
 printed values, using bounded magnified inspection where necessary. Unreadable
 values remain unknown; author clinical interpretation needs exact text evidence.
 
-Write `visual-submissions/ID.json` with `format: dense-figure-reference/1`, article
+Write `articles/ID/visual.json` with `format: dense-figure-reference/1`, article
 ID, source text hash, and one row for every figure. Inspected rows contain
 `status: inspected`, the inspected assets' URLs/SHA256s, `analysis` with the
 actual `JointFigureAnalysis` contract (`visual: FigureVisuals`, `attribution:
@@ -238,19 +238,19 @@ goes stale on any change. The checklist reports them as `informational_checks`
 outside `completed`. Commands run from the repo root with
 `PYTHONPATH=src:benchmarks/dense500 .venv/bin/python`; `R` = `benchmarks/dense500`.
 
-**Supplement manifest** (`dense-supplement-manifest/1`, `R/supplement-manifests/ID.json`),
+**Supplement manifest** (`dense-supplement-manifest/1`, `R/articles/ID/supplements/manifest.json`),
 required when the source lists supplements:
 1. `R/supplement_assets.py acquire R --article ID` downloads declared files into
    `data/.dense-supplement-cache` (hard 30 GB shared cap under a lock, 250 MB per
    file; larger files keep a HEAD size/type plus a 2 MB head sample and, for ZIP,
-   a central-directory tail). It writes `R/supplement-assets/ID.json` with hashes,
+   a central-directory tail). It writes `R/articles/ID/supplements/assets.json` with hashes,
    MD5 checks, detected type and a literal bounded peek (CSV/TSV/XLSX rows,
    PDF page count + first-page text, DOC/DOCX text, ZIP member list, image size,
    whitelisted non-identifying DICOM tags, ffprobe video metadata). Unsupported or
    unavailable files are recorded with their status, never dropped.
 2. `R/supplement_manifest_review.py R --article ID --draft`, then open each cached
    file (or the peek when only a sample exists) and complete every `review`
-   block in a copy at `R/supplement-manifests/ID.json`: `content_class`
+   block in a copy at `R/articles/ID/supplements/manifest.json`: `content_class`
    (reporting_checklist, literature_table, clinical_case_table, lab_results,
    vital_signs_series, medication_record, imaging_dicom, imaging_still, video,
    waveform_signal, genomic_data, questionnaire_instrument, protocol_methods,
@@ -270,11 +270,11 @@ required when the source lists supplements:
    (signing re-hashes the cached files). After both receipts,
    `R/supplement_assets.py cleanup R --article ID` frees the cache.
 
-**Figure EHR labels** (`dense-figure-ehr-labels/1`, `R/figure-ehr-labels/ID.json`),
+**Figure EHR labels** (`dense-figure-ehr-labels/1`, `R/articles/ID/figure_ehr_labels.json`),
 required when the source has figures, after the visual submission is final:
 `R/figure_ehr_review.py R --article ID --draft` derives a deterministic default
 per panel from the reviewed `image_kind`, modality, chart type/scope and panel
-attribution. Copy to `R/figure-ehr-labels/ID.json` and, for every panel and the
+attribution. Copy to `R/articles/ID/figure_ehr_labels.json` and, for every panel and the
 whole figure, set the final `ehr_category` (clinical_imaging, waveform,
 pathology, clinical_photo, clinical_chart_of_patient_data,
 non_clinical_diagnostic_aid, diagram_or_schematic, literature_or_aggregate,
@@ -285,7 +285,7 @@ includable, and only for panels attributed to a local patient (external or
 cited-case images are not). Validate/sign with `R/figure_ehr_review.py R
 --article ID [--role ...]`. Editing the visual submission makes labels stale.
 
-**Measurement series** (`dense-measurement-series/1`, `R/measurement-series/ID.json`),
+**Measurement series** (`dense-measurement-series/1`, `R/articles/ID/measurement_series.json`),
 recommended for serial tables and numeric supplements:
 `R/measurement_series_review.py R --article ID --draft` lists every literal
 main-article table cell (and CSV/TSV/XLSX supplement cells) with grid
@@ -311,7 +311,7 @@ A dash stays `missing_cell` and is never zero. Without a printed legend there is
 `cell_status`. These fields are additive: documents without them are unchanged,
 and the contract fingerprint excludes them, so existing receipts stay current.
 
-**Figure privacy flags** (`dense-figure-privacy-flags/1`, `R/figure-privacy-flags/ID.json`),
+**Figure privacy flags** (`dense-figure-privacy-flags/1`, `R/articles/ID/figure_privacy_flags.json`),
 required for every article with figures. Policy is flag only: panels stay
 includable. A separate sidecar bound to the visual submission (so signed
 figure-ehr receipts are unaffected), with its own agent/parent receipts.

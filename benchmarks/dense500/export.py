@@ -7,6 +7,7 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 import yaml
 
+import store
 from validate import digest, validate
 from schema_targets import with_review_only_items
 
@@ -168,7 +169,7 @@ def ehr_sidecar_status(root, aid, source):
             'no_source_figures' if not source.get('figures') else None)]
     statuses={}; reviewed={}; errors={}
     for name,folder,reader,not_applicable in specs:
-        if not (root/folder/f'{aid}.json').exists():
+        if not store.path(root,folder,aid).exists():
             statuses[name]=not_applicable or 'not_started'; continue
         try:
             result=reader(root,aid)
@@ -283,13 +284,13 @@ def write_unified(candidates, checklist):
 def reviewed_schema_target(root, annotation, source):
     """A generated shape is not a reviewed deliverable. Require both inspections."""
     aid=annotation['article_id']
-    parent_path=root/'schema-parent-reviews'/f'{aid}.json'
+    parent_path=store.receipt(root,'schema','parent',aid)
     if not parent_path.exists():return None
     from schema_review import validate_submission
-    target=json.loads((root/'schema-submissions'/f'{aid}.json').read_text())
+    target=json.loads(store.path(root,'schema-submissions',aid).read_text())
     receipts=[]
     for role in ('agent','parent'):
-        receipt=json.loads((root/f'schema-{role}-reviews'/f'{aid}.json').read_text())
+        receipt=json.loads(store.receipt(root,'schema',role,aid).read_text())
         for key,value in [('status','schema_source_reviewed'),('role',role),
                 ('article_id',aid),('annotation_sha256',digest(annotation)),
                 ('target_sha256',digest(target)),('source_text_sha256',source['text_sha256'])]:
@@ -416,7 +417,7 @@ def write_checklist(statistics, manifest):
 
 def author_attribution(source,root):
     raw=source.get('authors',[])
-    xml_path=root/'raw-xml'/f'{source["article_id"]}.xml'
+    xml_path=store.path(root,'raw-xml',source['article_id'])
     if not xml_path.exists():
         return {'authors':raw,'author_representation':'retained_parser_output; name formatting needs XML review'}
     tree=ET.fromstring(xml_path.read_text())
@@ -442,14 +443,14 @@ def main():
     manifest=[]; final=[]; patient_bundles=[]; article_bundles=[]; visual_bundles=[]; supplement_bundles=[]; document_bundles=[]; clinical_supplement_bundles=[]; figure_panels=[]; draft_count=0
     supplement_manifest_rows=[]; figure_ehr_rows=[]; measurement_series_rows=[]; unified_candidates={}
     for root in ROOTS:
-        for source_path in sorted((root/'sources').glob('*.json')):
-            source=json.loads(source_path.read_text()); aid=source['article_id']
+        for source_aid in store.article_ids(root,'sources'):
+            source=json.loads(store.path(root,'sources',source_aid).read_text()); aid=source['article_id']
             # Acquisition writes the source before its manifest checkpoint.
             if aid not in selection and aid not in retained:
                 continue
             sel=selection.get(aid,{})
-            review_path=root/'reviews'/f'{aid}.json'; annotation_path=root/'annotations'/f'{aid}.json'
-            drafted=(root/'drafts'/f'{aid}.json').exists(); draft_count+=drafted
+            review_path=store.path(root,'reviews',aid); annotation_path=store.path(root,'annotations',aid)
+            drafted=store.path(root,'drafts',aid).exists(); draft_count+=drafted
             row={'article_id':aid,'pmcid':source['pmcid'],'pmid':source.get('pmid'),
                 'doi':source.get('doi'),'title':source['title'],'article_type':source.get('article_type') or 'unspecified',**author_attribution(source,root),
                 'article_url':source['source_url'],'xml_url':source.get('xml_url'),

@@ -17,6 +17,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
+from .dense_store import load as _load_store
+
 STATIC = Path(__file__).with_name('viewer_static')
 ID = re.compile(r'^[A-Za-z0-9][A-Za-z0-9_.-]{0,120}$')
 FILES = ('manifest', 'annotations', 'patients', 'article_bundles', 'figure_visuals',
@@ -79,41 +81,43 @@ class Library:
             self.exports, self.export_stamp = fresh, signature
 
     def _source(self, aid):
-        paths = [root / 'sources' / f'{aid}.json' for root in self.roots]
-        paths = [path for path in paths if path.exists()]
+        store = _load_store()
+        paths = [(store.path(root, 'sources', aid), root) for root in self.roots]
+        paths = [(path, root) for path, root in paths if path.exists()]
         if not paths:
             return None, None
-        path = max(paths, key=lambda p: p.stat().st_mtime_ns)
+        path, root = max(paths, key=lambda p: p[0].stat().st_mtime_ns)
         source = read(path)
         if source.get('article_id') != aid:
             raise ValueError('Source identity mismatch')
-        return source, path.parent.parent
+        return source, root
 
     def _live(self, source, root):
         aid, sha = source['article_id'], source['text_sha256']
-        annotation = read(root / 'annotations' / f'{aid}.json')
-        review = read(root / 'reviews' / f'{aid}.json')
+        store = _load_store()
+        annotation = read(store.path(root, 'annotations', aid))
+        review = read(store.path(root, 'reviews', aid))
         annotation_ok = bool(annotation) and annotation.get('article_id') == aid and bound(review, article_id=aid,
             status='source_reviewed', source_read_in_full=True, source_text_sha256=sha,
             annotation_sha256=digest(annotation)) and annotation.get('text_sha256') == sha
-        target = read(root / 'schema-submissions' / f'{aid}.json')
+        target = read(store.path(root, 'schema-submissions', aid))
         schema_ok = (annotation_ok and bool(target) and target.get('article_id') == aid
                      and target.get('source_text_sha256') == sha
                      and target.get('annotation_sha256') == digest(annotation)
                      and not target.get('source_gate_errors'))
         if schema_ok:
             for role in ('agent', 'parent'):
-                receipt = read(root / f'schema-{role}-reviews' / f'{aid}.json')
+                receipt = read(store.receipt(root, 'schema', role, aid))
                 schema_ok &= bound(receipt, article_id=aid, role=role, status='schema_source_reviewed',
                     source_text_sha256=sha, annotation_sha256=digest(annotation), target_sha256=digest(target))
-        visual = read(root / 'visual-submissions' / f'{aid}.json')
+        visual = read(store.path(root, 'visual-submissions', aid))
         visual_ok = (annotation_ok and bool(visual) and visual.get('article_id') == aid
                      and visual.get('source_text_sha256') == sha)
         if visual_ok:
             identity = digest([{k: p[k] for k in ('patient_id', 'label', 'species', 'identity_evidence')}
                                for p in annotation['patients']])
             for role in ('agent', 'parent'):
-                visual_ok &= bound(read(root / f'visual-{role}-reviews' / f'{aid}.json'),
+                visual_ok &= bound(read(store.receipt(root, 'visual', role, aid)),
                     article_id=aid, role=role, status='source_and_pixels_reviewed',
                     source_text_sha256=sha, target_sha256=digest(visual), patient_identity_sha256=identity,
                     patient_ids=sorted(p['patient_id'] for p in annotation['patients']))
@@ -150,7 +154,7 @@ class Library:
             note.append('Source text is not installed on this server. The original article is linked below.')
         if not patients:
             note.append('Reviewed full-schema extraction is not yet available for this article.')
-        if source and not annotation and (root / 'reviews' / f'{aid}.json').exists():
+        if source and not annotation and _load_store().path(root, 'reviews', aid).exists():
             note.append('Source review is stale or being updated; its extraction is withheld until receipts match.')
         supplementary = []
         documents = []
@@ -180,13 +184,14 @@ class Library:
         with self.lock:
             self._exports()
             ids = set(self.exports['manifest'])
-            ids.update(path.stem for root in self.roots for path in (root / 'sources').glob('*.json'))
+            store = _load_store()
+            ids.update(aid for root in self.roots for aid in store.article_ids(root, 'sources'))
             rows = []
             for aid in sorted(ids):
                 if not ID.fullmatch(aid):
                     continue
-                signature = (self.export_stamp, tuple(stamp(root / folder / f'{aid}.json')
-                             for root in self.roots for folder in LIVE))
+                signature = (self.export_stamp, tuple(stamp(store.path(root, kind, aid))
+                             for root in self.roots for kind in LIVE))
                 cached = self.entries.get(aid)
                 if cached is None or cached[0] != signature:
                     try:

@@ -23,6 +23,8 @@ import copy
 import json
 from pathlib import Path
 
+import store
+
 GROUPS = ('clinical', 'media')
 
 
@@ -94,7 +96,7 @@ def _panel_label_warnings(root, aid, visual, warnings):
     figure-EHR label / privacy-flag sidecars that reuse its panel IDs; one warning per figure/label."""
     from openpatients2.semantic_rules import panel_label_violations
     found = {}
-    docs = [('visual-submissions', visual)] + [(folder, _json(Path(root) / folder / f'{aid}.json'))
+    docs = [('visual-submissions', visual)] + [(folder, _json(store.path(root, folder, aid)))
                                                 for folder in ('figure-ehr-labels', 'figure-privacy-flags')]
     for folder, doc in docs:
         for f in (doc or {}).get('figures', []):
@@ -116,7 +118,7 @@ def _glued_sidecar_warnings(root, source, visual, warnings):
     from openpatients2.semantic_rules import sidecar_glued_violations
     text = '\n'.join(s['text'] for s in source['segments'])
     for kind, folder in SIDECAR_FOLDERS:
-        doc = visual if kind == 'visual' else _json(Path(root) / folder / f"{source['article_id']}.json")
+        doc = visual if kind == 'visual' else _json(store.path(root, folder, source['article_id']))
         for v in sidecar_glued_violations(kind, doc or {}, text):
             _add(warnings, f'{folder}.GLUED-TEXT', v.text())
 
@@ -130,7 +132,7 @@ def media_gates(root, source, annotation, target):
     aid = source['article_id']; root = Path(root)
     errors, warnings = [], []
     roster = {'patients': [{'patient_id': p['patient_id']} for p in annotation['patients']]}
-    visual = _json(root / 'visual-submissions' / f'{aid}.json')
+    visual = _json(store.path(root, 'visual-submissions', aid))
     for f in (visual or {}).get('figures', []):
         if f['status'] != 'inspected':
             continue
@@ -154,7 +156,7 @@ def media_gates(root, source, annotation, target):
     for folder, task, status, checker, assemble in (
             ('figure-ehr-labels', 'figure_ehr_label', 'labeled', ehr_tasks.check_figure_ehr, ehr_tasks.labels_document),
             ('figure-privacy-flags', 'figure_privacy_flags', 'flagged', ehr_tasks.check_privacy, ehr_tasks.flags_document)):
-        sidecar = _json(root / folder / f'{aid}.json')
+        sidecar = _json(store.path(root, folder, aid))
         if not sidecar or not visual:
             continue
         outs = []
@@ -169,9 +171,9 @@ def media_gates(root, source, annotation, target):
             assemble(source, visual, outs)
         except (ValueError, KeyError, TypeError) as exc:
             _add(errors, f'ehr.{task}.document', exc)
-    manifest = _json(root / 'supplement-manifests' / f'{aid}.json')
+    manifest = _json(store.path(root, 'supplement-manifests', aid))
     if manifest:
-        acquisition = _json(root / 'supplement-assets' / f'{aid}.json')
+        acquisition = _json(store.path(root, 'supplement-assets', aid))
         if acquisition is None:
             _add(warnings, 'ehr.supplement_assets_missing', 'manifest without acquisition record')
         else:
@@ -180,7 +182,7 @@ def media_gates(root, source, annotation, target):
                                             source, annotation, acquisition)
             except (ValueError, KeyError, TypeError) as exc:
                 _add(errors, 'ehr.supplement_classification', exc)
-    series = _json(root / 'measurement-series' / f'{aid}.json')
+    series = _json(store.path(root, 'measurement-series', aid))
     if series:
         from measurement_series_review import reviewed_transcriptions
         try:
@@ -203,9 +205,9 @@ def media_gates(root, source, annotation, target):
 def run_gates(root, aid, *, annotation=None, folder='annotations', groups=GROUPS):
     """{'passed', 'errors', 'warnings', 'groups'} for one article."""
     root = Path(root)
-    source = json.loads((root / 'sources' / f'{aid}.json').read_text())
-    annotation = annotation if annotation is not None else json.loads((root / folder / f'{aid}.json').read_text())
-    target = _json(root / 'schema-submissions' / f'{aid}.json')
+    source = json.loads(store.path(root, 'sources', aid).read_text())
+    annotation = annotation if annotation is not None else json.loads(store.path(root, folder, aid).read_text())
+    target = _json(store.path(root, 'schema-submissions', aid))
     errors, warnings = [], []
     if 'clinical' in groups:
         e, w = clinical_gates(source, annotation, target); errors += e; warnings += w

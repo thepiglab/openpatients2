@@ -22,6 +22,7 @@ from openpatients2.document_text import TEXT_DOCUMENT_TYPES
 from openpatients2.figure_visuals import validate_joint
 from openpatients2.schemas import TASK_MODELS
 from validate import digest
+import store
 from visual_review import identity_digest
 
 FORMAT = 'dense-supplemental-figure-reference/1'
@@ -930,8 +931,7 @@ def validate_submission(target, source, annotation, *, verify_files=True):
 
 
 def _targets(root, aid):
-    paths = sorted(p for folder in ('visual-submissions', 'document-submissions')
-                   for p in (root / folder).glob(f'{aid}.supplements*.json'))
+    paths = store.supplement_targets(root, aid)
     targets = [json.loads(p.read_text()) for p in paths]
     ids = [t.get('supplement_id') for t in targets]
     if len(ids) != len(set(ids)):
@@ -940,9 +940,9 @@ def _targets(root, aid):
 
 
 def _inputs(root, aid):
-    source = json.loads((root / 'sources' / f'{aid}.json').read_text())
-    folder = 'annotations' if (root / 'annotations' / f'{aid}.json').exists() else 'drafts'
-    annotation = json.loads((root / folder / f'{aid}.json').read_text())
+    source = json.loads(store.path(root, 'sources', aid).read_text())
+    folder = 'annotations' if store.path(root, 'annotations', aid).exists() else 'drafts'
+    annotation = json.loads(store.path(root, folder, aid).read_text())
     return source, annotation
 
 
@@ -980,14 +980,13 @@ def sign_review(root, aid, sid, *, role, reviewer, notes):
         raise ValueError('Unavailable, partial or missing typed clinical-data supplement cannot receive completed review receipt')
     if target.get('format') in DOCUMENT_FORMATS or target.get('clinical_data'):
         other = 'parent' if role == 'agent' else 'agent'
-        other_path = root / f'supplement-{other}-reviews' / f'{aid}.{sid}.json'
+        other_path = store.receipt(root, 'supplement', other, aid, sid)
         if other_path.exists() and json.loads(other_path.read_text()).get('reviewer') == reviewer:
             raise ValueError('Supplement review requires independent agent and parent reviewers')
     receipt = {'role':role, 'reviewer':reviewer, **_binding(target,source,annotation),
         'reviewed_at':datetime.now(timezone.utc).isoformat(), 'inspection_notes':notes,
         'physician_adjudicated':False, **report}
-    folder = root / f'supplement-{role}-reviews'; folder.mkdir(exist_ok=True)
-    path = folder / f'{aid}.{sid}.json'
+    path = store.receipt(root, 'supplement', role, aid, sid); path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix('.json.tmp')
     temporary.write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\n')
     temporary.replace(path)
@@ -1006,7 +1005,7 @@ def reviewed_supplement_targets(root, aid):
     source, annotation = _inputs(root, aid); out = []
     for target in targets:
         sid = target.get('supplement_id'); _supplement(source,sid)
-        paths = [root / f'supplement-{role}-reviews' / f'{aid}.{sid}.json' for role in ('agent','parent')]
+        paths = [store.receipt(root, 'supplement', role, aid, sid) for role in ('agent','parent')]
         if not all(p.exists() for p in paths):
             continue
         report = validate_submission(target,source,annotation,verify_files=False)

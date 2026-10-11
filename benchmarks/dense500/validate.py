@@ -205,12 +205,13 @@ def semantic_errors(annotation, source):
 if __name__=='__main__':
     ap=argparse.ArgumentParser();ap.add_argument('root',type=Path);ap.add_argument('--folder',default='drafts')
     args=ap.parse_args(); total=0; failed=0
-    for path in sorted((args.root/args.folder).glob('*.json')):
+    import store
+    for aid in store.article_ids(args.root,args.folder):
         total+=1
-        annotation=json.loads(path.read_text())
-        source=json.loads((args.root/'sources'/path.name).read_text())
+        annotation=json.loads(store.path(args.root,args.folder,aid).read_text())
+        source=json.loads(store.path(args.root,'sources',aid).read_text())
         result=validate(annotation,source)+case_context_errors(annotation)+semantic_errors(annotation,source)
         if result:
-            failed+=1; print(path.name, json.dumps(result,ensure_ascii=False))
+            failed+=1; print(aid, json.dumps(result,ensure_ascii=False))
     print(json.dumps({'checked':total,'invalid':failed,'clinical_entailment_checked':False}))
     raise SystemExit(bool(failed))

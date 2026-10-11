@@ -7,6 +7,8 @@ import sys
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
+from openpatients2.dense_store import load as load_store
+store = load_store()
 RELEASE = ROOT / 'data/dense_clinical_cases_v1'
 R = ROOT / 'benchmarks/dense500'
 AID = 'PMC12786310.1'
@@ -108,13 +110,13 @@ def test_pipeline_builder_round_trip_scores_perfectly_on_reference_article():
     from openpatients2.ehr_pipeline import unified_from_pipeline
     from openpatients2.unified_scoring import score
     reference = {r['article_id']: r for r in release_rows()}.get(AID)
-    paths = [R / folder / f'{AID}.json' for folder in ('figure-ehr-labels', 'figure-privacy-flags', 'supplement-manifests',
+    paths = [store.path(R, folder, AID) for folder in ('figure-ehr-labels', 'figure-privacy-flags', 'supplement-manifests',
                                                      'measurement-series', 'visual-submissions', 'supplement-assets')]
     if reference is None or not all(p.exists() for p in paths):
         pytest.skip('reference article not completed with all sidecars')
     labels, flags, manifest, series, visual, acquisition = (json.loads(p.read_text()) for p in paths)
-    source = json.loads((R / 'sources' / f'{AID}.json').read_text())
-    annotation = json.loads((R / 'annotations' / f'{AID}.json').read_text())
+    source = json.loads(store.path(R, 'sources', AID).read_text())
+    annotation = json.loads(store.path(R, 'annotations', AID).read_text())
     from measurement_series_review import reviewed_transcriptions
     outputs = {}
     vrows = {f['figure_id']: f for f in visual['figures']}
@@ -148,12 +150,12 @@ def test_ehr_stage_defaults_off_and_runner_emits_unified_rows(tmp_path, monkeypa
     from openpatients2 import ehr_pipeline, ehr_tasks
     from openpatients2.pilot_extract import PilotRunner
     assert not any(getattr(ehr_pipeline.EhrStageConfig(), s) for s in ehr_pipeline.STAGES)
-    labels_path = R / 'figure-ehr-labels' / f'{AID}.json'
+    labels_path = store.path(R, 'figure-ehr-labels', AID)
     if not (labels_path.exists() and (RELEASE / 'legacy' / 'patients.jsonl').exists()):
         pytest.skip('reference artifacts unavailable')
-    source = json.loads((R / 'sources' / f'{AID}.json').read_text())
-    annotation = json.loads((R / 'annotations' / f'{AID}.json').read_text())
-    visual = json.loads((R / 'visual-submissions' / f'{AID}.json').read_text())
+    source = json.loads(store.path(R, 'sources', AID).read_text())
+    annotation = json.loads(store.path(R, 'annotations', AID).read_text())
+    visual = json.loads(store.path(R, 'visual-submissions', AID).read_text())
     labels = json.loads(labels_path.read_text())
     run = tmp_path / 'run'; run.mkdir()
     (run / 'patients.jsonl').write_text(''.join(l + '\n' for l in (RELEASE / 'legacy' / 'patients.jsonl').read_text().splitlines()

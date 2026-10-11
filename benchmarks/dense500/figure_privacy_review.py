@@ -1,10 +1,10 @@
 """Draft, validate and sign per-panel figure privacy/sensitivity flags (flag only).
 
-  figure_privacy_review.py ROOT --article ID --draft    # writes figure-privacy-flag-drafts/ID.json
-  figure_privacy_review.py ROOT --article ID            # validates figure-privacy-flags/ID.json
+  figure_privacy_review.py ROOT --article ID --draft    # writes articles/ID/figure_privacy_flags.draft.json
+  figure_privacy_review.py ROOT --article ID            # validates articles/ID/figure_privacy_flags.json
   figure_privacy_review.py ROOT --article ID --role agent|parent --reviewer NAME --notes NOTES
 
-Separate from figure-ehr-labels (whose receipts stay valid); bound to the visual
+Separate from figure_ehr_labels.json (whose receipts stay valid); bound to the visual
 submission. Drafts are pre-filled from reviewer-written figure-ehr rationales,
 the visual record and known reports; every panel must be confirmed on pixels.
 Flags never change EHR includability. Never transcribe identifier values.
@@ -14,6 +14,7 @@ import json
 from pathlib import Path
 
 from openpatients2.figure_privacy import FORMAT, contract_sha256, draft_flags, validate_flags
+import store
 from sidecar_receipts import base_binding, load_inputs, present, sign, verify
 from validate import digest
 
@@ -22,7 +23,7 @@ STATUS = 'figure_privacy_flags_reviewed'
 
 
 def _visual(root, aid):
-    path = Path(root) / 'visual-submissions' / f'{aid}.json'
+    path = store.path(root, 'visual-submissions', aid)
     if not path.exists():
         raise ValueError('Privacy flags need the article visual submission first')
     return json.loads(path.read_text())
@@ -40,18 +41,18 @@ def binding(target, source, annotation, visual):
 def write_draft(root, aid):
     root = Path(root)
     source, _ = load_inputs(root, aid)
-    labels_path = root / 'figure-ehr-labels' / f'{aid}.json'
+    labels_path = store.path(root, 'figure-ehr-labels', aid)
     labels = json.loads(labels_path.read_text()) if labels_path.exists() else None
     draft = draft_flags(source, _visual(root, aid), labels)
-    folder = root / 'figure-privacy-flag-drafts'; folder.mkdir(exist_ok=True)
-    (folder / f'{aid}.json').write_text(json.dumps(draft, ensure_ascii=False, indent=2) + '\n')
+    out = store.path(root, 'figure-privacy-flag-drafts', aid); out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(draft, ensure_ascii=False, indent=2) + '\n')
     return draft
 
 
 def check(root, aid):
     source, annotation = load_inputs(root, aid)
     visual = _visual(root, aid)
-    target = json.loads((Path(root) / 'figure-privacy-flags' / f'{aid}.json').read_text())
+    target = json.loads(store.path(root, 'figure-privacy-flags', aid).read_text())
     return target, source, annotation, visual, validate_flags(target, source, visual)
 
 
@@ -66,7 +67,7 @@ def sign_review(root, aid, *, role, reviewer, notes):
 def reviewed_privacy_flags(root, aid):
     """(flags, [agent, parent]) when dual-signed and current; None if unsigned; raises if stale."""
     root = Path(root)
-    if not (root / 'figure-privacy-flags' / f'{aid}.json').exists() or not all(present(root, KIND, aid)):
+    if not store.path(root, 'figure-privacy-flags', aid).exists() or not all(present(root, KIND, aid)):
         return None
     target, source, annotation, visual, report = check(root, aid)
     receipts = verify(root, KIND, aid, binding(target, source, annotation, visual), report)
@@ -80,7 +81,7 @@ if __name__ == '__main__':
     p.add_argument('--reviewer'); p.add_argument('--notes'); args = p.parse_args()
     if args.draft:
         draft = write_draft(args.root, args.article)
-        print(json.dumps({'draft': f'figure-privacy-flag-drafts/{args.article}.json', 'format': FORMAT,
+        print(json.dumps({'draft': str(store.path(args.root, 'figure-privacy-flag-drafts', args.article)), 'format': FORMAT,
                           'prefilled': [[f['figure_id'], q['panel'], q['burned_in_identifiers'], q['identifiable_face'],
                                          q['sensitive_anatomy']] for f in draft['figures'] for q in f['panels']
                                         if q['burned_in_identifiers'] != 'none' or q['identifiable_face'] or q['sensitive_anatomy']]}))

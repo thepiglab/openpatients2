@@ -3,17 +3,22 @@
 All four stages are OFF by default (`EhrStageConfig`). They run on a finished
 `PilotRunner` output directory (patients.jsonl, rosters.json,
 visual-annotations.json), reuse the runner's bounded call/repair/ledger
-machinery and the extraction config's serving limits, and write:
+machinery and the extraction config's serving limits, and write (OUTPUT uses the same per-article
+layout as the dense benchmark roots, benchmarks/dense500/store.py):
 
-  OUTPUT/figure-ehr-labels/ID.json      dense-figure-ehr-labels/1
-  OUTPUT/figure-privacy-flags/ID.json   dense-figure-privacy-flags/1   (needs pixels)
-  OUTPUT/supplement-manifests/ID.json   dense-supplement-manifest/1    (needs acquisition records)
-  OUTPUT/measurement-series/ID.json     dense-measurement-series/1
-  OUTPUT/data/unified.jsonl             openpatients2-unified-article/1 (same builder as the release)
+  OUTPUT/articles/ID/figure_ehr_labels.json       dense-figure-ehr-labels/1
+  OUTPUT/articles/ID/figure_privacy_flags.json    dense-figure-privacy-flags/1   (needs pixels)
+  OUTPUT/articles/ID/supplements/manifest.json    dense-supplement-manifest/1    (needs acquisition records)
+  OUTPUT/articles/ID/measurement_series.json      dense-measurement-series/1
+  OUTPUT/data/unified.jsonl                       openpatients2-unified-article/1 (same builder as the release)
+
+--supplement-assets and --supplement-transcriptions take a dense benchmark root (e.g.
+benchmarks/dense500): acquisition records are read from articles/ID/supplements/assets.json and
+reviewed supplement targets from articles/ID/supplements/<SID>.{document,visual}.json.
 
     python -m openpatients2.ehr_pipeline --config ehr.yaml --articles sample.jsonl --run-dir RUN \
         --output OUT --endpoints http://127.0.0.1:8000/v1 --context 131072 \
-        [--image-manifest vision-assets/manifest.json] [--supplement-assets DIR] [--supplement-transcriptions DIR]
+        [--image-manifest vision-assets/manifest.json] [--supplement-assets ROOT] [--supplement-transcriptions ROOT]
 
 Pipeline rows are unreviewed model output (`completion.completed=false`).
 """
@@ -29,6 +34,7 @@ import yaml
 
 from . import ehr_tasks
 from .config import ConfigModel
+from .dense_store import load as load_store
 from .unified_record import build_record
 
 STAGES = ('figure_ehr_label', 'figure_privacy_flags', 'supplement_classification', 'measurement_series_extraction')
@@ -136,7 +142,8 @@ async def run_ehr_stages(config, articles_path, run_dir, output, endpoints, cont
                 jobs.append(('figure_privacy_flags', 'figure-privacy-flags', lambda: figure_stage(
                     'figure_privacy_flags', ehr_tasks.privacy_messages, ehr_tasks.check_privacy, ehr_tasks.flags_document, True)))
             if config.supplement_classification and article.get('supplements'):
-                acquisition = json.loads((Path(supplement_assets) / f'{aid}.json').read_text()) if supplement_assets else None
+                acquisition_path = load_store().path(supplement_assets, 'supplement-assets', aid) if supplement_assets else None
+                acquisition = json.loads(acquisition_path.read_text()) if acquisition_path and acquisition_path.exists() else None
                 async def manifest_stage(acquisition=acquisition):
                     if acquisition is None:
                         raise ValueError('supplement_classification needs supplement_assets acquisition records')
@@ -165,8 +172,8 @@ async def run_ehr_stages(config, articles_path, run_dir, output, endpoints, cont
                         raise ValueError('No valid roster for this article')
                     document = await job()
                     outputs[task] = document; statuses[task] = PRESENT
-                    (output / folder).mkdir(parents=True, exist_ok=True)
-                    (output / folder / f'{aid}.json').write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n')
+                    path = load_store().path(output, folder, aid); path.parent.mkdir(parents=True, exist_ok=True)
+                    path.write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n')
                 except (ValueError, KeyError, OSError) as exc:
                     statuses[task] = 'model_output_failed'; errors[task] = str(exc)[:500]
             sidecar_status = {'figure_ehr_labels': statuses.get('figure_ehr_label', 'stage_disabled'),
@@ -191,8 +198,10 @@ def main(argv=None):
     p.add_argument('--config', required=True); p.add_argument('--articles', required=True)
     p.add_argument('--run-dir', required=True); p.add_argument('--output', required=True)
     p.add_argument('--endpoints', required=True); p.add_argument('--context', type=int, required=True)
-    p.add_argument('--image-manifest'); p.add_argument('--supplement-assets')
-    p.add_argument('--supplement-transcriptions', help='Folder of reviewed supplement targets (<ID>*.json with clinical_data.transcriptions)')
+    p.add_argument('--image-manifest')
+    p.add_argument('--supplement-assets', help='Dense benchmark root holding articles/<ID>/supplements/assets.json acquisition records')
+    p.add_argument('--supplement-transcriptions', help='Dense benchmark root whose reviewed supplement targets '
+                   '(articles/<ID>/supplements/<SID>.{document,visual}.json with clinical_data.transcriptions) are used')
     args = p.parse_args(argv)
     report = asyncio.run(run_ehr_stages(args.config, args.articles, args.run_dir, args.output, args.endpoints, args.context,
                                         image_manifest=args.image_manifest, supplement_assets=args.supplement_assets,

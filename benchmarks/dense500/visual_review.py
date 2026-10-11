@@ -11,6 +11,7 @@ from pathlib import Path
 
 from openpatients2.figure_visuals import validate_joint
 from validate import digest
+import store
 
 
 def identity_digest(annotation):
@@ -53,20 +54,20 @@ def validate_submission(target, source, annotation, assets, *, verify_files=True
 
 
 def load_inputs(root,aid):
-    def read(folder):return json.loads((root/folder/f'{aid}.json').read_text())
-    annotation=read('annotations' if (root/'annotations'/f'{aid}.json').exists() else 'drafts')
+    def read(kind):return json.loads(store.path(root,kind,aid).read_text())
+    annotation=read('annotations' if store.path(root,'annotations',aid).exists() else 'drafts')
     return read('visual-submissions'),read('sources'),annotation,read('figure-assets')
 
 
 def reviewed_visual_target(root,aid):
-    if not (root/'visual-parent-reviews'/f'{aid}.json').exists():return None
+    if not store.receipt(root,'visual','parent',aid).exists():return None
     target,source,annotation,assets=load_inputs(root,aid)
     # Receipts bind previously inspected bytes. Completed cache assets may have
     # been deleted to honor the disk cap; signing itself always checks the files.
     validate_submission(target,source,annotation,assets,verify_files=False)
     receipts=[]
     for role in ('agent','parent'):
-        receipt=json.loads((root/f'visual-{role}-reviews'/f'{aid}.json').read_text())
+        receipt=json.loads(store.receipt(root,'visual',role,aid).read_text())
         for key,value in [('role',role),('article_id',aid),('status','source_and_pixels_reviewed'),
             ('source_text_sha256',source['text_sha256']),('target_sha256',digest(target)),
             ('patient_identity_sha256',identity_digest(annotation)),
@@ -95,6 +96,6 @@ if __name__=='__main__':
             'patient_identity_sha256':identity_digest(annotation),
             'reviewed_at':datetime.now(timezone.utc).isoformat(),'inspection_notes':args.notes,
             'physician_adjudicated':False,**report}
-        folder=args.root/f'visual-{args.role}-reviews';folder.mkdir(exist_ok=True)
-        (folder/f'{args.article}.json').write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\n')
+        out=store.receipt(args.root,'visual',args.role,args.article);out.parent.mkdir(parents=True,exist_ok=True)
+        out.write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\n')
     print(json.dumps(report))

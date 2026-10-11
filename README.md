@@ -18,7 +18,9 @@ living overview whenever the pipeline changes.
 - `benchmarks/dense500/` — the dense reference-set project: acquisition, annotation protocol, review/receipt tools,
   runtime gates and `export.py`, which builds `data/dense_clinical_cases_v1/`. See its [README](benchmarks/dense500/README.md)
   and [annotation protocol](benchmarks/dense500/ANNOTATION_PROTOCOL.md). `benchmarks/dense50/` holds the first retained
-  articles and is exported together with dense500.
+  articles and is exported together with dense500. Everything about one article (source, annotation, schema target,
+  figure/supplement reviews, EHR sidecars, receipts) lives in one folder, `benchmarks/<root>/articles/<ID>/`, with
+  fixed file names resolved only by `benchmarks/dense500/store.py` (map in the dense500 README).
 - `docs/` — [pipeline overview](docs/PIPELINE_OVERVIEW.md), [article viewer](docs/ARTICLE_VIEWER.md),
   [schema review v2.1](docs/SCHEMA_REVIEW_V2_1.md), and the proposed
   [source-claim compiler](docs/SOURCE_CLAIM_COMPILER_DESIGN.md) design.

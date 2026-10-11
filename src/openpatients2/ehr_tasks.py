@@ -398,14 +398,17 @@ def series_draft(source, transcriptions=None, extra_cells=()):
     return draft
 
 
-def load_transcriptions(folder, article_id):
-    """Reviewed supplement targets in `folder` (files `<article_id>*.json` carrying `supplement_id` and
-    `clinical_data.transcriptions`) -> {(supplement_id, transcription_id): text}."""
+def load_transcriptions(root, article_id):
+    """Reviewed supplement targets of one article in a dense benchmark `root` (store kinds
+    document-submissions and supplement-visual-submissions, i.e. articles/<ID>/supplements/<SID>.document.json
+    and <SID>.visual.json, carrying `supplement_id` and `clinical_data.transcriptions`)
+    -> {(supplement_id, transcription_id): text}."""
     out = {}
-    if not folder:
+    if not root:
         return out
+    from .dense_store import load
     from .document_text import reviewed_text
-    for path in sorted(Path(folder).glob(f'{article_id}*.json')):
+    for path in load().supplement_targets(root, article_id):
         target = json.loads(path.read_text())
         if target.get('supplement_id'):
             # Text-document sidecars also offer every extracted unit (the same text reviewers read).

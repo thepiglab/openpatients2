@@ -5,12 +5,15 @@ from pathlib import Path
 import pytest
 
 from openpatients2.viewer import Library, build, digest, handler
+from openpatients2.dense_store import load as load_store
+
+store = load_store()
 
 AID = 'PMC123.1'
 
 
 def put(root, folder, value, aid=AID):
-    path = root / folder / f'{aid}.json'
+    path = store.path(root, folder, aid)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value))
     return path
@@ -81,7 +84,7 @@ def test_changed_target_is_withheld_then_reappears_when_receipts_match(library):
     put(root,'schema-submissions',target)
     assert lib.article(AID)['patients']==[]
     for role in ('agent','parent'):
-        receipt=json.loads((root/f'schema-{role}-reviews'/f'{AID}.json').read_text())
+        receipt=json.loads(store.receipt(root,'schema',role,AID).read_text())
         receipt['target_sha256']=digest(target)
         put(root,f'schema-{role}-reviews',receipt)
     assert lib.article(AID)['patients'][0]['sections']['observations']['items'][0]['name']=='Corrected fact'
@@ -184,7 +187,7 @@ def test_gate_errors_and_wrong_target_identity_withheld(library):
     for key,value in [('source_gate_errors',['invalid evidence']),('article_id','PMC999.1')]:
         changed={**target,key:value};put(root,'schema-submissions',changed)
         for role in ('agent','parent'):
-            receipt=json.loads((root/f'schema-{role}-reviews'/f'{AID}.json').read_text())
+            receipt=json.loads(store.receipt(root,'schema',role,AID).read_text())
             receipt['target_sha256']=digest(changed);put(root,f'schema-{role}-reviews',receipt)
         assert lib.article(AID)['patients']==[]
 

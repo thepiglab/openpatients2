@@ -24,6 +24,7 @@ from collections import Counter
 from pathlib import Path
 
 from openpatients2.glued_text import find_glued
+import store
 
 ROOT = Path(__file__).resolve().parent
 SKIP_KEYS = frozenset('''quote segment_id segment_ids fact_id fact_ids event_id from_event_id to_event_id patient_id
@@ -130,9 +131,10 @@ def main(argv=None):
     ap.add_argument('--out', type=Path, help='write {summary, findings} JSON here')
     args = ap.parse_args(argv)
     findings, scanned = [], 0
-    for path in sorted((args.root / args.folder).glob((args.article or '*') + '.json')):
+    for aid in store.matching_ids(args.root, args.folder, args.article):
+        path = store.path(args.root, args.folder, aid)
         annotation = json.loads(path.read_text())
-        source = json.loads((args.root / 'sources' / path.name).read_text())
+        source = json.loads(store.path(args.root, 'sources', aid).read_text())
         findings += scan_annotation(annotation, source)
         scanned += 1
     summary = summarize(findings, scanned)

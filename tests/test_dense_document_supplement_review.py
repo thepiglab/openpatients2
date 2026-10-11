@@ -9,6 +9,8 @@ import shutil
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
+from openpatients2.dense_store import load as load_store
+store = load_store()
 AID = 'PMC-test.1'
 
 
@@ -51,11 +53,10 @@ def document(tmp_path, monkeypatch):
                   assets=[{k:original[k] for k in ('url','filename','original_manifest_url','md5')} | dict(
                       sha256=hashlib.sha256(data).hexdigest(), bytes=len(data), path=str(path), source_license=source['license'],
                       media_type='application/pdf', page_count=2, pages=[page, dict(deepcopy(page), page=2)])], limitations=[])
-    for folder in ('sources','annotations','document-submissions'): (tmp_path / folder).mkdir()
     def save():
-        for folder,value,filename in [('sources',source,f'{AID}.json'),('annotations',annotation,f'{AID}.json'),
-                                       ('document-submissions',target,f'{AID}.supplements.SM1.json')]:
-            (tmp_path / folder / filename).write_text(json.dumps(value))
+        for kind,value,sid in [('sources',source,None),('annotations',annotation,None),
+                               ('document-submissions',target,'SM1')]:
+            store.path(tmp_path, kind, AID, sid=sid, mkdir=True).write_text(json.dumps(value))
     save()
     return m,tmp_path,source,annotation,target,save
 

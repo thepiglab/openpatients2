@@ -4,6 +4,8 @@ import importlib.util
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+from openpatients2.dense_store import load as load_store
+store = load_store()
 
 
 def load(monkeypatch):
@@ -75,7 +77,7 @@ def test_needs_review_resolutions_survive_reruns(monkeypatch, tmp_path):
     module = load(monkeypatch)
     item = {'key': 'OBS-FLAG:p1-f5:fields.flag', 'rule_id': 'OBS-FLAG'}
     module.write_needs_review(tmp_path, 'X', [item], True)
-    path = tmp_path / 'needs-review' / 'X.json'
+    path = store.path(tmp_path, 'needs-review', 'X')
     import json
     doc = json.loads(path.read_text()); doc['items'][0].update(resolution='kept negative: qualitative test', resolved_by='parent')
     path.write_text(json.dumps(doc))
@@ -109,7 +111,7 @@ def test_resolved_items_are_not_reopened(monkeypatch, tmp_path):
     item = {'key': 'FIG-LABELS:F1:figures.panels[0].panel', 'rule_id': 'FIG-LABELS'}
     module.write_needs_review(tmp_path, 'X', [item], True)
     import json
-    path = tmp_path / 'needs-review' / 'X.json'; doc = json.loads(path.read_text())
+    path = store.path(tmp_path, 'needs-review', 'X'); doc = json.loads(path.read_text())
     doc['items'][0].update(resolution='label printed on pixels', resolved_by='parent'); path.write_text(json.dumps(doc))
     again = module.write_needs_review(tmp_path, 'X', [item], True)
     assert [i for i in again['items'] if not i['resolution']] == []

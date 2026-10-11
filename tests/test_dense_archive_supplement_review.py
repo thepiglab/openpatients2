@@ -11,6 +11,8 @@ import zipfile
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
+from openpatients2.dense_store import load as load_store
+store = load_store()
 AID = 'PMC-archive-test.1'
 ZIP_URL = 'https://pmc-oa-opendata.s3.amazonaws.com/PMC-archive-test.1/s001.zip?md5=x'
 MEMBER = 'Supplementary/report.pdf'
@@ -75,12 +77,10 @@ def archive(tmp_path, monkeypatch):
                   assets=[dict(url=murl, member=MEMBER, sha256=msha, bytes=len(member), path=str(extracted),
                                media_type='application/pdf', page_count=2, pages=[page(1, 'administrative'), page(2, 'clinical_data')])],
                   limitations=[], clinical_data=payload)
-    for folder in ('sources', 'annotations', 'document-submissions'):
-        (root / folder).mkdir()
     def save():
-        for folder, value, name in [('sources', source, f'{AID}.json'), ('annotations', annotation, f'{AID}.json'),
-                                    ('document-submissions', target, f'{AID}.supplements.S1.json')]:
-            (root / folder / name).write_text(json.dumps(value))
+        for kind, value, sid in [('sources', source, None), ('annotations', annotation, None),
+                                 ('document-submissions', target, 'S1')]:
+            store.path(root, kind, AID, sid=sid, mkdir=True).write_text(json.dumps(value))
     save()
     return m, root, source, annotation, target, save
 
@@ -185,8 +185,7 @@ def test_extract_writes_bounded_members_and_skeleton(archive, tmp_path, monkeypa
     spec = __import__('importlib.util').util.spec_from_file_location('dense_assets_zip', ROOT / 'benchmarks/dense500/supplement_assets.py')
     assets = __import__('importlib.util').util.module_from_spec(spec); spec.loader.exec_module(assets)
     data = Path(t['archive']['path']).read_bytes()
-    (root / 'supplement-assets').mkdir()
-    (root / 'supplement-assets' / f'{AID}.json').write_text(json.dumps({'files': [dict(
+    store.path(root, 'supplement-assets', AID, mkdir=True).write_text(json.dumps({'files': [dict(
         supplement_id='S1', url=ZIP_URL, filename='s001.zip', original_manifest_url='s3://x/s001.zip', declared_md5=t['archive']['md5'],
         download_status='downloaded', detected_type='zip', sha256=hashlib.sha256(data).hexdigest(), bytes=len(data),
         path=t['archive']['path'])]}))
@@ -194,7 +193,7 @@ def test_extract_writes_bounded_members_and_skeleton(archive, tmp_path, monkeypa
     record = assets.extract_archive(root, AID, 'S1', cache=cache)
     assert [x['member'] for x in record['members']] == [MEMBER] and record['archive']['members'] == [MEMBER]
     assert Path(record['members'][0]['path']).parent == cache / AID / 'members'
-    skeleton = json.loads((root / 'document-submission-drafts' / f'{AID}.supplements.S1.json').read_text())
+    skeleton = json.loads(store.path(root, 'document-submission-drafts', AID, sid='S1').read_text())
     assert skeleton['format'] == m.ARCHIVE_FORMAT and skeleton['status'] == 'partial'
     with pytest.raises(assets.CacheFull):
         assets.extract_archive(root, AID, 'S1', cache=tmp_path / 'tiny', max_cache=10)

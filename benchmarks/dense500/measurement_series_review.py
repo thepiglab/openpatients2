@@ -1,13 +1,13 @@
 """Draft, validate and sign dense numeric measurement series.
 
-  measurement_series_review.py ROOT --article ID --draft   # writes measurement-series-drafts/ID.json
-  measurement_series_review.py ROOT --article ID           # validates measurement-series/ID.json
+  measurement_series_review.py ROOT --article ID --draft   # writes articles/ID/measurement_series.draft.json
+  measurement_series_review.py ROOT --article ID           # validates articles/ID/measurement_series.json
   measurement_series_review.py ROOT --article ID --role agent|parent --reviewer NAME --notes NOTES
 
 The draft lists every literal main-article table cell (and CSV/TSV/XLSX cells of
 downloaded supplements, capped) plus DRAFT candidate row series. Reviewers keep
 only real series, assign patients with literal evidence, kinds, units and time
-offsets, then copy the file to `measurement-series/ID.json`. Parsed numbers are
+offsets, then copy the file to `articles/ID/measurement_series.json`. Parsed numbers are
 recomputed from raw cells; they can never be typed in. Supplement transcription
 cells must cite dual-reviewed `dense-supplemental-clinical-reference/1` rows.
 """
@@ -19,6 +19,7 @@ from openpatients2.measurement_series import FORMAT, contract_sha256, draft_seri
 from openpatients2.supplement_peek import read_delimited, read_xlsx
 from sidecar_receipts import base_binding, load_inputs, present, sign, verify
 from validate import digest
+import store
 
 KIND = 'measurement-series'
 STATUS = 'measurement_series_reviewed'
@@ -39,7 +40,7 @@ def reviewed_transcriptions(root, aid):
 
 
 def _acquired(root, aid):
-    acquisition = _json(Path(root) / 'supplement-assets' / f'{aid}.json') or {'files': []}
+    acquisition = _json(store.path(root, 'supplement-assets', aid)) or {'files': []}
     return {(r['supplement_id'], r.get('url')): r for r in acquisition['files']}
 
 
@@ -89,16 +90,16 @@ def supplement_file_cells(root, aid):
 def write_draft(root, aid):
     source, _ = load_inputs(root, aid)
     draft = draft_series(source, supplement_cells=supplement_file_cells(root, aid))
-    folder = Path(root) / 'measurement-series-drafts'; folder.mkdir(exist_ok=True)
-    (folder / f'{aid}.json').write_text(json.dumps(draft, ensure_ascii=False, indent=2) + '\n')
+    out = store.path(root, 'measurement-series-drafts', aid); out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(draft, ensure_ascii=False, indent=2) + '\n')
     return draft
 
 
 def check(root, aid, *, verify_files=True):
     root = Path(root)
     source, annotation = load_inputs(root, aid)
-    target = json.loads((root / 'measurement-series' / f'{aid}.json').read_text())
-    manifest = _json(root / 'supplement-manifests' / f'{aid}.json')
+    target = json.loads(store.path(root, 'measurement-series', aid).read_text())
+    manifest = _json(store.path(root, 'supplement-manifests', aid))
     transcriptions = reviewed_transcriptions(root, aid)
     report = validate_series(target, source, annotation, transcriptions=transcriptions, manifest=manifest,
                              file_reader=file_reader(root, aid) if verify_files else None)
@@ -125,7 +126,7 @@ def sign_review(root, aid, *, role, reviewer, notes):
 
 def reviewed_series(root, aid):
     root = Path(root)
-    if not (root / 'measurement-series' / f'{aid}.json').exists() or not all(present(root, KIND, aid)):
+    if not store.path(root, 'measurement-series', aid).exists() or not all(present(root, KIND, aid)):
         return None
     target, source, annotation, manifest, transcriptions, report = check(root, aid, verify_files=False)
     receipts = verify(root, KIND, aid, binding(target, source, annotation, manifest, transcriptions), report)
@@ -139,7 +140,7 @@ if __name__ == '__main__':
     p.add_argument('--reviewer'); p.add_argument('--notes'); args = p.parse_args()
     if args.draft:
         draft = write_draft(args.root, args.article)
-        print(json.dumps({'draft': f'measurement-series-drafts/{args.article}.json', 'format': FORMAT,
+        print(json.dumps({'draft': str(store.path(args.root, 'measurement-series-drafts', args.article)), 'format': FORMAT,
                           'cells': len(draft['cells']), 'candidate_series': len(draft['series'])}))
     elif args.role:
         receipt = sign_review(args.root, args.article, role=args.role, reviewer=args.reviewer, notes=args.notes)

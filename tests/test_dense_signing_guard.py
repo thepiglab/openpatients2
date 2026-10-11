@@ -52,7 +52,7 @@ def test_every_signer_refuses_a_probe_without_writing(guard, tmp_path, monkeypat
 def test_stored_placeholder_receipt_is_not_a_review(guard, tmp_path):
     import sidecar_receipts
     for role, reviewer in (('agent', 'x'), ('parent', 'Claude Opus 5.5 parent')):
-        path = sidecar_receipts.receipt_path(tmp_path, 'figure-ehr', role, 'A'); path.parent.mkdir(parents=True)
+        path = sidecar_receipts.receipt_path(tmp_path, 'figure-ehr', role, 'A'); path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps({'role': role, 'reviewer': reviewer, 'inspection_notes': NOTES if role == 'parent' else 'x',
                                     'physician_adjudicated': False}))
     with pytest.raises(ValueError, match='placeholder'):

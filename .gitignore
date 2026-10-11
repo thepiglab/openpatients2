@@ -14,11 +14,11 @@ logs/
 *.safetensors
 .DS_Store
 tmp/
-# dense benchmarks: regenerable working files (rebuilt by acquire.py / *_review.py --draft / schema_targets.py)
-benchmarks/dense*/raw-xml/
-benchmarks/dense*/source-text/
-benchmarks/dense*/schema-drafts/
-benchmarks/dense*/*-drafts/
-benchmarks/dense*/document-submission-drafts/
-benchmarks/dense*/supplement-archive-members/
-benchmarks/dense*/supplement-cache/
+# dense benchmarks: regenerable per-article caches inside benchmarks/<root>/articles/<ID>/ (see
+# benchmarks/dense500/store.py CACHE_KINDS; rebuilt by acquire.py, schema_targets.py, *_review.py --draft,
+# supplement_assets.py). Everything else in articles/<ID>/ is tracked.
+benchmarks/dense*/articles/*/source.txt
+benchmarks/dense*/articles/*/raw.xml
+benchmarks/dense*/articles/*/*.draft.json
+benchmarks/dense*/articles/*/supplements/*.draft.json
+benchmarks/dense*/articles/*/supplements/*.archive_members.json

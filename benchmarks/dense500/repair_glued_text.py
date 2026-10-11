@@ -22,6 +22,7 @@ from collections import defaultdict
 from pathlib import Path
 
 from openpatients2.glued_text import apply_segmentations
+import store
 from scan_glued_text import ROOT, SKIP_KEYS, scan_annotation
 
 REPAIRABLE = ('exported', 'internal')
@@ -93,13 +94,13 @@ def main(argv=None):
     if args.out:
         args.out.mkdir(parents=True, exist_ok=True)
     summary = {}
-    for path in sorted((args.root / args.folder).glob((args.article or '*') + '.json')):
+    for aid in store.matching_ids(args.root, args.folder, args.article):
+        path = store.path(args.root, args.folder, aid)
         annotation = json.loads(path.read_text())
-        source = json.loads((args.root / 'sources' / path.name).read_text())
+        source = json.loads(store.path(args.root, 'sources', aid).read_text())
         changes = plan(annotation, source)
         if not changes:
             continue
-        aid = path.stem
         summary[aid] = {'values': len(changes), 'tokens': sum(len(c['tokens']) for c in changes),
                         'exported_values': sum(c['category'] == 'exported' for c in changes)}
         if args.out:

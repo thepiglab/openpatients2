@@ -10,6 +10,8 @@ from openpatients2.semantic_rules import WARNING, annotation_violations, item_vi
 from openpatients2.validation import validate
 
 ROOT = Path(__file__).resolve().parents[1]
+from openpatients2.dense_store import load as load_store
+store = load_store()
 SOURCE = ('A 50-year-old man underwent a right hemihepatectomy. Anti-HBs appeared more than seven months later. '
           'HbA1c was 7%, IL6 was raised and COVID19 testing was negative. Biopsy could not be performed.')
 
@@ -82,8 +84,8 @@ def dense(monkeypatch):
 
 def _reference():
     root = ROOT / 'benchmarks/dense50'; aid = 'PMC13624771.1'
-    return (json.loads((root / 'annotations' / f'{aid}.json').read_text()),
-            json.loads((root / 'sources' / f'{aid}.json').read_text()))
+    return (json.loads(store.path(root, 'annotations', aid).read_text()),
+            json.loads(store.path(root, 'sources', aid).read_text()))
 
 
 def test_materializer_keeps_spaced_text_verbatim(dense):

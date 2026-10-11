@@ -12,8 +12,8 @@ historical reference answers, or each other's annotations.
 
 ## Deliverable for each article
 
-Write `drafts/<article_id>.json`. Read its full `sources/<article_id>.json` and
-`source-text/<article_id>.txt`. Use `schema_version: dense-article-annotation/1`.
+Write `articles/<article_id>/annotation_draft.json`. Read its full `articles/<article_id>/source.json` and
+`articles/<article_id>/source.txt`. Use `schema_version: dense-article-annotation/1`.
 
 Top-level keys:
 - `article_id`, `text_sha256`, `xml_sha256` (copy from source metadata).

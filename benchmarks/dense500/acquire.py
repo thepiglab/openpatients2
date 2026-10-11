@@ -14,6 +14,7 @@ import httpx
 
 from openpatients2.corpus import fetch_article, search_candidates
 from openpatients2.literature_client import LiteratureClient, LiteratureConfig
+import store
 
 ROOT = Path(__file__).resolve().parent
 LANES = {
@@ -102,7 +103,7 @@ async def acquire(limit=477):
     manifest_path = ROOT / 'selection.json'
     manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else []
     used = {x['pmcid'] for x in manifest}
-    used.update(p.name.split('.')[0] for p in (ROOT.parent/'dense50/sources').glob('*.json'))
+    used.update(aid.split('.')[0] for aid in store.article_ids(ROOT.parent/'dense50', 'sources'))
     log_path = ROOT / 'acquisition/decisions.json'
     log = json.loads(log_path.read_text()) if log_path.exists() else []
     attempted = {x['pmcid'] for x in log}
@@ -144,12 +145,12 @@ async def acquire(limit=477):
                         xml = client.last_xml
                         if not xml or hashlib.sha256(xml.encode()).hexdigest() != article['xml_sha256']:
                             raise ValueError('Raw XML hash disagrees with parsed source')
-                        save(ROOT/'sources'/f'{article_id}.json', article)
-                        (ROOT/'raw-xml'/f'{article_id}.xml').write_text(xml)
+                        save(store.path(ROOT, 'sources', article_id), article)
+                        store.path(ROOT, 'raw-xml', article_id).write_text(xml)
                         text = article['title']+'\n\n'+'\n\n'.join(
                             f"[{s['segment_id']}] {s.get('heading', '')}\n{s['text']}"
                             for s in article['segments'])
-                        (ROOT/'source-text'/f'{article_id}.txt').write_text(text)
+                        store.path(ROOT, 'source-text', article_id).write_text(text)
                         manifest.append({'article_id': article_id, 'pmcid': pmcid,
                             'title': article['title'], 'stratum': lane,
                             'source_url': article['source_url'], 'doi': article.get('doi'),

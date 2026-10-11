@@ -16,7 +16,7 @@ Never run any `--role` command to probe, test or dry-run a script. It overwrites
 
 ## Event kinds live in the annotation
 
-Set timeline event classification on the annotation event: `kind` (presentation, history, diagnosis, test, treatment, adverse_event, outcome, follow_up, plan, other), and for its `time_text` the `time_kind` (calendar, relative, duration, age, gestational_age, postnatal_age, order_only), `time_precision` (exact, approximate, range, unknown) and `time_calendar_value` (the YYYY[-MM[-DD]] the time text states at its own precision, e.g. "October 26, 2022" -> 2022-10-26, "October 2022" -> 2022-10; calendar times only). `schema_targets.py` reads these fields. Never patch event kinds or time classifications into `schema-submissions/` with a script; regenerate instead. The same holds for the roster: set the article-level annotation block `"roster": {"reported_individual_count": N|null, "roster_complete": true|false, "evidence": [{"segment_id": ..., "quote": "<literal text stating the number>"}]}`; `schema_targets.py` reads it, and a submission patched after signing makes the parent's schema receipt stale. `schema_review.py` rejects a submission that disagrees with classification set in the annotation.
+Set timeline event classification on the annotation event: `kind` (presentation, history, diagnosis, test, treatment, adverse_event, outcome, follow_up, plan, other), and for its `time_text` the `time_kind` (calendar, relative, duration, age, gestational_age, postnatal_age, order_only), `time_precision` (exact, approximate, range, unknown) and `time_calendar_value` (the YYYY[-MM[-DD]] the time text states at its own precision, e.g. "October 26, 2022" -> 2022-10-26, "October 2022" -> 2022-10; calendar times only). `schema_targets.py` reads these fields. Never patch event kinds or time classifications into `schema_target.json` with a script; regenerate instead. The same holds for the roster: set the article-level annotation block `"roster": {"reported_individual_count": N|null, "roster_complete": true|false, "evidence": [{"segment_id": ..., "quote": "<literal text stating the number>"}]}`; `schema_targets.py` reads it, and a submission patched after signing makes the parent's schema receipt stale. `schema_review.py` rejects a submission that disagrees with classification set in the annotation.
 
 ## Read first (required)
 1. `benchmarks/dense500/ANNOTATION_PROTOCOL.md` — the binding contract for dense500 AND dense50 articles (the dense50
@@ -27,19 +27,19 @@ Set timeline event classification on the annotation event: `kind` (presentation,
    every rule ID.
 2. `benchmarks/dense500/claude_prompts/LESSONS.md` — defects the previous reviewer kept finding. Check each.
 3. `R/SUPPLEMENT_DOCUMENT_REVIEW.md` — only if the article has supplements.
-4. One completed exemplar for format: `R/annotations/PMC12310273.1.json`,
-   `R/visual-submissions/PMC12310273.1.json`, `R/schema-submissions/PMC12310273.1.json`.
+4. One completed exemplar for format: `R/articles/PMC12310273.1/annotation.json`,
+   `R/articles/PMC12310273.1/visual.json`, `R/articles/PMC12310273.1/schema_target.json`.
 5. Field shapes/enums: `src/openpatients2/schemas.py` (TASK_MODELS), `src/openpatients2/figure_visuals.py`,
    `src/openpatients2/figure_attribution.py`. Shapes only: semantics come from 1b, never from guessing at enum names.
 
 ## Source
-- Segments: `R/sources/<ID>.json` → `segments[]` (`segment_id` like `b00009`, `text`). Read EVERY segment,
+- Segments: `R/articles/<ID>/source.json` → `segments[]` (`segment_id` like `b00009`, `text`). Read EVERY segment,
   including tables (`table_row`), footnotes and captions. Quotes must be exact substrings of the segment
-  `text` in this JSON (not `source-text/*.txt`); preserve Unicode exactly.
+  `text` in this JSON (not `articles/<ID>/source.txt`); preserve Unicode exactly.
 - Copy `text_sha256` / `xml_sha256` from the source JSON.
 
 ## Mode A — new article (no draft exists)
-Write `R/drafts/<ID>.json` (`schema_version: dense-article-annotation/1`) doing the 5 protocol passes.
+Write `R/articles/<ID>/annotation_draft.json` (`schema_version: dense-article-annotation/1`) doing the 5 protocol passes.
 You may write a small builder script in your own scratch area (do not add it to the repo), but the JSON is what
 counts. Set `annotation_provenance.annotator_model` to `"Claude Sonnet 5.5 annotator"`, `prior_predictions_consulted: false`,
 `status: "draft"`. Never consult other model predictions or other articles' annotations for content.
@@ -47,26 +47,26 @@ counts. Set `annotation_provenance.annotator_model` to `"Claude Sonnet 5.5 annot
 ## Mode B — finishing an in-flight draft (draft exists from a prior GPT-6.1 Sol annotator)
 Do not trust it. Re-read the whole source and audit the draft source→output (omissions) and
 output→source (unsupported claims, wrong patient, timing, polarity, units, planned-vs-done, suspected-vs-confirmed).
-Fix it in place in `R/drafts/<ID>.json` and add `"Claude Sonnet 5.5 annotator audit"` as an extra entry in
+Fix it in place in `R/articles/<ID>/annotation_draft.json` and add `"Claude Sonnet 5.5 annotator audit"` as an extra entry in
 `annotation_provenance.passes`.
-If `R/annotations/<ID>.json` already exists (parent-approved), do NOT touch drafts; stop and report.
+If `R/articles/<ID>/annotation.json` already exists (parent-approved), do NOT touch drafts; stop and report.
 
 ## Steps (both modes)
 1. Draft/fix the annotation. Validate until it prints `[]` (structural + shared semantic rules):
-   `PYTHONPATH=src:benchmarks/dense500 .venv/bin/python -c "import json;from pathlib import Path;from validate import validate,semantic_errors;r=Path('benchmarks/dense500');a='<ID>';an=json.loads((r/'drafts'/f'{a}.json').read_text());s=json.loads((r/'sources'/f'{a}.json').read_text());print(validate(an,s)+semantic_errors(an,s))"`
+   `PYTHONPATH=src:benchmarks/dense500 .venv/bin/python -c "import json;from pathlib import Path;import store;from validate import validate,semantic_errors;r=Path('benchmarks/dense500');a='<ID>';an=json.loads(store.path(r,'drafts',a).read_text());s=json.loads(store.path(r,'sources',a).read_text());print(validate(an,s)+semantic_errors(an,s))"`
    (use `R` for the article's root). Supply every attribute the source supports: the materializer turns an omitted
    categorical field into `unknown` (e.g. a plain number needs `comparator: "="`, a numeric age needs its literal
    `text_value`, a result called normal needs `flag: "normal"`).
 2. Figures (if the source has any): `.venv/bin/python R/figure_assets.py R --article <ID>`. For each asset path in
-   `R/figure-assets/<ID>.json`, copy it to your scratch dir with a `.jpg`/`.png` extension and view it with the Read
-   tool. Inspect every panel, label, arrow, axis and printed value. Then write `R/visual-submissions/<ID>.json`
+   `R/articles/<ID>/figure_assets.json`, copy it to your scratch dir with a `.jpg`/`.png` extension and view it with the Read
+   tool. Inspect every panel, label, arrow, axis and printed value. Then write `R/articles/<ID>/visual.json`
    (`format: dense-figure-reference/1`, same shape as the exemplar). The pixel work lives in the visual
    submission; follow the canonical convention for the annotation's `figures[]` (exemplars keep
    `visual_status: not_inspected` / `visual_description: null` there) but do fix caption/panel attribution
    errors you find. Unreadable → unknown. Never describe pixels you did not view. Validate: `.venv/bin/python R/visual_review.py R --article <ID>` (no `--role` yet).
 3. Runtime schema: `.venv/bin/python R/schema_targets.py R --folder drafts --article <ID>`, inspect
-   `R/schema-drafts/<ID>.json` defaults against the source (documented attributes must go back into the
-   annotation, then regenerate), then `cp R/schema-drafts/<ID>.json R/schema-submissions/<ID>.json`.
+   `R/articles/<ID>/schema_target.draft.json` defaults against the source (documented attributes must go back into the
+   annotation, then regenerate), then `cp R/articles/<ID>/schema_target.draft.json R/articles/<ID>/schema_target.json`.
    Check with `.venv/bin/python R/schema_review.py R --folder drafts --article <ID>`.
 4. Run the runtime gate command and fix the annotation until it reports `"passed": true` (these are the exact checker
    objects the local-LLM pipeline must pass; `schema_review.py --role` refuses to sign otherwise):
@@ -77,33 +77,33 @@ If `R/annotations/<ID>.json` already exists (parent-approved), do NOT touch draf
    Supplements: follow SUPPLEMENT_DOCUMENT_REVIEW.md for agent receipts.
    ZIP of PDFs (e.g. PMC12786310.1): `R/supplement_assets.py acquire R --article <ID>`, then
    `R/supplement_assets.py extract R --article <ID> --supplement <SID>`; copy
-   `R/document-submission-drafts/<ID>.supplements.<SID>.json` to `R/document-submissions/`, inspect every member page,
+   `R/articles/<ID>/supplements/<SID>.document.draft.json` to `R/articles/<ID>/supplements/<SID>.document.json`, inspect every member page,
    add `clinical_data` for clinical pages (asset_url = member pseudo-URL), validate/sign with `R/supplement_review.py`.
 4b. EHR sidecars (see "EHR multimodal sidecars" in ANNOTATION_PROTOCOL.md; informational, not completion gates).
    Prefix: `PYTHONPATH=src:benchmarks/dense500 .venv/bin/python`.
    - Supplements (if the source lists any): `R/supplement_assets.py acquire R --article <ID>`, then
      `R/supplement_manifest_review.py R --article <ID> --draft`. Open every cached file (paths in
-     `R/supplement-assets/<ID>.json`; copy images/PDF pages to scratch and Read them) and fill every `review` block in
-     `R/supplement-manifests/<ID>.json` (content_class, basis, patient scope + literal ownership evidence, ehr_includable,
+     `R/articles/<ID>/supplements/assets.json`; copy images/PDF pages to scratch and Read them) and fill every `review` block in
+     `R/articles/<ID>/supplements/manifest.json` (content_class, basis, patient scope + literal ownership evidence, ehr_includable,
      ehr_modality, counts, limitations). Never edit `machine`/`machine_suggestion`; never put clinical values there.
      Validate `R/supplement_manifest_review.py R --article <ID>`, then sign
      `... --role agent --reviewer "Claude Sonnet 5.5 annotator" --notes "<what you opened>"`.
    - Figures (after the visual submission is final): `R/figure_ehr_review.py R --article <ID> --draft`, copy
-     `R/figure-ehr-label-drafts/<ID>.json` to `R/figure-ehr-labels/<ID>.json`, replace every DRAFT rationale after
+     `R/articles/<ID>/figure_ehr_labels.draft.json` to `R/articles/<ID>/figure_ehr_labels.json`, replace every DRAFT rationale after
      checking each panel's pixels, override defaults only with `override_reason`, validate
      `R/figure_ehr_review.py R --article <ID>`, sign `... --role agent --reviewer "Claude Sonnet 5.5 annotator" --notes "<...>"`.
    - Serial numeric tables/supplements (recommended): `R/measurement_series_review.py R --article <ID> --draft`; keep real
-     series in `R/measurement-series/<ID>.json` (owners, kinds, literal units/time, offsets only if printed), validate,
+     series in `R/articles/<ID>/measurement_series.json` (owners, kinds, literal units/time, offsets only if printed), validate,
      sign `--role agent`. Never type a parsed value; dashes are `missing_cell`. Record a legend-defined meaning (refusal, discontinuation, PRN/emergency) as `cell_status` + `legend_cell_id` (protocol, measurement series).
-   - Privacy flags (every article with figures; flag only, never exclude): `R/figure_privacy_review.py R --article <ID> --draft`, copy `R/figure-privacy-flag-drafts/<ID>.json` to
-     `R/figure-privacy-flags/<ID>.json`, view every panel's pixels and set `burned_in_identifiers`
+   - Privacy flags (every article with figures; flag only, never exclude): `R/figure_privacy_review.py R --article <ID> --draft`, copy `R/articles/<ID>/figure_privacy_flags.draft.json` to
+     `R/articles/<ID>/figure_privacy_flags.json`, view every panel's pixels and set `burned_in_identifiers`
      (none | timestamps_or_device_text | direct_identifiers = names, IDs/MRNs, birth dates, operator names, UIDs),
      `sensitive_anatomy` (e.g. genital) and `identifiable_face` (e.g. unmasked faces), each with a short description of
      the CATEGORY of what is visible (never copy the identifier values; runs of 4+ digits are rejected), and replace the
      DRAFT notes. `prefill` holds hints from earlier reviewer text/known reports; confirm or reject them on pixels.
      Flags never change `ehr_includable`. Validate `R/figure_privacy_review.py R --article <ID>`, sign `--role agent`.
    Never run `supplement_assets.py cleanup` (the parent does after both receipts).
-5. NEVER write `R/annotations/`, `R/reviews/`, any `*-parent-reviews/`, never run anything with `--role parent`,
+5. NEVER write `R/articles/<ID>/annotation.json`, any `R/articles/<ID>/receipts/*.parent.json`, never run anything with `--role parent`,
    never run `export.py`, and never edit another article's files.
 
 ## Report back (concise, ≤300 words)
@@ -114,7 +114,7 @@ receipts signed, and a bullet list of every uncertainty / source conflict / thin
 After the parent amends and promotes the annotation, you may be asked to re-inspect the delta and re-sign your
 agent receipts against the canonical files: `schema_review.py R --folder annotations --article <ID> --role agent ...`
 (and `visual_review.py ... --role agent` if the visual submission changed). Read the parent's changes first,
-and read the regenerated `schema-submissions/<ID>.json` (your receipt binds that full target) before signing.
+and read the regenerated `articles/<ID>/schema_target.json` (your receipt binds that full target) before signing.
 
 ## Scratch script hygiene
 Keep helper scripts in your own scratch dir, never name them after Python stdlib modules (struct.py, json.py, types.py, ...), and never write files for any article other than the one you were assigned.

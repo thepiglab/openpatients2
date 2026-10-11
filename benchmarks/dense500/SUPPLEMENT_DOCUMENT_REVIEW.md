@@ -1,6 +1,6 @@
 # PDF supplement review
 
-PDF supplements use `dense-supplemental-document-reference/1`, separately from the unchanged supplemental image contract. Save one sidecar per source supplement in `document-submissions/ARTICLE.supplements.SUPPLEMENT.json`. The concrete HMPV example is `document-submissions/PMC12756086.1.supplements.SM1.json`; the Pydantic contract is `DocumentSupplementTarget` in `supplement_review.py`.
+PDF supplements use `dense-supplemental-document-reference/1`, separately from the unchanged supplemental image contract. Save one sidecar per source supplement in `articles/ARTICLE/supplements/SUPPLEMENT.document.json`. The concrete HMPV example is `articles/PMC12756086.1/supplements/SM1.document.json`; the Pydantic contract is `DocumentSupplementTarget` in `supplement_review.py`.
 
 Preserve each original source-listed asset URL, MD5 (or null if absent), original manifest URL, filename, SHA256, byte count and exact source license. `media_type` is `application/pdf`. Obtain the actual `page_count` and personally inspect every rendered page. Each page entry requires its one-based page number, `status: inspected`, `inspection_method: rendered_page`, contents, clinical relevance (`administrative`, `clinical_data`, `background`, or `mixed`), relevance notes, supported patient IDs (otherwise empty), rights assessment and limitations. `rights_checked: true` records the actual page check; retain differing printed notices as `rights_basis: page_exception` with `rights_exceptions` notice/interpretation entries. No printed exception does not establish blanket asset licensing; use `unclear` where appropriate. Distinguish an administrative checklist from clinical data. Do not turn blank checklist cells into clinical negatives or create figure/vision output for document pages.
 
@@ -41,14 +41,14 @@ Production `time.text` and `date_iso`, when supplied, must also occur literally 
 
 ## ZIP supplements containing PDFs
 
-A source-listed ZIP is reviewed per member PDF with `dense-supplemental-archive-document-reference/1` (Pydantic `ArchiveDocumentTarget` in `supplement_review.py`). The sidecar goes in the same place: `document-submissions/ARTICLE.supplements.SUPPLEMENT.json`.
+A source-listed ZIP is reviewed per member PDF with `dense-supplemental-archive-document-reference/1` (Pydantic `ArchiveDocumentTarget` in `supplement_review.py`). The sidecar goes in the same place: `articles/ARTICLE/supplements/SUPPLEMENT.document.json`.
 
 ```sh
 PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/supplement_assets.py acquire benchmarks/dense500 --article ARTICLE
 PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/supplement_assets.py extract benchmarks/dense500 --article ARTICLE --supplement SUPPLEMENT
 ```
 
-`extract` checks the cached ZIP hash. It reads the central directory, ignoring `__MACOSX`/`.DS_Store` junk, and writes only the PDF members, under hashed names, into this article's folder of the capped supplement cache (250 MB per member, 30 GB shared cap). It records `supplement-archive-members/ARTICLE.SUPPLEMENT.json` and a skeleton at `document-submission-drafts/ARTICLE.supplements.SUPPLEMENT.json`. Copy the skeleton to `document-submissions/`, then inspect every rendered page of every member PDF. Fill `pages` exactly as for PDFs, set `status: inspected`, the classification and a summary, and remove the DRAFT text.
+`extract` checks the cached ZIP hash. It reads the central directory, ignoring `__MACOSX`/`.DS_Store` junk, and writes only the PDF members, under hashed names, into this article's folder of the capped supplement cache (250 MB per member, 30 GB shared cap). It records `articles/ARTICLE/supplements/SUPPLEMENT.archive_members.json` and a skeleton at `articles/ARTICLE/supplements/SUPPLEMENT.document.draft.json`. Copy the skeleton to `articles/ARTICLE/supplements/SUPPLEMENT.document.json`, then inspect every rendered page of every member PDF. Fill `pages` exactly as for PDFs, set `status: inspected`, the classification and a summary, and remove the DRAFT text.
 
 - The `archive` block keeps the declared ZIP URL, MD5, original manifest URL, filename, license, SHA256, bytes, the PDF member list and `other_members`. Any non-PDF member makes the review `partial`.
 - Each `assets` entry is one member, with pseudo-URL `ZIP_URL#member=NAME`, `member`, SHA256, bytes, extracted path, `application/pdf`, pdfinfo `page_count` and per-page reviews.
@@ -83,7 +83,7 @@ DOCX units are cross-checked against the raw `w:t` text of `word/document.xml`. 
 ```sh
 # 1. acquire (as for every supplement), then draft the review skeleton (extracts ZIP members into the cache)
 PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/supplement_assets.py extract-text benchmarks/dense500 --article ARTICLE --supplement SID
-# 2. copy document-submission-drafts/ARTICLE.supplements.SID.json to document-submissions/, read EVERY unit
+# 2. copy articles/ARTICLE/supplements/SID.document.draft.json to articles/ARTICLE/supplements/SID.document.json, read EVERY unit
 #    (open the original file too when layout matters), fill `blocks`, status, classification, summary, clinical_data
 # 3. validate (no --role: this is the dry run)
 PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/supplement_review.py benchmarks/dense500 --article ARTICLE --supplement SID

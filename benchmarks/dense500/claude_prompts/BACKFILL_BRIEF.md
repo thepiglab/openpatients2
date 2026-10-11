@@ -16,7 +16,7 @@ also given to the local-LLM figure prompts), the "EHR multimodal sidecars" secti
 Never run any `--role` command to probe, test or dry-run a script. It overwrites the existing receipt, which may be another reviewer's valid signature. Run the script WITHOUT `--role` to validate. Sign only after you inspected the content yourself, with your real reviewer identity (e.g. "Claude Sonnet 5.5 annotator", "Claude Opus 5.5 parent") and notes that describe what you checked. `signing_guard.py` refuses placeholder reviewers/notes ("x", "test", under 20 characters, "dry run"), and exports reject receipts that carry them.
 
 ## Hard rules
-- Do NOT modify `annotations/`, `reviews/`, `schema-*`, `visual-submissions/` or any existing receipt. These
+- Do NOT modify `annotation.json`, `schema_target*.json`, `visual.json` (in `R/articles/<ID>/`) or any existing receipt (`receipts/`). These
   articles are complete; touching them would un-complete them. You only create the new sidecars and their
   agent receipts.
 - Never run anything with `--role parent`, never run `supplement_assets.py cleanup`, never run `export.py`.
@@ -24,9 +24,9 @@ Never run any `--role` command to probe, test or dry-run a script. It overwrites
   annotation; never invent clinical values.
 
 ## Figure EHR labels (per article)
-1. `.venv/bin/python R/figure_assets.py R --article <ID>` if assets are not cached (paths in `R/figure-assets/<ID>.json`).
-2. `R/figure_ehr_review.py R --article <ID> --draft`, copy `R/figure-ehr-label-drafts/<ID>.json` →
-   `R/figure-ehr-labels/<ID>.json`.
+1. `.venv/bin/python R/figure_assets.py R --article <ID>` if assets are not cached (paths in `R/articles/<ID>/figure_assets.json`).
+2. `R/figure_ehr_review.py R --article <ID> --draft`, copy `R/articles/<ID>/figure_ehr_labels.draft.json` →
+   `R/articles/<ID>/figure_ehr_labels.json`.
 3. View every figure (copy each asset to your scratch dir with an image extension and Read it). For each figure
    and panel confirm or override the deterministic default `ehr_category` / `ehr_includable` (with
    `override_reason`), and replace every DRAFT rationale with a concrete one (what the image is, whose, why it
@@ -37,12 +37,12 @@ Never run any `--role` command to probe, test or dry-run a script. It overwrites
 
 ## Supplement manifests (per article with supplements)
 `R/supplement_assets.py acquire R --article <ID>` → `R/supplement_manifest_review.py R --article <ID> --draft` →
-open every cached file → fill each row's review block in `R/supplement-manifests/<ID>.json` → validate → sign
+open every cached file → fill each row's review block in `R/articles/<ID>/supplements/manifest.json` → validate → sign
 `--role agent`. Do not edit `machine`/`machine_suggestion`.
 
 ## Figure privacy flags (per article with figures; separate sidecar, existing figure-ehr receipts stay valid)
-`R/figure_privacy_review.py R --article <ID> --draft`, copy `R/figure-privacy-flag-drafts/<ID>.json` to
-`R/figure-privacy-flags/<ID>.json`, view every panel's pixels and set `burned_in_identifiers`
+`R/figure_privacy_review.py R --article <ID> --draft`, copy `R/articles/<ID>/figure_privacy_flags.draft.json` to
+`R/articles/<ID>/figure_privacy_flags.json`, view every panel's pixels and set `burned_in_identifiers`
 (none | timestamps_or_device_text | direct_identifiers = names, IDs/MRNs, birth dates, operator names, UIDs),
 `sensitive_anatomy` (e.g. genital) and `identifiable_face` (e.g. unmasked faces), each with a short description of
 the CATEGORY of what is visible (never copy the identifier values; runs of 4+ digits are rejected), and replace the

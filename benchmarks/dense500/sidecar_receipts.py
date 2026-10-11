@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 import json
 from pathlib import Path
 
+import store
 from validate import digest
 from visual_review import identity_digest
 
@@ -18,7 +19,7 @@ KINDS = ('supplement-manifest', 'figure-ehr', 'measurement-series', 'figure-priv
 def receipt_path(root, kind, role, aid):
     if kind not in KINDS or role not in ('agent', 'parent'):
         raise ValueError('Unknown sidecar receipt kind/role')
-    return Path(root) / f'{kind}-{role}-reviews' / f'{aid}.json'
+    return store.receipt(root, kind, role, aid)
 
 
 def base_binding(source, annotation, target, status):
@@ -39,7 +40,7 @@ def sign(root, kind, aid, binding, report, *, role, reviewer, notes):
                'reviewed_at': datetime.now(timezone.utc).isoformat(), 'inspection_notes': notes,
                'physician_adjudicated': False, **report}
     path = receipt_path(root, kind, role, aid)
-    path.parent.mkdir(exist_ok=True)
+    path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix('.json.tmp')
     temporary.write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + '\n')
     temporary.replace(path)
@@ -72,8 +73,7 @@ def verify(root, kind, aid, binding, report):
 
 
 def load_inputs(root, aid):
-    root = Path(root)
-    source = json.loads((root / 'sources' / f'{aid}.json').read_text())
-    folder = 'annotations' if (root / 'annotations' / f'{aid}.json').exists() else 'drafts'
-    annotation = json.loads((root / folder / f'{aid}.json').read_text())
+    source = json.loads(store.path(root, 'sources', aid).read_text())
+    folder = 'annotations' if store.path(root, 'annotations', aid).exists() else 'drafts'
+    annotation = json.loads(store.path(root, folder, aid).read_text())
     return source, annotation

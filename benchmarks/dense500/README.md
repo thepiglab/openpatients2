@@ -32,3 +32,84 @@ Figure captions and patient/panel ownership are annotated. Pixel interpretation
 must stay `not_inspected` unless an annotator actually views the image; captions
 must not be presented as visual inspection. Unavailable tables/supplements are
 recorded as limitations rather than silently treated as negative evidence.
+
+## Map: where everything about one article lives
+
+Both roots (`benchmarks/dense50`, `benchmarks/dense500`) use the same layout: one folder per article,
+fixed file names. `store.py` is the only code that turns (root, kind, article[, role, supplement]) into a
+path; every tool, test and `src/openpatients2` module (via `openpatients2.dense_store`) goes through it.
+The kind names are the old folder names (`sources`, `drafts`, `annotations`, `schema-submissions`,
+`visual-submissions`, `figure-ehr-labels`, ...), so `--folder drafts|annotations` and receipt fields such as
+`annotation_folder: "annotations"` keep their meaning. Migration from the old one-folder-per-kind layout:
+`migrations/per_article_layout.py --root R [--apply]` (moves only, sha256-verified, idempotent).
+
+```
+benchmarks/<root>/
+  README.md, ANNOTATION_PROTOCOL.md, SELECTION_PLAN.md, SUPPLEMENT_DOCUMENT_REVIEW.md
+  selection.json, retained-strata.json, acquisition/   selection/acquisition records (dense500)
+  claude_prompts/      agent briefs          migrations/   one-off data migrations
+  *.py                 tools (below)         store.py      the path map
+  articles/<ID>/
+    source.json                     parsed article (segments, figures, supplements, hashes)
+    source.txt, raw.xml             readable text / original JATS            [cache, gitignored]
+    annotation_draft.json           annotator's working annotation
+    annotation.json                 parent-promoted canonical annotation
+    schema_target.draft.json        materialized runtime contracts           [cache, gitignored]
+    schema_target.json              reviewed full patient-bundle target
+    figure_assets.json              downloaded image hashes/paths (pixels live in data/.dense-figure-cache)
+    visual.json                     pixel-reviewed figure analysis
+    figure_ehr_labels(.draft).json  EHR category/includability per panel     [.draft = cache]
+    figure_privacy_flags(.draft).json  burned-in text / face / anatomy flags [.draft = cache]
+    measurement_series(.draft).json serial numeric tables                    [.draft = cache]
+    needs_review.json               open judgment items from a rules migration
+    video_inspection.<FID>.<role>.json  sampled video-frame inspection records
+    supplements/
+      assets.json                   acquisition record (bytes in data/.dense-supplement-cache)
+      manifest(.draft).json         per-file content manifest                [.draft = cache]
+      <SID>.visual.json             image supplement review target
+      <SID>.figure_assets.json      image supplement acquisition record (dense50)
+      <SID>.document(.draft).json   PDF/ZIP/DOCX supplement review target    [.draft = cache]
+      <SID>.archive_members.json    extracted ZIP member record              [cache]
+    receipts/
+      annotation.parent.json        parent source review (review_record.save_review)
+      schema|visual|figure-ehr|figure-privacy|measurement-series|supplement-manifest.<agent|parent>.json
+      supplement.<SID>.<agent|parent>.json
+```
+
+Old folder -> new file: `sources/ID.json` -> `source.json`; `source-text/ID.txt` -> `source.txt`;
+`raw-xml/ID.xml` -> `raw.xml`; `drafts/` -> `annotation_draft.json`; `annotations/` -> `annotation.json`;
+`reviews/` -> `receipts/annotation.parent.json`; `schema-drafts/` -> `schema_target.draft.json`;
+`schema-submissions/` -> `schema_target.json`; `figure-assets/` -> `figure_assets.json`;
+`visual-submissions/ID.json` -> `visual.json`; `visual-submissions/ID.supplements[.SID].json` ->
+`supplements/SID.visual.json`; `figure-ehr-labels/`, `figure-ehr-label-drafts/` -> `figure_ehr_labels[.draft].json`;
+`figure-privacy-flags/`, `figure-privacy-flag-drafts/` -> `figure_privacy_flags[.draft].json`;
+`measurement-series/`, `measurement-series-drafts/` -> `measurement_series[.draft].json`;
+`needs-review/` -> `needs_review.json`; `supplement-assets/` -> `supplements/assets.json`;
+`supplement-manifests/`, `supplement-manifest-drafts/` -> `supplements/manifest[.draft].json`;
+`document-submissions/ID.supplements.SID.json` (and `-drafts`) -> `supplements/SID.document[.draft].json`;
+`supplement-archive-members/ID.SID.json` -> `supplements/SID.archive_members.json`;
+`<kind>-<role>-reviews/ID.json` -> `receipts/<kind>.<role>.json`;
+`supplement-<role>-reviews/ID.SID.json` -> `receipts/supplement.SID.<role>.json`;
+`video-inspections/ID.FID.<role>.json` -> `video_inspection.FID.<role>.json`.
+Free-text notes inside signed files still quote some old paths; they are content (bound by hashes), not links.
+
+Pipeline order per article (commands from the repo root with `PYTHONPATH=src:benchmarks/dense500 .venv/bin/python`,
+`R=benchmarks/dense500`; a `--role` call is a signature, so validate without it):
+
+| step | tool | writes | reads |
+|---|---|---|---|
+| 1 acquire | `acquire.py` | `source.json`, `source.txt`, `raw.xml` | PMC |
+| 2 annotate | annotator (ANNOTATOR_BRIEF) | `annotation_draft.json` | `source.json` |
+| 3 figures | `figure_assets.py R --article ID` | `figure_assets.json` | `source.json` |
+| 4 visual review | annotator writes `visual.json`; `visual_review.py` signs | `receipts/visual.*.json` | visual, source, annotation, figure assets |
+| 5 schema | `schema_targets.py R --folder drafts/annotations --article ID` | `schema_target.draft.json` (copy to `schema_target.json`) | annotation, source |
+| 6 schema review | `schema_review.py R --folder ... --article ID` (+`reference_gates.py`) | `receipts/schema.*.json` | annotation, schema target, source |
+| 7 parent source review | `review_record.save_review` | `annotation.json`, `receipts/annotation.parent.json` | draft, source |
+| 8 supplements | `supplement_assets.py acquire/extract/extract-text`, `supplement_manifest_review.py`, `supplement_review.py` | `supplements/*`, `receipts/supplement-manifest.*`, `receipts/supplement.SID.*` | source, annotation, cache |
+| 9 EHR sidecars | `figure_ehr_review.py`, `figure_privacy_review.py`, `measurement_series_review.py` (`--draft`, validate, sign) | `figure_ehr_labels`, `figure_privacy_flags`, `measurement_series` + receipts | visual, source, annotation, supplements |
+| 10 gates | `reference_gates.py R --article ID` | (report) | everything above |
+| 11 release | `export.py` | `data/dense_clinical_cases_v1/` | both roots |
+
+`validate.py`, `scan_glued_text.py`, `repair_glued_text.py`, `fix_label_digit_glue.py`, `migrate_case_context.py`
+and `migrations/semantic_rules_2026_10.py` read/write the same store kinds; `op2 viewer` reads `source.json`,
+`annotation.json`, `schema_target.json`, `visual.json` and their receipts live.

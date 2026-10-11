@@ -7,8 +7,8 @@ articles. On each case_context fact this changes ONLY:
   fields.case_kind  multi_patient -> clinical_case | animal (other kinds untouched)
   fields.multiple_index_patients  anything but false (incl. null/absent) -> false
 Nothing else in the annotation changes. Byte-identical drafts are kept identical.
-For changed articles the schema target is regenerated into schema-drafts/ and the
-existing schema-submissions/ edits are carried over: only the per-patient keys
+For changed articles the schema target is regenerated into schema_target.draft.json and the
+existing schema_target.json edits are carried over: only the per-patient keys
 that schema_review requires to equal the materialized target (case_context
 section, provenance annotation hash, case_context state-index rows, quality,
 validity flag) and the top-level annotation hash are replaced. A path diff
@@ -27,6 +27,9 @@ import sys
 import time
 
 HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+import store  # noqa: E402
+
 ROOTS = [HERE.parent / 'dense50', HERE]
 QUIET_SECONDS = 15 * 60
 STYLES = {'i2': lambda v: json.dumps(v, ensure_ascii=False, indent=2) + '\n',
@@ -111,24 +114,24 @@ def _mtime_recent(paths, now):
 
 
 def stability(root, aid, promoted, annotation, digest, now):
-    files = [root / f / f'{aid}.json' for f in ('annotations', 'drafts', 'reviews', 'schema-submissions', 'schema-drafts',
+    files = [store.path(root, f, aid) for f in ('annotations', 'drafts', 'reviews', 'schema-submissions', 'schema-drafts',
              'schema-agent-reviews', 'schema-parent-reviews', 'visual-submissions', 'visual-parent-reviews')]
     if _mtime_recent(files, now):
         return 'recent_activity_within_15_minutes'
     if promoted:
-        review = json.loads((root / 'reviews' / f'{aid}.json').read_text()) if (root / 'reviews' / f'{aid}.json').exists() else None
+        review = json.loads(store.path(root, 'reviews', aid).read_text()) if store.path(root, 'reviews', aid).exists() else None
         if not review or review.get('annotation_sha256') != digest(annotation):
             return 'parent_source_receipt_not_current'
-        parent = root / 'schema-parent-reviews' / f'{aid}.json'
+        parent = store.receipt(root, 'schema', 'parent', aid)
         if parent.exists():
             receipt = json.loads(parent.read_text())
-            submission = root / 'schema-submissions' / f'{aid}.json'
+            submission = store.path(root, 'schema-submissions', aid)
             if (receipt.get('annotation_sha256') != digest(annotation) or not submission.exists()
                     or receipt.get('target_sha256') != digest(json.loads(submission.read_text()))):
                 return 'parent_schema_receipt_not_current'
         else:
             return 'promoted_without_parent_schema_receipt'
-    elif (root / 'reviews' / f'{aid}.json').exists() or (root / 'schema-parent-reviews' / f'{aid}.json').exists():
+    elif store.path(root, 'reviews', aid).exists() or store.receipt(root, 'schema', 'parent', aid).exists():
         return 'draft_with_parent_activity'
     return None
 
@@ -136,10 +139,10 @@ def stability(root, aid, promoted, annotation, digest, now):
 def stale_receipts(root, aid, promoted):
     """Which receipts bind the annotation hash (stale) vs only patient identity/targets (unchanged)."""
     out = []
-    if promoted and (root / 'reviews' / f'{aid}.json').exists():
+    if promoted and store.path(root, 'reviews', aid).exists():
         out.append('reviews (annotation_sha256)')
     for role in ('agent', 'parent'):
-        if (root / f'schema-{role}-reviews' / f'{aid}.json').exists():
+        if store.receipt(root, 'schema', role, aid).exists():
             out.append(f'schema-{role} (annotation_sha256, target_sha256)')
     return out
 
@@ -154,9 +157,9 @@ def run(apply=False, skip=(), manifest_dir=None, roots=ROOTS, now=None):
     for root in roots:
         candidates = {}
         for folder in ('annotations', 'drafts'):
-            for path in sorted((root / folder).glob('*.json')):
-                aid = path.stem
-                if folder == 'drafts' and (root / 'annotations' / path.name).exists():
+            for aid in store.article_ids(root, folder):
+                path = store.path(root, folder, aid)
+                if folder == 'drafts' and store.path(root, 'annotations', aid).exists():
                     continue
                 candidates.setdefault(aid, (folder, path))
         for aid, (folder, path) in sorted(candidates.items()):
@@ -173,16 +176,16 @@ def run(apply=False, skip=(), manifest_dir=None, roots=ROOTS, now=None):
             entry['receipts_unaffected'] = ['visual/supplement (bind patient identity + their own targets)',
                                             'figure-ehr, figure-privacy, supplement-manifest, measurement-series (identity only)']
             reason = 'listed_in_flight' if aid in skip else stability(root, aid, promoted, annotation, digest, now)
-            source = json.loads((root / 'sources' / f'{aid}.json').read_text())
+            source = json.loads(store.path(root, 'sources', aid).read_text())
             style = style_of(text)
             if reason is None and style is None:
                 reason = 'unrecognised_json_style'
             errors = validate(new, source)
             if errors:
                 reason = reason or 'migrated_annotation_invalid'; entry['validation_errors'] = errors[:5]
-            draft_path = root / 'drafts' / f'{aid}.json'
+            draft_path = store.path(root, 'drafts', aid)
             entry['draft_identical'] = promoted and draft_path.exists() and draft_path.read_bytes() == path.read_bytes()
-            sub_path = root / 'schema-submissions' / f'{aid}.json'
+            sub_path = store.path(root, 'schema-submissions', aid)
             try:
                 regenerated = materialize(new, source)
                 entry['regenerated_source_gate_errors'] = regenerated['source_gate_errors']
@@ -206,7 +209,7 @@ def run(apply=False, skip=(), manifest_dir=None, roots=ROOTS, now=None):
                 path.write_text(STYLES[style](new), encoding='utf-8')
                 if entry['draft_identical']:
                     draft_path.write_bytes(path.read_bytes())
-                out = root / 'schema-drafts' / f'{aid}.json'; out.parent.mkdir(exist_ok=True)
+                out = store.path(root, 'schema-drafts', aid); out.parent.mkdir(parents=True, exist_ok=True)
                 out.write_text(json.dumps(regenerated, ensure_ascii=False, indent=2) + '\n')
                 if sub_path.exists():
                     sub_style = style_of(sub_text) or 'i2'

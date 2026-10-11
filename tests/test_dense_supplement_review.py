@@ -9,6 +9,8 @@ import sys
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
+from openpatients2.dense_store import load as load_store
+store = load_store()
 AID = 'PMC10998798.1'
 
 
@@ -17,9 +19,9 @@ def specimen(tmp_path, monkeypatch):
     monkeypatch.syspath_prepend(str(ROOT/'benchmarks/dense500'))
     spec=importlib.util.spec_from_file_location('dense_supplement_review',ROOT/'benchmarks/dense500/supplement_review.py')
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
-    source=json.loads((ROOT/'benchmarks/dense50/sources'/f'{AID}.json').read_text())
-    annotation=json.loads((ROOT/'benchmarks/dense50/annotations'/f'{AID}.json').read_text())
-    target=json.loads((ROOT/'benchmarks/dense50/visual-submissions'/f'{AID}.supplements.json').read_text())
+    source=json.loads(store.path(ROOT/'benchmarks/dense50','sources',AID).read_text())
+    annotation=json.loads(store.path(ROOT/'benchmarks/dense50','annotations',AID).read_text())
+    target=json.loads(store.path(ROOT/'benchmarks/dense50','supplement-visual-submissions',AID,sid='MOESM1').read_text())
     target.pop('pixel_match_to_main_figure',None)
     assignment=target['analysis']['attribution']['assignments'][0]
     assignment.update(scope='unresolved',patient_ids=[],evidence=[{'segment_id':'b00068','quote':next(z['text'] for z in source['segments'] if z['segment_id']=='b00068')}])
@@ -28,10 +30,9 @@ def specimen(tmp_path, monkeypatch):
     md5=hashlib.md5(data).hexdigest();sha=hashlib.sha256(data).hexdigest()
     source['supplements'][0]['assets'][0]['md5']=md5
     target['assets'][0].update(md5=md5,sha256=sha,bytes=len(data),path=str(image))
-    for folder in ('sources','annotations','visual-submissions'):(tmp_path/folder).mkdir()
     def save():
-        for folder,value,filename in [('sources',source,f'{AID}.json'),('annotations',annotation,f'{AID}.json'),('visual-submissions',target,f'{AID}.supplements.json')]:
-            (tmp_path/folder/filename).write_text(json.dumps(value))
+        for kind,value,sid in [('sources',source,None),('annotations',annotation,None),('supplement-visual-submissions',target,'MOESM1')]:
+            store.path(tmp_path,kind,AID,sid=sid,mkdir=True).write_text(json.dumps(value))
     save()
     return module,tmp_path,source,annotation,target,save
 
@@ -99,7 +100,7 @@ def test_incomplete_assets_cannot_receive_completed_receipt(specimen,status):
     assert m.validate_submission(t,s,a)['complete'] is False
     with pytest.raises(ValueError,match='cannot receive completed'):
         m.sign_review(r,AID,'MOESM1',role='agent',reviewer='Claude fixture reviewer',notes='Synthetic fixture inspection notes for tests')
-    assert not (r/'supplement-agent-reviews').exists()
+    assert not store.receipt(r,'supplement','agent',AID,'MOESM1').exists()
 
 
 @pytest.mark.parametrize('change',['missing','extra','duplicate','second_source_asset'])
@@ -133,7 +134,7 @@ def test_no_sidecars_returns_empty_without_inputs(tmp_path,specimen):
 
 def test_receipt_cannot_fake_completeness_or_role(specimen):
     m,r,_,_,_,_=specimen;sign_both(specimen)
-    path=r/'supplement-parent-reviews'/f'{AID}.MOESM1.json'
+    path=store.receipt(r,'supplement','parent',AID,'MOESM1')
     receipt=json.loads(path.read_text());receipt['complete']=False;path.write_text(json.dumps(receipt))
     with pytest.raises(ValueError,match='complete'):m.reviewed_supplement_targets(r,AID)
 
@@ -155,7 +156,7 @@ def test_nonimage_supplement_cannot_be_declared_completed(specimen):
 
 def test_duplicate_sidecars_do_not_double_count_media(specimen):
     m,r,_,_,t,_=specimen
-    (r/'visual-submissions'/f'{AID}.supplements.extra.json').write_text(json.dumps(t))
+    store.path(r,'supplement-visual-submissions',AID,sid='extra').write_text(json.dumps(t))
     with pytest.raises(ValueError,match='Duplicate supplemental'):m.reviewed_supplement_targets(r,AID)
 
 

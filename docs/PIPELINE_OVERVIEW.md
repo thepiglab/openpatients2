@@ -187,7 +187,8 @@ Run (all stages off unless enabled in the YAML):
 ```sh
 python -m openpatients2.ehr_pipeline --config ehr.yaml --articles sample.jsonl --run-dir RUN \
     --output OUT --endpoints http://127.0.0.1:8000/v1 --context 131072 \
-    [--image-manifest RUN_MEDIA/vision-assets/manifest.json] [--supplement-assets ACQ_DIR]
+    [--image-manifest RUN_MEDIA/vision-assets/manifest.json] \
+    [--supplement-assets benchmarks/dense500] [--supplement-transcriptions benchmarks/dense500]
 python -m openpatients2.unified_scoring --reference data/dense_clinical_cases_v1/data \
     --predicted OUT/data/unified.jsonl --out score.json
 ```
@@ -196,6 +197,9 @@ python -m openpatients2.unified_scoring --reference data/dense_clinical_cases_v1
 `supplement_classification` (needs acquisition records), and
 `measurement_series_extraction` to true. It may also name `extraction_config`
 for serving limits. Model labels are unreviewed and never mark a row completed.
+`--supplement-assets` / `--supplement-transcriptions` take a dense benchmark root: acquisition records and
+reviewed supplement targets are read from its per-article folders (`articles/<ID>/supplements/`). OUT uses the same
+per-article layout (`OUT/articles/<ID>/figure_ehr_labels.json`, ...), resolved by `benchmarks/dense500/store.py`.
 
 ## Current experimental branches
 

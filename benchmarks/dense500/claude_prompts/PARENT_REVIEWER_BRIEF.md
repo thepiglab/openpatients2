@@ -18,7 +18,7 @@ Never run any `--role` command to probe, test or dry-run a script. It overwrites
 
 ## Event kinds live in the annotation
 
-Set timeline event classification on the annotation event: `kind` (presentation, history, diagnosis, test, treatment, adverse_event, outcome, follow_up, plan, other), and for its `time_text` the `time_kind` (calendar, relative, duration, age, gestational_age, postnatal_age, order_only), `time_precision` (exact, approximate, range, unknown) and `time_calendar_value` (the YYYY[-MM[-DD]] the time text states at its own precision, e.g. "October 26, 2022" -> 2022-10-26, "October 2022" -> 2022-10; calendar times only). `schema_targets.py` reads these fields. Never patch event kinds or time classifications into `schema-submissions/` with a script; regenerate instead. The same holds for the roster: set the article-level annotation block `"roster": {"reported_individual_count": N|null, "roster_complete": true|false, "evidence": [{"segment_id": ..., "quote": "<literal text stating the number>"}]}`; `schema_targets.py` reads it, and a submission patched after signing makes the parent's schema receipt stale. `schema_review.py` rejects a submission that disagrees with classification set in the annotation.
+Set timeline event classification on the annotation event: `kind` (presentation, history, diagnosis, test, treatment, adverse_event, outcome, follow_up, plan, other), and for its `time_text` the `time_kind` (calendar, relative, duration, age, gestational_age, postnatal_age, order_only), `time_precision` (exact, approximate, range, unknown) and `time_calendar_value` (the YYYY[-MM[-DD]] the time text states at its own precision, e.g. "October 26, 2022" -> 2022-10-26, "October 2022" -> 2022-10; calendar times only). `schema_targets.py` reads these fields. Never patch event kinds or time classifications into `schema_target.json` with a script; regenerate instead. The same holds for the roster: set the article-level annotation block `"roster": {"reported_individual_count": N|null, "roster_complete": true|false, "evidence": [{"segment_id": ..., "quote": "<literal text stating the number>"}]}`; `schema_targets.py` reads it, and a submission patched after signing makes the parent's schema receipt stale. `schema_review.py` rejects a submission that disagrees with classification set in the annotation.
 
 ## Read once at start
 `benchmarks/dense500/ANNOTATION_PROTOCOL.md` (binding for dense50 too; read its "Shared annotation rules"),
@@ -29,9 +29,9 @@ Field MEANING: `src/openpatients2/rules/annotation_rules.yaml` and the runtime p
 follow it). Field shapes/enums: `src/openpatients2/schemas.py`. Review every item of the checklist at the end.
 
 ## Per article
-1. Read the WHOLE source (`R/sources/<ID>.json` segments incl. tables/captions) before reading the draft.
+1. Read the WHOLE source (`R/articles/<ID>/source.json` segments incl. tables/captions) before reading the draft.
    Form your own view of: patients and ownership, cited-vs-index cases, clinical course order, key quantities.
-2. Audit `R/drafts/<ID>.json` both directions:
+2. Audit `R/articles/<ID>/annotation_draft.json` both directions:
    - source→output: every clinically relevant patient fact (history, exam incl. negatives/normals, every table row,
      tests, treatments with dose/route/duration/indication, complications, outcomes, follow-up, plans) is present.
    - output→source: every fact, field value, enum (assertion, verification_status, action, status, flag,
@@ -41,18 +41,18 @@ follow it). Field shapes/enums: `src/openpatients2/schemas.py`. Review every ite
    - timeline: events complete (incl. post-discharge follow-up), occurrence correct, relations supported and
      sufficiently linked; no invented order.
    - summaries add no new facts; domain_coverage statuses honest; source_coverage sensible.
-3. Figures: independently view EVERY asset (paths in `R/figure-assets/<ID>.json`; copy to your scratch dir with an
-   image extension and Read it). Check `R/visual-submissions/<ID>.json` and draft `figures[]` against pixels and captions:
+3. Figures: independently view EVERY asset (paths in `R/articles/<ID>/figure_assets.json`; copy to your scratch dir with an
+   image extension and Read it). Check `R/articles/<ID>/visual.json` and draft `figures[]` against pixels and captions:
    panel attribution, readings, no invented detail.
    Do not ADD facts by inference (e.g. a device "in place" implied but never stated): record the implication as an
    ambiguity instead. Parent additions must be as source-literal as annotator facts.
 4. Correct directly in the draft JSON (keep evidence quotes exact; quarantine conflicts as
    `certainty: source_conflict`/`ambiguous` + `scoring: review_only`; delete unsupported facts). Revalidate to `[]`.
-5. Promote + sign source review (writes `R/annotations/<ID>.json` and `R/reviews/<ID>.json`):
+5. Promote + sign source review (writes `R/articles/<ID>/annotation.json` and `R/articles/<ID>/receipts/annotation.parent.json`):
    ```
    PYTHONPATH=src:benchmarks/dense500 .venv/bin/python -c "
-   import json;from pathlib import Path;from review_record import save_review
-   r=Path('benchmarks/dense500');a='<ID>';ann=json.loads((r/'drafts'/f'{a}.json').read_text())
+   import json,store;from pathlib import Path;from review_record import save_review
+   r=Path('benchmarks/dense500');a='<ID>';ann=json.loads(store.path(r,'drafts',a).read_text())
    save_review(r,ann,corrections=[...list of concrete corrections you made...],
      assessment={'reviewer':'Claude Opus 5.5 parent','source_units_read':N,'facts_reviewed':N,'figures_viewed':N,
                  'key_findings':[...],'residual_risks':[...]})"
@@ -61,7 +61,7 @@ follow it). Field shapes/enums: `src/openpatients2/schemas.py`. Review every ite
 6. Regenerate and sign the full schema on the canonical annotation:
    `.venv/bin/python R/schema_targets.py R --folder annotations --article <ID>`; inspect the target
    (sections, item attributes, summary, event kinds/time types, roster, figure subjects);
-   `cp R/schema-drafts/<ID>.json R/schema-submissions/<ID>.json`;
+   `cp R/articles/<ID>/schema_target.draft.json R/articles/<ID>/schema_target.json`;
    Run the runtime gates and resolve every error first (`schema_review.py --role` refuses otherwise):
    `PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/reference_gates.py R --article <ID> --folder <drafts|annotations>`
    `.venv/bin/python R/schema_review.py R --folder annotations --article <ID> --role parent --reviewer "Claude Opus 5.5 parent" --notes "<what you checked>"`.
@@ -69,17 +69,17 @@ follow it). Field shapes/enums: `src/openpatients2/schemas.py`. Review every ite
    after independent viewing. If you edited the visual submission, say so (annotator must re-sign).
    Supplements: parent receipts per SUPPLEMENT_DOCUMENT_REVIEW.md. Videos/unavailable media: do not claim review.
    ZIP-of-PDF supplements use the archive format (SUPPLEMENT_DOCUMENT_REVIEW.md "ZIP supplements"): view every
-   member page (extracted paths in `R/supplement-archive-members/<ID>.<SID>.json`), then
+   member page (extracted paths in `R/articles/<ID>/supplements/<SID>.archive_members.json`), then
    `R/supplement_review.py R --article <ID> --supplement <SID> --role parent --reviewer "Claude Opus 5.5 parent" --notes "<...>"`.
 7b. EHR sidecars (informational; see ANNOTATION_PROTOCOL.md "EHR multimodal sidecars"). Independently open every
-   cached supplement (`R/supplement-assets/<ID>.json` paths) and check `R/supplement-manifests/<ID>.json`: class,
-   patient scope/evidence, EHR-includability, counts; no clinical values. Check `R/figure-ehr-labels/<ID>.json` against
-   the pixels: category, includability (local patients only), overrides. Check `R/measurement-series/<ID>.json` cells,
+   cached supplement (`R/articles/<ID>/supplements/assets.json` paths) and check `R/articles/<ID>/supplements/manifest.json`: class,
+   patient scope/evidence, EHR-includability, counts; no clinical values. Check `R/articles/<ID>/figure_ehr_labels.json` against
+   the pixels: category, includability (local patients only), overrides. Check `R/articles/<ID>/measurement_series.json` cells,
    owners, units and offsets. Correct files if needed (the annotator must then re-sign), then sign each with
    `.venv/bin/python R/supplement_manifest_review.py R --article <ID> --role parent --reviewer "Claude Opus 5.5 parent" --notes "<...>"`,
    `R/figure_ehr_review.py ... --role parent ...` and `R/measurement_series_review.py ... --role parent ...`.
    After both supplement-manifest receipts: `R/supplement_assets.py cleanup R --article <ID>` to free the 30 GB cache.
-   Check `R/figure-privacy-flags/<ID>.json` on pixels too (burned-in identifiers incl. timestamps, sensitive anatomy,
+   Check `R/articles/<ID>/figure_privacy_flags.json` on pixels too (burned-in identifiers incl. timestamps, sensitive anatomy,
    identifiable faces; descriptions name categories, never values) and sign
    `R/figure_privacy_review.py R --article <ID> --role parent --reviewer "Claude Opus 5.5 parent" --notes "<...>"`.
    Missing sidecars do not block your SIGNED verdict; report their status. Note: figure EHR labels and supplement

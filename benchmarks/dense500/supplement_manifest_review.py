@@ -1,7 +1,7 @@
 """Draft, validate and sign the per-article supplement content manifest.
 
-  supplement_manifest_review.py ROOT --article ID --draft    # writes supplement-manifest-drafts/ID.json
-  supplement_manifest_review.py ROOT --article ID            # validates supplement-manifests/ID.json
+  supplement_manifest_review.py ROOT --article ID --draft    # writes articles/ID/supplements/manifest.draft.json
+  supplement_manifest_review.py ROOT --article ID            # validates articles/ID/supplements/manifest.json
   supplement_manifest_review.py ROOT --article ID --role agent|parent --reviewer NAME --notes NOTES
 
 Requires `supplement_assets.py acquire` first. Machine blocks are copied from the
@@ -17,20 +17,21 @@ from pathlib import Path
 from openpatients2.supplement_manifest import (FORMAT, contract_sha256, draft_manifest, validate_manifest)
 from sidecar_receipts import base_binding, load_inputs, sign, verify
 from validate import digest
+import store
 
 KIND = 'supplement-manifest'
 STATUS = 'supplement_manifest_reviewed'
 
 
 def _acquisition(root, aid):
-    path = Path(root) / 'supplement-assets' / f'{aid}.json'
+    path = store.path(root, 'supplement-assets', aid)
     if not path.exists():
         raise ValueError('Run supplement_assets.py acquire for this article first')
     return json.loads(path.read_text())
 
 
 def _target(root, aid):
-    return json.loads((Path(root) / 'supplement-manifests' / f'{aid}.json').read_text())
+    return json.loads(store.path(root, 'supplement-manifests', aid).read_text())
 
 
 def verify_cached_files(acquisition):
@@ -54,8 +55,8 @@ def binding(target, source, annotation, acquisition):
 def write_draft(root, aid):
     source, _ = load_inputs(root, aid)
     draft = draft_manifest(source, _acquisition(root, aid))
-    folder = Path(root) / 'supplement-manifest-drafts'; folder.mkdir(exist_ok=True)
-    (folder / f'{aid}.json').write_text(json.dumps(draft, ensure_ascii=False, indent=2) + '\n')
+    out = store.path(root, 'supplement-manifest-drafts', aid); out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(draft, ensure_ascii=False, indent=2) + '\n')
     return draft
 
 
@@ -79,7 +80,7 @@ def sign_review(root, aid, *, role, reviewer, notes):
 def reviewed_manifest(root, aid):
     """(manifest, [agent, parent]) when dual-signed and current; None if unsigned; raises if stale."""
     root = Path(root)
-    if not (root / 'supplement-manifests' / f'{aid}.json').exists():
+    if not store.path(root, 'supplement-manifests', aid).exists():
         return None
     from sidecar_receipts import present
     if not all(present(root, KIND, aid)):
@@ -96,7 +97,7 @@ if __name__ == '__main__':
     p.add_argument('--reviewer'); p.add_argument('--notes'); args = p.parse_args()
     if args.draft:
         draft = write_draft(args.root, args.article)
-        print(json.dumps({'draft': f'supplement-manifest-drafts/{args.article}.json', 'files': len(draft['files']),
+        print(json.dumps({'draft': str(store.path(args.root, 'supplement-manifest-drafts', args.article)), 'files': len(draft['files']),
                           'format': FORMAT}))
     elif args.role:
         receipt = sign_review(args.root, args.article, role=args.role, reviewer=args.reviewer, notes=args.notes)

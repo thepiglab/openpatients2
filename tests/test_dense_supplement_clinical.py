@@ -7,6 +7,8 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
+from openpatients2.dense_store import load as load_store
+store = load_store()
 AID = 'PMC-clinical-test.1'
 
 
@@ -50,10 +52,9 @@ def clinical(tmp_path, monkeypatch):
         f['evidence'].append(dict(transcription_id=tid,quote=quote))
     t = dict(format=m.DOCUMENT_FORMAT,article_id=AID,source_text_sha256='source-sha',supplement_id='SM1',status='inspected',
              document_classification='clinical_data',contents_summary='Synthetic clinical table',assets=[asset],limitations=[],clinical_data=payload)
-    for folder in ('sources','annotations','document-submissions'): (tmp_path/folder).mkdir()
     def save():
-        for folder,x,fn in [('sources',s,f'{AID}.json'),('annotations',a,f'{AID}.json'),('document-submissions',t,f'{AID}.supplements.SM1.json')]:
-            (tmp_path/folder/fn).write_text(json.dumps(x))
+        for kind,x,sid in [('sources',s,None),('annotations',a,None),('document-submissions',t,'SM1')]:
+            store.path(tmp_path,kind,AID,sid=sid,mkdir=True).write_text(json.dumps(x))
     save();return m,tmp_path,s,a,t,save
 
 
@@ -163,14 +164,13 @@ def test_full_export_dual_gate_and_immutable_main_sections(clinical,release,full
                          ('url','filename','md5','original_manifest_url')}])]
     t.update(article_id=aid,source_text_sha256=source['text_sha256'])
     t['assets'][0]['source_license']=source['license']
-    (root/'sources'/f'{aid}.json').write_text(json.dumps(source))
-    (root/'document-submissions').mkdir();(root/'document-submissions'/f'{aid}.supplements.SM1.json').write_text(json.dumps(t))
-    (root/'schema-submissions').mkdir();(root/'schema-submissions'/f'{aid}.json').write_text(json.dumps(target))
+    store.path(root, 'sources', aid, mkdir=True).write_text(json.dumps(source))
+    store.path(root,'document-submissions',aid,sid='SM1',mkdir=True).write_text(json.dumps(t))
+    store.path(root, 'schema-submissions', aid, mkdir=True).write_text(json.dumps(target))
     for role in ('agent','parent'):
-        folder=root/f'schema-{role}-reviews';folder.mkdir()
         receipt=dict(article_id=aid,status='schema_source_reviewed',role=role,reviewer=f'Claude synthetic {role}',inspection_notes='Synthetic fixture inspection notes for tests',annotation_sha256=validator.digest(annotation),
                      target_sha256=validator.digest(target),source_text_sha256=source['text_sha256'])
-        (folder/f'{aid}.json').write_text(json.dumps(receipt))
+        store.receipt(root,'schema',role,aid,mkdir=True).write_text(json.dumps(receipt))
     exporter.main()
     assert not (out/'legacy'/'supplement_clinical.jsonl').read_text()
     for role in ('agent','parent'):
@@ -186,4 +186,4 @@ def test_full_export_dual_gate_and_immutable_main_sections(clinical,release,full
     assert article['supplemental_clinical'][0]['supplement_id']=='SM1'
     catalog={r['article_id']:r for r in map(json.loads,(out/'legacy'/'manifest.jsonl').read_text().splitlines())}
     assert catalog[aid]['source_supplements'][0]['content_inspected']
-    assert json.loads((root/'sources'/f'{aid}.json').read_text())==source
+    assert json.loads(store.path(root, 'sources', aid).read_text())==source

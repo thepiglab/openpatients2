@@ -17,6 +17,8 @@ import httpx
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
+from openpatients2.dense_store import load as load_store
+store = load_store()
 AID = 'PMC-test.1'
 HOST = 'https://pmc-oa-opendata.s3.amazonaws.com/PMC-test.1/'
 
@@ -72,7 +74,7 @@ def transport(files, calls):
 
 @pytest.fixture
 def article(tmp_path):
-    root = tmp_path / 'root'; (root / 'sources').mkdir(parents=True); (root / 'annotations').mkdir()
+    root = tmp_path / 'root'
     supplements = [dict(supplement_id=f'S{i}', description='', assets=[dict(url=HOST + name, filename=name,
                         original_manifest_url='s3://x/' + name, md5=hashlib.md5(data).hexdigest(), kind='supplementary_or_other')])
                    for i, (name, data) in enumerate(FILES.items(), 1)]
@@ -85,8 +87,8 @@ def article(tmp_path):
                                  text='Table 1\nLabs.\nProject | First time | After 10 days | Reference value\nC-peptide | 7.73 | - | 1.1-4.4 ng/ml')])
     annotation = dict(article_id=AID, text_sha256='source-hash', patients=[dict(patient_id='p1', label='Index patient',
                       species='human', identity_evidence=[])])
-    (root / 'sources' / f'{AID}.json').write_text(json.dumps(source))
-    (root / 'annotations' / f'{AID}.json').write_text(json.dumps(annotation))
+    store.path(root, 'sources', AID, mkdir=True).write_text(json.dumps(source))
+    store.path(root, 'annotations', AID, mkdir=True).write_text(json.dumps(annotation))
     return root, source, annotation
 
 
@@ -141,13 +143,12 @@ def manifest_from_draft(mods, root):
               patient_ids=['p1'], ownership_evidence=[{'basis': 'article', 'segment_id': 'b1', 'quote': 'first patient'}],
               ehr_includable=True, ehr_modality='structured_table', limitations=[],
               estimated_counts={'rows': 3, 'frames': None, 'pages': None, 'members': None, 'duration_seconds': None, 'basis': None})
-    (root / 'supplement-manifests').mkdir(exist_ok=True)
-    (root / 'supplement-manifests' / f'{AID}.json').write_text(json.dumps(draft))
+    store.path(root, 'supplement-manifests', AID, mkdir=True).write_text(json.dumps(draft))
     return draft
 
 
 def save(root, folder, value):
-    (root / folder / f'{AID}.json').write_text(json.dumps(value))
+    store.path(root, folder, AID, mkdir=True).write_text(json.dumps(value))
 
 
 def test_manifest_requires_review_and_rejects_invented_content(mods, article, tmp_path):
@@ -195,7 +196,7 @@ def test_manifest_receipts_go_stale_and_cleanup_waits_for_signatures(mods, artic
     with pytest.raises(FileNotFoundError):
         review.sign_review(root, AID, role='agent', reviewer='Claude synthetic test agent', notes='Synthetic fixture inspection notes for tests')
     for change in ('notes', 'annotation', 'source'):
-        m = json.loads((root / 'supplement-manifests' / f'{AID}.json').read_text())
+        m = json.loads(store.path(root, 'supplement-manifests', AID).read_text())
         a = deepcopy(annotation); s = deepcopy(source)
         if change == 'notes': m['files'][0]['review']['notes'] = 'changed'
         elif change == 'annotation': a['patients'][0]['label'] = 'changed'
@@ -222,14 +223,14 @@ def visual_target(source):
 
 def reviewed_labels(mods, root, source):
     review = mods[2]
-    (root / 'visual-submissions').mkdir(exist_ok=True); save(root, 'visual-submissions', visual_target(source))
+    save(root, 'visual-submissions', visual_target(source))
     labels = review.write_draft(root, AID)
     for figure in labels['figures']:
         for p in figure['panels']:
             p['label']['rationale'] = 'Synthetic fixture review'
         if figure['figure_label']:
             figure['figure_label']['rationale'] = 'Synthetic fixture review'
-    (root / 'figure-ehr-labels').mkdir(exist_ok=True); save(root, 'figure-ehr-labels', labels)
+    save(root, 'figure-ehr-labels', labels)
     return labels
 
 
@@ -284,7 +285,7 @@ def reviewed_series(mods, root, source):
     draft['excluded_cells'] = [{'cell_id': c['cell_id'], 'reason': 'Other analyte, not in fixture'} for c in draft['cells']
                                if c['role'] == 'value' and c['segment_id'] == 'b3']
     draft.update(coverage='complete', limitations=[])
-    (root / 'measurement-series').mkdir(exist_ok=True); save(root, 'measurement-series', draft)
+    save(root, 'measurement-series', draft)
     return draft
 
 
@@ -446,7 +447,6 @@ def test_privacy_flags_are_separate_and_never_stale_figure_ehr(mods, article, mo
     panel = draft['figures'][0]['panels'][0]
     assert panel['burned_in_identifiers'] == 'direct_identifiers' and panel['prefill']['source'] == 'reviewer_text_scan'
     assert draft['figures'][0]['panels'][1]['burned_in_identifiers'] == 'none'
-    (root / 'figure-privacy-flags').mkdir()
     vt = visual_target(source)
     with pytest.raises(ValueError, match='DRAFT|reviewed'):
         privacy.validate_flags(draft, source, vt)
@@ -579,10 +579,10 @@ def test_repeek_refused_once_manifest_signed(mods, article, tmp_path):
     acquire(mods, root, tmp_path)
     manifest_from_draft(mods, root)
     review.sign_review(root, AID, role='agent', reviewer='Claude synthetic test agent', notes='Synthetic fixture inspection notes for tests')
-    before = (root / 'supplement-assets' / f'{AID}.json').read_text()
+    before = store.path(root, 'supplement-assets', AID).read_text()
     with pytest.raises(ValueError, match='--force'):
         assets.repeek(root, AID)
-    assert (root / 'supplement-assets' / f'{AID}.json').read_text() == before
+    assert store.path(root, 'supplement-assets', AID).read_text() == before
     review.check(root, AID)  # still valid
 
 

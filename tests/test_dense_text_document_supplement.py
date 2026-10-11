@@ -11,6 +11,8 @@ import zipfile
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
+from openpatients2.dense_store import load as load_store
+store = load_store()
 AID = 'PMC-text-doc-test.1'
 ZIP_URL = 'https://pmc-oa-opendata.s3.amazonaws.com/PMC-text-doc-test.1/supp.zip?md5=x'
 MEMBER = 'Supplementary Table S1.docx'
@@ -62,14 +64,13 @@ def setup(tmp_path, monkeypatch):
     annotation = dict(article_id=AID, text_sha256='source-sha', patients=[
         dict(patient_id=p, label=f'Case {p[1]}', species='human', identity_evidence=[], facts=[]) for p in ('p1', 'p2')])
     for folder, obj in (('sources', source), ('annotations', annotation)):
-        (root / folder).mkdir(); (root / folder / f'{AID}.json').write_text(json.dumps(obj))
-    (root / 'supplement-assets').mkdir()
-    (root / 'supplement-assets' / f'{AID}.json').write_text(json.dumps({'files': [dict(
+        store.path(root, folder, AID, mkdir=True).write_text(json.dumps(obj))
+    store.path(root, 'supplement-assets', AID, mkdir=True).write_text(json.dumps({'files': [dict(
         supplement_id='sup1', url=ZIP_URL, filename='supp.zip', original_manifest_url='s3://x/supp.zip',
         declared_md5=original['md5'], bytes=len(data), sha256=hashlib.sha256(data).hexdigest(), path=str(zip_path),
         download_status='downloaded', detected_type='zip')]}))
     result = supplement_assets.extract_text_documents(root, AID, 'sup1', cache=tmp_path / 'cache2')
-    draft = json.loads((root / result['draft']).read_text())
+    draft = json.loads(Path(result['draft']).read_text())
     return m, root, source, annotation, draft
 
 
@@ -122,8 +123,7 @@ def test_complete_review_signs_and_satisfies_the_supplement_gate(setup):
     target = complete(draft)
     report = m.validate_submission(target, source, annotation)
     assert report['complete'] and report['inspected_units'] == 4
-    (root / 'document-submissions').mkdir()
-    (root / 'document-submissions' / f'{AID}.supplements.sup1.json').write_text(json.dumps(target))
+    store.path(root, 'document-submissions', AID, sid='sup1', mkdir=True).write_text(json.dumps(target))
     m.sign_review(root, AID, 'sup1', role='agent', reviewer='Claude synthetic test agent', notes='Read every extracted unit of the DOCX table')
     m.sign_review(root, AID, 'sup1', role='parent', reviewer='Claude synthetic test parent', notes='Independently read all units and facts')
     reviewed = m.reviewed_supplement_targets(root, AID)
@@ -137,7 +137,7 @@ def test_complete_review_signs_and_satisfies_the_supplement_gate(setup):
     assert inventory[0]['review_status'] == 'agent_and_parent_source_and_document_text_reviewed'
     # The runtime pipeline reads the same extracted text (units + transcriptions) under the same ids.
     from openpatients2.ehr_tasks import load_transcriptions
-    texts = load_transcriptions(root / 'document-submissions', AID)
+    texts = load_transcriptions(root, AID)
     assert texts[('sup1', 'A1-U0003')] == '1 | acute cystitis | yes' and ('sup1', 'A1-U0001') in texts
     from openpatients2.unified_record import build_supplements
     built = build_supplements(source, reviewed=reviewed)[0]

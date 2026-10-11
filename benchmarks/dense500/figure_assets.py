@@ -12,6 +12,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from openpatients2.vision import fetch_pixels
+import store
 
 CACHE = Path(__file__).resolve().parents[2] / 'data/.dense-figure-cache'
 MAX_IMAGE_BYTES = 8_000_000
@@ -19,7 +20,7 @@ MAX_CACHE_BYTES = 1_000_000_000
 
 
 async def acquire(root, aid):
-    source = json.loads((root / 'sources' / f'{aid}.json').read_text())
+    source = json.loads(store.path(root, 'sources', aid).read_text())
     CACHE.mkdir(parents=True, exist_ok=True)
     rows = []
     # Different annotators share a bounded cache. Reserve and write under one lock.
@@ -61,8 +62,8 @@ async def acquire(root, aid):
         report = {'article_id': aid, 'source_text_sha256': source['text_sha256'],
             'figures': rows, 'cache_bytes_after': used, 'cache_limit_bytes': MAX_CACHE_BYTES,
             'download_is_not_inspection': True}
-        directory = root / 'figure-assets'; directory.mkdir(exist_ok=True)
-        (directory / f'{aid}.json').write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n')
+        out = store.path(root, 'figure-assets', aid); out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n')
     return report
 
 

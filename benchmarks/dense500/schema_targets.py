@@ -197,13 +197,14 @@ def with_review_only_items(bundle):
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('root',type=Path);parser.add_argument('--folder',default='drafts');parser.add_argument('--article');args=parser.parse_args();failures=[];count=0
-    out=args.root/'schema-drafts';out.mkdir(exist_ok=True)
-    for path in sorted((args.root/args.folder).glob((args.article or '*')+'.json')):
+    import store
+    for aid in store.matching_ids(args.root,args.folder,args.article):
         try:
-            result=materialize(json.loads(path.read_text()),json.loads((args.root/'sources'/path.name).read_text()))
-            target=out/path.name;tmp=target.with_suffix('.tmp');tmp.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n');tmp.replace(target);count+=1
-            if result['source_gate_errors']:failures.append({'article_id':path.stem,'source_gate_errors':result['source_gate_errors']})
-        except Exception as exc:failures.append({'article_id':path.stem,'error':str(exc)})
+            path=store.path(args.root,args.folder,aid)
+            result=materialize(json.loads(path.read_text()),json.loads(store.path(args.root,'sources',aid).read_text()))
+            target=store.path(args.root,'schema-drafts',aid);tmp=target.with_suffix('.tmp');tmp.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n');tmp.replace(target);count+=1
+            if result['source_gate_errors']:failures.append({'article_id':aid,'source_gate_errors':result['source_gate_errors']})
+        except Exception as exc:failures.append({'article_id':aid,'error':str(exc)})
     print(json.dumps({'materialized':count,'failed':len(failures),'failures':failures,'semantic_review_performed':False},ensure_ascii=False))
     raise SystemExit(bool(failures))
 if __name__=='__main__':main()

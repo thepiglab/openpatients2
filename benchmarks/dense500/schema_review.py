@@ -11,6 +11,7 @@ from openpatients2.figure_attribution import FigureReview
 from openpatients2.longitudinal import PatientTimeline,audit_timeline,relative_order
 from schema_targets import materialize
 from validate import digest
+import store
 
 
 def validate_submission(target,annotation,source):
@@ -90,7 +91,7 @@ def main():
     if args.role:
         from signing_guard import check_signature
         check_signature(args.reviewer,args.notes)   # refuse probes before anything is read or written
-    aid=args.article;source=json.loads((args.root/'sources'/f'{aid}.json').read_text());a=json.loads((args.root/args.folder/f'{aid}.json').read_text());target=json.loads((args.root/'schema-submissions'/f'{aid}.json').read_text())
+    aid=args.article;source=json.loads(store.path(args.root,'sources',aid).read_text());a=json.loads(store.path(args.root,args.folder,aid).read_text());target=json.loads(store.path(args.root,'schema-submissions',aid).read_text())
     report=validate_submission(target,a,source)
     if args.role:
         if not args.reviewer or not args.notes:raise ValueError('Review receipts need reviewer and substantive inspection notes')
@@ -101,6 +102,6 @@ def main():
         gates=run_gates(args.root,aid,annotation=a,groups=('clinical',))
         if not gates['passed']:raise ValueError(('Runtime gates failed; fix the annotation, regenerate and re-run',gates['errors'][:10]))
         receipt={'article_id':aid,'reviewer':args.reviewer,'role':args.role,'reviewed_at':datetime.now(timezone.utc).isoformat(),'annotation_folder':args.folder,'annotation_sha256':digest(a),'target_sha256':digest(target),'source_text_sha256':source['text_sha256'],'inspection_notes':args.notes,'status':'schema_source_reviewed','physician_adjudicated':False,**report}
-        directory=args.root/f'schema-{args.role}-reviews';directory.mkdir(exist_ok=True);(directory/f'{aid}.json').write_text(json.dumps(receipt,indent=2)+'\n')
+        out=store.receipt(args.root,'schema',args.role,aid);out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps(receipt,indent=2)+'\n')
     print(json.dumps({'article_id':aid,**report,'review_receipt_written':args.role}))
 if __name__=='__main__':main()

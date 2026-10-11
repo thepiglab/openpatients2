@@ -12,7 +12,7 @@ The shared cache has a HARD 30 GB cap enforced under an exclusive lock, and a
 per-file cap. Larger files are never fully downloaded: a HEAD request gives size
 and type, then only a bounded head sample (plus a ZIP central-directory tail) is
 kept. Downloading or peeking is not inspection; review is recorded separately in
-the supplement manifest and its receipts. Writes `supplement-assets/ID.json`.
+the supplement manifest and its receipts. Writes `articles/ID/supplements/assets.json`.
 """
 import argparse
 from datetime import datetime, timezone
@@ -27,6 +27,7 @@ from urllib.parse import urlparse
 import httpx
 
 from openpatients2.supplement_peek import PEEK_VERSION, extension, peek_file
+import store
 
 CACHE = Path(__file__).resolve().parents[2] / 'data/.dense-supplement-cache'
 MAX_CACHE_BYTES = 30_000_000_000      # hard cap for the whole shared cache (30 GB)
@@ -171,9 +172,9 @@ def _acquire_asset(client, aid, supplement, asset, used, cache, caps):
 
 def acquire(root, aid, *, client=None, cache=None, caps=None, force=False):
     root = Path(root); cache = Path(cache or CACHE); caps = caps or (MAX_CACHE_BYTES, MAX_FILE_BYTES)
-    source = json.loads((root / 'sources' / f'{aid}.json').read_text())
-    out_path = root / 'supplement-assets' / f'{aid}.json'
-    signed = [root / f'supplement-manifest-{r}-reviews' / f'{aid}.json' for r in ('agent', 'parent')]
+    source = json.loads(store.path(root, 'sources', aid).read_text())
+    out_path = store.path(root, 'supplement-assets', aid)
+    signed = [store.receipt(root, 'supplement-manifest', r, aid) for r in ('agent', 'parent')]
     if out_path.exists() and any(p.exists() for p in signed) and not force:
         raise ValueError('A signed supplement manifest binds this acquisition; pass --force to re-acquire (receipts become stale)')
     cache.mkdir(parents=True, exist_ok=True)
@@ -200,7 +201,7 @@ def acquire(root, aid, *, client=None, cache=None, caps=None, force=False):
                       'per_file_limit_bytes': caps[1], 'acquired_at': datetime.now(timezone.utc).isoformat(),
                       'peek_version': PEEK_VERSION,
                       'download_is_not_inspection': True}
-            out_path.parent.mkdir(exist_ok=True)
+            out_path.parent.mkdir(parents=True, exist_ok=True)
             temporary = out_path.with_suffix('.json.tmp')
             temporary.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
             temporary.replace(out_path)
@@ -216,8 +217,8 @@ def repeek(root, aid, *, force=False):
     Refused once any manifest receipt exists: a new peek engine would make the
     signed machine blocks stale. Existing records keep their original peeks.
     """
-    path = Path(root) / 'supplement-assets' / f'{aid}.json'
-    signed = [Path(root) / f'supplement-manifest-{r}-reviews' / f'{aid}.json' for r in ('agent', 'parent')]
+    path = store.path(root, 'supplement-assets', aid)
+    signed = [store.receipt(root, 'supplement-manifest', r, aid) for r in ('agent', 'parent')]
     if any(p.exists() for p in signed) and not force:
         raise ValueError('A signed supplement manifest binds these peeks; pass --force to re-peek (receipts become stale)')
     report = json.loads(path.read_text())
@@ -237,16 +238,16 @@ def repeek(root, aid, *, force=False):
 def extract_archive(root, aid, sid, *, cache=None, max_cache=MAX_CACHE_BYTES):
     """Bounded extraction of a downloaded ZIP supplement's PDF members into the cache.
 
-    Writes `supplement-archive-members/ID.SID.json` and a review skeleton in
-    `document-submission-drafts/ID.supplements.SID.json`
+    Writes `articles/ID/supplements/SID.archive_members.json` and a review skeleton in
+    `articles/ID/supplements/SID.document.draft.json`
     (`dense-supplemental-archive-document-reference/1`). Only PDF members are
     written, each under a hashed name inside this article's cache folder.
     """
     from supplement_review import (ARCHIVE_FORMAT, MAX_MEMBER_BYTES, member_url, pdf_page_count,
                                    zip_member_bytes, zip_members)
     root = Path(root); cache = Path(cache or CACHE)
-    source = json.loads((root / 'sources' / f'{aid}.json').read_text())
-    acquisition = json.loads((root / 'supplement-assets' / f'{aid}.json').read_text())
+    source = json.loads(store.path(root, 'sources', aid).read_text())
+    acquisition = json.loads(store.path(root, 'supplement-assets', aid).read_text())
     rows = [r for r in acquisition['files'] if r['supplement_id'] == sid]
     if len(rows) != 1 or rows[0].get('download_status') != 'downloaded' or rows[0].get('detected_type') != 'zip':
         raise ValueError('Extraction needs exactly one fully downloaded ZIP asset for this supplement')
@@ -279,16 +280,16 @@ def extract_archive(root, aid, sid, *, cache=None, max_cache=MAX_CACHE_BYTES):
                'source_license': source['license'], 'media_type': 'application/zip', 'members': pdfs, 'other_members': others}
     record = {'article_id': aid, 'supplement_id': sid, 'archive': archive, 'members': members,
               'extraction_is_not_inspection': True}
-    out = root / 'supplement-archive-members'; out.mkdir(exist_ok=True)
-    (out / f'{aid}.{sid}.json').write_text(json.dumps(record, ensure_ascii=False, indent=2) + '\n')
+    out = store.path(root, 'supplement-archive-members', aid, sid=sid); out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(record, ensure_ascii=False, indent=2) + '\n')
     skeleton = {'format': ARCHIVE_FORMAT, 'article_id': aid, 'source_text_sha256': source['text_sha256'],
                 'supplement_id': sid, 'status': 'partial', 'document_classification': 'other',
                 'contents_summary': 'DRAFT: describe after viewing every member page', 'archive': archive,
                 'assets': [{**m, 'pages': []} for m in members],
                 'limitations': ['DRAFT skeleton: pages not yet inspected'] + (
                     [f'Non-PDF members not reviewable by this path: {others}'] if others else [])}
-    drafts = root / 'document-submission-drafts'; drafts.mkdir(exist_ok=True)
-    (drafts / f'{aid}.supplements.{sid}.json').write_text(json.dumps(skeleton, ensure_ascii=False, indent=2) + '\n')
+    draft = store.path(root, 'document-submission-drafts', aid, sid=sid); draft.parent.mkdir(parents=True, exist_ok=True)
+    draft.write_text(json.dumps(skeleton, ensure_ascii=False, indent=2) + '\n')
     return record
 
 
@@ -297,14 +298,14 @@ def extract_text_documents(root, aid, sid, *, cache=None, max_cache=MAX_CACHE_BY
 
     Units are extracted offline by openpatients2.document_text (anydoc Inline.text; no hosted OCR).
     ZIP members are written under hashed names into this article's cache folder. Writes the skeleton
-    `document-submission-drafts/ID.supplements.SID.json` (`dense-supplemental-text-document-reference/1`).
+    `articles/ID/supplements/SID.document.draft.json` (`dense-supplemental-text-document-reference/1`).
     Extraction is not inspection: the reviewer reads every unit and fills `blocks`.
     """
     from supplement_review import (MAX_MEMBER_BYTES, _text_format, draft_text_document, zip_member_bytes,
                                    zip_text_members)
     root = Path(root); cache = Path(cache or CACHE)
-    source = json.loads((root / 'sources' / f'{aid}.json').read_text())
-    acquisition = json.loads((root / 'supplement-assets' / f'{aid}.json').read_text())
+    source = json.loads(store.path(root, 'sources', aid).read_text())
+    acquisition = json.loads(store.path(root, 'supplement-assets', aid).read_text())
     rows = [r for r in acquisition['files'] if r['supplement_id'] == sid]
     if not rows or any(r.get('download_status') != 'downloaded' for r in rows):
         raise ValueError('Text-document extraction needs fully downloaded supplement assets')
@@ -344,9 +345,9 @@ def extract_text_documents(root, aid, sid, *, cache=None, max_cache=MAX_CACHE_BY
     skeleton['archive'] = archive
     if archive and archive['other_members']:
         skeleton['limitations'].append(f"Non-document members not reviewable by this path: {archive['other_members']}")
-    drafts = root / 'document-submission-drafts'; drafts.mkdir(exist_ok=True)
-    (drafts / f'{aid}.supplements.{sid}.json').write_text(json.dumps(skeleton, ensure_ascii=False, indent=2) + '\n')
-    return {'draft': f'document-submission-drafts/{aid}.supplements.{sid}.json',
+    draft = store.path(root, 'document-submission-drafts', aid, sid=sid); draft.parent.mkdir(parents=True, exist_ok=True)
+    draft.write_text(json.dumps(skeleton, ensure_ascii=False, indent=2) + '\n')
+    return {'draft': str(draft),
             'assets': [{'url': a['url'], 'units': len(a['units']), 'nonliteral_units': a['extraction']['nonliteral_units']}
                        for a in skeleton['assets']]}
 

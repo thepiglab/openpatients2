@@ -15,8 +15,8 @@ Only three whitelisted, purely typographic rewrites, applied outside quotation m
 Never touched: evidence/quotes, ids, enums, literal time text, URLs/filenames/identifiers, hashes, machine
 blocks, and notation (HbA1c, VO2peak, IL6, T1/T2, 8Fr: none of them match the patterns).
 
-Files: annotations/ID.json (scan_glued_text categories exported/internal), visual-submissions/ID.json,
-figure-ehr-labels/ID.json, figure-privacy-flags/ID.json, supplement-manifests/ID.json (reviewer free-text keys,
+Files (store kinds, see store.py): annotations (scan_glued_text categories exported/internal), visual-submissions,
+figure-ehr-labels, figure-privacy-flags, supplement-manifests (reviewer free-text keys,
 openpatients2.semantic_rules.SIDECAR_FREE_TEXT). When the visual submission changes, `visual_target_sha256`
 in figure-ehr-labels and figure-privacy-flags is recomputed exactly as the tools do (json_digest of the
 whole visual submission).
@@ -31,6 +31,7 @@ import re
 
 from openpatients2.provenance import json_digest
 from openpatients2.semantic_rules import QUOTED, SIDECAR_FREE_TEXT, SIDECAR_SKIP
+import store
 
 ROOT = Path(__file__).resolve().parent
 LABEL_NUMBER = re.compile(r'\b(Case|Patient|Figure|Fig\.?|Table|Panel|Day|day|POD|Week|week|Month|month|Year|year|'
@@ -131,16 +132,16 @@ def plan_article(root, aid):
     """{'files': {folder: (old, new, changes)}, 'stale_receipts': [...], 'stale_targets': [...]}."""
     from visual_review import identity_digest
     root = Path(root)
-    source = json.loads((root / 'sources' / f'{aid}.json').read_text())
+    source = json.loads(store.path(root, 'sources', aid).read_text())
     text = '\n'.join([source.get('title') or ''] + [s['text'] for s in source.get('segments', [])]
                      + [f.get('caption') or '' for f in source.get('figures') or []])
     files = {}
-    annotation = _json(root / 'annotations' / f'{aid}.json')
+    annotation = _json(store.path(root, 'annotations', aid))
     if annotation:
         new, changes = plan_document(annotation, _annotation_strings, text)
         files['annotations'] = (annotation, new, changes)
     for kind, folder in SIDECARS:
-        doc = _json(root / folder / f'{aid}.json')
+        doc = _json(store.path(root, folder, aid))
         if doc and ('figures' in doc or kind == 'supplement_manifest'):
             new, changes = plan_document(doc, lambda d, kind=kind: _sidecar_strings(kind, d), text)
             files[folder] = (doc, new, changes)
@@ -157,14 +158,13 @@ def plan_article(root, aid):
     reasons = set(changed)
     if annotation and 'annotations' in changed and identity_digest(annotation) != identity_digest(files['annotations'][1]):
         reasons.add('identity')
-    stale = {f'{folder}/{aid}.json' for r in reasons for folder in RECEIPTS.get(r, ())
-             if (root / folder / f'{aid}.json').exists()}
+    paths = {store.path(root, folder, aid) for r in reasons for folder in RECEIPTS.get(r, ())}
     if 'identity' in reasons:     # supplement receipts bind the patient identity digest
-        stale |= {f'{p.parent.name}/{p.name}' for folder in ('supplement-agent-reviews', 'supplement-parent-reviews')
-                  for p in (root / folder).glob(f'{aid}.*.json')}
-    stale = sorted(stale)
+        paths |= {store.receipt(root, 'supplement', role, aid, sid) for role in ('agent', 'parent')
+                  for sid in store.supplement_ids(root, 'supplement', aid, role=role)}
+    stale = sorted(str(p.relative_to(root)) for p in paths if p.exists())
     targets = ['schema-submissions (annotation_sha256; regenerate)'] if 'annotations' in changed and \
-        (root / 'schema-submissions' / f'{aid}.json').exists() else []
+        store.path(root, 'schema-submissions', aid).exists() else []
     return {'article_id': aid, 'files': files, 'changed_files': changed, 'stale_receipts': stale, 'stale_targets': targets}
 
 
@@ -181,7 +181,7 @@ def apply(root, plan):
     for folder, (old, new, changes) in plan['files'].items():
         if not changes:
             continue
-        path = root / folder / f"{plan['article_id']}.json"
+        path = store.path(root, folder, plan['article_id'])
         text = path.read_text(encoding='utf-8')
         path.write_text(STYLES[style_of(text) or 'i2'](new), encoding='utf-8')
 
@@ -193,7 +193,7 @@ def main(argv=None):
     args = ap.parse_args(argv)
     if args.apply and not args.article:
         ap.error('--apply needs --article (one article at a time)')
-    ids = [args.article] if args.article else sorted(p.stem for p in (args.root / 'annotations').glob('*.json'))
+    ids = [args.article] if args.article else store.article_ids(args.root, 'annotations')
     reports = []
     for aid in ids:
         plan = plan_article(args.root, aid)

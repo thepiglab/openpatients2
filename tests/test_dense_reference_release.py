@@ -8,6 +8,8 @@ import sys
 import pytest
 
 ROOT=Path(__file__).resolve().parents[1]
+from openpatients2.dense_store import load as load_store
+store = load_store()
 
 
 def load_module(name,path):
@@ -24,19 +26,17 @@ def release(tmp_path,monkeypatch):
     monkeypatch.setitem(sys.modules,'validate',validate)
     exporter=load_module('dense_reference_export',ROOT/'benchmarks/dense500/export.py')
     source=ROOT/'benchmarks/dense50'
-    for folder in ('sources','drafts','annotations','reviews'):
-        (tmp_path/folder).mkdir()
     reviewed='PMC13624771.1';draft='PMC13624887.1'
     for aid in (reviewed,draft):
         for folder in ('sources','drafts'):
-            shutil.copyfile(source/folder/f'{aid}.json',tmp_path/folder/f'{aid}.json')
+            shutil.copyfile(store.path(source, folder, aid),store.path(tmp_path, folder, aid, mkdir=True))
     for folder in ('annotations','reviews'):
-        shutil.copyfile(source/folder/f'{reviewed}.json',tmp_path/folder/f'{reviewed}.json')
+        shutil.copyfile(store.path(source, folder, reviewed),store.path(tmp_path, folder, reviewed, mkdir=True))
     # The live receipt may be stale while a re-sign campaign is running; this fixture models a
     # current parent source review of the live annotation (independent of campaign state).
-    receipt=json.loads((tmp_path/'reviews'/f'{reviewed}.json').read_text())
-    receipt['annotation_sha256']=validate.digest(json.loads((tmp_path/'annotations'/f'{reviewed}.json').read_text()))
-    (tmp_path/'reviews'/f'{reviewed}.json').write_text(json.dumps(receipt))
+    receipt=json.loads(store.path(tmp_path, 'reviews', reviewed).read_text())
+    receipt['annotation_sha256']=validate.digest(json.loads(store.path(tmp_path, 'annotations', reviewed).read_text()))
+    store.path(tmp_path, 'reviews', reviewed, mkdir=True).write_text(json.dumps(receipt))
     (tmp_path/'retained-strata.json').write_text(json.dumps({reviewed:'gastrointestinal',draft:'dermatology'}))
     (tmp_path/'selection.json').write_text('[]')
     (tmp_path/'SELECTION_PLAN.md').write_text('Test selection plan')
@@ -90,7 +90,7 @@ def test_empty_inventory_is_not_counted_as_pixel_review(release):
 
 def test_export_keeps_supplement_links_without_claiming_content_review(release):
     exporter,_,root,out,aid,_=release
-    path=root/'sources'/f'{aid}.json'
+    path=store.path(root, 'sources', aid)
     source=json.loads(path.read_text())
     source['supplements']=[{'supplement_id':'video1','url':'https://example.invalid/video.mp4'}]
     path.write_text(json.dumps(source))
@@ -104,7 +104,7 @@ def test_export_keeps_supplement_links_without_claiming_content_review(release):
 
 def test_changed_annotation_requires_new_source_review(release):
     exporter,_,root,_,aid,_=release
-    path=root/'annotations'/f'{aid}.json'
+    path=store.path(root, 'annotations', aid)
     data=json.loads(path.read_text());data['patients'][0]['summary'][0]['text']='Changed after review'
     path.write_text(json.dumps(data))
     # A changed annotation is withheld from the release (not shown as reviewed)...
@@ -125,8 +125,8 @@ def test_changed_annotation_requires_new_source_review(release):
 def test_review_receipt_requires_structured_assessment(release):
     from review_record import save_review
     _,_,root,_,aid,_=release
-    annotation=json.loads((root/'annotations'/f'{aid}.json').read_text())
-    receipt_path=root/'reviews'/f'{aid}.json'
+    annotation=json.loads(store.path(root, 'annotations', aid).read_text())
+    receipt_path=store.path(root, 'reviews', aid)
     original=receipt_path.read_bytes()
     with pytest.raises(TypeError,match='structured mapping'):
         save_review(root,annotation,[], 'Prose belongs inside the assessment mapping.')
@@ -135,10 +135,10 @@ def test_review_receipt_requires_structured_assessment(release):
 
 def test_even_matching_receipt_cannot_admit_nonliteral_evidence(release):
     exporter,validator,root,_,aid,_=release
-    path=root/'annotations'/f'{aid}.json';data=json.loads(path.read_text())
+    path=store.path(root, 'annotations', aid);data=json.loads(path.read_text())
     data['patients'][0]['facts'][0]['evidence'][0]['quote']='Fabricated text that is absent from the article.'
     path.write_text(json.dumps(data))
-    receipt_path=root/'reviews'/f'{aid}.json';receipt=json.loads(receipt_path.read_text())
+    receipt_path=store.path(root, 'reviews', aid);receipt=json.loads(receipt_path.read_text())
     receipt['annotation_sha256']=validator.digest(data)
     receipt_path.write_text(json.dumps(receipt))
     # Default policy: the invalid article is withheld with an explicit status, never exported.
@@ -157,8 +157,8 @@ def test_even_matching_receipt_cannot_admit_nonliteral_evidence(release):
 
 def test_uninspected_figure_cannot_have_pixel_description(release):
     _,validator,root,_,aid,_=release
-    annotation=json.loads((root/'annotations'/f'{aid}.json').read_text())
-    source=json.loads((root/'sources'/f'{aid}.json').read_text())
+    annotation=json.loads(store.path(root, 'annotations', aid).read_text())
+    source=json.loads(store.path(root, 'sources', aid).read_text())
     annotation['figures'][0]['visual_description']='Claim derived from unseen image pixels'
     assert 'uninspected pixel claim' in validator.validate(annotation,source)
 
@@ -168,8 +168,8 @@ def full_target(release):
     import schema_targets
     import schema_review
     _,_,root,_,aid,_=release
-    annotation=json.loads((root/'annotations'/f'{aid}.json').read_text())
-    source=json.loads((root/'sources'/f'{aid}.json').read_text())
+    annotation=json.loads(store.path(root, 'annotations', aid).read_text())
+    source=json.loads(store.path(root, 'sources', aid).read_text())
     target=schema_targets.materialize(annotation,source)
     assert not target['source_gate_errors']
     return schema_targets,schema_review,target,annotation,source
@@ -227,22 +227,20 @@ def test_reviewed_roster_may_clear_only_generated_pending_notice(full_target):
 def test_full_bundle_release_requires_both_current_reviews(release,full_target):
     exporter,validator,root,out,aid,_=release
     _,_,target,annotation,source=full_target
-    (root/'schema-submissions').mkdir()
-    (root/'schema-submissions'/f'{aid}.json').write_text(json.dumps(target))
+    store.path(root, 'schema-submissions', aid, mkdir=True).write_text(json.dumps(target))
     exporter.main()
     assert not (out/'legacy'/'patients.jsonl').read_text()  # conversion alone is insufficient
     for role in ('agent','parent'):
-        folder=root/f'schema-{role}-reviews';folder.mkdir()
         receipt={'article_id':aid,'status':'schema_source_reviewed','role':role,'reviewer':f'Claude synthetic {role}','inspection_notes':'Synthetic fixture inspection notes for tests',
             'annotation_sha256':validator.digest(annotation),'target_sha256':validator.digest(target),
             'source_text_sha256':source['text_sha256']}
-        (folder/f'{aid}.json').write_text(json.dumps(receipt))
+        store.receipt(root,'schema',role,aid,mkdir=True).write_text(json.dumps(receipt))
     exporter.main()
     patients=[json.loads(line) for line in (out/'legacy'/'patients.jsonl').read_text().splitlines()]
     assert len(patients)==len(annotation['patients'])
     assert all(p['clinical_accuracy_verified'] is False for p in patients)
     target['roster']['roster_complete']=not target['roster']['roster_complete']
-    (root/'schema-submissions'/f'{aid}.json').write_text(json.dumps(target))
+    store.path(root, 'schema-submissions', aid, mkdir=True).write_text(json.dumps(target))
     # Default policy withholds a stale bundle (re-sign campaigns) instead of aborting the release.
     exporter.main()
     assert not (out/'legacy'/'patients.jsonl').read_text()
@@ -324,7 +322,7 @@ def test_reviewed_pdf_exports_as_document_not_pixels(release,full_target,monkeyp
     _,_,target,annotation,source=full_target
     source['supplements']=[{'supplement_id':'SM1','assets':[{'url':'https://example.invalid/checklist.pdf'}],
                             'content_inspected':False}]
-    (root/'sources'/f'{aid}.json').write_text(json.dumps(source))
+    store.path(root, 'sources', aid, mkdir=True).write_text(json.dumps(source))
     document={'format':supplement_review.DOCUMENT_FORMAT,'article_id':aid,'supplement_id':'SM1',
               'document_classification':'administrative_checklist','assets':[], 'contents_summary':'Synthetic checklist'}
     receipts=[{'role':'agent'},{'role':'parent'}]
@@ -336,11 +334,9 @@ def test_reviewed_pdf_exports_as_document_not_pixels(release,full_target,monkeyp
     item=json.loads((out/'legacy'/'manifest.jsonl').read_text().splitlines()[0])['source_supplements'][0]
     assert item['content_inspected'] and item['review_status']=='agent_and_parent_source_and_document_pages_reviewed'
     assert json.loads((out/'statistics.json').read_text())['page_reviewed_document_supplements']==1
-    (root/'schema-submissions').mkdir()
-    (root/'schema-submissions'/f'{aid}.json').write_text(json.dumps(target))
+    store.path(root, 'schema-submissions', aid, mkdir=True).write_text(json.dumps(target))
     for role in ('agent','parent'):
-        folder=root/f'schema-{role}-reviews';folder.mkdir()
-        (folder/f'{aid}.json').write_text(json.dumps({'article_id':aid,'status':'schema_source_reviewed','role':role,'reviewer':f'Claude synthetic {role}','inspection_notes':'Synthetic fixture inspection notes for tests',
+        store.receipt(root,'schema',role,aid,mkdir=True).write_text(json.dumps({'article_id':aid,'status':'schema_source_reviewed','role':role,'reviewer':f'Claude synthetic {role}','inspection_notes':'Synthetic fixture inspection notes for tests',
             'annotation_sha256':validator.digest(annotation),'target_sha256':validator.digest(target),
             'source_text_sha256':source['text_sha256']}))
     exporter.main()

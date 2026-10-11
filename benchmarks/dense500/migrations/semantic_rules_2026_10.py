@@ -1,6 +1,7 @@
 """Migrate reference data to the shared annotation rules (src/openpatients2/rules/annotation_rules.yaml).
 
-Scope: annotations/ in dense50 + dense500, plus drafts/ that have no promoted annotation (a draft
+Scope: annotations (articles/<ID>/annotation.json) in dense50 + dense500, plus drafts
+(annotation_draft.json) that have no promoted annotation (a draft
 byte-identical to its annotation is kept identical). Idempotent: a second run changes nothing.
 Dry run by default; `--apply` writes. Nothing is signed: every changed article needs the re-sign
 campaign (claude_prompts/RESIGN_BRIEF.md).
@@ -30,15 +31,15 @@ Judgment migrations (applied only where the source wording is unambiguous, else 
   M11 comparison_panels figure EHR labels whose rationale says normal/healthy comparison or
                         control (not includable) -> non_clinical_diagnostic_aid      (FIG-EHR-COMPARISON)
 
-After an annotation changes, the schema target is regenerated into schema-drafts/ and merged into
-schema-submissions/ keeping the reviewers' structural edits (event kinds/time classifications,
+After an annotation changes, the schema target is regenerated into schema_target.draft.json and merged into
+schema_target.json keeping the reviewers' structural edits (event kinds/time classifications,
 roster count/completeness, attribution subjects/rationales). Because the timeline vocabulary was
 unified, every article's schema target is regenerated (schema fingerprints changed).
 
   PYTHONPATH=src:benchmarks/dense500 .venv/bin/python benchmarks/dense500/migrations/semantic_rules_2026_10.py \
       [--apply] [--report PATH] [--skip ID ...] [--article ID ... [--allow-recent]]
 Outputs: the report (per article: changes by migration, needs_review items, schema status) and, with
---apply, R/needs-review/<ID>.json for articles with open items (resolutions already recorded there
+--apply, R/articles/<ID>/needs_review.json for articles with open items (resolutions already recorded there
 are preserved across runs).
 """
 import argparse
@@ -53,6 +54,7 @@ import time
 HERE = Path(__file__).resolve().parent
 DENSE = HERE.parent
 sys.path.insert(0, str(DENSE))
+import store  # noqa: E402
 ROOTS = [DENSE.parent / 'dense50', DENSE]
 QUIET_SECONDS = 15 * 60
 VERSION = 'semantic-rules-2026-10/1'
@@ -292,7 +294,7 @@ def m10_panel_labels(a, ctx):
                           'panel label is not printed in the caption: keep it only if it is printed on the image as a label '
                           '(check pixels); otherwise use the caption/printed label or merge into a whole-figure row',
                           caption[:300])
-    visual = ctx.root / 'visual-submissions' / f'{ctx.aid}.json'
+    visual = store.path(ctx.root, 'visual-submissions', ctx.aid)
     if visual.exists():
         for f in json.loads(visual.read_text())['figures']:
             v = (f.get('analysis') or {}).get('visual')
@@ -312,7 +314,7 @@ COMPARISON = re.compile(r'\bnormal[- ]\w+ comparison|\bnormal comparison|\bnorma
 
 
 def m11_comparison_panels(ctx, apply):
-    path = ctx.root / 'figure-ehr-labels' / f'{ctx.aid}.json'
+    path = store.path(ctx.root, 'figure-ehr-labels', ctx.aid)
     if not path.exists():
         return None
     text = path.read_text(encoding='utf-8'); labels = json.loads(text); new = copy.deepcopy(labels)
@@ -337,7 +339,7 @@ def m11_comparison_panels(ctx, apply):
     if new == labels:
         return None
     from openpatients2.figure_ehr import validate_labels
-    visual = json.loads((ctx.root / 'visual-submissions' / f'{ctx.aid}.json').read_text())
+    visual = json.loads(store.path(ctx.root, 'visual-submissions', ctx.aid).read_text())
     validate_labels(new, ctx.source, visual)
     if apply:
         path.write_text(STYLES[style_of(text) or 'i2'](new), encoding='utf-8')
@@ -431,22 +433,22 @@ def check_submission(merged, annotation, source):
 
 def receipts_going_stale(root, aid, annotation_changed, promoted):
     out = []
-    if annotation_changed and promoted and (root / 'reviews' / f'{aid}.json').exists():
+    if annotation_changed and promoted and store.path(root, 'reviews', aid).exists():
         out.append('reviews (parent source review: annotation_sha256)')
     for role in ('agent', 'parent'):
-        if (root / f'schema-{role}-reviews' / f'{aid}.json').exists():
+        if store.receipt(root, 'schema', role, aid).exists():
             out.append(f'schema-{role}-reviews (annotation_sha256/target_sha256)')
     return out
 
 
 def recent(root, aid, now):
-    paths = [root / f / f'{aid}.json' for f in ('annotations', 'drafts', 'reviews', 'schema-submissions', 'schema-drafts',
+    paths = [store.path(root, f, aid) for f in ('annotations', 'drafts', 'reviews', 'schema-submissions', 'schema-drafts',
              'schema-agent-reviews', 'schema-parent-reviews', 'visual-submissions', 'figure-ehr-labels')]
     return any(p.exists() and now - p.stat().st_mtime < QUIET_SECONDS for p in paths)
 
 
 def write_needs_review(root, aid, items, apply):
-    path = root / 'needs-review' / f'{aid}.json'
+    path = store.path(root, 'needs-review', aid)
     old = json.loads(path.read_text()) if path.exists() else {'items': []}
     resolved = {i['key']: i for i in old.get('items', []) if i.get('resolution')}
     rows = []
@@ -463,7 +465,7 @@ def write_needs_review(root, aid, items, apply):
            'items': rows}
     if apply:
         if rows:
-            path.parent.mkdir(exist_ok=True); path.write_text(json.dumps(doc, ensure_ascii=False, indent=2) + '\n')
+            path.parent.mkdir(parents=True, exist_ok=True); path.write_text(json.dumps(doc, ensure_ascii=False, indent=2) + '\n')
         elif path.exists():
             path.unlink()   # every item now satisfies its rule
     return doc
@@ -473,12 +475,12 @@ def candidates(roots, only=None):
     for root in roots:
         seen = {}
         for folder in ('annotations', 'drafts'):
-            for path in sorted((root / folder).glob('*.json')):
-                if folder == 'drafts' and (root / 'annotations' / path.name).exists():
+            for aid in store.article_ids(root, folder):
+                if folder == 'drafts' and store.path(root, 'annotations', aid).exists():
                     continue
-                if only and path.stem not in only:
+                if only and aid not in only:
                     continue
-                seen.setdefault(path.stem, (folder, path))
+                seen.setdefault(aid, (folder, store.path(root, folder, aid)))
         for aid, (folder, path) in sorted(seen.items()):
             yield root, aid, folder, path
 
@@ -491,7 +493,7 @@ def run(apply=False, skip=(), only=None, roots=ROOTS, now=None, allow_recent=Fal
               'generated_at': datetime.now(timezone.utc).isoformat(), 'articles': {}}
     for root, aid, folder, path in candidates(roots, only):
         text = path.read_text(encoding='utf-8'); annotation = json.loads(text)
-        source = json.loads((root / 'sources' / f'{aid}.json').read_text())
+        source = json.loads(store.path(root, 'sources', aid).read_text())
         ctx = Ctx(root, aid, source); new = copy.deepcopy(annotation)
         for migration in ANNOTATION_MIGRATIONS:
             migration(new, ctx)
@@ -506,9 +508,9 @@ def run(apply=False, skip=(), only=None, roots=ROOTS, now=None, allow_recent=Fal
             reason = 'unrecognised_json_style'
         annotation_changed = new != annotation
         entry['annotation_changed_paths'] = len(diff_paths(annotation, new))
-        draft_path = root / 'drafts' / f'{aid}.json'
+        draft_path = store.path(root, 'drafts', aid)
         draft_identical = promoted and draft_path.exists() and draft_path.read_bytes() == path.read_bytes()
-        sub_path = root / 'schema-submissions' / f'{aid}.json'
+        sub_path = store.path(root, 'schema-submissions', aid)
         merged = regenerated = None
         try:
             regenerated = materialize(new, source)
@@ -538,7 +540,7 @@ def run(apply=False, skip=(), only=None, roots=ROOTS, now=None, allow_recent=Fal
                 path.write_text(STYLES[style_of(text)](new), encoding='utf-8')
                 if draft_identical:
                     draft_path.write_bytes(path.read_bytes())
-            out = root / 'schema-drafts' / f'{aid}.json'; out.parent.mkdir(exist_ok=True)
+            out = store.path(root, 'schema-drafts', aid); out.parent.mkdir(parents=True, exist_ok=True)
             out.write_text(json.dumps(regenerated, ensure_ascii=False, indent=2) + '\n')
             if merged is not None:
                 sub_text = sub_path.read_text(encoding='utf-8')

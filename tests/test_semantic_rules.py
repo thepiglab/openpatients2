@@ -11,6 +11,8 @@ from openpatients2.semantic_rules import (case_context_target_errors, item_viola
 from openpatients2.validation import validate
 
 ROOT = Path(__file__).resolve().parents[1]
+from openpatients2.dense_store import load as load_store
+store = load_store()
 SOURCE = 'A 67-year-old man was admitted. Creatinine was 1.2 mg/dL. He never smoked. Biopsy was not performed.'
 EV = [{'quote': 'Creatinine was 1.2 mg/dL', 'source_section': None}]
 TIME = {'text': None, 'relation': 'unknown', 'anchor': None, 'date_iso': None}
@@ -107,8 +109,8 @@ def dense(monkeypatch):
 def test_annotation_and_materialized_target_share_the_rules_and_timeline_vocabulary(dense):
     validator, targets = dense
     root = ROOT / 'benchmarks/dense50'; aid = 'PMC13624771.1'
-    annotation = json.loads((root / 'annotations' / f'{aid}.json').read_text())
-    source = json.loads((root / 'sources' / f'{aid}.json').read_text())
+    annotation = json.loads(store.path(root, 'annotations', aid).read_text())
+    source = json.loads(store.path(root, 'sources', aid).read_text())
     patient = annotation['patients'][0]
     patient['events'][0]['occurrence'] = 'not_occurred'
     if len(patient['events']) > 1:
@@ -132,8 +134,8 @@ def test_annotation_and_materialized_target_share_the_rules_and_timeline_vocabul
 def test_review_only_facts_are_exported_as_flagged_items(dense):
     _, targets = dense
     root = ROOT / 'benchmarks/dense50'; aid = 'PMC13294519.1'
-    annotation = json.loads((root / 'annotations' / f'{aid}.json').read_text())
-    source = json.loads((root / 'sources' / f'{aid}.json').read_text())
+    annotation = json.loads(store.path(root, 'annotations', aid).read_text())
+    source = json.loads(store.path(root, 'sources', aid).read_text())
     bundle = targets.materialize(annotation, source)['patients'][0]
     quarantined = bundle['reference_provenance']['quarantined_facts']
     assert quarantined
@@ -150,10 +152,10 @@ def test_series_round_trip_uses_reviewed_supplement_transcriptions(monkeypatch):
     monkeypatch.syspath_prepend(str(ROOT / 'benchmarks/dense500'))
     from reference_gates import media_gates
     root = ROOT / 'benchmarks/dense500'; aid = 'PMC12786310.1'
-    if not (root / 'measurement-series' / f'{aid}.json').exists():
+    if not store.path(root, 'measurement-series', aid).exists():
         pytest.skip('reference series not present')
-    source = json.loads((root / 'sources' / f'{aid}.json').read_text())
-    annotation = json.loads((root / 'annotations' / f'{aid}.json').read_text())
+    source = json.loads(store.path(root, 'sources', aid).read_text())
+    annotation = json.loads(store.path(root, 'annotations', aid).read_text())
     errors, _ = media_gates(root, source, annotation, None)
     assert not [e for e in errors if e['gate'].startswith('ehr.measurement_series')]
 
@@ -190,7 +192,7 @@ def test_reference_gates_report_positional_panel_labels_as_warnings(tmp_path, mo
     from reference_gates import _panel_label_warnings
     figure = {'figure_id': 'F1', 'panels': [{'panel': 'left'}, {'panel': 'A'}]}
     visual = {'figures': [{'figure_id': 'F1', 'analysis': {'visual': {'panels': [{'panel': 'left'}, {'panel': 'A'}]}}}]}
-    (tmp_path / 'figure-ehr-labels').mkdir(); (tmp_path / 'figure-ehr-labels' / 'X.json').write_text(json.dumps({'figures': [figure]}))
+    store.path(tmp_path, 'figure-ehr-labels', 'X', mkdir=True).write_text(json.dumps({'figures': [figure]}))
     warnings = []
     _panel_label_warnings(tmp_path, 'X', visual, warnings)
     assert len(warnings) == 1 and warnings[0]['gate'] == 'figure.FIG-LABELS'
@@ -304,9 +306,9 @@ def test_event_classification_lives_in_the_annotation(dense, monkeypatch):
     import importlib
     schema_review = importlib.import_module('schema_review')
     root = ROOT / 'benchmarks/dense50'
-    for path in sorted((root / 'annotations').glob('PMC*.json')):   # read-only: first article with a timed event
-        annotation = json.loads(path.read_text())
-        source = json.loads((root / 'sources' / path.name).read_text())
+    for aid in store.matching_ids(root, 'annotations', 'PMC*'):   # read-only: first article with a timed event
+        annotation = json.loads(store.path(root, 'annotations', aid).read_text())
+        source = json.loads(store.path(root, 'sources', aid).read_text())
         if any(e.get('time_text') for e in annotation['patients'][0]['events']):
             baseline = targets.materialize(annotation, source)
             if not baseline['source_gate_errors'] and not validator.validate(annotation, source):
@@ -519,9 +521,9 @@ def test_roster_block_in_the_annotation_is_the_single_source(dense):
     import importlib
     schema_review = importlib.import_module('schema_review')
     root = ROOT / 'benchmarks/dense50'
-    for path in sorted((root / 'annotations').glob('PMC*.json')):     # read-only: a clean single-patient article
-        annotation = json.loads(path.read_text())
-        source = json.loads((root / 'sources' / path.name).read_text())
+    for aid in store.matching_ids(root, 'annotations', 'PMC*'):     # read-only: a clean single-patient article
+        annotation = json.loads(store.path(root, 'annotations', aid).read_text())
+        source = json.loads(store.path(root, 'sources', aid).read_text())
         if len(annotation['patients']) == 1 and 'roster' not in annotation and not validator.validate(annotation, source):
             baseline = targets.materialize(annotation, source)
             if not baseline['source_gate_errors']:

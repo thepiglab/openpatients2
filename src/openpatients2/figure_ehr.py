@@ -1,6 +1,6 @@
 """EHR-relevance overlay for reviewed figures (`dense-figure-ehr-labels/1`).
 
-A separate sidecar over `visual-submissions/ID.json`: the existing FigureVisuals
+A separate sidecar over the visual submission (`articles/ID/visual.json`): the existing FigureVisuals
 contract, its hashes and receipts are untouched. Each figure and panel gets a
 deterministic default derived from the reviewed image_kind, imaging modality,
 chart type/scope and patient attribution, plus a reviewer's final label. A label
