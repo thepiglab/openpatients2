@@ -1,7 +1,7 @@
 {
   "format": "dense-runtime-targets/1",
   "article_id": "PMC12796085.1",
-  "annotation_sha256": "f098c56661df3bc4c247e79cd35ba91e5cd9c80544a74ed66e34a0a2683adeba",
+  "annotation_sha256": "522ee3635415142058174c717129edccfee932e650f0af83cbf2feb70917eca8",
   "source_text_sha256": "3a89ae6d9ad7e713be2dd604773887b87932a655c0bdd0a33a21ede90270f4b2",
   "schema_fingerprints": {
     "case_context": "d7439310910ef4a7d5e1706c5b9dc8a2b379f132a2562791c059a478b588ec71",
@@ -44,6 +44,7 @@
           "b00001",
           "b00004",
           "b00005",
+          "b00009",
           "b00010",
           "b00019",
           "b00024",
@@ -53,7 +54,8 @@
         ],
         "attribution_limitations": [
           "The abstract says only the PTEN mutation remained after neoadjuvant therapy; FBXW7, KRAS and RB1 are not individually reported as undetectable.",
-          "PD-L1 was reported negative only after surgery; the authors interpret this as a consequence of tumor disappearance, so there is no pre-treatment PD-L1 value."
+          "PD-L1 was reported negative only after surgery; the authors interpret this as a consequence of tumor disappearance, so there is no pre-treatment PD-L1 value.",
+          "Figure captions date CT scans, but the case text gives no dates and does not say which text-described scan each image is."
         ]
       },
       {
@@ -81,8 +83,9 @@
           "b00032"
         ],
         "attribution_limitations": [
-          "Case 2 response is described inconsistently: abstract disease progression post-surgery, imaging called paradoxical progression after cycle 3, MDT assessment of stable disease by RECIST, a favorable pathological response in the discussion, and residual carcinoma with vascular invasion on surgical pathology.",
-          "The text does not label the first genomic analysis as pre-treatment or the later profiling as post-treatment except through the abstract wording before and after treatment; the 'vs.' values compare against the first analysis."
+          "Case 2 response is described inconsistently: imaging called paradoxical progression post-cycle 3 and the lobectomy \"post-progression\", yet the tumor was assessed as stable disease, downstaged and amenable to surgery; the repeat MDT found RECIST v1.1 criteria for progressive disease not met; the abstract reports disease progression post-surgery and the discussion reports inferior therapeutic outcomes, while the discussion also reports a favorable pathological response; surgical pathology showed residual carcinoma with vascular invasion.",
+          "The case text does not label the first genomic analysis as pre-treatment or the later profiling as post-treatment; only the abstract states the alterations were found before and after treatment with TMB rising from 23.72 to 28.13 muts/Mb, which supports their order relative to treatment but gives no time text for the individual results.",
+          "Figure captions date CT scans, but the case text gives no dates and does not say which text-described scan each image is."
         ]
       }
     ],
@@ -235,7 +238,7 @@
     ],
     "limitations": [
       "Figure captions only in this record; pixels viewed in the separate visual submission.",
-      "No dates are given in the case text; the figure captions give CT dates, which are not attached to text-only facts.",
+      "No dates are given in the case text; figure captions date CT scans (July to November 2024), recorded as caption-sourced CT facts without linking them to text-described events.",
       "The discussion contains literature mechanisms and general statements that are background and not attributed to the patients.",
       "Case 2 response and outcome are described inconsistently across abstract, case text and discussion; kept as review-only source conflicts.",
       "Genomic specimen type and timing are partly unstated; origin is left unknown."
@@ -560,6 +563,7 @@
             "b00001",
             "b00004",
             "b00005",
+            "b00009",
             "b00010",
             "b00019",
             "b00024",
@@ -569,7 +573,8 @@
           ],
           "attribution_limitations": [
             "The abstract says only the PTEN mutation remained after neoadjuvant therapy; FBXW7, KRAS and RB1 are not individually reported as undetectable.",
-            "PD-L1 was reported negative only after surgery; the authors interpret this as a consequence of tumor disappearance, so there is no pre-treatment PD-L1 value."
+            "PD-L1 was reported negative only after surgery; the authors interpret this as a consequence of tumor disappearance, so there is no pre-treatment PD-L1 value.",
+            "Figure captions date CT scans, but the case text gives no dates and does not say which text-described scan each image is."
           ]
         },
         "source_text_omitted_from_release": true
@@ -744,7 +749,7 @@
               "name": "Obstructive pneumonia",
               "clinical_status": "active",
               "role": "complication",
-              "body_site": "right lower lobe",
+              "body_site": null,
               "laterality": "unknown",
               "severity": null,
               "diagnostic_basis": null
@@ -1062,6 +1067,56 @@
               "laterality": "right",
               "indication": null,
               "finding": "pathological complete response; no residual carcinoma in primary site or lymph nodes",
+              "complication": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": "17 July 2024",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": "2024-07-17"
+              },
+              "evidence": [
+                {
+                  "quote": "Case1 17 July 2024 CT",
+                  "source_section": "b00026"
+                }
+              ],
+              "name": "CT",
+              "kind": "procedure",
+              "action": "completed",
+              "body_site": null,
+              "laterality": "unknown",
+              "indication": null,
+              "finding": null,
+              "complication": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": "31 October 2024",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": "2024-10-31"
+              },
+              "evidence": [
+                {
+                  "quote": "Case1 31 October 2024 CT",
+                  "source_section": "b00027"
+                }
+              ],
+              "name": "CT",
+              "kind": "procedure",
+              "action": "completed",
+              "body_site": null,
+              "laterality": "unknown",
+              "indication": null,
+              "finding": null,
               "complication": null
             }
           ]
@@ -1582,6 +1637,10 @@
                 {
                   "quote": "Biopsy confirmed small cell carcinoma",
                   "source_section": "b00004"
+                },
+                {
+                  "quote": "which ruled out systemic metastasis",
+                  "source_section": "b00004"
                 }
               ],
               "tumor_ref": "t1",
@@ -1629,7 +1688,7 @@
               "alteration": "p.R479* nonsense mutation",
               "origin": "unknown",
               "interpretation": "unknown",
-              "text_value": "VAF 67.7%",
+              "text_value": "VAF 67.70%",
               "numeric_value": 67.7,
               "unit": "% VAF",
               "assay": null,
@@ -1661,7 +1720,7 @@
               "alteration": "p.G12C missense mutation",
               "origin": "unknown",
               "interpretation": "unknown",
-              "text_value": "VAF 34.9%",
+              "text_value": "VAF 34.90%",
               "numeric_value": 34.9,
               "unit": "% VAF",
               "assay": null,
@@ -1725,7 +1784,7 @@
               "alteration": "p.R255 nonsense mutation",
               "origin": "unknown",
               "interpretation": "unknown",
-              "text_value": "VAF 49.1%",
+              "text_value": "VAF 49.10%",
               "numeric_value": 49.1,
               "unit": "% VAF",
               "assay": null,
@@ -1979,6 +2038,29 @@
               "disposition": null,
               "follow_up_duration_text": null,
               "cause_as_documented": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "The therapeutic management of Case 1 was straightforward and unanimously agreed upon, resulting in a favorable outcome.",
+                  "source_section": "b00009"
+                }
+              ],
+              "event": "other",
+              "text_value": "favorable outcome",
+              "related_condition": "Small cell lung cancer",
+              "disposition": null,
+              "follow_up_duration_text": null,
+              "cause_as_documented": null
             }
           ]
         },
@@ -2187,11 +2269,28 @@
                   "quote": "Postoperative molecular analysis showed reduced PTEN mutation frequency (30%→1.50%), undetectable TMB (17.65 vs. 0 muts/Mb), and PD-L1 negativity (TPS/CPS = 0%)."
                 }
               ]
+            },
+            {
+              "text": "The authors describe the outcome as favorable; figure captions date CT scans on 17 July 2024 and 31 October 2024.",
+              "evidence": [
+                {
+                  "segment_id": "b00009",
+                  "quote": "The therapeutic management of Case 1 was straightforward and unanimously agreed upon, resulting in a favorable outcome."
+                },
+                {
+                  "segment_id": "b00026",
+                  "quote": "Case1 17 July 2024 CT"
+                },
+                {
+                  "segment_id": "b00027",
+                  "quote": "Case1 31 October 2024 CT"
+                }
+              ]
             }
           ],
           "limitations": [
             "Figure captions only in this record; pixels viewed in the separate visual submission.",
-            "No dates are given in the case text; the figure captions give CT dates, which are not attached to text-only facts.",
+            "No dates are given in the case text; figure captions date CT scans (July to November 2024), recorded as caption-sourced CT facts without linking them to text-described events.",
             "The discussion contains literature mechanisms and general statements that are background and not attributed to the patients.",
             "Case 2 response and outcome are described inconsistently across abstract, case text and discussion; kept as review-only source conflicts.",
             "Genomic specimen type and timing are partly unstated; origin is left unknown."
@@ -2511,7 +2610,7 @@
               "times": [
                 {
                   "text": "at 2 months",
-                  "kind": "duration",
+                  "kind": "relative",
                   "precision": "approximate",
                   "calendar_value": null,
                   "evidence": [
@@ -2646,6 +2745,136 @@
                   ]
                 }
               ]
+            },
+            {
+              "event_id": "p1-e12",
+              "record_id": "PMC12796085.1:p1",
+              "episode_id": null,
+              "kind": "test",
+              "occurrence": "occurred",
+              "description": "CT on 17 July 2024 (Fig. 3)",
+              "fact_ids": [
+                "p1-f050"
+              ],
+              "evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00026",
+                  "segment_sha256": "ddfb7862d8565f39a48db1fc20ee9895a27a7a48f79640bbfc79ef46799bc02d",
+                  "start": 7,
+                  "end": 28,
+                  "quote": "Case1 17 July 2024 CT"
+                }
+              ],
+              "attribution_evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00004",
+                  "segment_sha256": "5fa2c2b778d3f2e12a040a0b7d7cac60ec44272f811b8f0f11e2062673fabd3c",
+                  "start": 7,
+                  "end": 61,
+                  "quote": "A 66-year-old female with 30-pack-year smoking history"
+                }
+              ],
+              "times": [
+                {
+                  "text": "17 July 2024",
+                  "kind": "calendar",
+                  "precision": "exact",
+                  "calendar_value": "2024-07-17",
+                  "evidence": [
+                    {
+                      "source_id": "PMC12796085.1:jats",
+                      "segment_id": "b00026",
+                      "segment_sha256": "ddfb7862d8565f39a48db1fc20ee9895a27a7a48f79640bbfc79ef46799bc02d",
+                      "start": 7,
+                      "end": 28,
+                      "quote": "Case1 17 July 2024 CT"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "event_id": "p1-e13",
+              "record_id": "PMC12796085.1:p1",
+              "episode_id": null,
+              "kind": "test",
+              "occurrence": "occurred",
+              "description": "CT on 31 October 2024 (Fig. 4)",
+              "fact_ids": [
+                "p1-f051"
+              ],
+              "evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00027",
+                  "segment_sha256": "52983248c5b87936111e32f6e208eec1a1c0938301a2493fe79a52913e8a10c8",
+                  "start": 7,
+                  "end": 31,
+                  "quote": "Case1 31 October 2024 CT"
+                }
+              ],
+              "attribution_evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00004",
+                  "segment_sha256": "5fa2c2b778d3f2e12a040a0b7d7cac60ec44272f811b8f0f11e2062673fabd3c",
+                  "start": 7,
+                  "end": 61,
+                  "quote": "A 66-year-old female with 30-pack-year smoking history"
+                }
+              ],
+              "times": [
+                {
+                  "text": "31 October 2024",
+                  "kind": "calendar",
+                  "precision": "exact",
+                  "calendar_value": "2024-10-31",
+                  "evidence": [
+                    {
+                      "source_id": "PMC12796085.1:jats",
+                      "segment_id": "b00027",
+                      "segment_sha256": "52983248c5b87936111e32f6e208eec1a1c0938301a2493fe79a52913e8a10c8",
+                      "start": 7,
+                      "end": 31,
+                      "quote": "Case1 31 October 2024 CT"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "event_id": "p1-e14",
+              "record_id": "PMC12796085.1:p1",
+              "episode_id": null,
+              "kind": "outcome",
+              "occurrence": "occurred",
+              "description": "Authors report a favorable outcome for Case 1",
+              "fact_ids": [
+                "p1-f049"
+              ],
+              "evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00009",
+                  "segment_sha256": "93b68bdb0729246638aa6503871f751653496bd131848c891693e3772b1896c6",
+                  "start": 0,
+                  "end": 119,
+                  "quote": "The therapeutic management of Case 1 was straightforward and unanimously agreed upon, resulting in a favorable outcome."
+                }
+              ],
+              "attribution_evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00004",
+                  "segment_sha256": "5fa2c2b778d3f2e12a040a0b7d7cac60ec44272f811b8f0f11e2062673fabd3c",
+                  "start": 7,
+                  "end": 61,
+                  "quote": "A 66-year-old female with 30-pack-year smoking history"
+                }
+              ],
+              "times": []
             }
           ],
           "edges": [
@@ -2722,6 +2951,31 @@
                   "start": 869,
                   "end": 1032,
                   "quote": "Subsequent VATS right lower lobectomy achieved pCR: no residual carcinoma in primary site or lymph nodes (stations 2,3,4,7,10,11). Postoperative molecular analysis"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge5",
+              "from_event_id": "p1-e12",
+              "to_event_id": "p1-e13",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00026",
+                  "segment_sha256": "ddfb7862d8565f39a48db1fc20ee9895a27a7a48f79640bbfc79ef46799bc02d",
+                  "start": 7,
+                  "end": 28,
+                  "quote": "Case1 17 July 2024 CT"
+                },
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00027",
+                  "segment_sha256": "52983248c5b87936111e32f6e208eec1a1c0938301a2493fe79a52913e8a10c8",
+                  "start": 7,
+                  "end": 31,
+                  "quote": "Case1 31 October 2024 CT"
                 }
               ]
             }
@@ -3045,7 +3299,7 @@
             "times": [
               {
                 "text": "at 2 months",
-                "kind": "duration",
+                "kind": "relative",
                 "precision": "approximate",
                 "calendar_value": null,
                 "evidence": [
@@ -3180,6 +3434,136 @@
                 ]
               }
             ]
+          },
+          {
+            "event_id": "p1-e12",
+            "record_id": "PMC12796085.1:p1",
+            "episode_id": null,
+            "kind": "test",
+            "occurrence": "occurred",
+            "description": "CT on 17 July 2024 (Fig. 3)",
+            "fact_ids": [
+              "p1-f050"
+            ],
+            "evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00026",
+                "segment_sha256": "ddfb7862d8565f39a48db1fc20ee9895a27a7a48f79640bbfc79ef46799bc02d",
+                "start": 7,
+                "end": 28,
+                "quote": "Case1 17 July 2024 CT"
+              }
+            ],
+            "attribution_evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00004",
+                "segment_sha256": "5fa2c2b778d3f2e12a040a0b7d7cac60ec44272f811b8f0f11e2062673fabd3c",
+                "start": 7,
+                "end": 61,
+                "quote": "A 66-year-old female with 30-pack-year smoking history"
+              }
+            ],
+            "times": [
+              {
+                "text": "17 July 2024",
+                "kind": "calendar",
+                "precision": "exact",
+                "calendar_value": "2024-07-17",
+                "evidence": [
+                  {
+                    "source_id": "PMC12796085.1:jats",
+                    "segment_id": "b00026",
+                    "segment_sha256": "ddfb7862d8565f39a48db1fc20ee9895a27a7a48f79640bbfc79ef46799bc02d",
+                    "start": 7,
+                    "end": 28,
+                    "quote": "Case1 17 July 2024 CT"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "event_id": "p1-e13",
+            "record_id": "PMC12796085.1:p1",
+            "episode_id": null,
+            "kind": "test",
+            "occurrence": "occurred",
+            "description": "CT on 31 October 2024 (Fig. 4)",
+            "fact_ids": [
+              "p1-f051"
+            ],
+            "evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00027",
+                "segment_sha256": "52983248c5b87936111e32f6e208eec1a1c0938301a2493fe79a52913e8a10c8",
+                "start": 7,
+                "end": 31,
+                "quote": "Case1 31 October 2024 CT"
+              }
+            ],
+            "attribution_evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00004",
+                "segment_sha256": "5fa2c2b778d3f2e12a040a0b7d7cac60ec44272f811b8f0f11e2062673fabd3c",
+                "start": 7,
+                "end": 61,
+                "quote": "A 66-year-old female with 30-pack-year smoking history"
+              }
+            ],
+            "times": [
+              {
+                "text": "31 October 2024",
+                "kind": "calendar",
+                "precision": "exact",
+                "calendar_value": "2024-10-31",
+                "evidence": [
+                  {
+                    "source_id": "PMC12796085.1:jats",
+                    "segment_id": "b00027",
+                    "segment_sha256": "52983248c5b87936111e32f6e208eec1a1c0938301a2493fe79a52913e8a10c8",
+                    "start": 7,
+                    "end": 31,
+                    "quote": "Case1 31 October 2024 CT"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "event_id": "p1-e14",
+            "record_id": "PMC12796085.1:p1",
+            "episode_id": null,
+            "kind": "outcome",
+            "occurrence": "occurred",
+            "description": "Authors report a favorable outcome for Case 1",
+            "fact_ids": [
+              "p1-f049"
+            ],
+            "evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00009",
+                "segment_sha256": "93b68bdb0729246638aa6503871f751653496bd131848c891693e3772b1896c6",
+                "start": 0,
+                "end": 119,
+                "quote": "The therapeutic management of Case 1 was straightforward and unanimously agreed upon, resulting in a favorable outcome."
+              }
+            ],
+            "attribution_evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00004",
+                "segment_sha256": "5fa2c2b778d3f2e12a040a0b7d7cac60ec44272f811b8f0f11e2062673fabd3c",
+                "start": 7,
+                "end": 61,
+                "quote": "A 66-year-old female with 30-pack-year smoking history"
+              }
+            ],
+            "times": []
           }
         ],
         "topological_layers": [
@@ -3207,11 +3591,20 @@
             ],
             [
               "p1-e09"
+            ],
+            [
+              "p1-e12"
+            ],
+            [
+              "p1-e14"
             ]
           ],
           [
             [
               "p1-e07"
+            ],
+            [
+              "p1-e13"
             ]
           ],
           [
@@ -3257,6 +3650,10 @@
           [
             "p1-e10",
             "p1-e11"
+          ],
+          [
+            "p1-e12",
+            "p1-e13"
           ]
         ],
         "incomparable_pairs": [
@@ -3301,6 +3698,18 @@
             "p1-e11"
           ],
           [
+            "p1-e01",
+            "p1-e12"
+          ],
+          [
+            "p1-e01",
+            "p1-e13"
+          ],
+          [
+            "p1-e01",
+            "p1-e14"
+          ],
+          [
             "p1-e02",
             "p1-e03"
           ],
@@ -3337,6 +3746,18 @@
             "p1-e11"
           ],
           [
+            "p1-e02",
+            "p1-e12"
+          ],
+          [
+            "p1-e02",
+            "p1-e13"
+          ],
+          [
+            "p1-e02",
+            "p1-e14"
+          ],
+          [
             "p1-e03",
             "p1-e04"
           ],
@@ -3369,6 +3790,18 @@
             "p1-e11"
           ],
           [
+            "p1-e03",
+            "p1-e12"
+          ],
+          [
+            "p1-e03",
+            "p1-e13"
+          ],
+          [
+            "p1-e03",
+            "p1-e14"
+          ],
+          [
             "p1-e04",
             "p1-e05"
           ],
@@ -3397,6 +3830,18 @@
             "p1-e11"
           ],
           [
+            "p1-e04",
+            "p1-e12"
+          ],
+          [
+            "p1-e04",
+            "p1-e13"
+          ],
+          [
+            "p1-e04",
+            "p1-e14"
+          ],
+          [
             "p1-e05",
             "p1-e06"
           ],
@@ -3421,6 +3866,18 @@
             "p1-e11"
           ],
           [
+            "p1-e05",
+            "p1-e12"
+          ],
+          [
+            "p1-e05",
+            "p1-e13"
+          ],
+          [
+            "p1-e05",
+            "p1-e14"
+          ],
+          [
             "p1-e06",
             "p1-e08"
           ],
@@ -3429,12 +3886,36 @@
             "p1-e09"
           ],
           [
+            "p1-e06",
+            "p1-e12"
+          ],
+          [
+            "p1-e06",
+            "p1-e13"
+          ],
+          [
+            "p1-e06",
+            "p1-e14"
+          ],
+          [
             "p1-e07",
             "p1-e08"
           ],
           [
             "p1-e07",
             "p1-e09"
+          ],
+          [
+            "p1-e07",
+            "p1-e12"
+          ],
+          [
+            "p1-e07",
+            "p1-e13"
+          ],
+          [
+            "p1-e07",
+            "p1-e14"
           ],
           [
             "p1-e08",
@@ -3447,6 +3928,62 @@
           [
             "p1-e08",
             "p1-e11"
+          ],
+          [
+            "p1-e08",
+            "p1-e12"
+          ],
+          [
+            "p1-e08",
+            "p1-e13"
+          ],
+          [
+            "p1-e08",
+            "p1-e14"
+          ],
+          [
+            "p1-e09",
+            "p1-e12"
+          ],
+          [
+            "p1-e09",
+            "p1-e13"
+          ],
+          [
+            "p1-e09",
+            "p1-e14"
+          ],
+          [
+            "p1-e10",
+            "p1-e12"
+          ],
+          [
+            "p1-e10",
+            "p1-e13"
+          ],
+          [
+            "p1-e10",
+            "p1-e14"
+          ],
+          [
+            "p1-e11",
+            "p1-e12"
+          ],
+          [
+            "p1-e11",
+            "p1-e13"
+          ],
+          [
+            "p1-e11",
+            "p1-e14"
+          ],
+          [
+            "p1-e12",
+            "p1-e14"
+          ],
+          [
+            "p1-e13",
+            "p1-e14"
           ]
         ],
         "same_time_groups": [],
@@ -3456,7 +3993,9 @@
           "p1-e07",
           "p1-e09",
           "p1-e10",
-          "p1-e11"
+          "p1-e11",
+          "p1-e12",
+          "p1-e13"
         ],
         "order_unknown_event_ids": [
           "p1-e01",
@@ -3464,7 +4003,8 @@
           "p1-e03",
           "p1-e04",
           "p1-e05",
-          "p1-e08"
+          "p1-e08",
+          "p1-e14"
         ],
         "layers_are_simultaneous": false,
         "synthetic_dates_generated": false,
@@ -3472,7 +4012,7 @@
         "basis": "Source-gated model relations; paragraph order and event kind do not create chronology."
       },
       "reference_provenance": {
-        "annotation_sha256": "f098c56661df3bc4c247e79cd35ba91e5cd9c80544a74ed66e34a0a2683adeba",
+        "annotation_sha256": "522ee3635415142058174c717129edccfee932e650f0af83cbf2feb70917eca8",
         "materializer_version": "dense-runtime-targets/1",
         "fact_pointers": [
           {
@@ -3663,6 +4203,28 @@
               {
                 "segment_id": "b00005",
                 "quote": "Subsequent VATS right lower lobectomy achieved pCR: no residual carcinoma in primary site or lymph nodes (stations 2,3,4,7,10,11)."
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f050",
+            "task": "procedures_devices",
+            "pointer": "/items/6",
+            "source_evidence": [
+              {
+                "segment_id": "b00026",
+                "quote": "Case1 17 July 2024 CT"
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f051",
+            "task": "procedures_devices",
+            "pointer": "/items/7",
+            "source_evidence": [
+              {
+                "segment_id": "b00027",
+                "quote": "Case1 31 October 2024 CT"
               }
             ]
           },
@@ -3858,6 +4420,10 @@
               {
                 "segment_id": "b00004",
                 "quote": "Biopsy confirmed small cell carcinoma"
+              },
+              {
+                "segment_id": "b00004",
+                "quote": "which ruled out systemic metastasis"
               }
             ]
           },
@@ -4014,6 +4580,17 @@
               {
                 "segment_id": "b00005",
                 "quote": "Subsequent VATS right lower lobectomy achieved pCR"
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f049",
+            "task": "outcomes",
+            "pointer": "/items/1",
+            "source_evidence": [
+              {
+                "segment_id": "b00009",
+                "quote": "The therapeutic management of Case 1 was straightforward and unanimously agreed upon, resulting in a favorable outcome."
               }
             ]
           },
@@ -4474,7 +5051,7 @@
               "name": "Obstructive pneumonia",
               "clinical_status": "active",
               "role": "complication",
-              "body_site": "right lower lobe",
+              "body_site": null,
               "laterality": "unknown",
               "severity": null,
               "diagnostic_basis": null
@@ -4484,7 +5061,6 @@
               "verification_status": "confirmed",
               "clinical_status": "active",
               "role": "complication",
-              "body_site": "right lower lobe",
               "temporality": "current",
               "subject": "index_patient",
               "assertion": "present"
@@ -5079,6 +5655,120 @@
             ],
             "event_ids": [
               "p1-e10"
+            ]
+          },
+          {
+            "fact_id": "p1-f050",
+            "task": "procedures_devices",
+            "pointer": "/items/6",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": "17 July 2024",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": "2024-07-17"
+              },
+              "evidence": [
+                {
+                  "quote": "Case1 17 July 2024 CT",
+                  "source_section": "b00026"
+                }
+              ],
+              "name": "CT",
+              "kind": "procedure",
+              "action": "completed",
+              "body_site": null,
+              "laterality": "unknown",
+              "indication": null,
+              "finding": null,
+              "complication": null
+            },
+            "value_as_annotated": {
+              "name": "CT",
+              "kind": "procedure",
+              "action": "completed",
+              "temporality": "historical",
+              "time": {
+                "text": "17 July 2024",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": "2024-07-17"
+              },
+              "subject": "index_patient",
+              "assertion": "present"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00026",
+                "segment_sha256": "ddfb7862d8565f39a48db1fc20ee9895a27a7a48f79640bbfc79ef46799bc02d",
+                "start": 7,
+                "end": 28,
+                "quote": "Case1 17 July 2024 CT"
+              }
+            ],
+            "event_ids": [
+              "p1-e12"
+            ]
+          },
+          {
+            "fact_id": "p1-f051",
+            "task": "procedures_devices",
+            "pointer": "/items/7",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": "31 October 2024",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": "2024-10-31"
+              },
+              "evidence": [
+                {
+                  "quote": "Case1 31 October 2024 CT",
+                  "source_section": "b00027"
+                }
+              ],
+              "name": "CT",
+              "kind": "procedure",
+              "action": "completed",
+              "body_site": null,
+              "laterality": "unknown",
+              "indication": null,
+              "finding": null,
+              "complication": null
+            },
+            "value_as_annotated": {
+              "name": "CT",
+              "kind": "procedure",
+              "action": "completed",
+              "temporality": "historical",
+              "time": {
+                "text": "31 October 2024",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": "2024-10-31"
+              },
+              "subject": "index_patient",
+              "assertion": "present"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00027",
+                "segment_sha256": "52983248c5b87936111e32f6e208eec1a1c0938301a2493fe79a52913e8a10c8",
+                "start": 7,
+                "end": 31,
+                "quote": "Case1 31 October 2024 CT"
+              }
+            ],
+            "event_ids": [
+              "p1-e13"
             ]
           },
           {
@@ -6077,6 +6767,10 @@
                 {
                   "quote": "Biopsy confirmed small cell carcinoma",
                   "source_section": "b00004"
+                },
+                {
+                  "quote": "which ruled out systemic metastasis",
+                  "source_section": "b00004"
                 }
               ],
               "tumor_ref": "t1",
@@ -6138,6 +6832,14 @@
                 "start": 465,
                 "end": 502,
                 "quote": "Biopsy confirmed small cell carcinoma"
+              },
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00004",
+                "segment_sha256": "5fa2c2b778d3f2e12a040a0b7d7cac60ec44272f811b8f0f11e2062673fabd3c",
+                "start": 158,
+                "end": 193,
+                "quote": "which ruled out systemic metastasis"
               }
             ],
             "event_ids": [
@@ -6174,7 +6876,7 @@
               "alteration": "p.R479* nonsense mutation",
               "origin": "unknown",
               "interpretation": "unknown",
-              "text_value": "VAF 67.7%",
+              "text_value": "VAF 67.70%",
               "numeric_value": 67.7,
               "unit": "% VAF",
               "assay": null,
@@ -6187,7 +6889,7 @@
               "alteration": "p.R479* nonsense mutation",
               "origin": "unknown",
               "interpretation": "unknown",
-              "text_value": "VAF 67.7%",
+              "text_value": "VAF 67.70%",
               "numeric_value": 67.7,
               "unit": "% VAF",
               "temporality": "historical",
@@ -6252,7 +6954,7 @@
               "alteration": "p.G12C missense mutation",
               "origin": "unknown",
               "interpretation": "unknown",
-              "text_value": "VAF 34.9%",
+              "text_value": "VAF 34.90%",
               "numeric_value": 34.9,
               "unit": "% VAF",
               "assay": null,
@@ -6265,7 +6967,7 @@
               "alteration": "p.G12C missense mutation",
               "origin": "unknown",
               "interpretation": "unknown",
-              "text_value": "VAF 34.9%",
+              "text_value": "VAF 34.90%",
               "numeric_value": 34.9,
               "unit": "% VAF",
               "temporality": "historical",
@@ -6408,7 +7110,7 @@
               "alteration": "p.R255 nonsense mutation",
               "origin": "unknown",
               "interpretation": "unknown",
-              "text_value": "VAF 49.1%",
+              "text_value": "VAF 49.10%",
               "numeric_value": 49.1,
               "unit": "% VAF",
               "assay": null,
@@ -6421,7 +7123,7 @@
               "alteration": "p.R255 nonsense mutation",
               "origin": "unknown",
               "interpretation": "unknown",
-              "text_value": "VAF 49.1%",
+              "text_value": "VAF 49.10%",
               "numeric_value": 49.1,
               "unit": "% VAF",
               "temporality": "historical",
@@ -6950,6 +7652,55 @@
             ]
           },
           {
+            "fact_id": "p1-f049",
+            "task": "outcomes",
+            "pointer": "/items/1",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "The therapeutic management of Case 1 was straightforward and unanimously agreed upon, resulting in a favorable outcome.",
+                  "source_section": "b00009"
+                }
+              ],
+              "event": "other",
+              "text_value": "favorable outcome",
+              "related_condition": "Small cell lung cancer",
+              "disposition": null,
+              "follow_up_duration_text": null,
+              "cause_as_documented": null
+            },
+            "value_as_annotated": {
+              "event": "other",
+              "text_value": "favorable outcome",
+              "related_condition": "Small cell lung cancer",
+              "temporality": "historical",
+              "subject": "index_patient",
+              "assertion": "present"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00009",
+                "segment_sha256": "93b68bdb0729246638aa6503871f751653496bd131848c891693e3772b1896c6",
+                "start": 0,
+                "end": 119,
+                "quote": "The therapeutic management of Case 1 was straightforward and unanimously agreed upon, resulting in a favorable outcome."
+              }
+            ],
+            "event_ids": [
+              "p1-e14"
+            ]
+          },
+          {
             "fact_id": "p1-f040",
             "task": "care_plans",
             "pointer": "/items/0",
@@ -7258,8 +8009,9 @@
             "b00032"
           ],
           "attribution_limitations": [
-            "Case 2 response is described inconsistently: abstract disease progression post-surgery, imaging called paradoxical progression after cycle 3, MDT assessment of stable disease by RECIST, a favorable pathological response in the discussion, and residual carcinoma with vascular invasion on surgical pathology.",
-            "The text does not label the first genomic analysis as pre-treatment or the later profiling as post-treatment except through the abstract wording before and after treatment; the 'vs.' values compare against the first analysis."
+            "Case 2 response is described inconsistently: imaging called paradoxical progression post-cycle 3 and the lobectomy \"post-progression\", yet the tumor was assessed as stable disease, downstaged and amenable to surgery; the repeat MDT found RECIST v1.1 criteria for progressive disease not met; the abstract reports disease progression post-surgery and the discussion reports inferior therapeutic outcomes, while the discussion also reports a favorable pathological response; surgical pathology showed residual carcinoma with vascular invasion.",
+            "The case text does not label the first genomic analysis as pre-treatment or the later profiling as post-treatment; only the abstract states the alterations were found before and after treatment with TMB rising from 23.72 to 28.13 muts/Mb, which supports their order relative to treatment but gives no time text for the individual results.",
+            "Figure captions date CT scans, but the case text gives no dates and does not say which text-described scan each image is."
           ]
         },
         "source_text_omitted_from_release": true
@@ -7748,10 +8500,85 @@
               "name": "VATS lobectomy",
               "kind": "procedure",
               "action": "completed",
-              "body_site": "lung",
+              "body_site": null,
               "laterality": "unknown",
               "indication": null,
               "finding": "residual poorly differentiated carcinoma with vascular invasion",
+              "complication": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": "15 July 2024",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": "2024-07-15"
+              },
+              "evidence": [
+                {
+                  "quote": "Case2 15 July 2024 CT",
+                  "source_section": "b00030"
+                }
+              ],
+              "name": "CT",
+              "kind": "procedure",
+              "action": "completed",
+              "body_site": null,
+              "laterality": "unknown",
+              "indication": null,
+              "finding": null,
+              "complication": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": "23 September 2024",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": "2024-09-23"
+              },
+              "evidence": [
+                {
+                  "quote": "Case2 23 September 2024 CT",
+                  "source_section": "b00031"
+                }
+              ],
+              "name": "CT",
+              "kind": "procedure",
+              "action": "completed",
+              "body_site": null,
+              "laterality": "unknown",
+              "indication": null,
+              "finding": null,
+              "complication": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": "1 November 2024",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": "2024-11-01"
+              },
+              "evidence": [
+                {
+                  "quote": "Case2 1 November 2024 CT",
+                  "source_section": "b00032"
+                }
+              ],
+              "name": "CT",
+              "kind": "procedure",
+              "action": "completed",
+              "body_site": null,
+              "laterality": "unknown",
+              "indication": null,
+              "finding": null,
               "complication": null
             }
           ]
@@ -8030,7 +8857,7 @@
               "unit": "µg/L",
               "flag": "high",
               "reference_range_text": null,
-              "specimen": "serum",
+              "specimen": null,
               "method": null,
               "body_site": null
             },
@@ -8060,7 +8887,7 @@
               "unit": "µg/L",
               "flag": "normal",
               "reference_range_text": null,
-              "specimen": "serum",
+              "specimen": null,
               "method": null,
               "body_site": null
             },
@@ -8213,6 +9040,10 @@
                 },
                 {
                   "quote": "Biopsy confirmed poorly differentiated small cell carcinoma",
+                  "source_section": "b00006"
+                },
+                {
+                  "quote": "which ruled out systemic metastasis",
                   "source_section": "b00006"
                 }
               ],
@@ -8628,7 +9459,7 @@
               "line_of_therapy": null,
               "intent": "unknown",
               "setting": "neoadjuvant",
-              "response": "partial response after cycle 2 then progression after cycle 3"
+              "response": "partial response after cycle 2; paradoxical progression post-cycle 3"
             },
             {
               "subject": "index_patient",
@@ -8791,6 +9622,29 @@
               "responsible_specialty": null,
               "urgency": null,
               "action_status": "completed"
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Foremost was the patient’s persistent and fully informed desire for surgical treatment after detailed counseling.",
+                  "source_section": "b00009"
+                }
+              ],
+              "action_text": "Detailed counseling about surgical treatment",
+              "plan_type": "counseling",
+              "target": "surgical treatment",
+              "responsible_specialty": null,
+              "urgency": null,
+              "action_status": "completed"
             }
           ]
         }
@@ -8865,7 +9719,7 @@
               ]
             },
             {
-              "text": "He received three cycles of neoadjuvant etoposide, carboplatin and serplulimab with partial response after cycle 2 and progression after cycle 3, was assessed as stable disease by the multidisciplinary team, and chose surgery.",
+              "text": "He received three cycles of neoadjuvant etoposide, carboplatin and serplulimab with transient NSE elevation then normalization, partial response after cycle 2 and paradoxical progression post-cycle 3; the tumor was also assessed as stable disease, and after multidisciplinary consultation, counseling and his preference for surgery he chose surgery.",
               "evidence": [
                 {
                   "segment_id": "b00007",
@@ -8878,6 +9732,10 @@
                 {
                   "segment_id": "b00007",
                   "quote": "Imaging showed partial response (68.3% tumor reduction, 27 mm × 20 mm) after cycle 2, but paradoxical progression (38 mm × 33 mm) post-cycle 3."
+                },
+                {
+                  "segment_id": "b00007",
+                  "quote": "induced transient NSE elevation (28.08 µg/L) followed by normalization (12.65 µg/L)"
                 },
                 {
                   "segment_id": "b00007",
@@ -8902,6 +9760,10 @@
                 {
                   "segment_id": "b00007",
                   "quote": "Therefore, the patient opted for surgical intervention."
+                },
+                {
+                  "segment_id": "b00009",
+                  "quote": "Foremost was the patient’s persistent and fully informed desire for surgical treatment after detailed counseling."
                 }
               ]
             },
@@ -8941,11 +9803,28 @@
                   "quote": "The subsequent confirmation of a favorable pathological response post-surgery supported our individualized decision."
                 }
               ]
+            },
+            {
+              "text": "Figure captions date CT scans on 15 July 2024, 23 September 2024 and 1 November 2024.",
+              "evidence": [
+                {
+                  "segment_id": "b00030",
+                  "quote": "Case2 15 July 2024 CT"
+                },
+                {
+                  "segment_id": "b00031",
+                  "quote": "Case2 23 September 2024 CT"
+                },
+                {
+                  "segment_id": "b00032",
+                  "quote": "Case2 1 November 2024 CT"
+                }
+              ]
             }
           ],
           "limitations": [
             "Figure captions only in this record; pixels viewed in the separate visual submission.",
-            "No dates are given in the case text; the figure captions give CT dates, which are not attached to text-only facts.",
+            "No dates are given in the case text; figure captions date CT scans (July to November 2024), recorded as caption-sourced CT facts without linking them to text-described events.",
             "The discussion contains literature mechanisms and general statements that are background and not attributed to the patients.",
             "Case 2 response and outcome are described inconsistently across abstract, case text and discussion; kept as review-only source conflicts.",
             "Genomic specimen type and timing are partly unstated; origin is left unknown."
@@ -9290,7 +10169,8 @@
               "fact_ids": [
                 "p2-f041",
                 "p2-f042",
-                "p2-f043"
+                "p2-f043",
+                "p2-f057"
               ],
               "evidence": [
                 {
@@ -9415,6 +10295,153 @@
                 }
               ],
               "times": []
+            },
+            {
+              "event_id": "p2-e13",
+              "record_id": "PMC12796085.1:p2",
+              "episode_id": null,
+              "kind": "test",
+              "occurrence": "occurred",
+              "description": "CT on 15 July 2024 (Fig. 7)",
+              "fact_ids": [
+                "p2-f058"
+              ],
+              "evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00030",
+                  "segment_sha256": "e007efc06956bd80f8a8f88346574a4a69ff18aaaba8661a5709cb60bb1b4de0",
+                  "start": 7,
+                  "end": 28,
+                  "quote": "Case2 15 July 2024 CT"
+                }
+              ],
+              "attribution_evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00006",
+                  "segment_sha256": "fbd7c5b7e72365e4723e234724811db0bbe923025596dbb486381acec0264921",
+                  "start": 7,
+                  "end": 59,
+                  "quote": "A 70-year-old male with 40-pack-year smoking history"
+                }
+              ],
+              "times": [
+                {
+                  "text": "15 July 2024",
+                  "kind": "calendar",
+                  "precision": "exact",
+                  "calendar_value": "2024-07-15",
+                  "evidence": [
+                    {
+                      "source_id": "PMC12796085.1:jats",
+                      "segment_id": "b00030",
+                      "segment_sha256": "e007efc06956bd80f8a8f88346574a4a69ff18aaaba8661a5709cb60bb1b4de0",
+                      "start": 7,
+                      "end": 28,
+                      "quote": "Case2 15 July 2024 CT"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "event_id": "p2-e14",
+              "record_id": "PMC12796085.1:p2",
+              "episode_id": null,
+              "kind": "test",
+              "occurrence": "occurred",
+              "description": "CT on 23 September 2024 (Fig. 8)",
+              "fact_ids": [
+                "p2-f059"
+              ],
+              "evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00031",
+                  "segment_sha256": "64be0bd03d5bd7f39b829b27ed7f2239d7fc76b2e9913106b33f0e447129fa9f",
+                  "start": 7,
+                  "end": 33,
+                  "quote": "Case2 23 September 2024 CT"
+                }
+              ],
+              "attribution_evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00006",
+                  "segment_sha256": "fbd7c5b7e72365e4723e234724811db0bbe923025596dbb486381acec0264921",
+                  "start": 7,
+                  "end": 59,
+                  "quote": "A 70-year-old male with 40-pack-year smoking history"
+                }
+              ],
+              "times": [
+                {
+                  "text": "23 September 2024",
+                  "kind": "calendar",
+                  "precision": "exact",
+                  "calendar_value": "2024-09-23",
+                  "evidence": [
+                    {
+                      "source_id": "PMC12796085.1:jats",
+                      "segment_id": "b00031",
+                      "segment_sha256": "64be0bd03d5bd7f39b829b27ed7f2239d7fc76b2e9913106b33f0e447129fa9f",
+                      "start": 7,
+                      "end": 33,
+                      "quote": "Case2 23 September 2024 CT"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "event_id": "p2-e15",
+              "record_id": "PMC12796085.1:p2",
+              "episode_id": null,
+              "kind": "test",
+              "occurrence": "occurred",
+              "description": "CT on 1 November 2024 (Fig. 9)",
+              "fact_ids": [
+                "p2-f060"
+              ],
+              "evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00032",
+                  "segment_sha256": "d2914ddb40b871903424c7c555ca6328be50c2917c01c7e5c29058420dcb8f30",
+                  "start": 7,
+                  "end": 31,
+                  "quote": "Case2 1 November 2024 CT"
+                }
+              ],
+              "attribution_evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00006",
+                  "segment_sha256": "fbd7c5b7e72365e4723e234724811db0bbe923025596dbb486381acec0264921",
+                  "start": 7,
+                  "end": 59,
+                  "quote": "A 70-year-old male with 40-pack-year smoking history"
+                }
+              ],
+              "times": [
+                {
+                  "text": "1 November 2024",
+                  "kind": "calendar",
+                  "precision": "exact",
+                  "calendar_value": "2024-11-01",
+                  "evidence": [
+                    {
+                      "source_id": "PMC12796085.1:jats",
+                      "segment_id": "b00032",
+                      "segment_sha256": "d2914ddb40b871903424c7c555ca6328be50c2917c01c7e5c29058420dcb8f30",
+                      "start": 7,
+                      "end": 31,
+                      "quote": "Case2 1 November 2024 CT"
+                    }
+                  ]
+                }
+              ]
             }
           ],
           "edges": [
@@ -9466,6 +10493,166 @@
                   "start": 955,
                   "end": 1042,
                   "quote": "Therefore, the patient opted for surgical intervention. Post-progression VATS lobectomy"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge4",
+              "from_event_id": "p2-e05",
+              "to_event_id": "p2-e06",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00001",
+                  "segment_sha256": "1ad63d3a4f783db355bc2374cad996b2b8daae1c46a7f1a60ce0d790ca13cbdc",
+                  "start": 1038,
+                  "end": 1190,
+                  "quote": "Case 2 showed MET and PTEN mutations and MYC gene amplification both before and after treatment, with TMB increasing from 23.72 muts/Mb to 28.13 muts/Mb"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge5",
+              "from_event_id": "p2-e11",
+              "to_event_id": "p2-e06",
+              "relation": "after",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00001",
+                  "segment_sha256": "1ad63d3a4f783db355bc2374cad996b2b8daae1c46a7f1a60ce0d790ca13cbdc",
+                  "start": 1038,
+                  "end": 1190,
+                  "quote": "Case 2 showed MET and PTEN mutations and MYC gene amplification both before and after treatment, with TMB increasing from 23.72 muts/Mb to 28.13 muts/Mb"
+                },
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00007",
+                  "segment_sha256": "1f8fbf3c58d6df6527871316bc1d9c59d9178fc732ad3e7832e524d2794e32c6",
+                  "start": 1391,
+                  "end": 1432,
+                  "quote": "PD-L1 expression increased post-treatment"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge6",
+              "from_event_id": "p2-e07",
+              "to_event_id": "p2-e06",
+              "relation": "during",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00007",
+                  "segment_sha256": "1f8fbf3c58d6df6527871316bc1d9c59d9178fc732ad3e7832e524d2794e32c6",
+                  "start": 145,
+                  "end": 288,
+                  "quote": "Imaging showed partial response (68.3% tumor reduction, 27 mm × 20 mm) after cycle 2, but paradoxical progression (38 mm × 33 mm) post-cycle 3."
+                }
+              ]
+            },
+            {
+              "edge_id": "edge7",
+              "from_event_id": "p2-e08",
+              "to_event_id": "p2-e06",
+              "relation": "after",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00007",
+                  "segment_sha256": "1f8fbf3c58d6df6527871316bc1d9c59d9178fc732ad3e7832e524d2794e32c6",
+                  "start": 235,
+                  "end": 287,
+                  "quote": "paradoxical progression (38 mm × 33 mm) post-cycle 3"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge8",
+              "from_event_id": "p2-e08",
+              "to_event_id": "p2-e10",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00007",
+                  "segment_sha256": "1f8fbf3c58d6df6527871316bc1d9c59d9178fc732ad3e7832e524d2794e32c6",
+                  "start": 1011,
+                  "end": 1042,
+                  "quote": "Post-progression VATS lobectomy"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge9",
+              "from_event_id": "p2-e12",
+              "to_event_id": "p2-e10",
+              "relation": "after",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00001",
+                  "segment_sha256": "1ad63d3a4f783db355bc2374cad996b2b8daae1c46a7f1a60ce0d790ca13cbdc",
+                  "start": 1192,
+                  "end": 1259,
+                  "quote": "resulting in an assessment of disease progression (PD) post-surgery"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge10",
+              "from_event_id": "p2-e13",
+              "to_event_id": "p2-e14",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00030",
+                  "segment_sha256": "e007efc06956bd80f8a8f88346574a4a69ff18aaaba8661a5709cb60bb1b4de0",
+                  "start": 7,
+                  "end": 28,
+                  "quote": "Case2 15 July 2024 CT"
+                },
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00031",
+                  "segment_sha256": "64be0bd03d5bd7f39b829b27ed7f2239d7fc76b2e9913106b33f0e447129fa9f",
+                  "start": 7,
+                  "end": 33,
+                  "quote": "Case2 23 September 2024 CT"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge11",
+              "from_event_id": "p2-e14",
+              "to_event_id": "p2-e15",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00031",
+                  "segment_sha256": "64be0bd03d5bd7f39b829b27ed7f2239d7fc76b2e9913106b33f0e447129fa9f",
+                  "start": 7,
+                  "end": 33,
+                  "quote": "Case2 23 September 2024 CT"
+                },
+                {
+                  "source_id": "PMC12796085.1:jats",
+                  "segment_id": "b00032",
+                  "segment_sha256": "d2914ddb40b871903424c7c555ca6328be50c2917c01c7e5c29058420dcb8f30",
+                  "start": 7,
+                  "end": 31,
+                  "quote": "Case2 1 November 2024 CT"
                 }
               ]
             }
@@ -9814,7 +11001,8 @@
             "fact_ids": [
               "p2-f041",
               "p2-f042",
-              "p2-f043"
+              "p2-f043",
+              "p2-f057"
             ],
             "evidence": [
               {
@@ -9939,6 +11127,153 @@
               }
             ],
             "times": []
+          },
+          {
+            "event_id": "p2-e13",
+            "record_id": "PMC12796085.1:p2",
+            "episode_id": null,
+            "kind": "test",
+            "occurrence": "occurred",
+            "description": "CT on 15 July 2024 (Fig. 7)",
+            "fact_ids": [
+              "p2-f058"
+            ],
+            "evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00030",
+                "segment_sha256": "e007efc06956bd80f8a8f88346574a4a69ff18aaaba8661a5709cb60bb1b4de0",
+                "start": 7,
+                "end": 28,
+                "quote": "Case2 15 July 2024 CT"
+              }
+            ],
+            "attribution_evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00006",
+                "segment_sha256": "fbd7c5b7e72365e4723e234724811db0bbe923025596dbb486381acec0264921",
+                "start": 7,
+                "end": 59,
+                "quote": "A 70-year-old male with 40-pack-year smoking history"
+              }
+            ],
+            "times": [
+              {
+                "text": "15 July 2024",
+                "kind": "calendar",
+                "precision": "exact",
+                "calendar_value": "2024-07-15",
+                "evidence": [
+                  {
+                    "source_id": "PMC12796085.1:jats",
+                    "segment_id": "b00030",
+                    "segment_sha256": "e007efc06956bd80f8a8f88346574a4a69ff18aaaba8661a5709cb60bb1b4de0",
+                    "start": 7,
+                    "end": 28,
+                    "quote": "Case2 15 July 2024 CT"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "event_id": "p2-e14",
+            "record_id": "PMC12796085.1:p2",
+            "episode_id": null,
+            "kind": "test",
+            "occurrence": "occurred",
+            "description": "CT on 23 September 2024 (Fig. 8)",
+            "fact_ids": [
+              "p2-f059"
+            ],
+            "evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00031",
+                "segment_sha256": "64be0bd03d5bd7f39b829b27ed7f2239d7fc76b2e9913106b33f0e447129fa9f",
+                "start": 7,
+                "end": 33,
+                "quote": "Case2 23 September 2024 CT"
+              }
+            ],
+            "attribution_evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00006",
+                "segment_sha256": "fbd7c5b7e72365e4723e234724811db0bbe923025596dbb486381acec0264921",
+                "start": 7,
+                "end": 59,
+                "quote": "A 70-year-old male with 40-pack-year smoking history"
+              }
+            ],
+            "times": [
+              {
+                "text": "23 September 2024",
+                "kind": "calendar",
+                "precision": "exact",
+                "calendar_value": "2024-09-23",
+                "evidence": [
+                  {
+                    "source_id": "PMC12796085.1:jats",
+                    "segment_id": "b00031",
+                    "segment_sha256": "64be0bd03d5bd7f39b829b27ed7f2239d7fc76b2e9913106b33f0e447129fa9f",
+                    "start": 7,
+                    "end": 33,
+                    "quote": "Case2 23 September 2024 CT"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "event_id": "p2-e15",
+            "record_id": "PMC12796085.1:p2",
+            "episode_id": null,
+            "kind": "test",
+            "occurrence": "occurred",
+            "description": "CT on 1 November 2024 (Fig. 9)",
+            "fact_ids": [
+              "p2-f060"
+            ],
+            "evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00032",
+                "segment_sha256": "d2914ddb40b871903424c7c555ca6328be50c2917c01c7e5c29058420dcb8f30",
+                "start": 7,
+                "end": 31,
+                "quote": "Case2 1 November 2024 CT"
+              }
+            ],
+            "attribution_evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00006",
+                "segment_sha256": "fbd7c5b7e72365e4723e234724811db0bbe923025596dbb486381acec0264921",
+                "start": 7,
+                "end": 59,
+                "quote": "A 70-year-old male with 40-pack-year smoking history"
+              }
+            ],
+            "times": [
+              {
+                "text": "1 November 2024",
+                "kind": "calendar",
+                "precision": "exact",
+                "calendar_value": "2024-11-01",
+                "evidence": [
+                  {
+                    "source_id": "PMC12796085.1:jats",
+                    "segment_id": "b00032",
+                    "segment_sha256": "d2914ddb40b871903424c7c555ca6328be50c2917c01c7e5c29058420dcb8f30",
+                    "start": 7,
+                    "end": 31,
+                    "quote": "Case2 1 November 2024 CT"
+                  }
+                ]
+              }
+            ]
           }
         ],
         "topological_layers": [
@@ -9959,19 +11294,21 @@
               "p2-e05"
             ],
             [
-              "p2-e06"
-            ],
-            [
               "p2-e07"
             ],
             [
               "p2-e09"
             ],
             [
-              "p2-e11"
+              "p2-e13"
+            ]
+          ],
+          [
+            [
+              "p2-e06"
             ],
             [
-              "p2-e12"
+              "p2-e14"
             ]
           ],
           [
@@ -9979,22 +11316,103 @@
               "p2-e08"
             ],
             [
+              "p2-e11"
+            ],
+            [
+              "p2-e15"
+            ]
+          ],
+          [
+            [
               "p2-e10"
+            ]
+          ],
+          [
+            [
+              "p2-e12"
             ]
           ]
         ],
         "before_pairs": [
           [
+            "p2-e05",
+            "p2-e06"
+          ],
+          [
+            "p2-e05",
+            "p2-e08"
+          ],
+          [
+            "p2-e05",
+            "p2-e10"
+          ],
+          [
+            "p2-e05",
+            "p2-e11"
+          ],
+          [
+            "p2-e05",
+            "p2-e12"
+          ],
+          [
+            "p2-e06",
+            "p2-e08"
+          ],
+          [
             "p2-e06",
             "p2-e10"
+          ],
+          [
+            "p2-e06",
+            "p2-e11"
+          ],
+          [
+            "p2-e06",
+            "p2-e12"
           ],
           [
             "p2-e07",
             "p2-e08"
           ],
           [
+            "p2-e07",
+            "p2-e10"
+          ],
+          [
+            "p2-e07",
+            "p2-e12"
+          ],
+          [
+            "p2-e08",
+            "p2-e10"
+          ],
+          [
+            "p2-e08",
+            "p2-e12"
+          ],
+          [
             "p2-e09",
             "p2-e10"
+          ],
+          [
+            "p2-e09",
+            "p2-e12"
+          ],
+          [
+            "p2-e10",
+            "p2-e12"
+          ],
+          [
+            "p2-e13",
+            "p2-e14"
+          ],
+          [
+            "p2-e13",
+            "p2-e15"
+          ],
+          [
+            "p2-e14",
+            "p2-e15"
           ]
         ],
         "incomparable_pairs": [
@@ -10043,6 +11461,18 @@
             "p2-e12"
           ],
           [
+            "p2-e01",
+            "p2-e13"
+          ],
+          [
+            "p2-e01",
+            "p2-e14"
+          ],
+          [
+            "p2-e01",
+            "p2-e15"
+          ],
+          [
             "p2-e02",
             "p2-e03"
           ],
@@ -10083,6 +11513,18 @@
             "p2-e12"
           ],
           [
+            "p2-e02",
+            "p2-e13"
+          ],
+          [
+            "p2-e02",
+            "p2-e14"
+          ],
+          [
+            "p2-e02",
+            "p2-e15"
+          ],
+          [
             "p2-e03",
             "p2-e04"
           ],
@@ -10119,6 +11561,18 @@
             "p2-e12"
           ],
           [
+            "p2-e03",
+            "p2-e13"
+          ],
+          [
+            "p2-e03",
+            "p2-e14"
+          ],
+          [
+            "p2-e03",
+            "p2-e15"
+          ],
+          [
             "p2-e04",
             "p2-e05"
           ],
@@ -10151,8 +11605,16 @@
             "p2-e12"
           ],
           [
-            "p2-e05",
-            "p2-e06"
+            "p2-e04",
+            "p2-e13"
+          ],
+          [
+            "p2-e04",
+            "p2-e14"
+          ],
+          [
+            "p2-e04",
+            "p2-e15"
           ],
           [
             "p2-e05",
@@ -10160,23 +11622,19 @@
           ],
           [
             "p2-e05",
-            "p2-e08"
-          ],
-          [
-            "p2-e05",
             "p2-e09"
           ],
           [
             "p2-e05",
-            "p2-e10"
+            "p2-e13"
           ],
           [
             "p2-e05",
-            "p2-e11"
+            "p2-e14"
           ],
           [
             "p2-e05",
-            "p2-e12"
+            "p2-e15"
           ],
           [
             "p2-e06",
@@ -10184,27 +11642,23 @@
           ],
           [
             "p2-e06",
-            "p2-e08"
-          ],
-          [
-            "p2-e06",
             "p2-e09"
           ],
           [
             "p2-e06",
-            "p2-e11"
+            "p2-e13"
           ],
           [
             "p2-e06",
-            "p2-e12"
+            "p2-e14"
+          ],
+          [
+            "p2-e06",
+            "p2-e15"
           ],
           [
             "p2-e07",
             "p2-e09"
-          ],
-          [
-            "p2-e07",
-            "p2-e10"
           ],
           [
             "p2-e07",
@@ -10212,7 +11666,15 @@
           ],
           [
             "p2-e07",
-            "p2-e12"
+            "p2-e13"
+          ],
+          [
+            "p2-e07",
+            "p2-e14"
+          ],
+          [
+            "p2-e07",
+            "p2-e15"
           ],
           [
             "p2-e08",
@@ -10220,15 +11682,19 @@
           ],
           [
             "p2-e08",
-            "p2-e10"
-          ],
-          [
-            "p2-e08",
             "p2-e11"
           ],
           [
             "p2-e08",
-            "p2-e12"
+            "p2-e13"
+          ],
+          [
+            "p2-e08",
+            "p2-e14"
+          ],
+          [
+            "p2-e08",
+            "p2-e15"
           ],
           [
             "p2-e09",
@@ -10236,7 +11702,15 @@
           ],
           [
             "p2-e09",
-            "p2-e12"
+            "p2-e13"
+          ],
+          [
+            "p2-e09",
+            "p2-e14"
+          ],
+          [
+            "p2-e09",
+            "p2-e15"
           ],
           [
             "p2-e10",
@@ -10244,30 +11718,83 @@
           ],
           [
             "p2-e10",
-            "p2-e12"
+            "p2-e13"
+          ],
+          [
+            "p2-e10",
+            "p2-e14"
+          ],
+          [
+            "p2-e10",
+            "p2-e15"
           ],
           [
             "p2-e11",
             "p2-e12"
+          ],
+          [
+            "p2-e11",
+            "p2-e13"
+          ],
+          [
+            "p2-e11",
+            "p2-e14"
+          ],
+          [
+            "p2-e11",
+            "p2-e15"
+          ],
+          [
+            "p2-e12",
+            "p2-e13"
+          ],
+          [
+            "p2-e12",
+            "p2-e14"
+          ],
+          [
+            "p2-e12",
+            "p2-e15"
           ]
         ],
         "same_time_groups": [],
-        "interval_relations": [],
+        "interval_relations": [
+          {
+            "edge_id": "edge6",
+            "from_event_id": "p2-e07",
+            "to_event_id": "p2-e06",
+            "relation": "during",
+            "offset": null,
+            "evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00007",
+                "segment_sha256": "1f8fbf3c58d6df6527871316bc1d9c59d9178fc732ad3e7832e524d2794e32c6",
+                "start": 145,
+                "end": 288,
+                "quote": "Imaging showed partial response (68.3% tumor reduction, 27 mm × 20 mm) after cycle 2, but paradoxical progression (38 mm × 33 mm) post-cycle 3."
+              }
+            ]
+          }
+        ],
         "ordered_event_ids": [
+          "p2-e05",
           "p2-e06",
           "p2-e07",
           "p2-e08",
           "p2-e09",
-          "p2-e10"
+          "p2-e10",
+          "p2-e11",
+          "p2-e12",
+          "p2-e13",
+          "p2-e14",
+          "p2-e15"
         ],
         "order_unknown_event_ids": [
           "p2-e01",
           "p2-e02",
           "p2-e03",
-          "p2-e04",
-          "p2-e05",
-          "p2-e11",
-          "p2-e12"
+          "p2-e04"
         ],
         "layers_are_simultaneous": false,
         "synthetic_dates_generated": false,
@@ -10275,7 +11802,7 @@
         "basis": "Source-gated model relations; paragraph order and event kind do not create chronology."
       },
       "reference_provenance": {
-        "annotation_sha256": "f098c56661df3bc4c247e79cd35ba91e5cd9c80544a74ed66e34a0a2683adeba",
+        "annotation_sha256": "522ee3635415142058174c717129edccfee932e650f0af83cbf2feb70917eca8",
         "materializer_version": "dense-runtime-targets/1",
         "fact_pointers": [
           {
@@ -10470,6 +11997,39 @@
             ]
           },
           {
+            "fact_id": "p2-f058",
+            "task": "procedures_devices",
+            "pointer": "/items/6",
+            "source_evidence": [
+              {
+                "segment_id": "b00030",
+                "quote": "Case2 15 July 2024 CT"
+              }
+            ]
+          },
+          {
+            "fact_id": "p2-f059",
+            "task": "procedures_devices",
+            "pointer": "/items/7",
+            "source_evidence": [
+              {
+                "segment_id": "b00031",
+                "quote": "Case2 23 September 2024 CT"
+              }
+            ]
+          },
+          {
+            "fact_id": "p2-f060",
+            "task": "procedures_devices",
+            "pointer": "/items/8",
+            "source_evidence": [
+              {
+                "segment_id": "b00032",
+                "quote": "Case2 1 November 2024 CT"
+              }
+            ]
+          },
+          {
             "fact_id": "p2-f010",
             "task": "observations",
             "pointer": "/items/0",
@@ -10639,6 +12199,10 @@
               {
                 "segment_id": "b00006",
                 "quote": "Biopsy confirmed poorly differentiated small cell carcinoma"
+              },
+              {
+                "segment_id": "b00006",
+                "quote": "which ruled out systemic metastasis"
               }
             ]
           },
@@ -10858,6 +12422,17 @@
                 "quote": "Therefore, the patient opted for surgical intervention."
               }
             ]
+          },
+          {
+            "fact_id": "p2-f057",
+            "task": "care_plans",
+            "pointer": "/items/3",
+            "source_evidence": [
+              {
+                "segment_id": "b00009",
+                "quote": "Foremost was the patient’s persistent and fully informed desire for surgical treatment after detailed counseling."
+              }
+            ]
           }
         ],
         "quarantined_facts": [
@@ -10912,6 +12487,32 @@
             "certainty": "source_conflict",
             "scoring": "review_only",
             "notes": "Conflicts with the abstract assessment of disease progression and the imaging described as paradoxical progression."
+          },
+          {
+            "fact_id": "p2-f056",
+            "task": "observations",
+            "collection": "items",
+            "fields": {
+              "name": "Preoperative evaluation of the lesion",
+              "kind": "other",
+              "status": "resulted",
+              "temporality": "historical",
+              "comparator": "unknown",
+              "flag": "unknown",
+              "text_value": "lesion has been downstaged and is now amenable to surgical intervention",
+              "subject": "index_patient",
+              "assertion": "present"
+            },
+            "evidence": [
+              {
+                "segment_id": "b00007",
+                "quote": "thorough preoperative evaluation indicates that the lesion has been downstaged and is now amenable to surgical intervention"
+              }
+            ],
+            "clinical_statement": "Preoperative evaluation stated the lesion had been downstaged and was amenable to surgery.",
+            "certainty": "source_conflict",
+            "scoring": "review_only",
+            "notes": "Stated alongside paradoxical progression post-cycle 3 and the later abstract assessment of progression; not reconciled."
           },
           {
             "fact_id": "p2-f054",
@@ -11994,7 +13595,7 @@
               "name": "VATS lobectomy",
               "kind": "procedure",
               "action": "completed",
-              "body_site": "lung",
+              "body_site": null,
               "laterality": "unknown",
               "indication": null,
               "finding": "residual poorly differentiated carcinoma with vascular invasion",
@@ -12005,7 +13606,6 @@
               "kind": "procedure",
               "action": "completed",
               "temporality": "historical",
-              "body_site": "lung",
               "finding": "residual poorly differentiated carcinoma with vascular invasion",
               "subject": "index_patient",
               "assertion": "present"
@@ -12022,6 +13622,177 @@
             ],
             "event_ids": [
               "p2-e10"
+            ]
+          },
+          {
+            "fact_id": "p2-f058",
+            "task": "procedures_devices",
+            "pointer": "/items/6",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": "15 July 2024",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": "2024-07-15"
+              },
+              "evidence": [
+                {
+                  "quote": "Case2 15 July 2024 CT",
+                  "source_section": "b00030"
+                }
+              ],
+              "name": "CT",
+              "kind": "procedure",
+              "action": "completed",
+              "body_site": null,
+              "laterality": "unknown",
+              "indication": null,
+              "finding": null,
+              "complication": null
+            },
+            "value_as_annotated": {
+              "name": "CT",
+              "kind": "procedure",
+              "action": "completed",
+              "temporality": "historical",
+              "time": {
+                "text": "15 July 2024",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": "2024-07-15"
+              },
+              "subject": "index_patient",
+              "assertion": "present"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00030",
+                "segment_sha256": "e007efc06956bd80f8a8f88346574a4a69ff18aaaba8661a5709cb60bb1b4de0",
+                "start": 7,
+                "end": 28,
+                "quote": "Case2 15 July 2024 CT"
+              }
+            ],
+            "event_ids": [
+              "p2-e13"
+            ]
+          },
+          {
+            "fact_id": "p2-f059",
+            "task": "procedures_devices",
+            "pointer": "/items/7",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": "23 September 2024",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": "2024-09-23"
+              },
+              "evidence": [
+                {
+                  "quote": "Case2 23 September 2024 CT",
+                  "source_section": "b00031"
+                }
+              ],
+              "name": "CT",
+              "kind": "procedure",
+              "action": "completed",
+              "body_site": null,
+              "laterality": "unknown",
+              "indication": null,
+              "finding": null,
+              "complication": null
+            },
+            "value_as_annotated": {
+              "name": "CT",
+              "kind": "procedure",
+              "action": "completed",
+              "temporality": "historical",
+              "time": {
+                "text": "23 September 2024",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": "2024-09-23"
+              },
+              "subject": "index_patient",
+              "assertion": "present"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00031",
+                "segment_sha256": "64be0bd03d5bd7f39b829b27ed7f2239d7fc76b2e9913106b33f0e447129fa9f",
+                "start": 7,
+                "end": 33,
+                "quote": "Case2 23 September 2024 CT"
+              }
+            ],
+            "event_ids": [
+              "p2-e14"
+            ]
+          },
+          {
+            "fact_id": "p2-f060",
+            "task": "procedures_devices",
+            "pointer": "/items/8",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": "1 November 2024",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": "2024-11-01"
+              },
+              "evidence": [
+                {
+                  "quote": "Case2 1 November 2024 CT",
+                  "source_section": "b00032"
+                }
+              ],
+              "name": "CT",
+              "kind": "procedure",
+              "action": "completed",
+              "body_site": null,
+              "laterality": "unknown",
+              "indication": null,
+              "finding": null,
+              "complication": null
+            },
+            "value_as_annotated": {
+              "name": "CT",
+              "kind": "procedure",
+              "action": "completed",
+              "temporality": "historical",
+              "time": {
+                "text": "1 November 2024",
+                "relation": "at",
+                "anchor": null,
+                "date_iso": "2024-11-01"
+              },
+              "subject": "index_patient",
+              "assertion": "present"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00032",
+                "segment_sha256": "d2914ddb40b871903424c7c555ca6328be50c2917c01c7e5c29058420dcb8f30",
+                "start": 7,
+                "end": 31,
+                "quote": "Case2 1 November 2024 CT"
+              }
+            ],
+            "event_ids": [
+              "p2-e15"
             ]
           },
           {
@@ -12531,7 +14302,7 @@
               "unit": "µg/L",
               "flag": "high",
               "reference_range_text": null,
-              "specimen": "serum",
+              "specimen": null,
               "method": null,
               "body_site": null
             },
@@ -12544,7 +14315,6 @@
               "flag": "high",
               "numeric_value": 28.08,
               "unit": "µg/L",
-              "specimen": "serum",
               "subject": "index_patient",
               "assertion": "present"
             },
@@ -12592,7 +14362,7 @@
               "unit": "µg/L",
               "flag": "normal",
               "reference_range_text": null,
-              "specimen": "serum",
+              "specimen": null,
               "method": null,
               "body_site": null
             },
@@ -12605,7 +14375,6 @@
               "flag": "normal",
               "numeric_value": 12.65,
               "unit": "µg/L",
-              "specimen": "serum",
               "subject": "index_patient",
               "assertion": "present"
             },
@@ -12899,6 +14668,10 @@
                 {
                   "quote": "Biopsy confirmed poorly differentiated small cell carcinoma",
                   "source_section": "b00006"
+                },
+                {
+                  "quote": "which ruled out systemic metastasis",
+                  "source_section": "b00006"
                 }
               ],
               "tumor_ref": "t1",
@@ -12961,6 +14734,14 @@
                 "start": 362,
                 "end": 421,
                 "quote": "Biopsy confirmed poorly differentiated small cell carcinoma"
+              },
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00006",
+                "segment_sha256": "fbd7c5b7e72365e4723e234724811db0bbe923025596dbb486381acec0264921",
+                "start": 168,
+                "end": 203,
+                "quote": "which ruled out systemic metastasis"
               }
             ],
             "event_ids": [
@@ -13779,7 +15560,7 @@
               "line_of_therapy": null,
               "intent": "unknown",
               "setting": "neoadjuvant",
-              "response": "partial response after cycle 2 then progression after cycle 3"
+              "response": "partial response after cycle 2; paradoxical progression post-cycle 3"
             },
             "value_as_annotated": {
               "tumor_ref": "t1",
@@ -13788,7 +15569,7 @@
               "action": "given",
               "intent": "unknown",
               "setting": "neoadjuvant",
-              "response": "partial response after cycle 2 then progression after cycle 3",
+              "response": "partial response after cycle 2; paradoxical progression post-cycle 3",
               "temporality": "historical",
               "subject": "index_patient",
               "assertion": "present"
@@ -14078,6 +15859,56 @@
                 "start": 955,
                 "end": 1010,
                 "quote": "Therefore, the patient opted for surgical intervention."
+              }
+            ],
+            "event_ids": [
+              "p2-e09"
+            ]
+          },
+          {
+            "fact_id": "p2-f057",
+            "task": "care_plans",
+            "pointer": "/items/3",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "historical",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Foremost was the patient’s persistent and fully informed desire for surgical treatment after detailed counseling.",
+                  "source_section": "b00009"
+                }
+              ],
+              "action_text": "Detailed counseling about surgical treatment",
+              "plan_type": "counseling",
+              "target": "surgical treatment",
+              "responsible_specialty": null,
+              "urgency": null,
+              "action_status": "completed"
+            },
+            "value_as_annotated": {
+              "action_text": "Detailed counseling about surgical treatment",
+              "plan_type": "counseling",
+              "target": "surgical treatment",
+              "action_status": "completed",
+              "temporality": "historical",
+              "subject": "index_patient",
+              "assertion": "present"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12796085.1:jats",
+                "segment_id": "b00009",
+                "segment_sha256": "93b68bdb0729246638aa6503871f751653496bd131848c891693e3772b1896c6",
+                "start": 406,
+                "end": 519,
+                "quote": "Foremost was the patient’s persistent and fully informed desire for surgical treatment after detailed counseling."
               }
             ],
             "event_ids": [

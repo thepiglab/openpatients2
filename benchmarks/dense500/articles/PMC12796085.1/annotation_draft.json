@@ -207,7 +207,6 @@
       "verification_status": "confirmed",
       "clinical_status": "active",
       "role": "complication",
-      "body_site": "right lower lobe",
       "temporality": "current",
       "subject": "index_patient",
       "assertion": "present"
@@ -670,12 +669,17 @@
       {
        "segment_id": "b00004",
        "quote": "Biopsy confirmed small cell carcinoma"
+      },
+      {
+       "segment_id": "b00004",
+       "quote": "which ruled out systemic metastasis"
       }
      ],
      "clinical_statement": "Stage IIIB (T3N2M0) small cell carcinoma of the right lower lobe.",
      "certainty": "supported",
      "scoring": "include",
-     "notes": ""
+     "notes": "",
+     "alternate_representation_of": "p1-f006"
     },
     {
      "fact_id": "p1-f026",
@@ -688,7 +692,7 @@
       "alteration": "p.R479* nonsense mutation",
       "origin": "unknown",
       "interpretation": "unknown",
-      "text_value": "VAF 67.7%",
+      "text_value": "VAF 67.70%",
       "numeric_value": 67.7,
       "unit": "% VAF",
       "temporality": "historical",
@@ -727,7 +731,7 @@
       "alteration": "p.G12C missense mutation",
       "origin": "unknown",
       "interpretation": "unknown",
-      "text_value": "VAF 34.9%",
+      "text_value": "VAF 34.90%",
       "numeric_value": 34.9,
       "unit": "% VAF",
       "temporality": "historical",
@@ -805,7 +809,7 @@
       "alteration": "p.R255 nonsense mutation",
       "origin": "unknown",
       "interpretation": "unknown",
-      "text_value": "VAF 49.1%",
+      "text_value": "VAF 49.10%",
       "numeric_value": 49.1,
       "unit": "% VAF",
       "temporality": "historical",
@@ -1218,7 +1222,8 @@
      "clinical_statement": "Surgical resection by VATS right lower lobectomy achieved pCR.",
      "certainty": "supported",
      "scoring": "include",
-     "notes": ""
+     "notes": "",
+     "alternate_representation_of": "p1-f042"
     },
     {
      "fact_id": "p1-f044",
@@ -1371,6 +1376,87 @@
      "certainty": "supported",
      "scoring": "include",
      "notes": ""
+    },
+    {
+     "fact_id": "p1-f049",
+     "task": "outcomes",
+     "collection": "items",
+     "fields": {
+      "event": "other",
+      "text_value": "favorable outcome",
+      "related_condition": "Small cell lung cancer",
+      "temporality": "historical",
+      "subject": "index_patient",
+      "assertion": "present"
+     },
+     "evidence": [
+      {
+       "segment_id": "b00009",
+       "quote": "The therapeutic management of Case 1 was straightforward and unanimously agreed upon, resulting in a favorable outcome."
+      }
+     ],
+     "clinical_statement": "The authors state that management of Case 1 resulted in a favorable outcome.",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": ""
+    },
+    {
+     "fact_id": "p1-f050",
+     "task": "procedures_devices",
+     "collection": "items",
+     "fields": {
+      "name": "CT",
+      "kind": "procedure",
+      "action": "completed",
+      "temporality": "historical",
+      "time": {
+       "text": "17 July 2024",
+       "relation": "at",
+       "anchor": null,
+       "date_iso": "2024-07-17"
+      },
+      "subject": "index_patient",
+      "assertion": "present"
+     },
+     "evidence": [
+      {
+       "segment_id": "b00026",
+       "quote": "Case1 17 July 2024 CT"
+      }
+     ],
+     "clinical_statement": "CT dated 17 July 2024 (Fig. 3 caption).",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": "Caption-sourced dated CT; the caption gives no findings and does not say which text-described scan it is."
+    },
+    {
+     "fact_id": "p1-f051",
+     "task": "procedures_devices",
+     "collection": "items",
+     "fields": {
+      "name": "CT",
+      "kind": "procedure",
+      "action": "completed",
+      "temporality": "historical",
+      "time": {
+       "text": "31 October 2024",
+       "relation": "at",
+       "anchor": null,
+       "date_iso": "2024-10-31"
+      },
+      "subject": "index_patient",
+      "assertion": "present"
+     },
+     "evidence": [
+      {
+       "segment_id": "b00027",
+       "quote": "Case1 31 October 2024 CT"
+      }
+     ],
+     "clinical_statement": "CT dated 31 October 2024 (Fig. 4 caption).",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": "Caption-sourced dated CT; the caption gives no findings and does not say which text-described scan it is."
     }
    ],
    "events": [
@@ -1536,7 +1622,7 @@
       }
      ],
      "kind": "test",
-     "time_kind": "duration",
+     "time_kind": "relative",
      "time_precision": "approximate",
      "time_calendar_value": null
     },
@@ -1597,6 +1683,60 @@
      "time_kind": "relative",
      "time_precision": "unknown",
      "time_calendar_value": null
+    },
+    {
+     "event_id": "p1-e12",
+     "description": "CT on 17 July 2024 (Fig. 3)",
+     "occurrence": "occurred",
+     "fact_ids": [
+      "p1-f050"
+     ],
+     "time_text": "17 July 2024",
+     "evidence": [
+      {
+       "segment_id": "b00026",
+       "quote": "Case1 17 July 2024 CT"
+      }
+     ],
+     "kind": "test",
+     "time_kind": "calendar",
+     "time_precision": "exact",
+     "time_calendar_value": "2024-07-17"
+    },
+    {
+     "event_id": "p1-e13",
+     "description": "CT on 31 October 2024 (Fig. 4)",
+     "occurrence": "occurred",
+     "fact_ids": [
+      "p1-f051"
+     ],
+     "time_text": "31 October 2024",
+     "evidence": [
+      {
+       "segment_id": "b00027",
+       "quote": "Case1 31 October 2024 CT"
+      }
+     ],
+     "kind": "test",
+     "time_kind": "calendar",
+     "time_precision": "exact",
+     "time_calendar_value": "2024-10-31"
+    },
+    {
+     "event_id": "p1-e14",
+     "description": "Authors report a favorable outcome for Case 1",
+     "occurrence": "occurred",
+     "fact_ids": [
+      "p1-f049"
+     ],
+     "time_text": null,
+     "evidence": [
+      {
+       "segment_id": "b00009",
+       "quote": "The therapeutic management of Case 1 was straightforward and unanimously agreed upon, resulting in a favorable outcome."
+      }
+     ],
+     "kind": "outcome"
     }
    ],
    "temporal_relations": [
@@ -1645,6 +1785,21 @@
       {
        "segment_id": "b00005",
        "quote": "Subsequent VATS right lower lobectomy achieved pCR: no residual carcinoma in primary site or lymph nodes (stations 2,3,4,7,10,11). Postoperative molecular analysis"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e12",
+     "to_event_id": "p1-e13",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00026",
+       "quote": "Case1 17 July 2024 CT"
+      },
+      {
+       "segment_id": "b00027",
+       "quote": "Case1 31 October 2024 CT"
       }
      ]
     }
@@ -1706,6 +1861,14 @@
       "p1-f046",
       "p1-f047",
       "p1-f048"
+     ]
+    },
+    {
+     "text": "The authors describe the outcome as favorable; figure captions date CT scans on 17 July 2024 and 31 October 2024.",
+     "fact_ids": [
+      "p1-f049",
+      "p1-f050",
+      "p1-f051"
      ]
     }
    ],
@@ -1803,6 +1966,24 @@
      "must_not_infer": "Do not infer a pre-treatment PD-L1 result.",
      "fact_ids": [
       "p1-f048"
+     ]
+    },
+    {
+     "evidence": [
+      {
+       "segment_id": "b00026",
+       "quote": "Case1 17 July 2024 CT"
+      },
+      {
+       "segment_id": "b00027",
+       "quote": "Case1 31 October 2024 CT"
+      }
+     ],
+     "issue": "Figure captions date CT scans, but the case text gives no dates and does not say which text-described scan each image is.",
+     "must_not_infer": "Do not attach the caption dates to text-described imaging, treatment or surgery events.",
+     "fact_ids": [
+      "p1-f050",
+      "p1-f051"
      ]
     }
    ]
@@ -2401,12 +2582,17 @@
       {
        "segment_id": "b00006",
        "quote": "Biopsy confirmed poorly differentiated small cell carcinoma"
+      },
+      {
+       "segment_id": "b00006",
+       "quote": "which ruled out systemic metastasis"
       }
      ],
      "clinical_statement": "Stage IIIB (T4N2M0) poorly differentiated small cell carcinoma of the right lower lobe.",
      "certainty": "supported",
      "scoring": "include",
-     "notes": ""
+     "notes": "",
+     "alternate_representation_of": "p2-f007"
     },
     {
      "fact_id": "p2-f024",
@@ -2660,7 +2846,7 @@
       "action": "given",
       "intent": "unknown",
       "setting": "neoadjuvant",
-      "response": "partial response after cycle 2 then progression after cycle 3",
+      "response": "partial response after cycle 2; paradoxical progression post-cycle 3",
       "temporality": "historical",
       "subject": "index_patient",
       "assertion": "present"
@@ -2678,7 +2864,7 @@
      "clinical_statement": "Three cycles of neoadjuvant etoposide, carboplatin and serplulimab; partial response after cycle 2, progression after cycle 3.",
      "certainty": "supported",
      "scoring": "include",
-     "notes": ""
+     "notes": "The progression label conflicts with the later stable disease assessment; see ambiguity."
     },
     {
      "fact_id": "p2-f034",
@@ -2693,7 +2879,6 @@
       "flag": "high",
       "numeric_value": 28.08,
       "unit": "µg/L",
-      "specimen": "serum",
       "subject": "index_patient",
       "assertion": "present"
      },
@@ -2721,7 +2906,6 @@
       "flag": "normal",
       "numeric_value": 12.65,
       "unit": "µg/L",
-      "specimen": "serum",
       "subject": "index_patient",
       "assertion": "present"
      },
@@ -2798,7 +2982,7 @@
      "clinical_statement": "Paradoxical progression (38 mm × 33 mm) post-cycle 3.",
      "certainty": "supported",
      "scoring": "include",
-     "notes": ""
+     "notes": "Measured enlargement is literal; the progression label conflicts with the stable disease assessment; see ambiguity."
     },
     {
      "fact_id": "p2-f038",
@@ -2964,7 +3148,6 @@
       "kind": "procedure",
       "action": "completed",
       "temporality": "historical",
-      "body_site": "lung",
       "finding": "residual poorly differentiated carcinoma with vascular invasion",
       "subject": "index_patient",
       "assertion": "present"
@@ -3005,7 +3188,8 @@
      "clinical_statement": "Surgical resection by VATS lobectomy.",
      "certainty": "supported",
      "scoring": "include",
-     "notes": ""
+     "notes": "",
+     "alternate_representation_of": "p2-f044"
     },
     {
      "fact_id": "p2-f046",
@@ -3290,6 +3474,143 @@
      "certainty": "source_conflict",
      "scoring": "review_only",
      "notes": "Conflicts with the abstract's disease progression and the surgical pathology showing residual poorly differentiated carcinoma with vascular invasion; not reconciled."
+    },
+    {
+     "fact_id": "p2-f058",
+     "task": "procedures_devices",
+     "collection": "items",
+     "fields": {
+      "name": "CT",
+      "kind": "procedure",
+      "action": "completed",
+      "temporality": "historical",
+      "time": {
+       "text": "15 July 2024",
+       "relation": "at",
+       "anchor": null,
+       "date_iso": "2024-07-15"
+      },
+      "subject": "index_patient",
+      "assertion": "present"
+     },
+     "evidence": [
+      {
+       "segment_id": "b00030",
+       "quote": "Case2 15 July 2024 CT"
+      }
+     ],
+     "clinical_statement": "CT dated 15 July 2024 (Fig. 7 caption).",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": "Caption-sourced dated CT; the caption gives no findings and does not say which text-described scan it is."
+    },
+    {
+     "fact_id": "p2-f059",
+     "task": "procedures_devices",
+     "collection": "items",
+     "fields": {
+      "name": "CT",
+      "kind": "procedure",
+      "action": "completed",
+      "temporality": "historical",
+      "time": {
+       "text": "23 September 2024",
+       "relation": "at",
+       "anchor": null,
+       "date_iso": "2024-09-23"
+      },
+      "subject": "index_patient",
+      "assertion": "present"
+     },
+     "evidence": [
+      {
+       "segment_id": "b00031",
+       "quote": "Case2 23 September 2024 CT"
+      }
+     ],
+     "clinical_statement": "CT dated 23 September 2024 (Fig. 8 caption).",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": "Caption-sourced dated CT; the caption gives no findings and does not say which text-described scan it is."
+    },
+    {
+     "fact_id": "p2-f060",
+     "task": "procedures_devices",
+     "collection": "items",
+     "fields": {
+      "name": "CT",
+      "kind": "procedure",
+      "action": "completed",
+      "temporality": "historical",
+      "time": {
+       "text": "1 November 2024",
+       "relation": "at",
+       "anchor": null,
+       "date_iso": "2024-11-01"
+      },
+      "subject": "index_patient",
+      "assertion": "present"
+     },
+     "evidence": [
+      {
+       "segment_id": "b00032",
+       "quote": "Case2 1 November 2024 CT"
+      }
+     ],
+     "clinical_statement": "CT dated 1 November 2024 (Fig. 9 caption).",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": "Caption-sourced dated CT; the caption gives no findings and does not say which text-described scan it is."
+    },
+    {
+     "fact_id": "p2-f056",
+     "task": "observations",
+     "collection": "items",
+     "fields": {
+      "name": "Preoperative evaluation of the lesion",
+      "kind": "other",
+      "status": "resulted",
+      "temporality": "historical",
+      "comparator": "unknown",
+      "flag": "unknown",
+      "text_value": "lesion has been downstaged and is now amenable to surgical intervention",
+      "subject": "index_patient",
+      "assertion": "present"
+     },
+     "evidence": [
+      {
+       "segment_id": "b00007",
+       "quote": "thorough preoperative evaluation indicates that the lesion has been downstaged and is now amenable to surgical intervention"
+      }
+     ],
+     "clinical_statement": "Preoperative evaluation stated the lesion had been downstaged and was amenable to surgery.",
+     "certainty": "source_conflict",
+     "scoring": "review_only",
+     "notes": "Stated alongside paradoxical progression post-cycle 3 and the later abstract assessment of progression; not reconciled."
+    },
+    {
+     "fact_id": "p2-f057",
+     "task": "care_plans",
+     "collection": "items",
+     "fields": {
+      "action_text": "Detailed counseling about surgical treatment",
+      "plan_type": "counseling",
+      "target": "surgical treatment",
+      "action_status": "completed",
+      "temporality": "historical",
+      "subject": "index_patient",
+      "assertion": "present"
+     },
+     "evidence": [
+      {
+       "segment_id": "b00009",
+       "quote": "Foremost was the patient’s persistent and fully informed desire for surgical treatment after detailed counseling."
+      }
+     ],
+     "clinical_statement": "The patient received detailed counseling and persistently wanted surgical treatment.",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": ""
     }
    ],
    "events": [
@@ -3467,7 +3788,9 @@
       "p2-f041",
       "p2-f042",
       "p2-f040",
-      "p2-f043"
+      "p2-f043",
+      "p2-f056",
+      "p2-f057"
      ],
      "time_text": null,
      "evidence": [
@@ -3534,6 +3857,63 @@
       }
      ],
      "kind": "outcome"
+    },
+    {
+     "event_id": "p2-e13",
+     "description": "CT on 15 July 2024 (Fig. 7)",
+     "occurrence": "occurred",
+     "fact_ids": [
+      "p2-f058"
+     ],
+     "time_text": "15 July 2024",
+     "evidence": [
+      {
+       "segment_id": "b00030",
+       "quote": "Case2 15 July 2024 CT"
+      }
+     ],
+     "kind": "test",
+     "time_kind": "calendar",
+     "time_precision": "exact",
+     "time_calendar_value": "2024-07-15"
+    },
+    {
+     "event_id": "p2-e14",
+     "description": "CT on 23 September 2024 (Fig. 8)",
+     "occurrence": "occurred",
+     "fact_ids": [
+      "p2-f059"
+     ],
+     "time_text": "23 September 2024",
+     "evidence": [
+      {
+       "segment_id": "b00031",
+       "quote": "Case2 23 September 2024 CT"
+      }
+     ],
+     "kind": "test",
+     "time_kind": "calendar",
+     "time_precision": "exact",
+     "time_calendar_value": "2024-09-23"
+    },
+    {
+     "event_id": "p2-e15",
+     "description": "CT on 1 November 2024 (Fig. 9)",
+     "occurrence": "occurred",
+     "fact_ids": [
+      "p2-f060"
+     ],
+     "time_text": "1 November 2024",
+     "evidence": [
+      {
+       "segment_id": "b00032",
+       "quote": "Case2 1 November 2024 CT"
+      }
+     ],
+     "kind": "test",
+     "time_kind": "calendar",
+     "time_precision": "exact",
+     "time_calendar_value": "2024-11-01"
     }
    ],
    "temporal_relations": [
@@ -3569,6 +3949,106 @@
        "quote": "Therefore, the patient opted for surgical intervention. Post-progression VATS lobectomy"
       }
      ]
+    },
+    {
+     "from_event_id": "p2-e05",
+     "to_event_id": "p2-e06",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00001",
+       "quote": "Case 2 showed MET and PTEN mutations and MYC gene amplification both before and after treatment, with TMB increasing from 23.72 muts/Mb to 28.13 muts/Mb"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p2-e11",
+     "to_event_id": "p2-e06",
+     "relation": "after",
+     "evidence": [
+      {
+       "segment_id": "b00001",
+       "quote": "Case 2 showed MET and PTEN mutations and MYC gene amplification both before and after treatment, with TMB increasing from 23.72 muts/Mb to 28.13 muts/Mb"
+      },
+      {
+       "segment_id": "b00007",
+       "quote": "PD-L1 expression increased post-treatment"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p2-e07",
+     "to_event_id": "p2-e06",
+     "relation": "during",
+     "evidence": [
+      {
+       "segment_id": "b00007",
+       "quote": "Imaging showed partial response (68.3% tumor reduction, 27 mm × 20 mm) after cycle 2, but paradoxical progression (38 mm × 33 mm) post-cycle 3."
+      }
+     ]
+    },
+    {
+     "from_event_id": "p2-e08",
+     "to_event_id": "p2-e06",
+     "relation": "after",
+     "evidence": [
+      {
+       "segment_id": "b00007",
+       "quote": "paradoxical progression (38 mm × 33 mm) post-cycle 3"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p2-e08",
+     "to_event_id": "p2-e10",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00007",
+       "quote": "Post-progression VATS lobectomy"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p2-e12",
+     "to_event_id": "p2-e10",
+     "relation": "after",
+     "evidence": [
+      {
+       "segment_id": "b00001",
+       "quote": "resulting in an assessment of disease progression (PD) post-surgery"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p2-e13",
+     "to_event_id": "p2-e14",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00030",
+       "quote": "Case2 15 July 2024 CT"
+      },
+      {
+       "segment_id": "b00031",
+       "quote": "Case2 23 September 2024 CT"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p2-e14",
+     "to_event_id": "p2-e15",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00031",
+       "quote": "Case2 23 September 2024 CT"
+      },
+      {
+       "segment_id": "b00032",
+       "quote": "Case2 1 November 2024 CT"
+      }
+     ]
     }
    ],
    "summary": [
@@ -3599,17 +4079,20 @@
      ]
     },
     {
-     "text": "He received three cycles of neoadjuvant etoposide, carboplatin and serplulimab with partial response after cycle 2 and progression after cycle 3, was assessed as stable disease by the multidisciplinary team, and chose surgery.",
+     "text": "He received three cycles of neoadjuvant etoposide, carboplatin and serplulimab with transient NSE elevation then normalization, partial response after cycle 2 and paradoxical progression post-cycle 3; the tumor was also assessed as stable disease, and after multidisciplinary consultation, counseling and his preference for surgery he chose surgery.",
      "fact_ids": [
       "p2-f030",
       "p2-f031",
       "p2-f032",
       "p2-f033",
+      "p2-f034",
+      "p2-f035",
       "p2-f036",
       "p2-f037",
       "p2-f039",
       "p2-f041",
-      "p2-f043"
+      "p2-f043",
+      "p2-f057"
      ]
     },
     {
@@ -3625,6 +4108,14 @@
       "p2-f053",
       "p2-f054",
       "p2-f055"
+     ]
+    },
+    {
+     "text": "Figure captions date CT scans on 15 July 2024, 23 September 2024 and 1 November 2024.",
+     "fact_ids": [
+      "p2-f058",
+      "p2-f059",
+      "p2-f060"
      ]
     }
    ],
@@ -3700,13 +4191,24 @@
       {
        "segment_id": "b00009",
        "quote": "The subsequent confirmation of a favorable pathological response post-surgery supported our individualized decision."
+      },
+      {
+       "segment_id": "b00019",
+       "quote": "Case 2 demonstrated paradoxically inferior therapeutic outcomes following chemoimmunotherapy"
+      },
+      {
+       "segment_id": "b00007",
+       "quote": "thorough preoperative evaluation indicates that the lesion has been downstaged"
       }
      ],
-     "issue": "Case 2 response is described inconsistently: abstract disease progression post-surgery, imaging called paradoxical progression after cycle 3, MDT assessment of stable disease by RECIST, a favorable pathological response in the discussion, and residual carcinoma with vascular invasion on surgical pathology.",
+     "issue": "Case 2 response is described inconsistently: imaging called paradoxical progression post-cycle 3 and the lobectomy \"post-progression\", yet the tumor was assessed as stable disease, downstaged and amenable to surgery; the repeat MDT found RECIST v1.1 criteria for progressive disease not met; the abstract reports disease progression post-surgery and the discussion reports inferior therapeutic outcomes, while the discussion also reports a favorable pathological response; surgical pathology showed residual carcinoma with vascular invasion.",
      "must_not_infer": "Do not choose one assessment as the true outcome.",
      "fact_ids": [
+      "p2-f033",
+      "p2-f037",
       "p2-f039",
       "p2-f040",
+      "p2-f056",
       "p2-f054",
       "p2-f055",
       "p2-f046"
@@ -3719,13 +4221,36 @@
        "quote": "Genomic analysis identified MET chr7:exon2 fusion (VAF 12.15%), PTEN p.T319* nonsense mutation (VAF 57.30%), TP53 p.R175H missense mutation (VAF 61.40%), and MYC amplification (copy number 4.98), with TMB 23.72 muts/Mb."
       }
      ],
-     "issue": "The text does not label the first genomic analysis as pre-treatment or the later profiling as post-treatment except through the abstract wording before and after treatment; the 'vs.' values compare against the first analysis.",
-     "must_not_infer": "Do not assign dates or timing anchors to the genomic analyses.",
+     "issue": "The case text does not label the first genomic analysis as pre-treatment or the later profiling as post-treatment; only the abstract states the alterations were found before and after treatment with TMB rising from 23.72 to 28.13 muts/Mb, which supports their order relative to treatment but gives no time text for the individual results.",
+     "must_not_infer": "Do not attach dates or time text to the Case 2 genomic results.",
      "fact_ids": [
       "p2-f024",
       "p2-f047",
       "p2-f028",
       "p2-f051"
+     ]
+    },
+    {
+     "evidence": [
+      {
+       "segment_id": "b00030",
+       "quote": "Case2 15 July 2024 CT"
+      },
+      {
+       "segment_id": "b00031",
+       "quote": "Case2 23 September 2024 CT"
+      },
+      {
+       "segment_id": "b00032",
+       "quote": "Case2 1 November 2024 CT"
+      }
+     ],
+     "issue": "Figure captions date CT scans, but the case text gives no dates and does not say which text-described scan each image is.",
+     "must_not_infer": "Do not attach the caption dates to text-described imaging, treatment or surgery events.",
+     "fact_ids": [
+      "p2-f058",
+      "p2-f059",
+      "p2-f060"
      ]
     }
    ]
@@ -4281,7 +4806,7 @@
  ],
  "article_limitations": [
   "Figure captions only in this record; pixels viewed in the separate visual submission.",
-  "No dates are given in the case text; the figure captions give CT dates, which are not attached to text-only facts.",
+  "No dates are given in the case text; figure captions date CT scans (July to November 2024), recorded as caption-sourced CT facts without linking them to text-described events.",
   "The discussion contains literature mechanisms and general statements that are background and not attributed to the patients.",
   "Case 2 response and outcome are described inconsistently across abstract, case text and discussion; kept as review-only source conflicts.",
   "Genomic specimen type and timing are partly unstated; origin is left unknown."
