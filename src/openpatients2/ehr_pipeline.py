@@ -109,11 +109,13 @@ def unified_from_pipeline(article, *, bundles, roster, visual_target, outputs, s
 
 async def run_ehr_stages(config, articles_path, run_dir, output, endpoints, context, *, image_manifest=None,
                          supplement_assets=None, supplement_transcriptions=None, http=None):
-    from .pilot_extract import PilotRunner
+    from .pilot_extract import PilotRunner, load_pilot_config
     from .pilot_media import _articles
     config = EhrStageConfig.model_validate(yaml.safe_load(Path(config).read_text()) if isinstance(config, (str, Path)) else config)
     output = Path(output)
-    runner = PilotRunner(config.extraction_config or {}, output / 'calls', endpoints, context, 'direct', http=http)
+    extraction = load_pilot_config(config.extraction_config or {})
+    runner = PilotRunner(extraction, output / 'calls', endpoints, context,
+                         'targeted' if extraction.overnight_repairs else 'direct', http=http)
     runner.schemas.update(ehr_tasks.schemas())  # shared dict; clients see the new task schemas
     bundles, rosters, visual_rows = pilot_outputs(run_dir)
     images = {}

@@ -67,7 +67,7 @@ def repair_snapshot(task, value, checker):
     collections = {'timeline_v2': ('events', 'edges'), 'ordering_review': ('edges',),
                    'clinical_inventory': ('features',), 'figure_visuals': ('panels',),
                    'figure_attribution': ('assignments',), 'pixel_attribution': ('assignments',),
-                   'summary': ('claims',)}.get(task, ())
+                   'summary': ('claims',), 'measurement_series_extraction': ('series',)}.get(task, ())
     def accepted(candidate):
         try: checker(candidate); return True
         except (ValueError, TypeError, KeyError): return False
@@ -101,7 +101,7 @@ def changed_accepted_atoms(task, protected, candidate):
     """Full-object retry cannot rewrite an already source-gated graph/panel atom."""
     collections = {'timeline_v2':('events','edges'), 'figure_visuals':('panels',),
                    'figure_attribution':('assignments',), 'pixel_attribution':('assignments',),
-                   'summary':('claims',)}.get(task, ())
+                   'summary':('claims',), 'measurement_series_extraction':('series',)}.get(task, ())
     if not collections or not isinstance(protected,dict) or not isinstance(candidate,dict): return []
     def preserves(old,new):
         if isinstance(old,dict):

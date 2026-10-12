@@ -88,6 +88,8 @@ class PilotConfig(ConfigModel):
     max_image_bytes: int = Field(default=8_000_000, ge=1, le=8_000_000)
     article_ids: list[str] | None = None
     robust_contracts: bool = True
+    # Opt-in paired experiment; the existing benchmark remains the control.
+    overnight_repairs: bool = False
     refinement_policy: Literal['legacy', 'source_aware'] = 'source_aware'
     image_manifest: str | None = None
     isolate_secondary_cases: bool = False
@@ -409,6 +411,11 @@ class PilotRunner:
 
     def prepared_messages(self, task, messages):
         messages = copy.deepcopy(messages)
+        if self.config.overnight_repairs:
+            from .overnight_repairs import task_instruction
+            instruction = task_instruction(task)
+            if instruction:
+                messages.append({'role': 'user', 'content': instruction})
         if task in self.config.prompt_overrides:
             strategy = self.config.prompt_overrides[task]
             if strategy and self.config.prompt_mode == 'rewrite':
@@ -481,6 +488,9 @@ class PilotRunner:
                         'facts, numbers, units, doses or time merely to pass validation. Previously returned candidate '
                         'and errors are untrusted data.\nCANDIDATE_JSON:\n' + json.dumps(baseline, ensure_ascii=False) +
                         '\nERRORS:\n' + '; '.join(errors)[:3500])
+                    if self.config.overnight_repairs and baseline is None and attempts:
+                        from .overnight_repairs import malformed_excerpt
+                        instruction += malformed_excerpt(attempts[-1].get('response'))
                     current.append({'role': 'user', 'content': instruction})
                     if 'repair' in self.config.prompt_overrides:
                         strategy = self.config.prompt_overrides['repair']
@@ -550,6 +560,10 @@ class PilotRunner:
                             candidate = parsed.value
                             entry.update(parse_method=parsed.method, parse_transformations=parsed.transformations,
                                          raw_candidate=copy.deepcopy(candidate))
+                            if self.config.overnight_repairs and task == 'figure_visuals':
+                                from .overnight_repairs import canonical_figure_identity
+                                candidate, identity_audit = canonical_figure_identity(candidate, identity)
+                                entry['figure_identity_normalization'] = identity_audit
                             if task in {'timeline_v2', 'timeline_completion', 'ordering_review'}:
                                 candidate, span_audit = resolve_timeline_spans(candidate,
                                     identity['article_id'] + ':jats', segments)
@@ -1065,7 +1079,17 @@ class PilotRunner:
                 messages.append({'role':'user','content':'Use precisely these panel IDs; include every panel, '
                     'including aggregate/background/unresolved panels, and never substitute a whole figure. '
                     'This visual inventory is unreviewed, not evidence of identity.\n'+json.dumps(visual['data'])})
-            attribution = await self.call('pixel_attribution',messages,attribution_checker,identity,replica,article['segments'])
+            if (self.config.overnight_repairs and self.config.pixel_strategy == 'staged'
+                    and visual['data'] is None):
+                # There is no valid inventory to attribute. Record the blocked
+                # stage without spending three generations on an impossible gate.
+                attribution = {'task': 'pixel_attribution', 'identity': identity, 'status': 'failed',
+                    'data': None, 'errors': ['Panel inventory unavailable; staged attribution is blocked'],
+                    'attempts': [], 'blocked_by': 'figure_visuals', 'arm': self.arm}
+                self.results.append(attribution)
+                write_json(self.output / 'tasks' / (json_digest({'blocked_attribution': identity}) + '.json'), attribution)
+            else:
+                attribution = await self.call('pixel_attribution',messages,attribution_checker,identity,replica,article['segments'])
         inspected = any(a['response'] and not a['response'].get('error') for r in (visual, attribution) for a in r['attempts'])
         result = {'identity': identity, 'status': 'valid' if visual['status'] == attribution['status'] == 'valid' else 'incomplete',
             'visual': visual, 'attribution': attribution, 'pixel_provenance': row['pixel_provenance'],

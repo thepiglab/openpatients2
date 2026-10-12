@@ -13,6 +13,7 @@ import csv
 import fcntl
 import gzip
 import hashlib
+import itertools
 import json
 import math
 import os
@@ -174,7 +175,7 @@ def freeze_media(source, article_dir, out, download=False):
     return Counter(r['status'] for r in result)
 
 
-def prepare(root, work, expected, download_media=False):
+def prepare(root, work, expected, download_media=False, *, splits=None, make_archive=True):
     from .pilot_extract import PilotConfig, source_gate
     root, work = root.resolve(), work.resolve()
     if work.exists():
@@ -199,6 +200,10 @@ def prepare(root, work, expected, download_media=False):
             refs[aid] = row
     if len(refs) != expected:
         raise ValueError(f'Expected {expected} completed articles, found {len(refs)}; inspect before changing --expected')
+    if splits is not None:
+        if not set(splits) <= {'train', 'validation', 'test'} or not splits:
+            raise ValueError('Invalid split selection')
+        refs = {k: v for k, v in refs.items() if v['split'] in splits}
     work.mkdir(parents=True)
     code = work / 'code'
     code.mkdir()
@@ -244,10 +249,11 @@ def prepare(root, work, expected, download_media=False):
     write(work / 'manifest.json', manifest)
     # A portable input archive: never include raw checkout, secrets, venv, models.
     archive = work.with_suffix('.inputs.tar.gz')
-    with tarfile.open(archive, 'w:gz') as tf:
-        for name in ('manifest.json', 'code', 'inputs', 'reference'):
-            tf.add(work / name, arcname=work.name + '/' + name)
-    checksum(archive)
+    if make_archive:
+        with tarfile.open(archive, 'w:gz') as tf:
+            for name in ('manifest.json', 'code', 'inputs', 'reference'):
+                tf.add(work / name, arcname=work.name + '/' + name)
+        checksum(archive)
     return {'work': str(work), 'archive': str(archive), 'articles': len(items), 'media': dict(media),
             'split_counts': manifest['splits'], 'workers': dict(Counter(x['shard'] for x in items))}
 
@@ -401,7 +407,47 @@ def completed_attempt(work, aid):
     return None, None
 
 
-async def worker(work, shard):
+def paired_jobs(work, campaigns, shard):
+    """Claim whole article pairs on shared storage; fast workers take more work.
+
+    Atomic mkdir works across nodes without relying on flock mount options.
+    Claims span both arms and are released on generator close. A hard kill can
+    leave a claim; explicit resume uses a fresh submission namespace only after
+    all previous jobs are terminal.
+    Skip busy pairs rather than keeping a GPU allocated waiting for another job.
+    A failed/incomplete arm is retried only by an explicit later resume.
+    """
+    epoch = os.environ.get('OP2_SUBMISSION_ID', 'local')
+    if not re.fullmatch(r'[A-Za-z0-9_-]+', epoch):
+        raise ValueError('Invalid queue submission identity')
+    claims = work / 'runtime/article-claims' / epoch
+    claims.mkdir(parents=True, exist_ok=True)
+    items = read(work / 'manifest.json')['articles']
+    for item in sorted(items, key=lambda x: (-x.get('source_characters', 0) - 10000*x.get('figures', 0), x['article_id'])):
+        aid = item['article_id']
+        claim = claims / aid
+        attempted = claims / (aid + '.attempted')
+        if attempted.exists():
+            continue
+        try:
+            claim.mkdir()
+        except FileExistsError:
+            continue
+        try:
+            if attempted.exists():
+                continue
+            order = campaigns if int(hashlib.sha256(aid.encode()).hexdigest(), 16) % 2 else list(reversed(campaigns))
+            for campaign in order:
+                if not completed_attempt(campaign, aid)[0]:
+                    yield campaign, {**item, 'shard': shard}
+            # Do not let another worker reroll operational errors from a pair
+            # already attempted in this submission. Resume gets a fresh epoch.
+            attempted.touch()
+        finally:
+            claim.rmdir()
+
+
+async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_timeout=None):
     from .dense_benchmark_serving import ServerGroup
     from .dense_benchmark_telemetry import monitor
     m = check_snapshot(work)
@@ -409,6 +455,8 @@ async def worker(work, shard):
         raise ValueError('Invalid worker shard')
     if not os.environ.get('SLURM_JOB_ID') or not os.environ.get('CUDA_VISIBLE_DEVICES'):
         raise ValueError('Worker requires an allocated Slurm GPU; never runs locally/login node')
+    if campaigns is not None and not os.environ.get('OP2_SUBMISSION_ID'):
+        raise ValueError('Paired workers require the submission queue identity from the launcher')
     rt = read(work / 'runtime.json')
     for name, info in rt['files'].items():
         stat = (work / name).stat()
@@ -418,7 +466,15 @@ async def worker(work, shard):
     logs.mkdir(parents=True, exist_ok=False)
     lock = (work / f'runtime/worker-{shard}.lock').open('a')
     fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-    pending = [x for x in m['articles'] if x['shard'] == shard and not completed_attempt(work, x['article_id'])[0]]
+    claimed = None
+    if campaigns is None:
+        pending = [(work, x) for x in m['articles']
+                   if x['shard'] == shard and not completed_attempt(work, x['article_id'])[0]]
+    else:
+        for campaign in campaigns:
+            check_snapshot(campaign)
+        claimed = paired_jobs(work, campaigns, shard)
+        pending = claimed
     cfg = serving(work, shard, logs)
     # Independent Slurm allocations may share a host with another campaign.
     # Choose a free loopback port rather than assuming 8600 is unused.
@@ -437,6 +493,9 @@ async def worker(work, shard):
     summary = {'shard': shard, 'job_id': os.environ['SLURM_JOB_ID'], 'started_unix': started,
                'articles': [], 'status': 'interrupted'}
     try:
+        if claimed is not None:
+            first = next(claimed, None)
+            pending = itertools.chain([first], claimed) if first else []
         if not pending:
             summary['status'] = 'done'
             return summary
@@ -467,22 +526,37 @@ async def worker(work, shard):
                     except httpx.HTTPError as exc:
                         write(logs / (name + '.error.json'), {'error': str(exc)})
                 await counters('metrics-before.txt')
-                for item in pending:
+                budget_exhausted = False
+                for campaign, item in pending:
+                    if budget_seconds is not None and time.monotonic() - monotonic_start + (article_timeout or 900) >= budget_seconds:
+                        budget_exhausted = True
+                        break
                     aid = item['article_id']
-                    write(logs / 'progress.json', {'article_id': aid, 'started_unix': time.time()})
-                    base = work / 'results/articles' / aid
+                    write(logs / 'progress.json', {'article_id': aid, 'campaign': campaign.name, 'started_unix': time.time()})
+                    base = campaign / 'results/articles' / aid
                     base.mkdir(parents=True, exist_ok=True)
                     attempt = base / f'attempt-{len(list(base.glob("attempt-*"))):04d}'
                     attempt.mkdir()
-                    receipt = await run_article(work, item, endpoints[0]['endpoint'], attempt)
-                    summary['articles'].append({'article_id': aid, 'status': receipt['status']})
+                    if article_timeout is None:
+                        receipt = await run_article(campaign, item, endpoints[0]['endpoint'], attempt)
+                    else:
+                        try:
+                            receipt = await asyncio.wait_for(run_article(campaign, item, endpoints[0]['endpoint'], attempt), article_timeout)
+                        except TimeoutError:
+                            receipt = read(attempt / 'receipt.json')
+                            receipt.update(error_type='TimeoutError', error='Per-article overnight time budget exceeded')
+                            write(attempt / 'receipt.json', receipt)
+                    summary['articles'].append({'article_id': aid, 'campaign': campaign.name, 'status': receipt['status']})
                     print(json.dumps({k: receipt[k] for k in ('article_id', 'status', 'wall_seconds', 'model_calls')}), flush=True)
                     if any(p.poll() is not None for p in group.processes):
                         raise RuntimeError('Model server exited; remaining articles are pending')
                 await counters('metrics-after.txt')
-            summary['status'] = 'done' if all(x['status'] == 'done' for x in summary['articles']) else 'errors'
+            summary['status'] = ('budget_exhausted' if budget_exhausted else
+                                 'done' if all(x['status'] == 'done' for x in summary['articles']) else 'errors')
     finally:
         group.stop()
+        if claimed is not None:
+            claimed.close()
         summary.update(ended_unix=time.time(), worker_seconds=time.monotonic()-monotonic_start)
         write(logs / 'receipt.json', summary)
         lock.close()
@@ -611,7 +685,7 @@ def export(work):
     return {'archive': str(archive), 'bytes': archive.stat().st_size}
 
 
-def submit(work, account, qos, hours, resume=False, dry_run=False):
+def submit(work, account, qos, hours, resume=False, dry_run=False, *, script_name='dense_benchmark.sbatch', campaigns=None):
     check_snapshot(work)
     if not 1 <= hours <= 72:
         raise ValueError('--hours must be between 1 and 72; Slurm --test-only also checks current policy')
@@ -625,13 +699,21 @@ def submit(work, account, qos, hours, resume=False, dry_run=False):
             if live.stdout.strip():
                 raise ValueError('Previous campaign jobs are still active; wait before --resume')
     (work / 'logs').mkdir(exist_ok=True)
-    script = work / 'code/scripts/dense_benchmark.sbatch'
+    script = work / 'code/scripts' / script_name
     common = ['sbatch', '--parsable', '--hold', '--nodes=1', '--ntasks=1', '--no-requeue',
-              '--account='+account, '--qos='+qos, '--chdir='+str(work / 'code')]
+              '--account='+account, '--qos='+qos, '--chdir='+str(work / 'code'),
+              '--export=ALL,OP2_SUBMISSION_ID='+str(time.time_ns())]
     phases = [('setup', None)] if not resume or not (work / 'runtime.json').exists() else []
-    phases += [('worker', i) for i in range(WORKERS)
-               if any(x['shard'] == i and not completed_attempt(work, x['article_id'])[0]
-                      for x in read(work / 'manifest.json')['articles'])]
+    if campaigns is None:
+        phases += [('worker', i) for i in range(WORKERS)
+                   if any(x['shard'] == i and not completed_attempt(work, x['article_id'])[0]
+                          for x in read(work / 'manifest.json')['articles'])]
+    else:
+        for campaign in campaigns:
+            check_snapshot(campaign)
+        pending_pairs = sum(any(not completed_attempt(c, x['article_id'])[0] for c in campaigns)
+                            for x in read(work / 'manifest.json')['articles'])
+        phases += [('worker', i) for i in range(min(WORKERS, pending_pairs))]
     phases += [('aggregate', None)]
     def command(phase, shard):
         gpu = phase == 'worker'
