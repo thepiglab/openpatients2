@@ -1,0 +1,50 @@
+{
+  "article_id": "PMC13314005.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6bd4298cfd5909ede6a4a9a74d38e0d58f6ac4347aa981e4c683bf009462f635",
+  "annotation_sha256": "bd8b7dd0f91ac07d879da7082575f0cf606d8754ac76c93624fb6eadf5ae9021",
+  "reviewed_at": "2026-10-10T02:16:16.680059+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 56,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M02 comparator '=' for the 10-mm clear surgical margin (no printed comparator).",
+    "Verified M12 nulled anchor 'specialist outpatient presentation' non-literal; time.text '2 months' retained.",
+    "EVID-NEGATION: p1-f012 (absent known genetic disorder) quote widened to include the negation cue: 'without any known health condition or any genetic disorder detected'.",
+    "Anchor restoration: for 1 facts whose paraphrased anchor was nulled by M12, set time.anchor to the literal source phrase the offset is relative to (e.g. 'admission', 'First time' table column, 'endoscopic procedure', 'starting rivaroxaban'); calendar dates, table ages and unstated references left null.",
+    "SOC-NEVER review of M06: p1-f013 'no history of irradiation' is an absent exposure, not never-use; changed to assertion=absent, status=unknown (not never-use).",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (18 whitelisted label/number or number/unit spacing edits outside quotes in visual-submissions (18); 'Table1'->'Table 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. All six figures viewed (intraoral photo, 3D CBCT renderings, H&E/IHC micrographs): none prints any text, so the limitation respacing affects no printed label.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=1, roster_complete=true, evidence b00014 \"We report the seventh case of gnathic sites affecting the mandible of a 62-year-old female.\"; 1 patients annotated in first-mention order."
+  ],
+  "unresolved": [
+    "Figure pixels were not inspected; visual details are restricted to captions.",
+    "Six literature-table cases are external previously reported cases; retained in coverage as aggregate review material, not original index patients.",
+    "No formal stage/grade or numerical follow-up beyond reconstruction interval stated. No molecular genetic testing. Figure callout mapping varies between prose and captions; caption descriptions retained as caption evidence."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 56,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical migrations M02/M12 correct; one quote widened to carry its negation cue.",
+      "M06 never-user migration was WRONG here: denial/absent-history wording is not never-use; corrected to absent/unknown."
+    ],
+    "residual_risks": [
+      "Figures not re-viewed in this re-sign."
+    ]
+  },
+  "physician_adjudicated": false
+}

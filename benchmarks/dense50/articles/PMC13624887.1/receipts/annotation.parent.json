@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC13624887.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a40e46e8a82b2a67be23b7e7a7f33538742b41b032bd285e13aed2307988cc4e",
+  "annotation_sha256": "f55780dcf66ddf6955405fc6b995de3cccb68eb0b80d60f91b5198823c2a66b0",
+  "reviewed_at": "2026-10-10T01:47:53.255255+00:00",
+  "source_segments_read": 11,
+  "facts_reviewed": 25,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M02 comparator '=' for 5 mm clinical lesion and 5x15 mm ultrasound extents (no printed <,>).",
+    "Verified M03 age text_value '9-month-old' literal.",
+    "NR001 (ASSERT-ABSENT): p1-f009 concomitant developmental anomalies verification_status confirmed -> unknown (denied/not-reported history).",
+    "[cleanup3 labels/sidecar glue/times/negation] p1-f005 'Asymptomatic lesion' (present, text_value 'asymptomatic') -> symptoms_function 'Lesion symptoms', kind symptom, assertion absent, body_site scalp; quote keeps 'asymptomatic' (EVID-NEGATION).",
+    "[cleanup3 labels/sidecar glue/times/negation] p1-f023/p1-f025 procedure findings respaced: '5mm' -> '5 mm', 'hypoechoic5×15mm' -> 'hypoechoic 5×15 mm' (GLUED-TEXT).",
+    "[cleanup3 labels/sidecar glue/times/negation] Visual submission text respaced: 'overviewA/dermoscopyB', 'PanelA/panelB', 'lettersA/B', 'labelA/labelB', 'clinical5mm and ultrasound5×15mm', 'to1A/to1B'; checked against the figure pixels (printed A/B); visual_target_sha256 updated in figure-ehr-labels and figure-privacy-flags."
+  ],
+  "unresolved": [
+    "Figure pixels were not inspected; visual details are restricted to captions.",
+    "No specific dressing or antibiotic ointment was documented for this patient; generic management recommendations excluded.",
+    "No MRI, histology, genetic testing or actual longitudinal outcome provided. Differential syndromes/neural tube defects are background, not patient diagnoses."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 11,
+    "facts_reviewed": 25,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical migrations correct; absent-confirmed condition resolved to unknown.",
+      "Cleanup pass 3: patient labels and sidecar text respaced; span/time-only quotes and negation-word items resolved against the source (NO-BORROWING/TIME-LITERAL/EVID-NEGATION)."
+    ],
+    "residual_risks": [],
+    "primary_stratum": "neonatal",
+    "patient_count": 1,
+    "clinical_course": "congenital stable lesion, diagnostic workup and conservative follow-up plan",
+    "rich_trajectory": false,
+    "normal_negative_evidence": true,
+    "serial_measurements": false,
+    "common_workflow": false,
+    "planned_vs_actual_challenge": true,
+    "split": "train",
+    "prior_benchmark_exposure": true,
+    "pixel_reviewed": false
+  },
+  "physician_adjudicated": false
+}

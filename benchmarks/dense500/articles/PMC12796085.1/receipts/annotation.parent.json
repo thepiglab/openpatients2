@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC12796085.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3a89ae6d9ad7e713be2dd604773887b87932a655c0bdd0a33a21ede90270f4b2",
+  "annotation_sha256": "522ee3635415142058174c717129edccfee932e650f0af83cbf2feb70917eca8",
+  "reviewed_at": "2026-10-11T18:26:11.300792+00:00",
+  "source_segments_read": 32,
+  "facts_reviewed": 111,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f008 obstructive pneumonia: removed body_site borrowed from the mass description.",
+    "p1-f026/f027/f029: text_value restored to the literal VAF strings (67.70%, 34.90%, 49.10%).",
+    "p1-f025 and p2-f023 tumors: added the \"ruled out systemic metastasis\" quote supporting M0/regional extent; marked as alternate representations of the SCLC conditions p1-f006/p2-f007.",
+    "p1-f043 and p2-f045 oncology surgery marked alternate_representation_of the VATS procedures p1-f042/p2-f044.",
+    "p1-e08 time_kind duration -> relative (\"at 2 months\").",
+    "p2-f034/f035 NSE: removed specimen serum (not in the Case 2 sentence).",
+    "p2-f044 VATS lobectomy: removed body_site lung (not stated).",
+    "p2-f033 regimen response reworded to the literal partial response after cycle 2 / paradoxical progression post-cycle 3, noted as disputed; p2-f033 and p2-f037 added to the outcome-conflict ambiguity.",
+    "Added p2-f056 (preoperative evaluation: downstaged, amenable to surgery) as source_conflict/review_only.",
+    "Added p2-f057 counseling care plan (detailed counseling before surgery) and p1-f049 author-stated favorable outcome for Case 1 (event p1-e14).",
+    "Added caption-sourced dated CT procedure facts and calendar events: p1-f050/f051 (17 July, 31 October 2024), p2-f058/f059/f060 (15 July, 23 September, 1 November 2024), ordered by their dates only; ambiguity that captions are not linked to text events.",
+    "Added p2 relations: genomics before treatment and post-treatment profiling after treatment (abstract before/after quote), imaging after cycle 2 during the regimen, post-cycle 3 imaging after the regimen and before the post-progression lobectomy, abstract post-surgery outcome after the lobectomy.",
+    "Expanded the Case 2 outcome ambiguity (abstract PD, inferior outcomes, case-text SD/downstaged, MDT RECIST not PD, favorable pathological response, residual carcinoma) and rewrote the Case 2 genomics-timing ambiguity; summaries updated without new facts.",
+    "visual.json Fig8: removed an incorrect limitation claiming cropped overlay/watermark text (Fig8 has none); figure-EHR and privacy drafts regenerated with --draft and reviewed labels/flags carried over; Fig4 privacy note corrected to watermark only."
+  ],
+  "unresolved": [
+    "Figure captions only in this record; pixels viewed in the separate visual submission.",
+    "No dates are given in the case text; figure captions date CT scans (July to November 2024), recorded as caption-sourced CT facts without linking them to text-described events.",
+    "The discussion contains literature mechanisms and general statements that are background and not attributed to the patients.",
+    "Case 2 response and outcome are described inconsistently across abstract, case text and discussion; kept as review-only source conflicts.",
+    "Genomic specimen type and timing are partly unstated; origin is left unknown."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 32,
+    "facts_reviewed": 111,
+    "figures_viewed": 9,
+    "key_findings": [
+      "Two index patients (Case 1 p1, Case 2 p2) correctly separated; discussion literature, gene-mechanism table and cohort statements kept as background.",
+      "Case 1 pre-treatment genomic results are explicitly labelled pre-treatment in their own b00010 sentence, so the pre-treatment time is literal, not borrowed.",
+      "Case 2 genomic results carry no time text; order relative to treatment is supported only by the abstract before/after statement.",
+      "Case 2 response/outcome conflict kept review_only with an explicit ambiguity; literal measurements and residual-carcinoma pathology kept as include.",
+      "Tumor-marker high/normal flags follow the source words elevated/elevation and normalization.",
+      "CT caption dates recorded only as caption-sourced dated CT facts, not attached to text events."
+    ],
+    "residual_risks": [
+      "disease_extent regional is a mapping of documented N2 nodal disease with systemic metastasis ruled out; the source does not use the word regional.",
+      "The Case 2 response assessment remains genuinely contradictory in the source.",
+      "Which text-described scans the dated CT figures depict is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

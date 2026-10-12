@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12872983.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6b8fc791c515cbc9e1e3383a20635b059b0e55035c2900e2065bdf6152214548",
+  "annotation_sha256": "20825fef2c22ef9830fa31566875a8b5bfaae11c32f7b4e26e3f7c1c2b7662f1",
+  "reviewed_at": "2026-10-10T02:10:46.581378+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 128,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added article-level roster block: reported_individual_count 4, roster_complete true, literal quote \"a case series of four patients\" (b00001).",
+    "p2-f026 week 16 sleep NRS \"100% improvement\" set to ambiguous/review_only: the parenthetical lists only EASI, DLQI and peak pruritus NRS.",
+    "Visual submission Fig2 panel a: added limitation that caption \"leg\" (sub-image iii) shows a foot and ankle on pixels; EHR-label and privacy sidecars re-bound to the new visual hash, labels/flags unchanged."
+  ],
+  "unresolved": [
+    "Figure pixels are inspected in the separate visual submission; the annotation figures keep the caption layer only.",
+    "Percent improvements printed for Case 1 and the EASI percentage for Case 4 do not agree with the printed scores; they are kept review_only and not recomputed.",
+    "Cohort and registry statements in the abstract and discussion, and the recommended lebrikizumab dose in the introduction, are not copied to individual patients.",
+    "Lebrikizumab doses for the four patients are not stated.",
+    "Several BSA reductions and the patient-reported relief statements carry no timepoint in their own sentences and are left untimed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 128,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Four index patients numbered by first mention (b00013-b00016); cohort/registry statements (BIOREP, ADvocate, ranges in b00019) not copied.",
+      "Case 1 percentages (99.5/94.7/92.9/100) and Case 4 EASI 89.0% conflict with printed scores: review_only source_conflict confirmed; Case 3 percentages consistent.",
+      "Case 4 \"EASI score reduction of 13.2\" kept review_only ambiguity.",
+      "BSA 5.0/10.0/15.0% untimed correctly (own sentences carry no time); p2 BSA 0.0% timed by its own week 16 sentence.",
+      "Series descriptors \"moderate-to-severe\" and \"clinical practice in the Czech Republic\" are explicit four-case statements (b00011); p4 uses her own \"severe\". \"All four patients continued with only topical therapy\" applied to p2-p4 (p1 has her own topical start).",
+      "Pulmonary embolism as condition plus ambiguity (no causal claim) accepted; polyvalent allergies recorded once.",
+      "Pixels: eye-barred faces on Fig2 a/b, Fig3 a, Fig4 a/b (identifiable_face true on 5 panels); underwear/bra/cleavage views flag sensitive_anatomy on 7 panels (conservative, flag only)."
+    ],
+    "residual_risks": [
+      "Patient 2 photographed regions do not correspond between baseline and week 16 (authors state this).",
+      "Sensitive-anatomy flags for clothed underwear views are conservative."
+    ]
+  },
+  "physician_adjudicated": false
+}

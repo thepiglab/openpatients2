@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC12790020.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "16831579e3a8807ce0e81a56093dfba2e5e3e9bfdebee1913ecc0063d577bc3a",
+  "annotation_sha256": "da1eeb3e3ba2af73eb2c1353f44d6372fc78b56a28d42edba08999f1c6708d87",
+  "reviewed_at": "2026-10-11T19:45:32.271861+00:00",
+  "source_segments_read": 30,
+  "facts_reviewed": 102,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p2-f037: added the literal quote for the 4.5 x 4 x 4.5 cm thickened bone / dura-attached tissue finding, which had no supporting evidence quote; statement updated.",
+    "p2-f004: removed severity \"rapidly growing\" (a growth descriptor already carried in text_value, not a severity).",
+    "p2-f046: outcome event improvement -> other (\"doing fine\" states no change).",
+    "p1-f029: added Fig.2 f caption quote and \"complete en bloc excision\" to the finding.",
+    "p1-f032, p2-f039: wound-closure clinical statements no longer duplicate the cranioplasty-absent statement.",
+    "Added p2-f053 (Fig.4 d-e caption: contrast-enhanced T1 showing dural attachment), linked to p2-e03 and the MRI summary claim.",
+    "Added literal relations: p1-e04/p2-e04 before surgery (\"our preoperative differentials\"), p2-e02/p2-e03 before p2-e04 (\"based on history, examination, and radiology\"), surgery before six-month follow-up for both (abstract \"Complete excision ... in both cases ... at six-month follow-up\").",
+    "Added p1 ambiguity and article limitation: abstract says CT and MRI in both cases showed extra-axial lesions, but case 1 MRI was not done.",
+    "Domain coverage notes: oncology empty per ONC-BENIGN (MNTI condition only); social_exposures note for the immunization item.",
+    "visual.json: F4 d said the lateral region was darker; pixels show it bright (contrast-enhanced). F4 f reworded to identify the brain and the bright lateral region. F2 h no longer claims the black bar covers an eye region (no facial features visible). Figure-EHR and privacy drafts regenerated with --draft and labels carried over; privacy F2 h identifiable_face true -> false."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual images are reviewed in the separate visual record.",
+    "MNTI is described in the abstract as mostly benign in nature; it is recorded as a confirmed condition and not as an oncology tumor entry.",
+    "The two cases are treated between April and May 2024 with a gap of one month; no calendar time is assigned to either patient.",
+    "Fig.4 caption (g) describes the T2-weighted coronal lesion as hypointense whereas the main text says hyperintense on T2; both are kept as source conflict, review-only facts for patient 2.",
+    "The discussion states urinary VMA was not done in our case (singular) and that neuroblastoma and rhabdomyosarcoma were ruled out on history and examination, without naming a patient; neither is recorded as a patient fact.",
+    "Discussion and literature-review text is background and not copied to the patients, except statements that explicitly cover both patients (immunohistochemistry not done, disease-free follow-up).",
+    "The abstract states that CT and MRI in both cases showed extra-axial lesions, whereas the case 1 report says MRI was not done; case 1 keeps MRI as not performed and no extra-axial finding is recorded for case 1."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 30,
+    "facts_reviewed": 102,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Two infants (p1 six-month-old girl, p2 three-month-old boy) with cranial MNTI; attribution and roster correct.",
+      "MNTI recorded as confirmed condition only, oncology empty (ONC-BENIGN: source calls MNTI mostly benign, no malignancy evaluation).",
+      "p2 T2 hyperintense (text) vs hypointense (Fig.4 g caption) kept as source_conflict/review_only pair.",
+      "Discussion statements applied to both patients only where the source says \"our cases\"/\"both patients\" (immunohistochemistry not done, disease-free follow-up); singular VMA statement left as ambiguity for both.",
+      "April-May 2024 is cohort-level; no calendar time assigned. Six-month follow-up time applied to every fact in each follow-up sentence.",
+      "Cranioplasty recorded as absent with the stated reasons; immunization up to date recorded as social_exposures domain other (no dedicated vaccination section exists).",
+      "All 25 panels viewed on pixels; F4 d description corrected; T2 conflict not resolved from pixels."
+    ],
+    "residual_risks": [
+      "Immunization placement in social_exposures/other is a convention choice; protocol has no vaccination section.",
+      "p1 CT 48 x 43 x 14 mm measurement not assigned to a specific structure (source ambiguous).",
+      "Abstract claims MRI in both cases, contradicting the case 1 text; recorded as ambiguity only."
+    ]
+  },
+  "physician_adjudicated": false
+}

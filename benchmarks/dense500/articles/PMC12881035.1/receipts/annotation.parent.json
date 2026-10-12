@@ -1,0 +1,49 @@
+{
+  "article_id": "PMC12881035.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5a2adc030da07220455c722c5c545d7171084ca2017398b0209da295d4307e84",
+  "annotation_sha256": "84cd5c5661e4b4912a3b81a6c22d53c423a75e69774f15466556eba57ed24d33",
+  "reviewed_at": "2026-10-09T22:29:42.879968+00:00",
+  "source_segments_read": 52,
+  "facts_reviewed": 52,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M02 comparator '=' on 22 observations (BMI, %EWL, Table 1 sizes/intervals, counts; no printed <,> for any; 'approximately one cm' stays '=').",
+    "NR001/NR002 (ONC-BENIGN): removed oncology tumor facts p2-f018 and p3-f016 for hepatic adenoma (source: 'benign neoplasms of the liver'; no malignancy evaluation for these patients); conditions p2-f004/p3-f004 retain the diagnosis.",
+    "Also removed p1-f021 (Patient A hepatic adenomas oncology tumor; same rule, missed by the singular regex) and its event link; oncology domain_coverage set to not_documented for all three patients.",
+    "p1-f010 'The operation was uneventful': outcomes complication assertion=absent had no negation cue in its quote (EVID-NEGATION gate) -> event=other, assertion=present, text_value unchanged."
+  ],
+  "unresolved": [
+    "Roster is the three institutional patients (A-C) only. The seven literature patients (Table 2 image MO3; narratives in b00028-b00032) come from previously published reports and are cited external cases, not index patients; their facts are not accepted here.",
+    "Table 1 imaging intervals (36, 48 and 7.5 months) have no stated anchor and differ from narrative post-operative imaging times (about 1.5 years, 16 months, 18 months); not reconciled. Patient C Table 1 hepatic adenoma sizes (1.00 cm pre- and post-op) conflict with narrative 1.3 cm (CT) and 1.1 cm (MRI).",
+    "Hepatic adenomas are imaging-based; no histology, subtype, or pre-operative symptoms beyond right flank pain (Patient A) are reported. Obesity is not stated as a per-patient diagnosis; BMI values are recorded as observations only.",
+    "Annotation figures[] keep caption-level fields only; pixel inspection of Figures 1-3 and the Table 2 image (MO3) is recorded in the visual submission. Supplements MOESM1-3 are DOCX files (STROBE checklist, record-screening keywords/ICD codes, JBI appraisal of cited studies) with no patient-level content; they are covered by the supplement manifest only because the PDF/image supplement review contracts do not support DOCX.",
+    "Weight-loss association with adenoma regression is a cohort-level statistical finding and does not establish individual causation. Two institutional patients with HA but no post-operative imaging are not described individually (b00018)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 52,
+    "facts_reviewed": 52,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical comparator migration correct.",
+      "Benign hepatic adenomas moved out of oncology for all three patients."
+    ],
+    "residual_risks": [
+      "Table 1 vs narrative imaging-interval differences remain as recorded (review_only where previously marked)."
+    ]
+  },
+  "physician_adjudicated": false
+}

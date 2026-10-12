@@ -1,0 +1,72 @@
+{
+  "article_id": "PMC12682600.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d9f3c51cbe37a4fe3f0038c2279acd263a88bae1b0f380ff53609835fc83968c",
+  "annotation_sha256": "85f40611965d264125d31fd17860491ebab1625b7a3714b2af2f7f12dc0e450b",
+  "reviewed_at": "2026-10-10T01:17:05.989988+00:00",
+  "source_segments_read": 37,
+  "facts_reviewed": 84,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f008..f013: removed the borrowed '1 day ago'/since-discharge time from each presenting finding; time is now the ED presentation from the findings' own sentence, evidence narrowed to that sentence.",
+    "Added p1-f048: mother's collateral that he had been 'acting like this' since discharge 1 day earlier, as a separate onset fact linked to the discharge event p1-e03.",
+    "p1-f007 Invega Sustenna: time changed from 'on the day of discharge' to 'during his recent prior psychiatric admission' with last dose the day before current admission; b00006 vs b00008 timing difference recorded as ambiguity and article limitation; IM route now cited from the abstract sentence about this patient; no 234/156 order assigned.",
+    "p1-f033 residual grandiosity: removed time borrowed from the preceding sentence ('While on this regimen').",
+    "p1-e09 (Day 3): removed baseline collateral fact p1-f015, which is not a Day 3 finding.",
+    "p2-f013 lorazepam continued: removed borrowed 'On psychiatric assessment' time; moved to its own untimed event p2-e12; continued vs titrated kept as two items with explicit ambiguity.",
+    "p2-f012 risperidone titration and p2-f014 lorazepam titration: action 'started' -> 'administered'.",
+    "p2-f034 reduction in auditory hallucinations: added 'After 3 weeks of treatment' from its own sentence.",
+    "p2-e01: removed p2-f030 (no catatonia before LAI) from the injection event.",
+    "Added supported link p2-e10 (pre-discharge Consta/appointment) before p2-e11 (six-month outpatient evaluation).",
+    "Catatonia diagnoses (p1-f005, p2-f006): added the introduction statement that both patients experienced moderate to severe catatonia as supporting evidence for confirmed status; no per-patient severity assigned.",
+    "semantic-rules-2026-10 re-sign: verified all 34 M12 nulled anchors were paraphrases.",
+    "Restored M12-nulled anchors with literal source phrases: p1-f005,f017-f021,f023 'assessed by the Consultation‐Liaison psychiatry team'; p1-f006,f016 'discharged from another psychiatric hospital's inpatient unit'; p1-f030-f032,f043 'started on oral Risperidone'; p1-f040 'given oral Lorazepam 1 mg twice daily'; p2-f008 'administered Invega Sustenna 234 mg intramuscularly'; p2-f017,f018,f033,f034 'treated with Risperidone 1 mg twice a day'; p2-f022,f023 'admitted to the psychiatric hospital'. Self-describing times (ED, inpatient medical unit stay, ER arrival, since discharge, prior to the LAI) left null.",
+    "opus-fixup: p1-f002/p2-f002 age text_value restored to the literal source spelling with U+2010 hyphens ('20‐year‐old', '24‐year‐old') per DEMO-AGE-TEXT.",
+    "TIME-ONLY QUOTES p1-f018/f019/f020 ('On evaluation'), p1-f025..f029 ('On Day 3'), p1-f031/f032 ('While on this regimen') and p2-f018 ('After 3 weeks of treatment'): each time phrase is in the same sentence as the finding/medication, so the times are governed and kept; the separate time fragment and finding fragment were merged into one contiguous governing quote per fact",
+    "TIME-ONLY QUOTE review p1-f006 / p2-f008 (paliperidone adverse-effect catatonia): the onset quotes ('our 20-year-old male patient who developed symptoms within a day after discharge'; 'our female patient's symptoms manifested 6 weeks post-injection') state the onset of this patient's reaction itself, so the times are the fact's own and kept (residual NO-BORROWING warning judged a checker false positive)"
+  ],
+  "unresolved": [
+    "Two-patient case series (Case 1 and Case 2) plus a literature review: Table 1 rows (Johnson et al., Tu et al., Coffey, McKeown et al., Xiong et al., Mall et al.) and discussion statements describe published cases or general knowledge and are not extracted as facts of the index patients.",
+    "The introduction states BFCRS scores of 15 and 11 and \"moderate to severe catatonia\" for the two patients together; per-patient BFCRS scores are taken from the case sections and no per-patient severity grade is assigned.",
+    "Catatonia is attributed to paliperidone by the authors; no causality scale is reported.",
+    "No laboratory values, vital signs or imaging details beyond a negative abdominal imaging result (Case 2) are reported; the article has no figures or supplements.",
+    "Case 1: \"originally from Jamaica\" is kept in the case description only (no demographic field for national origin); the individual dates and order of the 234 mg and 156 mg loading doses are not given for either case.",
+    "Case 1 loading-dose timing differs between b00006 ('loading doses on the day of discharge') and b00008 (series during the prior admission, last dose the day before the current admission); kept as an ambiguity with the broader admission time.",
+    "Presenting-finding times are taken only from each finding's own sentence (ED presentation for Case 1; 'On psychiatric assessment' only for the Case 2 findings in that sentence)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 37,
+    "facts_reviewed": 84,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Two index patients; Table 1 literature cases and discussion correctly background.",
+      "Main defect was time borrowing across sentences (p1 presenting findings, p1 grandiosity, p2 lorazepam continuation).",
+      "Case 1 loading-dose timing is internally inconsistent in the source (day of discharge vs during admission, last dose day before current admission).",
+      "semantic-rules-2026-10: M12 verified; 21 anchors restored to literal phrases.",
+      "opus-fixup: age text_value made byte-literal (U+2010).",
+      "Cleanup pass 2: no glued-text diff; 13 time-only-quote facts reviewed, all kept (11 merged into governing same-sentence spans, 2 reaction-onset statements kept); no negation-word rows"
+    ],
+    "residual_risks": [
+      "Schizophrenia verification left unknown (history only); catatonia confirmed on BFCRS and author framing; autoimmune encephalitis refuted from the explicit exclusion statement.",
+      "Paliperidone adverse effect represented under allergies as adverse_effect (author attribution, no causality scale).",
+      "Sertraline/benztropine share one indication clause, kept verbatim on both.",
+      "'Originally from Jamaica' has no demographic field and stays in the case description.",
+      "Abdominal imaging modality unstated; result recorded as source-stated negative."
+    ],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
+  },
+  "physician_adjudicated": false
+}

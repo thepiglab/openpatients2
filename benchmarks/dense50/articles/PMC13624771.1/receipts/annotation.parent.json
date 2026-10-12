@@ -1,0 +1,47 @@
+{
+  "article_id": "PMC13624771.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "716a9318babf3ec694a09ecd702111e399275e387da75f8801773206c9d0f3cb",
+  "annotation_sha256": "03955ae23c61a6f683b61c9cbc985edce23aedd1591f201bc3d72e48dc20aa9f",
+  "reviewed_at": "2026-10-10T01:44:57.273865+00:00",
+  "source_segments_read": 8,
+  "facts_reviewed": 18,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "f1-ce-2025-262: positional panel labels \"left\"/\"upper right\"/\"lower right\" are not printed labels (pixels: no letters/numbers; only the text \"attached in the up/down-angulation direction\" and \"70°\") -> merged into one whole-figure row with panel=null (FIG-LABELS)",
+    "cleanup-3 GLUED-TEXT (visual-submissions only; pixels of F1-F3 viewed): respaced 'labelledA'/'labelledB' -> 'labelled A'/'labelled B', 'adjacentA' -> 'adjacent A' (F3 panel descriptions), 'explicitFig2callout' -> 'explicit Fig 2 callout' (F2 attribution rationale), plus unflagged 'White70°' -> 'White 70°' and 'angulation of70°' -> 'angulation of 70°' (F1) and 'a20-mm' -> 'a 20-mm' (F2 clinical significance). No meaning change; visual_target_sha256 re-bound in figure-ehr-labels and figure-privacy-flags; parent visual, figure-EHR and privacy receipts re-signed."
+  ],
+  "unresolved": [
+    "Linked video not inspected; narrative and figure captions only.",
+    "Figure pixels were not inspected; annotation covers captions only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "campaign": "semantic-rules-2026-10 re-sign",
+    "source_units_read": 8,
+    "facts_reviewed": 18,
+    "figures_viewed": 3,
+    "key_findings": [
+      "M02: \"=\" for the 20-mm lesion size is correct (no comparator printed)",
+      "M03: \"82-year-old\" literal",
+      "FIG-LABELS: migration flagged only upper/lower right; \"left\" passed its caption check because the word occurs in the caption, but is equally positional",
+      "cleanup-3: glued visual text respaced; sidecar hashes re-bound; annotation unchanged."
+    ],
+    "residual_risks": [
+      "Visual submission still uses positional sub-image ids left/upper right/lower right for f1 (visual contract left untouched)"
+    ]
+  },
+  "physician_adjudicated": false
+}

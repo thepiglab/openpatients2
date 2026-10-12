@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12812032.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c235966d7963c5c05127272410b623443c18055cad6935a2f27e086b28bc8acb",
+  "annotation_sha256": "5a12361ff9054d8e8a5d803cae843646722bd86bc3e6b8d29b1b60fce43e0d88",
+  "reviewed_at": "2026-10-11T21:59:52.524686+00:00",
+  "source_segments_read": 22,
+  "facts_reviewed": 55,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f045 left adnexectomy: removed finding 'mature teratoma of the left ovary' borrowed from the histology sentence.",
+    "p1-f050 follow-up outcome: removed related_condition not stated by its evidence.",
+    "p1-f037 lumen hair shafts: added Figure 5 caption evidence 'keratin associated with hair shafts'.",
+    "Added p1-f052 (Figure 1 caption: mass occupying most of the abdominal cavity, suggestive of an adnexal origin), linked to ultrasound event p1-e04.",
+    "Added p1-f053 (Figure 3 caption: twisted appearance of the left ovarian mass), left unlinked to the laparotomy event because the caption calls the image preoperative.",
+    "Added p1-f054/p1-f055 (Figure 4 caption: smooth external surface; hair and sebaceous material within the mass) as macroscopic pathology observations; summary updated.",
+    "Added temporal relations: p1-e08 adnexectomy during p1-e07 laparotomy ('Surgical management was performed via a Pfannenstiel laparotomy'); p1-e08 before p1-e10 discharge ('postoperative day 2'); p1-e10 discharge before p1-e11 follow-up ultrasound (POD 2 vs at one month).",
+    "Ambiguity on '24 hours prior to admission' rewritten: abstract comma may scope the whole presentation or ED arrival; time kept on vomiting only, pain onset and ED-vs-admission not inferred.",
+    "visual.json FIG1: corrected location of the device settings text (top edge of the top left quadrant, not the upper right quadrant); figure-EHR and privacy drafts regenerated with --draft and reviewed labels/flags carried over unchanged."
+  ],
+  "unresolved": [
+    "Figure captions are caption-layer only here; pixels are inspected in the separate visual submission.",
+    "CT mass dimensions are given in mm in the case text and in cm in the Figure 2 caption; both retained as source conflicts without conversion.",
+    "The time phrase 24 hours prior to admission is attached to the vomiting only because its scope over the abdominal pain is not stated.",
+    "Imaging calls the mass cystic while the intraoperative description calls it solid; not reconciled.",
+    "Discussion and abstract background statements about teratomas in general are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 22,
+    "facts_reviewed": 55,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (four-year-old girl); roster count 1 from 'We report a case of a four-year-old girl'.",
+      "CT size 90 x 76 x 98 mm (text) vs 90x76x98 cm (Figure 2 caption): unit conflict kept as two source_conflict/review_only facts, numbers identical, no conversion; rest of the CT finding kept as include.",
+      "Doppler 'highly suggestive of left adnexal torsion' kept provisional/differential; ovarian torsion confirmed via 'torsion and non-viability of the adnexa'.",
+      "'prolonged duration of symptoms before diagnosis' is stated of this case ('This case is noteworthy because...'), kept as a patient fact with an ambiguity against the 24-hour phrase.",
+      "Imaging 'cystic' vs intraoperative 'large solid mass' kept as an ambiguity (different modality descriptions), not a quarantined conflict.",
+      "'uneventful' postoperative course recorded as absent complication; AFP and beta-hCG 'negative' as qualitative results; oncology not_documented for a mature (benign) teratoma.",
+      "Figures 1-5 viewed at full resolution with zoomed crops; FIG1 black redaction box and device text, FIG4b white blank rectangles, FIG2 tiny overlay text: privacy flags name categories only."
+    ],
+    "residual_risks": [
+      "Scope of '24 hours prior to admission' over pain/ED arrival remains unresolved in the source.",
+      "Order of ultrasound, CT and tumour markers relative to surgery is not literally stated, so no relations were added for them.",
+      "Figure 3 caption says preoperative while the photograph shows an opened incision; recorded as a visual limitation."
+    ]
+  },
+  "physician_adjudicated": false
+}

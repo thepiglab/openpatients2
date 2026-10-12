@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12640626.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9be13f266356d78d56ba94cb83b9056944601b27e77ad603e8d548fb2f7b5ceb",
+  "annotation_sha256": "a1dc29dea69b146ca947cf35c3cb1487ae0a8c8be2e48116c282902acb41ebab",
+  "reviewed_at": "2026-10-11T19:43:42.724114+00:00",
+  "source_segments_read": 70,
+  "facts_reviewed": 209,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p2-e02 'Onset of symptoms prenatally': removed postnatal exam facts p2-f013/p2-f016 (event membership implied a prenatal time for hepatosplenomegaly and petechiae the source never gives); description says the symptoms are not named; relation p2-e02 before p2-e01 added from 'observed prenatally'",
+    "p3-e08 bone marrow biopsy (17th day of life): removed p3-f023 'Congenital HLH was not confirmed' (no stated link to that biopsy or date); description and evidence narrowed to the biopsy sentence",
+    "p2-e01 / p3-e01 birth events: removed maternal infection facts timed to a trimester (p2-f006, p2-f007, p3-f012) and the maternal factor V Leiden carrier fact (p3-f014) so the birth time is not imposed on them; p3-e01 description adjusted",
+    "Added p3-f071..f074 dexamethasone, tocilizumab, IVIG (route intravenous) and etoposide action started per HLH-2004 protocol (source: 'Treatment was started ... with'); existing stopped facts kept; IVIG stopped fact gets route intravenous; stop notes corrected (the source states the reason with 'so')",
+    "p3-f039/p3-f040 AML-BFM 2017 start: time '38th day of life' (at) from the same sentence",
+    "Oncology tumors p1-f031, p2-f036, p3-f038: disease_extent set to hematologic (leukemia)",
+    "Added p1-f054 hepatosplenomegaly from the explicit all-three statement (b00063)",
+    "Added relation p2-e05 (Week 2 of life) before p2-e11 (26th day of life)",
+    "p3 summary 3 corrected: the day-17 bone marrow biopsy did not show blasts; the follow-up aspirate did; post-diagnosis course reordered as in the source; p1 summary notes hepatosplenomegaly",
+    "Measurement series (sidecar): added literal unit_text/unit_cell_id from the Units column to all 60 points; corrected exclusion reasons (30 units cells and 33 later-column reference-range cells had been mislabelled as Table 4 text cells); limitation on per-column reference ranges added"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the single CT image is inspected in the separate visual submission.",
+    "Table values are kept with their column-header epochs; no high/low flags were assigned from the printed reference ranges, and NA cells are recorded as not available.",
+    "Symptom onset times are given in the text and Table 4; individual examination findings carry no time of their own and are linked to onset events only where the source ties the symptoms to the onset sentence.",
+    "The conclusion says environmental and infectious factors may have contributed in one case without naming the patient; not assigned.",
+    "Patient 3 treatments with HLH-2004 and AML-BFM 2017 give no drug doses or dates; stopping is recorded without causation."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 70,
+    "facts_reviewed": 209,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Three neonates with AMKL (diagnosed days 21, 26, 38); p3 died. Roster 3, complete, ordered by first mention",
+      "All 63 table result cells checked against Tables 1-3 with column-header times; 3 NA cells recorded as not_performed; no flags from reference ranges",
+      "b00063 all-three and b00067 none-of-the-patients statements explicitly cover every patient, so per-patient petechiae/hepatosplenomegaly and Down syndrome absent are acceptable under NO-COHORT-COPY",
+      "p2 conjugated bilirubin carries \"from the first day\"; p3 \"After diagnosis\" only on the post-diagnosis symptoms; other symptom facts untimed",
+      "Congenital HLH kept as possible/unconfirmed; HLH provisional; oncology alternates of conditions and observations consistent",
+      "FIG1 abdominal CT viewed on pixels; description, attribution to p3, EHR label and privacy flags correct"
+    ],
+    "residual_risks": [
+      "p1 symptom onset event links the examination findings because the source says \"The symptoms appeared within the first 24 hours of life\" right after listing them; the facts themselves stay untimed",
+      "p2-f004 cesarean section is recorded as a procedure with subject index_patient (the delivery mode of the neonate)",
+      "Series carry only the first-column reference range"
+    ]
+  },
+  "physician_adjudicated": false
+}

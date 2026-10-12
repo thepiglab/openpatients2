@@ -1,0 +1,74 @@
+{
+  "article_id": "PMC12812052.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "305c60d89c523e8a857448717f27c5ad49fb65d57a48d2fc3cce7fe500bc450e",
+  "annotation_sha256": "901fecfd47dba3f00827996c1fbf977cebc000993ae03f5626edf33c7cb38117",
+  "reviewed_at": "2026-10-10T01:50:58.607315+00:00",
+  "source_segments_read": 106,
+  "facts_reviewed": 334,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Corrected fever measurement domain and blank respiratory-distress polarity.",
+    "Separated undated hypoglycemia from admission labs; removed unsupported sequential steroid-course edge.",
+    "Added completed five-month endocrine assessment separately from ongoing replacement therapy; retained conservative action enum with explicit ongoing text.",
+    "[semantic-rules-2026-10 re-sign] Verified all 129 M02 comparator '=' additions: no printed <, >, 'less than' etc. attached to any of those values (approximate 27 mm, renin 1.6 beside aldosterone <60, ARR 73 with '<80' reference all correctly '='). Verified M03 ages (64/72/42-year-old) and M12 nulling of 22 non-literal anchors (e.g. 'prior MRI', 'current admission', 'acute case course' absent from source).",
+    "[semantic-rules-2026-10 re-sign] NR001 (ONC-BENIGN p3-f149): moved 'adrenal adenoma' from oncology.tumors (t2) to conditions (left adrenal adenoma, provisional, left adrenal gland); source concludes 'adenoma rather than an aggressive neoplasm' and later a benign non-functioning lesion, so not a suspected malignancy. No biomarkers/treatments referenced t2; event/summary fact links kept.",
+    "GLUED-TEXT cleanup (repair_glued_text.py, 12 values): than100, CarePlan, Day3CTPA/day3CTPA, cortisol579nmol, in6months, about3years, influenzaA respaced",
+    "GLUED-TEXT manual cleanup (37 free-text values; quotes/ids/enums/patient labels untouched): Age 64/72/42 years; Table 2, Tables 1/4, Case 1, Case 3 in notes/ambiguities/limitations; acute kidney injury stage 3; approximately 27 mm; initially/initial 100 mg; 50 mg QDS; hydrocortisone 100 mg then 50 mg QDS (p1-e09); new/New 34 mm; 32 x 31 mm, than/lesion 32 x 31 mm, smaller 21 x 13 mm; T1-weighted phase 1 MRI; (Lipid-rich) 2.7 x 2.5 cm; FIG1 left 38 mm and right approximately 27 mm; none of the 3 lesions",
+    "NO-BORROWING review: Table 2/blood-test table facts p1-f060..f069, p2-f016..f020, p3-f107..f114 keep 'on admission' (governed by the table caption 'Blood test results on admission'); caption and row are now quoted as one contiguous span of the table-row segment; anchor 'admission observation' (phrase belonging to the vital-signs table) -> literal 'admission' for these 'on admission' facts (also p1-f070)",
+    "NO-BORROWING review: p1-f103 aldosterone, p1-f104 renin, p1-f106 hydrocortisone keep 'after five months' (same parenthetical clause); the two b00031 quotes merged into the governing span 'after five months, 9 AM cortisol ... while on oral hydrocortisone'",
+    "NO-BORROWING review: p2-f035/f036 keep 'in three days' time' (merged b00046 span 'An MRI (Figure 2) was done in three days' time, ... it measured 32 x 31 mm'); p2-f052/f053 keep 'approximately three months later' (full b00051 sentence); p3-f146/f147 keep 'following discharge' (span 'MRI scanning following discharge demonstrated a 2.7 × 2.5 cm ... nodule')",
+    "Negation polarity (negword scan): p3-f151 'the patient was asymptomatic' at endocrine clinic review: present functional_status 'Asymptomatic' -> Symptoms, kind symptom, assertion absent (text_value 'asymptomatic', quote unchanged)",
+    "Cleanup3 PATIENT LABELS: 'Case1:64-year-old ...', 'Case2:72-year-old ...', 'Case3:42-year-old ...' respaced to 'Case 1: 64-year-old ...' etc. (text otherwise unchanged).",
+    "Cleanup3 GLUED visual submission: 'endpoints0cm and27cm'/'and28cm' -> 'endpoints 0 cm and 27 cm'/'28 cm', 'labeled0cm and27cm'/'28cm' -> 'labeled 0 cm and 27 cm'/'28 cm', 'left38mm and rightapproximately27mm' -> 'left 38 mm and right approximately 27 mm', 'lesion32x31mm' -> 'lesion 32x31 mm', 'Case1 MRI Figure1'/'Case2 MRI Figure2' -> 'Case 1 MRI Figure 1'/'Case 2 MRI Figure 2', 'in Case2;' -> 'in Case 2;'; both figures re-viewed on pixels; figure-EHR label and privacy-flag visual_target_sha256 refreshed.",
+    "Cleanup3 TIME p1-f070 clotting parameters: 'on admission' kept - the narrative sentence explicitly cites Table 2, whose caption is 'Blood test results on admission'; primary quote widened to the full sentence including '(Table 2)' so the governing link is visible.",
+    "Cleanup3 NEGATION scan p3-f151: already assertion absent symptoms at endocrine clinic review; no change."
+  ],
+  "unresolved": [
+    "Caption-layer visual_status remains not_inspected; actual two MRI images are inspected in separate visual targets.",
+    "Abstract says two cases received steroids, whereas Case 3 explicitly received no AH-specific medical/surgical treatment; no unreported Case 3 steroid therapy inferred.",
+    "Case 1 deranged clotting prose versus normal Table 2 clotting profile is retained review-only.",
+    "Clock times in Tables 1/4 have GMT context without calendar dates; no cross-day/calendar reconstruction. Units in numeric blood rows use source reference/header where unambiguous; CRP42 Case 3 has no unit stated.",
+    "Adrenal lesions were not biopsied or surgically verified; imaging/courses distinguish adenoma from haemorrhagic pseudomass without tissue proof.",
+    "Pooled abstract repeat-imaging resolution/stability is not individually expanded into a Case 1 follow-up scan.",
+    "Case 3 aspirin/haematologic susceptibility as bleeding contributors is author-qualified; no proven drug toxicity or inherited/somatic JAK2 origin inferred.",
+    "Empiric steroids in b25 and explicit IV hydrocortisone in b29 may be descriptions of the same treatment episode; no sequential separate steroid courses asserted. Care Plan has no ongoing/in_progress enum; ongoing replacement remains explicit in text/current medication, with completed follow-up assessment represented separately."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 106,
+    "facts_reviewed": 334,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical migrations M02/M03/M12 correct for this article.",
+      "One benign lesion moved out of oncology.",
+      "Cleanup pass 2: all 33 flagged time facts kept (same-sentence or table-caption governed) with governing spans quoted; 49 glued tokens repaired; asymptomatic item re-polarised",
+      "Cleanup3: patient labels and visual prose respaced; admission time on narrative clotting claim kept via explicit Table 2 reference."
+    ],
+    "residual_risks": [
+      "Prior residual risks unchanged.",
+      "Patient labels ('Case1:64-year-old ...') and visual-submission free text (left38mm, lesion32x31mm) still glued; left unchanged to avoid invalidating pixel-reviewed visual/figure-EHR/privacy receipts"
+    ],
+    "previous_assessment": {
+      "clinical_course": "Personally read all106source units and five rawXML tables,334fact representations and all citations,42clinical sections,40events and final temporal relationships/sixsummaries. Serial admission clock readings checked individually, table MAP preserved rather than recomputed.",
+      "patient_attribution": "Three distinct cases: septic-shock bilateralAH with persistent adrenal insufficiency; COPD/PE unilateralAH without insufficiency; influenza/ET/aspirin patient with hemorrhagic imaging-defined adenoma. Figure1 onlyp1,Figure2 onlyp2.",
+      "uncertainty": "Normal versus deranged clotting source conflict remains review-only. Abstract two steroid cases does not override p3 noAH-specific intervention. Unreported cortisol/ACTH and infection-screen results remain unknown. No biopsy or histologic proof inferred.",
+      "images": "Personally inspected both native MRI images and all final visual fields,2whole-image scopes/12deduplicated citations. Caption dimensions separate from pixels; no lesion calipers. F1 bilateral colored arrows, F2singleyellowarrow. No p3 image.",
+      "coverage": "All14 clinical domains per patient reviewed, including missing domains. AI source review, not physician gold or measured recall."
+    },
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12765201.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "89e2ce69e34edd0e7f9d7af4e80f6ba9c4fef4916a2fa033f445d66dbc3f5ec3",
+  "annotation_sha256": "2bf6c159d09e0f157556521ad7000781d4081a55c1b5d8fbee4cc7286bbf403e",
+  "reviewed_at": "2026-10-11T02:29:31.053190+00:00",
+  "source_segments_read": 55,
+  "facts_reviewed": 148,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M02 comparator '=' on 32 plain-number values (printed '<0.005' HBs-Ag, '<1.00' HCV-Ab and 'more than 90%' already carry '<'/'>'), M03 age '58-year-old', M12 anchor nulling of paraphrases 'transplant referral/history' and 'DDLT waitlist registration'",
+    "TIME-LITERAL anchors restored with literal source phrases: p1-f023, p1-f148 '149 days after registration' -> anchor 'registration'; p1-f012, p1-f013, p1-f015, p1-f016, p1-f136, p1-f138, p1-f139 'five years earlier' -> anchor 'referred to our LT unit'",
+    "p1-f109: time 'by POD 143' relation after -> before (TIME-LITERAL 'by <time>' = no later than); anchor 'transplantation' -> null (not named in the by-phrase)",
+    "Cleanup2 GLUED-TEXT: repair_glued_text.py applied 8 tokens (than90, after149, byPOD143 x2, for3days, targetTAC10, fromPOD23, and30); then manually spaced the remaining glued tokens in exported free text (summaries, event descriptions, condition/procedure names and body sites, indications, figure panel descriptions, notes): segment4/segments5 and6/segment5/6, POD23/POD26/POD115/POD143, DDLT149, measuring25×25mm, Child-Pugh12/MELD18, in40s, TAC8–10ng/mL, acidemia,pH7.139, AST7994/ALT3960IU/L, INR2.33, ATG1.5mg/kg, 10–15ng/mL, peaked29.6mg/dL, to1.3, ATG3-day, approximately90. Spacing only; values unchanged. Figure 3 caption_summary 'POD 26The' left as the literal source caption text.",
+    "Cleanup2 TIME review (no edit): p1-f023 and p1-f148 (DDLT) keep '149 days after registration' — it is in the DDLT sentence itself ('he eventually underwent DDLT 149 days after registration'); residual NO-BORROWING warning is a checker false positive (abbreviation DDLT vs expanded name).",
+    "[cleanup3 labels/sidecar glue/times/negation] Visual submission text respaced only (annotation unchanged): FIG2 'near30mg/dL', 'aboutPOD140', 'with50/100/150/200', 'approximately29/800/30/5/3', 'the30'/'the50' ticks, 'range4-to6', 'between2 and4', 'day0', 'labelled100mg then50mg', 'and100mg/50mg', 'ATG1.5mg/kg'; printed boxes transcribed as on the image ('POD23-25: ATG 1.5mg/kg', 'POD26: liver biopsy'); FIG3 '200 μm' scale bar and 'more than 90%'; 'Figure1/Figure2' in rationales. Checked against FIG1-FIG3 pixels; visual_target_sha256 updated in figure-ehr-labels and figure-privacy-flags.",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (3 whitelisted label/number or number/unit spacing edits outside quotes in visual-submissions (3); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. Rejected fixer respacing of FIG2 printed labels (the chart prints POD23-25: ATG 1.5mg/kg, POD26: liver biopsy, 100mg, 50mg glued): these transcriptions in the FIG2 descriptions, measured-quantity and reading visual cues are now quoted as printed text (9 strings) instead; accepted the 5 prose edits (POD 115/143, POD 50, POD 115 in a chart limitation; POD 26 in FIG3 description and rationale). Viewed FIG2 and FIG3.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=1, roster_complete=true, evidence b00001 \"We report a rare case of severe graft dysfunction due to acute rejection\"; 1 patients annotated in first-mention order.",
+    "GLUED-TEXT pass 4 (hand): FIG2 chart limitation prose NAd,HSS -> NAd, HSS; visual_target_sha256 recomputed.",
+    "GLUED-TEXT pass 4 follow-up: FIG2 chart reading x labels approximately POD50/POD20/POD0/POD200/POD110-115/POD115-125 -> POD 50 etc. (axis prints numbers only), FIG2 statement POD23 -> POD 23, FIG3 statement POD26 -> POD 26; printed glued labels (POD23-25: ATG 1.5mg/kg, POD26) kept as printed; visual_target_sha256 recomputed."
+  ],
+  "unresolved": [
+    "Figure pixels were not inspected; visual details are restricted to captions.",
+    "Recipient is the sole original index case. Deceased donor age/status and negative viral tests remain explicitly other-subject facts, never merged into recipient demographics/tests.",
+    "All three raw XML tables and 30 results inspected. No reference ranges supplied; scientific platelet count retained textually, HBsAg/HCVAb bounds preserved, eGFR ml/min not supplemented with unstated surface-area indexing.",
+    "Historical RFA/TACE are collectively linked to two HCCs without asserting which treatment applied to each lesion. No biopsy histology/stage invented; preoperative absence of viable tumor does not overwrite earlier recurrence status.",
+    "Tacrolimus concentration ranges are targets, not doses or measured achieved troughs. ATG dose route/duration documented but frequency unspecified. Continuous hydrocortisone dose unreported.",
+    "Delayed CNI/basiliximab/daclizumab induction strategies are hypothetical background and were not performed. Reduced initial TAC target potentially causing rejection is a qualified author hypothesis.",
+    "Postoperative no vascular events does not negate preoperative portal vein thrombus. Septic-shock events occurred three times, but no individual dates/organisms/antibiotic identities supplied.",
+    "No explicit same-patient prior-report identity link; cited prior graft-rejection case is separate.",
+    "Every actual clinical schema attribute audited against the retained source, including semantically applicable cross-task representations; this remains AI annotation rather than clinical adjudication."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 55,
+    "facts_reviewed": 148,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical migrations correct; no open needs-review items",
+      "TIME-LITERAL 2026-10 'by <time>' audit: 1 fact(s) set to relation before after reading each source sentence",
+      "Cleanup2: glued text spaced throughout; DDLT time kept (same sentence).",
+      "Cleanup pass 3: patient labels and sidecar text respaced; span/time-only quotes and negation-word items resolved against the source (NO-BORROWING/TIME-LITERAL/EVID-NEGATION)."
+    ],
+    "residual_risks": [
+      "Child-Pugh/MELD kept as observations (lab-derived indices); figures not re-viewed (no figure sidecar change)"
+    ]
+  },
+  "physician_adjudicated": false
+}

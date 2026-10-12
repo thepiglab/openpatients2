@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC13317088.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8a60ab2b25c7ac1b99341af574365f3b81642335995fae1bc7d194bb0cff2730",
+  "annotation_sha256": "df554a95a6629694cfc7763f6ddf952da533bc46ea38ec0c368ef8b4d27701ea",
+  "reviewed_at": "2026-10-11T18:14:32.175530+00:00",
+  "source_segments_read": 17,
+  "facts_reviewed": 127,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f035 anthracyclines absent: quarantined (ambiguous, review_only); the negation describes exposure before transformation and would contradict doxorubicin in CHOP (p1-f031); added context evidence and ambiguity",
+    "p1-f078 Fig. 2b caption split: splenomegaly kept review_only (conflict with \"No hepatosplenomegaly\"); ascites on the same panel added as include fact p1-f125",
+    "p1-f079 2018 lymph node morphology: removed the Fig. 3b \"No centroblasts present\" quote that contradicted the text count 5 to 8/hpf; caption claim added as ambiguous review_only fact p1-f126 with ambiguity entry",
+    "Added p1-f127: R-CHOP offered at transformation but not received (financial constraints), oncology treatment assertion absent, time \"at transformation\"; linked to p1-e05 and summary",
+    "p1-f036 CVP regimen action started -> administered (6 cycles delivered per b00002/b00005); per-drug CVP doses kept as planned (doses appear only in the planning sentence)",
+    "p1-f088 cervix Ki-67 text_value \"around 20%\" added to keep the approximation",
+    "p1-f122 advised response CECT: added evidence that she defaulted without a follow-up scan",
+    "Added six supported temporal relations (e03->e04, e06->e07, e07->e08, e08->e09, e09->e10, e11->e12)"
+  ],
+  "unresolved": [
+    "The discussion cites literature cases and general statements about follicular lymphoma; none were attributed to the index patient.",
+    "Details of the 2004 staging and treatment were not available to the authors.",
+    "The neck swelling is described as left-sided in the presentation but the examination describes right-sided findings; retained as a source conflict.",
+    "The Fig. 2 caption states splenomegaly while the examination states no hepatosplenomegaly; retained as a source conflict.",
+    "Response to CHOP was not assessed by a follow-up scan; the delivered CVP doses are not restated.",
+    "Only year or month-level dates are given.",
+    "The Fig. 3b caption states no centroblasts in the pictured field while the text reports 5 to 8/hpf; retained as ambiguous."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 17,
+    "facts_reviewed": 127,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; discussion literature cases (Xu et al., Kridel, Casulo) not attributed",
+      "Left neck complaint vs right-sided exam findings kept as source_conflict review_only (p1-f012)",
+      "Fig. 2b splenomegaly vs examination \"No hepatosplenomegaly\" both review_only",
+      "Caption lead-sentence times (done in 2015/2018) apply only to caption-cited IHC; text-only IHC (LCA, Mum1, 2015 CD3) has no governing time of its own and stays untimed",
+      "Hb 10.2 g/dl left unflagged: source says only that it was the exception to within normal limits, never low; no abnormal flag exists in the enum",
+      "ASCT \"could not be planned as she defaulted\" kept as absent; rituximab absent supported by \"CHOP without rituximab\"",
+      "Pixels of Fig 1 A-H, Fig 2 (two unlabeled CT slices with masked headers and scanner text), Fig 3 A-I match visual.json and caption attribution"
+    ],
+    "residual_risks": [
+      "Per-drug CVP doses recorded as planned; delivered doses not restated",
+      "visual.json Fig 2 quotes scanner text as \"3D NECK\" while pixels print \"3D.NECK\"; trivial, left unedited",
+      "IPI/FLIPI recorded as observations kind=other"
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12305037.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f03fff7f363d4aea0754e108d47d14d4a75fe3d23bba2625a72a0d29f269a06a",
+  "annotation_sha256": "ba60a6108cb94e5bb0a6c57ba6f1bf6fe0ada8f1c904b0372fe9609bf5fafeb3",
+  "reviewed_at": "2026-10-11T18:42:47.943066+00:00",
+  "source_segments_read": 47,
+  "facts_reviewed": 126,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p3-f016 cow's milk protein-free formula, p3-f049 amino acid formula and p3-f054 full feeds moved from medications to procedures_devices nonpharmacologic_therapy (consistent with the p2 exclusion diet and earlier formula precedents); p3 medications coverage set to not_documented.",
+    "Indication CMPA added to p3-f016 and p2-f010 from their own sentences ('diagnosed previously with CMPA and, as such, was switched'; 'diagnosis of CMPA and consequent placement on an exclusion diet').",
+    "Added care_plans p1-f036, p2-f034, p3-f056: managed by a pediatric gastroenterology and pediatric surgery team (b00026, section heading 'Cases 1-3'); removed the limitation saying it was unrecorded.",
+    "p1 duration-conflict ambiguity now links all four affected facts (f004-f007); Figure 1A ambiguity notes that the pixels show a supine projection radiograph.",
+    "Added literal relations p2-e02 before p2-e03 ('Initially misdiagnosed with CMPA, further investigation using barium studies'), p3-e08 before p3-e09 ('First, the patient was admitted'), p3-e03 before p3-e04 ('diagnosed previously with CMPA').",
+    "visual.json F1 panel A: removed the 'gas-filled' reading of the central loops (they are intermediate-density distended loops; gas only in the upper abdomen) and added a contrast limitation; figure-EHR and privacy drafts regenerated and reviewed labels carried over.",
+    "figure_privacy_flags.json: F1A and F3A device-text flags set to none (orientation/position markers and caliper label only); F1B sensitive_anatomy set true (prepped perineum at the anal verge in the pull-through field)."
+  ],
+  "unresolved": [
+    "No dates are given; times are limited to the literal intervals in the text.",
+    "Discussion statements that the initial conservative management delayed surgery and led to failure to thrive in all patients are authors’ interpretation and are not recorded as patient facts.",
+    "Caption and text describe Figure 1A differently (rectally administered contrast versus contrast CT); modality left unresolved.",
+    "Pixels are reviewed in the separate visual submission; caption layer visual status stays not_inspected.",
+    "The Cases 1-3 management-team sentence uses the singular \"The patient\"; it is applied to all three cases from its section heading."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 47,
+    "facts_reviewed": 126,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Three children attributed by explicit Case 1-3 labels and section headings; roster count 3 complete.",
+      "Misdiagnosed CMPA/GER/regurgitation kept as absent+refuted conditions, with the suspected Hirschsprung disease as a separate possible/provisional item superseded by the biopsy-confirmed diagnosis.",
+      "Case 1 duration conflict (several months vs entire life) kept with the entire-life items as source_conflict/review_only.",
+      "Discussion causal claims (conservative management caused failure to thrive) left as limitation, not facts.",
+      "All six panels viewed: F1A is a supine projection radiograph although the text calls it contrast CT; F2B carries a burned-in date and time overlay."
+    ],
+    "residual_risks": [
+      "Figure 1A modality and contrast route remain unresolved between text, caption and pixels.",
+      "The Cases 1-3 management sentence says \"The patient\" in the singular; applied to all three from its heading.",
+      "Several events (diagnosis vs surgery, presentation vs workup) have no literal ordering and remain order-unknown."
+    ]
+  },
+  "physician_adjudicated": false
+}

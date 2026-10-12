@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12977025.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "80b2c40928d034f304709a01b4d816bd2e1fc137d72398c44bb2f7fcf12d419f",
+  "annotation_sha256": "232bd4fcbb96546f0c993fcad677a0eb0c7bc38fa90b100fcaf968bf5b9fe3e9",
+  "reviewed_at": "2026-10-11T21:10:10.756877+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 130,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Two-month postpartum bile acid: 89 (b00016) and approximately 100 (b00023) stay review_only; added included p1-f128 recording the agreed decrease without a value; ambiguity now also notes the Figure 1 Post plot estimate of about 80.",
+    "Second-pregnancy postpartum liver enzymes: AST 42, ALT 51, ALP 123 (p1-f079..f081) restored to supported/include with flag removed; the conflicting 'gradually normalized' interpretation moved to new review_only p1-f129 opposite review_only p1-f082 'persistently elevated'.",
+    "Added p1-f130 bile acid approximately 50 μmol/L at 20 weeks (b00021, omitted).",
+    "b00013 bile acid values 51/33/42/85 given their own-sentence time 'from 20 weeks' (relation after); no week mapping from the plot.",
+    "p1-f125 multidisciplinary decision to deliver: action_status planned -> completed (delivery followed).",
+    "Event p1-e16 had empty fact_ids: now the not_occurred bile-acid-testing event with p1-f065/p1-f078; orphan facts f006, f012, f024, f082 and new facts attached to their events.",
+    "Placental pathology p1-f103 (accelerated villous maturation) stays unattributed to a pregnancy (ambiguity) and was removed from the third-pregnancy neonatal summary claim.",
+    "Checked the 8 existing relations (postpartum/post-surgery/week-number/initially-later) as literal; added 9 literal before-relations (e03-e06, e06-e07, e06-e11, e11-e14, e14-e17, e29-e30, e30-e31, e32-e33, e36-e37): 8 -> 17."
+  ],
+  "unresolved": [
+    "Single index patient (the mother); fetus and newborn facts of the three pregnancies are recorded with subject fetus or newborn inside p1 and are not separate patients.",
+    "Bile acid values in the third pregnancy are listed without gestational weeks in the text; none were mapped to figure points.",
+    "Two-month postpartum bile acid is stated as 89 and as approximately 100 μmol/L; both are kept as review-only source conflicts.",
+    "Liver enzyme normalization after the second pregnancy conflicts with the discussion statement of persistent elevation; both sides are review-only.",
+    "ICP in the first two pregnancies was suspected without bile acid testing; the discussion speaks of recurrence in all three pregnancies.",
+    "Discussion literature statements, guideline recommendations and speculation about ABCB4 and ABCB11 variants are not patient facts.",
+    "Caption-layer visual status is not_inspected; the single figure is inspected in the visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 130,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single patient (the mother); fetus/newborn facts as subjects. Third-pregnancy neonate attribution is literal (abstract b00002 and b00021), first and second pregnancy facts are governed by their section headings.",
+      "Figure 1 viewed: six plot points about 50, 35, 42, 85, 333 and 80 at 20, 24, 26, 28, 32 and Post; plot estimates are not used as facts.",
+      "within 24 hr kept as relation before with null anchor; weekly assessments kept with subject unknown (ambiguity)."
+    ],
+    "residual_risks": [
+      "Identical AST/ALT/ALP printed for first pregnancy and three months postpartum (kept as printed, ambiguity).",
+      "Bile acid values 80 and 200 μmol/L untimed; plot shows no matching points.",
+      "ICP in pregnancies 1-2 only suspected."
+    ]
+  },
+  "physician_adjudicated": false
+}

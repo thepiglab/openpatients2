@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12860324.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "73ef416003450cff710add17396a8a4ad380ad0514cfe38d3a8b47ac2e882955",
+  "annotation_sha256": "eda47afe9fcf476c995dd7b90bde55f9ac91d1f8379dc4e04407fbb3ada98133",
+  "reviewed_at": "2026-10-10T00:54:13.777266+00:00",
+  "source_segments_read": 38,
+  "facts_reviewed": 77,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f040 cerebral perfusion: removed method \"transcranial Doppler\" borrowed from b00011 (NO-BORROWING); note updated.",
+    "Added p1-f076 procedure cardiac ultrasound (PE diagnosis, b00016) and p1-f077 outcome transfer to neurosurgical ICU (b00011); linked to events e15/e08 and summary.",
+    "Event p1-e18 restricted to the on-admission MDR screening (p1-f038); removed prior-antibiotic and no-recent-infection facts that do not share the \"On admission\" time.",
+    "Added temporal relations e01<e02, e02<e03, e07<e11, e13<e14 (POD 6 vs POD 8), e16<e15 (enoxaparin POD 1 before POD 12), and e11/e12 unknown.",
+    "Added ambiguity: culture results 5 days after surgery vs neurological improvement 48 h after treatment change on POD 6 (switch would precede results); no order inferred."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the actual image was inspected in the separate visual target.",
+    "Table 1 (antibiogram) is available only as an image (SNI-16-519-t001.jpg) with no quotable cell text; susceptibility is recorded only from narrative sentences.",
+    "An author portrait image appears in the front matter (SNI-16-519-inline001.jpg); it is not a clinical figure and not a patient image.",
+    "Postoperative-day anchors (days 6, 8, 12) are not explicitly tied to a named surgery; no calendar intervals were computed.",
+    "Discussion statements on literature, incidence, recommended regimens and novel antimicrobials are background and not copied to the patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 38,
+    "facts_reviewed": 77,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (76M); POD 6/8/12 numbering follows the surgical revision (abstract \"12 days after surgical revision\" = discussion \"died on postoperative day 12\") while POD 19 follows the craniectomy; anchors left null with ambiguity.",
+      "Table 1 antibiogram is image-only; per-antibiotic values verified against pixels in the visual submission only.",
+      "WBC flag high from source \"leukocytosis\"; CRP/PCT/CSF values keep flag unknown (interval printed but no per-value classification).",
+      "BioFire panel not_performed per \"Although not employed in this case\"; colistin loading and maintenance kept as separate items; enoxaparin prophylaxis with literal route."
+    ],
+    "residual_risks": [
+      "\"On admission\" MDR screening could refer to index admission or readmission.",
+      "Surgical revision (abstract) and wound debridement/skin closure (case text) kept as separate facts; likely the same operation.",
+      "Meropenem-vaborbactam/cefiderocol unavailability recorded only as ambiguity, not as medication items."
+    ]
+  },
+  "physician_adjudicated": false
+}

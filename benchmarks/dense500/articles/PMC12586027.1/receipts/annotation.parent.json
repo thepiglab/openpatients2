@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12586027.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d54d9fdd2084164989f07b000dc001900d57b5beef69ea819028329058707e89",
+  "annotation_sha256": "7af93f325f3f98615eec4bd43a22e8c5904ad4e33d5147bce4d6098293d8fd21",
+  "reviewed_at": "2026-10-11T18:00:17.644482+00:00",
+  "source_segments_read": 69,
+  "facts_reviewed": 147,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f082 (Hb 70 g/L): removed left-hip attribution from clinical_statement; own-sentence time kept; note explains ownership by the earlier surgery without borrowing laterality",
+    "p1-f094 (Hb 121 g/L, Table 1): time changed from \"First hospitalization\"/during to the governing row header \"after 3 months\"/after",
+    "p1-f102 ferric carboxymaltose: temporality historical -> current (index hospitalization)",
+    "p1-f113 nadroparin \"within thirteen days after surgery\": relation before -> after (anchor surgery)",
+    "p1-f103 (Table 1 ferric carboxymaltose timing) and p1-f137 (19-day stay vs discharge on 18th day): certainty ambiguous -> source_conflict, kept review_only",
+    "p1-f126 autoreinfusion 109 mL: note on 120 mL discussion conflict; p1-f123 finding cleaned",
+    "Added p1-f146 (no hemostatics in second hospitalization, Table 1) and p1-f147 (repeated inpatient conservative treatment, historical)",
+    "Added event p1-e14 (rehabilitation) and relations e06->e07, e05->e08, e03 during e13, e14->e10; e04 time_precision approximate",
+    "Added ambiguity: text Hb nadir 70 g/L vs Figure 2 first-hospitalization minimum about 74 g/L",
+    "visual.json fig1: removed transcribed birth year and childhood-year values (identifiers); figure-EHR/privacy drafts regenerated and reviewed labels carried over; fig1 privacy flag raised to direct_identifiers (birth year)"
+  ],
+  "unresolved": [
+    "Figure pixels are described only in the visual submission; the annotation figures keep caption-level status.",
+    "Table 1 first-hospitalization values are recorded as historical facts of the same patient with the column heading as their time.",
+    "Source inconsistencies (second hospitalization length, autoreinfusion volume, ferric carboxymaltose timing, left versus right hip range of motion) are recorded as ambiguities and not reconciled.",
+    "Discussion statements about published cohorts and literature are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 69,
+    "facts_reviewed": 147,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single patient; Table 1 first-hospitalization cells consistently owned via the column header (row header governs the 3-month value)",
+      "Conflicts kept explicit: 18th day vs 19 days, autoreinfusion 109 vs 120 mL, ferric carboxymaltose first preoperative day vs one day before operation, left/right range-of-motion label (review_only)",
+      "Normal flags on ECG/echo/fluorography rest on literal no-pathology wording; Hb 132/122 normal per discussion sentence",
+      "Fig 1 prints a birth year: flagged as direct identifier and no birth-year value is stored in any field; Fig 2 arrows described without interpretation"
+    ],
+    "residual_risks": [
+      "Hb 70 g/L ownership by the first surgery rests on paragraph narrative and abstract",
+      "Leukocyte 8.22 after release is not visible in Figure 3 series",
+      "Figure chart readings are approximate"
+    ]
+  },
+  "physician_adjudicated": false
+}

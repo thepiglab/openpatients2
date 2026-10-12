@@ -1,0 +1,50 @@
+{
+  "article_id": "PMC12744707.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1e4d6c4f5d4fc023ac5368ed4b4ca7a5295edf48a85f7eb178ef039305ada785",
+  "annotation_sha256": "3740bb82ce22711f5f6d12ebff231f72288cf779775d9dca30c624f059fc9f1c",
+  "reviewed_at": "2026-10-10T02:16:38.416842+00:00",
+  "source_segments_read": 42,
+  "facts_reviewed": 111,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M12 anchor nulls: 'third cEEG interpretation' (p1-f097) and 'Ativan administration' (p1-f104) do not occur in the source -> null correct; time.text 'between 1300 and 1600' and 'after an hour' are literal in each item's evidence.",
+    "No other annotation changes.",
+    "glue4 GLUED-TEXT (fix_label_digit_glue.py, all 14 proposed field edits (18 substitutions) reviewed and applied; number+unit only, quotes keep the source's glued '2mg'/'1.5g'/'500mg'): dose_text p1-f040..f044 '2mg'/'1.5g'/'500mg'/'250mg'/'100mg' -> '2 mg'/'1.5 g'/'500 mg'/'250 mg'/'100 mg'; p1-f102 text_value+clinical_statement 'Ativan 2 mg IV'; events 8, 18, 19, 20 descriptions; summary items 2 and 3; source_coverage 37 note.",
+    "glue4 ROSTER block added: reported_individual_count null (single-case report; no literal number stated), roster_complete true (p1 annotated); evidence b00001 'We report a case of continuous, involuntary jerky movements ... in a patient with a prior cerebrovascular accident'. The previously patched schema-submission value 1 had no literal number in the source and is replaced by null on regeneration.",
+    "glue4 ROSTER update (orchestrator ruling: a singular case statement is evidence for count 1): reported_individual_count null -> 1, roster_complete true (p1 annotated); evidence b00001 'We report a case of ...'."
+  ],
+  "unresolved": [
+    "Annotation figure rows remain caption-layer not_inspected; actual 2 JPEGs are inspected in the separate visual submission.",
+    "No supplements are listed for this article.",
+    "Laboratory, CT and EEG values are retained without reference-range-derived high/low flags or inferred diagnoses; lab and CT collection times are not stated.",
+    "cEEG clock times (e.g., 1600-1700, 0100-1300, 1300-1600, 1507) are given without calendar dates; only the stated day-after and right-after relations are used for ordering.",
+    "Source inconsistencies kept explicit: CKD stage IIIb versus eGFR 12 and dialysis; onset anchored both to day 7 of admission and day 7 after first HD; Discussion mentions left-hemisphere strokes and a repeat MRI not described in the case.",
+    "Ativan ingredient, route of the additional post-dialysis levetiracetam dose, lacosamide route and drug indications are not stated and were not inferred.",
+    "EPC is a clinical diagnosis stated by the authors without EEG or imaging confirmation; DDS is recorded as differential/less likely, not refuted.",
+    "Discussion general statements, cited literature and dosing recommendations are background, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 42,
+    "facts_reviewed": 111,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical anchor-null migration correct."
+    ],
+    "residual_risks": []
+  },
+  "physician_adjudicated": false
+}

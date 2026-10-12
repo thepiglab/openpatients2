@@ -1,0 +1,66 @@
+{
+  "article_id": "PMC12779367.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "be97c1fb2d88391e9c547d71f6cd25230c03e4cb78c7996d63ea9dca580f2849",
+  "annotation_sha256": "00333591808e6c9990c9de825cc0923083ed501752ac80d957ee6754e003db67",
+  "reviewed_at": "2026-10-11T20:09:29.919543+00:00",
+  "source_segments_read": 753,
+  "facts_reviewed": 61,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f057: WGS non-detection of the ring chromosome changed from assertion=absent to a present genetic_test result (could not detect ring or breakpoint) with the authors' unstable-rearrangement interpretation quoted; absent wrongly implied the ring was refuted",
+    "p1-f047: autopsy 'No other internal anomalies were noted' moved from symptoms_function sign to observations (pathology, assertion=absent); autopsy findings are not examination signs",
+    "p1-f004: evidence extended to 'a nonconsanguineously married couple who had a previous spontaneous abortion' so the couple/mother subject is in the quote",
+    "p1-f051: added b00027 terminal-deletion confirmation quote and b00028 'deletions in region 2 and region 3' quote; interpretation updated",
+    "p1-f055: added text SV-type percentages (94.51/2.3/1.93/1.01%) and GO nervous-system-development enrichment quotes",
+    "Added p1-f060 HIE grade 3 condition (provisional, ambiguous, review_only): named only inside the conflicting cause-of-death sentence and 'suggestive of HIE' in discussion",
+    "Added p1-f061 'lower birth weight' (b00028) newborn fact",
+    "Added 3 literally supported relations: antenatal ultrasound (last trimester of pregnancy) before birth; death before fetal autopsy ('Then, the fetal autopsy'); karyotype before WGS ('For further exploration ... WGS was performed')",
+    "p1-e02 description no longer says 'low Apgar scores' (not stated); now lists no cry, APGAR 2 and 3, severe perinatal asphyxia",
+    "Karyotype ambiguity rewritten: [59%,41%] vs 10 ring / 15 deletion metaphases puts the larger count on the deletion line; ring line printed 46, X although both karyotype panels show X and Y; no reconciliation",
+    "Summary: added sentence stating the two documented causes of death (f023, f024, f060)",
+    "b00029 source_coverage changed to patient_facts (final sentence is about the index patient)",
+    "visual.json: FIG1A cloth lies across abdomen/lower trunk with bare chest (was 'chest and abdomen'); FIG3C chr8 has a thin purple base (was 'no visible small-colored portion'); figure-EHR and privacy drafts regenerated with --draft and reviewed labels/flags carried over; FIG1 B/C privacy notes made karyotype-specific"
+  ],
+  "unresolved": [
+    "Appendix tables (Table 1 gene list of 505 genes, Table 2 VarElect gene-phenotype scores for 90 rows, Table 3 per-SV annotation records) are not itemized as per-gene or per-SV facts; the deleted-region contents, VarElect results and SV results are recorded only as compact genetics facts.",
+    "Literature statements about individual genes (for example KCNJ6, PCNT2, HPE1, SYNJ1, ITSN1, KCNE1, DSCR1, MAP2K2, ZBTB7A, PIAS4 functions) are background and not patient facts.",
+    "Caption-layer visual status not_inspected; the three figure images were inspected separately in the visual submission.",
+    "The text cites Figure 2E, but the caption lists panels A to D only; the chromosome 19 visualization is panel D.",
+    "Figure 3B printed percentages (94.71% deletions, 2.35% duplications) differ from the text (94.51%, 2.3%); values are kept as printed and not reconciled.",
+    "Admission at one day old and death on the same day, seven hours after birth, are stated together and are not reconciled."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 753,
+    "facts_reviewed": 61,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (one-day-old male neonate); all three figures belong to him; cited Moon and Yum case and 29-month-old literature case kept out",
+      "Two different stated causes of death kept as separate source_conflict/review_only facts plus a cause-less death fact (seven hours after birth, anchor birth)",
+      "Appendix tables (505-gene list, 89 VarElect rows, 120 AnnotSV rows) represented by region-level genetics facts quoting literal counts, percentages and coordinates; per-gene rows are annotation of the deleted region, not separate patient findings",
+      "Consanguinity absent via nonconsanguineously; chr19 reciprocal deletion/duplication recorded with unknown phenotypic effect; CREB3L3 drawn in Fig 2D but not named in text (visual limitation)",
+      "Fig 3B printed 94.71%/2.35% differ from text 94.51%/2.3%; kept as printed in visual.json and noted in article limitations",
+      "FIG1A neonatal facial clinical photo stays clinical_photo/includable with identifiable_face flag: protocol policy is flag-only, privacy flags never change includability"
+    ],
+    "residual_risks": [
+      "Karyotype percentage order versus metaphase counts and the 46, X ring-line notation are unresolved source inconsistencies",
+      "One-day-old at admission versus death seven hours after birth is unreconciled",
+      "Per-SV and per-gene appendix rows are not itemized; a consumer needing variant-level data must read the appendix",
+      "Fig 2C counts and Fig 3C chr21 bar are estimated_from_plot"
+    ]
+  },
+  "physician_adjudicated": false
+}

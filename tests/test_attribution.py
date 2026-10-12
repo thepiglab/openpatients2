@@ -3,8 +3,6 @@ import pytest
 from openpatients2.articles import parse_article
 from openpatients2.article_tasks import patient_packet
 from openpatients2.figure_attribution import validate_figure_review, bind_figure_review, patient_media, figure_messages
-from openpatients2.case_links import (reference_matches, citation_candidates, validate_link, bind_link,
-                                    review_identity, identity_components, linked_case_view)
 from test_articles import article, roster, XML
 
 
@@ -12,20 +10,6 @@ def fixture_review(a):
     return {'figure_id':'F1','assignments':[{'panel':None,'patient_ids':['p1'],'scope':'individual',
          'subject':'patient','evidence':[{'segment_id':'b00006','quote':'Case 1 radiograph.'}],
          'rationale':'The caption identifies case 1.'}], 'limitations':[]}
-
-
-def test_inline_callouts_survive_separately_without_bibliography_in_patient_text():
-    xml=XML.replace('<xref ref-type="bibr">99</xref>','<xref ref-type="bibr" rid="R1 R2">99</xref>')
-    xml=xml.replace('<ref>WRONG PATIENT from references</ref>', '<ref id="R1"><mixed-citation>Prior case '
-                    '<pub-id pub-id-type="pmid">12</pub-id></mixed-citation></ref>')
-    a=parse_article(xml,article()['metadata']);s=a['segments'][1]
-    assert s['cross_references']==[{'ref_type':'bibr','target_ids':['R1','R2'],'label':'99'}]
-    assert '[BIBR:R1 R2 99]' in s['text_with_reference_markers']
-    assert 'Prior case' not in a['text'] and '99' not in a['text']
-    assert a['references'][0]['identifiers']['pmid']==['12']
-    plan=citation_candidates(a,max_targets=1)
-    assert plan['ready'][0]['identity_status']=='not_assessed'
-    assert plan['ready'][0]['contexts'][0]['segment_id']==s['segment_id']
 
 
 def test_panel_assignments_flow_into_patient_bundle_and_preserve_whole_image_warning():
@@ -102,16 +86,6 @@ def test_unassigned_images_keep_completeness_false():
     assert not media['attribution_complete'] and media['unassigned_image_urls']
 
 
-def test_citation_plan_cli(tmp_path):
-    import json
-    from openpatients2.cli import main
-    a,_,_,_,_=link_fixture();source=tmp_path/'articles.jsonl';out=tmp_path/'plan.jsonl'
-    source.write_text(json.dumps(a)+'\n')
-    assert main(['citation-plan','--input',str(source),'--output',str(out),'--max-targets','1'])==0
-    assert json.loads(out.read_text())['ready'][0]['relation']=='cites'
-    assert main(['citation-plan','--input',str(source),'--output',str(out)])==2
-
-
 async def test_article_pipeline_calls_separate_figure_stage_before_patient_bundles(tmp_path):
     from test_article_experiment import config
     from openpatients2.experiment import Experiment
@@ -130,68 +104,3 @@ async def test_article_pipeline_calls_separate_figure_stage_before_patient_bundl
     finally:await exp.close()
 
 
-def link_fixture():
-    a=article();b=copy.deepcopy(a);b.update(article_id='PMC2.1',pmcid='PMC2',pmid='12',xml_sha256='targethash')
-    a['references']=[{'reference_id':'R1','identifiers':{'pmcid':['PMC2'],'pmid':['12'],'doi':[]}}]
-    a['segments'][1]['text']='This is the same patient reported in our earlier article.'
-    a['segments'][1]['cross_references']=[{'ref_type':'bibr','target_ids':['R1'],'label':'1'}]
-    r=roster(a);rb=roster(b)
-    d={'source_patient_id':'p1','target_patient_id':'p1','relation':'explicit_same_patient',
-       'reference_ids':['R1'],'source_evidence':[{'segment_id':'b00002','quote':a['segments'][1]['text']}],
-       'target_evidence':[{'segment_id':'b00002','quote':'A woman received 5 mg.'}],
-       'identity_statement':a['segments'][1]['text'],'contradictions':[],'rationale':'Explicit continuity.'}
-    return a,b,r,rb,d
-
-
-def test_identity_link_is_candidate_until_second_pass_and_sources_stay_separate():
-    a,b,r,rb,d=link_fixture();e=bind_link(d,a,b,r,rb,method='fixture')
-    assert e['identity_status']=='candidate' and not identity_components([e])['source_supported_groups']
-    e=review_identity(e,verdict='accept',reviewer='fixture source audit',rationale='Explicit matching case.',conflicts=[])
-    group=identity_components([e])['source_supported_groups'][0]['record_ids']
-    seeds=[{'record_id':rid,'article':article,'patient_identity':identity,'facts':[{'source':'unchanged'}]}
-           for rid,article,identity in [(group[0],a,r['patients'][0]),(group[1],b,rb['patients'][0])]]
-    result=linked_case_view(group,seeds,[e])
-    assert not result['synthetic'] and result['sources']==seeds
-    assert result['sources'][0]['article']['license']==a['license']
-    seeds[1]['article']['xml_sha256']='changed'
-    with pytest.raises(ValueError,match='versions'):linked_case_view(group,seeds,[e])
-
-
-@pytest.mark.parametrize('mutation',['wrong_identifier','citation_only','contradiction','missing_target','unknown_patient','unlinked_quote','license'])
-def test_identity_validation_rejects_wrong_sources_and_missing_support(mutation):
-    a,b,r,rb,d=link_fixture()
-    if mutation=='wrong_identifier':a['references'][0]['identifiers']['pmid']=['13']
-    if mutation=='citation_only':d['identity_statement']=None
-    if mutation=='contradiction':d['contradictions']=['Species differs']
-    if mutation=='missing_target':d['target_evidence']=[]
-    if mutation=='unknown_patient':d['target_patient_id']='p99'
-    if mutation=='unlinked_quote':a['segments'][1]['cross_references']=[]
-    if mutation=='license':b['license']['allowed']=False
-    with pytest.raises(ValueError):validate_link(d,a,b,r,rb)
-
-
-def test_similarity_cannot_be_promoted_and_transitive_identity_bridges_wait():
-    a,b,r,rb,d=link_fixture();e=bind_link(d,a,b,r,rb,method='fixture')
-    similarity=copy.deepcopy(e);similarity['data']['relation']='similar_case'
-    with pytest.raises(ValueError):review_identity(similarity,verdict='accept',reviewer='fixture',rationale='similar',conflicts=[])
-    e=review_identity(e,verdict='accept',reviewer='fixture',rationale='explicit',conflicts=[])
-    bridge={**e,'source_record_id':'PMC2.1:p1','target_record_id':'PMC3.1:p1'}
-    result=identity_components([e,bridge])
-    assert not result['source_supported_groups'] and len(result['pending_components'])==1
-    direct={**e,'source_record_id':'PMC1.1:p1','target_record_id':'PMC3.1:p1'}
-    assert len(identity_components([e,bridge,direct])['source_supported_groups'])==1
-    rejection={**direct,'identity_status':'rejected'}
-    assert not identity_components([e,bridge,direct,rejection])['source_supported_groups']
-
-
-def test_ehr_seed_cannot_attach_other_panels_from_vision_annotations():
-    from test_ehr_seeds import patient
-    from openpatients2.ehr_seeds import seed_patient
-    p=patient();p['source']['multimedia']={'status':'panel_attribution_available','attribution_complete':True}
-    p['source']['figure_assignments']=[{'figure_id':'F1','panel':'A','patient_ids':['p1']}]
-    ann={'article_id':'PMC1.1','model':'fixture','figure_id':'F1','pixel_provenance':{'sha256':'pixels'},
-         'source_license':{'code':'CC BY'},'annotation':{'status':'valid','data':{'caption_claims':[],
-          'pixel_observations':[{'panel':panel,'patient_ids':['p1'],'visible_description':'image'} for panel in ['A','B',None]]}}}
-    result=seed_patient(p,[ann])
-    assert [o['panel'] for o in result['visual_findings'][0]['pixel_observations']]==['A']
-    assert [o['panel'] for o in result['figure_annotations'][0]['annotation']['pixel_observations']]==['A']

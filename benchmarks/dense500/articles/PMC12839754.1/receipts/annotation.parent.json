@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12839754.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6c932a4f6ec9982c42d114b97070cf09323092c82f75a489f082d5194b0b6a3d",
+  "annotation_sha256": "c5fcbf8b1063f2bf10e233fb422feda3517bb046352671e5f0efa82922ac69ba",
+  "reviewed_at": "2026-10-11T19:19:59.128881+00:00",
+  "source_segments_read": 11,
+  "facts_reviewed": 48,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f012 NRS 6 and p1-f013 worsened pain: time set to relation after, anchor 'second fall' (own sentence 'after which'); 'one month prior to presentation' stays with the fall only, time.text null",
+    "p1-f027 mepivacaine and p1-f029 dexamethasone: route 'caudal epidural' from the abstract sentence that names both drugs in the caudal epidural block (own evidence quote added); saline p1-f028 route left null (named only in the mixture sentence)",
+    "p1-f030 unnamed skin local anesthetic: removed invented indication 'needle insertion'; note records agent/dose/route not named",
+    "p1-f032/p1-f033 sedation and anxiolysis (assertion absent): action completed -> unknown",
+    "p1-f037 procedure name shortened to a concise label",
+    "Added two ambiguities: unnamed agents of the continued pharmacologic treatment; case-text NRS 2 sentence has no own time (2-week time from abstract)",
+    "source_coverage b00006/b00007 now list p1 (patient-specific rationale and course restatements; no new facts)",
+    "visual.json Fig 3: panel A has four rows of paired ovals (not five), S5 label below; the amber S5 squares in panel B called yellow consistently with panel A and the caption; figure-EHR/privacy sidecars regenerated with --draft and reviewed labels carried over; privacy notes for Fig 1B and Fig 3B corrected (no view marker / no labels)"
+  ],
+  "unresolved": [
+    "Radiographs from the time of the initial injury were unavailable to the authors.",
+    "Caption-layer visual status not_inspected; the three JPEGs are inspected in the separate visual submission.",
+    "Route of the injected mixture is not stated in the sentence giving the drugs and doses; the block is described as caudal epidural elsewhere.",
+    "The authors state that improvement may partly reflect natural recovery; no causal effect of the block is recorded.",
+    "Short follow-up (2 weeks and 2 months); pain NRS 6 is at presentation after the second fall but no exact date is given."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 11,
+    "facts_reviewed": 48,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single 14-year-old girl; all 48 facts verified against abstract, case text and captions; no cohort or cited-case contamination",
+      "Fig 1A 'no visible fracture' kept as fracture absent/refuted; Fig 1C 'suggestive of' instability kept possible/provisional",
+      "2-week NRS 2 timed from the abstract sentence about this patient; consistent with case text (NRS 2 at 2 weeks, remained 2 at 2 months)",
+      "Acetaminophen/NSAIDs action historical: prescribed and stated to have maintained NRS about 3, so taken",
+      "Relation 2-week -> 2-month follow-up supported by the literal 2 weeks / 2 months after the procedure",
+      "Fig 2 device text: only legible settings transcribed; device text is not a patient identifier"
+    ],
+    "residual_risks": [
+      "Medication start times not set (case text 'At that time' refers back to the first fall)",
+      "Order of referral, examination and radiography relative to each other is not stated and left unlinked"
+    ]
+  },
+  "physician_adjudicated": false
+}

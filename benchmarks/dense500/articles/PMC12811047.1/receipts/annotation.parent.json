@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC12811047.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1737da0f4083794b8d6d9e8706c16077b48edb7571cc957c4e0ad06ae5262005",
+  "annotation_sha256": "8e91ad4f9f3f148209ef108ace429ec3213cd42bc3ddb28d8e21ac6fbf44cea1",
+  "reviewed_at": "2026-10-10T01:09:05.049872+00:00",
+  "source_segments_read": 84,
+  "facts_reviewed": 181,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f001/p2-f001 case_context: case_kind clinical_case -> multi_patient; multiple_index_patients true; subject_state living_at_presentation; chief_complaint and index description from literal presentation sentences; care_setting limited to literal \"our hospital\" (encounter type not stated).",
+    "p1-f009, p2-f009, p2-f007 symptom-duration times: relation at -> before, anchor presentation (\"presented with a two-week/eight-week/three-week history\"); edema body_site legs -> literal leg.",
+    "p2-f009: added \"persistent edema despite diuretic therapy\" evidence for refractory edema.",
+    "p1-f068/f069/f070 and p2-f065/f066: added full TTE sentence evidence so method/initial-echo context is grounded; p1-f070 method transthoracic echocardiography.",
+    "Added p1-f093 outcome: prompt symptomatic and hemodynamic improvement after thiamine replacement (literal shared b00075 statement); linked to p1-e007.",
+    "Split p2-e006: post-thiamine echo values (EF 68%, E/A 0.7, LVOT-VTI 19.7, peak 2.2), hemodynamic stabilization, AS reassessed mild and reclassification outcome moved to new p2-e008 (\"After thiamine supplementation\", Fig 6 caption); untimed lab/LVDD/MPG follow-up remain in p2-e006.",
+    "Added relations p2-e002->p2-e008 and p2-e001->p2-e008 (caption \"After thiamine supplementation\"; abstract \"reclassified as mild after treatment\"), p2-e002->p2-e003 (\"subsequently supported\"), p1-e002->p1-e003 (empiric IV fursultiamine after blood sampling; pretreatment level confirmed diagnosis).",
+    "p2-f070 note: source says diagnosis \"supported\"; new p2 ambiguity on supported-vs-confirmed and undated post-treatment echo values; new p1 ambiguity on Table 1 follow-up column dating and confirmation ordering.",
+    "Domain coverage counts refreshed.",
+    "Visual submission edited: all 8 Doppler charts (FIG3/FIG6 B-E) had velocity on x_axis and time on y_axis; swapped so y_axis carries the cm/s or m/s scale and ticks. FIG2/FIG5 laterality wording changed to image coordinates (no legible laterality marker); FIG5 notes the unreadable partial letter and the top-left black rectangle.",
+    "semantic-rules-2026-10: verified M02 comparator '=' on 93 table/echo values (no <,> printed) and M03 age text_value '88-year-old'/'89-year-old' against source.",
+    "NR001: split p1-f054 ECG into normal sinus rhythm (flag=normal) and new p1-f094 LV strain pattern; event p1-e001 and summary updated.",
+    "NR002: p2-f051 ECG normal sinus rhythm flag=normal.",
+    "Cleanup2 TIME review (no edit): p1-f059 LVEF 50% keeps 'After eight months' — the evidence sentence itself states it ('After eight months, ... accompanied by a decrease in EF to 50%'), and the Table 2 'Follow-up' column also governs the value; residual NO-BORROWING warning is a checker false positive ('EF' vs expanded name). No glued text in this article."
+  ],
+  "unresolved": [
+    "No explicit same-patient publication follow-up link found; cited background reports are not treated as additional cases.",
+    "Table \"Follow-up\" columns are not dated individually; narrative ties only some follow-up values to eight months (case 1) or three months (case 2).",
+    "Natriuretic peptides and right heart catheterization were not obtained; high-output physiology is the authors' echocardiographic/clinical interpretation.",
+    "Figure pixels are described only in visual-submissions; this annotation's figures[] keeps caption-derived content with visual_status not_inspected."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "campaign": "semantic-rules-2026-10 re-sign",
+    "source_units_read": 84,
+    "facts_reviewed": 181,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Re-sign campaign 2026-10: migrations M02/M03 verified correct; two OBS-FLAG items resolved.",
+      "Two index elderly female patients; no cited-case contamination; all four tables transcribed with reference ranges; dash cells not converted to values.",
+      "Annotator time discipline verified: only eight-month (p1) and three-month thiamine (p2) values carry narrative times; other Follow-up columns untimed.",
+      "Pixels: printed Doppler peak velocities 4.5/3.3 (FIG3C/E) and 3.3/2.2 m/s (FIG6C/E) match text; E/A marker estimates (~95/85, ~70/76, ~91/78, ~62/88 cm/s) consistent with stated ratios; EF, CTR and ECG interpretations are caption-only.",
+      "Cleanup2: LVEF eight-month time kept (same sentence)."
+    ],
+    "residual_risks": [
+      "Table Follow-up columns undated; p2 post-treatment echo only \"after thiamine supplementation\".",
+      "High-output state is the authors interpretation (no natriuretic peptides/RHC; anemia and cirrhosis co-contributors).",
+      "Anemia management elsewhere and cirrhosis \"not amenable to specific intervention\" use vague procedure/care-plan representations.",
+      "No EHR sidecars (figure-ehr-labels, measurement-series) exist yet for this article."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC13223501.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d64fc35782e794db9514278ee6b18e2d8bc656de289f3aeda48558a36cd7d9d4",
+  "annotation_sha256": "cc5da810b278e87fe748addcd25c8e57a5e4a1cd6f8bd5be641cdcf1c6cf91e7",
+  "reviewed_at": "2026-10-11T18:11:50.279782+00:00",
+  "source_segments_read": 21,
+  "facts_reviewed": 74,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f025 Ki-67 70%: flag unknown -> high; evidence widened to the literal 'consistent with the high proliferation index (Ki-67 of 70%)' (source calls it high).",
+    "p1-f043 chest CT 'Five months post-operation': anchor null -> literal 'operation'.",
+    "p1-f053 'The tumor was non-adherent to the skin': moved from symptoms_function absent sign to a present pathology observation (flag negative) since it is a resection finding, consistent with the other negative pathology findings.",
+    "p1-f067 VMAT/IMRT procedure: removed indication 'Curative intent' (intent is not an indication; kept on oncology treatments).",
+    "p1-f035 combined excised-IDC ER/PR/HER2 observation split into ER positive (f035), PR positive (f072), HER2 negative (f073).",
+    "Added p1-f074 observation: 'Histopathology of the excised lesion confirmed no specificity of the IDC'.",
+    "Marked 18 specialized/general duplicates with alternate_representation_of (tumors->conditions, biomarkers->observations, oncology treatments->procedures/medications, outcome->condition), incl. 50 Gy/45 Gy oncology treatments -> VMAT/IMRT procedure f067.",
+    "Timeline: e03->e04 (biopsy vs preoperative MRI) changed to unknown (paragraph order only); added e02->e04 before ('Initial imaging'), e05->e10 before ('at the same site'), e09->e10 unknown, e10->e11 before; e06 and e12 now link the excised-IDC and SCC pathology facts.",
+    "Added ambiguities: ultrasound time left null because 'Five months post-operation' leads only the CT sentence; metastases not attributed to either primary (no tumor_ref, no metastatic_sites).",
+    "visual.json F2A: lesion location reworded from 'near the upper left chest wall' to superficial soft tissue anterior to the muscle/rib layer at the upper left of the image (image position, not patient side); figure-EHR and privacy drafts regenerated with --draft and reviewed labels/flags carried over."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual 3 JPEGs inspected in the separate visual submission.",
+    "Discussion sections (b00003, b00004, b00007-b00010) are literature background and were not assigned to the patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 21,
+    "facts_reviewed": 74,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (48-year-old woman); IDC (pT2N1mi, ER+/PR+/HER2-, Ki-67 70%) treated by breast-conserving surgery and AC chemotherapy without radiation; pure SCC (triple-negative, p40+, Ki-67 60%) found five months post-operation, resected, then VMAT/IMRT 50 Gy/45 Gy; axillary and lung metastases 17 months after the second resection.",
+      "Negative findings consistently encoded: exam negatives as absent signs, test/pathology negatives as present observations with flag negative.",
+      "Metastases kept as condition plus outcome without tumor link because the source does not attribute them to either primary; no separate metastatic tumor entry (oncology prompt: metastases are sites, not new primaries).",
+      "All 10 panels viewed on pixels; captions and visual descriptions match; mammograms and other radiology/histology panels carry no burned-in text, faces or photographic sensitive anatomy."
+    ],
+    "residual_risks": [
+      "Ultrasound of the new lesion has no time; it is plausibly part of the five-month workup but the source does not scope it.",
+      "Specimen of the post-surgical IHC (excised lesion) is read from paragraph context.",
+      "Order of biopsy relative to preoperative MRI is unknown."
+    ]
+  },
+  "physician_adjudicated": false
+}

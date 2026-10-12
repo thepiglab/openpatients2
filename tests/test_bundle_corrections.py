@@ -9,10 +9,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from openpatients2.bundle_optimization import BundleAdapter, ComponentBatchSampler, GroupedComponents, compact_reflection
-from openpatients2.bundle_quality import score_bundle, validate_bundle_gold
 from openpatients2.data import read_jsonl
-from openpatients2.fidelity import matches
 from openpatients2.pilot_extract import PilotRunner
 from openpatients2.pilot_review import check_coverage
 from openpatients2.prompt_payloads import compact_facts, timeline_retention
@@ -119,133 +116,6 @@ def test_cross_domain_coverage_is_uncertain_without_hiding_other_decisions():
     assert candidate['decisions'][0]['status']=='represented'
     candidate['decisions'][0]['fact_ids']=['another_patient']
     with pytest.raises(ValueError):check_coverage(candidate,features,rows)
-
-
-def test_reviewed_gold_preserves_historical_scores_and_binds_equivalences_to_patient_marker():
-    spec=importlib.util.spec_from_file_location('gold_review',ROOT/'scripts/review_bundle_reference.py')
-    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
-    generated=module.reviewed_reference(ROOT)
-    reviewed=json.loads((ROOT/'benchmarks/patient-bundle/reference-reviewed.json').read_text())
-    original=json.loads((ROOT/'benchmarks/patient-bundle/reference.json').read_text())
-    assert generated==reviewed and len(original['checks'])==305
-    assert validate_bundle_gold(reviewed,list(read_jsonl(ROOT/'benchmarks/patient-bundle/articles.jsonl.gz')))
-    checks={c['id']:c for c in reviewed['checks']}
-    pattern=checks['C0163']['pattern']
-    assert matches(pattern,{'subject':'index_patient','name':'CD34','interpretation':'positive','text_value':None})
-    assert not matches(pattern,{'subject':'index_patient','name':'STAT6','interpretation':'positive'})
-    assert not matches(pattern,{'subject':'family_member','name':'CD34','interpretation':'positive'})
-    assert checks['B0071']['pattern']['assertion']=='possible'
-    assert matches(checks['C0166']['pattern']['name'],'SFT')
-    assert 'R20261006-laterality' in checks
-    disputed=next(a for a in reviewed['articles'] if a['article_id']=='PMC13575834.1')
-    assert disputed['evaluation_status']=='unadjudicated'
-    score=score_bundle({'checks':[],'articles':[disputed]},[])
-    assert score['identities'][0]['excluded_from_identity_score']
-    assert 'identity' not in score['parts']
-    # Neither including nor excluding an unadjudicated patient can incur a
-    # hidden identity penalty against independently labelled negative cases.
-    negative={'article_id':'PMC1.1','text_sha256':'hash','expected_count':0,'species':[],'identities':[]}
-    discovery={'articles':[{'article_id':'PMC1.1','text_sha256':'hash','status':'valid','roster':{'patients':[]}}]}
-    ref={'checks':[],'articles':[negative,disputed]}
-    provisional={'source':{'article_source':{'article_id':disputed['article_id']}}}
-    assert score_bundle(ref,[provisional],discovery=discovery)['score']==1.
-
-
-def test_group_batches_have_relevant_positive_cases_and_no_withheld_labels():
-    from gepa.core.data_loader import ListDataLoader
-    selector=GroupedComponents(['observations','medications'])
-    ref={'checks':[{'record_id':'pos:p1','task':'observations','kind':'required'},
-                   {'record_id':'neg:p1','task':'observations','kind':'forbidden'}]}
-    sampler=ComponentBatchSampler(selector,ref)
-    loader=ListDataLoader(['aggregate','neg','pos'])
-    ids=sampler.next_minibatch_ids(loader,SimpleNamespace(i=0))
-    assert 'pos' in loader.fetch(ids) and 'aggregate' not in loader.fetch(ids)
-    assert sampler.receipts[0]['components']==['observations']
-
-
-def test_bundle_rollout_timeout_is_inside_operation_and_not_cached(tmp_path,monkeypatch):
-    import openpatients2.bundle_optimization as module
-    async def slow(*args,**kwargs):await asyncio.sleep(.2)
-    monkeypatch.setattr(module,'run_pilot',slow)
-    a=article(); adapter=BundleAdapter([a],tmp_path/'sample',{},['endpoint'],65536,tmp_path,
-        {'checks':[]},time.monotonic()+.02)
-    start=time.monotonic();evaluation=adapter.evaluate([a['article_id']],{'summary':''})
-    assert time.monotonic()-start<.15 and evaluation.outputs==[None]
-    assert adapter.timeouts==1 and not adapter.evaluation_cache
-
-
-def test_missing_fresh_confirmation_is_partial_and_unavailable_not_medical_zero(tmp_path,monkeypatch):
-    import gepa
-    import openpatients2.bundle_optimization as module
-    a=article(); reference={'optimization_splits':{'train':[a['article_id']],
-        'validation':[a['article_id']],'test':[]},'checks':[],'articles':[]}
-    sample=input_file(tmp_path,[a]); path=tmp_path/'ref.json';path.write_text(json.dumps(reference))
-    monkeypatch.setattr(module,'validate_bundle_gold',lambda *args:True)
-    original=module.BundleAdapter.evaluate;calls=[]
-    def evaluate(self,batch,candidate,capture_traces=False):
-        from gepa.core.adapter import EvaluationBatch
-        calls.append((self.deadline,self.cache_enabled))
-        quality={'score':.8,'clinical':{'matched':3,'unscorable':0,'forbidden_violations':0,'forbidden_unscorable':0}}
-        outputs=[quality] if len(calls)<3 else [None]
-        return EvaluationBatch(outputs=outputs,scores=[.8] if len(calls)<3 else [0.])
-    monkeypatch.setattr(module.BundleAdapter,'evaluate',evaluate)
-    def optimize(**kwargs):
-        assert not any(kwargs['seed_candidate'].values())
-        assert kwargs['adapter'].deadline<calls[0][0]
-        assert kwargs['cache_evaluation'] is True
-        assert isinstance(kwargs['batch_sampler'],ComponentBatchSampler)
-        return SimpleNamespace(candidates=[kwargs['seed_candidate'],dict.fromkeys(module.COMPONENTS,'New strategy')],
-            val_aggregate_scores=[.8,.9],total_metric_calls=2)
-    monkeypatch.setattr(gepa,'optimize',optimize)
-    prompts,report=module.optimize_bundle(sample,tmp_path/'out',{},['endpoint'],65536,path,
-        {'observations':'Weaker independent rewrite'},seconds=30,calls=8)
-    assert not any(prompts.values()) and report['status']=='partial'
-    assert report['confirmation_score'] is None and report['confirmation_validation_facts'] is None
-    assert not report['clinical_nonregression_gate_passed'] and report['original_is_frontier_seed']
-    assert calls[-1][1] is False  # fresh inference, not search cache
-
-
-def test_reflection_does_not_copy_whole_bundle_evidence_or_unrelated_strategies():
-    trace={'Feedback':{'invoked_strategies':{'summary':'Actual strategy','medications':'irrelevant'},
-        'source_checked_course':{'timelines':[]},'missing_source_propositions':[],
-        'pixels':[{'text':'x'*100000}],'validation_errors':['bad quote']}}
-    result=compact_reflection({'summary':[trace]},['summary'])
-    encoded=json.dumps(result)
-    assert 'Actual strategy' in encoded and 'irrelevant' not in encoded and len(encoded)<1000
-
-
-@pytest.mark.parametrize('fails',[False,True])
-async def test_joint_search_reuses_one_gpu_stage_and_records_original_fallback(tmp_path,monkeypatch,fails):
-    import openpatients2.bundle_optimization as module
-    from openpatients2.corpus_pilot import optimize_joint_program
-    seen=[]
-    def optimize(sample,destination,config,endpoints,context,reference,independent,**options):
-        seen.append((endpoints,context,independent,options))
-        if fails: raise ValueError('Optimization failed')
-        return {'summary':'Source-grounded strategy'},{'status':'completed','selected_original':False}
-    monkeypatch.setattr(module,'optimize_bundle',optimize)
-    campaign={'work':str(tmp_path),'config':{'fidelity_reference':'gold.json',
-        'joint_gepa_seconds':5400,'joint_gepa_calls':512}}
-    report=await optimize_joint_program(campaign,{},['one_endpoint'],65536,{'summary':'Independent'})
-    folder=tmp_path/'prompt-optimization/joint-program'
-    selected=json.loads((folder/'best-prompts.json').read_text())
-    assert report['allocated_gpus']==1 and seen[0][0]==['one_endpoint']
-    assert seen[0][-1]=={'seconds':5400,'calls':512}
-    assert json.loads((tmp_path/'progress.json').read_text())['allocated_gpus']==1
-    if fails:
-        assert report['status']=='failed' and report['confirmation_score'] is None
-        assert report['selected_original'] and not any(selected.values())
-    else: assert selected=={'summary':'Source-grounded strategy'}
-
-
-async def test_missing_joint_receipts_stop_before_eight_gpu_start(tmp_path,monkeypatch):
-    import openpatients2.corpus_pilot as module
-    monkeypatch.setattr(module,'verify_cpu',lambda campaign:None)
-    folder=tmp_path/'prompt-optimization';folder.mkdir()
-    for name in ['report.json','best-prompts.json']:(folder/name).write_text('{}')
-    campaign={'work':str(tmp_path),'config':{'separate_gepa':True,'joint_gepa_in_separate_stage':True}}
-    with pytest.raises(ValueError,match='Joint GEPA stage did not produce final receipts'):
-        await module.gpu(campaign)
 
 
 async def test_source_license_is_rechecked_and_acquisition_receipt_retained(tmp_path,monkeypatch):

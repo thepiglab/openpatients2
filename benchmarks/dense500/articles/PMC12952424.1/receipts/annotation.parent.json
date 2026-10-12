@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12952424.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f86bae602f515dc24c077f5145624f6581c3e42fef54d15d5a9f9d521eac2b63",
+  "annotation_sha256": "3b7c3257fc0283f3fc501a495a848f2b6d7b5b0277b8f95f1c2c1c3dcb9782e6",
+  "reviewed_at": "2026-10-11T21:52:51.137684+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 81,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed UCEIS facts p1-f055/f056/f057 from the 2022 colonoscopy event p1-e07 (the source does not say which colonoscopy the scores come from; the annotator's own ambiguity forbids that link) and placed them in a new event p1-e14 timed literally 'at time of colonoscopy'.",
+    "Summary: reworded the colonoscopy sentence so it no longer ties the UCEIS scores to the 2022 colonoscopy.",
+    "Removed laboratory facts p1-f049..f053 from the routine-clinic presentation event p1-e13; the source does not tie the biochemical results to that visit.",
+    "Relation p1-e03->p1-e05: evidence replaced by one contiguous quote containing the vedolizumab sentence and 'Prior to this ...' so the referent is visible.",
+    "Added relations supported by stated calendar times: p1-e07 (2022) before p1-e10 (early 2024), p1-e06 (late 2022) before p1-e10, p1-e01 (1999) before p1-e05 (early 2022).",
+    "p1-f064 oncology clinical_statement trimmed to its own evidence (possible malignancy, not confirmed).",
+    "p1-f073 care plan target set to null (PSC is the stated reason for screening, kept in action_text).",
+    "Added missed patient-specific negatives from b00006: no history of diverticulosis (p1-f078), ischaemia (p1-f079) or radiation (p1-f080), and investigations to date unremarkable for these causes (p1-f081)."
+  ],
+  "unresolved": [
+    "Age is given only as middle-aged and early 40s; no exact age.",
+    "Dates are given only as years or seasons of a year (1999, 2022, early 2022, late 2022, early 2024); no full calendar dates.",
+    "The colonoscopy that produced the endoscopic disease activity scores is not identified.",
+    "Discussion segments about endometriosis, IBD and strictures are literature and guideline statements and are not patient facts.",
+    "Figure pixels are described in the visual submission, not in this annotation."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 81,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single woman in her early 40s with UC pancolitis (1999) and large-duct PSC (2022); rectosigmoid stricture biopsied and dilated without dysplasia; laparoscopic total proctocolectomy with end ileostomy in early 2024; rectal endometriosis confirmed by ER immunohistochemistry; recovering well at follow-up.",
+      "NO-BORROWING warnings on p1-f056/f057 are checker false positives: 'Disease activity at time of colonoscopy showed' is the lead clause of the same sentence that lists all three segment scores, so it scopes them; quotes are exact.",
+      "CRP 6.9 mg/L printed with N <5 mg/L inside results called unremarkable: individual lab flags left unknown, aggregate flag normal, recorded as an ambiguity (not a source conflict, since the source never classifies CRP as high).",
+      "Abstract 'total colectomy' vs body 'total proctocolectomy' kept as an ambiguity; malignancy kept as possible (oncology assertion possible); annual screening care plan status unknown.",
+      "UCEIS kept in observations as endoscopic procedure findings (SECTION-IMAGING), not a symptom or functional scale."
+    ],
+    "residual_risks": [
+      "Which colonoscopy produced the UCEIS scores is not identified by the source.",
+      "Order of steroid dependency, azathioprine reaction and routine clinic visit relative to other events is not stated; left unlinked.",
+      "Histology (p1-e11) and follow-up (p1-e12) are not literally ordered relative to surgery (p1-e10); left unlinked."
+    ]
+  },
+  "physician_adjudicated": false
+}

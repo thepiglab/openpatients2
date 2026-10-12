@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12688980.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "dadad8e453e7fec053365472017583abd6e51c8298a6b8492174a322d5f420fe",
+  "annotation_sha256": "74f17060b3778d2f500d1e37570e4a0a90ee801b2ccbb86bb9ad78cb75d7a187",
+  "reviewed_at": "2026-10-10T00:53:59.946631+00:00",
+  "source_segments_read": 38,
+  "facts_reviewed": 96,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f006 DKA diagnostic_basis trimmed to the quoted pH/glucose (urine ketones were not in its evidence).",
+    "p1-f008 deep cervical abscess: added the MRI quote supporting its diagnostic_basis.",
+    "Split polydipsia/polyuria (p1-f014, new p1-f091) and ICU resuscitation into antibiotics/fluids/acidosis correction (p1-f034, new p1-f092, p1-f093) with concise names.",
+    "p1-f015 toothache: removed \"partially relieved by amoxicillin\" from severity; body_site left.",
+    "p1-f062 glucose 7 mmol/L: trimmed b00021 quote to the sentence stating the preoperative value (dropped neighbouring ICU sentence).",
+    "p1-f090 ward wound care action_status completed -> unknown (stated only as purpose of transfer).",
+    "Added p1-f094 emergency admission/ICU transfer (Table 1 Day 0 row), p1-f095 MRI summary finding (abstract), p1-f096 compressed trachea (Fig 1 caption).",
+    "Moved recall interview facts (p1-f085, p1-f030) from discharge event to new event p1-e17 after p1-e14 (b00011 timing).",
+    "Visual F1: removed unsupported \"jaw on image left bulging\" (A) and tongue/floor-of-mouth identification (D).",
+    "Schema submission: set timeline event kinds/time kinds and regenerated relative_timeline; roster count 1 complete."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual pixels are inspected in the separate visual submission.",
+    "Table 1 uses Day numbering from emergency admission while the text uses postoperative days; the two are not reconciled.",
+    "Figure 4 vital-sign trends have no numeric values in the text; any chart readings live in the visual submission only.",
+    "Single case report; discussion recommendations, guideline citations and cited studies are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 38,
+    "facts_reviewed": 96,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient; Table 1 Day numbering (Day 0 = admission, ATI Day 1) conflicts with text POD 11/21 for ward transfer/discharge; kept as ambiguity, text times used.",
+      "Glucose 7 mmol/L time comes from the b00021 sentence that itself states the value; no borrowing.",
+      "Video-laryngoscopy, SGA and nerve blocks were judged infeasible/contraindicated, never attempted; kept as ambiguity only. Awake tracheostomy plan abandoned = cancelled/not_occurred.",
+      "F4 printed vital-sign values verified cell by cell on pixels; F2 equipment-only panels not includable."
+    ],
+    "residual_risks": [
+      "Yellow exudate vs purulent drainage wording unreconciled.",
+      "Mediastinal abscess vs mediastinal extension wording.",
+      "Difficult airway / imminent obstruction verification left unknown.",
+      "F4 T1 \"on admission\" meaning (OR entry vs hospital admission) unresolved."
+    ]
+  },
+  "physician_adjudicated": false
+}

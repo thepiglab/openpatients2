@@ -1,0 +1,50 @@
+{
+  "article_id": "PMC12754810.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "de1a28c108c930802441d420081cc72ec602264017a6ebb10970ee369f9b09b7",
+  "annotation_sha256": "2190e88bf654d880fa391e1f8cc16e671ca002d11fa831bcf72f0345b5f41175",
+  "reviewed_at": "2026-10-10T01:26:33.489185+00:00",
+  "source_segments_read": 38,
+  "facts_reviewed": 137,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "M12 follow-up: restored literal anchors: p1-f004 \"presented to the urgent treatment centre\" (pacemaker implanted five days before); p2-f056/p2-f074 \"upper limb DVT\".",
+    "SECTION-SIGNS: moved examination signs and NEWS from observations to symptoms_function: p1-f012, p1-f013, p1-f020, p1-f024, p2-f015, p2-f016, p2-f017, p2-f020, p2-f021, p2-f026 (pulses, capillary refill, pacemaker wound exam, peripheral warmth, arm circumferences = sign; NEWS = performance_score).",
+    "Verified M03 ages 61-/84-year-old, M05 p1-f036 flag=normal (source: \"normal inflammatory markers\"; Table 1 CRP 12.5 vs <5 already noted), M02 comparator \"=\" on 25 plain values.",
+    "Cleanup2 NO-BORROWING p2-f056 hydroxycarbamide dose increase: 'Following this episode of upper limb DVT' belongs to the preceding sentence about thrombotic risk, not the dose-increase sentence; fact time nulled (relation unknown) and the time-only quote dropped. Ordering after the DVT stays expressed by the existing event relation p2-e004 before p2-e013 (source 'Following this episode ... Consequently, the dose ... was increased').",
+    "Cleanup2 GLUED-TEXT (manual; no repair-tool diff): p1-f004 indication 'Mobitz type1' -> 'Mobitz type 1' (source spelling), p1-f009 clinical_statement 'his50s' -> 'his 50s', p1-f036 notes 'CRP12.5mg/L with reference<5' -> 'CRP 12.5 mg/L with reference <5'."
+  ],
+  "unresolved": [
+    "No explicit same-patient prior publication link identified; cited series remain background.",
+    "The abstract/discussion sentence \"In our case, anticoagulation resulted in symptom resolution and preservation of device function\" is not attributable to one patient and conflicts with absent pacemaker checks; it is kept unresolved.",
+    "Pixel-level figure observations live in the visual submission; the annotation figures[] keep caption-only visual_status by convention.",
+    "Duplicate split facts removed by parent: unlabelled 2 x 2 cm haematoma axes, LVEF range lower/upper bounds and combined-plus-split blood pressure; each value is kept once."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 38,
+    "facts_reviewed": 137,
+    "figures_viewed": 0,
+    "key_findings": [
+      "migration verified",
+      "exam signs and NEWS moved to symptoms_function",
+      "Cleanup2: 1 borrowed time nulled (order kept via event relation); 3 glued tokens fixed."
+    ],
+    "residual_risks": [
+      "Author calls inflammatory markers normal while CRP 12.5 mg/L exceeds printed <5 interval"
+    ]
+  },
+  "physician_adjudicated": false
+}

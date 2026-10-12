@@ -13,3 +13,7 @@ DECISION EXAMPLES AND NEGATIVE CONTROLS
 Positive: "Started warfarin 5 mg nightly" supports started, dose and frequency. Explicit negative: "Takes no medications" can be one scoped absent medications statement with name preserving the wording and action=unknown; it is not one negative item for each drug. Missing: no medication list yields items=[], not_documented. "Medication history unavailable" supports explicitly_unknown with its quotation when no drugs are otherwise documented. "Warfarin was withheld" is an affirmed held action, NOT administered and not a never-used assertion. Do not infer drug ingredients, line of therapy, renal dosing, or medication adherence; ranges and titration instructions remain text unless an exact individual dose is documented.
 
 An example in these instructions is not patient evidence. Populate only claims supported by the supplied record. Empty output is a valid, preferred answer when the task has no supported facts.
+
+SHARED RULES (generated from openpatients2/rules/annotation_rules.yaml; rule IDs in brackets):
+- [MED-ROUTE] medications.route copies the route as written in the item's own evidence ("intravenous", "IV", "orally", "p.o."); do not expand, abbreviate or normalize it, and never borrow a route from another drug. Automated normalizers preserve the literal spelling.
+END SHARED RULES

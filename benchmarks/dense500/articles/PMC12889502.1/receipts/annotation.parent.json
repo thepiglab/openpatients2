@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC12889502.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "00c00dd24e2c56763cb7806405be0720c8223a47c04f32a1557016f73df1a6f8",
+  "annotation_sha256": "a1a82b42a3e400f1965207544dd948bd20996690c6a7e876a04045188f9c38f0",
+  "reviewed_at": "2026-10-10T01:31:40.255625+00:00",
+  "source_segments_read": 38,
+  "facts_reviewed": 73,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Rewrote clinical statements of p1-f039, p1-f040, p1-f041 (were \"OCT: increased\", \"OCT: disrupted\", \"OCT: present\")",
+    "Removed severity \"progressive\" from p1-f015 blurred vision (course descriptor, kept in text_value)",
+    "Added event p1-e08 fluorescein angiography (test, occurred) and relation p1-e08 before p1-e05 from \"guided targeted therapy\"",
+    "Added event p1-e09 contrast sensitivity testing not_occurred",
+    "Added relation p1-e05 before p1-e07 (remission without recurrence over 6 months after local therapy, b00026); linked p1-f073 to outcome event p1-e06",
+    "Summary: no longer asserts painless (conflicted, review_only fact) without the conflict; now covers p1-f005, f006, f009, f042, f043, CBC/ESR values and absent injection side effects"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two JPEGs are inspected in the separate visual submission.",
+    "Single patient; abstract and discussion restate case details already captured from the case presentation section.",
+    "Discussion statements about published cohorts and literature are background, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 38,
+    "facts_reviewed": 73,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single 25-year-old male; literature, cohort (88.4% bilateral) and relapse-rate statements kept out of patient facts",
+      "Pain conflict (b00009 lists pain; b00002, b00011, b00016 say painless) correctly quarantined as source_conflict review_only",
+      "FA said to confirm active vasculitis with no findings; kept as resulted text with ambiguity, no findings inferred",
+      "Group-level unremarkable labs flagged normal; individual Hb/Hct unflagged as no per-value range or flag is printed (OBS-FLAG)",
+      "RF <3.5 IU/ml with comparator < and flag negative is supported by the \"screening was also negative\" sentence",
+      "NSAID route left null; topical is stated for corticosteroids only",
+      "Figures viewed: F1 OCT printout of both eyes (R/L table 199/473, 246/629 um), left-hand B-scan foveal pit, right-hand dome elevation; F2 photographed Optos monitor with eyelash shadows; caption findings not discernible"
+    ],
+    "residual_risks": [
+      "No dates or intervals between presentation, workup, injection and improvement; order partly narrative",
+      "F1 map eye assignment rests on R/L table column order only; F2 laterality from caption only",
+      "Both figures carry burned-in direct identifiers (flagged)"
+    ]
+  },
+  "physician_adjudicated": false
+}

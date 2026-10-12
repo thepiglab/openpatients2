@@ -1,0 +1,68 @@
+{
+  "article_id": "PMC12734255.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "876202913ee3f7239041fcdff2cfc38877276532d9c0b0a5384e671cc06141bb",
+  "annotation_sha256": "c2c2b64b3c1009db5cd69eb072bb1e761100259729d05f7f6b6f86bf7cbe86f0",
+  "reviewed_at": "2026-10-10T01:43:30.101396+00:00",
+  "source_segments_read": 44,
+  "facts_reviewed": 25,
+  "patients_reviewed": 6,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Disposition individual_cases retained: the Table 1 footnote (b00040) individuates six patients by diagnosis group and drug; aggregate_only would require patients=[] and discard that patient-level data. Roster reported 22, complete=false.",
+    "case_context for p1-p6: case_kind multi_patient -> clinical_case, multiple_index_patients true -> false (corrected rule); removed study-level ward care_setting; series quote trimmed so it does not carry the cohort mean age.",
+    "Removed 24 distributive cohort facts (4 per patient): >=2 antipsychotic trials before ECT (b00015), medications >=14 days before ECT (b00037), dopamine/serotonin/norepinephrine antagonists (b00038), no serious adverse events (b00021); recorded as a per-patient do-not-infer ambiguity instead.",
+    "ECT procedure facts: removed cohort protocol details (bitemporal placement as body_site, Thymatron device, twice-weekly schedule, full-course completion); now 'Electroconvulsive therapy (ECT)' grounded in the patient's footnote entry on the dose-increase row.",
+    "Medication facts: evidence and regimen restricted to the dose-increase row plus footnote; p3 keeps haloperidol and lurasidone as separate facts with separate events (no invented shared time/order) and an explicit ambiguity.",
+    "Timeline rebuilt: removed the 12 pre-ECT distributive events and their 12 relations; 13 events (ECT course + dose-increase events) with 7 'overlaps' relations.",
+    "Summaries rewritten without cohort statements; domain_coverage outcomes -> unresolved (cohort-only), notes updated.",
+    "Source coverage: b00008/b00012/b00015/b00021/b00037/b00038 -> aggregate; b00001 series description -> patient_facts for membership only.",
+    "Article limitations: rewrote the distributive-statement line; kept 10-12 vs mean 12.4, ten vs 4+3+1=8 ineffective-seizure patients, 81.4% vs 18/22=81.8%, conclusions 'mood disorders' vs no mood-disorder patients; anesthetic mg/kg vs mg reclassified as non-contradictory; added note that aggregate segments sit in roster unresolved_segment_ids because Roster has no aggregate list.",
+    "semantic-rules-2026-10 re-sign (DEMO-AGE-TEXT / NO-COHORT-COPY): removed p1-f002, p2-f002, p3-f002, p4-f002, p5-f002, p6-f002 (age_other text_value 'Adolescent (study analysis restricted to patients up to the age of 19)'): not a literal source phrase and a cohort inclusion statement copied to each footnote patient; individual ages are not reported. Summaries reworded ('Patient in a retrospective ECT case series of 22 adolescents'), fact_ids removed, demographics domain_coverage -> not_documented, article limitation updated.",
+    "Cleanup2 TIME review (no edit): p1-f004, p2-f004, p3-f004, p3-f005, p4-f004, p5-f004, p6-f004 keep 'During the course of ECT treatment' because that phrase is in the Table 1 row that itself states the dose increase ('During the course of ECT treatment, 6 patients had a simultaneous medication dose increase ^(1)'), and footnote (1) of that same row names each patient's drug; the row is the fact's own governing evidence, not a borrowed time. Residual NO-BORROWING warning is a checker false positive (drug name only appears in the footnote quote).",
+    "cleanup3 NO-BORROWING review (no change): 'During the course of ECT treatment' on p1-f004, p2-f004, p3-f004, p3-f005, p4-f004, p5-f004, p6-f004 is kept. The first quote is the Table 1 row itself ('During the course of ECT treatment, 6 patients had a simultaneous medication dose increase ^(1)'), which carries the fact's content (dose increase) and structurally governs footnote (1) that names each patient's drug; the warning is a checker false positive (table row + footnote marker)."
+  ],
+  "unresolved": [
+    "Retrospective series of 22 adolescents reported almost entirely as cohort statistics; roster of individuals is incomplete. Only six patients are individually identifiable (Table 1 footnote, patient I/II/III paranoid schizophrenia, I/II catatonic schizophrenia, one schizoaffective), and the other sixteen are not enumerated.",
+    "Cohort means, percentages, response rates (82%), PANSS scores, adverse-event counts, ECT parameters (sessions, intensity, seizure duration), EEG/imaging/laboratory findings and medication counts are not assigned to any individual patient.",
+    "Cohort-wide statements (\"All patients\"/\"Every patient\": >=2 antipsychotic trials, >=14 days of medication before ECT, antagonist drug classes, ECT protocol and anesthesia, full-course completion, no serious adverse events, ward setting) are not converted into facts for the six footnote patients; each patient keeps only footnote-specific data plus the study-population ICD-10 diagnosis; the cohort age definition (adolescents, analysis up to age 19) is not copied to individuals.",
+    "Source inconsistencies kept unresolved at cohort level: ECT sessions \"ranged from 10 to 12 (mean: 12.4)\" (mean exceeds maximum); \"In ten patients, at least one ineffective seizure was recorded\" vs 4+3+1 = 8 patients in the breakdown; EEG abnormalities \"81.4% of patients (N = 18)\" whereas 18/22 = 81.8%. Methods give weight-based propofol/succinylcholine doses without atropine whereas Results give absolute mg ranges with atropine and etomidate in one patient (not a numerical contradiction).",
+    "Conclusions state ECT is effective for adolescents \"with both psychotic and mood disorders\", but the Discussion notes a lack of mood disorder patients and the cohort included only schizophrenia/schizoaffective diagnoses; cohort-level only.",
+    "No dates, durations of hospitalization or follow-up for individuals; the abstract/discussion state lack of long-term follow-up.",
+    "Figure visual status not_inspected in this caption layer; the actual image is inspected in the separate visual submission.",
+    "Roster: reported count 22, roster incomplete (only six footnote patients enumerated). The runtime Roster has no aggregate segment list, so cohort-aggregate segments appear under unresolved_segment_ids (attribution to individual patients unresolved), consistent with prior completed articles."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "campaign": "semantic-rules-2026-10 re-sign",
+    "source_units_read": 44,
+    "facts_reviewed": 25,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Re-sign 2026-10: migration made no annotation change; parent removed six cohort-copied non-literal age facts.",
+      "Only patient-specific data in the article is the Table 1 footnote (diagnosis group + drug whose dose was increased during ECT) for six of 22 patients; all other content is cohort-level.",
+      "Annotator applied universal cohort statements to each footnote patient (about 4-5 of ~9 facts per patient); removed as cohort-to-individual conversion.",
+      "Figure 1 is an aggregate PANSS mean +/- SD bar chart; pixel readings in the visual submission agree with Table 2 and the image.",
+      "Cleanup2: ECT-course times kept (governing table row + footnote)."
+    ],
+    "residual_risks": [
+      "Study-population definition (adolescent up to 19; ICD-10 diagnosis) is retained per patient as membership criteria; a stricter reading could treat these as distributive too.",
+      "ECT action=completed means performed; full-course completion is cohort-level only.",
+      "Footnote does not state whether both p3 drugs were increased simultaneously.",
+      "No figure EHR-label or privacy sidecars exist for this article (not created per user policy)."
+    ],
+    "cleanup3": "final sweep (sidecar respacing, span/time-only quotes, negation) 2026-10-09"
+  },
+  "physician_adjudicated": false
+}

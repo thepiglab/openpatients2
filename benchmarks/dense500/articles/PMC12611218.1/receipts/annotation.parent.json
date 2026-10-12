@@ -1,0 +1,85 @@
+{
+  "article_id": "PMC12611218.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a1c11342ccc8e0d148026d934e6ac2886d128425b2dd0a07fa91ed281026b0e0",
+  "annotation_sha256": "08e78a7c0ca1ae53a265728672bcae7c48c162c8f0de5e9d517882ddde69a334",
+  "reviewed_at": "2026-10-10T01:07:04.988526+00:00",
+  "source_segments_read": 45,
+  "facts_reviewed": 186,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Verified sex: all three cases documented male in narrative (b00002/b00003/b00006 'male') and Table 1 Sex row; no female pronoun exists in the draft/visual files (the 'she died' was only in the annotator's report).",
+    "case_context p1/p2/p3: case_kind clinical_case -> multi_patient (multiple_index_patients already true; p2 deceased_during_course, p1/p3 living).",
+    "p2-f051 recurrent closed thoracostomy: ambiguous/review_only -> supported/include (explicitly stated). p2-f051 and p2-f060 tubing-site bleeding: removed borrowed 'from POD 90' time (belongs to the INR sentence).",
+    "p2-f050 inotropes: removed inferred indication 'postoperative RV dysfunction' (not stated).",
+    "p3-f043 E-CPR: restored literal time '30 minutes before cannulation' (relation before, anchor ECMO cannulation); duration-vs-lead-time ambiguity retained.",
+    "Added caption-grounded imaging facts: p2-f061 immediate postoperative chest X-ray (Fig 2B), p2-f062 chest CT left septated pneumothorax (Fig 2C), p3-f060 CXR immediately after E-CPR (Fig 3A), p3-f061 CXR after extubation POD 2 (Fig 3B), p3-f062 CXR on discharge day POD 174 (Fig 3D); linked to events.",
+    "p1 timeline: added e02 (STEMI) before e03 (GDMT continued for a year) and e03 before e04 (5 Nov 2020 ED visit) from narrative chronology; ambiguity text updated.",
+    "unwrapped-graphic-4: notes/limitations now record that raw JATS places ijhf-7-261-i001.jpg inside table-wrap T1 (Table 1 raster); attribution remains unresolved only because the parser-1.4 source lacks segment linkage.",
+    "p3-f030 note corrected (action current, regimen uptitrated).",
+    "[semantic-rules-2026-10 re-sign] Verified M03 ages (19/29/23-year-old, each case's own sentence) and M12 nulling of 23 non-literal anchors (e.g. 'initial transfer to Adult Cardiology', 'ICU admission', 'ECMO cannulation' not literal in source).",
+    "[semantic-rules-2026-10 re-sign] M12 side effect fixed: 11 facts were left with time.relation='at' but no text/anchor. Restored anchors with literal source phrases for the encounter each paragraph describes: 'transferred to the Adult Cardiology Department' (p1-f027/f029/f030, and p1-f031..f033 'Three months later'), 'transferred to our hospital' (p2-f026/f027/f032/f033/f034), 'referred from the Pediatric Department to the Adult Cardiology Clinic' (p3-f026..f029), 'admitted to the intensive care unit' (p3-f035, p3-f039/f040 'The following day'), 'cannulation' (p3-f043), 'application for LVAD implantation was submitted' (p3-f046 'after eight days').",
+    "[semantic-rules-2026-10 re-sign] p2-f028 (dyspnea): anchor restored as the literal phrase 'transferred to our hospital' from its own evidence, relation at.",
+    "[semantic-rules-2026-10 re-sign] DEMO-AGE-TEXT warnings fixed: age_at_diagnosis facts p1/p2/p3-f007 (DMD) and -f008 (DCM) had label text_values ('Duchenne muscular dystrophy diagnosis'); set text_value to the literal Table cell (5/14, 6/20, 10/20), diagnosis kept in clinical_statement/notes.",
+    "Cleanup2 TIME/NO-BORROWING: 48 Table 1 facts (p1/p2/p3 height, weight, BSA, NT-proBNP, LVEF, TAPSE, RV s', INTERMACS, PVR, PAP index under the 'Preoperative patient’s characteristics' section row; LVAD type/speed/flow/PI/PP under 'The day of LVAD implantation'; early RV failure/TR under 'Postoperative outcomes') keep their time because the table section heading row structurally governs those rows; the bare heading quote was replaced by the governing table span 'Variables | Case 1 | Case 2 | Case 3\\n<heading>'.",
+    "Cleanup2 NO-BORROWING p1-f033 thrombectomy: 'Three months later' is in the preceding STEMI/ED-visit sentence, not the thrombectomy sentence; time nulled (relation unknown). STEMI quote kept as indication support; order kept via event p1-e02.",
+    "Cleanup2 NO-BORROWING p2-f054 ICH, p2-f055 brain CT, p2-f056 declined surgery: 'POD 122' is only in the preceding mental-status sentence; time nulled (relation unknown) and the time-only quote dropped; order kept via events p2-e13/p2-e14.",
+    "Cleanup2 GLUED-TEXT: repair tool's only candidate ('validator' -> 'valid at or') is a false positive and was not applied; reworded figure attribution_notes 'attribution validator' -> 'attribution validation check' (same meaning) to clear the warning."
+  ],
+  "unresolved": [
+    "Caption-layer visual_status is not_inspected in this annotation; the four actual images are inspected in the separate visual submission.",
+    "Table 1 is the only source of several values (age at DMD/DCM diagnosis, anthropometrics, hemodynamics, RV measures, LVAD settings, early RV failure/TR, inotropic-off, late complications); table timing is only section-level (preoperative / implantation day / postoperative).",
+    "Case 3 Table 1 TAPSE 18 under a cm header is implausible and uncorrected (review-only); table preoperative values differ from referral-time text values for Case 3 and Case 1 (different time points).",
+    "Case 2 Table 1 lists a discharge date equal to the death date (POD 123); narrative describes death in hospital; kept review-only.",
+    "Case 2 \"Amelioration of lung function due to left upper pneumothorax\" is internally odd; left pneumothorax is retained, direction of lung-function change is not asserted.",
+    "The Case 1 postoperative-extubation sentence cites ref B2, a published DMD LVAD early-extubation case report; same-patient identity is not stated or verified and no facts are imported from it.",
+    "The Discussion autopsy case of a 29-year-old (ref B10) is an external published patient, not Case 2.",
+    "Unwrapped graphic ijhf-7-261-i001.jpg is the raster alternative of Table 1 in the raw JATS (table-wrap T1); attribution kept unresolved because the parser-1.4 source has no segment linkage (needs parser refresh); adds no facts beyond Table 1 text rows.",
+    "Dates/day counts: Case 1 hospital day 108 vs POD 69; Case 3 elapsed time between ICU admission and LVAD implantation is not stated; admission dates for Case 2 are not stated."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 45,
+    "facts_reviewed": 186,
+    "figures_viewed": 0,
+    "key_findings": [
+      "M12 nulls anchors correctly but leaves dangling relation values when time.text is also null.",
+      "Cleanup2: table section headings govern Table 1 rows; 4 narrative facts lost borrowed times."
+    ],
+    "residual_risks": [
+      "Prior residual risks unchanged."
+    ],
+    "previous_assessment": {
+      "reviewer": "Claude Opus 5.5 parent",
+      "source_units_read": 45,
+      "facts_reviewed": 186,
+      "figures_viewed": 4,
+      "key_findings": [
+        "All 3 cases documented male (19/29/23); B2 (Korean 2021 DMD LVAD early-extubation report) is cited after the Case 1 extubation sentence and is very likely the same patient, but identity is not stated, so no facts imported; B10 29-year-old autopsy case is external.",
+        "Dates check out: Case 1 implant 2020.12.31 -> discharge 2021.03.10 = POD 69 (hospital day 108 counts from the earlier admission, consistent); Case 2 2023.05.16 + 123 d = 2023.09.16 death (POD 122 ICH, died next day); Case 3 2023.09.14 + 174 d = 2024.03.06.",
+        "Fig 1B caption: CXR at 4 h postop AFTER successful extubation -> extubation bounded before 4 h, represented as before the 4-h CXR.",
+        "Table 1 raster (i001) pixels reproduce Table 1 exactly incl. Case 3 TAPSE '18'; review-only conflict confirmed. Case 2 Table 1 discharge date = death date kept review-only.",
+        "Pixel check: F1 A scout/B CXR+L marker/C color Doppler echo/D CXR+L; F2 A CXR (no marker, image-left apical lucency), B CXR with 'L' marker, C rotated axial CT septated air spaces image-right, D brain CT hyperdense image-left; F3 A/D CXR with L, C endoscopy red arrow."
+      ],
+      "residual_risks": [
+        "Table 1 raster attribution unresolved pending parser refresh of the source (raw XML links it to table-wrap T1).",
+        "Case 2 'Amelioration of lung function due to left upper pneumothorax' direction unresolved; Case 3 E-CPR 30-minute phrase ambiguous.",
+        "Case 1 same-patient identity with ref B2 unverified.",
+        "p1 STEMI->GDMT->Nov 2020 order rests on narrative chronology."
+      ]
+    }
+  },
+  "physician_adjudicated": false
+}

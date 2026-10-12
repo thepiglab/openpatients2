@@ -2,7 +2,7 @@ import json
 import pytest
 
 from openpatients2.config import APIConfig, PipelineConfig
-from openpatients2.demo import example_record, fixture_sections
+from synthetic_fixtures import example_record, fixture_sections
 
 
 @pytest.fixture

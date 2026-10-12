@@ -1,0 +1,51 @@
+{
+  "article_id": "PMC12470713.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "91fd430b39d7f10989c45a0849b893541dbbfe4bff23d56426abb934db5b6eff",
+  "annotation_sha256": "64e525ae73d9216de1546bf105ba9e710cb37c970c288c3f255b29c0e03930fb",
+  "reviewed_at": "2026-10-10T01:23:42.077195+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 125,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "M12 anchor nulling verified for 33 facts (all were paraphrases); restored literal source anchors where the source states the reference: p1-f006 p1-f010 p1-f011 p1-f012 -> 'combination immunotherapy'; p2-f005 -> 'surgery'; p2-f027 p2-f028 p2-f029 p2-f030 -> 'temporary discontinuation of treatment'; p2-f036 -> 'high dose glucocorticoid therapy'; p2-f041 p2-f042 p2-f043 -> 'resume ICI therapy'; p2-f056 -> 'radiotherapy'; p3-f005 p3-f006 p3-f013 -> 'anti-PD-1 agent'; p3-f007 p3-f014 p3-f015 -> 'eight treatment cycles'; p3-f009 p3-f010 -> 'March 2024' [TIME-LITERAL]",
+    "Cleanup2 NO-BORROWING p1-f006 (ICI-DM condition, case 1): 'Following two treatment cycles' came only from the symptom-onset sentence quoted as an extra evidence; the diagnostic sentence (autoantibodies/C peptide) states no time. Time nulled (relation unknown) and the time-only quote dropped; ordering stays via event membership.",
+    "Cleanup2 NO-BORROWING p2-f015 (ICI-DM condition, case 2): 'in September 2023' came only from the presentation sentence quoted separately; diagnostic sentences state no time. Time nulled and that quote dropped.",
+    "Cleanup2 NO-BORROWING p3-f007 (ICI-DM condition, case 3): bare 'After six more treatment cycles' fragment removed; diagnosis rests on the admission C peptide/autoantibody sentence which states no time. Time nulled.",
+    "Cleanup2 TIME-ONLY p3-f014 (capillary glucose 455 mg/dL) and p3-f015 (absent hyperglycemia symptoms): the time is in the same source sentence; replaced the split time fragment + result quotes with the single governing span. Times kept. No glued text in this article."
+  ],
+  "unresolved": [
+    "Narrative review with three case reports; review/background sections, cohort statistics and cited reports (including the cited spontaneous-recovery case in b00012) are excluded from patient facts.",
+    "Ages are stated without a time point and are recorded as age_other; dates are month/year only and no ISO dates are generated.",
+    "Drug names/doses/routes for the CTLA-4/PD-1 inhibitors, insulin, glucocorticoids and levothyroxine (case 3) are not stated and none are inferred.",
+    "Case 2: ICI resumption after the hypophysitis episode and radiotherapy delivery are described only as decisions/choices; the stated reasons for stopping ICI differ between b00020 and b00027.",
+    "Caption-layer visual status not_inspected in this annotation; the single mechanism figure is inspected in the separate visual submission.",
+    "Parent review: case_context set to multi_patient with multiple_index_patients true for all three patients."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 125,
+    "figures_viewed": 0,
+    "key_findings": [
+      "semantic-rules-2026-10 re-sign: M12 verified across 3 patients; 19 literal anchors restored; no needs-review items",
+      "Cleanup2: 3 borrowed condition times nulled, 2 same-sentence times kept with governing quotes."
+    ],
+    "residual_risks": [
+      "p2 'Four months later' anchored to the decision to resume ICI therapy (preceding paragraph), order implied by narrative"
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12736019.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7f7aec2413bb90d34e1c7520c8800a2c540fed84087d0c79739406e0a1e563a1",
+  "annotation_sha256": "fbbdb3c2d18f07f4f4e8d32774b6d7dbd82b27a56d6cf439dd87a7310a197f7d",
+  "reviewed_at": "2026-10-10T01:49:34.018593+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 53,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f024 ablation body_site: removed inferred \"(left atrium)\"; lesion set kept as printed.",
+    "p1-f017 rt-PA: removed non-indication \"intravenous thrombolysis\" from indication.",
+    "p1-f005 stroke: removed borrowed severity \"NIHSS 6 at onset\" (NIHSS kept as its own fact p1-f013).",
+    "p1-f012 abstract left hemiparesis: added its own-sentence time \"three days after AF ablation\" with a quote containing it.",
+    "p1-f013 NIHSS at onset: time relation at -> after (anchor catheter ablation).",
+    "p1-f044 thrombus: added Figure 4 caption evidence (two larger fragments, central pale spots).",
+    "Timeline: added 6 supported relations (stroke onset e03 before head CT e04, MRI/DWI-MRA e07 and perfusion e08; EVT e11 before follow-up imaging e13; discharge day 11 e15 before both follow-up timepoints e18/e19). 12 -> 18 relations. CT->idarucizumab and MRI->EVT left unlinked (narrative order only); day 4 -> day 11 retained (same day-count in consecutive sentences).",
+    "semantic-rules-2026-10: M12 nulled p1-f043 anchor 'dabigatran resumption on day 4' (paraphrase) leaving a dangling relation 'before'; restored the literal anchor from the fact's own sentence ('After confirming no hemorrhage on follow-up imaging, dabigatran was resumed on day 4'): anchor 'dabigatran was resumed on day 4', relation before.",
+    "Cleanup3 NEGATION p1-f049: outcome text_value 'asymptomatic with full neurological recovery' -> 'full neurological recovery' (present outcome); added p1-f053 symptoms_function 'Symptoms' kind symptom assertion absent at 'three-month follow-up' (quote 'She remained asymptomatic with full neurological recovery at three-month follow-up.' keeps the cue), linked to event p1-e18.",
+    "Cleanup3 NEGATION p1-f050: abstract outcome text_value 'asymptomatic' -> symptoms_function 'Symptoms' kind symptom assertion absent at 'two months' (quote 'She remained asymptomatic at two months.')."
+  ],
+  "unresolved": [
+    "Single-patient case report with no calendar dates; stroke onset, imaging, thrombolysis and thrombectomy clock times are not reported.",
+    "Source conflicts retained: abstract left hemiparesis vs body left facial palsy/limb clumsiness; two-month (abstract) vs three-month (body) follow-up; right M1 occlusion (text) vs distal ICA/proximal MCA occlusion (Figure 3A caption); 7 mm vs 7.2 mm aneurysm size; Figure 3A/3B callouts differ between body and caption.",
+    "No supplements. Figure pixels are inspected in the separate visual submission; the visual_status here follows the caption-layer convention.",
+    "Discussion statements about guidelines, cited trials and other literature are not patient facts and are excluded."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "campaign": "semantic-rules-2026-10 re-sign",
+    "source_units_read": 20,
+    "facts_reviewed": 52,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Re-sign 2026-10: dangling time relation on p1-f043 fixed with literal same-sentence anchor; privacy flags (Fig3 D direct_identifiers) confirmed category-only and already dual-signed.",
+      "Single index patient; discussion/guideline/cited-study content correctly excluded.",
+      "Abstract/body discrepancies (left hemiparesis vs facial palsy/limb clumsiness; 2 vs 3 months; M1 vs distal ICA/proximal MCA; Fig 3A/3B callouts; 7 vs 7.2 mm; large vs moderate) kept as separate facts/ambiguities, not reconciled.",
+      "Fig 3C d3 4.2 mm stays a pixel reading only; Fig 2 legend \"Mismatch volume\" vs text \"salvageable penumbra\" noted in visual record.",
+      "Day 4/day 11/one month later unanchored; triple-therapy start unstated; no dabigatran hold inferred from \"resumed\".",
+      "Device (ablation catheter) action unknown, ICH refuted plus negative CT, LA thrombus as TEE observation only, aneurysm comorbidity role accepted.",
+      "Cleanup3: asymptomatic follow-up recorded as absent symptoms; full neurological recovery kept as present outcome."
+    ],
+    "residual_risks": [
+      "Fig 3D burned-in identifiers (institution, age/sex, accession, date/time) await the privacy-flag sidecar; no values transcribed.",
+      "Occlusion level and figure-panel callouts remain source-inconsistent.",
+      "Mechanism (microbubble/atrial stunning, cardioembolic) is author interpretation recorded as ambiguity."
+    ]
+  },
+  "physician_adjudicated": false
+}

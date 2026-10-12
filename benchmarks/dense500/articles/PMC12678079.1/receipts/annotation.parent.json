@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12678079.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6c6e0f08702328b56e91cbca09bb7001e9ecc9704b5a5ee96642702f3a4f599c",
+  "annotation_sha256": "92a2e3f63456c4b646ef88f78d85b03bc29b35570fbde1febdd8529162f0c730",
+  "reviewed_at": "2026-10-11T03:14:25.501156+00:00",
+  "source_segments_read": 54,
+  "facts_reviewed": 223,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f067 (Discussion \"Case 1 relapsed after 6 months\") quarantined as source_conflict/review_only against DoR 23/23+ months, matching the case 2 relapse treatment (p2-f045).",
+    "Split combined multi-drug medication items into one item per drug: p3-f056 -> p3-f056/f062/f063/f064; p3-f058 -> p3-f058/f065/f066 (quote extended to the sentence naming the drugs); Table 1 \"GC + TAC + HCQ\" p3-f054 -> p3-f054/f067/f068 with alternate_representation_of to p3-f051/f052/f053; p4-f024 repeated protocol -> dexamethasone p4-f024 + rhTPO p4-f042 (no dose copied).",
+    "Added p1-f068 hetrombopag maintenance from Table 1 maintenance row; alternate links p1-f057->p1-f056 (danazol) and p1-f008->p1-f066 (peak 500).",
+    "p2-f041 platelet 260-270: quote extended to its own sentence and time \"During the follow-up period until July 2025\" added.",
+    "Added literal \"Initially\" times to p1-f025, p4-f020, p4-f021 and events p1-e02, p4-e02.",
+    "Added Table 1 ITP duration row evidence to each case_context; abstract evidence for case 3 secondary ITP and ripertamab; Results \"After ripertamab\" evidence for p3/p4 ripertamab facts.",
+    "Case 2 agent ambiguity expanded with the justification for treating case 2 (unresolved, neutral + two review_only facts) differently from cases 3/4 (ripertamab + ambiguity); case 2 relapse ambiguity given the abstract sustained-CR sentence.",
+    "Added p1 ambiguity for figure-only values (PLT <1 vs text <10, PLT 2, RTX 800mg).",
+    "Added 13 supported temporal relations (p1 6, p2 3, p3 3, p4 1) from explicit connectives."
+  ],
+  "unresolved": [
+    "Figure pixel content (platelet counts, treatment annotations, dates) is recorded in the visual submission, not as text facts; figure-only values are not duplicated as facts.",
+    "Anti-CD20 agent for case 2 is a source conflict (Table 1 and Results rituximab; Methods and Figure 1 ripertamab); cases 3 and 4 Results sentences say rituximab-hetrombopag while Table 1, Methods and Discussion say ripertamab.",
+    "Relapse and DoR statements conflict across the abstract, results, discussion and Table 1 (case 1: 6 months vs 23 months; case 2: relapse vs DoR over 27 months; abstract DoR range 3 to 27 months vs Table 1).",
+    "Bone marrow smear findings stated \"In all patients\" in the Methods are recorded for each patient; their timing is not stated.",
+    "Calendar dates appear only on the Figure 2 axes and in the case 2 follow-up until July 2025; most narrative events have no stated time and order is recorded only where explicit connectives or table row headers establish it.",
+    "Ethics, consent and eligibility criteria statements are study administration and are not recorded as patient facts.",
+    "Table 1 \"Prior treatment\" rows are kept as one aggregate historical item per patient (with the prior-line count); they overlap the narrative drug facts but list several drugs, so no single alternate_representation_of link applies."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 54,
+    "facts_reviewed": 223,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Four index patients numbered by first mention (Case 1-4 in Table 1 and narrative); roster 4 complete.",
+      "Anti-CD20 agent: case 1 rituximab consistent; case 2 Table 1/Results rituximab vs Methods/Figure 1 ripertamab unresolved; cases 3/4 ripertamab with the templated Results opener as an ambiguity.",
+      "Relapse/DoR statements conflict (case 1 relapse after 6 months vs DoR 23; case 2 relapse vs DoR >27; abstract DoR range 3-27); relapse statements review_only.",
+      "TET2 mutation (allele frequency 1.00%) kept in family_genetics as index-patient genetic test with origin unknown; somatic vs germline not stated.",
+      "Figure 1 is a per-patient clinical-course chart with figure-only values (case 3 later RTX course, case 1 RTX 800mg); Figure 2 date axes flagged as timestamps."
+    ],
+    "residual_risks": [
+      "Bone marrow smear findings from the Methods \"In all patients\" sentence are applied to each patient without timing.",
+      "Table 1 prior-treatment rows kept as aggregate historical items overlapping narrative drug facts.",
+      "Visual GLUED-TEXT warning on \"1/2days\" is a checker false positive: the figure prints it glued (verified on pixels)."
+    ]
+  },
+  "physician_adjudicated": false
+}

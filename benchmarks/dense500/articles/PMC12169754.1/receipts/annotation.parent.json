@@ -1,0 +1,48 @@
+{
+  "article_id": "PMC12169754.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9d19fe38d49fe69723d92ae08f11971de52cc52877ea7cda352e7c0ee596f218",
+  "annotation_sha256": "2cc4ad736e2c9b8b04bd3a02af1d3e686982e53d97831f19b07099b04a6cb027",
+  "reviewed_at": "2026-10-10T01:41:45.134668+00:00",
+  "source_segments_read": 61,
+  "facts_reviewed": 155,
+  "patients_reviewed": 5,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M03 age text_value '81','82','86','96' (p1-p4) are the literal Table 1 'Age, years' cells in each patient's own row quote (b00011-b00014); no other migrations; no edits needed.",
+    "cleanup-2 GLUED-TEXT: applied repair_glued_text.py (34 high-confidence tokens: typeIII/TypeIII->type III, gradeA->grade A, Age81years->Age 81 years, asCase3/andCase3/toCase3->Case 3 wording) and manually spaced remaining letter-digit glue in exported free text (CaseN->Case N in event descriptions/subject descriptions, TableN/TablesN/FigureN->Table N etc., score3/4->score 3/4, postoperative day11->day 11, two2–0Prolene->two 2–0 Prolene, RawXML->Raw XML); patient labels left unchanged to keep figure receipts' identity binding; quotes/ids/enums untouched; source spellings confirmed spaced. No time-only quote rows for this article.",
+    "[cleanup3 labels/sidecar glue/times/negation] Patient labels p1-p4 'Case1:'..'Case4:' respaced to 'Case 1:'..'Case 4:' (GLUED-TEXT).",
+    "[cleanup3 labels/sidecar glue/times/negation] Visual submission FIG2 text respaced (no content change): 'Cases1–4', 'scores0–4', 'Case1'..'Case4', 'toward0', 'at2'/'black4-to2'/'at1', response key '0: never, 1: occasionally, 2: sometimes, 3: often, 4: always' (incl. mangled mentioned-category value), 'row1'..'row12', 'questions1,2,3,4,6', 'All96', 'Table1', 'Fig2' -> spaced prose; checked against the figure pixels (legend prints 'Case 1'..'Case 4'). visual_target_sha256 updated in figure-ehr-labels and figure-privacy-flags."
+  ],
+  "unresolved": [
+    "This text/caption annotation layer does not use pixels; pixel inspection is recorded separately in the visual target and its review receipts.",
+    "Original XML Tables 1–3 fully reviewed; raw values match retained rows. Pooled blood-loss summaries disagree with individual Table 1 values, and Table 3 hospital-stay column values differ from narrative/Table 1 summaries; no pooled value assigned to a patient.",
+    "The one-month fluoroscopy statement of no esophageal contrast reflux in a “spine position” lacks an explicit patient identifier or all-patient wording; not assigned to Case 3 or all four by proximity.",
+    "Figure 1 has no operative case identity. Figure 2 native pixels label Cases 1–4; individual plot readings are recorded separately as visual estimates, not numeric text-derived clinical facts. Several curves overlap. Exact follow-up intervals are unreported.",
+    "Original comparator with transient postoperative dysphagia is represented sparsely; other three comparator patients lack individual records. No explicit same-patient prior-report linkage identified.",
+    "Selection thresholds (e.g.FEV1>1L) are protocol criteria, not documented individual measurement results. Generic future reoperation recommendations are not completed case interventions."
+  ],
+  "assessment": {
+    "clinical_course": "Personally read all61 source units and source table contents, all155 fact representations and49 distinct evidence quotations, all70 runtime clinical sections,20events15relations andfive summaries. Four main cases plus one sparse male comparator are represented; reported eight and roster incomplete. Individual Table1 values retained despite conflicting pooled summaries. Cases1/2 GradeA esophagitis and treatable heartburn; Case3 delayed emptying and typeI recurrence with medication; Case4 CHF/renal disease. No exact individual FSSG totals, comparator demographics or delivery of merely treatable medication invented. Unassigned one-month fluoroscopy retained as article limitation rather than attributed by proximity.",
+    "visual_review": "Both actual JPEGs and three enlarged chart-row views personally inspected. All12FSSG plots,96 uncertain endpoint estimates, questionnaire labels, legend, significance markers and10 source citations checked. F1 operative ownership unresolved; F2 explicitly labeledCases1–4, shared only across the four main patients. Approximate plot estimates are not inserted as exact source-derived clinical measurements.",
+    "clinical_fidelity": "AI source-grounded review, not physician adjudication or measured recall.",
+    "reviewer": "Claude Opus 5.5 parent",
+    "key_findings": [
+      "semantic-rules-2026-10: M03 table-cell age texts verified.",
+      "Cleanup-2: glued free text repaired; no borrowed-time facts flagged.",
+      "Cleanup pass 3: patient labels and sidecar text respaced; span/time-only quotes and negation-word items resolved against the source (NO-BORROWING/TIME-LITERAL/EVID-NEGATION)."
+    ]
+  },
+  "physician_adjudicated": false
+}

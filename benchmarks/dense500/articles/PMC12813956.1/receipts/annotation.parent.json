@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC12813956.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "61ef40268110947bf0d5b3dda8c37a0f40d849bb6d0419b71f6bc65f1c91e345",
+  "annotation_sha256": "b6b0b5ed53b63351a7b7acc92f5a1aca9cc3e874a1e0e17c2b88608d0907db03",
+  "reviewed_at": "2026-10-10T01:56:18.722987+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 107,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f092: absent hypotension confirmed -> unknown (\"no adverse effects, including hypotension ... were observed\": an observed absence, not a diagnosis excluded by workup) (ASSERT-ABSENT)",
+    "p1-f004: migration-nulled paraphrase anchor \"October2021 evaluation\" restored as the literal phrase \"evaluated in October 2021\" (quote extended to include it) (TIME-LITERAL)",
+    "GLUED-TEXT cleanup by hand (repair tool not applied because it mis-split 'redatetime' -> 'redate time'): 'rate85beats/min' -> 'rate 85 beats/min', 'NYHAIII toI' -> 'NYHA III to I', 'to30%' -> 'to 30%', 'with20–25%EF' -> 'with 20–25% EF', month-year names ('October2021 ECG' -> 'October 2021 ECG', March 2022, July 2023, February 2024), 'every2–4weeks' -> 'every 2–4 weeks', 'rate55' -> 'rate 55', ambiguity text ('Combination37.5/25mg and49/51mg' -> 'Combination 37.5/25 mg and 49/51 mg', 'redatetime' -> 'redate/retime', 'around2.0 versus table2.02' etc.) and provenance pass note ('all107facts' -> 'all 107 facts'); 21 values. Wording only; no values or meanings changed",
+    "Cleanup pass 3 NO-BORROWING: p1-f012..p1-f017 home medications (tamsulosin, triamterene/hydrochlorothiazide, donepezil, amlodipine, atorvastatin, pantoprazole) time 'October 2021' nulled (text/anchor/date null, relation unknown) and the multi-sentence paragraph quote removed: the date is in the separate 'evaluated in October 2021' sentence, not the medication sentence.",
+    "Cleanup pass 3 NO-BORROWING: p1-f039 LV systolic function time 'March 2022' nulled and paragraph quote removed (date in the 're-presented' sentence, not the TTE sentence).",
+    "Cleanup pass 3: p1-f040 chronic systolic HFrEF time now 'Mar 2022' (relation at) from Table 1 row 'Mar 2022 (HFrEF diagnosis) | 20-25 | II | 103 | 1.8 | 38', which governs the diagnosis; paragraph quote replaced by that row.",
+    "Cleanup pass 3: p1-f066 SBP 105 mmHg keeps 'May 2024' from the Table 1 row; second quote trimmed to its own sentence 'At the time of initiation, he had a low-normal systolic blood pressure (SBP) of 105 mmHg and a normal heart rate.'",
+    "Cleanup pass 3 GLUED-TEXT (visual submission, viewed FIG1-FIG3): respaced printed-label transcriptions to match the pixels ('25 mm/s, 10 mm/mV', 'LP 40Hz, AC 60Hz', 'Printed on 10/05/2021 17:35:28', 'Page 1 of 1', 'unlettered 12-lead', 'long lead-II strip', 'rate 85 beats/min', 'heart rate of 55', 'October 2021', 'March 2022', 'Creatinine (mg/dL)', 'eGFR (mL/min/1.73 m²)', axis ticks/dates and 'approximately N' readings). OUTRIGHT ERROR fixed: FIG2 footer timestamp is printed '17:27:49' (zoomed pixels), not '17:37:49' (visual submission and privacy prefill evidence). Privacy prefill evidence text synced; figure-ehr-labels/figure-privacy-flags visual_target_sha256 updated."
+  ],
+  "unresolved": [
+    "Figure pixels were not inspected; visual details are restricted to captions.",
+    "No explicit same-patient prior-report link found. References describe trials/cohorts/guidelines rather than this individual.",
+    "No precise doses for spironolactone reintroduction, diuretic intensification or apixaban restart. Table dashes mean unreported values; no negative clinical claims drawn from them.",
+    "No follow-up longer than the reported three-month vericiguat course inferred."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "campaign": "semantic-rules-2026-10 re-sign",
+    "source_units_read": 27,
+    "facts_reviewed": 107,
+    "figures_viewed": 3,
+    "key_findings": [
+      "M02: 20 comparators \"=\" verified against plain printed Table 1/text values (no <, > printed)",
+      "M03: \"78-year-old\" is the literal age phrase",
+      "M12: one paraphrase anchor nulled correctly; literal anchor restored",
+      "Cleanup pass 2: glued text repaired by hand (tool diff contained a mis-split); no time-only-quote or negation-word rows for this article",
+      "Cleanup pass 3: 8 borrowed/span times resolved (7 nulled, HFrEF diagnosis re-sourced to Table 1 row); FIG1-FIG3 visual text respaced; FIG2 print timestamp corrected to 17:27:49."
+    ],
+    "residual_risks": [],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09",
+    "cleanup3": "final sweep 2026-10-09: glued sidecar text, span/time-only quotes, negation words"
+  },
+  "physician_adjudicated": false
+}

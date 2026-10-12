@@ -1,0 +1,53 @@
+{
+  "article_id": "PMC12821518.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "72ed7594c720481a8e84add95c18b702c65dd40a7f3f1ab0b1033d8a090df678",
+  "annotation_sha256": "6b796211b56a1413f6bebf58ad54aad52f85191ab99b6ff67e76a09cae231c2a",
+  "reviewed_at": "2026-10-10T01:07:20.923532+00:00",
+  "source_segments_read": 16,
+  "facts_reviewed": 88,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Moved event kind/time_kind/time_precision classification into the annotation events (annotator had patched them only into the schema submission); calendar values omitted because the dates are not ISO literals.",
+    "p1-f015: removed inferred related_condition pneumonia from improvement in fever and cough.",
+    "p1-f040: hydrocortisone indication was borrowed from the preceding rash sentence; extended own quote and removed the indication; Table 1 dose/frequency/duration kept (governing column).",
+    "p1-f048: follow-up text_value no longer carries a negation; added p1-f051 symptoms absent during the subsequent 6-month follow-up (symptom-free).",
+    "Added temporal relations: p1 e02<e03, e02<e04, e09<e10; p2 e01<e04, e05<e06, e06<e07, e04<e08."
+  ],
+  "unresolved": [
+    "Figure pixels were inspected separately in the visual submission; caption fields in this file remain caption-level.",
+    "Chest radiograph laterality differs between text (right upper lobe) and Figure 1B caption (left mid and lower lobes); both kept as review-only.",
+    "Discussion statements about parasitology assessment, drug challenge and allergy workup do not clearly state which case they cover.",
+    "Discussion sentences about mechanisms, UAS7/UCT tools and literature were treated as background, not individual patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 16,
+    "facts_reviewed": 88,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Two index girls correctly separated; Fig 1A-C to p1 and Fig 2 to p2 by in-text citations (Fig 2 caption duplicates Fig 1A wording).",
+      "Chest radiograph laterality: text right upper lobe vs Fig 1B caption left mid/lower; pixels show opacity on image-right mid/lower zone without a side marker, so both stay source_conflict review_only.",
+      "Explicit both-cases statements (abstract diagnosis/refractoriness, b00009 subcutaneous route and tolerance) applied to each patient; discussion cohort sentences not copied.",
+      "p2 13 June 2025 is in the governing sentence for cough, rhinorrhea and vomiting; p1 new rash and initial CRP correctly untimed; By hospital day 3 uses relation before.",
+      "WBC 12.9 x10^3/uL (text) and 10^9/L (table header) are equivalent units, not a conflict."
+    ],
+    "residual_risks": [
+      "Allergy workup not prioritized kept not_performed review_only; parasitology and drug-challenge ownership unresolved and left as ambiguities.",
+      "Hydrocortisone 300 mg/day (17.8 kg) and 200 mg/day (10 kg) are as printed in the tables; not verified clinically."
+    ]
+  },
+  "physician_adjudicated": false
+}

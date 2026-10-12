@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC12531118.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1f34c74f5fa0e7b76ae4cf5f01937942b7e234343cac649f921f5070d47c4a7e",
+  "annotation_sha256": "c66f3f5ab836ce22d864d228591f870b14f6939dfcd89df8d23e5a0dc56eb059",
+  "reviewed_at": "2026-10-11T02:14:57.492805+00:00",
+  "source_segments_read": 60,
+  "facts_reviewed": 144,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Scoped figure-not-inspected notice to the caption-only layer.",
+    "Corrected before/after CR temporal relations for36 measured observations.",
+    "Retained author-defined MEC units with unresolved gross/net terminology.",
+    "Made Figure2 phase-specific significance and patient ownership citations precise.",
+    "Preserved post-CR printed637seconds versus table638seconds discrepancy without creating a resolved value.",
+    "semantic-rules-2026-10 re-sign: verified all 91 M02 comparator '=' additions against Table 1/body (no printed <, >, 'up to'); verified M03 p1-f002 text_value '57‐year‐old' literal in its own quote.",
+    "FIG-LABELS NR001/NR002: kept fig-0002 panels 'A'/'B' — 'A.', 'B.' are printed on the image under each trace and the body text cites 'Image A in Figure 2' / 'Image B in Figure 2'.",
+    "opus-fixup: Figure 2 (ccr371315-fig-0002) annotation panels lacked the printed panel 'C.' (Post-CR Exercise Test; pixels viewed): added panel C (p1, individual, exercise testing, caption evidence) and noted in attribution_notes that no device mode is inferred for C. Visual submission, figure-EHR labels and privacy flags already had panel C; unchanged.",
+    "GLUED-TEXT cleanup: repair_glued_text.py fixed 'this57' -> 'this 57' (jats-graphic-1 panel caption description), 'afterCR' -> 'after CR' (article_limitations/5) and an internal provenance token; manual spacing fixes (wording only, values unchanged): 'by43%' (p1-f112 text_value), 'Table1' -> 'Table 1' (clinical_statements p1-f115..f132, notes, findings p1-f142/f143, ambiguity, limitation), 'VO2peak15.0mL/min/kg,47%predicted,4.3MET' -> 'VO2peak 15.0 mL/min/kg, 47% predicted, 4.3 MET' (p1-f141 finding), 'EF28%'/'LVEF28%' (summary/0, event description), unit spacing in summary/1 and summary/3, ambiguity must_not_infer/description numbers, and 'Figure2C ... time10:37min:ss (637seconds) ... reports638.00seconds ...;637seconds' in article_limitations/5",
+    "Cleanup3 GLUED visual submission (Fig2, Fig3): respaced glued prose in panel descriptions, visual cues and limitations (e.g. 'HRpeak120bpm' -> “HRpeak 120 bpm”, 'labels1through38' -> 'labels 1 through 38', 'contains38session' -> 'contains 38 session', 'afterCR' -> 'after CR'); printed image text (METpeak, ET/Speed/Grade/HRpeak lines, 36 Planned Sessions/38 booked Sessions, plot title) now transcribed inside quotation marks as printed; Fig3 plateau positions corrected on pixels to sessions 6/7, 9/10, 20/21 and 29/30 (was 6, 10/11). figure-EHR label and privacy-flag visual_target_sha256 refreshed.",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (8 whitelisted label/number or number/unit spacing edits outside quotes in visual-submissions (8); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. Printed text verified on pixels (Figure 2 'ET 07:07 min:ss', 'Grade 9.5%'). Additional hand respacing of reviewer text in the visual submission to match printed/normal spacing: ET07:07->ET 07:07 (x3), Speed2.5mph->Speed 2.5mph (printed), panelA/B/C->panel A/B/C, Test(1)/(2)->Test (1)/(2) (printed), Load(Session-RPE->Load (Session-RPE (printed), near34000 atx38->near 34000 at x 38, 23,280arbitrary/720arbitrary/33attended/36/38session respaced, VT,RCP->VT, RCP, pre-to-postCR->pre-to-post CR, approximatelyNNNNN->approximately NNNNN, MEC(…)/Economy(…)/Efficiency(%)->spaced as printed, tests1/2->tests 1/2.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=None, roster_complete=true, evidence b00001 \"A 57‐year‐old male with a complex cardiac medical history\"; 1 patients annotated in first-mention order.",
+    "ROSTER-ORDER update (singular case statement = count 1): roster reported_individual_count null -> 1, roster_complete true, evidence b00010 \"in response to training in a HFrEF patient with a CRT‐D in DDD mode\"; 1 patient annotated."
+  ],
+  "unresolved": [
+    "Caption-layer figure fields remain text-only; separate actual-pixel submission covers all five source assets.",
+    "No explicit same-patient prior-report link found; citations are literature references, not identity links.",
+    "Exercise physiology outcomes are within-subject, protocol-dependent indirect measurements; no mortality reduction or proven peripheral mechanism assigned to this patient.",
+    "No exact rehabilitation calendar dates, long-term survival, hospitalization outcomes or follow-up EF reported.",
+    "Mechanical-efficiency net-change cells use fractional representations with unclear units, retained as exact text. Author-defined MEC units (mL·min^(−1)·W^(−1)) and MEF percentage units are retained from b00057; gross/net terminology remains unresolved.",
+    "Figure 2C prints exercise time 10:37 min:ss (637 seconds), while Table 1 reports 638.00 seconds after CR, a roughly one-second discrepancy. Both are preserved in their source layers without resolving them; 637 seconds is a visual reading conversion, not a new clinical fact."
+  ],
+  "assessment": {
+    "clinical_course": "Personally read all60source units and raw18row table; all144fact representations, all14 clinical sections,11events11edges and4summary claims reviewed. Device reprogramming, rehabilitation course, medications and full paired exercise measurements grounded in this patient.",
+    "conflicts": "Ten numerical/terminology conflict representations remain review-only; planned/booked training sessions in pixels are not completed33sessions. No inferred mortality benefit or proven muscular mechanism.",
+    "visual_review": "Personally inspected all5actual assets and7visual scopes including graphical abstract, concept map, exercise traces, cumulative training chart and paired MEC/MEF bars; checked11citations. No diagnosis derived solely from chart appearance.",
+    "supplements": "No supplementary material listed in source.",
+    "reviewer": "Claude Opus 5.5 parent",
+    "key_findings": [
+      "semantic-rules-2026-10: M02 (91) and M03 (1) verified correct; panel labels A/B confirmed printed on pixels.",
+      "opus-fixup: Fig 2 panel C added to annotation figures after viewing pixels.",
+      "Cleanup pass 2: 3 glued tokens repaired by tool (diff reviewed) plus ~30 manual spacing fixes across exported free text; no time-only quote or negation-word rows for this article",
+      "Cleanup3: visual-submission glued text respaced (Fig2/Fig3); no annotation change."
+    ],
+    "residual_risks": [
+      "fig-0002 also has a printed panel 'C.' (Post-CR Exercise Test) not represented as a panel row in the annotation figure entry."
+    ],
+    "facts_reviewed": 144,
+    "figures_viewed": 1,
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
+  },
+  "physician_adjudicated": false
+}

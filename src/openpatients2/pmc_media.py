@@ -220,9 +220,10 @@ def parse_figures(xml: str, pmcid: str, version: int, media: list[dict], xml_url
         while current is not None:
             ancestors.append(current); current=parents.get(current)
         names={local_name(x.tag) for x in ancestors}
-        if names & {'fig','fig-group','supplementary-material','inline-supplementary-material'}:
+        if names & {'fig','fig-group','supplementary-material','inline-supplementary-material',
+                    'ref-list','ref','ack','permissions','contrib-group','fn-group'}:
             continue
-        if not names & {'body','abstract','app'}:
+        if not names & {'body','abstract','app','floats-group'}:
             continue
         href=node.get(XLINK) or node.get('href')
         if not href:continue
@@ -230,10 +231,12 @@ def parse_figures(xml: str, pmcid: str, version: int, media: list[dict], xml_url
         while key in ids:key+='-unwrapped'
         ids.add(key); matched=_match_graphic(href,media)
         assigned.update(x['url'] for x in matched)
-        container=ancestors[0] if ancestors else node
+        table_container=next((x for x in ancestors if local_name(x.tag)=='table-wrap'),None)
+        container=table_container if table_container is not None else (ancestors[0] if ancestors else node)
         asset_rights=[{'type':local_name(x.tag),'text':xml_text(x),'url':x.get(XLINK) or x.get('href')}
                       for x in container.iter() if local_name(x.tag) in {'license','copyright-statement','attrib'}]
         figures.append({'figure_key':key,'figure_id':node.get('id'),'figure_type':'unwrapped_graphic',
+            'containing_table_id':table_container.get('id') if table_container is not None else None,
             'group_id':None,'group_label':None,'group_caption':None,'label':None,'caption':None,'alt_text':None,
             'article_anchor_url':None,'source_xml_url':xml_url,'graphic_references':[href],
             'media':matched,'image_urls':[x['url'] for x in matched if x['kind']=='image'],

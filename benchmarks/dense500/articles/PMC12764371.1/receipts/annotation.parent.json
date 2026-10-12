@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12764371.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "269e465143b89913ea28120cfad9d45c976a4e08d330adb2b58cda5a771dacc1",
+  "annotation_sha256": "312a41cdad7a49ef257c0be57ff89737190fd62f846a9e145d11db5cbf599ec6",
+  "reviewed_at": "2026-10-11T21:38:15.794980+00:00",
+  "source_segments_read": 42,
+  "facts_reviewed": 221,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f058 caesarean section: removed the b00039 discussion quote (lists lactic acidosis, which the case text documents only postoperatively); indication kept from its own b00014 sentence; tension stays an ambiguity",
+    "p1-f063/p1-f064 nephrology and cardiology consultations: action_status unknown -> completed, with b00013 evidence that the nephrology and cardiology reviews took place (blood pressure recorded during each review); action_text no longer says requested",
+    "p1-f108 peripheral smear: renamed Schistocytes on peripheral smear, flag negative, removed negation text_value",
+    "p1-f121 abdominal CT without findings: flag unknown -> normal",
+    "p1-f051 right lung base sounds: quote extended to its own sentence, time Approximately five hours after admission (after, anchor admission)",
+    "p1-f003 documented sex: added the sex noun quote \"in a woman\" (b00036)",
+    "roster evidence: added the singular case statement \"we describe a 30-year-old primigravida\" (b00001) before the b00036 quote",
+    "p1-e06 description: removed unsupported labels tachycardia/tachypnoea; now states the recorded values",
+    "relations: e15->e16 evidence now the literal \"5 hours after admission\"; added e07 before e17 (Postoperative day 1), e18 before e10 and e10 before e19 (postoperative day 2/5/7)",
+    "ambiguity on \"improved steadily\": added ALP and AST postoperative day 7 rises with row quotes and fact links",
+    "causal ambiguity: added the b00040 \"PPROM was an incidental finding\" quote",
+    "Table 1 clinical statements: fixed \"at At admission\"/\"at Postoperative day\" wording"
+  ],
+  "unresolved": [
+    "No figures and no supplements are listed in the source; no visual or supplement review applies.",
+    "The newborn son and the fetus are recorded inside the mother’s record with subject newborn or fetus, not as separate patients, because the source reports one individual case.",
+    "Table 1 values are recorded with their column headers as times and the printed normal ranges; no high or low flags were added because the table prints none.",
+    "Causal statements in the discussion (PPROM not causal, post-viral injury, transplacental contributions) are author interpretation and are not recorded as facts.",
+    "The reference point of the 12-day hospital discharge interval is not restated in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 42,
+    "facts_reviewed": 221,
+    "figures_viewed": 0,
+    "key_findings": [
+      "All 95 Table 1 cells verified programmatically and by eye: values, units, printed normal ranges as reference_range_text, column-header times (postoperative day N relation at with null anchor; At admission/At discharge anchored literally), no flags from ranges, blank cells omitted",
+      "Requested nephrology and cardiology consultations are documented as done by the BP recorded during each review",
+      "Normotensive recorded as hypertension absent on admission; no schistocytes now a negative smear result",
+      "Causal remarks (PPROM not causal, post-viral injury synergy, transplacental contributions) kept as ambiguities only",
+      "Hospital discharge 12 days after keeps anchor null; roster count 1 from literal singular case statements; newborn and fetus kept as subjects inside the mother record"
+    ],
+    "residual_risks": [
+      "Caesarean indication: discussion lists lactic acidosis, case text documents it postoperatively; kept as ambiguity",
+      "Discussion states absence of thrombocytopenia while Table 1 prints 134 and 117 against 150-400; ambiguity, no flags",
+      "Admission vital signs and GCS left without time because their sentence is not scoped by On admission"
+    ]
+  },
+  "physician_adjudicated": false
+}

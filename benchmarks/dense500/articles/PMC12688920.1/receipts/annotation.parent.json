@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12688920.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3881ccc07de098344ff6734361ed95e174fa9e7ea8a58edcfaebcdad46084359",
+  "annotation_sha256": "789d46d7b77bfbbae40c83dade48977a5e683f56680bdc815b09ab0d19978201",
+  "reviewed_at": "2026-10-11T18:37:49.278874+00:00",
+  "source_segments_read": 62,
+  "facts_reviewed": 61,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-e07 second follow-up: occurrence planned -> not_occurred (Table 1 prints \"(not occurred)\"); time_text trimmed to the literal \"8 post-op months\", precision exact; summary no longer says \"not yet\".",
+    "p1-f022 family history: subject index_patient -> family_member.",
+    "Added p1-f061 care plan \"referred to our hospital\" (b00002) and presentation event p1-e09 (admitted with 13-month history), with relation e01 before e09 from \"admitted ... with a 13-month history\".",
+    "p1-f056 second follow-up care plan: action_status planned -> unknown (schema has no not-occurred status; precedent in other parent-reviewed articles); non-occurrence carried by event p1-e07 not_occurred.",
+    "Added ambiguity: CT compression and rising of the left kidney and spleen vs adjacent organs \"not remarkable\"."
+  ],
+  "unresolved": [
+    "Figure captions are the caption layer only; pixels were inspected separately in visual.json.",
+    "Table 1 relative times have no stated reference point; surgery is the 0th day row.",
+    "Figure 2 and 3 captions say head, the case text says neck, for the CT field of view.",
+    "Literature review, discussion and the compendium Table 2 (published cases) are not index-patient facts; the source also gives inconsistent counts of pediatric reported cases.",
+    "Ultrasound and CT sizes differ and are not reconciled by the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 62,
+    "facts_reviewed": 61,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single 2-year-old South Asian girl (roster count 1 from \"a single patient\") with a benign retroperitoneal lipoma, CT 18.4 x 14.8 x 13.6 cm, resected via laparotomy with negative margins, discharged day 4, asymptomatic at 6 weeks.",
+      "Doppler sentence re-read: it literally says the absent vascular supply \"was indicative of malignancy\" with no negation; kept as possible malignancy, source_conflict, review_only.",
+      "Table 1 row \"CT, ultrasound & biopsy executed | 18 d before\" governs the CT/ultrasound studies and their results; the biopsy is stated only in Table 1 (no site or result) and is kept with an ambiguity; the only biopsy in the text is the intraoperative lymph node biopsy.",
+      "Uneventful postoperative period kept as a recovery outcome plus absent operative complication.",
+      "Figures viewed: F1 abdominal photo with cropped lower face, F2/F3 photographed CT film sheets with burned-in identifiers (header text reads neck+chest+abd protocol), F4 gross specimen with tape measure though text cites it for the CT size, F5 operative photo."
+    ],
+    "residual_risks": [
+      "Head vs neck CT field of view, ultrasound 9.0 x 9.2 cm vs CT size, and Table 1 biopsy remain ambiguities.",
+      "Table 1 relative times have no stated reference point."
+    ]
+  },
+  "physician_adjudicated": false
+}

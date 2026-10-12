@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC12815410.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c45a89b764f4c13eaa34c0096ce7df6caf65bc51306acc19877207b1861f5fa9",
+  "annotation_sha256": "41c32d0d0017550673f49c94b4d5b5a6c57b24e694ef2f50a88cbb29333e586d",
+  "reviewed_at": "2026-10-11T21:49:36.398640+00:00",
+  "source_segments_read": 32,
+  "facts_reviewed": 57,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f040/p1-f041 birth_weight_text changed to the literal values of their cited Table 1 row (2440 g, 1900 g)",
+    "p1-f056 social_exposures kept as access_to_care but reframed as the stated legal barrier that caused this patient's referral; evidence is now the full b00009 sentence including the patient request",
+    "Added p1-f057 outcomes termination (subject fetus) for the selective feticide of twin II at 33+1 weeks with confirmed asystole",
+    "Split referral and ethics approval into p1-e09 and new p1-e14; added literal relations e14 before e10 (\"Following ethical approval\"), e02 before e01 (\"prior ... nine years earlier\"), e11 before e12 (\"postoperative day\"), e11 before e13 (surviving infant follow-up)",
+    "Removed relation e07 before e10: the 20-33 week monitoring range may extend into week 33, so order versus 33+1 weeks is not literal; recorded as a structured ambiguity",
+    "Added alternate_representation_of links for cross-section duplicates (genetic tests f044-f046 to f025-f027, births f047/f048 to f040/f041, prior cesarean f015 to f037, delivery f039 to f020)",
+    "Added literal supporting quotes: b00008 to f029, b00022 to f049, b00023 to f051"
+  ],
+  "unresolved": [
+    "Fetuses/newborns (twin I, twin II) are not separate patients; their facts are subject facts (fetus/newborn) inside the mother's record and identified by twin number in statements.",
+    "Discussion statements about literature, legislation and general practice are not extracted as patient facts.",
+    "Table 1 repeats paragraph content; paragraph evidence is used and table rows are cited where they govern time or method.",
+    "Caption-layer visual status not_inspected; the image is described in the separate visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 32,
+    "facts_reviewed": 57,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single 38-year-old mother; twins kept as fetus/newborn subject facts in p1; roster count 1 complete",
+      "Table 1 row Gestational Age / Time cells govern the times of findings in the same row (20-33 weeks, 33+6 weeks); twin II Apgar 0 is only in the paragraph whose sentence has no own time, so time stays null",
+      "Documented sex female from the pronoun Her referring to the patient; twin sexes from male infant wording",
+      "Stillborn is literal for twin II; Apgar as performance_score; uneventful postoperative course as absent complication per EVID-NEGATION",
+      "Discussion sentences b00027/b00028 explicitly describe the present case (In the present case, The procedure was successful) and are not cohort or cited-case statements",
+      "Figure 1 viewed at full resolution: photographed display with 2D sector image and rendered 3D fetal profile with two arrows; nasal bone absence is caption-only"
+    ],
+    "residual_risks": [
+      "Fetal subjects share the mother record; twin identity carried only in statements",
+      "Serial ultrasound range end versus feticide timing not stated"
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,51 @@
+{
+  "article_id": "PMC12806153.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9cca0c7f905cd7165dd729bc0508e7ee225012183771e87f0bd0aaac4953965c",
+  "annotation_sha256": "610d9c2d02fdc0b2258fa9c97f07a0564920927568b5d8ae8200a1f7aa59cf5c",
+  "reviewed_at": "2026-10-11T18:53:19.093953+00:00",
+  "source_segments_read": 18,
+  "facts_reviewed": 51,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "X-ray and ultrasonography results with no findings (p1-f009, p1-f014, p1-f020, p2-f007, p2-f017, p2-f021) set consistently to flag unknown; positive/negative are for qualitative tests and none is called normal.",
+    "Added caption-evidenced Figure 2c/2d facts for p2 with caption-governed times and literal anchor 'initial examination': p2-f026 joint space enlargement resolved (4 days after initial examination), p2-f027 supinator still swollen (alternate of p2-f022), p2-f028 swelling significantly improved 11 days after initial examination (alternate of p2-f023); text facts keep 'Four days later'/'One week later' with null anchor.",
+    "Spontaneous reduction outcomes (p1-f023, p2-f025) now cite the explicit abstract 'Both cases were initially irreducible, but spontaneous reduction was confirmed by ultrasonography' in addition to b00011; seven/nine-day counts stay unassigned in the ambiguity.",
+    "p1-f004 pulled elbow gains the explicit 'In our two cases, we reliably diagnosed PE ... using USG' evidence and ultrasonography basis.",
+    "Ambiguity evidence entries converted from bare lists to segment_id/quote objects; p2-e06 description no longer claims the examination was at the authors' hospital."
+  ],
+  "unresolved": [
+    "Figure captions only in this record; pixels viewed in the separate visual submission.",
+    "No dates, ages in months, injury-to-reduction day counts or imaging measurements are reported; the abstract day counts cannot be assigned to a case.",
+    "Discussion and introduction material (mechanism, literature success rates, cited reports) is background and not attributed to the patients."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 18,
+    "facts_reviewed": 51,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Two girls correctly separated (Case 1 four-year-old, Case 2 three-year-old); spelled-out ages keep text_value with numeric null per DEMO-AGE-TEXT.",
+      "Abstract seven/nine days after injury not assignable to a case; recorded only as an ambiguity.",
+      "Shared statements used only where the source says both/two cases (b00001, b00004, b00007, b00011, b00012).",
+      "All seven ultrasound panels viewed; F1 a-c to p1 and F2 a-d to p2 via the in-text figure citations; descriptions match pixels."
+    ],
+    "residual_risks": [
+      "Text 'One week later' for Case 2 and caption '11 days after initial examination' are not reconciled; anchors of the text relative times are not stated.",
+      "Case 1 day of initial examination relative to the fall is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

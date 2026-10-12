@@ -1,0 +1,52 @@
+{
+  "article_id": "PMC12811976.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "62ff7793a457c5008700fe5c6696f6ad2c678590599a2baf0195d505248b06d0",
+  "annotation_sha256": "674f2b32a9010ef7feb7e2305b9b7a37e5d8b1662f4871fe16e3ee3285e3522a",
+  "reviewed_at": "2026-10-10T01:11:34.731569+00:00",
+  "source_segments_read": 29,
+  "facts_reviewed": 135,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M03 age text_value '62-year-old' is the literal phrase in b00006 for this patient.",
+    "Verified all 57 M12 nulled anchors ('reported calendar month', 'residence', 'chest imaging') were non-literal; literal month/year time.text retained.",
+    "NR001 p1-f135: flag=normal on the authors' 'all returned to normal' claim; still review_only/source_conflict.",
+    "SOC-NEVER review of M06: p1-f071 'He had no history of alcohol use' (no 'ever'; later alcohol-limit counseling); changed to assertion=absent, status=unknown (not never-use).",
+    "[cleanup2 glued/time-only] repair_glued_text.py --apply: 3 tokens (since 1994, than 10 units, with 5); each diff line checked, no mis-splits.",
+    "[cleanup2 glued/time-only] Manual glued-text fixes (60 values, spacing only): month-year dates (Aug 2018, March 2019, May 2022, Jun/June 2022, June 2023, March 2024, January 2025), Type 2 diabetes, age 62, Ishak 2/6, RUCAM 7, Table 2, IgG 16.2 g/L, 5.7 kPa, 5.5–7.0 kPa in F0–F1, stated 6–16, upper 16, efavirenz 600 mg.",
+    "[cleanup2 glued/time-only] p1-f133 (autoimmune hepatitis, refuted): time 'following discontinuation of efavirenz' came only from the previous sentence about the patient's recovery; own sentence states no time -> time text/anchor null, relation unknown (non-literal anchor 'efavirenz withdrawal' also removed), time-only quote dropped; order kept via event p1-e11 membership."
+  ],
+  "unresolved": [
+    "Age/date of original HIV diagnosis and exact ART-switch date/doses are not supplied; generic introduction efavirenz 600 mg bedtime is not a patient prescription.",
+    "Source geography is not an ethnicity target; no CYP2B6 genetic assay or HIV viral-load/CD4 quantity reported.",
+    "Tables use dashes for unreported later albumin/PT/INR, not negative tests. Distinct Ishak biopsy and FibroScan fibrosis scales retained.",
+    "No explicit same-patient prior-publication linkage identified; cited longitudinal studies are background."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 29,
+    "facts_reviewed": 135,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical migrations M03/M12 correct; one normal-flag item resolved.",
+      "M06 never-user migration was WRONG here: denial/absent-history wording is not never-use; corrected to absent/unknown.",
+      "Cleanup pass 2: glued free text repaired and time-only evidence quotes resolved against source (NO-BORROWING/TIME-LITERAL)."
+    ],
+    "residual_risks": [
+      "Alcohol never-use vs later alcohol-limit counseling remains a recorded ambiguity; figures not re-viewed in this re-sign."
+    ]
+  },
+  "physician_adjudicated": false
+}

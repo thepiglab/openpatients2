@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12823109.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "67fbeedbd3112356835c4de1b8a14d28ee0931b52fee01969d4986d682c4891f",
+  "annotation_sha256": "d37dd9f649bd78b74b9cdf5527e43c0c79eadb6d623b11385e34cc5f120f37d4",
+  "reviewed_at": "2026-10-11T18:50:29.448132+00:00",
+  "source_segments_read": 31,
+  "facts_reviewed": 87,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f038/p2-f041: shared 'both patients ... without any complications' outcome changed from assertion=present to absent complication (polarity), temporality removed.",
+    "p1-f021 meropenem action current -> administered (named in the treatment decision; antibiotic administration later discontinued); ambiguity added that its start time is not stated.",
+    "Added p1-f042 severe inflammation in the deep pelvis (reason emergent surgery was high risk), linked to p1-e05.",
+    "Added p2-f045 favorable postoperative course from the explicit both-patients abstract sentence, linked to p2-e11.",
+    "p2-e09 split: CT on the 14th day kept as a test event; discharge moved to new untimed event p2-e14 so no time is implied for discharge.",
+    "p2-e10 split: stent prolapse on the 16th post-procedure day kept; endoscopic removal moved to new untimed event p2-e15 with literal 'Consequently' relation e10 before e15.",
+    "Added literal relations p1-e07 before p1-e12 (deployed stent later prolapsed), p1-e07 before p1-e15 and p2-e08 before p2-e13 ('Following successful stent deployment'), p2-e07 before p2-e08 (mature abscess suitable for drainage; drainage performed).",
+    "p1-e04 description no longer claims the tests were at the authors' hospital; blood-test quote added. Removed complicated-appendicitis conditions from the shared complication-outcome events.",
+    "p1 ambiguity added for the unanchored 19th day; p2 ambiguity rewritten (14th-day CT vs discharge and removal days).",
+    "Figure F1 caption_summary no longer says 'one case'; attribution notes list the conflicting panel cues (d single catheter, b transabdominal US only reported for p2, e balloon dilatation) and keep b-g unresolved."
+  ],
+  "unresolved": [
+    "The Figure 1 caption does not name a patient; only panel a is tied to patient 1 by its 40 mm × 30 mm size and the other panels stay unresolved.",
+    "Supplement SD1 is an administrative CARE checklist PDF with no patient clinical content.",
+    "Discussion sections b00014 to b00022 describe literature and general practice and were not copied to either patient.",
+    "The drainage day of patient 1 is not stated; only the planned second hospital day is given."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 31,
+    "facts_reviewed": 87,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Two index patients correctly separated; only 'both patients'/'these two cases' statements are shared.",
+      "p1 drainage day is not stated: 'second day of hospitalization' stays a planned time on p1-f020 and the performed EUS drainage event is untimed.",
+      "Leukocyte and CRP values keep flag unknown: their sentences classify the inflammatory reaction/response as increased, not the individual values; the separate inflammatory-reaction observations carry flag high.",
+      "Fig 1 viewed panel by panel: only panel a is tied to p1 by the literal 40 mm x 30 mm size; panels b-g carry cues pointing to different patients and remain unresolved.",
+      "SD1 is a one-page CARE checklist viewed on pixels; no patient content."
+    ],
+    "residual_risks": [
+      "Leukocyte/CRP flags could arguably be high given the colon-listed values in p2's sentence; kept unknown for consistency with the rule that the value itself must be classified.",
+      "Relative day counts ('19th day', '14th day') are unanchored in the source.",
+      "Infectious enteritis from the outside hospital is kept as a documented diagnosis; the source never explicitly revises it."
+    ]
+  },
+  "physician_adjudicated": false
+}

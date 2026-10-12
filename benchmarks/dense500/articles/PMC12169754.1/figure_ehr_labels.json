@@ -1,0 +1,106 @@
+{
+  "format": "dense-figure-ehr-labels/1",
+  "article_id": "PMC12169754.1",
+  "source_text_sha256": "9d19fe38d49fe69723d92ae08f11971de52cc52877ea7cda352e7c0ee596f218",
+  "visual_target_sha256": "f2b6f54d274d0cbeb434db5774ff68627c1dc96df77d8ee783a5acf262c92918",
+  "figures": [
+    {
+      "figure_id": "F1",
+      "status": "labeled",
+      "assets": [
+        {
+          "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC12169754.1/scr-11-01-25-0235-g001.jpg?md5=1abe74fef989b1385f60144b782170cc",
+          "sha256": "72695939b47a5eeafb91da14b609658f36720316a1008968d56330c6a5c21c95"
+        }
+      ],
+      "figure_label": {
+        "ehr_category": "clinical_photo",
+        "ehr_includable": false,
+        "rationale": "Two laparoscopic operative views with blue sutures; the visual record could not resolve which patient they belong to, so not includable.",
+        "basis": "pixels_reviewed",
+        "override_reason": null
+      },
+      "panels": [
+        {
+          "panel": null,
+          "default": {
+            "ehr_category": "clinical_photo",
+            "ehr_includable": false,
+            "rule": "operative_photograph+not_attributed_to_local_patient",
+            "image_kind": "operative_photograph",
+            "imaging_modalities": [
+              "endoscopy"
+            ],
+            "chart_types": [],
+            "chart_scopes": [],
+            "attribution_scopes": [
+              "unresolved"
+            ],
+            "patient_ids": []
+          },
+          "label": {
+            "ehr_category": "clinical_photo",
+            "ehr_includable": false,
+            "rationale": "Pixels show two intraoperative laparoscopic views of liver/diaphragm with blue-purple sutures placed (hiatal repair-type); it is a clinical operative photo, but the source does not tie it to a specific one of the series cases (unresolved ownership), so it is kept non-includable.",
+            "basis": "pixels_reviewed",
+            "override_reason": null
+          }
+        }
+      ],
+      "limitations": []
+    },
+    {
+      "figure_id": "F2",
+      "status": "labeled",
+      "assets": [
+        {
+          "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC12169754.1/scr-11-01-25-0235-g002.jpg?md5=53cedac03c8b8385dfdf1025e1a468ae",
+          "sha256": "38f020e03a1ec21edf0d827c465c8f22a2b8910f8186b3ce567c8a9a432c8481"
+        }
+      ],
+      "figure_label": {
+        "ehr_category": "clinical_chart_of_patient_data",
+        "ehr_includable": true,
+        "rationale": "FSSG item key plus per-case pre/post symptom-score plots for the four local patients p1-p4; individual patient-reported outcome data, includable as a patient-data chart.",
+        "basis": "pixels_reviewed",
+        "override_reason": null
+      },
+      "panels": [
+        {
+          "panel": null,
+          "default": {
+            "ehr_category": "other",
+            "ehr_includable": false,
+            "rule": "image_kind_mixed",
+            "image_kind": "mixed",
+            "imaging_modalities": [],
+            "chart_types": [
+              "line"
+            ],
+            "chart_scopes": [
+              "multiple_individuals"
+            ],
+            "attribution_scopes": [
+              "shared"
+            ],
+            "patient_ids": [
+              "p1",
+              "p2",
+              "p3",
+              "p4"
+            ]
+          },
+          "label": {
+            "ehr_category": "clinical_chart_of_patient_data",
+            "ehr_includable": true,
+            "rationale": "Pixels show a printed FSSG item list (0-4 response key) beside 12 small pre/post line plots (Q1-Q12), each with one line per legend-coded Case 1-4 (p1-p4) and asterisks for P<0.05. The plotted lines are each local patient own pre- and post-operative symptom-score values, i.e. individual patient-reported outcome data; the questionnaire column only labels the items.",
+            "basis": "pixels_reviewed",
+            "override_reason": "Default was other only because image_kind is mixed; the reviewed record marks every chart as a clinical chart with scope multiple_individuals, and each line is a named local case (p1-p4) own pre/post FSSG item score, so it is patient-level PRO data rather than an aggregate or instrument-only image."
+          }
+        }
+      ],
+      "limitations": []
+    }
+  ],
+  "limitations": []
+}

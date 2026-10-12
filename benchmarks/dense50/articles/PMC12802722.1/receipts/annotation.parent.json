@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC12802722.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "72c471fe304644b231caa8f8098b738d5566a546bea9b7e0978001af13c1d9cc",
+  "annotation_sha256": "4fc7fd7ccda0d970a4fb6d2d2944be29647652921f9915e4beb08ab3de6cb237",
+  "reviewed_at": "2026-10-10T01:59:07.238570+00:00",
+  "source_segments_read": 65,
+  "facts_reviewed": 312,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M02 comparators (18; none hides a printed <,>), M03 age texts (54/78/54-year-old), M04 p1-f005 absent history -> verification unknown, M09 p2 deceased_during_course (died day 10), M12 anchor nulling (143; paraphrases 'index hospital admission' etc.)",
+    "Restored literal, source-tied time anchors after M12 nulling: 'admission' (p1-f049,p1-f050,p2-f040..f043,p2-f057,p2-f058,p2-f062,p3-f040), 'thrombolysis' (p1-f021,p1-f092,p2-f023,p2-f105,p3-f025,p3-f080), 'rt-PA treatment' (p1-f045), '9 p.m.' (p2-f027..f029, 'At that time' refers to the 9 p.m. deterioration), 'hospitalization' (p3-f038); other offsets (Table 2 'At 48 h', 'Within 48 h', 'On day 9', 'The next day') keep anchor null because the source does not state the reference point",
+    "MED-ROUTE: removed borrowed route intravenous from p1-f020 and p2-f022 (evidence only says IVT/thrombolysis); p3-f024 quote extended to the literal sentence containing intravenous thrombolysis",
+    "NR001 (OBS-FLAG p2-f051): removed the combined pH/ethylene-glycol summary fact; it duplicated p2-f116 (pH returned to normal, flag=normal) and p2-f106 (ethylene glycol <20 mg/dL); dropped from event p2-e009",
+    "SECTION-SIGNS: NIHSS scores (p1 4, p2 5, p3 7 points) moved observations -> symptoms_function performance_score; quotes/time/links unchanged; domain-coverage counts updated (p2 observation count note corrected).",
+    "  p1-f012: observations/other -> symptoms_function/performance_score",
+    "  p2-f018: observations/other -> symptoms_function/performance_score",
+    "  p3-f017: observations/other -> symptoms_function/performance_score",
+    "NO-BORROWING: Case 1 'On admission (1:20 p.m.)' scopes only the neurological-examination sentence in b00004; the following sentences (alert/afebrile/BP/HR, pulse oximetry, NCCT, CTA, routine labs) state no time. Removed the borrowed time-only quote and nulled time (relation unknown) on p1-f010, f011, f013, f014, f015, f016, f017, f018; order kept by event p1-e004 membership. Dropped 'Admission' from their names/statements (NCCT/CTA renamed 'Initial NCCT'/'Initial CTA').",
+    "NO-BORROWING: p2-f017 vigilant/fully oriented took 'On arrival (3 p.m.)' from the previous sentence; its own sentence says 'At baseline', now used as time.text (relation at); arrival quote dropped.",
+    "EVID-NEGATION: p2-f008 'Asymptomatic in morning' (present sign, text_value asymptomatic) -> symptoms, kind symptom, assertion absent, same time; quote keeps 'asymptomatic'. p1-f052 discharge outcome 'symptom-free' kept as a source-stated present outcome.",
+    "Glued text: respaced Cases 1 and 2 in p1-f105/p2-f113 clinical statements and Case 2 sepsis/day 2-9 label, Case 3 DNT-versus-body ONT in article_limitations[3].",
+    "Cleanup3 EVID-NEGATION p1-f052: present discharge outcome text_value 'At discharge, he was symptom-free.' -> 'Discharge'; added p1-f109 symptoms_function 'Symptoms at discharge' assertion absent (time 'At discharge', quote 'At discharge, he was symptom-free.'), added to event p1-e016. p2-f008 ('asymptomatic in the morning') was already assertion absent.",
+    "Cleanup3 TIME p1-f020 alteplase: kept '1:40 p.m.' (the IVT-start sentence is this same alteplase thrombolysis); split the 2-sentence span into two sentence quotes and replaced the copied clinical_statement with a concise one.",
+    "Cleanup3 GLUED annotations: 'Case3'/'forCase3' -> 'Case 3'/'for Case 3' in p1-f105, p2-f111, p2-f112, p3-f086 notes; provenance passes respaced ('across 65 units', 'recent alcohol', '280 facts', 'in Cases 2/3', 'all 312').",
+    "Cleanup3 GLUED visual submission F1 (14 fields): 'was 95.85 mg/dL', 'level 16.54 mg/dL', '(ONT: 250 min)', '(DNT: 230 min)' as printed, 'Case 1/2/3', 'Day 2–Day 9', 'day 5', 'Day 9' in limitations; figure-EHR label and privacy-flag visual_target_sha256 refreshed. FIG-LABELS panel labels 'Case 1'/'Case 2'/'Case 3' kept: they are printed row labels on the timeline image (verified on pixels).",
+    "Cleanup3 GLUED visual submission F1 (3 more fields): Case 2 cues/pixel observation \"(ONT:194min)\" -> \"(ONT: 194 min)\" and \"EG159mg/dL\" -> \"EG serum level of 159 mg/dL\" as printed; hashes refreshed."
+  ],
+  "unresolved": [
+    "Raw Table 2 XML bold patient-cell formatting was personally inspected and preserved as marked-abnormal text with the explicit table foot. The runtime flag enum has no generic abnormal value; direction remains unknown unless narrative supports it. Unbolded values are not automatically normal. GFR table mL/min and narrative indexed units remain distinct.",
+    "Clinical annotation retains caption-based figure attribution; actual timeline pixels were inspected and recorded separately in the visual submission.",
+    "First ABG and ethylene-glycol table admission headings disagree with narrative workup timing; collection times remain unresolved. Case 3 calcium 0.24 mmol/L is preserved as printed, not corrected or reinterpreted. Abstract seizure and symptom-free statements do not override detailed Case 3 uncertainty/residual deficits.",
+    "Actual timeline pixels inspected separately. Figure-only exact times, Case 2 sepsis/day 2–9 label and Case 3 DNT-versus-body ONT terminology retained in visual reference; not forced into literal clinical source segments.",
+    "Literal clock times are preserved exactly in text; current timeline schema has no dedicated time-of-day kind, so order_only is used with exact precision and no calendar date. Unspecified before/after intervals remain order_only with unknown precision."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 65,
+    "facts_reviewed": 311,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Migration changes verified against source; anchors restored only where the source states the reference phrase",
+      "Duplicate mixed pH/EG fact removed (NR001)",
+      "SECTION-SIGNS: NIHSS scores (p1 4, p2 5, p3 7 points) moved observations -> symptoms_function performance_score; quotes/time/links unchanged; domain-coverage counts updated (p2 observation count note corrected).",
+      "Cleanup pass 2: borrowed admission/arrival times removed from Case 1 exam/vitals/imaging and Case 2 orientation; Case 2 asymptomatic morning recorded as absent symptoms.",
+      "Cleanup3: symptom-free discharge split into present discharge + absent symptoms; alteplase 1:40 p.m. kept with sentence quotes; F1 glued text respaced; printed Case row labels kept."
+    ],
+    "residual_risks": [
+      "Table 2 Case 2 48 h values differ from narrative 9 h values (pre-existing, documented)"
+    ]
+  },
+  "physician_adjudicated": false
+}

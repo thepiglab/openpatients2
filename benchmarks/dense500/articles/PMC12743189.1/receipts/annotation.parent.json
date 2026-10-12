@@ -1,0 +1,83 @@
+{
+  "article_id": "PMC12743189.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2900f4e3c218ea4d9a4c7183524c731d2cebb934cd88b9f7989d22c74dfb3836",
+  "annotation_sha256": "719d22ac66fe1c254edc0801ab350f60bf343c442ccf048da50aa47e277ac449",
+  "reviewed_at": "2026-10-10T01:50:11.885389+00:00",
+  "source_segments_read": 39,
+  "facts_reviewed": 76,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f004 PDD kept confirmed; evidence now includes the authors' \"true condition\"/revision statement (b00023) as the stated basis; notes rewritten.",
+    "p1-f009 name reduced to MDD (GAD and \"EUPD traits\" are separate facts f010/f011) to remove duplicate representation.",
+    "p1-f014 diagnostic_basis no longer links normal routine investigations to the no-evidence conclusion (not stated); kept absent/unconfirmed.",
+    "p1-f015 low mood: added documented frequency \"most days, almost all the time\" with evidence; p1-f016 anhedonia: added the patient's \"Life looks grey\" statement.",
+    "p1-f037 treatment fatigue: added b00028 \"changing the name, not the problem\" evidence.",
+    "Medication and care-plan time anchors \"Table 1 treatment row\" (provenance, not a clinical anchor) set to null for f038-f046 and f075.",
+    "Removed amount_text \"denied use\" (not an amount) from denied alcohol/tobacco/substance facts f055-f057; status stays unknown.",
+    "p1-f074 lost to follow-up: added the documented frustration at yet another diagnostic change.",
+    "Added p1-f076 observation: authors state structured longitudinal assessment and scale-based monitoring were absent (not_performed) during the decade of diagnostic drift (b00031).",
+    "Timeline restructured: Table 1 composite row events split into diagnosis-label events (e03-e07) and treatment-period events (new e12-e16) plus the ketamine/ECT request (e17); DBT removed from the 2017-2018 composite and kept in e08 with its \"started after diagnosis\" time.",
+    "Temporal relations 7 -> 18: kept the narrative diagnosis chain and e10->e11; e07->e10 evidence strengthened; added literal non-overlapping year-range links between treatment periods and labels (2014-2017 vs 2017-2018 left unordered), e01 overlaps e03 (underlying chronic baseline), e09 before e17 (request led by her experience) and e09 before e11 (long-standing treatment fatigue).",
+    "Added ambiguities: untimed routine investigations left unlinked; historical labels called misdiagnosis/misattribution but never stated as ruled out (not converted to refuted).",
+    "Summary, observations domain note and b00031 source-coverage note updated for f076.",
+    "[semantic-rules-2026-10 re-sign] Verified M12 nulling of 2 non-literal anchors ('EUPD diagnosis', 'revised diagnosis of PDD'); time.text on both remains literal in own evidence.",
+    "[semantic-rules-2026-10 re-sign] p1-f074: anchor replaced with the literal phrase 'revised diagnosis' from its own evidence.",
+    "[semantic-rules-2026-10 re-sign] p1-f047: anchor restored as the literal phrase 'EUPD formulation' (DBT started after diagnosis).",
+    "[cleanup2 glued/time-only] No glued-text dry-run diff. p1-f015 (low mood) kept time 'dating back to adolescence' (relation since): the quoted sentence 'she described a chronic depressive baseline dating back to adolescence' describes the same chronic low-mood state as the presenting 'lifelong, pervasive low mood' in the same paragraph, so the time is the fact's own, not borrowed. NO-BORROWING warning is a lexical false positive (no word overlap with the label). Annotation unchanged.",
+    "Cleanup3 NO-BORROWING p1-f015 Low mood: time 'dating back to adolescence' came from the separate sentence about the 'chronic depressive baseline' (b00005), not the low-mood sentence; time nulled (text/anchor null, relation unknown) and the time-only quote dropped; quotes 'lifelong, pervasive low mood' and 'most days, almost all the time' kept; order kept via event p1-e01 membership."
+  ],
+  "unresolved": [
+    "Single case report with one index patient; no figures and no supplements, so no visual or supplement review applies.",
+    "No calendar dates beyond the literal years in the narrative and Table 1; dates of the revised PDD diagnosis, DBT completion and disengagement are not stated.",
+    "Medication doses, routes, durations, indications and per-drug responses are not reported; Table 1 periods overlap in 2017.",
+    "Introduction claim of an effective collaborative care plan is not accompanied by plan content and conflicts in tone with the documented lack of structured follow-up.",
+    "Discussion content on guidelines, CBASP and external studies is literature and is not attributed to the patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 39,
+    "facts_reviewed": 76,
+    "figures_viewed": 0,
+    "key_findings": [
+      "M12 correct for this article.",
+      "Cleanup pass 2: glued free text repaired and time-only evidence quotes resolved against source (NO-BORROWING/TIME-LITERAL).",
+      "Cleanup3: borrowed adolescence time removed from low-mood symptom."
+    ],
+    "residual_risks": [
+      "Prior residual risks unchanged."
+    ],
+    "previous_assessment": {
+      "reviewer": "Claude Opus 5.5 parent",
+      "source_units_read": 39,
+      "facts_reviewed": 76,
+      "figures_viewed": 0,
+      "key_findings": [
+        "Single index patient (48F); no figures, no supplements; discussion literature (NICE, CBASP, Upadhyay ML study) kept out of patient facts.",
+        "Historical labels (MDD 2012, RDD+GAD 2014-2017, EUPD 2017-2018, MDD+GAD+EUPD traits 2020-2023, RDD 2024) kept present/unconfirmed/historical with literal times; authors call them misdiagnoses but never state them ruled out.",
+        "PDD (Type 3, undefined) kept confirmed: authors state a longitudinal basis and call it the revised diagnosis and true condition.",
+        "Medication doses, routes, indications and per-drug responses unstated; timing only from Table 1 period rows; dothiepin \"tetracyclic\" preserved as printed.",
+        "Ketamine/ECT is only a patient request (care plan, action_status unknown); no administration or decision documented.",
+        "Introduction claim of an effective collaborative care plan conflicts with no structured follow-up; kept as ambiguity only."
+      ],
+      "residual_risks": [
+        "Dates of the PDD revision, DBT completion, the routine investigations and disengagement are unstated.",
+        "e07->e10 order rests on the 12-year/\"yet another diagnostic change\" framing rather than an explicit date.",
+        "GAD labels share the unconfirmed status although the authors do not specifically dispute GAD."
+      ]
+    }
+  },
+  "physician_adjudicated": false
+}

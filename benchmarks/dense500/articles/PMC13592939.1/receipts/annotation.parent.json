@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC13592939.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1e2f33a82f2b6c02480c809b42785897239fdbeca65cf53eed7ce04f3f53404e",
+  "annotation_sha256": "987b5ed0280b535b86651656d8240c200da3467394a1523915145a4d3fd513a4",
+  "reviewed_at": "2026-10-11T02:53:53.981328+00:00",
+  "source_segments_read": 57,
+  "facts_reviewed": 89,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f001: removed care_setting \"hemodialysis\" (inferred from treatment, not a stated setting).",
+    "p1-f052: removed indication borrowed from the preceding \"suspected\" sentence.",
+    "p1-f060: LMWH stop made supported/include with its own text quote and null time; date conflict (Table 1 June 20 and June 22; Figure 2 arrow at 6.22) kept in ambiguity.",
+    "p1-f061 marked alternate_representation_of p1-f060; p1-f048 (suspected reaction) alternate of p1-f047; p1-f057 (suspected HIT) alternate of p1-f058.",
+    "p1-f047: stale note about clinical_status resolved corrected.",
+    "Events: removed undated repeat/recheck labs (f020, f021, f064, f065) from e03/e12; removed undated LMWH stop facts from e12; deduplicated e09 fact list and removed oxygen (in e10); e08 June 17 precision exact with null calendar value.",
+    "Split e19: platelet recovery only; new follow-up event e20 for smooth dialysis, no further reactions or AVF thrombosis, no discomfort; removed not-performed titer monitoring from outcome event.",
+    "Relations: replaced e12 before e19 with e09 before e19 (b00005) and e15 before e19 (b00047); added e11 after e09 and e20 after e17.",
+    "Added p1-f087 platelet decrease >50% from baseline on the 20th day of hemodialysis; p1-f088 allergies item (adverse drug reaction to LMWH); p1-f089 absent significant discomfort; allergies domain now documented.",
+    "p1-f089: activity context limited to its own sentence (\"during the dialysis process\"); removed borrowed \"without argatroban\".",
+    "Summary 2 no longer implies the thrombectomy happened on June 10; ambiguities updated with Figure 2 pixel evidence and an ambiguity for undated repeat labs and liver panel."
+  ],
+  "unresolved": [
+    "Single case report with a literature review; Table 2 lists published cases by other authors and the discussion states cohort and guideline content, none of which is copied to the index patient.",
+    "Table 1 prints platelet count 231 on June 10, 2022 whereas the text gives 107 on that date and 231 as an undated repeat value; Figure 2 pixels place 231 at the June 6 axis point and 107 at June 10. Kept as printed and flagged review_only.",
+    "Table 1 lists LMWH discontinued on both June 20 and June 22, 2022; the text gives no stopping date.",
+    "Table 1 says \"Urokinase heparin\" for the July 22 catheter lock; the paragraph says urokinase.",
+    "Laboratory and vital-sign values given in sentences without their own time (admission blood tests, repeat tests, vital signs during the reaction, liver panel) carry no time; the narrative order is not used to assign dates.",
+    "No hemodialysis catheter is stated as a device although catheter locking is mentioned; no device item is recorded.",
+    "Dates in Figure 2 after June 27 (platelet readings through November 2, 2022) appear only in the chart.",
+    "Caption-layer visual status is not_inspected; pixels are described in the visual submission.",
+    "4T score components (2 points each) are kept in the 4T score note rather than as separate items; the >50% platelet decrease is recorded as its own observation."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 57,
+    "facts_reviewed": 89,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; Table 2 literature cases and discussion kept out.",
+      "Platelet 231 on June 10 (Table 1) conflicts with text 107; Figure 2 pixels agree with text; Table value kept source_conflict review_only.",
+      "LMWH stop date conflicts (June 20 vs June 22); stop recorded undated.",
+      "Urokinase lock recorded as urokinase; Table 1 \"Urokinase heparin\" kept as ambiguity.",
+      "Undated admission labs linked only to the presentation/diagnosis event; repeat/recheck labs left unlinked."
+    ],
+    "residual_risks": [
+      "Liver panel values linked to the June 26 test event via the Table 1 row that states liver function was tested that day.",
+      "Allergies item treats documented HIT as an adverse drug reaction to LMWH; reaction_type unknown.",
+      "4T components kept in notes, not as separate items."
+    ]
+  },
+  "physician_adjudicated": false
+}

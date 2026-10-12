@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12817846.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e2b9c7f1962215493c416fc5696241e0391d5fa7e22209b63d688a5f246bcb08",
+  "annotation_sha256": "c32e68a736def37721767dc9c89398a11e07ad5e1f957893d92407d6d9e6b130",
+  "reviewed_at": "2026-10-11T02:18:28.781718+00:00",
+  "source_segments_read": 46,
+  "facts_reviewed": 183,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f026/p1-f027: \"abstained from alcohol and illicit drugs\" recast from present abstinence to alcohol use and illicit drug use with assertion absent, status unknown",
+    "p1-f181: \"free from recurrent systemic or neurological infections\" recast from a present follow_up outcome to recurrence with assertion absent at the 8-month follow-up",
+    "p1-f040: \"negative pathological signs\" recast from present sign with text_value negative to pathological signs assertion absent",
+    "p1-f007 duplicate abrupt-onset fever (severity misuse) deleted; its quote merged into p1-f004 and references removed",
+    "p1-f155 cerebral septic emboli quarantined as source_conflict/review_only (narrative suggestive vs abstract/discussion asserted); removed from summary; ambiguity updated",
+    "p1-f173/p1-f174 unstated related_condition meningitis removed",
+    "p1-f178 discharge time set to literal \"After 32 days of hospitalization\" relation after",
+    "p1-f028..f031 time anchor restored to literal \"admission\"",
+    "p1-e22 discharge prescription occurrence planned -> occurred, kind treatment",
+    "Added four source-supported temporal relations (e06>e07, e13>e14, e19>e20, e21>e22) and an ambiguity on untimed meropenem steps",
+    "Fig2 privacy flag: identifiable_face set false (2D MRI soft-tissue outline only); direct-identifier overlay flag kept",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (9 whitelisted label/number or number/unit spacing edits outside quotes in annotations (9); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=1, roster_complete=true, evidence b00002 \"A 46-year-old man with previously undiagnosed diabetes mellitus presented\"; 1 patients annotated in first-mention order."
+  ],
+  "unresolved": [
+    "Figure pixels are described in the separate visual submission; the caption layer stays not_inspected.",
+    "Admission is given only as the month December without a year; day numbers have no stated origin and no calendar dates are derived.",
+    "Table 1 reference intervals are printed in row labels without high or low classification, so CSF values carry no flags.",
+    "Susceptibility interpretations come from the authors table; the text states CLSI or EUCAST without choosing one.",
+    "Discussion statements about mechanism, literature cases and mNGS in general are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 46,
+    "facts_reviewed": 184,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient; all case text, both tables and both captions personally read",
+      "Negation polarity fixed for abstinence, recurrence-free follow-up and negative pathological signs",
+      "Septic emboli certainty conflict quarantined",
+      "No calendar dates derived from December or the MRI overlay date; day numbers have no stated origin"
+    ],
+    "residual_risks": [
+      "Meropenem dose steps and lumbar puncture remain untimed per no-borrowing",
+      "Day 3 CSF ++++ and / cells kept as text only",
+      "Pyuria/microhematuria values carry no flag"
+    ]
+  },
+  "physician_adjudicated": false
+}

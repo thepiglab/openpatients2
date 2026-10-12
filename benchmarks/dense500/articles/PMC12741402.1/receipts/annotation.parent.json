@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12741402.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "70ba1b661b398f0cd9d2d1cbe833c882ff384f5e8123ef3f4864965b33f4c5f9",
+  "annotation_sha256": "b5e500c4482f0015975c1b65a89f3add40c1f78e0c1048cbe3d125f8199f670a",
+  "reviewed_at": "2026-10-11T02:38:18.835365+00:00",
+  "source_segments_read": 21,
+  "facts_reviewed": 99,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f029/p1-f030 Fig 2 caption facts: restored time \"after 3 doses of oral weekly methotrexate\" (caption head sentence governs its panels per NO-BORROWING exception); residual non-blocking gate warning on f030 left as is",
+    "p1-f027: replaced the gate-shaped present \"distribution of lesions\" sign with ulcerations and erosions assertion=absent at scalp, nails, palms, and soles (source: sparing)",
+    "p1-f043 2018 MTX course: time changed from \"At the time of her initial presentation in 2018\" to its own \"postpartum\"; p1-f044 topical maintenance: borrowed time removed",
+    "p1-f031 painful lesions: removed body_site borrowed from the following sentence",
+    "p1-f065 skin biopsy procedure: evidence extended to include the findings it records",
+    "p1-f089/p1-f096 weekly labs: \"weekly\" is frequency, time set to literal \"during treatment\" (during)",
+    "p1-f095 spesolimab response \"within 24 hours\": relation before (upper bound)",
+    "Added p1-f098 improvement in liver function and p1-f099 hemoglobin declined further (b00007)",
+    "Added six supported temporal relations (e07->e09, e09->e11, e09->e12, e12->e13, e13->e14, e15->e16)"
+  ],
+  "unresolved": [
+    "Single patient; the authors do not report a causality assessment beyond their interpretation of MTX-induced toxicity.",
+    "Descriptions of ulcer location conflict between the case text, discussion and Fig 2 caption; the conflicting facts are review_only.",
+    "Several serial laboratory values and the skin biopsy have no printed dates.",
+    "Annotation figure entries keep the canonical not_inspected state; pixel inspection is recorded in the visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 21,
+    "facts_reviewed": 99,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient; all case text, discussion patient sentences and four captions checked against every fact.",
+      "Ulcer site conflict (Fig 2A previous psoriatic lesions vs b00012 nonlesional skin) kept source_conflict review_only; \"limited to the lips\" refers to the oral/mucosal context and is kept as an ambiguity with the jaw wound culture.",
+      "Possible mild renal dysfunction kept ambiguous review_only alongside eGFR 78; no flag from reference ranges.",
+      "Undated hemoglobin/platelet series and skin biopsy: no governing sentence or table gives a time; left null with ambiguities.",
+      "2024 MTX start fact carries no route; oral only from the Fig 2 caption fact and the 2018 course."
+    ],
+    "residual_risks": [
+      "Gate warning on p1-f030 (caption head time) is non-blocking and intentionally kept per the caption-governs rule.",
+      "16-week and 12-week follow-up times have no stated anchor.",
+      "Fig 2C handwritten dressing note and wrist band flagged as burned-in identifiers; not transcribed."
+    ]
+  },
+  "physician_adjudicated": false
+}

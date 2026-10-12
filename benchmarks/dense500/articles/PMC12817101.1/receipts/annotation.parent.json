@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC12817101.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3f29a0395983f966b5cca339de8a42ea9c108aaab9c8d52207b322cae48010cd",
+  "annotation_sha256": "195f89126a7e723678672134e1b6f201bbd05e742bffb8c0d7b3294244130a17",
+  "reviewed_at": "2026-10-11T19:55:36.684127+00:00",
+  "source_segments_read": 13,
+  "facts_reviewed": 48,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f012 absent family history of coagulation disorders: subject mother -> family_member (relative null); the sentence negates the mother's personal or family history, so it is not the mother's own condition; ambiguity reworded.",
+    "Added p1-f046..f048: complete blood count, Rh factor testing and fasting blood glucose requested at the prenatal visit, recorded as observations status ordered with result_absent_reason not_reported (not resulted).",
+    "Added event p1-e06 (single prenatal visit, assessments requested) with p1-f008 and the new facts.",
+    "p1-f044 name shortened to \"Primary coagulation disorder\" (absent, refuted by the normal coagulation panel; \"rules out\" cue in quote).",
+    "p1-f041 cord improvement: added abstract quote \"improved significantly within 48 hours\" (time stays the governing b00006 window).",
+    "p1-e05 time classification: postnatal_age / range for \"during the first 48 hours\".",
+    "Added relations: prenatal visit before delivery (\"prenatal visit\"), delivery before the immediate clinical examination (\"Immediate clinical examination\") and before the first-48-hours monitoring; kept clamping after delivery (\"clamped immediately upon delivery\").",
+    "Visual submission: replaced the limitation claiming the abdominal-wall junction is not shown with a cautious statement (cord beyond lower left edge not shown; identity of the pale wrinkled structure not stated). Figure-EHR/privacy drafts regenerated and labels/flags carried over."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the actual JPEG is inspected in the separate visual target.",
+    "Discussion statements about the likely timing and etiology of the hematoma are author inference and are recorded only as an ambiguity.",
+    "Literature statements about incidence, risk factors and prognosis are not patient facts.",
+    "Requested initial prenatal assessments (complete blood count, Rh factor, fasting glucose) are recorded as ordered with no reported result."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 13,
+    "facts_reviewed": 48,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single full-term female newborn; Figure 1 photo is the index cord hematoma.",
+      "All b00006 monitoring/outcome facts (monitoring, uneventful course, progressive cord improvement) are in the sentence governed by \"during the first 48 hours\"; the lab facts carry no time.",
+      "Hematoma timing and traumatic/mechanical etiology are author inference, kept as ambiguity only.",
+      "APGAR 9 \"at the first minute\" is a performance_score with literal time."
+    ],
+    "residual_risks": [
+      "Family-history negation scope (mother's relatives) is implicit.",
+      "Prenatal ultrasound and serology recorded as not_performed with the mother as subject."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,51 @@
+{
+  "article_id": "PMC12818909.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "348120ed3f580a2add6854782cc0f8e4aa31b14dcfd153cbd83de8884ca20546",
+  "annotation_sha256": "57e7c7f31446e937dd2f13f1cd0c0c228b992ac9f0b373c7e7c4587358cfeaab",
+  "reviewed_at": "2026-10-10T01:09:54.066247+00:00",
+  "source_segments_read": 48,
+  "facts_reviewed": 109,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f018 apyrexia and p1-f028 afebrile were PRESENT signs; recoded as fever assertion absent (negation cue in quote) per the afebrile ruling; p1-f019 text_value reduced to clinical improvement.",
+    "p1-f041 initial scarlet fever diagnosis moved from the day-9 rash event to the amoxicillin-start event p1-e03.",
+    "Removed prior-exposure history facts (p1-f029/f030, p2-f024, p3-f014/f015) from current-episode events."
+  ],
+  "unresolved": [
+    "Figure pixels are not described in the annotation figures[]; actual images are inspected in the visual submission.",
+    "Table 1 rows duplicate the case narrative; the Case 2 rash-onset conflict (day 4 of treatment versus four days after discontinuation) is unresolved.",
+    "Discussion and literature statements about published cohorts are not attributed to any patient.",
+    "Dates are relative only; no calendar dates are printed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 48,
+    "facts_reviewed": 109,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Three adolescents correctly separated; Figs 1-3 p1, 4-5 p2, 6 p3 by caption case labels and in-text citations.",
+      "Case 2 rash onset: text day 4 of treatment vs Table 1/discussion 4 days after discontinuation vs Fig 4 Day 9 (3 days after Day 6 cessation); kept source_conflict review_only.",
+      "All-three-adolescents confirmed delayed hypersensitivity sentence is explicit and literal; applied per patient.",
+      "Prior-exposure no-hypersensitivity items correctly absent and historical; Case 1 scarlet fever/virus-drug/concomitant EBV kept provisional/differential.",
+      "Case 3 three-week follow-up and week-11 provocation left unordered (no stated anchor relation)."
+    ],
+    "residual_risks": [
+      "EVID-NEGATION validator does not treat apyrexia as a negation cue (warning on p1-f018).",
+      "Case 1 first-visit towel-like truncal rash precedes amoxicillin; cause not inferred."
+    ]
+  },
+  "physician_adjudicated": false
+}

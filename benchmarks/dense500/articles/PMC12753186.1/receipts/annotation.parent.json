@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12753186.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0b7615f507485e5f32962f84805a5ab448174b51c1b37a0dbf6bc8e4bc2d6d46",
+  "annotation_sha256": "eba1dc83befcc4150a3b9ef389aae5ba427016b33fdb6b7b5813daf30328b654",
+  "reviewed_at": "2026-10-11T20:55:35.861979+00:00",
+  "source_segments_read": 32,
+  "facts_reviewed": 78,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Roster kept at one reported individual (the neonate): the abstract reports a single case; mother and older daughter stay as mother/family_member subject facts.",
+    "p1-f005 gestational age: added the abstract 'a late preterm neonate' quote; the numeric GA stays from the article's own Table 1 index-case row (literature rows not used).",
+    "p1-f011 transient tachypnea of the newborn: verification_status unknown -> confirmed (stated unhedged as the admission reason), consistent with the other unhedged diagnoses.",
+    "ECMO (absent, action unknown, 'not a suitable candidate') moved out of the occurred consultation event into new not_occurred event p1-e16.",
+    "Withdrawal of life support kept as planned (only the decision is stated); notes and a new ambiguity say withdrawal itself and death-after-withdrawal are not stated.",
+    "Added events p1-e13 (day-3-paragraph exam findings and chest radiograph, untimed), p1-e14 (maternal postoperative symptoms, 'postoperative course') and p1-e15 (sibling enterovirus report, 'The day after delivery'); 12 -> 16 events.",
+    "Patient ambiguities converted from free text records to the issue/evidence/must_not_infer/fact_ids shape so they no longer materialize as JSON strings.",
+    "Added 4 literally supported before-relations (e05-e06, e04-e07, e03-e14, e04-e15): 3 -> 7; candidate e01-e04, e04-e05 and e11-e12 removed after re-check because no quote states their order."
+  ],
+  "unresolved": [
+    "Fig. 1 pixels are inspected in the separate visual submission; the caption-layer visual status stays not_inspected.",
+    "Supplementary Table S1 (diagnostic criteria for enterovirus-associated neonatal hemorrhage-hepatitis syndrome) is a general criteria table with a reference list, not patient data; no facts are taken from it.",
+    "Maternal and sibling facts are recorded with mother and family_member subjects inside the neonate record because the article reports one case.",
+    "Table 1 literature rows and Table 2 describe other published cases or cohorts and are not attributed to the index patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 32,
+    "facts_reviewed": 78,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index neonate; the mother is described clinically (fever, labs, postoperative symptoms) but is not a reported case and is never shown to have E-11.",
+      "Enterovirus PCR specimens (throat swab, CSF, rectal swab) listed with a single overall positive result; per-specimen results not inferred (ambiguity kept).",
+      "Cesarean action completed accepted: necessitated in b00003 and the mother's postoperative course is stated in b00004.",
+      "Troponin-I 0.016 and 9.228 ng/mL untimed; times only from own-sentence phrases (on day 3, by the third day of life, on the sixth day of life, at 36 5/7 weeks of gestation).",
+      "Supplement SM25oct0036-1 viewed (2 pages): general diagnostic criteria table and 2 references, literature_table, not includable."
+    ],
+    "residual_risks": [
+      "Cesarean completion relies on the phrase postoperative course.",
+      "Sibling relationship recorded as the mother's older daughter.",
+      "Day-3 examination findings are untimed although they follow the day-3 deterioration sentence."
+    ]
+  },
+  "physician_adjudicated": false
+}

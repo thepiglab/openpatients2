@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12747812.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "14fcbc3a4feac5700a770d38e9e8335ba77a726e7e943cfec97d3cd190c3f001",
+  "annotation_sha256": "58f40ae5236c98a61e2a225135294ba6029cc8bf6bfbcd9483595892f8f4d337",
+  "reviewed_at": "2026-10-10T01:57:25.080471+00:00",
+  "source_segments_read": 56,
+  "facts_reviewed": 130,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Personally read all56source units including5tables,129clinical representations and17event phases; corrected range-derived Table3 flags and connected initial presentation to treatment without invented workup completion timing.",
+    "Preserved source HBc antigen/HCV viral load labels and UI units, separate initial and repeat iron draws, undefined table2–5 draw timing, clinical DILI diagnosis versus nonspecific pathology, first encephalopathy versus second absence, no invented dose/route/RUCAM.",
+    "Personally viewed actual9series chart, all visual fields/readings:24approximate points and20unreadable low values, missingDay28LDH, categorical intervals and mixed units. Caption second admission retained despite resemblance to first table.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] p1-f021 Direct bilirubin 2.30 mg/dL: comparator set to '=' (the printed '<0.3' is the reference range, not the result) [NR001].",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified migration: M02 '=' comparators on 21 numeric Table 1/3/4/5 results (no printed comparator on any result value; '<' only in reference ranges); M03 age text '59-year-old' literal in b00005; M12 p1-f086 paraphrased anchor 'first-admission/discharge course' correctly nulled (source does not state what 'Three months later' is relative to beyond paragraph order; time text kept).",
+    "Cleanup3 EVID-NEGATION p1-f109: present recovery outcome text_value 'remained asymptomatic following antidepressant discontinuation with slow progressive biochemical normalization' -> 'slow but progressive normalization of hepatic biochemical tests following antidepressant discontinuation' (clinical_statement 'Biochemical recovery after antidepressant cessation'); added p1-f130 symptoms_function 'Symptoms after antidepressant discontinuation' assertion absent quoting 'following antidepressant discontinuation, the patient remained asymptomatic' (added to event p1-e14).",
+    "Cleanup3 TIME p1-f093 venlafaxine stopped: kept 'day one of hospitalization' because that sentence explicitly dates 'the discontinuation of the antidepressant'; replaced the single 4-sentence span with three sentence quotes (readmission on venlafaxine; withdrawal of the medication; the day-one discontinuation sentence) so the time's own sentence carries the fact.",
+    "Cleanup3 GLUED annotations: 'Table3' -> 'Table 3' in p1-f041..f045 notes and ambiguity 2.",
+    "Cleanup3 GLUED visual submission FIG1 (78 fields): respaced detailed descriptions ('Admission, Day 3, Day 7, Day 14, Day 28 (outpatient)' as printed on the axis, 'near 2000 and 1650 to roughly 575 and 450', 'at Day 14', 'U/L, mg/dL, g/L', '0-to-2000'), reading value_text 'approximately 1650' etc., visual cues 'against 250-unit y-grid', limitations ('unequal 3/7/14/28-day gaps', 'Day 14'/'Day 28', 'Table 1', '44 readings distinguish 24 rounded ... and 20 unreadable'), rationale 'Figure 1'; no values changed; figure-EHR label and privacy-flag visual_target_sha256 refreshed; chart re-viewed on pixels."
+  ],
+  "unresolved": [
+    "Figure pixels were not inspected; visual details are restricted to captions.",
+    "All five raw XML tables inspected; no missing rows. HBc antigen and HCV viral load labels, UI units and numeric serologic results retained as written, without correcting source labels or inferring active infection.",
+    "No doses/routes/frequencies for NAC or venlafaxine and no numeric vortioxetine doses are reported. Lower-dose rechallenge is literal only.",
+    "Tables 2–5 specimen dates unspecified despite workup during both admissions; table values are not duplicated into both admissions. Later normal iron/ACE statement has no numeric final results.",
+    "Formal RUCAM not calculated. Nonspecific biopsy is distinct from clinically established DILI; recurrence on another antidepressant suggests susceptibility but is not a proven class allergy.",
+    "No explicit same-patient previous-report identity link in original source. General recommendations about avoiding re-exposure remain background, rather than invented patient care orders."
+  ],
+  "assessment": {
+    "primary_stratum": "gastroenterology_hepatology",
+    "rich_trajectory": true,
+    "normal_negative_evidence": true,
+    "serial_measurements": true,
+    "common_workflow": false,
+    "planned_vs_actual_challenge": true,
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 56,
+    "facts_reviewed": 129,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Only migration-scope changes reviewed and verified; one needs-review comparator resolved.",
+      "Cleanup3: asymptomatic recovery split into present biochemical recovery + absent symptoms; venlafaxine day-one time kept with sentence-level evidence; visual submission respaced."
+    ],
+    "residual_risks": [
+      "Table 1 high flags derived from narrative 'marked cytolysis, hyperbilirubinemia, and coagulopathy' kept from prior parent review."
+    ]
+  },
+  "physician_adjudicated": false
+}

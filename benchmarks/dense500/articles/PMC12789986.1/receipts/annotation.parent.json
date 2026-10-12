@@ -1,0 +1,50 @@
+{
+  "article_id": "PMC12789986.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f0786ad90348ff4ebd8c695d3aa37d084d514d3d12b26bd6ff6e4fe4ef9cb493",
+  "annotation_sha256": "ca2fa0df88c56575276e2bed0e0cc047df8dcf7d096647b8f59da8b6eeb85e0d",
+  "reviewed_at": "2026-10-10T01:15:41.655794+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 74,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Requested five documented completed diagnostic-test procedure representations with shared source provenance; they are not five additional unique facts.",
+    "Added explicit table-versus-prose chronology qualification for Day72ward transfer and Day86EF44% review.",
+    "semantic-rules-2026-10 re-sign: verified M03 age text '59-year-old' and 12 M12 anchor nullings ('article day timeline', 'calendar period' were paraphrases; Day N / 'Days 26-29' / 'In early June 2025' keep literal time text with no literal anchor).",
+    "ASSERT-ABSENT: p1-f055 anaphylaxis and p1-f056 vancomycin infusion reaction verification_status refuted -> unknown ('no evidence of ...' is a clinical statement with no stated excluding test).",
+    "GLUED-TEXT cleanup: repair_glued_text.py (diff reviewed) fixed 'transferDay72'/'follow-upTTEDay86' in ambiguity 3 and 'tableDay72transfer'/'Day86TTE' in article_limitations/4; manual spacing fixes 'Day 25'/'Day 26' (p1-f009 notes), 'Day 66'/'Day 86' (p1-f072/p1-f073 names, matching the printed table labels), 'to 34%' (p1-f072 finding), 'May 2025' (event description), 'EF 44%' (ambiguity 3); wording only"
+  ],
+  "unresolved": [
+    "Original XML table reviewed against all retained rows; no missing table rows identified.",
+    "Day-number timeline origin is not defined; May/June periods must not be converted to invented dates.",
+    "No explicit same-patient prior-report linkage identified. Anticoagulant drug/dose and eventual discharge beyond ward transfer are unstated.",
+    "No figures or graphical assets are present in the original article. Medication first-course duration is quarantined separately from supported dose/frequency. Drug-cardiomyopathy causality is probable, not confirmed; prothrombotic mechanism remains a secondary authors hypothesis.",
+    "b10 narrative places follow-up discussion before stepdown description; prose may be thematic rather than chronological. Explicit table Day 72 transfer precedes Day 86 TTE; no resolved-discrepancy claim."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "campaign": "semantic-rules-2026-10 re-sign",
+    "source_units_read": 33,
+    "facts_reviewed": 74,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Re-sign 2026-10: migrations verified; two absent conditions changed refuted -> unknown.",
+      "Cleanup pass 2: 4 glued tokens repaired by tool plus 7 manual fixes; no time-only quote or negation-word rows"
+    ],
+    "residual_risks": [],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
+  },
+  "physician_adjudicated": false
+}

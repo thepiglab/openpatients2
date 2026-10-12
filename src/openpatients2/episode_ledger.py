@@ -17,6 +17,7 @@ from pydantic import Field, ValidationError
 from .extraction_contracts import SourceSpan, span_errors
 from .longitudinal import Offset, PatientTimeline, TimeExpression, audit_timeline
 from .prompt_payloads import compact_value
+from .semantic_rules import EVENT_OCCURRENCES, TEMPORAL_RELATIONS
 from .provenance import json_digest
 from .schemas import StrictModel
 
@@ -39,7 +40,7 @@ class EventAddition(StrictModel):
     occurrence_anchor: LedgerCitation = Field(description='Narrow unique phrase identifying one occurrence, preserving its year/day/dose when stated.')
     episode_anchor: LedgerCitation | None = Field(description='An explicitly distinguishable encounter/course; null when unknown. Drug name alone is not an episode.')
     kind: Literal['presentation', 'history', 'diagnosis', 'test', 'treatment', 'adverse_event', 'outcome', 'follow_up', 'plan', 'other']
-    occurrence: Literal['occurred', 'planned', 'conditional', 'unknown']
+    occurrence: Literal[EVENT_OCCURRENCES]
     description: str = Field(min_length=1)
     clinical_evidence: list[LedgerCitation] = Field(min_length=1)
     attribution_evidence: list[LedgerCitation] = Field(min_length=1)
@@ -55,7 +56,7 @@ class FactLinkAddition(StrictModel):
 class EdgeAddition(StrictModel):
     from_event_ref: str = Field(pattern=r'^[en][1-9][0-9]*$')
     to_event_ref: str = Field(pattern=r'^[en][1-9][0-9]*$')
-    relation: Literal['before', 'after', 'same_time', 'during', 'overlaps']
+    relation: Literal[TEMPORAL_RELATIONS]
     offset: Offset | None
     evidence: list[LedgerCitation] = Field(min_length=1)
 

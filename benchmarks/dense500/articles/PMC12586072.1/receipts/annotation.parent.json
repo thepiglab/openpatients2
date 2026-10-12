@@ -1,0 +1,45 @@
+{
+  "article_id": "PMC12586072.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "32c135cfe6b79cff0e3cb3f2725e77c95bc14b5cba647cc0b8eac2dcebcc001f",
+  "annotation_sha256": "12d5804a5713b2f136866bf69b0fc89e877c819d82c4015ce0dba63cf7dfb70a",
+  "reviewed_at": "2026-10-11T23:49:38.366633+00:00",
+  "source_segments_read": 94,
+  "facts_reviewed": 487,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "TIME-LITERAL: p2-f036 time 'within one month' relation after/anchor 'admission' -> relation before/anchor null. The source gives 'within one month' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged."
+  ],
+  "unresolved": [
+    "Original XML Tables 1–6 reviewed in full, with stable source ownership per case. Dashes/blanks mean unreported results, not negative tests; plus/minus flags preserved independently of numeric titers.",
+    "No figure assets or supplements are listed. No explicit same-patient prior-report linkage identified. Treatment dose/route/duration and exact discharge dates unreported.",
+    "Case 1 obstetric counts have unclear current/past scope; Case 2/3 gravida 0 conflicts with documented pregnancy. Pregnancy outcomes for Case 2/3 and causal relation of Case 1 missed abortion to HBV are not demonstrated.",
+    "Case 3 possible PBC is unconfirmed, and full HBV DNA clearance is not documented because of loss to follow-up; abstract all-three cure wording is review-only. Qualitative distress is not a formal psychometric anxiety/depression diagnosis.",
+    "Case 2 early-course HBV DNA 180 IU/mL has unresolved Day 0 narrative versus Day 2 table timing. Both temporal assignments are review-only, with the shared unanchored value represented separately. Case 1 disease-course duration origins are not silently converted to admission-day indices."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 94,
+    "facts_reviewed": 1,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Targeted TIME-LITERAL correction of 1 'within <duration>' facts (p2-f036): each source sentence was read; none ties the duration to an event in the same phrase, so relation set to before with anchor null. No other fields or facts changed."
+    ],
+    "residual_risks": [
+      "Targeted pass only; the rest of the article was not re-reviewed in this pass."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12769400.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "fa370e17710e73ef87a41f1731053f5041fffe8f3f2e617b533f347e67cdb4c0",
+  "annotation_sha256": "b2b872e14d739ee233f4838cab1064b6fff90e6a9f831eaa9a8a38735badf364",
+  "reviewed_at": "2026-10-11T20:13:52.438204+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 66,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Patient label: removed 'extremely preterm' (title-only wording) for a neutral label stating 25 weeks 2 days gestation; case_context index_subject_description tidied.",
+    "p1-f030 broad spectrum antibiotics: added time 'after transfer' (relation after, anchor transfer) because 'was started ... after transfer' governs both objects; matches event p1-e09; removed the contrary ambiguity.",
+    "p1-f042 voriconazole: removed the 'On D6' time; the switch was prompted by the MALDI-TOF confirmation that was 'subsequently' obtained, so it is undated; event p1-e17 time_text set null and description no longer implies D6; clinical_statement reworded to 'Switched to voriconazole 6mg/kg q12h, prompted by MALDI-TOF species confirmation' (source: 'prompting a switch'); ambiguity updated.",
+    "Split event p1-e16 (D6 culture growth, kind test) from new event p1-e24 (MALDI-TOF species confirmation and A. flavus diagnosis, untimed); relations e16 before e24 ('subsequently') and e24 before e17 ('prompting'); dropped e15 before e17 (now covered by the chain).",
+    "Added relations: e18 before e19 (D6 HUS then progressive infarction by D8), e19 before e21 (by D8 vs D10), e04 before e12 (D0 definition vs D1 and D2 debridements).",
+    "Added medications p1-f065 sedation and p1-f066 vasoactive support (escalating, agents unnamed) linked to event p1-e14 and summary; pain control left in the deterioration outcome.",
+    "p1-f022 name 'Possible invasive infection' -> 'Invasive infection' (assertion possible carries uncertainty); p1-f057 name 'Placental histopathology' -> 'Placental examination for fungal elements' (method not stated).",
+    "p1-f064 topical amphotericin B: evidence extended to the full sentence so the drug name and the 'neither feasible nor appropriate' negation are in one quote.",
+    "Summary updated for the antibiotic time, MALDI-TOF/voriconazole wording and the new medication facts.",
+    "visual.json: fig1 clinical-significance statement no longer dates the photographs to Day 0 (consistent with its own limitation); fig2 panel b statement no longer says the dish 'matches' the patient's cultures, only that Fig. 2 is cited in the culture sentence. Figure-EHR and privacy sidecars regenerated with --draft and reviewed labels/flags carried over unchanged."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the actual JPEGs are inspected in the separate visual target.",
+    "The supplement is a CARE reporting checklist (administrative); it carries no patient clinical data.",
+    "D-day times (D0, D1, D2, D4, D6, D8, D10) are kept as written; D0 is defined as the day of life six of disease presentation and no calendar dates are stated.",
+    "Table 1 minimum inhibitory concentrations have no printed breakpoints or flags; none were assigned, and the discussion's literature ranges are not applied to the patient.",
+    "The twin and the mother appear only through statements about the index patient; they are not separate patients and have no separate roster entries.",
+    "Literature, risk-factor and management statements in the Introduction and Discussion are background, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 66,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (female twin born at 25 weeks 2 days); roster count 1 from 'a fatal case ... in a 25-week infant'. The monochorionic twin is mentioned only by cause of death and a negative autopsy in one clause, with no individually described clinical course, so per the roster rule (relatives are separate cases only when individually described with their own course) the twin stays a family_member subject under p1, consistently with the mother facts under subject mother.",
+      "gestational_age_weeks left null: the reproductive_perinatal prompt keeps '25 weeks and 2 days' as text and reserves the numeric field for a single week value.",
+      "D-day times kept literal with null anchors; 'by D8' relation before; 'within 6 hours of transfer' anchored to transfer with relation after; twin fact 'two days prior to D0' anchored to literal D0.",
+      "Table 1 MIC rows have comparators (= or <=) and no flags; the authors' polyene-resistance statement stays a separate unflagged observation.",
+      "Topical amphotericin B kept as absent medication with action unknown; silver sulfadiazine 'was considered' is an ambiguity only; death on D10 literally stated and subject_state deceased_during_course.",
+      "Fig. 2 ownership rests on the in-text '(Fig. 2)' callout in the patient's culture sentence; limitation recorded. Supplement mmc1 viewed: CARE reporting checklist, administrative."
+    ],
+    "residual_risks": [
+      "Fig. 2 attribution to the patient's isolate depends on the callout only; the caption is species-level.",
+      "Whether 'after transfer' scopes the antibiotics is a grammatical reading of one sentence.",
+      "No relation links the autopsy event to death because the source states no order explicitly."
+    ]
+  },
+  "physician_adjudicated": false
+}

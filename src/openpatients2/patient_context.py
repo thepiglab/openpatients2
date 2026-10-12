@@ -11,6 +11,7 @@ import hashlib
 import json
 from pathlib import Path
 
+from .annotation_rules import prompt_block
 from .article_tasks import Roster, SYSTEM, check_article_task
 
 
@@ -31,8 +32,12 @@ def discovery_messages(article, *, refined=False, isolated=False):
         'A cohort size, group mean, generic diagram or anonymous dashboard bed is not an individual case. '
         'Include a previously published patient only if this article itself reports an individual clinical course; '
         'flag prior publication in attribution_limitations, and do not merge across articles. '
-        'Relatives are separate patients only if independently described. Preserve mother/fetus and comparison '
-        'patient identity. Assign blocks to patients, background or unresolved. Shared/mixed blocks may be '
+        'A fetus, newborn, mother or other relative mentioned in a case about one index patient stays in that '
+        'patient\'s record (subject newborn/fetus/mother/family_member), not a separate patient; a relative is a '
+        'separate patient only when the article presents them as an additional case with their own individually '
+        'described clinical course (ROSTER-RELATIVES). Labels describe the patient from the case text, never the '
+        'article title alone, and never contain names or identifiers (ROSTER-LABEL). Preserve mother/fetus and '
+        'comparison patient identity. Assign blocks to patients, background or unresolved. Shared/mixed blocks may be '
         'assigned to multiple patients with explicit limitations. Include case facts in Discussion. '
         'Use exact distinguishing identity quotes, literal segment IDs, unknown species if unstated, and null '
         'count if uncertain. Do not invent individuals to cover blocks. '
@@ -59,6 +64,9 @@ def discovery_messages(article, *, refined=False, isolated=False):
                 'Use cross_references and text_with_reference_markers to locate origin_reference_ids, while '
                 'all identity quotes must remain literal in the original text field. Validate primary cases '
                 'independently of optional cited-case links. If a bibliography link is uncertain, say so.')
+    # Shared roster rules (ROSTER-ORDER, NO-COHORT-COPY): check_patient_roster enforces the p1..pn
+    # first-mention order, so the live discovery prompt must state it too.
+    instruction += '\n' + prompt_block('roster')
     return [{'role': 'system', 'content': SYSTEM}, {'role': 'user', 'content':
         'SOURCE_JSON:\n' + json.dumps(source, ensure_ascii=False) + '\nTASK:\n' + instruction +
         '\nSCHEMA:\n' + json.dumps(schema)}]

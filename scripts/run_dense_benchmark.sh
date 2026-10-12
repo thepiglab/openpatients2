@@ -27,7 +27,14 @@ case "${1:-}" in
   status|verify)
     action="$1"
     work="${2:-}"
-    if [[ -z "$work" ]]; then work="$(cat "$pointer")"; fi
+    if [[ -z "$work" ]]; then
+      if [[ ! -f "$pointer" ]]; then
+        echo 'No benchmark has been launched from this checkout. Start it with:' >&2
+        echo '  bash scripts/run_dense_benchmark.sh' >&2
+        exit 1
+      fi
+      work="$(cat "$pointer")"
+    fi
     if [[ ! -f "$work/code/scripts/benchmark_dense.py" ]]; then
       echo "Preparation has not finished. Log: $work.bootstrap/prepare.log"
       squeue -u "$USER"
@@ -48,19 +55,25 @@ if [[ -e "$work" || -e "$bootstrap" ]]; then
   exit 1
 fi
 
-# This checkout may still be main. Use the hardened benchmark branch without
-# switching or modifying the user's checkout. Pin a commit before queueing.
-ref="${DENSE_REF:-HEAD}"
-if ! git -C "$repo" cat-file -e "$ref:src/openpatients2/dense_benchmark.py" 2>/dev/null; then
-  for candidate in origin/dense500-shared-rules dense500-shared-rules; do
-    if git -C "$repo" cat-file -e "$candidate:src/openpatients2/dense_benchmark.py" 2>/dev/null; then
-      ref="$candidate"
-      break
-    fi
+# The complete benchmark package lives on main. Pin this checkout's committed
+# revision before queueing so code, reference, and source packets stay together.
+package_exists() {
+  local candidate="$1" required
+  for required in scripts/benchmark_dense.py scripts/dense_benchmark.sbatch \
+      src/openpatients2/dense_benchmark.py src/openpatients2/dense_benchmark_serving.py \
+      src/openpatients2/dense_benchmark_telemetry.py \
+      configs/hipergator/dense-benchmark/reference.jsonl.gz \
+      configs/hipergator/dense-benchmark/chat_template.jinja \
+      docs/DENSE260_HIPERGATOR_BENCHMARK.md; do
+    git -C "$repo" cat-file -e "$candidate:$required" 2>/dev/null || return 1
   done
-fi
-git -C "$repo" cat-file -e "$ref:configs/hipergator/dense-benchmark/reference.jsonl.gz" || {
-  echo 'Fetch the benchmark branch containing the launcher and frozen reference first.' >&2
+}
+ref="${DENSE_REF:-HEAD}"
+package_exists "$ref" || {
+  echo 'This commit does not contain the complete benchmark package. Update main:' >&2
+  echo '  git switch main' >&2
+  echo '  git pull --ff-only origin main' >&2
+  echo '  bash scripts/run_dense_benchmark.sh' >&2
   exit 1
 }
 revision="$(git -C "$repo" rev-parse "$ref^{commit}")"

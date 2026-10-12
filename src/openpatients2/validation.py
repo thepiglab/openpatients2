@@ -46,7 +46,14 @@ def iter_objects(value, path: str = ""):
 
 
 def validate(task: str, raw: str | dict, source: str, *, segments: list[dict] | None = None,
-             recover_formatting: bool = False, recover_identical_duplicates: bool = False) -> CheckResult:
+             recover_formatting: bool = False, recover_identical_duplicates: bool = False,
+             target_patient: bool = False, strict_time: bool = False) -> CheckResult:
+    """Contract + literal-source checks + the shared semantic rules (semantic_rules, rule IDs in messages).
+
+    target_patient=True applies the per-patient packet rule (CTX-PER-PATIENT) to case_context.
+    strict_time=True (runtime extraction) makes the high-confidence NO-BORROWING/TIME-LITERAL shapes errors
+    (semantic_rules.item_violations); reference gates leave it False.
+    """
     result = CheckResult()
     try:
         if isinstance(raw, str):
@@ -97,14 +104,8 @@ def validate(task: str, raw: str | dict, source: str, *, segments: list[dict] | 
         time = obj.get("time")
         if time and time.get("text") and time["text"] not in combined:
             result.errors.append(f"{path}/time/text: temporal expression must occur literally in this fact's evidence; use null for an unstated time")
-        if time and time.get("date_iso"):
-            date = time["date_iso"]
-            try:
-                dt.date.fromisoformat(date)
-            except ValueError:
-                result.errors.append(f"{path}/time/date_iso: invalid date")
-            if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date) or date not in combined or date not in (time.get("text") or ""):
-                result.errors.append(f"{path}/time/date_iso: retain only full ISO dates literally present in evidence/time text")
+        # time.date_iso: checked once for both pipelines by semantic_rules.date_iso_errors (TIME-LITERAL, error)
+        # through section_violations below.
         # A heuristic warning, not an automatic semantic rejection: lexical checks cannot
         # distinguish e.g. 'no change in cancer' from 'no cancer'. Human adjudication is separate.
         if obj.get("assertion") == "present" and re.search(r"\b(no|denies|without|ruled out)\b", combined, re.I):
@@ -119,4 +120,9 @@ def validate(task: str, raw: str | dict, source: str, *, segments: list[dict] | 
                 result.warnings.append(f"{path}/{key}: numeric normalization needs review against evidence")
         if obj.get("numeric_value") is not None and "unit" in obj and obj["unit"] is None:
             result.warnings.append(f"{path}: numeric value has no documented unit")
+    from .semantic_rules import ERROR, case_context_target_errors, section_violations
+    for violation in section_violations(task, result.data, source, segments=segments, strict_time=strict_time):
+        (result.errors if violation.severity == ERROR else result.warnings).append(violation.text())
+    if task == "case_context" and target_patient:
+        result.errors.extend(case_context_target_errors(result.data))
     return result

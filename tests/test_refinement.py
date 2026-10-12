@@ -110,19 +110,6 @@ def test_targeted_batches_rotate_without_mutating_accepted_neighbors():
     assert [v['index'] for v in plan._active] == first
 
 
-def test_new_jats_markup_preserves_scientific_exponents_without_rewriting_frozen_fixture():
-    from test_articles import XML
-    from openpatients2.articles import parse_article
-    xml = XML.replace('120/80 mmHg','40.6×10<sup>9</sup>/L; H<sub>2</sub>O')
-    value = parse_article(xml, {'pmcid':'PMC1','version':1,'license_code':'CC BY-NC-SA',
-        'is_pmc_openaccess':True,'is_retracted':False})
-    assert '40.6×10^(9)/L; H_(2)O' in value['text'] and value['parser_version'] == '1.4'
-    root = Path(__file__).resolve().parents[1]
-    with gzip.open(root/'benchmarks/corpus-correctness/articles.jsonl.gz','rt') as stream:
-        sources = [json.loads(line) for line in stream]
-    assert any('40.6×109/L' in s['text'] for s in sources)
-
-
 def test_mathml_powers_survive_and_stripped_superscript_citations_stay_empty():
     from openpatients2.articles import _clean
     from openpatients2.pmc_media import parsed_xml
@@ -170,21 +157,6 @@ def test_cited_cases_are_source_bound_link_candidates_and_excluded_from_primary_
     assert 'PRIMARY VERSUS CITED CASES' in discovery_messages(value,refined=True)[-1]['content']
 
 
-def test_representation_alternatives_do_not_change_strict_scoring_or_use_quoted_evidence():
-    from test_corpus_fidelity import fixture
-    from openpatients2.corpus_fidelity import evaluate
-    reference, patient = fixture()
-    reference['checks'][0]['semantic_alternatives'] = [{'task':'conditions','collection':'items',
-        'pattern':{'name':'sodium result 115'}}]
-    patient['sections']['observations'] = {'items':[]}
-    patient['sections']['conditions'] = {'items':[{'name':'sodium result 115'}]}
-    score = evaluate(reference,[patient])
-    assert score['summary']['delivered']['matched'] == 0
-    assert score['representation_aware']['matched'] == 1
-    patient['sections']['conditions']['items'] = [{'name':'different','evidence':[{'name':'sodium result 115'}]}]
-    assert evaluate(reference,[patient])['representation_aware']['matched'] == 0
-
-
 async def test_pixel_priority_reaches_late_figure_without_bypassing_rights(tmp_path):
     import httpx
     from test_pilot_media import article as media_article, source, PNG
@@ -198,128 +170,3 @@ async def test_pixel_priority_reaches_late_figure_without_bypassing_rights(tmp_p
     assert result['figures'][1]['figure_id'] == 'F0' and result['figures'][1]['status'] == 'ready'
 
 
-async def test_refinement_trial_rotation_policy_and_live_conditioning(tmp_path,monkeypatch):
-    from openpatients2 import corpus_pilot as pilot
-    root = Path(__file__).resolve().parents[1]
-    campaign = pilot.prepare(root,tmp_path/'run',root/'configs/pilot/refinement.yaml')
-    work = Path(campaign['work']); (work/'profile').mkdir(); (work/'profile/rosters.json').write_text('{}')
-    calls = []
-    async def discover(config,*args,**kwargs):
-        assert config['refinement_policy'] == 'source_aware'
-        return {}
-    async def warm(*args): return {'controlled_prefix_reset':True}
-    async def run(config,sample,out,*args,**kwargs):
-        assert not out.exists()  # Warmup files must not violate fresh-output gate.
-        calls.append((kwargs['seed'],out.name,config['refinement_policy'],kwargs['frozen_rosters']))
-        return {'tokens':{},'valid_tasks':1,'task_count':1}
-    monkeypatch.setattr('openpatients2.pilot_extract.prepare_rosters',discover)
-    monkeypatch.setattr('openpatients2.pilot_extract.run_pilot',run)
-    monkeypatch.setattr(pilot,'trial_warmup',warm)
-    rows, found = await pilot.correctness_runs(campaign,work/'extraction',['mock'],65536)
-    assert len(rows) == len(calls) == 16 and len(found) == 4
-    for variant in campaign['config']['variants']:
-        trials = [r for r in rows if r['arm'] == variant['name']]
-        assert {r['order'] for r in trials} == {0,1,2,3}
-    assert all(frozen is None for _,name,_,frozen in calls if name == 'compact-live')
-    assert all(frozen is not None for _,name,_,frozen in calls if name != 'compact-live')
-    assert '--gres=none' in pilot.job_command(campaign,'cpu')
-    assert '--gres=gpu:b200:8' in pilot.job_command(campaign,'gpu')
-
-
-@pytest.mark.parametrize('bad',['owner','lock',None])
-def test_holdout_cleanup_checks_both_owned_source_trees_before_deletion(tmp_path,bad):
-    import fcntl
-    from test_pilot_cleanup import campaign as cleanup_campaign, TARGETS
-    from openpatients2.data import write_json
-    from openpatients2.provenance import json_digest
-    from openpatients2.pilot_cleanup import cleanup_sources, SCOPE
-    campaign,work,_ = cleanup_campaign(tmp_path)
-    campaign['config']['holdout_source_config'] = 'bounded-holdout.yaml'
-    campaign['config_sha256'] = json_digest(campaign['config'])
-    write_json(work/'source-owner.json',{'work':str(work),'config_sha256':campaign['config_sha256'],'scope':SCOPE})
-    child = work/'holdout'; child.mkdir(); (child/'profile').mkdir(); (child/'acquisition').mkdir()
-    for name in ('articles.jsonl.gz','profile/sample.jsonl.gz','acquisition/owner.lock'):
-        (child/name).write_text('owned source')
-    write_json(child/'source-owner.json',{'work':str(child),'config_sha256':campaign['config_sha256'],
-        'scope':'forged' if bad == 'owner' else 'corpus-pilot-holdout/1'})
-    (child/'profile/counts.jsonl.gz').write_text('review scalar counts')
-    if bad == 'lock':
-        with (child/'acquisition/owner.lock').open('a') as stream:
-            fcntl.flock(stream,fcntl.LOCK_EX|fcntl.LOCK_NB)
-            with pytest.raises(ValueError,match='Active acquisition'): cleanup_sources(campaign)
-    elif bad == 'owner':
-        with pytest.raises(ValueError,match='Holdout source ownership'): cleanup_sources(campaign)
-    else:
-        result = cleanup_sources(campaign)
-        assert 'holdout/articles.jsonl.gz' in result['deleted_paths']
-        assert not (child/'profile/sample.jsonl.gz').exists()
-        assert (child/'profile/counts.jsonl.gz').read_text() == 'review scalar counts'
-    if bad:
-        assert all((work/name).exists() for name in TARGETS)
-        assert (child/'articles.jsonl.gz').exists()
-
-
-def test_result_dedup_retains_every_attempt_and_nonidentical_patient_bundle(tmp_path):
-    import tarfile
-    from openpatients2 import corpus_pilot as pilot
-    from openpatients2.data import write_json
-    root = Path(__file__).resolve().parents[1]
-    campaign = pilot.prepare(root,tmp_path/'run',root/'configs/pilot/refinement.yaml'); work = Path(campaign['work'])
-    write_json(work/'gpu.json',{'status':'completed'})
-    trial = work/'extraction/run'; (trial/'tasks').mkdir(parents=True); (trial/'patients').mkdir()
-    attempt = {'ledger_sequence':1,'response':{'content':'all raw model output'}}
-    write_json(trial/'tasks/task.json',{'attempts':[attempt]})
-    (trial/'attempts.jsonl').write_text(json.dumps(attempt)+'\n')
-    write_json(trial/'patients/one.json',{'source':'one'})
-    write_json(trial/'patients/two.json',{'source':'different'})
-    (trial/'patients.jsonl').write_text(json.dumps({'source':'one'})+'\n')
-    output = tmp_path/'results.tar.gz'; pilot.archive_results(campaign,output)
-    with tarfile.open(output) as tar:
-        names = set(tar.getnames())
-        assert 'extraction/run/attempts.jsonl' not in names
-        assert 'extraction/run/patients/one.json' not in names
-        assert 'extraction/run/patients/two.json' in names
-        assert json.load(tar.extractfile('extraction/run/tasks/task.json'))['attempts'] == [attempt]
-    (trial/'attempts.jsonl').write_text(json.dumps({**attempt,'ledger_sequence':2})+'\n')
-    output = tmp_path/'nonredundant.tar.gz'; pilot.archive_results(campaign,output)
-    with tarfile.open(output) as tar:
-        assert 'extraction/run/attempts.jsonl' in tar.getnames()
-
-
-@pytest.mark.parametrize('only_overlap',[False,True])
-async def test_cpu_holdout_disjoint_sample_pin_and_failed_parent_readiness(tmp_path,monkeypatch,only_overlap):
-    from openpatients2 import corpus_pilot as pilot
-    from openpatients2.data import write_json, read_jsonl
-    from openpatients2.corpus_stats import sha256
-    root = Path(__file__).resolve().parents[1]
-    campaign = pilot.prepare(root,tmp_path/'run',root/'configs/pilot/refinement.yaml'); work = Path(campaign['work'])
-    calls = []
-    async def prepare(work_dir,config):
-        calls.append(config)
-        (work_dir/'profile').mkdir()
-        a = article(); a.update(pmcid='PMC1',article_id='PMC1.1')
-        b = copy.deepcopy(a); b.update(pmcid='PMC2',article_id='PMC2.1')
-        values = [a] if work_dir == work or only_overlap else [a,b]
-        path = work_dir/'profile/sample.jsonl.gz'
-        with gzip.open(path,'wt') as stream:
-            for value in values: stream.write(json.dumps(value)+'\n')
-        write_json(work_dir/'vision-assets/manifest.json',{'figures':[{'article_id':v['article_id']} for v in values]})
-        ready = {'status':'ready','hashes':{'profile/sample.jsonl.gz':sha256(path),
-            'vision-assets/manifest.json':sha256(work_dir/'vision-assets/manifest.json')}}
-        write_json(work_dir/'cpu.json',ready)
-        return ready
-    monkeypatch.setattr('openpatients2.pilot_cpu.run_cpu',prepare)
-    if only_overlap:
-        with pytest.raises(ValueError,match='overlaps'): await pilot.prepare_cpu_campaign(campaign)
-        assert json.loads((work/'cpu.json').read_text())['status'] == 'failed'
-        with pytest.raises(ValueError,match='not ready'): pilot.verify_cpu(campaign)
-    else:
-        result = await pilot.prepare_cpu_campaign(campaign)
-        assert result['holdout']['selected_articles'] == 1
-        assert [a['pmcid'] for a in read_jsonl(work/'holdout/profile/sample.jsonl.gz')] == ['PMC2']
-        assert json.loads((work/'holdout/vision-assets/manifest.json').read_text())['figures'] == [{'article_id':'PMC2.1'}]
-        assert result['hashes']['review-source-sample.json'] == sha256(work/'review-source-sample.json')
-        assert json.loads((work/'review-source-sample.json').read_text())['articles'][0]['pmcid'] == 'PMC2'
-        pilot.verify_cpu(campaign)
-    assert len(calls) == 2 and calls[1]['sample_size'] == 24
-    assert calls[1]['source_mode'] == 'acquisition' and not calls[1]['fixed_rosters']

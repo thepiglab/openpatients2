@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12827820.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ca7f37b6a00160e9f70c5bc80eb023d1872fefeb9f50bebf6a01ce737913156f",
+  "annotation_sha256": "18807df376af664dfe0cdb9f5bdd282a7b10f79c1f4dd8a7535a20456f1cc106",
+  "reviewed_at": "2026-10-11T19:36:00.759816+00:00",
+  "source_segments_read": 21,
+  "facts_reviewed": 70,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Roster: kept reported_individual_count null (no literal number; mother and surviving twin are two individually described people, consistent with earlier mother+neonate articles) and added the 'We report a monochorionic diamniotic twin pregnancy' evidence",
+    "p1-f028 ultrasound-confirmed demise: removed time '23+3 weeks' (presentation gestational age, not the ultrasound time)",
+    "Added p2-f023 birth weight consistent with gestational age (b00013); neonate gestational age deliberately not taken from the maternal cesarean sentence",
+    "p2 summary: removed 'by emergency cesarean section' (no p2 fact; maternal procedure)",
+    "Added 5 literal relations: p1-e02<e04, p1-e02<e03 (18 vs 23 / 23+3 weeks), p1-e07<e08 ('antenatal' corticosteroids; expectant management until cesarean), p1-e08<e09 ('postoperative' recovery, discharge), p2-e01<e02 ('at birth and required NICU care')",
+    "Added ambiguities: deceased co-twin kept as fetus-subject facts under the mother (not a patient), Figure 1 not attributed to the neonate; p2 NICU condition roles/resolution left unknown"
+  ],
+  "unresolved": [
+    "The article reports one mother and her surviving twin neonate as two annotated patients; the deceased co-twin is described only briefly (demise at 17 weeks, anomalous, sex not determined) and is recorded as fetus-subject facts in the mother record rather than as a patient.",
+    "The stated 10-week prolongation is not recomputed from the gestational ages given (demise at 17 weeks, delivery at 28+3 weeks) and its reference point is not stated.",
+    "The sentence on serial antenatal Doppler scans refers to \"such complications\" named in the preceding sentence; only the literal wording is recorded.",
+    "Caption-layer visual status not_inspected; the single JPEG was inspected in the separate visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 21,
+    "facts_reviewed": 70,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Two patients: p1 mother (36, G4P1L1A2, chronic hypertension, obesity, PPROM, emergency cesarean at 28+3 weeks) and p2 surviving male twin (1350 g, NICU, discharged after two months at 2180 g)",
+      "'On admission' scopes only its own sentence; pallor/icterus/edema, fundal height and fetal heart sounds untimed",
+      "'Pregnancy prolonged by 10 weeks' kept literal with no reference point; Doppler 'no evidence of such complications' kept literal",
+      "Figure 1 gross photo of the deceased co-twin: unresolved attribution, clinical_photo not includable, fetal face flagged identifiable_face (conservative), no burned-in identifiers"
+    ],
+    "residual_risks": [
+      "Treating the deceased co-twin as fetus-subject facts rather than a patient is a protocol choice",
+      "p2 condition roles unknown; source does not label complications",
+      "Identifiable-face flag on a malformed deceased fetus is conservative"
+    ]
+  },
+  "physician_adjudicated": false
+}

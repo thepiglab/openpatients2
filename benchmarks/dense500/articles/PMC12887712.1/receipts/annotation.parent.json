@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12887712.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "01309ca174d8fd74ba05f74689b2f126c664d5c69f33fa77a0bdae20868b0bab",
+  "annotation_sha256": "faf735eb9593ff037e3c17f9340be3a3723b02b304ab6149fb28e1cbe78fbb8a",
+  "reviewed_at": "2026-10-10T02:08:26.607570+00:00",
+  "source_segments_read": 53,
+  "facts_reviewed": 61,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f016 cryotherapy: removed indication 'Endemic nature of cutaneous leishmaniasis' (a rationale, not a diagnosis/indication); noted in notes",
+    "p1-f019/p1-f020 antimonials: removed regimen fields that only restated treatment sequence",
+    "p1-f021 amphotericin B: regimen trimmed to 'second-line treatment'; temporality current (index-course treatment)",
+    "p1-f009 note and ambiguity on 'since 2022' made consistent: time kept on the five findings of the presenting sentence (fact's own sentence); infiltration site not inferred",
+    "p1-e18 plateau event: unlinked review-only conflicting fact p1-f061; kind outcome",
+    "p1-e03 time_kind order_only for 'initially'",
+    "Added relations e06 before e07 (antimonials then no response) and e09 before e10 (clinic evaluation prompting laboratory investigations)",
+    "Outcome-conflict ambiguity extended with b00047 'our patient showed poor clinical improvement'",
+    "Visual submission: Fig 1A, 1D and Fig 4 eye masking corrected from black bar/rectangle to separate black oval masks; Fig 1B limitation on unlettered leg/hand photographs; figure-EHR and privacy sidecars rebound and privacy face descriptions corrected"
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; actual images are described in the separate visual submission.",
+    "C-reactive protein unit conflicts between narrative (mg/L) and Table I (mg/dl); the Discussion plateau and the Conclusion marked improvement are not reconciled.",
+    "No dates, doses, session counts or follow-up duration are reported for the treatments; no outcome after the plateau is given.",
+    "Table I toxoplasmosis antibody rows have no unit or interpretation; table values were not flagged high or low from reference ranges."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 53,
+    "facts_reviewed": 61,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient; all Table I rows captured; CRP unit conflict (text mg/L vs table mg/dl) kept as two review_only facts",
+      "Flags only from text wording (anemia, elevated CRP, increased IgG/IgM); table-only values unflagged",
+      "Wade staining and PCR correctly not_performed; 'systemic' not used as a route",
+      "Amphotericin B outcome conflict (plateau vs marked improvement) quarantined as review_only",
+      "Fig 3 'No malignancy' and 'Cutaneous Leichmaniasis' lines are visual-only, not added to the annotation"
+    ],
+    "residual_risks": [
+      "Scope of sentence-final 'since 2022' over the listed findings is grammatical, not explicit",
+      "Fig 1 unlettered leg/hand photographs grouped with panel B by layout",
+      "Biopsy site right forearm comes from the Fig 2 caption"
+    ]
+  },
+  "physician_adjudicated": false
+}

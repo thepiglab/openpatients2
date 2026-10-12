@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC12285374.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0f4179cd0b495bfe140c4bc7315c5de96f2032231408d36108d3b94bbbf06ae9",
+  "annotation_sha256": "22c0b35c812c811df22e0723e7df830d6aaa28d58589929f6a342211ca10166a",
+  "reviewed_at": "2026-10-10T02:15:50.034250+00:00",
+  "source_segments_read": 34,
+  "facts_reviewed": 108,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M02 comparator '=' on 12 numeric observations (CT/exam dimensions, mitotic index, Ki67) - no printed <,>, up to in source.",
+    "Verified M03 age text_value '50-year-old' (p1) and '55-year-old' (p2) are the literal phrases for each patient.",
+    "NR001 resolved: p2-f009 rectal examination converted from observation to symptoms_function sign 'rectal fullness'; added p2-f043 sign 'rectal mucosa on digital examination' text_value 'normal' (split mixed finding).",
+    "p2-f042 Ki67: text_value 'positive'/flag positive replaced by text_value '2%', no flag (source: 'with 2% Ki67'; no qualitative positive call).",
+    "Cleanup3 GLUED visual submission (4 figures): respaced ~55 glued tokens in descriptions/limitations/clinical-significance prose, e.g. 'Case1abdominal' -> 'Case 1 abdominal', 'labelledA'..'labelledE' -> 'labelled A'..'E', 'the16.7/12.3/13.4cm' -> 'the 16.7/12.3/13.4 cm', 'CTsections' -> 'CT sections', 'scalebar' -> 'scale bar', 'mapsCSTAT6/DCD34/ElowKi67' -> 'maps C STAT6/D CD34/E low Ki67', 'narrativeKi67negative and table4%' -> 'narrative Ki67 negative and table 4%'; quotes untouched; figure-EHR label and privacy-flag visual_target_sha256 refreshed; all four figures re-viewed on pixels.",
+    "Cleanup3 NEGATION scan p1-f042/p2-f028: 'The post-operative course was uneventful.' kept as a present outcome (source states it as the outcome).",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (2 whitelisted label/number or number/unit spacing edits outside quotes in annotations (2); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. (Case1 -> Case 1 in ambiguity issue, Table1 -> Table 1 in article limitation) plus hand fix 'current50-year-old' -> 'current 50-year-old'.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=2, roster_complete=true, evidence b00001 \"In this report, we describe two cases of rare colonic mesentery SFTs\"; 2 patients annotated in first-mention order.",
+    "GLUED-TEXT hand fix: \"mitotic index2/10hpf\" -> \"mitotic index 2/10 hpf\" (p1 ambiguity) and \"mitotic index1/10hpf\" -> \"mitotic index 1/10 hpf\" (p2-e006), matching the source table spelling \"2/10 hpf\"/\"1/10 hpf\"."
+  ],
+  "unresolved": [
+    "Figure pixels were not inspected; annotation covers captions only.",
+    "Recovered Table 1 literature cases remain secondary/background; current two rows retain their clinical values. No malignant histology inferred from size or mitotic count alone."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 34,
+    "facts_reviewed": 108,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical comparator and age-text migrations correct against source.",
+      "Rectal exam mixed finding split into two exam signs.",
+      "Cleanup3: visual-submission glued prose respaced; uneventful outcomes confirmed present."
+    ],
+    "residual_risks": [
+      "Case 1 Ki67 conflict (text negative vs table 4%) retained as source_conflict."
+    ],
+    "primary_stratum": "oncology",
+    "patient_count": 2,
+    "clinical_course": "two large mesocolon SFTs, preoperative differential, resection and uneventful36/24-month surveillance",
+    "rich_trajectory": true,
+    "normal_negative_evidence": true,
+    "serial_measurements": false,
+    "common_workflow": false,
+    "planned_vs_actual_challenge": true,
+    "split": "train",
+    "prior_benchmark_exposure": true,
+    "pixel_reviewed": false
+  },
+  "physician_adjudicated": false
+}

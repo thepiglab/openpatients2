@@ -1,0 +1,50 @@
+{
+  "article_id": "PMC12702475.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ed901141c3dbaefc1cf5710073062f411d1ac294e0c757cbb1af4261d681a8bd",
+  "annotation_sha256": "b8d312952a467a65da88e322c616b251470dd94205aca9649afc2d36604e31ca",
+  "reviewed_at": "2026-10-10T02:00:21.193731+00:00",
+  "source_segments_read": 60,
+  "facts_reviewed": 169,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Verified migration only (no edits): M03 ages '50-year-old'/'36-year-old' literal; M02 comparator '=' on 26 values (Table 1 '<63'/'<37' are reference intervals, not results; weights, BMI, sputum/pleural bilirubin plain numbers).",
+    "p1-f048, p2-f067 (IV contrast): route \"intravenous\" -> \"IV\" as written in evidence (MED-ROUTE).",
+    "Glued text (cleanup pass 2): applied repair_glued_text.py (129 tokens) and corrected its one mis-split ('descriptor' -> 'descript or') by rewriting p2 ambiguity 0 by hand (also respaced 35 kg, AST 37 U/L, postoperative). Hand-respaced remaining exported text: presentation dates (August 7, 2024; February 10, 2025), weights 65/56 kg (p1-f023/f024, p1-e007), chest-tube output 1000 ml/day, hepatitis A, January 2020 Roux-en-Y hepaticojejunostomy (p2-e004), POD 13, segment 4 and b00049 in article_limitations.",
+    "Negation-word scan: p1-f011 'uneventful recovery' and p2-f014 prior postoperative course 'uneventful until the recent onset of symptoms' are outcomes the source states; kept present. No time-only quotes in this article.",
+    "Cleanup3 GLUED patient labels: p1 'Case1: 50-year-old male ...' -> 'Case 1: 50-year-old male ...', p2 'Case2: 36-year-old female ...' -> 'Case 2: 36-year-old female ...' (source headings 'Case 1'/'Case 2'); identity hash changes, so visual, figure-EHR and privacy receipts re-signed after re-viewing all 7 figures.",
+    "Cleanup3 GLUED p2-f014 notes 'notpost2025repair' -> 'not the post-2025 repair'.",
+    "Cleanup3 EVID-NEGATION: p1-f011 'The patient had an uneventful recovery' and p2-f014 'Her postoperative course had been uneventful until the recent onset of symptoms' are stated uneventful OUTCOMES and stay present (rule exemption).",
+    "Cleanup3 GLUED p2-f022 notes \"Names,doses,routes and indications\" -> \"Names, doses, routes and indications\"."
+  ],
+  "unresolved": [
+    "Case 1 multiple intervening procedure records unavailable; no exact current postoperative discharge/followup interval. Case 2 individual ERCP result not given despite both-patient abstract claim. General recommended IV fluids/antibiotics/nutrition in b00049 are background, not patient orders. Prior cited reports do not explicitly identify a same-patient follow-up.",
+    "Case 1 tract origin segment 4 versus caption right hepatic remnant retained as source conflict. No anatomical repair of reporting adopted.",
+    "Clinical image companion is caption-grounded; actual inspected pixels are delivered in the separate visual target."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 60,
+    "facts_reviewed": 169,
+    "figures_viewed": 0,
+    "key_findings": [
+      "semantic-rules-2026-10 migration verified against source; no further edits needed",
+      "Cleanup pass 2: glued text respaced (one tool mis-split fixed by hand); uneventful outcomes kept as stated.",
+      "Cleanup3: patient labels respaced; uneventful outcomes kept present."
+    ],
+    "residual_risks": []
+  },
+  "physician_adjudicated": false
+}

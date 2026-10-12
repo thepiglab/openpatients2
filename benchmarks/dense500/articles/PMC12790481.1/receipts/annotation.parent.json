@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC12790481.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ac7fe20a052a86185495c09287a55874bbe0952c9a0162ee4326f8af44efd6ba",
+  "annotation_sha256": "a6dba5383a97fde55b622cfbb271d85b59d62c94b5f77b3c0c40b03599d9f745",
+  "reviewed_at": "2026-10-10T01:56:17.077978+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 65,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M02 comparator '=' for creatinine 3.30 ('to a maximum of' is not a printed comparator) and 1.18 mg/dL.",
+    "Verified 6 M12 nulled anchors ('endoscopic Deflux procedure', 'postDeflux follow-up') were paraphrases; literal time.text retained.",
+    "p1-f050: the follow-up VCUG was performed and showed 'complete resolution of vesicoureteral reflux'; a performed imaging result is an observation with assertion=present (text_value 'complete resolution'), not assertion=absent (EVID-NEGATION/ASSERT-ABSENT).",
+    "Anchor restoration: for 5 facts whose paraphrased anchor was nulled by M12, set time.anchor to the literal source phrase the offset is relative to (e.g. 'admission', 'First time' table column, 'endoscopic procedure', 'starting rivaroxaban'); calendar dates, table ages and unstated references left null.",
+    "DEMO-AGE-TEXT: p1-f004 age_other text_value 'Kidney transplantation at 33 years of age' (recased paraphrase) -> literal source phrase '33 years of age' (exact substring of the b00008 quote); numeric_value 33 years unchanged.",
+    "Repaired space-stripped (glued-word) free text left by an earlier pass, never touching evidence quotes: clinical_statement p1-f002/p1-f004/p1-f020, outcome text_value p1-f020, findings/indications/diagnostic_basis in p1-f025, f028, f030, f036, f039, f040, f041, f049, f059, f063, fact notes, event descriptions e02/e03/e04/e07/e09/e11/e12/e16, summary units, figure caption descriptions/body_part/attribution notes and article_limitations.",
+    "Summary/event timing restated with the source's own wording ('one year and one month', 'two years and six months after transplantation') instead of computed 13/30 months.",
+    "TIME-ONLY QUOTES p1-f036 (cystoscopy) and p1-f042 (Deflux injection): 'Two years and six months after kidney transplantation, she was admitted for endoscopic correction of vesicoureteral reflux.' explicitly introduces the endoscopic correction procedure that the following sentences describe, so the time is governed and kept; the separate quotes were merged into one contiguous governing span",
+    "TIME-ONLY QUOTES p1-f057 (serum creatinine 1.18 mg/dL), p1-f058 (outcome) and p1-f060 (ureteral obstruction absent): 'Four years and four months after Deflux injection, ...' opens the follow-up status report that the next sentence continues ('Her serum creatinine level had improved...'), so the time is governed and kept; quotes merged into one contiguous governing span",
+    "NEGATION-WORD review p1-f012/p1-f048: 'uneventful' (post)operative course is the source-stated outcome; kept present (no polarity change)",
+    "Cleanup3 GLUED visual submission: 'gradeII' -> 'grade II', 'Figure1A/B'/'Figure1'/'Figure2' -> 'Figure 1A/B'/'Figure 1'/'Figure 2', 'Femoralhead' -> 'Femoral head', 'postDeflux' -> 'post-Deflux', 'later52-month' -> 'later 52-month'; VID1 limitation rows (visual submission, figure-EHR labels, privacy flags) rewritten as spaced prose ('source-listed MP4 is accessible, cached and hash-verified, and 85 timed frame samples plus 4 full frames ...', 'Continuous motion and AAC audio remain uninspected; the image-only receipt cannot certify complete video coverage'); both figures re-viewed on pixels; visual_target_sha256 refreshed in figure-EHR labels and privacy flags.",
+    "Cleanup3 NEGATION scan p1-f012/p1-f048: 'postoperative course was uneventful' kept as a stated present outcome (allowed by EVID-NEGATION); no change.",
+    "Cleanup3 annotation free text: no glued tokens found; no annotation change."
+  ],
+  "unresolved": [
+    "Caption-layer figure fields remain text-only; separate actual-pixel targets inspect the two JPEGs. Source-listed 84.683-second MP4 fetched/hash-verified; timed frame inspection separately recorded; no image-only receipt certifies full-motion/audio inspection.",
+    "Age 35 at presentation and 33 at transplant are reported; surgery two years and six months after transplant without exact calendar dates. No age/date arithmetic imposed.",
+    "Mother donor is a related person; no independent donor course/genetic disease inferred. Donor left kidney implanted in recipient right iliac fossa; bilateral native kidneys retained.",
+    "Baseline approximately 1.2 mg/dL and follow-up 1.18 mg/dL retained without reference-derived normal flags despite author normalization wording. Laboratory adult female reference 0.46–0.79 mg/dL retained.",
+    "Small previously uremic bladder is author presumption only. Grade II reflux clinically significant; no further urodynamic/capacity tests or immunosuppressive regimens invented.",
+    "Temporary ureteral stent inserted; removal not stated. Urethral catheter removed POD 1 is a separate device. No specific antibiotic or spinal anesthetic agent/dose invented.",
+    "No explicit same-patient prior report identity link; references including the Aoki pediatric obstruction are other cases, not index complications.",
+    "Reported age 35 describes case context; it is not assigned to the first infection one year and one month after transplantation or calculated surgery/follow-up dates. Context phase remains unordered."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 65,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Age text_value for transplant age was not a literal source substring (DEMO-AGE-TEXT), which also made the runtime source gate fail and the schema target invalid.",
+      "Widespread glued-word text corruption in non-quote free-text fields repaired; clinical content, enums, times and quotes unchanged.",
+      "Cleanup pass 2: no glued-text diff; 5 time-only-quote facts kept with merged scoping spans; 2 'uneventful' outcomes kept present",
+      "Cleanup3: sidecar prose respaced only."
+    ],
+    "residual_risks": [
+      "Figures and video not re-viewed in this targeted correction pass; figure dual review pending the video-unavailable policy change."
+    ],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
+  },
+  "physician_adjudicated": false
+}

@@ -102,8 +102,13 @@ def packet_segments(record: dict) -> list[dict]:
         start, end = span['start'], span['end']
         if not 0 <= start <= end <= len(record['text']):
             raise ValueError('Invalid patient packet source span')
-        result.append({'segment_id':span['segment_id'], 'heading':span.get('heading', ''),
-                       'text':record['text'][start:end], 'packet_start':start})
+        segment = {'segment_id':span['segment_id'], 'heading':span.get('heading', ''),
+                   'text':record['text'][start:end], 'packet_start':start}
+        if span.get('table_id'):
+            segment['table_id'] = span['table_id']   # table rows/captions/footnotes: structural governance
+        if span.get('figure_id'):
+            segment['figure_id'] = span['figure_id']   # figure caption: lead sentence governs its panels
+        result.append(segment)
     return result
 
 

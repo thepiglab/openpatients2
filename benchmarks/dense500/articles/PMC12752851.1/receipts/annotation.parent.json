@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12752851.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a9be06e0304408b5692b908197024421ca53a40e0839ce4c1904fd1d369114a4",
+  "annotation_sha256": "f3ea1036e6de2134142c5bad4c36931e08850b238f6211f63868ff8aad5e3d77",
+  "reviewed_at": "2026-10-11T20:48:24.475848+00:00",
+  "source_segments_read": 45,
+  "facts_reviewed": 97,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f032 respiratory rate and p1-f035 FiO2: quotes extended to their own sentence and time 9 weeks of age added; f032 marked alternate_representation_of p1-f031 (tachypnea 70 breaths/minute).",
+    "p1-f062..f065 ATT doses: certainty source_conflict -> ambiguous (one sentence gives initiation doses then prematurity-adjusted doses; which was administered is unstated), kept review_only; notes, statements and ambiguity text updated.",
+    "p1-f028/p1-f029 ear canal and tympanic membrane examinations: text_value normal per SECTION-SIGNS.",
+    "p1-f057 congenital tuberculous lymphadenitis: removed borrowed body_site; added b00022 quote grounding the histopathology + GeneXpert diagnostic basis.",
+    "p1-f074 hepatotoxicity absent: verification_status unknown -> refuted (excluded by serial liver function tests).",
+    "p1-f008 maternal pregnancy: own-sentence time In 2022 added with extended quote.",
+    "Added p1-f095 maternal age 30 years, p1-f096 ATT dose recalculation with each weight gain, p1-f097 weekly weight gain monitoring.",
+    "Event p1-e07 no longer carries the ICU admission (description implied ICU at 9 weeks); new event p1-e16 ICU admission (12 weeks of age, precision unknown); kind adverse_event -> other.",
+    "New maternal history event p1-e17 (In 2022, calendar 2022); postnatal ages typed postnatal_age.",
+    "Added literal relations e17 before e01, e01 before e03, e03 before e04, e07 before e16."
+  ],
+  "unresolved": [
+    "Ultrasound and histopathology images are not included in the article; only Figure 1 (clinical photograph) is available.",
+    "The case narrative states that ultrasound measures, abdominal imaging, laboratory ranges, oxygen saturations and heart rate at key points were not available.",
+    "Mother is not a separate roster patient; her history is recorded with subject mother. The source says her own records were not accessed and her history came from a referral note after interviewing the caregiver.",
+    "Respiratory distress onset (3 weeks in the abstract versus 9 weeks of age in the narrative) is a source conflict kept review-only; initial versus prematurity-adjusted ATT doses are ambiguous (which was given) and kept review-only.",
+    "Parenthetical ages for the antibiotic course, ICU admission and Xpert result are kept literal; the source does not say whether they mark the start or the end of each interval.",
+    "Caregiver comments, Cantwell criteria text, WHO guideline statements and the discussion are background and not recorded as patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 45,
+    "facts_reviewed": 97,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index infant (30-week preterm male) with congenital tuberculous lymphadenitis; mother recorded only as subject mother.",
+      "Respiratory distress onset 3 weeks (abstract) vs 9 weeks of age (narrative) kept as a review_only source_conflict pair; tachypnea, retractions, oxygen dependency, RR and FiO2 are stated only in the 9-week sentence and stay included.",
+      "Xpert result timing (three weeks after admission) comes from the same key-clue item whose next sentence says This result came out; culture not performed, so ambiguity kept.",
+      "Ethambutol omitted recorded as assertion absent with action unknown; sepsis kept verification unknown (treated for sepsis, cultures negative).",
+      "Figure 1 viewed at full resolution (600x554): infant clinical photograph, red bar over eyes, yellow arrow to the neck below the jaw; visual description accurate."
+    ],
+    "residual_risks": [
+      "Parenthetical ages (5 weeks, 12 weeks, 15 weeks) do not state whether they mark interval start or end; relation unknown kept.",
+      "Weight band 3 to <4 kg vs 1.7 kg weight left as ambiguity.",
+      "Maternal miliary TB on chest X-ray is stated only in the discussion while the authors say they lacked maternal records."
+    ]
+  },
+  "physician_adjudicated": false
+}

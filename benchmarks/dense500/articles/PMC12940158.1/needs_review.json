@@ -1,0 +1,79 @@
+{
+  "format": "dense-needs-review/1",
+  "article_id": "PMC12940158.1",
+  "generated_by": "semantic-rules-2026-10/1",
+  "generated_at": "2026-10-10T00:43:44.912704+00:00",
+  "instructions": "Resolve each item against the SOURCE (claude_prompts/RESIGN_BRIEF.md): edit the annotation, set resolution (what you decided and why) and resolved_by, regenerate the schema target, then save_review + sign. Items reappear on the next migration run until the data satisfies the rule.",
+  "items": [
+    {
+      "item_id": "NR001",
+      "key": "OBS-FLAG:p1-f037:fields.flag",
+      "migration": "M05_normal_flag",
+      "rule_id": "OBS-FLAG",
+      "target": "p1-f037",
+      "path": "fields.flag",
+      "current": "negative",
+      "question": "text_value 'marked x in the Negative/Normal column of Table 1' uses normal wording; set flag=normal if the source calls THIS result normal, keep negative only for a qualitative negative test, or split mixed findings",
+      "suggestion": "normal",
+      "evidence": "List of Investigations performed | Negative/Normal | Positive\nCeliac disease serology* | x |\nList of Investigations performed | Negative/Normal | Positive\nBlood tests |  |\n*Anti-Deaminated Gliadin Peptide IgG and IgA, anti-tissue transglutaminase IgG and IgA with dosage of IgA and IgG",
+      "resolution": "Keep flag=negative: celiac serology is a qualitative antibody test in the Negative/Normal column.",
+      "resolved_by": "Claude Opus 5.5 parent"
+    },
+    {
+      "item_id": "NR002",
+      "key": "OBS-FLAG:p1-f040:fields.flag",
+      "migration": "M05_normal_flag",
+      "rule_id": "OBS-FLAG",
+      "target": "p1-f040",
+      "path": "fields.flag",
+      "current": "negative",
+      "question": "text_value 'marked x in the Negative/Normal column of Table 1' uses normal wording; set flag=normal if the source calls THIS result normal, keep negative only for a qualitative negative test, or split mixed findings",
+      "suggestion": "normal",
+      "evidence": "List of Investigations performed | Negative/Normal | Positive\nSerology for Yersinia enterocolitica | x |\nList of Investigations performed | Negative/Normal | Positive\nBlood tests |  |",
+      "resolution": "Keep flag=negative: Yersinia serology is a qualitative antibody test in the Negative/Normal column.",
+      "resolved_by": "Claude Opus 5.5 parent"
+    },
+    {
+      "item_id": "NR003",
+      "key": "OBS-FLAG:p1-f056:fields.flag",
+      "migration": "M05_normal_flag",
+      "rule_id": "OBS-FLAG",
+      "target": "p1-f056",
+      "path": "fields.flag",
+      "current": "unknown",
+      "question": "text_value 'Negative/Normal column; normal except for a microfocus of complete intestinal metaplasia localized to the gastric antrum' uses normal wording; set flag=normal if the source calls THIS result normal, keep negative only for a qualitative negative test, or split mixed findings",
+      "suggestion": "normal",
+      "evidence": "List of Investigations performed | Negative/Normal | Positive\nGastroscopy | x^(¥) |\nNormal except for a microfocus of complete intestinal metaplasia localized to the gastric antrum",
+      "resolution": "Keep flag unknown: footnote says normal EXCEPT a microfocus of intestinal metaplasia (mixed finding, kept in text_value).",
+      "resolved_by": "Claude Opus 5.5 parent"
+    },
+    {
+      "item_id": "NR004",
+      "key": "OBS-FLAG:p1-f057:fields.flag",
+      "migration": "M05_normal_flag",
+      "rule_id": "OBS-FLAG",
+      "target": "p1-f057",
+      "path": "fields.flag",
+      "current": "unknown",
+      "question": "text_value 'Negative/Normal column; shared footnote: normal except colonic coprostasis as well as a 4-cm tissue density in a jejunal' uses normal wording; set flag=normal if the source calls THIS result normal, keep negative only for a qualitative negative test, or split mixed findings",
+      "suggestion": "normal",
+      "evidence": "List of Investigations performed | Negative/Normal | Positive\nColonoscopy | x^(¶) |\nNormal except colonic coprostasis as well as a 4-cm tissue density in a jejunal loop associated with circumferentially thickened walls (up to 1 cm), lying just below the pancreatic head, extending under the body of the pancreas which had a normal appearance",
+      "resolution": "Keep flag unknown: shared footnote reports coprostasis and a jejunal tissue density (mixed finding).",
+      "resolved_by": "Claude Opus 5.5 parent"
+    },
+    {
+      "item_id": "NR005",
+      "key": "OBS-FLAG:p1-f063:fields.flag",
+      "migration": "M05_normal_flag",
+      "rule_id": "OBS-FLAG",
+      "target": "p1-f063",
+      "path": "fields.flag",
+      "current": "unknown",
+      "question": "text_value 'Negative/Normal column; footnote: no gastroesophageal reflux disease, but hypersensitive esophagus' uses normal wording; set flag=normal if the source calls THIS result normal, keep negative only for a qualitative negative test, or split mixed findings",
+      "suggestion": "normal",
+      "evidence": "List of Investigations performed | Negative/Normal | Positive\n24-h esophageal pH-impedance off PPI | x^(£) |\nNo gastroesophageal reflux disease, but hypersensitive esophagus",
+      "resolution": "Keep flag unknown: no GERD but hypersensitive esophagus (mixed finding).",
+      "resolved_by": "Claude Opus 5.5 parent"
+    }
+  ]
+}

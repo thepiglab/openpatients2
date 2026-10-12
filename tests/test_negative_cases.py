@@ -2,7 +2,7 @@ import copy
 
 import pytest
 
-from openpatients2.demo import SOURCE, empty_section
+from synthetic_fixtures import SOURCE, empty_section
 from openpatients2.schemas import TASK_MODELS
 from openpatients2.validation import validate
 from openpatients2.prompts import task_text

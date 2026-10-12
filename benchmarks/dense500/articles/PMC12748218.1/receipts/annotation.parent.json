@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12748218.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "07bc6cdf6730e3a0f6c8b7447550c4486d93cfff750fa812f04bbd5a8c7e062c",
+  "annotation_sha256": "de06d33a957febadec76427e9ffd2cc96e0f419c1acbeb84150120f09b9ccb33",
+  "reviewed_at": "2026-10-11T22:52:16.870260+00:00",
+  "source_segments_read": 31,
+  "facts_reviewed": 157,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-e01: removed the CA125 67.88 U/mL fact p1-f011 from the February 2023 presentation event, because the text gives no date for it and Figure 1A plots 67.88 at 28 May 2022 (time stays null; existing ambiguity kept).",
+    "p1 summary 1: CA125 67.88 U/mL no longer worded as a presentation finding; stated as reported with no date in the text.",
+    "p1: added follow-up event p1-e12 (8 November 2023, CA125 26.49 U/mL, from the Figure 1 caption) with relation p1-e06 before p1-e12 supported by 'follow-up examination post-surgery'.",
+    "p1: added relations p1-e06 before p1-e08 (postoperative transvaginal ultrasound) and p1-e03 before p1-e04 (strategy adopted that ART with OPU would be performed first; IVF in July 2023).",
+    "p1: added structured ambiguity on the SM1 frame label 'rectum 15cm' versus the text 'over 10 cm from the anal verge' (fact p1-f025); not quarantined because no annotation fact uses the frame label.",
+    "p2-f055 clinical_statement and p2-e11 description: removed the word 'postoperative', which the source does not state for these findings.",
+    "p2 summary 3: 'By October 2023' now scopes only CA125 and hydronephrosis resolution (same source sentence); bowel function and pain are no longer dated.",
+    "p2-e05 kind history -> presentation (April 2023 symptom report).",
+    "p2: added relation p2-e06 before p2-e07 supported by the MDT recommendation and 'Accordingly, in May 2023'."
+  ],
+  "unresolved": [
+    "Figure pixels are reviewed in the separate visual submission; the figure rows here are caption-layer only.",
+    "Discussion statements (b00014 to b00020), including author interpretations about CA125 normalization and the rationale for the strategy, are not recorded as patient facts; guideline and literature statements are not patient-specific.",
+    "The abstract sentence that the two cases are infertility secondary to severe rectal DIE is used for site and severity of DIE in both records; the second case body text does not describe a rectal lesion separately.",
+    "Figure 1 plotted points other than those printed in the text or caption are read from pixels in the visual submission and are not recorded as facts.",
+    "The four supplements (one endoscopic image, two signed consent forms, one surgical video) are reviewed in the supplement manifest; consent forms hold identifiers that are not copied.",
+    "Text figure callouts, not the Figure 3 caption, assign panels to patients."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 31,
+    "facts_reviewed": 157,
+    "figures_viewed": 3,
+    "key_findings": [
+      "All 157 facts (p1 75, p2 82) checked against the source quotes; no fact removed. The 8 GLUED-TEXT warnings flag the real word 'cryopreserved' in normal spaced prose and are checker false positives; left unchanged.",
+      "Figure 1A plots 67.88 at 2022-05-28 and 73.41 at 2023-02-02; the text lists 67.88 among the February 2023 findings without a date, so it is not a literal conflict: time null plus ambiguity.",
+      "p2 CA125 18.7 'By October 2023' (text) and 'on 30 October 2023' (caption) are consistent and kept as alternate representations.",
+      "p1 ovulation induction stays a recommended care plan plus an outcome 'unsuccessful'; occurrence unknown, with an ambiguity that the source does not say a cycle was given.",
+      "p1 'single blastocyst embryo was created following a natural cycle' kept as the March 2024 natural-cycle transfer through the anaphoric 'The transfer' and the abstract NC-FET, with the existing ambiguity.",
+      "The abstract sentence 'two cases of infertility secondary to severe rectal DIE' explicitly covers both cases, so p2 rectal site and severe severity are kept; the p2 ambiguity records that the p2 body text names no rectal lesion (only rectal compression and partial rectal resection).",
+      "Figure 3 panels keep the caption range '30 days and 40 days post-transfer'; no day assigned to a panel."
+    ],
+    "residual_risks": [
+      "Figure 1A/1B intermediate printed values (73.41, 111.21, 138.95) live only in visual.json readings, not as annotation facts.",
+      "p1 March 2024 transfer time rests on reading 'created' as the transfer.",
+      "SM4 surgical video stays patient-unresolved; sampled frames visually resemble Figure 2A/2D of case 1 and the title slide names the Anhui team, but no text assigns it."
+    ]
+  },
+  "physician_adjudicated": false
+}

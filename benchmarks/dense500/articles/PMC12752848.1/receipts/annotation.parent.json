@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12752848.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "73d41a7ba44480a69ade9fd1d5fe012458889fdfe88096b32eb74eaeccd0f781",
+  "annotation_sha256": "2389fef5a48fcb975bf5f7dd21e0aa6e1673728e96a77f2709be34c00e8fef48",
+  "reviewed_at": "2026-10-11T21:05:14.952779+00:00",
+  "source_segments_read": 63,
+  "facts_reviewed": 91,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f073 ELANE variant: inheritance heterozygous (zygosity) moved into interpretation; inheritance null (de novo stays on p1-f074).",
+    "Added p1-f085..f089: neutropenia contributors the source says were excluded for this patient (prenatal growth retardation, asphyxia, Rh hemolytic disease of the newborn, maternal hypertension, antiretroviral/chemotherapy exposure) as absent items with the excluded quote.",
+    "Maternal tobacco smoking (\"retained for consideration\") is not recorded as a fact (NO-INFERENCE; no protocol pattern for a considered exposure); kept only as an ambiguity.",
+    "p1-f089 note states the subject basis (source names no exposed person; neonate whose contributors were assessed).",
+    "Added p1-f091 neutropenia initially considered infection-related (differential) and p1-f092 first child (gravidity_parity).",
+    "Event p1-e15 kind adverse_event -> other (infection, not a treatment harm); p1-f091 linked to e10.",
+    "Added literal relations e01 before e02, e02 before e03, e11 before e13, e15 before e17 (4 -> 8).",
+    "Added ambiguity for text unit 10^9/μl vs Figure 1 key 10³/uL (values match; units kept as written); rewrote the excluded-factors ambiguity; article limitations updated for the 56 printed chart values.",
+    "visual.json fig-0003: lesion and umbilicus positions reworded to image coordinates (draft said left of the abdomen, which reads as anatomic laterality); limitation added. Figure-EHR and privacy drafts regenerated with --draft and reviewed labels/flags carried over unchanged."
+  ],
+  "unresolved": [
+    "Figure pixels are inspected in the separate visual submission; the caption-layer visual status stays not_inspected.",
+    "Table 1 literature rows and the discussion of 27 published cases describe other patients and are not attributed to the index patient.",
+    "Figure 1 prints 56 exact values (WBC, ANC, monocytes, Hb on 14 dated tests, 2/2/2024 to 5/3/2024); they are transcribed in the visual submission, not duplicated as annotation facts, and the chart dates are not linked to postnatal days by inference.",
+    "Case text calls the abdominal wall lesion painless and the Figure 3 caption calls it tender; both are kept as source conflicts.",
+    "Text writes 10^9/μl for WBC and ANC while the Figure 1 key gives 10³/uL; units kept as written."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 63,
+    "facts_reviewed": 91,
+    "figures_viewed": 3,
+    "key_findings": [
+      "One index male term newborn; Table 1 and literature discussion (27 published cases) correctly excluded.",
+      "Painless (case text, cited to Figure 3) vs tender (Figure 3 caption) is a real conflict on the same lesion; review_only pair kept.",
+      "No signs of omphalitis vs periumbilical erythema: a diagnostic statement vs a recorded sign, not a direct contradiction; both included with the ambiguity, omphalitis not inferred.",
+      "Early-infancy skin abscess kept separate from the 3-month lesion (source does not link them); ciprofloxacin alone carries blepharitis.",
+      "Figure 1: all 56 chart values are printed data labels (verified on enlarged crops); x-axis ticks are calendar dates of the tests, flagged as burned-in dates."
+    ],
+    "residual_risks": [
+      "Text unit 10^9/μl is likely a typo for 10^9/L; kept as written.",
+      "The early-infancy abscess may be the same event as the 3-month lesion.",
+      "Pneumonia verification left unknown although the discussion states E. coli pneumonia."
+    ]
+  },
+  "physician_adjudicated": false
+}

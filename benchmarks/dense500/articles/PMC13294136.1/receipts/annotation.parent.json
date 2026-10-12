@@ -1,0 +1,47 @@
+{
+  "article_id": "PMC13294136.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "adf2d028054332f77d74e9f226ee29e77abd4d991088c77fbc6fb19f80bddb9b",
+  "annotation_sha256": "faeea9abeabd4f10afecb90de2c754cc48fd0e726c7f2d6204d572db42710ede",
+  "reviewed_at": "2026-10-11T23:49:38.644729+00:00",
+  "source_segments_read": 11,
+  "facts_reviewed": 102,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "TIME-LITERAL: p2-f034 time 'Within one hour' relation after/anchor 'oral diazepam 5 mg' -> relation before/anchor null. The source gives 'Within one hour' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged.",
+    "TIME-LITERAL: p2-f036 time 'Within one hour' relation after/anchor 'oral diazepam 5 mg' -> relation before/anchor null. The source gives 'Within one hour' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged."
+  ],
+  "unresolved": [
+    "Article has no figures or supplements; no visual work applicable.",
+    "DSM-5 diagnosis and BFCRS monitoring are stated for \"both cases\" without specifying every episode of patient 1.",
+    "Several time anchors (for example \"After three months\", \"within 72 hours\") are not explicit in the source and are preserved as written without calendar dates.",
+    "Medication doses for reinstated or reintroduced drugs, and discharge medications for patient 2 and for the second discharge of patient 1, are not stated.",
+    "Case series: ethics approval and consent for publication are administrative and not recorded as clinical facts.",
+    "The pooled statement \"within 48 to 72 hours of initiating oral diazepam\" is used only as supporting evidence (index-episode recovery and the patient 2 anchor), never as an individual timing."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 11,
+    "facts_reviewed": 2,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Targeted TIME-LITERAL correction of 2 'within <duration>' facts (p2-f034, p2-f036): each source sentence was read; none ties the duration to an event in the same phrase, so relation set to before with anchor null. No other fields or facts changed."
+    ],
+    "residual_risks": [
+      "Targeted pass only; the rest of the article was not re-reviewed in this pass."
+    ]
+  },
+  "physician_adjudicated": false
+}

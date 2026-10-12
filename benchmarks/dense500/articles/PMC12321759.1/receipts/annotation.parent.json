@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12321759.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "13623bb9941a6ca345de44ee96ba137818f314e9f62e519bf1e0c061131b94fc",
+  "annotation_sha256": "8554ae90c807c8160ff2567175241eff751ea4cad29f7fbd34cee7fbe2b99b3d",
+  "reviewed_at": "2026-10-11T19:32:46.663916+00:00",
+  "source_segments_read": 34,
+  "facts_reviewed": 130,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f065 \"No solid tissue was found\" moved from symptoms_function (absent sign, gate-shaped) to observations as a resulted observation with the literal negative text_value and flag negative.",
+    "p1 events split so event times no longer imply unstated times: 3D ultrasound (two months before birth) separated from the untimed size/placenta previa ultrasound and the color Doppler; rectal examination and MRI cystic lesion separated from AFP \"1 year later\"; preoperative AFP, NICU transfer, preoperative consultation, perioperative protocol and postoperative care made separate events instead of being grouped under \"on the first day after birth\".",
+    "p1 perioperative protocol (b00007-b00008) kept for p1 per \"The treatment protocol followed in case 1\" but its event is not linked to either operation; ambiguity added.",
+    "p1-f009/f010 quotes extended to include \"In case 1,\"; p1-f017 quote extended to the full sentence so its time \"at birth\" is literal.",
+    "Added p1-f070 documented sex male from \"His Apgar scores\"; added p3-f018 mass resembling a head in appearance (Figure 4 caption).",
+    "p2 events split: preoperative HGB vs untimed 170 mL washed red cell transfusion; postoperative-day-1 wound bleeding vs untimed coagulation/HGB tests vs \"Subsequently\" transfusion.",
+    "p2 summary no longer says \"postoperative coagulopathy-range\" values (interpretation and borrowed time removed); p1 summary no longer says \"At follow-up\" for the rectal examination.",
+    "Added literal temporal relations: p1 e01/e20 before birth, birth before resection and NICU transfer, preoperative AFP before operation, consultation before and postoperative care after the protocol surgery, rectal exam/MRI before follow-up MRI; p2 birth/preoperative HGB before resection, bleeding during surgery, resection before POD1 bleeding and pathology, tests before subsequent transfusion.",
+    "Ownership ambiguities and article limitation corrected: case 2 and case 3 paragraphs carry source section headings \"Case 2\"/\"Case 3\"; added ambiguities for unassigned Apgar-10 sentence and \"the other two children\" discussion statements.",
+    "visual.json F3a corrected (ruler printed 1 to 23, sensor wrap on an infant hand at the upper right, cable runs down the right side); F2a \"in profile view\" removed to match its limitation. Figure EHR and privacy drafts regenerated and labels/flags carried over; privacy F1a linen label code raised to direct_identifiers, F3a sensor wrap print flagged as device text."
+  ],
+  "unresolved": [
+    "Case 2 and case 3 paragraphs carry the source section headings \"Case 2\" and \"Case 3\"; ownership follows those headings and the figure captions naming each case.",
+    "Discussion statements about one unnamed patient with recurrence or persistent congenital megacolon, and about the other two patients, are not assigned to a case.",
+    "The sentence giving Apgar scores of 10 follows a sentence naming cases 1 and 2 and is not assigned to a patient; the stable-vital-signs statement for case 1 conflicts with its resuscitation at birth.",
+    "Caption-layer visual status is not_inspected here; the four figures were inspected in the separate visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 34,
+    "facts_reviewed": 130,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Three neonates; ownership of case paragraphs is explicit from section headings Case 1/2/3 and figure captions.",
+      "b00005 \"cases 1 and 2 stable vital signs\" conflicts with case 1 resuscitation: p1 quarantined as source_conflict/review_only; kept as stated for p2 with ambiguity; Apgar-10 sentence unassigned.",
+      "Mother ages (respectively list), parents of each child, families, and \"In all three of our cases\" hypothermia are explicitly stated per case; discussion recurrence, megacolon, AFP-remained-elevated and within-48-h statements are not copied to patients.",
+      "p2 coagulation and HGB values and the 170 mL transfusion are untimed in the source and left untimed."
+    ],
+    "residual_risks": [
+      "The b00005 case numbering error cannot be resolved from the source; p2 stable-vital-sign facts may belong to case 3.",
+      "Perioperative protocol facts are attributed to p1 by the protocol introduction but may describe a generic protocol.",
+      "Documented sex for p1 rests on a pronoun."
+    ]
+  },
+  "physician_adjudicated": false
+}

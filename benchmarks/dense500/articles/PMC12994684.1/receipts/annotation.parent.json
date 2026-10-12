@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12994684.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "253ff9e6c8ddeca96fb53228de7e446dcdf80984e7c1c67152a18ee6b9420452",
+  "annotation_sha256": "59f1ddeed29321b747c78ed30ff1697f510cfee3821557d6c6da2caded2ce28e",
+  "reviewed_at": "2026-10-11T18:20:31.585047+00:00",
+  "source_segments_read": 90,
+  "facts_reviewed": 142,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f021/f022/f023 (vesicular murmur, wheezing, bibasilar crackles): removed the borrowed 'initial examination' time; evidence narrowed to the auscultation sentence; time null/unknown (the preceding sentence lists its own findings and does not scope the next sentence; consistent with the untimed ECG).",
+    "Event p1-e03 limited to the initial-examination vital-sign sentence; new untimed event p1-e14 for pulmonary auscultation.",
+    "p1-e05 now links all 50 Table 1 observation rows (p1-f036..f085).",
+    "p1-f120 R-CHOP: indication removed (not stated in its own sentence).",
+    "p1-f122 tumor: stage_context clinical -> unknown (staging type not stated).",
+    "p1-f005 pericardial effusion: added the PET-CAT sentence as evidence for its diagnostic basis.",
+    "Summary paragraph 2 rewritten: removed unstated direction words ('anemia-range', 'raised'); lists the 11 footnoted rows as outside normal ranges; auscultation no longer timed to the initial examination.",
+    "Footnote ambiguity extended to all 11 footnoted rows and to the prose/footnote conflict for RBC, iron, TSH, T3, alpha-1 and alpha-2 globulins; added an ambiguity on untimed auscultation/ECG.",
+    "Added relations e10 before e11 ('Based on these results') and e11 before e12 ('Finally, the patient was initiated').",
+    "visual.json Figure 2 panel D: replaced 'dark blue cytoplasmic rim' with the pixel-accurate abundant blue-grey cytoplasm and two small round dark bodies; figure-EHR and privacy drafts regenerated with --draft and reviewed labels/flags carried over."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two figure images were inspected in the separate visual submission.",
+    "Table 1 footnote flags values outside normal ranges without direction; no high/low flags were assigned from reference intervals.",
+    "Discussion tamponade statement conflicts with the case text; kept review_only.",
+    "No dates, durations of follow-up or chemotherapy cycle counts are stated.",
+    "Pulmonary auscultation and electrocardiogram findings are untimed; only the vital-sign sentence is stated as the initial examination."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 90,
+    "facts_reviewed": 142,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single 55-year-old woman; primary cardiac DLBCL diagnosed by pericardial fluid cytology; all 142 facts verified against source including 50 Table 1 rows.",
+      "Table 1: 11 footnoted rows keep flag unknown (footnote gives no direction); 39 unmarked rows flag normal from 'The rest of results ... were within normal ranges', all consistent with printed intervals.",
+      "Tamponade conflict (case text b00078 vs conclusions b00087) kept as two review_only source_conflict facts.",
+      "Smoking status current kept: 'had been smoking 10 cigarettes per day since the age of 17' states ongoing smoking up to presentation; alcohol absent with status unknown.",
+      "Lymph node biopsy site unstated; cytogenetic findings cited only in the conclusions with no result, recorded as ambiguities.",
+      "Figure 1 printed label 'Macrophages/HF-cells' differs from caption wording (atypical cells); both kept, not reconciled."
+    ],
+    "residual_risks": [
+      "Smoking 'current' rests on the past perfect progressive; the source never says she still smokes at publication.",
+      "The prose 'rest within normal ranges' literally contradicts the footnote for 6 rows; flags left unknown.",
+      "Figure images are low-resolution PMC renditions; fine cytologic detail (nucleoli, mitoses) not confirmed from pixels."
+    ]
+  },
+  "physician_adjudicated": false
+}

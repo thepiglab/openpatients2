@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12736919.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e00c855f9e3ec039de1f828a7c20e4e9986447846ab7404b6cfb349685a81b94",
+  "annotation_sha256": "7518a92077f6a9e9e83d02061ab5eccfcdf56099c0eb4cb083e89f5212f391ec",
+  "reviewed_at": "2026-10-10T01:09:09.482939+00:00",
+  "source_segments_read": 40,
+  "facts_reviewed": 104,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified 22 M02 comparator '=' changes (spirometry, BMI, 6MWT, scale scores, sessions); no printed comparator next to any value (SpO2 '>=90%' item already '>=').",
+    "Verified M03 '73-year-old' literal for the single patient.",
+    "Verified M04 (7): 'no history of diabetes or cardiac disease', 'No additional chronic illnesses ... were identified', 'no known ischemic, valvular, or arrhythmic conditions' -> verification_status unknown (history denials); 'clinically stable with no evidence of exacerbation' -> refuted (clinically excluded). All correct.",
+    "Verified 7 M12 nulled anchors non-literal. p1-f044: anchor nulling left an empty time (text null, relation 'after'); removed the vacuous time (TIME-LITERAL).",
+    "SECTION-SIGNS: moved clinical scale scores from observations to symptoms_function kind=performance_score (mMRC p1-f042/f043/f048/f049, Borg p1-f054/f055, LCADL p1-f056/f057, HADS-Anxiety p1-f058/f059; status/comparator dropped, numeric values/units/times kept); moved 'cardiovascular examination ... stable' (p1-f071) to symptoms_function kind=sign. 6MWT and sit-to-stand stay physiologic observations.",
+    "Anchor restoration: for 5 facts whose paraphrased anchor was nulled by M12, set time.anchor to the literal source phrase the offset is relative to (e.g. 'admission', 'First time' table column, 'endoscopic procedure', 'starting rivaroxaban'); calendar dates, table ages and unstated references left null.",
+    "SOC-NEVER review of M06: p1-f029 'denied any recreational drug use' is a denial, not stated lifetime never-use; changed to assertion=absent, status=unknown (not never-use).",
+    "p1-f044: time restored as relation after, anchor 'hospital-based pulmonary rehabilitation program' (literal; 'discontinuation of regular physical activity after a hospital-based pulmonary rehabilitation program').",
+    "cleanup-2 NO-BORROWING/TIME-LITERAL: p1-f048..f059 (baseline/Week 16 mMRC, 6MWT, 10x Sit-to-Stand, Borg, LCADL, HADS-Anxiety): time is governed by the same Table 1 row (b00036 'Baseline (Week 0) | Assessments | ...', b00038 'Week 16 | Post-intervention Assessments | ...'); kept time and replaced the separate value-cell + time-only quotes with one contiguous row span from the Date/Interval cell through the value; narrative quotes kept.",
+    "cleanup-2 p1-f112 outcome: evidence row quote extended to the governing table row 'Week 16 | Outcomes | Improved functional capacity, ...'; time.text changed from 'After 16 weeks' (narrative scope sentence) to the row's literal 'Week 16'; text_value trimmed of the appended 'after 16 weeks' so it carries the outcome only. No glued-text changes needed."
+  ],
+  "unresolved": [
+    "No figures are present in the original source.",
+    "No explicit same-patient prior-report linkage identified. The previous hospital rehabilitation is documented patient history without a linked report.",
+    "Post-intervention spirometry was explicitly not performed. Follow-up is short; no durable long-term or causal rehabilitation benefit is inferred.",
+    "10× Sit-to-Stand nomenclature and reported repetitions 10→18 are retained without correcting the test name.",
+    "Estimated training HR/MET and manufacturer band-resistance ranges are prescriptions/estimates, not individual measured physiologic achievements.",
+    "Aerobic HR/Borg targets and treadmill settings/MET estimates are prescriptions/estimates recorded as planned care-plan targets, not measured physiologic results; resistance sets (3x15, Borg <= 5) are stated as performed, but the band-resistance range is the manufacturer value. No session-level data are given.",
+    "Author interpretations (MCID comparisons, patient satisfaction, feasibility conclusions) are retained as author-stated and are not independent outcome evidence; the mMRC MCID statement is internally inconsistent.",
+    "The oxygen parenthetical \"(air to 2 L/min as needed)\" beside \"Supplemental oxygen was not required\" is ambiguous and kept review_only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 40,
+    "facts_reviewed": 104,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical migrations correct; M12 left one vacuous time (fixed). 11 scale/exam items re-sectioned per SECTION-SIGNS.",
+      "M06 never-user migration was WRONG here: denial/absent-history wording is not never-use; corrected to absent/unknown.",
+      "Cleanup-2: 13 time-quote facts reviewed; all times governed by the same Table 1 row, kept with row-span evidence."
+    ],
+    "residual_risks": [
+      "Figures not re-viewed in this re-sign."
+    ]
+  },
+  "physician_adjudicated": false
+}

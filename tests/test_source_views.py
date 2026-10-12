@@ -10,7 +10,6 @@ import pytest
 
 from openpatients2.article_tasks import patient_packet
 from openpatients2.data import normalize
-from openpatients2.ehr_seeds import seed_patient
 from openpatients2.figure_attribution import bind_figure_review
 from openpatients2.literature_client import LiteratureClient, LiteratureConfig
 from openpatients2.prompts import messages_for
@@ -71,22 +70,6 @@ def test_txt_patient_bundle_keeps_jats_figures_and_roundtrips_original_hash():
     assert 'identity_evidence' not in prompt and 'txt-00001' in prompt
     with pytest.raises(ValueError,match='whole_article'):
         patient_packet(a,r,r['patients'][0],clinical_source='pmc_text',scope='localized')
-
-
-def test_canonical_companion_survives_txt_ehr_export():
-    a=article();r=roster(a);a['source_views']={'pmc_text':official_text_view(a,txt())}
-    record=patient_packet(a,r,r['patients'][0],clinical_source='pmc_text',figure_reviews=[])
-    patient={'source':record,'sections':{},'model':{'model_id':'test'},'complete_for_scope':False,
-             'companions':{'summary':{'status':'valid','data':{'claims':[
-                 {'text':'A woman received 5 mg.','evidence':[{'segment_id':'b00002','quote':'A woman received 5 mg.'}]}],
-                 'limitations':[]}}}}
-    seed=seed_patient(patient)
-    assert seed['summary']['claims'][0]['evidence'][0]['segment_id']=='b00002'
-    assert seed['clinical_source_provenance']['kind']=='pmc_text'
-    assert seed['companion_source']=='canonical_jats'
-    assert seed['quality']['source_coverage_complete'] is False
-    record['canonical_evidence']['segments'][0]['text']='tampered canonical text'
-    with pytest.raises(ValueError,match='digest mismatch'):seed_patient(patient)
 
 
 def test_missing_txt_falls_back_explicitly():

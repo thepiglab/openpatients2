@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC13100476.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f2c1b4188e3b7d02dc7bbacc433656258850891c81a0af844792b6c5203c0d6a",
+  "annotation_sha256": "b9f85bc1388a3cb1216cc5afb4b037cb52667f3024623cbc17e32af977486313",
+  "reviewed_at": "2026-10-11T18:42:19.344190+00:00",
+  "source_segments_read": 22,
+  "facts_reviewed": 58,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f029 surgery: added the day-of-surgery quote 'On the day of surgery, five weeks later' and time text 'five weeks later' (relation after, anchor null because the source does not say what the interval is measured from).",
+    "p1-f016 additional episodes: quote extended to the full day-of-surgery sentence; time 'On the day of surgery', relation before, anchor 'surgery' (pluperfect 'had experienced').",
+    "p1-f014 intermittent painful urination (abstract/summary/discussion only) quarantined as source_conflict/review_only against the case report's 'without associated pain'; ambiguity reworded.",
+    "p1-f006 meatal stenosis: verification unknown -> confirmed (stenotic meatus stated at exam and intraoperatively; 'initially attributed' qualifies the explanation of retention); added evidence quotes and note.",
+    "p1-f040 urine culture: flag unknown -> positive (culture grew a named organism; no high flag from the colony count).",
+    "p1-f009: removed body_site 'urethra' not stated by the source.",
+    "p1-f004: added exam evidence 'Genitourinary assessment revealed hypospadias'.",
+    "p1-e06 reworded as the additional episodes and home stone expression reported on the day of surgery; e06->e07 and e05->e07 relation evidence trimmed to literal support.",
+    "Added relations e02 before e04 (presentation then discharge) and e07 before e13 (post-repair follow-up).",
+    "Added an ambiguity that the Fig. 1 calculus is caption-only and not distinguishable in pixels; clarified p1-f031 note and source_coverage notes (b00002 highlights, b00016 Somalia not recordable)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the single JPEG was inspected in a separate visual target.",
+    "Stone composition analysis, post-void residual volume and endoscopic evaluation were not performed per the source.",
+    "The surgery date is given only as five weeks later without a stated anchor; no calendar dates are reported.",
+    "Author causal statements in the discussion are not recorded as facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 22,
+    "facts_reviewed": 58,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (5-year-old boy); no cited cases; father family history kept as family_member facts.",
+      "All 58 facts re-checked against literal quotes; not-performed tests (PVR, stone analysis, endoscopy) use status not_performed with assertion present; endoscopy and stone-analysis events not_occurred.",
+      "Cephalexin kept as ordered at discharge with dose and four-day duration; no route, frequency or indication borrowed (UTI not linked).",
+      "Mother manual stone expression kept as historical nonpharmacologic therapy without time.",
+      "Fig. 1 viewed (incl. enlarged crop): genital close-up with gloved fingers; no stone distinguishable; visual.json, EHR label (clinical_photo, includable) and privacy flag (sensitive anatomy, no identifiers/face) agree with pixels."
+    ],
+    "residual_risks": [
+      "Reference point of five weeks later is unstated; reference_gates emits a NO-BORROWING warning on p1-f029 which I judge a false positive because the quote states the surgery day itself.",
+      "Abstract painful urination vs case-report painless presenting episode left unreconciled (review_only).",
+      "Catheter flushing time not stated (no time assigned); follow-up timing after catheter removal not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

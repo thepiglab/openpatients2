@@ -1,0 +1,76 @@
+{
+  "article_id": "PMC12940158.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b2fbe677f2b4a28d839eca180a2d2460454c8c63d6837ec584e4c938cc5e0455",
+  "annotation_sha256": "8e2495e6976fe76d7292373fa87df9e96ef4dac13ab13c7d4bd1e29f65dc1368",
+  "reviewed_at": "2026-10-10T01:13:19.616613+00:00",
+  "source_segments_read": 56,
+  "facts_reviewed": 104,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f020 COVID-19 \"ruled out\" moved from a microbiology observation with negative flag to a refuted differential condition (no test method stated).",
+    "p1-f058 (Table 1 abdominal-pelvic CT row) merged into p1-f021 narrative emergency CT: same footnoted 4-cm jejunal finding; duplicate removed and Table 1/footnote evidence added to f021.",
+    "p1-f034/p1-f035 diagnoses: removed borrowed workup time \"Until 2023\" (relation until misrepresented the condition); e09 time_text nulled and ordered after e07/e08 instead.",
+    "Table 1 Negative/Normal rows: flag set to negative for celiac and Yersinia serology and to normal for CRP/WBC, anemia markers, TSH, C1-INH activity, fecal calprotectin, MRI, gastric emptying scintigraphy, esophageal manometry and colon transit 28.8 h; footnoted-exception and composite urinary/gynecological rows keep unknown.",
+    "p1-f084 shared-core overlap upgraded to supported/include after Figure 2B (87, 34%) and Figure 2C (50.43-93.644) pixel confirmation; added over-90% and 4-month-increase quotes; dropped unit without numeric value.",
+    "p1-f033 generalized burning removed from post-surgery event e07 (time was borrowed); new untimed event p1-e24 with e02-before-e24 and e24-before-e17 links from the abstract.",
+    "Added eight supported ordering links: e04>e05, e07>e09, e08>e09, e08 overlaps e12, e09>e17, e13>e17, e02>e24, e24>e17.",
+    "Summary 1 corrected (laparoscopy, not MRI, identified/reduced hernia; added normal evaluation and COVID-19 exclusion); summary 3 replaced editorial microbiome sentence with source-literal key 16S results.",
+    "FMT regimen note/ambiguity updated with Figure 1 legend (two 20-capsule icons per FMT on two dates); metronidazole course overlap noted; Table 1 duplicated footnote symbol noted; domain coverage counts refreshed.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M02: comparator '=' on p1-f064, f085, f095-f098, f101, f104 matches plain printed values (no <,> printed for these values).",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M13: p1-e23 occurrence uncertain->unknown (discussion-only 'gut inflammation').",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] M12 anchors were paraphrases; restored literal anchors: p1-f015..f018 -> 'started on chlorprothixene, lorazepam, zolpidem, and mirtazapine'; p1-f024, p1-f025 -> 'abdominal-pelvic CT-scanner'; p1-f029..f032 -> 'surgery' (from 'After the surgery').",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] NR006/NR007: p1-f067 (urinary catecholamine/porphyria tests) and p1-f068 (gynecological tests) flag unknown -> normal (Table 1 'Negative/Normal' column, consistent with the other non-qualitative rows).",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] NR001/NR002: p1-f037 celiac serology and p1-f040 Yersinia serology keep flag=negative (qualitative serologies in the Negative/Normal column).",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] NR003/NR004/NR005: p1-f056 gastroscopy, p1-f057 colonoscopy, p1-f063 pH-impedance keep flag unknown: footnotes give mixed findings (intestinal metaplasia; coprostasis/jejunal mass; hypersensitive esophagus).",
+    "SECTION-SIGNS: IBS-SSS >300 and IBS-SSS decrease >175 -> symptoms_function performance_score; EQ-5D QoL increase >=40% -> quality_of_life. numeric_value dropped where the source gives a bound (symptoms_function has no comparator); literal bound kept in text_value.",
+    "  p1-f070: observations/other -> symptoms_function/performance_score",
+    "  p1-f078: observations/other -> symptoms_function/performance_score",
+    "  p1-f079: observations/other -> symptoms_function/quality_of_life",
+    "p1-f100: time 'By 4 months post-FMT' relation unknown -> before (TIME-LITERAL 'by <time>' = no later than); anchor 'FMT' kept (named in phrase)",
+    "cleanup-2 NO-BORROWING review p1-f069 (failed prior therapies): time 'from 2020 to 2023' kept — the Figure 1 caption phrase 'unsuccessful treatments from 2020 to 2023' states the failed treatments and their period in the same phrase, so the time is governed (warning is a wording mismatch: 'unsuccessful treatments' vs 'therapies ... no clinical response'). No annotation edit; no glued-text repair diff for this article."
+  ],
+  "unresolved": [
+    "Clinically important content that is printed only in Figure 1 pixels (names of failed antispasmodics, pregabalin, amitriptyline, fentanyl, SSRIs, phage therapy, rifaximin, ciprofloxacin, amoxicillin, metronidazole and diets; FMT and sampling dates; serial IBS-SSS, EQ5D5L and BSS values) is in the visual submission only, not in text-grounded facts.",
+    "The listed DOCX supplement KGMR_A_2487905_SM0325.docx (Table S1 sequencing read counts per sample, Table S2 genus comparison with reference 50, Figure S1 rarefaction curves) was opened in full and is classified in the supplement manifest as non-clinical methods/QC and literature-comparison material; it is not article text and contributes no typed facts. The PDF-only document-review and image-only supplement gates cannot represent a DOCX.",
+    "Donor FMT material (healthy 32-year-old male donor) is background and a reference sample in Figures 2 and 3; no donor attribute is assigned to the patient and the donor is not a roster patient.",
+    "Microbiome observations are exploratory patient stool 16S relative-abundance findings; causal, infection or strain-engraftment claims are not supported. Two figure/text discrepancies (3.381 versus less than 3%, and the 11.5% acquisition average) are unresolved.",
+    "Table 1 is a single Negative/Normal versus Positive checklist without values, dates, reference ranges or sites; laparoscopy appears there as a positive row and anorectal manometry has no result."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 56,
+    "facts_reviewed": 104,
+    "figures_viewed": 6,
+    "key_findings": [
+      "semantic-rules-2026-10 migration verified (8 comparators, 10 anchors restored with literal phrases, 1 occurrence); 7 OBS-FLAG items resolved (2 set normal, 5 kept).",
+      "Single index patient p1 (55-year-old woman); donor is background and not a roster patient; no cited cases merged.",
+      "Text \"<3% at 6 months\" conflicts with Figure 2C 3.381 (kept source_conflict/review_only); 11.5% environmental acquisition not reconcilable with Figure 2C acquisition rows (kept ambiguous/review_only); \"exhibited gut inflammation\" contradicts Negative/Normal CRP/WBC and calprotectin (kept review_only).",
+      "Burning sensation persisted at 1 year (abstract; Figure 1 \"No modification\"); discussion \"remission\" not widened.",
+      "Figures 2 and 3 are the patient serial stool samples with the donor material as a reference column; individual p1 patient_specimen attribution accepted.",
+      "Supplement SM0325 DOCX opened in full (Tables S1/S2 and decoded Figure S1): sequencing QC and literature comparison, protocol_methods/background, not includable; parent manifest receipt signed and cache cleaned.",
+      "SECTION-SIGNS: IBS-SSS >300 and IBS-SSS decrease >175 -> symptoms_function performance_score; EQ-5D QoL increase >=40% -> quality_of_life. numeric_value dropped where the source gives a bound (symptoms_function has no comparator); literal bound kept in text_value.",
+      "TIME-LITERAL 2026-10 'by <time>' audit: 1 fact(s) set to relation before after reading each source sentence",
+      "Cleanup-2: 1 time-quote fact reviewed and kept (same-phrase caption time); no edits."
+    ],
+    "residual_risks": [
+      "Table 1 rows are undated and the flag mapping from a single Negative/Normal column is a test-type reading, not a printed flag.",
+      "H. pylori and Blastocystis treatment events (e10, e11) remain unordered relative to the workup period.",
+      "Figure 1 year for the day.month FMT/sample dates rests on the caption statement about the 2023 shaded area; IBS-SSS/EQ5D5L/BSS alignment to dates is approximate.",
+      "Figure EHR labels, privacy flags and measurement series sidecars do not exist yet for this article."
+    ]
+  },
+  "physician_adjudicated": false
+}

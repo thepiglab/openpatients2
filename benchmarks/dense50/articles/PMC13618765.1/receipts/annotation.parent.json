@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC13618765.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "127d13fd877ab3c4e08375687d2752f8cfd4967768a4172fa49301936362cacb",
+  "annotation_sha256": "c969c782d6e1b81bdefe0fdaa096d568a6aebeda31e2f4eafdbb8456a6df1a9d",
+  "reviewed_at": "2026-10-10T02:16:58.616328+00:00",
+  "source_segments_read": 18,
+  "facts_reviewed": 46,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Corrected pain from sign to symptom and preserved duration before presentation.",
+    "Separated23/8mm node dimensions and added explicit actual15-session course and acemetacin start in addition to the initial plan.",
+    "Added post-treatment improvement with residual cord before complete resolution at two months.",
+    "Rewrote summaries so absent trauma and other negatives cannot be mistaken for diagnoses; literature-table patients remain external.",
+    "Inspected full-schema temporal gates: expanded the listed narrow fact citations to include the actual source sentence establishing visit timing; no measurement or time value changed.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] p1-f005/f006 'for three days': paraphrased anchor 'three days before presentation' (nulled by M12) restored as literal 'presented to our clinic'.",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] SECTION-SIGNS: moved examination findings and pain scale from observations to symptoms_function: p1-f013 fibrous cord (sign), p1-f015/f016 active flexion/abduction 170 degrees (sign), p1-f035 range of motion entirely restored (sign), p1-f017 baseline VAS 5 and p1-f036 posttreatment VAS 1 (performance_score; scale anchors kept in text_value).",
+    "[semantic-rules-2026-10 re-sign, Claude Opus 5.5 parent] Verified M02 '=' on ROM/VAS/lymph node 23x8 mm values (no printed comparators), M03 age text '39-year-old', M04 p1-f007 'no history of trauma' absent/unknown (not confirmed).",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (4 whitelisted label/number or number/unit spacing edits outside quotes in annotations (4); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. (23×8mm -> 23×8 mm in notes/summary, Table1 -> Table 1) plus hand fix 'single23×8 mm' -> 'single 23×8 mm' in p1 fact notes.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=None, roster_complete=true, evidence b00004 \"A 39-year-old female physiotherapist presented to our clinic with complaints of left shoulder pain and axillary swelling for three days\"; 1 patients annotated in first-mention order.",
+    "ROSTER-ORDER update (singular case statement = count 1): roster reported_individual_count null -> 1, roster_complete true, evidence b00003 \"we present a rare case of IAWS\"; 1 patient annotated."
+  ],
+  "unresolved": [
+    "Figure pixels were not inspected; annotation covers captions only.",
+    "Recovered Table 1 contains only previously reported literature cases, not the current39-year-old patient; secondary patients/outcome scores remain background."
+  ],
+  "assessment": {
+    "primary_stratum": "musculoskeletal",
+    "patient_count": 1,
+    "clinical_course": "acute shoulder presentation, negative diagnostic workup, medication/rehabilitation, early partial response and two-month resolution",
+    "rich_trajectory": true,
+    "normal_negative_evidence": true,
+    "serial_measurements": true,
+    "common_workflow": true,
+    "planned_vs_actual_challenge": true,
+    "split": "train",
+    "prior_benchmark_exposure": true,
+    "pixel_reviewed": false,
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 18,
+    "facts_reviewed": 46,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Anchors restored; exam signs and VAS moved to symptoms_function per SECTION-SIGNS."
+    ],
+    "residual_risks": []
+  },
+  "physician_adjudicated": false
+}

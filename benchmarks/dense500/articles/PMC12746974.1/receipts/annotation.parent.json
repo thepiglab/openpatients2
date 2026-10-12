@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12746974.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8cb93779160d20a7853dbf1b7cfa5178e5993490018844da0d7e455a77935b8d",
+  "annotation_sha256": "465d03f1151b781fbe1d3e3af6523a0dc275685c92b58fa919e5dc7ec82882a6",
+  "reviewed_at": "2026-10-10T02:16:37.618331+00:00",
+  "source_segments_read": 34,
+  "facts_reviewed": 61,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified 3 M02 comparator '=' changes (18 cm, 20 cm, 'approximately 5 mm' -> '=' since approximately is not a comparator) against b00009-b00011 and Fig. 6 caption.",
+    "Verified 14 M12 nulled anchors ('banquet departure', 'rigid extraction', 'author-reported post-ingestion asymptomatic interval') were paraphrases not literal in the source; literal time.text ('On postoperative day 3', 'During 3-month surveillance', ...) retained. No needs-review items; no annotation edits.",
+    "Restored M12-nulled paraphrase anchors with literal phrases: 'rigid extraction' -> 'rigid esophagoscopy' (p1-f041..f050 POD3 findings, p1-f052/f053 3-month surveillance); p1-f056 'for 3 hours' -> anchor 'ingesting a beer bottle cap' (own quote).",
+    "GLUED-TEXT cleanup (manual; repair_glued_text.py NOT applied because it mis-split the real word 'esophagoscopic' -> 'esophago scopic', which is kept unchanged): spacing fixed in p1-f002 clinical_statement ('Age 49'), observation text_values/names p1-f018/f019/f021/f022/f023/f028/f034/f035/f044/f045/f046 ('2.5 cm', '18 cm', '20 cm', 'at T1-T2', 'anterior T1-T2', 'extent 1/2', 'approximately 5 mm', '5 mm diameter', 'from 20 cm'), notes, event description ('Author-reported 3-hour'), ambiguity issue ('distance 18 cm', 'versus 20 cm', 'location 20 cm', 'around 03:00', 'beyond 3 months') and article_limitations 1-4 ('unlabelled 2.5 × 2.5 cm', 'actual 6 JPEG', 'all 6 actual JPEGs', 'Figure 2', 'Figures 1–3'); wording only, values unchanged",
+    "NEGATION WORDS: p1-f051 'discharged uneventfully' and p1-f054 'remained asymptomatic at 3-month follow-up' kept as present outcomes (source states them as the discharge/follow-up outcome, not about a specific finding)",
+    "Cleanup pass 3 EVID-NEGATION: p1-f054 'remained asymptomatic at 3-month follow-up' changed from outcomes follow_up present (text_value 'asymptomatic') to symptoms_function 'Symptoms at follow-up' assertion absent, time 'at 3-month follow-up' (relation at, anchor null); quote unchanged. p1-f051 'discharged uneventfully' kept as a present discharge outcome (stated outcome).",
+    "Cleanup pass 3 GLUED-TEXT (sidecar): visual-submissions F1 'paperclip' -> 'paper clip' (3 fields; paper clip confirmed at upper viewer-left on the radiograph pixels) and F4 attribution rationale 'Fig4' -> 'Fig. 4'; figure-ehr-labels and figure-privacy-flags visual_target_sha256 updated.",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (18 whitelisted label/number or number/unit spacing edits outside quotes in annotations (18); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. (POD3 -> POD 3 in fact names/statements/notes, event descriptions, ambiguity; quotes untouched.)",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=None, roster_complete=true, evidence b00002 \"A 49-year-old man with a 20-year history of daily alcohol and tobacco use developed acute pharyngeal pain 3 hours after attending a banquet\"; 1 patients annotated in first-mention order.",
+    "ROSTER-ORDER update (singular case statement = count 1): roster reported_individual_count null -> 1, roster_complete true, evidence b00001 \"We present an unusual case of an alert adult with chronic ethanol–nicotine co-use\"; 1 patient annotated."
+  ],
+  "unresolved": [
+    "No serum ethanol, dose/pack-years, exact ingestion time, discharge date or measured swallowing-reflex function available. Mechanistic alcohol/nicotine discussion does not establish actual intoxication or causality in this alert patient.",
+    "18 cm versus 20 cm foreign-body location distances unresolved. Each unlabelled 2.5 × 2.5 cm cap extent separately numeric; explicitly labelled erosion length and elevation diameter preserved. Similar-sized contralateral elevation not assigned a new exact measurement.",
+    "No tables/supplements in raw XML and no explicit same-patient earlier report link; cited long-retention case is external/background. Caption-only layer remains separate from actual 6 JPEG visual review.",
+    "Caption layer pixels not_inspected; all 6 actual JPEGs personally inspected and described in separate visual submission.",
+    "Figure 2 caption describes axial/sagittal/coronal CT but the supplied asset contains one sagittal view only; no missing plane is claimed inspected. Caption arrows in Figures 1–3 are not visible in supplied assets."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 34,
+    "facts_reviewed": 61,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Mechanical migrations M02/M12 correct for this article.",
+      "M12 nulled anchors restored with literal source phrases where the source states the reference event.",
+      "Cleanup pass 2: ~30 glued tokens fixed by hand (tool rejected for mis-splitting 'esophagoscopic'); no time-only quote rows; 2 negation-word outcomes kept present",
+      "Cleanup pass 3: asymptomatic follow-up recorded as symptoms absent; visual-submission glue fixed after viewing F1 and F4."
+    ],
+    "residual_risks": [
+      "Prior parent review content otherwise unchanged; figures not re-viewed in this re-sign."
+    ],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09",
+    "cleanup3": "final sweep 2026-10-09: glued sidecar text, span/time-only quotes, negation words"
+  },
+  "physician_adjudicated": false
+}

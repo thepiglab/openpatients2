@@ -1,0 +1,49 @@
+{
+  "article_id": "PMC12863730.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d9e21ed727364da6188ce0be8c76983d417498f5f411d580c05083a70fbddc87",
+  "annotation_sha256": "977f4276d00537db76d0ab7d2dc5eeb692916cca901b3f474af8b9844d1b856a",
+  "reviewed_at": "2026-10-10T02:15:10.810485+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 139,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M02 comparator '=' on 15 plain-number values (creatinine, eGFR, glomerular counts, Table 1 durations; none printed with <,>), M13 p3-e11 occurrence uncertain -> unknown (nonadherence only 'remains a differential diagnosis'). No further edits needed.",
+    "GLUED-TEXT pass 4: fix_label_digit_glue.py REJECTED for this article: its 3 proposed edits (2.5mg/day -> 2.5 mg/day in Figure 2 panel b description/visual cues) would alter a transcription of printed text; Figure 2 pixels print 'lisinopril 2.5mg/day' glued. Visual submission left unchanged.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=None, roster_complete=true, evidence b00001 \"Here, we present two successful cases of living kidney donations from heterozygous carrier parents to their siblings with COQ8B nephropathy\"; 4 patients annotated in first-mention order. Count left null: the source states 'two cases' of donation (donor-recipient pairs) and '2 siblings', not the number of annotated individuals (2 recipients + 2 donor parents = 4); the unaffected older brother is only mentioned as family history, not an individually described case."
+  ],
+  "unresolved": [
+    "Main-figure clinical captions are retained separately from actual-pixel visual submissions.",
+    "Two recipients and their two living kidney donors are original clinical subjects; the older brother is family history only. Two prior Table 1 cases are external reports, not local patients.",
+    "No donor ages, exact dates, graft laterality, immunosuppressive maintenance regimen, prednisolone dose/route, or numeric urine-protein/β2-microglobulin values are reported in prose/table.",
+    "Recipient 1 required hemodialysis; the narrative does not explicitly state initiation, although the actual Figure 2 course displays a hemodialysis interval. No dialysis schedule is invented.",
+    "Recipient 2 transplant age 16 and four-year interval from treatment initiation do not establish exact dates or an explicit treatment-start age. The age-11 biopsy and subsequent undated genetic/treatment phases remain separate.",
+    "Supplement SD1 is a CARE checklist PDF, source-listed but not content inspected; no supplemental clinical or pixel findings claimed.",
+    "No explicit same-patient prior-report linkage identified. Cited COQ8B case reports and cohort outcomes remain external."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 139,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical migrations correct; no open needs-review items"
+    ],
+    "residual_risks": [
+      "EVID-NEGATION warning on p1-f029 (CoQ10 not given: 'deprived ... of the opportunity for CoQ10 treatment') accepted; figures not re-viewed (no figure sidecar change)"
+    ]
+  },
+  "physician_adjudicated": false
+}

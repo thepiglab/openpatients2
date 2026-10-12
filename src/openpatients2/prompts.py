@@ -19,6 +19,31 @@ def system_text() -> str:
     return task_text("system")
 
 
+TABLE_CHECKLIST_LIMIT = 300
+
+
+def table_row_checklist(record: dict) -> str:
+    """OBS-TABLE-ROWS structure: list every table-row block of the packet so no patient table cell is skipped.
+
+    Rows are packet spans carrying a table_id whose last line is a '|'-separated row (the block repeats the
+    caption and header above it). Returns '' when the packet has no table rows."""
+    rows = []
+    for span in record.get('packet_spans') or []:
+        if not span.get('table_id'):
+            continue
+        lines = record['text'][span['start']:span['end']].strip().splitlines()
+        if lines and '|' in lines[-1]:
+            rows.append(f"- [{span['segment_id']}] {span['table_id']}: {lines[-1].strip()[:200]}")
+    if not rows:
+        return ''
+    shown = rows[:TABLE_CHECKLIST_LIMIT]
+    return ('\nTABLE ROW CHECKLIST (OBS-TABLE-ROWS; ' + str(len(rows)) + ' table rows in this record): for EVERY row '
+            'below that reports a result for the target patient, return one observation per result cell (each time '
+            'column, visit or specimen), citing that row\'s segment ID; normal values included. Skip only rows about '
+            'other patients or literature cases, and say which in limitations.\n' + '\n'.join(shown)
+            + ('\n- ... ' + str(len(rows) - len(shown)) + ' more rows: cover them too' if len(rows) > len(shown) else ''))
+
+
 def messages_for(record: dict, task: str, namespace: str = "production") -> list[dict]:
     # All task-specific content occurs AFTER the complete immutable record.
     # Identical messages, JSON escaping, namespace and chat-template options are
@@ -51,6 +76,7 @@ def messages_for(record: dict, task: str, namespace: str = "production") -> list
            'when needed; never synthesize a quote joining nonadjacent rows. '
            'Only supplied source text supports facts, not target labels or another source format.'
            if record.get('packet_spans') else '')
+        + (table_row_checklist(record) if task == 'observations' else '')
     )
     return [{"role": "system", "content": system_text()},
             {"role": "user", "content": prefix + suffix}]

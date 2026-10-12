@@ -13,3 +13,7 @@ DECISION EXAMPLES AND NEGATIVE CONTROLS
 Positive: "Former smoker" is an affirmed historical/former status, not current exposure. Explicit negative: "Never smoked" uses status=never with assertion=present because the affirmed attribute is never-use; it is not missing history. "Denies current tobacco use" is a scoped current negative and does not prove never-use. Missing: no tobacco/alcohol discussion means no such items, not never-use. "Social history unavailable" can support explicitly_unknown when no specific social facts exist. Do not compute pack-years or create substance-use disorders from exposures. Document housing/access barriers only when stated, never from demographic proxies.
 
 An example in these instructions is not patient evidence. Populate only claims supported by the supplied record. Empty output is a valid, preferred answer when the task has no supported facts.
+
+SHARED RULES (generated from openpatients2/rules/annotation_rules.yaml; rule IDs in brackets):
+- [SOC-NEVER] status=never only for explicit never-use wording ("never smoked", "has never used drugs", "lifelong non-smoker"), always with assertion=present; status=never with assertion=absent is a double negative and invalid. "No known contact with tuberculosis", "no exposure to ...", "denies alcohol" or "denies current tobacco use" are NOT never-use: record them as assertion=absent with status unknown (or current for a scoped current denial).
+END SHARED RULES

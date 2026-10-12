@@ -289,10 +289,8 @@ class Experiment:
             tasks=self.config.get('clinical_tasks',list(TASK_MODELS)) if clinical_ids is None or article['pmcid'] in clinical_ids else []
             async def clinical(task):
                 def check(v):
-                    checked=validate(task,v,record['text'],segments=packet_segments(record))
+                    checked=validate(task,v,record['text'],segments=packet_segments(record),target_patient=True)
                     if not checked.valid: raise ValueError('; '.join(checked.errors))
-                    if task == 'case_context' and (checked.data['multiple_index_patients'] is not False or checked.data['case_kind']=='multi_patient'):
-                        raise ValueError('This packet targets ONE specified index patient. case_kind and multiple_index_patients describe that target, not the number of patients in the source article. Use clinical_case (or animal) and multiple_index_patients=false.')
                     return checked.data
                 return task, await self.call(model,task,messages_for(record,task,'article-extraction-v2'),check,identity,
                     max_tokens=self.config.get('clinical_max_tokens',16384),source_segments=packet_segments(record),clinical_record=record)

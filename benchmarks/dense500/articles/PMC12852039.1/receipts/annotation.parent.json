@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC12852039.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2c26cc18d5a6fec5fe36dfc8dd4adeac521ca1ccc5e4955e15c6724af111f17c",
+  "annotation_sha256": "084d49ad757a2ad2812912e8aa6419e9965ad6e0f56252c3c8df2b57936779f5",
+  "reviewed_at": "2026-10-10T01:47:37.579838+00:00",
+  "source_segments_read": 79,
+  "facts_reviewed": 126,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f033 readmission empiric IV antibiotics: removed indication \"probable lung abscess (initially considered)\" that was linked only by sentence adjacency (\"...was initially considered, and ... commenced\"); evidence narrowed; ambiguity added.",
+    "p1-f032 probable lung abscess (initially considered): assertion present→possible (verification provisional, role differential retained).",
+    "p1-f016 readmission outcome: removed misused disposition \"emergency department\".",
+    "Added p1-f155 procedures_devices repeat CT pulmonary angiogram with explicit indication \"pleuritic chest pain and raised D-dimer\" (\"In view of ...\"), linked to p1-e008 and summary.",
+    "Moved supported Panel C (September 11) serial CT p1-f154 from the caption-conflict event p1-e021 to serial-CT event p1-e018; e021 now holds only review-only caption-dated images.",
+    "Timeline: e009→e015 relation evidence replaced with quotes that establish the order (\"initially considered\" vs later judgement); added e010 (negative hospital-stay workup) before e015 (relations 19→20).",
+    "Domain coverage notes for family_genetics/reproductive_perinatal/social_exposures corrected (copy-pasted oncology note) and procedures count updated.",
+    "semantic-rules-2026-10 re-sign: verified M03 p1-f002 text_value '37-year-old' literal in own quote; verified all 20 M12 nulled anchors were paraphrases.",
+    "Restored M12-nulled anchors with literal source phrases: p1-f007..f012 'hospitalized in June 2021'; p1-f013 'computed tomography (CT) pulmonary angiogram performed during this hospitalization'; p1-f016 'discharge from the hospital'; p1-f017 'discharge from the hospital' with relation at->after ('Twenty-one days after discharge'); p1-f039..f041 'repeat CT pulmonary angiogram' ('seven days later'); p1-f134..f137 'Serial chest CT scans' ('Throughout this follow-up period'). p1-f032 and p1-f034..f036 left null (self-describing time text).",
+    "OBS-FLAG NR001: kept p1-f100 sputum culture flag=negative — narrative b00016 states sputum cultures 'were negative'.",
+    "cleanup3 EVID-NEGATION: p1-f134 was a present outcome with text_value 'remained asymptomatic throughout CT follow-up'; re-recorded as symptoms_function 'symptoms during follow-up' with assertion=absent (quote 'Throughout this follow-up period, the patient remained asymptomatic' keeps the word; time unchanged; still a member of event p1-e020 with the specific absent recurrences p1-f135..f137).",
+    "cleanup3 EVID-NEGATION: p1-f126 (active necrotizing infection, absent/unconfirmed) quote widened to its full own sentence so the negation basis ('completely negative microbiologic and autoimmune evaluation ... rather than active necrotizing infection') supporting the diagnostic_basis field is inside the quote; polarity unchanged."
+  ],
+  "unresolved": [
+    "Figure 1 caption dates for panels A (July 11) and B (August 7), 2021 conflict with the narrative months of the index admission (June) and readmission (July); final resolution is complete in the body/abstract but near-complete with minimal residual changes in the caption. Neither conflict is reconciled.",
+    "Cavity dimensions are kept as printed (80 × 45 mm, 40 × 37 mm) without labelled axes; no separate magnitudes are asserted.",
+    "No histopathology; the post-COVID cavitation attribution and the proposed viral/microangiopathic mechanisms are the authors' judgement or literature background, not documented facts about the patient.",
+    "Table 1 \"-\" cells (index-admission BAL/immunology) and \"Not performed\" cells are not positive results; only \"Not performed\" blood and sputum cultures at the index admission are kept as not-performed observations. Decimal commas in the table are preserved as printed.",
+    "Antibiotic agents, doses, durations, corticosteroid agent/dose and noninvasive ventilation settings are not stated. The source says this exact case was previously presented as a congress poster (13th Iberian Pneumology Congress, Coimbra, July 7-8, 2022); no separate report identifier is given.",
+    "Figure pixels were inspected separately in the visual submission; this annotation keeps caption and text claims distinct from pixel observations."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 79,
+    "facts_reviewed": 126,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single local patient (37M); poster disclosure is the same case, not a second patient; discussion literature cases not attributed.",
+      "All 24 numeric Table 1 rows (48 cells), micro, BAL, cytology and immunology rows checked against cells; dash cells not converted; index cultures not_performed retained; decimal commas preserved.",
+      "Caption dates A July 11/B August 7 conflict with narrative June index CT/July readmission CT; caption near-complete vs text complete resolution; both held review_only. CRP \"mildly increased\" vs \"consistently low inflammatory markers\" kept as ambiguity.",
+      "Figure 1 (single JPEG, 4 panels) independently viewed with magnified panel B; visual submission accurate (photographed display, radiological L/R convention, air-fluid level not verifiable, single small cavity in C, no cavity at D arrow); not edited.",
+      "semantic-rules-2026-10: M03 and M12 verified; 16 anchors restored to literal phrases; NR001 resolved keep negative."
+    ],
+    "residual_risks": [
+      "Identity of the discontinued \"antimicrobial therapy\" with the readmission IV antibiotics is implied only.",
+      "Order of bronchoscopy relative to the 7-day follow-up CT is unstated.",
+      "Index steroid/antibiotic indications left null although the body sentence grammatically ties the triad to hypercapnic respiratory failure.",
+      "Figure EHR-label sidecar not yet produced (coordinator to request after promotion)."
+    ],
+    "cleanup3": "final sweep (sidecar respacing, span/time-only quotes, negation) 2026-10-09"
+  },
+  "physician_adjudicated": false
+}

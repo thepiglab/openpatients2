@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12614693.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1c9d3bffe451a1ca19b21f9b456b3847214fb0552f25e997f7f05e1c6b48a576",
+  "annotation_sha256": "634680886391045252a5ba1a93a377785b42576bd9b9acdf4130c7a3415d704b",
+  "reviewed_at": "2026-10-11T03:11:51.506627+00:00",
+  "source_segments_read": 34,
+  "facts_reviewed": 85,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f032 (baby gestational age 24 weeks): the only GA sentence is the mother's cesarean \"at 24 weeks gestational age\"; the baby GA is not stated, so GA stays on p2 (f043/f044) and a p1 ambiguity records the implication; summary text and event link updated.",
+    "p2-f011 DHTR: assertion present/confirmed -> possible/provisional, following the case text (\"symptoms suggestive of DHTR\") and discussion (\"favor the possibility\"); evidence now includes b00016 and b00030 with the abstract kept; own time \"Two weeks later\".",
+    "p2-f030 anti-B CAT titer 16384 (<=, \"reaching up to\"): quote widened to the full sentence so the \"significantly high\" qualifier behind flag=high is inside the evidence.",
+    "p2-f031 anti-Jk (a) titer 8: flag low -> unknown and the abstract quote removed; the abstract \"low titer\" concerns the antenatal undetected antibody, and no reference or classification is printed for the measured titer.",
+    "p2-f017 to p2-f020 (blood group, Rh/K phenotype, negative DCT and antibody screen): time \"before delivery\" applied from the b00010 subheading that scopes the b00011 pretransfusion workup; article limitation updated.",
+    "Visual submission edited: tubes with red cells scattered above the pellet corrected to include 1 and 7 (was about 3, 4, 9, 11, 14 and 16). Figure-EHR and privacy drafts regenerated with --draft and the reviewed labels and flags carried over unchanged."
+  ],
+  "unresolved": [
+    "Figure 1 pixels inspected in the separate visual submission; caption-layer visual status here stays not_inspected.",
+    "Methods and discussion statements about HDFN mechanisms, DHTR timing and recommendations are background and are not copied to either patient.",
+    "The baby is p1 and the mother p2 because the abstract mentions the baby before the mother.",
+    "No exact calendar dates, baby postnatal course beyond one week of NICU stay, or later outcome of either patient is reported.",
+    "Subheading b00010 (workup of the mother before delivery) scopes the b00011 pretransfusion results and is applied as their time."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 34,
+    "facts_reviewed": 86,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Two patients ordered by first mention: the baby (p1) precedes the mother (p2) in b00001; roster count null because the source states no number literally, roster complete.",
+      "Baby: ABO HDFN confirmed, anti-Jk (a) HDFN refuted by the eluate; DVET with reconstituted whole blood and phototherapy; Table 1/2 baby columns including Not tested rows checked.",
+      "Mother: anti-Jk (a) alloimmunization confirmed; DHTR kept as possible/provisional with the abstract-versus-results ambiguity.",
+      "Anti-B titers: 4096 tube (=, Table 1) and 16384 CAT (<=, up to); donor-unit Jk (a) typing kept as subject other in the p2 record.",
+      "\"Within 3 months\" (before, no anchor) and \"day 2\" (no named reference day) kept literal with the existing ambiguity.",
+      "Figure 1 viewed: maternal gel-card antibody screen and identification with masked labels; attributed to p2; figure-EHR label other/not includable because the category set has no laboratory-result image class.",
+      "GLUED-TEXT warnings on \"roman\" (roman numerals) are checker false positives; the NO-BORROWING warnings on f017 to f020 follow from applying the governing b00010 subheading, which the rule permits."
+    ],
+    "residual_risks": [
+      "The baby has no recorded gestational age, although delivery at the 24-week cesarean is the natural reading.",
+      "Applying the b00010 subheading as time triggers 4 non-blocking NO-BORROWING warnings.",
+      "The gel-card image is not EHR-includable under the current category set although it is the mother's own test."
+    ]
+  },
+  "physician_adjudicated": false
+}

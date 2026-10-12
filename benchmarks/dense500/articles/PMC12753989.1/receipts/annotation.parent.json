@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12753989.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "fc4a2c4e83e6b9891c21f0cb37f204fd35f3a08cb2f9e53f4cbd7574cb792afb",
+  "annotation_sha256": "aebd5961596f6872370d6ac6c26affe8fd91edb9e00717d73d767e85c50bdb53",
+  "reviewed_at": "2026-10-11T20:33:04.619121+00:00",
+  "source_segments_read": 32,
+  "facts_reviewed": 78,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f059 endotracheal intubation: 'opted against immediate endotracheal intubation' is a clinician decision, not a refusal; changed from present/declined to assertion absent with action unknown (gate EVID-NEGATION warning is a checker false positive: 'opted against' is the negation and is in the quote).",
+    "Added p1-f076 invasive mechanical ventilation absent ('thereby avoiding the need for invasive mechanical ventilation').",
+    "Added p1-f077 family Sanger sequencing confirming inheritance from the affected father (Fig. 1B caption) and p1-f078 metabolic bone disease absent/refuted ('helping to rule out metabolic bone disease'); p1-f048 origin set germline from 'inherited from the father'.",
+    "p1-f022 oxygen saturation 85%: added the discussion restatement with its own time 'by the ninth day after birth' (relation before); p1-f021 respiratory rate marked alternate_representation_of the tachypnea sign p1-f011.",
+    "Timeline: split CT (new p1-e13) and nCPAP start with intubation/IMV avoidance (new p1-e14) out of the protocol event; relations CT before nCPAP ('Following ... CT evidence ... he was commenced on nCPAP'), nCPAP before HFNC weaning/discontinuation, replacing the unsupported protocol-before-weaning link; added prenatal diagnosis before birth, admission same_time day-9 skeletal survey, admission before day-18 discontinuation, fracture (day 25) before day-52 radiographs, harness before day-52 radiographs (criteria for harness removal met), and the Fig. 8 'final follow-up (day 136 of life)' quote on the 52-before-136 link; e12 time_precision unknown for the 'By 136 days' bound; e03 calendar value 2025-01.",
+    "Summaries cite the new facts.",
+    "visual.json Fig 5: replaced 'second circled R' and 'no panel letters' with the faint lower-left circled marks seen in contrast-enhanced crops (right resembles a circled B, left illegible) and the midline soft-tissue density, consistently in figure and panel fields; figure-EHR and privacy drafts regenerated with --draft, labels/flags carried over, and Fig 5B sensitive_anatomy set true like 5A."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the eight images are described in the separate visual submission.",
+    "The stated discharge, hospitalization and fracture day-of-life intervals do not agree and are not reconciled (see ambiguities).",
+    "The article states criteria for harness removal were met but does not state removal or duration of harness use.",
+    "The discussion mentions bisphosphonate therapy and mesenchymal stem cell transplantation only as general options, not as treatment of this patient.",
+    "No supplementary material is listed and no videos are listed in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 32,
+    "facts_reviewed": 78,
+    "figures_viewed": 8,
+    "key_findings": [
+      "Single index male neonate; father and mother appear only as family-member subjects (father OI history, paternal inheritance, mother wild-type).",
+      "Discharge/fracture interval inconsistency (9-day-old, 9-day stay, support off day 18, fracture on 16th day after discharge = 25th day of life) kept as an ambiguity; no day of life was computed anywhere.",
+      "Harness removal is not recorded as a fact; only that criteria for removal were met.",
+      "Red arrows named in the captions are present only in Fig 1; none in Figs 2, 5, 7, 8 (verified at full resolution, magnified crops and a red-pixel scan). The visual descriptions already said so.",
+      "Faces in Figs 4 and 6A are pixelated (identifiable_face false); Fig 1B/C (father/mother) not includable."
+    ],
+    "residual_risks": [
+      "Fig 5 faint circled marks are barely legible.",
+      "Fig 6B dense objects are described by appearance only; the femur is not separable from them.",
+      "Relations from the day-25, day-52 and day-136 ages rely on the stated ages despite the interval inconsistency."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12802043.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b88b8af71ff74bb29bb402535301487fd353425d047044a0d01d0bf5f949485d",
+  "annotation_sha256": "2310f591868e455753ff2a5dfe1859c7be043eb578dc0db77f2ce65daf658871",
+  "reviewed_at": "2026-10-10T01:19:49.825260+00:00",
+  "source_segments_read": 90,
+  "facts_reviewed": 259,
+  "patients_reviewed": 9,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Negative blood culture copied from the series sentence quarantined (ambiguous, review_only) for p1, p2, p6, p7, p9 whose Table 2 Other cultures cell is None",
+    "p5-f013 no interventions/devices set source_conflict review_only against DJ catheter printed in Table 2 for case 5",
+    "p3-f027 \"No obstruction\" and p6-f022 \"No reflux\" moved from present observations carrying negation values to conditions with assertion absent, verification refuted",
+    "Row-level Table 3 durations removed from individual drugs where the regimen changed (p4 cefixime, p6 meropenem/cefixime, p7 piperacillin-tazobactam, p8 ceftriaxone/imipenem/ciprofloxacin); kept in regimen text",
+    "p1-f039 note corrected (first episode outpatient conflicts with at-admission sentence)",
+    "p9 sepsis role primary_diagnosis -> unknown; CRP NA notes; p6 summary wording corrected (no reflux was other imaging, not ultrasound); limitations updated"
+  ],
+  "unresolved": [
+    "The source has no captions for its five unwrapped graphics; figure attribution relies on matching content to Tables 1 to 4 and pixels are described only in the visual submission.",
+    "Vomiting is reported in 2 patients (22.2%) in the text but Table 1 lists vomiting for three patients; both are kept and no cohort count is copied to individuals.",
+    "The text says recurrent UTIs occurred in five patients, four of whom were on prophylactic antibiotics and performed intermittent catheterization, which does not match Table 1 (five recurrent; prophylaxis in four patients, only some of them recurrent, intermittent catheterization in four patients). Table values are used.",
+    "Seven patients are said to have required inpatient management, whereas Table 3 lists inpatient care for eight patients across nine rows including a second episode of patient 1.",
+    "The graphical abstract prints 78.8% female while the text gives 77.8%; the figure is aggregate and not used for facts.",
+    "The text lists myelomeningocele in 44% but Table 1 says neural tube defect; the terms are not equated for individual patients.",
+    "Table 2 lists other cultures as None for patients 1, 2, 6, 7 and 9 while the text says blood cultures remained negative across all cases; for those patients the negative blood culture is kept review-only.",
+    "Which one of nine UTIs was not a lower UTI is not stated; no upper or lower tract classification is assigned to individuals.",
+    "Table 2 gives no unit or method for urine white and red cell counts; text values are kept as printed. Same as above for patient 1 second episode refers to the first-episode imaging row.",
+    "Susceptibility results in Table 4 are isolate-level aggregates and are not attributed to individual patients except that both isolates of patient 1 were similar. Treatment duration in Table 3 is given once per row; it is kept on the drug only when the same single drug was given before and after culture, otherwise only in the regimen text.",
+    "Positive treatment response in inpatients is a cohort-level statement and is not copied to individual patients; no outcomes beyond patient 1 second infection are documented individually."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 90,
+    "facts_reviewed": 259,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Nine patients numbered by table order; p1 two episodes kept distinct",
+      "Explicit all-patient statements (not immunocompromised, urine culture inclusion) accepted; blood-culture statement conflicts with Table 2 None cells",
+      "Unwrapped graphics are images of Tables 1-4 plus graphical abstract; no caption or cross reference so attribution kept unresolved",
+      "CRP NA kept not_performed per OBS-NOT-PERFORMED (not available)"
+    ],
+    "residual_risks": [
+      "Bacteriuria None kept as performed urinalysis with flag negative",
+      "Text-vs-table count conflicts (vomiting, inpatients, prophylaxis) only in limitations",
+      "Same-drug row durations still attached to the after-culture drug"
+    ]
+  },
+  "physician_adjudicated": false
+}

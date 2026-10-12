@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC12611315.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "be1e07d67ebfce039a3431455809adfc0a65c1947b8c4ac399f3e699a834ab9a",
+  "annotation_sha256": "9666d4d46049994c1ae3ad7656beecfbcb3a0e2c2fb1874fa0eb1732fe4d93c2",
+  "reviewed_at": "2026-10-11T02:29:13.705193+00:00",
+  "source_segments_read": 22,
+  "facts_reviewed": 144,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "SECTION-SIGNS: Table 1 mMRC (3 timepoints) -> symptoms_function performance_score; SGRQ and CAT (patient-reported QoL/health-status questionnaires, 3 timepoints each) -> symptoms_function quality_of_life. 6MWD left in observations pending rule decision.",
+    "  p1-f070: observations/physiologic -> symptoms_function/quality_of_life",
+    "  p1-f071: observations/physiologic -> symptoms_function/quality_of_life",
+    "  p1-f072: observations/physiologic -> symptoms_function/performance_score",
+    "  p1-f089: observations/physiologic -> symptoms_function/quality_of_life",
+    "  p1-f090: observations/physiologic -> symptoms_function/quality_of_life",
+    "  p1-f091: observations/physiologic -> symptoms_function/performance_score",
+    "  p1-f105: observations/physiologic -> symptoms_function/quality_of_life",
+    "  p1-f106: observations/physiologic -> symptoms_function/quality_of_life",
+    "  p1-f107: observations/physiologic -> symptoms_function/performance_score",
+    "cleanup-2 GLUED-TEXT: applied repair_glued_text.py (13 high-confidence tokens: Age71years, smoker40pack-years, declined4to2peryear, reported63point/after2years, internal SGRQ note) and manually spaced remaining glue in exported free text: GOLD stage3->stage 3, over2years->over 2 years, February2023->February 2023, ambiguity issues (Narrative 0.81 L/39% vs table 0.81 L/40%; 'Body cites Figure 1A as SPECT and 1B as StratX; caption labels A as StratX/B as SPECT'; in 11/2022, in 02/2023), Caption A=StratX attribution note, Table1->Table 1. Quotes/ids/enums untouched; no meaning change. No time-only quote rows for this article.",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (2 whitelisted label/number or number/unit spacing edits outside quotes in visual-submissions (2); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. (Figure1A/Figure1B -> Figure 1A/Figure 1B in attribution rationales; source cites 'Figure 1A'/'Figure 1B') plus hand fix 'at5%' -> 'at 5%' in the same rationale.",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=1, roster_complete=true, evidence b00004 \"We report a patient with severe ACO\"; 1 patients annotated in first-mention order.",
+    "Correction to the pass-4 note above: the hand fix \"at5%\" -> \"at 5%\" and an additional hand fix \"cite Figure1A\" -> \"cite Figure 1A\" were made in the figure 1 panel A clinical_significance statement (not the attribution rationale); visual_target_sha256 recomputed in figure-EHR/privacy sidecars.",
+    "Also hand-fixed \"cite Figure1B\" -> \"cite Figure 1B\" in the figure 1 panel B clinical_significance statement; visual_target_sha256 recomputed.",
+    "Pass 4 follow-up: p1-f010 clinical_statement approximately700μg/day -> approximately 700 μg/day (source b00005: approximately 700 μg).",
+    "Pass 4 follow-up: fact note positive910HU -> positive 910 HU (source: 910 Hounsfield units)."
+  ],
+  "unresolved": [
+    "This text/caption annotation layer does not use pixels; pixel inspection is recorded separately in the visual target and its review receipts.",
+    "Raw XML Table 1 fully reviewed: blank cells are unreported values, not normal or negative. TLCO absolute-value unit is not printed.",
+    "Tezepelumab dose amount/frequency, exact clinical encounter dates beyond treatment month/year, and specific inhaled triple agents are unreported. No explicit same-patient prior-report linkage identified.",
+    "Narrative/table biomarker units, FEV1 percentage, positive HU threshold, body/caption panel references and two-year SGRQ change timing require review. Generic trial outcomes and technique risks are not index-patient outcomes.",
+    "Uncaptioned duplicate-looking graphic remains unresolved for patient ownership despite actual pixel inspection; resemblance alone does not establish identity."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "campaign": "semantic-rules-2026-10 re-sign",
+    "source_units_read": 22,
+    "facts_reviewed": 144,
+    "figures_viewed": 1,
+    "key_findings": [
+      "M12: 95 anchors \"table-relative treatment course\" and 1 \"tezepelumab dosing\" were paraphrases; nulling is correct, each time.text (e.g. \"Pre‐ Tezepelumab (1 month)\", \"12‐month post BLVR\", \"After two doses\") is literal and self-describing",
+      "M03: \"71‐year‐old\" (source U+2010 hyphens) is the literal age phrase",
+      "SECTION-SIGNS: Table 1 mMRC (3 timepoints) -> symptoms_function performance_score; SGRQ and CAT (patient-reported QoL/health-status questionnaires, 3 timepoints each) -> symptoms_function quality_of_life. 6MWD left in observations pending rule decision.",
+      "Cleanup-2: glued free text repaired; no borrowed-time facts flagged."
+    ],
+    "residual_risks": []
+  },
+  "physician_adjudicated": false
+}

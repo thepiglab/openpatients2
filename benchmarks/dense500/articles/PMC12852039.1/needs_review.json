@@ -1,0 +1,23 @@
+{
+  "format": "dense-needs-review/1",
+  "article_id": "PMC12852039.1",
+  "generated_by": "semantic-rules-2026-10/1",
+  "generated_at": "2026-10-10T01:47:38.038458+00:00",
+  "instructions": "Resolve each item against the SOURCE (claude_prompts/RESIGN_BRIEF.md): edit the annotation, set resolution (what you decided and why) and resolved_by, regenerate the schema target, then save_review + sign. Items reappear on the next migration run until the data satisfies the rule.",
+  "items": [
+    {
+      "item_id": "NR001",
+      "key": "OBS-FLAG:p1-f100:fields.flag",
+      "migration": "M05_normal_flag",
+      "rule_id": "OBS-FLAG",
+      "target": "p1-f100",
+      "path": "fields.flag",
+      "current": "negative",
+      "question": "text_value 'Normal respiratory flora; no pathogenic bacteria isolated' uses normal wording; set flag=normal if the source calls THIS result normal, keep negative only for a qualitative negative test, or split mixed findings",
+      "suggestion": "normal",
+      "evidence": "Microbiology\nSputum culture | Not performed | Normal respiratory flora; no pathogenic bacteria isolated | Qualitative | -\nParameters | Initial admission for COVID-19 pneumonia | Re-admission with a cavitary lung lesion | Units/Result | Reference range/Expected result\nA comprehensive diagnostic workup was undertaken, including blood cultures, sputum cultures, autoimmune screening, and fungal studie",
+      "resolution": "Keep flag=negative: although the table text is 'Normal respiratory flora; no pathogenic bacteria isolated', the narrative (b00016) explicitly lists sputum cultures among tests 'all of which were negative'; this is a qualitative culture so negative is the source-stated classification.",
+      "resolved_by": "Claude Opus 5.5 parent"
+    }
+  ]
+}

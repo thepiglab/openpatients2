@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC12229790.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "16611ca9335db86f07fbbe3215746cda598a84aaad139148cee63502eaad328d",
+  "annotation_sha256": "f456553eb8759e1d7b73fba8f5d220beebb3345c82d8f98a7fa15224bc61d0dd",
+  "reviewed_at": "2026-10-10T02:09:25.244806+00:00",
+  "source_segments_read": 59,
+  "facts_reviewed": 136,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "All four case contexts now record the multi-patient article rather than falsely single-patient context.",
+    "Separated postoperative CT/ABI from p2 surgery, p3 documented intraoperative causal/temporal chains, and planned p4 embolization from its intraoperative cancellation.",
+    "Scoped caption-only limitations to that layer; actual pixel records separate. Corrected F5 pixel-only category evidence and article-grounded branch significance.",
+    "[semantic-rules-2026-10 re-sign] Verified M03 age text_value (49/70/68/72-year-old) against each case's own sentence and M12 nulling of non-literal anchor 'before surgery' (absent from source) on p1-f004, p3-f004, p3-f005.",
+    "[semantic-rules-2026-10 re-sign] NR001 (p1-f009 OBS-FLAG): kept flag unset. 'normal' in 'mirror-image of the normal left aortic arch' describes the comparison arch, not this patient's result; the finding itself is an anomalous right-sided arch, so flag=normal would be wrong.",
+    "[cleanup2 glued/time-only] repair_glued_text.py --apply: 5 tokens in 3 values (p3 summary 'were56', article limitation 'forCases3', provenance note).",
+    "[cleanup2 glued/time-only] Manual glued-text fixes in exported free text: p2/p3/p4 summaries (ratio16/36, vertical24/0, ratio24/56, angle42, expression24/24, protrusion23mm, through9.0years, diameters44/31, vertical18/16, ratio18/44, angle58, Sac/neck23/18, Case3), 'Table1' in 4 table-finding fields, 'Cases1–2'/'Case3' in p3/p4 subtype text values, 'to18°C' in p3 fact and event. Spacing only; no meaning change.",
+    "[cleanup2 glued/time-only] No time-only quote rows for this article; no NO-BORROWING warnings from reference_gates.",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (16 whitelisted label/number or number/unit spacing edits outside quotes in visual-submissions (16); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. Printed figure labels read 'Case N' spaced (viewed F1, F3).",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=4, roster_complete=true, evidence b00002 \"Four patients with right-sided aortic arch underwent different surgeries for Kommerell’s diverticulum\"; 4 patients annotated in first-mention order."
+  ],
+  "unresolved": [
+    "This text/caption annotation layer does not use pixels; pixel inspection is recorded separately in the visual target and its review receipts.",
+    "Original XML reviewed for all four table rows and multirow headers; diameter units are not printed.",
+    "Source contains conflicting arch angles, arithmetically inconsistent sac/neck ratios and subtype-caption terminology; retained as explicit ambiguities.",
+    "No explicit same-patient prior-report linkage identified. Exact operation dates are absent. General proposed strategy/right-SCA reconstruction discussion is not substituted for actual ALSCA procedures.",
+    "Added explicit test execution and general outcome alternatives without counting them as new unique clinical facts. Postoperative CT descriptions may concern the same acquisition as one-month table morphometry; no distinct imaging session or unreported units inferred. Captions/body arch-subtype claims retained review-only for Cases 3/4; broad RAA/ALSCA remains documented."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 59,
+    "facts_reviewed": 136,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical migrations M03/M12 correct for this article; no annotation edits needed.",
+      "Cleanup pass 2: glued free text repaired and time-only evidence quotes resolved against source (NO-BORROWING/TIME-LITERAL)."
+    ],
+    "residual_risks": [
+      "Prior residual risks unchanged (arch-angle/ratio inconsistencies retained as ambiguities)."
+    ],
+    "previous_assessment": {
+      "source_review": "Personally read all59source units and original XML multirow table, all136clinical representations/all56runtime sections,35events26edges/4summaries, actual5image assets/13visual scopes and every visual citation. Reviewed all final deltas.",
+      "clinical_course": "Four distinct operative cases:49F symptomatic mirror arch/right DAR;70M asymptomatic smoker TAR/FET sternotomy with postop kink but no ABI decrease;68M hoarseness/dysphagia6years left DAR/ALSCA reconstruction complicated by clamp bleed then control/openmethod/cannulae/cooling;72Ffrail cognitivelydeclining asymptomatic TEVAR with left carotid-ALSCA bypass, planned embolization cancelled due to vertebral proximity.",
+      "measurements": "All pre/post horizontal/vertical diameters checked, units not assumed. Body30degrees versus table33, ratios24/24=1.3 and23/18=1.0 preserved review-only. Cases3/4 caption mirror-image wording conflicts bodybranching distinction, retained. One-month CT not conflated with1.3y/1month/6.5y/9y duration.",
+      "timeline": "Explicit surgical substeps now sequenced where source supports them and overlap broad operation; no forced order between independent intraoperative chains. Planned embolization not treated as delivered. No longterm outcomes beyond source.",
+      "figures": "Actual F1–F4each3panels explicitly mapped numberedcase; F5generic branching strategy is background, not patient care. No image-derived dimensions or unsupported modalities. Body/caption subtype conflicts kept.",
+      "limitations": "AI reference review, not physician adjudication or measured recall. No supplements."
+    }
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC12848253.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "408bfdd6baa028d94e4f3d6175538d6e79ab9f19402ba9f33806307ede569a7d",
+  "annotation_sha256": "a3f5975840370ceedda4665afcbf1661fe88ec1b4c24de8ba025ad9082bc7716",
+  "reviewed_at": "2026-10-11T19:23:55.536287+00:00",
+  "source_segments_read": 13,
+  "facts_reviewed": 70,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Breath-holding: p1-f051 (avoided after first discharge) and p1-f057 (rigorous breath-hold training soon after resuming swimming) restored from source_conflict/review_only to supported/include: the discussion sentence is explicitly about this patient and the abstract reconciles them (avoided for two weeks, then rapid resumption); abstract evidence added to f051, f057 quote widened to its full sentence; ambiguity rewritten (no stated avoidance period after episode 2)",
+    "p1-f061/f064/f065 (began sports-trainer sessions, resistance training commenced, swimming reintroduced): action_status unknown -> completed (carried out per source)",
+    "p1-f067 recurrence-free: full sentence quoted; time relation after, anchor 'rehabilitation sessions' ('after which')",
+    "Added p1-f069 analgesics administered in the initial episode (discussion: 'resolved with observation and analgesics'), linked to e04; added p1-f070 two-week rest period in episodes 1 and 2",
+    "Added 4 relations with literal cues: e01->e02 ('for the past six months'), e04->e05 ('two weeks later', 'Following discharge'), e09->e10 ('therefore presented'), e11->e12 (restricted for two months / two months post-discharge)",
+    "Added ambiguity: 'three episodes' vs 'three recurrences/recurrent episodes'",
+    "p1-f019 'acute-onset' moved from severity to text_value; p1-f047 bed rest time text 'Following admission'; p1-f041 flag negative -> unknown (imaging, not a qualitative test); comparator '=' -> unknown on 7 non-numeric observations"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two CT images were inspected in the separate visual submission.",
+    "The second episode was a presumptive clinical diagnosis without CT; the case text and abstract use presumptive/probable wording.",
+    "Exact dates are not given; all timing is relative to other episodes, discharge or presentation.",
+    "Literature statements in the introduction and discussion are background and were not copied to the patient.",
+    "Breath-holding avoidance duration is given only in the abstract (two weeks after the first episode); see ambiguities."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 13,
+    "facts_reviewed": 70,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single 14-year-old male swimmer; three SPM episodes; literature series (b00007/b00008) not copied to the patient",
+      "Second episode kept provisional ('probable recurrence'); incomplete bronchial healing kept possible/unconfirmed; deferred repeat CT and unperformed interval imaging kept not_performed",
+      "Throat-pain onset inconsistency kept as ambiguity only",
+      "Episode times only on own-sentence facts",
+      "FIG1/FIG2 arrow descriptions verified on zoomed pixels: arrow from below with tip at small gas foci beside the lower right of the airway lumen"
+    ],
+    "residual_risks": [
+      "Breath-holding avoidance duration comes only from the abstract",
+      "Three-month follow-up (discussion) vs rehabilitation completed over three months (case) leave the follow-up start point unclear"
+    ]
+  },
+  "physician_adjudicated": false
+}

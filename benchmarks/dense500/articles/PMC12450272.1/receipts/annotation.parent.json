@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12450272.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9f8aa4cfe3c93e543871546b89ba41d081d3227ed66292053f5b4c1883fe5194",
+  "annotation_sha256": "2f5dcfbff3af0cd9cd5fcca4a0648142bc82cf1dfc587cc5f5f76b30234ccf90",
+  "reviewed_at": "2026-10-11T02:29:42.096667+00:00",
+  "source_segments_read": 47,
+  "facts_reviewed": 71,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M02 comparator '=' on 13 lab values (Table 1/narrative print plain values; no <,>).",
+    "M12: paraphrase anchor 'symptom onset' had been nulled on 26 facts; restored with the literal source phrase 'onset of the symptoms' (b00008 'day 3 since onset of the symptoms'; day 7 counted on the same scale).",
+    "Glued text (cleanup pass 2): applied repair_glued_text.py (57 tokens) and hand-respaced remaining exported text: summary[1], article_limitations 0-5, figure attribution_notes and panel description, p1-f041 diagnostic_basis, p1-f067 finding, day3/day7/Day3/Day7/Age31 in names, clinical statements, action_text and event descriptions.",
+    "NO-BORROWING: Table 1 day-7 facts p1-f026/f028/f030/f032/f034/f036/f038/f040 no longer borrow 'day 7' from the transfer sentence (b00010); evidence now cites the governing Table 1 column header 'Day 7 test results' and time.text is 'Day 7'.",
+    "NO-BORROWING: b00012-only results p1-f046..f052 and p1-f067 dropped the borrowed transfer-sentence quote; their time is the scoping sentence b00011 'On admission to our facility' (relation at, anchor admission), which governs the b00012 list. Day-7 ordering kept through event p1-e07.",
+    "EVID-NEGATION: p1-f071 'symptom status' text_value 'asymptomatic' (present) -> symptoms, kind symptom, assertion absent (quote keeps 'remained asymptomatic'). p1-f063 kept as a present recovery outcome stated by the source.",
+    "Cleanup3 EVID-NEGATION p1-f063: present recovery outcome text_value 'Asymptomatic at two-week postdischarge follow-up' -> 'Recovery with normalized renal and liver function tests at two-week postdischarge follow-up' (source outcome; the absent symptoms are already p1-f071, symptoms assertion absent; quote unchanged).",
+    "Cleanup3 TIME: p1-f025..f037 keep 'day 3 since onset of the symptoms' and p1-f046..f052 keep 'On admission to our facility' - each is the explicit scoping lead clause ending in a colon ('initial laboratory investigations revealed:' / 'repeat laboratory tests showed significant improvement:') that introduces the list containing the fact; remaining NO-BORROWING warnings are this known lead-clause false positive.",
+    "Cleanup3 GLUED visual submission (Table 1 graphic): respaced 7 fields (chart limitations 'as day 3 in the image', 'normal finding or proof the assay was not performed', 'RBC plus-sign'; panel limitations 'the Table 1 alternative image ... rather than an invented main figure label', 'Clinical flags come only from source qualitative claims ... laboratory table'; attribution rationale 'Table 1 ... initial and day 7 laboratory results ... row labels'; attribution limitation 'individual patient'); figure-EHR label and privacy-flag visual_target_sha256 refreshed; table re-viewed on pixels.",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (5 whitelisted label/number or number/unit spacing edits outside quotes in annotations (1), visual-submissions (4); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. (day7/Day7 -> day 7/Day 7, Table1 -> Table 1 in fact note and Figure 1 (Table 1 image) descriptions; image prints 'Table 1' and 'Day 7' spaced, re-viewed).",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=1, roster_complete=true, evidence b00001 \"We report the case of a 31-year-old female army trainee\"; 1 patients annotated in first-mention order.",
+    "Pass 4 hand fixes (fields the fixer does not cover): Table1 -> Table 1, Day7/day7 -> Day 7/day 7, All24reference/initial/day7cells -> All 24 reference/initial/day 7 cells in the figure 1 chart title, pixel_observations and caption_claims; the image prints Table 1 and Day 7 with spaces; visual_target_sha256 recomputed.",
+    "Pass 4 follow-up: figure 1 description/panel description/pixel observation \"reference,+++RBCs initial and+RBCs day 7\" -> \"reference, +++ RBCs initial and + RBCs day 7\"; the image prints \"+++ RBCs\" and \"+ RBCs\" with spaces (re-viewed); visual_target_sha256 recomputed in figure-EHR/privacy sidecars."
+  ],
+  "unresolved": [
+    "Caption/table-layer figure facts remain text-only; the actual Table 1 JPEG pixels are reviewed separately.",
+    "Clinical rhabdomyolysis diagnosis lacks confirmatory CK, myoglobin or LDH; CK was unavailable at both facilities and other markers were not assessed. Dark urine with positive RBCs is not proof of myoglobinuria. Generic physical exam and diagnostic bullets (b29-b34) are background, not index findings or tests.",
+    "No pre-illness renal baseline or urine output, numeric AKI stage, dialysis delivery, IV fluid type/rate/volume, measured fever temperature or exact discharge date inferred.",
+    "Initial day 3 and receiving day 7 draws come from the reported care timeline; initial albumin \"No results\" means not reported, not \"not performed\". Day 7 Hb \"improved\" and creatinine \"decreased\" do not acquire reference-derived flags.",
+    "BUN mmol/L and printed references retained as reported, not unit corrected. Follow-up normalized renal/liver tests are generic; no additional numeric draws invented.",
+    "General prevention, training, hydration and screening recommendations are not individual delivered care plans. References and the external CK model/cases are not this patient or identity links."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 47,
+    "facts_reviewed": 71,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Mechanical migrations correct; anchor restored with literal phrase. Lab flags are source-stated (elevated/low/normalized).",
+      "Cleanup pass 2: glued text respaced; borrowed day-7 times replaced by the governing Table 1 column / scoping admission sentence; asymptomatic follow-up recorded as absent symptoms.",
+      "Cleanup3: recovery outcome reworded without negation word; lead-clause lab times kept; visual-submission glued text respaced."
+    ],
+    "residual_risks": [
+      "'day 7' anchored to symptom onset follows the source day numbering; source does not restate the anchor for day 7."
+    ]
+  },
+  "physician_adjudicated": false
+}

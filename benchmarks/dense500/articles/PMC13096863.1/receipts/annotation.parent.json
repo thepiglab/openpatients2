@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC13096863.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "bad522d5f0fabb7abe7490e3cf23bd0111ce4726e117b113c9666c5bbbc97a77",
+  "annotation_sha256": "6093478e0c7ef6b87597ffda920b07e0d4aaee3d355ed3ec8331eac35f2e0981",
+  "reviewed_at": "2026-10-11T02:31:32.942842+00:00",
+  "source_segments_read": 35,
+  "facts_reviewed": 159,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "semantic-rules-2026-10 re-sign: verified M07 not_performed (fluoroscopy/contrast imaging not used at initial D-J insertion, p1-f008,p1-f010,p2-f008,p2-f010 -> assertion present), M12 anchor nulling (25 paraphrased 'initial ureteral stone operation'/'follow-up' anchors; time texts such as 'postoperative 3^(rd) day' carry the reference literally), M13 events uncertain->unknown (p1-e23,p2-e22,p2-e23)",
+    "NR001-NR004 (ASSERT-ABSENT): perirenal hematoma and urinoma (p1-f012,p1-f013,p2-f012,p2-f013) kept assertion absent, verification_status confirmed->unknown; the statement 'observed without perirenal hematoma or urinoma' names no specific excluding test",
+    "GLUED-TEXT cleanup: repair_glued_text.py fixed 'worseleft' -> 'worse left' (p1 summary/1) and 'UVjunction' -> 'UV junction' (p2 summary/2)",
+    "GLUED-TEXT manual cleanup (28 values, wording only): IVdexketoprofen/IMpethidine -> IV dexketoprofen/IM pethidine and UVedema -> UV edema (p2 summaries); postoperative day5/day7/day3, on day2 -> spaced; grade2/grade3/Grade3 -> grade 2/grade 3/Grade 3; 9.3mm -> 9.3 mm; '4.8 Fr,28cm over0.035-inch' -> '4.8 Fr, 28 cm over 0.035-inch'; diameter35mm -> diameter 35 mm; Patient2/Figure3/Fig5 -> Patient 2/Figure 3/Fig 5; 'name,dose,route' -> 'name, dose, route'",
+    "GLUED-TEXT pass 4: applied fix_label_digit_glue.py (16 whitelisted label/number or number/unit spacing edits outside quotes in visual-submissions (16); e.g. 'Case1'->'Case 1', 'Figure1'->'Figure 1'); every edit read against the source/figures; visual_target_sha256 recomputed in figure-EHR/privacy sidecars. (Patient1/Patient2 -> Patient 1/Patient 2, Figure3 -> Figure 3, 35mm -> 35 mm in attribution rationales and limitations; source writes 'Patient 1', 'Patient 2', '35 mm'). Hand fixes in the 6 panel clinical_significance statements the fixer does not cover: day1/day2/day3/day4 -> day N, Patient1/Patient2 -> Patient N, a9.3mm -> a 9.3 mm, grade3 -> grade 3, diameter35mm -> diameter 35 mm (source: '9.3 mm', 'grade 3', '35 mm'; F5 prints 'Grade 3' spaced; figures re-viewed).",
+    "ROSTER-ORDER: added article-level roster block reported_individual_count=2, roster_complete=true, evidence b00001 \"In this case series, we present two male cases\"; 2 patients annotated in first-mention order.",
+    "Pass 4 follow-up, F3 (re-viewed pixels): lower image-left label corrected from \"Right lower Ureteral Stone\" to the printed \"Right Upper Ureteral Stone\" in descriptions and mentioned_categories; the mid image-left label is now described as partly legible (\"Kidney Lower Calyx Stone\", first word unclear) and added as a probable mentioned category; the wrong \"labels conflict with case text\" limitation (4 copies), pixel observation, clinical_significance and attribution rationale were rewritten: the Right Upper Ureteral Stone label matches the case text and the kidney-calyx labels are not in the case text. Privacy (flag only, no values): F3 figure-EHR rationales no longer transcribe the burned-in header values and describe them as a printed patient/ID-like label; privacy prefill recomputed with figure_privacy.prefill (still direct_identifiers); draft regenerated with figure_privacy_review --draft; visual_target_sha256 rebound via json_digest.",
+    "F3 partly legible Kidney Lower Calyx Stone mentioned category uses certainty uncertain (schema enum)."
+  ],
+  "unresolved": [
+    "AI source annotation, not physician-adjudicated gold; finite case-report documentation is not complete patient history.",
+    "Two-patient CT timing conflict and initial operation scope wording preserved. Figure 3 printed stone labels conflict with Patient 2 body site; no extra stones inferred.",
+    "Source Cefuroxime axetil IV wording is retained literally. Guidewire force and nutcracker-related pressure remain unmeasured author hypotheses.",
+    "No explicit same-patient prior-report link found; ordinary similar-case citations are not identity matches.",
+    "No supplementary materials or original tables listed.",
+    "This text/caption annotation layer does not use pixels; pixel inspection is recorded separately in the visual target and its review receipts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 35,
+    "facts_reviewed": 159,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Migration changes correct against source",
+      "Absent complications set to verification unknown",
+      "Cleanup pass 2: 30 glued values repaired (2 by script, 28 manual); no time-only quote rows"
+    ],
+    "residual_risks": [],
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09"
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC12757086.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b0ceb7256451c1468edf0bdc58f94bfdb487e5178cb09d32faefd254ac5e3b5d",
+  "annotation_sha256": "11e96e87c5a5a09ff52e4b5e9aeae0885dd41057fe16eaa3b186ff6fd5879294",
+  "reviewed_at": "2026-10-11T20:21:35.351446+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 172,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Verified narrative-to-case mapping: each unlabeled case paragraph matches exactly one Table 1 column by a uniquely printed diagnosis (NEC IIIA, NEC IIIB, meconium peritonitis, gastric wall defect), age and case-named discussion sentences; roster order p1-p4 kept; mapping basis recorded in article_limitations.",
+    "Apgar facts p1-p4 f004 moved from reproductive_perinatal to symptoms_function kind=performance_score (SECTION-SIGNS), time '1–5 min' from the row label.",
+    "Discussion 'markedly elevated CRP levels in all four' facts for p1, p2, p4 set certainty ambiguous / scoring review_only with an ambiguity per patient, because the case 3 text contradicts the all-four statement (p3 conflict pair already review_only).",
+    "Operation facts p3-f036 and p4-f025 now carry literal 'surgery' evidence (b00030 'In case 3 ... 6 days after surgery'; b00006 'On the first day after surgery') instead of resting on 'postoperatively' alone.",
+    "Narrative length-of-stay duplicates p3-f049 and p4-f031 marked alternate_representation_of the Table 1 rows.",
+    "Added case-named discussion facts: PIC elevated (p1, b00028), PIC normal (p2-p4, 'observed in cases 2 to 4'), CRP normalized at re-examination (p1-p3, b00029), gastrointestinal rest 4 days after surgery (p2, b00030), time to full enteral feeding 12 days (p3, b00030).",
+    "Timeline: added p1 asphyxia history event (before NEC per 'subsequently developed'), admission same_time links (p1 day-of-admission vomiting, p2-p4 admission/hospitalization events), admission-before-discharge links from the length-of-stay row for all four, p2 full feeding at 7 days before hospitalization at 8 days, p3 vomiting at 6 hours before transfer, p4 admission at 24 minutes before day-4 symptoms (5 -> 17 relations).",
+    "Added p4 ambiguity that the enoxaparin start is not dated by the sentence-initial 'On the first day after surgery'; enoxaparin stays untimed.",
+    "Article limitation added for Fig. 1 course-bar colours of Case 3/Case 4 being the reverse of the legend (verified on pixels)."
+  ],
+  "unresolved": [
+    "Table 1 gives the sex of Case 1 as girl while the case text uses \"he\"; both are retained as source_conflict, review-only facts.",
+    "Case 3 CRP is described as slightly increased in the case text but as markedly elevated in all four cases in the discussion; both are retained as review-only.",
+    "Biomarker values for TAT, PIC, sTM, t-PAIC, platelets, D-dimer, PT and fibrinogen are given only as figure points; no values were transcribed from the plots into facts.",
+    "The four control patients (anal atresia, post-NEC stenosis, allergic proctocolitis) are mentioned in aggregate and are not roster patients.",
+    "The discussion states LMWH was used in the unit and monitored by anti-Xa; this is unit practice and is not attributed to individual patients.",
+    "Operation type is not named for cases 3 and 4; the operation is established by \"postoperatively\" and the operative-findings row.",
+    "Caption-layer visual status not_inspected; both figure images were inspected separately in the visual submission.",
+    "Narrative paragraphs b00003 to b00006 carry no case numbers; each maps to one Table 1 column through a diagnosis printed only in that column (NEC IIIA, NEC IIIB, meconium peritonitis, gastric wall defect), consistent ages, and case-named discussion sentences (b00028 case 1 asphyxia and NEC IIIA; b00030 case 3 stay of 23 days and case 4 full enteral feeding at 11 days).",
+    "Fig. 1 course bars for Case 3 and Case 4 are drawn in yellow and green, the reverse of the legend (case 3 green, case 4 yellow); colour-based series ownership for cases 3 and 4 in Fig. 1 is uncertain and no plot values are used as facts.",
+    "The discussion statement that CRP was markedly elevated in all four cases is kept review-only for every patient because the case 3 text contradicts it."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 172,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Four index neonates; roster count 4 from 'a case series of four infants'; four control cases are aggregate and not rostered.",
+      "Case 1 sex conflict (Table 'girl' vs text 'he') correctly kept as source_conflict review-only pair.",
+      "'after mNGS' comes from the Table 1 row heading that structurally governs the cells; lead-clause times for p1 bilious vomiting and p4 day-4 symptoms are governed by sentence-initial time phrases.",
+      "Fig. 1 pixels: Case 3 course bars yellow and Case 4 green, opposite to the legend; visual submission already records this. Fig. 2 pixels match the visual description (blue point absent from Postsurgery column, case 1 PIC outlier).",
+      "No plot values transcribed as facts; table cells bound per case with header quotes."
+    ],
+    "residual_risks": [
+      "Narrative-to-column mapping rests on unique diagnoses and case-named discussion sentences rather than explicit case labels in the case paragraphs.",
+      "Discussion-derived facts (PIC, CRP normalization, GI rest, full feeding 12 days) depend on the discussion being accurate for named cases.",
+      "Fig. 1 series ownership for cases 3/4 is uncertain because of the colour inversion."
+    ]
+  },
+  "physician_adjudicated": false
+}

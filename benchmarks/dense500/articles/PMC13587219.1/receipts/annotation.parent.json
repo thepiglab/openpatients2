@@ -1,0 +1,45 @@
+{
+  "article_id": "PMC13587219.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0cf7ba904d9a6053ca7cf5621ebb28b217efd74230e0fc995a3e50d1aa71e4a9",
+  "annotation_sha256": "e8d634ca07176a39c213617dab5e7f5d6878264dbbb661e8b19c8cabd0ff13c6",
+  "reviewed_at": "2026-10-11T23:49:38.699874+00:00",
+  "source_segments_read": 24,
+  "facts_reviewed": 120,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "TIME-LITERAL: p1-f093 time 'within hours' relation after/anchor 'intravenous magnesium sulfate' -> relation before/anchor null. The source gives 'within hours' with no 'of/after <event>' in the same phrase; the anchor was taken from surrounding context, so per TIME-LITERAL it is an upper bound (before, anchor null). Time text unchanged."
+  ],
+  "unresolved": [
+    "Caption-layer visual fields remain text-only; a separate actual-pixel visual submission covers all three source images.",
+    "No FEMg or baseline magnesium; likely cyclosporine etiology does not prove causality or renal magnesium wasting.",
+    "Abstract normal renal function/basic panel versus untimed discussion transient renal impairment is review-only; detailed named normal/low labs retained.",
+    "Figure 1 precise values/treatment bars not stated in retained text are described in separate actual-pixel targets, not fabricated text quotes.",
+    "No completed outpatient follow-up or CsA restart. Generic Table 1/algorithm guidance not patient-specific orders."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 24,
+    "facts_reviewed": 1,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Targeted TIME-LITERAL correction of 1 'within <duration>' facts (p1-f093): each source sentence was read; none ties the duration to an event in the same phrase, so relation set to before with anchor null. No other fields or facts changed."
+    ],
+    "residual_risks": [
+      "Targeted pass only; the rest of the article was not re-reviewed in this pass."
+    ]
+  },
+  "physician_adjudicated": false
+}

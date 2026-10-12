@@ -75,7 +75,11 @@ def parse_article(xml: str, metadata: dict, retrieval: dict | None = None) -> di
 
     # A table row carries the caption and headers. This prevents values losing
     # their columns and allows per-patient rows to be attributed independently.
+    parsed_tables = set()
     def table(node, heading):
+        if id(node) in parsed_tables:
+            return
+        parsed_tables.add(id(node))
         label = _clean(child(node, 'label'))
         caption = _clean(child(node, 'caption'))
         headers = []
@@ -176,6 +180,34 @@ def parse_article(xml: str, metadata: dict, retrieval: dict | None = None) -> di
         fig['source_segment_ids'] = [s['segment_id'] for s in segments if set(s.get('inline_graphic_references',[])) & set(fig['graphic_references'])]
         exception_cue = bool(re.search(r'\b(reprinted|reproduced|adapted)\b.*\b(permission|from)\b|all rights reserved',text,re.I))
         fig['reuse_status'] = 'asset_rights_review' if fig['rights_statements'] or exception_cue else 'inherits_article_subject_to_exceptions'
+    # Some publishers store clinical tables after <back>, in <floats-group>.
+    # Append them after existing blocks so evidence IDs for body and captions
+    # remain stable. Tables under references or supplements are not main-text
+    # evidence; supplementary payloads require their own provenance.
+    parents = {kid: parent for parent in article.iter() for kid in parent}
+    for node in article.iter():
+        if local_name(node.tag) != 'table-wrap' or id(node) in parsed_tables:
+            continue
+        ancestor = parents.get(node)
+        excluded = False
+        while ancestor is not None:
+            if local_name(ancestor.tag) in skip | {'supplementary-material', 'inline-supplementary-material'}:
+                excluded = True
+                break
+            ancestor = parents.get(ancestor)
+        if not excluded:
+            table(node, 'Tables / Floating or back matter')
+    # A table's raster alternative can be a sibling of its structured rows.
+    # Preserve that explicit XML containment after floating tables are parsed;
+    # neither a filename guess nor adjacency establishes patient ownership.
+    for fig in figures['figures']:
+        table_id = fig.get('containing_table_id')
+        if not table_id:
+            continue
+        linked = [s['segment_id'] for s in segments if s.get('table_id') == table_id or any(
+            x['ref_type'] == 'table' and table_id in x['target_ids']
+            for x in s.get('cross_references', []))]
+        fig['source_segment_ids'] = list(dict.fromkeys([*fig.get('source_segment_ids', []), *linked]))
     supplements = []
     for node in article.iter():
         tag = local_name(node.tag)
@@ -207,7 +239,7 @@ def parse_article(xml: str, metadata: dict, retrieval: dict | None = None) -> di
         'lengths': {'words': len(re.findall(r'\S+', '\n'.join(s['text'] for s in segments))),
                     'characters': len(text), 'xml_bytes': len(xml.encode()),
                     'definition': 'abstract + body + appendices + tables + captions; no bibliography/author metadata'},
-        'parser_version': '1.4',
+        'parser_version': '1.6',
         'has_body_text':body is not None and bool(_clean(body)),
         'limitations': ['Tables with row/column spans retain span markers; complex grids need review.',
                          'Supplement contents are not downloaded. Figure captions are author statements, not pixel inspection.']}

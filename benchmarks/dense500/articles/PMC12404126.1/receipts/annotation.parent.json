@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12404126.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "82e471c5aabdefff34a52f980b3543f778467f15f3b2aa632d65000af9176f3d",
+  "annotation_sha256": "5bdc92383ecc20530dc7d8d8714a780bc6518f1f5adb5652d4fcb8ca291aa103",
+  "reviewed_at": "2026-10-11T03:03:32.607750+00:00",
+  "source_segments_read": 35,
+  "facts_reviewed": 107,
+  "patients_reviewed": 5,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p4-f010/p4-f020 and p5-f012/p5-f022: deferasirox titrations split into the two stated doses (900 then 1,080 mg/day; 360 then 1,080 mg/day) instead of one range-like dose text; events e05 and summaries relinked.",
+    "p3-e05: removed the untimed 360 mg/day dose from the \"by the 2-year time point\" stop event; relation to RBCX start changed from unknown to after with b00029 evidence (chelation discontinued while managing with RBCX alone).",
+    "p3-f008: added the patient-specific \"chelation-related nephrotoxicity\" quote from b00029.",
+    "Limitations updated for D/E doses and a note that Figure 1 estimates for D slightly exceed the stated peak."
+  ],
+  "unresolved": [
+    "Retrospective case series of five patients labelled A to E; individual-level data come from one descriptive paragraph, Table 2, a dose paragraph, and Figure 1. No narrative case descriptions, dates, or individual adverse events.",
+    "Cohort statements (188 procedures; 17 vasovagal reactions, 8 asymptomatic hypotensive reactions, 4 citrate toxicity reactions; median ferritin and P value; 4,085 mL average extra blood use; averages of 3.2 and 5 weeks) are not copied to individuals.",
+    "RBCX settings (pre-transfusion hematocrit target 29% or higher, post-transfusion hematocrit target 37-38%, FCR 30%, isovolemic hemodilution omitted, transfused unit hematocrit assumed 60%, Rh and Kell matched donor blood, Terumo Spectra Optia system) are series-level protocol statements with no per-patient schema field and are not recorded as facts.",
+    "Table 2 prints no unit for ferritin and no averaging window for blood utilization (the text elsewhere uses ng/mL and a 3-month comparison); neither was borrowed. Difference column equals pre minus post for every row.",
+    "The lead phrase \"At the time of RBCX initiation\" is applied only to patient A's age; peak ferritin has no printed time. The RBCX transition window (2019 to 2021) is stated for the five patients as a group.",
+    "Figure 1 values are plot estimates, not printed values.",
+    "Deferasirox dose changes for patients D and E are recorded as the two stated doses each (before and after the increase) with no printed times. Patient C's chelation stop is \"by the 2-year time point\" with no stated anchor.",
+    "Figure 1 plot estimates for patient D reach about 3,200 ng/mL at 3 months pre, slightly above the stated peak of 3,060 ng/mL; within plot-estimate uncertainty, not treated as a conflict."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 35,
+    "facts_reviewed": 107,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Roster A-E = p1-p5 by first mention in b00006; reported count 5 complete.",
+      "Cohort totals, protocol parameters (Table 1) and statistics kept out of individuals; \"all five\" statements (b00024 ferritin decrease, b00026 no RBC antibodies) explicitly cover each patient.",
+      "Table 2 ferritin has no printed unit; unit left null, not borrowed from text.",
+      "Age time \"At the time of RBCX initiation\" is a clause of patient A's sentence only; B-E ages left untimed.",
+      "B/C/E adverse effects: \"complicated by\" and \"chelation-related\" state the drug attribution; kept as adverse effects.",
+      "Two NO-BORROWING warnings on p1-f012 are checker false positives: \"2 years later\" is in the dose sentence itself; only the drug name comes from the paragraph lead sentence, which scopes the dose list."
+    ],
+    "residual_risks": [
+      "Drug name deferasirox for B-E doses rests on the paragraph lead sentence.",
+      "Iron overload role left unknown.",
+      "Figure 1 readings are estimates."
+    ]
+  },
+  "physician_adjudicated": false
+}

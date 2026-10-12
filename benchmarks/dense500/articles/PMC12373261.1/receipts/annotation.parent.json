@@ -1,0 +1,53 @@
+{
+  "article_id": "PMC12373261.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "be3ff1848b038baf70cfdd35a374412293dc27c1c3ee0a6dd308823c415bfbd5",
+  "annotation_sha256": "93d0fb7a681a18a86224a84d031ca62392329b9fea764ee90e1204da8683d43c",
+  "reviewed_at": "2026-10-11T18:46:50.927910+00:00",
+  "source_segments_read": 34,
+  "facts_reviewed": 0,
+  "patients_reviewed": 0,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Disposition individual_cases -> aggregate_only: the five placeholder patients p1-p5 had no individual identity evidence (all shared the cohort quote 'five pediatric patients') and each carried the same 24 copied series facts; removed all five placeholder patient records (120 facts, 35 events, 25 relations) per the protocol rules that aggregate articles cannot invent individuals, cohort statements are not converted into individual cases (NO-COHORT-COPY) and patients are enumerated by individual identity evidence (ROSTER-ORDER).",
+    "Roster: reported_individual_count 5 kept with literal evidence 'five pediatric patients were presented to our department'; roster_complete true -> false because no stated individual can be enumerated.",
+    "Source coverage: b00001, b00010, b00017, b00019, b00020 (plus b00022, b00025, b00028) set to aggregate with no patient IDs and notes describing the series content.",
+    "Moved the approach conflict (posterolateral vs lateral Kaplan), the follow-up conflict (minimum 12 months vs mean 8.8 months vs six months in the Figure 4 caption) and the transient stiffness vs residual motion limits discrepancy into article_limitations.",
+    "Figure attribution notes reworded; FIG1-FIG4 stay unresolved with no patient IDs."
+  ],
+  "unresolved": [
+    "Disposition aggregate_only: the source reports five pediatric Dubberley type 2A capitellum fractures only as a series (mean or range values and all-patient statements); no patient has individual identity evidence, so no individual patient records are created and series statements are not copied to placeholder patients.",
+    "reported_individual_count is 5 (literal) and roster_complete is false because none of the five stated individuals can be enumerated.",
+    "Source conflict on the surgical approach: the abstract says a posterolateral approach, while the case presentation and discussion say a lateral approach through the Kaplan interval.",
+    "Source conflict on follow-up: a minimum of 12 months in all five cases (case presentation), a mean follow-up of 8.8 months (abstract) and a last follow-up six months postoperatively (Figure 4 caption).",
+    "The abstract reports transient stiffness in two patients that resolved with physiotherapy, while the results report a 12-degree extension deficit and a 15-degree flexion deficit in two unnamed patients at the last follow-up and the discussion calls them minor limitations; these are not reconciled.",
+    "Figures 1 to 4 show one or more unidentified series members; ownership is unresolved and they are not EHR-includable. Pixels were reviewed in the separate visual target."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 34,
+    "facts_reviewed": 120,
+    "figures_viewed": 4,
+    "key_findings": [
+      "The article reports only series-level data: age as mean/range, sex counts, all-patient technique and outcomes, and motion deficits in one and another unnamed patient; no patient is individually identifiable.",
+      "The placeholder records duplicated identical facts across p1-p5, which misrepresents a cohort as five individual records; restructured to aggregate_only, which the validator and runtime roster model accept (aggregate articles cannot carry invented individuals).",
+      "Viewed all four figures: FIG1 preoperative lateral and AP elbow radiographs with L markers, FIG2 and FIG4 lateral and AP radiographs with two screw implants at the distal humerus, FIG3 four-view CT montage with scanner overlay text; visual descriptions, unresolved ownership, clinical_imaging non-includable EHR labels and the FIG3 device-text privacy flag match the pixels."
+    ],
+    "residual_risks": [
+      "The benchmark now holds no patient-level facts for this article; per-fact timing points raised for the placeholder records (within one week of the initial trauma, physiotherapy action, refuted complications) are moot.",
+      "Agent receipts were signed against the old individual_cases roster and must be refreshed."
+    ]
+  },
+  "physician_adjudicated": false
+}

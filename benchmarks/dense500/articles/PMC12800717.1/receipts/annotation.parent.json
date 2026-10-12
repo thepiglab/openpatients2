@@ -1,0 +1,73 @@
+{
+  "article_id": "PMC12800717.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "182fcb3983479087e42fb5637357a8a80816832c96def656c34a2ed61bf351a1",
+  "annotation_sha256": "4c82c473a960698b983ced9b1778a6df2e2c6d9ab85e3cd58bc71a8e8b9c07c3",
+  "reviewed_at": "2026-10-10T02:13:29.800281+00:00",
+  "source_segments_read": 25,
+  "facts_reviewed": 101,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Preserved sparse co-twin facts separately from the index patient and father family history.",
+    "Moved presentation BMI out of historical event; retained by-day-7 and by-month-3 bounded timing without invented exact dates.",
+    "Added explicit body figure links for each index-patient image.",
+    "[semantic-rules-2026-10 re-sign] Verified M12 nulling of 4 non-literal anchors ('aortic/CABG repair', 'p1 presentation during ICU visit'); literal time.text ('postoperative day 3', 'three nights prior') retained. Verified M13 p1-e26 occurrence uncertain -> unknown (sparse discussion wording; occurrence genuinely not established).",
+    "[semantic-rules-2026-10 re-sign] Restored literal anchors dropped by M12: p1-f056/f057/f090 'postoperative day 3' -> 'emergency surgical repair'; p2-f004 'three nights prior' -> 'visiting his monozygotic twin brother'.",
+    "p1-f058: time 'By postoperative day 7' relation after -> before (TIME-LITERAL 'by <time>' = no later than); anchor 'surgery' -> null (not named in the by-phrase)",
+    "p1-f059: time 'By postoperative day 7' relation after -> before (TIME-LITERAL 'by <time>' = no later than); anchor 'surgery' -> null (not named in the by-phrase)",
+    "p1-f071: time 'by month 3 after discharge' relation after -> before (TIME-LITERAL 'by <time>' = no later than); anchor 'discharge' kept (named in phrase)",
+    "GLUED-TEXT (cleanup pass 2): repair_glued_text.py applied (p1-f040 target 'below120mmHg' -> 'below 120 mmHg'; p1-f093 interpretation 'typeA' -> 'type A'); manual wording-only fixes: p1-f056/p1-f057 name and clinical_statement 'Postoperative-day3' -> 'Postoperative day 3', p1-f089 finding 'Root48mm,ascending44mm,dissection flap' -> 'Root 48 mm, ascending 44 mm, dissection flap', p1-f090 'during day3 washout' -> 'during day 3 washout', ambiguities must_not_infer 'type1' -> 'type 1' and 'day1/day7' -> 'day 1/day 7', provenance passes. 'arrowRCA:' in the Figure 3 caption fields is the source's own spelling and was left.",
+    "Cleanup pass 3: respaced glued list in patient ambiguity 2 ('AKI/CRRT,AF/HIT,bivalirudin,Coumadin,extubation' -> comma-spaced).",
+    "Cleanup pass 3: kept time 'postoperative day 3' on p1-f056/p1-f057: the fact's own sentence ('Intraoperative TEE ...') refers back to the POD 3 washout operation stated in the preceding sentence, which is kept in the evidence.",
+    "Cleanup pass 3: visual submission respaced (e.g. 'Printed10mm/mV', 'with47.5mm', 'the48mm', 'belowRCA', 'Upper-left53Hz/13cm', 'andM 4' -> 'and M4', 'leadII'); figure-EHR/privacy visual_target_sha256 rebound.",
+    "glue4 GLUED-TEXT (fix_label_digit_glue.py, both proposed edits reviewed and applied): figure-EHR label rationale (figure-level and panel 0) '10mm/mV calibration label' -> '10 mm/mV calibration label'. Figure 1 viewed: the ECG prints '10mm/mV' at top right; the rationale describes the gain (not a quotation) and the signed visual submission already writes 'A printed 10 mm/mV gain', so the spaced form is consistent. Figure-EHR receipts re-signed.",
+    "glue4 ROSTER block added: reported_individual_count null (no literal number of patients stated; title/abstract describe the index patient and his monozygotic twin brother), roster_complete true (both described individuals, p1 index patient and p2 twin brother, are annotated); evidence b00002 'We present the case of a 30-year-old man ...' and 'the patient's twin brother had a repair of Stanford type A aortic dissection just three days prior'. The previously patched schema-submission count 2 had no literal source number and is null on regeneration."
+  ],
+  "unresolved": [
+    "Two original twins retained: p1 has detailed treatment/outcome course, p2 only diagnosis, repair and ICU recovery. Father is family history, not a third original patient case.",
+    "No explicit same-patient or same-family prior-report link found; Redruello/Zhu cited twin cases are external historical literature, not this family.",
+    "Esmolol is recommended, not asserted administered. No later genetic result, syndrome, MI mechanism, cardiac-function normalization or p2 age inferred.",
+    "This text/caption annotation layer does not use pixels; pixel inspection is recorded separately in the visual target and its review receipts.",
+    "The sparse twin course and family-member father surgeries must not be expanded with index-patient details. Five original lab rows fully inspected; no normal/high/low flags inferred only from printed reference intervals.",
+    "No explicit same-patient prior-report link found among ten references. Earlier twin case reports are bibliographic comparisons, not identity matches.",
+    "No supplementary materials or unassigned media listed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 25,
+    "facts_reviewed": 101,
+    "figures_viewed": 0,
+    "key_findings": [
+      "M12/M13 correct for this article; no annotation edits needed.",
+      "TIME-LITERAL 2026-10 'by <time>' audit: 3 fact(s) set to relation before after reading each source sentence",
+      "Cleanup pass 2: 2 tool + 9 manual glued fixes; no time-only quotes in this article."
+    ],
+    "residual_risks": [
+      "Prior residual risks unchanged."
+    ],
+    "previous_assessment": {
+      "clinical_course": "Personally read all 25 source segments, raw five-row laboratory table, 101 fact representations, all 28 runtime clinical sections, 105 distinct citations, 28 timeline events and 21 accepted ordering edges, and five summaries. Reviewed exact final BMI, bounded timing and ownership corrections. No inferred twin age, completed catheterization, medication dose or deep-vein thrombosis.",
+      "visual_review": "Personally inspected all four original JPEGs and all visual fields/citations. CT caliper 47.5 mm is separate from TEE 48 mm. ECG calibration, TEE patient/device temperatures, device settings and body-to-patient figure ownership checked.",
+      "limitations": "AI reference review, not physician adjudication or measured exhaustive recall."
+    },
+    "cleanup2": "glued-text + time-only-quote cleanup pass 2026-10-09",
+    "cleanup_pass_3": [
+      "Cleanup pass 3: respaced glued list in patient ambiguity 2 ('AKI/CRRT,AF/HIT,bivalirudin,Coumadin,extubation' -> comma-spaced).",
+      "Cleanup pass 3: kept time 'postoperative day 3' on p1-f056/p1-f057: the fact's own sentence ('Intraoperative TEE ...') refers back to the POD 3 washout operation stated in the preceding sentence, which is kept in the evidence.",
+      "Cleanup pass 3: visual submission respaced (e.g. 'Printed10mm/mV', 'with47.5mm', 'the48mm', 'belowRCA', 'Upper-left53Hz/13cm', 'andM 4' -> 'and M4', 'leadII'); figure-EHR/privacy visual_target_sha256 rebound."
+    ]
+  },
+  "physician_adjudicated": false
+}

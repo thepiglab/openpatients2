@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12694780.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6e6b1e841b4061a4c468d1861a5b194f6bd8e0ddc1e0f1266ceb08ba7ecc7685",
+  "annotation_sha256": "2bcd01334a09978bbbcbaaaabf089e4e0d7dd8a6982174f3bb1234e3c0089e24",
+  "reviewed_at": "2026-10-11T03:06:19.513282+00:00",
+  "source_segments_read": 36,
+  "facts_reviewed": 174,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f156 packed cell: action administered -> ordered; the source says \"prepared\" and never states transfusion. Own-sentence time \"On the second day of hospitalization\" added; ambiguity added; event e07 description and summary changed from given to prepared.",
+    "p1-f051 gastric biopsy histology: flag negative -> unknown (histology is not a qualitative antibody/culture/PCR/stain test).",
+    "alternate_representation_of added from narrative gastroenterologist CBC values to identical Table 2 29 JUL 2023 cells: Hb 7 (f034->f103), WBC 2700 (f036->f058), MCV 90 (f037->f118). Platelet 112000 vs 107000 kept separate and review_only.",
+    "Added p1-f174 narrative hemoglobin 6.7 gr/dL (restatement of Table 2 2 AUG cell f104), with no time because the 6.7 value precedes the day-2 fall.",
+    "Added source-stated relations: e01 before e02 (CBC requested by the gastroenterologist), e02 before e03 (aspiration due to pancytopenia), e04 before e07 (second hospital day), e08 before e09 (TEE to rule out endocarditis after septicemia).",
+    "Extended the normocytic/latent wording ambiguity with the opening reference to secondary thyroid hormone deficiency."
+  ],
+  "unresolved": [
+    "Table 1 and Table 2 values are reproduced as printed; reference intervals are source-printed and no flags were derived from them.",
+    "Table 3 rows other than the current case are cited published cases and were not extracted.",
+    "Discharge date is ambiguous in the source and is not recorded."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 36,
+    "facts_reviewed": 174,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient; Table 3 cited cases correctly left as background; only the current-case row used.",
+      "All 83 Table 2 cells (WBC, RBC, PLT, Hb, MCV x15; LDH x8) checked against the printed row and column dates; RBC cells text-only.",
+      "Hospital-day times verified against Table 2 (day 2 = 3 AUG Hb 5.9, day 3 = 4 AUG B12 start, day 6 = 7 AUG levothyroxine start); each time is in its own sentence.",
+      "Discharge date not recorded: \"One day before discharge on August 13, 2023\" is ambiguous against the Table 2 caption; ambiguity kept.",
+      "Platelet 112000 (narrative/Table 3) vs 107000 (Table 2) and RBC 3.56 garbled vs 3.54 x10^6 kept review_only.",
+      "Endoscopy fact time comes from its own sentence, whose opening clause carries \"On the third day of hospitalization\".",
+      "Figure 1 viewed: one low-power marrow section and two high-power purple smears, unlabeled; the visual submission is accurate and was not edited.",
+      "Measurement series: 6 series and 83 points verified cell by cell against Table 2; unit_text holds the unit only (/uL, gr/dL, fl, U/L; RBC null)."
+    ],
+    "residual_risks": [
+      "Whether the packed cell was transfused is left unstated; a reader may expect a transfusion record.",
+      "The 7 AUG platelet value of 50000 looks discordant but is reproduced as printed.",
+      "Narrative CBC date is inferred only via identical values in the 29 JUL column (alternate representation), not by a stated date."
+    ]
+  },
+  "physician_adjudicated": false
+}

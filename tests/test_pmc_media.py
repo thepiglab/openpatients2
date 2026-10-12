@@ -3,7 +3,7 @@ import copy
 import pytest
 
 from openpatients2.pmc_media import cloud_url, media_manifest, parse_figures, metadata_identifiers, CLOUD
-from openpatients2.sources_demo import fixture_metadata, fixture_xml, PMID, PMCID
+from synthetic_fixtures import fixture_metadata, fixture_xml, PMID, PMCID
 
 
 def parse(xml=None, metadata=None):

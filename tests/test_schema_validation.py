@@ -7,7 +7,7 @@ import pytest
 from openpatients2.schemas import TASK_MODELS, wire_schema, field_guide
 from openpatients2.validation import validate, all_spans
 from openpatients2.consistency import consistency_findings
-from openpatients2.demo import SOURCE, common
+from synthetic_fixtures import SOURCE, common
 
 
 @pytest.mark.parametrize("task", list(TASK_MODELS))

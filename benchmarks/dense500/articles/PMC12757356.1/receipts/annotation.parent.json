@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC12757356.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "05e876b096b29730522aa1f2884d8e3f5944da2bf23b95563a27ad167575bd3b",
+  "annotation_sha256": "ed31f2bb47cf09f87aad8d68a429bcd0f8240746379eba7aa15c0cfc23fe4262",
+  "reviewed_at": "2026-10-11T20:17:36.867316+00:00",
+  "source_segments_read": 50,
+  "facts_reviewed": 91,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f035 (CSF cells 105 on day 9) set source_conflict/review_only: SM2 prints 23 on D9 and 105 on D12; both sides now quarantined (SM2-f014 already review_only)",
+    "p1-f040 ('extensive microbiological investigations returned negative') set source_conflict/review_only against SM2 CSF NGS S. epidermidis/C. parapsilosis; new ambiguity added; specific negative blood/CSF cultures kept",
+    "p1-f047/f048/f049 absent HLH criteria changed from verification_status unknown to refuted (stated absent on workup, ASSERT-ABSENT)",
+    "Added p1-f091 ethnicity_as_documented 'Chinese' (b00008 'a Chinese neonate')",
+    "Added 3 literal relations: transfer same_time admission examination; admission before 'subsequent weeks' course; canakinumab start before the second-dose CRP rise and dose increase",
+    "p1-f061/f062 notes: SM2 prints 'for7 days' per drug, consistent with the main-text grouping",
+    "Article limitation added: SM2 CRP peak at D16-17 vs Figure 4 peak at d15",
+    "SM1-f014 hearing loss '+' changed to supported/include: untimed '+' is consistent with initial AABR refer/BAEP fail and later normalization, not a conflict",
+    "SM2-f082 catch-up growth set uncertain/review_only to pair with the main-text delayed-growth conflict",
+    "SM2: added SM2-f088..f091 dash cells in the laboratory/imaging column (D15, D29, D48, after 1 day) as missing entries (unknown, not_reported, review_only); limitation updated",
+    "visual.json F1: Chinese databases count transcribed as printed '(n = 14)'; figure-EHR and privacy drafts regenerated with --draft and reviewed labels/flags carried over"
+  ],
+  "unresolved": [
+    "The 52-case systematic review (Supplementary Tables S1 and S4, Figure 1) and its cohort percentages are aggregate/literature data; the other cases are not roster patients.",
+    "Supplementary Table S2 lists CSF cells as 23 on D9 and 105 on D12, whereas the text gives 105 on day 9.",
+    "Figure 4 shows a red arrow at d43 for diagnosis and canakinumab initiation, while the text and Supplementary Table S2 give 48 days of life.",
+    "Figure 1 PRISMA identifies 160 records and 147 PubMed plus 14 Chinese database records; the text states 161 records.",
+    "Canakinumab dose units in the Figure 4 caption (per day) differ from the text (every 8 weeks); kept as printed and not reconciled.",
+    "Growth after canakinumab and the statement that all monitored parameters remained normal conflict with other statements in the article; both sides are retained as review-only.",
+    "Caption-layer visual status not_inspected; the five figure images were inspected separately in the visual submission.",
+    "Supplementary Table S2 places the CRP peak (67.40 mg/L) at D16-17, while Figure 4 plots the CRP peak at the d15 label; not reconciled."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 132,
+    "facts_reviewed": 214,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient; 52-case literature review, SM1 other columns and SM4 kept aggregate",
+      "Cross-source conflicts quarantined on both sides: CSF cells day 9 (105 vs 23), microbiology negative vs CSF NGS organisms, delayed vs catch-up growth, all-parameters-normal vs CRP 10 mg/L, Figure 4 per-day canakinumab units vs every 8 weeks",
+      "Bacterial infection and HLH kept as possible differentials (earlier suspicion; not literally excluded); TORCH and neonatal lupus refuted; absent HLH criteria refuted",
+      "Figure 4 arrow at d43 vs 48 days in text and D48 in SM2; PRISMA prints total 160 while 147 + 14 and the text give 161",
+      "F2 wristband shows partial printed digits and a barcode fragment: direct_identifiers flag kept as a precaution, no values transcribed"
+    ],
+    "residual_risks": [
+      "No measurement series sidecar: SM2 WBC/CRP and SM3 Gesell scores are serial and could support one (optional)",
+      "F2 sensitive_anatomy flag for a bare infant chest differs from the false flag on a comparable neonatal photo in PMC12779367.1; policy hint lists nipples",
+      "Figure 4 plot readings are estimated_from_plot on a non-proportional axis"
+    ]
+  },
+  "physician_adjudicated": false
+}

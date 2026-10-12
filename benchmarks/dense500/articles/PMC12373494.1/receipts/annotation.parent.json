@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC12373494.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6b8c35b9a10a3b5577adab3e847815451736f5abbd43850f52133d74f56c35f9",
+  "annotation_sha256": "d7ce8912d75266e00bb79ca064736a43ab297b2bb8e53656927e7f3d3da8d286",
+  "reviewed_at": "2026-10-10T01:57:15.433102+00:00",
+  "source_segments_read": 104,
+  "facts_reviewed": 316,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added p1-f103: Table 3 on-presentation left-eye visual field intact for case 1 (was missing; consistent with narrative).",
+    "Added caption-grounded imaging findings: p1-f104 (Figure 2 fundal photo: macular edema, arteriolar narrowing, venous segmentation, flame-shaped hemorrhages), p1-f105 (Figure 3 FFA: macular ischemia, retinal hemorrhage), p2-f103 (Figure 7 FFA: leakage, staining, ischemia, perivascular sheathing), p3-f108 (Figure 10 FFA incl. literal \"bidding\" and vitreal hemorrhage).",
+    "Added p1 ambiguities: Discoid lupus named only in Figure 1 caption; unnamed-patient bilateral retinal vasculitis discussion sentence (no laterality inferred).",
+    "p2 summary claim on rheumatoid factor and E. coli urine culture now cites p2-f080 and p2-f045.",
+    "p2/p3 procedures_devices domain_coverage corrected from documented to not_documented (no procedure facts).",
+    "p2-e02 seizures to p2-e03 presentation relation changed from unknown to before (\"Fifteen days before presentation\"; discussion: neuropsychiatric manifestations before eye symptoms).",
+    "Added supported order links per patient: presentation examination same_time presentation (Table 3 On presentation column), examination before one-month follow-up (Table 3 visits), initial investigations before follow-up (Table 1 initial vs Table 3 follow-up); p3 six-month fever history before admission.",
+    "Visual submission FIG7 panel B: orange arrow direction corrected (points right near the right edge, not left); figure-EHR label and privacy sidecar visual hash refreshed (no label/flag content changed)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the actual JPEG panels are described in the separate visual submission.",
+    "Table 3 first follow-up column and the case one narrative give the same visual acuity, while the Table 3 on-presentation column differs; field and color vision descriptions also conflict, kept as source conflicts.",
+    "Table 1 reports the albumin-to-creatinine ratio in mg/g against a reference printed as g/g; the units are kept as printed and not corrected.",
+    "Case two urine routine row prints a pus count of 15-0/HPF; the literal text is kept without correcting it.",
+    "Reference intervals are printed with the table cells; no high or low flags were assigned from them.",
+    "Table 1 case three HBsAg, anti-HBc and anti-HCV cell is blank and no result is recorded.",
+    "The follow-up time heading in Table 3 is in a separate header row; the caption phrase after one month is used as the follow-up time and on-presentation cells carry no time text.",
+    "Table 4 lists published cases from references and is not attributed to any patient.",
+    "The abstract and discussion contain series-level statements; only statements naming all patients or a specific case were attributed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 104,
+    "facts_reviewed": 316,
+    "figures_viewed": 11,
+    "key_findings": [
+      "Three index patients correctly separated (37M case 1, 33F case 2, 19F case 3); Table 4 published cases not attributed.",
+      "Case 1 narrative presentation visual acuity equals the Table 3 first follow-up column; narrative fields/colour vision also disagree with Table 3 On presentation; both kept review_only source_conflict with ambiguity.",
+      "Table 2 RA row (footnote: rheumatoid arthritis) vs text rheumatoid factor: only case 2 flagged positive from text; cases 1 and 3 unflagged; no reference-range flags anywhere.",
+      "Literal oddities kept as printed: ACR mg/g vs <30 g/g, Pus-15-0/HPF, blank case 3 HBsAg cell (no fact), \"bidding\".",
+      "Follow-up times taken from the governing Table 3 caption \"after one month\"; on-presentation cells carry no time.",
+      "Shared treatment sentence explicitly names all patients; bevacizumab only for cases one and two."
+    ],
+    "residual_risks": [
+      "Whether HCQ/cyclophosphamide were given to every patient depends on \"at the discretion of\" wording; recorded as administered per the \"All patients\" subject.",
+      "Retinal vasculitis laterality per patient unstated; caption-only imaging findings are author labels not independently verified.",
+      "SLEDAI drivers (low complement) for case 2 not reconciled with table values; no flags inferred."
+    ]
+  },
+  "physician_adjudicated": false
+}

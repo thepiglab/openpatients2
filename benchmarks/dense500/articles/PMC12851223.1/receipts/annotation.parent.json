@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12851223.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "425a3572c5955e3ac0a9d6748bfc59cb4ddb7ff9d7192f144ffb7c5f34e789f7",
+  "annotation_sha256": "b797d9847b7417dd7e5e805576e895d85e0de1fe6c9b2d66b6255e2e8f0d124c",
+  "reviewed_at": "2026-10-11T19:52:50.745034+00:00",
+  "source_segments_read": 34,
+  "facts_reviewed": 91,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed the source pseudonym from every field: label, case_context description, statements, summary, figure caption summaries/notes; evidence quotes trimmed or split around the name (same-sentence splits on p1-f011, f056, f057, f058, f083 trigger non-blocking NO-BORROWING warnings that are checker false positives, noted on each fact).",
+    "Added p1-f091 demographics documented_sex male from the pronoun \"He\" (DEMO-SEX-WORDING); demographics coverage and article limitation updated.",
+    "p1-f080/p1-e17: time text \"within 14 days (one month after commencing the device)\", relation after, anchor \"commencing the device\" (TIME-LITERAL).",
+    "p1-f059: removed body_site \"distal fistula\" borrowed from the gastric-tube sentence.",
+    "p1-f075: growth chart \"normalised\" flag unknown -> normal (OBS-FLAG).",
+    "p1-e16 kind follow_up -> other (an in-hospital weight check, not a follow-up visit).",
+    "Added literal relations p1-e01 before p1-e02 (\"By day of life (DOL) 7\") and p1-e10 before p1-e17 (\"one month after commencing the device\"); removed a trivial relation evidence fragment.",
+    "visual.json fig0010: photograph description now records the partly visible infant head/face and wrist band; figure-EHR and privacy drafts regenerated with --draft and labels carried over (privacy face description refined)."
+  ],
+  "unresolved": [
+    "Figure captions are annotated without pixel claims; pixel review is in visual.json.",
+    "No age statement other than gestational age and day of life; documented sex is recorded from the pronoun he (DEMO-SEX-WORDING).",
+    "Photographs in Fig. 1 and Fig. 2 are reproduced with family consent, but the captions do not say they depict this patient, so ownership is left unresolved.",
+    "Corrected gestational age at the POD 36 extubation is not reconciled with other day-of-life and gestational-age values; values kept as printed.",
+    "Feed and reinfusion rates and volumes are kept in evidence quotes and statements because the procedure schema has no rate field.",
+    "The pseudonym printed in the source is never copied into any field; evidence quotes were trimmed to exclude it and free text uses generic wording."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 34,
+    "facts_reviewed": 91,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single extremely preterm neonate (24 + 1 weeks, 650 g); NEC signs, presumed sepsis and aerophagia kept possible, perforation provisional; resection with double enterostomy at 25 + 6 weeks.",
+      "Course times literal: DOL 7/8/10/12, POD 36 after surgery, post-operative recovery as during, CRT start DOL 53/POD 41, DOL 67, re-anastomosis DOL 111.",
+      "GA 29 + 2 at POD 36 does not match the other GA/DOL values; kept as ambiguity, nothing derived.",
+      "Central line removal kept planned (impetus only); PN cessation only from the abstract.",
+      "Rates and volumes kept in statements/quotes, not in fields.",
+      "Fig 1/2 ownership unresolved and not includable; Fig 3 A/B and Fig 4 attributed to p1; Fig 4 readings estimated; printed vertical code on Fig 4 flagged direct_identifiers and not transcribed."
+    ],
+    "residual_risks": [
+      "Five NO-BORROWING warnings are false positives from splitting quotes around the pseudonym.",
+      "Parent proficiency interval (14 days vs one month) left unreconciled.",
+      "Fig 4 plotted values are estimates from pixels."
+    ]
+  },
+  "physician_adjudicated": false
+}

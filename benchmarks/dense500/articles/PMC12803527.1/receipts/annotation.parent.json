@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12803527.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "bf8b593e55849870431fea7a682fc11b38fb3b2ab566b4c5877cdb19d9f77fbd",
+  "annotation_sha256": "1252f0bab12fa7d09975f1d9d4edfc35057f8b8e1fc134e01ffcbfaa3cfd7fdb",
+  "reviewed_at": "2026-10-10T01:42:31.392500+00:00",
+  "source_segments_read": 42,
+  "facts_reviewed": 85,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f039/p1-f040 removed temporality historical from in-episode methylprednisolone administration/discontinuation",
+    "p1-f018 note corrected: no conflict with 2014 history (2014 eye of symptoms unstated; enhancement was left optic nerve)",
+    "Timeline: added e19 before e09 (relapse/pseudo-flare concern then empirical methylprednisolone), e04 before e09 (abstract: presentation then empirical corticosteroids), e01 before e05 (2014 diagnosis before admission); added abstract follow-up evidence to e15/e16 before e17",
+    "Summary 2: removed borrowed \"Admission labs\" timing (labs untimed), added temperature/CBC values and the readmission with blurred vision and worsened mental status (+f028,f029,f079)",
+    "Summary 4: added absence of typical infection signs attributed to immunosuppressive therapy (+f032,f014)",
+    "Ambiguity on ED/admission/readmission now states only the abstract presentation->steroid order is linked",
+    "cleanup-3 NO-BORROWING: '3 weeks later' is in the first sentence of b00014 ('On neuro-ophthalmic examination 3 weeks later, the patient returned to her baseline status.'), which states the return to baseline (p1-f083, time kept); the visual acuity, Ishihara, Humphrey 24-2 and OCT RNFL results (p1-f069..p1-f078) are separate sentences -> time nulled (text/anchor/date null, relation unknown) and each quote trimmed to the fact's own sentence. Order kept by event p1-e17 membership."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; pixels are described only in the separate visual submission.",
+    "Single index patient; Table 1 and N-MOmentum data are literature/cohort content and excluded from patient facts.",
+    "Timing of the cervical cord lesion, left optic nerve enhancement MRI and serum AQP4-IgG 1:10 is not stated; no dates assigned beyond the 2014 diagnosis year.",
+    "ED presentation, admission and readmission are not clearly distinguished in the text; ordering among them and the steroid course is not asserted.",
+    "Admission laboratory values and most exam findings carry no time expression of their own; none assigned.",
+    "Supplement SD1 is a CARE reporting checklist (no patient data); see the supplement manifest."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 42,
+    "facts_reviewed": 85,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient; Table 1 (17 rows) and N-MOmentum cohort data correctly excluded as background",
+      "NMOSD relapse: differential (possible) and final refuted/absent kept as earlier-suspicion vs adjudication; pseudo-relapse likewise differential then confirmed; consistent, not duplicative",
+      "Optic neuritis (2014-context MRI) kept provisional (\"consistent with\"); MRI/cervical lesion/AQP4 1:10 untimed, no 2014 borrowed",
+      "Two worsened-mental-status facts (readmission vs post-steroid) kept separate; same-episode identity unstated",
+      "CRP high from source \"elevated\"; AQP4 FACS positive per source; CBC units kept as 10^(3)/uL text, no conversion",
+      "Fig 1 pixels: axial orbital MRI with AFR/PHL labels, no side marker or arrows; caption claims kept separate",
+      "SD1 DOCX opened: CARE checklist with section-name locations only; administrative",
+      "cleanup-3: 10 borrowed '3 weeks later' times on follow-up visual function results nulled; event p1-e17 keeps order."
+    ],
+    "residual_risks": [
+      "ED presentation vs admission vs readmission chronology remains ambiguous; steroid course not placed relative to readmission",
+      "\"3 weeks later\" unanchored; abstract follow-up may or may not be the same exam",
+      "Lab and most exam timing unstated"
+    ]
+  },
+  "physician_adjudicated": false
+}

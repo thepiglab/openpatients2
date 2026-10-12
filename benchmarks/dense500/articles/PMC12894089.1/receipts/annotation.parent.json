@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC12894089.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "571893bdc84f1cefd221dacb27056faf88c6bfbca9159ef7de77db6f7c5f244f",
+  "annotation_sha256": "57c23b5e5a6bec18f71b708823e79c1e066f826cd140d57c8855a24556ee1abf",
+  "reviewed_at": "2026-10-11T19:06:37.172333+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 118,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Roster: reported_individual_count 4 -> 7 and roster_complete true -> false, evidence b00009 'a total of seven EFI patients were identified' (three lost to follow-up are not individually described).",
+    "p2-f017 'not started on any empiric treatment' and p3-f024 'without any interval treatment': absent medication action started -> unknown.",
+    "p3-f012 food impaction: added the esophagram evidence quote that states the partial obstruction recorded in severity.",
+    "Added literal temporal relations p1-e03 before p1-e04 ('started on high-dose proton-pump inhibitor and re-scoped 12 weeks later'), p3-e01 before p3-e03 ('After the EFI, he reported ongoing dysphagia'), p4-e03 before p4-e04 ('prescribed ... He underwent repeat endoscopy 4 months later, on this treatment regimen').",
+    "Event time_precision exact -> unknown for the open-ended relative times 'After resolution of his EFI', 'After the EFI', 'After the endoscopy'.",
+    "Figure 1 panels A-D resolved from unresolved to individual p1-p4: printed panel letters (A)-(D), caption 'Patient (A)'..'Patient (D)' and case headings 'Patient A'..'Patient D'; attribution notes and article limitations updated.",
+    "Added p3 and p4 ambiguities: caption findings for Patient (C) (edema, furrows) and Patient (D) (subtle rings) differ from the case text for the index endoscopy; not added as facts.",
+    "Visual target: panel attributions set to individual/patient p1-p4 and panel limitations updated; figure-EHR and privacy drafts regenerated with --draft, panels now includable clinical_imaging, privacy flags carried over unchanged."
+  ],
+  "unresolved": [
+    "Seven patients with sub-diagnostic eosinophil counts were identified; three were lost to follow-up and are not individually described, so the roster holds the four described patients and is incomplete relative to the stated seven.",
+    "Figure 1 panels A-D are attributed to Patients A-D (p1-p4) by the caption letters matching the case headings; caption findings for panels C and D differ from the case text for the index endoscopy.",
+    "Eosinophil counts are per high-power field as printed; p1 reports only rare (<5) eosinophils without a per-HPF unit in its sentence.",
+    "Caption-layer visual status not_inspected; the JPEG was inspected in the separate visual target."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 118,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Four boys (17, 16, 5, 13 years) with esophageal food impaction and 3-10 or rare (<5) eosinophils at index endoscopy; EoE at repeat endoscopy for all four (p2/p3 diagnosis from the series sentence that explicitly covers each patient).",
+      "Cohort of seven identified; three lost to follow-up are not described, so the roster is incomplete relative to the stated seven.",
+      "Figure 1 panels map literally to Patients A-D via the caption and case headings."
+    ],
+    "residual_risks": [
+      "Caption findings for panels C and D differ from the index endoscopy text; which endoscopy panel D shows is unresolved.",
+      "p4 PPI kept as action ordered (prescribed); repeat endoscopy was done on this regimen but the drug name is not restated there, so no separate current item was added.",
+      "p1 rare (<5) eosinophils recorded with comparator < and no per-HPF unit because the sentence prints none."
+    ]
+  },
+  "physician_adjudicated": false
+}
