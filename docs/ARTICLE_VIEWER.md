@@ -23,13 +23,44 @@ patient, section, and panel scroll positions on an automatic update.
 ## What you can inspect
 
 - Search by title, article ID, or specialty; filter by specialty and review stage.
+- Open **Filters** to narrow by patient count (including aggregate-only series),
+  figures, figure review (AI described, EHR labeled, privacy flagged, or not yet
+  reviewed), tables, supplements, article type, and license. The browser
+  remembers these choices.
 - Select each patient independently and view every available clinical schema.
 - Read summaries, measurements and units, event records, and relative event edges.
+  Expanding a timeline event lists the recorded values behind it, such as scores,
+  lab results with units, or doses. Each links to its own source quote.
 - Click a source citation to scroll to and highlight its exact quote.
 - View actual image links, reviewed visual descriptions, clinical classifications,
   panel/patient attribution, caption claims, and figure rights.
-- Inspect the roster, supplements, provenance, license, and complete JSON payload.
+- See each figure panel's reviewed EHR category and includability, plus privacy
+  flags (burned-in text or identifiers, identifiable faces, sensitive anatomy).
+  Hover a panel line for the reviewer's rationale.
+- Open **Supplements** in the record to see every supplementary file the article
+  lists. Each shows its type, which patient it belongs to, a link to the original
+  file, and the reviewer's summary. Extracted facts are grouped by patient, and
+  unassigned ones are kept separate. Transcribed tables are rebuilt as tables.
+  Supplement facts cannot be highlighted in the article text; open the file to
+  check them.
+- Inspect the roster, provenance, license, and complete JSON payload.
 - Copy a deep link to an article, patient, and section using the browser URL.
+
+## On a phone
+
+The same address works on an iPhone or Android phone. To reach a server running
+on your computer, start it with `--host 0.0.0.0` and open
+`http://<computer's LAN address>:8765` on the same network. On a phone:
+
+- A bottom tab bar switches between **Library**, **Article**, and **Record**.
+  You can also swipe sideways between Article and Record.
+- Tap a fact in the record to see its source quote, in context, in a sheet
+  that rises from the bottom. You stay in the record. Step through multiple
+  quotes, drag the sheet down to dismiss it, or tap **Read it in the article**.
+- The top bar tucks away while you scroll down and returns when you scroll up.
+  A thin line under the article bar shows how far you have read.
+- Figures open full screen. Pinch to zoom and swipe down to close.
+- Use **Share → Add to Home Screen** to install it as an app with its own icon.
 
 Timeline events are not silently converted into a total chronological order.
 Their explicitly supported relations remain visible, including uncertainty and
@@ -41,13 +72,18 @@ negative finding.
 Live schema submissions take priority over exports. The browser checks source,
 annotation, target, and both schema review hashes; visual descriptions also need
 both pixel review receipts and matching patient identity. Changed submissions
-with stale receipts are withheld. A stale exported record cannot override a
+with stale receipts are withheld. Supplement extractions and the supplement
+catalogue are read live under the same rule. Workstation file paths, such as
+cached figure copies, are removed from every payload. A stale exported record cannot override a
 changed live annotation. Matching enriched exported bundles retain normalized
 measurements and media columns. Work-in-progress drafts are never published.
 
 “Schema reviewed” and “source reviewed” are distinct stages, not synonyms for
 all article components being completed. Missing or unreviewed media are labeled
-separately. These are AI reference annotations, not physician-adjudicated gold.
+separately. Figure EHR labels and privacy flags appear only with current agent
+and parent receipts bound to the reviewed visual record. Aggregate-only articles,
+which report patients only as a series, are schema reviewed with no patient
+records and say so. These are AI reference annotations, not physician-adjudicated gold.
 
 Published exports can be served without the annotation workspace. If the original
 source packets are absent, the UI shows the original PMC link and explicitly

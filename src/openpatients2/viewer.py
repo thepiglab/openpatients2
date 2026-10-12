@@ -20,11 +20,16 @@ from urllib.parse import unquote, urlsplit
 from .dense_store import load as _load_store
 
 STATIC = Path(__file__).with_name('viewer_static')
+ASSETS = ('index.html', 'app.js', 'style.css', 'manifest.webmanifest', 'icon-180.png', 'icon-512.png')
+TYPES = {'html': 'text/html; charset=utf-8', 'js': 'text/javascript; charset=utf-8', 'css': 'text/css; charset=utf-8',
+         'webmanifest': 'application/manifest+json; charset=utf-8', 'png': 'image/png'}
 ID = re.compile(r'^[A-Za-z0-9][A-Za-z0-9_.-]{0,120}$')
 FILES = ('manifest', 'annotations', 'patients', 'article_bundles', 'figure_visuals',
          'supplement_visuals', 'supplement_documents')
 LIVE = ('sources', 'annotations', 'reviews', 'schema-submissions', 'schema-agent-reviews',
-        'schema-parent-reviews', 'visual-submissions', 'visual-agent-reviews', 'visual-parent-reviews')
+        'schema-parent-reviews', 'visual-submissions', 'visual-agent-reviews', 'visual-parent-reviews',
+        'figure-ehr-labels', 'figure-ehr-agent-reviews', 'figure-ehr-parent-reviews',
+        'figure-privacy-flags', 'figure-privacy-agent-reviews', 'figure-privacy-parent-reviews')
 
 
 def digest(value):
@@ -42,6 +47,16 @@ def stamp(path):
         return (stat.st_mtime_ns, stat.st_size)
     except FileNotFoundError:
         return None
+
+
+def scrub(value):
+    """Drop workstation file paths (e.g. cached figure copies) from anything sent to a browser."""
+    if isinstance(value, dict):
+        return {k: scrub(v) for k, v in value.items()
+                if not (isinstance(v, str) and (k == 'path' or k.endswith('_path')) and Path(v).is_absolute())}
+    if isinstance(value, list):
+        return [scrub(v) for v in value]
+    return value
 
 
 def bound(receipt, **expected):
@@ -124,10 +139,42 @@ class Library:
         return (annotation if annotation_ok else None, target if schema_ok else None,
                 visual if visual_ok else None)
 
+    @staticmethod
+    def _overlays(root, aid):
+        """Dual-signed, current figure EHR labels and privacy flags; stale or unsigned ones are withheld."""
+        from .dense.figure_ehr_review import reviewed_figure_ehr
+        from .dense.figure_privacy_review import reviewed_privacy_flags
+        out = []
+        for reviewed in (reviewed_figure_ehr, reviewed_privacy_flags):
+            try:
+                result = reviewed(root, aid)
+            except (ValueError, KeyError, OSError, TypeError):
+                result = None
+            out.append(result[0] if result else None)
+        return out
+
+    @staticmethod
+    def _supplements(root, aid):
+        """Live dual-signed supplement sidecars (documents, visuals) and the reviewed supplement manifest."""
+        from .dense.supplement_review import DOCUMENT_FORMATS, reviewed_supplement_targets
+        from .dense.supplement_manifest_review import reviewed_manifest
+        try:
+            targets = [target for target, _ in reviewed_supplement_targets(root, aid)]
+        except (ValueError, KeyError, OSError, TypeError):
+            targets = []
+        try:
+            manifest = reviewed_manifest(root, aid)
+        except (ValueError, KeyError, OSError, TypeError):
+            manifest = None
+        documents = [t for t in targets if t.get('format') in DOCUMENT_FORMATS or 'document_classification' in t]
+        visuals = [t for t in targets if t not in documents]
+        return documents, visuals, manifest[0] if manifest else None
+
     def _detail(self, aid):
         source, root = self._source(aid)
         manifest = next(iter(self.exports['manifest'].get(aid, [])), {})
         annotation, target, visual = self._live(source, root) if source else (None, None, None)
+        ehr_labels, privacy_flags = self._overlays(root, aid) if visual else (None, None)
         published_annotation = next(iter(self.exports['annotations'].get(aid, [])), None)
         published_patients = self.exports['patients'].get(aid, [])
         published_article = next(iter(self.exports['article_bundles'].get(aid, [])), {})
@@ -152,7 +199,13 @@ class Library:
         note = []
         if not source:
             note.append('Source text is not installed on this server. The original article is linked below.')
-        if not patients:
+        roster = article.get('roster') or {}
+        schema_reviewed = bool(patients or roster)
+        if schema_reviewed and not patients:
+            count = roster.get('reported_individual_count')
+            note.append(f"No individual patient records: the article reports {count or 'its'} patients "
+                        'only as an aggregate series.')
+        elif not patients:
             note.append('Reviewed full-schema extraction is not yet available for this article.')
         if source and not annotation and _load_store().path(root, 'reviews', aid).exists():
             note.append('Source review is stale or being updated; its extraction is withheld until receipts match.')
@@ -160,7 +213,10 @@ class Library:
         documents = []
         published_current = (published_ok and annotation and (not root or
                              published_annotation.get('review', {}).get('annotation_sha256') == digest(annotation)))
-        if published_current:
+        manifest_review = None
+        if root and annotation and source.get('supplements'):
+            documents, supplementary, manifest_review = self._supplements(root, aid)
+        if published_current and not (documents or supplementary):
             supplementary = self.exports['supplement_visuals'].get(aid, [])
             documents = self.exports['supplement_documents'].get(aid, [])
         source_view = {k: source.get(k) for k in ('article_id', 'title', 'authors', 'pmcid', 'pmid',
@@ -171,14 +227,25 @@ class Library:
         if source:
             meta.update(title=source['title'], article_url=source.get('source_url'),
                         source_license=source.get('license'), authors=manifest.get('authors', source.get('authors', [])))
-        meta.update(status='schema_reviewed' if patients else 'source_reviewed' if annotation else 'pending',
+        meta.update(status='schema_reviewed' if schema_reviewed else 'source_reviewed' if annotation else 'pending',
                     patient_count=len(patients), figure_reviewed=bool(visual),
+                    disposition=roster.get('disposition'),
+                    figure_count=sum(bool(f.get('media')) for f in (source or {}).get('figures') or []),
+                    has_tables=any(s.get('kind') == 'table_row' for s in (source or {}).get('segments') or []),
+                    supplement_count=len((source or {}).get('supplements') or []),
+                    article_type=(source or {}).get('article_type') or manifest.get('article_type'),
+                    figure_ehr_labeled=bool(ehr_labels),
+                    supplements_extracted=len(documents) + len(supplementary),
+                    privacy_concern=any(p.get('identifiable_face') or p.get('sensitive_anatomy')
+                                        or p.get('burned_in_identifiers') == 'direct_identifiers'
+                                        for f in (privacy_flags or {}).get('figures', []) for p in f.get('panels', [])),
                     text_available=bool(source))
-        return {'article_id': aid, 'metadata': meta, 'source': source_view, 'patients': patients,
+        return scrub({'article_id': aid, 'metadata': meta, 'source': source_view, 'patients': patients,
                 'annotation': annotation, 'roster': article.get('roster'),
                 'figure_attribution': article.get('figure_attribution'), 'visual': visual,
+                'figure_ehr_labels': ehr_labels, 'figure_privacy_flags': privacy_flags,
                 'supplement_visuals': supplementary, 'supplement_documents': documents,
-                'notices': note, 'revision': None}
+                'supplement_manifest': manifest_review, 'notices': note, 'revision': None})
 
     def catalog(self):
         with self.lock:
@@ -190,15 +257,20 @@ class Library:
             for aid in sorted(ids):
                 if not ID.fullmatch(aid):
                     continue
+                # Per-supplement sidecars and receipts are many files; their folders' mtimes cover adds/replaces.
                 signature = (self.export_stamp, tuple(stamp(store.path(root, kind, aid))
-                             for root in self.roots for kind in LIVE))
+                             for root in self.roots for kind in LIVE),
+                             tuple(stamp(store.article_dir(root, aid) / sub) for root in self.roots
+                                   for sub in ('supplements', 'receipts')))
                 cached = self.entries.get(aid)
                 if cached is None or cached[0] != signature:
                     try:
                         detail = self._detail(aid)
                         meta = detail['metadata']
                         row = {k: meta.get(k) for k in ('article_id', 'title', 'primary_stratum', 'status',
-                               'patient_count', 'figure_reviewed', 'text_available', 'article_url')}
+                               'patient_count', 'figure_reviewed', 'text_available', 'article_url',
+                               'disposition', 'figure_count', 'has_tables', 'supplement_count', 'article_type',
+                               'figure_ehr_labeled', 'privacy_concern', 'supplements_extracted')}
                         row['license'] = (meta.get('source_license') or {}).get('code', 'Unknown')
                         row['revision'] = digest(signature)
                         self.entries[aid] = (signature, row)
@@ -236,23 +308,22 @@ def handler(library):
                     return self.send_json(library.catalog())
                 if path.startswith('/api/articles/') and path.endswith('.json'):
                     return self.send_json(library.article(path[len('/api/articles/'):-5]))
-                files = {'/': 'index.html', '/index.html': 'index.html', '/app.js': 'app.js', '/style.css': 'style.css'}
-                if path not in files:
+                name = 'index.html' if path == '/' else path[1:]
+                if name not in ASSETS:
                     return self.send_json({'error': 'Not found'}, 404)
-                file = STATIC / files[path]
-                kind = {'html': 'text/html', 'js': 'text/javascript', 'css': 'text/css'}[file.suffix[1:]]
-                self.send_bytes(file.read_bytes(), kind)
+                file = STATIC / name
+                self.send_bytes(file.read_bytes(), TYPES[file.suffix[1:]])
             except KeyError:
                 self.send_json({'error': 'Unknown article'}, 404)
             except (ValueError, OSError, TypeError):
                 self.send_json({'error': 'Article data is being updated. Retrying shortly.'}, 503)
 
         def send_json(self, data, status=200):
-            self.send_bytes(json.dumps(data, ensure_ascii=False).encode(), 'application/json', status)
+            self.send_bytes(json.dumps(data, ensure_ascii=False).encode(), 'application/json; charset=utf-8', status)
 
         def send_bytes(self, data, kind, status=200):
             self.send_response(status)
-            self.send_header('Content-Type', kind + '; charset=utf-8')
+            self.send_header('Content-Type', kind)
             self.send_header('Content-Length', str(len(data)))
             self.send_header('Cache-Control', 'no-store')
             self.send_header('X-Content-Type-Options', 'nosniff')
@@ -268,7 +339,7 @@ def build(library, output):
     if output.exists() and any(output.iterdir()):
         raise ValueError('Static output must be new or empty; existing files are never overwritten')
     output.mkdir(parents=True, exist_ok=True)
-    for name in ('index.html', 'app.js', 'style.css'):
+    for name in ASSETS:
         shutil.copyfile(STATIC / name, output / name)
     api = output / 'api'
     (api / 'articles').mkdir(parents=True, exist_ok=True)

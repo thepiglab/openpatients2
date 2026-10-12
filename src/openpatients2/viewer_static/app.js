@@ -8,7 +8,7 @@ const SVG = 'http://www.w3.org/2000/svg';
 const LABELS = {
   symptoms_function: 'Symptoms & function', procedures_devices: 'Procedures & devices',
   family_genetics: 'Family & genetics', reproductive_perinatal: 'Reproductive & perinatal',
-  social_exposures: 'Social & exposures', source_facts: 'Source facts', raw: 'Raw data',
+  social_exposures: 'Social & exposures', source_facts: 'Source facts', raw: 'Raw data', supplements: 'Supplements',
 };
 const TITLE_KEYS = ['name', 'attribute', 'event', 'substance', 'action_text', 'description', 'text',
   'clinical_statement', 'label', 'event_id', 'figure_id'];
@@ -20,7 +20,7 @@ const ICONS = {
 
 const state = {
   catalog: [], catalogRevision: null,
-  filter: {q: '', status: '', specialty: ''},
+  filter: {q: '', status: '', specialty: '', advanced: {}},
   article: null, aid: null, pid: null, tab: 'summary', revision: null,
   generation: 0, refreshing: false,
   expanded: new Set(),
@@ -125,12 +125,26 @@ function saveRoute(push = false) {
 
 const titleOf = r => r.title || r.article_id;
 
+const range = (n, v) => v === '1' ? n === 1 : v === '2-4' ? n >= 2 && n <= 4 : n >= 5;
+const has = (n, v) => v === 'with' ? n > 0 : !n;
+const ADVANCED = {
+  patients: (r, v) => r.status === 'schema_reviewed' && (v === 'aggregate' ? !r.patient_count : range(r.patient_count || 0, v)),
+  figures: (r, v) => has(r.figure_count, v),
+  tables: (r, v) => has(r.has_tables ? 1 : 0, v),
+  supplements: (r, v) => v === 'extracted' ? r.supplements_extracted > 0 : has(r.supplement_count, v),
+  figure_review: (r, v) => ({described: r.figure_reviewed, ehr: r.figure_ehr_labeled, privacy: r.privacy_concern,
+    none: r.figure_count > 0 && !r.figure_reviewed})[v],
+  article_type: (r, v) => r.article_type === v,
+  license: (r, v) => r.license === v,
+};
+const advancedMatch = r => Object.entries(state.filter.advanced).every(([k, v]) => !v || !ADVANCED[k] || ADVANCED[k](r, v));
+
 function filteredCatalog() {
   const {q, status, specialty} = state.filter;
   const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
   const rank = {schema_reviewed: 0, source_reviewed: 1, updating: 2, pending: 3};
   return state.catalog
-    .filter(r => (!status || r.status === status) && (!specialty || r.primary_stratum === specialty)
+    .filter(r => (!status || r.status === status) && (!specialty || r.primary_stratum === specialty) && advancedMatch(r)
       && terms.every(t => [r.title, r.article_id, r.primary_stratum].join(' ').toLowerCase().includes(t)))
     .sort((a, b) => (rank[a.status] ?? 4) - (rank[b.status] ?? 4) || titleOf(a).localeCompare(titleOf(b)));
 }
@@ -143,7 +157,7 @@ function renderCatalog() {
     : `${rows.length} of ${state.catalog.length} articles`;
   $('articles').replaceChildren(...rows.map(r => {
     const meta = [r.primary_stratum && pretty(r.primary_stratum),
-      r.status === 'schema_reviewed' ? plural(r.patient_count || 0, 'patient') : r.status === 'updating' ? 'updating…' : 'not reviewed yet'];
+      r.status === 'schema_reviewed' ? (r.patient_count ? plural(r.patient_count, 'patient') : 'aggregate series only') : r.status === 'updating' ? 'updating…' : 'not reviewed yet'];
     return h('button', {
       type: 'button', class: 'article-row' + (r.status === 'schema_reviewed' ? '' : ' unreviewed') + (r.article_id === state.aid ? ' active' : ''),
       'aria-current': r.article_id === state.aid ? 'true' : null, 'data-id': r.article_id,
@@ -166,6 +180,29 @@ function renderSpecialties() {
   select.replaceChildren(h('option', {value: ''}, 'Any specialty'), ...values.map(v => h('option', {value: v}, pretty(v))));
   select.value = values.includes(state.filter.specialty) ? state.filter.specialty : '';
   state.filter.specialty = select.value;
+  for (const [key, field, label] of [['article_type', 'article_type', words], ['license', 'license', v => v]]) {
+    const el = document.querySelector(`[data-filter="${key}"]`);
+    const opts = [...new Set(state.catalog.map(r => r[field]).filter(Boolean))].sort();
+    el.replaceChildren(h('option', {value: ''}, 'Any'), ...opts.map(v => h('option', {value: v}, label(v))));
+  }
+  syncAdvanced();
+}
+
+/* Advanced filters persist per browser; stale values (e.g. a license no longer present) are dropped. */
+function syncAdvanced() {
+  for (const el of document.querySelectorAll('[data-filter]')) {
+    const v = state.filter.advanced[el.dataset.filter] || '';
+    el.value = [...el.options].some(o => o.value === v) ? v : '';
+    state.filter.advanced[el.dataset.filter] = el.value;
+  }
+  const active = Object.values(state.filter.advanced).filter(Boolean).length;
+  $('advanced-toggle').textContent = active ? `Filters (${active})` : 'Filters';
+  $('advanced-toggle').classList.toggle('on', active > 0);
+}
+function setAdvanced(next) {
+  state.filter.advanced = next;
+  store('filters', JSON.stringify(next));
+  syncAdvanced(); renderCatalog();
 }
 
 function stepArticle(delta) {
@@ -221,6 +258,7 @@ function patientLabel(p) {
 
 function openArticle(aid) {
   document.body.classList.remove('library-open');
+  syncTabbar();
   if (aid === state.aid) return;
   state.pid = null;
   loadArticle(aid, {push: true});
@@ -239,7 +277,7 @@ async function loadArticle(aid, {preserve = false, push = false} = {}) {
     state.article = a; state.revision = a.revision;
     const ids = patientList(a).map(patientId);
     if (!ids.includes(state.pid)) state.pid = ids[0] || null;
-    if (switching) { state.expanded.clear(); state.active = null; }
+    if (switching) { state.expanded.clear(); state.active = null; closePeek(); }
     renderHeading();
     renderSource();
     renderPatients();
@@ -510,6 +548,30 @@ function tableBlock(rows, notes) {
     noteNodes);
 }
 
+/* Reviewed EHR category and privacy flags, one line per panel. */
+function figureReview(figureId) {
+  const a = state.article;
+  const labels = (a.figure_ehr_labels?.figures || []).find(f => f.figure_id === figureId);
+  const privacy = (a.figure_privacy_flags?.figures || []).find(f => f.figure_id === figureId);
+  if (!labels && !privacy) return null;
+  const keys = [...new Set([...(labels?.panels || []), ...(privacy?.panels || [])].map(p => p.panel ?? ''))];
+  const rows = (keys.length ? keys : ['']).map(key => {
+    const label = labels?.panels?.find(p => (p.panel ?? '') === key)?.label || (keys.length <= 1 ? labels?.figure_label : null);
+    const flags = privacy?.panels?.find(p => (p.panel ?? '') === key);
+    const out = [];
+    if (label) out.push([words(label.ehr_category), label.ehr_includable ? 'blue' : 'violet'],
+      [label.ehr_includable ? 'EHR includable' : 'not EHR includable', label.ehr_includable ? 'blue' : 'violet']);
+    if (flags?.burned_in_identifiers && flags.burned_in_identifiers !== 'none')
+      out.push([words(flags.burned_in_identifiers), flags.burned_in_identifiers === 'direct_identifiers' ? 'red' : 'amber']);
+    if (flags?.identifiable_face) out.push(['identifiable face', 'red']);
+    if (flags?.sensitive_anatomy) out.push(['sensitive anatomy', 'red']);
+    const why = [label?.rationale, flags?.notes].filter(Boolean).join(' ');
+    return h('p', {title: why || null}, key && h('strong', null, `Panel ${key} `),
+      out.map(([text, tone], i) => [i ? ' · ' : '', h('span', 'flag ' + tone, text)]));
+  });
+  return h('div', 'figure-review', rows);
+}
+
 function figureBlock(seg, fig, visuals) {
   const visual = visuals.get(fig.figure_key || fig.figure_id);
   const media = visual?.assets?.length ? visual.assets : fig.media || [];
@@ -527,6 +589,7 @@ function figureBlock(seg, fig, visuals) {
       return btn;
     }),
     h('figcaption', null, label && h('strong', null, label + ' '), captionSpan),
+    figureReview(fig.figure_key || fig.figure_id),
     description && h('details', 'figure-ai', h('summary', null, 'AI image description'), h('p', null, richText(description))));
   register(seg, node, [{el: captionSpan, text: caption}]);
   return node;
@@ -618,10 +681,71 @@ function locate(key, evidence) {
   }
   markNow();
   markSelected();
+  // On a phone, keep the reader in the record and show the quote in a sheet instead of jumping away.
+  if (narrow() && $('reading-grid').classList.contains('show-record')) openPeek();
+  else jumpToActive();
+}
+function jumpToActive() {
+  if (!state.active) return;
+  closePeek();
   showPane('source');
-  const it = items[state.active.index];
+  const it = state.active.items[state.active.index];
   const target = $('source').querySelector(`mark.quote[data-q~="${state.active.index}"]`) || state.segments.get(it.id)?.node;
   target?.scrollIntoView({block: 'center', behavior: smooth()});
+}
+
+/* ---------- evidence peek (phones) ---------- */
+
+/* The quote with a little of the surrounding text, cut at sentence or word boundaries. */
+function quoteInContext(text, quote, room = 240) {
+  const at = quote ? text.indexOf(quote) : -1;
+  if (at < 0) return [text.length > room * 2 ? text.slice(0, room * 2).replace(/\s+\S*$/, '') + ' …' : text, '', ''];
+  let from = Math.max(0, at - room), to = Math.min(text.length, at + quote.length + room);
+  if (from > 0) { const cut = text.slice(from, at).search(/[.!?]\s+[A-Z(]/); from = cut >= 0 ? from + cut + 2 : text.indexOf(' ', from) + 1; }
+  if (to < text.length) { const end = text.slice(at + quote.length, to).search(/[.!?](\s|$)(?!.*[.!?](\s|$))/); to = end >= 0 ? at + quote.length + end + 1 : text.lastIndexOf(' ', to); }
+  return [(from > 0 ? '… ' : '') + text.slice(from, at), quote, text.slice(at + quote.length, to) + (to < text.length ? ' …' : '')];
+}
+function openPeek() {
+  const {items, index} = state.active;
+  const it = items[index];
+  const seg = state.segments.get(it.id)?.seg || {};
+  const [before, quote, after] = quoteInContext(seg.text || seg.caption || '', it.quote);
+  $('peek-body').replaceChildren(
+    seg.heading && h('p', 'peek-section', seg.heading.split(' / ').join(' › ')),
+    h('p', 'peek-quote', richText(before), quote && h('mark', 'quote now', richText(quote)), richText(after)));
+  $('peek-body').scrollTop = 0;
+  $('peek-count').textContent = items.length > 1 ? `${index + 1} of ${items.length}` : '';
+  $('peek-prev').hidden = $('peek-next').hidden = items.length < 2;
+  $('peek').style.removeProperty('--drag');
+  $('peek').hidden = false;
+}
+function closePeek() { $('peek').hidden = true; }
+function stepPeek(delta) {
+  if (!state.active) return;
+  const n = state.active.items.length;
+  state.active.index = (state.active.index + delta + n) % n;
+  markNow(); markSelected(); openPeek();
+}
+
+/* Drag a sheet down to dismiss it. */
+function dragToDismiss(handle, sheet, close) {
+  let start = null;
+  handle.addEventListener('pointerdown', e => {
+    if (e.target.closest('button')) return;
+    start = e.clientY; sheet.classList.add('dragging'); handle.setPointerCapture(e.pointerId);
+  });
+  handle.addEventListener('pointermove', e => {
+    if (start !== null) sheet.style.setProperty('--drag', Math.max(0, e.clientY - start) + 'px');
+  });
+  const end = e => {
+    if (start === null) return;
+    const dy = e.clientY - start; start = null;
+    sheet.classList.remove('dragging');
+    sheet.style.removeProperty('--drag');
+    if (dy > 70) close();
+  };
+  handle.addEventListener('pointerup', end);
+  handle.addEventListener('pointercancel', end);
 }
 function markNow() {
   for (const m of $('source').querySelectorAll('mark.quote')) m.classList.toggle('now', m.dataset.q.split(' ').includes(String(state.active?.index)));
@@ -649,13 +773,15 @@ function sectionHasContent(section) {
 
 function tabs() {
   const p = patient();
-  if (p) return ['summary', 'timeline', ...Object.keys(p.sections || {}).filter(k => sectionHasContent(p.sections[k])), 'raw'];
-  if (state.article.annotation) return ['source_facts', 'raw'];
-  return ['summary', 'raw'];
+  const supp = supplementList().length ? ['supplements'] : [];
+  if (p) return ['summary', 'timeline', ...Object.keys(p.sections || {}).filter(k => sectionHasContent(p.sections[k])), ...supp, 'raw'];
+  if (state.article.annotation) return ['source_facts', ...supp, 'raw'];
+  return ['summary', ...supp, 'raw'];
 }
 
 function renderPatients() {
   const list = patientList();
+  $('tab-record-badge').textContent = list.length > 1 ? list.length : '';
   $('patients').replaceChildren(...(list.length > 1 ? list.map((p, i) => h('button', {
     type: 'button', role: 'tab', class: 'patient' + (patientId(p) === state.pid ? ' active' : ''),
     'aria-selected': String(patientId(p) === state.pid), title: patientLabel(p),
@@ -667,6 +793,7 @@ function renderPatients() {
 
 function selectPatient(pid) {
   if (pid === state.pid) return;
+  closePeek();
   state.pid = pid;
   renderPatients(); saveRoute();
   $('record').scrollTop = 0;
@@ -685,6 +812,7 @@ function renderSections() {
 
 function selectTab(tab) {
   if (tab === state.tab) return;
+  closePeek();
   state.tab = tab;
   renderSections(); renderRecord(); saveRoute();
   $('record').scrollTop = 0;
@@ -701,6 +829,7 @@ function renderRecord() {
   restart(r, 'enter');
   if (state.tab === 'raw') renderRaw(r);
   else if (state.tab === 'source_facts') renderSourceFacts(r);
+  else if (state.tab === 'supplements') renderSupplements(r);
   else if (!p) {
     r.append(h('p', 'empty', 'This article has not been reviewed yet, so there is no extracted record. You can still read the article and download what exists as JSON.'));
   } else if (state.tab === 'summary') renderSummary(r, p);
@@ -717,11 +846,16 @@ function formatTime(t) {
   if (!isObject(t) || !(t.text || t.date_iso)) return null;
   return [t.relation && t.relation !== 'unknown' ? words(t.relation) : null, t.text || t.date_iso].filter(Boolean).join(' ');
 }
-function factValue(o, title) {
+function factValue(o, title, {withTime = false} = {}) {
   let v = o.text_value || o.dose_text || o.amount_text || o.finding || o.outcome || o.reaction || null;
-  if (!v && typeof o.numeric_value === 'number') v = `${o.numeric_value}${o.unit ? ' ' + o.unit : ''}`;
+  if (!v && typeof o.numeric_value === 'number') v = String(o.numeric_value);
   if (typeof v !== 'string' || v === title) v = null;
-  return v || formatTime(o.time);
+  // A bare number gets its unit ("3.6" → "3.6 mmol/L"); a missing result says why.
+  if (v && typeof o.unit === 'string' && o.unit && !/[a-z%]/i.test(v) && !v.includes(o.unit)) v += ' ' + o.unit;
+  if (!v && typeof o.result_absent_reason === 'string' && o.result_absent_reason !== 'unknown') v = words(o.result_absent_reason);
+  const when = formatTime(o.time);
+  if (!v) return when;
+  return withTime && when ? `${v} · ${when}` : v;
 }
 /* The few qualifiers that change what a fact means, as plain words. */
 function qualifiers(o) {
@@ -736,8 +870,8 @@ function qualifiers(o) {
 }
 
 /* One row per fact. Click it to see its source in the article; the chevron opens its details. */
-function factRow(o, index, key, title = factTitle(o, index)) {
-  const value = factValue(o, title);
+function factRow(o, index, key, title = factTitle(o, index), {withTime = false} = {}) {
+  const value = factValue(o, title, {withTime});
   const linked = evidenceItems(o.evidence).length > 0;
   const row = h('div', {class: 'fact', 'data-key': key});
   const more = h('button', {type: 'button', class: 'fact-more', 'aria-expanded': 'false', 'aria-label': 'Details', title: 'Details',
@@ -754,12 +888,24 @@ function factRow(o, index, key, title = factTitle(o, index)) {
   return row;
 }
 
+/* Source facts an item points at by id (timeline events list the facts they summarize). */
+function linkedFacts(o) {
+  if (!Array.isArray(o.fact_ids) || !o.fact_ids.length) return [];
+  const byId = new Map((state.article?.annotation?.patients || []).flatMap(p => p.facts || []).map(f => [f.fact_id, f]));
+  return o.fact_ids.map(id => byId.get(id)).filter(Boolean);
+}
+
 function toggleFact(row, o, key, title, instant = false) {
   const open = !row.classList.contains('open');
   if (open && !row.querySelector('.fact-body')) {
     const missing = (o.evidence || []).filter(e => !resolveSegment(e));
+    const linked = linkedFacts(o);
+    const rest = linked.length === o.fact_ids?.length ? Object.fromEntries(Object.entries(o).filter(([k]) => k !== 'fact_ids')) : o;
     row.append(h('div', 'fact-body', h('div', 'fact-inner',
-      details(o, title) || h('p', 'muted', 'No further details.'),
+      linked.length ? h('div', 'linked-facts', h('p', 'linked-title', 'Recorded values'),
+        h('div', 'facts', linked.map((f, i) => factRow({...(isObject(f.fields) ? f.fields : {}), task: f.task, evidence: f.evidence},
+          i, `${key}/fact/${f.fact_id}`, undefined, {withTime: true})))) : null,
+      details(rest, title) || (linked.length ? null : h('p', 'muted', 'No further details.')),
       missing.length ? h('div', 'unlinked', h('p', 'muted', 'Quoted but not found in the article text:'), missing.map(e => h('blockquote', null, richText(e.quote)))) : null)));
   }
   row.querySelector('.fact-more').setAttribute('aria-expanded', String(open));
@@ -848,6 +994,115 @@ function renderSourceFacts(r) {
   if (!facts.length) r.append(h('p', 'empty', 'No source facts for this patient.'));
 }
 
+/* ---------- supplementary material ---------- */
+
+/* One entry per supplementary file: what the article lists, the reviewed catalogue entry, and any extraction. */
+function supplementList(a = state.article) {
+  const byId = rows => new Map((rows || []).map(x => [x.supplement_id, x]));
+  const manifest = byId(a?.supplement_manifest?.files), docs = byId(a?.supplement_documents), visuals = byId(a?.supplement_visuals);
+  const ids = [...new Set([...(a?.source?.supplements || []).map(x => x.supplement_id), ...manifest.keys(), ...docs.keys(), ...visuals.keys()])];
+  return ids.map(id => ({id, source: (a.source?.supplements || []).find(x => x.supplement_id === id) || {},
+    review: manifest.get(id)?.review, doc: docs.get(id), visual: visuals.get(id)}));
+}
+
+/* Rebuild reviewer transcriptions as tables: cell-level (row × column labels) or row-level ("a | b | c"). */
+function transcriptionTables(transcriptions) {
+  const groups = new Map();
+  for (const t of transcriptions || []) {
+    const key = t.table_label || (t.page ? `Page ${t.page}` : 'Transcribed text');
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(t);
+  }
+  return [...groups].map(([label, items]) => {
+    const notes = [], cellLevel = items.some(t => t.kind === 'clinical_data' && t.column_label);
+    let head = null, body = [];
+    if (cellLevel) {
+      const cols = [...new Set(items.filter(t => t.column_label && t.kind === 'clinical_data').map(t => t.column_label))];
+      const rows = new Map();
+      for (const t of items) {
+        if (t.kind !== 'clinical_data' || !t.column_label) { notes.push(t.text); continue; }
+        const r = t.row_label || '';
+        if (!rows.has(r)) rows.set(r, new Map());
+        rows.get(r).set(t.column_label, t.text);
+      }
+      head = ['', ...cols];
+      body = [...rows].map(([r, cells]) => [r, ...cols.map(c => cells.get(c) ?? '')]);
+    } else {
+      for (const t of items) {
+        const cells = (t.text || '').split(' | ');
+        if (cells.length < 2) notes.push(t.text);
+        else if (!head && t.kind === 'context' && !body.length) head = cells;
+        else body.push(cells);
+      }
+    }
+    const shown = body.slice(0, 300);
+    return h('figure', 'table-block supp-table',
+      h('figcaption', null, h('strong', null, label)),
+      notes.filter(Boolean).map(n => h('p', 'table-note', richText(n))),
+      shown.length ? h('div', 'table-scroll', h('table', null,
+        head && h('thead', null, h('tr', null, head.map(c => h('th', null, richText(c))))),
+        h('tbody', null, shown.map(row => h('tr', null, row.map(c => h('td', null, richText(c)))))))) : null,
+      body.length > shown.length ? h('p', 'table-note', `Showing ${shown.length} of ${body.length} rows; the rest are in Raw data.`) : null);
+  });
+}
+
+/* Short patient names matching the patient tabs: "Patient 2", or "this patient" when there is one. */
+function shortPatient(id) {
+  const ids = patientList().map(patientId), i = ids.indexOf(id);
+  return i < 0 ? id : ids.length > 1 ? `Patient ${i + 1}` : 'this patient';
+}
+
+const SUPP_LABEL = {clinical_case_table: 'Patient data table', literature_table: 'Literature table', clinical_data: 'Clinical data'};
+
+function renderSupplements(r) {
+  const list = supplementList();
+  const extracted = list.filter(s => s.doc || s.visual).length;
+  r.append(viewHeader('Supplementary material',
+    `${plural(list.length, 'file')} listed with the article · ${extracted ? `${extracted} with extracted content` : 'nothing extracted yet'}`));
+  for (const s of list) {
+    const assets = s.doc?.assets?.length ? s.doc.assets : s.visual?.assets?.length ? s.visual.assets : s.source.assets || [];
+    const name = assets.map(x => x.filename).filter(Boolean).join(', ') || s.id;
+    const kind = s.review?.content_class || s.doc?.document_classification;
+    const status = s.doc || s.visual ? ['Extracted', 'blue'] : s.review ? ['Catalogued', 'violet'] : ['Not reviewed yet', 'amber'];
+    const facts = s.doc?.clinical_data?.facts || s.visual?.clinical_data?.facts || [];
+    const mine = facts.filter(f => f.patient_ids?.length && (!state.pid || f.patient_ids.includes(state.pid)));
+    const unassigned = facts.filter(f => !f.patient_ids?.length);
+    const factList = (rows, group) => h('div', 'facts', rows.map((f, i) => {
+      const fields = isObject(f.fields) ? f.fields : {};
+      const where = (f.evidence || []).map(e => e.quote).filter(q => q && q.trim()).join(' · ');
+      return factRow({...fields, task: f.task, from_supplement: where}, i, `supplements/${s.id}/${group}/${i}`, undefined, {withTime: true});
+    }));
+    const scope = s.review && (s.review.patient_scope === 'aggregate' ? 'Aggregate data, no individual patient'
+      : s.review.patient_ids?.length ? 'Belongs to ' + s.review.patient_ids.map(shortPatient).join(', ') : null);
+    const summary = s.doc?.contents_summary || s.visual?.analysis?.visual?.general_description
+      || s.review?.content_class_rationale || s.source.description;
+    const images = assets.filter(x => /\.(jpe?g|png|gif|webp)(\?|$)/i.test(x.url || x.filename || '')).map(x => safeURL(x.url)).filter(Boolean);
+    const card = h('section', 'supp',
+      h('header', 'supp-head',
+        h('div', 'supp-name', h('strong', null, s.id), h('span', null, name)),
+        h('span', 'flag ' + status[1], status[0])),
+      h('p', 'supp-meta', [kind && (SUPP_LABEL[kind] || words(kind)), scope,
+        s.review && (s.review.ehr_includable ? 'EHR includable' : 'not EHR includable')].filter(Boolean).join(' · ')),
+      images.map(src => h('button', {type: 'button', class: 'figure-zoom', 'aria-label': 'Enlarge ' + s.id, onclick: () => openLightbox(src, `${s.id} ${summary || ''}`)},
+        h('img', {src, alt: summary || s.id, loading: 'lazy', referrerpolicy: 'no-referrer'}))),
+      summary && h('p', 'supp-summary', richText(summary)),
+      h('p', 'supp-links', assets.map(x => safeURL(x.url) && h('a', {href: safeURL(x.url), target: '_blank', rel: 'noopener noreferrer'}, `Open ${x.filename || 'file'} ↗`))),
+      mine.length ? [h('h3', 'group-title', `Extracted for ${state.pid ? shortPatient(state.pid) : 'this article'} (${mine.length})`), factList(mine, 'mine')] : null,
+      unassigned.length ? [h('h3', 'group-title', `Not assigned to a patient (${unassigned.length})`),
+        h('p', 'footnote top', 'The reviewer could not tell which patient these belong to, so they are kept out of every record.'),
+        factList(unassigned, 'unassigned')] : null,
+      facts.length > mine.length + unassigned.length
+        ? h('p', 'footnote', `${plural(facts.length - mine.length - unassigned.length, 'more fact')} in this file belong to other patients.`) : null,
+      (s.doc?.clinical_data?.transcriptions || []).length ? h('details', 'supp-transcript',
+        h('summary', null, `Transcribed content (${s.doc.clinical_data.transcriptions.length} entries)`),
+        transcriptionTables(s.doc.clinical_data.transcriptions)) : null,
+      [s.review?.notes, ...(s.doc?.limitations || []), ...(s.review?.limitations || [])].filter(x => typeof x === 'string').length
+        ? h('p', 'footnote', [s.review?.notes, ...(s.review?.limitations || []), ...(s.doc?.limitations || [])].filter(x => typeof x === 'string').join(' ')) : null);
+    r.append(card);
+  }
+  r.append(h('p', 'footnote', 'Supplementary files sit outside the article text, so their facts cannot be highlighted in the article. Open the file to check them.'));
+}
+
 function renderRaw(r) {
   const a = state.article;
   r.append(viewHeader('Raw data', 'Everything the server has for this article, including review receipts and provenance.'),
@@ -860,13 +1115,72 @@ function renderRaw(r) {
 const narrow = () => matchMedia('(max-width: 900px)').matches;
 function showPane(which) {
   if (!narrow()) return;
-  $('reading-grid').classList.toggle('show-record', which === 'record');
+  const grid = $('reading-grid');
+  const was = grid.classList.contains('show-record') ? 'record' : 'source';
+  grid.classList.toggle('show-record', which === 'record');
   $('show-source').classList.toggle('active', which !== 'record');
   $('show-record').classList.toggle('active', which === 'record');
+  if (which !== 'record') closePeek();
+  if (was !== which) {
+    // Slide the new sheet in from the side it lives on: Article on the left, Record on the right.
+    restart(grid.querySelector(which === 'record' ? '.record-sheet' : '.source-sheet'), which === 'record' ? 'swipe-in-left' : 'swipe-in-right');
+    document.body.classList.remove('chrome-hidden');
+  }
+  syncTabbar();
 }
 function toggleLibrary() {
-  if (narrow()) document.body.classList.toggle('library-open');
-  else store('libraryHidden', document.body.classList.toggle('library-hidden') ? '1' : '');
+  if (narrow()) {
+    const list = $('articles'), row = list.querySelector('.active');
+    // Centre the current article; measured relative to the list so it works mid-slide.
+    if (document.body.classList.toggle('library-open') && row)
+      list.scrollTop += row.getBoundingClientRect().top - list.getBoundingClientRect().top - (list.clientHeight - row.offsetHeight) / 2;
+  } else store('libraryHidden', document.body.classList.toggle('library-hidden') ? '1' : '');
+  syncTabbar();
+}
+function syncTabbar() {
+  const library = document.body.classList.contains('library-open');
+  const record = $('reading-grid').classList.contains('show-record');
+  $('tab-library').classList.toggle('active', library);
+  $('tab-source').classList.toggle('active', !library && !record);
+  $('tab-record').classList.toggle('active', !library && record);
+  for (const id of ['tab-library', 'tab-source', 'tab-record'])
+    $(id).setAttribute('aria-current', $(id).classList.contains('active') ? 'page' : 'false');
+  if (library) closePeek();
+}
+
+/* Phones: swipe sideways between Article and Record (not inside things that scroll sideways). */
+function initSwipe() {
+  let t = null;
+  $('reading-grid').addEventListener('touchstart', e => {
+    const x = e.touches[0];
+    t = e.touches.length === 1 && !e.target.closest('.table-scroll, .sections, .patients, .json, input, .find')
+      ? {x: x.clientX, y: x.clientY, at: Date.now()} : null;
+  }, {passive: true});
+  $('reading-grid').addEventListener('touchend', e => {
+    if (!t || !narrow()) return;
+    const x = e.changedTouches[0], dx = x.clientX - t.x, dy = x.clientY - t.y, quick = Date.now() - t.at < 600;
+    t = null;
+    if (!quick || Math.abs(dx) < 70 || Math.abs(dx) < Math.abs(dy) * 1.8) return;
+    if (window.getSelection()?.toString()) return;
+    showPane(dx < 0 ? 'record' : 'source');
+  }, {passive: true});
+}
+
+/* Phones: tuck the top bar away while reading down, bring it back on the way up; track reading progress. */
+function initScrollChrome() {
+  for (const el of [$('source-scroll'), $('record')]) {
+    let last = 0;
+    el.addEventListener('scroll', () => {
+      const y = el.scrollTop;
+      if (el === $('source-scroll')) {
+        const max = el.scrollHeight - el.clientHeight;
+        $('progress').style.setProperty('--read', max > 0 ? Math.min(1, y / max).toFixed(4) : 0);
+      }
+      if (!narrow() || Math.abs(y - last) < 6) return;
+      document.body.classList.toggle('chrome-hidden', y > last && y > 80);
+      last = y;
+    }, {passive: true});
+  }
 }
 
 function initSplitter() {
@@ -897,6 +1211,21 @@ function toggleTheme() {
   store('theme', root.dataset.theme);
 }
 
+function initLightboxSwipe() {
+  const box = $('lightbox');
+  let start = null;
+  box.addEventListener('touchstart', e => { start = e.touches.length === 1 ? e.touches[0].clientY : null; }, {passive: true});
+  box.addEventListener('touchmove', e => {
+    if (start !== null && e.touches.length === 1) $('lightbox-img').style.setProperty('--drag', Math.max(0, e.touches[0].clientY - start) + 'px');
+  }, {passive: true});
+  box.addEventListener('touchend', e => {
+    const dy = start === null ? 0 : e.changedTouches[0].clientY - start;
+    start = null;
+    $('lightbox-img').style.removeProperty('--drag');
+    if (dy > 90) box.close();
+  });
+}
+
 function openLightbox(src, caption) {
   $('lightbox-img').src = src;
   $('lightbox-img').alt = caption;
@@ -911,18 +1240,40 @@ function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTi
 if (load('theme')) document.documentElement.dataset.theme = load('theme');
 if (load('libraryHidden')) document.body.classList.add('library-hidden');
 initSplitter();
+initSwipe();
+initScrollChrome();
+initLightboxSwipe();
+dragToDismiss($('peek-grip'), $('peek'), closePeek);
+dragToDismiss($('peek').querySelector('.peek-head'), $('peek'), closePeek);
 
 $('search').addEventListener('input', debounce(() => { state.filter.q = $('search').value; renderCatalog(); }, 80));
 $('status').addEventListener('change', () => { state.filter.status = $('status').value; renderCatalog(); });
+try { state.filter.advanced = JSON.parse(load('filters') || '{}') || {}; } catch { state.filter.advanced = {}; }
+for (const el of document.querySelectorAll('[data-filter]'))
+  el.addEventListener('change', () => setAdvanced({...state.filter.advanced, [el.dataset.filter]: el.value}));
+$('advanced-reset').onclick = () => setAdvanced({});
+$('advanced-toggle').onclick = () => {
+  const open = $('advanced').hidden;
+  $('advanced').hidden = !open;
+  $('advanced-toggle').setAttribute('aria-expanded', String(open));
+};
+syncAdvanced();
 $('specialty').addEventListener('change', () => { state.filter.specialty = $('specialty').value; renderCatalog(); });
 $('text-search').addEventListener('input', debounce(() => runFind(), 120));
 $('text-search').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); stepMatch(e.shiftKey ? -1 : 1); } });
 $('refresh').onclick = () => refresh({manual: true});
 $('theme').onclick = toggleTheme;
 $('toggle-library').onclick = toggleLibrary;
-$('scrim').onclick = () => document.body.classList.remove('library-open');
+$('scrim').onclick = () => { document.body.classList.remove('library-open'); syncTabbar(); };
 $('show-source').onclick = () => showPane('source');
 $('show-record').onclick = () => showPane('record');
+$('tab-library').onclick = () => { if (!document.body.classList.contains('library-open')) toggleLibrary(); };
+$('tab-source').onclick = () => { document.body.classList.remove('library-open'); showPane('source'); };
+$('tab-record').onclick = () => { document.body.classList.remove('library-open'); showPane('record'); };
+$('peek-close').onclick = closePeek;
+$('peek-open').onclick = jumpToActive;
+$('peek-prev').onclick = () => stepPeek(-1);
+$('peek-next').onclick = () => stepPeek(1);
 $('brand').addEventListener('click', e => { e.preventDefault(); hop(); boing(); });
 $('lightbox').addEventListener('click', e => { if (e.target === $('lightbox')) $('lightbox').close(); });
 
@@ -930,7 +1281,9 @@ document.addEventListener('keydown', e => {
   if (document.querySelector('dialog[open]')) return;
   const typing = e.target.closest?.('input, select, textarea');
   if (e.key === 'Escape') {
-    if (typing) e.target.blur(); else document.body.classList.remove('library-open');
+    if (typing) e.target.blur();
+    else if (!$('peek').hidden) closePeek();
+    else { document.body.classList.remove('library-open'); syncTabbar(); }
     return;
   }
   if (typing || e.metaKey || e.ctrlKey || e.altKey) return;

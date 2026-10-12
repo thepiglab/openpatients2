@@ -149,13 +149,22 @@ def test_handler_does_not_serve_workspace_files(library):
     assert replies[0][0]==404
 
 
+@pytest.mark.parametrize('path,kind', [('/', 'text/html'), ('/manifest.webmanifest', 'application/manifest+json'),
+                                       ('/icon-180.png', 'image/png')])
+def test_handler_serves_the_installable_app_shell(library, path, kind):
+    cls=handler(library[0]);request=object.__new__(cls);sent=[]
+    request.send_bytes=lambda data,content_type,status=200:sent.append((status,content_type,data))
+    request.path=path;request.do_GET()
+    assert sent[0][0]==200 and sent[0][1].startswith(kind) and sent[0][2]
+
+
 def test_static_build_is_portable_and_does_not_overwrite(library,tmp_path):
     lib,root,_,source=library;review(root,source)
     out=tmp_path/'site';result=build(lib,out)
     assert result['articles']==1
     data=json.loads((out/'api/articles'/f'{AID}.json').read_text())
     assert data['patients'] and data['source']['segments'][0]['text']=='Exact evidence.'
-    assert (out/'app.js').exists() and (out/'index.html').exists()
+    assert all((out/name).exists() for name in ('app.js','index.html','manifest.webmanifest','icon-180.png'))
     with pytest.raises(ValueError,match='never overwritten'):build(lib,out)
 
 
@@ -198,3 +207,47 @@ def test_viewer_reads_legacy_folder_of_unified_release(tmp_path):
     library = Library(dataset, [])
     assert library.dataset == (dataset / 'legacy').resolve()
     assert any(row['article_id'] == AID for row in library.catalog()['articles'])
+
+
+def test_aggregate_only_article_is_schema_reviewed_without_patients(library):
+    lib, root, _, source = library
+    annotation, target = review(root, source)
+    target.update(patients=[], roster={'disposition': 'aggregate_only', 'reported_individual_count': 5, 'patients': []})
+    put(root, 'schema-submissions', target)
+    for role in ('agent', 'parent'):
+        put(root, f'schema-{role}-reviews', dict(article_id=AID, role=role, status='schema_source_reviewed',
+            source_text_sha256=source['text_sha256'], annotation_sha256=digest(annotation), target_sha256=digest(target)))
+    row = lib.catalog()['articles'][0]
+    assert row['status'] == 'schema_reviewed' and row['patient_count'] == 0 and row['disposition'] == 'aggregate_only'
+    assert any('aggregate series' in n for n in lib.article(AID)['notices'])
+
+
+def test_figure_overlays_need_current_dual_signed_review(monkeypatch, tmp_path):
+    from openpatients2.dense import figure_ehr_review, figure_privacy_review
+    monkeypatch.setattr(figure_ehr_review, 'reviewed_figure_ehr', lambda root, aid: ({'figures': ['ehr']}, []))
+    monkeypatch.setattr(figure_privacy_review, 'reviewed_privacy_flags', lambda root, aid: None)
+    assert Library._overlays(tmp_path, AID) == [{'figures': ['ehr']}, None]
+    def stale(root, aid):
+        raise ValueError('receipt does not bind the current target')
+    monkeypatch.setattr(figure_ehr_review, 'reviewed_figure_ehr', stale)
+    assert Library._overlays(tmp_path, AID) == [None, None]
+
+
+def test_workstation_paths_never_reach_the_browser():
+    from openpatients2.viewer import scrub
+    row = {'assets': [{'url': 'https://example.org/a.jpg', 'path': '/Users/someone/cache/a.jpg', 'cache_path': '/tmp/x'}],
+           'quote': '/10 scale', 'path': 'relative/is/fine'}
+    assert scrub(row) == {'assets': [{'url': 'https://example.org/a.jpg'}], 'quote': '/10 scale', 'path': 'relative/is/fine'}
+
+
+def test_unsigned_supplement_sidecars_are_not_published(library):
+    lib, root, _, source = library
+    source = {**source, 'supplements': [{'supplement_id': 'SM1', 'assets': [{'url': 'https://example.org/s.pdf'}]}]}
+    put(root, 'sources', source)
+    review(root, source)
+    sidecar = store.path(root, 'document-submissions', AID, sid='SM1')
+    sidecar.parent.mkdir(parents=True, exist_ok=True)
+    sidecar.write_text(json.dumps({'supplement_id': 'SM1', 'contents_summary': 'unsigned draft'}))
+    payload = lib.article(AID)
+    assert payload['supplement_documents'] == [] and 'unsigned draft' not in json.dumps(payload)
+    assert payload['source']['supplements'][0]['supplement_id'] == 'SM1'
