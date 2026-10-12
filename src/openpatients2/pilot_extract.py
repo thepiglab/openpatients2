@@ -21,7 +21,7 @@ from typing import Literal
 from urllib.parse import urlparse
 
 import httpx
-from pydantic import Field
+from pydantic import Field, model_validator
 import yaml
 
 from .article_tasks import ARTICLE_TASKS, SYSTEM, check_article_task, patient_packet, task_messages
@@ -55,13 +55,14 @@ from .validation import iter_objects, validate
 
 
 class PilotConfig(ConfigModel):
-    model_id: Literal['RedHatAI/Muse-Glimmer-30B-FP8-block'] = 'RedHatAI/Muse-Glimmer-30B-FP8-block'
-    revision: Literal['1deb4641ff84f9a728dd11b27cac1f6a02a9ed14'] = '1deb4641ff84f9a728dd11b27cac1f6a02a9ed14'
+    model_id: Literal['RedHatAI/Muse-Glimmer-30B-FP8-block', 'fastino/Fastino-Nemotron-3.5-Lightning-Healthcare'] = 'RedHatAI/Muse-Glimmer-30B-FP8-block'
+    revision: Literal['1deb4641ff84f9a728dd11b27cac1f6a02a9ed14', 'c602dcde62676c42bb9a31647d4fd8697e7c9e64'] = '1deb4641ff84f9a728dd11b27cac1f6a02a9ed14'
     served_model: str = 'clinical-extractor'
     gpus_per_endpoint: int = Field(default=1,ge=1,le=2)
     tokenizer_contract: Literal['vllm/0.30.0'] = 'vllm/0.30.0'
     reasoning_strength: Literal['low', 'medium', 'high', 'xhigh'] = 'medium'
-    temperature: Literal[1.0] = 1.0
+    fastino_reasoning: Literal['off', 'on', 'efficient'] = 'off'
+    temperature: Literal[0.0, 1.0] = 1.0
     top_p: Literal[0.95] = 0.95
     top_k: Literal[64] = 64
     seed: int = Field(default=42, ge=0, le=2**32-1)
@@ -111,6 +112,23 @@ class PilotConfig(ConfigModel):
     ledger_chunk_characters: int = Field(default=12000, ge=1024, le=32000)
     ledger_audit: bool = False
     ledger_delta_timeline: bool = True
+
+    @model_validator(mode='after')
+    def model_recipe(self):
+        fastino = self.model_id.startswith('fastino/')
+        revision = 'c602dcde62676c42bb9a31647d4fd8697e7c9e64' if fastino else '1deb4641ff84f9a728dd11b27cac1f6a02a9ed14'
+        if self.revision != revision or self.temperature != (0.0 if fastino else 1.0):
+            raise ValueError('Model, pinned revision and temperature must match the model recipe')
+        if fastino and (self.max_figures != 0 or self.image_manifest or self.summary_structured_output):
+            raise ValueError('Fastino benchmark requires text-only inputs and unconstrained output')
+        return self
+
+    def template_kwargs(self):
+        if self.model_id.startswith('fastino/'):
+            if self.fastino_reasoning == 'off':
+                return {'enable_thinking': False}
+            return {'enable_thinking': True, 'medium_effort': self.fastino_reasoning == 'efficient'}
+        return {'reasoning_strength': self.reasoning_strength}
 
     def repair_enabled(self, component):
         return self.overnight_repairs or component in self.repair_components
@@ -382,7 +400,7 @@ class PilotRunner:
                 max_tokens=self.config.max_output_tokens,
                 max_retry_tokens=max(self.config.max_output_tokens, self.config.max_retry_tokens),
                 http_retries=0, timeout_seconds=self.config.timeout_seconds,
-                extra_body={'chat_template_kwargs': {'reasoning_strength': self.config.reasoning_strength},
+                extra_body={'chat_template_kwargs': self.config.template_kwargs(),
                             'skip_special_tokens': False, 'top_k': self.config.top_k})
             self.clients.append(APIClient(api, http=http, schema_overrides=self.schemas))
 

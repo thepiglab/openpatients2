@@ -175,7 +175,8 @@ def freeze_media(source, article_dir, out, download=False):
     return Counter(r['status'] for r in result)
 
 
-def prepare(root, work, expected, download_media=False, *, splits=None, make_archive=True, article_selector=None):
+def prepare(root, work, expected, download_media=False, *, splits=None, make_archive=True, article_selector=None,
+            freeze_images=True):
     from .pilot_extract import PilotConfig, source_gate
     root, work = root.resolve(), work.resolve()
     if work.exists():
@@ -232,7 +233,8 @@ def prepare(root, work, expected, download_media=False, *, splits=None, make_arc
             raise ValueError(f'Source gate failed: {aid}: {errors}')
         out = work / 'inputs' / aid
         write_rows(out / 'source.jsonl', [source])
-        media.update(freeze_media(source, paths[0].parent, out, download=download_media))
+        if freeze_images:
+            media.update(freeze_media(source, paths[0].parent, out, download=download_media))
         items.append({'article_id': aid, 'split': ref['split'], 'source_characters': len(source['text']),
                       'figures': len(source['figures']), 'source_text_sha256': source['text_sha256']})
     # Greedy work assignment uses SOURCE size and image count, never annotated
@@ -359,7 +361,11 @@ async def run_article(work, item, endpoint, attempt):
     aid = item['article_id']
     source = work / 'inputs' / aid / 'source.jsonl'
     media = source.parent / 'vision-assets/manifest.json'
-    cfg = read(work / 'manifest.json')['extraction']
+    manifest = read(work / 'manifest.json')
+    cfg = manifest['extraction']
+    text_only = manifest.get('text_only', False)
+    if text_only:
+        media = None
     start, wall = time.monotonic(), time.time()
     receipt = {'article_id': aid, 'shard': item['shard'], 'split': item['split'], 'started_unix': wall,
                'status': 'error', 'attempt': attempt.name, 'timing_basis': 'single active article per GPU; includes source/token validation and repairs; excludes server startup and queue'}
@@ -376,7 +382,7 @@ async def run_article(work, item, endpoint, attempt):
         if any(a.get('omitted_patient_ids_due_to_cap') for a in report['articles']):
             raise ValueError('Discovered patient cap exceeded; do not silently benchmark a truncated roster')
         side_start = time.monotonic()
-        ehr = await run_ehr_stages({'figure_ehr_label': True, 'figure_privacy_flags': True,
+        ehr = await run_ehr_stages({'figure_ehr_label': not text_only, 'figure_privacy_flags': not text_only,
                 'measurement_series_extraction': True, 'extraction_config': {**cfg, 'concurrency_per_endpoint': 2},
                 'default_split': item['split']}, source, attempt / 'extraction', attempt / 'ehr',
                 [endpoint], CONTEXT, image_manifest=media)
@@ -459,7 +465,8 @@ def paired_jobs(work, campaigns, shard):
             claim.rmdir()
 
 
-async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_timeout=None, workload=None):
+async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_timeout=None, workload=None,
+                 serving_factory=None, runtime_probe=None):
     from .dense_benchmark_serving import ServerGroup
     from .dense_benchmark_telemetry import monitor
     m = check_snapshot(work)
@@ -487,7 +494,7 @@ async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_ti
             check_snapshot(campaign)
         claimed = paired_jobs(work, campaigns, shard)
         pending = claimed
-    cfg = serving(work, shard, logs)
+    cfg = (serving_factory or serving)(work, shard, logs)
     # Independent Slurm allocations may share a host with another campaign.
     # Choose a free loopback port rather than assuming 8600 is unused.
     for _ in range(100):
@@ -511,7 +518,7 @@ async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_ti
         if not pending and workload is None:
             summary['status'] = 'done'
             return summary
-        probe = ('import torch,vllm; from vllm.model_executor.models import ModelRegistry; '
+        probe = runtime_probe or ('import torch,vllm; from vllm.model_executor.models import ModelRegistry; '
                  'from vllm.reasoning import ReasoningParserManager; '
                  'assert vllm.__version__ == "0.30.0"; '
                  'assert "MuseGlimmerForConditionalGeneration" in ModelRegistry.get_supported_archs(); '
@@ -649,7 +656,8 @@ def aggregate(work):
               'output_tokens_per_gpu_article_second': sum(output_tokens)/seconds if seconds and all(v is not None for v in output_tokens) else None,
               'slowest_articles': sorted([{'article_id': r['article_id'], 'seconds': r['wall_seconds']} for r in timing],
                                          key=lambda r: -r['seconds'])[:10],
-              'timing_notes': ['Wall time per article includes live discovery, pixels, extraction, repair, EHR stages and serialization.',
+              'timing_notes': [('Wall time per article includes live discovery, text/caption extraction, repair, text EHR stages and serialization; no pixels.'
+                                if m.get('text_only') else 'Wall time per article includes live discovery, pixels, extraction, repair, EHR stages and serialization.'),
                               'Startup/queue excluded from article latency; first article is cold (no hidden warmup).',
                               'Sequential articles per worker favor attributable latency over maximum cross-article throughput.',
                               'Summed worker time includes probe/startup/cleanup/retries; interrupted jobs without final receipt require sacct.',
@@ -701,7 +709,8 @@ def export(work):
     return {'archive': str(archive), 'bytes': archive.stat().st_size}
 
 
-def submit(work, account, qos, hours, resume=False, dry_run=False, *, script_name='dense_benchmark.sbatch', campaigns=None, worker_shards=None):
+def submit(work, account, qos, hours, resume=False, dry_run=False, *, script_name='dense_benchmark.sbatch', campaigns=None, worker_shards=None,
+           gpu_memory='60G'):
     check_snapshot(work)
     if not 1 <= hours <= 72:
         raise ValueError('--hours must be between 1 and 72; Slurm --test-only also checks current policy')
@@ -737,7 +746,7 @@ def submit(work, account, qos, hours, resume=False, dry_run=False, *, script_nam
         gpu = phase == 'worker'
         return common + ['--job-name=op2-dense-'+phase+('' if shard is None else str(shard)),
                '--partition='+('hpg-b200' if gpu else 'hpg-default'), '--cpus-per-task='+('8' if phase != 'aggregate' else '2'),
-               '--mem='+('60G' if gpu else '32G'), '--time='+ (f'{hours:02d}:00:00' if gpu else '04:00:00'),
+               '--mem='+(gpu_memory if gpu else '32G'), '--time='+ (f'{hours:02d}:00:00' if gpu else '04:00:00'),
                '--output='+str(work / 'logs' / (phase+'-%j.log')), '--signal=B:TERM@120'] + (
                ['--gres=gpu:b200:1'] if gpu else []) + [str(script), phase, str(work), str(shard) if shard is not None else '-']
     env = {k: v for k, v in os.environ.items() if not k.startswith('SBATCH_')}
