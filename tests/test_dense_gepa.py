@@ -168,3 +168,21 @@ async def test_batch_failure_cancels_siblings_before_return():
     with pytest.raises(RuntimeError, match='server failed'):
         await g.gather_cancel([pending(), fail()])
     assert settled.is_set()
+
+
+def test_prepare_real_frozen_packets_never_requires_image_cache(tmp_path, monkeypatch):
+    root = Path(__file__).resolve().parents[1]
+    reference = root / 'configs/hipergator/dense-benchmark/reference.jsonl.gz'
+    original_hash = b.sha(reference)
+    def forbidden(*args, **kwargs):
+        raise AssertionError('Text-only GEPA must not access/download cached images')
+    monkeypatch.setattr(b, 'freeze_media', forbidden)
+    work = tmp_path / 'gepa'
+    result = g.prepare(root, work)
+    manifest = b.check_snapshot(work)
+    assert result['partitions'] == {'search_validation': 32, 'train': 126, 'confirmation': 59}
+    assert manifest['text_only'] and manifest['media'] == {}
+    assert manifest['extraction']['max_figures'] == 0
+    assert not list((work / 'inputs').rglob('vision-assets'))
+    assert len(list((work / 'inputs').glob('*/gepa-packets.json'))) == 217
+    assert b.sha(reference) == original_hash

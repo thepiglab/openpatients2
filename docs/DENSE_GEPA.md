@@ -78,7 +78,10 @@ and oversized proposals are rejected. This is not a proof against memorization.
 
 ## CPU/GPU allocation and failure handling
 
-CPU preparation freezes source packets, code and references; CPU setup installs
+CPU preparation freezes text source packets, code and references. These four
+clinical optimizers never use figure pixels, so preparation neither copies nor
+downloads the local figure cache. Git-archived checkouts do not need that cache.
+CPU setup installs
 client dependencies and downloads the pinned container/model/drafter. One TP1 B200 job runs four concurrent GEPA engines (one per task), sharing the
 model server and a 64-request cap. This overlaps small reflection/evaluation
 batches instead of reserving four GPUs for mostly sequential search loops. Each

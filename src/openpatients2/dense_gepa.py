@@ -47,10 +47,17 @@ def prepare(root, work, expected=260, hours=8, beta=2., metric_calls=1500):
     fbeta(1, 0, 0, beta)
     if not 2 <= hours <= 24 or metric_calls < 100:
         raise ValueError('Use 2–24 hours and at least 100 metric calls')
-    b.prepare(root, work, expected, splits=('train', 'validation'), make_archive=False)
+    # These four optimizers consume text patient packets, never figure pixels.
+    # Git snapshots omit the local image cache; do not require or download it.
+    b.prepare(root, work, expected, splits=('train', 'validation'), make_archive=False,
+              freeze_images=False)
     m = b.read(work / 'manifest.json')
     m['git_head'] = os.environ.get('DENSE_SOURCE_REVISION') or m['git_head']
     m['workers'] = 1
+    m['text_only'] = True
+    m['extraction'].update(max_figures=0, focused_pixels=False)
+    m['scope']['figures'] = 'not evaluated; text-only conditional clinical tasks'
+    m['scope']['ehr_stages'] = []
     for item in m['articles']:
         item['shard'] = 0
     m['scope']['clinical'] = 'Conditional task optimization using fixed annotated identities; no roster or full-pipeline evaluation'
