@@ -149,7 +149,8 @@ def test_handler_does_not_serve_workspace_files(library):
     assert replies[0][0]==404
 
 
-@pytest.mark.parametrize('path,kind', [('/', 'text/html'), ('/manifest.webmanifest', 'application/manifest+json'),
+@pytest.mark.parametrize('path,kind', [('/', 'text/html'), ('/viewer.html', 'text/html'), ('/home.js', 'text/javascript'),
+                                       ('/manifest.webmanifest', 'application/manifest+json'),
                                        ('/icon-180.png', 'image/png')])
 def test_handler_serves_the_installable_app_shell(library, path, kind):
     cls=handler(library[0]);request=object.__new__(cls);sent=[]
@@ -164,7 +165,7 @@ def test_static_build_is_portable_and_does_not_overwrite(library,tmp_path):
     assert result['articles']==1
     data=json.loads((out/'api/articles'/f'{AID}.json').read_text())
     assert data['patients'] and data['source']['segments'][0]['text']=='Exact evidence.'
-    assert all((out/name).exists() for name in ('app.js','index.html','manifest.webmanifest','icon-180.png'))
+    assert all((out/name).exists() for name in ('app.js','index.html','viewer.html','home.js','manifest.webmanifest','icon-180.png'))
     with pytest.raises(ValueError,match='never overwritten'):build(lib,out)
 
 
@@ -207,6 +208,21 @@ def test_viewer_reads_legacy_folder_of_unified_release(tmp_path):
     library = Library(dataset, [])
     assert library.dataset == (dataset / 'legacy').resolve()
     assert any(row['article_id'] == AID for row in library.catalog()['articles'])
+
+
+def test_catalog_counts_facts_by_section_for_the_overview(library):
+    lib, root, _, source = library
+    annotation, target = review(root, source)
+    target['patients'][0]['sections'] = {'observations': {'items': [{'name': 'a'}, {'name': 'b'}], 'limitations': ['x']},
+                                         'medications': {'items': []}}
+    target['patients'][0]['companions'] = {'timeline_v2': {'events': [{'event_id': 'e1'}]}}
+    put(root, 'schema-submissions', target)
+    for role in ('agent', 'parent'):
+        put(root, f'schema-{role}-reviews', dict(article_id=AID, role=role, status='schema_source_reviewed',
+            source_text_sha256=source['text_sha256'], annotation_sha256=digest(annotation), target_sha256=digest(target)))
+    row = lib.catalog()['articles'][0]
+    assert row['section_facts'] == {'observations': 2, 'medications': 0}
+    assert row['section_patients'] == {'observations': 1, 'medications': 0} and row['event_count'] == 1
 
 
 def test_aggregate_only_article_is_schema_reviewed_without_patients(library):

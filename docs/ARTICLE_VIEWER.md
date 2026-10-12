@@ -10,7 +10,13 @@ From the repository:
 uv run --locked op2 viewer
 ```
 
-Open **http://127.0.0.1:8765**. Leave the command running. No model, Node install,
+Open **http://127.0.0.1:8765**. Leave the command running. The first page is an
+overview dashboard. It shows headline counts, donuts for review status, patients
+per article, and article type, bars for facts by record section, and coverage
+meters for media and each specialty. Every segment, bar, and meter links into the
+viewer (`/viewer.html`) with that filter applied, e.g.
+`viewer.html#specialty=cardiac` or `viewer.html#status=schema_reviewed&patients=5+`.
+Older links of the form `/#article=…` are forwarded to the viewer. No model, Node install,
 extra dependencies, or article downloads are needed.
 
 The default library combines `data/dense_clinical_cases_v1` with live sources and

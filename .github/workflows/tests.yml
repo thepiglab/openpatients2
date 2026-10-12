@@ -8,8 +8,9 @@ jobs:
       - uses: astral-sh/setup-uv@v6
         with:
           python-version: '3.13'
-      - run: uv sync
-      - run: uv run pytest -q
-      - run: uv run op2 --help
-      - run: uv run op2 ehr-pipeline --help
-      - run: uv run op2 dense --help
+      # The full suite includes real GEPA integration tests.
+      - run: uv sync --locked --extra optimize
+      - run: uv run --locked --extra optimize pytest -q
+      - run: uv run --locked --extra optimize op2 --help
+      - run: uv run --locked --extra optimize op2 ehr-pipeline --help
+      - run: uv run --locked --extra optimize op2 dense --help

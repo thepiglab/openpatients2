@@ -20,7 +20,7 @@ from urllib.parse import unquote, urlsplit
 from .dense_store import load as _load_store
 
 STATIC = Path(__file__).with_name('viewer_static')
-ASSETS = ('index.html', 'app.js', 'style.css', 'manifest.webmanifest', 'icon-180.png', 'icon-512.png')
+ASSETS = ('index.html', 'home.js', 'viewer.html', 'app.js', 'style.css', 'manifest.webmanifest', 'icon-180.png', 'icon-512.png')
 TYPES = {'html': 'text/html; charset=utf-8', 'js': 'text/javascript; charset=utf-8', 'css': 'text/css; charset=utf-8',
          'webmanifest': 'application/manifest+json; charset=utf-8', 'png': 'image/png'}
 ID = re.compile(r'^[A-Za-z0-9][A-Za-z0-9_.-]{0,120}$')
@@ -57,6 +57,21 @@ def scrub(value):
     if isinstance(value, list):
         return [scrub(v) for v in value]
     return value
+
+
+def record_counts(patients):
+    """Facts per record section (and how many patients have any), plus timeline events, for the overview page."""
+    facts, having, events = defaultdict(int), defaultdict(int), 0
+    for patient in patients:
+        for name, section in (patient.get('sections') or {}).items():
+            if not isinstance(section, dict):
+                continue
+            n = sum(len(v) for k, v in section.items() if isinstance(v, list) and k not in ('coverage', 'limitations', 'evidence', 'documentation_evidence'))
+            facts[name] += n
+            having[name] += n > 0
+        timeline = (patient.get('companions') or {}).get('timeline_v2') or patient.get('relative_timeline') or {}
+        events += len(timeline.get('events') or [])
+    return {'section_facts': dict(facts), 'section_patients': dict(having), 'event_count': events}
 
 
 def bound(receipt, **expected):
@@ -236,6 +251,7 @@ class Library:
                     article_type=(source or {}).get('article_type') or manifest.get('article_type'),
                     figure_ehr_labeled=bool(ehr_labels),
                     supplements_extracted=len(documents) + len(supplementary),
+                    **record_counts(patients),
                     privacy_concern=any(p.get('identifiable_face') or p.get('sensitive_anatomy')
                                         or p.get('burned_in_identifiers') == 'direct_identifiers'
                                         for f in (privacy_flags or {}).get('figures', []) for p in f.get('panels', [])),
@@ -270,7 +286,8 @@ class Library:
                         row = {k: meta.get(k) for k in ('article_id', 'title', 'primary_stratum', 'status',
                                'patient_count', 'figure_reviewed', 'text_available', 'article_url',
                                'disposition', 'figure_count', 'has_tables', 'supplement_count', 'article_type',
-                               'figure_ehr_labeled', 'privacy_concern', 'supplements_extracted')}
+                               'figure_ehr_labeled', 'privacy_concern', 'supplements_extracted',
+                               'section_facts', 'section_patients', 'event_count')}
                         row['license'] = (meta.get('source_license') or {}).get('code', 'Unknown')
                         row['revision'] = digest(signature)
                         self.entries[aid] = (signature, row)

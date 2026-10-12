@@ -8,7 +8,7 @@ const SVG = 'http://www.w3.org/2000/svg';
 const LABELS = {
   symptoms_function: 'Symptoms & function', procedures_devices: 'Procedures & devices',
   family_genetics: 'Family & genetics', reproductive_perinatal: 'Reproductive & perinatal',
-  social_exposures: 'Social & exposures', source_facts: 'Source facts', raw: 'Raw data', supplements: 'Supplements',
+  social_exposures: 'Social & exposures', source_facts: 'Source facts', raw: 'Raw data', supplements: 'Supplements', ent: 'ENT',
 };
 const TITLE_KEYS = ['name', 'attribute', 'event', 'substance', 'action_text', 'description', 'text',
   'clinical_statement', 'label', 'event_id', 'figure_id'];
@@ -230,7 +230,10 @@ async function refresh({manual = false} = {}) {
     if (!state.aid && c.articles.length) {
       const r = route();
       state.pid = r.pid; state.tab = r.tab;
-      await loadArticle(r.aid || c.articles.find(x => x.status === 'schema_reviewed')?.article_id || c.articles[0].article_id);
+      const shown = filteredCatalog();
+      await loadArticle(r.aid || shown.find(x => x.status === 'schema_reviewed')?.article_id || shown[0]?.article_id
+        || c.articles.find(x => x.status === 'schema_reviewed')?.article_id || c.articles[0].article_id);
+      syncTabbar();
       $('articles').querySelector('.active')?.scrollIntoView({block: 'center'});
     } else {
       const row = c.articles.find(r => r.article_id === state.aid);
@@ -1257,6 +1260,18 @@ $('advanced-toggle').onclick = () => {
   $('advanced').hidden = !open;
   $('advanced-toggle').setAttribute('aria-expanded', String(open));
 };
+/* Links from the overview carry filters in the hash (e.g. #specialty=cardiac&patients=5+); they replace saved ones. */
+{
+  const p = new URLSearchParams(location.hash.slice(1));
+  const keys = Object.keys(ADVANCED);
+  if (!p.has('article') && [...p.keys()].some(k => k === 'specialty' || k === 'status' || keys.includes(k))) {
+    state.filter.specialty = p.get('specialty') || '';
+    state.filter.status = $('status').value = p.get('status') || '';
+    state.filter.advanced = Object.fromEntries(keys.map(k => [k, p.get(k) || '']).filter(([, v]) => v));
+    store('filters', JSON.stringify(state.filter.advanced));
+    if (narrow()) document.body.classList.add('library-open');
+  }
+}
 syncAdvanced();
 $('specialty').addEventListener('change', () => { state.filter.specialty = $('specialty').value; renderCatalog(); });
 $('text-search').addEventListener('input', debounce(() => runFind(), 120));
@@ -1274,7 +1289,8 @@ $('peek-close').onclick = closePeek;
 $('peek-open').onclick = jumpToActive;
 $('peek-prev').onclick = () => stepPeek(-1);
 $('peek-next').onclick = () => stepPeek(1);
-$('brand').addEventListener('click', e => { e.preventDefault(); hop(); boing(); });
+// The toad hops; the name goes back to the overview page.
+$('brand').addEventListener('click', e => { if (e.target.closest('.toad')) { e.preventDefault(); hop(); boing(); } });
 $('lightbox').addEventListener('click', e => { if (e.target === $('lightbox')) $('lightbox').close(); });
 
 document.addEventListener('keydown', e => {
