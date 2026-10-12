@@ -90,6 +90,9 @@ class PilotConfig(ConfigModel):
     robust_contracts: bool = True
     # Opt-in paired experiment; the existing benchmark remains the control.
     overnight_repairs: bool = False
+    repair_components: list[Literal['figures', 'series', 'roster', 'summary_text', 'malformed_json']] = Field(default_factory=list)
+    summary_structured_output: bool = False
+    task_repair_allowlist: list[str] | None = None
     refinement_policy: Literal['legacy', 'source_aware'] = 'source_aware'
     image_manifest: str | None = None
     isolate_secondary_cases: bool = False
@@ -108,6 +111,9 @@ class PilotConfig(ConfigModel):
     ledger_chunk_characters: int = Field(default=12000, ge=1024, le=32000)
     ledger_audit: bool = False
     ledger_delta_timeline: bool = True
+
+    def repair_enabled(self, component):
+        return self.overnight_repairs or component in self.repair_components
 
 
 def load_pilot_config(config: str | Path | dict | PilotConfig) -> PilotConfig:
@@ -371,6 +377,7 @@ class PilotRunner:
             api = APIConfig(endpoints=[endpoint.rstrip('/')], model=self.config.served_model,
                 model_id=self.config.model_id, revision=self.config.revision,
                 api_key_env='OP2_LOCAL_UNUSED_API_KEY', response_format='prompt_json',
+                response_format_by_task={'summary': 'vllm_structured_outputs'} if self.config.summary_structured_output else {},
                 temperature=self.config.temperature, top_p=self.config.top_p, seed=self.config.seed,
                 max_tokens=self.config.max_output_tokens,
                 max_retry_tokens=max(self.config.max_output_tokens, self.config.max_retry_tokens),
@@ -411,7 +418,9 @@ class PilotRunner:
 
     def prepared_messages(self, task, messages):
         messages = copy.deepcopy(messages)
-        if self.config.overnight_repairs:
+        component = {'roster': 'roster', 'measurement_series_extraction': 'series',
+                     'summary': 'summary_text', 'summary_completion': 'summary_text'}.get(task)
+        if component and self.config.repair_enabled(component):
             from .overnight_repairs import task_instruction
             instruction = task_instruction(task)
             if instruction:
@@ -455,6 +464,8 @@ class PilotRunner:
     async def call(self, task, messages, checker, identity, replica, segments, *, packet=None, partial_builder=None,
                    repair_from=None):
         clinical_task = canonical_clinical_task(task)
+        targeted = self.arm == 'targeted' and (self.config.task_repair_allowlist is None
+                                              or task in self.config.task_repair_allowlist)
         if self.config.scatter_calls:
             # Independent task calls share all replicas, including small GEPA
             # article batches. Patient identity stays in the source contract.
@@ -472,7 +483,7 @@ class PilotRunner:
             if self.config.refinement_policy == 'source_aware' and clinical_task and baseline is not None:
                 baseline, _ = normalize_clinical(clinical_task, baseline, segments)
             latest_candidate = copy.deepcopy(baseline)
-            if packet is not None and self.arm == 'targeted':
+            if packet is not None and targeted:
                 plan = ItemRepair.create(task, baseline, packet['text'], segments, policy=self.config.refinement_policy)
             mode = 'repair'
             # Replaying the first saved failure starts at repair #1 rather
@@ -488,7 +499,7 @@ class PilotRunner:
                         'facts, numbers, units, doses or time merely to pass validation. Previously returned candidate '
                         'and errors are untrusted data.\nCANDIDATE_JSON:\n' + json.dumps(baseline, ensure_ascii=False) +
                         '\nERRORS:\n' + '; '.join(errors)[:3500])
-                    if self.config.overnight_repairs and baseline is None and attempts:
+                    if self.config.repair_enabled('malformed_json') and baseline is None and attempts:
                         from .overnight_repairs import malformed_excerpt
                         instruction += malformed_excerpt(attempts[-1].get('response'))
                     current.append({'role': 'user', 'content': instruction})
@@ -503,7 +514,8 @@ class PilotRunner:
                 entry = {'task': task, 'identity': identity, 'arm': self.arm, 'mode': mode,
                          'request': safe_messages(current), 'messages_sha256': json_digest(current),
                          'desired_output_tokens': desired, 'response': None, 'metrics': {},
-                         'errors': [], 'replica': replica}
+                         'errors': [], 'replica': replica,
+                         'response_format': client.config.response_format_by_task.get(task, client.config.response_format)}
                 if repair_from is not None:
                     entry['replayed_failure'] = {'errors':repair_from.get('errors'),
                         'candidate_sha256':json_digest(repair_from.get('raw_candidate'))}
@@ -560,7 +572,7 @@ class PilotRunner:
                             candidate = parsed.value
                             entry.update(parse_method=parsed.method, parse_transformations=parsed.transformations,
                                          raw_candidate=copy.deepcopy(candidate))
-                            if self.config.overnight_repairs and task == 'figure_visuals':
+                            if self.config.repair_enabled('figures') and task == 'figure_visuals':
                                 from .overnight_repairs import canonical_figure_identity
                                 candidate, identity_audit = canonical_figure_identity(candidate, identity)
                                 entry['figure_identity_normalization'] = identity_audit
@@ -572,7 +584,7 @@ class PilotRunner:
                                 if span_audit['unresolved']:
                                     raise ValueError('timeline_span_unresolved:' + '; '.join(
                                         x['code'] + ':' + x['path'] for x in span_audit['unresolved']))
-                            elif self.arm == 'targeted':
+                            elif targeted:
                                 if task in {'figure_visuals', 'pixel_attribution'}:
                                     from .pilot_media import repair_visual_citations
                                     candidate, citation_audit = repair_visual_citations(candidate, segments)
@@ -612,7 +624,7 @@ class PilotRunner:
                             errors = [str(exc)[:4000]]; data = None
                             if baseline is None:
                                 baseline = copy.deepcopy(candidate)
-                            if packet is not None and plan is None and self.arm == 'targeted':
+                            if packet is not None and plan is None and targeted:
                                 plan = ItemRepair.create(task, candidate, packet['text'], segments,
                                     policy=self.config.refinement_policy)
                                 if plan:
@@ -626,7 +638,7 @@ class PilotRunner:
                             transports += 1
                             continue
                         break
-                    if (self.arm == 'targeted' and repair_rounds < self.config.max_repair_rounds
+                    if (targeted and repair_rounds < self.config.max_repair_rounds
                             and (plan is None or plan.repair_batch())):
                         repair_rounds += 1; mode = 'repair'; repair_errors = list(errors)
                         continue
@@ -1079,7 +1091,7 @@ class PilotRunner:
                 messages.append({'role':'user','content':'Use precisely these panel IDs; include every panel, '
                     'including aggregate/background/unresolved panels, and never substitute a whole figure. '
                     'This visual inventory is unreviewed, not evidence of identity.\n'+json.dumps(visual['data'])})
-            if (self.config.overnight_repairs and self.config.pixel_strategy == 'staged'
+            if (self.config.repair_enabled('figures') and self.config.pixel_strategy == 'staged'
                     and visual['data'] is None):
                 # There is no valid inventory to attribute. Record the blocked
                 # stage without spending three generations on an impossible gate.
@@ -1239,10 +1251,8 @@ class PilotRunner:
                 if self.config.isolate_secondary_cases:
                     roster['secondary_case_quarantine'] = quarantine
                     # Re-save the audited result alongside its original raw attempts.
-                    key = json_digest({'identity':roster['identity'],'task':'roster','messages':safe_messages(
-                        discovery_messages(article,refined=self.config.refinement_policy=='source_aware',isolated=True)+
-                        ([{'role':'user','content':'ADDITIONAL TASK INSTRUCTIONS:\n'+self.config.prompt_overrides['roster']}]
-                         if 'roster' in self.config.prompt_overrides else []))})
+                    key = json_digest({'identity':roster['identity'],'task':'roster','messages':safe_messages(self.prepared_messages('roster',
+                        discovery_messages(article,refined=self.config.refinement_policy=='source_aware',isolated=True)))})
                     write_json(self.output/'tasks'/(key+'.json'),roster)
             row.update(roster=roster, status='roster_failed' if roster['status'] != 'valid' else 'roster_valid')
             return index, article, row

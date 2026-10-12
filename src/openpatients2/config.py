@@ -22,6 +22,7 @@ class APIConfig(ConfigModel):
     revision: str = "UNPINNED"
     api_key_env: str = "OPENAI_API_KEY"
     response_format: Literal["json_schema", "json_object", "vllm_structured_outputs", "prompt_json"] = "json_schema"
+    response_format_by_task: dict[str, Literal['json_schema', 'json_object', 'vllm_structured_outputs', 'prompt_json']] = Field(default_factory=dict)
     schema_profile: Literal["standard", "cohere"] = "standard"
     timeout_seconds: float = Field(default=600, gt=0)
     http_retries: int = Field(default=3, ge=0, le=10)
@@ -53,7 +54,7 @@ class APIConfig(ConfigModel):
 
     def generation(self) -> dict:
         return {k: getattr(self, k) for k in ["temperature", "top_p", "max_tokens", "max_retry_tokens",
-                                              "extra_body", "response_format", "schema_profile", "seed", "save_reasoning", "save_messages"]}
+                                              "extra_body", "response_format", "response_format_by_task", "schema_profile", "seed", "save_reasoning", "save_messages"]}
 
 
 class PipelineConfig(ConfigModel):

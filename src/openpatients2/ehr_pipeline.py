@@ -114,8 +114,10 @@ async def run_ehr_stages(config, articles_path, run_dir, output, endpoints, cont
     config = EhrStageConfig.model_validate(yaml.safe_load(Path(config).read_text()) if isinstance(config, (str, Path)) else config)
     output = Path(output)
     extraction = load_pilot_config(config.extraction_config or {})
+    if extraction.repair_enabled('series') and not extraction.overnight_repairs:
+        extraction = extraction.model_copy(update={'task_repair_allowlist': ['measurement_series_extraction']})
     runner = PilotRunner(extraction, output / 'calls', endpoints, context,
-                         'targeted' if extraction.overnight_repairs else 'direct', http=http)
+                         'targeted' if extraction.repair_enabled('series') else 'direct', http=http)
     runner.schemas.update(ehr_tasks.schemas())  # shared dict; clients see the new task schemas
     bundles, rosters, visual_rows = pilot_outputs(run_dir)
     images = {}

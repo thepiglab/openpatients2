@@ -175,7 +175,7 @@ def freeze_media(source, article_dir, out, download=False):
     return Counter(r['status'] for r in result)
 
 
-def prepare(root, work, expected, download_media=False, *, splits=None, make_archive=True):
+def prepare(root, work, expected, download_media=False, *, splits=None, make_archive=True, article_selector=None):
     from .pilot_extract import PilotConfig, source_gate
     root, work = root.resolve(), work.resolve()
     if work.exists():
@@ -204,6 +204,11 @@ def prepare(root, work, expected, download_media=False, *, splits=None, make_arc
         if not set(splits) <= {'train', 'validation', 'test'} or not splits:
             raise ValueError('Invalid split selection')
         refs = {k: v for k, v in refs.items() if v['split'] in splits}
+    if article_selector is not None:
+        selected = set(article_selector([{'article_id': k, 'split': v['split']} for k, v in refs.items()]))
+        if not selected or not selected <= set(refs):
+            raise ValueError('Invalid article selection')
+        refs = {k: v for k, v in refs.items() if k in selected}
     work.mkdir(parents=True)
     code = work / 'code'
     code.mkdir()
@@ -436,7 +441,14 @@ def paired_jobs(work, campaigns, shard):
         try:
             if attempted.exists():
                 continue
-            order = campaigns if int(hashlib.sha256(aid.encode()).hexdigest(), 16) % 2 else list(reversed(campaigns))
+            rank = int(hashlib.sha256(aid.encode()).hexdigest(), 16)
+            if len(campaigns) == 2:  # preserve the established paired experiment
+                order = campaigns if rank % 2 else list(reversed(campaigns))
+            else:
+                offset = rank % len(campaigns)
+                order = campaigns[offset:] + campaigns[:offset]
+                if (rank // len(campaigns)) % 2:
+                    order = list(reversed(order))
             for campaign in order:
                 if not completed_attempt(campaign, aid)[0]:
                     yield campaign, {**item, 'shard': shard}

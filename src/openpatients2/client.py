@@ -114,12 +114,13 @@ class APIClient:
         if self.config.seed is not None:
             body["seed"] = self.config.seed
         schema = provider_schema(self.schema_overrides.get(task) or wire_schema(task),self.config.schema_profile)
-        if self.config.response_format == "json_schema":
+        response_format = self.config.response_format_by_task.get(task, self.config.response_format)
+        if response_format == "json_schema":
             body["response_format"] = {"type": "json_schema", "json_schema": {
                 "name": "op2_" + task, "strict": True, "schema": schema}}
-        elif self.config.response_format == "vllm_structured_outputs":
+        elif response_format == "vllm_structured_outputs":
             body["structured_outputs"] = {"json": schema}
-        elif self.config.response_format == "json_object":
+        elif response_format == "json_object":
             body["response_format"] = {"type": "json_object"}
             # Explicitly selected compatibility mode: syntax protection is weaker,
             # application validation remains mandatory. Never silently fall back.

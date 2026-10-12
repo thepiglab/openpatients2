@@ -19,13 +19,22 @@ GATE = {'minimum_f1_gain': 0.005, 'maximum_precision_drop': 0.01,
         'maximum_attribute_accuracy_drop': 0.01, 'maximum_roster_recall_drop': 0.0}
 
 
-def prepare(root, work, expected=260, download_media=False, hours=8):
+def arm_names(work):
+    return tuple(b.read(work / 'manifest.json')['overnight']['arms'])
+
+
+def prepare(root, work, expected=260, download_media=False, hours=8, plan='paired'):
     if not 1 <= hours <= 24:
         raise ValueError('Overnight hours must be between 1 and 24')
-    b.prepare(root, work, expected, download_media, splits=('train', 'validation'), make_archive=False)
+    if plan not in {'paired', 'ablation'}:
+        raise ValueError('Unknown experiment plan')
+    from .dense_ablation import ARM_CONFIGS, select_articles
+    configs = ARM_CONFIGS if plan == 'ablation' else {'control': {}, 'repairs': {'overnight_repairs': True}}
+    b.prepare(root, work, expected, download_media, splits=('train', 'validation'), make_archive=False,
+              article_selector=select_articles if plan == 'ablation' else None)
     m = b.read(work / 'manifest.json')
     m['git_head'] = os.environ.get('DENSE_SOURCE_REVISION') or m['git_head']
-    m['overnight'] = {'format': 'paired-pipeline/1', 'arms': list(ARMS), 'hours': hours,
+    m['overnight'] = {'format': 'paired-pipeline/1', 'arms': list(configs), 'hours': hours, 'plan': plan,
         'article_timeout_seconds': 900, 'shutdown_reserve_seconds': 600,
         'selection': 'all completed train and validation articles; test excluded before input preparation',
         'order': 'article-ID SHA256 parity counterbalances arm order on the same GPU',
@@ -35,10 +44,19 @@ def prepare(root, work, expected=260, download_media=False, hours=8):
                        'Both arms use current code; only overnight_repairs differs.',
                        'Prior inspection makes this a development comparison, not blind evaluation.',
                        'No automatic test evaluation or prompt optimization.']}
+    if plan == 'ablation':
+        from .dense_ablation import GATES
+        m['overnight'].update(format='component-ablation/1', promotion_gate=GATES,
+            selection='24 diagnostic training articles and all validation articles; test excluded',
+            order='SHA256 cyclic rotation and reversal of arms within each article',
+            arm_configs=configs, limitations=['One component per arm; combinations remain untested.',
+                'Diagnostic training selection includes known series regressions; not a blind sample.',
+                'Source overflows stay explicit failures; no GEPA or test evaluation.'])
+        shutil.copyfile(root / 'docs/DENSE_ABLATION.md', work / 'code/docs/DENSE_ABLATION.md')
     doc = root / 'docs/DENSE_OVERNIGHT.md'
     shutil.copyfile(doc, work / 'code/docs/DENSE_OVERNIGHT.md')
     m['files'] = b.inventory(work, ['code', 'inputs', 'reference'])
-    for name in ARMS:
+    for name in configs:
         arm = work / 'arms' / name
         arm.mkdir(parents=True)
         # Immutable hard links share disk bytes; inference writes only results.
@@ -47,20 +65,20 @@ def prepare(root, work, expected=260, download_media=False, hours=8):
         am = copy.deepcopy(m)
         am.pop('overnight')
         am['experiment_arm'] = name
-        am['extraction']['overnight_repairs'] = name == 'repairs'
-        am['scope']['clinical'] += '; overnight contract repairs=' + str(name == 'repairs')
+        am['extraction'].update(configs[name])
+        am['scope']['clinical'] += '; experiment arm=' + name
         am['files'] = b.inventory(arm, ['code', 'inputs', 'reference'])
         b.write(arm / 'manifest.json', am)
         m['files'][f'arms/{name}/manifest.json'] = b.sha(arm / 'manifest.json')
     b.write(work / 'manifest.json', m)
     b.write(work / 'prepared.json', {'manifest_sha256': b.sha(work / 'manifest.json')})
     return {'work': str(work), 'articles_per_arm': m['article_count'], 'splits': m['splits'],
-            'arms': ARMS, 'hours_per_gpu': hours, 'test_inference': False}
+            'arms': list(configs), 'hours_per_gpu': hours, 'test_inference': False}
 
 
 def status(work):
     m = b.read(work / 'manifest.json')
-    arms = {name: b.status(work / 'arms' / name) for name in ARMS}
+    arms = {name: b.status(work / 'arms' / name) for name in arm_names(work)}
     compact = {name: {**r, 'pending': len(r['pending']), 'pending_sample': r['pending'][:8]}
                for name, r in arms.items()}
     return {'arms': compact, 'complete': all(not r['pending'] for r in arms.values()),
@@ -99,6 +117,9 @@ def score_metrics(scores):
 
 
 def aggregate(work):
+    if b.read(work / 'manifest.json')['overnight'].get('plan') == 'ablation':
+        from .dense_ablation import aggregate as ablation_aggregate
+        return ablation_aggregate(work)
     from .unified_scoring import score
     m = b.check_snapshot(work)
     reports = {name: b.aggregate(work / 'arms' / name) for name in ARMS}
@@ -189,7 +210,7 @@ def export(work):
 
 def verify(work):
     b.check_snapshot(work)
-    for name in ARMS:
+    for name in arm_names(work):
         b.verify(work / 'arms' / name)
     integrity = b.read(work / 'summary/integrity.json')
     if integrity['manifest_sha256'] != b.sha(work / 'manifest.json'):
@@ -215,6 +236,7 @@ def main(argv=None):
             a.add_argument('--expected', type=int, default=260)
             a.add_argument('--download-media', action='store_true')
             a.add_argument('--hours', type=int, default=8)
+            a.add_argument('--plan', choices=('paired', 'ablation'), default='paired')
         if command == 'submit':
             a.add_argument('--account', default='cai5724'); a.add_argument('--qos', default='cai5724')
             a.add_argument('--resume', action='store_true'); a.add_argument('--dry-run', action='store_true')
@@ -223,11 +245,11 @@ def main(argv=None):
     args = p.parse_args(argv)
     work = args.work.resolve()
     if args.command == 'prepare':
-        result = prepare(args.root.resolve(), work, args.expected, args.download_media, args.hours)
+        result = prepare(args.root.resolve(), work, args.expected, args.download_media, args.hours, args.plan)
     elif args.command == 'submit':
         m = b.check_snapshot(work)
         result = b.submit(work, args.account, args.qos, m['overnight']['hours'], args.resume, args.dry_run,
-                          script_name='dense_overnight.sbatch', campaigns=[work / 'arms' / n for n in ARMS])
+                          script_name='dense_overnight.sbatch', campaigns=[work / 'arms' / n for n in arm_names(work)])
     elif args.command == 'setup':
         result = b.setup(work)
     elif args.command == 'worker':
@@ -235,7 +257,7 @@ def main(argv=None):
             raise KeyboardInterrupt('Slurm termination; preserve partial results')
         signal.signal(signal.SIGTERM, terminate)
         plan = b.read(work / 'manifest.json')['overnight']
-        result = asyncio.run(b.worker(work, args.shard, campaigns=[work / 'arms' / n for n in ARMS],
+        result = asyncio.run(b.worker(work, args.shard, campaigns=[work / 'arms' / n for n in arm_names(work)],
             budget_seconds=plan['hours']*3600 - plan['shutdown_reserve_seconds'],
             article_timeout=plan['article_timeout_seconds']))
         if result['status'] != 'done':

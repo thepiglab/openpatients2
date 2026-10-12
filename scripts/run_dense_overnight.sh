@@ -61,7 +61,7 @@ fi
 package_exists() {
   local candidate="$1" required
   for required in scripts/benchmark_dense_overnight.py scripts/dense_overnight.sbatch \
-      src/openpatients2/dense_overnight.py src/openpatients2/overnight_repairs.py \
+      src/openpatients2/dense_overnight.py src/openpatients2/overnight_repairs.py src/openpatients2/dense_ablation.py \
       src/openpatients2/dense_benchmark.py src/openpatients2/dense_benchmark_serving.py \
       src/openpatients2/dense_benchmark_telemetry.py \
       configs/hipergator/dense-benchmark/reference.jsonl.gz \
