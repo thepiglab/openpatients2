@@ -224,7 +224,7 @@ def compare_attributes(r, p):
 def _prf(tp, fp, fn):
     p = tp / (tp + fp) if tp + fp else None
     r = tp / (tp + fn) if tp + fn else None
-    f = 2 * p * r / (p + r) if p and r else (0.0 if p is not None and r is not None else None)
+    f = 2 * tp / (2 * tp + fp + fn) if 2 * tp + fp + fn else None
     return {'tp': tp, 'fp': fp, 'fn': fn, 'precision': p, 'recall': r, 'f1': f}
 
 

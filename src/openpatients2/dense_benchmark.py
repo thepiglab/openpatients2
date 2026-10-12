@@ -459,7 +459,7 @@ def paired_jobs(work, campaigns, shard):
             claim.rmdir()
 
 
-async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_timeout=None):
+async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_timeout=None, workload=None):
     from .dense_benchmark_serving import ServerGroup
     from .dense_benchmark_telemetry import monitor
     m = check_snapshot(work)
@@ -508,7 +508,7 @@ async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_ti
         if claimed is not None:
             first = next(claimed, None)
             pending = itertools.chain([first], claimed) if first else []
-        if not pending:
+        if not pending and workload is None:
             summary['status'] = 'done'
             return summary
         probe = ('import torch,vllm; from vllm.model_executor.models import ModelRegistry; '
@@ -539,29 +539,33 @@ async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_ti
                         write(logs / (name + '.error.json'), {'error': str(exc)})
                 await counters('metrics-before.txt')
                 budget_exhausted = False
-                for campaign, item in pending:
-                    if budget_seconds is not None and time.monotonic() - monotonic_start + (article_timeout or 900) >= budget_seconds:
-                        budget_exhausted = True
-                        break
-                    aid = item['article_id']
-                    write(logs / 'progress.json', {'article_id': aid, 'campaign': campaign.name, 'started_unix': time.time()})
-                    base = campaign / 'results/articles' / aid
-                    base.mkdir(parents=True, exist_ok=True)
-                    attempt = base / f'attempt-{len(list(base.glob("attempt-*"))):04d}'
-                    attempt.mkdir()
-                    if article_timeout is None:
-                        receipt = await run_article(campaign, item, endpoints[0]['endpoint'], attempt)
-                    else:
-                        try:
-                            receipt = await asyncio.wait_for(run_article(campaign, item, endpoints[0]['endpoint'], attempt), article_timeout)
-                        except TimeoutError:
-                            receipt = read(attempt / 'receipt.json')
-                            receipt.update(error_type='TimeoutError', error='Per-article overnight time budget exceeded')
-                            write(attempt / 'receipt.json', receipt)
-                    summary['articles'].append({'article_id': aid, 'campaign': campaign.name, 'status': receipt['status']})
-                    print(json.dumps({k: receipt[k] for k in ('article_id', 'status', 'wall_seconds', 'model_calls')}), flush=True)
-                    if any(p.poll() is not None for p in group.processes):
-                        raise RuntimeError('Model server exited; remaining articles are pending')
+                if workload is not None:
+                    await workload(endpoints[0]['endpoint'], logs)
+                else:
+                    budget_exhausted = False
+                    for campaign, item in pending:
+                        if budget_seconds is not None and time.monotonic() - monotonic_start + (article_timeout or 900) >= budget_seconds:
+                            budget_exhausted = True
+                            break
+                        aid = item['article_id']
+                        write(logs / 'progress.json', {'article_id': aid, 'campaign': campaign.name, 'started_unix': time.time()})
+                        base = campaign / 'results/articles' / aid
+                        base.mkdir(parents=True, exist_ok=True)
+                        attempt = base / f'attempt-{len(list(base.glob("attempt-*"))):04d}'
+                        attempt.mkdir()
+                        if article_timeout is None:
+                            receipt = await run_article(campaign, item, endpoints[0]['endpoint'], attempt)
+                        else:
+                            try:
+                                receipt = await asyncio.wait_for(run_article(campaign, item, endpoints[0]['endpoint'], attempt), article_timeout)
+                            except TimeoutError:
+                                receipt = read(attempt / 'receipt.json')
+                                receipt.update(error_type='TimeoutError', error='Per-article overnight time budget exceeded')
+                                write(attempt / 'receipt.json', receipt)
+                        summary['articles'].append({'article_id': aid, 'campaign': campaign.name, 'status': receipt['status']})
+                        print(json.dumps({k: receipt[k] for k in ('article_id', 'status', 'wall_seconds', 'model_calls')}), flush=True)
+                        if any(p.poll() is not None for p in group.processes):
+                            raise RuntimeError('Model server exited; remaining articles are pending')
                 await counters('metrics-after.txt')
             summary['status'] = ('budget_exhausted' if budget_exhausted else
                                  'done' if all(x['status'] == 'done' for x in summary['articles']) else 'errors')
@@ -697,7 +701,7 @@ def export(work):
     return {'archive': str(archive), 'bytes': archive.stat().st_size}
 
 
-def submit(work, account, qos, hours, resume=False, dry_run=False, *, script_name='dense_benchmark.sbatch', campaigns=None):
+def submit(work, account, qos, hours, resume=False, dry_run=False, *, script_name='dense_benchmark.sbatch', campaigns=None, worker_shards=None):
     check_snapshot(work)
     if not 1 <= hours <= 72:
         raise ValueError('--hours must be between 1 and 72; Slurm --test-only also checks current policy')
@@ -716,7 +720,9 @@ def submit(work, account, qos, hours, resume=False, dry_run=False, *, script_nam
               '--account='+account, '--qos='+qos, '--chdir='+str(work / 'code'),
               '--export=ALL,OP2_SUBMISSION_ID='+str(time.time_ns())]
     phases = [('setup', None)] if not resume or not (work / 'runtime.json').exists() else []
-    if campaigns is None:
+    if worker_shards is not None:
+        phases += [('worker', i) for i in worker_shards]
+    elif campaigns is None:
         phases += [('worker', i) for i in range(WORKERS)
                    if any(x['shard'] == i and not completed_attempt(work, x['article_id'])[0]
                           for x in read(work / 'manifest.json')['articles'])]

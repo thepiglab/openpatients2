@@ -685,6 +685,20 @@ class PilotRunner:
         self.results.append(result)
         return result
 
+    def clinical_messages(self, task, packet):
+        messages = messages_for(packet, task, namespace='bounded-pmc-pilot/1')
+        messages[-1]['content'] += '\nReturn only JSON matching SCHEMA:\n' + json.dumps(self.schemas[task])
+        if self.config.refinement_policy == 'source_aware':
+            messages[-1]['content'] += ('\nKeep explicit routes in route fields, not only medication names. '
+                'Split named laboratory/immunohistochemical panel members into individual observations. '
+                'Distinguish the performed test from an absent finding. Preserve specimen, value/unit, '
+                'planned versus performed status, and separate encounters. Do not infer missing results. '
+                'For observations, split numeric magnitude, comparator and unit into their fields. '
+                'Preserve the exact result notation in text_value, including scientific exponents; '
+                'keep reference intervals separate. Do not mistake flattened 109 for an explicit 10^9, '
+                'convert units, or copy a reference threshold as the patient result.')
+        return messages
+
     def clinical_checker(self, task, packet, segments):
         def checker(value):
             # target_patient=True: the shared CTX-PER-PATIENT packet rule (semantic_rules).
@@ -768,17 +782,7 @@ class PilotRunner:
                 task_segments = packet_segments(task_packet)
                 routing[task] = receipt | {'segment_ids':sorted(selected),
                     'request_source_characters':len(task_packet['text'])}
-            messages = messages_for(task_packet, task, namespace='bounded-pmc-pilot/1')
-            messages[-1]['content'] += '\nReturn only JSON matching SCHEMA:\n' + json.dumps(self.schemas[task])
-            if self.config.refinement_policy == 'source_aware':
-                messages[-1]['content'] += ('\nKeep explicit routes in route fields, not only medication names. '
-                    'Split named laboratory/immunohistochemical panel members into individual observations. '
-                    'Distinguish the performed test from an absent finding. Preserve specimen, value/unit, '
-                    'planned versus performed status, and separate encounters. Do not infer missing results. '
-                    'For observations, split numeric magnitude, comparator and unit into their fields. '
-                    'Preserve the exact result notation in text_value, including scientific exponents; '
-                    'keep reference intervals separate. Do not mistake flattened 109 for an explicit 10^9, '
-                    'convert units, or copy a reference threshold as the patient result.')
+            messages = self.clinical_messages(task, task_packet)
             return await self.call(task, messages, self.clinical_checker(task, task_packet, task_segments),
                                    identity, replica, task_segments, packet=task_packet)
         tasks = await asyncio.gather(*(clinical(task) for task in TASK_MODELS))
