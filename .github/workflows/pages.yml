@@ -1,0 +1,75 @@
+name: Publish article viewer
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/pages.yml'
+      - 'scripts/build_viewer_site.py'
+      - 'src/**'
+      - 'benchmarks/dense50/**'
+      - 'benchmarks/dense500/**'
+      - 'tests/test_viewer.py'
+      - 'pyproject.toml'
+      - 'uv.lock'
+  pull_request:
+    paths:
+      - '.github/workflows/pages.yml'
+      - 'scripts/build_viewer_site.py'
+      - 'src/**'
+      - 'benchmarks/dense50/**'
+      - 'benchmarks/dense500/**'
+      - 'tests/test_viewer.py'
+      - 'pyproject.toml'
+      - 'uv.lock'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: '3.13'
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.2.13'
+      - name: Install locked dependencies
+        run: uv sync --locked
+      - name: Check viewer export and review boundaries
+        run: uv run --locked pytest -q tests/test_viewer.py
+      - name: Build and optimize the static viewer
+        run: uv run --locked python scripts/build_viewer_site.py _site
+      - name: Upload website only
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

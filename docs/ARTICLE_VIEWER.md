@@ -104,7 +104,40 @@ bundles, article bundles, and reviewed figure/supplement outputs. Sources are
 `SOURCE_ROOT/articles/ARTICLE_ID/source.json`. Source and review discovery happen on each
 refresh, including files added after the server starts.
 
-## Hosting a website later
+## GitHub Pages
+
+The `Publish article viewer` workflow builds and deploys the existing viewer on
+relevant pushes to `main`, and can also be run from the Actions tab. Pull requests
+build and validate the site without deploying it.
+
+In the repository's **Settings → Pages → Build and deployment**, select
+**GitHub Actions** as the source. Once the workflow is on `main`, run it or push
+a viewer/data change. The deployment job reports the published URL; for this
+repository the default is <https://thepiglab.github.io/openpatients2/>.
+See [GitHub's custom workflow guide](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
+
+The build uses locked Python dependencies and the existing static exporter, then
+Bun 1.2.13 minifies the generated JavaScript and CSS. JSON is compacted without
+changing its data. Only the generated website is uploaded. The viewer source,
+layout, interactions, review gates, and relative URLs are unchanged.
+
+Pages includes the checked-in sources and current reviewed records from both
+`benchmarks/dense50` and `benchmarks/dense500`. Ignored workstation exports under
+`data/` are not part of this build; exported enrichments available only there
+will not appear on Pages. Drafts and stale reviews remain withheld by the viewer.
+Images and supplementary files still link to their original hosts.
+
+To reproduce the Pages build locally, install uv and Bun 1.2.13, then run:
+
+```bash
+uv run --locked python scripts/build_viewer_site.py _site
+uv run --locked python -m http.server 8000 --directory _site
+```
+
+Open `http://localhost:8000`. The output directory must be new or empty; use
+another output path for subsequent builds. `_site/` is ignored by Git.
+
+## Other static hosts
 
 Create a portable static site containing the UI, article catalog, reviewed
 records, and installed source text:
