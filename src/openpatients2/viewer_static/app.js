@@ -1218,7 +1218,6 @@ function enhanceSelect(select) {
   const sync = () => { value.textContent = select.selectedOptions[0]?.textContent || ''; };
   Object.defineProperty(select, 'value', {configurable: true, get() { return SELECT_VALUE.get.call(this); },
     set(v) { SELECT_VALUE.set.call(this, v); sync(); }});
-  new MutationObserver(sync).observe(select, {childList: true, subtree: true});
   sync();
 
   const items = () => [...list.children];
@@ -1249,15 +1248,16 @@ function enhanceSelect(select) {
     if (opt && select.value !== opt.value) { select.value = opt.value; select.dispatchEvent(new Event('change', {bubbles: true})); }
     close();
   };
-  const open = () => {
-    if (openDropdown && openDropdown !== close) openDropdown(false);
-    list.replaceChildren(...[...select.options].map((o, i) => {
+  const fill = () => list.replaceChildren(...[...select.options].map((o, i) => {
       const li = h('li', {role: 'option', id: `${label.replace(/\W+/g, '-')}-opt-${i}`, 'aria-selected': String(o.selected), class: o.selected ? 'selected' : null},
         h('span', 'dd-check', o.selected ? icon('check') : null), o.textContent);
       li.addEventListener('pointermove', () => { if (active !== i) highlight(i); });
       li.addEventListener('click', () => choose(i));
       return li;
     }));
+  const open = () => {
+    if (openDropdown && openDropdown !== close) openDropdown(false);
+    fill();
     list.hidden = false; trigger.setAttribute('aria-expanded', 'true');
     openDropdown = close;
     place();
@@ -1265,6 +1265,12 @@ function enhanceSelect(select) {
     list.focus({preventScroll: true});
     restart(list, 'dd-in');
   };
+
+  // Options can arrive or change while the menu is open (e.g. specialties once the catalog loads): rebuild it.
+  new MutationObserver(() => {
+    sync();
+    if (!list.hidden) { fill(); place(); highlight(select.selectedIndex); }
+  }).observe(select, {childList: true, subtree: true});
 
   trigger.addEventListener('click', () => list.hidden ? open() : close());
   trigger.addEventListener('keydown', e => {
