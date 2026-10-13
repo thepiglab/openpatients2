@@ -109,7 +109,7 @@ def test_missing_usage_and_nonissued_failure_are_visible(tmp_path):
     assert r['unknown_completion_tokens'] == 1
 
 
-def test_submission_preflight_dependencies_and_reverse_release(tmp_path, monkeypatch):
+def test_submission_queues_held_jobs_then_releases_dependencies(tmp_path, monkeypatch):
     work, _, _ = campaign(tmp_path, 4)
     seen, counter = [], 100
     def run(argv, **kwargs):
@@ -122,7 +122,8 @@ def test_submission_preflight_dependencies_and_reverse_release(tmp_path, monkeyp
     monkeypatch.setattr(b.subprocess, 'run', run)
     result = b.submit(work, 'account', 'qos', 12)
     assert len(result['jobs']) == 6
-    assert all('--test-only' in c for c in seen[:6])
+    assert not any('--test-only' in c for c in seen)
+    assert all('--hold' in c for c in seen[:6])
     jobs = result['jobs']
     assert all('--dependency=afterany:101' in j['argv'] for j in jobs[1:5])
     assert '--dependency=afterany:102:103:104:105' in jobs[5]['argv']

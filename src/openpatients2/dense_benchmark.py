@@ -713,7 +713,7 @@ def submit(work, account, qos, hours, resume=False, dry_run=False, *, script_nam
            gpu_memory='60G'):
     check_snapshot(work)
     if not 1 <= hours <= 72:
-        raise ValueError('--hours must be between 1 and 72; Slurm --test-only also checks current policy')
+        raise ValueError('--hours must be between 1 and 72; Slurm submission also checks current policy')
     ledger = work / 'submissions'
     if ledger.exists() and any(ledger.iterdir()) and not resume:
         raise ValueError('Already submitted. Use --resume after previous jobs are terminal')
@@ -753,8 +753,10 @@ def submit(work, account, qos, hours, resume=False, dry_run=False, *, script_nam
     commands = [command(*p) for p in phases]
     if dry_run:
         return {'commands_without_dependencies': commands, 'dependency_policy': 'held DAG; afterany setup/workers; release downstream first', 'submitted': False}
-    for cmd in commands:
-        subprocess.run([cmd[0], '--test-only', *cmd[1:]], check=True, env=env)
+    # Real sbatch validates each request while allowing pending jobs. Do not
+    # gate submission on --test-only's availability/start-time prediction.
+    # Every job stays held until the whole DAG has been accepted; submission
+    # failure cancels only this attempt's held jobs below.
     ledger.mkdir(exist_ok=True)
     receipt_path = ledger / f'{time.time_ns()}.json'
     jobs = []

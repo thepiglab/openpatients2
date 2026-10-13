@@ -130,7 +130,8 @@ args=(--parsable --account="$account" --qos="$qos" --partition=hpg-default
       --job-name=op2-dense-prepare --output="$bootstrap/prepare.log"
       "$bootstrap/bootstrap.sh" --bootstrap "$repo" "$work" "$revision" "$bootstrap"
       "$account" "$qos" "$hours")
-sbatch --test-only "${args[@]}"
+# Submit normally so Slurm can queue the job. --test-only is a start-time
+# estimate and can fail with EAGAIN even when a request can be queued.
 job="$(sbatch "${args[@]}")"
 printf '%s\n' "$job" > "$bootstrap/job-id.txt"
 printf 'Preparation job: %s\nSource: %s (%s)\nCampaign: %s\nLog: %s/prepare.log\n' \

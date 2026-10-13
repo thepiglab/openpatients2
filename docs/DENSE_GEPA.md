@@ -146,3 +146,10 @@ shasum -a 256 -c results.tar.gz.sha256 && tar -xzf results.tar.gz
 Inspect `summary/comparison.json`, `summary/proposed-overrides.json`,
 `results/gepa/TASK/selection.json`, `confirmation.json`, `optimizer.log`, saved
 calls/proposals, and `results/workers/*/job-*/gpu-telemetry.jsonl`.
+
+The launcher and CPU submission phase use normal `sbatch` so accepted jobs can
+wait in the queue. They do not require `--test-only` to predict a start time.
+All downstream jobs stay held until their complete dependency graph is accepted;
+a submission error cancels only the jobs created by that submission. Busy-cluster
+start-time estimates can fail with “Resource temporarily unavailable” without
+meaning that ordinary queued submission must fail.

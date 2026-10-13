@@ -24,8 +24,9 @@ and ordinary thinking on. To intentionally include all 260 completed articles, s
 launch. Existing annotations remain frozen. A second invocation is refused while
 the previous campaign has active jobs. Override `DENSE_HOURS` (default 8 per GPU),
 `DENSE_ACCOUNT`/`DENSE_QOS` (both default cai5724), or give an absolute campaign
-output path as the first argument. Account/QOS policy is checked with sbatch
-`--test-only`. Eight hours is an allocation cap, not a guaranteed completion time.
+output path as the first argument. Normal `sbatch` validates account/QOS policy
+and queues accepted jobs; submission is not gated by a `--test-only` start-time
+estimate, which can fail with “Resource temporarily unavailable” on a busy cluster. Eight hours is an allocation cap, not a guaranteed completion time.
 
 CPU preparation freezes source packets and reference membership. CPU setup
 installs the existing locked client dependencies, downloads the pinned model and
@@ -172,3 +173,11 @@ are shared**: additional jobs can wait or affect scheduling, so this is not a
 guarantee of zero scheduling impact. Existing queued/running jobs retain their
 frozen code and allocated resources. No benchmark jobs are submitted by local
 code preparation or tests.
+
+The posted cai5724 investment allowance is 32 CPUs, 250 GB host memory and
+8 GPUs. Five GPUs total does not imply that both campaigns can run every worker
+concurrently: four Fastino workers alone request 512 GB host memory. With the
+current conservative 128 GB-per-worker profile, Slurm must stagger Fastino
+workers under that memory allowance. Pending jobs consume no GPU allocation;
+their eight-hour time limit starts when they run. Account policy, burst QOS and
+other group users can change the effective availability.
