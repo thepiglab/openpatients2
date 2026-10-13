@@ -1178,22 +1178,6 @@ function initSplitter() {
   bar.addEventListener('dblclick', () => set(52));
 }
 
-/* The new theme spreads out as a circle from the button (View Transitions); instant where unsupported. */
-function toggleTheme(e) {
-  const root = document.documentElement;
-  const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
-  const apply = () => { root.dataset.theme = dark ? 'light' : 'dark'; store('theme', root.dataset.theme); };
-  if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) return apply();
-  const r = e?.currentTarget?.getBoundingClientRect?.();
-  const x = r ? r.left + r.width / 2 : innerWidth - 40, y = r ? r.top + r.height / 2 : 28;
-  // Percentages of the page, not pixels: some webviews scale pixel clip-paths by the device pixel ratio.
-  const W = innerWidth, H = innerHeight, at = `at ${(100 * x / W).toFixed(3)}% ${(100 * y / H).toFixed(3)}%`;
-  const radius = 100 * Math.hypot(Math.max(x, W - x), Math.max(y, H - y)) / (Math.hypot(W, H) / Math.SQRT2);
-  document.startViewTransition(apply).ready.then(() => root.animate(
-    {clipPath: [`circle(0% ${at})`, `circle(${radius.toFixed(3)}% ${at})`]},
-    {duration: 550, easing: 'cubic-bezier(.4, 0, .2, 1)', pseudoElement: '::view-transition-new(root)'}));
-}
-
 /* ---------- dropdowns ----------
    The native <select> stays the source of truth (value, options, change events). With a mouse or trackpad,
    a button + listbox stands in for the OS popup so the menu drops below the field; touch keeps the native picker. */
@@ -1220,7 +1204,7 @@ function enhanceSelect(select) {
     set(v) { SELECT_VALUE.set.call(this, v); sync(); }});
   sync();
 
-  const items = () => [...list.children];
+  const items = () => [...list.children].filter(li => !li.classList.contains('dd-loading'));
   const highlight = i => {
     const all = items();
     active = Math.max(0, Math.min(all.length - 1, i));
@@ -1248,13 +1232,16 @@ function enhanceSelect(select) {
     if (opt && select.value !== opt.value) { select.value = opt.value; select.dispatchEvent(new Event('change', {bubbles: true})); }
     close();
   };
+  // Menus filled from the catalog (specialty, article type, license) say so while it is still loading.
+  const loading = () => !state.catalog.length && select.options.length <= 1
+    ? h('li', {class: 'dd-loading', 'aria-disabled': 'true'}, 'Loading…') : null;
   const fill = () => list.replaceChildren(...[...select.options].map((o, i) => {
       const li = h('li', {role: 'option', id: `${label.replace(/\W+/g, '-')}-opt-${i}`, 'aria-selected': String(o.selected), class: o.selected ? 'selected' : null},
         h('span', 'dd-check', o.selected ? icon('check') : null), o.textContent);
       li.addEventListener('pointermove', () => { if (active !== i) highlight(i); });
       li.addEventListener('click', () => choose(i));
       return li;
-    }));
+    }), loading() || '');
   const open = () => {
     if (openDropdown && openDropdown !== close) openDropdown(false);
     fill();
@@ -1323,7 +1310,6 @@ function openLightbox(src, caption) {
 
 function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
 
-if (load('theme')) document.documentElement.dataset.theme = load('theme');
 if (load('libraryHidden')) document.body.classList.add('library-hidden');
 initSplitter();
 document.querySelectorAll('select').forEach(enhanceSelect);
@@ -1360,7 +1346,6 @@ syncAdvanced();
 $('specialty').addEventListener('change', () => { state.filter.specialty = $('specialty').value; renderCatalog(); });
 $('text-search').addEventListener('input', debounce(() => runFind(), 120));
 $('text-search').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); stepMatch(e.shiftKey ? -1 : 1); } });
-$('theme').onclick = toggleTheme;
 $('toggle-library').onclick = toggleLibrary;
 $('scrim').onclick = () => { document.body.classList.remove('library-open'); syncTabbar(); };
 $('show-source').onclick = () => showPane('source');
@@ -1373,7 +1358,6 @@ $('peek-open').onclick = jumpToActive;
 $('peek-prev').onclick = () => stepPeek(-1);
 $('peek-next').onclick = () => stepPeek(1);
 // The toad hops; only the name goes back to the overview page.
-$('toad').addEventListener('click', () => { hop(); boing(); });
 $('lightbox').addEventListener('click', e => { if (e.target === $('lightbox')) $('lightbox').close(); });
 
 document.addEventListener('keydown', e => {

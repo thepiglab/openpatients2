@@ -16,7 +16,24 @@ per article, and article type, bars for facts by record section, and coverage
 meters for media and each specialty. Every segment, bar, and meter links into the
 viewer (`/viewer.html`) with that filter applied, e.g.
 `viewer.html#specialty=cardiac` or `viewer.html#status=schema_reviewed&patients=5+`.
-Older links of the form `/#article=…` are forwarded to the viewer. No model, Node install,
+Older links of the form `/#article=…` are forwarded to the viewer.
+
+## Cohort builder
+
+**Cohort builder** in the header opens `/cohort.html`. It filters reviewed
+patients by specialty, age group, sex, course, condition, medication, and article
+features such as figures or supplements. Choices within a group are combined with
+OR, and groups are combined with AND. Each option shows how many patients it would
+leave. The filters are kept in the URL, so a cohort can be bookmarked or shared.
+Each row opens that patient in the viewer.
+
+**Export JSONL** streams one line per patient: the full reviewed record, plus its
+article ID, patient ID, PMCID, title, specialty, license, and source link. Records
+are re-checked against live review receipts at export time. **Download CSV**
+saves the table's summary columns. Ages come from the record's demographics, as
+documented or parsed from phrasing such as "13 years 6 months" or "DOL 30". Sex
+counts only the index patient, never relatives mentioned in the case. In a
+static build, the export is assembled in the browser from the article files. No model, Node install,
 extra dependencies, or article downloads are needed.
 
 The default library combines `data/dense_clinical_cases_v1` with live sources and

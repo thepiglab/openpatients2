@@ -149,7 +149,7 @@ def test_handler_does_not_serve_workspace_files(library):
     assert replies[0][0]==404
 
 
-@pytest.mark.parametrize('path,kind', [('/', 'text/html'), ('/viewer.html', 'text/html'), ('/home.js', 'text/javascript'), ('/toad.js', 'text/javascript'),
+@pytest.mark.parametrize('path,kind', [('/', 'text/html'), ('/viewer.html', 'text/html'), ('/home.js', 'text/javascript'), ('/common.js', 'text/javascript'), ('/cohort.html', 'text/html'), ('/cohort.js', 'text/javascript'),
                                        ('/manifest.webmanifest', 'application/manifest+json'),
                                        ('/icon-180.png', 'image/png')])
 def test_handler_serves_the_installable_app_shell(library, path, kind):
@@ -165,7 +165,7 @@ def test_static_build_is_portable_and_does_not_overwrite(library,tmp_path):
     assert result['articles']==1
     data=json.loads((out/'api/articles'/f'{AID}.json').read_text())
     assert data['patients'] and data['source']['segments'][0]['text']=='Exact evidence.'
-    assert all((out/name).exists() for name in ('app.js','index.html','viewer.html','home.js','toad.js','manifest.webmanifest','icon-180.png'))
+    assert all((out/name).exists() for name in ('app.js','index.html','viewer.html','home.js','common.js','cohort.html','cohort.js','manifest.webmanifest','icon-180.png'))
     with pytest.raises(ValueError,match='never overwritten'):build(lib,out)
 
 
@@ -267,3 +267,47 @@ def test_unsigned_supplement_sidecars_are_not_published(library):
     payload = lib.article(AID)
     assert payload['supplement_documents'] == [] and 'unsigned draft' not in json.dumps(payload)
     assert payload['source']['supplements'][0]['supplement_id'] == 'SM1'
+
+
+@pytest.mark.parametrize('item,years', [
+    ({'numeric_value': 76.0, 'unit': 'years'}, 76.0), ({'numeric_value': 3, 'unit': 'months'}, 0.25),
+    ({'text_value': 'Six-year-old'}, 6.0), ({'text_value': '13 years 6 months'}, 13.5),
+    ({'text_value': '21st day of life'}, 21 / 365.25), ({'text_value': 'DOL 30'}, 30 / 365.25),
+    ({'text_value': 'neonate'}, 0.0), ({'text_value': 'in his 70s'}, 75.0), ({'text_value': 'adult'}, None)])
+def test_age_phrasings_become_years(item, years):
+    from openpatients2.viewer import age_years
+    assert age_years(item) == pytest.approx(years) if years is not None else age_years(item) is None
+
+
+def test_patient_summary_reads_only_the_index_patient():
+    from openpatients2.viewer import patient_summary
+    patient = {'source': {'patient_target': {'patient_id': 'p2'}}, 'sections': {
+        'case_context': {'index_subject_description': 'Girl with lupus', 'species': 'human', 'subject_state': 'living_at_presentation'},
+        'demographics': {'items': [
+            {'subject': 'family_member', 'attribute': 'documented_sex', 'text_value': 'father'},
+            {'subject': 'family_member', 'attribute': 'age_other', 'numeric_value': 40, 'unit': 'years'},
+            {'subject': 'index_patient', 'attribute': 'documented_sex', 'text_value': 'Girl'},
+            {'subject': 'index_patient', 'attribute': 'age_at_presentation', 'text_value': 'eleven-year-old'}]},
+        'conditions': {'items': [{'subject': 'index_patient', 'assertion': 'present', 'name': 'Lupus nephritis'},
+                                 {'subject': 'index_patient', 'assertion': 'absent', 'name': 'Sepsis'}]}}}
+    row = patient_summary(patient)
+    assert (row['patient_id'], row['sex'], row['age_years'], row['age_group']) == ('p2', 'female', 11.0, 'child')
+    assert row['conditions'] == ['Lupus nephritis'] and row['subject_state'] == 'living_at_presentation'
+
+
+def test_export_streams_reviewed_patient_rows(library):
+    import io
+    lib, root, _, source = library
+    review(root, source)
+    cls = handler(lib); request = object.__new__(cls); request.wfile = io.BytesIO(); sent = []
+    request.send_response = lambda status: sent.append(status)
+    request.send_header = lambda k, v: sent.append((k, v))
+    request.end_headers = lambda: None
+    request.path = f'/api/export.jsonl?patients={AID}:p1,{AID}:p9'; request.do_GET()
+    rows = [json.loads(line) for line in request.wfile.getvalue().decode().splitlines()]
+    assert sent[0] == 200 and [(r['article_id'], r['patient_id']) for r in rows] == [(AID, 'p1')]
+    assert rows[0]['record']['source']['patient_target']['patient_id'] == 'p1'
+    bad = object.__new__(cls); replies = []
+    bad.send_json = lambda data, status=200: replies.append(status)
+    bad.path = '/api/export.jsonl?patients=../etc:p1'; bad.do_GET()
+    assert replies == [400]

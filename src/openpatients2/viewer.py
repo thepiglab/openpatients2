@@ -15,12 +15,12 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import unquote, urlsplit
+from urllib.parse import parse_qs, unquote, urlsplit
 
 from .dense_store import load as _load_store
 
 STATIC = Path(__file__).with_name('viewer_static')
-ASSETS = ('index.html', 'home.js', 'toad.js', 'viewer.html', 'app.js', 'style.css', 'manifest.webmanifest', 'icon-180.png', 'icon-512.png')
+ASSETS = ('index.html', 'home.js', 'common.js', 'cohort.html', 'cohort.js', 'viewer.html', 'app.js', 'style.css', 'manifest.webmanifest', 'icon-180.png', 'icon-512.png')
 TYPES = {'html': 'text/html; charset=utf-8', 'js': 'text/javascript; charset=utf-8', 'css': 'text/css; charset=utf-8',
          'webmanifest': 'application/manifest+json; charset=utf-8', 'png': 'image/png'}
 ID = re.compile(r'^[A-Za-z0-9][A-Za-z0-9_.-]{0,120}$')
@@ -72,6 +72,74 @@ def record_counts(patients):
         timeline = (patient.get('companions') or {}).get('timeline_v2') or patient.get('relative_timeline') or {}
         events += len(timeline.get('events') or [])
     return {'section_facts': dict(facts), 'section_patients': dict(having), 'event_count': events}
+
+
+SEX = {'male': 'male', 'man': 'male', 'm': 'male', 'boy': 'male', 'he': 'male', 'gentleman': 'male',
+       'male infant': 'male', 'male neonate': 'male', 'male fetus': 'male',
+       'female': 'female', 'woman': 'female', 'women': 'female', 'f': 'female', 'girl': 'female', 'lady': 'female',
+       'she': 'female', 'female infant': 'female', 'female neonate': 'female', 'female fetus': 'female'}
+AGE_UNITS = {'year': 1, 'years': 1, 'yr': 1, 'yrs': 1, 'y': 1, 'month': 1 / 12, 'months': 1 / 12, 'mo': 1 / 12,
+             'week': 7 / 365.25, 'weeks': 7 / 365.25, 'wk': 7 / 365.25, 'day': 1 / 365.25, 'days': 1 / 365.25,
+             'hour': 0, 'hours': 0, 'minute': 0, 'minutes': 0}
+AGE_ORDER = ('age_at_presentation', 'age_other', 'age_at_diagnosis')
+NUMBER_WORDS = {w: str(n) for n, w in enumerate('zero one two three four five six seven eight nine ten eleven twelve thirteen '
+                                                 'fourteen fifteen sixteen seventeen eighteen nineteen twenty'.split())}
+
+
+def patient_id(patient):
+    source = patient.get('source') or {}
+    return (source.get('patient_target') or {}).get('patient_id') or source.get('record_id') or patient.get('patient_id')
+
+
+def age_years(item):
+    """Age in years from a demographics item: numeric value + unit, or common phrasings like '13 years 1 month'."""
+    value, unit = item.get('numeric_value'), str(item.get('unit') or '').lower()
+    if isinstance(value, (int, float)) and (unit in AGE_UNITS or not unit):
+        return value * AGE_UNITS.get(unit, 1)
+    text = str(item.get('text_value') or '').lower()
+    text = re.sub(r'\b(' + '|'.join(NUMBER_WORDS) + r')\b', lambda m: NUMBER_WORDS[m.group(1)], text)
+    if re.search(r'\b(neonate|newborn|at birth)\b', text):
+        return 0.0
+    life_day = re.search(r'(\d+)(?:st|nd|rd|th)? day of life|day of life (\d+)|\bdol\s*(\d+)', text)
+    if life_day:
+        return float(next(g for g in life_day.groups() if g)) / 365.25
+    parts = dict((u[0], float(n)) for n, u in re.findall(r'(\d+(?:\.\d+)?)\s*-?\s*(year|month|week|day)', text))
+    if parts:
+        return parts.get('y', 0) + parts.get('m', 0) / 12 + parts.get('w', 0) * 7 / 365.25 + parts.get('d', 0) / 365.25
+    decade = re.search(r'\b(\d)0[\'’]?s\b', text)
+    return float(decade.group(1)) * 10 + 5 if decade else None
+
+
+def age_group(years):
+    if years is None:
+        return 'unknown'
+    for limit, name in ((28 / 365.25, 'neonate'), (1, 'infant'), (13, 'child'), (18, 'adolescent'), (65, 'adult')):
+        if years < limit:
+            return name
+    return 'older_adult'
+
+
+def patient_summary(patient):
+    """The small per-patient row the cohort builder filters on (the full record stays in the article payload)."""
+    sections = patient.get('sections') or {}
+    own = lambda item: item.get('subject') in (None, 'index_patient')
+    demo = [i for i in (sections.get('demographics') or {}).get('items') or [] if own(i)]
+    sex = next((SEX.get(str(i.get('text_value') or '').strip().lower()) for i in demo
+                if i.get('attribute') == 'documented_sex' and SEX.get(str(i.get('text_value') or '').strip().lower())), None)
+    ages = sorted((AGE_ORDER.index(i['attribute']), i) for i in demo if i.get('attribute') in AGE_ORDER)
+    years = next((y for _, i in ages if (y := age_years(i)) is not None), None)
+    context = sections.get('case_context') or {}
+    named = lambda name: sorted({str(i.get('name')).strip() for i in (sections.get(name) or {}).get('items') or []
+                                 if own(i) and i.get('assertion') == 'present' and i.get('name')})
+    counts = record_counts([patient])
+    return {'patient_id': patient_id(patient), 'description': context.get('index_subject_description'),
+            # Human life stages only; an animal's age stays numeric.
+            'sex': sex, 'age_years': round(years, 2) if years is not None else None,
+            'age_group': age_group(years) if context.get('species') in (None, 'human') else 'unknown',
+            'age_text': next((i.get('text_value') for _, i in ages if i.get('text_value')), None),
+            'subject_state': context.get('subject_state'), 'species': context.get('species'),
+            'conditions': named('conditions'), 'medications': named('medications'),
+            'facts': sum(counts['section_facts'].values()), 'events': counts['event_count']}
 
 
 def bound(receipt, **expected):
@@ -252,6 +320,7 @@ class Library:
                     figure_ehr_labeled=bool(ehr_labels),
                     supplements_extracted=len(documents) + len(supplementary),
                     **record_counts(patients),
+                    cohort=[patient_summary(p) for p in patients],
                     privacy_concern=any(p.get('identifiable_face') or p.get('sensitive_anatomy')
                                         or p.get('burned_in_identifiers') == 'direct_identifiers'
                                         for f in (privacy_flags or {}).get('figures', []) for p in f.get('panels', [])),
@@ -287,7 +356,7 @@ class Library:
                                'patient_count', 'figure_reviewed', 'text_available', 'article_url',
                                'disposition', 'figure_count', 'has_tables', 'supplement_count', 'article_type',
                                'figure_ehr_labeled', 'privacy_concern', 'supplements_extracted',
-                               'section_facts', 'section_patients', 'event_count')}
+                               'section_facts', 'section_patients', 'event_count', 'cohort')}
                         row['license'] = (meta.get('source_license') or {}).get('code', 'Unknown')
                         row['revision'] = digest(signature)
                         self.entries[aid] = (signature, row)
@@ -316,13 +385,25 @@ class Library:
             return result
 
 
+def export_row(detail, patient):
+    """One cohort export row: the full reviewed patient record plus where it came from."""
+    meta = detail['metadata']
+    return {'article_id': detail['article_id'], 'patient_id': patient_id(patient),
+            'record_id': (patient.get('source') or {}).get('record_id'), 'pmcid': meta.get('pmcid'),
+            'title': meta.get('title'), 'specialty': meta.get('primary_stratum'),
+            'license': (meta.get('source_license') or {}).get('code'), 'source_url': meta.get('article_url'),
+            'review_status': meta.get('status'), 'record': patient}
+
+
 def handler(library):
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self):
             path = unquote(urlsplit(self.path).path)
             try:
                 if path == '/api/catalog.json':
-                    return self.send_json(library.catalog())
+                    return self.send_json({**library.catalog(), 'export': True})
+                if path == '/api/export.jsonl':
+                    return self.send_export(parse_qs(urlsplit(self.path).query).get('patients', [''])[0])
                 if path.startswith('/api/articles/') and path.endswith('.json'):
                     return self.send_json(library.article(path[len('/api/articles/'):-5]))
                 name = 'index.html' if path == '/' else path[1:]
@@ -334,6 +415,31 @@ def handler(library):
                 self.send_json({'error': 'Unknown article'}, 404)
             except (ValueError, OSError, TypeError):
                 self.send_json({'error': 'Article data is being updated. Retrying shortly.'}, 503)
+
+        def send_export(self, wanted):
+            """Stream the selected patients (ARTICLE:PATIENT,...) as JSONL, one reviewed record per line."""
+            groups = defaultdict(set)
+            for item in filter(None, wanted.split(',')):
+                aid, _, pid = item.partition(':')
+                if not (ID.fullmatch(aid) and ID.fullmatch(pid)):
+                    return self.send_json({'error': f'Bad patient reference: {item}'}, 400)
+                groups[aid].add(pid)
+            if not groups:
+                return self.send_json({'error': 'No patients selected'}, 400)
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/x-ndjson; charset=utf-8')
+            self.send_header('Content-Disposition', f'attachment; filename="cohort-{datetime.now():%Y%m%d-%H%M%S}.jsonl"')
+            self.send_header('Cache-Control', 'no-store')
+            self.send_header('X-Content-Type-Options', 'nosniff')
+            self.end_headers()
+            for aid, pids in groups.items():
+                try:
+                    detail = library.article(aid)
+                except (KeyError, ValueError, OSError, TypeError):
+                    continue
+                for patient in detail['patients']:
+                    if patient_id(patient) in pids:
+                        self.wfile.write((json.dumps(export_row(detail, patient), ensure_ascii=False) + '\n').encode())
 
         def send_json(self, data, status=200):
             self.send_bytes(json.dumps(data, ensure_ascii=False).encode(), 'application/json; charset=utf-8', status)

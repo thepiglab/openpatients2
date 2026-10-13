@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#eef0ec" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e100f" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>Cohort Builder</title>
+<link rel="stylesheet" href="style.css">
+<script src="common.js" defer></script>
+<script src="cohort.js" defer></script>
+</head>
+<body class="home cohort-page">
+<header class="topbar">
+  <div class="brand">
+    <button id="toad" class="toad-btn" type="button" aria-label="Boing" title="Boing">
+      <svg class="toad" viewBox="0 0 32 32" aria-hidden="true">
+        <ellipse class="toad-body" cx="16" cy="20.5" rx="12.5" ry="8"/>
+        <circle class="toad-body" cx="10" cy="12.5" r="4.6"/>
+        <circle class="toad-body" cx="22" cy="12.5" r="4.6"/>
+        <circle class="toad-eye" cx="10.4" cy="12" r="1.9"/>
+        <circle class="toad-eye" cx="21.6" cy="12" r="1.9"/>
+        <path class="toad-mouth" d="M11.5 21.5q4.5 3 9 0"/>
+      </svg>
+    </button>
+    <a class="brand-link" href="./" title="Overview">Clinical Article Library</a>
+  </div>
+  <div class="topbar-actions">
+    
+    <button id="theme" class="icon-btn" type="button" aria-label="Switch light or dark theme" title="Light / dark">
+      <svg class="icon theme-moon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 9.5A5.5 5.5 0 0 1 6.5 2.5a5.5 5.5 0 1 0 7 7z"/></svg>
+      <svg class="icon theme-sun" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="2.8"/><path d="M8 1.5v1.6M8 12.9v1.6M1.5 8h1.6M12.9 8h1.6M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M3.4 12.6l1.1-1.1M11.5 4.5l1.1-1.1"/></svg>
+    </button>
+    <a class="button-link" href="viewer.html">Open<span class="wide-only">&nbsp;the viewer</span>&nbsp;→</a>
+  </div>
+</header>
+
+<main class="cohort">
+  <aside class="tile cohort-filters" aria-label="Cohort filters">
+    <div class="filters-head">
+      <h1>Cohort builder</h1>
+      <button id="reset" class="link-btn" type="button">Clear</button>
+    </div>
+    <div class="filter-group" data-group="specialty"><h2>Specialty</h2><div class="chips"></div></div>
+    <div class="filter-group" data-group="age"><h2>Age</h2><div class="chips"></div></div>
+    <div class="filter-group" data-group="sex"><h2>Sex</h2><div class="chips"></div></div>
+    <div class="filter-group" data-group="course"><h2>Course</h2><div class="chips"></div></div>
+    <div class="filter-group">
+      <h2><label for="cond">Condition</label></h2>
+      <input id="cond" type="search" placeholder="e.g. lupus, sepsis" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="filter-group">
+      <h2><label for="med">Medication</label></h2>
+      <input id="med" type="search" placeholder="e.g. methotrexate" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="filter-group" data-group="article"><h2>Article</h2><div class="chips"></div></div>
+  </aside>
+
+  <section class="tile cohort-results" aria-label="Matching patients">
+    <div class="results-head">
+      <div>
+        <p class="results-count" id="count" role="status">Loading…</p>
+        <p class="results-summary muted" id="summary"></p>
+      </div>
+      <div class="results-actions">
+        <button id="csv" class="link-btn" type="button">Download CSV</button>
+        <button id="export" class="button-link" type="button">Export JSONL</button>
+      </div>
+    </div>
+    <div class="table-scroll">
+      <table class="data-table cohort-table">
+        <thead><tr>
+          <th><button type="button" data-sort="description">Patient</button></th>
+          <th class="num"><button type="button" data-sort="age_years">Age</button></th>
+          <th><button type="button" data-sort="sex">Sex</button></th>
+          <th><button type="button" data-sort="specialty">Specialty</button></th>
+          <th>Conditions</th>
+          <th class="num"><button type="button" data-sort="facts">Facts</button></th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p class="more"><button id="more" class="link-btn" type="button" hidden>Show more</button></p>
+  </section>
+</main>
+<div class="viz-tip" id="tip" role="tooltip" hidden></div>
+</body>
+</html>

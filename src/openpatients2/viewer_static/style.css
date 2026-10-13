@@ -189,6 +189,7 @@ div.brand:hover .toad { transform: none; }
 }
 .dd-list li.active { background: var(--hover); color: var(--ink); }
 .dd-list li.selected { color: var(--ink); font-weight: 550; }
+.dd-list li.dd-loading { padding-left: 28px; color: var(--muted); font-style: italic; }
 .dd-check { display: inline-grid; place-items: center; width: 16px; flex: none; color: var(--accent); }
 .dd-check .icon { width: 14px; height: 14px; stroke-width: 2; }
 
@@ -748,4 +749,54 @@ a.meter:hover { background: var(--hover); }
 @media (max-width: 380px) {
   .donut-wrap { flex-direction: column; align-items: stretch; }
   .donut { align-self: center; }
+}
+
+/* ---------- cohort builder (cohort.html) ---------- */
+
+.cohort {
+  display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 12px; align-items: start;
+  padding: 4px max(16px, env(safe-area-inset-right)) 24px max(16px, env(safe-area-inset-left));
+}
+.cohort > .tile { grid-column: auto; }
+.cohort-filters { position: sticky; top: 12px; max-height: calc(100dvh - 92px); overflow: auto; overscroll-behavior: contain; }
+.filters-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px; }
+.filters-head h1 { margin: 0; font-size: 17px; font-weight: 650; letter-spacing: -.01em; }
+.filter-group { padding: 12px 0; border-top: 1px solid var(--line); }
+.filter-group:first-of-type { border-top: 0; }
+.filter-group h2 { margin: 0 0 8px; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border: 1px solid var(--line); border-radius: 99px;
+  background: var(--sheet); color: var(--ink-2); font-size: 13px; cursor: pointer; transition: background .15s, border-color .15s, color .15s;
+}
+.chip:hover:not(:disabled) { border-color: var(--faint); color: var(--ink); }
+.chip.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.chip:disabled { opacity: .45; cursor: default; }
+.chip-n { font-size: 11.5px; font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; }
+.chip.on .chip-n { color: var(--accent-ink); }
+
+.cohort-results { padding-bottom: 8px; }
+.results-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin-bottom: 12px; }
+.results-count { margin: 0; font-size: 20px; font-weight: 650; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.results-summary { margin: 2px 0 0; font-size: 13px; }
+.results-actions { display: flex; align-items: center; gap: 8px; }
+.results-actions button.button-link { border: 0; cursor: pointer; }
+.results-actions button:disabled { opacity: .5; cursor: default; }
+.cohort-table th button { padding: 0; border: 0; background: none; font: inherit; color: inherit; cursor: pointer; }
+.cohort-table th button[data-dir="asc"]::after { content: " ↑"; }
+.cohort-table th button[data-dir="desc"]::after { content: " ↓"; }
+.cohort-table tbody tr { cursor: pointer; transition: background .12s; }
+.cohort-table tbody tr:hover { background: var(--hover); }
+.cohort-table td { vertical-align: top; }
+.patient-link { display: block; color: var(--ink); font-weight: 500; text-decoration: none; }
+.patient-link:hover { color: var(--accent-ink); }
+.row-article { display: block; margin-top: 2px; font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 46ch; }
+.cohort-table .conds { font-size: 13px; color: var(--ink-2); max-width: 36ch; }
+.more { margin: 10px 0 0; text-align: center; }
+
+@media (max-width: 900px) {
+  .cohort { grid-template-columns: 1fr; padding-left: max(8px, env(safe-area-inset-left)); padding-right: max(8px, env(safe-area-inset-right)); }
+  .cohort-filters { position: static; max-height: none; }
+  .cohort-table th:nth-child(5), .cohort-table td:nth-child(5) { display: none; }
+  .row-article { max-width: 28ch; }
 }
