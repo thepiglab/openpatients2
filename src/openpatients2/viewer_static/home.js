@@ -174,11 +174,19 @@ function render(c) {
 }
 
 if (load('theme')) document.documentElement.dataset.theme = load('theme');
-$('theme').onclick = () => {
+/* The new theme spreads out as a circle from the button (View Transitions); instant where unsupported. */
+$('theme').onclick = e => {
   const root = document.documentElement;
   const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
-  root.dataset.theme = dark ? 'light' : 'dark';
-  store('theme', root.dataset.theme);
+  const apply = () => { root.dataset.theme = dark ? 'light' : 'dark'; store('theme', root.dataset.theme); };
+  if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) return apply();
+  const r = e.currentTarget.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+  // Percentages of the page, not pixels: some webviews scale pixel clip-paths by the device pixel ratio.
+  const W = innerWidth, H = innerHeight, at = `at ${(100 * x / W).toFixed(3)}% ${(100 * y / H).toFixed(3)}%`;
+  const radius = 100 * Math.hypot(Math.max(x, W - x), Math.max(y, H - y)) / (Math.hypot(W, H) / Math.SQRT2);
+  document.startViewTransition(apply).ready.then(() => root.animate(
+    {clipPath: [`circle(0% ${at})`, `circle(${radius.toFixed(3)}% ${at})`]},
+    {duration: 550, easing: 'cubic-bezier(.4, 0, .2, 1)', pseudoElement: '::view-transition-new(root)'}));
 };
 
 fetch('api/catalog.json', {cache: 'no-store'})

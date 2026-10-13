@@ -103,6 +103,7 @@ def setup(work):
         raise ValueError('Unexpected model architecture/context')
     if b.sha(weights / 'chat_template.jinja') != TEMPLATE_SHA:
         raise ValueError('Pinned chat template changed')
+    b.write(weights / 'op2_snapshot.json', {'model_id': MODEL, 'revision': REVISION})
     sif = runtime / 'vllm-0.30.0.sif'
     if not sif.exists():
         subprocess.run(['apptainer', 'pull', str(sif), b.IMAGE], check=True)
@@ -133,6 +134,8 @@ def setup(work):
     b.write(work / 'results/setup-probe.json', {'returncode': result.returncode,
                                                'stdout': result.stdout, 'stderr': result.stderr})
     result.check_returncode()
+    from .dense_benchmark_serving import ServerGroup
+    ServerGroup(serving(work, 0, work / 'results/setup'), str(work), str(work / 'results/setup')).preflight()
     files = {}
     for path in [sif] + [p for p in weights.rglob('*') if p.is_file() and '.cache' not in p.parts]:
         files[str(path.relative_to(work))] = {'sha256': b.sha(path), 'bytes': path.stat().st_size,
@@ -141,6 +144,44 @@ def setup(work):
                                    'model_revision': REVISION, 'template_sha256': TEMPLATE_SHA,
                                    'setup_started_unix': started, 'setup_seconds': time.time()-started})
     return {'ready': True, 'runtime_files': len(files)}
+
+
+def repair(work):
+    """CPU-only recovery of already-downloaded, hashed snapshots missing metadata."""
+    check(work)
+    assert_idle(work)
+    runtime = work / 'runtime'
+    owner = {'work': str(work.resolve()), 'model': MODEL, 'revision': REVISION}
+    if runtime.is_symlink() or b.read(runtime / 'model-owner.json') != owner:
+        raise ValueError('Runtime ownership mismatch')
+    rt = b.read(work / 'runtime.json')
+    if not rt.get('ready') or rt.get('model_revision') != REVISION or rt.get('template_sha256') != TEMPLATE_SHA:
+        raise ValueError('CPU setup did not complete for the pinned Fastino revision')
+    required = {'runtime/weights/config.json', 'runtime/weights/chat_template.jinja', 'runtime/vllm-0.30.0.sif'}
+    if not required <= rt['files'].keys() or not any(name.endswith('.safetensors') for name in rt['files']):
+        raise ValueError('Incomplete recorded runtime')
+    # Rehash on CPU before supplying missing provenance. Never redownload on a GPU.
+    for name, info in rt['files'].items():
+        path = work / name
+        if not path.resolve().is_relative_to(runtime.resolve()) or path.is_symlink() or b.sha(path) != info['sha256']:
+            raise ValueError('Runtime artifact changed: ' + name)
+        if path.stat().st_size != info['bytes'] or path.stat().st_mtime_ns != info['mtime_ns']:
+            raise ValueError('Runtime artifact metadata changed: ' + name)
+    weights = runtime / 'weights'
+    if weights.is_symlink() or b.sha(weights / 'chat_template.jinja') != TEMPLATE_SHA:
+        raise ValueError('Unexpected model/template location')
+    snapshot = weights / 'op2_snapshot.json'
+    if snapshot.exists():
+        if b.read(snapshot) != {'model_id': MODEL, 'revision': REVISION}:
+            raise ValueError('Conflicting snapshot metadata')
+    else:
+        b.write(snapshot, {'model_id': MODEL, 'revision': REVISION})
+    rt['files']['runtime/weights/op2_snapshot.json'] = {
+        'sha256': b.sha(snapshot), 'bytes': snapshot.stat().st_size, 'mtime_ns': snapshot.stat().st_mtime_ns}
+    b.write(work / 'runtime.json', rt)
+    b.write(work / 'results/metadata-repair.json', {'completed_unix': time.time(), 'revision': REVISION,
+        'note': 'CPU rehashed existing runtime and added missing serving metadata; frozen code/inputs unchanged'})
+    return {'repaired': True, 'model_revision': REVISION, 'downloaded_again': False}
 
 
 def serving(work, shard, logdir):
@@ -376,7 +417,7 @@ def aggregate(work):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='command', required=True)
-    for command in ('prepare', 'setup', 'submit', 'worker', 'aggregate', 'status', 'verify', 'cleanup'):
+    for command in ('prepare', 'setup', 'repair', 'submit', 'worker', 'aggregate', 'status', 'verify', 'cleanup'):
         p = sub.add_parser(command)
         p.add_argument('--work', type=Path, required=True)
         if command == 'prepare':
@@ -389,13 +430,21 @@ def main(argv=None):
             p.add_argument('--resume', action='store_true'); p.add_argument('--dry-run', action='store_true')
         if command == 'worker':
             p.add_argument('--shard', type=int, required=True)
+        if command == 'repair':
+            p.add_argument('--resubmit', action='store_true')
+            p.add_argument('--account', default='cai5724'); p.add_argument('--qos', default='cai5724')
     args = parser.parse_args(argv)
     work = args.work.resolve()
     if args.command == 'prepare':
         result = prepare(args.root.resolve(), work, args.expected, args.hours, args.include_test)
     else:
         m = check(work)
-        if args.command == 'submit':
+        if args.command == 'repair':
+            result = repair(work)
+            if args.resubmit:
+                result['submission'] = b.submit(work, args.account, args.qos, m['fastino']['hours'], resume=True,
+                    script_name='dense_fastino.sbatch', campaigns=campaigns(work), gpu_memory='128G')
+        elif args.command == 'submit':
             result = b.submit(work, args.account, args.qos, m['fastino']['hours'], args.resume, args.dry_run,
                               script_name='dense_fastino.sbatch', campaigns=campaigns(work), gpu_memory='128G')
         elif args.command == 'worker':

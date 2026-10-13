@@ -15,6 +15,7 @@ const TITLE_KEYS = ['name', 'attribute', 'event', 'substance', 'action_text', 'd
 const EVIDENCE_KEYS = new Set(['evidence', 'documentation_evidence', 'attribution_evidence']);
 const ICONS = {
   chevron: 'M6 4l4 4-4 4',
+  check: 'M3.5 8.5l3 3 6-7',
   locate: 'M8 13.5A5.5 5.5 0 1 0 8 2.5a5.5 5.5 0 0 0 0 11zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
 };
 
@@ -1207,11 +1208,117 @@ function initSplitter() {
   bar.addEventListener('dblclick', () => set(52));
 }
 
-function toggleTheme() {
+/* The new theme spreads out as a circle from the button (View Transitions); instant where unsupported. */
+function toggleTheme(e) {
   const root = document.documentElement;
   const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
-  root.dataset.theme = dark ? 'light' : 'dark';
-  store('theme', root.dataset.theme);
+  const apply = () => { root.dataset.theme = dark ? 'light' : 'dark'; store('theme', root.dataset.theme); };
+  if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) return apply();
+  const r = e?.currentTarget?.getBoundingClientRect?.();
+  const x = r ? r.left + r.width / 2 : innerWidth - 40, y = r ? r.top + r.height / 2 : 28;
+  // Percentages of the page, not pixels: some webviews scale pixel clip-paths by the device pixel ratio.
+  const W = innerWidth, H = innerHeight, at = `at ${(100 * x / W).toFixed(3)}% ${(100 * y / H).toFixed(3)}%`;
+  const radius = 100 * Math.hypot(Math.max(x, W - x), Math.max(y, H - y)) / (Math.hypot(W, H) / Math.SQRT2);
+  document.startViewTransition(apply).ready.then(() => root.animate(
+    {clipPath: [`circle(0% ${at})`, `circle(${radius.toFixed(3)}% ${at})`]},
+    {duration: 550, easing: 'cubic-bezier(.4, 0, .2, 1)', pseudoElement: '::view-transition-new(root)'}));
+}
+
+/* ---------- dropdowns ----------
+   The native <select> stays the source of truth (value, options, change events). With a mouse or trackpad,
+   a button + listbox stands in for the OS popup so the menu drops below the field; touch keeps the native picker. */
+const SELECT_VALUE = Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value');
+let openDropdown = null;
+
+function enhanceSelect(select) {
+  if (!matchMedia('(hover: hover) and (pointer: fine)').matches || select.dataset.enhanced) return;
+  select.dataset.enhanced = '1';
+  const label = select.getAttribute('aria-label') || select.closest('label')?.firstChild?.textContent?.trim() || '';
+  const value = h('span', 'dd-value');
+  const trigger = h('button', {type: 'button', class: 'dd-trigger', 'aria-haspopup': 'listbox', 'aria-expanded': 'false', 'aria-label': label}, value);
+  const list = h('ul', {class: 'dd-list', role: 'listbox', tabindex: '-1', 'aria-label': label, hidden: true});
+  // The trigger comes first so a wrapping <label> activates it rather than the hidden select.
+  select.before(trigger);
+  select.classList.add('dd-native');
+  select.tabIndex = -1;
+  select.setAttribute('aria-hidden', 'true');
+  document.body.append(list);
+  let active = -1, typed = '', typedAt = 0;
+
+  const sync = () => { value.textContent = select.selectedOptions[0]?.textContent || ''; };
+  Object.defineProperty(select, 'value', {configurable: true, get() { return SELECT_VALUE.get.call(this); },
+    set(v) { SELECT_VALUE.set.call(this, v); sync(); }});
+  new MutationObserver(sync).observe(select, {childList: true, subtree: true});
+  sync();
+
+  const items = () => [...list.children];
+  const highlight = i => {
+    const all = items();
+    active = Math.max(0, Math.min(all.length - 1, i));
+    all.forEach((li, j) => li.classList.toggle('active', j === active));
+    if (all[active]) { list.setAttribute('aria-activedescendant', all[active].id); all[active].scrollIntoView({block: 'nearest'}); }
+  };
+  const place = () => {
+    const r = trigger.getBoundingClientRect(), below = innerHeight - r.bottom - 12, above = r.top - 12;
+    const up = below < 220 && above > below;
+    list.classList.toggle('up', up);
+    list.style.minWidth = r.width + 'px';
+    list.style.maxHeight = Math.min(340, up ? above : below) + 'px';
+    list.style.left = Math.min(r.left, innerWidth - list.offsetWidth - 8) + 'px';
+    list.style.top = up ? '' : (r.bottom + 6) + 'px';
+    list.style.bottom = up ? (innerHeight - r.top + 6) + 'px' : '';
+  };
+  const close = (focus = true) => {
+    if (list.hidden) return;
+    list.hidden = true; trigger.setAttribute('aria-expanded', 'false');
+    openDropdown = null;
+    if (focus) trigger.focus();
+  };
+  const choose = i => {
+    const opt = select.options[i];
+    if (opt && select.value !== opt.value) { select.value = opt.value; select.dispatchEvent(new Event('change', {bubbles: true})); }
+    close();
+  };
+  const open = () => {
+    if (openDropdown && openDropdown !== close) openDropdown(false);
+    list.replaceChildren(...[...select.options].map((o, i) => {
+      const li = h('li', {role: 'option', id: `${label.replace(/\W+/g, '-')}-opt-${i}`, 'aria-selected': String(o.selected), class: o.selected ? 'selected' : null},
+        h('span', 'dd-check', o.selected ? icon('check') : null), o.textContent);
+      li.addEventListener('pointermove', () => { if (active !== i) highlight(i); });
+      li.addEventListener('click', () => choose(i));
+      return li;
+    }));
+    list.hidden = false; trigger.setAttribute('aria-expanded', 'true');
+    openDropdown = close;
+    place();
+    highlight(select.selectedIndex);
+    list.focus({preventScroll: true});
+    restart(list, 'dd-in');
+  };
+
+  trigger.addEventListener('click', () => list.hidden ? open() : close());
+  trigger.addEventListener('keydown', e => {
+    if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(e.key)) { e.preventDefault(); open(); }
+  });
+  list.addEventListener('keydown', e => {
+    const n = items().length;
+    const keys = {ArrowDown: () => highlight(active + 1), ArrowUp: () => highlight(active - 1),
+      Home: () => highlight(0), End: () => highlight(n - 1), PageDown: () => highlight(active + 8), PageUp: () => highlight(active - 8),
+      Enter: () => choose(active), ' ': () => choose(active), Escape: () => close(), Tab: () => close(false)};
+    if (keys[e.key]) { if (e.key !== 'Tab') e.preventDefault(); e.stopPropagation(); keys[e.key](); return; }
+    if (e.key.length === 1 && !e.metaKey && !e.ctrlKey) {
+      // Type-ahead: keep typing to narrow, pause to start over.
+      typed = (Date.now() - typedAt > 700 ? '' : typed) + e.key.toLowerCase(); typedAt = Date.now();
+      const all = items(), from = typed.length === 1 ? active + 1 : active;
+      const hit = [...all.slice(from), ...all.slice(0, from)].find(li => li.textContent.trim().toLowerCase().startsWith(typed));
+      if (hit) highlight(all.indexOf(hit));
+      e.stopPropagation();
+    }
+  });
+  list.addEventListener('blur', e => { if (!list.contains(e.relatedTarget) && e.relatedTarget !== trigger) close(false); });
+  document.addEventListener('pointerdown', e => { if (!list.hidden && !list.contains(e.target) && !trigger.contains(e.target)) close(false); }, true);
+  addEventListener('resize', () => close(false));
+  document.addEventListener('scroll', e => { if (!list.hidden && !list.contains(e.target)) close(false); }, true);
 }
 
 function initLightboxSwipe() {
@@ -1243,6 +1350,7 @@ function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTi
 if (load('theme')) document.documentElement.dataset.theme = load('theme');
 if (load('libraryHidden')) document.body.classList.add('library-hidden');
 initSplitter();
+document.querySelectorAll('select').forEach(enhanceSelect);
 initSwipe();
 initScrollChrome();
 initLightboxSwipe();
@@ -1295,7 +1403,7 @@ $('lightbox').addEventListener('click', e => { if (e.target === $('lightbox')) $
 
 document.addEventListener('keydown', e => {
   if (document.querySelector('dialog[open]')) return;
-  const typing = e.target.closest?.('input, select, textarea');
+  const typing = e.target.closest?.('input, select, textarea, [role="listbox"]');
   if (e.key === 'Escape') {
     if (typing) e.target.blur();
     else if (!$('peek').hidden) closePeek();

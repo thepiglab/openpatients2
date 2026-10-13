@@ -720,8 +720,10 @@ def submit(work, account, qos, hours, resume=False, dry_run=False, *, script_nam
     if resume and ledger.exists():
         old_ids = [str(j['id']) for p in ledger.glob('*.json') for j in read(p)['jobs']]
         if old_ids:
-            live = subprocess.run(['squeue', '-h', '-j', ','.join(old_ids), '-o', '%i'], check=True, text=True, capture_output=True)
-            if live.stdout.strip():
+            # Finished IDs may already be purged from squeue. Inspect the user
+            # queue and match only this campaign's IDs; unrelated runs are fine.
+            live = subprocess.run(['squeue', '-h', '-u', os.environ['USER'], '-o', '%i'], check=True, text=True, capture_output=True)
+            if set(old_ids) & set(live.stdout.split()):
                 raise ValueError('Previous campaign jobs are still active; wait before --resume')
     (work / 'logs').mkdir(exist_ok=True)
     script = work / 'code/scripts' / script_name

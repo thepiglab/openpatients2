@@ -181,3 +181,27 @@ current conservative 128 GB-per-worker profile, Slurm must stagger Fastino
 workers under that memory allowance. Pending jobs consume no GPU allocation;
 their eight-hour time limit starts when they run. Account policy, burst QOS and
 other group users can change the effective availability.
+
+## Recover the missing snapshot metadata failure
+
+An early launcher version downloaded and hashed Fastino successfully but omitted
+`runtime/weights/op2_snapshot.json`, which the common server preflight requires.
+Affected workers fail before model startup with “Missing pinned op2_snapshot.json”.
+CPU setup now writes the pinned model/revision marker, includes it in runtime
+hashes, and runs the real server preflight before writing the ready receipt.
+
+After pulling the fix, recover an existing campaign with completed CPU setup:
+
+```bash
+bash scripts/repair_dense_fastino.sh /blue/cai6734/ehr_agent/op2-dense-fastino/run-20261013-121428
+```
+
+This submits one small CPU job. It refuses active Fastino setup/workers, verifies
+runtime ownership and rehashes the existing artifacts, adds missing metadata,
+then submits a resume of the same frozen campaign. It does not redownload weights
+or change the frozen source/code/reference. It leaves unrelated campaigns alone.
+Progress uses the existing status command; recovery logs are
+`$WORK/logs/repair-JOBID.log`. After resumed workers terminate, CPU scoring replaces
+the earlier partial report/export and cleans up only on complete verification.
+If the original runtime was incomplete or modified, recovery refuses; inspect
+that error before starting a new campaign.

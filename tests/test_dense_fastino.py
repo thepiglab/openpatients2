@@ -217,6 +217,7 @@ def test_cpu_setup_pins_download_and_records_artifacts(tmp_path, monkeypatch):
         compile(argv[argv.index('-c')+1], '<cpu-probe>', 'exec')
         return SimpleNamespace(returncode=0, stdout='verified', stderr='', check_returncode=lambda: None)
     monkeypatch.setattr(f.subprocess, 'run', run)
+    monkeypatch.setattr(shutil, 'which', lambda name: '/usr/bin/apptainer')
     # setup changes these for its private download; keep this test hermetic.
     monkeypatch.setenv('HF_HOME', '')
     monkeypatch.setenv('HF_XET_CACHE', '')
@@ -225,6 +226,8 @@ def test_cpu_setup_pins_download_and_records_artifacts(tmp_path, monkeypatch):
     rt = b.read(work / 'runtime.json')
     assert rt['model_revision'] == f.REVISION
     assert 'runtime/weights/test.safetensors' in rt['files']
+    assert b.read(work / 'runtime/weights/op2_snapshot.json') == {'model_id': f.MODEL, 'revision': f.REVISION}
+    assert 'runtime/weights/op2_snapshot.json' in rt['files']
     assert not any('drafter' in p for p in rt['files'])
     assert b.read(work / 'results/setup-probe.json')['returncode'] == 0
 
@@ -309,3 +312,54 @@ def test_other_campaign_job_does_not_block_or_get_cancelled(tmp_path, monkeypatc
     monkeypatch.setattr(f.subprocess, 'run', run)
     f.assert_idle(work)
     assert len(seen) == 1 and seen[0][0] == 'squeue'
+
+
+def repair_fixture(tmp_path, monkeypatch):
+    work, refs, m = fixture_campaign(tmp_path, 1)
+    weights = work / 'runtime/weights'
+    b.write(weights / 'config.json', {'architectures': ['NemotronHForCausalLM']})
+    (weights / 'chat_template.jinja').write_text('fixture template')
+    monkeypatch.setattr(f, 'TEMPLATE_SHA', b.sha(weights / 'chat_template.jinja'))
+    files = {}
+    for path in (work / 'runtime').rglob('*'):
+        if path.is_file() and path.name != 'model-owner.json':
+            files[str(path.relative_to(work))] = {'sha256': b.sha(path), 'bytes': path.stat().st_size,
+                                                'mtime_ns': path.stat().st_mtime_ns}
+    b.write(work / 'runtime.json', {'ready': True, 'model_revision': f.REVISION,
+                                   'template_sha256': f.TEMPLATE_SHA, 'files': files})
+    return work
+
+
+def test_repair_reuses_download_and_passes_real_server_preflight(tmp_path, monkeypatch):
+    from openpatients2.dense_benchmark_serving import ServerGroup
+    work = repair_fixture(tmp_path, monkeypatch)
+    monkeypatch.setattr(shutil, 'which', lambda name: '/usr/bin/apptainer')
+    group = ServerGroup(f.serving(work, 0, work), str(work), str(work / 'server'))
+    with pytest.raises(ValueError, match='Missing pinned op2_snapshot'):
+        group.preflight()
+    manifest_hash = b.sha(work / 'manifest.json')
+    assert f.repair(work)['repaired']
+    assert group.preflight() == {'model_id': f.MODEL, 'revision': f.REVISION}
+    info = b.read(work / 'runtime.json')['files']['runtime/weights/op2_snapshot.json']
+    assert info['sha256'] == b.sha(work / 'runtime/weights/op2_snapshot.json')
+    assert f.repair(work)['repaired']  # safe repeat; existing metadata must agree
+    assert b.sha(work / 'manifest.json') == manifest_hash
+
+
+def test_repair_refuses_corrupt_download_before_adding_metadata(tmp_path, monkeypatch):
+    work = repair_fixture(tmp_path, monkeypatch)
+    (work / 'runtime/weights/test.safetensors').write_text('corrupted')
+    with pytest.raises(ValueError, match='artifact changed'):
+        f.repair(work)
+    assert not (work / 'runtime/weights/op2_snapshot.json').exists()
+
+
+def test_repair_can_resubmit_only_original_fastino_campaign(tmp_path, monkeypatch):
+    work = repair_fixture(tmp_path, monkeypatch)
+    seen = []
+    monkeypatch.setattr(b, 'submit', lambda *args, **kwargs: seen.append((args, kwargs)) or {'submitted': True})
+    f.main(['repair', '--work', str(work), '--resubmit'])
+    assert len(seen) == 1
+    args, kwargs = seen[0]
+    assert args[0] == work and kwargs['resume']
+    assert kwargs['campaigns'] == [work] and kwargs['script_name'] == 'dense_fastino.sbatch'

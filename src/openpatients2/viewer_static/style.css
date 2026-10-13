@@ -31,6 +31,9 @@
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --ease: cubic-bezier(.2, .7, .2, 1);
   --spring: cubic-bezier(.34, 1.56, .64, 1);
+  /* Scroll containers clip their children's shadows and outlines at the padding edge. Any scrolling list of
+     pills/cards with --shadow-card or a focus ring must keep at least this much padding on every side. */
+  --ring-room: 6px;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
@@ -90,7 +93,7 @@ a:hover { text-decoration-color: currentColor; }
 ::-webkit-scrollbar-thumb { background: var(--faint); border: 4px solid transparent; border-radius: 99px; background-clip: content-box; }
 ::-webkit-scrollbar-track { background: transparent; }
 
-input[type="search"], select {
+input[type="search"], select, .dd-trigger {
   width: 100%; min-width: 0;
   padding: 8px 12px;
   border: 1px solid var(--line); border-radius: 10px;
@@ -100,9 +103,9 @@ input[type="search"], select {
 }
 input[type="search"]::placeholder { color: var(--muted); }
 /* The ring shows while typing or keyboard focused, never lingers after a mouse pick. */
-input[type="search"]:focus, select:focus-visible { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-select:focus-visible { outline: none; }
-select {
+input[type="search"]:focus, select:focus-visible, .dd-trigger:focus-visible, .dd-trigger[aria-expanded="true"] { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+select:focus-visible, .dd-trigger:focus-visible { outline: none; }
+select, .dd-trigger {
   cursor: pointer; appearance: none; -webkit-appearance: none;
   padding-right: 30px;
   background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
@@ -158,7 +161,43 @@ select {
 .library { display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; padding: 0 6px 0 12px; }
 .library-controls { display: grid; gap: 8px; padding: 2px 4px 10px; }
 .filter-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.filter-row select, .advanced select { font-size: 13px; padding: 7px 28px 7px 10px; }
+.filter-row select, .advanced select, .filter-row .dd-trigger, .advanced .dd-trigger { font-size: 13px; padding: 7px 28px 7px 10px; }
+
+/* Custom dropdown (desktop): trigger looks exactly like the field; the list drops below it. */
+.dd-native { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.dd-trigger { display: block; min-width: 0; text-align: left; color: var(--ink); font-weight: 400; cursor: pointer; }
+.dd-value { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dd-list {
+  position: fixed; z-index: 60; margin: 0; padding: 4px; list-style: none; overflow: auto; overscroll-behavior: contain;
+  max-width: min(320px, calc(100vw - 16px)); border: 1px solid var(--line); border-radius: 12px;
+  background: var(--sheet); box-shadow: 0 10px 30px -10px rgb(0 0 0 / .25), var(--shadow-card);
+  font-size: 13.5px; outline: none; transform-origin: top;
+}
+.dd-list.up { transform-origin: bottom; }
+.dd-list.dd-in { animation: dd-in .14s var(--ease); }
+@keyframes dd-in { from { opacity: 0; transform: translateY(-4px) scale(.98); } }
+.dd-list.up.dd-in { animation-name: dd-in-up; }
+@keyframes dd-in-up { from { opacity: 0; transform: translateY(4px) scale(.98); } }
+.dd-list li {
+  display: flex; align-items: center; gap: 6px; padding: 7px 10px 7px 6px; border-radius: 8px;
+  color: var(--ink-2); white-space: nowrap; cursor: default; user-select: none;
+}
+.dd-list li.active { background: var(--hover); color: var(--ink); }
+.dd-list li.selected { color: var(--ink); font-weight: 550; }
+.dd-check { display: inline-grid; place-items: center; width: 16px; flex: none; color: var(--accent); }
+.dd-check .icon { width: 14px; height: 14px; stroke-width: 2; }
+
+/* Theme button: a moon in light mode (switch to dark), a sun in dark mode (switch to light). */
+.theme-sun { display: none; }
+:root[data-theme="dark"] .theme-sun { display: block; }
+:root[data-theme="dark"] .theme-moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-sun { display: block; }
+  :root:not([data-theme="light"]) .theme-moon { display: none; }
+}
+
+/* Theme switch: the new theme is revealed by a circle animated from the button (see toggleTheme). */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
 .counts-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
 .counts { margin: 2px 2px 0; font-size: 12.5px; color: var(--muted); }
 .link-btn { padding: 2px 4px; border: 0; border-radius: 6px; background: none; font-size: 12.5px; font-weight: 500; color: var(--accent-ink); cursor: pointer; white-space: nowrap; }
@@ -167,7 +206,7 @@ select {
 .advanced[hidden] { display: none; }
 .advanced label { display: grid; gap: 3px; min-width: 0; font-size: 11.5px; font-weight: 500; color: var(--muted); }
 .advanced .link-btn { grid-column: 1 / -1; justify-self: end; }
-.article-list { flex: 1; overflow: auto; overscroll-behavior: contain; padding: 2px 4px 16px; }
+.article-list { flex: 1; overflow: auto; overscroll-behavior: contain; padding: var(--ring-room) var(--ring-room) 16px; }
 .article-row {
   display: block; width: 100%; text-align: left;
   padding: 10px 12px; margin-bottom: 2px;
@@ -309,7 +348,7 @@ tr.active td:last-child { border-radius: 0 6px 6px 0; }
 
 /* ---------- record sheet ---------- */
 
-.patients { margin-left: auto; display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+.patients { margin-left: auto; display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; padding: var(--ring-room); margin-right: calc(-1 * var(--ring-room)); }
 .record-sheet .sheet-bar:has(.patient) { padding-left: 12px; }
 .record-sheet .sheet-bar:has(.patient) .sheet-label { display: none; }
 .record-sheet .sheet-bar:has(.patient) .patients { margin-left: 0; }
@@ -437,7 +476,7 @@ tr.active td:last-child { border-radius: 0 6px 6px 0; }
 
 /* ---------- section menu (on the desk, right) ---------- */
 
-.sections { overflow: auto; padding: 4px 0 24px 12px; }
+.sections { overflow: auto; padding: var(--ring-room) var(--ring-room) 24px 12px; }
 .section-link {
   display: block; width: 100%; text-align: left;
   padding: 7px 12px; margin-bottom: 2px;
@@ -508,7 +547,7 @@ tr.active td:last-child { border-radius: 0 6px 6px 0; }
   .reading-grid.show-record .source-sheet { display: none; }
   .reading-grid.show-record .record-sheet { display: flex; }
   .reading-grid.show-record .sections {
-    display: flex; gap: 4px; padding: 2px 2px 8px; overflow-x: auto; scrollbar-width: none;
+    display: flex; gap: 4px; padding: var(--ring-room) var(--ring-room) 8px; margin: calc(-1 * var(--ring-room)) calc(-1 * var(--ring-room)) 0; overflow-x: auto; scrollbar-width: none;
     scroll-snap-type: x proximity; -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent);
   }
   .reading-grid.show-record .sections::-webkit-scrollbar { display: none; }
