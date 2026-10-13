@@ -311,3 +311,19 @@ def test_export_streams_reviewed_patient_rows(library):
     bad.send_json = lambda data, status=200: replies.append(status)
     bad.path = '/api/export.jsonl?patients=../etc:p1'; bad.do_GET()
     assert replies == [400]
+
+
+def test_specialty_comes_from_checked_in_selection_without_an_export(library):
+    lib, root, dataset, source = library
+    (dataset / 'manifest.jsonl').unlink()
+    (root / 'selection.json').write_text(json.dumps([{'article_id': AID, 'stratum': 'cardiac'}]))
+    put(root, 'sources', {**source, 'article_id': 'PMC124.1'}, 'PMC124.1')
+    (root / 'retained-strata.json').write_text(json.dumps({'PMC124.1': 'renal'}))
+    strata = {r['article_id']: r['primary_stratum'] for r in lib.catalog()['articles']}
+    assert strata == {AID: 'cardiac', 'PMC124.1': 'renal'}
+
+
+def test_patient_with_two_ages_of_the_same_kind_is_summarized():
+    from openpatients2.viewer import patient_summary
+    items = [{'attribute': 'age_other', 'text_value': 'neonate'}, {'attribute': 'age_other', 'numeric_value': 2, 'unit': 'days'}]
+    assert patient_summary({'sections': {'demographics': {'items': items}}})['age_group'] == 'neonate'

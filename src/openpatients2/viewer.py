@@ -126,7 +126,7 @@ def patient_summary(patient):
     demo = [i for i in (sections.get('demographics') or {}).get('items') or [] if own(i)]
     sex = next((SEX.get(str(i.get('text_value') or '').strip().lower()) for i in demo
                 if i.get('attribute') == 'documented_sex' and SEX.get(str(i.get('text_value') or '').strip().lower())), None)
-    ages = sorted((AGE_ORDER.index(i['attribute']), i) for i in demo if i.get('attribute') in AGE_ORDER)
+    ages = sorted(((AGE_ORDER.index(i['attribute']), i) for i in demo if i.get('attribute') in AGE_ORDER), key=lambda pair: pair[0])
     years = next((y for _, i in ages if (y := age_years(i)) is not None), None)
     context = sections.get('case_context') or {}
     named = lambda name: sorted({str(i.get('name')).strip() for i in (sections.get(name) or {}).get('items') or []
@@ -158,6 +158,23 @@ class Library:
         self.export_stamp = None
         self.exports = {}
         self.entries = {}
+        self.strata_stamp, self.strata = None, {}
+
+    def _strata(self):
+        """Specialty per article from the checked-in selection files, as the dataset exporter assigns it.
+        The export manifest carries the same value, but it is not in Git, so static builds need this."""
+        files = [root / name for root in self.roots for name in ('selection.json', 'retained-strata.json')]
+        signature = tuple(stamp(path) for path in files)
+        if signature != self.strata_stamp:
+            strata = {}
+            for path in files:
+                data = read(path) if path.exists() else None
+                if isinstance(data, dict):
+                    strata.update({aid: s for aid, s in data.items() if isinstance(s, str)})
+                elif isinstance(data, list):
+                    strata.update({r['article_id']: r['stratum'] for r in data if isinstance(r, dict) and r.get('stratum')})
+            self.strata, self.strata_stamp = strata, signature
+        return self.strata
 
     def _exports(self):
         signature = tuple(stamp(self.dataset / f'{name}.jsonl') for name in FILES)
@@ -307,6 +324,7 @@ class Library:
             'references')} if source else None
         # Source reading surfaces contain captions/URLs but no workstation paths.
         meta = {**manifest, 'article_id': aid}
+        meta['primary_stratum'] = meta.get('primary_stratum') or self._strata().get(aid)
         if source:
             meta.update(title=source['title'], article_url=source.get('source_url'),
                         source_license=source.get('license'), authors=manifest.get('authors', source.get('authors', [])))
