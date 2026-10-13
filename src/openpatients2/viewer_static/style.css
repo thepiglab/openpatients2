@@ -134,8 +134,14 @@ select, .dd-trigger {
 .toad-eye { fill: var(--sheet); transform-box: fill-box; transform-origin: center; animation: blink 7s infinite; }
 .toad-mouth { fill: none; stroke: var(--sheet); stroke-width: 1.6; stroke-linecap: round; }
 .brand:hover .toad { transform: rotate(-6deg) scale(1.08); }
+/* Viewer: the toad and the name are separate targets. The toad's button is padded generously and covers the
+   gap, so a slightly-off click on the toad hops instead of leaving for the overview. */
+div.brand { gap: 0; padding: 0; }
+.toad-btn { display: grid; place-items: center; padding: 6px 16px 6px 8px; margin: -2px 0; border: 0; border-radius: 12px; background: none; cursor: pointer; }
+div.brand:hover .toad { transform: none; }
+.toad-btn:hover .toad { transform: rotate(-6deg) scale(1.08); }
+.brand-link, .brand-title { padding: 6px 8px 6px 2px; border-radius: 10px; color: var(--ink); text-decoration: none; }
 .hop .toad { animation: hop .62s var(--ease); }
-.hop #refresh .icon { animation: spin .7s var(--ease); }
 @keyframes hop {
   0% { transform: none; }
   18% { transform: translateY(1px) scale(1.14, .82); }
@@ -144,7 +150,6 @@ select, .dd-trigger {
   100% { transform: none; }
 }
 @keyframes blink { 0%, 94%, 100% { transform: scaleY(1); } 97% { transform: scaleY(.1); } }
-@keyframes spin { to { transform: rotate(360deg); } }
 .topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 2px; }
 .sync { font-size: 12.5px; color: var(--muted); margin-right: 10px; white-space: nowrap; }
 .sync.error { color: var(--red); }
@@ -656,7 +661,6 @@ html:has(body.home), body.home { height: auto; min-height: 100%; }
 body.home { display: block; overflow: auto; background: var(--desk); }
 .home .topbar { height: auto; min-height: 56px; padding: max(8px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 8px max(14px, env(safe-area-inset-left)); }
 .home .topbar > * { opacity: 1; pointer-events: auto; }
-.home-tagline { margin: 0 0 0 6px; font-size: 13.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .home .topbar-actions { gap: 6px; }
 .button-link {
   display: inline-flex; align-items: center; padding: 8px 14px; border-radius: 10px;
@@ -732,8 +736,8 @@ a.meter:hover { background: var(--hover); }
 }
 @media (max-width: 900px) {
   body.home { height: auto; display: block; }
-  .home-tagline, .wide-only { display: none; }
-  .home .brand span { font-size: 14px; }
+  .wide-only { display: none; }
+  .home .brand-title { font-size: 14px; }
   .dash { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding-left: max(8px, env(safe-area-inset-left)); padding-right: max(8px, env(safe-area-inset-right)); }
   .tile, .tile.wide, .tile.full { grid-column: 1 / -1; }
   .tile.stat { grid-column: span 1; }

@@ -79,35 +79,6 @@ async function get(path) {
   return r.json();
 }
 function restart(node, cls) { node.classList.remove(cls); void node.offsetWidth; node.classList.add(cls); }
-function hop() { restart(document.body, 'hop'); }
-
-/* A synthesized "boing" for the toad: a pitch swoop wobbled by a fast, fading vibrato. */
-let audio = null;
-function boing() {
-  try {
-    audio = audio || new AudioContext();
-    if (audio.state === 'suspended') audio.resume();
-    const t = audio.currentTime;
-    const pitch = 0.92 + Math.random() * 0.16;  // a little different every hop
-    const osc = audio.createOscillator(), amp = audio.createGain();
-    const wobble = audio.createOscillator(), depth = audio.createGain();
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(150 * pitch, t);
-    osc.frequency.exponentialRampToValueAtTime(560 * pitch, t + 0.09);
-    osc.frequency.exponentialRampToValueAtTime(230 * pitch, t + 0.55);
-    wobble.frequency.setValueAtTime(22, t);
-    wobble.frequency.linearRampToValueAtTime(12, t + 0.55);
-    depth.gain.setValueAtTime(90 * pitch, t);
-    depth.gain.exponentialRampToValueAtTime(4, t + 0.55);
-    amp.gain.setValueAtTime(0.0001, t);
-    amp.gain.exponentialRampToValueAtTime(0.22, t + 0.015);
-    amp.gain.exponentialRampToValueAtTime(0.0001, t + 0.6);
-    wobble.connect(depth).connect(osc.frequency);
-    osc.connect(amp).connect(audio.destination);
-    for (const o of [osc, wobble]) { o.start(t); o.stop(t + 0.62); }
-  } catch { /* no audio available; the hop still happens */ }
-}
-
 /* ---------- routing ---------- */
 
 function route() {
@@ -216,10 +187,9 @@ function stepArticle(delta) {
   }
 }
 
-async function refresh({manual = false} = {}) {
+async function refresh() {
   if (state.refreshing) return;
   state.refreshing = true;
-  if (manual) hop();
   try {
     const c = await get('api/catalog.json');
     if (c.revision !== state.catalogRevision) {
@@ -1384,7 +1354,6 @@ syncAdvanced();
 $('specialty').addEventListener('change', () => { state.filter.specialty = $('specialty').value; renderCatalog(); });
 $('text-search').addEventListener('input', debounce(() => runFind(), 120));
 $('text-search').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); stepMatch(e.shiftKey ? -1 : 1); } });
-$('refresh').onclick = () => refresh({manual: true});
 $('theme').onclick = toggleTheme;
 $('toggle-library').onclick = toggleLibrary;
 $('scrim').onclick = () => { document.body.classList.remove('library-open'); syncTabbar(); };
@@ -1397,8 +1366,8 @@ $('peek-close').onclick = closePeek;
 $('peek-open').onclick = jumpToActive;
 $('peek-prev').onclick = () => stepPeek(-1);
 $('peek-next').onclick = () => stepPeek(1);
-// The toad hops; the name goes back to the overview page.
-$('brand').addEventListener('click', e => { if (e.target.closest('.toad')) { e.preventDefault(); hop(); boing(); } });
+// The toad hops; only the name goes back to the overview page.
+$('toad').addEventListener('click', () => { hop(); boing(); });
 $('lightbox').addEventListener('click', e => { if (e.target === $('lightbox')) $('lightbox').close(); });
 
 document.addEventListener('keydown', e => {

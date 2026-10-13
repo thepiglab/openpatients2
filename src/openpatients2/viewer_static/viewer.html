@@ -14,6 +14,7 @@
 <meta name="color-scheme" content="light dark">
 <title>Clinical Article Library</title>
 <link rel="stylesheet" href="style.css">
+<script src="toad.js" defer></script>
 <script src="app.js" defer></script>
 </head>
 <body>
@@ -21,22 +22,21 @@
   <button id="toggle-library" class="icon-btn" type="button" aria-label="Show or hide the article list">
     <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4h11M2.5 8h11M2.5 12h11"/></svg>
   </button>
-  <a class="brand" href="./" id="brand" title="Overview">
-    <svg class="toad" viewBox="0 0 32 32" aria-hidden="true">
-      <ellipse class="toad-body" cx="16" cy="20.5" rx="12.5" ry="8"/>
-      <circle class="toad-body" cx="10" cy="12.5" r="4.6"/>
-      <circle class="toad-body" cx="22" cy="12.5" r="4.6"/>
-      <circle class="toad-eye" cx="10.4" cy="12" r="1.9"/>
-      <circle class="toad-eye" cx="21.6" cy="12" r="1.9"/>
-      <path class="toad-mouth" d="M11.5 21.5q4.5 3 9 0"/>
-    </svg>
-    <span>Clinical Article Library</span>
-  </a>
+  <div class="brand">
+    <button id="toad" class="toad-btn" type="button" aria-label="Boing" title="Boing">
+      <svg class="toad" viewBox="0 0 32 32" aria-hidden="true">
+        <ellipse class="toad-body" cx="16" cy="20.5" rx="12.5" ry="8"/>
+        <circle class="toad-body" cx="10" cy="12.5" r="4.6"/>
+        <circle class="toad-body" cx="22" cy="12.5" r="4.6"/>
+        <circle class="toad-eye" cx="10.4" cy="12" r="1.9"/>
+        <circle class="toad-eye" cx="21.6" cy="12" r="1.9"/>
+        <path class="toad-mouth" d="M11.5 21.5q4.5 3 9 0"/>
+      </svg>
+    </button>
+    <a class="brand-link" href="./" title="Overview">Clinical Article Library</a>
+  </div>
   <div class="topbar-actions">
     <span id="sync" class="sync" role="status">Connecting…</span>
-    <button id="refresh" class="icon-btn" type="button" aria-label="Refresh" title="Refresh">
-      <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8a5 5 0 1 1-1.5-3.6M13 2.5v3h-3"/></svg>
-    </button>
     <button id="theme" class="icon-btn" type="button" aria-label="Switch light or dark theme" title="Light / dark">
       <svg class="icon theme-moon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 9.5A5.5 5.5 0 0 1 6.5 2.5a5.5 5.5 0 1 0 7 7z"/></svg>
       <svg class="icon theme-sun" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="2.8"/><path d="M8 1.5v1.6M8 12.9v1.6M1.5 8h1.6M12.9 8h1.6M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M3.4 12.6l1.1-1.1M11.5 4.5l1.1-1.1"/></svg>

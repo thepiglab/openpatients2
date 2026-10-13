@@ -20,7 +20,7 @@ from urllib.parse import unquote, urlsplit
 from .dense_store import load as _load_store
 
 STATIC = Path(__file__).with_name('viewer_static')
-ASSETS = ('index.html', 'home.js', 'viewer.html', 'app.js', 'style.css', 'manifest.webmanifest', 'icon-180.png', 'icon-512.png')
+ASSETS = ('index.html', 'home.js', 'toad.js', 'viewer.html', 'app.js', 'style.css', 'manifest.webmanifest', 'icon-180.png', 'icon-512.png')
 TYPES = {'html': 'text/html; charset=utf-8', 'js': 'text/javascript; charset=utf-8', 'css': 'text/css; charset=utf-8',
          'webmanifest': 'application/manifest+json; charset=utf-8', 'png': 'image/png'}
 ID = re.compile(r'^[A-Za-z0-9][A-Za-z0-9_.-]{0,120}$')

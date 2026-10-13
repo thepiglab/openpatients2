@@ -23,7 +23,7 @@ The default library combines `data/dense_clinical_cases_v1` with live sources an
 reviewed targets in `benchmarks/dense50` and `benchmarks/dense500`. There are no
 article IDs embedded in the page. New source files enter the catalog, and new
 reviewed targets appear automatically. The page checks every 15 seconds and when
-it becomes visible again; Refresh checks immediately. It preserves the selected
+it becomes visible again. It preserves the selected
 patient, section, and panel scroll positions on an automatic update.
 
 ## What you can inspect

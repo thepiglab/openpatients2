@@ -149,7 +149,7 @@ def test_handler_does_not_serve_workspace_files(library):
     assert replies[0][0]==404
 
 
-@pytest.mark.parametrize('path,kind', [('/', 'text/html'), ('/viewer.html', 'text/html'), ('/home.js', 'text/javascript'),
+@pytest.mark.parametrize('path,kind', [('/', 'text/html'), ('/viewer.html', 'text/html'), ('/home.js', 'text/javascript'), ('/toad.js', 'text/javascript'),
                                        ('/manifest.webmanifest', 'application/manifest+json'),
                                        ('/icon-180.png', 'image/png')])
 def test_handler_serves_the_installable_app_shell(library, path, kind):
@@ -165,7 +165,7 @@ def test_static_build_is_portable_and_does_not_overwrite(library,tmp_path):
     assert result['articles']==1
     data=json.loads((out/'api/articles'/f'{AID}.json').read_text())
     assert data['patients'] and data['source']['segments'][0]['text']=='Exact evidence.'
-    assert all((out/name).exists() for name in ('app.js','index.html','viewer.html','home.js','manifest.webmanifest','icon-180.png'))
+    assert all((out/name).exists() for name in ('app.js','index.html','viewer.html','home.js','toad.js','manifest.webmanifest','icon-180.png'))
     with pytest.raises(ValueError,match='never overwritten'):build(lib,out)
 
 

@@ -174,6 +174,7 @@ function render(c) {
 }
 
 if (load('theme')) document.documentElement.dataset.theme = load('theme');
+$('toad').addEventListener('click', () => { hop(); boing(); });
 /* The new theme spreads out as a circle from the button (View Transitions); instant where unsupported. */
 $('theme').onclick = e => {
   const root = document.documentElement;
