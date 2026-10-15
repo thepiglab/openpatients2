@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC12765198.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4878c5875298f9be2a1e1c005eb02d38cadbe8c565843fe11a15839ac663b94d",
+  "annotation_sha256": "2bdaa2ad8e52e1adf198b44548406d6ca2c22e487de362da07d227fe02ef7532",
+  "reviewed_at": "2026-10-15T16:47:34.794615+00:00",
+  "source_segments_read": 32,
+  "facts_reviewed": 86,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Event p1-e02 (\"First intraovarian PRP treatment\") linked the cycle-unscoped b00011 technique facts (sedation, antibiotics, injection, tolerance, preoperative tests) to the first cycle, contradicting the annotator's own ambiguity; moved them to new event p1-e13 with no cycle or time and added fact p1-f086 for the stated first PRP treatment (\"One month after the first PRP treatment\") as the sole content of p1-e02.",
+    "p1-f067 intraovarian PRP injection: laterality set to bilateral (\"2 mL of PRP per ovary\").",
+    "Added literal relations: p1-e05 before p1-e06 (three vs five months after the second PRP), p1-e08 before p1-e09 (fertilized oocyte then blastocyst on day 5 of culture), p1-e11 before p1-e12 (five weeks + one day vs 38 weeks and five days)."
+  ],
+  "unresolved": [
+    "Figure pixels are described in visual.json; the annotation figure rows keep caption-layer status.",
+    "Genetic evaluations in the case text do not say whether they concern the woman, the male partner or both; they are review_only with subject unknown.",
+    "The PRP procedure, sedation, antibiotics and tolerance are described once and are not scoped to the first or second PRP cycle.",
+    "Reference ranges appear only in Table 1 rows; no high/low flags were assigned from them.",
+    "Table 1 dash cells are missing values and were not recorded as results."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 32,
+    "facts_reviewed": 86,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (39-year-old woman with POI); partner, embryo, fetus and newborn facts kept in her record with subject other/fetus/newborn per ROSTER-RELATIVES.",
+      "Genetic evaluations (b00008) do not name their owner (\"normal karyotypes\" after a couple-level sentence); subject unknown and review_only is correct.",
+      "Couple-level infertility history and denials literally include the patient as a couple member; kept with an explicit ambiguity.",
+      "Table 1 rows all captured; dash cells not recorded as values.",
+      "Endometrial thickness \"reached a maximum of 8.7 mm\" is a measured peak, comparator = per OBS-COMPARATOR; the gate warning is a checker false positive.",
+      "Pregnancy time \"five weeks + one day\" comes from the Figure 5 caption lead sentence, which governs the figure cited by the fact sentence.",
+      "Figures: Fig 1B calipers measure a large structure (28.63 x 11.95 mm), not a follicle; Fig 2A printed values (7.21/5.41/5.14/8.01 mm) are not facts, the caption 6 and 7 mm are; visual descriptions keep them as printed text only."
+    ],
+    "residual_risks": [
+      "Owner of the genetic evaluations remains unresolved (review_only).",
+      "Couple-level denials are attributed to the patient as a couple member.",
+      "Figure 3 embryo microscopy is labelled pathology because no embryology EHR category exists."
+    ]
+  },
+  "physician_adjudicated": false
+}
