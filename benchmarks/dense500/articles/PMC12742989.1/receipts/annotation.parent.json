@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12742989.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9110b20ef3d5f7d3eee1436e694d087b37c86db8444a4cb8e58cc3ae7835e771",
+  "annotation_sha256": "a27e410b9bc7ab3108bb22d406c90c99ca9c4c6e3323f8bd6f9e4c4dc36cbb55",
+  "reviewed_at": "2026-10-15T16:30:41.983888+00:00",
+  "source_segments_read": 31,
+  "facts_reviewed": 143,
+  "patients_reviewed": 5,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f014 (physiologic ascites as a possible condition): the initial POCUS impression is already the observation p1-f013 (ONE-STATEMENT) and was superseded by the prevoid/postvoid scans; recorded as a p1 ambiguity instead.",
+    "Removed p1-f026 (cystic lesion condition with severity \"90 mm\"): duplicate of observation p1-f025 and severity misused for size.",
+    "p1-f042 delayed diagnosis: added the b00020 quote that identifies the single POCUS pseudo-bladder case as Case 1; note rewritten.",
+    "p4-f004/p4-f005: time text changed from \"a few hours after the onset\" to the literal \"a few hours\", relation before, anchor \"presented\" (onset a few hours before presentation).",
+    "p4-f022 immature teratoma: note corrected (not stated malignant in source; condition only, no inferred oncology tumor).",
+    "p3: split the referral into its own event p3-e07 and added literal relations p3-e02 before p3-e07 (\"referred to our hospital after an ultrasound examination\"), p3-e04 before p3-e05 and p3-e06 (imaging \"highly suggestive\" then surgery/pathology \"confirmed\").",
+    "Added literal relations p4-e02 before p4-e03 (\"strongly suggested\" then \"Emergency surgery confirmed\") and p5-e03 before p5-e04 and p5-e05 (\"consistent with\" then surgery/pathology \"confirmed\"). No literal order exists for p2 events, so none added.",
+    "source_coverage b00001 and b00020 now list all five patients.",
+    "visual.json: 20 weak pelvis body-part tags (as_documented \"Pelvic\" citing the word \"bladder\") re-grounded: Case 1 panels on \"an anechoic pelvic area\", CT panels with visible bony pelvis on pixels, other panels on the abstract \"pelvic cyst\" quote; figure-EHR and privacy drafts regenerated and reviewed labels/flags carried over.",
+    "figure_privacy_flags: Figure 7 textbook schematic un-flagged for sensitive_anatomy (illustration, not real patient anatomy)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; all eight figure images were inspected separately in visual.json.",
+    "The Discussion statement that the structure closest to the pubic symphysis might have been recognized as the bladder (Figure 8) is a counterfactual teaching point and is not recorded as a patient finding.",
+    "No dates, laboratory values, medications, or follow-up after discharge are reported for any case; orders between investigations are recorded only where the text states them.",
+    "Immature teratoma (Case 4) is not stated to be malignant in the case text and is recorded as a condition, not an oncology tumor.",
+    "Pre-operative imaging suspicions (suggested or consistent with torsion) are kept as possible/provisional separately from the surgically confirmed torsion."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 31,
+    "facts_reviewed": 151,
+    "figures_viewed": 8,
+    "key_findings": [
+      "Roster of 5 (Cases 1-5) correct with literal \"five pediatric patients\"; ages, sexes, vitals, exam negatives, imaging, surgery and pathology verified for all cases.",
+      "Pseudo-bladder sign and delayed diagnosis attributed to Case 1 via the single POCUS case explicitly labelled Case 1 in b00020.",
+      "Constipation kept as historical: its own quote reads \"her history of constipation\".",
+      "Immature teratoma kept as a condition only; the source never calls it malignant.",
+      "The Discussion counterfactual about recognizing the bladder is excluded from facts.",
+      "All 25 panels viewed at full resolution; attribution (Figs 1, 2, 8 to p1; 3 to p2; 4 to p3; 5 to p4; 6 to p5; Fig 7 background) confirmed."
+    ],
+    "residual_risks": [
+      "Two EVID-NEGATION warnings on p1-f039 (uneventful recovery as complication absent) are a known checker false positive; data left as the rule prescribes.",
+      "Relations relying on \"suggested ... confirmed\" wording are semantic order signals; p2 has no relations because no literal order is stated.",
+      "Torsion degree stored in conditions severity."
+    ]
+  },
+  "physician_adjudicated": false
+}
