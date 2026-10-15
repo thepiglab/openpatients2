@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC13393005.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6f15d02ec251f07744314ec5c18c7c8b64bbb3b518f976fd634cea4e9ca1529f",
+  "annotation_sha256": "e1c9191ff8bcc457db4a749aec720379f05328dd952edd257a97eba8b7481d1b",
+  "reviewed_at": "2026-10-15T17:06:23.945756+00:00",
+  "source_segments_read": 77,
+  "facts_reviewed": 219,
+  "patients_reviewed": 6,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f034 (P1 fatigue in phantom leg) and p2-f052 (P2 session 5 PLP increase described as fatigue) set to source_conflict/review_only: the article says only one participant reported phantom-limb fatigue; added a P2 ambiguity and extended the P1 ambiguity evidence",
+    "Added p1-f035 (review_only): P1 attributed low comprehension of the system to less than a high school education, quarantined with the P1 ratings that conflict with Figure 3",
+    "Removed the quarantined fatigue claims from the P1 and P2 summaries; rewrote the P4 summary sex-neutrally (no he/him)",
+    "p4-f003 (Table 1 Male, review_only) now also cites the literal \"he\" in the NRS paragraph; statement updated",
+    "p6-f020 outcomes event changed from complication to other (control-manipulation difficulty is not a clinical complication)",
+    "p2-f050 statement no longer implies an unsupported order; p1-f016 and p6-f016 notes explain why the VR GMI program action stays unknown (P1 one session then discharged; P6 zero sessions, began intervention per b00021, now cited)",
+    "One standard for the satisfaction paragraph (b00038): its attributions conflict with Figure 3 and Table 1, so every fact sourced only from it is review_only; p4-f018 (very helpful), p2-f049 (not permitted to continue after discharge) and p2-f050 (discharge) set ambiguous/review_only with ambiguities, removed from P2/P4 summaries, and the P2 discharge event and its relation dropped",
+    "Added events p2-e05 (session 5 PLP increase), p5-e04 (session 2 decreases), p5-e05 (session 4 RLP decrease), p6-e05 (control-manipulation difficulties)",
+    "Added 10 literal temporal relations: amputation before VR GMI sessions for P2-P5 (\"in the postoperative acute care period\" plus Table 2 completion rows), P1 sessions before discharge (\"Discharged home prior to further progression\"), P2 session 5 increase during sessions, P5 session 2 and session 4 events during sessions and session 2 before session 4, P6 difficulties before discharge",
+    "Added article limitation noting the possible participant-numbering offset in the satisfaction paragraph without reassigning anything"
+  ],
+  "unresolved": [
+    "Case series of six participants whose individual data come only from Tables 1 to 3 and a few named-participant sentences; many results, usability and discussion statements are cohort-level or refer to unnamed participants and are not assigned.",
+    "Table 1 IDs 1 to 6 are treated as the same participants as P1 to P6 in the text and Tables 2 and 3 (text defines Participant 1 as P1); this mapping is not printed in Table 1 itself.",
+    "Text and Figure 3 disagree on which participant gave the low helpful rating and the 70% helpful rating; Figure 3 labels P2 to P5 only.",
+    "P4 is male in Table 1 and in the NRS paragraph but referred to with \"her\" in the satisfaction paragraph.",
+    "Text states −5-point session 2 decreases for P5, whereas Table 3 cells differ by 4 points.",
+    "Participant age is a bare number in Table 1 with no printed unit.",
+    "Analgesic regimens during VR GMI sessions were not systematically recorded by the authors; no medications beyond prior chemotherapy for P1 are documented.",
+    "Caption-layer visual status is not_inspected; the actual images are inspected in the separate visual target.",
+    "In the satisfaction paragraph the ratings attributed to P1 (low helpful), P2 (70% helpful) and P4 (\"her\") resemble the Figure 3 series P2, P3 and P5 and Table 1 participant 5 (female); a participant-numbering offset is possible but not stated, so those text statements are quarantined or left as written and never reassigned."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 77,
+    "facts_reviewed": 219,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Every Table 1 and Table 2 cell and all 88 Table 3 pre/post cells checked against the text table and the Table 3 image; all values, asterisks and NA blocks (as not_performed) match",
+      "Table 1 ID n mapped to P n in Tables 2 and 3 via the text definition \"Participant 1 (P1)\"; recorded as an article limitation",
+      "Figure 3 legend is P2 to P5; text ratings for P1 (0-10%) and P2 (70%) conflict with the plotted series; text facts quarantined, Figure 3 estimates never used as facts",
+      "P4 sex conflict (Table 1 Male and \"he\" vs \"her PLP\") kept as a review_only pair; label, case_context and summary are sex-neutral",
+      "P5 session 2 text change of -5 vs Table 3 difference of 4 quarantined only on the text change items; table cells stay included",
+      "The \"all four participants\" sentence (b00038) does not name its four participants and is left unassigned, as are other unnamed single-participant statements"
+    ],
+    "residual_risks": [
+      "The satisfaction paragraph may use shifted participant numbers; all facts sourced only from it are review_only",
+      "Table 1 age has no printed unit; ages kept as bare numbers",
+      "Amputation-to-session ordering for P2-P5 relies on b00022 referring to the four participants who completed the program, matched to Table 2 completion rows"
+    ]
+  },
+  "physician_adjudicated": false
+}
