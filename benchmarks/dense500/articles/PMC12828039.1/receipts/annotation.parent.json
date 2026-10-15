@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12828039.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "370e2d8ba1ca1437badeeee81e8f5a1a0520c3996318d7060f7e4131a3a09ea0",
+  "annotation_sha256": "2242c79e8658682018a21023387603d00019825126fcc79283ab2cf43f682de2",
+  "reviewed_at": "2026-10-15T16:42:03.853210+00:00",
+  "source_segments_read": 22,
+  "facts_reviewed": 96,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p2-f023 ACUM: verification_status confirmed -> provisional with diagnostic_basis ultrasound; the Case 2 text only says ACUM was proposed and reports no MRI result (overview 'diagnosed' and Figure 2B caption kept in notes and ambiguity).",
+    "p1-f027 Robert's uterus: possible/differential -> absent/refuted, because b00013 states it was initially misclassified and MRI confirmed ACUM.",
+    "p1-f014 'MRI advised' moved from care_plans to procedures_devices (planned) per SECTION-CAREPLANS; p1 care_plans domain set to not_documented.",
+    "p3-f014 removed the non-indication 'diagnosis'; p3-f015 MRI indication now cites the overview sentence that covers all three patients.",
+    "Added presentation events p1-e06, p2-e05, p3-e06; linked the Figure 2B caption MRI observations p2-f025..f028 to the p2 MRI event.",
+    "p3 summary no longer states the quarantined 'para 1' parity.",
+    "Visual submission: F1B panel A femoral-head wording, F3A panel B letter position (upper left), F3A panel A D1/D2 readout transcribed (1.44, 1.69, unit cut off), F3B panels A/B smaller structure is at the upper right of center (patient left), verified on zoomed crops."
+  ],
+  "unresolved": [
+    "Discussion sentence \"One of our patients experienced dysmenorrhea that started soon after menarche, along with chronic pelvic pain\" does not name the case, so it is not assigned to any patient.",
+    "Case 3 parity is \"para 1\" in the case text but \"multiparous\" in the Figure 3A caption; both are kept as review-only source-conflict facts.",
+    "Case 2 text reports no MRI result; MRI findings for Case 2 come from the Figure 2B caption only.",
+    "Case 1 ultrasound is described as raising the possibility of a Robert’s uterus in the text, while the Figure 1A caption labels ACUM on the ultrasound images.",
+    "Statements about all three patients (no adenomyosis, no urinary tract or vertebral anomalies, refusal of surgery, medical therapy with temporary relief) are copied to each patient only because the source explicitly covers all of them.",
+    "Specific analgesics are not named; hormonal therapy other than oral contraceptive pills is not described for any patient.",
+    "Figure captions are author statements; pixels are inspected separately in the visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 22,
+    "facts_reviewed": 96,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Three individually described patients in case order (21y, 20y, 32y); roster count 3 from 'Three case reports'.",
+      "Statements copied to all three (no urinary tract/vertebral anomalies, no adenomyosis, surgery refused, medical therapy with temporary relief, MRI indication) all literally cover every patient ('None of our patients', 'All three of our patients', 'in all three patients').",
+      "p3 parity: 'para 1' (case text, consistent with wanting a second child) vs 'multiparous' (Figure 3A caption) is a real contradiction; both kept review_only source_conflict.",
+      "The discussion sentence 'One of our patients experienced dysmenorrhea...' names no case and stays unassigned.",
+      "p2 'two years after the onset of menarche' vs age 20 kept as an ambiguity.",
+      "Shared 'temporary relief' is compatible with p1 positive response and p3 improvement; kept as ambiguities, not conflicts.",
+      "p3 heterotopic pregnancy and cornual ectopic pregnancy are refuted misdiagnoses; EVID-NEGATION warnings on p1-f027/p3-f009 are checker false positives (cues 'misclassified', 'erroneously').",
+      "All six figures viewed at full resolution with zoomed crops; F2A top strip carries date/time and an ID-like string (flagged direct_identifiers, values not copied)."
+    ],
+    "residual_risks": [
+      "Figure 1B/2B/3B ownership rests on the case-text figure citations, not caption lead sentences.",
+      "Low-resolution images: marker meanings and signal characteristics come from captions.",
+      "F3A D1/D2 caliper values (1.44, 1.69) are pixel-only and are not recorded as clinical facts."
+    ]
+  },
+  "physician_adjudicated": false
+}
