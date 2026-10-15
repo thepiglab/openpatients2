@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12679229.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "191b67a38f189eaacbe12fd8951817cdcf0f48ec6670f3b27534523b1c7a5de0",
+  "annotation_sha256": "dc183e3df6165d18a8207f7de88b0b7e74d525d31b90cc06be15036098b44f9a",
+  "reviewed_at": "2026-10-15T16:53:02.686776+00:00",
+  "source_segments_read": 29,
+  "facts_reviewed": 141,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Third patient INR 1.2 \"in first 48 hours\" time relation changed from during to before (upper-bound wording).",
+    "Summary claims now cite the facts they state: donor facts (subject other) in all three treatment claims, family history, and the no post-reperfusion syndrome / no early allograft dysfunction items; the first-patient treatment claim names the donor.",
+    "First-patient follow-up ambiguity extended: the 24-month rejection also exceeds the abstract 7 to 16 month range; only the follow-up duration item stays quarantined.",
+    "Added an article limitation recording Figure 1 plot-versus-text differences (Patient 2 INR about 1.4 at 72 hours versus stated normalization; Patient 3 AST peak near 3000 versus transaminases peaking in the 2000s) without using plotted values as facts."
+  ],
+  "unresolved": [
+    "Abstract follow-up range of 7 to 16 months post-transplant conflicts with case-level follow-up of 28, 17 and 19 months; case-level values are source_conflict or ambiguous and review_only.",
+    "Follow-up paragraph b00020 has no patient label; its facts are attached to p2 only as ambiguous review_only facts.",
+    "Donor facts are recorded inside each recipient record with subject other; donors are not roster patients.",
+    "Discussion sentence b00022 describing three transplant types is in case order but not labeled by patient, so it is not used to assign OCS Liver use to p1 or p2.",
+    "Discharge on post-operative day 34 and readmission one month post-transplant for the third patient are not reconciled.",
+    "Figure 1 chart values are plotted estimates; case-text values only are recorded as facts.",
+    "Caption-layer visual status not_inspected; the two JPEG figures were inspected in the separate visual submission.",
+    "Figure 1 plotted estimates differ slightly from case-text statements (for example the Patient 2 INR series reads about 1.4 at 72 hours where the text says INR normalized by 72 hours, and the Patient 3 AST series peaks near 3000 IU/L where the text says transaminases peaked in the 2000s); these are recorded as limitations only, and no plotted value is used as a fact."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 29,
+    "facts_reviewed": 141,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Roster of three (13-year-old boy with fulminant hepatic failure, 8-year-old boy with PFIC3, 19-year-old woman with Fontan-associated liver disease) with literal count three.",
+      "Abstract follow-up range 7 to 16 months conflicts with case-text 28 and 19 months and the unlabeled 17 months; only the per-patient follow-up duration items are review_only, the abstract range is not copied to individuals, and doing-well/normal-function outcomes stay included.",
+      "Unlabeled follow-up paragraph b00020 stays ambiguous review_only on p2: its pronoun and position point to the second patient but no sentence names him and 17 months appears nowhere else for p2.",
+      "Third patient discharge on post-operative day 34 and readmission at one month post-transplant are left unordered with an ambiguity.",
+      "Donor demographics, causes of death, procurement, cannulation and OCS devices are recorded with subject other inside each recipient record.",
+      "Both figures viewed at full resolution: Figure 1 four line graphs keyed Patient 1 to 3 shared by p1 to p3; Figure 2 operative photograph of the cannulated donor graft attributed to p2 through the text callout."
+    ],
+    "residual_risks": [
+      "Figure 2 shows the donor graft before implantation; attributing it to p2 as a clinical photo with subject patient is defensible but patient_specimen would also be arguable.",
+      "Mapping of b00020 to p2 is deduction from pronoun and position, kept review_only.",
+      "Only ALP is flagged high for p2 because \"elevated\" grammatically governs alkaline phosphatase; AST and ALT flags left unknown."
+    ]
+  },
+  "physician_adjudicated": false
+}
