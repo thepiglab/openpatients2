@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12830030.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1f27042d6fac543cba86426358129fdb3528875609a2721bedd8710d28b2bdda",
+  "annotation_sha256": "9e754df29eb46311b7b0f86d7b430ad55315095bc1fb0294f66110871a26fa38",
+  "reviewed_at": "2026-10-15T16:54:22.403675+00:00",
+  "source_segments_read": 76,
+  "facts_reviewed": 185,
+  "patients_reviewed": 7,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Checked the raw JATS Table 1: the Premorbid row-1 cells for patients 1, 2, 4, 6, 7 and the summary span three rows, so row 2 maps to patient 3 (Hyperlipidaemia) and patient 5 (Hypertension, rowspan 2) and row 3 to patient 3 (atypical chest pain; extrathoracic restrictive lung disease from eventration of the diaphragm with phrenic nerve palsy). p3-f008, p3-f009, p3-f010 and p5-f010 promoted from ambiguous/review_only to supported/include; their ambiguities removed and the p3 and p5 summaries updated.",
+    "Oncology treatments (mastectomies, neoadjuvant chemotherapy, adjuvant therapy) now reference the single tumor t1 instead of tumor_ref null.",
+    "Breast cancer conditions: added the b00030 quote linking Table 1 laterality to left/right breast cancer.",
+    "p4: added b00056 evidence (persistent leak despite dietary modification, then surgery) to p4-f025 and a literal relation p4-e04 (dietary management) before p4-e09 (plication); b00056 coverage now patient_facts for p4.",
+    "Article limitation added for the b00039 bilateral LD flap statement that is not assigned to patient 5."
+  ],
+  "unresolved": [
+    "No figures or supplements are listed in the source.",
+    "Table 3 summary cell says seroma requiring drainage in 4/7 (57.14%) and none in 3/7, but only three patient cells (patients 2, 4 and 6) describe seroma drainage and the text says three patients required additional drainage; N/A cells are not recorded as absent.",
+    "Text says the median body weight was 22.2 kg/m^(2), which is the BMI median in Table 1; BMI is recorded from the table.",
+    "Text groups mastectomy types (3 simple with SLNB, 2 simple with SLNB then AD for positive frozen-section nodes, 2 modified radical) in counts that do not line up one to one with the Table 1 rows, so the frozen-section indication is not assigned to individuals.",
+    "Cohort statements (median age, tumour quadrant, axillary metastases by FNAC, ER/PR status, resolution in 3 to 11 days, maximum daily chyle output) have no literal mapping to individual patients and are not copied.",
+    "Dash cells in the Premorbid and Neoadjuvant therapy rows are not recorded as absent items.",
+    "Table 1 Premorbid rows 2 and 3 are flattened in the segment text; the raw table row and column spans place them deterministically under patients 3 and 5, so those items are included.",
+    "Text (b00039) reports bilateral pedicle latissimus dorsi flaps for one patient, while Table 1 lists a pedicle LD flap without laterality for patient 5; the bilateral detail is not assigned."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 76,
+    "facts_reviewed": 180,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Roster of 7 from Table columns Patient 1-7 with literal \"seven patients\"; every Table 1-3 cell spot-checked (all 7 columns of age, BMI, ASA, staging, laterality, neoadjuvant therapy, surgery type, SLNB, AD, OT duration, LN count, chyle date, seroma, indication, drain output, drain days, recurrence, complications, management, diet), all correct.",
+      "N/A, dash and (Missing) cells are not recorded as values; patient 5 drain output is not_reported.",
+      "p4 \"seroma insertion\" kept verbatim in an ambiguity, with the inserted item not named.",
+      "Seroma 4/7 summary versus three patient cells and the text \"three patients\" stays an article limitation.",
+      "All-patient sentences (no prior breast/axilla/thorax surgery, intraoperative drains, adjuvant therapy proceeded) explicitly cover each patient.",
+      "Milky drain fluid times come from the Table 3 row heading \"POD when drain started to become milky\"."
+    ],
+    "residual_risks": [
+      "Breast cancer diagnosis per patient rests on the cohort inclusion sentence plus staging and laterality cells.",
+      "Atypical chest pain and lung disease share one unseparated table cell, split into two items."
+    ]
+  },
+  "physician_adjudicated": false
+}
