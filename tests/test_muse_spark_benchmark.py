@@ -15,10 +15,26 @@ from openpatients2.pilot_extract import PilotConfig, PilotRunner
 from test_dense_nemotron_super import campaign
 
 
-def test_default_includes_spark_and_uses_its_own_image(campaign, tmp_path, monkeypatch):
+@pytest.mark.parametrize('with_images,arm_count', [(False, 5), (True, 9)])
+def test_default_excludes_spark_access_image_and_eight_gpu_job(campaign, tmp_path, monkeypatch, with_images, arm_count):
+    monkeypatch.setattr(b, 'freeze_media', lambda *a, **kw: {})
+    work = tmp_path / 'default-models'
+    s.prepare(campaign[2], work, expected=3, with_images=with_images)
+    m = s.check(work)
+    assert m['nemotron_super']['profiles'] == ['fastino', 'nvfp4', 'bf16', 'lilicorr', 'redhat-fp8-dspark']
+    assert len(m['nemotron_super']['arms']) == arm_count
+    assert not any(name.startswith('spark-') for name in m['nemotron_super']['arms'])
+    assert spark.SPARK not in m['nemotron_super']['pins'] and spark.DSPARK not in m['nemotron_super']['pins']
+    assert set(m['nemotron_super']['engines']) == {'nemotron'}
+    plan = s.submit(work, 'account', 'qos', dry_run=True)
+    assert plan['maximum_simultaneous_gpus'] == 2
+    assert not any('--gres=gpu:b200:8' in command for command in plan['commands_without_dependencies'])
+
+
+def test_explicit_spark_uses_its_own_image(campaign, tmp_path, monkeypatch):
     root = campaign[2]
     work = tmp_path / 'all-models'
-    s.prepare(root, work, expected=3)
+    s.prepare(root, work, expected=3, profiles=list(s.PROFILES))
     m = s.check(work)
     assert list(m['nemotron_super']['profiles']) == ['fastino', 'nvfp4', 'bf16', 'lilicorr', 'spark', 'redhat-fp8-dspark']
     assert len(m['nemotron_super']['arms']) == 6
@@ -44,7 +60,7 @@ def test_default_includes_spark_and_uses_its_own_image(campaign, tmp_path, monke
 def test_spark_vision_is_separate_and_preserves_other_profiles(campaign, tmp_path, monkeypatch):
     monkeypatch.setattr(b, 'freeze_media', lambda *a, **kw: {})
     work = tmp_path / 'vision'
-    s.prepare(campaign[2], work, expected=3, with_images=True)
+    s.prepare(campaign[2], work, expected=3, with_images=True, profiles=list(s.PROFILES))
     m = s.check(work)
     assert len(m['nemotron_super']['arms']) == 11
     assert m['nemotron_super']['arms']['spark-vision'] == {'profile': 'spark', 'pixels': True}
@@ -100,7 +116,7 @@ def test_git_blob_identity_rejects_modified_gated_file(tmp_path, monkeypatch):
 
 def test_missing_spark_access_fails_before_any_weight_download(campaign, tmp_path, monkeypatch):
     work = tmp_path / 'access-failure'
-    s.prepare(campaign[2], work, expected=3)
+    s.prepare(campaign[2], work, expected=3, profiles=['spark'])
     calls = []
     def download(**kwargs):
         calls.append(kwargs)

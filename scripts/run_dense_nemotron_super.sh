@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# CPU preparation -> pinned CPU setup -> sequential Nemotron/Spark servers -> CPU scores/export.
+# CPU preparation -> pinned CPU setup -> sequential model servers -> CPU scores/export.
 set -euo pipefail
 umask 077
 
@@ -106,4 +106,4 @@ job="$(sbatch --parsable --account="$account" --qos="$qos" --partition=hpg-defau
 printf '%s\n' "$job" > "$bootstrap/job-id.txt"
 printf '%s\n' "$work" > "$pointer"
 printf 'Preparation job: %s\nSource commit: %s\nCampaign: %s\nLog: %s/prepare.log\n' "$job" "$revision" "$work" "$bootstrap"
-echo 'Default configurations: Fastino Super Healthcare, NVIDIA NVFP4 + MTP5, BF16 + MTP5, NVFP4 + LiLiCorr7, Muse Spark Open NVFP4 + DSpark7, and Red Hat Nemotron FP8 + DSpark8. CPU setup checks model access before large downloads. GPU configurations run sequentially: eight B200s for Spark, at most two for the others; then CPU scoring/export runs.'
+echo 'Default configurations: Fastino Super Healthcare, NVIDIA NVFP4 + MTP5, BF16 + MTP5, NVFP4 + LiLiCorr7, and Red Hat Nemotron FP8 + DSpark8. Muse Spark is excluded by default while access is pending. GPU configurations run sequentially using at most two B200s; then CPU scoring/export runs.'

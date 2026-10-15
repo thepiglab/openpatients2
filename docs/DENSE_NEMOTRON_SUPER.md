@@ -1,4 +1,4 @@
-# Nemotron 3.5 Super and Muse Spark Open clinical extraction benchmark
+# Nemotron 3.5 Super clinical extraction benchmark
 
 Separate campaign from the existing Glimmer, GEPA and LoRA runs.
 It never submits or cancels their jobs. Uses the existing dense reference,
@@ -6,11 +6,15 @@ live patient discovery, source-aware extraction/repair, literal evidence checks,
 caption attribution, measurement-series extraction and unified scorer.
 The obsolete Fastino Lightning launcher and model support have been removed;
 the `fastino` configuration here is the new **Super VL Healthcare** checkpoint.
+Muse Spark Open is **excluded from the default campaign** while access is pending.
+Its recipe is retained for explicit future selection.
 
 ## Run on HiPerGator
 
 Commit/push this implementation and pull it into the HiPerGator checkout first.
 The launcher freezes a **committed** Git snapshot, not the Mac's uncommitted files.
+Start a new campaign after pulling this change. An existing frozen campaign that
+includes Muse Spark will still require it when resumed.
 
 ```bash
 # From openpatients2 on HiPerGator, first run a small end-to-end hardware check:
@@ -25,7 +29,7 @@ WORK="$(cat runs/dense-nemotron-super-last-work.txt)"
 cat "$WORK/summary/comparison.md"
 ```
 
-Default: six configurations × **217 train/validation articles = 1,302 article
+Default: five configurations × **217 train/validation articles = 1,085 article
 runs**. The 43 test articles are preserved. Train and validation scores are
 separate. This is a development comparison, not a blinded clinical validation.
 Small checks choose the first article IDs deterministically; they are operational
@@ -33,7 +37,12 @@ smokes, not representative quality samples. Each arm also runs synthetic startup
 checks outside article timing. No annotated roster, facts, figure labels or
 supplement transcription enters model inference.
 
-Muse Spark Open requires approved access to Meta's gated Hugging Face checkpoint.
+The five default configurations do not require the gated Muse Spark checkpoint,
+its DSpark drafter, or its separate container. A Hugging Face credential is still
+useful for public-repository download rate limits.
+
+**Only if explicitly selecting `spark`:** Muse Spark Open requires approved
+access to Meta's gated Hugging Face checkpoint.
 Approve access with the account used on HiPerGator, then make its credential
 available through `HF_TOKEN` or the existing Hugging Face credential cache.
 The credential checked locally on October 15 received HTTP 403; target config,
@@ -46,12 +55,9 @@ Credentials are never written into campaign receipts or exports.
 # Spark-only hardware smoke after access is approved:
 DENSE_SUPER_PROFILES=spark DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=2 \
   bash scripts/run_dense_nemotron_super.sh
-# Nemotron configurations remain runnable while Spark access is pending:
-DENSE_SUPER_PROFILES='fastino nvfp4 bf16 lilicorr redhat-fp8-dspark' \
-  bash scripts/run_dense_nemotron_super.sh
 ```
 
-Optional separate vision arms (all six text arms still run):
+Optional separate vision arms (all five default text arms still run):
 
 ```bash
 DENSE_SUPER_WITH_IMAGES=1 bash scripts/run_dense_nemotron_super.sh
@@ -60,8 +66,8 @@ DENSE_SUPER_PROFILES='nvfp4 lilicorr' DENSE_SUPER_LIMIT_ARTICLES=2 \
   DENSE_HOURS=2 bash scripts/run_dense_nemotron_super.sh
 ```
 
-Vision adds three NVIDIA arms, one Red Hat FP8 arm and one Muse Spark Open arm,
-for **2,387 article runs** across eleven arms.
+Vision adds three NVIDIA arms and one Red Hat FP8 arm,
+for **1,953 article runs** across nine arms. Muse Spark remains excluded.
 Fastino Super has no vision encoder and never receives pixels. CPU preparation freezes
 eligible source image bytes and verifies acquisition hashes; missing/rights-review
 images remain explicit. Vision arms run original figure/EHR/privacy stages too.
@@ -91,8 +97,10 @@ python3 scripts/benchmark_dense_nemotron_super.py recipe
 | nvfp4 | NVIDIA Super VL NVFP4 | 1 B200 | Native MTP, 5 tokens | 512 | 64 | 96G |
 | bf16 | NVIDIA Super VL BF16 | 2 B200 | Native MTP, 5 tokens | 32 | 32 | 200G |
 | lilicorr | **Same NVIDIA NVFP4 target**, plus LiLiCorr draft checkpoint | 1 B200 | DFlash/LiLiCorr, 7 tokens | 1 | 1 | 96G |
-| spark | Muse Spark Open 816B-A42B NVFP4 | 8 B200 | DSpark, 7 tokens | 32 | 32 | 200G |
 | redhat-fp8-dspark | Red Hat Nemotron Super VL FP8 | 2 B200 | Red Hat DSpark, 8 tokens, draft TP1 | 128 | 64 | 200G |
+
+Optional, excluded by default: `spark` uses Muse Spark Open 816B-A42B NVFP4,
+eight B200s, DSpark7, 32 engine sequences/client requests and 200G host RAM.
 
 LiLiCorr is a drafter paired with the NVIDIA NVFP4 target. It declares block size 8,
 so the published seven-token draft is used. It is never attached to Fastino.
@@ -105,12 +113,12 @@ The cards also list v0.32.0; this campaign pins the named nightly and records th
 installed version, SIF hash, and relevant upstream Python source hashes. It does
 not reuse the older project's vLLM 0.30.0/Glimmer container or speculative head.
 
-Muse Spark Open uses its own official `vllm/vllm-openai:muse-spark-open` launch
+The optional Muse Spark Open profile uses its own official `vllm/vllm-openai:muse-spark-open` launch
 image, pinned to the Linux AMD64 manifest digest
 `sha256:2790bff92e9f2a796dcb65682dc5c2e9559f967a4b773f6ae4ca09dbd31c1081`.
 Its image source-revision label currently points to an unavailable Git commit;
 the OCI digest pins the runtime, and CPU setup records installed source hashes.
-Both images must pass the live tokenization checks below. Red Hat
+Each selected image must pass the live tokenization checks below. Red Hat
 reports evaluations on vLLM 0.31.0 but its main serving commands do not pin a
 container; this campaign reuses the NVIDIA nightly after inspecting its
 Speculators adapter, Qwen3 DSpark model and Nemotron auxiliary-state support.
@@ -145,7 +153,7 @@ Speculators adapter, Qwen3 DSpark model and Nemotron auxiliary-state support.
 - **Fastino Super:** follows its BF16/tensor-parallel quickstart, using TP2 as
   recommended for B200s. Speculation is off; this is the new Super checkpoint,
   not the retired Lightning model.
-- **Muse Spark Open:** follows Meta's NVFP4 + DSpark7 command: expert parallelism,
+- **Muse Spark Open (opt-in only):** follows Meta's NVFP4 + DSpark7 command: expert parallelism,
   `muse` reasoning/tool parsers, automatic tool choice, Rust frontend, probabilistic
   draft sampling, block rejection sampling and adaptive verification. Meta's
   published deployment uses **four B300s**; this campaign uses **TP8 on eight B200s**
@@ -203,17 +211,18 @@ Sources:
 ## Resources, validation and recovery
 
 CPU preparation → CPU setup → **sequential** GPU arms → CPU aggregation/export.
-At most **eight B200s, 16 CPUs and 200G host RAM** for this campaign at once.
-Only Muse Spark Open requests eight GPUs; the Nemotron profiles request at most
-two GPUs and eight CPUs. Other users'
+By default, at most **two B200s, eight CPUs and 200G host RAM** for this campaign
+at once. Explicitly selecting Muse Spark raises this to eight B200s and 16 CPUs.
+Other users'
 jobs and account CPU/RAM/GPU limits still affect scheduling. GPU stages require
 successful CPU setup; independent arm failures allow later arms and diagnostics
 to continue. Jobs remain held until the whole dependency graph is accepted.
 Submission failure cancels only IDs created by that submission.
 
-Allow roughly **2 TB or more free scratch** for five full targets, three drafters,
-download caches, both containers, inputs/results. Muse Spark Open's NVFP4 weights
-alone are approximately 530 GB. Setup may take hours; downloads, full
+Allow roughly **1.5 TB or more free scratch** for four full targets, two drafters,
+download caches, one container, inputs/results. If explicitly selecting Muse Spark,
+allow **2 TB or more**: its NVFP4 weights alone add approximately 530 GB, plus its
+drafter and separate container. Setup may take hours; downloads, full
 hashing, scoring and compression run on CPU allocations. No model inference or
 installation runs on a login node. The launcher needs existing `uv`, Apptainer
 and any required Hugging Face access. No packages are installed globally.

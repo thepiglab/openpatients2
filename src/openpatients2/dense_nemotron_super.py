@@ -1,7 +1,7 @@
-"""Frozen clinical extraction benchmark for Nemotron Super and Muse Spark Open.
+"""Frozen clinical extraction benchmark for Nemotron Super.
 
 CPU stages download/hash/score/export; Slurm GPU stages only serve local files.
-Servers run sequentially; Spark reserves eight B200s, other profiles at most two.
+Servers run sequentially, using at most two B200s by default. Muse Spark is opt-in.
 """
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ import time
 
 from . import dense_benchmark as b
 from .nemotron_super_recipes import (
-    LILICORR, PINS, PROFILES, arm_definitions, engine,
+    DEFAULT_PROFILES, LILICORR, PINS, PROFILES, arm_definitions, engine,
 )
 
 FORMAT = 'dense-nemotron-super/2'
@@ -30,7 +30,7 @@ def prepare(root, work, expected=260, hours=12, with_images=False, include_test=
             limit_articles=None, profiles=None):
     if not 1 <= hours <= 72 or (limit_articles is not None and limit_articles < 1):
         raise ValueError('Invalid hours/article limit')
-    selected = list(PROFILES) if profiles is None else list(profiles)
+    selected = list(DEFAULT_PROFILES) if profiles is None else list(profiles)
     if not selected or len(set(selected)) != len(selected) or set(selected) - PROFILES.keys():
         raise ValueError('Select unique, supported profiles')
     definitions = {k: v for k, v in arm_definitions(with_images).items() if v['profile'] in selected}
@@ -49,7 +49,7 @@ def prepare(root, work, expected=260, hours=12, with_images=False, include_test=
                  'pins': {model: PINS[model] for name in selected
                           for model in [PROFILES[name]['model']] + ([PROFILES[name]['drafter']] if 'drafter' in PROFILES[name] else [])},
                  'engines': {p.get('engine', 'nemotron'): engine(p) for name in selected for p in [PROFILES[name]]},
-                 'timing_policy': 'One active article per server; synthetic startup probe is outside article timing. Configurations run sequentially; Spark uses eight B200s, others at most two.'})
+                 'timing_policy': 'One active article per server; synthetic startup probe is outside article timing. Configurations run sequentially. GPU counts come from the selected recipes; defaults use at most two B200s.'})
     m['files'] = b.inventory(work, ['code', 'inputs', 'reference'])
     for name, definition in definitions.items():
         profile = PROFILES[definition['profile']]
@@ -600,7 +600,7 @@ def aggregate(work):
             'Use sacct for actual allocation costs, including hard-killed jobs with missing final receipts. '
             'One seed; annotation agreement only; no automatic model promotion.'}
     b.write(work / 'summary/comparison.json', result)
-    lines = ['# Nemotron Super and Muse Spark Open comparison', '', f'Complete: {result["complete"]}. Test evaluated: {result["test_evaluated"]}.', '']
+    lines = ['# Clinical model comparison', '', f'Complete: {result["complete"]}. Test evaluated: {result["test_evaluated"]}.', '']
     for scope, splits in metrics.items():
         for split, arms in splits.items():
             lines += [f'## {scope}: {split}', '', '| Arm | Precision | Recall | Item F1 | F2 | Attribute accuracy |',
@@ -676,7 +676,8 @@ def main(argv=None):
     args = parser.parse_args(argv)
     if args.command == 'recipe':
         result = {'engines': {p.get('engine', 'nemotron'): engine(p) for p in PROFILES.values()},
-                  'pins': PINS, 'profiles': PROFILES, 'context_override': b.CONTEXT}
+                  'pins': PINS, 'profiles': PROFILES, 'default_profiles': list(DEFAULT_PROFILES),
+                  'context_override': b.CONTEXT}
     else:
         work = args.work.resolve()
         if args.command == 'prepare':
