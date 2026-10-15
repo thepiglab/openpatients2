@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12857773.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "fe271a83a9fc74a84f227c584d85a498968dcdcec3f32bba03faf3e426cfb56f",
+  "annotation_sha256": "bdeb0978110ce67099944c14d450dd9752d2605e96864d121209fa4f43355f12",
+  "reviewed_at": "2026-10-15T16:53:17.222238+00:00",
+  "source_segments_read": 40,
+  "facts_reviewed": 92,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f014 'no abdominal hernias were documented' quarantined (ambiguous, review_only): absence of documentation right after limited palpation and no imaging, not an explicit negation (ASSERT-ABSENT).",
+    "Removed care_plans p1-f031 (Figure 1 caption 'mechanical contraindication') and p1-f046 ('precluded continuation in the transplant protocol'): assessments, not care plans; quotes moved to evidence of the pannus and panniculopathy conditions.",
+    "Merged caption-only closure items p1-f060 (Figure 5) and p1-f061 (Figure 6) into layered closure p1-f059 (ONE-STATEMENT); Figure 6 'good perfusion' added to flap perfusion p1-f076.",
+    "p1-f089 abdominal compression action unknown -> completed ('tolerated abdominal compression' states it was applied).",
+    "Linked all 12 Table 1 laboratory observations to the preoperative laboratory event and operative details to the panniculectomy event.",
+    "Added relations with literal support: abscess drainage during panniculectomy ('During dissection'), clearance before surgery, drain removal after the first-24-hour output, transplant eligibility after surgery ('subsequently').",
+    "Added ambiguity for 110 x 50 cm attributed to the incision (text) and to the specimen (Figure 3 caption); both kept as stated.",
+    "Visual submission FIG1 panel B: groin-crease ink lines, visible pubic and partial genital region below the fold, neck at top edge."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the six figure images are inspected in the separate visual target.",
+    "No dates or follow-up durations are stated, so no calendar times are recorded; only relative anchors printed in the text are used.",
+    "The incision (b00022) and the excised specimen (Figure 3 caption) are both described as approximately 110 × 50 cm; both are kept as stated.",
+    "Pathology of the drained cavity is not reported; the chronic abscess is kept provisional because results wording says compatible with.",
+    "Post-transplant outcome and long-term follow-up are not reported; the discussion says the report lacks long-term follow-up.",
+    "Literature citations and cohort statements in the introduction and discussion are not attributed to the index patient.",
+    "Written informed consent statement is administrative and not a clinical fact."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 40,
+    "facts_reviewed": 96,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Single index patient, 54-year-old man with ESRD on hemodialysis and a massive pannus; roster count 1.",
+      "'No medication allergies were documented' kept as drug-allergy absent (NKDA-equivalent scoped statement per the allergies prompt); hernia 'not documented' quarantined.",
+      "Chronic abscess kept provisional: results and caption hedge, discussion and conclusion state it flatly, and no pathology result is reported.",
+      "PT/INR/aPTT keep flag unknown: 'within acceptable parameters for major elective surgery' is not a normal call (aPTT 39.7 s exceeds the printed 25-35 s range); other flags come from the text wording.",
+      "Table 1 'Preoperative' time comes from the governing table caption; temporality unknown throughout.",
+      "All six figures viewed with zoomed crops; FIG1 A, FIG1 B and FIG6 show the pubic/genital region; no faces or printed identifiers."
+    ],
+    "residual_risks": [
+      "Allergy representation depends on reading 'not documented' as NKDA-equivalent.",
+      "Pathology of the drained cavity is not reported.",
+      "Several outcome items come from abstract and discussion summaries of this same patient."
+    ]
+  },
+  "physician_adjudicated": false
+}
