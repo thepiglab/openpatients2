@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC12624158.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8941b7fd55a460e16d470449c3fd475f88d3ac132e13efd6d2bca3e1df4ea526",
+  "annotation_sha256": "4bdef973b243dcf58a811b588da7ad9264f2abbf70838e2636056b11f610085a",
+  "reviewed_at": "2026-10-15T16:31:15.453936+00:00",
+  "source_segments_read": 28,
+  "facts_reviewed": 121,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Fistula diagnostic certainty for Cases 1 and 2: case text hedges (possible/suspected) while the article reports three cases of colo-ovarian fistula and the abstract says Case 2 presented with a fistula on MRI; p1-f034 and p2-f013 set source_conflict/review_only and the unhedged side added as p1-f042 and p2-f026 (review_only).",
+    "Discussion \"fistulas resolved after conservative treatment\" outcomes (p1-f039, p2-f023) set ambiguous/review_only: they presuppose a fistula the case text leaves suspected; the explicitly scoped \"symptoms successfully managed conservatively\" outcomes stay included.",
+    "Discussion \"MRI and CT demonstrated free air within the ovary\" in both cases (p1-f041, p2-f025) set ambiguous/review_only: Case 1 text reports air only on CT and Case 2 text only on MRI with no CT mentioned.",
+    "Added gas-producing bacterial infection as a possible differential for Cases 1 and 2 (p1-f043, p2-f027) from the discussion sentence scoped to these two cases.",
+    "Case 3 en bloc resection (p3-f041) changed from planned to completed: the decision is followed by examination of the resected specimen containing intestine and ovary and by \"treated by surgery\"/\"managed surgically\"; generic surgical-treatment item p3-f042 merged into it; colostomy creation added as p3-f051 (established by its later closure).",
+    "Added the authors suspected diverticulum/endometriotic-lesion overlap etiology for Case 3 as review_only p3-f052; added Case 3 sigmoid-colon endometriosis and ruptured-segment evidence quotes.",
+    "Case 3 postoperative Day 2 fever, abdominal pain and peritonitis time relation changed from after to at; leak test method moved out of the finding field into the name.",
+    "Timeline: p3 planned decision event converted to the occurred resection/colostomy event and the duplicate surgery event removed; added literal relations (p1 16 years earlier before five years prior; p2 no recurrence during expectant management; p3 preoperative MRI before hysterectomy, Day 2 symptoms before next-day worsening, leak test during laparotomy, findings before resection, colostomy before its closure). Summaries rewritten so they no longer state review_only claims."
+  ],
+  "unresolved": [
+    "Fistula status is imaging-suggested for Cases 1 and 2 in the case text, while the abstract and discussion call them fistulas that resolved; no confirmation method for resolution is stated.",
+    "Case 3 discussion says no evidence of ovarian involvement, which conflicts with the case text describing a tract into the ovary; recorded as a review-only item.",
+    "Case 3 resection and colostomy are recorded as a decision in the case text; surgical treatment is recorded from the abstract and discussion.",
+    "Retrospective author scenarios and suspected mechanisms (sealed fistula, diverticulum overlap) are kept as review-only or ambiguity entries.",
+    "Discussion statements about MRI and CT free air in Cases 1 and 2 are kept as separate observations from the case-text findings."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 28,
+    "facts_reviewed": 121,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Three individual cases (36F, 42F, 42F) with literal roster count three; cohort statements copied only where the sentence names the cases (All cases / Cases 1 and 2 / both cases).",
+      "Case 3 fistula confirmed intraoperatively and on the specimen; discussion \"no evidence of ovarian involvement\" kept review_only against the case-text tract into the ovary; sealed-fistula scenario and etiology kept review_only.",
+      "Aborted laparoscopy kept as action historical with the abort in complication; recto-sigmoid adhesions left untouched kept as a present condition; colostomy closure completed within 3 months.",
+      "All six panels viewed at full resolution with magnified crops; visual descriptions, attributions, EHR labels and privacy flags match the pixels."
+    ],
+    "residual_risks": [
+      "Whether article-level framing (\"three cases of colo-ovarian fistulas\") constitutes a certainty conflict with the hedged case text is a judgment call; both sides are review_only.",
+      "Figure 2a has a cropped, illegible line of overlay text at the top edge; privacy flags record device text only."
+    ]
+  },
+  "physician_adjudicated": false
+}
