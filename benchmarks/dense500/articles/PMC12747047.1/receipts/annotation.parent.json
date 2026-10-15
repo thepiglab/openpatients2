@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC12747047.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a43800d7f8804f57786a75e1aee3cb067830d9d9012bf8a52a2523ffb93ad7bb",
+  "annotation_sha256": "211207f054899d78c1a69557f6b412f63b7f8edd8260f5e5a2685f35f788aebc",
+  "reviewed_at": "2026-10-15T17:14:04.583587+00:00",
+  "source_segments_read": 13,
+  "facts_reviewed": 82,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p2-f001: removed care_setting \"clinic\" borrowed from the later 4-month return visit (initial presentation states no setting).",
+    "p2-f022: Progrip mesh action device_present -> completed (\"was placed\"; remaining in place not stated).",
+    "p2-f029: hematoma clinical_status unknown -> resolved from the cited abstract quote \"which resolved initially\".",
+    "p2-f015: \"no significant surgical history\" set certainty ambiguous, scoring review_only, with a patient ambiguity against the 2015 CABG (p2-f013 kept include).",
+    "p2-e04: removed p2-f021 (surgeons \"opted to\" incise the sac) from the occurred surgery event; new event p2-e13 with occurrence unknown.",
+    "Added p2-f049 abstract persistent scrotal swelling and tenderness (undated); residual contact pain for p1 stays in outcome p1-f030 only (ONE-STATEMENT).",
+    "Added the abstract ultrasound sentence covering both patients as second evidence on the ultrasound findings and hydrocele facts (one item citing both).",
+    "Added 11 literally supported temporal relations (p1: 3, p2: 8; p1-e02 before p1-e03 not added because only sentence adjacency supports it), e.g. \"He subsequently underwent TAPP\", pluperfect 2015 CABG and hernia belt, abstract hematoma \"subsequently led to\" hydrocele, follow-up scheduled then visit, \"However, 4 months postoperatively, he returned\".",
+    "Article limitations updated: abstract \"gradually resolved\" judged compatible with the case-text residual symptoms (undated abstract claim), not a source conflict."
+  ],
+  "unresolved": [
+    "No figures or supplements are listed in the source.",
+    "The discussion hypothesizes that postoperative hematomas evolved into hydroceles by compressing lymphatic vessels; this is speculation and is not recorded as a patient fact.",
+    "The 59-year-old patient in the discussion belongs to a cited 2023 case report and is not an index patient.",
+    "The two TAPP operations were performed within a 5-week interval at the same facility; the interval is between the two patients and is not assigned to either one.",
+    "Patient 1 hydrocele is named only in the abstract and the introduction sentence; the case narrative describes the left scrotal fluid collection on ultrasound without the word hydrocele.",
+    "Abstract says symptoms gradually resolved without surgery, while the case text keeps pain on direct contact (patient 1) and mild tenderness on palpation (patient 2); both are recorded as written, not reconciled.",
+    "Patient 2 is said to have no significant surgical history despite a documented 2015 CABG; the absent surgical-history item is kept review_only (ambiguous qualifier).",
+    "Anchors for relative times such as \"3 years earlier\" and \"1 month later\" are not stated and are left null.",
+    "Parent review: the abstract statement that symptoms gradually resolved without surgery is undated and is judged compatible with (not contradicted by) the case text, which reports improvement with residual contact pain (patient 1) or mild tenderness (patient 2) at the last dated visit; both views are recorded."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 13,
+    "facts_reviewed": 82,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Two index patients; roster count 2 literal (\"two unique cases\"); no figures or supplements.",
+      "Patient 1 hydrocele is literally attributed in the abstract (\"The first patient ... developed a left-sided hydrocele\") and in b00004 for both patients; kept confirmed include.",
+      "Abstract \"symptoms gradually resolved without surgical intervention\" is undated and scoped to both cases; compatible with case-text improvement, kept include alongside the improvement outcomes.",
+      "Opted incision kept action unknown; the text never reports it was performed.",
+      "Medication actions stay unknown (history list, no current/started wording).",
+      "Relative times \"3 years earlier\", \"1 month later\", \"2 months later\" keep null anchors; relations use literal order wording only."
+    ],
+    "residual_risks": [
+      "\"No significant surgical history\" vs 2015 CABG treated as ambiguous qualifier (single review_only item) rather than a two-sided source conflict.",
+      "Timing of abstract-only items (p2-f049, recovery outcomes) relative to dated visits is unknown.",
+      "Not physician-adjudicated."
+    ]
+  },
+  "physician_adjudicated": false
+}
