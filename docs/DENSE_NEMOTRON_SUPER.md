@@ -218,27 +218,41 @@ Sources:
 
 ## Resources, validation and recovery
 
-CPU preparation → CPU setup → **sequential** GPU arms → CPU aggregation/export.
+CPU preparation/access checks → **for each selected profile: CPU download → GPU
+benchmark → CPU cleanup** → CPU aggregation/export. Downloads and cleanup use
+`hpg-default`, eight CPUs, 32G RAM, up to eight hours, and **no GPUs**.
+All six default profiles remain selected. Text and optional vision arms for a
+profile share its download; cleanup waits for both arms to terminate.
 At most **eight B200s, 16 CPUs and 200G host RAM** for this campaign at once.
 Only Muse Spark Open requests eight GPUs; the Nemotron profiles request at most
 two GPUs and eight CPUs. Other users'
 jobs and account CPU/RAM/GPU limits still affect scheduling. GPU stages require
-successful CPU setup; independent arm failures allow later arms and diagnostics
-to continue. Jobs remain held until the whole dependency graph is accepted.
+successful CPU access checks and their own CPU download/probe job. Cleanup runs
+after the profile's download and GPU jobs terminate, including failures. The next
+profile downloads only after cleanup succeeds; a cleanup failure blocks further
+large downloads. Independent model failures allow later profiles and diagnostics
+to continue once cleanup succeeds. Jobs remain held until the whole dependency graph is accepted.
 Submission failure cancels only IDs created by that submission.
 
-Allow roughly **2 TB or more free scratch** for five full targets, three drafters,
-download caches, both containers, inputs/results. Muse Spark Open's NVFP4 weights
-alone are approximately 530 GB. Setup may take hours; downloads, full
-hashing, scoring and compression run on CPU allocations. No model inference or
-installation runs on a login node. The launcher needs existing `uv`, Apptainer
-and any required Hugging Face access. No packages are installed globally.
+Storage now holds **one target plus its drafter and serving image at a time**,
+rather than every model. Budget roughly **650–750 GB free** for the largest profile
+(Muse Spark Open), its drafter/container, and working space, plus inputs/results.
+Actual free space and image sizes still determine whether it fits. The CPU
+download job builds the container first and removes its OCI cache/conversion
+scratch before downloading model weights, reducing peak space. Cleanup removes
+the completed profile's target/drafter, image, download caches and arm compilation
+caches; outputs, citations, returned reasoning, pinned revisions, weight hashes
+and CPU probe receipts remain. NVFP4 is downloaded again for LiLiCorr rather than
+kept resident through another profile. Downloads, full hashing, cleanup, scoring
+and compression run on CPU allocations. No inference or installation runs on a
+login node. The launcher needs existing `uv`, Apptainer and required Hugging Face
+access. No packages are installed globally.
 
 CPU preflight verifies pinned configurations/templates, native reasoning modes
 and published serving flags in each model's own image. Nemotron additionally
 checks the exact upstream tokenization/registry source hashes. Muse Spark Open's
 gated config, template, generation config and tokenizer file are pinned to public
-Git blob identities and checked after authorized download; setup confirms the
+Git blob identities and checked after authorized download; each download job confirms the
 target architecture is registered in its official image.
 On each GPU allocation, a probe requires the expected count of B200-class GPUs.
 The server must then pass synthetic text (and optional image) requests whose
@@ -261,10 +275,32 @@ bash scripts/run_dense_nemotron_super.sh resume
 python3 "$WORK/code/scripts/benchmark_dense_nemotron_super.py" submit --work "$WORK" --dry-run
 ```
 
-Resume reuses CPU-prepared weights and skips completed articles/configurations.
-A failed CPU setup is rerun if no ready root runtime receipt exists. Change code,
-recipe, sampling or input selection by preparing a **new** campaign. Private
-weights/container are retained after export; no automatic deletion occurs.
+Resume skips completed articles/configurations and schedules CPU downloads only
+for profiles with pending articles. Retained partial downloads can resume when
+available; cleaned weights are downloaded again. A canceled cleanup is recovered
+before a different profile downloads. A campaign runtime lock prevents download,
+cleanup and inference from using its weights concurrently. A failed access setup
+is rerun if no ready root runtime receipt exists. Change code, recipe, sampling,
+storage policy or input selection by preparing a **new** campaign. Old campaigns
+continue to use their frozen all-model download code when resumed.
+
+To reclaim the previous campaign's downloaded weights before starting a new one,
+first cancel it, then run the current checkout's cleanup command on a **CPU** job.
+This keeps its frozen inputs/code, results and reasoning. It also supports older
+campaigns; their deleted weights cannot be reused by resume.
+
+```bash
+bash scripts/run_dense_nemotron_super.sh cancel &&
+sbatch --wait --account="${DENSE_ACCOUNT:-cai5724}" --qos="${DENSE_QOS:-cai5724}" \
+  --partition=hpg-default --nodes=1 --ntasks=1 --cpus-per-task=1 --mem=2G \
+  --time=01:00:00 --job-name=op2-super-clean-old \
+  --wrap='python3 scripts/benchmark_dense_nemotron_super.py cleanup --work "$(cat runs/dense-nemotron-super-last-work.txt)"' &&
+DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=2 bash scripts/run_dense_nemotron_super.sh
+```
+
+Export `HF_TOKEN` (for example `set -a; source .env; set +a`) before launching the
+new campaign. Commit/push/pull the updated implementation first. Do not resume an
+old campaign to get the new download policy.
 
 ## Scores and export
 

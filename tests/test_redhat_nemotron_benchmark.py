@@ -105,9 +105,11 @@ def test_redhat_metadata_pins_and_setup_ownership(campaign, tmp_path, monkeypatc
     monkeypatch.setitem(sys.modules, 'huggingface_hub', SimpleNamespace(snapshot_download=download, get_token=lambda: None))
     monkeypatch.setattr(b, 'sha', sha)
     monkeypatch.setattr(s.subprocess, 'run', run)
-    for name in ('HF_HOME', 'HF_XET_CACHE', 'APPTAINER_CACHEDIR', 'APPTAINER_TMPDIR'):
+    for name in ('HF_HOME', 'HF_HUB_CACHE', 'HF_XET_CACHE', 'HF_XET_CHUNK_CACHE_SIZE_BYTES', 'APPTAINER_CACHEDIR', 'APPTAINER_TMPDIR'):
         monkeypatch.setenv(name, 'fixture')
     assert s.setup(work)['ready']
+    assert [call['repo_id'] for call in calls] == [redhat.FP8, redhat.DSPARK]
+    assert s.download(work, 'redhat-fp8-dspark')['ready']
     assert [call['repo_id'] for call in calls] == [redhat.FP8, redhat.DSPARK] * 2
     assert all(call['revision'] == redhat.PINS[call['repo_id']]['revision'] for call in calls)
     assert all('*.safetensors' not in call['allow_patterns'] for call in calls[:2])

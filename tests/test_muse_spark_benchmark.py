@@ -124,7 +124,7 @@ def test_missing_spark_access_fails_before_any_weight_download(campaign, tmp_pat
             raise PermissionError('fixture gated access denial')
     monkeypatch.setitem(sys.modules, 'huggingface_hub', SimpleNamespace(snapshot_download=download, get_token=lambda: 'fixture-token'))
     monkeypatch.setattr(s, 'validate_checkpoint', lambda *a, **kw: None)
-    for name in ('HF_HOME', 'HF_XET_CACHE', 'APPTAINER_CACHEDIR', 'APPTAINER_TMPDIR'):
+    for name in ('HF_HOME', 'HF_HUB_CACHE', 'HF_XET_CACHE', 'HF_XET_CHUNK_CACHE_SIZE_BYTES', 'APPTAINER_CACHEDIR', 'APPTAINER_TMPDIR'):
         monkeypatch.setenv(name, 'fixture-before-setup')
     with pytest.raises(PermissionError):
         s.setup(work)

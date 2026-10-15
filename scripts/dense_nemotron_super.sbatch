@@ -8,7 +8,7 @@ export UV_CACHE_DIR="$work/runtime/uv-cache" UV_LINK_MODE=copy
 export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 export TOKENIZERS_PARALLELISM=false PYTHONDONTWRITEBYTECODE=1
 if [[ "$phase" != worker ]]; then export CUDA_VISIBLE_DEVICES=""; fi
-if [[ "$phase" == setup || "$phase" == worker ]]; then
+if [[ "$phase" == download || "$phase" == worker ]]; then
   if ! command -v apptainer >/dev/null; then module load apptainer; fi
 fi
 if [[ "$phase" == setup ]]; then uv sync --locked --extra data --no-dev --python 3.12; fi
@@ -19,6 +19,7 @@ python="$work/runtime/client-venv/bin/python"
 if [[ ! -x "$python" ]]; then python=python3; fi
 args=("$phase" --work "$work")
 if [[ "$phase" == worker ]]; then args+=(--arm "$arm"); fi
+if [[ "$phase" == download || "$phase" == cleanup ]]; then args+=(--profile "$arm"); fi
 "$python" scripts/benchmark_dense_nemotron_super.py "${args[@]}" &
 child=$!
 terminate() {

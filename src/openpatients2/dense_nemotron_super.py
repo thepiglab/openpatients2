@@ -1,13 +1,17 @@
 """Frozen clinical extraction benchmark for Nemotron Super and Muse Spark Open.
 
-CPU stages download/hash/score/export; Slurm GPU stages only serve local files.
-Servers run sequentially; Spark reserves eight B200s, other profiles at most two.
+CPU access preflight -> per-profile CPU download, GPU benchmark, CPU cleanup.
+CPU jobs hash/score/export; GPU stages serve local files. Servers run sequentially;
+Spark reserves eight B200s, other profiles at most two.
 """
 from __future__ import annotations
 
 import argparse
 import asyncio
 import copy
+from contextlib import contextmanager
+import fcntl
+from functools import wraps
 import hashlib
 import json
 import os
@@ -24,6 +28,7 @@ from .nemotron_super_recipes import (
 )
 
 FORMAT = 'dense-nemotron-super/2'
+STORAGE_POLICY = 'download-benchmark-cleanup/1'
 
 
 def prepare(root, work, expected=260, hours=12, with_images=False, include_test=False,
@@ -43,7 +48,7 @@ def prepare(root, work, expected=260, hours=12, with_images=False, include_test=
     shutil.copyfile(root / 'docs/DENSE_NEMOTRON_SUPER.md', work / 'code/docs/DENSE_NEMOTRON_SUPER.md')
     m.update(format=FORMAT, git_head=os.environ.get('DENSE_SOURCE_REVISION') or m['git_head'],
              container=None, model=None, drafter=None,
-             nemotron_super={'hours': hours, 'arms': definitions, 'profiles': selected,
+             nemotron_super={'storage_policy': STORAGE_POLICY, 'hours': hours, 'arms': definitions, 'profiles': selected,
                  'with_images': pixels, 'include_test': include_test, 'limit_articles': limit_articles,
                  'recipes': {name: copy.deepcopy(PROFILES[name]) for name in selected},
                  'pins': {model: PINS[model] for name in selected
@@ -172,39 +177,100 @@ def weights_path(work, model):
     return work / 'runtime/weights' / key
 
 
-def validate_runtime(work, arm_name=None):
+def runtime_owner(work, create=False):
     runtime = work / 'runtime'
     owner = {'work': str(work.resolve()), 'manifest_sha256': b.sha(work / 'manifest.json')}
-    if runtime.is_symlink() or b.read(runtime / 'owner.json') != owner:
+    if runtime.is_symlink():
         raise ValueError('Runtime ownership mismatch')
+    if create:
+        runtime.mkdir(exist_ok=True)
+    marker = runtime / 'owner.json'
+    if marker.is_symlink() or (marker.exists() and b.read(marker) != owner) or (not create and not marker.exists()):
+        raise ValueError('Runtime ownership mismatch')
+    if create and not marker.exists():
+        b.write(marker, owner)
+    return runtime
+
+
+@contextmanager
+def runtime_lock(work, create=False):
+    runtime = runtime_owner(work, create=create)
+    path = runtime / 'lifecycle.lock'
+    if path.is_symlink():
+        raise ValueError('Refusing symlink runtime lock')
+    with path.open('a') as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            raise ValueError('A campaign download, worker or cleanup still owns the runtime') from None
+        yield runtime
+
+
+def exclusive_runtime(func):
+    @wraps(func)
+    def locked(work, *args, **kwargs):
+        with runtime_lock(work, create=func.__name__ == 'setup'):
+            return func(work, *args, **kwargs)
+    return locked
+
+
+def profile_models(profile):
+    recipe = PROFILES[profile]
+    return [recipe['model']] + ([recipe['drafter']] if 'drafter' in recipe else [])
+
+
+def validate_runtime(work, arm_name=None):
+    runtime = runtime_owner(work)
     record = b.read(work / 'runtime.json')
-    expected_engines = b.read(work / 'manifest.json')['nemotron_super']['engines']
-    if not record.get('ready') or record.get('engines') != expected_engines:
-        raise ValueError('CPU setup has not completed for the pinned images')
-    for name, info in record['files'].items():
-        path = work / name
-        if path.is_symlink() or not path.resolve().is_relative_to(runtime.resolve()):
-            raise ValueError('Runtime artifact escapes campaign ownership')
+    plan = b.read(work / 'manifest.json')['nemotron_super']
+    if (not record.get('ready') or record.get('engines') != plan['engines']
+            or record.get('storage_policy') != STORAGE_POLICY):
+        raise ValueError('CPU setup has not completed for staged model downloads')
+    if arm_name is None:
+        return record
+    profile_name = plan['arms'][arm_name]['profile']
+    current = b.read(runtime / 'active-profile.json')
+    if current.get('profile') != profile_name:
+        raise ValueError('Requested model is not the active downloaded profile')
+    staged = b.read(runtime / 'profiles' / (profile_name + '.json'))
+    if not staged.get('ready') or current.get('receipt_sha256') != b.sha(runtime / 'profiles' / (profile_name + '.json')):
+        raise ValueError('CPU model download has not completed')
+    for name, info in staged['files'].items():
+        path = owned_path(work, work / name)
         stat = path.stat()
         if stat.st_size != info['bytes'] or stat.st_mtime_ns != info['mtime_ns']:
             raise ValueError('CPU-prepared artifact changed: ' + name)
-    if arm_name is not None:
-        arm = work / 'arms' / arm_name
-        if (arm / 'runtime').is_symlink() or not (arm / 'runtime').is_dir():
-            raise ValueError('Missing campaign-owned arm runtime directory')
-        local = b.read(arm / 'runtime.json')
-        expected = {os.path.relpath(work / name, arm): info for name, info in record['files'].items()}
-        if not local.get('ready') or any(expected.get(name) != info for name, info in local['files'].items()):
-            raise ValueError('Arm runtime differs from CPU-prepared artifact inventory')
-        profile = PROFILES[b.read(arm / 'manifest.json')['arm_profile']['profile']]
-        if local.get('image') != engine(profile)['image']:
-            raise ValueError('Arm image differs from pinned recipe')
-        required = [weights_path(work, profile['model']) / 'config.json', runtime / engine(profile)['sif']]
-        if 'drafter' in profile:
-            required.append(weights_path(work, profile['drafter']) / 'config.json')
-        if any(os.path.relpath(path, arm) not in local['files'] for path in required):
-            raise ValueError('Arm runtime omits target/drafter/container')
+    arm = work / 'arms' / arm_name
+    if (arm / 'runtime').is_symlink() or not (arm / 'runtime').is_dir():
+        raise ValueError('Missing campaign-owned arm runtime directory')
+    local = b.read(arm / 'runtime.json')
+    expected = {os.path.relpath(work / name, arm): info for name, info in staged['files'].items()}
+    if not local.get('ready') or local.get('files') != expected:
+        raise ValueError('Arm runtime differs from CPU-prepared artifact inventory')
+    profile = PROFILES[profile_name]
+    if local.get('image') != engine(profile)['image']:
+        raise ValueError('Arm image differs from pinned recipe')
+    required = [weights_path(work, model) / 'config.json' for model in profile_models(profile_name)]
+    required.append(runtime / engine(profile)['sif'])
+    if any(os.path.relpath(path, arm) not in local['files'] for path in required):
+        raise ValueError('Arm runtime omits target/drafter/container')
     return record
+
+
+def owned_path(work, path):
+    """Check every ancestor before reading or deleting campaign runtime artifacts."""
+    runtime = work / 'runtime'
+    relative = path.relative_to(runtime)
+    if '..' in relative.parts or path == runtime:
+        raise ValueError('Runtime artifact escapes campaign ownership')
+    for parent in [path, *path.parents]:
+        if parent.is_symlink():
+            raise ValueError('Runtime artifact escapes campaign ownership')
+        if parent == runtime:
+            break
+    if not path.resolve().is_relative_to(runtime.resolve()):
+        raise ValueError('Runtime artifact escapes campaign ownership')
+    return path
 
 
 def serving(work, name, shard=0):
@@ -314,35 +380,35 @@ def validate_checkpoint(path, model, require_weights=False):
         raise ValueError('No model weights downloaded: ' + model)
 
 
-def setup(work):
-    m = check(work)
-    start = time.time()
-    runtime = work / 'runtime'
-    runtime.mkdir(exist_ok=True)
-    owner = {'work': str(work.resolve()), 'manifest_sha256': b.sha(work / 'manifest.json')}
-    marker = runtime / 'owner.json'
-    if runtime.is_symlink() or (marker.exists() and b.read(marker) != owner):
-        raise ValueError('Runtime ownership mismatch')
-    b.write(marker, owner)
-    cache = runtime / 'download-cache'
-    for path in [cache, runtime / 'weights'] + [runtime / e['sif'] for e in m['nemotron_super']['engines'].values()]:
-        if path.is_symlink():
-            raise ValueError('Runtime artifacts must be campaign-owned')
-    from huggingface_hub import get_token, snapshot_download
-    # Resolve the user's credential before switching to private campaign caches.
-    # It stays in memory; no token or credential file enters a result artifact.
+def download_environment(work):
+    from huggingface_hub import get_token
+    # Resolve credentials before switching to campaign-local caches. Never persist them.
     token = get_token()
-    os.environ.update(HF_HOME=str(cache), HF_XET_CACHE=str(cache / 'xet'),
+    runtime = runtime_owner(work)
+    cache = owned_path(work, runtime / 'download-cache')
+    for path in (runtime / 'weights', runtime / 'apptainer-cache', runtime / 'apptainer-tmp', runtime / 'cpu-cache'):
+        owned_path(work, path)
+    os.environ.update(HF_HOME=str(cache), HF_HUB_CACHE=str(cache / 'hub'),
+        HF_XET_CACHE=str(cache / 'xet'), HF_XET_CHUNK_CACHE_SIZE_BYTES='0',
         APPTAINER_CACHEDIR=str(runtime / 'apptainer-cache'), APPTAINER_TMPDIR=str(runtime / 'apptainer-tmp'))
     (runtime / 'apptainer-tmp').mkdir(exist_ok=True)
-    # Validate every small config/access gate before any target weights download.
+    return token, cache
+
+
+@exclusive_runtime
+def setup(work):
+    m = check(work)
+    if m['nemotron_super'].get('storage_policy') != STORAGE_POLICY:
+        raise ValueError('Prepare a new campaign for staged downloads; old campaigns freeze their setup code')
+    start = time.time()
+    from huggingface_hub import snapshot_download
+    token, cache = download_environment(work)
     metadata_patterns = ['config.json', 'chat_template.jinja', 'generation_config.json',
                          'hf_quant_config.json', 'tokenizer_config.json', 'processor_config.json',
                          '*.py', 'l4_200k_base', 'LICENSE*', 'USE_POLICY.md']
+    # Access checks for every selected model stay small; no weights or images here.
     for model, pin in m['nemotron_super']['pins'].items():
-        path = weights_path(work, model)
-        if path.is_symlink():
-            raise ValueError('Refusing symlink weights')
+        path = owned_path(work, weights_path(work, model))
         try:
             snapshot_download(repo_id=model, revision=pin['revision'], local_dir=path,
                 cache_dir=cache / 'hub', allow_patterns=metadata_patterns, token=token)
@@ -352,8 +418,94 @@ def setup(work):
                 'note': 'Check HF_TOKEN and approved access to gated checkpoints on the CPU setup job.'})
             raise
         validate_checkpoint(path, model)
-    for model, pin in m['nemotron_super']['pins'].items():
-        path = weights_path(work, model)
+    record = {'ready': True, 'files': {}, 'engines': m['nemotron_super']['engines'],
+              'storage_policy': STORAGE_POLICY, 'setup_seconds': time.time() - start,
+              'setup_started_unix': start}
+    b.write(work / 'runtime.json', record)
+    return record
+
+
+def cleanup_profile(work, profile_name):
+    """Caller owns the lifecycle lock; delete only this campaign's runtime data."""
+    m = check(work)
+    runtime = runtime_owner(work)
+    names = m['nemotron_super']['profiles'] if profile_name is None else [profile_name]
+    if any(name not in m['nemotron_super']['profiles'] for name in names):
+        raise ValueError('Unknown campaign profile')
+    marker = owned_path(work, runtime / 'active-profile.json')
+    if profile_name is not None and marker.exists() and b.read(marker)['profile'] != profile_name:
+        raise ValueError('Refusing cleanup of a different active profile')
+    paths = {weights_path(work, model) for name in names for model in profile_models(name)}
+    paths.update(runtime / engine(PROFILES[name])['sif'] for name in names)
+    paths.update(runtime / folder for folder in (
+        'download-cache', 'apptainer-cache', 'apptainer-tmp', 'cpu-cache'))
+    # Check the full deletion set before the first mutation.
+    for path in paths:
+        owned_path(work, path)
+    arm_caches = [work / 'arms' / name / 'runtime/caches'
+                  for name, definition in m['nemotron_super']['arms'].items() if definition['profile'] in names]
+    for path in arm_caches:
+        for parent in [path, *path.parents]:
+            if parent == work:
+                break
+            if parent.is_symlink():
+                raise ValueError('Refusing symlink arm runtime')
+    deleted = []
+    for path in sorted(paths | set(arm_caches)):
+        if path.exists():
+            if path.is_dir():
+                shutil.rmtree(path)
+            else:
+                path.unlink()
+            deleted.append(str(path.relative_to(work)))
+    if marker.exists():
+        marker.unlink()
+    receipt = {'profile': profile_name, 'deleted': deleted, 'cleaned_unix': time.time(),
+               'note': 'Outputs, reasoning, model pins and hash inventories retained; runtime weights/caches/images removed.'}
+    b.write(work / f'results/lifecycle/cleanup-{time.time_ns()}.json', receipt)
+    return receipt
+
+
+@exclusive_runtime
+def cleanup(work, profile=None):
+    # All-profile cleanup is a manual CPU operation, also supported for old campaigns.
+    legacy = b.read(work / 'manifest.json')['nemotron_super'].get('storage_policy') != STORAGE_POLICY
+    if (profile is None or legacy) and active_jobs(work):
+        raise ValueError('Cancel/wait for all campaign jobs before cleaning the entire runtime')
+    return cleanup_profile(work, profile)
+
+
+@exclusive_runtime
+def download(work, profile_name):
+    m = check(work)
+    validate_runtime(work)
+    if profile_name not in m['nemotron_super']['profiles']:
+        raise ValueError('Unknown campaign profile')
+    start = time.time()
+    runtime = runtime_owner(work)
+    marker = owned_path(work, runtime / 'active-profile.json')
+    # A canceled cleanup can leave the last model resident. Free it before staging another.
+    if marker.exists() and b.read(marker)['profile'] != profile_name:
+        cleanup_profile(work, b.read(marker)['profile'])
+    b.write(marker, {'profile': profile_name, 'ready': False})
+    from huggingface_hub import snapshot_download
+    token, cache = download_environment(work)
+    profile = PROFILES[profile_name]
+    models_to_download = profile_models(profile_name)
+    # Build the image before downloading the large target so OCI layers and
+    # Apptainer conversion scratch do not overlap the full model on disk.
+    selected_engine = engine(profile)
+    sif = owned_path(work, runtime / selected_engine['sif'])
+    if not sif.exists():
+        subprocess.run(['apptainer', 'pull', str(sif), selected_engine['image']], check=True)
+    for folder in ('apptainer-cache', 'apptainer-tmp'):
+        path = owned_path(work, runtime / folder)
+        if path.exists():
+            shutil.rmtree(path)
+    (runtime / 'apptainer-tmp').mkdir(exist_ok=True)
+    for model in models_to_download:
+        pin = m['nemotron_super']['pins'][model]
+        path = owned_path(work, weights_path(work, model))
         snapshot_download(repo_id=model, revision=pin['revision'], local_dir=path,
             cache_dir=cache / 'hub', token=token,
             allow_patterns=['*.json', '*.jinja', '*.py', '*.safetensors', '*.model', '*.tiktoken', '*.txt',
@@ -364,53 +516,53 @@ def setup(work):
                'HF_HOME': str(runtime / 'cpu-cache/hf'), 'HF_MODULES_CACHE': str(runtime / 'cpu-cache/modules'),
                'VLLM_CACHE_ROOT': str(runtime / 'cpu-cache/vllm'), 'XDG_CACHE_HOME': str(runtime / 'cpu-cache/xdg'),
                'PYTHONDONTWRITEBYTECODE': '1'}
-    sifs, probes = [], {}
-    for engine_name, selected_engine in m['nemotron_super']['engines'].items():
-        sif = runtime / selected_engine['sif']; sifs.append(sif)
-        if not sif.exists():
-            subprocess.run(['apptainer', 'pull', str(sif), selected_engine['image']], check=True)
-        prefix = ['apptainer', 'exec', '--cleanenv', '--bind', f'{work}:{work}']
-        for key, value in cpu_env.items():
-            prefix += ['--env', f'{key}={value}']
-        prefix += [str(sif), '/usr/bin/python3']
-        profiles = [PROFILES[name] for name in m['nemotron_super']['profiles']
-                    if PROFILES[name].get('engine', 'nemotron') == engine_name]
-        models = {str(weights_path(work, model)): engine_name for profile in profiles
-                  for model in [profile['model']] + ([profile['drafter']] if 'drafter' in profile else [])}
-        probe = subprocess.run(prefix + ['-c', CPU_PROBE, json.dumps(models),
-            selected_engine['tokenizer_source_sha'] or '', selected_engine['registry_source_sha'] or '',
-            profiles[0].get('reasoning_parser', 'nemotron_v3')], text=True, capture_output=True)
-        b.write(work / f'results/setup-probe-{engine_name}.json', {'returncode': probe.returncode, 'stdout': probe.stdout, 'stderr': probe.stderr})
-        probe.check_returncode()
-        probes[engine_name] = json.loads(probe.stdout.strip().splitlines()[-1])
-        help_result = subprocess.run(prefix + ['-m', 'vllm.entrypoints.cli.main', 'serve', '--help=all'],
-                                     text=True, capture_output=True)
-        (work / f'results/vllm-serve-help-{engine_name}.txt').write_text(help_result.stdout + help_result.stderr)
-        help_result.check_returncode()
-        for profile in profiles:
-            for flag in (arg.split('=')[0] for arg in profile['extra_args'] if arg.startswith('--')):
-                if flag not in help_result.stdout:
-                    raise ValueError('Pinned vLLM lacks recipe flag: ' + flag)
-    files = sifs + [p for p in (runtime / 'weights').rglob('*') if p.is_file() and '.cache' not in p.parts]
-    records = {str(p.relative_to(work)): {'sha256': b.sha(p), 'bytes': p.stat().st_size,
-                                        'mtime_ns': p.stat().st_mtime_ns} for p in files}
+    engine_name = profile.get('engine', 'nemotron')
+    prefix = ['apptainer', 'exec', '--cleanenv', '--bind', f'{work}:{work}']
+    for key, value in cpu_env.items():
+        prefix += ['--env', f'{key}={value}']
+    prefix += [str(sif), '/usr/bin/python3']
+    models = {str(weights_path(work, model)): engine_name for model in models_to_download}
+    probe = subprocess.run(prefix + ['-c', CPU_PROBE, json.dumps(models),
+        selected_engine['tokenizer_source_sha'] or '', selected_engine['registry_source_sha'] or '',
+        profile.get('reasoning_parser', 'nemotron_v3')], text=True, capture_output=True)
+    b.write(work / f'results/setup-probe-{profile_name}.json',
+            {'returncode': probe.returncode, 'stdout': probe.stdout, 'stderr': probe.stderr})
+    probe.check_returncode()
+    probes = {engine_name: json.loads(probe.stdout.strip().splitlines()[-1])}
+    help_result = subprocess.run(prefix + ['-m', 'vllm.entrypoints.cli.main', 'serve', '--help=all'],
+                                 text=True, capture_output=True)
+    (work / f'results/vllm-serve-help-{profile_name}.txt').write_text(help_result.stdout + help_result.stderr)
+    help_result.check_returncode()
+    for flag in (arg.split('=')[0] for arg in profile['extra_args'] if arg.startswith('--')):
+        if flag not in help_result.stdout:
+            raise ValueError('Pinned vLLM lacks recipe flag: ' + flag)
+    files = [sif] + [p for model in models_to_download for p in weights_path(work, model).rglob('*')
+                     if p.is_file() and '.cache' not in p.parts]
+    records = {}
+    for path in files:
+        owned_path(work, path)
+        records[str(path.relative_to(work))] = {'sha256': b.sha(path), 'bytes': path.stat().st_size,
+                                              'mtime_ns': path.stat().st_mtime_ns}
+    receipt = {'ready': True, 'profile': profile_name, 'files': records,
+               'download_started_unix': start, 'download_seconds': time.time() - start, 'cpu_probes': probes}
+    record_path = runtime / 'profiles' / (profile_name + '.json')
+    owned_path(work, record_path)
+    b.write(record_path, receipt)
+    b.write(work / f'results/lifecycle/download-{profile_name}-{time.time_ns()}.json', receipt)
     for name, definition in m['nemotron_super']['arms'].items():
-        profile = PROFILES[definition['profile']]
-        sif = runtime / engine(profile)['sif']
+        if definition['profile'] != profile_name:
+            continue
         arm = work / 'arms' / name
         if (arm / 'runtime').is_symlink():
             raise ValueError('Refusing symlink arm runtime')
         (arm / 'runtime').mkdir(exist_ok=True)
-        model_dirs = [weights_path(work, profile['model'])]
-        if 'drafter' in profile:
-            model_dirs.append(weights_path(work, profile['drafter']))
-        arm_files = {os.path.relpath(work / name_, arm): info for name_, info in records.items()
-                     if work / name_ == sif or any((work / name_).is_relative_to(d) for d in model_dirs)}
-        b.write(arm / 'runtime.json', {'ready': True, 'files': arm_files, 'image': engine(profile)['image'],
-            'model_revision': PINS[profile['model']]['revision'], 'gpus': profile['gpus']})
-    b.write(work / 'runtime.json', {'ready': True, 'files': records, 'engines': m['nemotron_super']['engines'],
-        'setup_seconds': time.time() - start, 'setup_started_unix': start, 'cpu_probes': probes})
-    return {'ready': True, 'runtime_files': len(records), 'engines': m['nemotron_super']['engines']}
+        b.write(arm / 'runtime.json', {'ready': True,
+            'files': {os.path.relpath(work / key, arm): info for key, info in records.items()},
+            'image': engine(profile)['image'], 'model_revision': PINS[profile['model']]['revision'],
+            'gpus': profile['gpus']})
+    b.write(marker, {'profile': profile_name, 'ready': True, 'receipt_sha256': b.sha(record_path)})
+    return {'ready': True, 'profile': profile_name, 'runtime_files': len(records),
+            'download_seconds': receipt['download_seconds']}
 
 
 async def smoke(endpoint, logs, config, pixels):
@@ -466,6 +618,11 @@ async def smoke(endpoint, logs, config, pixels):
 
 
 async def worker(work, name):
+    with runtime_lock(work):
+        return await _worker(work, name)
+
+
+async def _worker(work, name):
     m = check(work)
     if name not in m['nemotron_super']['arms']:
         raise ValueError('Unknown arm')
@@ -501,12 +658,23 @@ def submit(work, account, qos, resume=False, dry_run=False):
         raise ValueError('Already submitted; use --resume after all campaign jobs terminate')
     if active_jobs(work):
         raise ValueError('Campaign jobs are still active')
-    pending = [name for name in m['nemotron_super']['arms'] if b.status(work / 'arms' / name)['pending']]
+    plan = m['nemotron_super']
+    if plan.get('storage_policy') != STORAGE_POLICY:
+        raise ValueError('Prepare a new campaign to use staged CPU downloads; resume uses the old frozen code')
+    pending = [name for name in plan['arms'] if b.status(work / 'arms' / name)['pending']]
+    ready = False
     if resume and (work / 'runtime.json').exists():
-        for name in pending:
-            validate_runtime(work, name)
-    phases = ([('setup', None)] if pending and (not resume or not (work / 'runtime.json').exists()) else [])
-    phases += [('worker', name) for name in pending] + [('aggregate', None)]
+        validate_runtime(work)
+        ready = True
+    phases = [('setup', None)] if pending and not ready else []
+    for profile_name in plan['profiles']:
+        arms = [name for name in pending if plan['arms'][name]['profile'] == profile_name]
+        if arms:
+            phases += [('download', profile_name)] + [('worker', name) for name in arms] + [('cleanup', profile_name)]
+    # A canceled final cleanup can leave weights even when all articles completed.
+    if not pending and (work / 'runtime/active-profile.json').exists():
+        phases.append(('cleanup', b.read(work / 'runtime/active-profile.json')['profile']))
+    phases.append(('aggregate', None))
     (work / 'logs').mkdir(exist_ok=True)
     epoch = str(time.time_ns())
     common = ['sbatch', '--parsable', '--hold', '--nodes=1', '--ntasks=1', '--no-requeue',
@@ -516,18 +684,18 @@ def submit(work, account, qos, resume=False, dry_run=False):
     for phase, name in phases:
         gpu = phase == 'worker'
         profile = PROFILES[m['nemotron_super']['arms'][name]['profile']] if gpu else None
-        cmd = common + ['--job-name=op2-super-' + (name or phase),
+        cmd = common + ['--job-name=op2-super-' + (name if gpu else phase + ('-' + name if name else '')),
             '--cpus-per-task=' + str(profile.get('cpus', 8) if gpu else 8),
             '--partition=' + ('hpg-b200' if gpu else 'hpg-default'),
             '--mem=' + (profile['host_memory'] if gpu else '32G'),
             '--time=' + (f'{m["nemotron_super"]["hours"]:02d}:00:00' if gpu else '08:00:00'),
-            '--output=' + str(work / 'logs' / ((name or phase) + '-%j.log'))]
+            '--output=' + str(work / 'logs' / ((name if gpu else phase + ('-' + name if name else '')) + '-%j.log'))]
         if gpu:
             cmd += [f'--gres=gpu:b200:{profile["gpus"]}']
         commands.append(cmd + [str(work / 'code/scripts/dense_nemotron_super.sbatch'), phase, str(work), name or '-'])
     if dry_run:
         return {'submitted': False, 'commands_without_dependencies': commands,
-                'dependency_policy': 'CPU setup afterok; GPU arms sequential afterany; CPU aggregate afterany all jobs',
+                'dependency_policy': 'CPU access setup; per profile CPU download afterok previous cleanup, GPU arms afterok download/sequential afterany, CPU cleanup afterany download/workers; aggregate afterany all jobs',
                 'maximum_simultaneous_gpus': max((PROFILES[m['nemotron_super']['arms'][name]['profile']]['gpus'] for name in pending), default=0)}
     ledger.mkdir(exist_ok=True)
     path = ledger / (epoch + '.json')
@@ -536,13 +704,25 @@ def submit(work, account, qos, resume=False, dry_run=False):
     try:
         for (phase, name), cmd in zip(phases, commands):
             setup_ids = [j['id'] for j in jobs if j['phase'] == 'setup']
-            previous = [j['id'] for j in jobs if j['phase'] == 'worker']
+            cleanups = [j['id'] for j in jobs if j['phase'] == 'cleanup']
             deps = []
-            if phase == 'worker':
+            if phase == 'download':
                 if setup_ids:
-                    deps.append('afterok:' + ':'.join(setup_ids))
+                    deps.append('afterok:' + setup_ids[-1])
+                if cleanups:
+                    deps.append('afterok:' + cleanups[-1])
+            elif phase == 'worker':
+                download_job = next(j for j in reversed(jobs) if j['phase'] == 'download')
+                deps.append('afterok:' + download_job['id'])
+                previous = [j['id'] for j in jobs if j['phase'] == 'worker'
+                            and plan['arms'][j['arm']]['profile'] == plan['arms'][name]['profile']]
                 if previous:
                     deps.append('afterany:' + previous[-1])
+            elif phase == 'cleanup':
+                group = [j['id'] for j in jobs if (j['phase'] == 'download' and j['arm'] == name)
+                         or (j['phase'] == 'worker' and plan['arms'][j['arm']]['profile'] == name)]
+                if group:
+                    deps.append('afterany:' + ':'.join(group))
             elif phase == 'aggregate' and jobs:
                 deps.append('afterany:' + ':'.join(j['id'] for j in jobs))
             if deps:
@@ -590,8 +770,8 @@ def aggregate(work):
         denominator = 5 * counts['tp'] + 4 * counts['fn'] + counts['fp']
         return 5 * counts['tp'] / denominator if denominator else None
     m = check(work)
-    if active_jobs(work, {'setup', 'worker'}):
-        raise ValueError('Setup/GPU jobs are still active')
+    if active_jobs(work, {'setup', 'download', 'worker', 'cleanup'}):
+        raise ValueError('Setup/download/GPU/cleanup jobs are still active')
     reports = {name: b.aggregate(work / 'arms' / name) for name in m['nemotron_super']['arms']}
     refs = b.rows(work / 'reference/unified.jsonl')
     predictions = {name: b.rows(work / 'arms' / name / 'summary/predictions.jsonl') for name in reports}
@@ -701,7 +881,7 @@ def verify(work):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='command', required=True)
-    for command in ('prepare', 'setup', 'submit', 'worker', 'aggregate', 'status', 'verify', 'cancel', 'export', 'recipe'):
+    for command in ('prepare', 'setup', 'download', 'cleanup', 'submit', 'worker', 'aggregate', 'status', 'verify', 'cancel', 'export', 'recipe'):
         p = sub.add_parser(command)
         if command == 'recipe':
             continue
@@ -719,6 +899,8 @@ def main(argv=None):
             p.add_argument('--resume', action='store_true'); p.add_argument('--dry-run', action='store_true')
         if command == 'worker':
             p.add_argument('--arm', required=True)
+        if command in ('download', 'cleanup'):
+            p.add_argument('--profile', choices=list(PROFILES), required=command == 'download')
     args = parser.parse_args(argv)
     if args.command == 'recipe':
         result = {'engines': {p.get('engine', 'nemotron'): engine(p) for p in PROFILES.values()},
@@ -731,6 +913,8 @@ def main(argv=None):
                              args.include_test, args.limit_articles, args.profiles)
         elif args.command == 'submit':
             result = submit(work, args.account, args.qos, args.resume, args.dry_run)
+        elif args.command in ('download', 'cleanup'):
+            result = globals()[args.command](work, args.profile)
         elif args.command == 'worker':
             def terminate(signum, frame):
                 raise KeyboardInterrupt('Slurm termination; preserve partial results for explicit resume')
