@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC13201271.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5d9740f59a421b24ebe8f6c804de10f2aa36e9fdd0788281aab11e116f7092aa",
+  "annotation_sha256": "0217898ab0e37cabe298d2677abc4d6c60da997eafd53529fd0f16a850c7958c",
+  "reviewed_at": "2026-10-15T16:45:27.333806+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 155,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Vedolizumab: restored the Case 4 item (p4-f028) to supported/include because Table 2 and the case-labeled Case 4 sentence agree; only the b00008 \"(Case 3) was continued\" attribution stays quarantined as source_conflict/review_only on Case 3 (p1-f034).",
+    "Added \"Severe infection\" assertion=absent for all four patients from the series statement that no severe infection occurred except one mild COVID-19.",
+    "Case 2 efficacy \"NA (early discontinuation)\" recorded as result_absent_reason=not_applicable with no text value instead of a text result.",
+    "Upadacitinib \"not continued at last follow-up\" items for Cases 2 and 4: time relation changed from at to before (the stop preceded the last follow-up).",
+    "Added Case 2 ambiguities: adalimumab named as replaced by UPA in the text but without the Table 2 replaced asterisk; unlabeled abstract one-month stop versus Table 2 exposure of 1.5 months.",
+    "Added literal temporal relations: Case 1 enzyme elevation before biopsy and biopsy before normalization; Case 2 enzyme elevation before discontinuation (reason column); Case 4 enzyme elevation before suspected rejection and discontinuation."
+  ],
+  "unresolved": [
+    "Patients are numbered by earliest identity evidence: Case 3 is first labeled in the methods paragraph before Table 1, so p1 is Case 3, p2 Case 1, p3 Case 2, p4 Case 4.",
+    "The text attributes continued vedolizumab to Case 3 while Table 2 and a later paragraph attribute it to Case 4; the Case 3 attribution is review-only and the Case 4 item, supported by Table 2 and the Case 4 sentence, is included.",
+    "Abstract and discussion sentences that describe patients without a case label (for example the liver biopsy, steroid-sparing and COVID-19 sentences) are used only where a case-labeled sentence or Table 2 makes the mapping literal.",
+    "Cohort medians, trial and literature statements are not individual facts.",
+    "The source lists no figures, supplements or videos."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 155,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Roster of four with literal count; numbering by first case-labeled mention puts Case 3 first because \"(Case 3)\" in b00008 precedes Table 1; abstract mentions individuals only unlabeled.",
+      "Every Table 1 and Table 2 cell for each patient is represented; tables are one row per patient and not serial, so no measurement series applies.",
+      "All-patient statements copied (no prior JAKi, no life-threatening adverse events, multidisciplinary decisions with risks and benefits explained, no severe infection) are literal series-wide statements.",
+      "Unlabeled narrative (steroid-sparing paragraph, abstract per-patient sentences, mild COVID-19 detail) is not mapped beyond review_only; Case 2 UPA indication left null."
+    ],
+    "residual_risks": [
+      "Roster numbering depends on treating the possibly erroneous \"(Case 3)\" parenthetical, rather than unlabeled abstract descriptions, as the first identity mention.",
+      "Table durations (IBD duration, LT-to-UPA interval, UPA exposure, follow-up) are observations of kind other per the table-cell rule."
+    ]
+  },
+  "physician_adjudicated": false
+}
