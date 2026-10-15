@@ -15,20 +15,20 @@ from openpatients2.pilot_extract import PilotConfig, PilotRunner
 from test_dense_nemotron_super import campaign
 
 
-@pytest.mark.parametrize('with_images,arm_count', [(False, 5), (True, 9)])
-def test_default_excludes_spark_access_image_and_eight_gpu_job(campaign, tmp_path, monkeypatch, with_images, arm_count):
+@pytest.mark.parametrize('with_images,arm_count', [(False, 6), (True, 11)])
+def test_default_includes_spark_access_image_and_eight_gpu_job(campaign, tmp_path, monkeypatch, with_images, arm_count):
     monkeypatch.setattr(b, 'freeze_media', lambda *a, **kw: {})
     work = tmp_path / 'default-models'
     s.prepare(campaign[2], work, expected=3, with_images=with_images)
     m = s.check(work)
-    assert m['nemotron_super']['profiles'] == ['fastino', 'nvfp4', 'bf16', 'lilicorr', 'redhat-fp8-dspark']
+    assert m['nemotron_super']['profiles'] == ['fastino', 'nvfp4', 'bf16', 'lilicorr', 'spark', 'redhat-fp8-dspark']
     assert len(m['nemotron_super']['arms']) == arm_count
-    assert not any(name.startswith('spark-') for name in m['nemotron_super']['arms'])
-    assert spark.SPARK not in m['nemotron_super']['pins'] and spark.DSPARK not in m['nemotron_super']['pins']
-    assert set(m['nemotron_super']['engines']) == {'nemotron'}
+    assert 'spark-text' in m['nemotron_super']['arms']
+    assert spark.SPARK in m['nemotron_super']['pins'] and spark.DSPARK in m['nemotron_super']['pins']
+    assert set(m['nemotron_super']['engines']) == {'nemotron', 'spark'}
     plan = s.submit(work, 'account', 'qos', dry_run=True)
-    assert plan['maximum_simultaneous_gpus'] == 2
-    assert not any('--gres=gpu:b200:8' in command for command in plan['commands_without_dependencies'])
+    assert plan['maximum_simultaneous_gpus'] == 8
+    assert sum('--gres=gpu:b200:8' in command for command in plan['commands_without_dependencies']) == (2 if with_images else 1)
 
 
 def test_explicit_spark_uses_its_own_image(campaign, tmp_path, monkeypatch):

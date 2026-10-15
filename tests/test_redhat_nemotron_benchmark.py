@@ -19,7 +19,7 @@ def test_redhat_default_arm_freezes_target_and_draft_and_preserves_profiles(camp
     s.prepare(campaign[2], work, expected=3)
     m = s.check(work)
     assert m['nemotron_super']['profiles'][-1] == 'redhat-fp8-dspark'
-    assert len(m['nemotron_super']['arms']) == 5
+    assert len(m['nemotron_super']['arms']) == 6
     assert {redhat.FP8, redhat.DSPARK} <= m['nemotron_super']['pins'].keys()
     arm = b.read(work / 'arms/redhat-fp8-dspark-text/manifest.json')
     assert arm['model'] == {'id': redhat.FP8, 'revision': redhat.PINS[redhat.FP8]['revision']}
@@ -46,7 +46,7 @@ def test_redhat_default_arm_freezes_target_and_draft_and_preserves_profiles(camp
     plan = s.submit(work, 'account', 'qos', dry_run=True)
     job = next(cmd for cmd in plan['commands_without_dependencies'] if 'redhat-fp8-dspark-text' in cmd)
     assert '--gres=gpu:b200:2' in job and '--mem=200G' in job
-    assert plan['maximum_simultaneous_gpus'] == 2
+    assert plan['maximum_simultaneous_gpus'] == 8
 
 
 def test_redhat_native_sampling_and_live_text_pixel_smoke(campaign, tmp_path, monkeypatch):

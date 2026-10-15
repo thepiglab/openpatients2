@@ -1,7 +1,7 @@
-"""Frozen clinical extraction benchmark for Nemotron Super.
+"""Frozen clinical extraction benchmark for Nemotron Super and Muse Spark Open.
 
 CPU stages download/hash/score/export; Slurm GPU stages only serve local files.
-Servers run sequentially, using at most two B200s by default. Muse Spark is opt-in.
+Servers run sequentially; Spark reserves eight B200s, other profiles at most two.
 """
 from __future__ import annotations
 
@@ -49,7 +49,7 @@ def prepare(root, work, expected=260, hours=12, with_images=False, include_test=
                  'pins': {model: PINS[model] for name in selected
                           for model in [PROFILES[name]['model']] + ([PROFILES[name]['drafter']] if 'drafter' in PROFILES[name] else [])},
                  'engines': {p.get('engine', 'nemotron'): engine(p) for name in selected for p in [PROFILES[name]]},
-                 'timing_policy': 'One active article per server; synthetic startup probe is outside article timing. Configurations run sequentially. GPU counts come from the selected recipes; defaults use at most two B200s.'})
+                 'timing_policy': 'One active article per server; synthetic startup probe is outside article timing. Configurations run sequentially; Spark uses eight B200s, others at most two.'})
     m['files'] = b.inventory(work, ['code', 'inputs', 'reference'])
     for name, definition in definitions.items():
         profile = PROFILES[definition['profile']]
@@ -115,6 +115,52 @@ def active_jobs(work, phases=None):
     result = subprocess.run(['squeue', '-h', '-u', os.environ['USER'], '-o', '%i'],
                              text=True, capture_output=True, check=True)
     return [j['id'] for j in jobs if str(j['id']) in result.stdout.split()]
+
+
+def cancel(work, timeout_seconds=60):
+    """Stop only this campaign, including a still-running bootstrap submission.
+
+    Stop the bootstrap first so it cannot enqueue more jobs after we read its
+    ledger. Re-read ledgers until all recorded jobs have left the user's queue.
+    Frozen code, inputs, downloads and completed outputs are retained.
+    """
+    work = Path(work).resolve()
+    bootstrap_file = Path(str(work) + '.bootstrap') / 'job-id.txt'
+
+    def job_id(value):
+        value = str(value).strip().split(';')[0]
+        if not value.isascii() or not value.isdecimal() or int(value) < 1:
+            raise ValueError('Invalid campaign Slurm job ID')
+        return value
+
+    bootstrap = {job_id(bootstrap_file.read_text())} if bootstrap_file.exists() else set()
+
+    def recorded():
+        ledgers = sorted((work / 'submissions').glob('*.json'))
+        if not bootstrap and not ledgers:
+            raise ValueError('No campaign job records found: ' + str(work))
+        return bootstrap | {job_id(j['id']) for path in ledgers for j in b.read(path)['jobs']}
+
+    requested = set()
+    deadline = time.monotonic() + timeout_seconds
+    while True:
+        known = recorded()
+        queue = subprocess.run(['squeue', '-h', '-u', os.environ['USER'], '-o', '%i'],
+                               text=True, capture_output=True, check=True)
+        # A bootstrap can finish and publish its last ledger during squeue.
+        known.update(recorded())
+        active = known.intersection(queue.stdout.split())
+        if not active:
+            return {'stopped': True, 'work': str(work),
+                    'cancellation_requested': sorted(requested, key=int), 'remaining_active': []}
+        targets = (bootstrap & active) or active
+        new = targets - requested
+        if new:
+            subprocess.run(['scancel', *sorted(new, key=int)], check=True)
+            requested.update(new)
+        if time.monotonic() >= deadline:
+            raise TimeoutError('Campaign jobs are still stopping; rerun cancel. Active IDs: ' + ', '.join(sorted(active, key=int)))
+        time.sleep(.5)
 
 
 def weights_path(work, model):
@@ -655,7 +701,7 @@ def verify(work):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='command', required=True)
-    for command in ('prepare', 'setup', 'submit', 'worker', 'aggregate', 'status', 'verify', 'export', 'recipe'):
+    for command in ('prepare', 'setup', 'submit', 'worker', 'aggregate', 'status', 'verify', 'cancel', 'export', 'recipe'):
         p = sub.add_parser(command)
         if command == 'recipe':
             continue

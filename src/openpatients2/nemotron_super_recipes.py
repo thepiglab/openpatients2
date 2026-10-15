@@ -90,9 +90,8 @@ PROFILES = {
     'redhat-fp8-dspark': REDHAT_PROFILE,
 }
 
-# Meta access is pending. Preserve Spark's recipe for an explicit future run,
-# but never download its gated target/drafter or image in a default campaign.
-DEFAULT_PROFILES = tuple(name for name in PROFILES if name != 'spark')
+# Every publisher configuration, including Muse Spark, participates by default.
+DEFAULT_PROFILES = tuple(PROFILES)
 
 
 def arm_definitions(with_images=False):
