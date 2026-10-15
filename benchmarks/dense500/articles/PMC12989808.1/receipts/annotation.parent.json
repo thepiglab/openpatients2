@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12989808.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "102203a2bd9138568026b4c31a789ac961e5d3989d97d0417e14e2f5d2d2bc2c",
+  "annotation_sha256": "3ab31bde66b14d6cba81a45db7f76866fb3a81102cc2e38fded9632e806eec57",
+  "reviewed_at": "2026-10-15T17:18:23.372938+00:00",
+  "source_segments_read": 42,
+  "facts_reviewed": 81,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f010 (conditions: suspected failure of the apical seal), a duplicate of the cause already carried by outcome p1-f072 (ONE-STATEMENT); references repointed",
+    "p1-f061 (IRM retro-filling, b00025) kept ambiguous/review_only, untimed and outside the reoperation event: 2011 appears only in the second clause and the sentence does not say which surgery used IRM",
+    "Quarantined p1-f037 (Table 1 2011 radiographic cell \"Normal apical tissues\") as ambiguous/review_only: it is in tension with the same row (chronic apical abscess, 2011: Failure) and the recurrent lesion in b00028; ambiguity evidence extended",
+    "Added p1-f082: radiographically normal periapical tissue at the 2-year follow-up after the 2002 surgery (b00010), no figure panel assigned",
+    "Added 6 literal relations: referral/preoperative before NSRCT (Fig 1 pre/postoperative), 2002 presentation before surgery (Fig 2 pre/postoperative), surgery before 2-year follow-up before 2006 additional visit, 2011 late failure before reoperation (b00028), reoperation before 2021 evaluation",
+    "Noted in the 1972/1977 ambiguity that the cited Tagger report was published in 1977 without resolving the conflict; updated summary claim 3 and article limitations (Figure 1 attribution basis)"
+  ],
+  "unresolved": [
+    "Source conflict: year of the first treatment is 1972 (case description, Figure 1, Table 1) versus 1977 (discussion); the year is kept only in separate review_only facts.",
+    "Source conflict: two-year follow-up after the 2011 reoperation is dated 2012 in the Figure 3 caption and 2013 in Table 1; the interval from reoperation to last follow-up is 10 years in the Figure 4 caption and 11 years in the abstract and conclusion.",
+    "Table 1 radiographic cell for 2011 reads Normal apical tissues although the 2011 text describes a chronic apical abscess; the cell is kept literal and quarantined as review_only.",
+    "Text cites Figure 2C for the 2-year follow-up while the caption describes panel C as the 2002 postoperative radiograph.",
+    "Discussion statements about cited cases, general endodontic recommendations and success rates are not index-patient facts and were not recorded.",
+    "Figure 1 is reprinted from the earlier Tagger report; its caption names tooth #22 and the text cites it for this patient's two-year radiograph, so it is attributed to the index patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 42,
+    "facts_reviewed": 81,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Conflict pairs are real and only the attribute is quarantined: first-treatment year 1972 vs 1977, two-year follow-up 2012 (Fig 3C) vs 2013 (Table 1), and 10 vs 11 years reoperation to last follow-up; NSRCT and the two-year healing stay included untimed",
+      "2002 and 2011 times on surgery, diagnosis and sinus-tract facts come from the Table 1 Date column, which governs its row, or from their own sentences",
+      "Text cites Figure 2C for the 2-year follow-up although the caption calls 2C the 2002 postoperative radiograph; no panel is assigned to the follow-up",
+      "Figure 1 is reprinted from the Tagger report but its caption names tooth #22 and the text cites it for this patient, so p1 attribution and EHR includability are literal",
+      "Table 1 Failure rows kept as outcomes with event other and no inferred cause",
+      "All 11 panels viewed at full resolution with corner crops; visual descriptions, EHR labels and privacy flags match the pixels"
+    ],
+    "residual_risks": [
+      "Which surgery used IRM per b00025 is unresolved (review_only)",
+      "Calendar dates derived from the conflicting first-treatment year (1972 radiographs, 1975 healing) remain included because their own captions and table cells state them"
+    ]
+  },
+  "physician_adjudicated": false
+}
