@@ -321,6 +321,7 @@ def serving(work, shard, logdir):
 
 def ledger_metrics(paths):
     metrics = {'model_calls': 0, 'failed_attempts': 0}
+    reasoning_statuses = Counter()
     for k in ('prompt_tokens', 'completion_tokens', 'reasoning_tokens'):
         metrics[k] = 0
         metrics['unknown_' + k] = 0
@@ -335,6 +336,7 @@ def ledger_metrics(paths):
             if response is None:
                 continue
             metrics['model_calls'] += 1
+            reasoning_statuses[response.get('reasoning_status', 'unknown_legacy')] += 1
             if response.get('error') and not entry.get('errors'):
                 metrics['failed_attempts'] += 1
             for k in ('prompt_tokens', 'completion_tokens', 'reasoning_tokens'):
@@ -347,6 +349,7 @@ def ledger_metrics(paths):
         metrics['reported_' + k] = metrics[k]
         if metrics['unknown_' + k]:
             metrics[k] = None
+    metrics['reasoning_statuses'] = dict(reasoning_statuses)
     return metrics
 
 
@@ -368,11 +371,13 @@ async def run_article(work, item, endpoint, attempt):
         media = None
     start, wall = time.monotonic(), time.time()
     receipt = {'article_id': aid, 'shard': item['shard'], 'split': item['split'], 'started_unix': wall,
-               'status': 'error', 'attempt': attempt.name, 'timing_basis': 'single active article per GPU; includes source/token validation and repairs; excludes server startup and queue'}
+               'status': 'error', 'attempt': attempt.name, 'gpus_per_server': cfg.get('gpus_per_endpoint', 1),
+               'timing_basis': 'single active article per server; includes source/token validation and repairs; excludes server startup and queue'}
     runner = None
     try:
-        runner = ArticleRunner(cfg, attempt / 'extraction', [endpoint], CONTEXT, 'targeted')
-        runner.vision_slots = asyncio.Semaphore(2)
+        context = manifest.get('context', CONTEXT)
+        runner = ArticleRunner(cfg, attempt / 'extraction', [endpoint], context, 'targeted')
+        runner.vision_slots = asyncio.Semaphore(min(2, cfg.get('concurrency_per_endpoint', 64)))
         report = await runner.run(source, image_manifest=media)
         receipt['extraction_seconds'] = time.monotonic() - start
         receipt['task_statuses'] = report['task_statuses']
@@ -383,9 +388,9 @@ async def run_article(work, item, endpoint, attempt):
             raise ValueError('Discovered patient cap exceeded; do not silently benchmark a truncated roster')
         side_start = time.monotonic()
         ehr = await run_ehr_stages({'figure_ehr_label': not text_only, 'figure_privacy_flags': not text_only,
-                'measurement_series_extraction': True, 'extraction_config': {**cfg, 'concurrency_per_endpoint': 2},
+                'measurement_series_extraction': True, 'extraction_config': {**cfg, 'concurrency_per_endpoint': min(2, cfg.get('concurrency_per_endpoint', 64))},
                 'default_split': item['split']}, source, attempt / 'extraction', attempt / 'ehr',
-                [endpoint], CONTEXT, image_manifest=media)
+                [endpoint], context, image_manifest=media)
         receipt['ehr_seconds'] = time.monotonic() - side_start
         receipt['ehr_errors'] = ehr['articles'][0]['errors']
         predictions = rows(attempt / 'ehr/data/unified.jsonl')
@@ -466,7 +471,7 @@ def paired_jobs(work, campaigns, shard):
 
 
 async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_timeout=None, workload=None,
-                 serving_factory=None, runtime_probe=None):
+                 serving_factory=None, runtime_probe=None, startup_check=None):
     from .dense_benchmark_serving import ServerGroup
     from .dense_benchmark_telemetry import monitor
     m = check_snapshot(work)
@@ -510,6 +515,7 @@ async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_ti
     started = time.time()
     monotonic_start = time.monotonic()
     summary = {'shard': shard, 'job_id': os.environ['SLURM_JOB_ID'], 'started_unix': started,
+               'gpus_per_server': cfg.gpus,
                'articles': [], 'status': 'interrupted'}
     try:
         if claimed is not None:
@@ -534,6 +540,8 @@ async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_ti
             begin = time.monotonic()
             endpoints = await group.start()
             summary['startup_seconds'] = time.monotonic() - begin
+            if startup_check is not None:
+                await startup_check(endpoints[0]['endpoint'], logs)
             # Capture engine counters before/after, including actual DFlash counters.
             import httpx
             async with httpx.AsyncClient(timeout=10) as http:
@@ -609,20 +617,24 @@ def status(work):
 def aggregate(work):
     m = check_snapshot(work)
     from .unified_scoring import score
+    from .benchmark_reporting import throughput, worker_goodput
+    from .reasoning_lineage import export_fact_index
     reference = rows(work / 'reference/unified.jsonl')
     if set(reference) != {x['article_id'] for x in m['articles']}:
         raise ValueError('Reference membership differs from frozen campaign')
-    predictions, timing, all_attempts = {}, [], []
+    predictions, timing, all_attempts, completed_paths = {}, [], [], []
     for item in m['articles']:
         aid = item['article_id']
         path, receipt = completed_attempt(work, aid)
         if receipt:
             predictions.update(rows(path / 'ehr/data/unified.jsonl'))
             timing.append(receipt)
+            completed_paths.append((aid, item['split'], path))
         for r in sorted((work / 'results/articles' / aid).glob('attempt-*/receipt.json')):
             all_attempts.append(read(r))
     out = work / 'summary'
     out.mkdir(exist_ok=True)
+    reasoning_index = export_fact_index(work, out / 'fact-reasoning.jsonl', completed_paths)
     write_rows(out / 'predictions.jsonl', [predictions[k] for k in sorted(predictions)])
     scores = score(reference, predictions)
     write(out / 'scores.json', scores)
@@ -634,16 +646,20 @@ def aggregate(work):
     write_rows(out / 'timing-all-attempts.jsonl', all_attempts)
     fields = ['article_id', 'split', 'shard', 'status', 'wall_seconds', 'extraction_seconds', 'ehr_seconds',
               'model_calls', 'prompt_tokens', 'completion_tokens', 'reasoning_tokens', 'failed_attempts',
-              'patients_extracted', 'has_prediction', 'all_extraction_tasks_valid']
+              'patients_extracted', 'has_prediction', 'all_extraction_tasks_valid',
+              'output_tokens_per_second', 'answer_tokens_per_second', 'documents_per_second',
+              'output_tokens_per_gpu_second']
     with (out / 'article-timing.csv').open('w', newline='') as f:
         writer = csv.DictWriter(f, fields, extrasaction='ignore')
         writer.writeheader()
-        by_id = {r['article_id']: r for r in timing}
+        by_id = {r['article_id']: {**r, **{k: v for k, v in throughput([r]).items() if k in fields}}
+                 for r in timing}
         writer.writerows(by_id.get(a['article_id'], {**a, 'status': 'pending'}) for a in m['articles'])
     workers = [read(p) for p in (work / 'results/workers').glob('*/job-*/receipt.json')]
     progress = status(work)
-    output_tokens = [r['completion_tokens'] for r in timing]
-    seconds = sum(r['wall_seconds'] for r in timing)
+    rates = throughput(timing)
+    worker_dirs = list((work / 'results/workers').glob('*/job-*'))
+    missing_worker_receipts = sum(not (p / 'receipt.json').exists() for p in worker_dirs)
     report = {**progress, 'scope': m['scope'], 'complete': not progress['pending'],
               'score_overall': scores['overall'], 'split_counts': m['splits'], 'media': m['media'],
               'startup_seconds': stats([r['startup_seconds'] for r in workers if 'startup_seconds' in r]),
@@ -653,12 +669,17 @@ def aggregate(work):
               'extraction_task_statuses': dict(sum((Counter(r.get('task_statuses', {})) for r in timing), Counter())),
               'articles_with_ehr_errors': sum(bool(r.get('ehr_errors')) for r in timing),
               'operational_error_attempts': sum(r['status'] != 'done' for r in all_attempts),
-              'output_tokens_per_gpu_article_second': sum(output_tokens)/seconds if seconds and all(v is not None for v in output_tokens) else None,
+              'throughput': rates,
+              'worker_goodput': worker_goodput(timing, workers,
+                  default_gpus=m.get('extraction', {}).get('gpus_per_endpoint', 1), missing_receipts=missing_worker_receipts),
+              'reasoning_capture': dict(sum((Counter(r.get('reasoning_statuses', {})) for r in all_attempts), Counter())),
+              'fact_reasoning_index': reasoning_index,
+              'output_tokens_per_gpu_article_second': rates['output_tokens_per_gpu_second'],
               'slowest_articles': sorted([{'article_id': r['article_id'], 'seconds': r['wall_seconds']} for r in timing],
                                          key=lambda r: -r['seconds'])[:10],
               'timing_notes': [('Wall time per article includes live discovery, text/caption extraction, repair, text EHR stages and serialization; no pixels.'
                                 if m.get('text_only') else 'Wall time per article includes live discovery, pixels, extraction, repair, EHR stages and serialization.'),
-                              'Startup/queue excluded from article latency; first article is cold (no hidden warmup).',
+                              'Startup/queue and any recorded synthetic startup checks are excluded from article latency.',
                               'Sequential articles per worker favor attributable latency over maximum cross-article throughput.',
                               'Summed worker time includes probe/startup/cleanup/retries; interrupted jobs without final receipt require sacct.',
                               'Worker span excludes initial queue/CPU setup; never sum worker rates as simultaneous throughput.',
@@ -668,6 +689,8 @@ def aggregate(work):
         f"Completed: {progress['completed']}/{progress['expected']}; predictions: {len(predictions)}.\n\n" +
         'Article seconds (excluding startup/queue):\n\n```json\n' + json.dumps(progress['article_seconds'], indent=2) +
         '\n```\n\nAnnotation agreement:\n\n```json\n' + json.dumps(scores['overall'], indent=2) +
+        '\n```\n\nPipeline throughput (completed articles):\n\n```json\n' + json.dumps(rates, indent=2) +
+        '\n```\n\nWorker goodput (including startup/retries):\n\n```json\n' + json.dumps(report['worker_goodput'], indent=2) +
         '\n```\n\n' + '\n'.join('- '+x for x in report['timing_notes']) +
         '\n\nSupplement classification/clinical extraction are unsupported; these reference targets remain in the full denominator.\n')
     hashes = inventory(work, ['results', 'summary', 'submissions'])

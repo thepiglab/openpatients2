@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Bootstrap the campaign CLI without installing dependencies on a login node."""
+"""Small login-node CLI; inference is restricted to allocated Slurm GPUs."""
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
-from openpatients2.dense_fastino import main
+from openpatients2.dense_nemotron_super import main
 
 if __name__ == '__main__':
     main()

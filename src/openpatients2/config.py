@@ -27,6 +27,7 @@ class APIConfig(ConfigModel):
     timeout_seconds: float = Field(default=600, gt=0)
     http_retries: int = Field(default=3, ge=0, le=10)
     temperature: float = Field(default=0.2, ge=0, le=2)
+    vision_temperature: float | None = Field(default=None, ge=0, le=2)
     top_p: float = Field(default=0.95, gt=0, le=1)
     max_tokens: int = Field(default=4096, ge=128)
     max_retry_tokens: int = Field(default=16384, ge=128)
@@ -53,7 +54,7 @@ class APIConfig(ConfigModel):
         return {"model": self.model, "model_id": self.model_id, "revision": self.revision}
 
     def generation(self) -> dict:
-        return {k: getattr(self, k) for k in ["temperature", "top_p", "max_tokens", "max_retry_tokens",
+        return {k: getattr(self, k) for k in ["temperature", "vision_temperature", "top_p", "max_tokens", "max_retry_tokens",
                                               "extra_body", "response_format", "response_format_by_task", "schema_profile", "seed", "save_reasoning", "save_messages"]}
 
 

@@ -8,7 +8,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 
 
-@pytest.mark.parametrize('campaign', ['dense_gepa', 'dense_fastino', 'dense_gepa_next', 'dense_lora'])
+@pytest.mark.parametrize('campaign', ['dense_gepa', 'dense_nemotron_super', 'dense_gepa_next', 'dense_lora'])
 @pytest.mark.parametrize('reject', [False, True])
 def test_launch_queues_without_start_time_estimate(tmp_path, campaign, reject):
     scripts = tmp_path / 'scripts'

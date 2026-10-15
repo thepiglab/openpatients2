@@ -55,16 +55,19 @@ from .validation import iter_objects, validate
 
 
 class PilotConfig(ConfigModel):
-    model_id: Literal['RedHatAI/Muse-Glimmer-30B-FP8-block', 'fastino/Fastino-Nemotron-3.5-Lightning-Healthcare'] = 'RedHatAI/Muse-Glimmer-30B-FP8-block'
-    revision: Literal['1deb4641ff84f9a728dd11b27cac1f6a02a9ed14', 'c602dcde62676c42bb9a31647d4fd8697e7c9e64'] = '1deb4641ff84f9a728dd11b27cac1f6a02a9ed14'
+    model_id: str = 'RedHatAI/Muse-Glimmer-30B-FP8-block'
+    revision: str = '1deb4641ff84f9a728dd11b27cac1f6a02a9ed14'
     served_model: str = 'clinical-extractor'
-    gpus_per_endpoint: int = Field(default=1,ge=1,le=2)
-    tokenizer_contract: Literal['vllm/0.30.0'] = 'vllm/0.30.0'
+    gpus_per_endpoint: int = Field(default=1,ge=1,le=8)
+    tokenizer_contract: str = 'vllm/0.30.0'
     reasoning_strength: Literal['low', 'medium', 'high', 'xhigh'] = 'medium'
-    fastino_reasoning: Literal['off', 'on', 'efficient'] = 'off'
+    nemotron_thinking: bool = True
+    template_date: str | None = Field(default=None, pattern=r'^\d{4}-\d{2}-\d{2}$')
+    stop_token_ids: list[int] | None = None
     temperature: Literal[0.0, 1.0] = 1.0
-    top_p: Literal[0.95] = 0.95
-    top_k: Literal[64] = 64
+    vision_temperature: Literal[0.6] | None = None
+    top_p: Literal[0.95, 1.0] = 0.95
+    top_k: Literal[64] | None = 64
     seed: int = Field(default=42, ge=0, le=2**32-1)
     sample_seed: int = 42
     max_articles: int = Field(default=48, ge=1, le=48)
@@ -115,19 +118,42 @@ class PilotConfig(ConfigModel):
 
     @model_validator(mode='after')
     def model_recipe(self):
-        fastino = self.model_id.startswith('fastino/')
-        revision = 'c602dcde62676c42bb9a31647d4fd8697e7c9e64' if fastino else '1deb4641ff84f9a728dd11b27cac1f6a02a9ed14'
-        if self.revision != revision or self.temperature != (0.0 if fastino else 1.0):
+        from .nemotron_super_recipes import PINS, FASTINO, LILICORR, TOKENIZER_CONTRACT
+        from .muse_spark_recipe import SPARK, DSPARK, TOKENIZER_CONTRACT as SPARK_CONTRACT, STOP_TOKEN_IDS
+        from .redhat_nemotron_recipe import DSPARK as REDHAT_DSPARK
+        if self.model_id == SPARK:
+            if (self.revision != PINS[SPARK]['revision'] or self.tokenizer_contract != SPARK_CONTRACT
+                    or self.temperature != 1.0 or self.top_p != 1.0 or self.top_k is not None
+                    or self.vision_temperature is not None or self.stop_token_ids != STOP_TOKEN_IDS
+                    or self.template_date is None):
+                raise ValueError('Spark model revision, tokenizer contract and publisher sampling must match the pinned recipe')
+            return self
+        if self.model_id in (DSPARK, REDHAT_DSPARK):
+            raise ValueError('Unsupported model: DSpark is a drafter, not a serving target')
+        if self.model_id in PINS and self.model_id != LILICORR:
+            if (self.revision != PINS[self.model_id]['revision'] or self.tokenizer_contract != TOKENIZER_CONTRACT
+                    or self.temperature != (0.0 if self.model_id == FASTINO else 1.0) or self.top_k is not None
+                    or self.vision_temperature != (None if self.model_id == FASTINO else .6)
+                    or self.top_p != .95 or self.stop_token_ids is not None):
+                raise ValueError('Super model revision, tokenizer contract and publisher sampling must match the pinned recipe')
+            if self.model_id == FASTINO and (self.max_figures != 0 or self.image_manifest or self.summary_structured_output):
+                raise ValueError('Fastino Super benchmark requires text-only inputs and unconstrained output')
+            return self
+        if self.model_id != 'RedHatAI/Muse-Glimmer-30B-FP8-block':
+            raise ValueError('Unsupported model; add an explicitly pinned model recipe')
+        if (self.revision != '1deb4641ff84f9a728dd11b27cac1f6a02a9ed14' or self.temperature != 1.0
+                or self.tokenizer_contract != 'vllm/0.30.0' or self.top_k != 64 or self.vision_temperature is not None
+                or self.top_p != .95 or self.stop_token_ids is not None):
             raise ValueError('Model, pinned revision and temperature must match the model recipe')
-        if fastino and (self.max_figures != 0 or self.image_manifest or self.summary_structured_output):
-            raise ValueError('Fastino benchmark requires text-only inputs and unconstrained output')
         return self
 
     def template_kwargs(self):
-        if self.model_id.startswith('fastino/'):
-            if self.fastino_reasoning == 'off':
-                return {'enable_thinking': False}
-            return {'enable_thinking': True, 'medium_effort': self.fastino_reasoning == 'efficient'}
+        from .muse_spark_recipe import SPARK
+        if self.model_id == SPARK:
+            return {'reasoning_effort': self.reasoning_strength, 'current_date': self.template_date}
+        from .nemotron_super_recipes import PINS
+        if self.model_id in PINS:
+            return {'enable_thinking': self.nemotron_thinking}
         return {'reasoning_strength': self.reasoning_strength}
 
     def repair_enabled(self, component):
@@ -394,14 +420,17 @@ class PilotRunner:
         for endpoint in endpoints:
             api = APIConfig(endpoints=[endpoint.rstrip('/')], model=self.config.served_model,
                 model_id=self.config.model_id, revision=self.config.revision,
+                save_reasoning=True, save_messages=True,
                 api_key_env='OP2_LOCAL_UNUSED_API_KEY', response_format='prompt_json',
                 response_format_by_task={'summary': 'vllm_structured_outputs'} if self.config.summary_structured_output else {},
-                temperature=self.config.temperature, top_p=self.config.top_p, seed=self.config.seed,
+                temperature=self.config.temperature, vision_temperature=self.config.vision_temperature,
+                top_p=self.config.top_p, seed=self.config.seed,
                 max_tokens=self.config.max_output_tokens,
                 max_retry_tokens=max(self.config.max_output_tokens, self.config.max_retry_tokens),
                 http_retries=0, timeout_seconds=self.config.timeout_seconds,
-                extra_body={'chat_template_kwargs': self.config.template_kwargs(),
-                            'skip_special_tokens': False, 'top_k': self.config.top_k})
+                extra_body={'chat_template_kwargs': self.config.template_kwargs(), 'skip_special_tokens': False,
+                            **({'stop_token_ids': self.config.stop_token_ids} if self.config.stop_token_ids is not None else {}),
+                            **({'top_k': self.config.top_k} if self.config.top_k is not None else {})})
             self.clients.append(APIClient(api, http=http, schema_overrides=self.schemas))
 
     async def close(self):
@@ -428,11 +457,12 @@ class PilotRunner:
                 or count != len(tokens) or any(type(token) is not int for token in tokens)
                 or type(server_max) is not int or server_max < 1):
             raise ValueError('serving_tokenizer_did_not_return_exact_count')
-        # vLLM v0.30.0 tokenize preprocess_chat -> renderer -> mm_processor.apply
-        # counts engine input IDs after image expansion. This contract requires
-        # that pinned server implementation and the identical full image prompt.
+        # Require engine input IDs after image expansion from the pinned runtime.
+        # Nemotron setup checks upstream source hashes; every new profile also
+        # requires live /tokenize versus generation prompt-usage agreement.
         # Do not replace this with text tokenization or a hand-waved image bound.
-        return count, 'server_multimodal_exact_vllm_0.30.0' if pixels else 'server_text_exact', server_max
+        return count, ('server_multimodal_exact_' + self.config.tokenizer_contract.replace('/', '_')
+                       if pixels else 'server_text_exact'), server_max
 
     def prepared_messages(self, task, messages):
         messages = copy.deepcopy(messages)
@@ -530,6 +560,7 @@ class PilotRunner:
                             current.append({'role':'user','content':strategy})
                 desired = self.config.max_retry_tokens if mode == 'repair' else self.config.max_output_tokens
                 entry = {'task': task, 'identity': identity, 'arm': self.arm, 'mode': mode,
+                         'model': client.config.identity(), 'generation': client.config.generation(),
                          'request': safe_messages(current), 'messages_sha256': json_digest(current),
                          'desired_output_tokens': desired, 'response': None, 'metrics': {},
                          'errors': [], 'replica': replica,
@@ -979,6 +1010,9 @@ class PilotRunner:
         rows.extend(review_rows(article, rid, 'summary', summary['data']))
         rows.extend(review_rows(article, rid, 'timeline_v2', timeline['data']))
         all_tasks = [*tasks, summary, timeline, *extra_tasks]
+        from .reasoning_lineage import link_fact_reasoning
+        link_fact_reasoning(rows, all_tasks,
+            {'model_id': self.config.model_id, 'revision': self.config.revision})
         vision = self.patient_vision(article, roster, patient['patient_id'], reviews)
         vision['caption_only_media'] = copy.deepcopy(packet['multimedia'])
         visual_complete = all(row['status'] == 'valid' for row in self.visual_rows
@@ -1029,6 +1063,7 @@ class PilotRunner:
                     field_support=literal_field_support(row['candidate'], row['evidence_spans']),
                     origin='article_text', supersedes_fact_id=None)
                 envelopes.append({'fact': fact.model_dump(), 'gate_report': field_support_report(fact, sources),
+                                  'generation_trace': row['generation_trace'],
                                   'section_literal_validation_only': True,
                                   'field_support_basis': 'literal field value inside this fact citation; entailment and attribution remain unreviewed',
                                   'evidence_spans_for_reviewer': row['evidence_spans']})

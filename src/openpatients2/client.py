@@ -108,8 +108,12 @@ class APIClient:
             await self.http.aclose()
 
     def body(self, task: str, messages: list[dict], max_tokens: int) -> dict:
+        pixels = any(isinstance(m.get('content'), list) and any(
+            part.get('type') in {'image_url', 'video_url'} for part in m['content']) for m in messages)
+        temperature = (self.config.vision_temperature if pixels and self.config.vision_temperature is not None
+                       else self.config.temperature)
         body = {"model": self.config.model, "messages": messages, "stream": True,
-                "stream_options": {"include_usage": True}, "temperature": self.config.temperature,
+                "stream_options": {"include_usage": True}, "temperature": temperature,
                 "top_p": self.config.top_p, "max_tokens": max_tokens, **self.config.extra_body}
         if self.config.seed is not None:
             body["seed"] = self.config.seed

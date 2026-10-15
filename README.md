@@ -27,6 +27,10 @@ living overview whenever the pipeline changes.
 - `docs/` — [pipeline overview](docs/PIPELINE_OVERVIEW.md), [article viewer](docs/ARTICLE_VIEWER.md),
   [schema review v2.1](docs/SCHEMA_REVIEW_V2_1.md), and the proposed
   [source-claim compiler](docs/SOURCE_CLAIM_COMPILER_DESIGN.md) design.
+- [Clinical model benchmark](docs/DENSE_NEMOTRON_SUPER.md) — Fastino Super Healthcare,
+  NVIDIA BF16/NVFP4, NVFP4 with LiLiCorr, Muse Spark Open NVFP4 with DSpark,
+  and Red Hat Nemotron FP8 with its DSpark8 drafter,
+  using pinned publisher vLLM recipes.
 
 ## Quick start
 

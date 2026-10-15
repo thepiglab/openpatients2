@@ -216,7 +216,7 @@ async def test_worker_budget_timeout_and_cpu_work_separation(tmp_path, monkeypat
     monkeypatch.setenv('CUDA_VISIBLE_DEVICES', '0')
     monkeypatch.setenv('OP2_SUBMISSION_ID', 'fixture')
     events = []
-    config = SimpleNamespace(sif='fixture.sif', port=1234)
+    config = SimpleNamespace(sif='fixture.sif', port=1234, gpus=1)
     monkeypatch.setattr(b, 'serving', lambda *args: config)
     class Socket:
         def __enter__(self): return self
