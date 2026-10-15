@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12831388.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e07c66ad60c05f939d92cf8f297abb96966a0582a793c5cb61a3034c09be6bb3",
+  "annotation_sha256": "ec5e21848066527fbc02f1fa9d14ec40636b29509bca22dd40632c48fb6ff627",
+  "reviewed_at": "2026-10-15T17:09:31.707462+00:00",
+  "source_segments_read": 22,
+  "facts_reviewed": 62,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Marked oncology tumor t1 (p1-f050) as alternate representation of the adenocarcinoma condition p1-f004 (no link for the combined oncology surgery p1-f053, which is not identical to any single procedure fact).",
+    "Added b00013 evidence (\"conservative treatment can achieve complete resolution\") and a note supporting clinical_status resolved on the torsion condition p1-f006.",
+    "Recorded the Discussion phrase \"within hours of symptom onset\" (b00015) as an ambiguity only, since it is not literally tied to the CT/bronchoscopy confirmation event; e08 keeps no time.",
+    "Added the \"additional 6 days of observation\" quote to the discharge-before-three-month relation so it rests on stated times rather than paragraph order.",
+    "Added ambiguities: undisclosed start day of conservative treatment (POD 7 = third day of treatment vs symptom onset POD 2/3); Video 1 not stated to show this patient, so its slide parameters are not patient facts.",
+    "Reworded the Supplementary Material 1 article limitation to state the frame sampling and the unresolved ownership."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEG figures were inspected in the separate visual target.",
+    "Supplementary Material 1 is a procedure demonstration video (19 frames sampled every 2 s were viewed): protocol slides and bronchoscopy-room footage of a torsed bronchus; the article does not say the footage is this patient, so its slide parameters were not extracted as patient facts.",
+    "Supplementary Tables 1 (published cases) and 2 (proposed selection criteria) are literature or proposal content, not patient facts.",
+    "Discussion statements that early recognition prevented irreversible ischemic changes and that the approach gave superior outcomes are author interpretation and were not recorded as facts.",
+    "Caption of Figure 2B labels the emergency radiograph postoperative day 3 while the text places chest tube removal on postoperative day 2; kept as an ambiguity.",
+    "Pulmonary function test results are not reported; restoring pulmonary function is the authors statement only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 22,
+    "facts_reviewed": 62,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single 52-year-old man; roster count 1 literal; all 62 facts verified against b00002-b00022 with exact quotes; no facts added or removed.",
+      "Fig 2B caption POD 3 vs text chest-tube removal POD 2 with symptoms 2 h later is not a hard contradiction (removal time within POD 2 unstated); kept as an ambiguity with the radiograph time recorded as the literal \"2 h after chest tube removal\".",
+      "Histology is not mapped to either PET-CT nodule; t1 confirmed adenocarcinoma with t2/t3 possible nodules and an explicit must-not-infer ambiguity is consistent with the source.",
+      "Torsion resolved is supported by the authors literal \"successfully repositioned\" and \"complete resolution\"; Discussion interpretation (prevented ischemic changes, superior outcomes) is not recorded as fact.",
+      "All 18 panels in 4 figures viewed at full resolution with zoomed crops; 19 frames of the MOESM1 video viewed: generic SII protocol slides plus bronchoscopy-room footage labelled torsed bronchus, not stated to be this patient."
+    ],
+    "residual_risks": [
+      "Three tumor rows (t1 histology, t2/t3 nodules) may double count the same lesion; the source does not say which nodule was adenocarcinoma.",
+      "The Video 1 footage is probably this patient but the article never says so; its parameters stay unrecorded.",
+      "Discussion-derived facts (hemodynamic stability, absent hemoptysis) rely on author summary text."
+    ]
+  },
+  "physician_adjudicated": false
+}
