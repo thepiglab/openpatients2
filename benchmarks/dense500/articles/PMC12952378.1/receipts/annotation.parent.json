@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12952378.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e921748e27a2d2c064beb15c1536d2fc58b1f2fb3a334fd482c6176a36c40f57",
+  "annotation_sha256": "842a739e267fa0a645b10e1771b294df393c052937d0319dedf31498da4891c9",
+  "reviewed_at": "2026-10-15T17:07:04.671831+00:00",
+  "source_segments_read": 19,
+  "facts_reviewed": 85,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-e12 carried the barium enema and gynecologic examination (p1-f043, p1-f074, p1-f020, p1-f021) under the time '12 weeks later', which their sentences do not state; moved to new untimed event p1-e15 and added relation p1-e15 before p1-e13 from the literal 'subsequently closed' sentence.",
+    "p1-f071: the negation 'without air blowing into the vagina' was the text_value of a present observation; now text_value negative with flag negative.",
+    "Summary claim 4: 'at 12 weeks' implied a reference point the body text does not fix; reworded to 'another endoscopy 12 weeks later'.",
+    "visual.json (agent-owned submission, parent edit): Figure 3C description corrected to the pixels (folds radiate from a pale central area, reddish-brown patch at bottom centre); burned-in endoscopy text described as present and not transcribed instead of 'too small to read reliably'. Figure-EHR and privacy files regenerated with --draft and the reviewed labels and flags carried over unchanged."
+  ],
+  "unresolved": [
+    "Single case report; no calendar dates are given, so all times are literal relative phrases.",
+    "Text and figure captions give different intervals for the reexaminations (8 weeks versus 1 month after ileostomy; 12 weeks later versus 3 months after the repair); recorded as ambiguities.",
+    "Inflammation at the eight-week reexamination is described as disappeared and as significantly relieved; recorded as two review-only source-conflict facts.",
+    "Discussion sentences on the literature, success rates of other series and device choice are not recorded as patient facts.",
+    "Pixels are reviewed in the separate visual submission; Figure 3G and 3H show axial cross-sectional images although the caption calls them ileostomy status."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 19,
+    "facts_reviewed": 85,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single 37-year-old woman; roster count 1.",
+      "Eight-week reexamination: disappeared (abstract, b00004) vs significantly relieved (b00006) kept as a review_only pair; 8 weeks vs 1 month (Fig 1 caption) and 12 weeks later vs after 12 weeks of surgery vs 3 months (Fig 3 caption) kept as ambiguities, no reference point chosen.",
+      "Figure caption times are panel-specific caption sentences and are not borrowed into text facts.",
+      "Cephalosporin left unnamed; which stoma was seriously infected left as an ambiguity; ileostomy closure untimed.",
+      "Discussion sentences used (b00009 large and complex fistula, stoma infection, preventive ileostomy, repair when no fecal outflow, stoma closure; b00010 sclerosing agents and scar, complete closure in a single treatment) speak about this patient in the first person or with \"the patient's\"; general literature sentences not used.",
+      "All 22 panels viewed at full resolution and zoomed crops; Fig 3G/H are axial cross-sections (CT uncertain), stoma not identified on pixels; endoscopic timestamps flagged by category only, values not transcribed."
+    ],
+    "residual_risks": [
+      "b00009 \"The stoma was closed as soon as the operative wound has healed\" carries a citation marker; read as this patient's ileostomy closure.",
+      "Order of the 12-week endoscopy relative to the operation versus the 5-week visit is unresolved in the source."
+    ]
+  },
+  "physician_adjudicated": false
+}
