@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12959870.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f90b236141ea5394383b27b4ab27de4b866eae206eb5fbbcefdc4e98cfe96724",
+  "annotation_sha256": "e0ed12ad9c6013abc976d9148e916299dc0999d6a657eb7ec2cdda4542b8bd7b",
+  "reviewed_at": "2026-10-15T16:39:09.255645+00:00",
+  "source_segments_read": 21,
+  "facts_reviewed": 49,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f007 Inv(9) condition: evidence repointed to the condition statements (b00001 abstract, b00018 conclusion); the karyotype report sentence stays only on family_genetics p1-f024 (ONE-STATEMENT).",
+    "p1-f037 mild pituitary hyperplasia: quote extended to 'suggestive of cavernous angioma and mild pituitary hyperplasia' so the possible hedge is inside the evidence; note added.",
+    "p1-f007 diagnostic_basis Karyotype report -> null (its own quotes no longer contain the karyotype sentence; no borrowed attribute).",
+    "p1-f035 MRI small uterus: body_site pelvis -> uterus.",
+    "p1-e07 physical examination: removed family-history fact p1-f023 from the event's fact links.",
+    "Added ambiguities: attachment of 'for the last 11 years' (withdrawal treatment vs complaint) and the neurosurgery advice 'avoid any active intervention and follow-up' (follow-up not reported as done).",
+    "visual.json: removed a transcribed overlay fragment from panel A (identifier-like text), corrected the panel B letter position (below-left of the orbit displayed on the left) in the figure and panel descriptions; figure-EHR and privacy drafts regenerated and labels carried over; privacy burned-in descriptions refined to categories (panel B overlay partly legible, upper left and upper right)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the single figure pixels are inspected in the separate visual target.",
+    "Cavernous angioma is described as suggestive on MRI in the case text and without hedge in the abstract; kept provisional.",
+    "Thyroid function values and the later hormonal profile have no stated dates; no order between them is inferred.",
+    "Drug names and doses for withdrawal treatment and thyroid replacement therapy are not given.",
+    "The literature case report in the discussion and cohort statistics are not attributed to the index patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 21,
+    "facts_reviewed": 49,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single 27-year-old woman; roster count 1; the Inv(9) literature case in b00012 is not attributed to her.",
+      "Cavernous angioma kept provisional with include: the case text twice says 'suggestive of'; the abstract and conclusion label the same MRI finding without the hedge, a certainty gradation rather than a conflicting fact; ambiguity recorded.",
+      "FSH high and oestradiol/AMH low flags are stated by the source for this patient in the abstract (one measurement each), so allowed.",
+      "TSH 12.81 (with hypothyroidism diagnosis) and 1.57 (hormonal profile) stay untimed and unordered.",
+      "Withdrawal treatment action unknown is correct; neurosurgery opinion completed is supported because advice resulted; the advice stays one recommended care plan.",
+      "Caption says red and green arrows for panel B; pixels show a red arrow in A and a green arrow in B (recorded in visual caption claims).",
+      "Both panels carry direct-identifier scanner overlays; flags name categories only."
+    ],
+    "residual_risks": [
+      "Whether 'suggestive of' also governs 'mild pituitary hyperplasia' is unresolved.",
+      "Inv(9) held both as condition and as karyotype result from separate source statements; scorers may count it twice."
+    ]
+  },
+  "physician_adjudicated": false
+}
