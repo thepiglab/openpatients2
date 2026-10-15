@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12743295.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c921d8897ce6c28ff99b328ad52ba15069674d531e3a916228ab08a12fcc0e7a",
+  "annotation_sha256": "b4be7584a66da5d0aecd64f1d30bf2863d21808dc3f1fc3581ed60321f6b62a4",
+  "reviewed_at": "2026-10-15T16:30:03.279673+00:00",
+  "source_segments_read": 25,
+  "facts_reviewed": 75,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f004 tubo-ovarian abscess: verification_status confirmed -> unknown; the case presentation describes only a left adnexal mass lesion (suspected ovarian tumor, then isolated tubal torsion) and gives no abscess diagnosis or basis; clinical_statement and notes reworded; ambiguity must_not_infer extended.",
+    "Added temporal relation p1-e01 before p1-e03 (literal 'presented with a 4-day history').",
+    "Added temporal relation p1-e18 (six-week follow-up US) after p1-e15 (discharge), supported by 'subsequently discharged ... and kept under follow up with serial pelvic ultrasonography'.",
+    "Added temporal relation p1-e19 (radiologic resolution on serial follow-up imaging) after p1-e15 (discharge) with the same literal follow-up quote.",
+    "visual.json f2 panel C: letter position corrected from 'upper centre' to 'upper left' and yellow arrow direction to 'from the upper right' (pixels); figure-EHR and privacy drafts regenerated with --draft and labels/flags carried over; f3 privacy notes corrected (no arrows in Figure 3; calipers and coloured marks)."
+  ],
+  "unresolved": [
+    "Source conflict on mass volumes: the case text (27 cc to 40 cc on repeated ultrasound, citing Figure 3A) disagrees with the Figure 1 caption (40 cc) and Figure 3A caption (16 cc after 2 weeks); the volume facts are review_only and not reconciled.",
+    "Source conflict on MRI enhancement: the case text reports peripheral enhancement of the internal tubular structure while the Figure 2 caption says the mass shows no enhancement post-contrast; both enhancement facts are review_only.",
+    "The tubo-ovarian abscess diagnosis is stated only in the abstract and discussion; the case presentation describes a left adnexal mass and gives no diagnostic basis, organism or drainage.",
+    "Times for the vital signs, anthropometry and laboratory tests, and the reference points of the Figure 3 caption times, are not stated and are left unanchored.",
+    "Pixels of Figures 1 to 3 were reviewed in the separate visual target; the article has no supplements or videos."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 25,
+    "facts_reviewed": 75,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single 12-year-old female; roster count 1 from the abstract; Table 1 rows (b00011-b00016) are literature cases and correctly excluded.",
+      "Volume conflict kept quarantined: text 27 cc and 40 cc (citing Fig 3A), Fig 1 caption 40 cc, Fig 3A caption 16 cc are review_only; dimensions and morphology stay included.",
+      "Enhancement conflict kept quarantined: text peripheral enhancement (f058) vs Fig 2 caption no enhancement (f059), both review_only; enhancing surrounding soft tissue (f042) is a different structure and stays included.",
+      "Upon presentation scopes only the acutely ill sentence; vital signs, anthropometry and labs correctly left untimed.",
+      "3 cc volume correctly merged text plus Fig 3B caption because the text sentence cites Fig. 3B; separate caption-only texture and dimensions keep '6 weeks later'.",
+      "Next day (anchor 'scheduled for surgery') and 'in this time' (anchor 'surgery postponed two days') are literal source phrases; plural 'the patients' recorded as an ambiguity, not a second patient.",
+      "WBC unit kept literal '× 10^(9) cells/l' with flag high from the word leukocytosis; tumor markers flagged negative from the authors' word."
+    ],
+    "residual_risks": [
+      "Whether the repeated US (text, citing Fig 3A), the 2-week caption exam and the ten-day post-discharge exam are the same study is not resolvable from the source.",
+      "B-HCG 5 mIU/ml sits at the stated <5 threshold while the authors call it negative; recorded as ambiguity.",
+      "Reference point of 'six-week follow-up' and '6 weeks later' is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}
