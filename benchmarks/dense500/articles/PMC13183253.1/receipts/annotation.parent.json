@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC13183253.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "976671fa88419f521073abb5dfbd8bb03891970083be0c7717a7062d51876d97",
+  "annotation_sha256": "5488363ecd06cc7c4071091a278d71f85e53127a2d80879ef4f25066ebfe0267",
+  "reviewed_at": "2026-10-16T08:13:44.455915+00:00",
+  "source_segments_read": 19,
+  "facts_reviewed": 44,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f019 sensory nerve conduction text_value now keeps \"suggestive of demyelination\" from its own sentence.",
+    "Added p1-f040 multiple sclerosis (assertion possible, differential) from the Figure 1 caption hedge \"may be consistent with RIS/MS\"; noted the caption hedge on the RIS condition p1-f027.",
+    "Added SECTION-IMAGING/diagnostic procedure facts p1-f041 brain MRI, p1-f042 cervical spine MRI, p1-f043 electromyography, p1-f044 visual evoked potentials and linked them to events e07, e08, e05, e06.",
+    "Added temporal relations: e02 prior carpal tunnel surgery before e01 presentation (\"prior surgery\"); e07 brain MRI before e13 planned annual follow-up MRI (follow-up imaging of the found lesion burden); e01 presentation before e14 short-term follow-up.",
+    "Summary claim 3 mentions the caption RIS/MS hedge; claim 4 expanded with the stated PT and MRI purposes (25-85 words).",
+    "Added ambiguity on the authors proposed shared PMP22 mechanism versus coincidental coexistence (not a diagnosis)."
+  ],
+  "unresolved": [
+    "Figure caption layer is not_inspected; the single JPEG was inspected in visual.json.",
+    "No dates, ages at events or intervals are stated apart from short-term follow-up; most facts carry no time.",
+    "The first-person quotation in b00010 has no stated speaker and is kept review_only.",
+    "EMG and VEP results are given without reference intervals; no flags were assigned from numbers.",
+    "No supplements are listed in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 19,
+    "facts_reviewed": 44,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single 28-year-old woman; all patient-specific statements in b00004-b00010, b00014 (OCB) and the Figure 1 caption are captured.",
+      "Annotator flags accepted: b00010 unattributed quote stays review_only; polyneuropathy provisional (\"consistent with\"); \"Her symptoms\" activity context legitimately covers all four complaints; 5 mm plaque merge valid because the text cites Figure 1 for the same lesion; neuropathy history -> genetic testing relation supported by \"Due to ... genetic testing was performed\".",
+      "Figure 1 viewed at full resolution with magnified crops; printed labels T2WI, FLAIR (A), FLAIR (S), T1WI, T1WI+C confirmed; sagittal FLAIR shows no facial surface (cropped at the orbit/nasal level)."
+    ],
+    "residual_risks": [
+      "Few stated times; most events have no time and order is only partially linked.",
+      "Short-term follow-up interval is not quantified.",
+      "b00010 quotation speaker is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}
