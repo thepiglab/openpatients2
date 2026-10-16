@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC13593081.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0156340dcff0f92ea30fb8fe9a1955c423b5e4ba90ca8fc68c6cb5695aa784a6",
+  "annotation_sha256": "2da189d479abeef66954cd0417ff46a1ef2899cda497ae2441126abc6235cd26",
+  "reviewed_at": "2026-10-16T08:38:08.720842+00:00",
+  "source_segments_read": 32,
+  "facts_reviewed": 84,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f064/f065/f066/f067 (cranial CT, blood cell analysis, indirect antihuman globulin test, genetic testing): bare list under the abstract Diagnoses heading with no verb or result; set certainty ambiguous, scoring review_only; family_genetics coverage set to unresolved; ambiguity and limitation reworded.",
+    "p1-f078: removed related_condition AIHA; the source says only \"the problem\"/\"the condition\".",
+    "p1-f005: notes record the l-iduronic aciduria wording as a possible print artefact (ambiguity kept, review_only).",
+    "p1-e07 now links p1-f006 (AIHA confirmation) with p1-f007; p1-e09 now links p1-f070 (no notable enhancement after transfusion and immunoglobulin) with its quote.",
+    "Added 11 temporal relations supported by stated post-transplant day counts (day +27, 144 days, day +211, day 276), post-transplant wording, the first-4/fifth ordinal and the abstract alleviated-upon-daratumumab sentence: e01<e03, e01<e04, e01<e11, e01<e13, e04<e11, e04<e13, e05<e11, e05<e13, e12<e13, e10<e13, e05<e10 (5 -> 16 relations).",
+    "Individuals ambiguity extended to the Conclusions sentence (b00027) in addition to the Introduction (b00008)."
+  ],
+  "unresolved": [
+    "Table 1 and its legend describe 9 published literature patients; they are not roster patients and no facts are taken from them.",
+    "The text gives the transplant as cord blood stem cell transplantation, umbilical blood transfusion and reinfusion; all day counts are post-transplant and no calendar dates are given.",
+    "The l-iduronic aciduria deficiency wording beside MPS type III is not reconciled by the source and is kept review_only.",
+    "Abstract-listed diagnostic methods (genetic testing, cranial CT, blood cell analysis, indirect antihuman globulin test) are a bare list without verb or results and are kept review_only.",
+    "Daratumumab dose, route and exact schedule are not stated in the text; Figure 1 pixel content (curves and treatment symbols) is recorded only in visual.json, not as facts.",
+    "Introduction and conclusion use plural wording about treated individuals; the report describes one patient.",
+    "Caption-layer visual status not_inspected; the actual image is inspected in the separate visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 32,
+    "facts_reviewed": 84,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (5-year-old boy, MPS III, AIHA after cord blood transplant); Table 1 and section 3 are nine literature patients and correctly excluded.",
+      "p1-f006 time \"144 days following umbilical blood transfusion\" is literal in its own AIHA sentence; the NO-BORROWING gate warning is a checker false positive.",
+      "Onset qualitative findings and admission numeric values kept as separate facts; IVIG intolerance kept as an allergies intolerance item; IV route applied to methylprednisolone only.",
+      "F1 daratumumab symbol count/days, MMF, ruxolitinib and meprednisone exist only in pixels and stay in visual.json; not facts and not a conflict side."
+    ],
+    "residual_risks": [
+      "Day +211 for the fifth daratumumab injection is read against the figure symbols only approximately; no text conflict recorded.",
+      "Gamma globulin (abstract) and dosed immunoglobulin (case text) kept as separate items because the source does not equate them; methylprednisolone kept as abstract IV item and case-text combination item.",
+      "Ferritin unit pmol/L kept as printed."
+    ]
+  },
+  "physician_adjudicated": false
+}
