@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12687915.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "47d63a9b8cd07985d182d43c36b222c54c16b64ee4bbcf2cec9e14897a4a8a12",
+  "annotation_sha256": "02a40f403cdcdead296a4ae1289ffcd5f56f36cda8227c2da7573982543216dd",
+  "reviewed_at": "2026-10-16T00:59:02.808782+00:00",
+  "source_segments_read": 57,
+  "facts_reviewed": 64,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f022 Brinzolamide and p1-f023 Timolol: set certainty ambiguous / scoring review_only; they are named after \"like\" as examples of the topical IOP-lowering drugs, so the specific agents are not literally stated as given",
+    "Added p1-f064 topical intraocular pressure-lowering drugs (medications, administered, route topical, b00006) as the supported class-level item; linked to event p1-e06 and summary claim 3",
+    "p1-f031 repeat CT time relation unknown -> after, consistent with p1-f050 (\"after two days\", anchor null)",
+    "Split symptom event p1-e02 (decreased vision right eye, \"for 1 day\") from new event p1-e17 (complete loss of vision, \"for 3 hours\", no eye named) so each event carries its own literal duration",
+    "Added 7 literally supported temporal relations: e02 before e17 and e02/e17 before ER arrival e03 (b00004 durations up to arrival); e05 paracentesis refusal and e09 thrombolysis refusal before HBOT e10 (\"As the patient was not willing ... she was taken for emergency HBOT\"); discharge e14 before follow-up for HBOT e15 (b00011); HBOT e10 before follow-up outcome e16 (b00002 \"Early HBOT has improved the visual outcome in follow-up visits\")",
+    "Summary claim 3 reworded to \"topical intraocular pressure-lowering drops such as Brinzolamide and Timolol\"",
+    "Updated the Brinzolamide/Timolol ambiguity and added an ambiguity for the past-tense cherry-red spot / pale retina sentence in the Assessment discussion (b00027), not attributed to the patient"
+  ],
+  "unresolved": [
+    "Follow-up visual acuity timing conflicts (6 months in the case presentation versus three months in the abstract and conclusion); kept as review_only source_conflict facts.",
+    "The repeat CT report names the right common iliac artery on a brain angiogram; recorded literally and flagged review_only.",
+    "The Discussion sections are general literature and recommendations and were not assigned to the patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 57,
+    "facts_reviewed": 64,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (52-year-old female, CRAO right eye); roster count 1 from b00002",
+      "Follow-up 6/18 timing conflict (6 months in b00011 vs three months in b00002/b00055) kept as review_only source_conflict pair p1-f061/p1-f062 on timing only; untimed 6/18 outcome p1-f060 included",
+      "Repeat CT \"right common iliac artery\" on a brain angiogram kept literal as ambiguous/review_only p1-f051; not corrected to carotid",
+      "Thrombolysis and AC paracentesis are patient refusals (declined, events not_occurred); polycythemia work-up not performed",
+      "Complete loss of vision has no eye named; \"after two days\" has no anchor; both left unanchored",
+      "b00051 differential diagnosis list and b00027 assessment sentences are general discussion, not patient facts",
+      "FIG1 two Optos fundus images (R with arrow; L not described by caption) and FIG2 volume-rendered CT angiogram viewed at full resolution with zoomed header crops; orange masking bars leave only illegible glyph remnants, no legible identifiers"
+    ],
+    "residual_risks": [
+      "Whether Brinzolamide and Timolol were actually given is left review_only",
+      "Follow-up interval (3 vs 6 months) unresolved by source",
+      "Left-eye fundus image in FIG1 is not mentioned by the caption; attributed with the figure",
+      "Masked header bars in FIG1 leave lower halves of glyphs below the top bars; judged illegible"
+    ]
+  },
+  "physician_adjudicated": false
+}
