@@ -540,7 +540,7 @@
       "time": {
        "text": "2 days later",
        "relation": "after",
-       "anchor": null
+       "anchor": "transferred to our facility"
       }
      },
      "evidence": [
@@ -552,7 +552,7 @@
      "clinical_statement": "Surgical treatment 2 days later",
      "certainty": "supported",
      "scoring": "include",
-     "notes": "Anchor of '2 days later' is not stated in the sentence; anchor left null."
+     "notes": "'2 days later' follows the transfer stated in the immediately preceding sentence; anchor is that literal phrase."
     },
     {
      "fact_id": "p1-f023",
@@ -690,7 +690,7 @@
       "time": {
        "text": "2 months later",
        "relation": "after",
-       "anchor": null
+       "anchor": "placement of a circular ring fixator"
       }
      },
      "evidence": [
@@ -702,7 +702,7 @@
      "clinical_statement": "Circular ring fixator removed 2 months later",
      "certainty": "supported",
      "scoring": "include",
-     "notes": "Anchor of '2 months later' is the fixator placement in the same sentence; anchor left null because no literal anchor phrase is stated."
+     "notes": "'2 months later' refers to the fixator placement named in the same sentence."
     },
     {
      "fact_id": "p1-f029",
@@ -740,7 +740,7 @@
       "assertion": "present",
       "action_text": "Non-weightbearing on the left leg",
       "plan_type": "other",
-      "action_status": "unknown",
+      "action_status": "completed",
       "target": "Left leg",
       "time": {
        "text": "initially",
@@ -768,7 +768,7 @@
       "assertion": "present",
       "action_text": "Toe-touch weightbearing on the right leg",
       "plan_type": "other",
-      "action_status": "unknown",
+      "action_status": "completed",
       "target": "Right leg",
       "time": {
        "text": "initially",
@@ -796,7 +796,7 @@
       "assertion": "present",
       "action_text": "Transition to crutches with weightbearing as tolerated on the left leg",
       "plan_type": "other",
-      "action_status": "unknown",
+      "action_status": "completed",
       "target": "Left leg",
       "time": {
        "text": "After removal of the fixator",
@@ -824,7 +824,7 @@
       "assertion": "present",
       "action_text": "Continued non-weightbearing on the right leg",
       "plan_type": "other",
-      "action_status": "unknown",
+      "action_status": "completed",
       "target": "Right leg",
       "time": {
        "text": "After removal of the fixator",
@@ -1283,7 +1283,7 @@
       "time": {
        "text": "more than 10 days",
        "relation": "before",
-       "anchor": null
+       "anchor": "definitive fixation"
       }
      },
      "evidence": [
@@ -1296,6 +1296,34 @@
      "certainty": "ambiguous",
      "scoring": "review_only",
      "notes": "Unlabeled Discussion sentence; owner not literally stated. The authors' causal speculation about nonunion is not recorded as a fact."
+    },
+    {
+     "fact_id": "p1-f052",
+     "task": "conditions",
+     "collection": "items",
+     "fields": {
+      "subject": "index_patient",
+      "assertion": "present",
+      "name": "Tibial nonunion",
+      "verification_status": "confirmed",
+      "role": "complication",
+      "body_site": "tibia",
+      "laterality": "unknown"
+     },
+     "evidence": [
+      {
+       "segment_id": "b00007",
+       "quote": "the right leg developed nonunion through the distal tibia"
+      },
+      {
+       "segment_id": "b00015",
+       "quote": "Patient 1 developed nonunion of the left tibia"
+      }
+     ],
+     "clinical_statement": "Tibial nonunion; the side is reported differently in the case text and the Discussion",
+     "certainty": "supported",
+     "scoring": "include",
+     "notes": "Both the case text and the Discussion state a tibial nonunion for Patient 1; only the laterality conflicts, so laterality is left unknown here and the side-specific conflicting facts stay review_only."
     }
    ],
    "events": [
@@ -1428,12 +1456,13 @@
     },
     {
      "event_id": "p1-e07",
-     "description": "Right distal tibial nonunion with posttraumatic arthritis",
+     "description": "Distal tibial nonunion (side differs between case text and Discussion) with posttraumatic arthritis",
      "occurrence": "occurred",
      "fact_ids": [
+      "p1-f052",
       "p1-f037",
-      "p1-f039",
-      "p1-f038"
+      "p1-f038",
+      "p1-f039"
      ],
      "time_text": null,
      "evidence": [
@@ -1516,6 +1545,26 @@
      "kind": "test",
      "time_kind": "relative",
      "time_precision": "exact"
+    },
+    {
+     "event_id": "p1-e12",
+     "description": "Initial wheelchair dependence with non-weightbearing on the left and toe-touch weightbearing on the right",
+     "occurrence": "occurred",
+     "fact_ids": [
+      "p1-f029",
+      "p1-f030",
+      "p1-f031"
+     ],
+     "time_text": "initially",
+     "evidence": [
+      {
+       "segment_id": "b00006",
+       "quote": "The patient was initially wheelchair dependent because of non-weightbearing (NWB) on the left and toe-touch weightbearing (TTWB) on the right."
+      }
+     ],
+     "kind": "treatment",
+     "time_kind": "order_only",
+     "time_precision": "unknown"
     }
    ],
    "temporal_relations": [
@@ -1617,6 +1666,65 @@
        "quote": "Radiographs of patient 1 obtained 3 years after the index procedure"
       }
      ]
+    },
+    {
+     "from_event_id": "p1-e02",
+     "to_event_id": "p1-e03",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00005",
+       "quote": "was transferred to our facility 10 days after the injury"
+      },
+      {
+       "segment_id": "b00006",
+       "quote": "Surgical treatment occurred 2 days later."
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e07",
+     "to_event_id": "p1-e08",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00007",
+       "quote": "However, the right leg developed nonunion through the distal tibia, along with posttraumatic arthritis. As a result, the patient underwent a right ankle fusion."
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e03",
+     "to_event_id": "p1-e08",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00007",
+       "quote": "2.5 years after the index surgery (1.5 years after the ankle fusion)"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e10",
+     "to_event_id": "p1-e11",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00022",
+       "quote": "Radiographs of patient 1 obtained 3 years after the index procedure, including AP view of the left ankle and lateral and oblique views of the right ankle following subtalar fusion."
+      }
+     ]
+    },
+    {
+     "from_event_id": "p1-e12",
+     "to_event_id": "p1-e05",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00006",
+       "quote": "The patient was initially wheelchair dependent because of non-weightbearing (NWB) on the left and toe-touch weightbearing (TTWB) on the right. After removal of the fixator, he transitioned to crutches"
+      }
+     ]
     }
    ],
    "summary": [
@@ -1657,8 +1765,9 @@
      ]
     },
     {
-     "text": "One year after the initial surgery the left leg was reported healed without complications, though the Discussion reports left tibial nonunion. The right leg developed distal tibial nonunion with posttraumatic arthritis and underwent right ankle fusion, plate removal at 2.5 years and subtalar fusion at 3 years post-index surgery.",
+     "text": "One year after the initial surgery the left leg was reported healed without complications, though the Discussion reports left tibial nonunion. The case text reports right distal tibial nonunion with posttraumatic arthritis, followed by right ankle fusion, plate removal at 2.5 years and subtalar fusion at 3 years post-index surgery.",
      "fact_ids": [
+      "p1-f052",
       "p1-f035",
       "p1-f037",
       "p1-f038",
@@ -2011,7 +2120,7 @@
       "time": {
        "text": "4 years earlier",
        "relation": "before",
-       "anchor": null
+       "anchor": "sustained bilateral pilon fractures"
       }
      },
      "evidence": [
@@ -2023,7 +2132,7 @@
      "clinical_statement": "Bilateral calcaneal ORIF 4 years earlier",
      "certainty": "supported",
      "scoring": "include",
-     "notes": "Anchor of '4 years earlier' is not literally stated; left null."
+     "notes": "'4 years earlier' is relative to the pilon fractures sustained, named in the same sentence."
     },
     {
      "fact_id": "p2-f010",
@@ -2300,7 +2409,7 @@
       "time": {
        "text": "One week later",
        "relation": "after",
-       "anchor": null
+       "anchor": "initial surgery"
       }
      },
      "evidence": [
@@ -2312,7 +2421,7 @@
      "clinical_statement": "ORIF of the right leg one week later",
      "certainty": "supported",
      "scoring": "include",
-     "notes": "Anchor of 'One week later' is the external fixator application in the preceding sentence; left null."
+     "notes": "'One week later' follows the preceding sentence's 'At the time of the initial surgery' (external fixator application); anchor is that literal phrase."
     },
     {
      "fact_id": "p2-f021",
@@ -2323,7 +2432,7 @@
       "assertion": "present",
       "action_text": "Non-weightbearing bilaterally",
       "plan_type": "other",
-      "action_status": "unknown",
+      "action_status": "completed",
       "target": "Both legs",
       "time": {
        "text": "during the first 12 weeks",
@@ -2377,7 +2486,7 @@
       "assertion": "present",
       "action_text": "Instructed to use crutches once partial weightbearing was permitted",
       "plan_type": "counseling",
-      "action_status": "recommended"
+      "action_status": "completed"
      },
      "evidence": [
       {
@@ -2670,10 +2779,7 @@
      "occurrence": "occurred",
      "fact_ids": [
       "p2-f008",
-      "p2-f009",
-      "p2-f005",
-      "p2-f006",
-      "p2-f007"
+      "p2-f009"
      ],
      "time_text": "4 years earlier",
      "evidence": [
@@ -2705,11 +2811,10 @@
     },
     {
      "event_id": "p2-e03",
-     "description": "Presentation to the hospital 5 days after injury with radiographs",
+     "description": "Presentation to the hospital 5 days after injury",
      "occurrence": "occurred",
      "fact_ids": [
-      "p2-f012",
-      "p2-f013"
+      "p2-f012"
      ],
      "time_text": "5 days after injury",
      "evidence": [
@@ -2846,6 +2951,25 @@
      "kind": "test",
      "time_kind": "relative",
      "time_precision": "exact"
+    },
+    {
+     "event_id": "p2-e10",
+     "description": "AP and oblique radiographs obtained after a fall showing bilateral pilon fractures and retained calcaneal hardware",
+     "occurrence": "occurred",
+     "fact_ids": [
+      "p2-f013",
+      "p2-f014"
+     ],
+     "time_text": "after a fall",
+     "evidence": [
+      {
+       "segment_id": "b00023",
+       "quote": "AP and oblique radiographs of patient 2 obtained after a fall, demonstrating bilateral pilon fractures and retained hardware from prior bilateral calcaneal ORIF."
+      }
+     ],
+     "kind": "test",
+     "time_kind": "relative",
+     "time_precision": "unknown"
     }
    ],
    "temporal_relations": [
@@ -3418,7 +3542,7 @@
       "time": {
        "text": "the same day",
        "relation": "at",
-       "anchor": null
+       "anchor": "presented"
       }
      },
      "evidence": [
@@ -3430,7 +3554,7 @@
      "clinical_statement": "Initial surgery the same day",
      "certainty": "supported",
      "scoring": "include",
-     "notes": "'the same day' refers to the presentation in the same paragraph; anchor left null."
+     "notes": "'the same day' refers to the presentation stated in the preceding sentence; anchor is that literal word."
     },
     {
      "fact_id": "p3-f017",
@@ -3517,7 +3641,7 @@
       "time": {
        "text": "Three days later",
        "relation": "after",
-       "anchor": null
+       "anchor": "Initial surgery"
       }
      },
      "evidence": [
@@ -3545,7 +3669,7 @@
       "time": {
        "text": "Three days later",
        "relation": "after",
-       "anchor": null
+       "anchor": "Initial surgery"
       }
      },
      "evidence": [
@@ -3568,7 +3692,7 @@
       "assertion": "present",
       "action_text": "Non-weightbearing bilaterally",
       "plan_type": "other",
-      "action_status": "unknown",
+      "action_status": "completed",
       "target": "Both legs",
       "time": {
        "text": "initially",
@@ -3622,7 +3746,7 @@
       "assertion": "present",
       "action_text": "Partial weightbearing permitted bilaterally with transition to crutches",
       "plan_type": "other",
-      "action_status": "unknown",
+      "action_status": "completed",
       "target": "Both legs",
       "time": {
        "text": "At 12 weeks",
@@ -4108,29 +4232,22 @@
     },
     {
      "event_id": "p3-e04",
-     "description": "Initial bilateral non-weightbearing and wheelchair use, partial weightbearing with crutches at 12 weeks, physical therapy",
+     "description": "Initial bilateral non-weightbearing with wheelchair reliance",
      "occurrence": "occurred",
      "fact_ids": [
       "p3-f022",
-      "p3-f023",
-      "p3-f024",
-      "p3-f025",
-      "p3-f026"
+      "p3-f023"
      ],
-     "time_text": "At 12 weeks",
+     "time_text": "initially",
      "evidence": [
       {
        "segment_id": "b00012",
        "quote": "The patient was initially NWB bilaterally and relied on a wheelchair for mobility."
-      },
-      {
-       "segment_id": "b00012",
-       "quote": "At 12 weeks, partial weightbearing was permitted bilaterally, allowing transition to crutches. He complied with rehabilitation instructions and participated in physical therapy."
       }
      ],
-     "kind": "follow_up",
-     "time_kind": "relative",
-     "time_precision": "exact"
+     "kind": "treatment",
+     "time_kind": "order_only",
+     "time_precision": "unknown"
     },
     {
      "event_id": "p3-e05",
@@ -4240,6 +4357,24 @@
      "kind": "test",
      "time_kind": "relative",
      "time_precision": "exact"
+    },
+    {
+     "event_id": "p3-e11",
+     "description": "Partial weightbearing permitted bilaterally at 12 weeks with transition to crutches",
+     "occurrence": "occurred",
+     "fact_ids": [
+      "p3-f024"
+     ],
+     "time_text": "At 12 weeks",
+     "evidence": [
+      {
+       "segment_id": "b00012",
+       "quote": "At 12 weeks, partial weightbearing was permitted bilaterally, allowing transition to crutches."
+      }
+     ],
+     "kind": "treatment",
+     "time_kind": "relative",
+     "time_precision": "exact"
     }
    ],
    "temporal_relations": [
@@ -4306,6 +4441,39 @@
       {
        "segment_id": "b00027",
        "quote": "obtained 1 year and 9 months after the index procedure"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p3-e04",
+     "to_event_id": "p3-e11",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00012",
+       "quote": "The patient was initially NWB bilaterally and relied on a wheelchair for mobility. At 12 weeks, partial weightbearing was permitted bilaterally"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p3-e06",
+     "to_event_id": "p3-e07",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00026",
+       "quote": "taken 3 months after posterior iliac crest bone grafting"
+      }
+     ]
+    },
+    {
+     "from_event_id": "p3-e09",
+     "to_event_id": "p3-e10",
+     "relation": "before",
+     "evidence": [
+      {
+       "segment_id": "b00027",
+       "quote": "obtained 1 year and 9 months after the index procedure, demonstrating right ankle arthrodesis"
       }
      ]
     }
@@ -4773,7 +4941,7 @@
   }
  ],
  "article_limitations": [
-  "Table 1 is referenced in the case text but no table content is present in the retained source, so no table rows could be extracted.",
+  "Table 1 is referenced in the case text but is absent from the publisher JATS (raw.xml has no table-wrap, table graphic or supplementary material; only the seven figure graphics), so no table rows could be extracted.",
   "Abstract statements about all patients (obesity, tobacco use, cardiovascular or psychiatric conditions; revision procedures more than 1 year after index surgery) are cohort-level and are not copied to individuals, except the explicit 'Each underwent staged ORIF' and 'three male patients' statements.",
   "Source conflicts retained as review_only facts: Patient 1 nonunion laterality (case text right, Discussion left) and Patient 3 timing of bone grafting versus the 7-month radiographs (case text versus Figure 6 caption).",
   "An unlabeled Discussion sentence about a shortened right leg and more than 10 days of malreduction is quarantined because its patient is not literally stated.",

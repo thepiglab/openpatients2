@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC12531980.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "790a3b1c0ef62f1c9d8b17a3698dfc1c608cf9cb162ccc82b332744a3fcbb23a",
+  "annotation_sha256": "05bbd6a8ac7b13c4b0dba518b7944a3cd993d1b307968faf89de60597bcae824",
+  "reviewed_at": "2026-10-16T02:25:57.120755+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 125,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1: added p1-f052 tibial nonunion (include, laterality unknown) so only the conflicting laterality stays quarantined in p1-f035..f038; event p1-e07 description made side-neutral and linked to p1-f052; summary claim 3 updated.",
+    "p1: literal anchors restored: p1-f022 '2 days later' -> 'transferred to our facility'; p1-f028 '2 months later' -> 'placement of a circular ring fixator'; p1-f051 malreduction time anchored to 'definitive fixation' (relation before).",
+    "p1: added event p1-e12 (initial wheelchair dependence with NWB left / TTWB right) and relations e02<e03, e07<e08 ('As a result'), e03<e08 (stated 2.5 y / 1.5 y times), e10<e11 (caption 'following subtalar fusion'), e12<e05.",
+    "p2: anchors restored: p2-f009 '4 years earlier' -> 'sustained bilateral pilon fractures'; p2-f020 'One week later' -> 'initial surgery'.",
+    "p2: removed alcohol use disorder, schizophrenia and smoking from the '4 years earlier' history event p2-e01 (time belonged only to calcaneal ORIF); moved Fig 3 radiographs (p2-f013, p2-f014) from the presentation event to new event p2-e10 'after a fall' (no time borrowed from presentation).",
+    "p3: anchors restored: p3-f016 'the same day' -> 'presented'; p3-f020/f021 'Three days later' -> 'Initial surgery'; p3-f031 (Discussion bone grafting within 1 year) marked alternate_representation_of p3-f030.",
+    "p3: split p3-e04 so 'initially' NWB/wheelchair is no longer timed 'At 12 weeks'; new event p3-e11 (PWB at 12 weeks); compliance/physical therapy facts left untimed; relations e04<e11, e06<e07 (caption '3 months after ... grafting'), e09<e10 (caption 'demonstrating right ankle arthrodesis').",
+    "Weightbearing restrictions/instruction actions literally carried out set action_status completed (p1-f030..f033, p2-f021, p2-f023, p3-f022, p3-f024).",
+    "Article limitation on Table 1 updated: table is absent from the publisher JATS itself (no table-wrap, table graphic or supplement in raw.xml), not an extraction drop."
+  ],
+  "unresolved": [
+    "Table 1 is referenced in the case text but is absent from the publisher JATS (raw.xml has no table-wrap, table graphic or supplementary material; only the seven figure graphics), so no table rows could be extracted.",
+    "Abstract statements about all patients (obesity, tobacco use, cardiovascular or psychiatric conditions; revision procedures more than 1 year after index surgery) are cohort-level and are not copied to individuals, except the explicit 'Each underwent staged ORIF' and 'three male patients' statements.",
+    "Source conflicts retained as review_only facts: Patient 1 nonunion laterality (case text right, Discussion left) and Patient 3 timing of bone grafting versus the 7-month radiographs (case text versus Figure 6 caption).",
+    "An unlabeled Discussion sentence about a shortened right leg and more than 10 days of malreduction is quarantined because its patient is not literally stated.",
+    "Authors' speculative causal statements (malalignment, obesity, smoking, bilaterality as risk factors) and literature findings are not recorded as patient facts.",
+    "Caption-layer visual status is not_inspected; actual images are inspected in the separate visual submission.",
+    "No supplementary material is listed for this article."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 125,
+    "figures_viewed": 7,
+    "key_findings": [
+      "Three-patient bilateral pilon series; roster count 3 literal; all 7 radiograph figures viewed at full resolution and attributed per caption.",
+      "Table 1 is referenced (b00014) but absent from raw.xml; nothing to extract.",
+      "P1 nonunion laterality conflict (case text right/left healed vs Discussion left) quarantined as review_only on the side-specific facts only; nonunion, arthritis and fusions remain included.",
+      "P3 graft timing is a genuine conflict: text puts nonunion X-rays at 7 months then grafting; Fig 6 caption puts post-graft radiographs (3 months after graft) at 7 months; timing facts quarantined, graft itself included untimed.",
+      "Unlabelled Discussion sentence (shortened right leg, >10 days malreduction) is only contextually Patient 1; kept ambiguous/review_only.",
+      "Cohort copies limited to explicit 'Each underwent staged ORIF' and 'each with a follow-up period extending beyond 2 years'; Discussion statements naming Patients 1/2/3 used per named patient.",
+      "Fig 3 caption 'after a fall' vs text 'jumping from a third-story window' kept as an ambiguity."
+    ],
+    "residual_risks": [
+      "EVID-NEGATION warning on p2-f026 is a checker false positive: 'heal uneventfully' is the rule's uneventful-recovery case (complications absent).",
+      "GLUED-TEXT warning on 'hindfoot' in the visual submission is a false positive (standard anatomical term).",
+      "Cross-sentence anchors for '2 days later', 'One week later', 'the same day', 'Three days later' are the literal phrases of the immediately preceding event; a stricter reading would leave them null.",
+      "Presentation/transfer and weightbearing kept in care_plans and injury mechanisms as conditions (role unknown) for lack of an encounter/external-cause section.",
+      "Relation between P3 7-month nonunion X-rays and the graft is omitted because the source conflicts on it."
+    ]
+  },
+  "physician_adjudicated": false
+}
