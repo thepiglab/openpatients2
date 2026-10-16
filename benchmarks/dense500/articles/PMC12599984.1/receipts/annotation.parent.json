@@ -1,0 +1,50 @@
+{
+  "article_id": "PMC12599984.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a6ebb2419a23b82bfe0f2d6e124bb16577730fe2d34f44302a916c8358a77e01",
+  "annotation_sha256": "2975c2157210a1d9afa96bff6bdca6a0a03988ae743f75c8e009f04fddc8c57a",
+  "reviewed_at": "2026-10-16T03:01:49.901642+00:00",
+  "source_segments_read": 39,
+  "facts_reviewed": 79,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Per orchestrator ruling (testing confirmed states a basis, not a time order): removed relations p1-e21 before p1-e22 and p1-e19 before p1-e22; no quote orders either pair with a time word.",
+    "Earlier fixes retained: serum tryptase kept as two facts (untimed text result p1-f065, Table 1 on-admission cell p1-f077) with ambiguity; ICU-transfer-before-taper relation removed; Fulminant anaphylaxis cell merged into the anaphylactic shock fact; discussion restatement cited on treatment facts; abstract Ringer Lactate route intravenous; managed-with, Later and ondansetron-before-onset relations kept."
+  ],
+  "unresolved": [
+    "Table 2 rows other than \"Our case\" and the discussion of cited published cases (82-year-old woman, 70-year-old man) describe other patients or literature and are not recorded as facts about the index patient.",
+    "Intro and discussion statements about ondansetron safety, incidence, mechanisms and recommendations (for example slow intravenous administration) are general and are not recorded as patient facts or care plans.",
+    "The vasopressor drug, dose and route are not named; the drug used for rapid sequence induction is not named.",
+    "Dates, the interval between presentation and the later tests, and the time of the text tryptase draw are not stated; whether \"on admission\" for Table 1 means emergency or ICU admission is not stated; no order beyond the stated relations was added.",
+    "Figure 1 was inspected in the separate visual target; caption-layer visual status here remains not_inspected."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 39,
+    "facts_reviewed": 79,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient; Table 2 literature rows and discussed cited cases not recorded.",
+      "Confirmed ondansetron hypersensitivity event is not ordered against the tests because the source states only its basis.",
+      "Figure 1 pixels match the visual description; panel B handwritten ink kept as a possible direct identifier."
+    ],
+    "residual_risks": [
+      "Whether Table 1 on admission means emergency or ICU admission is not stated.",
+      "Prick versus intradermal test method is unresolved in the source.",
+      "Measurement-series sidecar exists only as a draft."
+    ]
+  },
+  "physician_adjudicated": false
+}
