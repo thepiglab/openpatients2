@@ -150,6 +150,7 @@ def test_slurm_dag_serializes_gpu_arms_and_releases_downstream_first(campaign, m
         if job['phase'] != 'worker':
             assert '--partition=hpg-default' in job['argv']
             assert not any(arg.startswith('--gres') for arg in job['argv'])
+            assert ('--mem=128G' if job['phase'] == 'download' else '--mem=32G') in job['argv']
     assert result['jobs'][-1]['phase'] == 'aggregate'
     # Resume queues only unfinished arms, and cannot overlap a live campaign.
     for ref in campaign[1]:
@@ -263,9 +264,11 @@ def cpu_runtime(campaign, monkeypatch):
         return native_sha(path)
     help_text = ' '.join(arg for p in r.PROFILES.values() for arg in p['extra_args']) + ' --generation-config --chat-template'
     def run(argv, **kw):
-        if argv[:2] == ['apptainer', 'pull']:
-            Path(argv[2]).write_bytes(b'fixture-container')
-        return SimpleNamespace(returncode=0, stdout=help_text if '--help=all' in argv else '{"vllm_version":"pinned-nightly"}',
+        if argv[:2] == ['apptainer', 'build'] and '--help' not in argv:
+            Path(argv[-2]).write_bytes(b'fixture-container')
+        stdout = ('--mksquashfs-args' if argv == ['apptainer', 'build', '--help'] else
+                  help_text if '--help=all' in argv else '{"vllm_version":"pinned-nightly"}')
+        return SimpleNamespace(returncode=0, stdout=stdout,
                                stderr='', check_returncode=lambda: None)
     monkeypatch.setitem(sys.modules, 'huggingface_hub', SimpleNamespace(snapshot_download=download, get_token=lambda: None))
     monkeypatch.setattr(subprocess, 'run', run)
@@ -486,3 +489,73 @@ def test_scores_and_export_verify_after_every_model_has_been_deleted(cpu_runtime
         assert sum('/results/lifecycle/download-' in name for name in names) == 4
         assert sum('/results/lifecycle/cleanup-' in name for name in names) == 4
         assert not any(name.endswith('.safetensors') for name in names)
+
+
+def test_container_build_bounds_compression_and_publishes_only_valid_image(cpu_runtime, monkeypatch):
+    work, _ = cpu_runtime
+    sif = work / 'runtime' / r.engine(r.PROFILES['fastino'])['sif']
+    image = r.engine(r.PROFILES['fastino'])['image']
+    calls = []
+    def run(argv, **kwargs):
+        calls.append(argv)
+        if argv == ['apptainer', 'build', '--help']:
+            return SimpleNamespace(stdout='--mksquashfs-args')
+        if argv[:2] == ['apptainer', 'build']:
+            assert argv[2:4] == ['--mksquashfs-args', '-processors 8 -mem 8G']
+            assert argv[-1] == image
+            assert not sif.exists()
+            Path(argv[-2]).write_bytes(b'completed image')
+        if argv[:3] == ['apptainer', 'sif', 'list']:
+            assert not sif.exists()
+            assert Path(argv[-1]).read_bytes() == b'completed image'
+        return SimpleNamespace(stdout='')
+    monkeypatch.setattr(subprocess, 'run', run)
+    s.build_image(work, sif, image)
+    assert sif.read_bytes() == b'completed image'
+    assert not sif.with_suffix('.building.sif').exists()
+    assert len(calls) == 3
+
+
+@pytest.mark.parametrize('failure', ['build', 'validation'])
+def test_failed_image_is_not_published_and_no_weights_download(cpu_runtime, monkeypatch, failure):
+    work, downloads = cpu_runtime
+    downloads.clear()
+    sif = work / 'runtime' / r.engine(r.PROFILES['fastino'])['sif']
+    def run(argv, **kwargs):
+        if argv == ['apptainer', 'build', '--help']:
+            return SimpleNamespace(stdout='--mksquashfs-args')
+        if argv[:2] == ['apptainer', 'build']:
+            Path(argv[-2]).write_bytes(b'partial image')
+            if failure == 'build':
+                raise subprocess.CalledProcessError(137, argv)
+        if argv[:3] == ['apptainer', 'sif', 'list']:
+            raise subprocess.CalledProcessError(1, argv)
+        return SimpleNamespace(stdout='')
+    monkeypatch.setattr(subprocess, 'run', run)
+    with pytest.raises(subprocess.CalledProcessError):
+        s.download(work, 'fastino')
+    assert downloads == []
+    assert not sif.exists() and not sif.with_suffix('.building.sif').exists()
+    s.cleanup(work, 'fastino')
+
+
+def test_old_apptainer_fails_before_image_or_weights_download(cpu_runtime, monkeypatch):
+    work, downloads = cpu_runtime
+    downloads.clear()
+    calls = []
+    def run(argv, **kwargs):
+        calls.append(argv)
+        return SimpleNamespace(stdout='Apptainer 1.3 build options')
+    monkeypatch.setattr(subprocess, 'run', run)
+    with pytest.raises(RuntimeError, match='Load Apptainer 1.4'):
+        s.download(work, 'fastino')
+    assert calls == [['apptainer', 'build', '--help']]
+    assert downloads == []
+
+
+def test_cleanup_reclaims_image_left_by_hard_kill(cpu_runtime):
+    work, _ = cpu_runtime
+    temporary = (work / 'runtime' / r.engine(r.PROFILES['fastino'])['sif']).with_suffix('.building.sif')
+    temporary.write_bytes(b'partial file from a killed process')
+    s.cleanup(work, 'fastino')
+    assert not temporary.exists()

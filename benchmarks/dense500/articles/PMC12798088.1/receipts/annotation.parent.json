@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12798088.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4db4965a60e7eeab28e45fb915271ea16583ce2f8a53b5bbc17be6d860b19671",
+  "annotation_sha256": "db0fec28f3a9a5d2fccb149c6a8e8b6beae20fe3d661955767132def04be3ad4",
+  "reviewed_at": "2026-10-16T02:16:47.851286+00:00",
+  "source_segments_read": 17,
+  "facts_reviewed": 58,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f005 active cheerleader: domain occupation -> exercise (not stated as an occupation); removed from injury event p1-e01",
+    "p1-f014 pain: removed borrowed body_site 'both knees' (sentence names no pain site); case_context chief_complaint and p1-e01 description de-localized",
+    "p1-f029 retinacular tears: role complication -> unknown (source does not call them a complication)",
+    "p1-f036/p1-f041 right-knee stump excision and retinaculum repair: evidence now carries the transosseous-repair link that b00012 places in the right knee; notes explain the laterality",
+    "p1-f045 knee brace: action completed -> device_present",
+    "p1-f050 gait retraining (action unknown) removed from occurred physiotherapy event p1-e08",
+    "Added literal relations: e02 before e05 ('admitted inpatient and evaluated with imaging, before eventually undergoing surgical repair'), e05 before e07/e08/e11/e12 (postoperative / post surgery / post-operatively / following surgery)",
+    "Article limitation on the MRI vs intra-operative site conflict rewritten"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three JPEGs are inspected in the separate visual target.",
+    "MRI wording (bilateral proximal patellar tendons) and the intra-operative left-knee site (mid-portion) disagree about the same rupture; both site statements are review-only source_conflict facts, while the bilateral complete rupture and the right-knee proximal-fifth site stay accepted.",
+    "The source gives no dates; all times are relative to surgery as written.",
+    "Discussion statements about published series and other repair options are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 17,
+    "facts_reviewed": 58,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single 19-year-old woman; roster count 1",
+      "Left-knee rupture site is a genuine source conflict (MRI bilateral proximal vs intra-operative mid-portion): both site statements review_only; bilateral complete rupture and right proximal-fifth site accepted",
+      "Right-knee retinaculum repair kept right: right-knee paragraph sequence after the transosseous repair, which b00012 places in the right knee",
+      "Gait retraining kept action unknown; trampoline mechanism kept as exercise exposure; Chinese kept race_as_documented",
+      "All three figures viewed; visual descriptions, panel letters and F1 device-text privacy flag match pixels"
+    ],
+    "residual_risks": [
+      "Right laterality of stump excision, Krakow tagging, drill holes and retinaculum repair rests on paragraph structure plus the transosseous-repair link",
+      "Injury event, ED presentation and examination have no literal order links to each other",
+      "Chinese could be read as ethnicity rather than race"
+    ]
+  },
+  "physician_adjudicated": false
+}

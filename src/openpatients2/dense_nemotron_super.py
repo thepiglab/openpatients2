@@ -29,6 +29,8 @@ from .nemotron_super_recipes import (
 
 FORMAT = 'dense-nemotron-super/2'
 STORAGE_POLICY = 'download-benchmark-cleanup/1'
+DOWNLOAD_MEMORY = '128G'
+MKSQUASHFS_ARGS = '-processors 8 -mem 8G'
 
 
 def prepare(root, work, expected=260, hours=12, with_images=False, include_test=False,
@@ -437,6 +439,7 @@ def cleanup_profile(work, profile_name):
         raise ValueError('Refusing cleanup of a different active profile')
     paths = {weights_path(work, model) for name in names for model in profile_models(name)}
     paths.update(runtime / engine(PROFILES[name])['sif'] for name in names)
+    paths.update((runtime / engine(PROFILES[name])['sif']).with_suffix('.building.sif') for name in names)
     paths.update(runtime / folder for folder in (
         'download-cache', 'apptainer-cache', 'apptainer-tmp', 'cpu-cache'))
     # Check the full deletion set before the first mutation.
@@ -475,6 +478,33 @@ def cleanup(work, profile=None):
     return cleanup_profile(work, profile)
 
 
+def build_image(work, sif, image):
+    """Bound compression explicitly; host RAM/CPU detection ignores Slurm limits."""
+    owned_path(work, sif)
+    if sif.exists():
+        subprocess.run(['apptainer', 'sif', 'list', str(sif)],
+                       check=True, text=True, capture_output=True)
+        return
+    help_result = subprocess.run(['apptainer', 'build', '--help'],
+                                 check=True, text=True, capture_output=True)
+    if '--mksquashfs-args' not in help_result.stdout:
+        raise RuntimeError('Load Apptainer 1.4+ with build --mksquashfs-args support; '
+                           'refusing an unbounded container conversion on a Slurm CPU job')
+    # A killed build must never leave a partial image at the final serving path.
+    temporary = owned_path(work, sif.with_suffix('.building.sif'))
+    if temporary.exists():
+        temporary.unlink()
+    try:
+        subprocess.run(['apptainer', 'build', '--mksquashfs-args', MKSQUASHFS_ARGS,
+                        str(temporary), image], check=True)
+        subprocess.run(['apptainer', 'sif', 'list', str(temporary)],
+                       check=True, text=True, capture_output=True)
+        temporary.replace(sif)
+    finally:
+        if temporary.exists():
+            temporary.unlink()
+
+
 @exclusive_runtime
 def download(work, profile_name):
     m = check(work)
@@ -496,8 +526,7 @@ def download(work, profile_name):
     # Apptainer conversion scratch do not overlap the full model on disk.
     selected_engine = engine(profile)
     sif = owned_path(work, runtime / selected_engine['sif'])
-    if not sif.exists():
-        subprocess.run(['apptainer', 'pull', str(sif), selected_engine['image']], check=True)
+    build_image(work, sif, selected_engine['image'])
     for folder in ('apptainer-cache', 'apptainer-tmp'):
         path = owned_path(work, runtime / folder)
         if path.exists():
@@ -544,7 +573,9 @@ def download(work, profile_name):
         records[str(path.relative_to(work))] = {'sha256': b.sha(path), 'bytes': path.stat().st_size,
                                               'mtime_ns': path.stat().st_mtime_ns}
     receipt = {'ready': True, 'profile': profile_name, 'files': records,
-               'download_started_unix': start, 'download_seconds': time.time() - start, 'cpu_probes': probes}
+               'download_started_unix': start, 'download_seconds': time.time() - start, 'cpu_probes': probes,
+               'image_build': {'method': 'apptainer build', 'mksquashfs_args': MKSQUASHFS_ARGS,
+                               'slurm_memory': DOWNLOAD_MEMORY}}
     record_path = runtime / 'profiles' / (profile_name + '.json')
     owned_path(work, record_path)
     b.write(record_path, receipt)
@@ -687,7 +718,7 @@ def submit(work, account, qos, resume=False, dry_run=False):
         cmd = common + ['--job-name=op2-super-' + (name if gpu else phase + ('-' + name if name else '')),
             '--cpus-per-task=' + str(profile.get('cpus', 8) if gpu else 8),
             '--partition=' + ('hpg-b200' if gpu else 'hpg-default'),
-            '--mem=' + (profile['host_memory'] if gpu else '32G'),
+            '--mem=' + (profile['host_memory'] if gpu else DOWNLOAD_MEMORY if phase == 'download' else '32G'),
             '--time=' + (f'{m["nemotron_super"]["hours"]:02d}:00:00' if gpu else '08:00:00'),
             '--output=' + str(work / 'logs' / ((name if gpu else phase + ('-' + name if name else '')) + '-%j.log'))]
         if gpu:

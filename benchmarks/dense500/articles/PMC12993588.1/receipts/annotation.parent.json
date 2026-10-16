@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC12993588.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6883b9badb6316d584e7224cbfc3af4db79c406c8d8c8b0a48a490290e05c72c",
+  "annotation_sha256": "ecd42e0f35fd04e3a3fda308410dfb0cdbcdc0b0086629758b3b766e34ebc734",
+  "reviewed_at": "2026-10-16T00:53:50.597570+00:00",
+  "source_segments_read": 43,
+  "facts_reviewed": 115,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f101 Akkermansia muciniphila: removed text_value that carried a different, non-literal statement (Verrucomicrobiota rank).",
+    "Added p1-f114 Verrucomicrobiota as third fecal phylum (b00023 literal sentence).",
+    "Added p1-f115 procedures_devices 16S rRNA V3-V4 next-generation sequencing of both samples (b00001, b00014); added to summary claim 3, which already described the sequencing.",
+    "Added event p1-e05 sequencing analysis linking all microbiome observations (f052-f111, f114, f115).",
+    "Added three literal temporal relations: e01 screening exclusion before e05 (\"Before analyzed the samples\"), e03 sample collection before e05 (\"Samples were frozen until analysis.\"), e04 FMT use before e05 (\"We thus decided to explore ... since all patients who received the product for FMT showed a favorable response\").",
+    "Venn-vs-Table ambiguity rewritten with the exact mismatching ranks (stool genus 68 vs 69, oral genus 27 vs 28, stool family 29 vs 31) and both Table 1 rows as evidence.",
+    "source_coverage b00014 and b00025 changed to patient_facts for the new procedure and relation evidence.",
+    "Article limitations: recorded why roster count stays null (no literal count the single-case check accepts) and that the XLSX supplement has no content-review format."
+  ],
+  "unresolved": [
+    "Single healthy stool donor; the 11 FMT recipients are mentioned only as a cohort and are not annotated as individuals.",
+    "Sequencing methods (DNA extraction, primers, PCR, bioinformatics) are laboratory methods and are not recorded as patient facts.",
+    "The abstract and results disagree on the most abundant fecal species (source conflict, review_only).",
+    "The Rome IV questionnaire, examination, laboratory tests and serologies have no stated results.",
+    "The screening exclusion sentence is garbled; the 6-month window is not assigned to one item.",
+    "Discussion text on microbial functions, disease associations and cited literature describes published work, not the donor.",
+    "Pixels are reviewed in the separate visual submission; caption-layer visual status stays not_inspected. Krona-style charts have unreadable labels.",
+    "Supplementary taxon tables (Table_1.xlsx) are reviewed in the supplement manifest, not transcribed as facts.",
+    "Roster reported_individual_count left null: the only literal count statement is \"A single super-donor was recruited\", which the single-case pattern of the roster check does not accept (super-donor is not in its noun list), and no other sentence states the number; roster_complete stays true with one annotated individual.",
+    "Supplement SM1 (Table_1.xlsx) has no supplement content-review format for XLSX files; it is reviewed only through the supplement manifest."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 43,
+    "facts_reviewed": 115,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single healthy 26-year-old woman FMT super-donor; 11 C. difficile recipients are cohort only and not annotated.",
+      "Abstract (F. prausnitzii most abundant) vs Results (B. vulgatus 11.8% > F. prausnitzii 9.87%) kept as review_only pair f112/f113 on the ranking claim only; both percentages stay included; SM1 stool sheet agrees with Results (11.84 vs 9.88).",
+      "Garbled b00006 exclusion sentence kept as three absent social exposures with the 6-month window unassigned.",
+      "Screening labs/serologies without stated results kept as performed with result not reported; b00007 \"All test results were negative\" applied only to the b00007 stool tests.",
+      "Discussion taxa (Veillonellaceae 27%, Pasteurellaceae, Streptococcus, Clostridia orders, F. prausnitzii high, A. muciniphila low) are explicitly about this donor; specimen left null where the sentence does not name it.",
+      "Table 1 twelve cells each one observation; Venn mismatches recorded as ambiguity; sunburst labels illegible at source resolution, no values taken."
+    ],
+    "residual_risks": [
+      "Roster reported_individual_count null although the source states a single donor.",
+      "Ethnicity \"Mexican\" may denote nationality.",
+      "SM1 per-row taxon abundances are not transcribed; no XLSX supplement review path exists."
+    ]
+  },
+  "physician_adjudicated": false
+}

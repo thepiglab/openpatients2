@@ -1,0 +1,67 @@
+{
+  "article_id": "PMC12777617.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ff0f31a9172932e85cbc307c1abe0e1f1e18e1a457c18f286cdc6e726beab9ab",
+  "annotation_sha256": "09c49895e968ccba66c15fd880bb0dba2a63ef96b4c4732fb064fbd6f3dd31dd",
+  "reviewed_at": "2026-10-16T01:45:11.502185+00:00",
+  "source_segments_read": 38,
+  "facts_reviewed": 206,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f045 (A§E 3/7 on referral, text citing Table 2) and p1-f055 (Table 2 earliest available A§E 0/7) quarantined as source_conflict/review_only; ambiguity, summary and limitations updated.",
+    "p4 implant: merged review-only p4-f015 (CI22, Table 1) and p4-f016 (CI22M, narrative) into one include device item p4-f015 citing both quotes; CI22M judged the more specific model name, not a conflict (supplemental Tables 2-3 also list CI22M).",
+    "p1-f018 no detection of low-frequency sounds moved from a present symptom with a negation text_value to an observation (hearing test finding on referral).",
+    "Removed borrowed indications: p1-f031, p2-f025 and p4-f017 (break / pulse-duration items whose own evidence does not state the purpose).",
+    "p1-f024..f027 evidence widened to the whole Attempts were made to manage FNS sentence so the indication is in the item own quote; p2-f027 and p3-f021 evidence widened to include the literal cause (Consequently / and thus).",
+    "p1-f020 dropped body_site not stated in its evidence.",
+    "p3-f019 deleted as duplicate of outcome p3-f039 (same sentence).",
+    "Added p3-f040 family_genetics OPA1 mutation (gene OPA1, dominant) and set family_genetics documented.",
+    "Added HIDO clinic referral care_plans item for each patient (p1-f069, p2-f054, p3-f041, p4-f044) from the sentence naming the 4 referred patients.",
+    "p4-f027 FNS thresholds: added method from the Figure 4 caption (Pseudomonopolar, 150 µs, 210 to 245 pps).",
+    "Timeline: added 16 test events for Table 2 timepoints and the p1 referral evaluation, p3 ABI offered/declined event (not_occurred) and p4 not-repeated tests (not_occurred); 14 relations from stated table times; removed unsupported p2-e07 before p2-e08 relation; FNS-onset-before-break relations (p1-e04/e06, p2-e06/e11, p4-e04/e06) removed after coordinator follow-up because Table 1 gives the break as a duration and no text states the order; p2-e05/e06 relation now cites the Table 1 onset cell; removed untimed facts (p3-f005, p3-f011..f014) from timed events.",
+    "Article limitations updated (conflict decisions, Fig 2 versus text SFAT range, supplement status)."
+  ],
+  "unresolved": [
+    "Figure pixels are reviewed in the separate visual submission; the annotation figures keep not_inspected caption-layer status.",
+    "Singular they is used for all four patients, so no documented sex is recorded.",
+    "Stimulation-level changes expressed as percentages of the prebreak dynamic range are retained as printed, including values above 100%, without recalculation.",
+    "Table 1 and Table 2 time cells are retained as printed, including the source spelling moths in the Patient 2 narrative; time relations use only literal anchors.",
+    "Patient 3 has no A§E or BKB records and no electrode counts leading to FNS; no values are inferred.",
+    "The discussion of excitotoxicity, OPA1 disease mechanisms and meningitis requirements is general background and is not attributed to individual patients.",
+    "Patient 1 speech discrimination: the text gives 3/7 on referral citing Table 2, but Table 2 gives 0/7 as the earliest available A§E outcome; both values are quarantined as source_conflict, review_only.",
+    "Patient 4 implant: Table 1 names Cochlear CI22 and the narrative Cochlear CI22M; the parent reviewer treats these as the same device at different naming specificity (one include item), not a conflict.",
+    "Patient 1 on-referral sound field thresholds are 30 to 40 dB HL in the text, while the Figure 2 Patient 1 facet plots most thresholds above 40 dB HL at every labelled time point (referral is not a labelled time point); no plot values are used as facts.",
+    "Supplemental Digital Content 3 (mao-47-e193-s003.docx) holds patient-level map tables, voltage and transimpedance matrices and percentage-change tables; it was opened and classified in the supplement manifest, but its values are not transcribed because the DOCX supplement review tooling was not available. Supplements 1 and 2 are blank templates."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 38,
+    "facts_reviewed": 206,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Four adult CI users with FNS; roster 4 from b00004; numbering by first mention matches.",
+      "Table 1 and Table 2 cells (about 50) checked cell by cell against facts; No data available, Not tested and Not repeated cells are not_performed.",
+      "Cohort sentences applied to all four (adult, insufficient loudness, treatment options failed, HIDO referral) are literal for the 4 discussed patients; 3 of 4 increase statement not attributed.",
+      "Maternal rubella kept with subject mother in p1; singular they so no documented sex; hearing-loss role unknown.",
+      "Figures are per-patient facets, attributed shared; no plot values used as facts."
+    ],
+    "residual_risks": [
+      "Supplement s003 patient-level map tables not transcribed (DOCX review tooling unavailable).",
+      "CI22 versus CI22M resolved by naming-specificity judgement.",
+      "p3 break duration: narrative 2-month session interval versus Table 1 uncertain, up to 6 mo, kept as ambiguity."
+    ]
+  },
+  "physician_adjudicated": false
+}

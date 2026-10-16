@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12528027.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f63355063da5bb68440886be741e094ee9f4ea246f4251e60299930da3f815ae",
+  "annotation_sha256": "4faf2da4016714a7e1e6016a5c13309ae0c2be36f79da0df45270f39c60d4eeb",
+  "reviewed_at": "2026-10-16T01:52:59.420858+00:00",
+  "source_segments_read": 47,
+  "facts_reviewed": 274,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1 summary claim 3 rewritten: removed the paragraph-order wording (tislelizumab then chemotherapy then biopsy), states DDGP as recommended and 3 cycles of chemotherapy without a regimen, cites the allo-HSCT advice item instead of the two review_only conflict facts.",
+    "p2 summary claim 4 rewritten: the transplant was delayed for financial reasons until three months after progression to HLH (previous wording implied it was performed because of financial reasons).",
+    "p1-f112 removed related_condition HLH (temperature normalization is not tied to HLH in its evidence).",
+    "p1 DDGP ambiguity extended: Figure 3 prints a DDGP entry with 3 cycles under CASE1; kept as pixel content only, DDGP drugs remain planned.",
+    "Added p1 ambiguity: pancytopenia statement citing Table 1 versus Case 1 pre-CAR-T platelets 241 within the printed range.",
+    "Added 4 temporal relations from stated calendar times (p1 Dec 2022 before Jan 2023, Feb 2023 before early June 2023; p2 Feb 2024 before June 2024, July 2024 before October 2024).",
+    "Article limitation added: Figure 3 timeline details not stated in the text are not used as facts."
+  ],
+  "unresolved": [
+    "Figure pixels are described in the separate visual submission; the figure rows here keep caption-layer status not_inspected.",
+    "Supplement SM1 (Table1.docx, a Word document with supplementary figure captions and a CAEBV versus ENKTL differential table) could not be reviewed: the text-document review path requires the unavailable anydoc extra. Its listed content includes patient-level supplementary figure captions (for example Case 1 and Case 2 PET/CT SUVmax values) that are not captured here.",
+    "Discussion says the patient with low blood EBV DNA load progressed faster than the one with high load without naming the case; not assigned to an individual.",
+    "Table 1 prints two Case 2 cells with stray spaces ('0. 89' and '1657. 00'); kept as printed text rather than parsed numbers.",
+    "The discussion statement about gp350 expression in 'the patient' is read as Case 1 from its paragraph lead sentence.",
+    "Case 1 text says symptoms persisted four years while the abstract says more than six months for both patients; the abstract statement is not copied to either patient.",
+    "Figure 3 (author timeline) prints details not stated in the text, e.g. a DDGP entry with 3 cycles for CASE1 and 2024.09 allo-HSCT for CASE2; these are recorded only in the visual review and are not used as annotation facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 47,
+    "facts_reviewed": 274,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Roster 2 (b00002), Case 1 male 18, Case 2 female 22; numbering by first mention.",
+      "Case 1 allo-HSCT: declined for personal reasons versus no suitable donor kept as two review_only source_conflict facts; advice kept as a recommended care plan.",
+      "DDGP for Case 1 stays planned (recommended); 3 cycles of chemotherapy unnamed; no DDGP attribute borrowed. Case 2 DDGP literal (underwent).",
+      "gp350 flow cytometry: the sentence is in the paragraph whose subject is Case one and states the target chosen for the CAR-T only Case 1 received; accepted for p1.",
+      "Both-patient discussion sentences (nasal lesions improved, both deteriorated, progressed to HLH) literally name both patients.",
+      "All 30 Table 1 cells checked; 0. 89 and 1657. 00 kept as printed text; unavailable is not_performed; Case 2 text-level elevated labs kept separate from the table columns.",
+      "Figures 1-3 viewed; panel attribution from text citations and printed Case headers is correct; 9 GLUED-TEXT warnings are literal Fig 3 transcriptions or the drug name chidamide (false positives)."
+    ],
+    "residual_risks": [
+      "Supplement SM1 DOCX with patient-level PET/CT images and SUVmax captions not reviewed (DOCX tooling unavailable); no facts taken from it.",
+      "Case 1 cured (abstract) versus later EBV-LPD recurrence and PET site wording kept as ambiguities.",
+      "Case 2 suspected lymphoma recorded as possible condition and possible oncology tumor."
+    ]
+  },
+  "physician_adjudicated": false
+}

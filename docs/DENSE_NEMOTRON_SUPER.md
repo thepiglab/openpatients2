@@ -219,8 +219,9 @@ Sources:
 ## Resources, validation and recovery
 
 CPU preparation/access checks → **for each selected profile: CPU download → GPU
-benchmark → CPU cleanup** → CPU aggregation/export. Downloads and cleanup use
-`hpg-default`, eight CPUs, 32G RAM, up to eight hours, and **no GPUs**.
+benchmark → CPU cleanup** → CPU aggregation/export. Downloads use `hpg-default`,
+eight CPUs, **128G RAM**, up to eight hours, and **no GPUs**. Setup, cleanup and
+aggregation request eight CPUs and 32G RAM.
 All six default profiles remain selected. Text and optional vision arms for a
 profile share its download; cleanup waits for both arms to terminate.
 At most **eight B200s, 16 CPUs and 200G host RAM** for this campaign at once.
@@ -239,13 +240,19 @@ rather than every model. Budget roughly **650–750 GB free** for the largest pr
 (Muse Spark Open), its drafter/container, and working space, plus inputs/results.
 Actual free space and image sizes still determine whether it fits. The CPU
 download job builds the container first and removes its OCI cache/conversion
-scratch before downloading model weights, reducing peak space. Cleanup removes
+scratch before downloading model weights, reducing peak space. Image builds use
+`apptainer build --mksquashfs-args '-processors 8 -mem 8G'`: compression must not
+size its RAM buffers from the full node's memory instead of the Slurm allocation.
+Apptainer 1.4+ with this build option is required; unsupported versions fail
+before fetching the large image or weights. A temporary image is checked with
+`apptainer sif list` and published only after successful conversion; failed or
+interrupted temporary images are removed by cleanup. Cleanup removes
 the completed profile's target/drafter, image, download caches and arm compilation
 caches; outputs, citations, returned reasoning, pinned revisions, weight hashes
 and CPU probe receipts remain. NVFP4 is downloaded again for LiLiCorr rather than
 kept resident through another profile. Downloads, full hashing, cleanup, scoring
 and compression run on CPU allocations. No inference or installation runs on a
-login node. The launcher needs existing `uv`, Apptainer and required Hugging Face
+login node. The launcher needs existing `uv`, Apptainer 1.4+ and required Hugging Face
 access. No packages are installed globally.
 
 CPU preflight verifies pinned configurations/templates, native reasoning modes

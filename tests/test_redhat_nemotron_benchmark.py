@@ -98,9 +98,10 @@ def test_redhat_metadata_pins_and_setup_ownership(campaign, tmp_path, monkeypatc
             return redhat.PINS[model]['config_sha256' if path.name == 'config.json' else 'template_sha256']
         return native_sha(path)
     def run(argv, **kwargs):
-        if argv[:2] == ['apptainer', 'pull']:
-            Path(argv[2]).write_bytes(b'fixture image')
-        stdout = ' '.join(redhat.PROFILE['extra_args']) if '--help=all' in argv else '{"vllm_version":"fixture"}'
+        if argv[:2] == ['apptainer', 'build'] and '--help' not in argv:
+            Path(argv[-2]).write_bytes(b'fixture image')
+        stdout = ('--mksquashfs-args' if argv == ['apptainer', 'build', '--help'] else
+                  ' '.join(redhat.PROFILE['extra_args']) if '--help=all' in argv else '{"vllm_version":"fixture"}')
         return SimpleNamespace(returncode=0, stdout=stdout, stderr='', check_returncode=lambda: None)
     monkeypatch.setitem(sys.modules, 'huggingface_hub', SimpleNamespace(snapshot_download=download, get_token=lambda: None))
     monkeypatch.setattr(b, 'sha', sha)
