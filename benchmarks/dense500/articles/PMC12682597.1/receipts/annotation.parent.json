@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12682597.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "07b8895f65a9d944eae5d2389e23ba7fed76c52ec0f0bf7c026a3f1d23170dea",
+  "annotation_sha256": "3b171d07723374ac687d7d40c592abba9895c0af64065c5cb1a93597b308939a",
+  "reviewed_at": "2026-10-16T02:25:43.911718+00:00",
+  "source_segments_read": 60,
+  "facts_reviewed": 113,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Restored literal time 'Initial laboratory tests' (relation at) on p1-f009 thrombocytopenia, p1-f049 platelets, p1-f047 hemoglobin and p1-f048 leukocytes, each citing the full governing b00016 sentence; other Table 1 cells stay untimed",
+    "Moved Table 2 Day 1/2/4 observations out of the post-withdrawal improvement event p1-e09 into new test events p1-e11/e12/e13 (Day 1, Day 2, Day 4); Day 1 is not placed after withdrawal",
+    "Added relations e11 before e12 before e13 (stated day labels) and e01 before e04 ('The next day, she returned')",
+    "p1-f090/p1-f091 EBV/CMV not_performed: added b00043 'tests could not be performed due to resource limitations'",
+    "p1-f046 family history: subject index_patient -> family_member",
+    "Table-timing article limitation rewritten"
+  ],
+  "unresolved": [
+    "No figures or supplements are listed in the source.",
+    "Table 1 has no stated time; only the platelet, hemoglobin and leukocyte results restated in the \"Initial laboratory tests\" sentence carry that time. Table 2 Day 1, Day 2 and Day 4 are not anchored to a stated event and are not placed relative to drug withdrawal.",
+    "AST differs in precision between Table 1 (76 U/L) and Table 2 Day 1 (76.41 U/L); both retained.",
+    "Units are not printed in the value cells for total leukocyte count and monocytes; no units inferred.",
+    "DILI certainty is described both as confirmed by RUCAM and as possible (RUCAM +5) or suspected; recorded as review_only source_conflict facts.",
+    "EBV, CMV and autoimmune hepatitis testing was not performed; the general statement that differentials were ruled out is not applied to them.",
+    "Country and exact setting are not stated beyond a rural outpatient department; the discussion's references to usual DILI latency, risk factors and mechanisms are general literature, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 60,
+    "facts_reviewed": 113,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single 32-year-old woman; roster count 1",
+      "DILI certainty is a genuine internal conflict (confirmed by RUCAM vs suspected / RUCAM +5 possible): both certainty facts kept review_only; cholestatic liver injury accepted",
+      "EBV/CMV/AIH testing literally not performed ('couldn't be tested', 'could not be performed'); differentials kept possible, not refuted",
+      "Table 1 and Table 2 Day 1 AST (76 vs 76.41) kept separate; no caption times Table 1",
+      "Flags follow text wording; cholesterol 172.4 normal per 'lipid profile were within normal limits' with ambiguity",
+      "Symptom onset 'within hours of drug intake' anchored to drug intake, relation after; RUCAM cells as observations and Disclosure-derived concern/compliance kept"
+    ],
+    "residual_risks": [
+      "Table 1 facts sit in the 'further lab investigations' event after the return visit; the link is narrative, not literal",
+      "Table 1 and Table 2 Day 1 are probably the same draw but are not merged",
+      "Diagnosis, investigations and drug withdrawal events have few literal order links"
+    ]
+  },
+  "physician_adjudicated": false
+}
