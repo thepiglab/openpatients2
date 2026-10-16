@@ -1,0 +1,68 @@
+{
+  "article_id": "PMC12780777.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1c2a984fec2864a966238530d76a96b95d02f8c9cb708965d340bb79d42dd432",
+  "annotation_sha256": "5fe7719f63a2f5584173da8dab934fb112ac8a3de6f689da3c03f2a4b8aa462e",
+  "reviewed_at": "2026-10-16T05:34:36.349222+00:00",
+  "source_segments_read": 160,
+  "facts_reviewed": 1412,
+  "patients_reviewed": 21,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Table 4 evidence: truncated the patient-number row and analyte row quotes of 986 Table 4 citations to end at the patient's own column, so the last value in each quote is that patient's cell (previously whole rows with all 17 patients).",
+    "Added symptoms_function gross hematuria assertion=absent for all 21 patients from the Results sentence stating gross hematuria was universally absent.",
+    "Added review_only (ambiguous) death-from-cancer-progression outcome facts and ambiguities for Pt 2, 4, 5 and 18: the cohort sentence cites Table 5 and Table 5 prints Death for exactly these four, but names no patient.",
+    "Added 34 temporal relations: renal biopsy before follow-up (16 patients) and before death (4), supported by the Methods statement that follow-up data were post-biopsy; TKI therapy before its Table 5 discontinuation (14).",
+    "Summary claims now cite the serum creatinine trajectory group fact they state (21 claims).",
+    "Pt 5 and Pt 19 causality notes record that Table S1 counts one possible case each in the VEGFR and PDGFR groups (consistent, not literal); kept review_only.",
+    "Article limitations: Figure 1 window 2015-2024 versus study to March 2025; unassigned indication of the 5 immunosuppressed patients; Table S1 aggregate only."
+  ],
+  "unresolved": [
+    "Case series of 21 patients; all patient facts come from Tables 1, 3, 4 and 5 and are keyed by the printed Pt number, so patient ids p1 to p21 equal Pt 1 to 21.",
+    "Table 4 evidence quotes include the whole patient-number row and analyte row because the cell for one patient is only identifiable by column position; values for other patients appear inside those quotes.",
+    "Table 4 caption says 15 patients but 17 patient columns are printed (and the Results text says 17 TMA-like cases); this count mismatch is recorded as arithmetic ambiguity, not a source conflict.",
+    "Table 5 prints rows for 18 patients (Pt 17, 20 and 21 are absent) although its caption says 21 patients; no outcome facts are recorded for the absent patients.",
+    "Results text says 8 discontinued, 5 substituted and 5 continued the TKI among 18 patients, while Table 5 shows 14 discontinuations and 5 substitutions; arithmetic mismatch kept as ambiguity, no per-patient value changed.",
+    "Cohort-level statements (medians, percentages, unlabeled counts such as pre-existing renal comorbidity, schistocyte-negative smears in five cases, prior anti-VEGF antibody exposure in four cases, twelve patients with prior anticancer therapy, one AKI patient, four deaths from cancer progression, causality grades certain and probable) are not assigned to individual patients because the text gives no patient labels.",
+    "Table 2 is a group-level summary; only its BTK row (n = 1) is kept, as review_only facts for the sole BTK patient.",
+    "Cases 5 and 19 in the causality sentence are matched to Pt 5 and Pt 19 by number only, kept review_only.",
+    "Peak U-Pro for Pt 11 differs between Tables 3 and 5 and is kept as two review_only source_conflict facts; TKI duration for Pt 3 and Pt 6 differs only by rounding between Tables 1 and 3.",
+    "Table 5 Tumor status has no printed time and is not equated with the Table 1 status at biopsy.",
+    "Figure 1 as plotted sums to 18 cases (VEGFR 11, PDGFR 4, HER 2, BTK 1) while the text and tables give 21 patients (VEGFR 12, PDGFR 5, HER 3, BTK 1); plotted values are chart estimates, not facts, and no patient fact is derived from them.",
+    "Supplement Table S1 (DOCX) is an aggregate evidence-level count table by TKI group and holds no patient-level data; it could not be extracted with the text-document tool because anydoc is not installed, so only the manifest row was reviewed from the raw DOCX text.",
+    "Caption-layer visual status is not_inspected; the four images were inspected separately in the visual submission.",
+    "Figure 1 covers 2015 to 2024 while the study window runs to March 2025, which may explain why its bars total 18 rather than 21; the source does not say so, so the difference stays an unexplained limitation.",
+    "The Results sentence that 5 patients started immunosuppressive therapy for significant proteinuria and/or renal impairment, guided by immune complex deposition, names no patients; Table 5 shows IS therapy for five patients (Pt 2, 3, 5, 14, 15), but the indication is not assigned to them.",
+    "Supplement Table S1 is an aggregate causality evidence-level count table (certain, probable, possible by TKI group); no per-patient values are taken from it."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 160,
+    "facts_reviewed": 1412,
+    "figures_viewed": 4,
+    "key_findings": [
+      "All 636 Table 3/5 cells and all Table 1 and Table 4 cells were checked programmatically against the facts and spot-checked by hand; every cell is represented with the correct value, polarity and NA handling.",
+      "Bx SCr (Table 3 Scr@Bx, Table 5 Bx SCr defined as serum creatinine at renal biopsy) and Peak U-Pro (identical column label in both tables) are the same labeled measurement, so merging identical values is allowed; Pt 11 Peak U-Pro 1.48 vs 0.86 stays two review_only source_conflict facts.",
+      "Pt 14 Table 2 BTK (n = 1) row facts stay review_only; Cases 5 and 19 are never literally equated with Pt 5 and Pt 19.",
+      "Table 4 caption says 15 patients but prints 17 columns, matching the 17 TMA-like cases in the text; Table 5 has 18 rows (no Pt 17, 20, 21); TKI duration 5.75 vs 5.7 (Pt 3) and 0.63 vs 0.6 (Pt 6) are rounding, not conflicts.",
+      "Figure 3 is representative and names no patient; it stays unresolved. Figures 1 and 2 are aggregate; Fig 2 counts match Table 1 exactly."
+    ],
+    "residual_risks": [
+      "Gross hematuria absent is copied to all 21 from a universal cohort sentence.",
+      "Death cause, AKI narrative (Pt 18) and immunosuppression indication rest on count matching and are not included facts.",
+      "TKI-to-biopsy order is not encoded because some patients continued the TKI."
+    ]
+  },
+  "physician_adjudicated": false
+}
