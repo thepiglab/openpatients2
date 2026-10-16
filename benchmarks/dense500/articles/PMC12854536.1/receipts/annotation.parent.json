@@ -1,0 +1,52 @@
+{
+  "article_id": "PMC12854536.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d96b4b727fa2f80824095153f6535a8654a6eac82cae040462131ae1edb11696",
+  "annotation_sha256": "fa48699895b2244b1667ff00949003c4f67c917af355f6c4fcaccdffe8990e31",
+  "reviewed_at": "2026-10-16T00:48:59.075252+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 57,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Linked the oncology tumor-excision treatment p1-f049 to tumor t1 with the b00016 statement that the patient was treated with this resection.",
+    "Added a supported relation p1-e02 (preoperative lesion examination) before p1-e03 (resection) from the Figure 1 caption \"Preoperative view\".",
+    "Shortened summary claim 1 from 89 to under 85 words without changing its facts (size kept as approximately 10x15 mm)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEGs are inspected in the separate visual submission.",
+    "Graft donor site is retroauricular in the abstract and case text but preauricular in the Conclusions; both are kept as review-only source conflicts.",
+    "The title calls the carcinoma recurrent; the case text does not label the current lesion a recurrence, so no recurrence status is recorded.",
+    "No dates, follow-up beyond the first postoperative week, medications, allergies, family history or perinatal data are reported.",
+    "General discussion and literature statements are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 57,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single 54-year-old man; roster 1; all 57 facts verified against b00002 and b00009-b00033; no facts added or removed.",
+      "Donor site retroauricular (b00002, b00014, b00016) vs preauricular (b00028) is a true source conflict: the harvest stays included without a site and both sites are review_only.",
+      "Recurrence is not recorded: only the title (not a source segment) says recurrent; the case text describes a prior treated lesion with positive margins. Contralateral stays unanchored to left/right as an ambiguity.",
+      "Infiltrative solid-type (confirmed diagnosis) vs nodular-ulcerative (clinical impression) are different evidentiary levels, not a conflict; kept confirmed plus provisional with an ambiguity.",
+      "All 4 photographs viewed at full resolution: Fig 2/3 letters are point markers on one photograph (lowercase c in Fig 3); eyes are masked but nose, cheeks, forehead and beard remain visible, so identifiable_face true is a reasonable conservative flag."
+    ],
+    "residual_risks": [
+      "Postoperative edema is recorded as present with verification unknown from the authors attribution of the NOSE score; no examination finding of edema is described.",
+      "Rhinoscopy result and NOSE timing are unstated; the cotton-in-glove-finger and saline-cotton items may be one device described twice."
+    ]
+  },
+  "physician_adjudicated": false
+}
