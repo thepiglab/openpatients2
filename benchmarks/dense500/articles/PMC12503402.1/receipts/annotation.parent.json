@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12503402.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "53a6ce41e7713a7c819ad0b4fe63f8add0976da8fcc04e3908b5361332dff4fd",
+  "annotation_sha256": "155496b24e380ee86e80518bbccdc0b0291106df14cbbfea63ab76df7a1aa46d",
+  "reviewed_at": "2026-10-16T01:30:54.056695+00:00",
+  "source_segments_read": 11,
+  "facts_reviewed": 24,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f005 exposure condition: re-evidenced with its own statements (exposed electrode; Figure 1 caption) and diagnostic_basis cleared so the otoscopy sentence is held once (ONE-STATEMENT).",
+    "p1-f009 otoscopic finding moved from observations to symptoms_function kind=sign (SECTION-SIGNS).",
+    "p1-f008 implant functioning normally moved from symptoms_function functional_status to procedures_devices kind=device, action=device_present (device status, not patient function).",
+    "p1-f011 removed: \"agreed to endoscopic revision surgery\" is the completed surgery (p1-f012), not a care plan; its stated purposes became the p1-f012 indication with the sentence as evidence.",
+    "p1-f012 body_site corrected to posterior external auditory canal.",
+    "p1-f006 broken posterior canal wall: role complication -> unknown (not stated); added intraoperative evidence \"the broken external ear canal wall\".",
+    "p1-f014 finding set to the literal removed material (ear wax, pus and scabs).",
+    "Added event p1-e06 (right implant performance unchanged) and relation e06 after e04 from the literal \"before the revision surgery\" sentence (an e01 before e04 relation was removed: no quote literally orders the 2013 placement and the revision); e04 now links f005/f006; e02 links the device status.",
+    "Added three ambiguities: unstated side of exposure/defect, ownership of the discussion sentence on extrusion taking years, unstated presentation-to-surgery interval.",
+    "Summary claim 2 reworded (no consent-as-plan), still sourced only from record facts.",
+    "visual.json: corrected Figure 1 strand/triangle description and Figure 2c triangle/arrow description to match the pixels; figure-EHR and privacy files regenerated with --draft and reviewed labels/flags carried over unchanged."
+  ],
+  "unresolved": [
+    "Discussion statements about the technique in general (advantages, limitations, \"In our experience\") are not recorded as patient facts.",
+    "The discussion sentence about the initial electrode extrusion taking years is not tied to a stated duration and is not recorded.",
+    "Laterality of the exposure and of the ear canal defect is not restated outside the implant placement sentence; no side was borrowed.",
+    "Surgery date, anesthesia and whether surgery preceded or followed the consent sentence relative to other events are not stated; no order beyond the stated relations was added.",
+    "Figures were inspected in separate visual targets; caption-layer visual status here remains not_inspected."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 11,
+    "facts_reviewed": 24,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single 46-year-old man; roster count 1 from \"Our patient, a 46-year-old man\".",
+      "Every surgical step in b00004 is captured as its own item; discussion paragraphs b00006-b00007 are general technique statements and are not patient facts.",
+      "Laterality right is literal only for the 2013 implant placement and the post-operative implant performance; the exposure, canal wall defect and surgery keep laterality unknown.",
+      "Only literal orderings are linked (Five years after the cochlear implant; 12 months after surgery; before the revision surgery); presentation-to-surgery order is not asserted.",
+      "Six endoscopic panels viewed at full resolution plus zoomed crops; all patient-attributed clinical imaging, no privacy flags."
+    ],
+    "residual_risks": [
+      "Otoscopic examination timing relative to the presentation is not stated and is left unlinked.",
+      "The discussion sentence on the initial extrusion taking years may concern this patient; held as an ambiguity, not a fact.",
+      "Structure identification in the endoscopic images relies on the captions."
+    ]
+  },
+  "physician_adjudicated": false
+}
