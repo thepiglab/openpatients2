@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12968469.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "70eb5cc42d37ced0434d901f49f9684cd958af6fcab3dc1ba6e16599adf88a2e",
+  "annotation_sha256": "d5b1a6b0f3b36307d143a29c7d404e388e970e03f33a59d95acf2e7e5852b6ff",
+  "reviewed_at": "2026-10-16T09:26:01.927724+00:00",
+  "source_segments_read": 17,
+  "facts_reviewed": 79,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f068 and p1-f069 (live-cell assay technique descriptions in care_plans): laboratory method text, not patient findings; noted in article_limitations. p1-f067 (live-cell assay adopted for this case and all subsequent monitoring) kept as a completed monitoring care plan.",
+    "Removed outcomes p1-f070 and p1-f071: they repeated the visual acuity statements already recorded as signs p1-f015/f016/f017/f018 (ONE-STATEMENT); events e12/e14 and summary repointed.",
+    "Merged the Figure 1A caption MRI (p1-f027) into the case-text MRI p1-f026: the text cites Figure 1 for these results and the orbit MRI includes the optic nerve; ambiguity rewritten.",
+    "p1-f024 oligoclonal bands present: flag unknown -> positive (qualitative test).",
+    "Event e03 now carries its own stated time \"On May 8\" (presentation sentence) instead of \"Upon admission\".",
+    "Removed relation e11 before e12: \"but visual acuity improved\" does not state that the improvement followed the final 125 mg step.",
+    "Calendar relations: all 15 pairs among the six fully dated events (May 6, 2023; March 13, 2024; October 10, 2024; March 19, 2025; April 7, 2025; July 23, 2025) now quote both stated dates; long paragraph quotes replaced.",
+    "Added relations e01<e03 (initially / aforementioned symptoms), e11<e13 (subsequently referred), e04<e18 (previously negative ... now tested positive), e15<e19 (MMF start -> discontinuation), e20<e21 (three vs seven months after satralizumab initiation), e19<e23 (satralizumab continued), e20<e24 (conceived and delivered), e24<e26 (5 months postpartum).",
+    "Summary claim 4 no longer dates the live-cell results to the March 13, 2024 consultation; claim 3 cites the sign facts and the referral.",
+    "MOG-IgG \"stable 1:32\" kept as an ambiguity (review_only p1-f041) rather than a conflict: the discussion names no test date, so it cannot be bound to the October 10, 2024 1:100 test."
+  ],
+  "unresolved": [
+    "Figure pixels are reviewed in the separate visual submission; values printed inside images (visual field, RNFL and antibody-titer plots) are pixel content and are not recorded as facts.",
+    "Figure 2 prints a fixed cell-based assay point dated 2023.12.3 and a 2024.3.13 point that the case text does not date; these are pixel content only.",
+    "The discussion states AQP4-IgG was the primary pathogenic driver and that the satralizumab strategy was justified; these author interpretations are not recorded as clinical facts.",
+    "The discussion calls the MOG-IgG titer stable at 1:32, which does not match the 1:100 result on October 10, 2024; kept as an ambiguous review-only observation.",
+    "Live cell assay results at the preconception consultation are not dated in their own sentence and carry no time.",
+    "Literature cases cited in the introduction and discussion are not patient facts.",
+    "Live-cell assay technique statements (antigen substrate, transfected-cell controls, IgG Fc-specific secondary antibody) are laboratory method descriptions, not patient findings; they are not recorded as separate items. The decision to use the live-cell assay for this case and all subsequent monitoring is kept as a completed monitoring care plan.",
+    "The improvement to finger-counting after methylprednisolone is not ordered after the final 125 mg step, because the source does not say when during the course it was observed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 17,
+    "facts_reviewed": 84,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (34-year-old woman); newborn kept in her record; roster count 1 from \"A 34 year-old female\".",
+      "Live-cell results after the March 13, 2024 consultation have no governing lead clause (the date is in its own sentence), so they stay undated.",
+      "Figure 2 pixels (incl. a 2023.12.3 point and 2024.3.13 dating) are pixel content only; no facts or conflicts derived from them.",
+      "Author interpretations (AQP4-IgG as primary driver, satralizumab strategy justified) correctly not recorded."
+    ],
+    "residual_risks": [
+      "Discussion \"stable MOG-IgG titer of 1:32\" vs dated 1:100 handled as ambiguity, not conflict.",
+      "Figure 1A caption MRI merged with the text MRI on the basis of the text citation of Figure 1.",
+      "Figure 1E printed sample codes may be specimen accession identifiers; privacy flag change requested from the annotator."
+    ]
+  },
+  "physician_adjudicated": false
+}
