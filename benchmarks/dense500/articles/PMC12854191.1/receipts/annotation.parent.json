@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC12854191.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7c0fdd2460934ef731d06a49744ef231d6767ccfa66ed2bc7cddb14b749d8971",
+  "annotation_sha256": "bedcededc6206ad9ca1f6613bde3b73b9f7c0f0ec98ac7eec29f8c2c6cd44f7a",
+  "reviewed_at": "2026-10-16T04:16:47.597347+00:00",
+  "source_segments_read": 39,
+  "facts_reviewed": 80,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f033 cholesterol: replaced the b00027 quote with one that carries the subject wording \"in the present case ... the cholesterol level was lower than the normal range\"; flag low kept on the single Table 1 cholesterol value",
+    "Removed p1-f018 tachypnea sign; the same statement \"Mild tachypnea (43 breaths per min)\" is kept once as respiratory rate p1-f020 with flag high from the word tachypnea (ONE-STATEMENT); event p1-e02 and summary refs repointed",
+    "p1-f042 nucleated red blood cell (Fig. 3 panel A): removed Giemsa method and quote borrowed from the panel B part of the caption",
+    "Added 2 literal relations: necropsy before CBC/biochemistry evaluation (\"were subsequently evaluated\", abstract) and tissue sampling/formalin dispatch before histopathology (\"sent to a histopathological laboratory for further evaluation\")"
+  ],
+  "unresolved": [
+    "Single canine case; the dog died before diagnostic imaging, so no imaging was performed and none is recorded.",
+    "Table 1 has one value column with no sample time and no reference intervals; flags come only from source words (leukocytosis, thrombocytopenia, increase, hypertriglyceridemia, elevated, lower than the normal range). Red cell, hemoglobin, hematocrit, MCV, MCH and MCHC are unflagged.",
+    "Table 1 values that the results text repeats are recorded once, citing both the table row and the text sentence; the source gives no separate time for either.",
+    "Source conflict recorded: intravenous lactated Ringer’s solution administered versus death before performing any treatments; both review-only.",
+    "Comparisons with cited dog and cat studies, fold differences from a cited study, and general statements about hepatic lipidosis are not patient facts.",
+    "Caption-layer figure visual status is not_inspected; the five images are inspected in the separate visual submission.",
+    "The nearly 8-year-old age is approximate and carries no numeric value. Breed appears only in the case context description."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 39,
+    "facts_reviewed": 81,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single dog, deceased before referral; roster count 1",
+      "LRS administered (b00006) versus death before performing any treatments (b00030): same attribute (treatment given), both review_only; death itself stays included",
+      "Table/text merges for WBC, platelets, RDW and triglycerides kept: the article reports one complete blood count conducted on the dog, Table 1 is titled the complete blood cell count of the dog, and the triglyceride sentence cites Table 1",
+      "Anemia appears only in the discussion as observed in our case: condition with verification unknown plus ambiguity; Table 1 red cell indices unflagged",
+      "Fig. 5 caption has no letters but the image prints A-C; FIG-LABELS allows printed-on-image letters, annotation keeps F5 as a whole figure"
+    ],
+    "residual_risks": [
+      "Blood sample timing relative to death is not stated",
+      "GLUED-TEXT warning on the real word antemortem is a checker false positive"
+    ]
+  },
+  "physician_adjudicated": false
+}
