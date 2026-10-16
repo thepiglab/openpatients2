@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12737661.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c1c24949e07ec89c6b35771cb3260068e5ce608ea52de5fe430efa0a19df81de",
+  "annotation_sha256": "12b539618a7f2339a5e40b1bd230c34f84fc843e44423032ed3143c078ebe0c8",
+  "reviewed_at": "2026-10-16T03:06:55.219572+00:00",
+  "source_segments_read": 93,
+  "facts_reviewed": 196,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Narrative facts copied to both patients from sentences without a plural subject set to ambiguous/review_only for each patient (24 per patient): ~30 min onset, progression to sopor/coma, the \"On admission\" clinical picture (GCS 6, pupils, secretions, salivation, continuous vomiting, tachypnea, rales, cyanosis, hemodynamics), fasciculations and hypersalivation, nasogastric intubation, activated charcoal, atropine stop at 18 h, worsening during transport, later stabilization, no long-term complications, and the b00022 differential exclusions; an ambiguity per patient lists them.",
+    "Kept per-patient only where the sentence literally covers both (\"both patients\", \"the patients\", \"their\", \"these/our/present cases\", abstract \"Both cases\"): coma on admission (b00016 evidence removed), miosis (b00032 \"as observed in both patients\" added), gastric lavage, IV fluids and drugs, ICU transfer, regained consciousness, intubation not required, atropine infusion and continuous monitoring (abstract; monitoring fact promoted to include).",
+    "Hospitalization fact no longer carries the subjectless \"approximately 2 h and 30 min after mushroom ingestion\" time; hospitalization event time removed.",
+    "Male urea 8.6 (text \"normal\", table interval 2.8–7.2) changed from source_conflict to supported/include with no flag plus an ambiguity: the table prints no classification and flags never come from intervals. Male GGT decrease vs 17/17 kept as a source conflict (text states a decrease the printed values contradict).",
+    "Added \"initial cooking water not discarded\" for both patients (b00029, \"in the present cases\"); added b00031 \"present cases\" evidence to the mycological-identification-not-performed facts.",
+    "Split the onset event: ~30 min onset (review_only fact) separate from the \"Initially, both patients\" symptoms event.",
+    "Added literal relations per patient: ingestion before seeking care, Byala visit before transport/hospitalization, hospitalization before immediate decontamination, atropine start before discontinuation, regained consciousness before later stabilization, initial symptoms before progression; p2 admission labs before discharge labs (5 -> 11 and 12 relations).",
+    "Per coordinator ruling on disputed relations: dropped e01->e05 for both patients (its quote orders ingestion before seeking care, already covered by e01->e04, and does not mention hospitalization); p2 e08->e17 re-quoted with the literal Table 2 Female column headers Admission / Discharge instead of the text quote (10 and 11 relations).",
+    "Summaries rewritten to cite only literally assigned facts and to drop paragraph-order \"then\"."
+  ],
+  "unresolved": [
+    "Literature review plus two cases; only the two spouses are patients. Review, discussion and published-case content is background.",
+    "No mycological or laboratory identification of the ingested mushrooms was performed; the diagnosis is clinical.",
+    "Several case-narrative sentences (onset time, admission clinical picture, decontamination details, unlabeled treatments, atropine stop time, later course) have no patient subject; those facts are review_only for each patient.",
+    "The discussion gives a symptom course with full recovery within 24 h and a six-hour atropine termination interval without naming a patient; not recorded as patient facts.",
+    "Table 2 lab cells are recorded as printed; flags come only from case-text wording, never from reference intervals.",
+    "Caption-layer visual status not_inspected; actual images inspected in the visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 93,
+    "facts_reviewed": 196,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Table 2 cells for both patients checked against the source rows (value, unit, Admission/Discharge column, row reference interval); the misaligned measurement-series draft grid does not affect annotation values.",
+      "Fig 4A (p1) and 4B (p2) viewed with zoomed crops: viewer icons and L/L-SUP markers only, no names, numbers or dates; breast soft-tissue outline in 4B; Figs 1, 2, 3, 5 are background.",
+      "Clonazepam stays review_only on p2 (sentence names no patient); dexamethasone, hydration, symptomatic GI treatment and support of vital functions stay review_only for both.",
+      "p2 \"no nephrotoxic effects\" versus eGFR 36 and impaired renal function kept as an ambiguity."
+    ],
+    "residual_risks": [
+      "Many admission findings (GCS 6 and others) are probably true for both spouses but are review_only because no sentence assigns them.",
+      "Atropine regimen details come from a subjectless sentence attached to the abstract-supported atropine fact.",
+      "No measurement_series.json exists for Table 2 (draft grid misaligned)."
+    ]
+  },
+  "physician_adjudicated": false
+}
