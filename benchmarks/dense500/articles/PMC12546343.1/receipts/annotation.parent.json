@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12546343.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3a2fd9efd9b58e03ad9674e9e1d4ed403ebfe4d5ad7f8db26fe7d53d5c61b37b",
+  "annotation_sha256": "3e0b6b82fdc45f578cda3fb08df4606ee06be73ed43461114515d62079f895d9",
+  "reviewed_at": "2026-10-16T01:47:47.234921+00:00",
+  "source_segments_read": 49,
+  "facts_reviewed": 163,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Table 2 time: b00009 states \"The laboratory results from the three patients ... at the time of admission are summarized in Table 2\", which explicitly scopes the table; all 45 resulted Table 2 cells without an own-sentence time now carry time \"at the time of admission\" (relation at, anchor admission) with that scoping sentence as evidence. P2 N/A cells stay untimed. The NO-BORROWING checker warns on 38 of these; treated as a false positive because the sentence governs the table as a whole.",
+    "p1: added relation e03 same_time e01 (\"when he was admitted in 2015\"); split the \"failed to recover completely after treatment\" outcome into new event p1-e07 with e05 before e07 (\"after treatment\").",
+    "p2: added event p2-e10 for the unlinked p2-f031 glottic outcome with e07 before e10 (\"after treatment\"); added e01 (August 2019) before e04 (2020) from the stated dates.",
+    "p3: added relations e02 before e03 (\"Therefore, the patient underwent posterior rhinoplasty surgery\") and e02 (February 2022) before e05 (2023); removed the follow-up sentence from the p3-f008 condition evidence so it is held once, as the outcome p3-f035.",
+    "Article limitation on Table 2 time rewritten to the new decision."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three JPEGs are inspected in the separate visual submission.",
+    "Table 2 results are scoped by the text sentence \"The laboratory results ... at the time of admission are summarized in Table 2\", so every resulted Table 2 cell carries that time with the scoping sentence as evidence; the N/A cells carry no time.",
+    "Table 2 cells reading N/A (P2 CRP and PCT) are recorded as not reported, because the source does not say the test was not performed.",
+    "Flags (high/low) only where the results paragraph states them; no flags were derived from the printed reference ranges.",
+    "Table 2 unit of Th/Ts is printed as % with ratio-like values; transcribed literally without correction.",
+    "Table 1 lists ARDS for P2 while the treatment paragraph names acute respiratory failure; recorded as separate conditions.",
+    "Statements that a treatment was needed or required (mechanical ventilation for P1 and P2, antifungal drugs for P3) are recorded with action unknown because administration is not stated.",
+    "The 10-day duration in the P3 presentation sentence may apply to the cough only; not attached to any single symptom.",
+    "Discussion statements about P3 surgery (nasopharyngeal surgery; glottic structure recovery) cannot be linked to a specific operation."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 49,
+    "facts_reviewed": 163,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Three HIV-negative children (P1-P3), roster count 3 from \"Three pediatric patients\"; all-three statements (HIV negative, sputum T. marneffei, pharyngeal/laryngeal injuries, \"our patients ... serious injuries\") are explicit about the three patients.",
+      "Every Table 1 cell and every Table 2 cell (17 analytes x 3) is present; flags only where the results paragraph states them (IgG all, IgM P2/P3, IgE P1/P2, low P1 CD4/NK/B and P2 NK); no flags from printed ranges; Th/Ts kept with the printed % unit.",
+      "Needed/required ventilation (P1, P2) and required antifungals (P3) stay action/occurrence unknown; P3 discussion \"nasopharyngeal surgery\" stays review-only; P2 ARDS (Table 1) and acute respiratory failure (text) are distinct terms, not a conflict.",
+      "All 21 endoscopic panels viewed with 2x crops; descriptions, attribution and EHR/privacy labels match the pixels."
+    ],
+    "residual_risks": [
+      "Table 2 admission time relies on a scoping text sentence rather than a caption; the NO-BORROWING checker flags it.",
+      "P2 CRP/PCT N/A cells are recorded as not reported; N/A could mean not performed.",
+      "P3 10-day duration and the two P3 surgeries versus the discussion surgery statement remain unresolved."
+    ]
+  },
+  "physician_adjudicated": false
+}
