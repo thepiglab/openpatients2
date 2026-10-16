@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC13150488.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "843f42e6f54994749ed2219f515b2da00dde6c366c42b26415892e9b4bff038b",
+  "annotation_sha256": "fbc100463ad6c1b231385f1f02ff28ca6bd38d9e7bfbc924b636afe64bebc069",
+  "reviewed_at": "2026-10-16T09:04:27.136751+00:00",
+  "source_segments_read": 17,
+  "facts_reviewed": 66,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f018 school-screening chest radiography \"revealed no abnormalities\": flag unknown -> normal (orchestrator ruling; source classification).",
+    "p1-f055, p1-f056 (histopathology without evidence of infection/malignancy) and p1-f064..f066 (follow-up CT no evidence of air-fluid space/empyema/residual cavity): flag negative -> unknown (OBS-FLAG: positive/negative only for qualitative tests; precedent PMC12801562.1).",
+    "p1-f010 renamed Acute chest trauma -> Acute trauma (source says \"no history of acute trauma\").",
+    "p1-f011 possible repeated subclinical blunt chest trauma: certainty ambiguous/review_only -> supported/include with assertion possible (hedged author wording \"likely\").",
+    "p1-f015 lesion mass effect moved from symptoms_function sign to observations (lesion finding, not an examination sign).",
+    "p1-f047 wedge resection: added the b00014 quote that states its indication (size, infection risk, persistent hemoptysis) to remove borrowed indication; notes reworded.",
+    "p1-f045 traumatic pneumatocele clinical_status unknown -> resolved (own evidence: complete resolution of the pneumatocele).",
+    "Wedge-resection ambiguity reworded with the literal b00014 link; trauma ambiguity must_not_infer updated.",
+    "Added 12 temporal relations with literal support (stated relative times, preoperative caption/differential, intraoperative/during the procedure, postoperative day 2, 1 month postoperatively, due-to hemoptysis -> referral and resection)."
+  ],
+  "unresolved": [
+    "Figure pixels are described in the separate visual submission; figures[] keeps caption-layer status not_inspected.",
+    "No supplements or videos are listed in the source.",
+    "Discussion paragraphs b00009 to b00015 beyond the present-case statements are literature background and are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 17,
+    "facts_reviewed": 66,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single 16-year-old male judo athlete; roster count 1 from the literal case statement.",
+      "Wedge resection and stapler excision kept as one procedure: the discussion literally says the chosen wedge resection was accomplished with endo-staplers and only one resection is described.",
+      "Referral abnormal radiography/CT findings kept separate from the described initial X-ray and contrast CT findings with an ambiguity (the source does not make them the same studies).",
+      "CT hydropneumothorax (text) vs cystic lesion with air-fluid level (caption) kept as two observations with an ambiguity, not a conflict.",
+      "Figures F1 (radiograph, CT) and F2 (two thoracoscopic views) viewed at full resolution with enlarged crops; visual, figure-EHR and privacy sidecars consistent with pixels; F1B side is caption-only (no marker)."
+    ],
+    "residual_risks": [
+      "p1-f059 discharge NO-BORROWING warning is a checker false positive: the time-bearing quote is the fact own sentence (\"the patient was discharged on postoperative day 2\").",
+      "Relation e10 during e08 relies on \"intraoperative adjustment of the resection line\" plus the VATS purpose wording."
+    ]
+  },
+  "physician_adjudicated": false
+}
