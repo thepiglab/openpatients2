@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12463625.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "48381e228124fd63cbc2b0f1fbd8badf62456803d26fc2481e9ce06a20452726",
+  "annotation_sha256": "82925aee32d076ee7a264c39963525bec431651d8caef398e6872d38c3659715",
+  "reviewed_at": "2026-10-16T05:40:56.122157+00:00",
+  "source_segments_read": 43,
+  "facts_reviewed": 129,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged 14 case-text pre-treatment values (weight, BMI, PASI, DLQI, FBG, 2h-PBG, insulin, C-peptide, TC, TG, HDL-C, LDL-C, CRP, ALT) into their identical Table 1 Baseline facts: the article reports each test once before treatment and uses the text values as start values of the same Baseline-to-Week 24 comparison. Baseline CRP keeps flag high from the word elevated.",
+    "Merged duplicate Week 24 statements into the Table 1 facts: text BMI 24.02, ALT 48 and AST 26; abstract PASI 6.2 and HbA1c 7.2; abstract HbA1c 9.8 into the Table 1 Baseline cell.",
+    "Pre-treatment HbA1c 7.8% (text) versus 9.8% (Table 1 and abstract) changed from an ambiguity to a two-sided source_conflict, review_only, because both describe the single pre-treatment measurement.",
+    "Abstract titration to 1 mg/week over 12 weeks merged as evidence into the 1 mg/week at 8 weeks fact; 8 weeks falls within the span, so this is not a conflict.",
+    "Added Discussion comparison quotes (ALT, AST, CRP, HOMA-IR) as evidence to the matching Table 1 facts.",
+    "Did not add presentation or examinations to diagnosis relations: the based-on wording gives the reason for the diagnosis, not a time order (coordinator ruling); 8 original relations kept.",
+    "Removed 21 duplicate facts and repointed events, summary and ambiguity references; updated ambiguities and limitations."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three JPEGs were inspected in the separate visual submission.",
+    "Figure 3 plotted points are chart estimates and are not extracted as facts; they appear to disagree with Table 1 for Week 24 ALT and pre-treatment AST.",
+    "Table 1 reference ranges are stored as printed; no high or low flags were derived from them.",
+    "Discussion mechanisms and general statements about semaglutide are not patient facts.",
+    "Each test is reported once before treatment; identical case-text and Table 1 Baseline values (and identical text, abstract and Table 1 Week 24 values) are recorded as one measurement citing every source.",
+    "Source conflicts kept review_only on both sides: pre-treatment HbA1c 7.8% (text) vs 9.8% (Table 1, abstract); Week 24 HbA1c 6.5% (text) vs 7.2% (Table 1, abstract); pre-treatment AST 48 U/L (text) vs 34 U/L (Table 1).",
+    "Abstract metformin dose adjustment and liver enzymes returned to normal ranges are kept as ambiguous review_only facts: the case text continues metformin 1,000 mg daily and prints Week 24 ALT 48 U/L, but neither statement is literally contradicted."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 43,
+    "facts_reviewed": 129,
+    "figures_viewed": 3,
+    "key_findings": [
+      "All 40 Table 1 cells are present with values, units and reference ranges, and no flags are derived from the ranges.",
+      "Source conflicts are kept review_only on both sides: Week 24 HbA1c 6.5 vs 7.2, pre-treatment AST 48 vs 34, and pre-treatment HbA1c 7.8 vs 9.8.",
+      "Metformin dose adjustment and liver enzymes returning to normal (abstract) stay ambiguous review_only; they are not literally contradicted.",
+      "The Week 12/Week 24 headings in b00007 and the Figure 2 panel label scope the findings that follow; the remaining NO-BORROWING warnings are checker false positives.",
+      "All 8 relations have literal date or week support.",
+      "Figure 3 is a chart of patient data; its estimates are kept only in visual.json. It plots AST near 48 at 0 weeks and ALT near 34 at Week 24, which is recorded as an ambiguity."
+    ],
+    "residual_risks": [
+      "Merging the presentation-time text labs with the Table 1 Baseline cells assumes one pre-treatment measurement, which the source implies but never states.",
+      "The case-text lab values have no stated date."
+    ]
+  },
+  "physician_adjudicated": false
+}
