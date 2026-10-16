@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC13593186.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4aba945d6899edc013b8ee6c680481fc98aafbd59023fde8c490bfb0c7a25717",
+  "annotation_sha256": "5d320db30f1dcf524c8c8efe756bdc30a16dbcd5dca4bd25c3908cbdb1d22412",
+  "reviewed_at": "2026-10-16T08:37:18.124197+00:00",
+  "source_segments_read": 50,
+  "facts_reviewed": 170,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Fever course (reduced fever spikes by hospital day 3 vs persistent fever at 72 hours) re-adjudicated as compatible statements, not a conflict: p1-f036 and p1-f156 restored to supported/include; ambiguity reworded.",
+    "Confirmed conflicts kept review_only: admission PaO2 46.8 vs 89 mm Hg at admission; NIHSS 8->3 vs 12->4 (same post-infarction recovery); piperacillin-sulbactam vs piperacillin-tazobactam (same initial empirical regimen, same dose).",
+    "CK-MB 831.3 (text) vs 31.3 (Table 1, cited by text) kept as one-character print-artefact ambiguity, not a conflict.",
+    "Removed p1-f151 (vague inflammatory-markers observation duplicating outcome p1-f157).",
+    "p1-f013 suspected atypical pathogen: assertion present -> possible.",
+    "p1-f052 omadacycline indication changed from borrowed diagnosis to its own evidence (mNGS-confirmed CP detection) with quote added; p1-f053 quote replaced by the escalation clause plus abstract dose; p1-f059/f060 quote extended to include the infarction clause that supplies the indication; p1-f003 abstract female quote added; p1-f146 discussion quote added; p1-f169 note fixed.",
+    "Events: split facts with different stated times out of p1-e11, e12, e14, e20 (NIHSS 3 by day 14 postinfarction, NIHSS 12/4, day-5 improvement, 72-hour fever and markers, weaning, untimed conclusions); added events p1-e27, e28, e30, e31; weaning moved to extubation event.",
+    "Relations 15 -> 33: added literal-support relations (stated-date pairs, admission-day same_time, Following/led to/resulting in/Subsequently, intubation->extubation, MRI request->MRI, Predischarge->discharge); p1-e07->e11 evidence replaced with initially/switched quotes.",
+    "Added ambiguities: day-21 serial CT vs last dated CT 5 April; weaning timing in abstract vs extubation before April 1 MRI."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four WEBP figures were inspected in the separate visual submission.",
+    "Values printed inside the figures (chart curves, CT overlay text) are pixel content only and are not facts here.",
+    "Source conflicts retained as review_only facts: admission PaO2, NIHSS values and empirical beta-lactam name; the fever course around day 3 is an ambiguity, not a conflict.",
+    "Text CK-MB 831.3 U/L versus Table 1 31.3 U/L is kept as an ambiguity, not a conflict.",
+    "Discussion statements about general psittacosis epidemiology, mechanisms, cohorts and cited studies are background and not attributed to the patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 50,
+    "facts_reviewed": 171,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (60-year-old woman); Table 1 (\"patients\") belongs to her: the case text cites Table 1 and its admission values match the text.",
+      "Calf muscular vein thrombosis vs discussion DVT/lower-extremity venous thrombosis: different wording for the thrombosis, not a conflict; both kept with ambiguity.",
+      "Fig 1 E/F caption absorption of effusion vs text effusion present: compatible (partial absorption); ambiguity only.",
+      "Caption-only CT dates (20 March, 27 March, 30 March, 5 April) are literal in each fact's own caption quote.",
+      "No CT overlay identifiers, accession numbers or acquisition times copied into annotation or sidecars."
+    ],
+    "residual_risks": [
+      "NIHSS and PaO2 conflict adjudication is a judgment: the 12/4 and 89 values could be different time points the authors did not label.",
+      "Figure 4 pixels show CRP falling on day 3, in tension with escalating markers at 72 hours; pixel values are not facts."
+    ]
+  },
+  "physician_adjudicated": false
+}
