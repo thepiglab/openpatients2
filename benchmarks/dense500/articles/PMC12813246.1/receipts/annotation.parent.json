@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12813246.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "10378548fccc5e5dc9fac6c9e5fbc96a38ffc5477773d70a1dd4cb6ff0e84c1b",
+  "annotation_sha256": "3cfec3e2032877ff226421fb1e2076469105ba866b0119ccc48f779d7375e24d",
+  "reviewed_at": "2026-10-16T02:07:55.616694+00:00",
+  "source_segments_read": 37,
+  "facts_reviewed": 85,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f046 traction-type external fixation: action declined -> unknown (team judged it impractical; not a patient refusal and no explicit not-performed wording); removed reason misfiled as indication; event p1-e06 kept not_occurred with the quote that ORIF was planned instead",
+    "p1-f004/p1-f005 diagnostic_basis trimmed to Initial plain radiographs (CT not in the quote); p1-f005 incomplete-dorsal-base wording moved out of severity into notes",
+    "p1-f071 and p1-f074 time relation corrected to after surgery (were during/at)",
+    "Added p1-f085 reduction of the dorsal base fragment (b00009, Fig. 3 F/G caption) and event p1-e24",
+    "Relations: replaced unsupported e09-after-e08 with e09-after-e24 (Following reduction of the dorsal bone fragment); added e10 after e09 (subsequent plate fixation), e13 after e12 (then/Finally), e13 after e08 (in preparation for later fixation; had been flipped proximally), e22 same_time e20 (both 12 months), and operative steps e08/e24/e09/e10/e12/e13 during e07 (Fig. 3 intraoperative caption)",
+    "Summary: claim 3 no longer attaches the 12-month time to untimed grip strength, swan-neck, pain, implant discomfort and ADL findings; split into treatment-course and outcome claims",
+    "Event p1-e21 description states the findings have no stated time",
+    "Ambiguities added: untimed final-follow-up findings, osteoporotic bone as in our case (not recorded), DIP joint finger unspecified; ring-finger ambiguity reworded as possibly non-conflicting",
+    "Visual: Fig. 2 panel B description corrected (no arrows on the B slices); Fig. 1 panel A lower-left structure is the thumb, not the carpal region; figure-EHR and privacy drafts regenerated with --draft and reviewed labels/flags carried over"
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the eight JPEGs are inspected in the separate visual submission.",
+    "Time-governed facts: only text with its own time phrase or a governing figure-caption lead sentence carries a time; grip strength, swan-neck deformity, pain, implant discomfort, DIP joint radiographic change and daily activity status in the 12-month paragraph have no time of their own and stay untimed.",
+    "Table 1 (needle gauge specifications) describes equipment in general and is not patient data; it is not recorded as observations.",
+    "Author statements about general advantages of the technique, other published methods and rehabilitation protocols (Lalonde, Hintringer) are background, not patient facts.",
+    "The source states right-handedness but no structured field holds handedness; it is kept in the case description only.",
+    "The 12 range-of-motion values are printed as extension/flexion pairs; the minus sign before DIP extension values is kept as printed and not interpreted.",
+    "Traction-type external fixation was judged impractical by the treating team; it is recorded with action unknown (considered, not chosen) and a not_occurred timeline event, not as a patient-declined procedure."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 37,
+    "facts_reviewed": 85,
+    "figures_viewed": 7,
+    "key_findings": [
+      "Single index patient; roster count 1 literal",
+      "All 12 ROM values, grip strength and operative steps verified against b00008-b00014",
+      "Grip strength, swan-neck deformity, pain, implant discomfort, DIP OA and ADL have no literal time of their own and stay untimed",
+      "Fig. 3 whole-figure clinical_photo override matches pixels (4 intraoperative photographs D, G, I, K among schematics)",
+      "Table 1 is generic needle specifications, not patient data"
+    ],
+    "residual_risks": [
+      "NO-BORROWING warnings on p1-f013 and p1-f070 kept: Fig. 1 and Fig. 7 caption lead sentences govern the same radiographs (judged checker false positives)",
+      "Traction external fixation status has no exact enum (considered, not indicated)",
+      "Wire-end cutting/closure event p1-e14 has no literal ordering link",
+      "Implant-removal sentence may be general advice; kept review_only"
+    ]
+  },
+  "physician_adjudicated": false
+}
