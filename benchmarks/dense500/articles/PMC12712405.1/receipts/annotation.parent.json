@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12712405.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4d7a3fc185ae7e9389c0dcf7d0ea77d57266813283958d3d6bca0312da44f280",
+  "annotation_sha256": "8068b59d0232a33cac23b134448f68688ecbf6926eaa1e9c89ec16c78eeac747",
+  "reviewed_at": "2026-10-16T07:25:53.768275+00:00",
+  "source_segments_read": 39,
+  "facts_reviewed": 158,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Restored caption-lead time 'during the 2025 follow-up visit' on p1-f125/p1-f126 (microbial profile items quoted from the Figure 9/10 caption leads) and on sampling procedures p1-f068/p1-f069 (caption lead states the sample collection); text-only per-taxon items keep time null (no borrowing), recorded as an ambiguity.",
+    "p1-f070 sequencing: added its own discussion restatement 'At the 23-year follow-up, a microbiological assessment ... was conducted' with that time.",
+    "p1-f129 (not performed at baseline): split the two-sentence span into separate quotes and added the b00028 'baseline microbiological data were not available' quote; moved it from the 2025 sampling event to the baseline event p1-e02.",
+    "p1-f032/p1-f033/p1-f038: abstract quotes extended to the full sentence so their own time 'At the initial periodontal evaluation' is literal; time added.",
+    "Merged discussion duplicate p1-f128 (P. gingivalis 5%) into subgingival taxon item p1-f084 (same measurement); references repointed.",
+    "Added p1-f157 discussion of metagenomic results (counseling, completed), p1-f158 marked gingival enlargement at return (abstract), p1-f159 immunosuppressed condition; abstract migration quote added to p1-f052.",
+    "Events: p1-e08 sampling event given caption time 'during the 2025 follow-up visit'; added p1-e11 (results discussion) and p1-e12 (Figure 4 photo a few months after the initial examination; p1-f148 moved there from p1-e02).",
+    "Relations 8 -> 21: added year-stated orders (late 1999 / early 2002 / 2002 / 2025), '23 years after the initial treatment', 'After many years of stability, the patient returned', 'In response to this deterioration' (return before microbiological assessment), 'following discussion of his metagenomic results', Figure 4 'a few months after' and 'newly restored', plus two explicit unknown pairs (retreatment vs sampling; sampling vs outcome)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual 10 JPEGs inspected in the separate visual target.",
+    "Baseline microbiological data and cyclosporine serum levels were not available; the metagenomic samples were collected only at the 2025 follow-up visit.",
+    "Literature statements in the introduction and discussion are not patient facts and are excluded.",
+    "Calendar years are given only where stated; no dates of the maintenance lapse are stated."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 39,
+    "facts_reviewed": 158,
+    "figures_viewed": 10,
+    "key_findings": [
+      "Single index patient (42-year-old male heart transplant recipient on cyclosporine), roster count 1 from literal case statement.",
+      "All 48 per-taxon abundance values are stated in the case text (b00016/b00017) and match the pie-chart labels; none is pixel-only, so all stay as facts.",
+      "DIGO kept provisional (consistent with, most likely related to cyclosporine); 2025 Stage II Grade B kept provisional (consistent with in both case text and abstract); Stage I Grade A confirmed (diagnosis was made).",
+      "Candida RT-PCR specimen left null: the source does not name the sample tested.",
+      "Hair strands at edges of Figures 5, 6 and 8; no face, no burned-in text in any figure."
+    ],
+    "residual_risks": [
+      "p1-f129 keeps a non-blocking NO-BORROWING warning: the time is in the fact's own sentence (No such investigation had been performed at baseline), so it is a checker false positive.",
+      "Order between the 2025 scaling and root planing and the microbiome sampling is not stated (recorded as unknown).",
+      "Exact years of the three-year maintenance lapse are not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}
