@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12959119.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "00298ada0e9e0d276c7627f4d0a8908201289883a7bb78c7648c586d155d44f8",
+  "annotation_sha256": "ad1e19978b2474c055a47aeb24841d888dfead5f5f71f998d66072dd26e346f9",
+  "reviewed_at": "2026-10-16T08:49:52.085085+00:00",
+  "source_segments_read": 38,
+  "facts_reviewed": 104,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Split Table 1 cells out of the admission and day 11 events into time-labelled events: p1-e14 (Admission day, 13 cells), p1-e16 (Day 11, 17 cells); ALP Day 3 (p1-f086) and Day 13 (p1-f087) moved to their own events p1-e15 and p1-e17 (the ALP Day 3 cell had been grouped with admission and Day 13 with day 11 workup).",
+    "Moved scleral icterus, abdominal tenderness and agitation (no stated day) out of the 'On day 11' event into p1-e18; reticulocyte/smear/Coombs/crossmatch event p1-e08 no longer described as day 11.",
+    "Moved 'Hemolysis improved after vancomycin cessation' (p1-f103) out of the day 30 discharge event into p1-e19 ordered after the day 13 vancomycin switch.",
+    "Gave p1-e01 its literal 'on admission' time and evidence.",
+    "Relations 7 -> 20: added stated-time relations from Table 1 column headers, ALP cell days and 'On day N' text (admission/day 3/day 5/day 11/day 13/day 30), 'ultimately confirmed' Coombs -> ARUP confirmation, and 'after vancomycin cessation'; replaced e04->e05 (paragraph order) with e03->e05 ('Regimen was changed'); removed e08->e09 (prednisone after warm AIHA concern was paragraph order only).",
+    "Added p1-f105: authors' case-specific statement that the mechanism could be the immune complex theory (b00010 now patient_facts).",
+    "Summary claim 3 no longer places exam signs on day 11 and cites the Day 11 hemoglobin, indirect bilirubin, creatinine and haptoglobin facts it names.",
+    "Reworded the day 1 vs Admission day ambiguity and widened the untimed-treatment ambiguity (nadir, transfusion, methylprednisolone, IVIG, prednisone)."
+  ],
+  "unresolved": [
+    "Introduction and discussion paragraphs are general or literature statements and are not recorded as patient facts, except the case-specific sentences in b00001, b00009, b00011 and b00012.",
+    "Table 2 lists previously published vancomycin hemolysis cases from the literature; they are not roster patients and no facts are recorded for them.",
+    "The b00009 statement that this case shared similarities with published cases is an author comparison and is not recorded as a separate patient fact.",
+    "Text and Figure 1 differ on the discharge hemoglobin and chart extent; the text value is review-only (see ambiguities). Figure 1 also shows a linezolid arrow at the end that the case text does not mention; it is recorded only in the visual submission.",
+    "Table 1 N/A cells are not recorded as observations.",
+    "Caption-layer visual status is not_inspected; the single JPEG is inspected in the separate visual submission.",
+    "No supplements are listed in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 38,
+    "facts_reviewed": 104,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient; Table 2 literature cases correctly excluded; all 32 Table 1 numeric cells present with literal times and reference ranges.",
+      "Discharge hemoglobin 13.6 g/dL (text) vs Figure 1 curve about 8.2 g/dL at day 30: chart values are pixel content, so the text fact stays review_only with an ambiguity.",
+      "Table 1 N/A admission cells (indirect bilirubin, haptoglobin, lactate, LDH) are undefined and not recorded, with an ambiguity.",
+      "Day 11 flags (indirect bilirubin and creatinine high, haptoglobin low) come from the day 11 paragraph that cites Table 1; indirect bilirubin and haptoglobin exist only in the Day 11 column; kept.",
+      "Prior vancomycin exposure 'unclear' kept review_only; surgery 'not indicated' kept as absent/unknown, not declined.",
+      "Linezolid and bar start/end days appear only in Figure 1 and stay visual-only."
+    ],
+    "residual_risks": [
+      "Text says Table 1 compares 'day 1' while the column is 'Admission day' and Figure 1 plots the first value at day 0; admission labs keep the table's 'Admission day' time.",
+      "Creatinine 'elevated' is mapped to the Day 11 cell from paragraph context plus the Table 1 citation; the admission creatinine is not flagged.",
+      "Prednisone, nadir, transfusion, methylprednisolone and IVIG have no stated day in the text and stay unordered (Figure 1 arrows are pixel content)."
+    ]
+  },
+  "physician_adjudicated": false
+}
