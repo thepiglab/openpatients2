@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12801562.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "383b5b29e20cc5e71c42042245cf3c8d4656a1de49f3acfa481db4c03946f99e",
+  "annotation_sha256": "1db287f57a8f12d6de092f181741af039a6f5609569086ef60f0da3b943715a6",
+  "reviewed_at": "2026-10-16T06:53:25.392611+00:00",
+  "source_segments_read": 40,
+  "facts_reviewed": 155,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Chest CT 'no significant abnormalities' (p1-f033) flag unknown -> normal.",
+    "Split combined absent history 'chronic diarrhea, hematochezia, or abdominal pain' (p1-f081, kind sign) into three absent symptoms (p1-f081 chronic diarrhea, p1-f154 hematochezia, p1-f155 abdominal pain).",
+    "Split event p1-e04: postoperative fasting/parenteral nutrition kept with literal time 'after surgery'; the untimed irregular fever and its improvement moved to new event p1-e21 with no time and no relations.",
+    "Added 11 temporal relations with literal support (surgery before fasting, pathology, discharge on postoperative day 14 and fistula '2 weeks post surgery'; drain removal day 9 before discharge day 14; readmission same_time CT at T = +14 days (evening); CT T = +14 days before fistulography T = +15 days; diagnosis before ESR 'after the diagnosis was confirmed'; IV anti-TB start before home care where treatment 'was continued'; home care before outcome 'After 1.5 years'; fistula before the conservative-vs-surgery decision 'considering the patient's formation of a complex fistula'); added Table 1 stated-time quotes and 'subsequently' to existing relations.",
+    "Fig6 description_from_caption no longer says CT (caption names no modality); Fig4/Fig6 attribution notes record that modality is from pixels in visual.json only.",
+    "Second-postoperative-day ambiguity rewritten (no anchor; literal reading vs narrative placement vs Table 1 T = +15 fistulography); discharge mismatch marked arithmetic-level ambiguity; added Fig 5 label-vs-caption ambiguity.",
+    "Summary claims reworded so fever is not dated postoperative and CT 'suggested' (not 'showed') perforation."
+  ],
+  "unresolved": [
+    "Table 1 day counts relative to admission and the text's postoperative day counts are not reconciled; see the ambiguities.",
+    "Tuberculosis was not microbiologically confirmed (AFB smear, culture and molecular testing were not performed).",
+    "The suspected ovarian malignancy is not stated as excluded; the final pathology is a benign adenoma.",
+    "Literature discussion (cited studies on CA-125, HE4, interferon-gamma release assay, Xpert, ADA, imaging and biopsy) is not patient data and is not recorded.",
+    "Figure captions are author statements; pixel descriptions are in visual.json.",
+    "No supplementary material is listed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 40,
+    "facts_reviewed": 155,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Single index patient; all 153 draft facts verified against source text and Table 1; draft was largely accurate.",
+      "Tuberculosis kept provisional (considered to be tuberculosis, most likely etiology, no microbiological confirmation); ovarian malignancy kept as suspected (possible), not refuted.",
+      "Table 1 T = +N values used as stated times for ordering; discharge T = +14 vs postoperative day 14 kept as ambiguity.",
+      "'Second postoperative day' left unanchored and unrelated: the only described operation contradicts its narrative placement.",
+      "Six EVID-NEGATION warnings on 'noncontributory' family history are checker false positives (noncontributory for the named conditions is a negation not in the cue list); left as is."
+    ],
+    "residual_risks": [
+      "Timing of the incision exudate/imaging (second postoperative day) is unresolved in the source.",
+      "Discharge day differs between Table 1 and text by the 3 preoperative days.",
+      "Tuberculosis diagnosis is histologic/immunologic only."
+    ]
+  },
+  "physician_adjudicated": false
+}
