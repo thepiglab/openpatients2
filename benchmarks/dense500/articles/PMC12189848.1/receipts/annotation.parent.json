@@ -1,0 +1,52 @@
+{
+  "article_id": "PMC12189848.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f2b2dc984cfac133bc0477cc321e881b8766d23da788534c038e5c8018a61175",
+  "annotation_sha256": "af26bdbdcce1d188376c4fe47623c4ddaed395b725afa62594d327501e1d923a",
+  "reviewed_at": "2026-10-16T01:28:34.802218+00:00",
+  "source_segments_read": 41,
+  "facts_reviewed": 94,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Split the pre-referral steroid ointment item into betamethasone valerate (p1-f080) and gentamicin sulfate (new p1-f094), each with the same literal quote; the ambiguity now forbids asserting one combination product or two separate ointments.",
+    "Comparator set to unknown for text-only observations without numeric values (allergy testing summary, culture summary and the three Table 3 culture rows).",
+    "Habitual ear cleaning temporality set to historical (evidence reads \"history of AD and habitual ear cleaning\").",
+    "Removed the undated author comparison (p1-f093) from the one-year follow-up event.",
+    "Added two literal relations: follow-up after the one-month improvement (\"subsequently followed up\") and laboratory testing after dupilumab (\"following dupilumab therapy\")."
+  ],
+  "unresolved": [
+    "Tables 1 to 3 carry no collection dates; only the narrative ties the IgE and TARC values to the period following dupilumab therapy.",
+    "Discussion statements about IL-31 suppression, the likely role of habitual ear cleaning and the mechanism of delgocitinib are author interpretation and are not recorded as patient facts.",
+    "Figure pixels are reviewed in the separate visual target."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 41,
+    "facts_reviewed": 94,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single 49-year-old man; roster count 1 literal.",
+      "Chronic external otitis and external ear eczema kept as two literal condition items with an ambiguity, because the source never equates the terms.",
+      "Narrative unlateralized otoscopic findings and per-side caption findings kept as separate statements; per-side items carry caption laterality only.",
+      "Every Table 1-3 row is an observation; TARC kept in pg/dL as printed; IgE and TARC high flags come from the literal \"remained above normal ranges\".",
+      "Discussion mechanism claims (IL-31 suppression, habitual ear cleaning as cause) kept only as ambiguities."
+    ],
+    "residual_risks": [
+      "Tables carry no dates; only IgE and TARC are tied to the post-dupilumab period.",
+      "The two diagnosis terms may describe one lesion; downstream scoring may count two primary diagnoses."
+    ]
+  },
+  "physician_adjudicated": false
+}
