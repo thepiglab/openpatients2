@@ -8,6 +8,9 @@ The obsolete Fastino Lightning launcher and model support have been removed;
 the `fastino` configuration here is the new **Super VL Healthcare** checkpoint.
 The default campaign includes Muse Spark Open, five Fastino/Nemotron configurations,
 and Beam FP8/NVFP4 with DFlash2. Beam BF16 is excluded.
+Each configuration runs **once per article** using its supported modalities:
+five configurations receive text and images together; Fastino and both Beam
+variants receive text only. There are no duplicate text-versus-image runs.
 
 ## Run on HiPerGator
 
@@ -67,22 +70,29 @@ DENSE_SUPER_PROFILES=spark DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=2 \
   bash scripts/run_dense_nemotron_super.sh
 ```
 
-Optional separate vision arms (all eight default text arms still run):
+Images are enabled by default for models that support them:
 
 ```bash
+# Explicitly request the default supported-modality behavior:
 DENSE_SUPER_WITH_IMAGES=1 bash scripts/run_dense_nemotron_super.sh
+# An optional text-only comparison, still one run per configuration:
+DENSE_SUPER_WITH_IMAGES=0 bash scripts/run_dense_nemotron_super.sh
 # A smaller campaign can select configurations:
 DENSE_SUPER_PROFILES='nvfp4 lilicorr' DENSE_SUPER_LIMIT_ARTICLES=2 \
   DENSE_HOURS=2 bash scripts/run_dense_nemotron_super.sh
 ```
 
-Vision adds three NVIDIA arms, one Red Hat FP8 arm and one Muse Spark Open arm,
-for **2,821 article runs** across thirteen arms.
+The eight jobs are `fastino-text`, `nvfp4-vision`, `bf16-vision`, `lilicorr-vision`,
+`spark-vision`, `redhat-fp8-dspark-vision`, `beam-fp8-dflash2-text`, and
+`beam-nvfp4-dflash2-text`. The `-vision` suffix means text and image pixels are
+processed together through the full pipeline. It is not an image-only job.
 Fastino Super and Beam are text-only and never receive pixels. CPU preparation freezes
 eligible source image bytes and verifies acquisition hashes; missing/rights-review
 images remain explicit. Vision arms run original figure/EHR/privacy stages too.
-Supplement extraction remains unsupported. Compare text arms with each other and
-vision arms with each other; their scopes and timings differ.
+Supplement extraction remains unsupported. Reports label modality groups because
+their figure/EHR scopes and timings differ; these labels do not create extra jobs.
+Direct CLI preparation also defaults to images where supported; `prepare --text-only`
+explicitly disables pixels, and `prepare --with-images` retains the default behavior.
 
 `DENSE_INCLUDE_TEST=1` explicitly opts into test evaluation. `DENSE_HOURS` defaults
 to 12 **per server**, including startup; it is not an overall completion estimate.
@@ -244,8 +254,9 @@ CPU preparation/access checks → **for each selected profile: CPU download → 
 benchmark → CPU cleanup** → CPU aggregation/export. Downloads use `hpg-default`,
 eight CPUs, **128G RAM**, up to eight hours, and **no GPUs**. Setup, cleanup and
 aggregation request eight CPUs and 32G RAM.
-All eight default profiles remain selected. Text and optional vision arms for a
-profile share its download; cleanup waits for both arms to terminate.
+All eight default profiles remain selected, with one GPU worker per profile.
+Cleanup runs after that worker terminates and before the next profile downloads.
+Inspection and cleanup still accept older frozen campaigns containing both conditions.
 At most **eight B200s, 16 CPUs and 200G host RAM** for this campaign at once.
 Muse Spark Open and Beam FP8 request eight GPUs; Beam NVFP4 requests four.
 The Nemotron profiles request at most two GPUs and eight CPUs. Other users'

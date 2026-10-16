@@ -98,9 +98,10 @@ PROFILES = {
 DEFAULT_PROFILES = tuple(PROFILES)
 
 
-def arm_definitions(with_images=False):
-    arms = {name + '-text': {'profile': name, 'pixels': False} for name in PROFILES}
-    if with_images:
-        arms.update({name + '-vision': {'profile': name, 'pixels': True}
-                     for name, profile in PROFILES.items() if name != 'fastino' and profile.get('supports_images', True)})
+def arm_definitions(with_images=True):
+    """Run each configuration once, using all supported input modalities."""
+    arms = {}
+    for name, profile in PROFILES.items():
+        pixels = bool(with_images and name != 'fastino' and profile.get('supports_images', True))
+        arms[name + ('-vision' if pixels else '-text')] = {'profile': name, 'pixels': pixels}
     return arms

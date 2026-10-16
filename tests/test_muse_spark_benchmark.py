@@ -15,7 +15,7 @@ from openpatients2.pilot_extract import PilotConfig, PilotRunner
 from test_dense_nemotron_super import campaign
 
 
-@pytest.mark.parametrize('with_images,arm_count', [(False, 8), (True, 13)])
+@pytest.mark.parametrize('with_images,arm_count', [(False, 8), (True, 8)])
 def test_default_includes_spark_access_image_and_eight_gpu_job(campaign, tmp_path, monkeypatch, with_images, arm_count):
     monkeypatch.setattr(b, 'freeze_media', lambda *a, **kw: {})
     work = tmp_path / 'default-models'
@@ -23,18 +23,21 @@ def test_default_includes_spark_access_image_and_eight_gpu_job(campaign, tmp_pat
     m = s.check(work)
     assert m['nemotron_super']['profiles'] == ['fastino', 'nvfp4', 'bf16', 'lilicorr', 'spark', 'redhat-fp8-dspark', 'beam-fp8-dflash2', 'beam-nvfp4-dflash2']
     assert len(m['nemotron_super']['arms']) == arm_count
-    assert 'spark-text' in m['nemotron_super']['arms']
+    assert ('spark-vision' if with_images else 'spark-text') in m['nemotron_super']['arms']
+    assert len({a['profile'] for a in m['nemotron_super']['arms'].values()}) == 8
+    assert sum(a['pixels'] for a in m['nemotron_super']['arms'].values()) == (5 if with_images else 0)
     assert spark.SPARK in m['nemotron_super']['pins'] and spark.DSPARK in m['nemotron_super']['pins']
     assert set(m['nemotron_super']['engines']) == {'nemotron', 'spark', 'beam'}
     plan = s.submit(work, 'account', 'qos', dry_run=True)
     assert plan['maximum_simultaneous_gpus'] == 8
-    assert sum('--gres=gpu:b200:8' in command for command in plan['commands_without_dependencies']) == (3 if with_images else 2)
+    assert sum('--gres=gpu:b200:8' in command for command in plan['commands_without_dependencies']) == 2
+    assert sum(command[-3] == 'worker' for command in plan['commands_without_dependencies']) == 8
 
 
 def test_explicit_spark_uses_its_own_image(campaign, tmp_path, monkeypatch):
     root = campaign[2]
     work = tmp_path / 'all-models'
-    s.prepare(root, work, expected=3, profiles=list(s.PROFILES))
+    s.prepare(root, work, expected=3, profiles=list(s.PROFILES), with_images=False)
     m = s.check(work)
     assert list(m['nemotron_super']['profiles']) == ['fastino', 'nvfp4', 'bf16', 'lilicorr', 'spark', 'redhat-fp8-dspark', 'beam-fp8-dflash2', 'beam-nvfp4-dflash2']
     assert len(m['nemotron_super']['arms']) == 8
@@ -57,19 +60,58 @@ def test_explicit_spark_uses_its_own_image(campaign, tmp_path, monkeypatch):
     assert s.serving(work, 'nvfp4-text').image_reference != cfg.image_reference
 
 
-def test_spark_vision_is_separate_and_preserves_other_profiles(campaign, tmp_path, monkeypatch):
+def test_default_runs_each_profile_once_with_supported_modalities(campaign, tmp_path, monkeypatch):
     monkeypatch.setattr(b, 'freeze_media', lambda *a, **kw: {})
     work = tmp_path / 'vision'
-    s.prepare(campaign[2], work, expected=3, with_images=True, profiles=list(s.PROFILES))
+    result = s.prepare(campaign[2], work, expected=3)
     m = s.check(work)
-    assert len(m['nemotron_super']['arms']) == 13
+    assert len(m['nemotron_super']['arms']) == 8
+    assert result['article_runs'] == 16
+    assert m['nemotron_super']['input_policy'] == 'supported-modalities-once'
+    assert set(m['nemotron_super']['arms']) == {
+        'fastino-text', 'nvfp4-vision', 'bf16-vision', 'lilicorr-vision', 'spark-vision',
+        'redhat-fp8-dspark-vision', 'beam-fp8-dflash2-text', 'beam-nvfp4-dflash2-text'}
     assert m['nemotron_super']['arms']['spark-vision'] == {'profile': 'spark', 'pixels': True}
     assert 'fastino-vision' not in m['nemotron_super']['arms']
+    for name, definition in m['nemotron_super']['arms'].items():
+        arm = b.read(work / 'arms' / name / 'manifest.json')
+        assert arm['text_only'] is not definition['pixels']
+        assert arm['extraction']['focused_pixels'] == definition['pixels']
+        assert arm['extraction']['max_figures'] == (12 if definition['pixels'] else 0)
+
+
+def test_legacy_dual_condition_campaign_remains_inspectable_and_cleanable(campaign, tmp_path, monkeypatch):
+    work = tmp_path / 'legacy-dual'
+    monkeypatch.setattr(b, 'freeze_media', lambda *a, **kw: {})
+    current = s.arm_definitions
+    def old_selection(with_images):
+        return {**current(False), **(current(True) if with_images else {})}
+    monkeypatch.setattr(s, 'arm_definitions', old_selection)
+    s.prepare(campaign[2], work, expected=3)
+    monkeypatch.setattr(s, 'arm_definitions', current)
+    assert len(s.check(work)['nemotron_super']['arms']) == 13
+    s.runtime_owner(work, create=True)
+    target = s.weights_path(work, spark.SPARK)
+    target.mkdir(parents=True)
+    (target / 'fixture-weights').write_bytes(b'old weights')
+    result = s.cleanup(work)
+    assert not target.exists() and str(target.relative_to(work)) in result['deleted']
+    assert (work / 'arms/spark-text/manifest.json').exists()
+    assert (work / 'arms/spark-vision/manifest.json').exists()
+
+
+@pytest.mark.parametrize('flags,expected', [([], True), (['--with-images'], True), (['--text-only'], False)])
+def test_prepare_cli_defaults_to_supported_modalities(tmp_path, monkeypatch, capsys, flags, expected):
+    def prepare(root, work, count, hours, with_images, *args):
+        return {'with_images': with_images}
+    monkeypatch.setattr(s, 'prepare', prepare)
+    s.main(['prepare', '--work', str(tmp_path), *flags])
+    assert json.loads(capsys.readouterr().out)['with_images'] is expected
 
 
 def test_spark_native_template_sampling_and_stop_tokens(campaign, tmp_path):
     work = tmp_path / 'spark-only'
-    s.prepare(campaign[2], work, expected=3, profiles=['spark'])
+    s.prepare(campaign[2], work, expected=3, profiles=['spark'], with_images=False)
     config = b.read(work / 'arms/spark-text/manifest.json')['extraction']
     seen = []
     def tokenize(request):
@@ -116,7 +158,7 @@ def test_git_blob_identity_rejects_modified_gated_file(tmp_path, monkeypatch):
 
 def test_missing_spark_access_fails_before_any_weight_download(campaign, tmp_path, monkeypatch):
     work = tmp_path / 'access-failure'
-    s.prepare(campaign[2], work, expected=3, profiles=['spark'])
+    s.prepare(campaign[2], work, expected=3, profiles=['spark'], with_images=False)
     calls = []
     def download(**kwargs):
         calls.append(kwargs)

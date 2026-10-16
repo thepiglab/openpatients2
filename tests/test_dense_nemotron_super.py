@@ -40,7 +40,7 @@ def campaign(tmp_path):
     with gzip.open(root / 'configs/hipergator/dense-benchmark/reference.jsonl.gz', 'wt') as out:
         out.write(''.join(json.dumps(ref) + '\n' for ref in refs))
     work = tmp_path / 'campaign'
-    s.prepare(root, work, expected=3, profiles=['fastino', 'nvfp4', 'bf16', 'lilicorr'])
+    s.prepare(root, work, expected=3, profiles=['fastino', 'nvfp4', 'bf16', 'lilicorr'], with_images=False)
     return work, refs[:2], root
 
 
@@ -83,14 +83,14 @@ def test_frozen_selection_and_official_request_sampling(campaign, tmp_path):
         s.check(work)
 
 
-def test_vision_adds_all_three_nvidia_profiles(campaign, tmp_path, monkeypatch):
+def test_vision_replaces_text_for_all_three_nvidia_profiles(campaign, tmp_path, monkeypatch):
     _, _, root = campaign
     frozen = []
     monkeypatch.setattr(b, 'freeze_media', lambda *a, **kw: frozen.append(a[0]['article_id']) or {})
     work = tmp_path / 'vision'
     s.prepare(root, work, expected=3, with_images=True, profiles=['fastino', 'nvfp4', 'bf16', 'lilicorr'])
     m = s.check(work)
-    assert len(m['nemotron_super']['arms']) == 7 and len(frozen) == 2
+    assert len(m['nemotron_super']['arms']) == 4 and len(frozen) == 2
     assert {name for name in m['nemotron_super']['arms'] if name.endswith('-vision')} == {
         'nvfp4-vision', 'bf16-vision', 'lilicorr-vision'}
     assert b.read(work / 'arms/nvfp4-vision/manifest.json')['text_only'] is False
@@ -461,7 +461,7 @@ def test_lifecycle_lock_and_symlink_guards_prevent_destructive_cleanup(cpu_runti
     assert (external / 'keep').read_text() == 'keep'
 
 
-def test_vision_workers_share_one_download_until_both_finish(campaign, tmp_path, monkeypatch):
+def test_one_combined_worker_per_profile_then_cleanup_before_next_download(campaign, tmp_path, monkeypatch):
     monkeypatch.setattr(b, 'freeze_media', lambda *a, **kw: {})
     work = tmp_path / 'staged-vision'
     s.prepare(campaign[2], work, expected=3, profiles=['nvfp4', 'bf16'], with_images=True)
@@ -472,11 +472,11 @@ def test_vision_workers_share_one_download_until_both_finish(campaign, tmp_path,
     monkeypatch.setattr(subprocess, 'run', run)
     jobs = s.submit(work, 'a', 'q')['jobs']
     assert [(j['phase'], j['arm']) for j in jobs[:6]] == [
-        ('setup', None), ('download', 'nvfp4'), ('worker', 'nvfp4-text'),
-        ('worker', 'nvfp4-vision'), ('cleanup', 'nvfp4'), ('download', 'bf16')]
-    assert '--dependency=afterok:2,afterany:3' in jobs[3]['argv']
-    assert '--dependency=afterany:2:3:4' in jobs[4]['argv']
-    assert '--dependency=afterok:1,afterok:5' in jobs[5]['argv']
+        ('setup', None), ('download', 'nvfp4'), ('worker', 'nvfp4-vision'),
+        ('cleanup', 'nvfp4'), ('download', 'bf16'), ('worker', 'bf16-vision')]
+    assert '--dependency=afterok:2' in jobs[2]['argv']
+    assert '--dependency=afterany:2:3' in jobs[3]['argv']
+    assert '--dependency=afterok:1,afterok:4' in jobs[4]['argv']
 
 
 def test_gpu_seconds_account_for_tensor_parallelism(campaign):

@@ -33,7 +33,7 @@ DOWNLOAD_MEMORY = '128G'
 MKSQUASHFS_ARGS = '-processors 8 -mem 8G'
 
 
-def prepare(root, work, expected=260, hours=12, with_images=False, include_test=False,
+def prepare(root, work, expected=260, hours=12, with_images=True, include_test=False,
             limit_articles=None, profiles=None):
     if not 1 <= hours <= 72 or (limit_articles is not None and limit_articles < 1):
         raise ValueError('Invalid hours/article limit')
@@ -51,7 +51,8 @@ def prepare(root, work, expected=260, hours=12, with_images=False, include_test=
     m.update(format=FORMAT, git_head=os.environ.get('DENSE_SOURCE_REVISION') or m['git_head'],
              container=None, model=None, drafter=None,
              nemotron_super={'storage_policy': STORAGE_POLICY, 'hours': hours, 'arms': definitions, 'profiles': selected,
-                 'with_images': pixels, 'include_test': include_test, 'limit_articles': limit_articles,
+                 'with_images': pixels, 'input_policy': 'supported-modalities-once' if with_images else 'text-only',
+                 'include_test': include_test, 'limit_articles': limit_articles,
                  'recipes': {name: copy.deepcopy(PROFILES[name]) for name in selected},
                  'pins': {model: PINS[model] for name in selected
                           for model in [PROFILES[name]['model']] + ([PROFILES[name]['drafter']] if 'drafter' in PROFILES[name] else [])},
@@ -102,8 +103,11 @@ def check(work):
             or b.read(work / 'prepared.json')['manifest_sha256'] != b.sha(work / 'manifest.json')):
         raise ValueError('Not an intact pinned Super campaign')
     plan = m['nemotron_super']
+    # Older frozen campaigns may contain both conditions. Keep inspection and
+    # cleanup compatible while new preparation selects only one per profile.
+    allowed_arms = {**arm_definitions(False), **arm_definitions(True)}
     for name, definition in plan['arms'].items():
-        if definition != arm_definitions(True).get(name) or plan['recipes'][definition['profile']] != PROFILES[definition['profile']]:
+        if definition != allowed_arms.get(name) or plan['recipes'][definition['profile']] != PROFILES[definition['profile']]:
             raise ValueError('Serving recipe differs from frozen code')
         b.check_snapshot(work / 'arms' / name)
     if any(PINS.get(model) != pin for model, pin in plan['pins'].items()):
@@ -1021,7 +1025,11 @@ def main(argv=None):
             p.add_argument('--root', type=Path, default=Path.cwd())
             p.add_argument('--expected', type=int, default=260)
             p.add_argument('--hours', type=int, default=12)
-            p.add_argument('--with-images', action='store_true')
+            modalities = p.add_mutually_exclusive_group()
+            modalities.add_argument('--with-images', dest='with_images', action='store_true', default=True,
+                help='Run each profile once with images if supported (default)')
+            modalities.add_argument('--text-only', dest='with_images', action='store_false',
+                help='Run each profile once without image pixels')
             p.add_argument('--include-test', action='store_true')
             p.add_argument('--limit-articles', type=int)
             p.add_argument('--profiles', choices=list(PROFILES), nargs='+')
@@ -1036,6 +1044,7 @@ def main(argv=None):
     if args.command == 'recipe':
         result = {'engines': {p.get('engine', 'nemotron'): engine(p) for p in PROFILES.values()},
                   'pins': PINS, 'profiles': PROFILES, 'default_profiles': list(DEFAULT_PROFILES),
+                  'default_arms': arm_definitions(), 'default_input_policy': 'supported-modalities-once',
                   'context_override': b.CONTEXT}
     else:
         work = args.work.resolve()

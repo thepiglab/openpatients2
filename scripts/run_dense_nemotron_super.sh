@@ -15,7 +15,11 @@ if [[ "${1:-}" == --bootstrap ]]; then
   uv sync --locked --extra data --no-dev --python 3.12
   selection=()
   if [[ "${DENSE_INCLUDE_TEST:-0}" == 1 ]]; then selection+=(--include-test); fi
-  if [[ "${DENSE_SUPER_WITH_IMAGES:-0}" == 1 ]]; then selection+=(--with-images); fi
+  case "${DENSE_SUPER_WITH_IMAGES:-1}" in
+    1) selection+=(--with-images);;
+    0) selection+=(--text-only);;
+    *) echo 'DENSE_SUPER_WITH_IMAGES must be 1 (supported modalities, default) or 0 (text only).' >&2; exit 1;;
+  esac
   if [[ -n "${DENSE_SUPER_LIMIT_ARTICLES:-}" ]]; then selection+=(--limit-articles "$DENSE_SUPER_LIMIT_ARTICLES"); fi
   if [[ -n "${DENSE_SUPER_PROFILES:-}" ]]; then
     read -r -a profiles <<< "$DENSE_SUPER_PROFILES"
@@ -86,7 +90,7 @@ for required in scripts/benchmark_dense_nemotron_super.py scripts/dense_nemotron
     scripts/run_dense_nemotron_super.sh src/openpatients2/dense_nemotron_super.py \
     src/openpatients2/benchmark_reporting.py src/openpatients2/reasoning_lineage.py \
     src/openpatients2/nemotron_super_recipes.py src/openpatients2/muse_spark_recipe.py \
-    src/openpatients2/redhat_nemotron_recipe.py docs/DENSE_NEMOTRON_SUPER.md \
+    src/openpatients2/redhat_nemotron_recipe.py src/openpatients2/beam_recipe.py docs/DENSE_NEMOTRON_SUPER.md \
     configs/hipergator/nemotron-super/provenance.json \
     configs/hipergator/dense-benchmark/reference.jsonl.gz; do
   git -C "$repo" cat-file -e "$revision:$required" 2>/dev/null || {
@@ -110,4 +114,4 @@ job="$(sbatch --parsable --account="$account" --qos="$qos" --partition=hpg-defau
 printf '%s\n' "$job" > "$bootstrap/job-id.txt"
 printf '%s\n' "$work" > "$pointer"
 printf 'Preparation job: %s\nSource commit: %s\nCampaign: %s\nLog: %s/prepare.log\n' "$job" "$revision" "$work" "$bootstrap"
-echo 'Default configurations: Fastino Super Healthcare, NVIDIA NVFP4 + MTP5, BF16 + MTP5, NVFP4 + LiLiCorr7, Muse Spark Open NVFP4 + DSpark7, Red Hat Nemotron FP8 + DSpark8, and Beam FP8/NVFP4 + DFlash2 (no Beam BF16). CPU setup checks model access. Each profile gets a CPU download, GPU benchmark, then CPU weight/cache/container cleanup before the next download: eight B200s for Spark/Beam FP8, four for Beam NVFP4, at most two for the others; then CPU scoring/export runs. Every worker checks streaming reasoning capture before article inference.'
+echo 'Default: each of eight configurations runs once. NVIDIA NVFP4 + MTP5, BF16 + MTP5, NVFP4 + LiLiCorr7, Muse Spark Open + DSpark7 and Red Hat FP8 + DSpark8 use article text and images together; Fastino Healthcare and Beam FP8/NVFP4 + DFlash2 use text only. DENSE_SUPER_WITH_IMAGES=0 explicitly selects text-only runs. Each profile gets CPU download -> GPU benchmark -> CPU weight/cache/container cleanup, then CPU scoring/export. At most eight B200s run at once. Every worker checks streaming reasoning capture before article inference.'

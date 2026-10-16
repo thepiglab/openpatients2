@@ -73,7 +73,7 @@ def test_beam_native_recipe_template_stops_and_gpu_allocation(campaign, tmp_path
 @pytest.mark.parametrize('alias', ['reasoning', 'reasoning_content', 'thinking'])
 def test_every_profile_preserves_streamed_reasoning_with_production_settings(campaign, tmp_path, monkeypatch, profile_name, alias):
     work = tmp_path / profile_name
-    s.prepare(campaign[2], work, expected=3, profiles=[profile_name])
+    s.prepare(campaign[2], work, expected=3, profiles=[profile_name], with_images=False)
     config = b.read(work / 'arms' / (profile_name + '-text') / 'manifest.json')['extraction']
     real_client = httpx.AsyncClient
     requests = []

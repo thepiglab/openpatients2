@@ -15,19 +15,20 @@ from test_dense_nemotron_super import campaign
 
 
 def test_redhat_default_arm_freezes_target_and_draft_and_preserves_profiles(campaign, tmp_path, monkeypatch):
+    monkeypatch.setattr(b, 'freeze_media', lambda *a, **kw: {})
     work = tmp_path / 'all-profiles'
     s.prepare(campaign[2], work, expected=3)
     m = s.check(work)
     assert 'redhat-fp8-dspark' in m['nemotron_super']['profiles']
     assert len(m['nemotron_super']['arms']) == 8
     assert {redhat.FP8, redhat.DSPARK} <= m['nemotron_super']['pins'].keys()
-    arm = b.read(work / 'arms/redhat-fp8-dspark-text/manifest.json')
+    arm = b.read(work / 'arms/redhat-fp8-dspark-vision/manifest.json')
     assert arm['model'] == {'id': redhat.FP8, 'revision': redhat.PINS[redhat.FP8]['revision']}
     assert arm['drafter'] == {'id': redhat.DSPARK, 'revision': redhat.PINS[redhat.DSPARK]['revision']}
     assert arm['container'] == r.VLLM_IMAGE
     monkeypatch.setenv('CUDA_VISIBLE_DEVICES', '2,7')
-    cfg = s.serving(work, 'redhat-fp8-dspark-text')
-    command = render(cfg, str(work / 'arms/redhat-fp8-dspark-text'))[0]
+    cfg = s.serving(work, 'redhat-fp8-dspark-vision')
+    command = render(cfg, str(work / 'arms/redhat-fp8-dspark-vision'))[0]
     assert command['devices'] == ['2', '7']
     assert cfg.model_id == redhat.FP8 and cfg.model_path.endswith('/weights/redhat-fp8-dspark')
     assert cfg.tensor_parallel == 2 and cfg.expert_parallel and cfg.reasoning_parser == 'nemotron_v3'
@@ -44,7 +45,7 @@ def test_redhat_default_arm_freezes_target_and_draft_and_preserves_profiles(camp
         assert cfg.extra_args[cfg.extra_args.index(flag) + 1] == '64'
     assert '--enable-mamba-fine-grained-prefix-cache' not in command['argv']
     plan = s.submit(work, 'account', 'qos', dry_run=True)
-    job = next(cmd for cmd in plan['commands_without_dependencies'] if 'redhat-fp8-dspark-text' in cmd)
+    job = next(cmd for cmd in plan['commands_without_dependencies'] if 'redhat-fp8-dspark-vision' in cmd)
     assert '--gres=gpu:b200:2' in job and '--mem=200G' in job
     assert plan['maximum_simultaneous_gpus'] == 8
 
@@ -53,8 +54,8 @@ def test_redhat_native_sampling_and_live_text_pixel_smoke(campaign, tmp_path, mo
     monkeypatch.setattr(b, 'freeze_media', lambda *a, **kw: {})
     work = tmp_path / 'redhat-only'
     s.prepare(campaign[2], work, expected=3, with_images=True, profiles=['redhat-fp8-dspark'])
-    assert set(s.check(work)['nemotron_super']['arms']) == {'redhat-fp8-dspark-text', 'redhat-fp8-dspark-vision'}
-    config = b.read(work / 'arms/redhat-fp8-dspark-text/manifest.json')['extraction']
+    assert set(s.check(work)['nemotron_super']['arms']) == {'redhat-fp8-dspark-vision'}
+    config = b.read(work / 'arms/redhat-fp8-dspark-vision/manifest.json')['extraction']
     cfg = PilotConfig.model_validate(config)
     assert cfg.template_kwargs() == {'enable_thinking': True} and cfg.concurrency_per_endpoint == 64
     for changes in ({'revision': b.REVISION}, {'top_k': 64}, {'temperature': 0}, {'vision_temperature': None}):
@@ -80,7 +81,7 @@ def test_redhat_native_sampling_and_live_text_pixel_smoke(campaign, tmp_path, mo
 
 def test_redhat_metadata_pins_and_setup_ownership(campaign, tmp_path, monkeypatch):
     work = tmp_path / 'setup-redhat'
-    s.prepare(campaign[2], work, expected=3, profiles=['redhat-fp8-dspark'])
+    s.prepare(campaign[2], work, expected=3, profiles=['redhat-fp8-dspark'], with_images=False)
     native_sha = b.sha
     calls = []
     def download(**kwargs):
