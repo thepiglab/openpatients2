@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC12906739.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "72c9dc8788372e56176ffd0e71c3fead6bd347ae7c8a7ac43fc8be84524bd372",
+  "annotation_sha256": "b9d5c7b25c2defc27ff0be5177d609db64e531e52b8437b5151e16e1e8b738e9",
+  "reviewed_at": "2026-10-16T01:55:37.732748+00:00",
+  "source_segments_read": 14,
+  "facts_reviewed": 55,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f006 injury: temporality historical -> unknown (the alleged-history injury is the presented episode, not prior history); verification_status unconfirmed kept for \"alleged\".",
+    "p1-f028: name \"Triple antibiotics\" -> \"Antibiotics\" and quote trimmed to \"Antibiotics were discontinued after two weeks\" (amikacin was 5 days only).",
+    "p1-f030: clinical statement no longer borrows \"at the emergency department\" (attached to the tetanus clause).",
+    "Added p1-f055 wound closure (procedure, completed) from the Figure 3 caption; linked to fixation event p1-e07.",
+    "p1-e05 description no longer calls the labs baseline; labs moved to new untimed test event p1-e15.",
+    "Relations: added literal b00004 order quotes to e02->e03 and e03->e04, b00002 \"index debridement followed by definitive internal fixation\" to e04->e07; added e06->e07 (\"inspected every day prior to OT\"), e01->e07 (\"after four days of visit\"), e07->e09, e07->e11, e07->e14 (post-operative wording).",
+    "Antibiotic-start ambiguity: added abstract quote listing intravenous antibiotics in initial emergency care.",
+    "visual.json: F1 notes a partly cut-off non-legible printed mark on the linen; F2 names visible anatomy (humeral head/shaft, scapula, long curved bone across top, ribs, lung field, spine, ring-shaped objects); F3 names the sutured curved incision and a dark strip along the wound margin with instruments, without naming plate or screws. Figure EHR/privacy sidecars regenerated with --draft and labels/flags carried over."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three JPEGs are inspected in the separate visual target.",
+    "Discussion statements about published literature and general recommendations are not recorded as patient facts.",
+    "The phrase \"presented acutely\" and the statement that no other post operative protocol differed from other clavicle fractures are not recorded as separate facts.",
+    "The unit of the fourteenth post operative follow-up is not stated."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 14,
+    "facts_reviewed": 55,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient, roster count 1 correct; no cited cases attributed.",
+      "All 54 draft facts verified against source; quotes exact; medication doses/frequencies/durations correct; route IV from the shared antibiotic phrase.",
+      "Relations each rest on a literal order quote or post-operative/day-count wording."
+    ],
+    "residual_risks": [
+      "Antibiotic start time conflicts in narrative order (b00004 vs b00007/b00001); left as ambiguity with no time on the drug items.",
+      "\"within 2 hours\" in b00002 is unattached; left as ambiguity.",
+      "Unit of the fourteenth post operative follow-up is unstated.",
+      "F1 lower face partially visible; flagged identifiable_face true conservatively."
+    ]
+  },
+  "physician_adjudicated": false
+}
