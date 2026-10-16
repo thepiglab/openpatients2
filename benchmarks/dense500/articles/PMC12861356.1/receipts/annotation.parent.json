@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12861356.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f7ac1a0e9b44160f3a76d4e57778a4817787bcfbff87c4d1c9c65651c1780d1f",
+  "annotation_sha256": "caca353098b0b7d07dc3613502fc51be0ed342ddf0530909dbdfcf6fbadb9aff",
+  "reviewed_at": "2026-10-16T04:40:18.134956+00:00",
+  "source_segments_read": 46,
+  "facts_reviewed": 237,
+  "patients_reviewed": 5,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Table 2 bold cells verified as literal <bold> markup in raw.xml (footnote: outside the reference interval). Set flag=high on 12 enzyme cells whose cat-specific text or Table 1 row states the enzymes are increased (cat 1 ALT and AST; cats 2 and 5 ALT, AST, ALP, GGT; cat 3 ALT and AST), citing the footnote and that wording; bold TBili cells (cats 2, 3, 5) keep flag unknown with a note; cat 4 ALT, AST and ALP set flag=normal from \"normal liver enzyme activity\". No flag derived from reference intervals.",
+    "N/A cells (cat 1 copper, cat 3 ALP, GGT and copper, cat 4 GGT) changed from not_performed to status unknown / result_absent_reason unknown: the legend says \"not submitted or value not available\".",
+    "Caption day-N times (cat 2 day 70; cat 5 day 190 and day 440 medication items) corrected from relation at to relation after the day-0 diagnosis anchor.",
+    "Added 11 literally supported relations: cat 1 diagnosis before day 160 and day 160 before subsequent follow-up; cat 2 diagnosis and lactulose course before day 70, day 70 during metronidazole; cat 4 normal enzymes before biopsy and culture before enrofloxacin (\"based on\"); cat 5 culture before amoxicillin-clavulanate, progressive elevations same time as hyperthyroidism diagnosis (\"Concurrently\"), hyperthyroidism same time as chlorambucil start (\"At the same time\"), diagnosis before day 190.",
+    "Article limitations updated (bold markup, unassigned ORCID image described from XML context only, cohort sentences not copied, cat 3 relations)."
+  ],
+  "unresolved": [
+    "Five-cat retrospective case series; patients are numbered by Table 1 row order because the abstract describes the cats only as a cohort and the first individual identity evidence is the Table 1 rows.",
+    "Cohort statements (3/5 cats asymptomatic, one cat well-controlled diabetic and hyperthyroid, 3/5 alive, one euthanized for unrelated causes, mean survival 878.5 days, enzyme means and ranges) are not copied to individual cats unless a labelled sentence supports them.",
+    "The results text gives the ALT range as 27–211 U/l whereas Table 2 lists 2111 for cat 2; recorded as an ambiguity, the table cell is kept as printed.",
+    "Table 2 bold cells are literal <bold> markup in the source XML, defined by the footnote as outside the reference interval. High flags are set only where the cat's own text or Table 1 row states the enzymes are increased (cats 1, 2, 3 and 5 enzymes); bold total bilirubin cells keep flag unknown because no direction is stated; cat 4 enzymes are flagged normal from its text. No flag is derived from the reference intervals.",
+    "Figures 1 to 3 are line charts with no printed data values; plotted points are visual estimates and are not recorded as facts. The plotted day 0 AST for cat 5 looks far below the Table 2 value of 102 U/l, and plotted values are not reconciled with the table.",
+    "Table images (Tables 1 to 3) are uncaptioned unwrapped graphics whose content duplicates the source table rows; their ownership is not resolved from the image itself.",
+    "Caption-layer visual status not_inspected; the actual image pixels were inspected in the separate visual target.",
+    "The source lists one unassigned inline image; the XML places it in the ORCID iD footnote, so it is treated as non-clinical. It was not viewed and is not part of the visual target.",
+    "Parent review: cat 3 has no ordering relation because no quote orders its presentation, ultrasound, biopsy and loss to follow-up. Cohort-level sentences (\"AUS failed to identify anomalous vasculature\", \"one was euthanized for unrelated causes\", the ALT range 27–211) are not copied to individual cats; the ALT mean (749.8) agrees with the Table 2 value 2111, so the printed range is a cohort-level typographical inconsistency, not a per-cat conflict."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 46,
+    "facts_reviewed": 237,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Five cats numbered by Table 1 row; every Table 1-3 cell present per cat; cat-labelled narrative and captions correctly attributed.",
+      "ALT range 27-211 vs Table 2 2111: cohort statistic, mean 749.8 confirms 2111; kept as ambiguity, not a per-cat conflict.",
+      "Cohort sentences copied to all cats (no ascites, no clinical PSS evidence, CT not pursued, CBC available) explicitly scope all cats; kept. Cat 2 absent hepatic lipidosis maps through the same paragraph naming cat 2 as the only DM cat; kept.",
+      "Cat 4 euthanasia recorded as death; \"unrelated causes\" (unlabelled cohort sentence) not copied.",
+      "Chart readings stay in visual.json; Fig 3a day-0 AST vs Table 2 kept as limitation."
+    ],
+    "residual_risks": [
+      "Table images (unwrapped graphics) keep unresolved attribution and non-includable aggregate labels although their rows are the five cats.",
+      "High flags combine source bold marking with cat-level \"increased liver enzymes\" wording; for cats 1 and 3 that wording does not name each enzyme.",
+      "Cat 3 has no ordering relations."
+    ]
+  },
+  "physician_adjudicated": false
+}
