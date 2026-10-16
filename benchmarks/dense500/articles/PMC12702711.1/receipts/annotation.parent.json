@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC12702711.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "eafa39d3f59b89e7250fa5d8492a638c05058e28ab212924bf30bc34528000a8",
+  "annotation_sha256": "cd52793a165f7f744ae5d207b1fb45267451f5106e4d477fccd881ace5f71be1",
+  "reviewed_at": "2026-10-16T05:08:00.530134+00:00",
+  "source_segments_read": 39,
+  "facts_reviewed": 216,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-e01 linked ALT (p1-f055) instead of the ascent fact; repointed to p1-f015 and p1-f016.",
+    "p1-f096 (Discussion: sPAP normalized within 1 month after transfer) duplicated p1-f095; merged as extra evidence into p1-f095 and removed (ONE-STATEMENT).",
+    "p2-f100 to p2-f103 (follow-up RV/RA diameters, sPAP, mPAP): dropped the extra quote \"After 24 days of this regimen, a follow-up echocardiogram was performed.\" that only supplied a time, cited each value sentence and set time null (NO-BORROWING); p2-f099 and p2-f104 time also null for the same reason. Timing stays on procedure p2-f098 and event p2-e09.",
+    "Added relations p1-e01->p1-e03 (\"within the first week at high altitude\"), p1-e07->p1-e09 (\"Following transfer to a low-altitude environment ... normalized within 1 month\") and p2-e01->p2-e03 (\"returned to the plain areas ... and re-ascended to the plateau\").",
+    "Visual submission: F5A readout is fully legible as \"PSV: -349.66cm/s\" (not cut off); description, pixel observation, limitation and reading corrected. F2A velocity scale reads \"0m/s\" at the top with ticks 1 to 4; description corrected."
+  ],
+  "unresolved": [
+    "Figures inspected in a separate visual submission; caption layer here stays not_inspected.",
+    "The echocardiographic Doppler readouts printed in Figures 2 and 5 differ from the 4.6 m/s and 4.3 m/s regurgitant velocities in the text; the article does not identify them as the same measurement, so text values are kept and the readouts are not facts.",
+    "Several discussion and exclusion statements do not name a case; they are not copied to individual patients.",
+    "The article contains no tables and no supplementary material.",
+    "Figures 3 and 6 panel A is captioned as an axial non-contrast image, but the pixels show a frontal projection image of the chest rather than an axial slice; recorded in the visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 39,
+    "facts_reviewed": 217,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Two patients (Case 1, Case 2), roster count 2 from \"two cases of HAPH in young males\".",
+      "Plural statements copied to both patients are literal: \"Both were previously healthy\" (b00007), \"Both patients ... normal cardiopulmonary function\" and \"respectively\" hypoxemia (b00002), \"Echocardiography in both cases\" (b00002), \"Patients had no risk factors for deep vein thrombosis\" (b00018), \"the patients' profile ... final diagnosis was HAPH\" (b00019), \"sPAP in both patients exceeded 55 mmHg\" (b00024).",
+      "Unlabelled left-heart and lung-disease exclusions, the abstract CT dilation sentence and Discussion polycythemia are not copied as included facts; polycythemia stays review_only per patient.",
+      "Fig 3A and 6A are frontal projection (scout-type) images despite the \"Axial non-contrast\" caption; limitation verified.",
+      "Doppler readouts 364.65 cm/s / 53.19 mmHg (Fig 2A) and -349.66 cm/s / 48.90 mmHg (Fig 5A) stay pixel content only; text velocities 4.6 and 4.3 m/s kept, recorded as ambiguity.",
+      "p1-f096 TIME-LITERAL warning: \"Following transfer ... normalized within 1 month\" names its reference point in the same sentence, so after/transfer would be the right reading; the item was a duplicate and is merged, so the warning no longer applies."
+    ],
+    "residual_risks": [
+      "Case 1 sPAP \"approximately 55 mmHg\" vs Discussion \"exceeded 55 mmHg in both patients\" kept as ambiguity, not quarantined.",
+      "Case 2 \"no significant reduction in sPAP\" (Discussion) vs printed 56 to 47 mmHg kept as ambiguity.",
+      "Follow-up echo times (\"6 days later\", \"One month later\") have no named reference point."
+    ]
+  },
+  "physician_adjudicated": false
+}
