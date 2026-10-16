@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC13051045.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f623bcef1a7ec3793994dc446df7ced1a22a9a2ae4a637b2fd05b1d85073e9b9",
+  "annotation_sha256": "70fe741555674b42b6a533f05edd9507e3bf95dbe288714c40038bad185f4b1a",
+  "reviewed_at": "2026-10-16T09:21:30.256299+00:00",
+  "source_segments_read": 21,
+  "facts_reviewed": 66,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Restored the dropped \"previously healthy\" statement as conditions p1-f065 (prior medical illness, assertion absent, verification unknown, role history, historical); the resulting EVID-NEGATION warning is accepted, not silenced.",
+    "Merged p1-f043 into p1-f044: the rheumatology-presentation sentence and the pediatrician referral sentence both give the positive ANA as the referral reason, so they are one result (1:320 speckled); the \"remained positive\" titer at rheumatology stays a separate later test (p1-f045).",
+    "Added p1-f066 (ongoing pain while continuing the move after the injury, no borrowed time) and p1-f067 (observation: negative autoimmune serology, literal \"absence of serologic evidence of autoimmune disease\"; not a refuted condition, per orchestrator/annotator review).",
+    "Added 7 literally supported relations: injury before rheumatology presentation (\"6 months prior\"), MRI before aspiration (\"Based on the location of the fluid collection\"), referral before rheumatology presentation and before the \"remained positive\" ANA, initial rheumatologic exam before follow-up appointment (\"Initial\"/\"follow-up\", 10 months after injury), reported bruising/swelling same time as follow-up (\"also reported\"), ultrasound before dermatology referral (\"then\"); strengthened referral-to-dermatology-exam quote.",
+    "Reworded the \"Five months later\" ambiguity and limitation: the adjacent aspiration sentence orders aspiration before the pediatrician visit (per rulings), while the interval reference point stays unstated and no anchor is set."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the three JPEG figures are inspected in the separate visual target.",
+    "The MRI is \"consistent with\" a Morel-Lavallée lesion in the abstract but \"suggestive of either\" a hematoma or the lesion in the case text; the case-text wording is used.",
+    "The authors' shearing-force mechanism and delayed-healing statements are hypotheses (\"likely\", \"potentially\") and are recorded only as possible.",
+    "Discussion statements about pediatric Morel-Lavallée lesions in general are not patient facts.",
+    "No tables, supplements or videos are listed in the source.",
+    "\"Five months later\" orders the pediatrician visit after the adjacent aspiration sentence only; its interval reference point is not stated."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 21,
+    "facts_reviewed": 66,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; discussion paragraphs are background only.",
+      "Onset-of-symptoms fact (p1-f015) is its own source statement (\"Her symptoms began 6 months prior\"), so the split is faithful, not reshaping.",
+      "Hedged statements (potential exacerbation, likely repetitive mechanical stress, consistent with orthopedic injury, suspected bursitis) correctly kept as possible.",
+      "Abstract MRI wording (\"consistent with an MLL\") versus case text (\"suggestive of either\" hematoma or MLL) is a wording difference kept as an ambiguity; the case-text wording is used, not a source conflict.",
+      "Ultrasound top-right edge shows clipped, unreadable glyph fragments; the timestamps_or_device_text privacy flag is confirmed. Figure 3 sides are described as image left/right only, consistent with pixels."
+    ],
+    "residual_risks": [
+      "Whether \"Five months later\" counts from the injury or the aspiration is not stated.",
+      "The rheumatology presentation (b00003) and the initial rheumatologic exam (b00006) are probably one encounter but are not linked by a relation.",
+      "Injury time \"6 months prior\" is taken from the onset sentence that names the injury."
+    ]
+  },
+  "physician_adjudicated": false
+}
