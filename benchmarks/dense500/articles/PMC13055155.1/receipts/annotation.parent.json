@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC13055155.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8b00d1f9434774437d5df4c49aa8a4f22a550a6e0ecce5b78a06546f3a4f4983",
+  "annotation_sha256": "8d184964c6bac70e5c1ccf0b4e762bb0c3857b48c39131ecf101e5bbf707f5c6",
+  "reviewed_at": "2026-10-16T09:12:06.747491+00:00",
+  "source_segments_read": 24,
+  "facts_reviewed": 56,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Demographics \"Saudi\" (f004): nationality word with no nationality attribute in the schema and the runtime demographics prompt forbids ethnicity from nationality; kept literal as ethnicity_as_documented but certainty ambiguous, review_only, with an ambiguity.",
+    "Oncology tumor, CD4/CD3/PD-1 biomarkers and excision treatment (f048-f052) set ambiguous/review_only: source calls SMPLPD a definite CTCL type yet says it was reclassified as a lymphoproliferative disorder rather than a lymphoma (ONC-BENIGN); general conditions/observations/procedures rows stay include.",
+    "Removed negation words \"painless\"/\"nonpruritic\" from text_value of absent pain and pruritus items (f010, f011).",
+    "Exam appearance sign f020: added the Figure 1 caption quote stating the same firm, shiny, telangiectatic erythematous nodule and set body_site left cheek from it; size and tenderness signs keep site null (no site in their sentences).",
+    "Merged duplicate outcome f056 (\"managed successfully with surgical excision\") into f053 and removed it from the summary.",
+    "Care plan f057 evidence widened to the full follow-up sentence.",
+    "Timeline: split biopsy (e03) from histopathology/immunostaining results (new e08); added outcome event e09 (full resolution) and examination event e10; follow-up e07 time text \"within a 6-month follow-up period\" with range precision per rulings.",
+    "Relations: added e03 before e08 (test to result of biopsy tissue) and e06 before e09 (treated with complete excision and showed full resolution); e06 before e07 now quotes the conclusion and abstract.",
+    "Added ambiguities for the oncology classification and the nationality word; updated limitations and the oncology domain-coverage note."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; actual image pixels are described in the separate visual submission.",
+    "Table 1 (segments b00005-b00020) reports published literature cases from other authors and is not copied to the index patient.",
+    "The case text gives no dates, ages at events or intervals other than the 3-month lesion history and the 6-month follow-up period; no relations beyond those with stated order are recorded.",
+    "Nodule size and tenderness signs keep body_site null because their sentences name no site; the appearance sign takes its site from the Figure 1 caption that states the same finding.",
+    "The nationality word \"Saudi\" is kept literally as ethnicity_as_documented but review_only; the schema has no nationality attribute.",
+    "Oncology rows are review_only because the source both calls SMPLPD a CTCL type and says it was reclassified as a lymphoproliferative disorder rather than a lymphoma."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 24,
+    "facts_reviewed": 57,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (6-year-old girl); Table 1 rows are literature cases correctly excluded.",
+      "All 56 remaining facts verified against b00001-b00004, b00021 and the two captions; quotes exact.",
+      "Figure 2 pixels confirm panel B is labelled CD4 and C CD3, matching the caption; the text lists CD3 and CD4 for B,C without saying respectively.",
+      "PD-1: text says medium-to-large atypical T cells, caption says tumor cells; kept include with the existing ambiguity, no conflict on positivity.",
+      "Recurrence/complication absence uses \"within a 6-month follow-up period\" as relation before with null anchor (range)."
+    ],
+    "residual_risks": [
+      "Oncology rows are review_only; scorers will neither reward nor penalise an oncology tumor prediction.",
+      "Relation e06 before e07 rests on abstract/conclusion wording that pairs excision with no relapse at follow-up.",
+      "Figure 1 is a partial face of a minor (eyelid and cheek), flagged identifiable_face."
+    ]
+  },
+  "physician_adjudicated": false
+}
