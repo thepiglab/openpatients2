@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12813579.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "bee6f6935322dc7593b3778834ab321cdf3e315ddb6676f8890927759fb8cedf",
+  "annotation_sha256": "94d859d0c62d85161a2cf4371f240926e2daa855dcfded0d99944f536fb0e441",
+  "reviewed_at": "2026-10-16T04:48:00.771357+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 68,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "OBS-FLAG: p1-f039 (echocardiography), p1-f040 (laboratory tests), p1-f041 (cardiac biomarkers), p1-f042 (serum electrolytes) flag unknown -> normal; the source calls them 'unremarkable', which the rule maps to normal.",
+    "OBS-NOT-PERFORMED: electrophysiology study (p1-f031, 'not pursued') and ajmaline provocation test (p1-f032, 'decided not to perform') moved from procedures_devices assertion=absent to observations with status=not_performed, result_absent_reason=not_performed, assertion=present.",
+    "p1-f062 exercise-restriction counselling action_status recommended -> completed ('has been advised').",
+    "Added p1-f068: Figure 2 caption 'incomplete right bundle branch block' on the modified high right precordial lead ECG; added the Figure 1 caption quote to p1-f035.",
+    "Added 3 relations with literal support: e11 after e02 ('To reproduce the circumstances of the arrest'), e12 during e11 ('At peak exercise'), e13 after e12 (peak exercise then 'resolved gradually during recovery').",
+    "Removed my earlier relations e14 after e11 and e19 after e14 on re-review: 'the diagnosis was assumed based on the exercise test' states the basis of the diagnosis, not an order, and 'The subsequent finding' names no event it follows."
+  ],
+  "unresolved": [
+    "Single-case report with no tables or supplements; discussion sentences about published series and guidelines were treated as background, not patient facts.",
+    "The graphical abstract and the uncaptioned inline graphic have no source link to the patient and are left unresolved; pixels are reviewed in the separate visual target.",
+    "No dates or ages are given for events before the 12-month follow-up, so only the ordering stated in the text (ICD implanted after the genetic panel) is recorded."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 68,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single human patient (35-year-old man, out-of-hospital VF arrest); roster count 1.",
+      "Brugada syndrome kept provisional: the authors say the diagnosis 'was assumed based on the exercise test' and that the stress test is not a guideline diagnostic tool; the abstract 'diagnostic Type 1' wording is in the ambiguity.",
+      "b00021 dual pathology with idiopathic VF does not name the patient and is a 'cannot be entirely excluded' possibility; kept ambiguous/review_only.",
+      "Family ajmaline testing and the sibling's Type 1 pattern stay subject=family_member; no family history of SCD/CVD recorded as absent family conditions.",
+      "Peak-exercise heart rate 174-186 b.p.m. (text range) and 186 b.p.m. (caption, at maximum ST augmentation) are different statements and values; kept separate.",
+      "All five images viewed: ECG descriptions match pixels (Figure 1 V6 flat line, Figure 3B has no visible circle despite the caption, limitation recorded). The graphical abstract and the lead-author biography portrait are unresolved, non-clinical, not EHR-includable; the portrait's face is flagged."
+    ],
+    "residual_risks": [
+      "Admission ECG vs abstract 'resting ECG' identity not stated.",
+      "No literal order for the pre-hospital, emergency and intensive care events or for the 12-month follow-up anchor."
+    ]
+  },
+  "physician_adjudicated": false
+}
