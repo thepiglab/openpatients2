@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12619684.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "dd39f5747a8d5014b427cd95fc4589d2ca21b62284e2ef70f6a3c81442e8f868",
+  "annotation_sha256": "c1b00e310c9306638365dc117fe8eb6bbc907e109462328133af15ebb8a8c5d5",
+  "reviewed_at": "2026-10-16T01:21:31.818221+00:00",
+  "source_segments_read": 46,
+  "facts_reviewed": 113,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f040 denial of dizziness: removed the borrowed \"At 4-week follow-up treatment\" time (the lead clause governs only the preceding sentence); evidence narrowed to its own sentence, time \"in weeks\", negation word removed from text_value.",
+    "New untimed event p1-e19 (denial, inconsistent exercise participation, negative head impulse test and spontaneous nystagmus, two PT visits) moved out of the 4-week event; relation e19 after e12 (\"exercises provided at the initial evaluation\").",
+    "Added relation p1-e15 (resolution) after p1-e03 (surgery) from b00004 \"following surgical intervention\".",
+    "p1-f073 Dupixent: removed ingredient_as_documented (held the mechanism \"dual inhibitor of IL-4 and IL-13\").",
+    "p1-f031 sinus congestion: implied only; set ambiguous/review_only.",
+    "p1-f104: relief wording neutralised because \"which reportedly provided symptom relief\" may refer to Bactroban and irrigations together.",
+    "Added p1-f111 referral by primary care physician to outpatient PT for vestibular rehabilitation, p1-f112 vestibular laboratory testing (caloric/VEMP) not performed, p1-f113 only two PT visits.",
+    "Summary claim 4 rewritten so the denial and repeat vestibular exam are not dated to the 4-week visit.",
+    "visual.json fig1: replaced interpretive radiology wording (\"soft-tissue-density material\", \"maxillary sinuses contain\", \"mastoid air cells\", \"artifact\") with pixel-level descriptions; regenerated figure-EHR and privacy drafts and carried labels/flags over unchanged."
+  ],
+  "unresolved": [
+    "Figure 1 pixels are inspected in the separate visual target; caption-layer visual status stays not_inspected.",
+    "Table 1 (+)/(−) entries have no printed legend; treated as positive/negative results.",
+    "Right unilateral vestibular hypofunction certainty differs between case and discussion wording; kept as source_conflict review_only facts.",
+    "No dates are given for surgery, the second opinion, the physical therapy visit or the symptom resolution; only relative sequences stated in the text are linked.",
+    "Whether revision surgery was performed is not stated; the summary refers to sinus surgeries in the plural."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 46,
+    "facts_reviewed": 113,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Right UVH: one condition with conflicting certainty (\"may have\" vs \"revealed a diagnosis\", limitations say no lab confirmation); kept as a review_only source_conflict pair.",
+      "Revision surgery only recommended (care_plans recommended, future); summary \"sinus surgeries\" plural kept as an ambiguity, no revision surgery recorded.",
+      "Table 1 head thrust and spontaneous nystagmus merged with the narrative because the text says Table 1 summarizes those results.",
+      "Oculomotor/vestibular table rows kept as observations (tabled test results), cervical exam as signs.",
+      "Cosentyx/doxycycline/steroids historical from \"Historically\"; doxycycline \"finished\" recorded as stopped; Dupixent indication left null.",
+      "Figure is one unlettered panel: printed H/F/R/L marks a coronal image and A/P/R/L an axial image; identifiable_face false confirmed."
+    ],
+    "residual_risks": [
+      "Dizziness resolution timing relative to the PT visits is not stated.",
+      "Whether the second-opinion doxycycline course is the one finished at follow-up is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}
