@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12743277.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0cfc2e09f96dbd2a5043e152d79d7fd0fad9fad6f5105cba3cd922ba06ffe54a",
+  "annotation_sha256": "7ce6ed97d6ce1212e7ed11acd62d1297e1438df83c58e42bee0b769e4df41e50",
+  "reviewed_at": "2026-10-16T06:40:13.433402+00:00",
+  "source_segments_read": 10,
+  "facts_reviewed": 89,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f049 parenteral nutrition time set to relation after, anchor 'life' for 'within the first hour of life' (orchestrator ruling: within X of <event>).",
+    "p1-f067 renamed 'Endotracheal intubation attempt', action unknown -> completed, finding 'intubation was not technically possible' (attempt performed, intubation not achieved).",
+    "p1-f083 Apgar moved from reproductive_perinatal to symptoms_function performance_score (SECTION-SIGNS) and split: 1-minute score 7 (p1-f083), 5-minute score 8 (added p1-f090); birth weight p1-f082 stays reproductive_perinatal newborn.",
+    "Added p1-f089 condition 'Ongoing infection' (present, temporality current) from the retinoid sentence 'considering the infant's severe general condition and ongoing infection'; linked to e09.",
+    "Removed p1-f071 (observation duplicating the ABCA12 variant already owned by family_genetics p1-f074; ONE-STATEMENT); references repointed.",
+    "Added 7 relations with literal support: e04 same_time e03 (born by cesarean / at birth); e06 before e07 (within the first hour of life / second week of life); e06 before e08 (antibiotics started / escalated); e04 before e10 (at birth thickened scales / by around day 10 had become more softened); e10 before e14 (day 10 / day 30); e07 before e16 and e11 before e16 (stated days of life vs death on the 30th day)."
+  ],
+  "unresolved": [
+    "Single case; the index patient is the neonate and the mother and father are recorded with subject mother and family_member.",
+    "Introduction, discussion and conclusions are background and cohort or literature statements, not patient facts.",
+    "Figures 1 and 2 have one-line captions (Day 1 image, Day 10 image); pixels were inspected in the separate visual submission.",
+    "No laboratory values, drug names for antibiotics or antifungals, doses or durations are stated in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 10,
+    "facts_reviewed": 89,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient is the neonate (abstract: 'We present the case of a preterm neonate'); mother and father facts stay in p1 with subject mother/family_member; roster count 1.",
+      "Transfusion kept action unknown: 'neonatal anemia requiring transfusion' does not state that a transfusion was given (ambiguity retained).",
+      "'No infections' during pregnancy monitoring kept subject unknown (source does not say mother or fetus).",
+      "'After 35 hours' kept anchor null: neither the same nor the preceding sentence names the reference point (presentation or corticosteroids); e02 before e03 retained under the adjacent-sentence 'After N' ruling.",
+      "No cause of death is stated; outcome death has no cause and the ambiguity is retained.",
+      "Figure 2 is cited in the retinoid sentence while its caption says Day 10 image; attribution to p1 kept, ambiguity retained.",
+      "Both figures viewed at full resolution with zoomed crops: identifiable unmasked neonate faces, no legible names, numbers or dates; groin covered by diaper."
+    ],
+    "residual_risks": [
+      "e06 (NICU transfer and initial supportive management) is a composite event whose earliest literal time is the parenteral nutrition 'within the first hour of life'.",
+      "e14/e15/e16 desaturation, failed intubation and death are only partly ordered (e15 before e16 via 'shortly thereafter'); e14 vs e15 not literally ordered.",
+      "Privacy sidecar FIG2 face description mentions eyes 'open at the lid margins'; the pixels show red everted eyelid margins with the eye state unclear; Sonnet should reword."
+    ]
+  },
+  "physician_adjudicated": false
+}
