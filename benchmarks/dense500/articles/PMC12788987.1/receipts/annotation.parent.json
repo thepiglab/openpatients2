@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12788987.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "77e9f83b53e81f7b9d722bc0fd47a133f334e6510cf221c33c39390e247ab120",
+  "annotation_sha256": "1764a0e0b70a537dc61342d436204e815ace3dacee498b10c08fad0b05ca6ecb",
+  "reviewed_at": "2026-10-16T06:28:40.235707+00:00",
+  "source_segments_read": 30,
+  "facts_reviewed": 81,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f020 (Table 1 NSCLC cell) marked alternate_representation_of p1-f004 lung adenocarcinoma: same cancer, not a second condition.",
+    "p1-f046/p1-f047 (additional resection, radiation not pursued): removed the COPD ventilatory impairment from indication; it is the reason for not pursuing, kept in the quote and notes.",
+    "p1-f064 cyclosporine and p1-f065 eltrombopag now also cite the present-case Table 1 treatment cell (OBS-TABLE-ROWS coverage).",
+    "Relation e18->e21 now quotes the full sentence \"Eltrombopag (EPAG) ... was added on day 24\" instead of a fragment.",
+    "Added 7 literal relations: e11->e13 and e11->e14 (\"Due to the rapid progression of pancytopenia ... were performed\"), e10->e18 (day eight vs day 16 of chemotherapy plus immunotherapy), e08->e09 and e09->e10 (pegfilgrastim day two in the sentence after initiation; day eight), e18->e19 (day 16 vs day 24), e19 same_time e21 (both day 24).",
+    "Recurrence-wording ambiguity now also cites the Figure 1B caption \"recurrent nodule\"; glucocorticoid ambiguity notes that Figure 2 mPSL 500mg / PSL1mg/kg labels are pixel-only.",
+    "Summary claim 4: removed \"on CT\" from the partial-response sentence (the text states only a partial response with a figure citation)."
+  ],
+  "unresolved": [
+    "Table 1 rows 1 to 14 describe published cases from the literature (reference column) and are not recorded as facts of the index patient.",
+    "Literature-review, mechanism, guideline and trial statements in the introduction and discussion are not patient facts.",
+    "Figure 2 plots the clinical course (drug bars, transfusion and pegfilgrastim arrows, WBC, Hb, platelet and CRP curves); values and drug doses printed or plotted in the image are pixel content in visual.json and are not stated as facts, except where the text states them.",
+    "Case text and Figure 1 caption disagree on the lobe of the pre-surgery mass (right upper versus right lower); both statements are review_only.",
+    "The text gives no calendar dates beyond February 2024; no dates were computed from relative times.",
+    "Dates of surgery, adjuvant chemotherapy and the first chemotherapy plus immunotherapy cycle are not stated."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 30,
+    "facts_reviewed": 81,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (71-year-old woman); Table 1 rows 1-14 are literature cases and correctly excluded; only the present-case row is used.",
+      "Lobe conflict (text right upper lobe vs Figure 1A caption right lower lobe) is a text-vs-caption conflict; only the lobe attribute is quarantined (p1-f040, p1-f041 review_only); pixels were not used to decide it.",
+      "Platelet 3.1 x 10^4/uL left without time: \"on day 24\" grammatically governs the WBC clause; ambiguity recorded.",
+      "Filgrastim 150 mg/day kept as printed with an ambiguity (likely unit print artefact; not corrected).",
+      "Pulse GC, initial GC and Table 1 PSL 1 mg/kg kept as separate unmerged items with an ambiguity; Figure 2 dose labels and plotted values stay in visual.json only; no fact uses chart readings.",
+      "Chemotherapy-induced myelosuppression kept as assertion unknown / differential (considered atypical, not ruled out); author causal claim about early immunosuppression kept review_only."
+    ],
+    "residual_risks": [
+      "Day numbering for pegfilgrastim day two, day 24 and day 34 is not explicitly anchored in the sentence; relations rely on the paragraph-level chemotherapy-day series.",
+      "Filgrastim dose unit is implausible as printed.",
+      "visual.json FIG2 description says the Cyclosporine bar \"begins later\"; it begins after the G-CSF bar start but before the Eltrombopag bar (wording ambiguity only)."
+    ]
+  },
+  "physician_adjudicated": false
+}
