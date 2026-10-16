@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12860570.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d38de3f125ce33f6683d4775a3d26e1ecc3098f8b646b271687b0b7539cfd477",
+  "annotation_sha256": "397af96795805a7026849c4403dd629424dc8d8bea5f4824fa59cd1546ec393d",
+  "reviewed_at": "2026-10-16T02:09:26.713295+00:00",
+  "source_segments_read": 15,
+  "facts_reviewed": 63,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f026 Achilles tendon allograft reconstruction: laterality right, with Figure 1-2 caption evidence (radiographs of the right knee following the reconstruction); rupture laterality kept unknown",
+    "p1-f052/p1-f053 postoperative radiograph observations: body_site right knee with caption evidence",
+    "p1-f006/f007/f021 clinical statements no longer imply the postoperative clinic-visit time (their sentence states none); removed from clinic-visit event p1-e09",
+    "p1-f063 strict non-weight bearing: evidence extended to its own governing sentence and time Postoperatively/after added",
+    "Counseling and decision facts moved from clinic-visit event p1-e04 to new event p1-e10 (kind other); relation p1-e06 after p1-e10 on 'chose to proceed with surgery'",
+    "p1-e02 time_text set to literal 'approximately one month after undergoing right TKA' (relative, approximate) with abstract evidence",
+    "p1-e04 after p1-e03 relation: added literal 'At a subsequent outpatient orthopedic clinic visit' evidence",
+    "FIG1/FIG2 caption_summary: replaced glued duplicated caption text with the spaced caption sentence",
+    "Laterality article limitation and ambiguity rewritten; ambiguity added that MRI vs reconstruction order has no literal cue (left unlinked)",
+    "p1-f051 note explaining why discussion sentence b00011 is this patient's intraoperative finding"
+  ],
+  "unresolved": [
+    "The case text does not name the side of the patellar tendon rupture; the right TKA is stated, and the Figures 1-2 captions place the Achilles tendon allograft reconstruction in the right knee. Rupture laterality is left unknown rather than inferred from the reconstruction side.",
+    "Discussion sentences about reconstruction techniques in general were treated as background; only sentences describing the present case were captured.",
+    "Caption-layer visual status not_inspected; the two radiographs are reviewed in the separate visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 15,
+    "facts_reviewed": 63,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single 60-year-old woman; roster count 1 literal",
+      "Right TKA laterality is literal; rupture side not stated; reconstruction side stated only by Figure 1-2 captions",
+      "TKA 'one month prior' kept as relation before, anchor null (no named reference point)",
+      "MRI and reconstruction left unlinked: no literal order cue",
+      "Decision to proceed kept action_status unknown; strict non-weight bearing completed care plan; delayed diagnosis outcome kept (explicitly 'In the present case presentation')",
+      "Both radiographs viewed at full resolution; visual descriptions match pixels"
+    ],
+    "residual_risks": [
+      "ED presentation/fall event and ED evaluation event are not linked by a literal relation, so the timeline has two components before the clinic visit chain",
+      "Relation surgery after counseling relies on 'chose to proceed with surgery'",
+      "Delayed diagnosis recorded as an outcome is an author characterization"
+    ]
+  },
+  "physician_adjudicated": false
+}
