@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12813277.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2c9f6eef2e8e424065a1b369e9be4fddbe2cd07ed86d5b50c62ac6ab85bb19eb",
+  "annotation_sha256": "936f5d0175c666f61ae4bb84d9aa8e4c70947705a6d58fbdcfa4893d0d49796c",
+  "reviewed_at": "2026-10-16T09:59:43.260157+00:00",
+  "source_segments_read": 64,
+  "facts_reviewed": 116,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Gestational age 12 weeks +2 days (stated) vs 12 weeks and 4 days (early ultrasound estimate): changed from source_conflict/review_only to supported/include on both facts (p1-f022, p1-f023) and rewrote the ambiguity as two different measurements, following the PMC12750986.1 precedent.",
+    "Merged abstract \"fluid resuscitation\" (p1-f043) into the normal saline fact p1-f042 as one initial fluid treatment; removed p1-f043 and its event reference.",
+    "Expanded the bedside ultrasonography not-performed quote (p1-f059) so it names the test.",
+    "Added evidence: old midline scar from previous deliveries (p1-f021), collaborative obstetric and surgical operation (p1-f067), gangrenous cystic mass involving the right ovary and tube from the discussion (p1-f078).",
+    "Added social_exposures fact p1-f117 (long distance and difficulty accessing transportation as referral reasons, domain access_to_care); social_exposures coverage now documented.",
+    "Added 13 temporal relations with literal support: pregnancy diagnosis before pain onset (two stated times from presentation), symptom onset and distension before referral (16-h and 12-h history at referral), referral before tertiary presentation, previous cesareans before presentation and before the repeat cesarean, presentation before treatment (promptly), labs overlapping IV line placement (while), peritonitis before no imaging (therefore) and before laparotomy (necessitating), discharge with appointments before follow-up visits, referral for admission before general hospital stay, ward recovery before delivery (six months later).",
+    "Revised the adnexal mass vs cystic mass ambiguity to cite the source links (Fig. 1 caption, discussion) and limit the must-not-infer to the teratoma size; revised the Fig. 4 ambiguity to cover all seven caption items and the unobtainable fx1 to fx7 glyph graphics.",
+    "Reworded one summary sentence so it no longer implies a causal chain between the unavailable ultrasound and the absent imaging."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEG figures were inspected separately in visual.json.",
+    "Figure 4 caption lists seven numbered images but the asset shows four tiles; seven unresolved GIF references (fx1 to fx7) are listed in the source but no assets were obtainable for them.",
+    "Discussion statements about the literature, incidence and general management were not copied to the patient.",
+    "Gestational age at presentation (12 weeks +2 days) and the early ultrasound estimate (12 weeks and 4 days) differ; recorded as an ambiguity between different measurements, both kept."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 64,
+    "facts_reviewed": 116,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index case of a 37-year-old pregnant woman (12 weeks +2 days) with small bowel volvulus around a torsioned gangrenous right adnexal mature cystic teratoma; neonate kept in the mother record as subject newborn.",
+      "Gestational-age discrepancy is an ambiguity between different measurements, not a source conflict.",
+      "Gross gangrene of bowel and tube vs normal histology of the bowel and fallopian tube sample kept as an ambiguity; both facts included.",
+      "Live birth outcome is supported by delivery of a healthy neonate; no further investigations kept as a care plan with unknown status.",
+      "Fig. 4 caption names seven images while the asset shows four tiles; mapping left unresolved."
+    ],
+    "residual_risks": [
+      "Whether Fig. 4 \"Image N\" refers to tiles or to the unobtainable fx1 to fx7 glyphs is unknown.",
+      "Privacy sidecar flags sensitive_anatomy on Figs 1 to 3 (intra-abdominal operative and specimen views); per the contract definition this should be false and was reported back to the annotator.",
+      "Not physician adjudicated."
+    ]
+  },
+  "physician_adjudicated": false
+}
