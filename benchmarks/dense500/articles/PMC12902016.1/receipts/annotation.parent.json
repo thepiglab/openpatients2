@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12902016.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "907cdb948f1b3242ee4bdea778f7a55cf4ffdf57a15412fc0c14e62e530c5ecf",
+  "annotation_sha256": "f45b6ba78e0978af05045b1c8c024d4999f7fee619c24cdb129d14430f4b1757",
+  "reviewed_at": "2026-10-16T01:19:42.449224+00:00",
+  "source_segments_read": 12,
+  "facts_reviewed": 61,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p2-f013/p2-e01: removed time '6 months after the previous surgery' (anchor 'previous surgery'); it dates case 2 relative to the case 1 surgery, not a surgery of this patient; event description and summary no longer imply a prior surgery; ambiguity added",
+    "Added caption-governed facts for each case from Fig. 1 (A case 1, B case 2): central corneal haziness markedly more evident in the left eye than the right during nucleus removal (p1-f036, p2-f021), left-eye haziness resolved after IOL implantation (p1-f037, p2-f022), nucleus removal in the right and left eyes (p1-f038, p2-f023); linked to events and summaries",
+    "p1 laterality ambiguity updated: text-level haziness item keeps no eye; left eye comes only from the caption item",
+    "Added literally supported relations: p1-e04 after p1-e03 ('preoperative antisepsis'), p1-e10 and p1-e11 after p1-e09 ('Postoperatively', '3 months postoperatively'), p2-e08 after p2-e07 ('Postoperative recovery')",
+    "Added article limitation that Supplementary Table 1 per-eye values live in the supplement clinical sidecar (24 numeric cells and 4 NA cells checked against the rendered PDF page)",
+    "visual.json: corrected panel C alcohol-line description (starts lowest at Baseline, rises to Start) and panel E description (pale-white peak at 1 hr, pinker at 2 hr; dark speckles at 1 hr, white marks at 2 hr); figure-EHR and privacy drafts regenerated with --draft and reviewed labels/flags carried over"
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the actual JPEG is inspected in the separate visual target.",
+    "The authors' rabbit experiment (two New Zealand white rabbits) is an animal study, not a clinical case, and is not a roster patient; its facts are not annotated.",
+    "General statements about the two cases, such as no intraoperative trauma, OVD instability or anesthesia-related toxicity being evident, absent classic signs of epithelial disruption or hyperemia, and the antiseptic regimen including diluted chlorhexidine and 83% alcohol, do not explicitly name each patient and are not copied to individuals.",
+    "Case 1 antiseptic agents are recorded from the case 1 paragraph; the paragraph does not state which eye each preparation step applied to.",
+    "Supplementary Table 1 (PDF) holds patient-level endothelial and corneal thickness values; it is reviewed in the supplement sidecar, not as article segments.",
+    "Mechanistic statements about alcohol contact and toxicity are author hypotheses and are recorded only as ambiguities.",
+    "Supplementary Table 1 per-eye values (ECD, CV, HEX, CCT; case 1 before surgery and 3 months, case 2 before surgery, case 2 3 months NA) are recorded as typed facts in the supplement clinical sidecar, not as article-segment facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 12,
+    "facts_reviewed": 61,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Two-case letter: p1 Case 1 62-year-old female, p2 Case 2 61-year-old female; rabbit study (b00010, Fig. 1C-E) correctly excluded from roster; roster count 2 from 'two cases of TCE'",
+      "Only 'Both patients had normal ECD' and 'two cases of TCE ... during ISBCS under general anesthesia' explicitly cover both patients; other discussion statements (no trauma/OVD instability, absent epithelial disruption, antiseptic regimen) are not copied, which is correct",
+      "TCE confirmed for both from 'We present two cases of TCE'; 'no lasting endothelial compromise' kept as refuted with the stable specular microscopy/pachymetry basis stated in the same sentence",
+      "Case 2 'similar findings' not copied; case 2 per-eye pre-op ECD/CV/HEX/CCT and NA 3-month values are in the supplement sidecar and consistent with the text (normal ECD, lost to follow-up)",
+      "p1 antiseptic agents recorded without eye; the protocol was applied to each eye separately per the source"
+    ],
+    "residual_risks": [
+      "Caption statements about left-eye haziness are attributed to each case because the caption covers panels A and B jointly",
+      "Inter-case interval '6 months after the previous surgery' is kept only as an ambiguity",
+      "Visual-acuity results carry text values only (Snellen fractions), no numeric value"
+    ]
+  },
+  "physician_adjudicated": false
+}
