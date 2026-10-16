@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12589108.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a17d9a9d8921527f5e2899482fa1994942825308b560080a50945dae417ac86a",
+  "annotation_sha256": "e7a6b0298f8e36e456fef79dc42c247156097c49df30d18231762139510e89f0",
+  "reviewed_at": "2026-10-16T07:19:34.517958+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 94,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f007: restored condition name \"Chronic rhinosinusitis with nasal polyps\" (annotator had shortened it to CRSwNP to silence a NO-BORROWING warning); the age-44 time comes from the sentence that names CRSwNP, so the remaining warning is a checker false positive and is accepted.",
+    "Age conflict ruled literal: refractory disease at age 61 (p1-f077, p1-f031) is the stated reason (\"Given the insufficient clinical response\") for tezepelumab started \"at age 60\" (p1-f032); all three set to source_conflict/review_only with age/time as the quarantined attribute; ambiguity rewritten; referral age 61 not a side.",
+    "Added 6 literally supported relations: e05 before e07 (start then taper), e08 before e09 (worsening then local treatment), e15 before e17 (\"Given the insufficient clinical response\"), e18 same_time e17 (\"At that time\"), e15 before e27 (increase to 15 mg/day then taper from 15 mg/day), e32 during e20 (\"during the alternating regimen\").",
+    "Summary claim 3 rewritten (after Sonnet dispute): left-ear averages apply only to the baseline 61.7/66.7 dB; post values given as 41.7 dB air and 51.7 dB bone conduction after 6 months, with no ear or averaging; tezepelumab age phrased as stated age.",
+    "p1-f038 (no systemic corticosteroid escalation): fuller abstract quote and note scoping it to the alternating regimen.",
+    "Ambiguities: FeNO/asthma sentence ruled patient-specific; Figure 1 eosinophil pixel peak corrected to about 155/μl; audiometry ambiguity notes baseline bone average printed above air average."
+  ],
+  "unresolved": [
+    "Figure pixels were inspected separately in visual.json; caption-layer figure rows here stay not_inspected.",
+    "Ages in the narrative conflict (refractory disease at age 61 is the stated reason for tezepelumab, whose start is given at age 60); the age-bearing facts on both sides are source_conflict/review_only.",
+    "The sentence on tezepelumab-related improvement and FeNO values carries literature citations; the parent ruled it a statement about this patient.",
+    "Post-treatment audiometry values do not state ear or averaging; no laterality was borrowed from the preceding sentence.",
+    "Figure 1 plotted eosinophil values and audiogram thresholds are pixel content only and are not stored as facts.",
+    "Discussion and mechanism statements about tezepelumab, mepolizumab, dupilumab, GWAS and cost are background and not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 94,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single 61-year-old woman with EGPA and steroid-refractory EOM; roster count 1 correct.",
+      "All 24 relations checked for literal order support (18 original kept, 6 added).",
+      "Tezepelumab/FeNO improvement sentence is about this patient; citations support the general claim.",
+      "Baseline audiometry is left ear in its own sentence; post-treatment values carry no ear and stay unassigned.",
+      "\"Avoided\" dual biologic therapy and \"did not recur\" vasculitis/symptoms correctly recorded as absent."
+    ],
+    "residual_risks": [
+      "Age 60 vs 61 conflict unresolved by the source.",
+      "Figure 1 eosinophil peaks after tezepelumab versus the text \"remained suppressed\" (pixel-only, ambiguity).",
+      "Remaining NO-BORROWING warning on p1-f007 is a checker false positive."
+    ]
+  },
+  "physician_adjudicated": false
+}
