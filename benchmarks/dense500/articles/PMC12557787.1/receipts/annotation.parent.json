@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12557787.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d3d963864ecccda2b1bb33bad85f6930c2c789f447d3dc9628883a015f1c3af1",
+  "annotation_sha256": "c4c9d71d1a80ddc5c3ad3856993144f43d2d97779ffa13865ecbe5d7e2dea805",
+  "reviewed_at": "2026-10-16T04:35:14.924305+00:00",
+  "source_segments_read": 36,
+  "facts_reviewed": 128,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f021 coagulopathy (stated side): quote extended to the full b00004 sentence so subject and timing are grounded; source_conflict/review_only kept on both sides (b00004 'with coagulopathy' vs b00022 'might be suspected')",
+    "p1-f086 first IA: added its own b00008 indication sentence; indication reworded to the literal 'reduce antigen-antibody complexes' / 'high suspicion' wording",
+    "p1-f087/f088/f094/f105 heparin/citrate: indication trimmed to 'Anticoagulation' (session setting came from the paragraph, not the quote)",
+    "p1-f102 second-IA heparin boluses: added b00022 quote stating the boluses were added in the second IA session",
+    "p1-f080 amlodipine discontinued: quote extended to name the drug",
+    "p1-f031 fluid overload: added b00021 'severely overhydrated on arrival'",
+    "Events: f061 removed from 'initial' lab event e07; f108 (both sessions) removed from second-IHD event e14; anti-HSA antibody facts moved from e16 ('On the following days') into new event p1-e22 (time null)",
+    "Relations: added e04->e06, e10->e12, e16->e17, e17->e18, e22->e17 (all with literal order quotes); 13 relations total",
+    "Coordinator ruling on disputed relations: e10->e12 now also quotes the b00010 sentence placing the second treatment on the lab day; e17->e18 now quotes the discharge-medication and prednisolone-taper sentences separately",
+    "Summary claim 1 no longer implies the post-surgery hypoalbuminemia followed intussusception surgery; claim 4 cites f079",
+    "visual.json fig2/fig3 detailed descriptions and pixel observations corrected (Day 3 and Day 10 rises, which markers lie in the gray band); figure-EHR and privacy drafts regenerated with labels carried over unchanged"
+  ],
+  "unresolved": [
+    "Figures 2 to 4 are line charts whose plotted values were not transcribed as facts; only literal text values are recorded.",
+    "Coagulopathy is stated in the introduction but only suspected in the discussion; both wordings are kept as review-only source-conflict facts.",
+    "Surgery at the other clinic, HSA dose and the indication of the second operation are incompletely documented in the source.",
+    "No tables or supplements are present in the source.",
+    "Assay quality-control statistics, control-dog serum readings, ELISA reagent details and discussion of other published cases are method or background content and are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 36,
+    "facts_reviewed": 128,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single canine patient; roster count 1 from 'a dog' (b00004) is literal",
+      "Coagulopathy is a literal certainty conflict (intro states it, discussion says might be suspected); both kept review_only",
+      "Lab flags on Na, Cl, K, Hct, creatinine, urea and albumin each come from a disorder word or 'increased' that governs that value in the same parenthesis; pH/HCO3/pCO2 left unknown",
+      "Allergies item for HSA (assertion possible) kept alongside the provisional condition, as the substance-reaction view consistent with prior reviewed articles",
+      "Check-up CRP time left null: the preceding sentence is narrative, not a scoping heading, and the abstract time sentence omits CRP",
+      "Chart values are not facts; visual.json readings are empty; plotted 12%/29% antibody drops match the text"
+    ],
+    "residual_risks": [
+      "NO-BORROWING warnings on f104 (abstract 'Both treatments were repeated on the following day' states the IHD repeat itself) and f122 (Fig 1 caption states restored normal appearance on the day of discharge) judged false positives and left",
+      "Fig 2 first creatinine point (~645) differs from text 612 umol/L; chart readings not transcribed, no conflict recorded",
+      "Hct low flag rests on 'anemia' wording rather than an explicit low marker"
+    ]
+  },
+  "physician_adjudicated": false
+}
