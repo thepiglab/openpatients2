@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12753295.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "df221683df91a46d6df46fce0bed503e97728d79c5c4e0222c79c70d2fff28b7",
+  "annotation_sha256": "67a1175781e084198d68fadb260baf1b7b61a338001f01f17d1b04652dd2ecbc",
+  "reviewed_at": "2026-10-16T01:38:03.933173+00:00",
+  "source_segments_read": 73,
+  "facts_reviewed": 121,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Fig. 1 caption states the left mastoid and middle ear are well aerated, conflicting with Table 1 CT left otomastoiditis: both sides added as review-only source_conflict items (p1-f118, p1-f119); the include left otomastoiditis condition (p1-f008) now rests on MRI/MRV text and the Fig. 2 caption only.",
+    "Added Fig. 1 caption findings: right middle ear soft-tissue opacification (p1-f116) and right mastoid tip residual fluid (p1-f117); right mastoid sclerosis added to p1-f097.",
+    "Clot removal: operative \"did not remove the thrombotic clot\" (p1-f073) and discussion \"This was done in our case\" (new p1-f120) made a review-only source_conflict pair; summary no longer states the clot outcome.",
+    "Fig. 5 caption \"healed incision site\" (p1-f110) set ambiguous/review_only because the image shows a raw area with sutures and gauze; ambiguity added.",
+    "Added Table 1 onset-row facts: no neurological signs (p1-f121) and mild otalgia with the ~45 days before admission time on p1-f024; Day 0 row evidence and time on the postauricular swelling sign (p1-f049).",
+    "Added \"other ossicles were not identified\" to the tympanomastoidectomy finding; right eye vision symptom text_value no longer states the improvement.",
+    "WBC ambiguity now links all five unitless values and the two review-only unit items; onset ambiguity includes jaw and neck pain; new ambiguity for Table 1 vs Table 2/text dating of cultures and antibiotics.",
+    "Events linked to admission vitals/signs, post-op day 10 and weeks 2-6 outcomes and CT caption items; added a Day 0 same_time relation (admission and incision and drainage); summary fact links completed.",
+    "Visual submission: Fig. 3 header description corrected (no name or institution line visible; top line cut off); figure-EHR and privacy drafts regenerated with labels carried over; Fig. 2 and Fig. 3 privacy descriptions refined by category."
+  ],
+  "unresolved": [
+    "Table 1 and Table 2 times are relative to admission or surgery and are kept literal; individual WBC values carry no times because the table gives one range for the series.",
+    "Title-level chronic suppurative otitis media label is not recorded as a condition because case text names the otomastoiditis only; the discussion statement that the thrombosis was a complication of CSOM is general.",
+    "Discussion statement that surgical drainage and clot removal \"was done in our case\" conflicts with the operative text that the clot was not removed; it is not recorded as a fact.",
+    "Figure 5 caption says the incision site was healed after suture removal while the pixels show an open wound with sutures and gauze; recorded in the visual review.",
+    "Literature-review cases in Table 3 are not index-patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 73,
+    "facts_reviewed": 121,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Single 8-year-old girl; roster count 1 literal; Table 3 literature rows not patient facts except the article's own row used only as supporting evidence.",
+      "Fig. 1 caption describes right-sided disease and a well-aerated left side, conflicting with left otomastoiditis on CT in Table 1; kept as a review-only pair.",
+      "Superior sagittal sinus thrombosis kept provisional (abstract \"suggestive of\" and Table 3 own-case row only).",
+      "No identifier values from the Fig. 2/3 scanner headers appear in any file; flags name categories only.",
+      "Uncaptioned jats-graphic-1 is a smaller duplicate of Fig. 5, left unassigned and not includable."
+    ],
+    "residual_risks": [
+      "Symptom onset times differ between text and Table 1 and are not reconciled.",
+      "The subperiosteal abscess condition rests on an unclear operative sentence.",
+      "Title-level CSOM is not recorded because no case segment states it for the patient."
+    ]
+  },
+  "physician_adjudicated": false
+}
