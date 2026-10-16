@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12689126.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c0e84bde0cc172cf31f67febb043b83d02c7210c8550eaef267e94399cf89dac",
+  "annotation_sha256": "1b7a1ce14c3fa7da095e901be90de2cf0f26bdec196b76e76c5d2b918ad6bbb4",
+  "reviewed_at": "2026-10-16T04:48:08.662189+00:00",
+  "source_segments_read": 48,
+  "facts_reviewed": 113,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added ambiguity: Table 2 dFLC row labelled kappa minus lambda but printed values equal lambda minus kappa (same labelling problem as rFLC); notes on p1-f054/f055",
+    "Added ambiguity: flow cytometry kappa light chain restriction vs Table 2 lambda FLC exceeding kappa FLC, unreconciled by the source",
+    "Added p1-f113 care_plans hematologic referral (completed) from the abstract chemotherapy sentence; linked to event e23",
+    "Added 8 relations with literal order quotes (e21->e16, e22->e23, e09->e08, e14->e15, e12->e15, e15->e16, e22->e25, e24->e26); 16 total",
+    "Coordinator ruling: removed e06->e09, e07->e09 (basis for suspicion, not order) and e12->e13 (purpose clause); kept e14->e15 and e12->e15 (necessitated biopsy)",
+    "visual.json F1: description and pixel observations corrected to include V1 among rows with broad rounded upward waves; figure-EHR and privacy drafts regenerated with labels carried over unchanged"
+  ],
+  "unresolved": [
+    "Figure pixels were inspected separately in visual.json; annotation figure rows keep the caption-layer visual_status not_inspected.",
+    "Dates printed inside Figures 1 and 4 are burned-in image text; they are not stated in the article text and are not used as fact times.",
+    "Table 2 rFLC values match lambda over kappa although the row label reads kappa over lambda; printed values are retained.",
+    "The case text gives the 99mTc-PYP ratio at 3 hours postinjection while Figure 4 planar images are labelled 1 h and 2.5 h.",
+    "The article gives no dates for admission, the echocardiography, CMR, scintigraphy, biopsy or treatment course; only table column dates are used.",
+    "Adverse effects and toxicity leading to drug discontinuation are not specified in the source.",
+    "Literature statements about the published cohort and general discussion are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 48,
+    "facts_reviewed": 113,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Single patient; roster 1 literal",
+      "Every Table 1/2 cell is its own observation; troponin dash is not_performed per the 'data not available' footnote; text-only 'elevated' troponin and NT-proBNP cite Table 1 without a column so they cannot merge into one cell and stay separate",
+      "rFLC and dFLC values both match lambda-over/minus-kappa against their kappa-first labels; printed values kept",
+      "PYP ratio at 3 h in text vs 1 h / 2.5 h planar labels in Fig 4 confirmed on pixels; ambiguity kept",
+      "Multiple myeloma 'support a diagnosis' kept provisional/possible; final diagnoses AL-CA and ATTRwt-CA confirmed",
+      "Abstract class-level drugs and chemotherapy kept separate from case-text drugs; furosemide split into dose and later-oral items; adverse effects as allergies adverse_effect items",
+      "Fig 6 white rows carry no patient claim in the annotation; visual readings transcribe printed values only"
+    ],
+    "residual_risks": [
+      "Table 2 dates (Sep 2023) precede Table 1 (Oct 2023) and the in-figure ECG/PYP dates; no admission date is stated, so no cross-table order beyond literal dates is asserted",
+      "Fig 6 prints 'Immunoglobulin kappa light chain' while FLCs show lambda excess; recorded only in the visual readings and the kappa/lambda ambiguity"
+    ]
+  },
+  "physician_adjudicated": false
+}
