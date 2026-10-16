@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12627014.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "35201c8b1fa46782ac3ec945a28b42b5b8f8c8f7f45d4fb2853f78bf7081bb00",
+  "annotation_sha256": "88632ccccca311787a9bf84d2e0010ef11b7b906028a5f556dd2ae6528b7e36c",
+  "reviewed_at": "2026-10-16T06:23:45.910965+00:00",
+  "source_segments_read": 39,
+  "facts_reviewed": 62,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Set temporality historical on HFrEF, atrial fibrillation, CAD and ESRD (all labelled by \"past medical history of\"), matching HIT.",
+    "Apixaban administered/stopped facts now quote the sentences that carry their historical context (\"Six months earlier ... while taking\"; \"At that time ... subsequently discontinued\").",
+    "Baseline platelet count time: relation before, literal anchor \"LAAO\"; baseline ACT anchor set to literal \"case initiation\".",
+    "LAAO indication changed from inferred \"after gastrointestinal bleeding\" wording to \"apixaban discontinuation\" with its own quote (\"prompting the need for LAAO\").",
+    "ACT 489 s flag set to high from the source word \"supratherapeutic\" (precedent: supratherapeutic levels flagged high).",
+    "Postoperative anticoagulation (p1-f060) promoted from review_only to include: explicit \"as was observed with this patient\"; no conflict with the case text; ambiguity rewritten.",
+    "Split the admission/hemodialysis care plan: hemodialysis \"the next day\" is now a planned procedures_devices item (performance not reported) and hospital admission an outcomes item (p1-f061); events e18 (admission, occurred) and new e21 (hemodialysis, planned).",
+    "Added p1-f062 i-STAT ACT point-of-care testing used for intraoperative argatroban titration (discussion statement about this case).",
+    "Hemoglobin change moved to its own event e22 (\"from preoperative to postoperative day 1\"); e19 keeps the absent-complication facts.",
+    "Relations added: HIT episodes before NSTEMI and before presentation (stated relative times), NSTEMI before presentation, apixaban discontinuation before presentation (\"prompting\"), first bolus before 262 s ACT (\"45 min after the initial bolus\"), procedure completion before next-day hemodialysis and before POD1 hemoglobin; e11-e12 relation now quotes both stated times.",
+    "Ambiguities added for the 526 s ACT (discussion calls the post-infusion state supratherapeutic; flag left unknown) and for the unreported hemodialysis; figure ambiguity notes plotted x positions are pixel content not read into facts."
+  ],
+  "unresolved": [
+    "Single-case report; Table 1 rows describe published literature cases and Table 2 is a drug comparison, neither is a patient fact.",
+    "Caption-layer visual status not_inspected; the one JPEG was inspected in the separate visual target.",
+    "The case gives no calendar dates; the intraoperative times are relative to stated events only.",
+    "Discussion statements about argatroban, HIT and i-STAT ACT in general are literature statements and are not patient facts.",
+    "Authors selection reasoning (concerns about prolonged anticoagulation, multidisciplinary discussion) is not recorded as separate facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 39,
+    "facts_reviewed": 62,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single 67-year-old man; Table 1 rows are literature cases and Table 2 a drug comparison, correctly excluded.",
+      "All five intraoperative/postoperative ACT values cite the case text with literal after-anchors (full 25 mg dose, initial bolus, starting the infusion, infusion stopped); none cites chart pixel readings.",
+      "HIT nadirs paired to the 16- and 8-year-prior episodes by the literal \"respectively\"; shared time phrase recorded with an ambiguity.",
+      "p1-f043 NO-BORROWING warning is a checker false positive: the time is in the sentence that states the full dose was administered."
+    ],
+    "residual_risks": [
+      "p1-f043 represents \"the full dose was administered\" as the second 12.5 mg bolus, entailed by the two-bolus plan but not worded as such.",
+      "Figure 1 plotted time positions (e.g. 262 s point near 59 min) do not closely match the approximate text intervals; recorded as pixel content only.",
+      "Relation e11 before e12 relies on arithmetic across two anchors linked by the within-4-min statement."
+    ]
+  },
+  "physician_adjudicated": false
+}
