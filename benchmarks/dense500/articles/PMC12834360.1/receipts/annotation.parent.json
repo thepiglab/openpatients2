@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12834360.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "af4a484fe2f8d136be6386891ca9fbbe72a86d7ecc38f12ea5fe9b2f8410de3d",
+  "annotation_sha256": "10e0c3fbc1048b1f8874d1b61aad80e813c16d1756c3113b99e4ddb790c608de",
+  "reviewed_at": "2026-10-16T09:46:44.139704+00:00",
+  "source_segments_read": 25,
+  "facts_reviewed": 116,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Splenic artery embolization, massive transfusion and dialysis ('necessitating') set to action unknown and event e04 occurrence unknown; dilation and curettage ('requiring') and IV immunoglobulin/glucocorticoids at the latest aHUS episode ('requiring') likewise set to action unknown; ambiguity, limitation, summary and event e01/e21 wording updated.",
+    "D-dimer flag set to high: 'elevated lactate dehydrogenase (2,150 IU/L) and D-dimer (630 ng/mL)' is one coordinated list item; ambiguity reworded.",
+    "'Immunocompetence' changed from a present condition to Immunodeficiency assertion absent, verification unknown; ambiguity added.",
+    "Anchors restored: 'Later that day' -> 'presented'; 'Four months later' -> 'initial presentation' (ambiguity added on the reference point); 'Later' (latest aHUS episode) -> 'mycophenolate 500 mg daily'; Table 1 Later/later/repeat cells -> after 'Initial'/'initial'.",
+    "Eculizumab maintenance item no longer carries the 'approximately nine months' duration from the separate tolerance sentence (kept on outcome p1-f110).",
+    "Historical delivery/postpartum hemorrhage/D&C quotes now include 'Notable history included'.",
+    "Added elevated liver function testing (p1-f115) and viral symptoms (p1-f116) as ambiguous/review_only: the source gives them as disjunctive reasons (or) for holding mycophenolate; ambiguity added.",
+    "Split plasmapheresis discontinuation into event e23; replaced unsupported e06-before-e08 with e06 before e23 ('discontinued following') and e08 before e23 (start before stop).",
+    "Added relations with literal support: e05 before e14 (repeat DAT), e05 before e12 (repeat complement levels), e05 before e16 (Table 1 C3 initial/repeat), e06 before e12 (ADAMTS13 initial/later), e02 before e12 (Table 1 Initial/Later), e07 before e13 (recurrent TMA), e07 before e10 (CMV viral load remained elevated), e21 before e22 (eculizumab started, tolerated nine months now). Relations 9 -> 18."
+  ],
+  "unresolved": [
+    "No figures or supplements are listed in the source.",
+    "Table 1 values were merged with text values only where the text cites the table or reports the analyte once at the labelled time point; the table C4 cell has no time label.",
+    "Calendar dates are absent; ordering relies on stated relative times and sequence words.",
+    "Flags follow the source wording only; no flags were derived from reference ranges.",
+    "Procedures and drugs stated only as necessitated or required (splenic artery embolization, massive transfusion, dialysis, dilation and curettage, IV immunoglobulin and glucocorticoids at the latest aHUS episode) keep action unknown."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 25,
+    "facts_reviewed": 116,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient (35-year-old postpartum woman); roster count 1 literal; no figures or supplements.",
+      "All 13 Table 1 rows present; merges checked against the merge rule: initial labs cite Table 1, C3/ADAMTS13/Hb/platelet values carry matching initial/repeat/later labels, single-report analytes merged; table C4 'Normal' has no time label and the text reports normal C4 twice, so it stays a separate item.",
+      "ITP kept as a condition: 'The combination of warm AIHA and ITP yielded a diagnosis of ES' asserts it; no ITP-specific test inferred (ambiguity kept).",
+      "Genetic variant origin stays unknown (germline/somatic not stated).",
+      "Remaining EVID-NEGATION warning on p1-f049 is a checker false positive: 'immunocompetence' is the negating word itself."
+    ],
+    "residual_risks": [
+      "'Four months later' could be measured from the follow-up rather than the initial presentation.",
+      "The distributive reading of 'elevated' over D-dimer is a judgment call.",
+      "C3 70 mg/dL is equated with 'Repeat complement levels' via the Table 1 repeat label; a third unreported draw cannot be excluded."
+    ]
+  },
+  "physician_adjudicated": false
+}
