@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12688975.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7768fb564f66d15e22ea0311b1cc17d0635dd969b451b55ac1c9d160374e6b89",
+  "annotation_sha256": "d56d5dd96dbb2a7aeb260699b66f5012612b09725d63b3d63b9ab9b80a9c2efc",
+  "reviewed_at": "2026-10-16T09:03:56.977707+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 74,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f043 neuroenteric cyst: removed body_site (C2-C4 ventral canal) because none of the cited pathology sentences states the location (NO-BORROWING).",
+    "p1-f044 subdural lesion resection: removed finding 'Cyst completely resected', not stated in its own evidence; completeness stays in p1-f056.",
+    "Split admission event: p1-e05 now holds admission and the conscious finding ('upon admission'); new p1-e15 holds the strength grades, left limb function, forced position and incomplete neurological exam with null time, consistent with the annotator's narrow time scope.",
+    "Relation p1-e03->p1-e04 now cites the onset sentence plus 'Subsequently, weakness ...' instead of the abstract's 'secondarily accompanied'.",
+    "Relation p1-e10->p1-e11 now quotes both the NICU transfer and the 'After extubation ... general ward' sentences.",
+    "Added relations p1-e09 before p1-e14 ('recovered well postoperatively') and p1-e15 before p1-e14 ('had recovered to grade 3+').",
+    "Summary claim 1 reworded so the strength grades are not stated as 'on admission'.",
+    "Added ambiguity: 'without any obvious predisposing factors' versus history of minor neck trauma before onset."
+  ],
+  "unresolved": [
+    "Figure panels were pixel-inspected in the separate visual submission; the annotation figures keep caption-level status not_inspected.",
+    "The case text gives no calendar dates; only some findings carry a stated time, so other workup times stay null.",
+    "The preoperative diagnosis includes \"spinal cord embolism\" without any explanation in the source.",
+    "The Figure 2 image is a printed motor nerve conduction table; its numeric cells are pixel content and are not recorded as facts.",
+    "Introduction, discussion, lessons and conclusion statements about neuroenteric cysts in general are not patient facts.",
+    "No supplements are listed in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 74,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (3y5m boy); twin brother and mother kept as subjects in the index record.",
+      "All 74 facts verified against case text, abstract and captions; 2 borrowed attributes removed, no facts added or removed.",
+      "F2 is an image-only Chinese motor nerve conduction table; all 48 cells match pixels in visual.json and are not facts (rulings).",
+      "Spinal cord embolism kept as a provisional preoperative diagnosis with an ambiguity; NICU wording kept as written; tumor wording in the abstract not turned into an oncology item.",
+      "15 events, 13 relations, each relation with a literal order quote or stated admission/discharge or postoperative times."
+    ],
+    "residual_risks": [
+      "'Spinal cord embolism' may be a translation artefact; its meaning is unresolved.",
+      "Admission examination sentences after the first carry no time; downstream users may expect them at admission.",
+      "Fig 5A is captioned T2-weighted but fluid spaces look dark in the pixels; recorded only as a visual limitation.",
+      "Figure 2 shows only motor conduction; the F-wave and SEP results exist only in caption text."
+    ]
+  },
+  "physician_adjudicated": false
+}
