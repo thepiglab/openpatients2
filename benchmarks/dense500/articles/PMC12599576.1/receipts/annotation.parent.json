@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12599576.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "25dbe0659be6333de332fabd6af73ef99cfbcf4895ef697dc4f96105de22fab8",
+  "annotation_sha256": "536e1773e52565d083bbff1470cb0e1b669f33e53a89f866edb4e33810163e0d",
+  "reviewed_at": "2026-10-16T04:08:15.781286+00:00",
+  "source_segments_read": 35,
+  "facts_reviewed": 33,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f011 oral papilloma: diagnostic_basis \"Clinical appearance\" was inferred from general discussion; replaced with the literal limitations (not examined histologically; no PCR confirmation of CPV). verification_status unknown kept.",
+    "p1-f019 PCR: \"no polymerase chain reaction confirmation of CPV\" does not literally say the test was not performed; changed from status not_performed to PCR confirmation of CPV with assertion absent, status unknown and result_absent_reason unknown, with a note.",
+    "p1-f022 two-week regression: time anchor \"molecular iodine\" (a substance) changed to the literal reference phrase \"utilizing molecular iodine\".",
+    "p1-f029 no recurrence at one and a half years: added abstract and introduction statements as evidence.",
+    "Added p1-f033 for the discussion statement \"after three weeks, it was nearly gone\" as an alternate representation of p1-f023, linked to p1-e05.",
+    "visual.json: Figure 1 \"upper lip is pulled up and back\" replaced by pixel-literal wording; Figure 2 cross-figure size comparison removed and \"palate\" replaced by pink oral tissue; Figure 5 box 7 is orange-filled with a black outline (not orange-outlined), background light gray, sub-lines hyphen-prefixed. Figure-EHR and privacy drafts regenerated and labels carried over; Figure 2 privacy note expanded after a zoomed crop of the thumb."
+  ],
+  "unresolved": [
+    "Lesion was not examined histologically and had no polymerase chain reaction confirmation; diagnosis is clinical.",
+    "Case text calls the lesion exophytic while the Figure 1 caption calls it endophytic; recorded as a source conflict.",
+    "Total duration of the iodine course is not stated.",
+    "Single-animal report; treatment suggested by a dentist and not reviewed with a veterinarian.",
+    "The discovery event has no literal order relative to the start of treatment (paragraph order only), so it carries no relation."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 35,
+    "facts_reviewed": 33,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single dog (nonhuman), roster count 1 with literal evidence.",
+      "Exophytic (case text) vs endophytic (Figure 1 caption) is a same-attribute conflict; only the growth-pattern attribute is quarantined as two review_only facts while site, size and surface texture stay accepted.",
+      "7 mm size takes \"at the time of discovery\" from the Figure 1 caption lead sentence, which structurally governs the caption sentence giving 7 mm; allowed.",
+      "Time anchors: one week \"after one week of treatment\" (anchor treatment), two weeks after \"utilizing molecular iodine\", three weeks \"by the end of three weeks\" before with null anchor, consistent with the by/within rules.",
+      "Histology not performed is literal (\"was not examined histologically\"); PCR wording only states no confirmation and was corrected.",
+      "No recurrence recorded at four weeks (Figure 3 caption) and at one and a half years (text and Figure 4 caption).",
+      "All five figures viewed at full resolution with zoomed crops of the lesion areas, the thumb and the flowchart boxes; the thumb shows no identifying detail, flags none."
+    ],
+    "residual_risks": [
+      "Treatment start and total duration are not stated; the treatment event precedes the week-1 assessment only through \"after one week of treatment\".",
+      "The discovery event is unordered relative to treatment.",
+      "Canine papillomavirus etiology is asserted in the discussion but unconfirmed; kept as an ambiguity, not a condition."
+    ]
+  },
+  "physician_adjudicated": false
+}
