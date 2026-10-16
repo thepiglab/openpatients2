@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12820457.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6279bfc26195ce1964c9f24a707dd425eebecc38c50329fc02b3cc07b03a6803",
+  "annotation_sha256": "ca1b1340fd23b47f6efc78d239978964ced9196272df727ddc9fed2456fb796a",
+  "reviewed_at": "2026-10-16T10:19:27.769254+00:00",
+  "source_segments_read": 17,
+  "facts_reviewed": 44,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged the breast pain onset, pattern and character items (f009-f011) into the single breast pain item f008 as text_value \"insidious, continuous, constricting\" (one symptom, one item); the absent-radiation item f012 stays separate.",
+    "Moved \"Hindu\" (f004) from demographics ethnicity_as_documented to social_exposures domain other with the literal name \"Hindu\": it names a religion and demographics has no religion attribute.",
+    "Pituitary microadenoma (f027): replaced the truncated MRI quote with the clause that states \"posterior left pituitary gland\", so left laterality comes from its own evidence.",
+    "Merged the Figure 1 caption MRI observation (f039) into the brain MRI observation f038 (the text cites Fig. 1 for the same study); repointed event and summary references.",
+    "Abstract-only \"symptomatic treatment\" (f045) set to certainty ambiguous, scoring review_only: it may be the cabergoline course and must not be scored as a separate drug.",
+    "Split the 18-month duration off the presentation event: new history event p1-e12 (breast pain and milky discharge lasting 18 months) with relation e12 overlaps e01, quoting the presentation sentence; presentation event time cleared.",
+    "Source coverage for the cited literature cases b00011-b00013 changed from aggregate to background so the roster does not list them as unresolved segments.",
+    "Added the LFT/RFT/CBC/pregnancy-test quote to the laboratory event evidence; added an ambiguity on whether \"for one month\" covers symptoms other than skin darkening; updated limitations."
+  ],
+  "unresolved": [
+    "The abstract mentions symptomatic treatment without naming it; the case text names cabergoline for one year.",
+    "Whether the 18-month duration covers both breast pain and milky discharge is not explicit.",
+    "Previously published cases in the discussion are not this patient and are recorded as background only.",
+    "The consent statement is administrative and carries no clinical facts.",
+    "Only two temporal relations are supported by literal wording or stated durations; the diagnosis and treatment are not ordered relative to the workup by order words (basis wording only)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 17,
+    "facts_reviewed": 48,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (42-year-old Hindu female); discussion cases in b00011-b00013 are cited literature, correctly excluded.",
+      "18-month duration kept on both breast pain and milky discharge (participle governs the coordinated phrase) with the ambiguity retained.",
+      "Non-smoker / non-alcoholic kept as assertion absent, status unknown (not literal never-use wording, SOC-NEVER).",
+      "Pregnancy test kept as flag normal only, direction not inferred.",
+      "Diagnosis basis wording does not order the workup, diagnosis and treatment; only cabergoline -> improvement (\"resulting in\") and symptom duration overlapping presentation are supported relations.",
+      "Figure 1 viewed at full resolution with crops of the panel A and B overlays; panel B measurement label is pixel content only, not a fact."
+    ],
+    "residual_risks": [
+      "Symptomatic treatment in the abstract may duplicate cabergoline; kept review_only.",
+      "Hyperprolactinaemia is not named as a diagnosis for the patient and was not inferred.",
+      "Duration scope of \"18 months\" and \"for one month\" is grammatically ambiguous."
+    ]
+  },
+  "physician_adjudicated": false
+}
