@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12668203.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9af5e2ca9208b4bd7ca19618fdb7b3a263e8a0a33fe80447e0c063a82e0928c9",
+  "annotation_sha256": "6e2fa77c24bb24d0ea3595d28019b5e61744cae587d781b4f2c7dbb16dfcb0de",
+  "reviewed_at": "2026-10-16T03:28:28.279929+00:00",
+  "source_segments_read": 61,
+  "facts_reviewed": 388,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Case-to-cat mapping is literal: each narrative paragraph carries its \"Case 1\" to \"Case 4 (control)\" heading in the segment heading field (confirmed in raw.xml); removed the four mapping ambiguities and rewrote case_context notes, source coverage notes and the limitation.",
+    "Merged narrative statements that cite Table 1 into the matching Table 1 items: Cat 1 globulin (high), A:G ratio (low), FIP 7B ELISA (high); Cat 2 initial exam obtunded mentation, vertical downbeat nystagmus, truncal sway, postural reactions.",
+    "Cat 1 \"resolved head tilt\" at the 1-month follow-up recorded as head tilt absent rather than present with text resolved.",
+    "Added \"none of the cats experienced relapse of neurologic FIP\" (literal for all 4) as a refuted absent condition for each cat.",
+    "Added 16 relations with literal order words or stated ages (later, after, following, end of the treatment course, post-operatively, post-mortem, aged N months).",
+    "Removed Cat 3 e10 before e12: its only support (secondary to left VPS placement) is a suspected cause, not a literal order."
+  ],
+  "unresolved": [
+    "Each narrative paragraph sits under its literal \"Case 1\" to \"Case 4 (control)\" heading (segment heading field and article XML), so the case-to-cat mapping is literal; the headings are not repeated in the segment text. Patients are numbered by the case narratives (Cats 1-4) although the abstract and introduction mention Cat 2 and Case 4 earlier; those mentions refer to the labelled cases.",
+    "The text cites Supplementary Image 1 and Supplementary Image 2; the source lists no supplements, so these images were not available.",
+    "Table 1 cells carry no explicit time except through row labels (Initial, Recheck, Re-check, Post VPS). Narrative statements that cite Table 1 for the same finding (Cat 1 bloodwork and ELISA; Cat 2 initial examination) are one item citing both; other narrative statements are not linked to table cells.",
+    "Table 2 row suffixes a and b are not defined inside Table 2; the figure captions use a and b for the FIP diagnosis or initial MRI and for re-presentation or the repeat MRI, but no time was assigned to Table 2 values.",
+    "Cat 2 necropsy ventricular findings conflict between Table 1 and the abstract (marked dilation, moderate to severe hydrocephalus) and the discussion (ventricular system unremarkable); both are kept as review_only source_conflict facts.",
+    "Re-presentation intervals differ between Table 1 (months from diagnosis) and the narrative (months post treatment or later) for all cats; the anchors differ and no single interval was derived.",
+    "NA entries in Table 1 are not defined in the footnote and are kept as ambiguous review_only observations.",
+    "Cohort-level discussion statements (none of the cats experienced relapse, all cats responded to VPS, all cats showing vestibular signs had resolution of ventriculitis) were not copied to individual cats.",
+    "Table 2 Cat 2b left ventricle ratio (36.73%) does not equal the ratio computed from its printed heights (about 36.9%); arithmetic only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 61,
+    "facts_reviewed": 388,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Four-cat series, roster 4 literal; numbering p1-p4 follows the labelled Case 1-4 narratives; earlier abstract/introduction mentions of Cat 2 and Case 4 refer to those labelled cases.",
+      "Cat 2 necropsy ventricular dilation (Table 1, abstract) vs ventricular system unremarkable (discussion) is a genuine conflict; both review_only.",
+      "Cat 2 humanely euthanized is a death outcome.",
+      "Cohort sentences all cats / all cats mesocephalic / each affected cat (cats 1-3 by Table 2 title) are literal for the covered cats.",
+      "Fig 2 caliper labels verified on magnified crops and kept pixel-only in the visual record; Table 1 NA cells stay ambiguous review_only."
+    ],
+    "residual_risks": [
+      "Narrative statements that do not cite Table 1 (Cat 1 initial exam, recheck exams, CSF results) remain separate from similar Table 1 cells.",
+      "Re-presentation intervals differ between Table 1 and narrative for every cat; Cat 2b left Vh/BH ratio does not match its own row arithmetic.",
+      "p1-f033 EVID-NEGATION warning on \"recovered uneventfully\" is a checker false positive.",
+      "Supplementary Images 1-2 are cited but not provided by the source."
+    ]
+  },
+  "physician_adjudicated": false
+}
