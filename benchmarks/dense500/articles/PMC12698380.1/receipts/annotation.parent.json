@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC12698380.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2148e52df8d9dd12d5047ee39100b43f083b468e69b38a416c5b515271c52005",
+  "annotation_sha256": "f596ce3e0c4b1ec19c23453c79adb4311f70d046ae2b1bbbbb6d38a2761ad546",
+  "reviewed_at": "2026-10-16T07:02:23.930675+00:00",
+  "source_segments_read": 39,
+  "facts_reviewed": 117,
+  "patients_reviewed": 5,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Foley clamp durations: 'five and 10 minutes, respectively' follows a sentence whose subject is the unordered 'Two patients', so the per-case mapping is by case order only. p1-f012/p2-f011 now record only the Foley catheter (include); new review_only facts p1-f022 (five minutes) and p2-f019 (10 minutes); ambiguities rewritten.",
+    "Fibrosis sentence 'Fluorescence was poor in regions with dense fibrosis.' has no stated subject (only the preceding sentence says 'Both cases'): p1-f017/p2-f015 set ambiguous/review_only and removed from summaries.",
+    "Abstract two-patient DIE-involving-the-ureter sentence (b00003) does not name its cases and does not match the Case 4 text (stage 3 endometriosis): removed p3-f007/p4-f007 (review_only DIE-ureter condition) and p3-f011/p4-f011 (mapping facilitated safe dissection), and dropped the b00003 quote from p3-f010/p4-f010 (kept on the discussion sentence covering 'both patients undergoing endometriosis surgery').",
+    "Duplicates merged: abstract 'patchy and unreliable' (p1-f018/p2-f016) folded into p1-f015/p2-f013 as evidence; 'advanced endometriosis' (p3-f005/p4-f005) folded into p3-f004 (severity advanced) and p4-f003.",
+    "Added p5-f028 endometriotic ovarian cyst condition from the 'A fifth case' abstract sentence (literal Case 5).",
+    "p5 medications domain set unresolved (ICG imaging used but administration not stated).",
+    "Event links: removed time-implying links (p3-f010 from p3-e06; p4-f010/p4-f022 from p4-e05); moved p4-f024 (Fig 7B, during excision) to p4-e06; p3-e08/p4-e08 now cite only b00021 and the no-complication fact.",
+    "Relations 11 -> 19: p3 excision before end-of-surgery imaging (Fig 5 'following ... excision'); p4 start-of-surgery view during excision, Fig 7 view during excision, final inspection after excision; p5 replaced preoperative MRI -> scheduling with MRI -> operation, added scheduling -> operation and start/intraoperative/end fluorescence events during the operation.",
+    "Article limitations updated (abstract DIE sentence, three-retrograde-patients inconsistency, Figure 2 text vs caption/pixels, review-only Foley/fibrosis); b00003 coverage now p5 only; FIG2 attribution note records that pixels show fluorescence mode in both panels."
+  ],
+  "unresolved": [
+    "The text never states the total number of patients as a number; the five cases are enumerated as Cases 1 to 5 (the title says a series of five cases), so reported_individual_count is null while the roster of five is complete.",
+    "Caption-layer visual status is not_inspected; the 11 figure images are described in the separate visual submission.",
+    "No supplementary material is listed for this article.",
+    "Case 5 ICG route and dose are not stated; the series sentence about three retrograde patients does not name them.",
+    "Discussion statements that explain fluorescence results (fibrosis restricting diffusion, urothelial uptake) are the authors' interpretation and are not recorded as patient facts.",
+    "The abstract sentence on two patients with deep infiltrating endometriosis involving the ureter does not name the cases, and its description does not match the Case 4 text (stage 3 endometriosis); its claims are not recorded as patient facts.",
+    "The introduction says three patients underwent retrograde ureteric ICG instillation for endometriosis surgery, while the case text describes retrograde instillation only for Cases 3 and 4 and gives no ICG route for Case 5.",
+    "Figure 2: the Case 2 text says Figure 2 includes a view before fluorescence activation, but the caption and the pixels show near-infrared fluorescence-mode views in both panels; no before-activation finding is recorded.",
+    "The Foley clamp durations (\"five and 10 minutes, respectively\") and the unlabelled dense-fibrosis sentence are kept review-only for Cases 1 and 2."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 39,
+    "facts_reviewed": 122,
+    "figures_viewed": 11,
+    "key_findings": [
+      "Five individual cases (Cases 1-5) in order of first mention; reported count null (no single literal total in the segments; title not a segment); roster complete.",
+      "Figures cited by range (Figures 3-5, 6-8) and 9A-11B literally map to Cases 3, 4 and 5; captions corroborate (DIE case, kissing ovaries, ectopic anatomy).",
+      "Figure 2: text says one panel precedes fluorescence activation; caption and pixels show NIR fluorescence in both panels; no before-activation finding recorded.",
+      "Case 5 ICG route/dose not stated; introduction claims three retrograde patients; left unresolved.",
+      "Sex not documented for Cases 4 and 5 (only \"patient\"); no sex items.",
+      "Case 5 salpingo-oophorectomy remains planned; robotic hysterectomy completion supported by the fifth-case abstract sentence and \"All surgeries were completed robotically\"."
+    ],
+    "residual_risks": [
+      "Copying \"All surgeries were completed robotically without complications\" to all five patients relies on the abstract \"All surgeries\" scope.",
+      "Range citations are accepted as literal mapping of Figures 3-5 and 6-8; a stricter reading would leave per-figure attribution open.",
+      "Clamp-duration mapping is review_only; a human may accept case order as the respectively referent."
+    ]
+  },
+  "physician_adjudicated": false
+}
