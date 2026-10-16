@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12700181.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0e9ef55ce0a939e7a5ed13892a6f940fa92b03a79302b4d46cf3ff252b9ef2b6",
+  "annotation_sha256": "82df7a92792b1f91dfd4d45a848d287b0ba2a3c51bfc2e98f96f3017b13a569b",
+  "reviewed_at": "2026-10-16T00:57:31.587990+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 62,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Narrowed the drug conflict to the conflicting attribute: eplerenone (p1-f045) and spironolactone (p1-f046) stay review_only as drug-identity claims; added included p1-f062 oral mineralocorticoid receptor antagonist 50 mg once daily started, on which abstract and case text agree.",
+    "p1-f050 (subretinal fluid reduction within two months, case text) changed from source_conflict/review_only to supported/include: 'within two months' is not contradicted by the abstract; the abstract one-month outcomes (p1-f060, p1-f061) stay review_only.",
+    "p1-f008 denied medication use and p1-f009 no prior corticosteroids: action historical -> unknown (assertion absent kept).",
+    "p1-f042 brain MRI advised and declined moved from care_plans to procedures_devices (kind procedure, action declined, body site brain).",
+    "Split event p1-e04: labs and referral stay in e04; new p1-e10 (not_occurred) holds the declined brain MRI and the not-performed MRI and detailed endocrinological evaluation.",
+    "Added relation p1-e09 after p1-e05 ('within one month of initiating therapy').",
+    "p1-f027 B-scan: laterality right and inferior quadrant from the Figure 3 caption quote.",
+    "p1-f017 scoped normal anterior segment text_value 'normal'.",
+    "Ambiguities, summary claim 3 and the conflict limitation rewritten for the narrowed conflict scope; referral note says the detailed endocrine evaluation was not performed.",
+    "visual.json FIG2 panel B: panel letter position corrected (below the field at the lower left, not lower center); figure-EHR and privacy drafts regenerated with --draft and labels carried over; privacy notes for FIG2 and FIG4 corrected to match pixels (no orientation icon in FIG2, no panel letter in FIG4)."
+  ],
+  "unresolved": [
+    "Source conflict: the abstract names oral spironolactone 50 mg/day with improvement within one month, whereas the case presentation, Figure 4 caption and discussion name oral eplerenone 50 mg once daily with improvement at two and three months; the drug-name facts and the abstract one-month outcomes are review_only, and the agreed oral 50 mg daily MR-antagonist therapy is an included item.",
+    "The eye is not named for the two- and three-month visual acuity values.",
+    "Caption-layer visual status not_inspected; the actual JPEGs are inspected in the separate visual target.",
+    "Introduction and discussion statements on mechanisms, published cases and literature are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 62,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient; roster count 1. Discussion literature statements stay background.",
+      "Conflict is the drug identity (abstract spironolactone vs case/caption/discussion eplerenone); the abstract's one-month timing is unique to the abstract and tied to the spironolactone claim.",
+      "Two- and three-month visual acuity values name no eye and stay unassigned; baseline and six-month values name the right eye.",
+      "FIG2B left eye is supported by the caption lead 'right eye (A) and left eye (B)'.",
+      "FIG3 on-screen ultrasound text (eye side, gain, user preset) is correctly flagged as device text without values.",
+      "Endocrinology referral stated as made; detailed evaluation not performed; brain MRI declined.",
+      "VA, IOP and height are measurements in observations; examination signs in symptoms_function."
+    ],
+    "residual_risks": [
+      "The included MR-antagonist item uses a class label; scorers matching on a specific drug name will only hit the review_only items.",
+      "Abstract 'bullous variant' diagnosis is not repeated in the case presentation, which says provisional exudative RD secondary to CSCR."
+    ]
+  },
+  "physician_adjudicated": false
+}
