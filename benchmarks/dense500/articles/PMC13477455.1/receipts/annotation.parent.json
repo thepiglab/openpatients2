@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC13477455.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d934528d8c9f17db4d94d2e30d485edc8a3f81c680a4eb3be4e31e3c106292ff",
+  "annotation_sha256": "c1063e685cc41e9ae755caa6ce8e754052b70413de347fa43b469874f620e535",
+  "reviewed_at": "2026-10-16T07:41:10.171818+00:00",
+  "source_segments_read": 28,
+  "facts_reviewed": 93,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Fixed duplicated word 'clone clone' in the method field of the four jejunal-cancer MMR immunohistochemistry observations (f028-f031).",
+    "Intestinal obstruction condition (f008): role complication -> unknown; the source never calls it a complication of the jejunectomy.",
+    "Parents' untested MSH2 F836fs*5 items (f090, f091): renamed to 'MSH2 F836fs*5 genetic testing' so assertion=absent no longer double-negates a 'not performed' name.",
+    "Added the Table 1 'Our case | SBA | 62 | M' cell as evidence for the jejunal adenocarcinoma condition (f004).",
+    "Split event e09: e09 is now the intestinal obstruction (occurred, adverse_event, f008); new e11 is the operation required for it (occurrence unknown, f015), because 'required an operation' does not state the operation was done.",
+    "Removed previous rectal/colon cancer IHC facts (f033-f036) from event e05 (jejunal cancer histology/IHC); their timing is not stated.",
+    "Added 5 relations with literal support: e01 before e05 ('previous ... cancers'), e06 before e07 (blood test confirming the tumor-detected variant), e04 before e11 and e11 before e10 (stated 7 and 23 months after surgery), e09 before e11 (operation for obstruction).",
+    "Summary claim 1 reworded: brother had a brain tumor (not 'cancer'); listed the sister's LS and cancers explicitly.",
+    "Updated the operation ambiguity and added an ambiguity that the somatic origin of MSH2 D716fs*4 and MLH1 R659* rests on the abstract/table and allele fractions, without a described normal-tissue test."
+  ],
+  "unresolved": [
+    "Table 1 rows other than Our case describe previously published cases cited by reference number; they are literature data, not roster patients, and are not recorded as patient facts.",
+    "Figure 1 pixels are recorded in the visual submission only; the caption states that all four MMR stains are deficient.",
+    "Genomic variants other than the MMR table cells are recorded in oncology.biomarkers only (no duplicate observation per variant); VAFs are recorded only where printed.",
+    "Stage context, disease extent and tumor disease status are not labelled in the source for any tumor and are left unknown.",
+    "Dose, schedule, route and duration of pembrolizumab are not stated; the operation for intestinal obstruction is not described beyond its indication and timing.",
+    "Discussion statements about published cases and author hypotheses (methylation, ARID1A/PIK3CA triggering, PMS2/MSH6-only testing) are not recorded as patient facts.",
+    "No supplementary material is listed for this article."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 28,
+    "facts_reviewed": 93,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (62-year-old man); Table 1 rows other than Our case are literature cases and stay out of the record; relatives' facts are family_member items inside p1 with relationship terms only, no names.",
+      "Death is literally stated ('the patient died 23 months after surgery, presumably from unrelated causes'); subject_state deceased_during_course; cause kept as documented with an ambiguity.",
+      "MMR IHC flags negative are supported by the patient-specific wording 'all four MMR proteins being negative' and the caption 'are all deficient'; previous cancers MLH1/PMS2 positive and MSH2/MSH6 negative.",
+      "Germline MSH2 F836fs*5 confirmed by peripheral blood; somatic origin of MSH2 D716fs*4 and MLH1 R659* stated in the abstract and Table 1 somatic column, kept as somatic with an ambiguity.",
+      "ARID1A x2 and PIK3CA VAFs mapped by the literal 'respectively' sentence about our case; other genomic variants are biomarkers only with origin unknown.",
+      "Stage IIIB (UICC 8th, at least pT3 pN2 (4/5) cM0) kept as printed; 4/5 undefined (ambiguity); stage context, extent and disease status unknown.",
+      "Fig 1 viewed at full resolution (750x714): six panels a-f, H&E and four MMR stains with tumor glands unstained and internal-control nuclei brown; visual description matches pixels."
+    ],
+    "residual_risks": [
+      "Whether the operation for intestinal obstruction was actually performed is not stated (occurrence unknown).",
+      "Presentation, CT and pembrolizumab have no stated times relative to each other or to death; those pairs stay unordered.",
+      "Bold marking of pathogenic variants in Table 1 is lost in the text extraction; pathogenicity of variants other than the germline MSH2 variant is left unknown.",
+      "e06 -> e07 order rests on the blood test confirming a variant first detected in the tumor test."
+    ]
+  },
+  "physician_adjudicated": false
+}
