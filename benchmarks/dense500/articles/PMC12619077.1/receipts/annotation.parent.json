@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12619077.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7ffcc3960b531ec106c3c242092398fa5fd86a6a656a4b61d6360981eadb422c",
+  "annotation_sha256": "629cca39416209b6fa450783a2e92b060d974a0dba56d393afc097409a5ef8e8",
+  "reviewed_at": "2026-10-16T02:46:48.484490+00:00",
+  "source_segments_read": 126,
+  "facts_reviewed": 127,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Events regrouped so linked facts do not inherit times: history negatives (no prior suicide attempt, no substance misuse) removed from the overdose event; IM injection for back pain moved to new event p1-e22 ('earlier that day'); toxicology consult moved to new p1-e19; brain CT and SpO2 drop to new p1-e20; abdominal radiograph (p1-e24) and abdominal CT (p1-e23) split from chest radiograph (p1-e07); EMG split to p1-e21.",
+    "Added 6 literally supported relations: brain CT before intubation; toxicology consultation before abdominal CT ('prompted a CT scan'); initially negative abdominal radiograph before CT; IM injection earlier that day before presentation; previous-day psychiatric discharge before presentation; neurologic picture before diagnosis ('prompted consideration'). After coordinator ruling, removed EMG->diagnosis (basis, not order) and rehabilitation transfer->discharge after 54 days (sentence order only; discharge facility unstated).",
+    "p1-f054 CRRT: added indication 'fulfilled EXTRIP criteria with CNS depression and ventilatory support' (b00043) and summary claim updated.",
+    "Figure 3 printed plot values removed from annotation ambiguity text and article limitations; they now appear only in visual.json.",
+    "visual.json FIG3 reading '67' at Day 5: visual cue corrected (label is unattached to any line segment) and certainty set to uncertain; figure-EHR and privacy files regenerated with --draft and reviewed labels carried over (only visual hash changed)."
+  ],
+  "unresolved": [
+    "Table 2 (segments b00051-b00120) and the discussion of published reports describe other patients in the literature; none are roster patients or index-patient facts.",
+    "Figure 3 printed data labels are transcribed only in the visual review; they are not source-text evidence and are not recorded as facts. Their timing differs from the text's VPA fall below 2.8 µg/mL over 72 hours and their first point lacks Table 1's > comparator; both are recorded as ambiguities.",
+    "Table 1 day labels: the lab rows are governed by the caption day 1 of admission, while Figure 3 labels the first reading Day 0; day numbering is not reconciled.",
+    "The discharge after 54 days has no stated start point; no rehabilitation facility details are given.",
+    "The initial history was incomplete and relied on collateral family information; no further detail is stated.",
+    "Caption-layer visual status is not_inspected; actual JPEGs are inspected in the separate visual target.",
+    "No supplementary files are listed for this article."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 126,
+    "facts_reviewed": 127,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single 42-year-old man; roster count 1; Table 2 (68 literature rows, b00052-b00119) contains only cited cases, none is this patient, coded aggregate.",
+      "All 30 Table 1 result cells present (18 admission labs governed by caption day 1 of admission, 12 blood gas cells governed by Blood gas (day N) row labels).",
+      "Fig 3 vs text/Table 1 discrepancies (VPA fall timing, first-point comparator and day numbering) are correctly ambiguities only; plot labels are not quotable source text.",
+      "'Discharged ambulatory after 54 days' has no stated start point: anchor null, ambiguity kept.",
+      "Interpretive items kept as drafted: ongoing absorption/delayed clearance verification unknown, 4 considered diagnoses possible/differential, probable causal association provisional.",
+      "Ingested VPA, zolpidem and paracetamol action historical with no route (none written); co-ingestions correct."
+    ],
+    "residual_risks": [
+      "Overdose ingestion is in medications here (action historical) rather than social_exposures; both are defensible.",
+      "Measurement series sidecar has no series (Table 1 single time point; blood gas rows split by day blocks); coverage limited.",
+      "Hyperammonemia condition kept verification unknown although the Discussion states it for the patient and ammonia was 76 µmol/L."
+    ]
+  },
+  "physician_adjudicated": false
+}
