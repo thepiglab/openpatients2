@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC13316848.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4f3fd0880d5b6f7b45f4f5fde76b62217a8eb5e14fa3bdfe2694027f15561ce3",
+  "annotation_sha256": "212de69bb59b572b697455bc4589f797aafd568e7d16d5524fa6bc1c3eb3d25b",
+  "reviewed_at": "2026-10-16T07:54:57.695871+00:00",
+  "source_segments_read": 15,
+  "facts_reviewed": 148,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f058/p1-f059 pelvic lymphadenectomy and paraaortic sampling: action planned/temporality future -> action unknown (advised only; orchestrator ruling); ambiguity must_not_infer updated.",
+    "p1-f140/p1-f141 metronomic chemotherapy: action planned/temporality future -> action unknown (advised, never started); event e23 stays not_occurred.",
+    "p1-f024 leiomyosarcoma condition: removed borrowed left-lateral-wall body site, laterality and biopsy diagnostic_basis; body_site urinary bladder from its own quote.",
+    "p1-f049/p1-f050 gemcitabine/docetaxel: indication changed from 'second line chemotherapy' to the 'for which' clause (persistent symptoms and local progression on CECT).",
+    "p1-f063 note: removed reference to image-printed label text (pixel content stays in visual.json).",
+    "p1-f116/p1-f117 anastomotic metastasis: added discussion quote 'unusual metastases in intestinal mucosa and peritoneum'; kept confirmed with ambiguity on the 'suggested' wording.",
+    "Added 11 literally supported before-relations (e06<e08, e08<e09, e10<e11, e03<e12, e04<e12, e05<e13, e09<e13, e12<e13, e19<e20, e19<e21, e04<e24) and e12-e14 as unknown (quote says adjuvant therapy, not radiotherapy); e23<e24 dropped (not_occurred event, no order word); 11 -> 23 relations.",
+    "Summary claim 3 rewritten to drop implied causality (surgery advised in view of good PS and persistent symptoms, as stated)."
+  ],
+  "unresolved": [
+    "Radiotherapy doses and fractionation, and the 1 cm CTV-to-PTV expansion, have no runtime schema field and are kept in evidence quotes and clinical statements only.",
+    "Figure pixel content, including values printed inside images, is recorded only in the visual submission, not as facts.",
+    "Fig. 1 panel B caption says FDG avid on the corresponding PET image; the supplied image shows only the CT slice.",
+    "The anastomotic metastasis is stated as suggested by histopathology in the case text and without hedging in the abstract and discussion.",
+    "The source does not state that pelvic lymphadenectomy or paraaortic sampling was performed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 15,
+    "facts_reviewed": 148,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient, 45-year-old woman with bladder leiomyosarcoma; death is literal ('succumbed to her illness') 2 months after last PET, overall survival 1.7 years since diagnosis.",
+      "Anastomotic metastasis kept confirmed: case text says histopathology 'suggested' it, while abstract, discussion and Fig. 5 caption state it flatly; recorded as ambiguity.",
+      "Initial paraaortic nodal metastatic diagnosis revised; kept review_only (no revised stage or benign label stated).",
+      "'Within 6 weeks following surgery' keeps relation after with literal anchor 'surgery' (the emergency laparotomy/resection).",
+      "Adjuvant RT 50.4 Gy/28 fractions delivered per Fig. 3 caption; palliative RT 30 Gy/10 fractions; doses have no schema field and stay in evidence and clinical statements.",
+      "Fig. 1B caption mentions a corresponding PET image but the supplied panel is CT only; Fig. 1C/D carry burned-in demographic and date overlay text flagged by category only, no values copied.",
+      "Fig. 5 caption largest lesion (12.5 cm, left lumbar) vs text largest pelvic serosal deposit (7.3 cm): different locations, kept as ambiguity, not merged."
+    ],
+    "residual_risks": [
+      "Anastomotic metastasis verification (confirmed vs provisional) is a judgment on hedged vs unhedged source wording.",
+      "Fig. 4 aspirate site: text says left lumbar swelling, caption says peritoneal deposit.",
+      "Timeline events e15/e16 and e01-e03 have no literal ordering links beyond the stated times."
+    ]
+  },
+  "physician_adjudicated": false
+}
