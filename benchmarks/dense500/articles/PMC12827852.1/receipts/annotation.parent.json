@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12827852.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9c11a9b5d154a5bf8e5391e280ac9aa8cc0481dbc20d1ed7e224d9349a6878cb",
+  "annotation_sha256": "eb9ac9572d94e2b78503a7cf4ade99377b3a68cd7ac74f14c9f1d943ebd3613a",
+  "reviewed_at": "2026-10-16T10:10:43.738264+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 101,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Negated history ('no pertinent medical, surgical or family history of ovarian tumor'): kept as three literal items (condition, procedure, family) with concise labels 'Ovarian tumor' and 'Surgery for ovarian tumor'; scope ambiguity now links p1-f013/f014/f015.",
+    "'Fertility sparing surgery had already been performed' (p1-f062) set ambiguous/review_only and removed from the counseling event; new ambiguity: the source does not itemize which operation it means, so it is not counted as an additional operation beside the staging laparotomy.",
+    "Oncology treatments made one-to-one alternates: chemotherapy split into Carboplatin (alt p1-f087) and new Paclitaxel (p1-f100, alt p1-f088); completion surgery split into Total abdominal hysterectomy (alt p1-f070) and new Left salpingo-oophorectomy (p1-f101, alt p1-f071).",
+    "Tumor stage_context set to pathologic ('Final histopathology examination (HPE) reported stage IA'); new ambiguity that the source never restages after the positive peritoneal fluid cytology.",
+    "Completion surgery no longer carries the family decision as its indication (decision quote removed from p1-f069).",
+    "Expansible pattern text_value corrected to the source spelling 'Expansible pattern' (discussion sentence scoped by 'as observed here').",
+    "Abstract duplicate outcome p1-f099 ('disease-free one year postoperatively') merged into p1-f098 as a second quote (ONE-STATEMENT); summary and ambiguity references repointed.",
+    "Added Figure 2 caption gross finding p1-f102 (cross section releasing brown viscous fluid).",
+    "Events: added e14 (intraoperative findings and imprint cytology), e15 (EGD and colonoscopy), e16 (completion-surgery cytology and histopathology results); split follow-up into e12 (three-monthly follow-up with normal markers/USG, untimed) and e13 (one year post surgery outcome); linked previously unlinked facts (CECT septations/impression, HPE unremarkable tissues, completion intraoperative findings, oncology treatments).",
+    "Relations 6 -> 12: e04->e05 replaced by e14->e05 ('Consequently'); e09->e10 repointed to e16->e10 ('Due to'); added e04->e14 (plan before its reported result), e05->e09 ('repeat peritoneal fluid cytology', 'completion surgery'), e06->e08 ('Given a final diagnosis'), e09->e16 (cytology/histology of completion specimens), e09->e11 ('Due to malignant cell ... adjuvant chemotherapy'), e05->e13 ('one year post surgery' after any described operation)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three JPEGs are described in the separate visual record.",
+    "No supplements are listed by the source.",
+    "Stage system and edition are not stated; stage context is pathologic because the stage is reported by the final histopathology examination.",
+    "The source does not state which operation the one-year follow-up is measured from, and gives no per-cycle versus total chemotherapy doses.",
+    "The source consent statement is administrative and is not held in a clinical field."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 99,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (23-year-old nulligravida woman); roster count 1 from 'a case of MOC'; no supplements.",
+      "Follow-up anchor 'surgery' is literal but does not identify the operation; ambiguity kept and anchor left as the literal word.",
+      "Carboplatin 530 mg / paclitaxel 260 mg x 6 cycles: per-cycle vs total not stated; ambiguity kept, no schedule inferred.",
+      "Figure 3 histology fact rests on caption text only; the visual record marks the glandular claims as caption claims not resolvable in the pixels.",
+      "All three figures viewed at full resolution; visual descriptions match the pixels."
+    ],
+    "residual_risks": [
+      "Chemotherapy-to-follow-up order is not stated literally, so the follow-up event e12 stays unlinked; imaging, tumor markers, IHC and endoscopy events also have no literal order.",
+      "Grouping of the right-iliac-fossa fluid, fat planes and lymphadenopathy sentences with CECT is left out of the imaging event because the sentences do not name the modality.",
+      "The e04->e14 plan-before-result order relies on the plan sentence preceding its reported intraoperative result."
+    ]
+  },
+  "physician_adjudicated": false
+}
