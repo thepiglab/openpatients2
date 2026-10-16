@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12744359.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "53a18523e8f0b2ae019e60be9a291be728bf263eced0c01758f2fc804ca5ec0b",
+  "annotation_sha256": "ee23ebb12988107348df1318c9c4c049634f8d00a6f17f6fe13ff1219b6dbab6",
+  "reviewed_at": "2026-10-16T06:16:03.187880+00:00",
+  "source_segments_read": 35,
+  "facts_reviewed": 76,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f006 pleural effusion and p1-f007 ascites conditions re-grounded on the presenting-constellation statements (b00026, abstract); removed laterality/severity/role borrowed from the chest X-ray and ultrasound statements, which stay as observations p1-f038/p1-f040 (ONE-STATEMENT).",
+    "Removed p1-f008 pericardial effusion condition: its only statement is the echocardiography result already held by observation p1-f043.",
+    "Removed p1-f031 'standard immunosuppressive therapy' (conclusion restatement of the methylprednisolone/prednisone already recorded).",
+    "p1-f023 'controlled disease course' moved from symptoms_function functional_status to an outcomes item (event other, related condition SLE, historical).",
+    "p1-f024/p1-f025 evidence widened to the full treatment sentence and the abstract sentence so the SLE indication is grounded; hydroxychloroquine name trimmed with Plaquenil kept as ingredient_as_documented.",
+    "p1-f036 paracentesis: removed unstated body_site; p1-f055 TB PCR: removed specimen not stated for the PCR.",
+    "p1-f046 discussion abdominal ultrasound (patent hepatic veins) set ambiguous/review_only: source does not say whether it is the duplex study p1-f045; removed from event p1-e09.",
+    "p1-f074/p1-f076 symptom-improvement outcomes: removed related_condition not named in their sentences.",
+    "Added supporting quotes: abstract furosemide failure (p1-f073), discussion SAAG pattern (p1-f049) and proteinuria (p1-f066).",
+    "Events: f006/f007 linked to the presentation event p1-e03; e05 description no longer states caption-only infiltrates; summary rewritten as 3 phase claims of 25-85 words."
+  ],
+  "unresolved": [
+    "Figures are caption-only in this annotation; pixels are described separately in visual.json.",
+    "The abstract gives SLE duration as three years while the case text gives the diagnosis year as 2019 and presentation three years later; no presentation year is stated.",
+    "Table 1 laboratory values carry the table caption time during hospitalization; no collection dates are stated.",
+    "Discussion statements about published cases, pathophysiology and general literature are not patient facts.",
+    "The article has no supplementary material."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 35,
+    "facts_reviewed": 78,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; all 17 Table 1 rows present as observations, merged with text only where the test is reported once for the patient.",
+      "All 8 temporal relations carry literal order wording (Three years later, Subsequently, As a result, initially/After confirming, then, a month later).",
+      "SLE 'three years' history and 'diagnosed in 2019 ... Three years later' are consistent; kept as an ambiguity only (no presentation year stated).",
+      "Caption-only pulmonary infiltrates (FIG1) and massive ascites (FIG3) kept as caption-grounded observations of the patient's own figures."
+    ],
+    "residual_risks": [
+      "Whether the discussion's abdominal ultrasound is the case-text duplex study is unresolved (p1-f046 review_only).",
+      "Table 1 time is only 'during hospitalization'; no per-test dates.",
+      "visual.json FIG1 places the ring-shaped outlines in the right-hand lung field of the image; pixels show them in the left-hand (image-left) lung field; annotator must correct."
+    ]
+  },
+  "physician_adjudicated": false
+}
