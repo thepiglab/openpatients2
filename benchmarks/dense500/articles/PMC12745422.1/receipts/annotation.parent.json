@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12745422.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7b9f613acc8d149ffee1ddd285e627ba8031866e36cad47129281b3b8f1783ca",
+  "annotation_sha256": "20a23a3de2d08af88b9ad06ac9cde5070865840d1515daff7d57f61a8b282b0f",
+  "reviewed_at": "2026-10-16T06:41:14.635928+00:00",
+  "source_segments_read": 44,
+  "facts_reviewed": 126,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f087 amphotericin B deoxycholate action started -> administered (therapy continued for 4 weeks); added the Table 1 own-case cell and the dose-rationale sentence as evidence; dose rationale in notes",
+    "Added p1-f125 liposomal amphotericin B and p1-f126 flucytosine (assertion absent: not available, case managed with amphotericin B alone)",
+    "Added Table 1 own-case row cells as evidence to p1-f002 (1-day-old), p1-f065 (MRI findings) and p1-f107 (full recovery); added the serial-monitoring sentence to p1-f089",
+    "Split the figure-caption post-treatment findings (p1-f101..f105) out of the 4-week repeat MRI event into new event p1-e16, because the source never states that the captioned images are that repeat MRI",
+    "Added event p1-e17 (suspected CNSF raised by MRI) and p1-e18 (term delivery / birth history)",
+    "Added 7 literally supported relations: e13 before e14 (before discharge), e07 before e12 (subsequently resolved after antifungal therapy), e10 before e12 (during the 4-week course vs after 4 weeks of therapy), e09 before e16 (after treatment), e07 before e16 (previously seen), e17 before e09 (due to suspicion of CNSF), e18 before e01 (first day of life); added b00030 evidence to e09 before e11",
+    "Rewrote the meningeal-enhancement ambiguity: removed the unsupported claim that the descriptions concern different time points; now records the clear/complete-resolution vs improved/residual-T2-foci wording and the unresolved identity of the captioned post-treatment images"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three MRI figures were inspected in the separate visual submission.",
+    "Figure 1 and Figure 3 captions label the before-treatment image as right and the after-treatment image as left, whereas the pixels show nodular enhancement in the left image; caption-derived findings carry no time and the discrepancy is not resolved.",
+    "Diagnosis is probable rather than proven (pathogen not identified, fungal diagnostics unavailable); one discussion sentence says MRI-confirmed.",
+    "Table 1 rows for other reported neonatal cases and literature statements are not index-patient facts.",
+    "No dates are given; times are limited to the first day of life, the 4-week treatment course and 4 weeks later."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 44,
+    "facts_reviewed": 126,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single full-term female neonate; roster 1; Table 1 literature rows excluded, own-case row kept as evidence",
+      "CNSF kept provisional (probable, not proven); MRI-confirmed wording kept as an ambiguity, not a conflict",
+      "Figures 1 and 3 captions say before (right)/after (left) while pixels show the enhancing nodules in the left image; caption facts carry no time and no position-based attribution; recorded as ambiguity and limitation",
+      "Calcification absent per discussion vs possible on SWI per caption kept as ambiguity (hedged caption, not a firm conflict); follow-up CT kept as possible, not ordered",
+      "Discussion imaging negatives kept as negative observations; risk-factor negatives limited to the six factors literally listed in b00011",
+      "Pixels of all 3 figures (5 panels) checked against visual.json, figure-EHR labels and privacy flags; no changes needed"
+    ],
+    "residual_risks": [
+      "No relation orders the repeat MRI or the discharge relative to each other; paragraph order only",
+      "Whether the captioned post-treatment images are the 4-week repeat MRI is unresolved",
+      "Facial-profile privacy flags on sagittal MRI panels are a conservative judgment"
+    ]
+  },
+  "physician_adjudicated": false
+}
