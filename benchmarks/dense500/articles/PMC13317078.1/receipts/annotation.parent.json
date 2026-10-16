@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC13317078.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a32766b4981cd2dc95a6e6b8a1d4ff39c86f939c0542dac1cf84e05d3738f558",
+  "annotation_sha256": "643f3aa16c28d33e68cf66625bffc787416a45422c299aff3336ee45fd49bc96",
+  "reviewed_at": "2026-10-16T08:56:32.585257+00:00",
+  "source_segments_read": 18,
+  "facts_reviewed": 36,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f014 (provisional benign phyllodes tumor condition restating the biopsy sentence); the biopsy test+result stays as observations p1-f010/p1-f011 and the diagnosis is recorded once as p1-f015 confirmed by histopathology (ONE-STATEMENT); ambiguity added",
+    "p1-f015 left laterality now has its own evidence (\"a large mass in her left breast\", b00007) instead of a note-only borrowing",
+    "p1-f006 quote extended to the full examination sentence so its left-breast body site is in its own evidence",
+    "Added p1-f036 breast asymmetry sign (\"her breast asymmetry\", b00016; \"to correct breast asymmetry\", b00006) and p1-f037 normal contralateral breast dimensions (b00009); asymmetry ambiguity rewritten",
+    "Added literal evidence: b00009 for p1-f025, b00016 for p1-f030, caption d for p1-f027, caption e for p1-f031",
+    "New event p1-e08 (preoperative photographs and markings; f007, f024, f025, f037; time \"Preoperative\") with relation e08 before e05 quoting \"c Preoperative markings for periareolar mastopexy.\"; markings removed from operation event e05",
+    "Summary rewritten as four phase claims citing current facts; ambiguity added for unstated operative-step laterality; b00003 coverage set to background (general conclusion)"
+  ],
+  "unresolved": [
+    "Single-case report; the discussion and literature review describe other published cases and general technique and are not patient facts.",
+    "Breast asymmetry is recorded as a sign from \"her breast asymmetry\"; its degree and timing are not stated.",
+    "No dates, medications, anesthesia details, margins status or follow-up beyond three months are documented.",
+    "Conclusion statements about favorable aesthetic results are general and not recorded as an individual outcome.",
+    "Panel letters are printed uppercase on the image and lowercase in the caption; caption lowercase letters are used as panel labels."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 18,
+    "facts_reviewed": 36,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (16-year-old woman); all draft facts checked against source quotes; 34 kept, 1 removed, 2 added, none quarantined",
+      "Annotator flags: asymmetry now a sign (literal \"her breast asymmetry\"); biopsy kept as observations only, histopathology diagnosis confirmed; \"A biopsy\" vs FNA + Tru-Cut ambiguity kept; general technique and aesthetic-results claims not stored; operative steps left without laterality; mitosis/atypia flag negative kept",
+      "Fig 1 panels A-H viewed at magnification: no face visible in any panel; bare breasts with nipple-areola complex in A, B, C, E, F, G, H; D is an open breast wound with the nipple-areola region covered by the gloved hand"
+    ],
+    "residual_risks": [
+      "p1-f029 residual breast tissue sufficient and p1-f036 asymmetry come from discussion paragraph b00016 that refers to this patient",
+      "Privacy sidecar panel d sensitive_anatomy=false is defensible (no nipple visible) but the panel is an exposed operative view of a minor breast; Sonnet may wish to flag it",
+      "Only one temporal chain: e08 -> e05 -> e06/e07, e04 -> e05; presentation, exam and biopsy events have no literal order links"
+    ]
+  },
+  "physician_adjudicated": false
+}
