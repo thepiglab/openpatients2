@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC12745886.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c0cd8547cfd3abbd835ee5aaf5432eb870c74fa30b2ce318cfd63b199c7962e8",
+  "annotation_sha256": "d4447a1eb4d04eaa7794dc488e1dc1369ede8c6eab16bf87db2702271357611e",
+  "reviewed_at": "2026-10-16T02:54:05.847047+00:00",
+  "source_segments_read": 36,
+  "facts_reviewed": 89,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed relation e18 (second extubation) before e19 (foot drop exam): the source only says 'After extubation' and the draft's own ambiguity leaves open which extubation; replaced with e16 (first extubation, day 5) before e19, which holds under either reading.",
+    "Coordinator-requested fixes: p1-f025 critical illness neuropathy kept as the drafter's possible/differential (the earlier parent change to refuted was reverted because 'differentiating it from' does not literally exclude it) with a new ambiguity quoting the b00029 sentence; removed relations e12->e13 (day-4 improvement 'with atropine therapy' does not date the atropine start) and e02->e03 (the event bundles ED vitals that the intubation sentence does not order); kept e05->e11 because 'initially misdiagnosed' literally orders the misdiagnosis first.",
+    "Added p1-f089 discharge outcome and event p1-e25 from 'lost to follow-up after discharge' (untimed).",
+    "Added 10 temporal relations with literal support: initial labs before provisional diagnosis; initial misdiagnosis before OP diagnosis; ICU transfer before day-2 deterioration; GTCS after ICU admission; suspicion before diagnosis established; VAP after ICU stay >3 days; ARDS after VAP ('progressing to'); NCS after foot-drop exam ('confirmed the foot drop'); follow-up advice before loss to follow-up; loss to follow-up after discharge.",
+    "Ambiguities updated: Discussion co-ingestion statement for alcohol; Discussion 'confirming the condition' vs case text 'suggestive of OPIDN' (OPIDN kept provisional); foot-drop exam ordered only after the first extubation.",
+    "Summary claims 2-4 reworded so the garlic odor and atropine challenge are not dated to ICU day 2, improvement is 'on day 4' as written, and discharge and the critical illness neuropathy differential are covered."
+  ],
+  "unresolved": [
+    "The article has no figures, tables or supplements.",
+    "Exact organophosphorus compound, route, intent and amount of exposure are not stated.",
+    "Text-only facts without a governing time keep null time; the day 2, day 4 and day 5 clauses scope only their own sentences.",
+    "Discussion sentences about cited literature and general statements are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 36,
+    "facts_reviewed": 89,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient (43-year-old man, OP poisoning initially misdiagnosed as alcohol intoxication); roster count 1 literal; no figures, tables or supplements.",
+      "Alcohol history kept possible (\"History suggests\"); ethanol intoxication kept as provisional at the time and refuted as alcohol intoxication by \"initially misdiagnosed\".",
+      "Day 2/4/5 clauses scope only their own sentences; garlic odor, atropine challenge, VAP and ARDS onset stay untimed; ED vitals and initial labs use their lead clauses.",
+      "Flags come only from source words (tachycardia, hypotension, hypothermia, tachypnea, hyperbilirubinemia); reference-range values carry no flags.",
+      "OPIDN kept provisional; pre-reintubation GTCS left open relative to the 5 episodes; neurology consultation kept as referral with action_status unknown; supportive measures kept as non-specific medications."
+    ],
+    "residual_risks": [
+      "OPIDN verification: case text says suggestive, Discussion says the NCS helped confirm it; kept provisional.",
+      "Critical illness neuropathy left as a considered differential; its final status is not literally stated.",
+      "Alcohol co-ingestion is affirmed only in the Discussion; kept possible from the case history."
+    ]
+  },
+  "physician_adjudicated": false
+}
