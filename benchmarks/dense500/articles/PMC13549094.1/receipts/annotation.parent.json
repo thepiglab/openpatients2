@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC13549094.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d8d1ca96cbeb36e5138ef50a2636b6079dec983034beaece865f5a7dfbf39ea0",
+  "annotation_sha256": "e62d5d33946b637c0e2d2884a50685141141436bf0e141fee5f87eaf8f171f74",
+  "reviewed_at": "2026-10-16T07:36:52.582147+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 72,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f004 gastric volvulus: removed unsupported clinical_status active (now unknown).",
+    "p1-f005 perforation: diagnostic_basis now keeps the literal approx. 4 cm size.",
+    "p1-f011, p1-f066, p1-f069, p1-f072 \"Postoperatively\" and p1-f070 \"on the first postoperative day\": anchor restored to the literal operation phrase \"exploratory laparotomy\", relation after; p1-f048 \"Intraoperatively\" anchored to the same phrase (relation during).",
+    "Added p1-f071 (grossly distended stomach at laparotomy) and p1-f072 (persistent postoperative resuscitation).",
+    "p1-e05 decision for emergency surgery: kind plan, occurrence planned (the decision is a plan; the performed laparotomy is p1-e06).",
+    "Relations: replaced unsupported p1-e06 before p1-e07 with p1-e07 during p1-e06; added p1-e08 during p1-e06, p1-e06 before p1-e10 (\"Postoperatively\"), p1-e10 before p1-e11.",
+    "Summary claim 1: removed inferred \"hypotensive and tachycardic\"; now states the printed blood pressure, pulse and hemodynamic instability.",
+    "Added four ambiguities: x10^(3)/mL and mg/dL units kept as printed (probable print artefact), unnamed raised inflammatory markers, no stated cause of death, Figures 4/5 caption-only identification.",
+    "p1-f065 left in situ kept with action unknown and a note explaining why."
+  ],
+  "unresolved": [
+    "Table 1 prints no time and no abnormal flags; laboratory rows carry reference intervals only, with no flags derived from them. The case text separately says only that markers of inflammation were raised, without naming which.",
+    "Source gives no timing for presentation relative to a date, no length of stay, and no cause of death beyond the stated sequence of septic shock and death; no cause is asserted.",
+    "Discussion sentences about gastric volvulus, jejunal diverticulosis, colonic malfixation and cited published cases are literature background, not facts about this patient.",
+    "Caption-layer visual status not_inspected; the five images are described in the separate visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 72,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single 35-year-old woman: gastric volvulus with lesser-curvature perforation, asplenia, jejunal diverticula and unattached large gut found at laparotomy; septic shock postoperatively; died on the first postoperative day.",
+      "All six Table 1 rows recorded with printed units and reference intervals and no derived flags; the text-level \"raised markers of inflammation\" stays a separate high-flag item.",
+      "Death is literal; no cause of death asserted.",
+      "Inflamed diverticula refuted from \"no signs of inflammation\"/\"non-inflamed\" at exploration."
+    ],
+    "residual_risks": [
+      "Count units x10^(3)/mL likely a print artefact; kept as printed.",
+      "Intraoperative step order (oxygen/saline, reduction, gastropexy) is linked to the laparotomy by during relations, a necessary implication rather than a stated order word.",
+      "Figure 1 visual description places the smaller gas lucencies on the wrong side of the image; agent visual.json needs correction before the parent visual receipt."
+    ]
+  },
+  "physician_adjudicated": false
+}
