@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12705121.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "da453abc5a8ec98b13ab947e7516ec8af7a6c726a74a8bfff39c6328b64188ad",
+  "annotation_sha256": "b5e7efdd5c5e16dcb0d006dd45cd0fd86280d66ca4818b5b628fbfaafce27c53",
+  "reviewed_at": "2026-10-16T07:00:09.444947+00:00",
+  "source_segments_read": 22,
+  "facts_reviewed": 122,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Drug-name conflict decided as a real conflict (prednisone vs prednisolone are distinct drugs, not a one-character print artefact): p1-f102 now records only what its own quote says (Prednisone, tapered to 10 mg/day over 4.5 months) as source_conflict/review_only; added p1-f121 (discussion: prednisolone dose tapered to 10 mg/day) as the other review_only side; ambiguity rewritten; event p1-e12 relabelled 'Steroid tapered' and linked to both; summary cites p1-f103 instead of p1-f102.",
+    "p1-f104 (increase to 30 mg/day): added the abstract quote naming prednisolone so the drug name comes from the fact's own evidence.",
+    "p1-f099 final-visit CFF 38.8 Hz: body_site right eye (the sentence makes the right eye the subject of both values).",
+    "p1-f083/p1-f084: added the abstract quote 'aside from elevated CRP and ESR' so the ESR high flag has literal support.",
+    "p1-f034 no identifiable underlying disease on systemic evaluation: verification_status refuted (excluded by workup).",
+    "Added p1-f122 extraocular myositis absent/refuted from the discussion statement of the case, linked to the diagnosis event.",
+    "Event p1-e13 (recurrence) kind changed from adverse_event to outcome (disease relapse, not a treatment harm).",
+    "Added 10 literally supported temporal relations (8 -> 18): labs->diagnosis (Thus), initial OCT->prednisolone start and prednisolone start->3-week MRI / 5-month recurrence (stated times from the initial visit), initial MRI->3-week MRI (Fig 4 a/b), initial Hess->recurrence (again, compared to the initial visit), adalimumab start->continued, prednisolone start->taper (drug start->taper), taper->recurrence (recurred after tapering), presentation->recurrence (Five months after the initial visit).",
+    "Added an ambiguity for circumferential (text) vs near-circumferential (Fig 4a caption) scleral findings on the merged initial MRI."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; pixels are inspected in the separate visual target.",
+    "The case text says B-scan ultrasonography of the right eye while the Figure 1 caption says the left eye; both are kept as review-only source_conflict facts and not reconciled.",
+    "Most findings carry no explicit date; only caption lead sentences and explicit relative phrases supply times, and relations are limited to explicitly ordered pairs.",
+    "Values printed inside the figure images (for example the visual field indices) are recorded only in the visual submission.",
+    "Discussion and background literature statements, including cited cohort data, were not assigned to the patient.",
+    "The supplement SD1 is a CARE reporting checklist PDF with no patient clinical data."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 22,
+    "facts_reviewed": 122,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single 22-year-old woman; roster count 1 from the singular case statement.",
+      "B-scan laterality conflict (text right eye vs Fig 1b caption left eye) kept as two review_only facts carrying only the laterality; findings themselves stay include without laterality.",
+      "Prednisone/prednisolone naming treated as a real drug-name conflict; both statements review_only, prednisolone course otherwise recorded from statements that name it.",
+      "Text MRI merged with the Fig 4a caption: the text cites Fig. 4a and the initial MRI is reported once.",
+      "Anchor 22 months after the initial treatment kept literal; 5-day duration applies to the three abstract-listed symptoms only (not headache).",
+      "F1d Humphrey printout values stay in visual.json only; F1d labelled as a patient-data chart.",
+      "Supplement SD1 is a one-page CARE checklist with no patient data."
+    ],
+    "residual_risks": [
+      "The prednisone/prednisolone conflict quarantines the 4.5-month taper duration; a human may judge it a typo.",
+      "Relations between the dose increase to 30 mg/day and adalimumab initiation, and between the 2-week OCT and 3-week MRI, are left open (no literal order).",
+      "visual.json F4 a/c wording says the arrows point at the lateral and posterior wall; one arrow points at the posteromedial wall (minor, agent-owned file)."
+    ]
+  },
+  "physician_adjudicated": false
+}
