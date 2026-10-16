@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC12709671.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1dc610d72f0cd8e6261e82347525b3f790b766798841913b1743299e88b0c054",
+  "annotation_sha256": "5ca95fc07b1a08af61a49876c43a0efb5af47a1460654083187f3e726efb8369",
+  "reviewed_at": "2026-10-16T04:22:36.890417+00:00",
+  "source_segments_read": 47,
+  "facts_reviewed": 117,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged results-text ATD and inclination values into their Table 1 items (p1-f091->f079, f092->f080, f093->f082, f094->f083) because b00015 states At the final follow-up; un-merged the untimed results-text items (b00014 femoral lengths p1-f074/p1-f075, review_only side conflict; b00016 left procurvatum p1-f097 and anteversion p1-f099/p1-f100) as separate facts with null time; the Table 1 items p1-f072, p1-f073, p1-f086, p1-f088, p1-f089 keep only table evidence and the caption time. ATD and inclination merges (p1-f079, f080, f082, f083) kept because b00015 states \"At the final follow-up\".",
+    "Removed side-free femoral length items p1-f121/p1-f122 (duplicates of the table cells); instead the Table 1 femoral length items p1-f072/p1-f073 are accepted with the side omitted, and the side conflict is carried by review_only text items p1-f074/p1-f075 vs Figure 4 caption items p1-f076/p1-f077 (difference p1-f078 stays review_only).",
+    "p1-f078 femoral length difference (-8.4 mm): its sign depends on the conflicted side assignment, so it is now source_conflict review_only.",
+    "Added p1-f123 outcome: bone healing continued after implant removal (b00030).",
+    "p1-f041 plate application: added the b00028 evidence that screws were placed across the trochanteric region.",
+    "Added 6 temporal relations with literal support: trauma before presentation (re-quoted with the full b00006 sentence: the dog was presented to the hospital with a history of trauma sustained 2-3 days prior to admission, plus the Upon presentation sentence); surgery before postoperative medication (postoperative); bridging callus before implant removal (\"Once bridging callus ... removed\"); weight bearing (3 days after surgery) before removal (16 days following initial surgery); removal before greater trochanter development (2 months following surgery); that before the final follow-up (15 months postoperatively); each cites both stated surgery-anchored times.",
+    "visual.json Figure 1 panel D: the femoral shaft is not seen from its end; it stands vertically with a flared, notched upper end. Figure EHR and privacy drafts regenerated and labels carried over.",
+    "Supplement manifest SM1: limitations rewritten to name the sampling (every 2 s, 10 frames, contact sheet) and a privacy note giving categories only: a legible third-party vehicle registration plate at 18 s and bystanders without faces. Values are not copied, and EHR includability is unchanged."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEG figures were inspected in the separate visual target and the one MP4 supplement was frame-sampled in the supplement manifest.",
+    "Source conflict: femoral length laterality differs between Table 1/results text and the Figure 4 caption; both versions kept review_only.",
+    "Source conflict: abstract reports a 21-month follow-up while the case text, Table 1 and figure captions give 15 months; both kept review_only.",
+    "Results text cites Table 1 for hip and stifle range of motion, but Table 1 has no range-of-motion row.",
+    "Procurvatum angle appears as 160 and 159.9 degrees for the right femur and as 21.8 degrees (7.9% increase) in the discussion; recorded as ambiguities.",
+    "Surgical-reasoning statements (interlocking nail and external fixation considered inappropriate, double-hook plate unavailable, expected healing) are not recorded as performed events.",
+    "Results-text values are merged with Table 1 items only where the text sentence states the same time (\"At the final follow-up\": ATD and inclination). The untimed femoral length, procurvatum and anteversion sentences stay separate items with null time; the right procurvatum angle printed as 160° stays review-only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 47,
+    "facts_reviewed": 117,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single 2-month-old female mongrel dog; roster count 1 with literal evidence.",
+      "Femoral length side conflict verified: Table 1 and b00014 give right 186.1 and left 177.7, while the Figure 4 caption gives left 186.1 and right 177.7.",
+      "The abstract 21-month vs 15-month final follow-up conflict is kept as two review_only facts.",
+      "Procurvatum 160 vs 159.9 (rounding) and the discussion 21.8 deg / 7.9% are kept as review_only ambiguities.",
+      "At the final follow-up literally governs both the ATD and the inclination values in b00015, so those text values share the Table 1 items; untimed text values stay separate.",
+      "Raw XML confirms Table 1 has no range-of-motion row; hip and stifle ROM keep no borrowed time.",
+      "Implant removal device item carries no borrowed time; the skeletal development normal flag is literal (\"confirmed normal skeletal development\").",
+      "Figure 2 has A-D printed twice, so it is treated as one whole panel; the override from mixed/other to clinical_imaging is justified by the pixels.",
+      "All 22 panels viewed with zoomed crops; the 10 video frames viewed at full resolution plus a contact sheet."
+    ],
+    "residual_risks": [
+      "The video title card reads 5 days postoperatively for the indoor footage; this is not transcribed as a clinical fact.",
+      "The Figure 4 caption abbreviation typo (Lr defined as the length of the left femur) leaves panel side identity caption-dependent.",
+      "Pressure plate values take their time from the sentence-initial \"Throughout the follow-up period\" clause."
+    ]
+  },
+  "physician_adjudicated": false
+}
