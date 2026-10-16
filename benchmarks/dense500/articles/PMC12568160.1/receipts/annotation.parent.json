@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC12568160.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b8b8db0769ac50abde543524b06e6cc1e3a6702dd6d04c2e40ed5824e41cfe3e",
+  "annotation_sha256": "b3f65c0eb29a8033bb3b8d4ce8af61bce3a3eb5bcb95ead900d9e55dbe940a2d",
+  "reviewed_at": "2026-10-16T04:22:32.325949+00:00",
+  "source_segments_read": 30,
+  "facts_reviewed": 56,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f056 MUO relapse outcome: \"made it possible to recognise a relapse\" does not literally assert a relapse; changed to assertion possible, certainty ambiguous, scoring review_only, with a new ambiguity linking the neurological worsening p1-f055",
+    "Removed p1-f053 care plan (recommended ciclosporin halving): drug dose changes belong in medications (SECTION-CAREPLANS) and the reduction is already p1-f021; care_plans domain coverage set to not_documented",
+    "p1-f013 Figure 1A tail lesion marked alternate_representation_of p1-f011 (text cites Figure 1 for the same tail lesion), matching the nasal pair p1-f014/p1-f012",
+    "Added 4 literal relations: urine bacterial assessment before amoxicillin-clavulanate (\"which was treated\"), systemic workup before antifungal choice (\"no systemic infection was confirmed, so ... was chosen\"), antifungal therapy before non-regression (\"Despite\"), neurological worsening before euthanasia (\"so that she had to be euthanised\")"
+  ],
+  "unresolved": [
+    "Single-dog report; the article gives no dates, only relative times (48 weeks of therapy, four weeks later).",
+    "The word following 'female intact' in the case text is not interpreted or stored.",
+    "Dose of the prednisolone increase, duration of antifungal therapy and the interval to euthanasia are not stated.",
+    "Susceptibility results are author-stated MICs without interpretive breakpoints; the authors caution against translating them into treatment decisions.",
+    "Figure 1 panel C pixels show orange to brown colonies while the caption states light purple pigmentation; caption text is kept and the discrepancy is recorded in the visual limitations and ambiguities.",
+    "Discussion statements about published cases, cohorts and recommendations were not copied to the dog.",
+    "The source has no tables and no supplements."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 30,
+    "facts_reviewed": 57,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single dog, euthanised; roster count 1",
+      "The word Elo after female intact appears only inside literal quotes (identity evidence, fact evidence, one ambiguity quote); no authored field (label, names, statements, notes, case_context, summary) contains it",
+      "Figure 1C pixels show orange to tan-brown colonies, not the light purple stated by the caption; caption kept literally with ambiguity and visual limitation",
+      "MIC flags high only for amphotericin B (remarkably high) and itraconazole for Purpureocillium (relatively high); higher MIC wording for Alternaria itraconazole/isavuconazole left unflagged",
+      "Systemic fungal infection recorded as absent with verification unconfirmed from \"no systemic infection was confirmed\", not refuted",
+      "Euthanasia kept as a procedure and as the death outcome (two intended views)"
+    ],
+    "residual_risks": [
+      "Light purple versus orange-brown pigment discrepancy unresolved",
+      "Timing of euthanasia and of antifungal therapy relative to lesion onset not stated"
+    ]
+  },
+  "physician_adjudicated": false
+}
