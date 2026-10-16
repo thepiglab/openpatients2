@@ -56,7 +56,7 @@ class Completion:
                 "reasoning_provenance": "endpoint-returned output, not verified clinical evidence"}
 
     def capture_reasoning(self, delta: dict) -> bool:
-        keys = [k for k in ("reasoning", "reasoning_content", "reasoning_details") if k in delta]
+        keys = [k for k in ("reasoning", "reasoning_content", "thinking", "reasoning_details") if k in delta]
         if not keys:
             return False
         self.reasoning_field_seen = True
@@ -73,8 +73,8 @@ class Completion:
                         existing = [existing]
                         self.reasoning_fields[key] = existing
                     existing.extend(value if isinstance(value, list) else [value])
-        # The two supported vLLM field names may both be present as aliases. Count once.
-        text = next((delta[k] for k in ("reasoning", "reasoning_content")
+        # Parsers/frontends may expose multiple aliases. Preserve all; count once.
+        text = next((delta[k] for k in ("reasoning", "reasoning_content", "thinking")
                      if isinstance(delta.get(k), str) and delta[k]), "")
         self.reasoning_characters += len(text)
         if self.reasoning_saved and text:

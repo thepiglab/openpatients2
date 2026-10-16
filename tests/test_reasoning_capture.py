@@ -39,3 +39,13 @@ def test_missing_empty_opaque_and_disabled_reasoning_are_distinct():
     assert disabled.response()["reasoning_status"]=="disabled_by_client"
 
 
+def test_thinking_alias_preserves_exact_chunks_and_counts_once():
+    c = Completion()
+    c.capture_reasoning({'thinking': 'Check ', 'reasoning': 'Check '})
+    c.capture_reasoning({'thinking': 'the source.'})
+    assert c.reasoning_text == 'Check the source.'
+    assert c.reasoning_characters == len(c.reasoning_text)
+    assert c.response()['reasoning_fields']['thinking'] == 'Check the source.'
+    assert c.response()['reasoning_status'] == 'returned_text'
+
+

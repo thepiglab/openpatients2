@@ -309,6 +309,15 @@ def test_cpu_setup_only_metadata_then_downloads_one_profile_and_worker_dispatch(
     assert dispatched['campaigns'] == [work / 'arms/lilicorr-text']
     assert dispatched['startup_check'] is not None
     assert dispatched['runtime_probe'] == s.gpu_probe(r.PROFILES['lilicorr'])
+    checks = []
+    async def token_smoke(*args):
+        checks.append('tokenization')
+    async def trace_smoke(*args):
+        checks.append('reasoning')
+    monkeypatch.setattr(s, 'smoke', token_smoke)
+    monkeypatch.setattr(s, 'reasoning_smoke', trace_smoke)
+    asyncio.run(dispatched['startup_check']('http://localhost:8000/v1', work))
+    assert checks == ['tokenization', 'reasoning']
     (s.weights_path(work, r.NVFP4) / 'weights.safetensors').write_bytes(b'changed')
     with pytest.raises(ValueError, match='artifact changed'):
         s.validate_runtime(work, 'lilicorr-text')

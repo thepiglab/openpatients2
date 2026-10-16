@@ -60,13 +60,13 @@ class PilotConfig(ConfigModel):
     served_model: str = 'clinical-extractor'
     gpus_per_endpoint: int = Field(default=1,ge=1,le=8)
     tokenizer_contract: str = 'vllm/0.30.0'
-    reasoning_strength: Literal['low', 'medium', 'high', 'xhigh'] = 'medium'
+    reasoning_strength: Literal['low', 'medium', 'high', 'xhigh', 'max'] = 'medium'
     nemotron_thinking: bool = True
     template_date: str | None = Field(default=None, pattern=r'^\d{4}-\d{2}-\d{2}$')
     stop_token_ids: list[int] | None = None
-    temperature: Literal[0.0, 1.0] = 1.0
+    temperature: Literal[0.0, 0.7, 1.0] = 1.0
     vision_temperature: Literal[0.6] | None = None
-    top_p: Literal[0.95, 1.0] = 0.95
+    top_p: Literal[0.95, 0.99, 1.0] = 0.95
     top_k: Literal[64] | None = 64
     seed: int = Field(default=42, ge=0, le=2**32-1)
     sample_seed: int = 42
@@ -121,6 +121,16 @@ class PilotConfig(ConfigModel):
         from .nemotron_super_recipes import PINS, FASTINO, LILICORR, TOKENIZER_CONTRACT
         from .muse_spark_recipe import SPARK, DSPARK, TOKENIZER_CONTRACT as SPARK_CONTRACT, STOP_TOKEN_IDS
         from .redhat_nemotron_recipe import DSPARK as REDHAT_DSPARK
+        from .beam_recipe import TARGETS as BEAM_TARGETS, DFLASH2, TOKENIZER_CONTRACT as BEAM_CONTRACT, STOP_TOKEN_IDS as BEAM_STOPS
+        if self.model_id in BEAM_TARGETS:
+            if (self.revision != PINS[self.model_id]['revision'] or self.tokenizer_contract != BEAM_CONTRACT
+                    or self.temperature != .7 or self.top_p != .99 or self.top_k is not None
+                    or self.vision_temperature is not None or self.stop_token_ids != BEAM_STOPS
+                    or self.reasoning_strength != 'max'):
+                raise ValueError('Beam model revision, tokenizer contract and publisher sampling must match the pinned recipe')
+            if self.max_figures != 0 or self.image_manifest or self.summary_structured_output:
+                raise ValueError('Beam benchmark requires text-only inputs and unconstrained JSON output')
+            return self
         if self.model_id == SPARK:
             if (self.revision != PINS[SPARK]['revision'] or self.tokenizer_contract != SPARK_CONTRACT
                     or self.temperature != 1.0 or self.top_p != 1.0 or self.top_k is not None
@@ -128,8 +138,8 @@ class PilotConfig(ConfigModel):
                     or self.template_date is None):
                 raise ValueError('Spark model revision, tokenizer contract and publisher sampling must match the pinned recipe')
             return self
-        if self.model_id in (DSPARK, REDHAT_DSPARK):
-            raise ValueError('Unsupported model: DSpark is a drafter, not a serving target')
+        if self.model_id in (DSPARK, REDHAT_DSPARK, DFLASH2):
+            raise ValueError('Unsupported model: speculative checkpoint is a drafter, not a serving target')
         if self.model_id in PINS and self.model_id != LILICORR:
             if (self.revision != PINS[self.model_id]['revision'] or self.tokenizer_contract != TOKENIZER_CONTRACT
                     or self.temperature != (0.0 if self.model_id == FASTINO else 1.0) or self.top_k is not None
@@ -148,6 +158,9 @@ class PilotConfig(ConfigModel):
         return self
 
     def template_kwargs(self):
+        from .beam_recipe import TARGETS as BEAM_TARGETS
+        if self.model_id in BEAM_TARGETS:
+            return {'reasoning_effort': self.reasoning_strength, 'allow_missing_thinking': False}
         from .muse_spark_recipe import SPARK
         if self.model_id == SPARK:
             return {'reasoning_effort': self.reasoning_strength, 'current_date': self.template_date}

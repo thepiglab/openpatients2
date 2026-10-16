@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from .muse_spark_recipe import ENGINE as SPARK_ENGINE, PINS as SPARK_PINS, PROFILE as SPARK_PROFILE
 from .redhat_nemotron_recipe import PINS as REDHAT_PINS, PROFILE as REDHAT_PROFILE
+from .beam_recipe import ENGINE as BEAM_ENGINE, PINS as BEAM_PINS, PROFILES as BEAM_PROFILES
 
 VLLM_COMMIT = '3f1bcfd82bb2e93fcd364fc7a5491718453a77e2'
 VLLM_IMAGE = 'docker://vllm/vllm-openai:nightly-' + VLLM_COMMIT
@@ -33,6 +34,7 @@ PINS = {
                'architecture': 'LiLiCorrDraftModel'},
     **SPARK_PINS,
     **REDHAT_PINS,
+    **BEAM_PINS,
 }
 
 ENGINES = {
@@ -40,6 +42,7 @@ ENGINES = {
                  'sif': 'vllm-' + VLLM_COMMIT + '.sif', 'tokenizer_contract': TOKENIZER_CONTRACT,
                  'tokenizer_source_sha': TOKENIZER_SOURCE_SHA, 'registry_source_sha': REGISTRY_SOURCE_SHA},
     'spark': SPARK_ENGINE,
+    'beam': BEAM_ENGINE,
 }
 
 
@@ -88,6 +91,7 @@ PROFILES = {
                  'adaptation': 'Official Spark TP1/c1 LiLiCorr7 recipe adapted to B200. Not a published B200 performance claim.'},
     'spark': SPARK_PROFILE,
     'redhat-fp8-dspark': REDHAT_PROFILE,
+    **BEAM_PROFILES,
 }
 
 # Every publisher configuration, including Muse Spark, participates by default.
@@ -98,5 +102,5 @@ def arm_definitions(with_images=False):
     arms = {name + '-text': {'profile': name, 'pixels': False} for name in PROFILES}
     if with_images:
         arms.update({name + '-vision': {'profile': name, 'pixels': True}
-                     for name in PROFILES if name != 'fastino'})
+                     for name, profile in PROFILES.items() if name != 'fastino' and profile.get('supports_images', True)})
     return arms

@@ -1,4 +1,4 @@
-# Nemotron 3.5 Super and Muse Spark Open clinical extraction benchmark
+# Nemotron Super, Muse Spark Open and Reflection Beam clinical extraction benchmark
 
 Separate campaign from the existing Glimmer, GEPA and LoRA runs.
 It never submits or cancels their jobs. Uses the existing dense reference,
@@ -6,8 +6,8 @@ live patient discovery, source-aware extraction/repair, literal evidence checks,
 caption attribution, measurement-series extraction and unified scorer.
 The obsolete Fastino Lightning launcher and model support have been removed;
 the `fastino` configuration here is the new **Super VL Healthcare** checkpoint.
-Muse Spark Open is included in the default campaign alongside all five
-Fastino/Nemotron configurations.
+The default campaign includes Muse Spark Open, five Fastino/Nemotron configurations,
+and Beam FP8/NVFP4 with DFlash2. Beam BF16 is excluded.
 
 ## Run on HiPerGator
 
@@ -29,11 +29,11 @@ WORK="$(cat runs/dense-nemotron-super-last-work.txt)"
 cat "$WORK/summary/comparison.md"
 ```
 
-To stop the current campaign and start a fresh six-model smoke after updating:
+To stop the current campaign and start a fresh eight-configuration smoke after updating:
 
 ```bash
 bash scripts/run_dense_nemotron_super.sh cancel && \
-  DENSE_SUPER_PROFILES='fastino nvfp4 bf16 lilicorr spark redhat-fp8-dspark' \
+  DENSE_SUPER_PROFILES='' \
   DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=2 bash scripts/run_dense_nemotron_super.sh
 ```
 
@@ -43,7 +43,7 @@ submission ledgers, and cancels only recorded jobs still in your queue. It waits
 up to 60 seconds for them to disappear; if they are still stopping, rerun `cancel`.
 Other campaigns are untouched. Downloads and partial results are retained.
 
-Default: six configurations × **217 train/validation articles = 1,302 article
+Default: eight configurations × **217 train/validation articles = 1,736 article
 runs**. The 43 test articles are preserved. Train and validation scores are
 separate. This is a development comparison, not a blinded clinical validation.
 Small checks choose the first article IDs deterministically; they are operational
@@ -67,7 +67,7 @@ DENSE_SUPER_PROFILES=spark DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=2 \
   bash scripts/run_dense_nemotron_super.sh
 ```
 
-Optional separate vision arms (all six default text arms still run):
+Optional separate vision arms (all eight default text arms still run):
 
 ```bash
 DENSE_SUPER_WITH_IMAGES=1 bash scripts/run_dense_nemotron_super.sh
@@ -77,8 +77,8 @@ DENSE_SUPER_PROFILES='nvfp4 lilicorr' DENSE_SUPER_LIMIT_ARTICLES=2 \
 ```
 
 Vision adds three NVIDIA arms, one Red Hat FP8 arm and one Muse Spark Open arm,
-for **2,387 article runs** across eleven arms.
-Fastino Super has no vision encoder and never receives pixels. CPU preparation freezes
+for **2,821 article runs** across thirteen arms.
+Fastino Super and Beam are text-only and never receive pixels. CPU preparation freezes
 eligible source image bytes and verifies acquisition hashes; missing/rights-review
 images remain explicit. Vision arms run original figure/EHR/privacy stages too.
 Supplement extraction remains unsupported. Compare text arms with each other and
@@ -91,10 +91,10 @@ output directory as the first positional argument.
 
 ## Publisher recipes and sampling
 
-Checked October 15, 2026. Model SHAs, card/config hashes, source URLs and deviations
+Checked October 15–16, 2026. Model SHAs, card/config hashes, source URLs and deviations
 are tracked in `configs/hipergator/nemotron-super/provenance.json`; executable
 settings are in `nemotron_super_recipes.py`, `muse_spark_recipe.py` and
-`redhat_nemotron_recipe.py`.
+`redhat_nemotron_recipe.py` and `beam_recipe.py`.
 Inspect without downloading models:
 
 ```bash
@@ -109,6 +109,8 @@ python3 scripts/benchmark_dense_nemotron_super.py recipe
 | lilicorr | **Same NVIDIA NVFP4 target**, plus LiLiCorr draft checkpoint | 1 B200 | DFlash/LiLiCorr, 7 tokens | 1 | 1 | 96G |
 | spark | Muse Spark Open 816B-A42B NVFP4 | 8 B200 | DSpark, 7 tokens | 32 | 32 | 200G |
 | redhat-fp8-dspark | Red Hat Nemotron Super VL FP8 | 2 B200 | Red Hat DSpark, 8 tokens, draft TP1 | 128 | 64 | 200G |
+| beam-fp8-dflash2 | Reflection Beam 501B-A23B FP8 | 8 B200 | DFlash2, 7 tokens, adaptive verification | 32 | 32 | 200G |
+| beam-nvfp4-dflash2 | Reflection Beam 501B-A23B NVFP4 | 4 B200 | DFlash2, 7 tokens, adaptive verification | 32 | 32 | 200G |
 
 LiLiCorr is a drafter paired with the NVIDIA NVFP4 target. It declares block size 8,
 so the published seven-token draft is used. It is never attached to Fastino.
@@ -170,6 +172,19 @@ Speculators adapter, Qwen3 DSpark model and Nemotron auxiliary-state support.
   42B-active model requires at least 700 GB VRAM in NVFP4 according to Meta.
   Its approximately 1.63 TB BF16 weights exceed eight B200s' aggregate VRAM, so
   only NVFP4 is included.
+- **Reflection Beam:** follows the [official vLLM recipe](https://recipes.vllm.ai/reflection/Beam-1.0-501B-A23B).
+  FP8 uses TP8 on eight B200s and the Triton MoE backend; NVFP4 uses TP4 on four
+  B200s with the image's default Blackwell backend. Both use FP8 KV cache, pure
+  tensor parallelism (no EP), `beam` reasoning/tool parsers and native output
+  grammar. The common DFlash2 drafter proposes seven tokens with `FLASH_ATTN`
+  and adaptive verification. Its trained block size is 16; seven proposals are
+  the publisher recommendation. The model image `vllm/vllm-openai:reflection-beam`
+  is pinned to Linux AMD64 digest
+  `sha256:25635d363e0a86a099e16690f642e85301c4940ee11acf9335c4570657db9d9d`.
+  Its source-revision label is unavailable publicly; runtime source hashes are
+  recorded and live tokenization/streaming capture must pass. Project overrides
+  are 64K context, 32K prefill, c32, 0.90 GPU memory and two loading workers.
+  Beam BF16 is not selected. No B200 benchmark result is claimed before a run.
 
 All NVIDIA configurations use `nemotron_v3` reasoning and `qwen3_coder` tool
 parsers, the native pinned chat template, and the publisher's media configuration
@@ -189,6 +204,13 @@ parent's image recommendation **0.6 / 0.95**. Muse Spark Open
 uses **temperature 1.0 / top-p 1.0** for text and images, native
 `reasoning_effort='xhigh'`, and a frozen template date of `2026-10-15`. It stops
 on `<|end_of_text|>` (200001) and `<|eot|>` (200008), never `<|eom|>`.
+Beam uses its generation-config/evaluation defaults **temperature 0.7 / top-p 0.99**,
+native `reasoning_effort='max'` (effort value 512, not a token limit),
+`allow_missing_thinking=False`, and its pinned Harmony template. It stops on
+`<|return|>` (151674) and `<|call|>` (151675), allowing analysis to finish at
+`<|end|>` without ending generation. The same kwargs are sent to tokenization
+and completion. Beam's native output grammar stays enabled; JSON schemas remain
+prompt instructions plus local validation.
 All use seed 42 and **no inherited Glimmer top-k 64**.
 `--generation-config vllm` prevents checkpoint defaults from overriding the
 explicit per-request sampling. Tokenization uses the identical native template
@@ -222,11 +244,11 @@ CPU preparation/access checks → **for each selected profile: CPU download → 
 benchmark → CPU cleanup** → CPU aggregation/export. Downloads use `hpg-default`,
 eight CPUs, **128G RAM**, up to eight hours, and **no GPUs**. Setup, cleanup and
 aggregation request eight CPUs and 32G RAM.
-All six default profiles remain selected. Text and optional vision arms for a
+All eight default profiles remain selected. Text and optional vision arms for a
 profile share its download; cleanup waits for both arms to terminate.
 At most **eight B200s, 16 CPUs and 200G host RAM** for this campaign at once.
-Only Muse Spark Open requests eight GPUs; the Nemotron profiles request at most
-two GPUs and eight CPUs. Other users'
+Muse Spark Open and Beam FP8 request eight GPUs; Beam NVFP4 requests four.
+The Nemotron profiles request at most two GPUs and eight CPUs. Other users'
 jobs and account CPU/RAM/GPU limits still affect scheduling. GPU stages require
 successful CPU access checks and their own CPU download/probe job. Cleanup runs
 after the profile's download and GPU jobs terminate, including failures. The next
@@ -272,6 +294,13 @@ the actual multimodal expansion path before article inference. Smoke time/output
 is separate; article latency therefore follows a small synthetic warmup.
 The Muse Spark Open synthetic smoke uses `low` reasoning effort for speed;
 article extraction and repair use the manifest's `xhigh` setting.
+Beam's token-count smoke uses `low` effort; extraction/repair use `max`.
+Every configuration also runs a separate **streaming reasoning smoke**, through
+the actual extraction client with the production reasoning/template/sampling/stop
+settings. It must return nonempty, separately parsed reasoning text. Failures
+stop the worker before article inference, with diagnostics in
+`results/workers/*/job-*/reasoning-smoke.json`. The bounded synthetic trace can end
+at its token cap; it is excluded from article metrics and training artifacts.
 These checks can reject an incompatible runtime; local tests do not establish
 GPU kernel compatibility or memory fit.
 
@@ -373,6 +402,10 @@ response IDs, token usage, raw answer, parsed candidates, and validation errors
 are retained. A reasoning field that is missing, empty, opaque, or disabled has
 an explicit status. Raw answer content remains saved even when the endpoint
 does not provide a separate reasoning field.
+`reasoning`, `reasoning_content` and `thinking` aliases are retained verbatim;
+`reasoning_details` blocks remain in their original structure. Alias text is
+counted once. The comparison report includes returned-text/missing-text call
+counts and the number of facts linked to returned reasoning for every model.
 
 Fact review rows and clinical fact envelopes now link to their same-patient,
 same-task initial and repair calls through ledger sequence IDs. CPU aggregation

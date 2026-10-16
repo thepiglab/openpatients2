@@ -1,8 +1,8 @@
-"""Frozen clinical extraction benchmark for Nemotron Super and Muse Spark Open.
+"""Frozen clinical extraction benchmark for Nemotron Super, Muse Spark and Beam.
 
 CPU access preflight -> per-profile CPU download, GPU benchmark, CPU cleanup.
 CPU jobs hash/score/export; GPU stages serve local files. Servers run sequentially;
-Spark reserves eight B200s, other profiles at most two.
+Spark and Beam FP8 reserve eight B200s; Beam NVFP4 uses four.
 """
 from __future__ import annotations
 
@@ -56,7 +56,7 @@ def prepare(root, work, expected=260, hours=12, with_images=False, include_test=
                  'pins': {model: PINS[model] for name in selected
                           for model in [PROFILES[name]['model']] + ([PROFILES[name]['drafter']] if 'drafter' in PROFILES[name] else [])},
                  'engines': {p.get('engine', 'nemotron'): engine(p) for name in selected for p in [PROFILES[name]]},
-                 'timing_policy': 'One active article per server; synthetic startup probe is outside article timing. Configurations run sequentially; Spark uses eight B200s, others at most two.'})
+                 'timing_policy': 'One active article per server; synthetic startup probes are outside article timing. Configurations run sequentially, using at most eight B200s.'})
     m['files'] = b.inventory(work, ['code', 'inputs', 'reference'])
     for name, definition in definitions.items():
         profile = PROFILES[definition['profile']]
@@ -173,7 +173,8 @@ def cancel(work, timeout_seconds=60):
 def weights_path(work, model):
     from .muse_spark_recipe import DSPARK
     from .redhat_nemotron_recipe import DSPARK as REDHAT_DSPARK
-    key = ('redhat-dspark' if model == REDHAT_DSPARK else
+    from .beam_recipe import DFLASH2
+    key = ('beam-draft' if model == DFLASH2 else 'redhat-dspark' if model == REDHAT_DSPARK else
            'spark-draft' if model == DSPARK else 'lilicorr' if model == LILICORR else
            next(name for name, profile in PROFILES.items() if profile['model'] == model))
     return work / 'runtime/weights' / key
@@ -293,6 +294,7 @@ def serving(work, name, shard=0):
         reasoning_parser=profile.get('reasoning_parser', 'nemotron_v3'), max_model_len=b.read(work / 'manifest.json')['context'],
         max_num_seqs=profile['max_num_seqs'], max_batched_tokens=profile['max_batched_tokens'],
         gpu_memory_utilization=profile['gpu_memory'], speculative_config=spec,
+        kv_cache_dtype=profile.get('kv_cache_dtype', 'auto'),
         extra_args=['--generation-config', 'vllm', '--chat-template',
                     str(weights_path(work, profile['model']) / 'chat_template.jinja')] + profile['extra_args'],
         # The target/draft snapshots share one read-only mount; caches are arm-local.
@@ -328,6 +330,14 @@ for path, family in json.loads(sys.argv[1]).items():
     if config['architectures'] == ['MuseSparkDSparkModel']:
         assert config['block_size'] == 7 and config['model_type'] == 'muse_spark_dspark'
         continue
+    if config['architectures'] == ['DFlash2BeamDraftModel']:
+        assert config['num_hidden_layers'] == 5 and config['num_target_layers'] == 52
+        assert config['dflash_config']['block_size'] == 16
+        assert config['dflash_config']['target_layer_ids'] == [4, 16, 28, 40, 46]
+        assert config['dflash_config']['selector_top_k'] == 16
+        assert config['dflash_config']['conv_kernel_size'] == 2
+        assert config['draft_vocab_size'] == config['vocab_size'] == 151936
+        continue
     if config['architectures'] == ['DSparkDraftModel']:
         assert config['block_size'] == 8 and config['speculators_model_type'] == 'dspark'
         assert config['sample_from_anchor']
@@ -348,7 +358,9 @@ for path, family in json.loads(sys.argv[1]).items():
         continue
     t = AutoTokenizer.from_pretrained(path, local_files_only=True, trust_remote_code=True)
     modes = ([{'reasoning_effort': effort, 'current_date':'2026-10-15'} for effort in ['low','xhigh']]
-             if family == 'spark' else [{'enable_thinking': on} for on in [False, True]])
+             if family == 'spark' else
+             [{'reasoning_effort': effort, 'allow_missing_thinking': False} for effort in ['low','max']]
+             if family == 'beam' else [{'enable_thinking': on} for on in [False, True]])
     rendered = [t.apply_chat_template([{'role':'user','content':'Say READY'}], tokenize=False,
                 add_generation_prompt=True, **kw) for kw in modes]
     assert rendered[0] != rendered[1], 'Native reasoning modes must differ'
@@ -356,6 +368,14 @@ for path, family in json.loads(sys.argv[1]).items():
         assert t.convert_tokens_to_ids('<|eot|>') == 200008
         assert t.convert_tokens_to_ids('<|end_of_text|>') == 200001
         assert t.convert_tokens_to_ids('<|eom|>') not in [200001, 200008]
+    elif family == 'beam':
+        assert config['model_type'] == 'beam'
+        assert 'Reasoning effort: 32' in rendered[0] and 'Reasoning effort: 512' in rendered[1]
+        assert rendered[1].endswith('<|start|>assistant')
+        assert t.convert_tokens_to_ids('<|return|>') == 151674
+        assert t.convert_tokens_to_ids('<|call|>') == 151675
+        assert t.convert_tokens_to_ids('<|end|>') not in [151674, 151675]
+        assert json.loads((pathlib.Path(path)/'generation_config.json').read_text())['eos_token_id'] == [151674, 151675]
     else:
         assert '<think>' in rendered[1]
     assert all(t.encode(x) for x in rendered)
@@ -600,8 +620,11 @@ async def smoke(endpoint, logs, config, pixels):
     from .client import APIClient
     from .config import APIConfig
     from .muse_spark_recipe import SPARK
+    from .beam_recipe import TARGETS as BEAM_TARGETS
     kwargs = ({'reasoning_effort': 'low', 'current_date': config['template_date']}
-              if config['model_id'] == SPARK else {'enable_thinking': False})
+              if config['model_id'] == SPARK else
+              {'reasoning_effort': 'low', 'allow_missing_thinking': False}
+              if config['model_id'] in BEAM_TARGETS else {'enable_thinking': False})
     # A synthetic 32x32 RGB PNG; no reference or patient information in probes.
     def chunk(kind, value):
         return struct.pack('!I', len(value)) + kind + value + struct.pack('!I', zlib.crc32(kind + value))
@@ -643,6 +666,41 @@ async def smoke(endpoint, logs, config, pixels):
     b.write(logs / 'smoke.json', {'passed': True, 'outside_article_timing': True, 'cases': results})
 
 
+async def reasoning_smoke(endpoint, logs, config):
+    """Require saved reasoning through the actual streaming extraction client.
+
+    Uses the production template/sampling/stop settings, including Spark xhigh
+    and Beam max. A bounded synthetic trace may end at the token cap; its text
+    must still be returned separately from the answer and preserved verbatim.
+    """
+    import httpx
+    from .pilot_extract import PilotRunner
+    messages = [{'role': 'user', 'content': 'Compute 17 times 19 plus 23. Check the arithmetic, then give the final number.'}]
+    receipt = {'passed': False, 'outside_article_timing': True, 'synthetic': True,
+               'messages': messages, 'model_id': config['model_id'], 'revision': config['revision']}
+    async with httpx.AsyncClient(timeout=600) as http:
+        runner = PilotRunner(config, logs / 'reasoning-smoke-client', [endpoint], b.CONTEXT, 'targeted', http=http)
+        try:
+            client = runner.clients[0]
+            receipt['request'] = client.body('case_context', messages, 512)
+            count, _, _ = await runner.token_count(client, messages)
+            result = await client.complete_once(endpoint, 'case_context', messages, 512)
+            receipt.update(response=result.response(), metrics=result.metrics(), expected_prompt_tokens=count)
+            if result.error:
+                raise ValueError('Reasoning streaming probe failed: ' + result.error)
+            if result.prompt_tokens != count:
+                raise ValueError('Reasoning tokenize/generation prompt token counts differ')
+            if not result.reasoning_text or not result.reasoning_text.strip():
+                raise ValueError('Reasoning capture failed: endpoint did not return separate reasoning text; inspect reasoning-smoke.json and the configured parser/template')
+            receipt['passed'] = True
+        except Exception as exc:
+            receipt.update(error_type=type(exc).__name__, error=str(exc))
+            raise
+        finally:
+            await runner.close()
+            b.write(logs / 'reasoning-smoke.json', receipt)
+
+
 async def worker(work, name):
     with runtime_lock(work):
         return await _worker(work, name)
@@ -681,7 +739,9 @@ async def _worker(work, name):
     profile = PROFILES[definition['profile']]
     validate_runtime(work, name)
     async def startup(endpoint, logs):
-        await smoke(endpoint, logs, b.read(arm / 'manifest.json')['extraction'], definition['pixels'])
+        config = b.read(arm / 'manifest.json')['extraction']
+        await smoke(endpoint, logs, config, definition['pixels'])
+        await reasoning_smoke(endpoint, logs, config)
     return await b.worker(arm, 0, campaigns=[arm],
         serving_factory=lambda _work, shard, _logs: serving(work, name, shard), runtime_probe=gpu_probe(profile),
         startup_check=startup, budget_seconds=m['nemotron_super']['hours'] * 3600 - 120,
@@ -858,6 +918,11 @@ def aggregate(work):
             'item_matching': 'one-to-one evidence overlap and fuzzy names',
             'attribute_errors_scored_separately': True,
             'reference_is_physician_gold': False},
+        'reasoning_policy': {'streaming_capture_smoke_required': True,
+            'saved_fields': ['reasoning', 'reasoning_content', 'thinking', 'reasoning_details'],
+            'provenance': 'Endpoint-returned reasoning only; original call ledgers include messages, model revision, generation settings and response.',
+            'fact_links': 'Task-level call references accompany extracted facts/citations; reasoning is not verified evidence.',
+            'training_filter_applied': False},
         'test_evaluated': m['nemotron_super']['include_test'], 'metrics': metrics, 'matched': matched,
         'arms': {name: {'configuration': m['nemotron_super']['arms'][name],
             'recipe': PROFILES[m['nemotron_super']['arms'][name]['profile']],
@@ -903,6 +968,17 @@ def aggregate(work):
     lines += [result['interpretation'], '',
         'Item detection and attribute correctness are separate: an item match can still have a wrong assertion, value, or time. Semantic judge scores have not been applied.', '',
         'Full scores, matched-article throughput, worker goodput, reasoning capture and fact/citation/trace links: comparison.json and arms/*/summary.', '']
+    lines += ['## Reasoning capture', '',
+              '| Arm | Calls with text reasoning | Calls without text reasoning | Facts with returned reasoning links |',
+              '|---|---:|---:|---:|']
+    for name, report in reports.items():
+        counts = report['reasoning_capture']
+        returned = counts.get('returned_text', 0)
+        linked = report['fact_reasoning_index']['facts_with_returned_reasoning_links']
+        lines.append(f'| {name} | {returned} | {sum(counts.values()) - returned} | {linked} |')
+    lines += ['', 'Original reasoning remains in extraction/attempts.jsonl and ehr/calls/attempts.jsonl under each article attempt. '
+              'summary/fact-reasoning.jsonl links facts and source citations to those calls. Synthetic reasoning-smoke.json traces are excluded from article scoring and distillation data. '
+              'Returned traces and their facts remain unreviewed for training.', '']
     (work / 'summary/comparison.md').write_text('\n'.join(lines))
     files = b.inventory(work, ['results', 'summary', 'submissions'])
     for name in reports:

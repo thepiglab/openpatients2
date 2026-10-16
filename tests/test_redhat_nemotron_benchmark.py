@@ -18,8 +18,8 @@ def test_redhat_default_arm_freezes_target_and_draft_and_preserves_profiles(camp
     work = tmp_path / 'all-profiles'
     s.prepare(campaign[2], work, expected=3)
     m = s.check(work)
-    assert m['nemotron_super']['profiles'][-1] == 'redhat-fp8-dspark'
-    assert len(m['nemotron_super']['arms']) == 6
+    assert 'redhat-fp8-dspark' in m['nemotron_super']['profiles']
+    assert len(m['nemotron_super']['arms']) == 8
     assert {redhat.FP8, redhat.DSPARK} <= m['nemotron_super']['pins'].keys()
     arm = b.read(work / 'arms/redhat-fp8-dspark-text/manifest.json')
     assert arm['model'] == {'id': redhat.FP8, 'revision': redhat.PINS[redhat.FP8]['revision']}

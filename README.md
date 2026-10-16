@@ -29,7 +29,8 @@ living overview whenever the pipeline changes.
   [source-claim compiler](docs/SOURCE_CLAIM_COMPILER_DESIGN.md) design.
 - [Clinical model benchmark](docs/DENSE_NEMOTRON_SUPER.md) — Fastino Super Healthcare,
   NVIDIA BF16/NVFP4, NVFP4 with LiLiCorr, Muse Spark Open NVFP4 with DSpark,
-  and Red Hat Nemotron FP8 with its DSpark8 drafter,
+  Red Hat Nemotron FP8 with its DSpark8 drafter, and Reflection Beam FP8/NVFP4
+  with DFlash2 and verified streaming reasoning capture,
   using pinned publisher vLLM recipes.
 
 ## Quick start

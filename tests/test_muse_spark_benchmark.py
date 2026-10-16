@@ -15,20 +15,20 @@ from openpatients2.pilot_extract import PilotConfig, PilotRunner
 from test_dense_nemotron_super import campaign
 
 
-@pytest.mark.parametrize('with_images,arm_count', [(False, 6), (True, 11)])
+@pytest.mark.parametrize('with_images,arm_count', [(False, 8), (True, 13)])
 def test_default_includes_spark_access_image_and_eight_gpu_job(campaign, tmp_path, monkeypatch, with_images, arm_count):
     monkeypatch.setattr(b, 'freeze_media', lambda *a, **kw: {})
     work = tmp_path / 'default-models'
     s.prepare(campaign[2], work, expected=3, with_images=with_images)
     m = s.check(work)
-    assert m['nemotron_super']['profiles'] == ['fastino', 'nvfp4', 'bf16', 'lilicorr', 'spark', 'redhat-fp8-dspark']
+    assert m['nemotron_super']['profiles'] == ['fastino', 'nvfp4', 'bf16', 'lilicorr', 'spark', 'redhat-fp8-dspark', 'beam-fp8-dflash2', 'beam-nvfp4-dflash2']
     assert len(m['nemotron_super']['arms']) == arm_count
     assert 'spark-text' in m['nemotron_super']['arms']
     assert spark.SPARK in m['nemotron_super']['pins'] and spark.DSPARK in m['nemotron_super']['pins']
-    assert set(m['nemotron_super']['engines']) == {'nemotron', 'spark'}
+    assert set(m['nemotron_super']['engines']) == {'nemotron', 'spark', 'beam'}
     plan = s.submit(work, 'account', 'qos', dry_run=True)
     assert plan['maximum_simultaneous_gpus'] == 8
-    assert sum('--gres=gpu:b200:8' in command for command in plan['commands_without_dependencies']) == (2 if with_images else 1)
+    assert sum('--gres=gpu:b200:8' in command for command in plan['commands_without_dependencies']) == (3 if with_images else 2)
 
 
 def test_explicit_spark_uses_its_own_image(campaign, tmp_path, monkeypatch):
@@ -36,9 +36,9 @@ def test_explicit_spark_uses_its_own_image(campaign, tmp_path, monkeypatch):
     work = tmp_path / 'all-models'
     s.prepare(root, work, expected=3, profiles=list(s.PROFILES))
     m = s.check(work)
-    assert list(m['nemotron_super']['profiles']) == ['fastino', 'nvfp4', 'bf16', 'lilicorr', 'spark', 'redhat-fp8-dspark']
-    assert len(m['nemotron_super']['arms']) == 6
-    assert set(m['nemotron_super']['engines']) == {'nemotron', 'spark'}
+    assert list(m['nemotron_super']['profiles']) == ['fastino', 'nvfp4', 'bf16', 'lilicorr', 'spark', 'redhat-fp8-dspark', 'beam-fp8-dflash2', 'beam-nvfp4-dflash2']
+    assert len(m['nemotron_super']['arms']) == 8
+    assert set(m['nemotron_super']['engines']) == {'nemotron', 'spark', 'beam'}
     assert spark.SPARK in m['nemotron_super']['pins'] and spark.DSPARK in m['nemotron_super']['pins']
     monkeypatch.setenv('CUDA_VISIBLE_DEVICES', '0,1,2,3,4,5,6,7')
     cfg = s.serving(work, 'spark-text')
@@ -51,7 +51,7 @@ def test_explicit_spark_uses_its_own_image(campaign, tmp_path, monkeypatch):
     assert cfg.speculative_config == {**spark.PROFILE['speculation'],
         'model': str(work / 'runtime/weights/spark-draft')}
     plan = s.submit(work, 'account', 'qos', dry_run=True)
-    jobs = [cmd for cmd in plan['commands_without_dependencies'] if '--gres=gpu:b200:8' in cmd]
+    jobs = [cmd for cmd in plan['commands_without_dependencies'] if cmd[-1] == 'spark-text']
     assert len(jobs) == 1 and '--cpus-per-task=16' in jobs[0] and '--mem=200G' in jobs[0]
     assert plan['maximum_simultaneous_gpus'] == 8 and not plan['submitted']
     assert s.serving(work, 'nvfp4-text').image_reference != cfg.image_reference
@@ -62,7 +62,7 @@ def test_spark_vision_is_separate_and_preserves_other_profiles(campaign, tmp_pat
     work = tmp_path / 'vision'
     s.prepare(campaign[2], work, expected=3, with_images=True, profiles=list(s.PROFILES))
     m = s.check(work)
-    assert len(m['nemotron_super']['arms']) == 11
+    assert len(m['nemotron_super']['arms']) == 13
     assert m['nemotron_super']['arms']['spark-vision'] == {'profile': 'spark', 'pixels': True}
     assert 'fastino-vision' not in m['nemotron_super']['arms']
 
