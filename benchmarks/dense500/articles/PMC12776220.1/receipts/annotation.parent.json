@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12776220.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8714c7835c9d850d2a13330f8ca2e605460cc2dd30551f86085ebf0b1c12ae44",
+  "annotation_sha256": "de33fe20f513786ec52236c52da17fa80cc21b3c259a62c0df5354e0ccb3c530",
+  "reviewed_at": "2026-10-16T08:55:59.945846+00:00",
+  "source_segments_read": 58,
+  "facts_reviewed": 121,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f029/p1-f030 (heparin cessation, non-heparin anticoagulation): kept action unknown, ambiguous, review_only; added the Discussion 'in hindsight' and limitations 'absent precise timestamps ... initiation of non-heparin anticoagulation' evidence and notes; moved both out of the hematology-diagnosis event into new event p1-e22 with occurrence unknown.",
+    "p1-f109: preoperative ECG 'no ST-T changes' recoded as a performed test with assertion present and flag negative (was assertion absent).",
+    "p1-e05: removed the borrowed time_text 'At the start of the operation' from the whole-operation event (it belongs to exposure and plate removal only).",
+    "p1-e16: removed free flap loss (p1-f012) and the review_only heparin facts so the event no longer implies their time.",
+    "p1-e18 split: further investigation (p1-f121) moved to new event p1-e21.",
+    "Relation p1-e15 -> p1-e17 re-evidenced with the abstract's literal 'subsequently' quote instead of paragraph order around the death sentence.",
+    "Added 11 literally supported relations: e16->e17 (subsequently), e05->e06 (Postoperative), e04->e07 (within 72 hours of perioperative heparin exposure), e07->e08 (first appeared / Initial conservative management), e07->e09 (persisted despite re-exploration), e07->e11 (POD 3 persistent congestion), e04->e15 (after perioperative heparin), e15->e16 (4Ts components score the POD 5 nadir), e15->e21 (prompted), e18->e21 (initially ... until), e19->e20 (despite escalation, progressed and died).",
+    "Ambiguities rewritten: Table 4 vs text re-explorations are consistent in count and first finding but not literally mapped; PF4 result vs death is not a literal conflict (neither passage places the result relative to death), so no relation to death and nothing quarantined; heparin-stop ambiguity cites the limitations presupposition."
+  ],
+  "unresolved": [
+    "Appendix A, B, C and D are referenced; Appendix A, B and C appear only as heading segments with no content in the retained source, and Appendix D content is the Table 4 re-exploration log.",
+    "The source states that daily platelet counts were not recorded, that PF4 ELISA optical density and functional assay results were unavailable, and that precise timestamps for heparin dosing and for initiation of non-heparin anticoagulation are absent.",
+    "The source states that no intraoperative photodocumentation of retrieved thrombi was retained and that ECG and chest radiograph images were not retained.",
+    "Table 1 values carry reference intervals but no flags in the retained text; no high or low flags were derived from the intervals.",
+    "Text re-exploration statements and the Table 4 log are not literally mapped to one another and are kept as separate items.",
+    "Caption-layer visual status is not_inspected; the four figure images were inspected in visual.json."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 58,
+    "facts_reviewed": 121,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient; death on postoperative day 7 literally stated (b00033).",
+      "Heparin cessation and non-heparin anticoagulation are only supported/justified by the 4Ts score; the limitations presuppose initiation without stating it, so both stay action unknown and review_only.",
+      "Table 1 row shading is zebra striping in the XML, not author emphasis; no flags derived from reference intervals.",
+      "Table 4 four re-explorations are consistent with the text first re-exploration plus three additional ones; kept separate because the source gives no row-level mapping.",
+      "All four figures viewed at full resolution; visual descriptions, attribution, EHR labels and privacy flags match the pixels."
+    ],
+    "residual_risks": [
+      "Free flap loss is presupposed only by a Discussion causal phrase; kept as condition with verification unknown and no event or time.",
+      "PF4 result timing relative to death remains unknown.",
+      "Measurement series INR points carry unit_text \"0\"/\"9\" (substrings of the value cells), which is not a unit; Sonnet must set them to null or to the reference-interval cell \"ratio\"."
+    ]
+  },
+  "physician_adjudicated": false
+}
