@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC13560476.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4a5c300c64595f305866792424d741ea507877043ef20f8364432c32ef9c8eaa",
+  "annotation_sha256": "3c722a2be09216802bf51619c0b679e493b4e696e698f8583fa2b223ff1e316e",
+  "reviewed_at": "2026-10-16T08:54:29.328707+00:00",
+  "source_segments_read": 14,
+  "facts_reviewed": 46,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Atypia: p1-f018 (mild to moderate, results + Figure 2 caption) restored to supported/include; p1-f019 (discussion \"mild atypia\") changed from source_conflict to ambiguous/review_only, since mild lies inside the stated range (narrowing ambiguity, not a literal contradiction)",
+    "Mitoses: p1-f021 \"rare mitoses\" kept ambiguous/review_only; p1-f020 gains the Figure 2 caption evidence",
+    "p1-f022 text_value spaced to \"higher-grade\" (GLUED-TEXT); the evidence quote keeps the printed \"highergrade\"",
+    "Caption evidence added to p1-f006 (Figure 1A), p1-f014, p1-f015, p1-f016, p1-f017, p1-f018 and p1-f024 (Figure 2); b00008 restatement added to p1-f004",
+    "Added p1-f046 care_plans follow-up after lesion removal (completed, during 1 year of follow-up), linked to event p1-e08; care_plans domain now documented",
+    "Added relation p1-e01 overlaps p1-e02 (presented with a 2-year history of the lesion)",
+    "Added ambiguity and limitation: specimen source of the histopathology (biopsy vs removed lesion) and the order of diagnosis and removal are not stated, so no relation links them",
+    "Summary paragraph 2 now cites atypia, mitoses and higher-grade atypia facts and states the diagnosis basis without \"supporting\" wording"
+  ],
+  "unresolved": [
+    "Discussion sentence calling the case mild atypia with rare mitoses narrows the results and caption wording (mild to moderate atypia; occasional mitotic figures); recorded as review_only ambiguities.",
+    "Author interpretation that the findings support a benign nature, and statements comparing the case with published series, are not recorded as patient facts.",
+    "Immunohistochemistry panel D is described only as a CD10 stain per the caption; no other marker images are shown.",
+    "No surgical date, biopsy type, specimen site or follow-up findings beyond absence of local recurrence are stated.",
+    "Order of histopathology, diagnosis and lesion removal is not stated; no relation links them."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 14,
+    "facts_reviewed": 46,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (10-year-old girl); all 45 draft facts verified against b00008/b00009/b00010 and both captions; none removed",
+      "Benign cellular neurothekeoma correctly kept in conditions only (ONC-BENIGN); benign-nature discussion sentence left as author interpretation",
+      "Duration split accepted: 2-year history carried by the asymptomatic item, 2-month growth by the growing-lesion item, with an ambiguity against inferring onset or growth start",
+      "Both figures viewed at full and enlarged resolution; visual.json descriptions match pixels; scale-bar text unreadable"
+    ],
+    "residual_risks": [
+      "Only two relations; presentation, dermoscopy, histopathology, diagnosis and excision remain unordered because the source gives no literal order words",
+      "Low-resolution figures (500 px wide) limit pixel verification of atypia and mitoses"
+    ]
+  },
+  "physician_adjudicated": false
+}
