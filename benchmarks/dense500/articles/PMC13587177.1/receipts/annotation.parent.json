@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC13587177.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a22e1afc1d6119b90abf293b7a910ad82c1de0a534106b01282ddd0ccd90c254",
+  "annotation_sha256": "e56320b634996739d341d7a16dc9bcff061096f629ea59f52b4af5cfe77158cb",
+  "reviewed_at": "2026-10-16T08:42:55.180596+00:00",
+  "source_segments_read": 12,
+  "facts_reviewed": 139,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f008 (condition clinical_status resolved from the abstract): duplicate of review_only outcome p1-f140 (ONE-STATEMENT); references repointed.",
+    "Fig 1A caption vs case text judged the same abdominal ultrasound study (text cites Fig. 1A); conflicting site/size kept only on the two review_only ultrasound findings p1-f084/p1-f085; p1-f084 given numeric 4.7 cm; the CT finding, procedures and the hemorrhagic right ovarian cyst condition stay included.",
+    "Abstract \"resolved completely in 3 months\" vs text/Fig 1C reduced lesion (<2 cm) judged the same three-month time point; persistence is the conflicting attribute, p1-f087 and p1-f140 stay review_only; ambiguity text updated.",
+    "Anchors restored from adjacent sentences: 5 days later -> \"Tacrolimus (2 mg/day) was also added\" (p1-f132); dizziness, menorrhagia and Hb 7.4 time set to the discussion \"After 3 months\" anchored to \"added tacrolimus\" (p1-f023, p1-f024, p1-f088); Since then -> \"diagnosis of LAHPS associated with SLE\" (p1-f026..p1-f030) and \"cyclophosphamide pulse therapy were administered\" (p1-f034).",
+    "p1-f034 symptom improvement moved from symptoms_function to outcomes (event improvement).",
+    "Temporality current removed from p1-f118, p1-f119, p1-f120 (present tense without an ongoing label); new ambiguity on \"recurrent bleeding events take place\" vs \"persisted without bleeding\".",
+    "p1-f110 brain MRI \"no pathologic findings\" flagged normal.",
+    "Removed relation e10 after e09 (paragraph order only); added 11 literal relations: e01<e07 (stated ages), e02<e22 (First / again / Second), e03<e05, e05<e20, e04<e20, e20<e22 (stated calendar times), e07 same_time e08 (At this visit), e07<e10 (Due to abdominal discomfort / Thus), e10<e12 (Thus ... After 3 months), e08<e14 (After 3 months ... reduced), new event e26 recurrent bleeding episodes < e17 diagnosis (diagnosed after).",
+    "Summary claim 3 now cites p1-f113 (post-diagnosis UPCR aggravation) instead of p1-f096."
+  ],
+  "unresolved": [
+    "Case report of one patient; literature statements about LAHPS cohorts and mechanisms are background, not patient facts.",
+    "Figure 1A caption and the case text disagree on the ultrasound site and size; the abstract says the cyst resolved completely in 3 months while the text and caption describe a reduced lesion.",
+    "The case text names deflazacort and the discussion names prednisolone as the current steroid.",
+    "Most events lack calendar dates; Three months later, Since then and 5 days later are anchored only to the adjacent sentences.",
+    "Values printed inside the Figure 3 chart are pixel content for the visual record only and are not facts here.",
+    "Caption-layer visual status not_inspected; actual images are inspected in the separate visual target."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 12,
+    "facts_reviewed": 140,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single 17-year-old girl with SLE nephritis and LAHPS; roster 1 complete.",
+      "Steroid name conflict (deflazacort in case text vs prednisolone in discussion for current medication) kept as two review_only facts; earlier deflazacort use is consistent and included.",
+      "PT/aPTT high flags kept: the source classifies each value as prolonged/prolongation/increased (and prints reference intervals at the visit).",
+      "Times from abstract and captions verified literal in each fact's own quote; December 2018.12 kept literal as a print-artefact ambiguity.",
+      "Fig 3 chart values remain visual-only; no facts derived from pixels."
+    ],
+    "residual_risks": [
+      "Visit date, LAHPS diagnosis date and cyclophosphamide start are not stated; Fig 3 dates are not used to place them.",
+      "Whether the abstract resolution and the <2 cm lesion describe the same instant rests on both saying 3 months."
+    ]
+  },
+  "physician_adjudicated": false
+}
