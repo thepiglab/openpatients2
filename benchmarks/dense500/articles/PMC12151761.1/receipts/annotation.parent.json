@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12151761.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7f5a2ca3f2551078d5abe461945accedffa83cd86c5841419a4d1993e5abf3a2",
+  "annotation_sha256": "733e81e99b79f0e824302e615af55b946082b6d80e613d2b7ce064bb7b27c3d7",
+  "reviewed_at": "2026-10-16T01:26:09.369792+00:00",
+  "source_segments_read": 16,
+  "facts_reviewed": 62,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f046/f047/f048 (CBCT MSF reestablishment, unchanged mucosal edema and lesion size) timed \"At the 6-month follow-up\" from the discussion sentence that states them for this case (b00009); caption E/F and abstract evidence added to f046.",
+    "p1-f060 symptom recurrence re-timed from the b00009 6-month sentence; \"after 6 months\" in b00010 qualifies MSF reestablishment, not the recurrence.",
+    "p1-f045 abstract evidence (\"no evidence of bony healing after 6 months\") added alongside the Figure 1D caption.",
+    "p1-f005 MSEO laterality left / body site left upper first molar (#26) from \"originating from the left upper first molar\".",
+    "p1-f007 radicular cyst: added b00010 \"histologically diagnosed as a periapical cyst\"; p1-f041 added Figure 1A caption (mesiobuccal root asterisk); p1-f038 added \"we opted against root-end surgery on the palatal root\".",
+    "Added p1-f062 postoperative periapical radiographs (Figure 2F caption).",
+    "Events: planned NSRCT (f024) moved from treatment e04 to diagnosis/plan e03; surgical consent f058 moved from e07 to surgery e08; hypotheses f061 and f008 and not-performed procedures f038/f039 removed from occurred events; f062 added to e08.",
+    "Summaries no longer cite review-only f061 or unmentioned f039.",
+    "visual.json Figure 1A asterisk location and Figure 1D speck (bright, not dark) corrected to pixels; figure-EHR and privacy sidecars regenerated with --draft and reviewed labels/flags carried over.",
+    "Article limitations: Figure 1A/1D crowns visible before the documented crown placement noted without adding a fact; 6-month timing basis documented."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the actual JPEGs are inspected in the separate visual target.",
+    "Discussion mechanisms (cystic pressure, bay cyst, microbial and nonmicrobial causes) are author hypotheses and are recorded only as ambiguities or review-only items.",
+    "General statements about endodontic microsurgery and surgical approaches to the palatal root are not patient facts.",
+    "Figure 1A and 1D pixels show full-coverage radiopaque crowns on both molars, while the text reports zirconia crowns placed two months after the nonsurgical treatment; no crown fact is added from pixels.",
+    "The 6-month periapical radiograph is timed by the Figure 1 caption and abstract, and the 6-month CBCT findings by the discussion sentence beginning \"At the 6-month follow-up\"; other b00007 statements stay untimed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 16,
+    "facts_reviewed": 62,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient; roster 1 from \"A 55-year-old woman presented\".",
+      "p1-f038 palatal root-end surgery absent is literal (\"we did not perform root-end surgery on the palatal roots\"); p1-f039 trans-antral approach \"dismissed\" kept absent (checker warning is a false positive for \"dismissed\").",
+      "MSF \"almost indiscernible\" (text) and \"destroyed\" (caption) describe the same baseline CBCT finding; kept as one observation with an ambiguity, not a literal conflict.",
+      "Bay cyst and the hypothesized failure cause stay review_only; \"retreatment\" wording never used.",
+      "All 18 panels in 4 figures viewed at 3x crops."
+    ],
+    "residual_risks": [
+      "\"Two months later\" keeps a null anchor (no literal reference event).",
+      "No literal order link between the diagnosis (e03) and the start of nonsurgical treatment (e04).",
+      "Two non-blocking EVID-NEGATION warnings remain on p1-f039 (\"dismissed\")."
+    ]
+  },
+  "physician_adjudicated": false
+}
