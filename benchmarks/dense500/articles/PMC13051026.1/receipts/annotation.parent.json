@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC13051026.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "568d8ef08921559ac3574e278fdf4efeb9f2737c07b7697f012edce1dba1eea8",
+  "annotation_sha256": "41ae269e03a88ff912593b5d652925249a0cb3c67c86739f8ec45798434554e0",
+  "reviewed_at": "2026-10-16T06:19:58.372480+00:00",
+  "source_segments_read": 23,
+  "facts_reviewed": 69,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f055 (Table 1 omalizumab protocol for the case row) set to certainty source_conflict, scoring review_only: the table shortens the interval to every 3 weeks before escalating to 300 mg, the case text escalates to 300 mg and 'later' shortens the interval; ambiguity rewritten as a source conflict; f052/f053 keep no order",
+    "p1-f053 interval shortening: removed time 'Over the next year' (the interval was 'later' shortened, possibly outside that year); added q21-day dose evidence",
+    "p1-f069 symptom relapse when a dose was missed promoted from ambiguous/review_only to supported/include: the discussion states follow-up demonstrated it for this patient and the case text describes the same pattern; no date or count recorded; summary claim 4 cites it",
+    "p1-f043 name trimmed to 'Bone marrow biopsy' (deferral kept in evidence and notes); event p1-e15 kind other -> test, occurrence not_occurred kept",
+    "p1-f049 prednisolone bursts: frequency '8 bursts' corrected to 'daily' (10 mg orally daily), burst count moved into regimen; added b00018 evidence; prednisolone ambiguity extended to the 7 mg/day maintenance floor (arithmetic-only mismatch, not a conflict)",
+    "p1-f067 no adverse events: text_value 'no adverse events' -> 'adverse events' (assertion absent carries the negation); added b00018 evidence",
+    "Added b00018 evidence for baseline and follow-up tryptase (f032, f039) and steroid discontinuation (f056)",
+    "Added six literally supported temporal relations: e02 before e06 (rash initially treated as impetigo before the skin biopsy confirming DCM; replaces an e02-before-e01 relation withdrawn after orchestrator review), e04 before e14 (tryptase decreased 30.8 vs 6.2), e10 before e14 ('remained on omalizumab'), e08 before e13 and e09 before e13 (drug start before its discontinuation), e10 during e09 (11 months within the first 12 months of life)",
+    "Added ambiguity that Figure 1B adds no stated finding beyond the caption; article limitation on escalation order updated"
+  ],
+  "unresolved": [
+    "Table 1 rows other than the Case presentation row describe published literature cases and are not patients of this article; the abstract's five additional pediatric cases are cohort background.",
+    "Reference ranges, standard doses and general mechanism statements are background and not recorded as patient facts.",
+    "Caption-layer visual status not_inspected; the actual JPEG is inspected in the separate visual target.",
+    "The order of omalizumab dose escalation and interval shortening conflicts between text and table; the table regimen is review_only and the events are left unordered.",
+    "A bone marrow biopsy is described as later deferred; it is recorded as not done, with action unknown rather than cancelled."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 23,
+    "facts_reviewed": 69,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (boy, DCM) presenting at 3 months, omalizumab from 11 months; Table 1 literature rows correctly excluded and the case row folded into existing facts as evidence (sex/age, DCM, protocol, 1- and 2-injection outcomes, steroid cessation).",
+      "Text and Table 1 disagree on the order of omalizumab dose escalation and interval shortening; quarantined on the table regimen fact.",
+      "Bone marrow biopsy was later deferred: recorded as procedure action unknown and a not_occurred test event.",
+      "Systemic (text) vs oral (table) steroid cessation is one reported cessation of the same drug class; merged without adding a route.",
+      "Impetigo kept as assertion possible/unconfirmed: the rash was only initially treated as impetigo.",
+      "Figure 1 viewed at full resolution; visual, figure-EHR and privacy descriptions match the pixels; no faces or burned-in identifiers."
+    ],
+    "residual_risks": [
+      "Prednisolone burst length (4 weeks) vs 7-day full dose plus weekly 2.5 mg taper and the 7 mg/day maintenance floor are recorded as printed, not reconciled.",
+      "The missed-dose relapse has no date or count; the case text phrases it generically.",
+      "Abstract age 11 months is the omalizumab start age, not the presentation age (3 months)."
+    ]
+  },
+  "physician_adjudicated": false
+}
