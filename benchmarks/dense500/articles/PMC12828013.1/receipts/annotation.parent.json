@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12828013.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6465c1be15eb3225070f09fce17c63e582afcfeab42a692779631a25912932e2",
+  "annotation_sha256": "d07b014acc9a7b90edcffeabf71af502f65bc82cad4f4a25edb9b59539f6cade",
+  "reviewed_at": "2026-10-16T09:52:01.138049+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 70,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f015 placenta percreta changed from confirmed to provisional at 18 weeks: the case text calls the 18-week findings suggestive; abstract quote kept only for the 18-week time",
+    "Added p1-f069 placenta percreta confirmed by the later ultrasound (own sentence has no time; fact time left null)",
+    "p1-f016 total placenta previa changed to confirmed with time 18 weeks of gestation from the Figure 1 caption",
+    "Kept in situ vs removed intact resolved as a sequence, not a contradiction: added p1-f070 placenta kept in situ; p1-f037 hysterectomy finding now uterus and placenta removed intact; ambiguity removed",
+    "p1-f065 close follow-up action_status unknown -> completed; p1-f067 discharge monitoring instructions completed -> recommended",
+    "Events: history facts moved out of the 6-week presentation into new history event p1-e12; cesarean (p1-e08, time 32 weeks from the abstract) split from hysterectomy p1-e13 and intraoperative blood loss/transfusion p1-e14; p1-e11 reduced to permanent fertility loss; multidisciplinary monitoring moved to p1-e03",
+    "Relations rebuilt from 8 to 21: all pairs ordered by stated gestational ages (6w5d, 18, 29, 32+1, 32 weeks) except the same-week readmission/delivery pair, which is ordered by the planned emergency cesarean and its execution; plus previous, repeated, readmitted, subsequent hysterectomy, postoperative, intraoperative and resulting-in links",
+    "Summary claims 2 and 4, ambiguities and article limitations updated to match (incl. Figure 4 anatomy not identifiable on pixels)"
+  ],
+  "unresolved": [
+    "Abstract says placenta percreta was diagnosed at 18 weeks while the case text calls the 18-week findings suggestive and reports later ultrasound confirmation; recorded as provisional then confirmed.",
+    "The confirming ultrasound and Figure 2 state no gestational age of their own; their facts carry no time.",
+    "Placental pathology was sent but no result is reported.",
+    "Discussion statements about published series and meta-analyses are not patient facts.",
+    "Caption-layer visual status is not_inspected; the four images are inspected in visual.json. Figure 4 pixels do not allow the uterus, placenta or cervix named in the caption to be identified."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 70,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (35-year-old G4P3 woman); fetus and newborn kept in her record",
+      "Percreta was suspected at 18 weeks and confirmed on a later ultrasound; abstract wording 'diagnosed at 18 weeks' kept as an ambiguity",
+      "Placenta left in situ and removed intact with the uterus is a sequence, not a conflict",
+      "Placental pathology sent without a reported result"
+    ],
+    "residual_risks": [
+      "Confirming ultrasound, Figure 2 findings and admission treatments are grouped in the 29-week admission event although their own sentences state no time",
+      "Readmission before cesarean relies on the planned emergency cesarean and its execution rather than distinct stated times",
+      "Figure 3 and 4 anatomy is not identifiable on pixels; caption claims only"
+    ]
+  },
+  "physician_adjudicated": false
+}
