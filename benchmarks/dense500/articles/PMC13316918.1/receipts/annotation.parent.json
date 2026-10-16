@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC13316918.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a08903909803953e1984a569ec6631dce5dc2dc9ead1dfed118d7540592bf374",
+  "annotation_sha256": "5483fc49a3af778e9ef7af825293a9638c1a178638fd13062d4049e8db7b259f",
+  "reviewed_at": "2026-10-16T08:10:01.380961+00:00",
+  "source_segments_read": 38,
+  "facts_reviewed": 66,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed relation e03->e07: \"8 months later\" has no named anchor; the e06->e07 pair is recorded as unknown because the adjacent laboratory sentence does not name the anchor; ambiguity rewritten.",
+    "Added relations e01->e03 (abstract \"post-total thyroidectomy and radioactive iodine ... presented\"), e11->e13 (Fig 7 \"preoperative\") and e15->e18 (adjacent-sentence anchor for \"Ten months later\").",
+    "Summary claim 3 no longer states the tru-cut biopsy preceded surgery (the source gives no order).",
+    "Cited every previously uncited Table 1 cell: MIBI assumptive (f037), MIBI definitive (f005, f051, f052), PET assumptive (f042, f043, f007), PET definitive mediastinal lesion (f006, f052), follow-up row label and assumptive cell (f024, f058, f007).",
+    "Added abstract evidence for the same single tests (f030, f039, f040, f037, f023) and the MIBI indication \"to localize any suspicious parathyroid adenoma\" (f018); f023 body site set to superior mediastinum per the abstract.",
+    "Added p1-f065 recurrent papillary thyroid cancer (abstract statement about this case, verification unknown) and p1-f066 oncology treatment right neck dissection (alternate of f022; tumor_ref null and no stated purpose, since no quote links it to a tumor).",
+    "Moved discussion-only \"rising sTg level\" (f033) from the PET event to the laboratory event."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the 8 JPEG figures were inspected in the separate visual target.",
+    "Hyperparathyroidism is not stated as a diagnosis of this patient in the case text (only in generic abstract conclusions), so no condition was recorded.",
+    "Brown tumors are an imaging-based supposition with no histological proof; they are recorded as possible/provisional.",
+    "Thyroglobulin has no printed unit; PTH unit ng/ml is as printed. No flags were derived from reference ranges.",
+    "Background paragraphs, literature statistics and generic conclusions are not patient facts.",
+    "Table 1 is a summary of imaging findings with assumptive and definitive diagnoses; its cells are cited as evidence of the matching observations and conditions.",
+    "No supplementary files are listed for this article."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 38,
+    "facts_reviewed": 66,
+    "figures_viewed": 8,
+    "key_findings": [
+      "Single index patient; 39-year-old woman; roster count 1 literal.",
+      "Hyperparathyroidism is never stated for this patient (only generic background and a generic abstract conclusion); not recorded, limitation kept.",
+      "PTH and ALP high flags are supported by the abstract sentence \"high calcium, parathyroid hormone, and alkaline phosphatase\" describing the same single laboratory test.",
+      "Brown tumors stay possible/provisional (no histological proof); thyroid skeletal metastases stay a differential.",
+      "Superior versus anterior mediastinal wording kept as an ambiguity with both observations; Figures 7 and 8 preoperative images kept as a separate event, not tied to the Figs 3 to 5 PET.",
+      "Figure 6 specimen is not named in the caption; the histology description facts keep no specimen, linked to the parathyroid adenoma through the text citation of Fig. 6.",
+      "Two not-performed MIBI acquisitions (whole-body, SPECT) correctly share one negation sentence."
+    ],
+    "residual_risks": [
+      "Thyroglobulin has no printed unit; the sTg 145.7 value is unitless.",
+      "The MIBI scan and the presentation remain unordered because the 8-month interval has no named anchor."
+    ]
+  },
+  "physician_adjudicated": false
+}
