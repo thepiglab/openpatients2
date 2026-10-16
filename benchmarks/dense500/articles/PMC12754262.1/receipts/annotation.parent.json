@@ -1,0 +1,47 @@
+{
+  "article_id": "PMC12754262.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "50b51e4312802463d392971326f7dd59acffc588d0211156759b0728852208fa",
+  "annotation_sha256": "2598a7fd90749dea1e999a07d8d17ac8eadb3f20080a9a089023f3b00a17f85c",
+  "reviewed_at": "2026-10-16T05:53:31.409400+00:00",
+  "source_segments_read": 35,
+  "facts_reviewed": 166,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Discharge medications p1-f095 to p1-f098 (valproic acid, carbamazepine, levetiracetam, clonazepam) changed from current to administered with the Day 45 time kept: the source says only that he left the hospital on Day 45 while taking them and never states continuation to the latest described time (EEG 3 months after discharge).",
+    "Earlier parent corrections unchanged: corticosteroid route conflict items, CT contrast ambiguity, psychiatric-history items, f014 time, rituximab planned, event and relation fixes."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the actual JPEG is inspected in the separate visual target.",
+    "Case text gives no calendar dates; all times are hospital days or offsets from discharge.",
+    "Discussion statements about other published cases and general literature are not patient facts.",
+    "Figure 1 is an image: its Day 15 \"non injected\" CT entry is pixel content kept in visual.json; the text contrast attribute is review-only (ambiguity, not a source conflict).",
+    "Corticosteroid route conflicts between the abstract (oral) and case text (intravenous); both route values are review-only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 35,
+    "facts_reviewed": 166,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Targeted re-review of discharge medication actions after annotator dispute; rest of the previously reviewed annotation unchanged."
+    ],
+    "residual_risks": [
+      "Corticosteroid route quarantined despite repeated IV wording in the case text.",
+      "Timing of first suspicion (16 vs 17 days) left untimed."
+    ]
+  },
+  "physician_adjudicated": false
+}
