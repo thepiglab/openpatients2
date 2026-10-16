@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12588930.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d6b804dfe215a8cf6b1596029b3b4fe377879e491851c34c9dc022ca469932c1",
+  "annotation_sha256": "09402729b0f552c2a64a261ad01da4ecd0c16865ca992de1baeb9d0c36234dfd",
+  "reviewed_at": "2026-10-16T01:11:07.482763+00:00",
+  "source_segments_read": 38,
+  "facts_reviewed": 87,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Suspected hemorrhagic lesion location reclassified from ambiguity to source conflict: Table 1 \"in the macula\" versus text/abstract/caption outside the inferior vascular arcade / inferior to the macula. p1-f017 kept include without body_site; added review_only source_conflict items p1-f083 (outside arcade) and p1-f084 (in the macula)",
+    "Follow-up duration reclassified as source conflict (30 months / 2.5 years versus nearly three years): removed duration from include items p1-f075 and p1-f082; p1-f078 set source_conflict/review_only with the Figure 2 caption quote; added review_only p1-f085 for the 30-month / 2.5-year side",
+    "Added p1-f086 and p1-f087: Figure 2 caption OCT findings for panels C and G (SRF resolved with few / without intraretinal hard exudates), previously only cited as evidence on the macular-edema items p1-f051/p1-f056; those items now cite only their own statements",
+    "p1-f047 text_value now includes the caption-stated sparse intraretinal hard exudates",
+    "p1-f064 ingredient_as_documented set to conbercept",
+    "Added Table 1 diagnosis cells as evidence on p1-f008 (initial diagnosis BRVO) and p1-f010 (final diagnosis RCM); added the Figure 2A caption wording to p1-f027",
+    "Added relations e04 before e06 (\"Two more intravitreal injections\") and e07 before e09 (July 2, 2018 / April 23, 2019 dates)",
+    "Visual submission: corrected the F1 panel H arrow description (the arrow lies right of the red vertical line and points left to the contour peak, not left of the line); regenerated figure-EHR and privacy drafts and carried the reviewed labels and flags over"
+  ],
+  "unresolved": [
+    "Figure pixels are described in the visual submission; the annotation figure rows keep caption-level status not_inspected.",
+    "Visual acuity values are Snellen-style fractions kept as literal text; no numeric conversion or reference-range flags were added.",
+    "Individual conbercept injection dates are not stated; only the dates of the follow-up visits are given.",
+    "Location wording of the suspected hemorrhagic lesion and follow-up duration wording differ across sections and are kept as stated (see ambiguities).",
+    "Table 2 and literature statements about RCM, PEVAC and TelCaps are not patient facts and were not recorded."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 38,
+    "facts_reviewed": 87,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (68-year-old female), right-eye RCM first treated as BRVO with three monthly conbercept injections, spontaneous resolution by November 27, 2020",
+      "Every Table 1 BCVA cell (OD and OS for six rows) and finding cell is an observation; the Time point column governs row times, dated sentences keep their own dates",
+      "Injection frequency (\"Three ... per month\" in Table 1 versus monthly x3) kept as an ambiguity, not a conflict: the table states no different count or interval",
+      "\"Admission\" (Table 1) versus \"presented\" kept as an ambiguity; no inpatient stay inferred",
+      "Hypertension temporality unknown with \"for 10 years\"; oral antihypertensive action current from \"well-controlled with oral medication\"",
+      "OCT \"no evidence of macular edema\" kept flag negative (performed imaging, negative result); \"no significant abnormalities\" kept flag normal",
+      "Table 2 and literature statements excluded; all 16 panels (F1 A-H, F2 A-H) viewed at full size with zoomed crops of F1 C/H and F2 C/D/G/H"
+    ],
+    "residual_risks": [
+      "Treating the location and follow-up duration differences as conflicts rather than loose wording is a judgment call",
+      "Individual injection dates are not stated; e04 and e08 stay untimed",
+      "Arrow-marked lesions in OCT/OCTA panels are small at the published resolution",
+      "measurement_series.json was not submitted (draft only)"
+    ]
+  },
+  "physician_adjudicated": false
+}
