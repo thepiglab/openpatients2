@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12809215.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a8235c1a86960f3db2595edc43f9ab8ba608bca17eed370e3cf730e046a72e09",
+  "annotation_sha256": "6321b736a399658415acf08c7f1fbc692b9781aac41fbe8f6e7e19a758354078",
+  "reviewed_at": "2026-10-16T03:02:10.691120+00:00",
+  "source_segments_read": 24,
+  "facts_reviewed": 101,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged duplicate 170-198 μg/L range: p1-f047 (abstract) removed and its quote added to p1-f048 (Discussion, time 'before discontinuing kohl exposure'); references repointed.",
+    "Added p1-f112: observed BLL increase 'in August 2021' (b00013). p1-f032 (170 μg/L) keeps null time; ambiguity added that the text does not identify 170 with August 2021 or the chart point.",
+    "Removed 8 Table 1 items that were not results: the four row-label items (place/year of purchase, kept in item names and p1-f092) and the four 'Image N' items (raw.xml shows 'Image N' is alt text of unavailable inline graphics fx1-fx4).",
+    "Removed p1-f083/p1-f084 (text restating Table 1 lead range and mercury/cadmium < LOD); their quotes now cite the per-sample lead and mercury/cadmium cells, which also quote the full table row and header.",
+    "p1-f099 kohl source: kept present with the abstract identification quote plus 'confirming suspicions'; dropped the 'likely source' quote (certainty mismatch).",
+    "p1-f097 possible occupational mercury exposure: evidence extended to include the preceding sentence so 'that last heavy metal' (whole blood mercury) is literal; ambiguity added.",
+    "p1-f053 July 2023 urinary screen 'normal': quarantined ambiguous/review_only because 'The biological examination was normal.' is a separate sentence whose referent is not stated.",
+    "Flag normal set on results described as 'no abnormalities'/'no abnormal values' (CBC and electrolytes at both dates, plasma arsenic/antimony/cadmium, whole blood mercury).",
+    "p1-f027 ICP-MS: removed the method detail misfiled as a finding.",
+    "Unavailable inline graphics unwrapped-graphic-2..5 in the annotation set to patient_ids [] and scope unresolved (not attributed or described).",
+    "Added 4 date-supported relations (Oct 2018 before 2019-2021 replacement; Q1 2021 resumption before Aug 2021 consultation; Aug 2021 before Jan 2022 BLL; Apr 2022 before Mar 2023 labs).",
+    "Summary rewritten as 5 phase claims of 67-82 words; no 'sons' or 'twice daily' paraphrase; stale fact links removed."
+  ],
+  "unresolved": [
+    "Table 1 macroscopic-aspect cells contain inline graphics fx1-fx4 whose alt text is \"Image 1\"-\"Image 4\"; no downloadable image exists, so they are listed as unavailable, not described, and not recorded as observations. Row labels (place and year of purchase) are kept in the item names, not as separate items.",
+    "Figure 1 data points are chart annotations; text-stated BLLs are kept as text facts and not linked to chart points unless the source states the same time point.",
+    "Several lead and kohl statements appear in both abstract and body; kept as separate statements with their own quotes.",
+    "Pharmacokinetic constants are listed in the Fig. 1 caption and are author-calculated for the patient; no reference ranges are stated."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 24,
+    "facts_reviewed": 111,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (63-year-old woman, chronic lead poisoning from kohl over >40 years); roster count 1 literal; the two children stay in her record as family_member.",
+      "Dated timeline (2017, May 2018, Oct 2018, Jan 2021, Aug 2021, Jan 2022, Apr 2022, Mar/Jul 2023, Feb 2024) verified; May 2018 is not equated with \"about 3 years ago\".",
+      "Children's BLLs 18 and 24 μg/L are not mapped to ages 24 and 27; the source does not say which is which.",
+      "Fig. 1 caption kinetic constants are recorded as patient facts; printed chart BLL values (including 67, 51, 43, 41, 40 that the text never states) stay in visual.json only.",
+      "Inline graphics fx1-fx4 have no obtainable image and stay unavailable in visual, figure-EHR and privacy records."
+    ],
+    "residual_risks": [
+      "Whether the 170 μg/L BLL is the August 2021 increase is left open.",
+      "Possible occupational mercury exposure rests on the grammatical referent \"that last heavy metal\".",
+      "The July 2023 \"normal\" biological examination referent is unstated (review_only)."
+    ]
+  },
+  "physician_adjudicated": false
+}
