@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12838257.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8e01f5350359674509f18dd14e8b0cada1d9577de08421a0a35234c981010d91",
+  "annotation_sha256": "9e7036f767f830fb3c1f0d3ab4e3e8c45e72dabaa186c21e887031d287711a57",
+  "reviewed_at": "2026-10-16T09:38:45.194894+00:00",
+  "source_segments_read": 70,
+  "facts_reviewed": 167,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f156 (no antithyroid therapy for the infant): removed the indication \"Neonatal hyperthyroidism\", which the sentence does not state; note made consistent.",
+    "p1-f017: removed severity \"new onset\" (onset is not a severity).",
+    "p1-f148: severity \"transient\" removed and name set to \"Transient neonatal hyperthyroidism\" as the abstract words it.",
+    "Added the Table 3 Present case cells as evidence on the facts they restate: age (p1-f002), GD onset and ALZ interval plus the b00053 16-month sentence (p1-f028), TRAb at diagnosis (p1-f021).",
+    "Added p1-f167: methimazole continued at the same dose until the 19th week of gestation (b00030), which the draft had missed.",
+    "Split the lumped Table 1 and Table 2 series events (old e07, e17, e22) into one event per gestational week, postpartum month and neonatal age row; the 10-day neonatal row joins e16 and the 7-month postpartum row joins e23; added course-level events for throughout-pregnancy MMI and 2-3-weekly monitoring, the third-trimester TRAb entry, the decline of free hormones over the following weeks and MMI continuation until week 19.",
+    "Temporal relations increased from 9 to 49 (after orchestrator review: e13-before-e14 dropped as unsupported; e45-before-e09 re-quoted with the contiguous span stating the decline and the 28-week reduction in response to it; e01-before-e02 kept on the quoted \"diagnosed ... treated with ALZ\" wording), each quoting the stated times or order words: gestational-week row chain, week-11 same_time links (presentation, GD diagnosis, MMI start), dose-change events same_time with their table rows, delivery before postpartum rows, 3-day row and postpartum monitoring, postpartum month chain, neonatal age chain, ALZ ages before presentation, MS diagnosis before ALZ (treated with), transient hyperthyroidism before spontaneous recovery.",
+    "Existing dose-change relations re-quoted with the two stated-time sentences instead of a whole paragraph.",
+    "Ambiguities updated: TRAb week-25 conflict confirmed as the same time point; postpartum tapered entry confirmed to sit in the Table 3 Present case column, so the conflict stands."
+  ],
+  "unresolved": [
+    "Figure pixels are described only in visual.json; the annotation figure row stays caption-level.",
+    "Dash cells in Tables 1 and 2 (data not available or not assessed) are not recorded as observations.",
+    "TRAb at 25 weeks of gestation conflicts between the text (20.6 IU/L) and Table 1 (37.9); both are review-only.",
+    "Postpartum maternal methimazole direction conflicts between the text (increased) and Table 3 (tapered); both are review-only.",
+    "TRAb unit labels differ between text (IU/L), Table 1 (U/L) and Table 2 (UI/L) and are kept literal.",
+    "Table 3 literature cases (three published cases) are not patients and none of their values are recorded.",
+    "Gestational age at delivery is not stated in the text.",
+    "Postpartum Table 1 rows 1, 2, 4, 5 and 7 months are kept with literal time labels; Figure 1 plots the postpartum axis in weeks after birth."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 70,
+    "facts_reviewed": 167,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (36-year-old pregnant woman with alemtuzumab-induced Graves disease); fetus and newborn stay in her record; Table 3 Case 1-3 columns are literature cases and are excluded.",
+      "TRAb at week 25: text 20.6 IU/L vs Table 1 37.9 at the same time point; both review_only source_conflict.",
+      "Postpartum MMI: text says gradually increased, Table 3 Present case column says maternal ATD tapered; genuine present-case conflict, both review_only; Table 1 postpartum dose cells (10, 10, 15, 15, 15 mg) stay included.",
+      "TSH low flag at week 11 rests on the source word suppressed; other TSH 0 cells unflagged.",
+      "Ten NO-BORROWING warnings on p1-f029, f105, f106, f107, f162 (each reported twice) are checker false positives: each time text is literal in the fact's own text sentence, which also states the dose; facts were not reshaped."
+    ],
+    "residual_risks": [
+      "Table cells keep bare week numbers (\"13\", \"21\") as time text under the Week of gestation header.",
+      "Figure 1 postpartum axis is in weeks after birth while Table 1 uses months; positions not reconciled (limitation).",
+      "Delivery gestational age is not stated; week 41 row is not linked to delivery."
+    ]
+  },
+  "physician_adjudicated": false
+}
