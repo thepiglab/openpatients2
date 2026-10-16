@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12680488.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4791f827e3fb472e5f46d7c4d917b37810e284f7eb47c215c16503e56002de16",
+  "annotation_sha256": "350a86b48cb3c30f397842a85c460891f4c903ae25f964d8e627ef931f105437",
+  "reviewed_at": "2026-10-16T02:51:44.451072+00:00",
+  "source_segments_read": 47,
+  "facts_reviewed": 238,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Paraquat ingestion facts (p1-f004, p2-f004/f005, p3-f004/f007/f008, p4-f005/f006/f007) moved from medications to social_exposures: a herbicide poisoning is an exposure, not a drug given as treatment.",
+    "Dose conflict made consistent: the discussion sentence that all patients ingested more than 20 mL literally conflicts with 20 mL (p2), spat it out (p3) and approximately 5 mL (p4); both sides are review_only source_conflict and only the amount is quarantined. For p2 the amount was split out to new review-only fact p2-f066 so the ingestion and its 3.5 h timing stay included.",
+    "p1: about 20 mL does not literally conflict with more than 20 mL; the case-text dose stays include, and the series sentence was added as review-only ambiguous fact p1-f063 (contradicted for the other three patients).",
+    "p3 timing: 3 h prior to ER presentation and the exact time unclear when found are compatible; merged into one include exposure fact p3-f004 citing both quotes, removed p3-f005 and p3-f006.",
+    "p2 vasopressor: the stopped vasopressor is unnamed and not literally the vasopressin that was continued; p2-f040 and p2-f041 un-quarantined to supported/include with an ambiguity; p2-f040 evidence now carries its On the fourth day time.",
+    "p2 day-4 event split: untimed AKI resolution, bradycardia, hypokalemia and continued N-acetylcysteine/vasopressin moved to new untimed event p2-e16; summary rewritten so it no longer dates them to day 4 and no longer states the quarantined 20 mL amount.",
+    "p3 duplicate paragraphs b00019/b00024 and b00020/b00025: 13 facts now cite both segments.",
+    "Added 8 relations with literal support (p1 Day 2 before Day 3; p2 MICU transfer before MICU stay, second day before third day, May 31 before June 7; p3 initial renal tests before the after-2-days tests; p4 ingestion before crying, ingestion before nearby-hospital care, arrival before death 7 h after admission).",
+    "p1-e09 description no longer claims radiograph infiltration; p4-f016 also cites the b00011 crying sentence; ambiguities and article limitations rewritten for these decisions."
+  ],
+  "unresolved": [
+    "The article has no figures, tables or supplements.",
+    "The paragraph about the seizure, intubation, bradycardia and death does not name the younger son; it is attributed from the preceding paragraph and the abstract.",
+    "The discussion sentence that all patients ingested more than 20 mL of 24% PQ literally conflicts with the case-text amounts for the mother (20 mL) and younger son (approximately 5 mL) and with the elder son spitting the poison out; both sides of each conflict are review-only and only the amount is quarantined. For the first patient (about 20 mL) there is no literal conflict, so her case-text dose stays included and the series sentence is a review-only ambiguous fact.",
+    "The mother's fourth-day statements (an unnamed vasopressor stopped; vasopressin continued) do not name the same drug, so both are kept as included facts with an ambiguity.",
+    "The discussion vitamin C dose (1 g intravenously twice daily, \"in our cases\"), the fulminant category (stated as following from the more-than-20-mL sentence that the case text contradicts), antioxidant benefit and survival statements are series-level and are not copied to individuals.",
+    "Several narrative paragraphs (b00019 and b00024, b00020 and b00025) repeat the elder son sentences; each fact cites both segments once.",
+    "Paraquat ingestion is recorded under social_exposures (herbicide exposure), not medications."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 47,
+    "facts_reviewed": 238,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Four patients: p1 27-year-old woman (died Day 4), p2 35-year-old mother, p3 7-year-old elder son, p4 1-year-old younger son (died 7 h after admission); roster count 4 from Among the four patients.",
+      "b00027 (the child: seizure, intubation, bradycardia, death 7 h after admission) belongs to p4: its death time and intubation match the abstract sentence about the 1-year-old infant, and the elder son was discharged.",
+      "Mother paragraphs b00014-b00017 and b00022 use she/her inside Case II; discharge after 19 days matches the abstract.",
+      "Discussion vitamin C dose (in our cases) and the fulminant category are series-level and not assigned; p4 had failed IV cannulation, so not every case received IV therapy.",
+      "Route: intravenous applied only to the drug it directly precedes in b00014 and b00015 lists (scope ambiguous, recorded); b00024/b00026 lists give each drug its own route."
+    ],
+    "residual_risks": [
+      "Gate warning on p3-f048 (abstract quote without the after 8 days time) is a checker false positive; the time comes from the fact own discharge sentence.",
+      "Whether intravenous in b00014/b00015 covers the later list items is unresolved.",
+      "Admissions to the ER are kept as care_plans items with plan_type other."
+    ]
+  },
+  "physician_adjudicated": false
+}
