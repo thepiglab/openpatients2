@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12902050.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a4fdd0a37fd80748140c19be2ac4666d3cddabc83e2ce7c41654e88303912dde",
+  "annotation_sha256": "ab6ce992e9cc71ca9e174185373dc6656de2ec5b078f875fb59dca74c1780620",
+  "reviewed_at": "2026-10-16T00:50:53.293190+00:00",
+  "source_segments_read": 8,
+  "facts_reviewed": 51,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f030 (panel L tear more open), p1-f034 (panel O tear closed), p1-f037 (macular SRF bleb), p1-f022 (tear partially supported): time added from the governing caption panel-group lead sentences ((L–N) Five weeks, (O–Q) at 6 weeks, (R–T) Two months, (C–E) One week after surgery), quoted as one span.",
+    "p1-f042: \"residual traction\" present with text_value \"not considered significant\" -> \"Significant residual traction\" assertion absent (author judgment), plus patient ambiguity.",
+    "p1-f051 vitrectomy: care_plans unknown -> procedures_devices Vitrectomy assertion absent (\"avoided\"); event p1-e23 not_occurred. p1-f050 (PR preferred over revision) kept as a care_plans decision with status unknown (no negation cue for revision).",
+    "p1-f026, p1-f032 positioning instructions: action_status recommended -> completed (instruction given).",
+    "p1-f040 BCVA 20 / 30 removed from the 3-month event p1-e18 into its own untimed event p1-e25; summary no longer dates it.",
+    "Added 6 relations: onset 2 days before presentation, initial-visit imaging same day as encircling, first before second gas injection (\"A second injection\"), 5 weeks before 6 weeks, first PR before recurrent RD and before second PR.",
+    "Summary 3 rewritten with the literal \"one week later, at 6 weeks\"; summary 4 no longer dates BCVA.",
+    "visual.json: panel H rewritten (one bright strip crosses a tissue edge; the two bright strips do not cross); panels Q, T, W now record the short thin dark cleft near the lower-right end instead of \"no visible dark gap\"; photo-panel limitations for F, I, R, U corrected. Figure-EHR and privacy drafts regenerated with --draft and reviewed labels/flags carried over."
+  ],
+  "unresolved": [
+    "Figure 1 caption-layer visual status is not_inspected; the image was inspected separately in visual.json.",
+    "The source states no calendar dates; all times are relative to surgery, presentation or gas injection.",
+    "No supplements or videos are listed for this article."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 8,
+    "facts_reviewed": 51,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single patient, roster 1 literal (\"A 27-year-old male patient\").",
+      "\"On the same day\" for the first gas injection and encircling is the fact's own time text; the anchors (\"Three weeks after surgery\", \"initial visit\") are literal source phrases. Day-25 laser and 6-week laser carry their own same-sentence times.",
+      "\"2 days ago\" anchor \"presented\" is in the same sentence and kept.",
+      "Right eye is literal only for the field defect and the RRD (caption title); tear, lattice, scars and procedures keep laterality unknown.",
+      "First and second PR are not mapped to specific injections or laser sessions (ambiguity kept).",
+      "All 23 panels (A to W) viewed at full resolution with 2x row crops and zooms of H, K, Q, T and W."
+    ],
+    "residual_risks": [
+      "Second gas injection keeps no time (its sentence states none, though \"One week later, at 6 weeks\" implies 5 weeks).",
+      "Subretinal fluid findings are kept as fundus signs rather than imaging observations.",
+      "Not physician-adjudicated."
+    ]
+  },
+  "physician_adjudicated": false
+}
