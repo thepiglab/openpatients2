@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC12849298.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0000d6ee261bfee1dc8115841f454da15c86f5a3651a5ce6e26486fc59bf9cdd",
+  "annotation_sha256": "87d0c44f3cd1beb509bb69fbc8a5ceca33483f0a4c6e17e9ba9dc1bf9cb8fc0b",
+  "reviewed_at": "2026-10-16T01:32:33.109672+00:00",
+  "source_segments_read": 25,
+  "facts_reviewed": 33,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Table 1 swab 1 organism cell split per organism: p1-f020 Achromobacter spp. and p1-f028 V. parahaemolyticus, each citing the culture sentence, the swab 1 method sentence and the table row (merged the former text-level mixed-culture item with the pooled table item); medium and identification method kept in method",
+    "Susceptibility results split to one observation per organism per agent class: p1-f026 Achromobacter multidrug resistance, p1-f029 Achromobacter susceptible to carbapenems, p1-f027 V. parahaemolyticus susceptible to fluoroquinolones, new p1-f033 susceptible to tetracyclines (text plus Table 1 row; VITEK 2/AST-N335/CLSI in method)",
+    "p1-f008 otorrhea body_site left ear from 'left-sided otorrhea'",
+    "Added literal relations: p1-e02 before p1-e03 ('presented ... despite multiple courses'), p1-e07 after p1-e06 (isolates subjected to AST); a proposed p1-e06 after p1-e05 relation was dropped because no quote states culture followed transport",
+    "Updated table-pooling ambiguity, summary claim 2, and notes on ciprofloxacin 'changed' (stopped) and the three-week regimen duration"
+  ],
+  "unresolved": [
+    "No figures or supplements are listed in the source.",
+    "Table 1 swab 2 and swab 3 cells are dashes; recorded as not reported, not as negative results.",
+    "The case text gives no dates, culture timing relative to presentation, or susceptibility values (MICs); treatment sequence is ordered only where the text states it.",
+    "Specific carbapenem and fluoroquinolone agents are not named in the case text."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 25,
+    "facts_reviewed": 33,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single case (15-year-old male); roster count 1 from 'we describe a rare case', no figures or supplements",
+      "Swab 2 and 3 dash rows kept as performed cultures with status unknown/not_reported; no negative result inferred",
+      "Three-week duration kept on carbapenem and fluoroquinolone: 'The regimen' in the next sentence refers back to exactly that therapy, so it is not borrowed from another fact",
+      "MALDI-TOF A. xylosoxidans kept as the literal instrument result with an ambiguity; authors' reported identification Achromobacter spp. used elsewhere",
+      "Achromobacter CSOM infection kept as a condition from 'a rare case of CSOM infection with Achromobacter spp.'; V. parahaemolyticus only as an isolate",
+      "Sea swimming: temporality historical from 'history of', status unknown, duration 'for the past 8 months'"
+    ],
+    "residual_risks": [
+      "Ciprofloxacin 'changed' mapped to action stopped (no exact enum)",
+      "Specific carbapenem and fluoroquinolone agents and resistant agents are unnamed",
+      "Hearing impairment laterality left unknown although 'left-sided' may scope both symptoms"
+    ]
+  },
+  "physician_adjudicated": false
+}
