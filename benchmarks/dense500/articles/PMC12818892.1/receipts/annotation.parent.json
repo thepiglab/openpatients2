@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC12818892.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2f1f53380cba0a7d1207008e46c6ed4ed52d4e4d9b68bd910cc99638b404e089",
+  "annotation_sha256": "568433ccee3ff89659d15d0a1bfd9f513eb994cc4e33c0adc4b5d0bdc0ab426e",
+  "reviewed_at": "2026-10-16T09:00:35.110860+00:00",
+  "source_segments_read": 48,
+  "facts_reviewed": 179,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Table 1 / abstract merge kept on the source basis (body cites Table 1 for the work-up CBC; abstract calls the same values the initial laboratory tests); merged WBC, neutrophil, Hgb, Hct and PLT facts now quote the full abstract sentence and carry time Initial; notes and ambiguity reworded so the merge no longer rests on matching numbers.",
+    "p1-f017: removed severity \"sudden\" (onset wording, not severity); text_value \"suddenly developed\".",
+    "Removed p1-f115 (stable disease recorded as a condition; duplicate of outcome p1-f175).",
+    "p1-f173 paclitaxel: added duration_text \"6 months\" with its quote.",
+    "Added p1-f180 (blood counts failed to normalize after infection control) and event p1-e08b.",
+    "p1-e17 kind adverse_event -> presentation (disease-progression symptoms, not a treatment adverse event).",
+    "Added 11 temporal relations with literal support (same day of admission, first evaluation sentence, additional RDP, platelet drop -> repeat RDP and chemotherapy, first cycle -> second cycle -> completion, post-treatment response imaging, second-line switch); 7 -> 18 relations; e10->e11c and e19->e20 were dropped as lacking an order word.",
+    "Added ambiguity: CBC called normal although RBC 2.92, Hgb 93 and Hct 29.3 lie below Table 1 reference ranges (flags follow the source wording).",
+    "Summary: removed invented \"later\" and the disputed 6-cycle count; limitations updated for the Table 1 time."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the 2 figure images are inspected in the separate visual submission.",
+    "Figure 2 timeline prints values that differ from the text (chemotherapy dose count, platelet change wording); they stay in the visual record and the related text facts are review_only.",
+    "The supplement is a CARE checklist (administrative); it holds no patient clinical data.",
+    "Table 1 and the abstract values for WBC, neutrophil, Hct, Hgb and PLT are the same initial work-up CBC and are recorded once with the abstract time Initial."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 48,
+    "facts_reviewed": 179,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single 47-year-old woman with cT4N3M1 left breast IDC, marrow infiltration on aspirate, AC chemotherapy at 20% reduced first-cycle dose, endocrine maintenance, second-line paclitaxel, death with OS 21 months.",
+      "Figure 2 prints 8 doses, PLT dropped by 43 and increased by 62 and normal PLT 3 weeks after dose 1; per rulings these are pixel content only and the text facts for 6 cycles, PLT 43 and PLT 62 stay review_only with an ambiguity.",
+      "Pancytopenia is the authors diagnosis despite WBC 21.83 G/L called high; recorded with an ambiguity, no flags from reference ranges.",
+      "Nutritional deficiency (unlikely), sepsis-related cytopenia (initially suspected), myeloma, lymphoma and MDS kept as review_only differentials."
+    ],
+    "residual_risks": [
+      "Table 1 / abstract merge is a judgment: the source never says in one sentence that Table 1 is the initial CBC.",
+      "reference_gates NO-BORROWING warnings on p1-f062/f063/f066 are checker false positives: the abstract quote carries the value itself (Hgb 87, Hct 27.3, PLT 22) as well as the word Initial."
+    ]
+  },
+  "physician_adjudicated": false
+}
