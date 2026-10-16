@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12622862.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "060c16e31096d4b6fe7fd2f9964d466c97d520586eebf0b28a26cc7c7d385cf6",
+  "annotation_sha256": "3a1b8b2905831fb3d2102c408a07d4c4d75564661eb7e62712dada6a5697d247",
+  "reviewed_at": "2026-10-16T05:43:10.609725+00:00",
+  "source_segments_read": 15,
+  "facts_reviewed": 45,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f015 clinical_statement no longer says the pituitary mass was suspected 'at presentation' (not stated); unlinked from presentation event p1-e01.",
+    "p1-f016 pituitary adenoma kept absent/refuted on the literal 'misdiagnosis of pituitary adenoma'; added b00004 evidence 'initially misinterpreted as a pituitary adenoma' and a note.",
+    "p1-f030 Figure 1 lesion size (14x13x13 mm) unlinked from the dedicated sella MRI event p1-e04 so it is not tied to either initial MRI, matching the existing ambiguity.",
+    "p1-f031 caption evidence extended to the full Figure 2 lead sentence including 'three months after treatment'.",
+    "p1-f034 'remained on thyroid hormone replacement' action changed from unknown to administered with a note: past-tense continuation that does not place use at the latest time point (coordinator ruling after annotator dispute; supersedes an earlier 'current').",
+    "Summary claim 1: 'routine blood tests' replaced by the source's laboratory tests including complete blood count and blood glucose; claim 3: adverse events 'were reported' instead of 'occurred'.",
+    "Added temporal relations p1-e03 before p1-e04 ('again interpreted') and p1-e07 before p1-e12 ('remained on thyroid hormone replacement').",
+    "Added ambiguity linking thyroid hormone replacement and levothyroxine items (dose, route, start date not stated).",
+    "visual.json: removed 'above a dark air-filled space' where the pixels do not show it (FIG1 B, FIG2 B) and redescribed FIG2 B (thin bright-edged band above a rounded structure); figure-level descriptions made panel-specific.",
+    "figure_privacy_flags: FIG1 descriptions no longer mention a Spanish-language protocol label (only FIG2 prints one); sidecars regenerated with --draft and labels carried over."
+  ],
+  "unresolved": [
+    "Single-patient report; the statement that the history was unremarkable names no specific condition and is not itemized.",
+    "Height SDS (3.0) and weight SDS (.1) are kept as printed; the sign and leading digit may be print artefacts.",
+    "The anchor of \"three months later\" for the follow-up MRI is not literal; the caption says three months after treatment.",
+    "Levothyroxine dose and route are not stated.",
+    "Discussion recommendations (for example a three-month follow-up MRI) are general guidance and not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 15,
+    "facts_reviewed": 45,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single 9-year-old boy; pituitary hyperplasia secondary to severe primary hypothyroidism (TSH 936 mIU/L, free T4 < 0.4 ng/dL) initially misdiagnosed as adenoma; full regression on follow-up sella MRI after levothyroxine.",
+      "Pituitary adenoma recorded absent/refuted from the literal 'misdiagnosis' and 'misinterpreted' wording.",
+      "Height SDS 3.0 and weight SDS .1 kept as printed with an ambiguity (sign/leading digit possibly print artefacts).",
+      "'Three months later' (text) and 'three months after treatment' (Fig 2 caption) are both literal; the e07-before-e10 relation rests on the caption."
+    ],
+    "residual_risks": [
+      "Height SDS printed positive (3.0) despite severe short stature; weight SDS '.1' incomplete.",
+      "Figure 1 is cited in the sella MRI sentence but the caption does not name the study; size left untied.",
+      "Thyroid hormone replacement and levothyroxine recorded as separate medication statements; probably the same course."
+    ]
+  },
+  "physician_adjudicated": false
+}
