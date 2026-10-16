@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC12698493.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5f4360f7d3ffd1b432dfe0d89619d6b6d48b79986efcd4dd28de5b60bafe1f3d",
+  "annotation_sha256": "c2fa7714091094175fd46cf1f63798f631a456ce8e776dad0663c5753d677849",
+  "reviewed_at": "2026-10-16T05:24:35.421309+00:00",
+  "source_segments_read": 21,
+  "facts_reviewed": 66,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged p1-f007 (abstract 'right subhepatic abscess') into p1-f006 (hepatic abscess secondary to a retained appendicolith): one abscess described with varied location wording (ONE-STATEMENT); location wording kept in evidence and the existing ambiguity, whose fact_ids now point to p1-f006.",
+    "Moved p1-f010 'delayed diagnosis' from conditions to outcomes (event other, related_condition the abscess); it is a course statement from the discussion, not a condition.",
+    "p1-f028 post-operative CT: evidence widened to the full literal sentence including the initial hospitalization and persistent low-grade fevers; indication left null with a note because the fevers may attach to the hospitalization rather than the CT (orchestrator ruling).",
+    "Removed the counterfactual surgical-removal item p1-f067 (assertion conditional) from the occurred decision event p1-e13; the fact itself is kept.",
+    "Added 6 relations with literal support: e02<e04 and e03<e04 ('six months prior', 'a few weeks after the appendectomy'), e04<e06 ('Given the chronicity of the RUQ pain'), e10<e11 (culture of the aspirated fluid; both sentences quoted), e10<e15 ('after one week' with the immediately preceding drainage-procedure sentence quoted), e15<e16 (drain removal sentence and 'one month after drainage' sentence quoted). A proposed e07<e08 relation was dropped on orchestrator ruling: 'Correlating the imaging findings' states the diagnostic basis, not an order.",
+    "figure_ehr_labels.json: replaced figure and panel rationales that called every image 'abdomen/pelvis' with modality/region wording matching the pixels; categories and includability unchanged."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four images are inspected in the separate visual submission.",
+    "The case text states the case occurred over five years ago; no calendar dates are given and none are derived.",
+    "Inflammatory markers are described qualitatively; no CRP or ESR numeric values are given.",
+    "The intervals between appendectomy, onset of pain and abscess are stated differently in the abstract and case text; see ambiguities.",
+    "Discussion and conclusion text about literature and general management is background and is not recorded as patient facts; only the conservative-management and conditional surgery statements about this patient are kept."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 21,
+    "facts_reviewed": 67,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single 75-year-old man; roster 1; every case-presentation statement and the patient-specific discussion sentences checked against the source.",
+      "Figures: arrowed findings in FIG1, FIG3 and FIG4 do not clearly show the captioned anechoic well-defined lesion, two bright calcified appendicoliths, or a bright radiodensity; visual descriptions name only visible structures and record the mismatches as limitations.",
+      "Interval wording (abstract five months after appendectomy vs six months prior with a five-month pain history) kept as an ambiguity, not reconciled.",
+      "Judgement calls kept: oral antibiotics current at three-month follow-up, conservative management planned (decision), counterfactual surgery conditional, culture-before-tailoring relation."
+    ],
+    "residual_risks": [
+      "Order of exam/labs, IV antibiotics, the 3-month follow-up and the counselling/declined surgery relative to other events is not stated and those events remain partly unlinked.",
+      "Whether the subhepatic appendicolith seen on the one-month CT is the same scan as the resolution CT is not stated (e16/e17 unlinked).",
+      "Merging the hepatic/subhepatic abscess wording into one condition relies on the source describing one collection."
+    ]
+  },
+  "physician_adjudicated": false
+}
