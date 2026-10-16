@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC13364885.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3c4fd50aecfbb1d32a82fb767cd40e9509e17e828b6145f5b9c97e75a2381e96",
+  "annotation_sha256": "80881fd46f1656731ed79e429a625a73373e92439e642de2c90da08c2507f725",
+  "reviewed_at": "2026-10-16T07:36:10.866459+00:00",
+  "source_segments_read": 16,
+  "facts_reviewed": 64,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Fig. 1 caption findings (large cystic lesion, surrounding pleural effusion) now carry method 'chest CT scan' from the caption wording; no modality taken from pixels; modality ambiguity kept.",
+    "Added p1-f064 intravenous fluids (route intravenous) from the abstract immediate-treatment sentence, with an ambiguity that the source does not equate it with normal saline or hydration.",
+    "Split the combined imaging event: e11 spiral lung CT (with abstract 'Following stabilization' quote), new e16 lung HRCT with caption-2A findings, new e17 findings reported without a named study (cystic foci dimensions, water lily sign, discussion CT findings, Fig. 1 caption findings).",
+    "Added e18 'anaphylactic shock considered' diagnosis event for the provisional item.",
+    "Added relations with literal support: e01 before e05 (one hour prior to his arrival), e03 before e06 (oxygen therapy and hydration were continued), e18 before e06 ('Given the possibility'), e09 before e11 ('Following stabilization'), e06 before e14 (the 'After ... complete management of the anaphylactic reaction' clause governs the wedge resection); e03 before e05 now quotes both the transport sentence and 'subsequently transferred'.",
+    "Event kinds: worsening/urticaria event set to presentation (not adverse_event); transfer event set to other.",
+    "Reworded urticaria clinical statement to avoid implying a time."
+  ],
+  "unresolved": [
+    "Single case report; no tables and no supplements. Figure 1 caption says chest CT but the pixels show a single frontal projection image (modality not settled by the text).",
+    "The cystic dimensions, effusion size and air-fluid/water lily findings are not tied in the text to one named imaging study or structure.",
+    "Corticosteroid and antihistamine names, doses, routes and times, and the epinephrine dose amounts, are not stated.",
+    "Albendazole dose and duration given in the discussion are a recommendation and are not recorded as this patient's prescription.",
+    "General statements about hydatid disease, cited cases of other patients and population frequencies in the introduction and discussion are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 16,
+    "facts_reviewed": 64,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (31-year-old man); roster count 1 from the abstract case statement.",
+      "Albendazole recorded only as discharge instructions (ordered); the 10 mg/kg x 12 months regimen is a discussion recommendation with plural 'patients' and stays an ambiguity.",
+      "Corticosteroids and antihistamines kept as administered: the discussion states they were administered to the patient; 'prescribed' in the case text does not contradict that; ambiguity kept, no time borrowed from 'immediately'.",
+      "Anaphylactic shock kept as two items: provisional (possibility/suspected) and confirmed (established after HRCT).",
+      "Hypotension from the abstract kept as a patient-specific sign; BP values are separate observations.",
+      "Other causes of shock ruled out after RUSH kept as absent/refuted differential.",
+      "Overlapping CT findings from abstract, results, discussion and captions left unmerged; the source never equates them."
+    ],
+    "residual_risks": [
+      "Fig. 1 pixels look like a frontal projection image (radiograph or CT localizer) while the caption says CT; facts follow the caption.",
+      "Whether spiral lung CT and HRCT are one study is not stated; findings stay unattributed where the text does not name the study."
+    ]
+  },
+  "physician_adjudicated": false
+}
