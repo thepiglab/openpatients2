@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC12637166.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6e1458a1d116b159e271751adcf6291a5ed42807164e24540173464fdc8b2cf3",
+  "annotation_sha256": "ecddc3b15423183fa2b99ab03e0763aaf96d597640c85f0c3739c93e530948af",
+  "reviewed_at": "2026-10-16T02:41:09.567093+00:00",
+  "source_segments_read": 28,
+  "facts_reviewed": 93,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f021 decreased level of consciousness: promoted from ambiguous/review_only to supported/include; the Discussion states it as part of the indication for starting intermittent hemodialysis, so it is timed at that decision (anchor 'starting intermittent hemodialysis', full-sentence quote) and does not conflict with full consciousness on arrival; ambiguity rewritten (sedation confound not inferred).",
+    "p1-f040 complete blood count: kept normal but quarantined as ambiguous/review_only because the sentence does not literally repeat normal for the CBC.",
+    "p1-f049 pH 14:00: removed the case-text quote 'with pH at 7.3' (different printed value from the table 7.33); recorded the 7.3/7.33 precision difference as an ambiguity, not a conflict.",
+    "p1-f045 pH normalized after hemodialysis: flag set to normal ('to normalize the pH').",
+    "p1-f047 name trimmed to 'Lactate' (concise label).",
+    "p1-f024 'not on any other medications': action current -> unknown per the medications prompt for a scoped negative medication statement.",
+    "Event p1-e11 now links p1-f021 and cites the abstract sentence on initiation when lactate reached 18 mmol/L.",
+    "Added 6 temporal relations with literal support: ED arrival after ingestion; hemodialysis after the serial ABG lactate peak, after sodium bicarbonate and after the noradrenaline/fluid supportive measures ('Despite these measures ... Therefore'); mental-status improvement before noradrenaline discontinuation (before end of dialysis vs following completion); hemodialysis during the Table 1 window ('from admission till the end of dialysis').",
+    "Summary claims 2-3 reworded: CBC no longer called normal; decreased level of consciousness at hemodialysis start added (p1-f021).",
+    "Coordinator-requested fix: p1-f048 (Table 1 14:00 lactate) no longer cites the untimed case-text ABG quote and its flag is unknown (table prints no flag); added untimed text-ABG observations p1-f092 (lactate 5.7 mmol/L, flag high) and p1-f093 (pH 7.3), linked to event p1-e05 and summary; ABG ambiguity and limitation rewritten. p1-f084 keeps the case-text 3.2 quote because the caption and text both place it at the end of dialysis.",
+    "Added ambiguities for the untimed ABG vs Table 1 14:00 row and for the caption's empty separator row that raw.xml does not contain; updated article limitations accordingly."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the actual Figure 1 image is inspected in the separate visual submission.",
+    "Table 1 values are kept literally with the printed clock times; the caption mentions an empty row separating the hemodialysis rows, but raw.xml contains no empty row (only alternating row shading), so no row is labelled as during dialysis. The Figure 1 x-axis D suffix and shaded area are not used to time facts.",
+    "End-of-dialysis lactate is 3.2 mmol/L in the case presentation and Table 1 but 3.3 in the Discussion; both are kept review_only.",
+    "Decreased level of consciousness appears only in the Discussion, as part of the indication for starting hemodialysis; it is recorded at that decision point and does not conflict with full consciousness on arrival.",
+    "Table 1 prints pH 7.33 and lactate 5.7 at 14:00; the case text gives an untimed ABG with pH 7.3 and high lactate 5.7 mmol/L. Text ABG values and table cells are kept as separate items because the source does not identify them as the same time point.",
+    "Reference intervals in Table 1 headers are recorded as reference_range_text and no flags are derived from them.",
+    "Literature, guideline and cohort statements in the Introduction and Discussion are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 28,
+    "facts_reviewed": 93,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (17-year-old non-diabetic female, intentional metformin overdose, MILA treated with one 8-hour intermittent hemodialysis session); roster count 1 is literal.",
+      "End-of-dialysis lactate is 3.2 mmol/L in the case text and Table 1 5:50 row versus 3.3 in the Discussion; both describe the end of the single eight-hour session, so the two lactate facts stay source_conflict/review_only.",
+      "All 40 Table 1 cells are separate observations with header reference ranges and no range-derived flags; no Table 1 cell carries a flag; the high flag is only on the untimed case-text ABG lactate.",
+      "raw.xml Table 1 has no empty separator row (only alternating shading), so no row is labelled as during dialysis; Figure 1 D suffix and shading were not used to time facts and no plot estimates became facts.",
+      "Sedative agent, ABG clock time and noradrenaline route stay null; metformin ingestion action stays unknown."
+    ],
+    "residual_risks": [
+      "The untimed text ABG (p1-f092/p1-f093) and the 14:00 table cells may be the same sample, but the source does not say so; they are kept separate.",
+      "Table 1 clock times are kept as one aggregated event; per-row events are not modelled.",
+      "Relation e11 after e07 relies on the abstract and case text calling the measures supportive measures that failed before dialysis."
+    ]
+  },
+  "physician_adjudicated": false
+}
