@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12952377.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "01551272ce0e440e58654106381cafaf9c4b2a657dff668ea10c49d4944ae66a",
+  "annotation_sha256": "ae0f15d25c2f89acfb39ac6eca6715181686c55529a8fb6c4fe726b3519d31a9",
+  "reviewed_at": "2026-10-16T06:04:10.689204+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 74,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f036: evidence extended to include 'now' so the current wheelchair statement carries its own temporal cue",
+    "p1-f072: temporality current -> unknown (present tense 'is depicting' carries no explicit ongoing cue)",
+    "p1-f046: most recent endoscopic review action historical -> completed, temporality historical -> unknown (source does not place it before presentation); ambiguity added",
+    "p1-f038..f041: clinical statements no longer restate the regimen start time on the individual drug items, whose time stays null",
+    "Added p1-f074 conditions 'Anal fistula' from the introduction ('anorectal tuberculosis which presented as an anal fistula')",
+    "Added relation p1-e06 before p1-e07 (tissue taken for histopathology review -> histopathological analysis; test -> result)",
+    "Added ambiguity for the unitless monocyte value 11.2",
+    "source_coverage b00006 background -> patient_facts for the added anal fistula fact"
+  ],
+  "unresolved": [
+    "Single-case report without tables or supplements; the laboratory workup, imaging and sigmoidoscopy have no stated dates.",
+    "Caption-layer visual status not_inspected; the one JPEG was inspected in the separate visual target.",
+    "Discussion and background statements about anal tuberculosis in general are literature or cohort statements and are not patient facts.",
+    "Ulcerative colitis history is uncorroborated by imaging records per the source; the abbreviation IUC is as printed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 74,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single 25-year-old man with anal tuberculosis; roster count 1 literal; all case paragraphs b00007-b00015 plus abstract b00001 and Figure 1 caption verified quote by quote.",
+      "Hb 15.0 g/dL vs consistently falling hemoglobin with transfusions is not a direct source conflict (undated single value vs trend); kept include with an ambiguity.",
+      "Biopsy site anorectal junction (text) vs anal biopsy from ulcerated areas (caption) kept as ambiguity, not merged.",
+      "Hirschsprung disease historical/confirmed (known case); differentials enterocutaneous fistula, abscess and incontinence secondary to Hirschsprung kept possible/provisional; ulcerative colitis historical, remission per authors, uncorroborated.",
+      "ATT component drugs keep time null (time stated only on the regimen sentence); regimen item carries the after-diagnosis anchor.",
+      "Figure 1 viewed at full resolution with panel crops; panels C and D burned-in overlay date/time stamp under the D.O.B. label is not copied into any file (grep confirmed)."
+    ],
+    "residual_risks": [
+      "Lab, MRI and sigmoidoscopy have no stated dates; relation to transfusions unknown.",
+      "Whether the most recent endoscopic review is the reported sigmoidoscopy is unstated.",
+      "Abstract (b00001) and body duplicate statements are merged into single facts by meaning."
+    ]
+  },
+  "physician_adjudicated": false
+}
