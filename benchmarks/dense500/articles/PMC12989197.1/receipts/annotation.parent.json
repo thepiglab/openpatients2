@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC12989197.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1335eb39224762e9c7a4cdc14e41961ccaf33180834a804e34b784edabd6d434",
+  "annotation_sha256": "39c626c05e2d5258828eae628f6b2ebf3d177cced1ed98e11d09bbccc801b3c5",
+  "reviewed_at": "2026-10-16T08:31:10.324545+00:00",
+  "source_segments_read": 24,
+  "facts_reviewed": 119,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f009: an absent 'complications of childhood development' condition re-recorded as symptoms_function childhood development 'uncomplicated' until 20-22 months.",
+    "p1-f022 (feeding intervals as a care plan) removed; the feeding interval is part of the dietary-management procedure p1-f021, whose statement now carries it (ONE-STATEMENT).",
+    "p1-f025, p1-f067, p1-f068: 'persistent'/'sporadic' moved from severity to text_value (they describe course or frequency, not severity).",
+    "p1-f040: removed indication 'Carnitine supplementation' (a purpose, not an indication; no indication is stated).",
+    "p1-f054 to p1-f057: evidence widened to the whole regimen sentence so the stated indication (stabilization of the acute psychotic episode) comes from each item's own quote.",
+    "p1-f083: added quotes supporting conservation, SIFT/PolyPhen prediction and unknown TMEM196 function; corrected the note.",
+    "p1-f086: added the quote supporting 'conservative Val to Ile change'.",
+    "Added p1-f120 care_plans: transition in psychiatric care (completed, no time).",
+    "Event p1-e06 split: metabolic testing (p1-f027 to p1-f030) moved to new event p1-e21 with no time, because the source does not place it at age 11.",
+    "Added relations p1-e10 before p1-e11 ('persisted even after cessation') and p1-e15 before p1-e16 ('Despite sustained improvement with this therapeutic intervention ... continues').",
+    "Summary claim 4: the DBH -970 TT genotype is attributed to Sanger sequencing, not to whole-exome sequencing."
+  ],
+  "unresolved": [
+    "Single-case article; the unaffected fraternal twin sister, mother and father are relatives with genotype/lab statements only and are not separate roster patients.",
+    "Literature, population-frequency and control-cohort statements (allele frequencies, control CPT2 activity as a reference interval, KCNQ2, IAE, schizophrenia lipid studies) are not patient facts.",
+    "Pseudonymous family codes printed in the source are not copied into authored fields.",
+    "Caption-layer visual status is not_inspected; the three figure images are inspected in the visual target.",
+    "Supplement SD1 is a ZIP of a methods/primer/frequency PDF and a variant spreadsheet; its review path is partial and is reported rather than worked around.",
+    "The source gives ages only as life stages or approximate ages; no numeric age at presentation, no dates and no time of the genetic work-up."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 24,
+    "facts_reviewed": 119,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (adolescent male proband); mother, father and unaffected fraternal twin sister kept inside p1 as relatives.",
+      "MUTYH p.Tyr165Cys versus 'from Thr to Cys' is a print artefact, kept as an ambiguity, not a conflict.",
+      "TMEM196 'potentially de novo' versus 'de novo' is a hedge difference, kept as an ambiguity with the hedged wording.",
+      "NICU stabilization stays action unknown ('requiring'); ADHD stays confirmed (stated without hedging in b00004).",
+      "CPT2 activity unit comes from the sentence that defines how this same assay's activity is reported; it is not borrowed from another fact.",
+      "Pedigree pixels in Figures 2 and 3 match the text genotypes for all four family members."
+    ],
+    "residual_risks": [
+      "Supplement SD1 XLSX (family exome variant tables) has no supplement_review path; the supplement gate stays open and the article is held for a user decision.",
+      "'Early childhood seizure' (b00004) is kept as its own item and may duplicate the 20-22 month tonic-clonic seizure.",
+      "Evidence quotes for the fibroblast C16 and MUTYH carrier facts contain the source's pseudonymous family codes; no authored field contains them."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC13245729.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "65dfc639c6e8fad0b9b618b2bbb76e38e421ee8b36852d07d07820c15b1518a3",
+  "annotation_sha256": "1862b823bcfafdfe892bc8537a3d8fd0441161e73d7a0308b67276ac278d15af",
+  "reviewed_at": "2026-10-16T09:05:22.994133+00:00",
+  "source_segments_read": 28,
+  "facts_reviewed": 71,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f020 cardiogenic shock (table) promoted from source_conflict/review_only to supported/include: normotension does not negate cardiogenic shock; the tension is recorded as an ambiguity, not a conflict",
+    "Removed p1-f022 (normotensive sign duplicating p1-f021); p1-f021 blood pressure now flag normal from the word normotensive",
+    "p1-f050 indication restored from the abstract sentence (absent leaflet and severe mitral regurgitation) with that quote added; note corrected",
+    "p1-f011 indication rheumatic heart disease added from the abstract quote",
+    "Added p1-f071 body weight 75 kg and p1-f072 body mass index 31 kg/m^(2) (omitted)",
+    "p1-f054 manufacturer 'no abnormalities' flag normal; p1-f040 imaging 'no echocardiographic evidence' flag negative changed to unknown (negative is for qualitative tests)",
+    "Event p1-e05 now links p1-f020, p1-f071, p1-f072; added relation p1-e05 before p1-e06 (transfer then 'On admission')",
+    "Summary claims updated (weight/BMI, table shock and normotensive BP, removed invented 'about'); shock ambiguity rewritten; CT site ambiguity adds the Figure 4 caption 'descending aorta'",
+    "Article limitations: conflict line replaced; supplement slide-deck discrepancy note and unviewed author-bio inline image note added"
+  ],
+  "unresolved": [
+    "Supplement ZIP (slide set and three videos) is not a source segment; its slides carry additional clinical data that no supplement review path in the tooling covers.",
+    "Figure pixels are described in visual.json only; values printed inside the images are not clinical facts.",
+    "Source table time labels (calendar year, age, Day N) have no stated anchor; they are kept literal.",
+    "Table states presentation with cardiogenic shock while the text states normotensive on presentation; judged not a literal conflict (normotension does not exclude cardiogenic shock) and recorded as an ambiguity.",
+    "The supplement slide deck repeats this case with clinical values that are not in the article and in places differ from it (for example the INR target range, presenting oxygen saturation and INR value); none were transcribed and the article text governs.",
+    "Unassigned inline image ytac439il1.jpg (positioned with the lead author biography) was not viewed by the annotator or the parent reviewer; it is presumed non-patient author content but is not described, classified or attributed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 28,
+    "facts_reviewed": 70,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient; roster 1 correct",
+      "Table cardiogenic shock vs text normotensive judged an ambiguity, not a literal conflict",
+      "Year vs 'one year after', age 10/11 labels and distal/descending aorta vs bifurcation/iliac sites are precision ambiguities, kept literal",
+      "Author-proposed mechanisms kept as possible/review_only",
+      "NO-BORROWING warning on p1-f065 is a checker false positive: the time is in the discharge fact's own sentence"
+    ],
+    "residual_risks": [
+      "Supplement ZIP (PPTX plus 3 videos) has no supplement_review path; PPTX holds patient values absent from or disagreeing with the article and none were transcribed",
+      "Inline image ytac439il1.jpg (author biography) not viewed",
+      "Flags high/low on vitals rest on the source words tachycardic, tachypnoeic, desaturated"
+    ]
+  },
+  "physician_adjudicated": false
+}

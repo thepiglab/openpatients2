@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12560891.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "360553c700afe8b6b07f70f1a2d5e5aa35478b1572d0868c88ba824a94686c9a",
+  "annotation_sha256": "2fe3f8acd9ff8026b0e1acc0455a3da8e4df3f271d51629b5c3b50abbbb81b99",
+  "reviewed_at": "2026-10-16T04:51:31.010775+00:00",
+  "source_segments_read": 73,
+  "facts_reviewed": 199,
+  "patients_reviewed": 6,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Dog 1 inflammatory component (Table 3 + mild) versus Figure 3a extensive peritumoral aggregates is not a literal conflict on one attribute (graded intratumoral component versus aggregates surrounding the tumor): p1-f010 and p1-f027 released from source_conflict/review_only to supported/include; ambiguity, summary and article limitation rewritten.",
+    "Added gross-morphology facts for dogs 1-5 from the sentences covering all spinal cord tumors (well-circumscribed soft reddish-purple nodular mass; marked cord compression with extensive peritumoral edema); the 5 to 11 mm range left as cohort-level: p1-f030/f031, p2-f035/f036, p3-f027/f028, p4-f028/f029, p5-f030/f031; source_coverage b00015 updated.",
+    "Added p4-f030 care_plans follow-up evaluation after surgery (completed) from the sentence naming dog 4, linked to p4-e05; the 1 to 3 year range not copied.",
+    "Added 8 temporal relations with literal support: p1 euthanasia before post-mortem histology (PM = post-mortem); p2-p6 surgical biopsy before histology (specimens obtained then processed for histology); p4 surgery before recurrence (follow-up after the surgery sentence); p5 presentation paraplegia before improvement (improved from paraplegia).",
+    "Added p6 ambiguity: presenting signs in the left pelvic limb versus tumor in the right sciatic nerve; both kept as written.",
+    "Added article limitation on Video S1 content (C5/C6 labels, anatomical spine model segment, organization end card, digitally silent audio)."
+  ],
+  "unresolved": [
+    "Veterinary case series of six dogs (five spinal cord hemangioblastomas and one sciatic nerve case); each dog is a roster patient numbered by the dog label order in the neurological signs sentence. Breed is kept only in case context because the demographics schema has no breed attribute.",
+    "Cohort, literature and discussion statements were not copied to individuals: the abstract, mean age, breed counts, the 1 to 3 year follow-up range, the 4 no-recurrence count, the 5 to 11 mm tumor size range, the unlabelled subgroup counts of 2 and 3 dogs by tumor compartment, the unlabelled histology and immunohistochemistry sentences, the Ki-67 range, Tables 4 and 5 and the two Cornell cases.",
+    "Sentences that explicitly cover all dogs or all tumors (blood tests, MRI protocol, biphasic histology, INHα negativity, CAIX positivity) were copied to each dog with the covering wording in the evidence.",
+    "Source conflicts recorded as review-only pairs: dog 2 cellularity (Table 3 moderate versus Figure 3b highly cellular) and dog 2 post-contrast T1WI enhancement pattern (dogs 1-5 text homogeneous versus Figure 1b heterogeneous). Dog 1 inflammation (Table 3 mild intratumoral grade versus Figure 3a extensive peritumoral aggregates) describes different attributes and is kept as supported items with an ambiguity note (parent review).",
+    "Table 2 Outcome cell for dog 1 is a dash; the text states euthanasia. Dog 4 owners elected euthanasia but death is not stated literally.",
+    "The Figure 4 caption lists panels e and h under spinal cord while labeling them dog 6 (sciatic nerve case); no tissue site is recorded for those observations.",
+    "Supplement ZIP contains an image of control ovary tissue (Figure S1) and a video of the dog 2 resection (Video S1); neither adds transcribed clinical facts.",
+    "Dog 6 presenting signs are stated for the left pelvic limb while the tumor is in the right sciatic nerve; recorded as an ambiguity, both kept as written.",
+    "Video S1 (inside the ZIP) opens with C5 and C6 vertebral labels and a segment showing an anatomical spine model with a pointer before the intraoperative footage, and ends with an organization end card; its audio track is digitally silent (ffmpeg volume detection: mean -91 dB, maximum -90.3 dB). No clinical facts are transcribed from it."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 73,
+    "facts_reviewed": 199,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Six dogs, roster count literal (Six cases); Table 2/3 cells all present per dog; Figure 4 a-d mapping follows caption order plus the caption tissue grouping and the dog 6 sciatic location.",
+      "Kept review-only conflicts: dog 2 cellularity (++ versus highly cellular) and dog 2 post-contrast enhancement (homogeneous text versus heterogeneous Figure 1b).",
+      "All-dogs sentences (blood tests, MRI with gadolinium protocol, biphasic histology, INHα negative, CAIX positive) explicitly cover all cases including dog 6.",
+      "Dog 1 euthanasia recorded as death; dog 4 elected euthanasia kept as goals-of-care decision with unknown status, no death asserted.",
+      "The 14 NO-BORROWING warnings are checker false positives: at presentation is the lead clause of the same sentence that lists each dog sign."
+    ],
+    "residual_risks": [
+      "Figure 4 e and h are labelled dog 6 but grouped under spinal cord in the caption; dog 6 vimentin and Ki-67 kept with no tissue site.",
+      "Dog 4 death is implied (post-mortem not performed) but not stated.",
+      "Video S1 reviewed by sampled frames only; supplement gate cannot be met by the manifest because the video is inside a ZIP."
+    ]
+  },
+  "physician_adjudicated": false
+}

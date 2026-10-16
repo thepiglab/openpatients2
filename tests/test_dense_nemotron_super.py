@@ -264,6 +264,8 @@ def cpu_runtime(campaign, monkeypatch):
         return native_sha(path)
     help_text = ' '.join(arg for p in r.PROFILES.values() for arg in p['extra_args']) + ' --generation-config --chat-template'
     def run(argv, **kw):
+        if '--help=all' in argv and '--nv' not in argv:
+            raise AssertionError('vLLM CLI help must never run in CPU download jobs')
         if argv[:2] == ['apptainer', 'build'] and '--help' not in argv:
             Path(argv[-2]).write_bytes(b'fixture-container')
         stdout = ('--mksquashfs-args' if argv == ['apptainer', 'build', '--help'] else
@@ -306,9 +308,72 @@ def test_cpu_setup_only_metadata_then_downloads_one_profile_and_worker_dispatch(
     assert cfg.model_id == r.NVFP4 and cfg.speculative_config['model'].endswith('/weights/lilicorr')
     assert dispatched['campaigns'] == [work / 'arms/lilicorr-text']
     assert dispatched['startup_check'] is not None
+    assert dispatched['runtime_probe'] == s.gpu_probe(r.PROFILES['lilicorr'])
     (s.weights_path(work, r.NVFP4) / 'weights.safetensors').write_bytes(b'changed')
     with pytest.raises(ValueError, match='artifact changed'):
         s.validate_runtime(work, 'lilicorr-text')
+
+
+@pytest.mark.parametrize('profile_name', list(r.PROFILES))
+def test_gpu_probe_validates_flags_for_every_recipe(profile_name, monkeypatch, capsys):
+    profile = r.PROFILES[profile_name]
+    monkeypatch.setitem(sys.modules, 'torch', SimpleNamespace(__version__='fixture', cuda=SimpleNamespace(
+        device_count=lambda: profile['gpus'], get_device_capability=lambda i: (10, 0))))
+    monkeypatch.setitem(sys.modules, 'vllm', SimpleNamespace(__version__='fixture'))
+    calls = []
+    def run(argv, **kwargs):
+        calls.append((argv, kwargs))
+        return subprocess.CompletedProcess(argv, 0, stdout=' '.join(profile['extra_args']), stderr='diagnostic')
+    monkeypatch.setattr(subprocess, 'run', run)
+    exec(s.gpu_probe(profile), {})
+    captured = capsys.readouterr()
+    assert json.loads(captured.out.splitlines()[-1])['serving_flags_verified']
+    assert 'diagnostic' in captured.err
+    assert calls == [([sys.executable, '-m', 'vllm.entrypoints.cli.main', 'serve', '--help=all'],
+                      {'text': True, 'capture_output': True, 'timeout': 120})]
+
+
+@pytest.mark.parametrize('failure', ['no_gpu', 'cli_failure', 'missing_flag'])
+def test_gpu_probe_fails_closed_and_preserves_diagnostics(failure, monkeypatch, capsys):
+    profile = r.PROFILES['nvfp4']
+    monkeypatch.setitem(sys.modules, 'torch', SimpleNamespace(__version__='fixture', cuda=SimpleNamespace(
+        device_count=lambda: 0 if failure == 'no_gpu' else profile['gpus'],
+        get_device_capability=lambda i: (10, 0))))
+    monkeypatch.setitem(sys.modules, 'vllm', SimpleNamespace(__version__='fixture'))
+    calls = []
+    def run(argv, **kwargs):
+        calls.append(argv)
+        return subprocess.CompletedProcess(argv, 1 if failure == 'cli_failure' else 0,
+                                           stdout='usage', stderr='device error')
+    monkeypatch.setattr(subprocess, 'run', run)
+    error = {'no_gpu': AssertionError, 'cli_failure': subprocess.CalledProcessError, 'missing_flag': ValueError}[failure]
+    with pytest.raises(error):
+        exec(s.gpu_probe(profile), {})
+    captured = capsys.readouterr()
+    if failure == 'no_gpu':
+        assert not calls
+    else:
+        assert 'device error' in captured.err and 'usage' in captured.out
+
+
+def test_incomplete_cli_exports_diagnostics_but_exits_unsuccessfully(campaign, capsys):
+    work, refs, _ = campaign
+    with pytest.raises(SystemExit, match='Campaign incomplete'):
+        s.main(['aggregate', '--work', str(work)])
+    assert (work / 'results.tar.gz').exists()
+    assert (work / 'results.tar.gz.sha256').exists()
+    result = json.loads(capsys.readouterr().out)
+    metrics = result['metrics']['text']['train']['nvfp4-text']
+    assert not metrics['quality_measured']
+    assert metrics['completed_articles'] == 0 and metrics['planned_articles'] == 1
+    report = (work / 'summary/comparison.md').read_text()
+    assert 'INCOMPLETE' in report and '| nvfp4-text | 0 / 1 | not measured |' in report
+    for name in s.check(work)['nemotron_super']['arms']:
+        for ref in refs:
+            finish(work / 'arms' / name, ref)
+    s.main(['aggregate', '--work', str(work)])
+    assert json.loads(capsys.readouterr().out)['complete']
+    assert 'not measured' not in (work / 'summary/comparison.md').read_text()
 
 
 def test_cleanup_preserves_outputs_reasoning_and_hashes_and_resume_downloads_again(cpu_runtime, monkeypatch):

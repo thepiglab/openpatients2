@@ -1,0 +1,109 @@
+{
+  "format": "dense-supplement-manifest/1",
+  "article_id": "PMC13245729.1",
+  "source_text_sha256": "65dfc639c6e8fad0b9b618b2bbb76e38e421ee8b36852d07d07820c15b1518a3",
+  "source_supplements_sha256": "05fc61082856479324afad0a907cb5e64b260a0ffed48d91341b04d4f048595b",
+  "files": [
+    {
+      "supplement_id": "sup1",
+      "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13245729.1/ytac439_supplementary_data.zip?md5=146a10ea99439298ea21299b70f019e8",
+      "machine": {
+        "filename": "ytac439_supplementary_data.zip",
+        "original_manifest_url": "s3://pmc-oa-opendata/PMC13245729.1/ytac439_supplementary_data.zip?md5=146a10ea99439298ea21299b70f019e8",
+        "declared_md5": "146a10ea99439298ea21299b70f019e8",
+        "declared_kind": "supplementary_or_other",
+        "extension": ".zip",
+        "http_content_type": "binary/octet-stream",
+        "bytes": 3113262,
+        "download_status": "downloaded",
+        "download_reason": null,
+        "sha256": "48af4d2b4223c8fa9eeb5c3b0008d8539a78afa29b8b4e57e1a4f3471768a8b0",
+        "md5_verified": true,
+        "sample_sha256": null,
+        "sample_bytes": null,
+        "tail_sha256": null,
+        "detected_type": "zip",
+        "inspection_status": "peeked",
+        "peek": {
+          "kind": "archive",
+          "format": "zip",
+          "member_count": 4,
+          "uncompressed_bytes": 3232408,
+          "members": [
+            {
+              "name": "Slide set.pptx",
+              "bytes": 2138990
+            },
+            {
+              "name": "Video 1.mp4",
+              "bytes": 326412
+            },
+            {
+              "name": "Video 2.mp4",
+              "bytes": 396987
+            },
+            {
+              "name": "Video 3.mp4",
+              "bytes": 370019
+            }
+          ],
+          "member_extensions": {
+            ".mp4": 3,
+            ".pptx": 1
+          },
+          "tool": "zipfile",
+          "dicomdir_present": false
+        },
+        "limitations": [
+          "Members listed from the central directory only; nothing extracted"
+        ],
+        "errors": []
+      },
+      "machine_suggestion": {
+        "content_class": "unknown",
+        "rule": "no_rule"
+      },
+      "review": {
+        "content_class": "other",
+        "content_class_rationale": "Mixed ZIP of four members: a slide deck about this case (Slide set.pptx) and three short transoesophageal echocardiography videos (Video 1.mp4 to Video 3.mp4). One content class cannot describe both, so the row is classed other with archive_mixed modality.",
+        "classification_basis": "full_content",
+        "patient_scope": "patient_level",
+        "patient_ids": [
+          "p1"
+        ],
+        "ownership_evidence": [
+          {
+            "basis": "article",
+            "segment_id": "b00021",
+            "quote": "A fully edited slide set detailing this case and suitable for local presentation is available online as Supplementary data."
+          },
+          {
+            "basis": "article",
+            "segment_id": "b00012",
+            "quote": "see supplementary material online, Videos S1–S3"
+          }
+        ],
+        "ehr_includable": true,
+        "ehr_modality": "archive_mixed",
+        "estimated_counts": {
+          "rows": null,
+          "frames": null,
+          "pages": null,
+          "members": 4,
+          "duration_seconds": null,
+          "basis": "Four members listed in the ZIP central directory and opened from the extracted copy"
+        },
+        "notes": "Opened all four members. The deck has nine slides: a title slide, an introduction, case presentation slides with clinical text and a portable chest radiograph, echocardiography and CT figures repeated from the article, a discussion slide, learning points and references. The three videos are 0.88 to 0.89 s echocardiography clips (one 2D plus colour-flow, two three-dimensional renderings), matching the article figure views.",
+        "limitations": [
+          "Video frames sampled at 6 frames per s (5 frames per video) and every sampled frame viewed; the clips are under 1 s long, so frames between samples, continuous motion and audio were not reviewed.",
+          "Slide deck text and images were read from the extracted PPTX XML and media files; no rendered slide pages were viewed because no renderer was available.",
+          "The slide deck carries patient clinical data not present in the article text (for example blood results, an ECG statement and a chest radiograph). No review path exists for PPTX supplements, so none of it was transcribed as clinical facts; the ZIP as a whole therefore has no completed content review route.",
+          "A burned-in label on the chest radiograph in the deck and device text on the video frames were seen; no names were identified."
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "Reviewer-completed review block for the single ZIP row; machine blocks untouched."
+  ]
+}

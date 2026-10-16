@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC13348837.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7f71e480e17caa03a19c384ec9463963c685d7c0c2828e272ddf5a4603312d0c",
+  "annotation_sha256": "3e09c71b64cb376edd8b352aadaaabae10bfb88d574314af1dec5b8ee82a25d7",
+  "reviewed_at": "2026-10-16T10:21:21.943750+00:00",
+  "source_segments_read": 60,
+  "facts_reviewed": 178,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Patient 4 table comorbidity \"MI\" (footnote: mitral valve insufficiency) vs case text \"myocardial infarction treated with coronary stenting\": judged an abbreviation-legend ambiguity, not a conflict; myocardial infarction (p4-f009) kept include from the text; added the literal table-plus-footnote reading as conditions p4-f050 \"Mitral valve insufficiency\", certainty ambiguous, scoring review_only; ambiguity and limitation rewritten.",
+    "Patient 2 recurrence timing: confirmed not a conflict (two successive \"Two weeks later\" intervals are consistent with table \"2 and 4 wk\"); ambiguity reworded and linked to both recurrences.",
+    "Patient 4 clopidogrel \"One month later\": ordered after the first-revision admission (p4-e03) by the adjacent-sentence anchor ruling; also after presentation via \"resumed\" vs \"ongoing clopidogrel therapy\"; ambiguity reworded; not ordered against the 3-month recurrence.",
+    "Added table Sex/Age row cells (rows 1-4 map literally to patients 1-4) and the \"M, male\" footnote to the demographic facts; added the case-text pronoun \"he\" for patient 2 sex; patient 1 sex stays on \"All patients were male\" with the stray-backtick ambiguity.",
+    "All-patients copies (male, asymptomatic and full function at last follow-up, general anesthesia and irrigation at initial surgery, symptomatic recurrent CSH) checked: each sentence explicitly covers all 4 patients. f007 renamed to \"Symptoms\" with literal time \"at last follow-up\".",
+    "Verified every table-to-text merge is the same per-patient item (comorbidities, anticoagulant, initial surgery, recurrence, revision surgery, follow-up duration reported once per patient); the patient 4 MI cell is the only cell not merged.",
+    "Set \"later\"/\"Two weeks later\"/\"One month later\" item times to relation after (were unknown).",
+    "Added literal discharge times \"after 6 days\" (p2-f030) and \"after 3 days\" (p4-f031).",
+    "p4-f011 clopidogrel action current -> administered (ongoing at presentation, later resumed); p4-f015 GCS text_value \"15\"; p4-f016 \"progressive\" moved from severity to text_value; p1-f033 removed non-finding text.",
+    "Split drug changes and figure imaging out of surgery events so descriptions imply no times: new p1-e06 aspirin reintroduced, p1-e07 3D CT (Fig 3), p2-e06 clopidogrel resumed, p3-e05 LMWH increased/bridged back to phenprocoumon, p4-e07 CT bone window (Fig 2), p4-e08 3D CT (Fig 4).",
+    "Added 13 literal relations (recurrence \"re-\" orders, drug start->resume/adjust, adjacent-sentence anchor, post-hoc imaging \"demonstrating the position\", stated follow-up times) and added the second stated time / \"third surgical intervention\" quotes to 3 existing relations.",
+    "Source coverage: table footnote b00040 marked patient_facts (p2-p4); limitations updated (MI, SmartBrush not assigned despite the Figure 2 citation, unlinked pairs)."
+  ],
+  "unresolved": [
+    "Series-level statements (mean age, 10 to 90 days to revision, no further recurrences, scheduled follow-up intervals, SmartBrush use in 2 cases, anticoagulation and reversal policy, cosmetic and complication statements) were not copied to individuals unless the sentence explicitly covers all patients; the 2 cases using SmartBrush are not identified. Figure 2 (patient 4 CT bone window) is cited after the SmartBrush sentence, but the source does not say patient 4 was one of the 2 SmartBrush cases, so SmartBrush is not assigned.",
+    "Table footnote defines MI as mitral valve insufficiency (matching patient 3 text), while patient 4 text states myocardial infarction treated with coronary stenting; judged an abbreviation-legend ambiguity: myocardial infarction kept from the text, the literal table reading kept as review_only.",
+    "No ordering word links each initial presentation to the index surgery, and patient 4 clopidogrel resumption (\"One month later\") to the 3-month recurrence; those pairs are left unrelated rather than ordered by paragraph position or arithmetic.",
+    "Caption-layer visual status is not_inspected; the four JPEG figures were inspected in visual.json."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 60,
+    "facts_reviewed": 178,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Four male patients with recurrent chronic subdural hematoma; roster, numbering and table rows map literally to the case paragraphs.",
+      "Patient 4 MI abbreviation clash handled as ambiguity: text myocardial infarction include, table-footnote mitral valve insufficiency review_only.",
+      "Patient 2 two-week intervals are consistent with the table 2 and 4 weeks; no conflict.",
+      "SmartBrush (2 unidentified cases) and Figure 1 schematic are correctly unassigned.",
+      "visual.json F3 description has pixel errors (face orientation; plate markers in the inside-out view) to be fixed by the annotator."
+    ],
+    "residual_risks": [
+      "The MI abbreviation decision is a judgment call; the table reading is review_only, not deleted.",
+      "Presentation-to-index-surgery order is not stated with an ordering word and stays unlinked.",
+      "Follow-up anchors differ (patient 1 postoperatively after the third surgery, others after the index procedure); the table column gives no anchor."
+    ]
+  },
+  "physician_adjudicated": false
+}

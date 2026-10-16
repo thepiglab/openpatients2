@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12714658.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7ab45ce9ffc876edba7c031f467d32f55a138b785e92ab7aff4e8be6ed1d2a40",
+  "annotation_sha256": "a7156e15538da63f804190e65883bacb416d94840d61a7e260a1244958a0685a",
+  "reviewed_at": "2026-10-16T02:48:54.347642+00:00",
+  "source_segments_read": 35,
+  "facts_reviewed": 99,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Relation e03 (day 9 transfer) before e05 (scores by day 17) had no lower bound; replaced by e03 same_time e04 (both stated day 9).",
+    "Relation e05 before e06 ordered two upper bounds (\"by day 17\", \"by day 21\"); replaced by e05 before e07 (by day 17 versus day 23).",
+    "Relation e07 before e08 ordered day 23 against the upper bound \"by day 47\"; replaced by e07 before e09 (day 23 versus day 56).",
+    "Relation e04 before e05 now cites the comparative sentence (\"Although global scores improved by day 17\") together with the day-9 scores.",
+    "Added event e19 (repeat EEG, no stated day) linked after the same-day EEG of e05 by the literal \"Repeat ... progression\".",
+    "Added an article limitation explaining why upper-bound times are not used to order pairs.",
+    "visual.json: Figure 1 medication boxes described at their actual position between the day 123 and day 152 lines; unprinted \"Session\" x-axis titles removed from Figure 2 panels E-P; figure-EHR and privacy sidecars regenerated with --draft and labels carried over."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two figure images are reviewed in the separate visual submission.",
+    "Supplement DataSheet1.docx (MRI parameters, ROI table, Supplementary Figure S1) could not be text-extracted because anydoc is not installed; it is not patient-level data.",
+    "Chart values in Figure 2 are plotted estimates and are not recorded as facts; only values printed in the text are facts.",
+    "Figure 1 prints maximum valproate and olanzapine doses and a transfer position that are not stated in the case text; they are not recorded as facts.",
+    "HDS-R, MMSE and FAB scales are recorded as printed; reference thresholds in the methods are general and not per-patient flags.",
+    "Author interpretations (remyelination, edema resolution, pharmacologic modulation) are not recorded as patient facts.",
+    "Relations between two upper-bound times (\"by day 17\" and \"by day 21\"), or between a stated day and a later upper bound (\"by day 47\", \"by day 81\" scores), are not ordered by time alone; such pairs are linked only through stated exact days."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 35,
+    "facts_reviewed": 99,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single 51-year-old man, roster 1; all 99 facts checked against b00001-b00035.",
+      "\"By day 17/21/47/81\" are upper bounds and correctly kept as relation before with null anchor; only MRI sessions carry exact days.",
+      "Day-17 and day-115 score sets use labels defined in the same quoted passage (\"global scores\" = HDS-R/MMSE; HDS-R/MMSE/FAB order); kept as include with the existing ambiguity; Figure 2B percentages match that order.",
+      "\"Same day\" EEG refers to the day-17 testing whose day is only an upper bound; null time is correct.",
+      "Figure 1 VPA/OLZ maxima and transfer position are figure-only and not facts; the day 152 versus 153 transfer discrepancy stays an ambiguity.",
+      "Figure 2 HDS-R line is light blue on pixels while the caption says teal; recorded as a visual limitation."
+    ],
+    "residual_risks": [
+      "Supplement SM1 Figure S1 is a patient MRI image (three T1w overlay panels); the manifest marks the file not EHR-includable, which the parent does not accept, so the parent manifest receipt is not signed.",
+      "Scale assignment for the day-17 pair and day-115 triplet relies on labels earlier in the same passage."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,67 @@
+{
+  "article_id": "PMC13316921.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "62ed3e9f8085959c8a37f4609a9a283f9b84b9ede6daa86a299ca20191e362ca",
+  "annotation_sha256": "9a9a82fee43335f8461f59cc500001645a6094989974f03452f5d8e6bced050e",
+  "reviewed_at": "2026-10-16T06:34:40.678888+00:00",
+  "source_segments_read": 29,
+  "facts_reviewed": 88,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f058 BCL6: certainty ambiguous, scoring review_only; it is named only in a discussion sentence ending in a literature citation and is not in the reported IHC panel; ambiguity added.",
+    "p1-f050..f054 and biomarkers p1-f076..f080: method/assay immunohistochemistry from b00020 \"This report also uses IHC for the demonstration of ABTCE.\" (plus the Fig. 3 caption lead for CD4, CD2, CD7, CD3); CD3 method/assay now \"immunohistochemistry, clone SP 7 against epsilon chain\".",
+    "CD4, CD2, CD7, CD3 (obs + biomarkers): Fig. 3 caption evidence added; text_value records the weak membranous staining in the large tumor cells.",
+    "CD20, PAX5, OCT2, EBER (obs + biomarkers): Fig. 2 caption evidence added; CD20 strong and diffuse membranous, PAX5/OCT2 nuclear positivity in polylobated cells.",
+    "Ambiguity added: text cites Fig. 2b, c for Oct 2 while the caption assigns b to PAX5 and c to OCT2.",
+    "p1-f027 native breast parenchyma: removed flag negative (histologic finding, not a qualitative test).",
+    "p1-f063 tumor: primary_site axillary lymph node, laterality right, with b00006/b00008/b00002 evidence.",
+    "p1-f083 R-CHOP: \"4 cycles\" moved from dose_text to duration_text; abstract evidence added.",
+    "Abstract (b00002) evidence added to the ultrasound, aspiration, excision biopsy, diagnosis and chemotherapy facts (same tests reported once).",
+    "p1-f059 TCR rearrangement not performed: b00026 limitation sentence added as evidence.",
+    "Added p1-f087 (Fig. 1 caption: polymorphous cell population with numerous multilobated cells, H&E) and p1-f088 (gene expression studies not performed, b00026).",
+    "Event p1-e05 kind other -> test; p1-e06 now links CD23 (p1-f055) and p1-f087.",
+    "Relations added: p1-e05 before p1-e07 (b00002 \"Excision biopsy of the mass was diagnosed as ...\" = histology of removed tissue -> its result); p1-e08 before p1-e10 (b00002 \"after which she was lost to follow-up\").",
+    "Summary: removed unsupported \"high\" (Ki 67) and \"atypical\"; claim 1 now cites sex, menopause and hypertension facts.",
+    "Article limitations updated (BCL6 review_only; R-CHOP not linked to tumour and no diagnosis-to-chemotherapy order because the source gives no indication or order wording)."
+  ],
+  "unresolved": [
+    "Case text states no follow-up beyond partial response; patient lost to follow-up.",
+    "Hemoglobin has no printed flag or reference interval; no flag assigned.",
+    "Table 1 lists other researchers' published cases and is not patient data.",
+    "Mixed phenotypic leukemia and T cell lymphoma were discussed as differential considerations but are not recorded as refuted diagnoses.",
+    "Supplement MOESM1 is a ZIP of two JPEG administrative documents (consent form and ethics approval); content is not clinical and no patient identifiers are recorded.",
+    "Immunohistochemistry results are copied to oncology biomarkers as alternate representations of the pathology observations. The CD3 clone comes from a discussion sentence about this case; BCL6 appears only in a cited discussion sentence and is review_only.",
+    "R-CHOP is not linked to the tumour (no tumor_ref) and no diagnosis-to-chemotherapy order is recorded because the source states neither indication nor order wording."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 29,
+    "facts_reviewed": 88,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (68-year-old postmenopausal woman); Table 1 is literature cases only.",
+      "p1-f022 kept as a possible/provisional infective pathology from the aspirate (\"suggestive of\"), never confirmed or refuted.",
+      "p1-f062 extranodal involvement stays review_only: the referent of \"this was not seen in our case\" is not explicit.",
+      "No diagnosis-to-chemotherapy relation: b00010 and b00002 give no order or indication wording; R-CHOP not linked to tumour t1.",
+      "All three figures viewed at full resolution (10 panels); supplement MOESM1 (ZIP of two JPEGs: consent form and IRB approval) viewed; administrative only, no identifiers recorded."
+    ],
+    "residual_risks": [
+      "BCL6 status in this case is unresolved (review_only).",
+      "Mixed phenotype leukemia/lymphoma not conclusively excluded by the authors; not recorded as a refuted diagnosis.",
+      "Supplement gate: MOESM1 is images-in-ZIP with no supplement_review path; manifest class other."
+    ]
+  },
+  "physician_adjudicated": false
+}

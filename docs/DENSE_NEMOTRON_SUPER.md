@@ -255,13 +255,17 @@ and compression run on CPU allocations. No inference or installation runs on a
 login node. The launcher needs existing `uv`, Apptainer 1.4+ and required Hugging Face
 access. No packages are installed globally.
 
-CPU preflight verifies pinned configurations/templates, native reasoning modes
-and published serving flags in each model's own image. Nemotron additionally
+CPU preflight verifies pinned configurations/templates and native reasoning modes
+in each model's own image. Nemotron additionally
 checks the exact upstream tokenization/registry source hashes. Muse Spark Open's
 gated config, template, generation config and tokenizer file are pinned to public
 Git blob identities and checked after authorized download; each download job confirms the
 target architecture is registered in its official image.
 On each GPU allocation, a probe requires the expected count of B200-class GPUs.
+It also checks published serving flags with `vllm serve --help=all`, using the
+same container, `--nv`, and GPU visibility as the server. The pinned CUDA builds
+construct a device configuration even for CLI help, so this check cannot run on
+a CPU node. Its stdout/stderr are retained in the worker's `probe.json`.
 The server must then pass synthetic text (and optional image) requests whose
 `/tokenize` count exactly equals generation's `usage.prompt_tokens`. This checks
 the actual multimodal expansion path before article inference. Smoke time/output
@@ -270,6 +274,14 @@ The Muse Spark Open synthetic smoke uses `low` reasoning effort for speed;
 article extraction and repair use the manifest's `xhigh` setting.
 These checks can reject an incompatible runtime; local tests do not establish
 GPU kernel compatibility or memory fit.
+
+Aggregation always exports diagnostic results, including incomplete runs, but
+the aggregate CLI/Slurm job exits unsuccessfully when articles remain pending.
+An archive's existence or checksum only establishes that results were packaged,
+not that inference succeeded. The comparison table shows completed/planned
+articles and reports quality as **not measured** when no attempts completed.
+The JSON retains full-reference missing-prediction penalties for accounting,
+with `quality_measured: false` distinguishing those from measured quality.
 
 Each article has a 30-minute operational timeout; a worker stops taking articles
 near its allocation deadline. Operational failures/pending articles are retained

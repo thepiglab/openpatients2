@@ -1,0 +1,94 @@
+{
+  "format": "dense-supplement-manifest/1",
+  "article_id": "PMC12989197.1",
+  "source_text_sha256": "1335eb39224762e9c7a4cdc14e41961ccaf33180834a804e34b784edabd6d434",
+  "source_supplements_sha256": "fb08759cab01a6b5a53249851775682e4e4fa8934f17402549ae08e124e9ddeb",
+  "files": [
+    {
+      "supplement_id": "SD1",
+      "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC12989197.1/NIHMS2149886-supplement-Supplementary_material.zip?md5=ea91f8ff658487db9b8eaadc191d0a08",
+      "machine": {
+        "filename": "NIHMS2149886-supplement-Supplementary_material.zip",
+        "original_manifest_url": "s3://pmc-oa-opendata/PMC12989197.1/NIHMS2149886-supplement-Supplementary_material.zip?md5=ea91f8ff658487db9b8eaadc191d0a08",
+        "declared_md5": "ea91f8ff658487db9b8eaadc191d0a08",
+        "declared_kind": "supplementary_or_other",
+        "extension": ".zip",
+        "http_content_type": "binary/octet-stream",
+        "bytes": 14043226,
+        "download_status": "downloaded",
+        "download_reason": null,
+        "sha256": "9f0726befc66523881a105398ab479e60a83df457675176ffe436ee85df358db",
+        "md5_verified": true,
+        "sample_sha256": null,
+        "sample_bytes": null,
+        "tail_sha256": null,
+        "detected_type": "zip",
+        "inspection_status": "peeked",
+        "peek": {
+          "kind": "archive",
+          "format": "zip",
+          "member_count": 2,
+          "uncompressed_bytes": 14075597,
+          "members": [
+            {
+              "name": "reports-934184 supplementary final/WICKRAMASEKARA-large_supp_tables_REVISION.xlsx",
+              "bytes": 13516070
+            },
+            {
+              "name": "reports-934184 supplementary final/WICKRAMASEKARA-SUPPLEMENT_REV_Clean-FINAL.pdf",
+              "bytes": 559527
+            }
+          ],
+          "member_extensions": {
+            ".pdf": 1,
+            ".xlsx": 1
+          },
+          "tool": "zipfile",
+          "dicomdir_present": false
+        },
+        "limitations": [
+          "Members listed from the central directory only; nothing extracted"
+        ],
+        "errors": []
+      },
+      "machine_suggestion": {
+        "content_class": "unknown",
+        "rule": "no_rule"
+      },
+      "review": {
+        "content_class": "genomic_data",
+        "content_class_rationale": "ZIP of two members. The PDF member (10 pages, all read) holds supplementary methods text, a primer table and ExAC population-frequency tables with no patient clinical data. The XLSX member (six sheets: Table S1 sequencing metrics, S2 variant summary, S3 proband coding SNPs, S4 proband coding INDELs, S5 inheritance counts, S10 sibling coding SNPs) is whole-exome variant data; its header rows and row counts were read from the workbook XML but not every cell.",
+        "classification_basis": "peek_content",
+        "patient_scope": "patient_level",
+        "patient_ids": [
+          "p1"
+        ],
+        "ownership_evidence": [
+          {
+            "basis": "article",
+            "segment_id": "b00021",
+            "quote": "Table S3: Coding SNPs identified in the proband."
+          }
+        ],
+        "ehr_includable": false,
+        "ehr_modality": "archive_mixed",
+        "estimated_counts": {
+          "rows": null,
+          "frames": null,
+          "pages": 10,
+          "members": 2,
+          "duration_seconds": null,
+          "basis": "members from the ZIP central directory; pages from pdfinfo of the extracted PDF member; spreadsheet row counts not totalled"
+        },
+        "notes": "Mixed archive: methods/primer/population-frequency PDF plus research variant tables for the proband (S3, S4, S5) and family or sibling (S1, S2, S10). Not marked EHR-includable because the tables are research exome call lists rather than a clinical record; the parent should rule on this. No clinical values are entered here.",
+        "limitations": [
+          "XLSX member not covered by any dense supplement document review path (a ZIP with a non-PDF member is partial in supplement_review); only sheet names, header rows and row counts were inspected, not every cell.",
+          "Table S1 and S2 have per-sample rows that include the proband alongside other family members; S3 and S4 list proband variants but also carry father, mother and sibling genotype columns; S5 is proband inheritance counts; S10 lists the sibling coding SNPs. Patient scope p1 therefore covers only the proband-labelled content, and rows or columns for other family members are not p1 data."
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "Manifest completed by an annotator who read all PDF pages and inspected the XLSX structure; see the file review limitations."
+  ]
+}

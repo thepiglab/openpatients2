@@ -1,0 +1,101 @@
+{
+ "format": "dense-supplement-manifest/1",
+ "article_id": "PMC12560891.1",
+ "source_text_sha256": "360553c700afe8b6b07f70f1a2d5e5aa35478b1572d0868c88ba824a94686c9a",
+ "source_supplements_sha256": "6e7edaf7c1c4fb76b2b7ef9ab438f57b622fbfa25de0d3d862fc2ae92a52af01",
+ "files": [
+  {
+   "supplement_id": "animals-15-03010-s001",
+   "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC12560891.1/animals-15-03010-s001.zip?md5=8ef8c6ac3c2bfc9b3c0ed75b3d15f126",
+   "machine": {
+    "filename": "animals-15-03010-s001.zip",
+    "original_manifest_url": "s3://pmc-oa-opendata/PMC12560891.1/animals-15-03010-s001.zip?md5=8ef8c6ac3c2bfc9b3c0ed75b3d15f126",
+    "declared_md5": "8ef8c6ac3c2bfc9b3c0ed75b3d15f126",
+    "declared_kind": "supplementary_or_other",
+    "extension": ".zip",
+    "http_content_type": "binary/octet-stream",
+    "bytes": 34247674,
+    "download_status": "downloaded",
+    "download_reason": null,
+    "sha256": "7694411c119053b964453f645e12513f4089b30c456c8e8b62f204f8b214569a",
+    "md5_verified": true,
+    "sample_sha256": null,
+    "sample_bytes": null,
+    "tail_sha256": null,
+    "detected_type": "zip",
+    "inspection_status": "peeked",
+    "peek": {
+     "kind": "archive",
+     "format": "zip",
+     "member_count": 2,
+     "uncompressed_bytes": 37517288,
+     "members": [
+      {
+       "name": "animals-3916762-supplementary/16489 cntr INHa 60x.tif",
+       "bytes": 3505794
+      },
+      {
+       "name": "animals-3916762-supplementary/Video_HB.mp4",
+       "bytes": 34011494
+      }
+     ],
+     "member_extensions": {
+      ".mp4": 1,
+      ".tif": 1
+     },
+     "tool": "zipfile",
+     "dicomdir_present": false
+    },
+    "limitations": [
+     "Members listed from the central directory only; nothing extracted"
+    ],
+    "errors": []
+   },
+   "machine_suggestion": {
+    "content_class": "unknown",
+    "rule": "no_rule"
+   },
+   "review": {
+    "content_class": "video",
+    "content_class_rationale": "The ZIP holds two members. Video_HB.mp4 (960 by 540, h264 with an aac audio stream, 187.2 s) was sampled at 0, 10, 20 and so on to 180 s (19 full-resolution frames) plus contact sheets and extra frames at 1, 3, 5, 7, 183 and 186 s. It opens on the exposed vertebrae with overlaid labels C5 and C6, fades through a short segment showing a white anatomical spine model with a pointer (a teaching model, not patient tissue), then shows color intraoperative footage of exposed red tissue with surgical instruments, a white website watermark in the upper right from about 10 s on, and at 120 s overlaid labels reading Medulla, Intramedullary neoplasia and Dura mater with two arrows; the 170 s frame shows black sutures across a closed opening, and from about 180 s a page-turn transition leads to an organization end card (logo, postal address, website and email). The second member, a TIF of 1432 by 816 pixels, was viewed in full: a brown and lavender immunostained tissue section with many round and oval brown-rimmed structures and a 500 µm scale bar, which the article lists as a canine ovary control (Figure S1).",
+    "classification_basis": "full_content",
+    "patient_scope": "patient_level",
+    "patient_ids": [
+     "p2"
+    ],
+    "ownership_evidence": [
+     {
+      "basis": "article",
+      "segment_id": "b00033",
+      "quote": "Video S1: Resection of the tumor in dog 2."
+     },
+     {
+      "basis": "article",
+      "segment_id": "b00014",
+      "quote": "The left C6 and C7 nerve roots were involved and partially removed along with the mass (Video S1)."
+     }
+    ],
+    "ehr_includable": true,
+    "ehr_modality": "archive_mixed",
+    "estimated_counts": {
+     "rows": null,
+     "frames": 4681,
+     "pages": null,
+     "members": 2,
+     "duration_seconds": 187.245714,
+     "basis": "ffprobe of the extracted member Video_HB.mp4 (4681 frames, 187.245714 s); the member count is read from the ZIP directory"
+    },
+    "notes": "Video S1 is the intraoperative resection of the tumor of dog 2 and is the includable patient content; the opening spine-model segment and the closing end card are not patient data. The TIF is the Figure S1 canine ovary INHα control tissue; it is not this patient data, is a non-clinical comparison aid and is not includable. No clinical values are transcribed from either member.",
+    "limitations": [
+     "Video frames sampled every 10 s from 0 to 180 s (19 frames), contact sheets and extra frames at 1, 3, 5, 7, 183 and 186 s; the frames between samples and continuous motion were not reviewed.",
+     "Audio was not listened to; an ffmpeg volume measurement of the aac stream gives a mean of -91 dB and a maximum of -90.3 dB, i.e. a digitally silent track with no speech.",
+     "Privacy (category only): an organization website watermark is burned into the video from about 10 s on, the closing end card shows an organization name, postal address, website and email, and the opening frames carry anatomical vertebra labels; no patient or owner names, record numbers, dates, faces or genitalia were seen in the sampled frames.",
+     "The ZIP detects as an archive rather than a video, so the video-frames gate basis for a standalone MP4 does not apply and an archive-level supplement review is not part of this manifest."
+    ]
+   }
+  }
+ ],
+ "limitations": [
+  "Machine draft: every review block must be completed by a reviewer who inspected the content."
+ ]
+}

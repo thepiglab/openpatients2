@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC12728512.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f0a393df5d8655422230df8590c66a7abccae0cd6384ac5bffaa362c689b85cb",
+  "annotation_sha256": "3b7ccf4f43e9468babbe56091e95a832641415a17cd1dccb198982ff8ca711a8",
+  "reviewed_at": "2026-10-16T05:15:04.127634+00:00",
+  "source_segments_read": 22,
+  "facts_reviewed": 113,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1: merged p1-f057 (CMR-paragraph restatement of the post-PTE reduction in invasive pulmonary hemodynamics) into p1-f048 (follow-up RHC improvement) as added evidence; it had been grouped in the 1-year CMR event p1-e10, implying hemodynamics measured at 1 year.",
+    "p2: merged p2-f056 (pulmonary hemodynamics did not improve after PTE) into p2-f050 (follow-up RHC 4 months after PTE, no significant change) for the same reason; removed from the 1-year CMR event p2-e11.",
+    "p1 and p2 summary claim 4: removed the hemodynamics clause now cited in the RHC claim; no new facts.",
+    "p1: added relation p1-e06 before p1-e08 (follow-up pulmonary angiography), supported by the literal 'Follow-up included an RHC approximately 3 months after PTE' and 'A follow-up pulmonary angiography'; p1-e08 was previously unlinked."
+  ],
+  "unresolved": [
+    "Table S1 (right heart catheterization values for both cases) is cited by the text but is not in source.json; it is the third page of the supplement PDF and is transcribed only in the supplement sidecar.",
+    "Values printed inside Figure 1 (MBF, MPR, EDV, ESV, SV, EF) are not article text and are recorded only in visual.json, not as annotation facts.",
+    "Control group values in the discussion (stress LV MBF, RV MBF, LV MPR, RV MPR) are comparison cohort values and are not copied to either patient.",
+    "The abstract, key points, introduction and discussion refer to \"one\" patient improving and \"the other\" not improving without naming the case; only case-labelled paragraphs are assigned to individuals.",
+    "No dates or ages are printed for the events in the article text; times are literal relative phrases such as \"1 year after PTE\"."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 22,
+    "facts_reviewed": 115,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Two-patient CTEPH report; roster 2 from 'two patients with CTEPH'; p1 = Case 1 52-year-old man, p2 = Case 2 62-year-old woman; every case-paragraph statement checked against the source.",
+      "p2 CTEPH kept confirmed: the article explicitly states both patients have CTEPH ('two patients with CTEPH who underwent PTE'), beyond the CT 'consistent with CTEPH'.",
+      "p2 community-acquired pneumonia kept verification unknown: 'initially diagnosed' and non-response do not state confirmation or refutation.",
+      "p1 relations verified: 'later', 'another' scan/TTE, 'RHC was repeated', 'Given these findings', and the stated before/after PTE intervals.",
+      "Unlabelled one/the-other statements and control-group values in abstract, key points, introduction and discussion are correctly left unassigned; case paragraphs already state which case improved.",
+      "Table S1 (supplement PDF page 3) values stay in the reviewed supplement sidecar (48 cells verified against the rendered page); annotation keeps only the text-stated PVR values citing Table S1. Text intervals (~3 months, 4 months) and table day counts (78, 117 days) are compatible approximations, not conflicts.",
+      "Figure 1 printed MBF/MPR/volume values are recorded in visual.json only; all 56 readings match the pixels, including the printed 'LB MBF' label."
+    ],
+    "residual_risks": [
+      "Order of p2 CT pulmonary angiography and pulmonary angiography relative to other workup is unstated; those events remain unlinked.",
+      "Merging the CMR-paragraph hemodynamics restatements into the RHC follow-up facts assumes they describe the only reported post-PTE RHC.",
+      "p1-e04 (repeat RHC) before PTE rests on 'Given these findings' covering the preceding findings."
+    ]
+  },
+  "physician_adjudicated": false
+}

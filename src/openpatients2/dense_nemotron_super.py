@@ -558,13 +558,8 @@ def download(work, profile_name):
             {'returncode': probe.returncode, 'stdout': probe.stdout, 'stderr': probe.stderr})
     probe.check_returncode()
     probes = {engine_name: json.loads(probe.stdout.strip().splitlines()[-1])}
-    help_result = subprocess.run(prefix + ['-m', 'vllm.entrypoints.cli.main', 'serve', '--help=all'],
-                                 text=True, capture_output=True)
-    (work / f'results/vllm-serve-help-{profile_name}.txt').write_text(help_result.stdout + help_result.stderr)
-    help_result.check_returncode()
-    for flag in (arg.split('=')[0] for arg in profile['extra_args'] if arg.startswith('--')):
-        if flag not in help_result.stdout:
-            raise ValueError('Pinned vLLM lacks recipe flag: ' + flag)
+    # Even CLI help constructs vLLM's DeviceConfig and needs a detected GPU in
+    # these CUDA images. Validate flags in the GPU probe, never on a CPU node.
     files = [sif] + [p for model in models_to_download for p in weights_path(work, model).rglob('*')
                      if p.is_file() and '.cache' not in p.parts]
     records = {}
@@ -653,6 +648,30 @@ async def worker(work, name):
         return await _worker(work, name)
 
 
+def gpu_probe(profile):
+    """Runs inside the serving container with --nv and allocated GPU visibility.
+
+    Keep CLI diagnostics in the worker's probe.json even when argument discovery
+    fails. This does not load model weights or include smoke tokens in scoring.
+    """
+    flags = [arg.split('=')[0] for arg in profile['extra_args'] if arg.startswith('--')]
+    return f'''
+import json, subprocess, sys, torch, vllm
+assert torch.cuda.device_count() == {profile['gpus']}, 'Unexpected GPU count'
+assert all(torch.cuda.get_device_capability(i) == (10, 0) for i in range(torch.cuda.device_count())), 'Expected B200-class GPUs'
+help_result = subprocess.run([sys.executable, '-m', 'vllm.entrypoints.cli.main', 'serve', '--help=all'],
+                             text=True, capture_output=True, timeout=120)
+print(help_result.stdout, flush=True)
+print(help_result.stderr, file=sys.stderr, flush=True)
+help_result.check_returncode()
+for flag in {flags!r}:
+    if flag not in help_result.stdout:
+        raise ValueError('Pinned vLLM lacks recipe flag: ' + flag)
+print(json.dumps({{'vllm': vllm.__version__, 'torch': torch.__version__,
+                  'gpus': torch.cuda.device_count(), 'serving_flags_verified': True}}))
+'''
+
+
 async def _worker(work, name):
     m = check(work)
     if name not in m['nemotron_super']['arms']:
@@ -661,14 +680,10 @@ async def _worker(work, name):
     definition = m['nemotron_super']['arms'][name]
     profile = PROFILES[definition['profile']]
     validate_runtime(work, name)
-    probe = ('import json,torch,vllm; '
-        f'assert torch.cuda.device_count()=={profile["gpus"]}; '
-        'assert all(torch.cuda.get_device_capability(i)==(10,0) for i in range(torch.cuda.device_count())); '
-        'print(json.dumps({"vllm":vllm.__version__,"torch":torch.__version__,"gpus":torch.cuda.device_count()}))')
     async def startup(endpoint, logs):
         await smoke(endpoint, logs, b.read(arm / 'manifest.json')['extraction'], definition['pixels'])
     return await b.worker(arm, 0, campaigns=[arm],
-        serving_factory=lambda _work, shard, _logs: serving(work, name, shard), runtime_probe=probe,
+        serving_factory=lambda _work, shard, _logs: serving(work, name, shard), runtime_probe=gpu_probe(profile),
         startup_check=startup, budget_seconds=m['nemotron_super']['hours'] * 3600 - 120,
         article_timeout=1800)
 
@@ -826,6 +841,8 @@ def aggregate(work):
                 clinical = scores['overall']['clinical_items']
                 seconds = [r['wall_seconds'] for aid, r in receipts[name].items() if r and aid in subset]
                 metrics[scope][split][name] = {'clinical': {**clinical, 'f2': f2(clinical)},
+                    'completed_articles': len(seconds), 'planned_articles': len(subset),
+                    'quality_measured': bool(seconds),
                     'attribute_accuracy': scores['overall']['attribute_accuracy'], 'roster_recall': scores['roster']['recall'],
                     'article_seconds': b.stats(seconds), 'gpus_per_server': profile['gpus'],
                     'completed_article_gpu_seconds': sum(seconds) * profile['gpus'],
@@ -858,15 +875,22 @@ def aggregate(work):
             'One seed; annotation agreement only; no automatic model promotion.'}
     b.write(work / 'summary/comparison.json', result)
     lines = ['# Clinical model comparison', '', f'Complete: {result["complete"]}. Test evaluated: {result["test_evaluated"]}.', '']
+    if not result['complete']:
+        lines += ['INCOMPLETE: this archive contains diagnostic/partial results. '
+                  'Archive creation does not mean the benchmark succeeded.', '']
     for scope, splits in metrics.items():
         for split, arms in splits.items():
-            lines += [f'## {scope}: {split}', '', '| Arm | Precision | Recall | Item F1 | F2 | Attribute accuracy |',
-                      '|---|---:|---:|---:|---:|---:|']
+            lines += [f'## {scope}: {split}', '', '| Arm | Completed / planned | Precision | Recall | Item F1 | F2 | Attribute accuracy |',
+                      '|---|---:|---:|---:|---:|---:|---:|']
             for name, values in arms.items():
                 clinical = values['clinical']
                 quality = ' | '.join(f'{clinical[k]:.4f}' if clinical[k] is not None else 'unavailable' for k in ('precision', 'recall', 'f1', 'f2'))
                 attr = values['attribute_accuracy']
-                lines.append(f'| {name} | {quality} | {attr if attr is not None else "unavailable"} |')
+                if not values['quality_measured']:
+                    quality = ' | '.join(['not measured'] * 4)
+                    attr = None
+                completed = f'{values["completed_articles"]} / {values["planned_articles"]}'
+                lines.append(f'| {name} | {completed} | {quality} | {attr if attr is not None else "unavailable"} |')
             lines += ['', '| Arm | Output tok/s | Answer tok/s | Doc/s | Doc/h | Output tok/GPU-s | GPUs |',
                       '|---|---:|---:|---:|---:|---:|---:|']
             for name, values in arms.items():
@@ -963,6 +987,8 @@ def main(argv=None):
         else:
             result = globals()[args.command](work)
     print(json.dumps(result, indent=2))
+    if args.command == 'aggregate' and not result['complete']:
+        raise SystemExit('Campaign incomplete; diagnostic archive saved. Inspect logs and worker probe receipts before retrying.')
 
 
 if __name__ == '__main__':
