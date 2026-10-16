@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC13223478.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a023ecf7a7c6b9b4db19bf97cd349862a6d6c8c85f99165761b515e6f6be8528",
+  "annotation_sha256": "ff19fe303ce394256dffb3fcfbebb4b80f6ac3097c40e0f845ae646c5439c479",
+  "reviewed_at": "2026-10-16T10:01:25.351352+00:00",
+  "source_segments_read": 29,
+  "facts_reviewed": 89,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f038 abstract serum hCG >297,000 IU/L set certainty ambiguous, scoring review_only: probable rounded duplicate of the referral-stage >297,475 IU/L result (p1-f039); not merged because the source never identifies them; removed from abstract imaging event p1-e10",
+    "p1-f006 hyperthyroidism kept present (discussion sentence says \"as observed in this case\") but verification_status changed confirmed -> unknown because no diagnostic basis is reported",
+    "p1-f014 diarrhea: \"occasional\" moved from severity to text_value (frequency, not severity)",
+    "Added alternate_representation_of links: oncology tumor p1-f075 -> p1-f004, IHC biomarkers p1-f076..f083 -> observations p1-f065..f072/f069, oncology surgery p1-f084 -> p1-f034",
+    "Split admission event p1-e06 (no stated exam/lab time) into admission p1-e06, physical examination p1-e13 (\"Upon examination\") and laboratory tests p1-e14",
+    "p1-e05 fever before admission reclassified kind adverse_event -> presentation",
+    "Added 7 temporal relations with stated times or literal order words: e01/e02/e03 before admission e06 (stated \"... prior to/before admission\"), e01 before e03 and e05, e02 before e05 (two stated times from the admission anchor), abstract preoperative imaging e10 before postoperative diagnosis e12 (\"Preoperative\" / \"confirmed postoperatively\")",
+    "Added ambiguity on lower abdominal pain for over three weeks vs \"no accompanying ... pain\" at bleeding onset; added note on p1-f022",
+    "Rewrote hCG ambiguity: abstract vs referral value is a rounding-level ambiguity, 282,995 IU/L is a distinct result with unstated order; lung-lesion ambiguity notes the discussion restates the imaging finding and is not a source conflict",
+    "p1-f045 tumor markers kept review_only; notes record that markers are unnamed while hCG itself was markedly elevated",
+    "Summary claim 1 now states the antipyretic resolution it cites; article limitation added for the hCG values"
+  ],
+  "unresolved": [
+    "Single index patient; the literature-review and general discussion statements are not patient facts. The source lists no tables or supplements.",
+    "No calendar dates are given; times are relative to admission only where the sentence states them, and no outcome after surgery or follow-up is reported.",
+    "Disease extent and stage are not stated; lung lesions are described as radiologically suggestive of metastasis in the case text but as identified metastases in the discussion.",
+    "Hyperthyroidism and normal tumor markers are mentioned only in the discussion as consistent with this case; the underlying results are not reported.",
+    "Serum hCG appears as >297,000 IU/L (abstract), >297,475 IU/L (referral) and 282,995 IU/L (laboratory tests); the abstract value is kept review_only as a probable rounded duplicate."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 29,
+    "facts_reviewed": 89,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (10-year-old girl) with right ovarian non-gestational choriocarcinoma; all case, abstract and discussion statements about this patient checked against b00001-b00029",
+      "Hyperthyroidism and normal tumor markers are discussion statements explicitly tied to this case; hyperthyroidism accepted with unknown verification, tumor markers kept review_only",
+      "Lung lesions: case text \"radiologically suggestive\", discussion \"identified\": provisional condition plus ambiguity, not a conflict",
+      "hCG: >297,000 (abstract) is a probable rounded duplicate of >297,475 (referral) and is review_only; 282,995 IU/L is a separate laboratory result",
+      "Abstract imaging statements kept separate from body studies because the source does not identify them as the same study",
+      "No outcome, adjuvant therapy or follow-up is reported after surgery"
+    ],
+    "residual_risks": [
+      "Order between the referral-stage hCG/referral event and admission/laboratory tests is not stated, so those events stay unlinked",
+      "Body imaging studies (ultrasound, CT) have no literal preoperative statement and are not ordered against surgery",
+      "Abstract imaging and hCG facts may duplicate body facts"
+    ]
+  },
+  "physician_adjudicated": false
+}
