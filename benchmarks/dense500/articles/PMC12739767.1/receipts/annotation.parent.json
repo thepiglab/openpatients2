@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12739767.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "dda60bba736d9ebed624e583bdb9ecbb991357d30f121fb018935d70f96b94fb",
+  "annotation_sha256": "ea58252ea6e1c3bd018c9cd45bf79b99f1b305b1ec83c43b28d6b84070167180",
+  "reviewed_at": "2026-10-16T06:46:28.227127+00:00",
+  "source_segments_read": 14,
+  "facts_reviewed": 52,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f047 (normalization of hydration and electrolyte levels) set to certainty ambiguous, scoring review_only: it implies prior abnormal electrolytes against 'Electrolytes were normal' and 'lacked ... the electrolyte disturbances'; f029/f007 stay include.",
+    "Removed relations p1-e11->p1-e12 and p1-e11->p1-e13: 'postoperatively' and 'the surgery' do not literally identify the pyloromyotomy (vs the exploratory laparotomy); surgery ambiguity reworded to cover these orders.",
+    "Added relations with literal stated times/order words: e01->e04 ('at birth' / 'day 3 of life'), e03->e04 ('since birth; however ... began on day 3 of life'), e02->e10 ('within the first 24 hours' / 'day 7 of age'), e05->e10 ('Initial sepsis workup' / laparotomy on day 7).",
+    "Split p1-e14: post-surgical outcome event (resolution of vomiting, normalization, recovery without complications) and new p1-e15 follow-up event (weight gain, feeding tolerance, sustained improvement).",
+    "Added ambiguity documenting that the discharge outcome merges the Results discharge timing and the Discussion 'discharged in stable condition' as the same single discharge; time stays from the Results discharge sentence (NO-BORROWING warning judged a checker false positive, data not reshaped)."
+  ],
+  "unresolved": [
+    "Figure pixels are described in visual.json; the caption layer here stays not_inspected.",
+    "Figure captions interpret the arrows; those descriptions are recorded as caption author statements.",
+    "Mother is recorded under subject mother inside the neonate record; no names or identifiers are stored.",
+    "The mother's \"otherwise unremarkable medical history\" is not itemized because no condition is named."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 14,
+    "facts_reviewed": 52,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single 36-week male neonate with HPS; emesis from day 3 of life, exploratory laparotomy day 7 with pyloromyotomy, discharge two days after the surgery.",
+      "All 52 facts verified against the source; maternal facts (age, G1P1A0, former smoker, placenta previa, C-section) kept with subject mother inside the neonate record.",
+      "Age 'three-day-old' comes from the abstract and is consistent with emesis onset on day 3 of life.",
+      "Ultrasound measurements come from text and captions; caliper values printed in the images stay in visual.json.",
+      "Visual review found FIG1 and FIG2 arrow-direction errors in visual.json (agent-owned) to be corrected by the annotator."
+    ],
+    "residual_risks": [
+      "'The surgery' may denote one operation comprising laparotomy and pyloromyotomy; postoperative feeding, discharge and follow-up are left unordered against the procedures.",
+      "Discussion 'normalization of hydration and electrolyte levels' kept as review_only ambiguity.",
+      "Mother's 'otherwise unremarkable medical history' not itemized."
+    ]
+  },
+  "physician_adjudicated": false
+}
