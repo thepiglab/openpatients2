@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12750986.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "457bb7f5eed64f6f794a7cec53384e32d4699aa92aa6e0e1309b4bb0590e19d9",
+  "annotation_sha256": "8f340655db58bcfa80f63ba27f02c2123706b2b9521c5ebf093a50c52d89fcf8",
+  "reviewed_at": "2026-10-16T09:33:28.949933+00:00",
+  "source_segments_read": 19,
+  "facts_reviewed": 95,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged p1-f008 (antenatal \"consistently diagnosed\" placenta previa) into p1-f007 (initial misdiagnosis): one antenatal ultrasonographic diagnosis; f007 now carries both quotes, the b00012 \"leading to misdiagnosis as placenta previa\" quote and time \"During her antenatal care\"; label narrowed to complete placenta previa because the transverse lie was confirmed on examination.",
+    "Removed p1-f077 birth weight observation: duplicate of the reproductive_perinatal newborn item p1-f083 (birth_weight_text 3000 grams).",
+    "p1-f010 neonatal respiratory distress: removed the \"on the third day of life\" time, which is the time of death, not of the distress.",
+    "p1-f043 laparotomy: evidence widened to the full abstract clause so the stated indication (intact sac in the peritoneal cavity with placental attachment) is in its own quote.",
+    "p1-f061 label \"Repeated antenatal ultrasonography\" -> \"Repeated ultrasonography\" (antenatal not stated).",
+    "p1-f091 neonatal death: added the b00015 \"neonatal demise occurred\" statement.",
+    "Added p1-f097 reproductive_perinatal \"In labor\" (b00007, b00010), linked to e09 and the indication/contractions ambiguity.",
+    "p1-e18 time -> \"on the third day of life\" (postnatal_age, exact) with the abstract quote added.",
+    "Added 10 literally supported relations: LMP and stated gestation before presentation; antenatal history before presentation (\"history of\"); exam at presentation; intraoperative findings during the cesarean (\"during which\") and before conversion (\"for which ... converted\"); delivery before NICU; intubation/oxygen and intensive care before death (\"Despite\", \"despite intensive care\"); transfusion overlapping surgery (\"during and after the surgery\"); surgery before discharge (\"postoperative\").",
+    "Summary claims 3-4 reworded: removed the invented order \"planned ... after counseling, consent and prophylactic antibiotics\" and the garbled NICU/intubation sentence.",
+    "Ambiguities: indication/labor ambiguity now states the two indications can coexist (not a conflict); gestational-age ambiguity states 39+6 and the 36+6 ultrasound estimate are different measurements."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the actual JPEG is inspected in the separate visual target.",
+    "Discussion statements on incidence, diagnosis, management and mortality of abdominal ectopic pregnancy and the cited study are background, not patient facts.",
+    "The neonate is recorded as subject newborn inside the mother record; the newborn death is not the index patient death.",
+    "Figure 1 is called in the placental histopathology sentence but its caption describes an intraoperative picture; see ambiguity."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 19,
+    "facts_reviewed": 96,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (20-year-old primigravida); fetus and newborn facts stay in her record; newborn death literally stated (\"succumbed\", \"neonatal demise\") and recorded with subject newborn; mother living.",
+      "Cesarean recorded as planned; spinal anesthesia, Pfannenstiel incision, conversion to general anesthesia and laparotomy recorded as performed; no completed cesarean asserted.",
+      "39+6 weeks (stated gestation) vs 36+6 weeks (ultrasound estimate) and placenta previa vs transverse lie in labor indications kept as ambiguities, not conflicts; three cause-of-death wordings kept as separate items with an ambiguity.",
+      "Figure 1 viewed at full resolution: intraoperative photograph matching its caption; the in-text callout sits in the histopathology sentence (ambiguity kept); visual description consistent with pixels.",
+      "\"Other parameters were within normal limits\" kept as one unnamed normal laboratory item with an ambiguity."
+    ],
+    "residual_risks": [
+      "Order of per speculum vs per vaginal examination, admission/laboratory tests and the cesarean decision is not stated and stays unlinked.",
+      "Placental separation, complete removal and histopathology are not ordered against the delivery or the transfusion.",
+      "Timing of labor onset relative to the examination that recorded no uterine contractions is unknown."
+    ]
+  },
+  "physician_adjudicated": false
+}
