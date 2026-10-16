@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12584588.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1bcfa7624244f335d9f5add086b67ccbc78c9dce388858d78e614feee5181c50",
+  "annotation_sha256": "a7daaa250b5aa544a28309febaac794bc8a54c4d0499fe8907c24b0da66dad19",
+  "reviewed_at": "2026-10-16T01:38:01.851752+00:00",
+  "source_segments_read": 48,
+  "facts_reviewed": 90,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f059 discharge CRP \"1.4 g/L\": kept source_conflict/review_only, but the conflict is restated as the printed unit versus \"back to normal\" in the same sentence; the admission CRP 73 mg/L (p1-f045) is a different time point and stays include. Ambiguity and limitation reworded accordingly.",
+    "p1-f015 complex NOE: assertion present -> possible (likely / consistent with / possible), verification provisional kept.",
+    "p1-f016 Carney stage: kept as author-stated stage, severity now records \"at least Grade 3b\"; bone-scan ambiguity kept, no bone scan recorded.",
+    "p1-f068 biphasic isophane insulin 30/70: action unknown -> current (\"had been receiving ... for the past two years\").",
+    "p1-f010..f012 ENT-known otitis externa/media/mastoiditis: temporality historical (\"known to\"); bilateral scope ambiguity kept.",
+    "p1-f017 and p1-f073: added patient-specific discussion evidence (lower cranial nerve involvement; ceftazidime in place of ciprofloxacin due to antimicrobial resistance, now the indication).",
+    "Added p1-f090: abstract MRI finding of granulation tissue at the osseocartilaginous junction.",
+    "Event p1-e12 no longer carries the inflammatory markers and overall-improvement facts: \"Before discharge\" governs only its own sentence. New events p1-e14 (markers normal / overall improvement, untimed), p1-e15 (discharge), p1-e16 (polypoidal lesion histology, untimed, moved out of the examination event).",
+    "Relations 4 -> 7: added e03 before e05 (Before admission / upon admission), e12 before e15 (Before discharge), e15 before e13 (10 days after discharge); e12 before e13 re-evidenced with the two literal phrases instead of the whole paragraph.",
+    "Summary claims 2 and 4 updated (MRI granulation tissue; markers no longer dated before discharge)."
+  ],
+  "unresolved": [
+    "Figure captions are not pixel inspection; the two images are reviewed in the separate visual submission.",
+    "Discharge CRP printed as 1.4 g/L conflicts with the statement that inflammatory markers were back to normal; kept as printed, review-only.",
+    "Dates and the timing of prior ENT disease, histology and the ketoacidosis admission are not stated.",
+    "Discussion text on literature, criteria tables and HBOT is background, not patient findings."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 48,
+    "facts_reviewed": 90,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single 67-year-old man; roster count 1; discussion tables 2-4 are criteria tables, not patient data.",
+      "Every Table 1 cranial nerve row is captured, including the negative ophthalmic-nerve finding and the not-performed audiometry and stapedius reflex tests.",
+      "The discharge CRP unit conflicts with the normal statement and is review-only; all other values are included.",
+      "Both scans viewed at full resolution with zoomed crops; Figure 2 scanner overlay text correctly flagged as device text, no identifiers."
+    ],
+    "residual_risks": [
+      "Carney Stage 3b is author-stated although the staging table requires a bone scan that is not reported.",
+      "Laterality of otitis media/mastoiditis and of the history items is unresolved.",
+      "Timing of the prior histology, DKA admission and the diagnosis relative to treatment is not stated and is left unlinked."
+    ]
+  },
+  "physician_adjudicated": false
+}
