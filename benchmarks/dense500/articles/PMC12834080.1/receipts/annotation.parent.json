@@ -1,0 +1,51 @@
+{
+  "article_id": "PMC12834080.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a530c40b2b2a76b47c02d84549dfdf344d96c928bf2b564cbfa68b8603e4f271",
+  "annotation_sha256": "38f18e1ebbd81e3bfea49a17949d8e0ffe32f94ec688122b190429251d3095f8",
+  "reviewed_at": "2026-10-16T05:53:01.852186+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 103,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Anti-thyroglobulin 20 IU/mL: text 'positive' vs Table 1 caption '< 35 IU/mL considered negative' handled by the conflict rule; p1-f072 keeps the value with flag unknown, new p1-f103 holds the conflicting interpretation as source_conflict/review_only citing both sides; ambiguity updated.",
+    "Added relations: e02 (week preceding ED visit) before e03 (ED visit); e13 (2-day repeat tests) before e15 ('Over the following weeks' symptoms subsided); e11 (carbimazole/atenolol start) before e16 ('leading to ... complete remission within 45 days'); e12 (olanzapine commenced) before e17 (tapered and discontinued).",
+    "Summary claim 2 no longer says thyroid antibodies were positive without qualification; states anti-TPO 141 IU/mL and anti-thyroglobulin 20 IU/mL called positive in the text."
+  ],
+  "unresolved": [
+    "Figures are caption-only in this annotation; pixels are described separately in visual.json.",
+    "Initial laboratory time is stated as five days before psychiatric evaluation in the text and as Upon presentation in Table 1; the relation of presentation to the emergency department visit is not stated.",
+    "Table 1 N/A cells are recorded as not reported without inferring why.",
+    "Discussion statements about published cases and general literature are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 103,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single 29-year-old woman, psychosis due to Graves' disease/thyrotoxicosis; every Table 1 cell present including N/A cells as not_reported.",
+      "Initial labs: fact times use the governing Table 1 row label 'Upon presentation'; the event carries the text time 'five days before psychiatric evaluation'; ambiguity states the anchors are not equated. Consistent.",
+      "'Antithyroid medication/treatment' is not equated with carbimazole/atenolol (ambiguity kept).",
+      "Abstract 'normalization of thyroid function' vs 45-day TSH < 0.007 kept as ambiguity; no fact asserts normalization.",
+      "Mental state exam: 'On mental state examination' is the lead clause of the first sentence only; later sentences keep null time and are grouped in the MSE event."
+    ],
+    "residual_risks": [
+      "The anti-thyroglobulin conflict could be a text error.",
+      "The MSE lead clause could be read as scoping the whole paragraph."
+    ]
+  },
+  "physician_adjudicated": false
+}
