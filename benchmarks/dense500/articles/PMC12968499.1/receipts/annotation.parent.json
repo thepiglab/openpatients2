@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC12968499.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "853e77f9a7015b006bc6a36bfb9d984d167d7dec0af856443f98a5b055253ad4",
+  "annotation_sha256": "a843faedc95fe00262454ef19136c15f29a6c86f3cec7b787cd2e3101b061dd3",
+  "reviewed_at": "2026-10-16T04:33:19.620543+00:00",
+  "source_segments_read": 34,
+  "facts_reviewed": 248,
+  "patients_reviewed": 6,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p5-f045 (Discussion: recurrence of paraphimosis in dog 5) promoted from ambiguous/review_only to supported/include; it names dog 5 and is compatible with the Table 1 long-term minor penile protrusion and the Results 0.5 cm intermittent protrusion; removed the recurrence ambiguity; added event p5-e12 with relation after surgery and added it to summary claim 3.",
+    "p5-e11 (referring veterinarian triangular incision) no longer carries p5-f042: the two-layer closure of the triangular defect is not attributed to the referring veterinarian; new event p5-e13 for the closure, left unordered relative to p5-e11 because no quote orders them (relation removed after coordinator ruling).",
+    "p5-f044 gains the Discussion evidence that no further treatment was necessary for dog 5.",
+    "p2-e05 (Fig 1 caption surgical steps) merged into p2-e02 (the same MPECT surgery).",
+    "Added literally supported relations: referring-veterinarian treatments before presentation (dogs 3 and 5, past perfect \"had\"); stated-time order for dog 5 (within 48 hours < 5 and 14 days < 1 month < 14 months after surgery); ice packs during the oedema they resolved (dogs 4 and 5); incision discharge (dog 1) and incision dehiscence (dog 4) after surgery.",
+    "Coordinator ruling applied: kept p4-e02 before p4-e08 (a wound dehiscence can only follow the surgery that made the wound); removed p5-e11 before p5-e13 (no quote orders the referring-veterinarian incision and the defect closure).",
+    "Added article limitations recording the parent decisions on abstract-vs-Results wording and unassigned Discussion sentences.",
+    "figure_privacy_flags.json Fig 1 panel B: burned_in_identifiers changed from timestamps_or_device_text to none (only sterile-ruler product lettering, consistent with the panel A ruler)."
+  ],
+  "unresolved": [
+    "Series of six dogs; only statements explicitly naming a dog, naming all dogs, or Table 1 rows are attributed to individuals. Unlabelled narrative (complete blood counts and biochemistry within normal limits, radiograph and ultrasound workup, unlabelled surgical technique steps, meloxicam continued orally for 3 days, Elizabethan collar, pain scale, telephone follow-up) is not copied to every dog.",
+    "The analgesic sentence lists meloxicam, tramadol or buprenorphine for the dogs collectively; per-dog assignment is not stated, so each dog carries review-only possible items.",
+    "Abstract states four minor complications in three dogs while Table 1 lists six complication entries across dogs 1, 4 and 5; recorded as an arithmetic or categorisation mismatch, not a source conflict.",
+    "Abstract says all dogs recovered uneventfully from surgery and all short-term complications resolved without treatment, which sits uneasily with Results for dogs 1, 4 and 5; held as review-only items and ambiguities.",
+    "Outcome definitions (good if a minor complication was noted, excellent if free of clinical signs) do not obviously match the Table 1 grades for dogs 1 and 4; not reconciled.",
+    "Discussion recurrence statements (two dogs with 2.2 and 2.4 cm exposure; recurrence with 2.5 cm and 3 cm protrusion) are not labelled by dog and their numbers do not match Table 1 protrusion lengths; not assigned to any dog.",
+    "Median and range values in the Abstract and Results are cohort statistics and are not copied to individuals; Table 1 cells were used instead.",
+    "Table 1 age column is not labelled as age at presentation, so age_other is used. Follow-up months in Table 1 are not linked to text time points such as re-examination 14 months after surgery.",
+    "The orchidectomy of the left descended testicle sentence does not name a dog; it is held as a review-only item for dog 6 only.",
+    "Figure pixels viewed at full resolution with zoomed panel crops in the separate visual submission; caption-layer figure entries stay not_inspected.",
+    "Parent review: the dog 5 recurrence statement in the Discussion is accepted as a literal dog-labelled fact (compatible with Table 1 and Results). Unlabelled Discussion sentences (two dogs with oedema attributed to lymphatic trauma; polyglactin 901 suture possibly contributing to recurrence, although the technique section names polypropylene) are not assigned to any dog.",
+    "Parent review: the abstract statements \"All dogs recovered uneventfully from surgery\" and \"All short-term complications resolved without treatment\" are treated as imprecise cohort summaries (the Results counterpart is smooth recovery from anaesthesia), recorded as ambiguities rather than source-conflict pairs; dog-labelled Results and Table 1 complication facts stay included."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 34,
+    "facts_reviewed": 248,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Six dogs, roster numbered by Table 1 case number; all Table 1 cells present per dog; dog-labelled Results, Discussion and caption statements correctly attributed.",
+      "Abstract \"recovered uneventfully\" and \"resolved without treatment\" kept as ambiguities (imprecise cohort summaries) rather than conflict pairs; dog 5 Table \"Good\" vs abstract \"all excellent\" kept as a source_conflict pair.",
+      "Analgesic sentence kept as three possible review_only items per dog: the sentence explicitly covers the dogs but the drug alternatives per dog are not stated.",
+      "Dog 6 left-sided cryptorchidism (unnamed \"one had\"), orchidectomy of the left descended testicle (unnamed) and Discussion \"no orchiectomy\" kept review_only; mapping to dog 6 is contextual, not literal, and the laterality is internally inconsistent.",
+      "Passive unlabelled sentences (CBC/biochemistry, radiographs/ultrasound, technique steps, oral meloxicam, collar, pain scale, telephone follow-up) left unassigned."
+    ],
+    "residual_risks": [
+      "Analgesic and abstract-level items are review_only and may under-represent care all dogs received.",
+      "Outcome grade definitions do not match Table 1 grades for dogs 1 and 4; not reconciled.",
+      "Relations from past perfect referring-veterinarian wording and from incision-based entailment are interpretive but literal-text grounded."
+    ]
+  },
+  "physician_adjudicated": false
+}
