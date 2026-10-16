@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12800525.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "450ab46896ae7aa43a0bf0e3379a6cf2a59c4f4243b06710f51fff17df3ced76",
+  "annotation_sha256": "94cb891f5907e93cb3e2532f35b644e1e3c3a90f15ea0a5e2548659572664595",
+  "reviewed_at": "2026-10-16T05:01:58.438040+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 73,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f026 retrograde nailing: added b00005 nail-placement quote so the hospital day 3 operative paragraph is cited; NO-BORROWING warning kept as checker false positive (the hospital day 3 surgery is the operation whose steps end in nail placement)",
+    "p1-f014 anchor null -> \"procedure\"; p1-f005 anchor null -> \"referred to our outpatient clinic\" (adjacent sentence)",
+    "Added relations e03->e05 (\"postoperative pulmonary embolism\"), e05->e08 (\"Given the postoperative pulmonary embolism, contrast-enhanced CT was performed\"), e07->e12 (\"Due to progressively worsening thigh swelling ... fasciotomy\"), e12->e17 (\"the fasciotomy wound was closed\")",
+    "e03->e13 relation evidence now includes \"postoperative day (POD)\" definition",
+    "Source conflict on fracture articular extent: p1-f049 narrowed to shared long oblique meta-diaphyseal pattern (included); new p1-f073 articular extension (text) and p1-f050 AO/OTA 33A2.2 femoral shaft classification (caption) set source_conflict/review_only; ambiguity added; summary no longer asserts articular extension"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the six JPEG figures were inspected in the separate visual submission.",
+    "Fig. 1B is captioned only as a postoperative radiograph and the case text states no radiographic result for it, so no observation is recorded for it.",
+    "Fracture and operative side are not stated in the case text; only the pseudoaneurysm is called left.",
+    "The initial contrast-enhanced CT named in the abstract and discussion is not explicitly identified with the CT for deep vein thrombosis in the case text.",
+    "Discussion sentences about literature, cited reports and general technique are not patient facts and were not recorded."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 73,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Single patient, roster 1; all 72 facts verified against text and captions",
+      "Existing relations e03->e07/e10/e13/e19 and e14-e18 each rest on literal postoperative/POD/subsequently/thereafter/after which wording",
+      "flag=positive on the targeted pulmonary embolism CT kept (qualitative test for PE, finding present)",
+      "Initial contrast-enhanced CT kept separate from the DVT CT with ambiguity; fracture laterality left unknown with ambiguity (only pseudoaneurysm and femur at subtrochanteric level are called left); presumed mechanism kept as ambiguity",
+      "Fig 1B has no stated result: no observation, correct",
+      "Visual submission has 17 panels (2+4+2+2+3+4); the drafter visual receipt notes saying 20 panels are wrong. Fig 2C/D markers are arrows, not arrowheads as captioned; small dark masking patches beside the panel letters verified"
+    ],
+    "residual_risks": [
+      "Hospital day 3 time on the nailing fact relies on paragraph-level linkage (gate warning)"
+    ]
+  },
+  "physician_adjudicated": false
+}
