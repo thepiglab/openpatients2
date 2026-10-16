@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12683280.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b431fc470d02763ea1e675fe7d5eb6be823e4dbd6f2ad82f447181af161ebff2",
+  "annotation_sha256": "1d9a2c30bb77b1ef929ae0b7ab73551045c6a889e24d7ffc5eaeb1d57adaf1b3",
+  "reviewed_at": "2026-10-16T01:02:15.912573+00:00",
+  "source_segments_read": 25,
+  "facts_reviewed": 36,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f012, p1-f013, p1-f024, p1-f025: added Figure 1 caption quote that labels the OCT ellipsoid zone disruption and FAF hyperfluorescent crescent as baseline; time.text \"baseline\" (b00005 \"At the time of discontinuation\" governs only the BCVA sentence, so no discontinuation time).",
+    "p1-f011: removed indication \"HCQ toxicity\" (reason for stopping, not the drug indication).",
+    "p1-f026 split: parafoveal outer retinal loss (modality not literally stated) and new p1-f036 juxtafoveal hyperautofluorescence area on FAF.",
+    "Added same-fact evidence: f016 (b00004), f022/f023 (b00001 BCVA stable both eyes), f028 (b00001 lesion enlargement), f032 (b00018, b00020 genetic testing negative), f034 (caption annual follow-up years two to nine), f035 (b00013, b00023).",
+    "Event p1-e04 now baseline SD-OCT/FAF (time baseline, caption evidence); new untimed event p1-e11 for the b00007 hypofluorescent FAF description.",
+    "Added relations p1-e04 before p1-e05 (caption baseline vs annual follow-up) and p1-e10 after p1-e03 (b00001 \"progression over nine years after cessation\").",
+    "Summary claims 2-3 rewritten so OCT/FAF are not implied to be at discontinuation and the untimed FAF description is included.",
+    "visual.json FIG1: corrected red-arrow location in panel A (beside, not below, the foveal depression) and replaced \"thin dark line artifact(s)\" with \"thin faint grey line(s)\" in panels F, H, I; regenerated figure-EHR and privacy drafts and carried labels and flags over unchanged."
+  ],
+  "unresolved": [
+    "Pixels of both figures are inspected in the separate visual target; caption layer stays not_inspected.",
+    "Time of OCT and FAF findings in the first case paragraph is not stated; no time borrowed from the discontinuation sentence.",
+    "Discussion sentences restating the patient's findings (segments b00013, b00018, b00020, b00023) add no new facts and duplicate earlier items.",
+    "Humphrey printout values appear only in Figure 2 pixels and are not extracted as clinical facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 25,
+    "facts_reviewed": 36,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient, roster count 1 correct.",
+      "b00007 hypofluorescent FAF description is untimed and kept as an ambiguity, not a source conflict.",
+      "BCVA 0.1 to 0.12 described as stable without unit; kept as ambiguity, values unconverted.",
+      "b00018 clinical approach of surveillance and counseling is a general author statement, not recorded as a care plan.",
+      "RA temporality historical supported by literal \"history of\" in its own evidence.",
+      "FIG2 EHR override to clinical_chart_of_patient_data accepted: patient-specific perimetry printouts."
+    ],
+    "residual_risks": [
+      "Eye laterality of Figure 1 tile columns is not printed; panels not split by eye.",
+      "Humphrey printed statistics exist only in figure pixels and are not annotation facts.",
+      "Baseline time for FAF crescent relies on the caption adjective scoping over both arrow targets."
+    ]
+  },
+  "physician_adjudicated": false
+}
