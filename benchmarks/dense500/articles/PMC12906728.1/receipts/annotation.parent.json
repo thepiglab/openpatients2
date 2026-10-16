@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12906728.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1e0bc85d80b7490bf2c4ef58ae07be889a7e01df11d610f3a7fa5a7809b08aae",
+  "annotation_sha256": "20915c2ba57c8e895617f1559512a98920578c957d30be377284a6b47e54bf65",
+  "reviewed_at": "2026-10-16T02:48:40.595435+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 151,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Day-1 event p1-e11 narrowed to the sentence \"On day 1 of admission, he had no complaints of blurred vision\"; the ophthalmology consultation and bedside eye examination moved to new untimed event p1-e20 (the day-1 clause does not scope the following sentences).",
+    "Split MRI brain out of the drug-screen event into new event p1-e21; p1-e10 now lists all nine urine drug screen results and the not-assessed serum methanol level.",
+    "Added four Table 1 ABG column events (p1-e22..p1-e25, time_kind calendar, calendar value null for all-numeric dates) and before relations from the literal column dates; \"after 6 hours\" kept without an anchor.",
+    "Added literal-order relations: referral before emergency arrival, provisional diagnosis then oral ethanol, bicarbonate in an emergency then MICU admission, MRI findings before the advised and refused methylprednisolone, MICU-stay drugs after MICU admission, oral ethanol before blurred vision subsided, discharge before loss to follow-up (6 -> 16 relations).",
+    "Added facts p1-f150 (completed referral to medical OPD and Emergency department) and p1-f151 (admission to the MICU) and linked them to events p1-e02 and p1-e08, which previously pointed only at case_context.",
+    "Oral ethanol route set to the literal delivery route \"Nasogastric tube\" and the discussion sentence on nasogastric administration in our patient added as evidence.",
+    "Summary rewritten so vitals are not attributed to \"On arrival at the emergency\" (only the airway/saturation/circulation sentence is scoped) and to mention MICU drugs and the refused methylprednisolone.",
+    "Event p1-e04 fact links corrected to the untimed blood investigations and osmolar gap (Table 1 cells now belong to the dated column events)."
+  ],
+  "unresolved": [
+    "The article has no figures and no supplements; Table 1 is present in source.json and every non-blank cell is recorded.",
+    "Blank cells in the serum osmolality row of Table 1 are not recorded as values.",
+    "Patient weight is printed as 70gm; unit kept as printed and quarantined as review_only.",
+    "The text says IV ethanol and fomepizole were unavailable; no ordering or administration of either is recorded.",
+    "The sentence about osmolar gap returning to normal in the discussion is not recorded as a patient value.",
+    "Table 1 pCO2 12/05/2025 printed as 6.4 mmHg; kept as printed.",
+    "No patient names or pseudonyms are stored."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 151,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Weight \"70gm\" kept as printed, ambiguous/review_only; no conversion or per-kilogram dose is computed (0.6-0.8 g/kg and 0.8 g/kg are source-printed).",
+      "\"for harmful alcohol use\" kept as a separate condition with an ambiguity; not assigned as an indication to thiamine or pantoprazole.",
+      "Methylprednisolone was advised and \"refused by the patient\": action declined, event not_occurred.",
+      "Thiamine at discharge action unknown; IV ethanol and fomepizole unavailability is only a limitation.",
+      "MRI infarcts confirmed, optic neuritis provisional (\"likely\"); echocardiography kept as stated in the ECG sentence.",
+      "Table 1: every non-blank cell recorded with its column date; pCO2 6.4 mmHg kept as printed; blank osmolality cells not recorded."
+    ],
+    "residual_risks": [
+      "Arrival vitals and eye examination are untimed although clinically likely at emergency arrival.",
+      "The 13/05/2025 \"(after 6 hours)\" column has no stated reference point.",
+      "pCO2 6.4 mmHg and weight 70gm are probable source typos kept as printed.",
+      "No link between Table 1 calendar dates and admission-day numbering is stated."
+    ]
+  },
+  "physician_adjudicated": false
+}
