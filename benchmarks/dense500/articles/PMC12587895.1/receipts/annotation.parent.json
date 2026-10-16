@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12587895.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1d2980d851669f10fafd645146911776d4c10a8cb747486a7419286239cc6675",
+  "annotation_sha256": "950251ee6d916273accd2678100f9eb159bf8a9c1aa99111b823c3cfa45cf18a",
+  "reviewed_at": "2026-10-16T04:07:44.768032+00:00",
+  "source_segments_read": 28,
+  "facts_reviewed": 48,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Promoted the b00012 density, mucoid matrix and amorphous material with macrophages observations from ambiguous/review_only to supported/include: \"The cytological evaluation revealed\" reports this case; citations support only the differentiation clause.",
+    "Added ambiguities for the \"near\" (text) vs \"on\" (caption) ischial tuberosity wording and for the \"These cells\" referent (spindle cells).",
+    "Added a completed care_plans follow-up item for the 8-week follow-up.",
+    "Added relation presentation before the 8-week follow-up (\"the last time we saw the patient\"); the findings-to-diagnosis relation was removed per coordinator ruling (basis wording states a reason, not a time order).",
+    "Surgery declined confirmed as the owner decision; note added. Summary claim 2 now cites the promoted cytology items."
+  ],
+  "unresolved": [
+    "Figure captions are annotated without pixels in the annotation layer; actual images were inspected separately in visual.json.",
+    "Histopathological confirmation was not possible; the ganglion cyst diagnosis is presumptive and the benign nature is an author belief.",
+    "Synovial cyst is discussed only as a differentiating comparison and is not recorded as a differential diagnosis of this patient; whether imaging was performed is not stated for this patient.",
+    "Generic statements about cytology, ganglion cysts and resource-limited settings are background, not patient facts.",
+    "The caption places the nodule on the right ischial tuberosity while the text says near it; the text wording is used for body_site.",
+    "The Discussion sentence on fluid density, mucoid matrix and macrophages is read as this case's cytological evaluation (\"revealed\"); the spindle-cell cytoplasm is described as clear, irregular in the Case Description and elongated in the Discussion, kept as separate compatible items."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 28,
+    "facts_reviewed": 48,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single dog; roster count 1 from the singular case statement.",
+      "Synovial cyst is a comparison, not a stated differential; imaging is never literally stated as not performed for this patient; histopathology not possible is recorded not_performed.",
+      "Spindle-cell cytoplasm \"clear, irregular\" vs \"elongated\" are compatible descriptions, not a conflict.",
+      "Figures viewed at full resolution with crops; visual.json matches pixels, no edits."
+    ],
+    "residual_risks": [
+      "b00012 cytology characteristics come from a Discussion sentence with literature citations.",
+      "Fig 2b pixels show a rounded central cell where the caption names a fusiform cell; visual records the caption claim as not independently identified."
+    ]
+  },
+  "physician_adjudicated": false
+}
