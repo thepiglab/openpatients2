@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC12791173.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3c5ced115a3bdb9a5f447c2ffe3ed673fd93a6fe8cb0226ebe43da57403c0edc",
+  "annotation_sha256": "41b97fac4f733cf38cecf0e69aafeeb78961cc9fd06a3245688866209b2ed9f3",
+  "reviewed_at": "2026-10-16T02:01:09.006502+00:00",
+  "source_segments_read": 25,
+  "facts_reviewed": 56,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Kept both documented_sex facts (female from girl/female patient/her; male from b00010 \"His ankle mobility\") as source_conflict review_only: DEMO-SEX-WORDING counts a pronoun that unambiguously refers to the patient, and conflicts are never reconciled.",
+    "p1-f001 case description and summary claims made sex-neutral so no accepted output asserts the quarantined attribute.",
+    "Removed p1-f049 (outcome restating the AOFAS 100-point score already in p1-f048; same score in two sections).",
+    "p1-f026 CRPF: removed body_site epiphysis borrowed from the separate screw-placement clause.",
+    "Events: postoperative radiograph facts f039/f040 linked to follow-up event e08; two-month findings f042/f043 linked to e11; added e15 third-month appointment examination (f050-f057) and e16 activity/isometric permissions (f034/f035).",
+    "Relations added: e01->e02 (presented with a story of a fall), e02->e03 (examination, \"Therefore, portable imaging studies were requested\"), e06->e08 (Figure 5 follow-up X-rays are \"postoperative radiographs\").",
+    "visual.json: FIG2 bone layout corrected and partly cut-off top-edge character noted; FIG3 arrow directions refined; FIG5A and FIG6A arrows point down and to the right, not straight down. Figure EHR/privacy sidecars regenerated with --draft and labels/flags carried over."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the seven JPEGs are inspected in the separate visual submission.",
+    "Sex wording conflicts: female patient/girl/her versus one \"His\" in the two-month follow-up sentence; documented_sex facts are source_conflict review_only.",
+    "Surgery laterality and indication are not stated in the operative sentences and were not inferred; the posterior malleolus fracture and Salter-Harris injury sides are not stated.",
+    "Time of surgery and of the first follow-up are not given; follow-up events are ordered only where stated times order them.",
+    "Introduction and Discussion sentences are literature background and were not copied to the patient.",
+    "The third-month appointment examination (b00012) and the third-month radiographic check-up (b00010) are separate events; the source does not state that they are the same visit."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 25,
+    "facts_reviewed": 57,
+    "figures_viewed": 7,
+    "key_findings": [
+      "Single index patient; roster count 1 correct; literature cases (adult, transgender, Maisonneuve, Giacobazzi) not attributed.",
+      "Null laterality/indication on surgery and null sides for SH IV and posterior malleolus are correct: the source does not state them in those sentences.",
+      "Third-month relation e06->e13 is supported by the Figure 6 caption \"radiographs three months after surgery\", which the case text links to the third-month X-ray."
+    ],
+    "residual_risks": [
+      "Documented sex is review_only because of one masculine pronoun.",
+      "Time of surgery and of the first follow-up are not stated.",
+      "Third-month check-up and third-month appointment kept as separate events without a relation."
+    ]
+  },
+  "physician_adjudicated": false
+}
