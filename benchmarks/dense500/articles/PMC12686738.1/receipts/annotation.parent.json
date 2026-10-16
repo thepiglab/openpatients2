@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12686738.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7aa9af5834deb9bf96aed5c12f41787c213d45e54aaccbb40d05457c081e36b7",
+  "annotation_sha256": "4b384a52c1401c27df5aeb8f85d6e259d659f2cd65e716366013919d9cb28be8",
+  "reviewed_at": "2026-10-16T02:28:21.406395+00:00",
+  "source_segments_read": 16,
+  "facts_reviewed": 44,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Renamed the mild and moderate CNS depression source-conflict facts (p1-f007, p1-f008) to the concise label \"Central nervous system depression\"; severity stays the only conflicting attribute, both sides and the highlights mild-sedation item remain review_only.",
+    "Eszopiclone dose_text changed from the non-literal \"estimated 78 mg\" to the literal \"78 mg\"; the note records that \"an estimated\" precedes the paired doses.",
+    "Split event p1-e07, which attached the nine-hour time to the consciousness improvement: p1-e07 is now the untimed improvement and full recovery, new p1-e10 is ambulation by nine hours post-ingestion.",
+    "Added events p1-e11 (contacted her mother one hour before arrival) and p1-e12 (mother called EMS; empty blister packs found upon EMS arrival).",
+    "Added 8 temporal relations with literal support: alcohol before ingestion (stated eight and four hours before arrival), ingestion before the call to her mother, call before arrival and before the EMS call (\"subsequently\"), arrival vitals same time as presentation, improvement during supportive care, ingestion before ambulation, presentation before discharge on hospital day two.",
+    "Ingestion event time precision set to approximate (\"approximately four hours before her arrival\").",
+    "Added an ambiguity: the graphical abstract prints GCS 15 / full clinical recovery at 9 hours, which the text does not state, and its plotted line reaches 15 only at 12 hours; nothing from the graphic is a fact.",
+    "Summary claim 3 now mentions the full recovery it cites."
+  ],
+  "unresolved": [
+    "Graphical abstract has no caption or in-text callout; it is described in the visual submission only and its printed values are not added as text facts.",
+    "The graphical abstract prints a Glasgow Coma Scale of 15 at nine hours, which the text does not state; chart values estimated from the plotted line or bar are not facts and do not override the text.",
+    "Severity of the central nervous system depression is described as mild in the abstract and conclusion and as moderate in the discussion; both are kept as review-only source-conflict facts.",
+    "Intent of the overdose is only implied; blister-pack tablet counts are recorded as review-only and not summed into a dose.",
+    "Plasma lemborexant was measured at only two time points; the author calls the later level a peak while noting that only two levels were obtained.",
+    "Discussion statements about pharmacokinetics, co-ingestant effects and the fatal comparison case are interpretation or other cases and are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 16,
+    "facts_reviewed": 44,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single 33-year-old woman, roster 1; all 44 facts checked against b00001-b00009.",
+      "Severity conflict (mild in abstract, highlights and conclusion vs moderate in discussion) quarantined on severity only; the base CNS depression fact quotes no severity word.",
+      "Doses 720 mg and 78 mg are text-literal; blister-pack counts (146 x 5 mg, 26 x 3 mg) stay review_only and are not summed; intent stays review_only because the source only says \"implying\".",
+      "Arrival vitals quote is one literal contiguous sentence headed \"On arrival to the ED, the patient’s vital signs were as follows:\", which scopes all five values.",
+      "Plasma lemborexant 0.144 and 1.410 ug/mL at four and nine hours are literal; the \"peak\" wording is the authors' own and is kept in text_value.",
+      "Graphical abstract viewed at full size and in magnified crops; visual.json matches the pixels; no plot values became facts."
+    ],
+    "residual_risks": [
+      "Graphical abstract ownership left unresolved because the source has no caption or callout, although its text matches this case.",
+      "Overdose drugs are medications with action unknown; route is not stated literally so it is not recorded.",
+      "The highlights \"mild sedation\" item overlaps the mild CNS depression conflict fact; both are review_only."
+    ]
+  },
+  "physician_adjudicated": false
+}
