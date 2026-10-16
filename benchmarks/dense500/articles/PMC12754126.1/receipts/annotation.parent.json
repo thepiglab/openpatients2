@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12754126.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5d82be5a028d88a51d57d795a9dc0d0437de78ecd44d6c35d69af213ae53384d",
+  "annotation_sha256": "1a88026efe627ec0998892f7e8fb23b2baea9e5fa2645b83ea689678a14f78c9",
+  "reviewed_at": "2026-10-16T06:05:00.695419+00:00",
+  "source_segments_read": 24,
+  "facts_reviewed": 93,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f024 (gastrointestinal complications requiring surgical evaluation, absent): evidence quote extended to include its own negation cue 'the absence of renal compromise or ...' (EVID-NEGATION warning was a real missing-cue defect, not a checker false positive).",
+    "Added p1-f090 systemic toxicity absent (b00020 'absence of systemic toxicity') and p1-f091 constitutional symptoms absent (b00020 'lack of constitutional symptoms').",
+    "Added p1-f092 cytopenias absent and p1-f093 multisystem involvement absent as ambiguous/review_only (b00020 SLE rule-out basis), with a new ambiguity: case text reports reduced lymphocytes and skin/GI/joint involvement, discussion calls the course multisystemic.",
+    "Linked p1-f017, p1-f018 and the new f090-f093 to the diagnosis/differential event p1-e10.",
+    "Added relations p1-e04/e05/e06 before p1-e03 (b00006 'presented ... with a one-day history of a non-pruritic rash, abdominal pain, and joint pain') and p1-e02 before p1-e03 (stated ages: 'rickets in infancy' vs '11-year-old ... presented').",
+    "Shortened summary claim 1 from 89 to 72 words (SUMMARY-CLAIMS 25-85 words) without adding facts."
+  ],
+  "unresolved": [
+    "Single-patient case report with no tables or supplements; Figure 1 pixels are described in visual.json, not in the annotation.",
+    "The Imaging examinations section reads only \"No special notes.\"; no imaging result was recorded from it.",
+    "No dates, admission or discharge times, doses, routes or durations are stated; times are recorded only where the source states them.",
+    "Discussion statements about IgA vasculitis in general, cited literature and the authors interpretations (for example the cough as a viral prodrome, analgesics being appropriate) are not recorded as patient facts.",
+    "Case-text description of the rash as hyperpigmented non-blanching macules versus the caption and diagnosis description as palpable purpura is kept as separate facts (see ambiguity)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 24,
+    "facts_reviewed": 93,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (11-year-old Black girl, IgA vasculitis); roster count 1 from b00002; no tables or supplements.",
+      "Infection-history conflict (b00008 'no history of recent infections' vs b00013 'the preceding upper respiratory infection') kept as source_conflict, both sides review_only; dry cough kept as a separate symptom.",
+      "Macules vs palpable purpura and 'joint pain persisted' vs 'fully recovered' are ambiguities, not conflicts; all sides kept as written.",
+      "Six b00013 differentials refuted ('helped rule out these conditions'); meningococcemia ('considered unlikely') and serum sickness ('not supported') stay unconfirmed, not refuted.",
+      "'On physical examination' time kept only on the facts of its own sentence (no borrowing to later exam sentences).",
+      "Figure 1 viewed at full resolution: four clinical photographs of the index patient's feet/ankle/legs and hands; panel A left photo shows one foot, the second photo the ankle with toes of the other foot; visual limitation already records the caption 'both feet' mismatch."
+    ],
+    "residual_risks": [
+      "No dates, doses, routes or durations; presentation vs admission timing unresolved, so the dry cough (two weeks before admission) is not ordered against the rash.",
+      "Hospital-course outcome events are not ordered relative to treatment or discharge because no order wording is printed.",
+      "Panel B shows an IV-type connector on the hand; it is not recorded as a device because the text never mentions it."
+    ]
+  },
+  "physician_adjudicated": false
+}
