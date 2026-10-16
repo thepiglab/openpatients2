@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12828015.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4ff6803b8c8d9690cab9ee0ba0dce05853245702bedad8161bbd6f6f5155f87d",
+  "annotation_sha256": "8a6b08865a092ba87a470df5ffb48717d69fc35cdc82f6c1d570e5751d5c4fa1",
+  "reviewed_at": "2026-10-16T09:50:17.128094+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 79,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f046 (second-mentioned PCV unit with FFP): statement no longer claims a further unit; certainty ambiguous, scoring review_only; ambiguity added (same or additional unit not stated).",
+    "p1-f044 time anchor restored to the literal phrase \"drop in hemoglobin\".",
+    "p1-f027 gained the b00015 evidence quote (symptoms and signs mimicking acute gastroenteritis at 20 weeks).",
+    "Events: f026 moved from e04 into new e14 (initial diagnosis of intrauterine pregnancy); f054 into new e15 (preoperative instability, time_text \"preoperative\"); differentials f050-f053 into new e16; f046/f047 transfusion into new e17 (unordered); f056 (clinically palpable) moved from intraoperative e09 to examination e03; e08 description no longer implies a further transfusion; e13 precision exact.",
+    "Relations: e08->e09 \"before\" (paragraph order) replaced by e09 during e08 (\"intraoperatively found\", \"Upon exploration\"); e09->e10 removed (paragraph order only); e10->e11 re-evidenced with \"after removal\"; added e14 before e09 and e14 before e02 (\"initially diagnosed ... but presented ... intraoperatively found\"), e15 before e08 (\"preoperative\"), e03 before e06 (\"worsened\"), e11 before e13 (\"subsequently discharged\").",
+    "Summary: removed the pronoun \"She\" (source never uses one), removed the implied \"further\" PCV unit, separated external ultrasound from ultrasonography findings, stated platelet value with the author term, added initial IUP diagnosis and viability sequence."
+  ],
+  "unresolved": [
+    "No sex/gender noun or pronoun refers to the patient, so documented_sex is not recorded; primigravida is not treated as a sex statement.",
+    "Discussion paragraphs b00010 to b00012 describe published cases cited from the literature and are not index-patient facts; b00001, b00004, b00008, b00009 and b00014 are general background.",
+    "The platelet count of 220×10^(3)/mm^(3) is called thrombocytopenia by the source; both are kept literally and the discrepancy is not resolved.",
+    "The admission hemoglobin of 7 g/dL and the cited starting value of 8 g/dL for the later drop are kept as separate observations without reconciliation.",
+    "Whether the trailing duration (the past 2-3 days) covers all listed presenting complaints is not explicit; it is applied to each with a note.",
+    "The source lists no supplements and no tables; three single-panel figures were viewed separately in visual.json.",
+    "Exteriorization and clamp/removal of the mass are not ordered relative to each other (paragraph order only); removal is ordered before sectioning by \"after removal\"."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 79,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; fetus and placenta kept in her record (subject fetus); b00010-b00012 are cited literature cases and stay background.",
+      "Roster count 1 evidenced by the literal b00003 quote \"in a low-income patient\", which refers to the index patient; the natural quote \"A 25-year-old primigravida\" is rejected only because the SINGLE_CASE regex lacks gravidity nouns (tooling note).",
+      "Platelets 220x10^3/mm^3 called thrombocytopenia: flag low kept because the source says so (OBS-FLAG, consistent with prior hyperkalemia ruling); value kept literal; ambiguity notes possible print artefact.",
+      "documented_sex omitted: no sex/gender noun or pronoun refers to the patient; primigravida/pregnancy would be inference from a reproductive status (DEMO-SEX-WORDING).",
+      "Fetus recorded as live on external ultrasound and viable on operative ultrasonography, non-viable after removal; no death recorded.",
+      "All three single-image figures viewed at full resolution; visual descriptions match pixels."
+    ],
+    "residual_risks": [
+      "Hemoglobin 7 g/dL on admission vs drop from 8 g/dL remains an unexplained ambiguity.",
+      "Duration \"for the past 2-3 days\" applied to all five listed complaints.",
+      "Histopathology specimen (fetus with placenta vs mass) not stated precisely; specimen left null.",
+      "Fifth-day discharge reference point unnamed (anchor null)."
+    ]
+  },
+  "physician_adjudicated": false
+}
