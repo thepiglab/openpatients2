@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12790098.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2cae5cddee2fbc2efd0ff50cff5d1782c22c0ad0cff4d0ffdae25ac75b4cb74c",
+  "annotation_sha256": "8f3b4881ba40a30130e925179253b2a10b2eb780d705689a85ec3f822f9e6bb6",
+  "reviewed_at": "2026-10-16T00:51:52.339628+00:00",
+  "source_segments_read": 24,
+  "facts_reviewed": 78,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Split event p1-e13 (bleb failure, time 'two years later') from new p1-e30 (Baerveldt GDD implantation, no stated time) so the implantation does not inherit the bleb-failure time.",
+    "Added six literally supported before-relations: default for three years -> re-presentation; trabeculectomy -> right-eye bleb failure 'two years later'; Baerveldt GDD -> IOP rise ('functioned for eight years before'); tube exposure -> failed initial AMT ('persistent exposure'); failed AMT -> 1.0 mm reduction (Figure 1 caption A/B); corneal patch graft repair -> day-1 coverage (Figure 2 caption).",
+    "p1-f032 over-the-counter eye drops action unknown -> administered ('intermittently using').",
+    "p1-f073 lost to follow-up: removed follow_up_duration_text (the three years is the default period, not follow-up length); time 'for three years' (during) from its own quote.",
+    "Summary claim 3 no longer credits serum drops/antibiotics/doxycycline/bandage lens with the reduction to 1.0 mm (source attributes it to the scleral lens); claim 4 adds six-month coverage with its fact.",
+    "Added ambiguities: abstract places counting-fingers VA and IOP 11 mmHg after the failed AMT while the case text places them at the exposure examination; discussion 'At presentation' refers to the exposure presentation; bleb failure and Baerveldt implantation order unstated. Added limitation on six-month (abstract) vs 12-month (case text) follow-up points."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the two figure images are reviewed in visual.json.",
+    "Eye is not stated for the counting-fingers visual acuity and IOP 11 mmHg at the exposure examination; no eye assigned.",
+    "Interval anchors for \"two years later\" and \"Subsequently\" are not named in their sentences; anchors left null.",
+    "Authors’ suggestion that young age at first implantation and prior surgeries may have contributed to exposure is hypothesis, not a recorded cause.",
+    "No supplements or videos are listed in the source.",
+    "Abstract reports the tube covered at six months postoperatively and the case text reports no recurrence at 12 months; both are kept as separate follow-up points."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 24,
+    "facts_reviewed": 78,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (47-year-old man with JOAG); roster count 1 from 'We report a case'. Table 1 rows are literature cases and stay aggregate.",
+      "Filtering-surgery refusal is patient refusal ('he declined') -> declined/not_occurred is correct; four topical agents only recommended -> planned.",
+      "Counting-fingers VA and IOP 11 mmHg carry no eye; trabeculectomy eye order unstated; 'may have contributed' kept as ambiguity, not a cause.",
+      "'two years later' and 'Subsequently' keep null anchors; 'eight years' anchored to the literal 'GDD' is acceptable.",
+      "Caption times on exposure lengths and postoperative coverage come from the panel clauses that are the facts' own evidence, not borrowed.",
+      "Bandage and scleral lenses as device_present are supported (both stated as used); care plan 'remains under follow-up' action_status unknown is honest.",
+      "All five panels viewed at full resolution and enlarged crops; visual descriptions, EHR labels and privacy flags match the pixels."
+    ],
+    "residual_risks": [
+      "Relation trabeculectomy -> bleb failure relies on 'two years later' following the postoperative sentence and on a bleb implying prior filtering surgery.",
+      "Re-presentation, panophthalmitis and evisceration are not linked to the initial-presentation events beyond the stated chain.",
+      "Tube exposure lengths recorded as examination signs rather than observations."
+    ]
+  },
+  "physician_adjudicated": false
+}
