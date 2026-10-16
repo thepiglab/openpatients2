@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12696286.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "77ea5a52f3f2049aff3301c35e39a29b542c75a080ae5ecb5a8d262b0624db83",
+  "annotation_sha256": "b832c9846a505bd0dcf9477f8b43d28d511aa8b44d36daf428beb6a303d5cb66",
+  "reviewed_at": "2026-10-16T02:58:57.514746+00:00",
+  "source_segments_read": 25,
+  "facts_reviewed": 120,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed time borrowing from events: triage event now holds only the triage vitals and TEWS; untimed examination findings and the not-performed ABG moved to new event p1-e23; the b00010 ECG moved out of the initial-laboratory event (p1-e24) and the admission ECG got its own event (p1-e25).",
+    "Split the \"During the first 48 hours\" event to the AKI/pulmonary edema sentence only; POCUS/echo (p1-e26), pleural taps (p1-e27), antibiotics for suspected sepsis (p1-e28), chest radiograph (p1-e29) and RRT not required (p1-e30, not_occurred) are separate untimed events.",
+    "Considered-but-unavailable glucagon (p1-e31) and ILE/ECMO (p1-e32) moved out of occurred treatment events into not_occurred events; serial laboratory improvement split from the ICU-scoped event (p1-e33).",
+    "Added norepinephrine (p1-f118) from the abstract as ambiguous/review_only: the abstract states he received \"escalating vasopressors (norepinephrine/epinephrine)\", the case text names only epinephrine; the ambiguity no longer says it must not be recorded.",
+    "Added HDI continued in the ICU (p1-f117) and transfer to the medical ward (p1-f119, event p1-e34).",
+    "Hospital-day inconsistency (hospital day 15 = 11th ICU day before ward transfer vs a 14-day total stay): total-stay statement split into its own fact p1-f120 (supported/include, literal values) with an ambiguity explaining the arithmetic-only mismatch; discharge fact p1-f109 no longer carries the duration.",
+    "Added literal relations: depressive history before the ingestion, fluids and pressors before HIET (b00018), first 48 hours before hospital day 3, arrest during intubation induction, extubation before hospital day 15, ward transfer before discharge, discharge before limited post-discharge follow-up (6 -> 13 relations).",
+    "Triage vitals and the psychiatry referral at discharge given relation at; summary no longer attributes examination findings to triage or the conflicting 14-day stay.",
+    "Per coordinator convention, the arithmetic-only hospital-stay mismatch is an ambiguity, not a source conflict: p1-f120 reset from source_conflict/review_only to supported/include; limitation reworded.",
+    "img1 limitation corrected: it is the inline ORCID icon in the author footnote, not patient media."
+  ],
+  "unresolved": [
+    "No supplements and no tables in the source; two figures (admission ECG, chest radiograph) inspected in the visual submission.",
+    "Source lists an unassigned image (img1); in the JATS it is the inline ORCID icon in the author ORCID iDs footnote, not patient media, and it is not described.",
+    "Nationality (Ethiopian) is stated but not recorded as race or ethnicity.",
+    "Machine-printed text on the ECG image (including an automated rhythm statement) is not source text and is not recorded as a fact; see the ambiguity on the ECG.",
+    "Pleural tap volumes and chest radiograph have no stated time of their own beyond the discussion of the first 48 hours; Figure 2 is not given a time.",
+    "Author causal statements (HIET contribution, diclofenac contribution to kidney injury, arrest precipitant) are kept as ambiguities or possible conditions.",
+    "Hospital-day counts in the recovery paragraph (hospital day 15, 11th ICU day) do not add up to the stated 14-day total stay; recorded as an ambiguity."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 25,
+    "facts_reviewed": 120,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Fig 1 viewed at full resolution with zoomed header/footer crops: printed machine text reads Sinus rhythm / Borderline ECG / Unconfirmed Diagnosis, differing from the caption; recorded only as pixel text and an ambiguity.",
+      "ECG header has ID, name, age, gender fields, a timestamp, facility line and device text; flagged direct_identifiers by category; no identifier values appear in any file.",
+      "ARDS (discussion) and non-cardiogenic pulmonary edema (case text) both kept with an ambiguity.",
+      "Glucagon, ILE and ECMO considered but unavailable/not used, RRT not required: assertion absent; sepsis (suspected), BRASH (considered, less likely) and hypoxemia (most likely precipitant) kept as possible."
+    ],
+    "residual_risks": [
+      "Hospital-day counts (day 15, 11th ICU day) and the 14-day total stay do not add up; both kept literally with an ambiguity, no day arithmetic recorded.",
+      "Whether the b00010 ECG and the admission ECG are the same tracing is not stated.",
+      "Norepinephrine administration rests only on the abstract slash wording."
+    ]
+  },
+  "physician_adjudicated": false
+}
