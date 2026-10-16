@@ -1,0 +1,66 @@
+{
+  "article_id": "PMC12428602.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e1be6bd1704a42f7a655cedc9cf5ed0c381f0dfe256b605cb7b0803d7322681f",
+  "annotation_sha256": "c64df3abe5bd40d507515feb05010ef4c6173cf840c096ea891384396307f14a",
+  "reviewed_at": "2026-10-16T01:53:00.763475+00:00",
+  "source_segments_read": 24,
+  "facts_reviewed": 96,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Earlier full parent review: p1-f004 GPA diagnostic_basis trimmed to 'PR3-ANCA seropositivity and chest CT findings' (abstract plural 'nodules' conflicts with single nodule in case text; ambiguity kept)",
+    "Earlier full parent review: p1-f006 removed discussion quote 'apparent left maxillary sinusitis' (different statement); note cites b00003 misdiagnosis; kept provisional",
+    "Earlier full parent review: p1-f011 oncology possible lymphoma marked alternate_representation_of p1-f009",
+    "Earlier full parent review: p1-f043 removed borrowed indication 'poor response to conservative therapy' (that clause governs the differential-diagnosis sentence, not the surgery)",
+    "Earlier full parent review: Added p1-f096 outcome: electrolyte abnormalities corrected (b00010), linked to e23 and summary claim 4",
+    "Earlier full parent review: Relation e18->e23 re-pointed to e17->e23 (literal 'Following correction of electrolyte abnormalities')",
+    "Earlier full parent review: added 13 date/literal-supported relations; 4 of these (e01<e02, e12<e16, e20<e22, e21<e22) were removed in the targeted pass below",
+    "Earlier full parent review: Figure 4 ambiguity extended: postoperative methylprednisolone '40mg qd x3d' vs text taper to 8 mg over 3 days; added Figure 4 call-out quote",
+    "Earlier full parent review: Added ambiguity: rheumatology/immunology consultation only 'sought'; not recorded as completed",
+    "Targeted pass (Sonnet dispute): removed p1-e01->p1-e02 before; 'Bartter syndrome diagnosed 8 years prior' has no literal anchor and no quote states its order against the late-November 2024 onset",
+    "Targeted pass: removed p1-e12->p1-e16 before; 'antibiotic therapy was de-escalated to imipenem/cilastatin' does not name cefoperazone/sulbactam and no date or literal order quote links the two",
+    "Targeted pass: removed p1-e20->p1-e22 and p1-e21->p1-e22 before; 'GPA was ultimately diagnosed based on' is causal basis, not a literal order statement, and the diagnosis has no stated date",
+    "Targeted pass: summary claim 3 reworded from 'then imipenem/cilastatin' to 'with antibiotics de-escalated to imipenem/cilastatin' so it implies no unsupported order"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the five figure images were inspected separately in visual.json.",
+    "Figure 4 (treatment timeline image) prints drug doses and dates (for example cefuroxime and ceftriaxone doses and an admission date) that the case text does not state; these are not recorded as facts because annotation facts are text-grounded.",
+    "Abstract mentions cavitary pulmonary nodules (plural) while the case text describes one cavitary nodule; the case text is used.",
+    "No exact dates are stated for symptom onset (late November 2024 only), discharge, or the 2-month follow-up; no dates were derived.",
+    "Discussion paragraphs mix general GPA literature with statements about this patient; only sentences explicitly about \"our patient\" or \"our case\" were used as patient facts.",
+    "Route of postoperative methylprednisolone is not stated separately from the shared sentence with cefoperazone/sulbactam and is left null."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 24,
+    "facts_reviewed": 96,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (55-year-old woman), roster count 1 literal; Figure 5 is a generic flowchart, background",
+      "8 NO-BORROWING warnings on 'preoperative' (f007/f008/f009/f011) are checker false positives: the sentence splitter cuts inside the quoted list at '1.'; the time is in the facts' own sentence; data left unchanged",
+      "Figure 4 pixel text conflicts (80 mg x5d vs 10 days; postoperative 40 mg qd x3d vs taper; emergency admission vs outpatient ceftriaxone) kept as ambiguity and visual limitation; text facts used",
+      "Figure 4 EHR override to clinical_chart_of_patient_data is justified: patient-specific timeline with doses, dates and anti-PR3 value",
+      "Hypokalemia/hypomagnesemia low flags come from printed down-arrows (source markers); mNGS detections flagged positive; postoperative methylprednisolone route correctly null",
+      "Targeted correction pass on 4 disputed relations: all four failed the literal-order bar and were removed; 19 temporal relations remain; no facts, events, roster, identity quotes or figures changed"
+    ],
+    "residual_risks": [
+      "Initial acute sinusitis kept provisional although later called a misdiagnosis; a refuted reading is arguable",
+      "Figure-only data (cefuroxime 250 mg bid, discharge 2-12, mNGS negative for invasive fungi) are not annotation facts",
+      "Discharge outcome rests on 'At discharge'/'Post-discharge' wording without a text date",
+      "GPA diagnosis event p1-e22 and Bartter history p1-e01 are now unlinked to the timeline because no literal order or date supports a relation"
+    ]
+  },
+  "physician_adjudicated": false
+}
