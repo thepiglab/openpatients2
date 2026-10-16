@@ -1,0 +1,68 @@
+{
+  "article_id": "PMC12352932.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1aaaa354f7d3e01b2125d7692dba11729f2db0d55ddd17a8b25d6e0c60441cb1",
+  "annotation_sha256": "248386910099db6361f55e3fa954eb56b62120a554e1991bbce75979ee6d0e08",
+  "reviewed_at": "2026-10-16T05:12:56.027814+00:00",
+  "source_segments_read": 136,
+  "facts_reviewed": 376,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged narrative repeats into the table item for the same test, value and time (OBS-TABLE-ROWS/ONE-STATEMENT), whether or not the text cites the table: p1 NLR 8.78; p2 NLR 18.25 and anti-AChR negative; p3 NT-proBNP 1433 and NLR 10.6; p4 coagulation normal, anti-AChR/anti-MuSK negative, NLR 11.14; removed the p3 ambiguity that justified keeping them separate.",
+    "Case 4 troponin T: Table 4 cell \"I694ng/L\" reclassified from source_conflict to an ambiguous review_only print artefact; the narrative value 1,694 ng/L (which cites Table 4 and says Admitting labs) is now included with time Admitting.",
+    "Case 4 NT-proBNP: unit conflict kept as two review_only items (pg/L table, ug/L text); added value-only include item p4-f110 (1369, unit null) so only the conflicting attribute is quarantined.",
+    "Case 4 troponin I: table cell and narrative 14 ng/L merged into one item (flag normal from \"came back normal\"), time left null; ambiguity rewritten (no double count of one result).",
+    "Case 3 oesophageal tumor: removed frontal lobe as a metastatic site (source does not attribute the brain metastasis to either of the two primaries).",
+    "Case 3 MRI-negative peri-lesional oedema and new lesions set to verification_status refuted (ASSERT-ABSENT).",
+    "Case 3 oral prednisolone given its literal time \"in the following week\"; tacrolimus evidence widened to its full sentence with indication lack of response to steroids, infection concern noted; neck item renamed difficulty with neck control.",
+    "Removed non-indication values from indication fields (p1 MMF stop reason, p4 pyridostigmine stop reason, p2 \"Adjuvant treatment\").",
+    "Added missed items: p1 cardiology review and immune-oncology specialist advice; p2 neurology discussion; p3 swallowing assessment, rapid deterioration despite initial treatment, not stable for transport.",
+    "Timeline: added p2 events (PLEX considered day 8 not_occurred, FVC 20% by day 9, tocilizumab/tacrolimus/pyridostigmine by day 10, MMF added) and p4 events (pyridostigmine stopped by day 5, oral prednisolone by day 7, post-discharge course); added relations supported by stated days or literal order words (eventually, worsened, at this time/only agreed, earlier during the admission, after discharge); reworded p1 e02 so it no longer implies all findings were at admission.",
+    "Summaries no longer state \"raised\" troponins/CK/NT-proBNP where the source gives no qualifier (p1, p2, p3, p4).",
+    "Merge audit under the coordinator ruling (keep a table/text merge only when the article reports that test once for the patient): p2-f059 anti-AChR, p3-f062 NT-proBNP, p4-f051 coagulation and p4-f058 anti-AChR/anti-MuSK are each reported only once with no sign of repeat testing, so all four merges are kept and the single-measurement reasoning is recorded in each note; the NLR merges share a literal admission time and were not disputed.",
+    "Visual: FIG3 red arrow direction corrected (points left and slightly down, not up and left); figure-EHR and privacy drafts regenerated and reviewed labels carried over."
+  ],
+  "unresolved": [
+    "Case series of four patients; cohort-level statements in the abstract, methods and Discussion (mean age, drug and cancer-type counts, cycle timing, \"all patients received ICI therapy within four weeks of symptom onset\", anti-AChR results in 3 of 4) are not copied to individuals unless a sentence names the case or all four patients explicitly.",
+    "The abstract gives a mean age of 68.9 years while the Discussion gives 69.8 years; this is a cohort-level inconsistency not attributed to any patient.",
+    "Case 1 narrative (citing Table 1) and Table 1 differ for creatine kinase (10866 vs 10389 U/L) and troponin T (498 vs 393 ng/L): paired source_conflict, review_only values; the qualitative \"CK was elevated\" stays scorable. Case 4 NT-proBNP unit differs (narrative ug/L vs Table 4 pg/L): both unit readings review_only, the agreed value 1369 kept as a value-only item. The Case 4 Table 4 troponin T cell printed \"I694ng/L\" is treated as a print ambiguity (review_only), with the narrative 1,694 ng/L kept.",
+    "Case 4 troponin I 14 ng/L appears in Table 4 (captioned admitting laboratory results) and in the narrative as resulting 4 days into the admission; recorded as one result with time null and an ambiguity.",
+    "Laboratory tables print units as given (e.g. creatinine, CRP and cortisol in mmol/L); no units were converted or corrected and no flags were derived from printed reference ranges.",
+    "Where the narrative repeats a table value for the same test and time (with or without citing the table), the two are one item citing both, per OBS-TABLE-ROWS and ONE-STATEMENT.",
+    "The Discussion statement that all four patients received inappropriately lower initial steroid doses is an authorial judgement and is kept as an ambiguity only.",
+    "Cases are not individually identified outside the case headings; unlabelled Discussion sentences (e.g. a hepatitis diagnosis, delayed MG-directed therapy) were assigned only where the sentence names the patient or case or the case text itself states the fact.",
+    "Figure captions are author statements; pixel review is in visual.json. Figure assets match their captions and the case text that calls them out.",
+    "No supplements or videos are listed for this article."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 136,
+    "facts_reviewed": 376,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Four men (p1-p4 in case order) with ICI-induced MMM overlap; p2 and p3 died, p1 and p4 recovered; roster count 4 literal from the abstract.",
+      "Case 1 CK (10866 text vs 10389 Table 1) and troponin T (498 vs 393) are same-test, same-time value conflicts (text cites Table 1); both sides review_only, CK \"elevated\" stays scorable.",
+      "Case 1 muscle biopsy, EMG and NCS \"not considered during the admission\" are literally not done: kept as not_performed with the source wording in notes.",
+      "Case 4 \"full blood count within normal limits\" vs table lymphocytes and neutrophils outside printed ranges kept as an ambiguity with no flags derived from ranges.",
+      "Discussion sentences used only where they name the case (case 1, patient 2, patient 3) or state all four patients; unnamed sentences (hepatitis patient, MGC >= 13 patients, NLR survivors) were not attributed."
+    ],
+    "residual_risks": [
+      "Tables print creatinine, CRP and cortisol in mmol/L; kept as printed.",
+      "p4-f110 carries the agreed NT-proBNP value 1369 with unit null because the narrative (ug/L) and Table 4 (pg/L) units conflict.",
+      "Case 4 troponin I timing (admitting table vs resulted day 4) is unresolved by the source."
+    ]
+  },
+  "physician_adjudicated": false
+}
