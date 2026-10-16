@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC12688825.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c91710c87826d8e2acd989ea7860dd7b688764b1adcb9d14a5d8f6fe91246e96",
+  "annotation_sha256": "908ad65c49934693adf0a72475569f55c04de8e682e514cc1b164b1cd221213d",
+  "reviewed_at": "2026-10-16T07:30:31.832845+00:00",
+  "source_segments_read": 39,
+  "facts_reviewed": 131,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f019 (vagina) and p1-f020 (urethra): re-ruled from source_conflict/review_only to supported/include; the two three-site lists are not mutually exclusive (anterior vaginal wall mass on exam, biopsy-proven carcinoma in the urethral mass) and are kept as an ambiguity that they may be one lesion; p1-f020 verification_status unknown -> confirmed (Table 1 \"diagnosed with metastases to ... urethra\").",
+    "p1-f094 oncology tumor: metastatic_sites now include vagina and urethra as printed; Table 1 evidence added; notes and statement updated.",
+    "Ambiguity 1 must_not_infer and article limitation reworded for the vagina/urethra re-ruling.",
+    "p1-f070/p1-f107 PD-L1 GPS: text_value \"GPS was 20\" -> \"20\"; clinical statement de-duplicated.",
+    "Summary paragraph 2: removed invented order \"confirmed after MDT discussion\" (source: diagnosis confirmed after review of history, imaging and pathology; MDT discussion then preceded treatment).",
+    "Summary paragraph 3: removed \"followed by\" between November 2024 imaging and November 2024-January 2025 maintenance (no stated order within November).",
+    "Added p1-f131 outcome (b00018: integrated strategy controlled tumor progression and preserved quality of life, author assessment)."
+  ],
+  "unresolved": [
+    "Pathological confirmation of the cardiac lesion was not obtained (b00017); the cardiac metastasis is the authors clinical diagnosis and benign alternatives are not entirely ruled out.",
+    "The third metastatic site is named vagina in the diagnosis sentence and urethra in Table 1 and elsewhere; both are recorded as supported sites with an ambiguity (possibly one lesion), not as a source conflict.",
+    "Grade 3 thrombocytopenia is stated alongside a statement that no adverse events were reported; both are recorded as source_conflict and not resolved.",
+    "MSH6 is printed as negative in the case text and as partial loss in the discussion; both recorded as source_conflict.",
+    "The immunohistochemistry list prints \"partial response (PR; 90%+)\" and the PD-L1 score as GPS; printed wording is kept and not reinterpreted.",
+    "Response degrees differ across sources (vanished, near-total resolution, partial regression, resolution, complete radiographic resolution) and are kept as printed.",
+    "Values printed inside Figure 3 are pixel content in the visual submission only and are not recorded as separate facts.",
+    "Literature cases in the discussion and Table 2 (published reports) and general statements are not recorded as patient facts; the Table 2 present-case row is the index patient.",
+    "The statements that all management decisions were made with informed consent and that the patient perspective was not documented are administrative and not recorded as clinical facts.",
+    "Caption-layer visual status is not_inspected; the three JPEGs are inspected in the separate visual submission.",
+    "No supplements are listed in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 39,
+    "facts_reviewed": 131,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; roster count 1 literal; literature cases (Table 2 rows 1-3, discussion) correctly excluded; Table 2 present-case row and all five Table 1 rows captured.",
+      "Thrombocytopenia grade 3 vs \"reported no adverse events\": genuine contradiction, kept as source_conflict on the adverse-event attribute only; TPO-RA and dose-adjustment use stay included.",
+      "MSH6 negative (case text) vs partial loss (discussion): genuine contradiction, both review_only.",
+      "\"partial response (PR; 90%+)\" inside the IHC list kept ambiguous/review_only (misprinted expansion; not renamed by inference).",
+      "Cardiac metastasis kept verification_status confirmed as literally stated, with differentials (thrombus, benign mass) possible and an ambiguity noting no pathological confirmation.",
+      "b00027 patient-perspective sentence states the perspective was not documented: nothing patient-reported to capture (not-documented is not absent); informed-consent sentence is administrative.",
+      "All 13 temporal relations have literal order words or stated times; Fig. 3 printed values agree with the text (120 -> 25 U/mL) and remain pixel content only."
+    ],
+    "residual_risks": [
+      "Vaginal and urethral metastasis may be one lesion counted twice in conditions/metastatic_sites (ambiguity recorded).",
+      "LVEF 54% merges the case-text echocardiogram and the MDT echocardiography sentence as the single baseline echo.",
+      "Response degree wording varies across text, captions and tables (vanished vs near-total resolution vs complete resolution); kept as printed with an ambiguity."
+    ]
+  },
+  "physician_adjudicated": false
+}
