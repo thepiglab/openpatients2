@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC13166262.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6589931cc7bc364ee1dcb02873172abf6bd62568942ead9c637cc5f1815e5d3b",
+  "annotation_sha256": "a6be0c5aee3bc8ead5d201b573b9ecb871031011d2391f44a847ee3947c0dd18",
+  "reviewed_at": "2026-10-16T08:23:46.600039+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 65,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Tingling ratings p1-f041/f042 promoted to supported/include: the joint initial-visit rating is the only tingling rating and is not contradicted.",
+    "Pain-relief facts p1-f054/f055/f056 promoted to supported/include: \"significantly decreased\" and \"resolved entirely\" after 3 sessions, and \"near complete resolution\" with no time point, are not literal contradictions; kept as an ambiguity.",
+    "Kept only the baseline numbness ratings p1-f037..f040 as source_conflict/review_only: initial visit and presentation are the same pre-treatment baseline, so 5/7 vs 4/5-6 is one assessment, not a sequence.",
+    "Added the initial-visit joint rating as second evidence for pain 5/10 right and 7/10 left (p1-f028/f029).",
+    "Clarified p1-f049 as a patient-stated tolerability threshold, not a measured rating.",
+    "Broadened event p1-e06 to the whole initial evaluation (pain, numbness, tingling, quality of life); added events p1-e13 (improvements sustained weeks and months after therapy) and p1-e14 (reductions reported after completing sessions).",
+    "Replaced the unsupported \"ST series before pain decrease after 3 sessions\" relation with during; added literal relations: pomalidomide stop before current daratumumab, initial evaluation before session-3 and fifth-session changes, session 3/5/8 changes during the eight-session course, fifth session before session 8, fifth-session improvements before end of treatment, ST before the post-therapy outcomes (3 -> 12 relations).",
+    "Rewrote ambiguities and article limitations: session count 8 vs fewer than 10 is consistent, not a conflict; pain wording is an ambiguity."
+  ],
+  "unresolved": [
+    "Source conflict on the baseline numbness rating: 5/10 right and 7/10 left (initial-visit joint rating with pain and tingling) versus 4/10 right and 5–6/10 left at presentation; only the four numbness ratings are review_only.",
+    "Pain relief after 3 sessions is worded as significantly decreased (Results) and resolved entirely (Discussion), with near complete resolution and lowest pain at the final session elsewhere; recorded as an ambiguity, not a conflict.",
+    "The session count is eight per the Figure 1 caption and fewer than 10 per the text, which is consistent; the Figure 1 plotted values are pixel content and are not recorded as facts.",
+    "The 3–4/10 tolerable level, outcome expectations and travel plans are patient statements; the travel plan is not recorded as done.",
+    "No supplements are listed. Figure pixels were reviewed in the separate visual target."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 65,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single patient, woman in her 70s with IgG myeloma and CIPN treated with Scrambler Therapy; all 65 facts checked against source quotes.",
+      "Only the baseline numbness value is a literal source conflict (4 facts review_only, down from 9).",
+      "p1-f008 NO-BORROWING warning judged a checker false positive: the time is literal in the remission quote, which carries this tumor fact's disease_status=remission attribute.",
+      "Figure 1 plotted pain values are pixel content only (visual.json); Figure 2 is a mixed photo plus dermatome-template composite."
+    ],
+    "residual_risks": [
+      "Whether \"at presentation\" in the numbness paragraph means the same baseline visit as \"initial visit\" is a judgment; if it meant a later visit the numbness values would be a sequence.",
+      "Relations from \"by the fifth session\"/\"by session 8\" use upper-bound wording; pain-after-session-3 vs numbness-by-session-5 left unordered for that reason.",
+      "Figure 1 shows non-zero pain after session 3, inconsistent with \"resolved entirely\"; pixel values are not facts."
+    ]
+  },
+  "physician_adjudicated": false
+}
