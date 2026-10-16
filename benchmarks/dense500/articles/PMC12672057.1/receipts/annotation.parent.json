@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC12672057.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "804d3b92334fdc6e43ec406540b3a8f76160f69905f6eb2253637327313ee429",
+  "annotation_sha256": "3d70c2032a6fea373bbb1e016467d79502d86baa0bfdb12901c51d573f544586",
+  "reviewed_at": "2026-10-16T05:55:37.213010+00:00",
+  "source_segments_read": 39,
+  "facts_reviewed": 53,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f028: added the chosen song title and singer (b00013) to the finding and evidence",
+    "p1-f032: added the patient's composed lyric text (b00015) to the finding and evidence",
+    "added p1-f053 outcome 'Now she can focus on herself' (b00012), linked to e11 and summary",
+    "e09 closing-stage event: removed p1-f049 (relief from colleague counseling, history) and p1-f037 (need for further help); f049 moved to history event e03",
+    "e07 working-stage event: removed p1-f022 (timing of increased participation not stated) and added an ambiguity for it",
+    "added 4 literal relations: pretest during beginning stage, beginning stage before working stage ('beginning of the previous stage'), transition before working stage ('previous stage'), posttest during closing stage; trimmed e07-before-e09 evidence to the 'previous working stage' clause",
+    "summary: nonvoluntary referral, focus-on-herself and lifelong-reminder recommendation now stated in the claims that cite them"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEGs are reviewed in visual.json.",
+    "Scores are verbal 0-10 self-ratings of one combined scale; the sources disagree on whether the instrument was validated.",
+    "The stage in which the new lyrics were composed is stated conflictingly (closing stage versus working stage).",
+    "Author interpretation, theory and predictions in the discussion are not recorded as patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 39,
+    "facts_reviewed": 53,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (22-year-old girl), roster count 1 from the literal 'the case of a 22-year-old' statement",
+      "Validation conflict is literal: b00034 says validated scales were used for the same before/after assessment that b00023 says used no validated instruments; both sides review_only, scores stay included",
+      "Lyric composition stage conflict (closing stages b00011 vs previous working stage b00016) kept review_only on the stage attribute only",
+      "Pretest 8, posttest 6 and 9-month 2 each restate one measurement in the case report and discussion; merging is literal",
+      "Stated intentions are planned care plans, risk of suicide is possible, nonvoluntary referral is a completed referral; author interpretation (talking cure, reframing, logotherapy, predicted decrease, confounders) excluded"
+    ],
+    "residual_risks": [
+      "Scaling-question scores are unvalidated verbal self-ratings; the source contradicts itself on validation",
+      "Fig 1 levels are gridline estimates and stay in the visual record only",
+      "7 GLUED-TEXT warnings are false positives on words printed in the figures (Trendline, telepsychotherapy)"
+    ]
+  },
+  "physician_adjudicated": false
+}
