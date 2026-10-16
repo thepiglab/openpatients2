@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12802614.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1d093470cb09b79417ef18c1a1778a058f6ad0b52324dfdb19cbe13f54f5d31e",
+  "annotation_sha256": "e6f2d9899648979f898d3963ce01d81d4b17f470e48db7991265381e24dd3dcd",
+  "reviewed_at": "2026-10-16T05:55:14.890795+00:00",
+  "source_segments_read": 72,
+  "facts_reviewed": 211,
+  "patients_reviewed": 5,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged each participant's baseline gait speed item into the identical pre-intervention 10MWT item (p1-f018->f021, p2-f015->f016, p3-f019->f022, p4-f015->f018, p5-f019->f020): the Methods define baseline assessments as those completed before VR training, P2's text says '10MWT: 0.65 m/s at baseline', and P3's text ties gait speed to the 10MWT; one statement, one item citing both quotes.",
+    "Removed p3-f012 and p4-f012 (tDCS system with headcap and sponge electrodes): study-level equipment description copied to the active-group participants, duplicating the anodal tDCS procedure items and not applied to the sham participants who also received stimulation.",
+    "Converted P5 Table 2 '+' (withdrawn) cells for DGI and BBS 2-week changes (p5-f030, p5-f034) from symptoms_function items with text_value '+' and assertion unknown to observations with status not_performed, consistent with the TUG and 10MWT '+' cells and OBS-NOT-PERFORMED.",
+    "Added per-participant relations pre-intervention assessments before VR training (Methods: baseline assessments completed before the VR training began) and VR training before post-intervention assessments (assessments repeated within 48 h of the final training session); 20 relations total.",
+    "Reworded the P2 10MWT ambiguity: +0.69 m/s is from baseline while Table 2's 0.59 is 2-week minus post; neither cell is starred."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the two figure images and the PDF supplement were inspected in separate review targets.",
+    "Table 2 group mean cells (Mean ΔPost-Pre by Group) are group statistics, not participant facts, and are not recorded as patient observations.",
+    "Table 2 sham-group TUG mean (-1.37) does not match the participant values printed in the same table; arithmetic only, not reconciled.",
+    "Abstract says four participants had clinically significant DGI improvements, Discussion says three out of the four participants, and Table 2 stars three DGI cells; cohort-level wording, not copied to individuals.",
+    "Figure 2 caption says P1–5 represent four participants and the case text says Figure 2 shows DGI and TUG changes; the figure shows five participants and four tests.",
+    "Protocol and eligibility statements (outcome measure methods, MCID thresholds, game design, exclusion criteria) are study-level and not copied to individual participants beyond statements that explicitly cover each participant.",
+    "Interpretive author statements (for example that results suggest improved independence) are not recorded as facts.",
+    "The Supplementary Data PDF contains per-participant VR training performance tables and a cohort correlation table; it is reviewed in the supplement sidecar and not copied into the main-article facts.",
+    "R/L and AFO abbreviations in Table 1 and the narrative are kept as printed; R/L are not expanded in the table itself."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 72,
+    "facts_reviewed": 218,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Five participants mapped by literal labels Participant 1-5 / P1-P5 in text, Table 1, Table 2, Figure 2 legend and Supplementary Table 1.",
+      "All 76 narrative and Table 2 participant values verified programmatically; all 150 SM1 cells verified against the PDF text layer and rendered page, including 6 x cells recorded as missing.",
+      "P1 years post stroke 8 (Table 1) vs 10 (text) is a literal conflict; both sides review_only and stroke type/location kept included.",
+      "P5 TUG: Table 2 stars -6.23 while the text says significance was only achieved for DGI and 10MWT; this is the only literal star conflict (the word only excludes TUG); narrative pre/post TUG values give -1.36. Other narrative-vs-star mismatches are absent stars, recorded as ambiguities.",
+      "P1 Table 2 TUG change -1.57 vs narrative values giving -1.48 is arithmetic only and stays an ambiguity.",
+      "Group from Table 1 Active/sham column, DGI/BBS in symptoms_function, TUG/10MWT in observations, P4 fall risk as possible: accepted.",
+      "Figure 1 photographs unattributed (no participant named); Figure 2 series attributed by printed legend P1-P5."
+    ],
+    "residual_risks": [
+      "Gate shows 5 NO-BORROWING warnings on the merged pre-intervention 10MWT items; the time comes from the item own score sentence, so these are checker false positives.",
+      "Years post stroke is held both as a Table 1 observation and in the stroke condition time for P2-P5.",
+      "Figure 2 visual descriptions estimate positions to two decimals that coincide with narrative values.",
+      "Cohort-level inconsistencies (four vs three DGI MCIDs, Figure 2 caption four participants, sham TUG mean) are limitations only."
+    ]
+  },
+  "physician_adjudicated": false
+}
