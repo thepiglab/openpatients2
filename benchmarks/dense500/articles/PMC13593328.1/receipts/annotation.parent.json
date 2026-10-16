@@ -1,0 +1,67 @@
+{
+  "article_id": "PMC13593328.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f4406c65c9c702fd0fdb1e57daf6406bc1f761467f32d2e8ad8047fc39d62f9a",
+  "annotation_sha256": "22ce75dd1e0366011af06fc04ccc78642f98adbafe485ec8a1491a1624ccd7df",
+  "reviewed_at": "2026-10-16T07:35:30.322532+00:00",
+  "source_segments_read": 72,
+  "facts_reviewed": 188,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Table 1 Relapse vs text no-recurrence (Cases 1, 2, 3): Table gives no time point, so the pair is an ambiguity, not a conflict; text no-recurrence facts p4-f046 and p1-f047 restored to supported/include, Table relapse facts p4-f047, p1-f048 (and p2-f049) kept review-only ambiguous; ambiguities and limitation rewritten.",
+    "Case 4 recommended methylprednisolone 1.5 mg/kg/day (p3-f020): action planned -> unknown; event p3-e05 occurrence planned -> unknown; summary reworded to say recommended.",
+    "Case 4 tube-removal evaluation sought by patient (p3-f008): action_status planned -> unknown. Decannulation outcome stays unstated.",
+    "Case 1 unnamed-drug taper p4-f045 made review-only ambiguous (drug not named; 50 mg steps incompatible with 0.4 mg/kg/day start).",
+    "Case 1: removed invented duration 3 days from vonoprazan p4-f008; removed DIF-based diagnostic_basis and non-diagnostic quote from MMP p4-f035.",
+    "Case 3: merged abstract IVIG fact p2-f046 into case-text immunoglobulin p2-f036 (route intravenous from abstract evidence), refs repointed; removed non-severity \"unexplained\" from p2-f005; added discussion evidence to rituximab p2-f045; added review-only abstract gradual-improvement fact p2-f050 with ambiguity against no significant improvement after one week.",
+    "Added Table 1 cells missed for all four cases: upper respiratory tract involvement and other-areas condition items (p4-f050/f051, p1-f052/f053, p2-f051/f052, p3-f032), Case 2 degree-of-disease item p1-f054; Table 1 age/sex and treatment cells added as evidence to existing facts.",
+    "Case 4: Figure 13 caption finding moved to its own event p3-e10; new event p3-e11 for abstract regular corticosteroid treatment following tracheotomy; cannula-position quote added to device fact p3-f007; ambiguities added for unassigned abstract tracheotomy indication and Table 1 slash cells.",
+    "Events: p4-e07, p2-e04, p2-e05 kind adverse_event -> other (disease progression); coagulation tests split into p2-e14; rituximab event p2-e15 added.",
+    "Relations: 17 -> 32. Added literal-order links (Initial, subsequent, following month, Given, Consequently, followed by, later, test-to-result, drug start-to-taper) and replaced the p3-e04->p3-e06 and p4-e10->p4-e11 / p1-e05->p1-e06 quotes with quotes that state the order."
+  ],
+  "unresolved": [
+    "The 17 published cases in the literature review and Table 2, and the pooled literature statistics, are not patients of this series; they are not individuated and no facts were recorded for them.",
+    "Patients are numbered by first mention including the abstract, which names the second, third and fourth patients before Case 1 appears, so p1 is Case 2, p2 is Case 3, p3 is Case 4 and p4 is Case 1.",
+    "The abstract sentence that one patient required a tracheotomy for severe dyspnea does not label the patient and was not assigned.",
+    "Table 1 gives Relapse as the outcome for Cases 1 to 3 without a time point, while the text reports no recurrence at the end of follow-up (Case 3: no recurrence of nasal stenosis or epistaxis); because the relapse is not placed in time the pair is recorded as an ambiguity, with the Table relapse review only and the text statements kept.",
+    "Table 1 prints Rhinorrhagia where the Case 3 text says rhinorrhea, Dermal division where the Case 1 text says subepithelial splitting, and After tracheotomy as the Case 4 initial symptom; none is reconciled.",
+    "Rituximab for Case 3 appears in the abstract, Table 1 and discussion but not in the case narrative; no dose or timing is stated.",
+    "The Case 1 dosage reduction sentence does not name the drug and mixes per-kilogram and absolute doses; recorded as printed.",
+    "The Case 3 text cites Supplemental Video 1 but the source declares no supplement or video asset; the video is unavailable media, not viewed or reviewed (complete, flagged), and no facts come from it.",
+    "The Figure 1 flow chart prints 115 retrieved records while the methods text says 113; the printed values are pixel content only and no patient fact depends on them.",
+    "Figure 7 is cited in the text as panels A to C but the image is a single unlabelled panel.",
+    "Figure captions describe immunofluorescence images as electron microscope images; this is caption wording only.",
+    "The abstract tracheotomy sentence is attributed by the abstract to the fourth patient, but the case text gives no indication for that tracheotomy; the stated reason (severe dyspnea) is not assigned."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 72,
+    "facts_reviewed": 188,
+    "figures_viewed": 13,
+    "key_findings": [
+      "Four index patients; numbering by earliest identity evidence (abstract ordinals) gives p1=Case 2, p2=Case 3, p3=Case 4, p4=Case 1; 17 literature cases (Table 2) excluded.",
+      "Table 1 Relapse for Cases 1-3 has no time point; text no-recurrence statements kept, Table relapse review-only ambiguous.",
+      "Case 3 rituximab is literally attributed to the third patient in abstract, Table 1 and discussion (after IVIG), but without dose or timing.",
+      "Case 4 recommended steroid dose not asserted as given or planned; decannulation not asserted.",
+      "Supplemental Video 1 is cited but no asset is declared: unavailable media, complete-flagged, no facts from it."
+    ],
+    "residual_risks": [
+      "The relapse/no-recurrence pair could still be a true source conflict if the table and text refer to the same follow-up.",
+      "Table 1 involvement items are coded as conditions with verification_status unknown; another reviewer could prefer folding them into the MMP diagnosis.",
+      "Figure 9 is captioned as laryngeal DIF; pixels show keratinized epithelium-like tissue, not adjudicated."
+    ]
+  },
+  "physician_adjudicated": false
+}
