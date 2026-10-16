@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12715974.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2d4b45eef90a81146eb6e298940b52bbfd438f1e6bbe6877ca91b1750ff44216",
+  "annotation_sha256": "83217bb68e2ff26cc08bacf21f596c488006ea4bb5463affe2b82ece32010743",
+  "reviewed_at": "2026-10-16T06:25:28.824000+00:00",
+  "source_segments_read": 40,
+  "facts_reviewed": 125,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f026 temperature flag set to normal from the source word 'afebrile'.",
+    "Re-presentation facts p1-f022/f023/f117 now carry the stated date '19^(th) January 2025' (relation at) instead of 'three months later' with a null anchor; event p1-e15 keeps the literal relative time 'three months later' because the calendar parser does not read the superscript ordinal; the e01->e15 relation quotes both stated dates.",
+    "p1-f072 ongoing cytopenias at discharge: removed temporality=current (not the latest described time).",
+    "p1-f058 vitamin B12 replacement time relation 'later' set to after; moved out of the test event into its own treatment event p1-e21.",
+    "p1-f110 'currently receiving immunosuppressive therapy' (abstract) moved out of the diagnosis/start event p1-e12 into its own event p1-e20; action current kept because 'currently' places use at the latest described time.",
+    "Added 6 literally supported relations: e03->e06 (Initial/Further investigations), e06->e21 ('treated later'), e01->e07 ('requiring emergency laparoscopic intervention'), e07->e11 ('Subsequent investigations'), e01->e12 ('initially presented ... subsequently diagnosed'), e09->e10 (discharge with ongoing cytopenias -> follow-up persistent, outpatient transfusions).",
+    "Added ambiguity: vitamin B12 called low-normal in text while 192 ng/L lies below the printed 211-911 range; no flag assigned.",
+    "Summary paragraph 3 now mentions ongoing immunosuppressive therapy (p1-f110)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; pixels inspected in the separate visual target.",
+    "Table 1 prints the MCHC reference range as 316-165 and the red blood cell count unit as 10⁹/L; both kept literal and recorded as ambiguities.",
+    "No flags were derived from reference ranges; flags come only from the source wording (bilirubin, LDH, erythropoietin, β2-microglobulin, HR, folate, BP).",
+    "The case gives no dates for the laboratory workup, transfusions, diagnosis or treatment start beyond the stated presentation and re-presentation dates; relations are limited to explicitly ordered pairs.",
+    "Discussion and background literature statements were not assigned to the patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 40,
+    "facts_reviewed": 125,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single 17-year-old female; roster 1 confirmed.",
+      "All Table 1 (14 rows) and Table 2 (4 rows) cells present as observations; tables are single time points so no measurement series applies.",
+      "Table 1 MCHC range 316-165 and RBC unit 10^9/L kept literal as ambiguities (print artefacts).",
+      "Flags on HR (tachycardic), LDH (low), EPO (markedly elevated), beta2M (slightly low), bilirubin (mildly elevated), BP (normotensive), folate (normal) all come from source wording.",
+      "Bilirubin text/Table 1 merge accepted: the text cites Table 1 for the same initial investigations.",
+      "ICU admission and re-presentation kept as outcomes event=other; no admission stated for the re-presentation."
+    ],
+    "residual_risks": [
+      "Order of the further workup (blood film, serologies, flow cytometry, marrow) relative to discharge and follow-up is not stated and left unordered.",
+      "Second-episode CT and laparoscopy are not ordered against the re-presentation by literal wording.",
+      "'one unit of RBC and platelet transfusion' unit split unresolved."
+    ]
+  },
+  "physician_adjudicated": false
+}
