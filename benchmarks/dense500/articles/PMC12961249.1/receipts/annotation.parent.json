@@ -1,0 +1,68 @@
+{
+  "article_id": "PMC12961249.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "fc8858be27befd5b6ca8a5e83dcb001f22463c590be1c6f8d46c9ace176a4b07",
+  "annotation_sha256": "6faeaa3bc12d8089caf9a8ca676d80cdddac6b1fd6a8d53e81aeb780054c2e07",
+  "reviewed_at": "2026-10-16T03:23:38.206510+00:00",
+  "source_segments_read": 43,
+  "facts_reviewed": 334,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Case 2 laterality: restored right (OD) on facts whose own evidence or governing Table 1 row says OD (mass, melanocytoma, therapeutic TCIP, delineation TCIP and sector iridectomy with \"Case 2, treated OD\", Figure 1 caption items); only the 14-month follow-up findings keep laterality unknown; both conflict facts stay review_only.",
+    "Merged duplicate Case 2 therapeutic TCIP (Table 1 1x and Table 2 single session) into one item; removed p2-f009 and repointed references.",
+    "New source conflict: Case 2 therapeutic TCIP laser is FOX A.R.C. (Table 1 footnote c) vs DioVet (Table 2); both device items review_only with an ambiguity.",
+    "Removed the tPA indication from Cases 2 and 3: the \"two of the five eyes\" sentence does not name the eyes; recorded as ambiguity.",
+    "Table 2 Timeline column entries set ambiguous/review_only because the column is undefined.",
+    "Case 1 right eye \"As for OS\" now also carries the systemic NSAID and antibiotic.",
+    "Added absent cataract per patient from \"cataract development as a complication was not noted in the present study\".",
+    "\"None\" prior-therapy items for Cases 3 and 4 no longer carry action completed.",
+    "Figure 1 caption items for Case 1 set to left eye; Case 2 Table 2 regrowth set to OD from its row.",
+    "Added 10 relations with literal support (surgery and initial re-evaluation before last follow-up); tPA-to-last-follow-up relations removed after coordinator ruling (post-op time orders tPA only against surgery).",
+    "p3 summary claim lengthened to the 25-word minimum.",
+    "visual.json: Figure 3 panel E overlay text added; figure-EHR and privacy sidecars regenerated with --draft, labels carried over, panel E flagged timestamps_or_device_text."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual image pixels are described in the separate visual submission.",
+    "Table 1 and Table 2 are split over several segments with rowspan markers; Case 1 right-eye rows are attributed by the rowspan marker.",
+    "The ophthalmic examination sentence \"Unless otherwise noted, ocular reflexes, STT results, fluorescein stain, and IOP values were considered within normal limits\" is a series-level statement and is not copied to individual patients.",
+    "Series-wide surgical technique details (corneal incision type, keratome or phaco lance, viscoelastic choice, suture pattern alternatives) are not attributed per patient except where the text says all patients or all eyes.",
+    "Table 2 Timeline column is undefined in the table and recorded literally; the Case 2 postoperative therapy cell is empty and not recorded.",
+    "Table 1 therapy post-SI and therapy prior to SI items carry action unknown because the table gives no administration dates, doses or durations.",
+    "Per-patient Table 1 follow-up findings for Case 4 omit synechiae that the text states for all eyes; no time for those synechiae is given.",
+    "Case 2 eye laterality: Table 1, the roster sentence, the Figure 1 caption and its printed row label give OD; the longest follow-up sentence gives OS. Only the 14-month follow-up findings keep laterality unknown; both versions are review_only conflict facts.",
+    "Case 2 therapeutic TCIP laser differs between Table 1 (footnote c, FOX A.R.C. Laser) and Table 2 (DioVet); both kept review_only.",
+    "The tPA indication sentence (\"two of the five eyes\") does not name the eyes and is not attached to Cases 2 and 3.",
+    "Tumor size range (approximately 1/4 to 1/3 of the iris circumference) is a series range and is not attributed to individual patients; the statement that cataract was not noted in the present study is recorded as absent cataract for each patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 43,
+    "facts_reviewed": 334,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Four patients (three dogs, one cat; Case 1 bilateral) in first-mention order; roster count 4 from the literal \"2/4 patients\".",
+      "Figure 1 printed row labels read CASE 1 OS and CASE 2 OD, supporting OD for Case 2 against the single OS mention.",
+      "Series-level \"all patients\"/\"all eyes\" methods and complications are explicit for every patient and copied; tumor-size range and the normal-limits default are not copied.",
+      "Case 4 synechiae: text says all eyes, Table 1 omits it at last follow-up; kept as ambiguity."
+    ],
+    "residual_risks": [
+      "Figure 1 panel IDs combine printed letters with case/eye text because letters repeat across rows.",
+      "The normal-limits examination default (\"unless otherwise noted\") is not itemized per patient.",
+      "Many series-level surgical facts are copied to each patient from \"all patients\" statements.",
+      "No measurement_series.json was produced (tables hold categorical/laser-setting text)."
+    ]
+  },
+  "physician_adjudicated": false
+}
