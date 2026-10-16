@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC13467280.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "45f679ee8b0a02b33e36803037c6452faabd9a9e661a78cc647aab9cc2f67000",
+  "annotation_sha256": "2b3e1f65bb47f8b0eafa5228b30fd0f22b76a9e56fef812d51692bf9fa1a6762",
+  "reviewed_at": "2026-10-16T02:13:41.580582+00:00",
+  "source_segments_read": 21,
+  "facts_reviewed": 50,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f010 distal radius fracture: laterality right from the literal 'in the same limb' co-reference to the right index finger; evidence widened to the contiguous b00003 text.",
+    "p1-f020 preoperative nail and p1-f029 retained nail: laterality right from the Figure 2 and Figure 4 captions (right hand and distal forearm); Figure 2 caption also added to p1-f039.",
+    "Added p1-f049 postoperative radiograph (procedure) and p1-f050 shortened nail no longer impinging the extensor compartment (observation) from the Figure 4 caption, with event p1-e17.",
+    "p1-f008 EPL rupture absent: removed inferred body_site 'thumb'.",
+    "Added 7 literally supported relations: fracture before fixation, fracture 2.5 years before presentation, preoperative exam (Fig 1) and preoperative radiographs (Fig 2) before surgery, EDC grafting during surgery (intraoperative Fig 5), surgery before postoperative radiograph, supervised motion before excellent recovery.",
+    "Laterality ambiguity rewritten: tendon ruptures and operative steps remain without side; summary updated with the postoperative radiograph.",
+    "visual.json Fig 1: no longer asserts both stacked views show one hand (lower view shows palmar creases with thumb toward viewer); figure-EHR/privacy drafts regenerated with labels carried over."
+  ],
+  "unresolved": [
+    "Discussion statements about published cases and general management options are background, not patient facts.",
+    "Right-handedness is kept in the case_context description only; no demographics attribute exists for handedness.",
+    "Counterfactual alternatives (EIP transfer, FDS transfer, end-to-side suturing) are not recorded as done or planned.",
+    "The Video 1 line in the text has no figure or supplement id in the source record; the MP4 is recorded as an unassigned-media video inspection with provisional ownership. The caption statement about postoperative recovery of extension is not recorded as a separate fact.",
+    "Figures were inspected in separate visual targets; caption-layer visual status here remains not_inspected."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 21,
+    "facts_reviewed": 50,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single 25-year-old man; cited cases (McKinney, Nguyen, Bhardwaj, Ghijselings, Piotuch, Furuya, Hattori) kept out of the patient record.",
+      "Nail removal failed (assertion absent) and EIP not reconstructed are recorded as not done; EIP-to-EDC and FDS transfer are counterfactual alternatives, not recorded.",
+      "Cut-end positions carry no method because their sentence names none.",
+      "Video 1 (13 sampled frames) shows postoperative finger extension, fist and isolated index pointing; owned by p1 via the Video 1 caption and the discussion citation."
+    ],
+    "residual_risks": [
+      "Whether 3 months is the duration of inability or the interval from trauma to onset remains open (ambiguity kept).",
+      "Fig 1 may show both hands; the pixels do not settle it.",
+      "The transcoded pmcvs_normal MP4 copy was not separately sampled."
+    ]
+  },
+  "physician_adjudicated": false
+}
