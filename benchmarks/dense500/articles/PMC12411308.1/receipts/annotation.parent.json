@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12411308.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7b9ec337f22a1922508b68b1e0021d7f5c36a1f6fd4300f2d07ebc36ba40e92a",
+  "annotation_sha256": "f7b415b34da66954c7beb07a71087ca576a6236d9e7d823d2bfd867030198619",
+  "reviewed_at": "2026-10-16T02:43:20.702068+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 129,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Norepinephrine doses for Cases 1 and 3 (narrative 0.5 and 1.0 vs Table 1 0.25 and 0.5 ug/kg/min): un-quarantined p1-f046, p1-f047, p3-f042, p3-f043 to supported/include; both sides are untimed and the same Table 1 rows also give BP/HR differing from both timed narrative readings, so the values are not shown to describe the same moment; ambiguities rewritten (no time assigned, no reconciliation).",
+    "Case 3 ECMO discontinued on day 5 vs Table 1 duration 6 days: un-quarantined p3-f027 and p3-f037 to supported/include; a discontinuation day and a duration are different attributes with an unstated day-counting convention; ambiguity kept.",
+    "Removed duplicate bare norepinephrine-administered facts p1-f023 and p3-f019 (same sentence as the dose facts); event and summary references repointed to p1-f046 and p3-f042.",
+    "Removed untimed Table 1 noradrenalin facts p1-f047 and p3-f043 from the narrative vasopressor events p1-e04 and p3-e04.",
+    "Case 3 ECMO initiation event p3-e06: time_text on the day of admission from the abstract sentence stating it for each case (same evidence as fact p3-f026).",
+    "Added 4 temporal relations with literal support: e03 before e04 for each case (remained low / persisted after the arrival readings) and p3-e06 before p3-e08 (abstract: initiated on the day of admission, discontinued within 4 to 6 days).",
+    "Table 1 row-to-case ambiguity now cites the discussion calling row 5 Case 5, showing table row numbers are case numbers.",
+    "Peak lactate statements no longer imply a value read from Figure 1; article limitations updated for the conflict decisions and the fatal Case 5."
+  ],
+  "unresolved": [
+    "Table 1 rows 4 to 6 are cited literature cases (first authors other than the article authors) and are not index patients; no fact was recorded for them.",
+    "Table 1 columns BP, HR and noradrenalin carry no time; their cells are kept untimed and differ from the timed narrative BP and HR values. Norepinephrine doses differ between the untimed narrative sentence and Table 1 for Cases 1 and 3; because neither has a stated time and the same table rows also differ from both narrative BP/HR readings, both doses are kept as untimed facts with an ambiguity, not as a source conflict.",
+    "Case 3 narrative gives ECMO discontinuation on day 5 whereas Table 1 gives ECMO duration 6 days (Cases 1 and 2 agree); the day number and the duration are different attributes with an unstated day-counting convention, so both are kept with an ambiguity rather than quarantined.",
+    "Table 1 legend does not define the + and - symbols in the CHDF, life-threatening arrhythmia and ECPR columns; they are kept as literal text values.",
+    "The discussion mentions the only fatal case in our study with lactate 22 mmol/L; the discussion and Table 1 attribute that lactate and the death to Case 5 (row 5, Kano, a cited literature case), and all three index patients survived, so the sentence is not assigned to any index patient.",
+    "The final diagnosis of CCB-induced cardiogenic shock was stated for the series without confirmatory toxicological analysis; it is not copied to individual patients beyond statements that explicitly cover each case.",
+    "Figure 1 is a plotted chart; values estimated from the curves are not facts and never replace the literal text and Table 1 lactate values. Caption-layer visual status not_inspected; pixels recorded in visual.json.",
+    "Discussion statements about drug pharmacology, survival cohorts and guidelines are background, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 129,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Three index patients (Cases 1 to 3); Table 1 rows 1 to 3 (first author Hokama, ages and sexes matching) are these cases, rows 4 to 6 are cited literature cases and are not recorded.",
+      "The only fatal case (lactate 22 mmol/L) is literature Case 5 (Kano), not an index patient.",
+      "Series statements copied to each patient use sentences that explicitly cover all three: in each case, in all cases, in any patient, all three patients.",
+      "No statement-level source conflict remains: the NE dose and ECMO day-vs-duration discrepancies are untimed or different attributes and are documented as ambiguities.",
+      "Figure 1 curve readings are estimates in visual.json only; pixels match the visual description."
+    ],
+    "residual_risks": [
+      "Readers may still treat the Case 1 and Case 3 NE dose discrepancy and Case 3 day 5 vs 6 days as an author error; both values are kept untimed.",
+      "Table 1 +/- cells (CHDF, arrhythmia, ECPR) are kept as literal text because the legend does not define them.",
+      "Table 1 Type of drugs cells are kept as observations of kind other rather than social exposures."
+    ]
+  },
+  "physician_adjudicated": false
+}
