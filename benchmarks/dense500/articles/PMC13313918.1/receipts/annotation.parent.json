@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC13313918.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a0e0f8125dc98e3221bb5c8af6849bdda2babb13e26c8e11e0d181bb7e908a09",
+  "annotation_sha256": "c36db09cf1d277e5cf8f4f24db3cbf69f07da7204a0c078381c9ff1a5b175813",
+  "reviewed_at": "2026-10-16T04:39:22.047196+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 27,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f001 case_context: removed care_setting ('no veterinary hospital nearby' was a paraphrase and the examination setting is not stated); added the b00002 heart-location quote that grounds chief_complaint",
+    "Added relation p1-e03 (supportive care) before p1-e05 (death), quoting b00011 'survived for 2 days after birth due to the supportive care provided by the owner'",
+    "Article limitation added: PMC XML links the Fig. 1 map caption to g002, whose pixels are the calf photo, and the Fig. 2 calf caption to g001, whose pixels are the map",
+    "figures[]: fig1 and fig2 scope/panels set unresolved with no patient ids; caption summaries and attribution notes now describe the caption and the asset mismatch without asserting the bound asset content",
+    "visual.json fig1 (after Sonnet redo): body part changed from article-based heart (cited Fig. 2 text) to pixel-based neck; stale caption-derived limitations replaced; figure-EHR and privacy drafts regenerated with labels carried over"
+  ],
+  "unresolved": [
+    "Single-animal report with no necropsy, laboratory or imaging results; no histology or other confirmation of the anomaly.",
+    "Classification conflict: abstract, case text and Figure 2 caption describe cervical ectopia cordis while the Discussion classifies it as complete thoracic EC; recorded as source_conflict.",
+    "Video 1 is an external YouTube link with no declared PMC asset; it was not viewed and no facts were taken from it.",
+    "The herd statements do not state that the calf belonged to the described herd.",
+    "Cause of death is the authors speculation only.",
+    "Exact time from birth to examination is not stated; no relation is recorded between the examination, supportive care and death.",
+    "Figure assets: the PMC XML links the Fig. 1 (locator map) caption to OpenVetJ-15-12-6805-g002.jpg, whose pixels show the calf photograph, and the Fig. 2 (calf) caption to g001, whose pixels show the map; annotation figure entries follow the captions."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 27,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Cervical (abstract, case text, Fig. 2 caption) vs complete thoracic (discussion) EC type is a literal conflict; only the two type-classification facts are review_only, shared EC/complete displacement/location facts included",
+      "Herd production-system fact review_only (calf membership not stated); 'no similar cases' kept as subject other, assertion absent",
+      "Cause of death possible ('may have been'); necropsy literally 'was not conducted', recorded not_performed",
+      "Roster count 1 from 'a male dromedary camel calf'; 'unable to stand for long and suckle' kept as one fact with an ambiguity",
+      "Video 1 is a YouTube link with no PMC asset and no figure/supplement entry; recorded only as an unviewed limitation"
+    ],
+    "residual_risks": [
+      "Figure assets are cross-linked in the PMC XML (g002 calf photo under the map caption, g001 map under the calf caption); the visual.json descriptions follow the captions, not the bound pixels, and the visual rows were redone to match the bound pixels with fig1 attribution unresolved and nothing includable; a corrected asset mapping upstream would require redoing them",
+      "The care-before-death relation rests on the authors' survival-due-to-care sentence"
+    ]
+  },
+  "physician_adjudicated": false
+}
