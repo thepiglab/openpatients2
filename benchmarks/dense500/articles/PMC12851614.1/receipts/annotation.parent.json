@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12851614.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4af8398688ead3dfe330d75ccfbd3be588a21ff87b58681bd91628e393aac6e5",
+  "annotation_sha256": "f0d2acbb18d6cb8fa05a613d483d3c2779f0b4e9f266fdd445fbf88ad71ee952",
+  "reviewed_at": "2026-10-16T05:41:23.079052+00:00",
+  "source_segments_read": 80,
+  "facts_reviewed": 203,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f185 and p1-f186: serum creatinine values 1100 and 281 were Fig. 4 pixel labels recorded as facts citing only the caption; figure-printed values stay in visual.json and the ambiguity text.",
+    "Fig. 4 SCr vs text/Table 2: judged 1100 vs 1106 a rounded chart label (text and table agree), so the admission item and Table 2 Day 1 cell p1-f120 are now included; judged 281 vs 283 a real discrepancy, so the Day 30 cell p1-f122 stays source_conflict/review_only; ambiguity rewritten.",
+    "Kept the admission-text items (f030-f036) and Table 2 Day 1 cells (f114, f120, f136, f139, f145, f181, f183) as separate items: Table 2 is a serial table and the source never ties upon admission to Day 1 nor cites Table 2 for these values; ambiguity records that the values match. Neutrophil and urinalysis text items keep time null because their own sentences state no time.",
+    "Added p1-f205 (fibrinoid necrosis present, included) citing both the Discussion and the Fig. 2 caption, since only the extent conflicts; the two extent facts stay source_conflict/review_only.",
+    "Added two literally supported temporal relations: symptoms upon admission same_time admission, admission labs same_time admission. Did not add an immuno-EM-before-final-diagnosis relation (leading to is basis wording, not order).",
+    "Visual submission: corrected the Fig. 4 description that all five curves start near D1; the red SCr curve starts at the 1m ago tick. Figure-EHR and privacy files carried over unchanged except the regenerated visual_target_sha256."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEG figures were inspected in the separate visual submission.",
+    "Table 2 cells shown as a dash are missing cells; no result is stated, so no observation was created for them. The footnote defines PLT but Table 2 has no PLT row.",
+    "Table 1 and Table 2 give no sample times beyond the Table 2 Day 1/15/30 column headings; Table 2 Day 1 is not equated with the admission text time point.",
+    "Fig. 4 prints SCr labels at D1 (1100) and D30 (281); 1100 is treated as a rounded label of 1106 (text and Table 2 Day 1 agree) and 281 versus the Table 2 Day 30 cell 283 as a source conflict (Day 30 cell review_only). Fig. 4 pixel labels, curves, day positions and symptom bars are kept in the visual submission, not as facts.",
+    "The Discussion says extensive fibrinoid necrosis while the Fig. 2 caption says segmental fibrinoid necrosis in one glomerular capillary loop; presence is recorded once as included and the two extent descriptions as review_only source_conflict facts.",
+    "Fig. 1 caption uses the undefined abbreviation LHCDD; not expanded.",
+    "The anti-PR3 antibody follow-up change was reported by the patient during a telephone follow-up; no assay value or date is given.",
+    "Supplementary file SD1 is a one-page CARE checklist (administrative); no patient-level clinical data."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 80,
+    "facts_reviewed": 204,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (55-year-old woman), PICGN with MGUS; MGRS suspected then ruled out by immuno-electron microscopy; dialysis-dependent at 3-month follow-up.",
+      "All Table 1 rows and Table 2 cells verified against the source; dash cells correctly omitted.",
+      "Anti-PM-Scl and anti-PR3 text values are the same Table 1 results (text cites the ANCA test shown in Table 1); merged items are correct.",
+      "Patient-reported telephone follow-up anti-PR3 negative conversion recorded as an observation with patient-reported statement and note; acceptable.",
+      "Fibrinoid necrosis extent conflict (Discussion extensive vs Fig. 2 caption one loop) concerns the same single renal biopsy.",
+      "SD1 is a one-page CARE reporting checklist with no patient content."
+    ],
+    "residual_risks": [
+      "Treating Fig. 4 1100 as rounding of 1106 is a judgment; the chart prints other values exactly.",
+      "Admission text values and identical Table 2 Day 1 cells are kept as separate items; they may be the same measurement (recorded as an ambiguity).",
+      "LHCDD in the Fig. 1 caption is undefined and left unexpanded.",
+      "Measurement-series SCr row stays include although its Day 30 cell is review_only in the annotation."
+    ]
+  },
+  "physician_adjudicated": false
+}
