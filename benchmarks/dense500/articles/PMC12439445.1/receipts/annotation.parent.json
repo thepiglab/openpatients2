@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12439445.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "166a89dc9d552e8cfad63acd8977e30f78fd45304b9a4a430b5ef5a8f24d0b20",
+  "annotation_sha256": "7d4b22847d0873e254841cec60b9c19f6eba12dbf89dbd783578a99481b1cc55",
+  "reviewed_at": "2026-10-16T01:51:29.041630+00:00",
+  "source_segments_read": 34,
+  "facts_reviewed": 184,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Fixed a malformed p1 ambiguity evidence entry (list instead of {segment_id, quote}).",
+    "p2 Table 1 \"no complications\" cell moved from the extubation-complication item p2-f052 to the overall no-complication outcome p2-f045; p2-f051 cites \"Smooth extubation\".",
+    "p3-f069 discharge: own text sentence placed first, table \"discharged on day 3\" kept as support (remaining NO-BORROWING warning is a checker false positive: the time is in the fact's own sentence).",
+    "Relations: added p1-e06 before p1-e07 and p2-e04 before p2-e05 (\"Postoperatively\"/\"Postoperative recovery ... extubated\"); replaced unsupported p3-e05 before p3-e06 with p3-e04 before p3-e06 (\"discharged on postoperative day three\").",
+    "p1 summary no longer claims an unremarkable general examination (only systemic examination was called unremarkable); summary fact links for p1/p2/p3 completed to the examination facts they state.",
+    "Figure 1 limitation reworded: attribution to Case 2 rests on the literal callout in the Case 2 paragraph."
+  ],
+  "unresolved": [
+    "Shared anesthesia paragraph: only premedication, induction and maintenance statements explicitly cover all patients; the topical, block, pre-operative sedation, oxymetazoline and intraoperative dexamethasone/paracetamol sentences have no explicit patient scope and are review_only for each patient.",
+    "Case 1 location is the left posterior oropharyngeal wall while the abstract calls all lesions vallecular cysts.",
+    "The sentence on patient consent in the discussion is administrative and not recorded as a clinical fact.",
+    "Caption-layer visual status not_inspected; the actual image is inspected in the separate visual target.",
+    "Figure 1 is attributed to Case 2 by its literal callout in the Case 2 paragraph (\"as show in Figure 1\"); that sentence concerns CT while the caption and pixels show an endoscopic view, so the examination is not inferred."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 34,
+    "facts_reviewed": 184,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Three index patients (Case 1-3), roster count 3 from \"three adult patients\".",
+      "Shared anesthesia paragraph: premedication, induction and maintenance are explicitly scoped to all patients; topical/block/sedation/oxymetazoline/dexamethasone-paracetamol details are protocol sentences without patient scope, correctly kept per patient as ambiguous review_only, while Table 1 literally confirms topical anaesthesia and blocks per case (supported generic items).",
+      "Case 1 lesion location (left posterior oropharyngeal wall in text and Table 1) vs \"vallecular cysts\" in abstract: ambiguity, not a literal conflict.",
+      "Case 2 \"which appeared tubular\" kept in the text_value with an ambiguity about the referent.",
+      "All 15 Table 1 cells mapped to items for their own patient.",
+      "Figure 1 viewed on pixels: endoscopic still matching the caption; visual description accurate."
+    ],
+    "residual_risks": [
+      "Figure 1 attribution to Case 2 relies on a callout in a CT sentence while the image is endoscopic.",
+      "Shared-protocol details stay review_only for each patient.",
+      "Two non-blocking NO-BORROWING warnings on p3-f069 (checker false positive)."
+    ]
+  },
+  "physician_adjudicated": false
+}
