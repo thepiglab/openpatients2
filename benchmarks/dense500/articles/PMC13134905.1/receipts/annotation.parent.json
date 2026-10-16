@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC13134905.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "df090dc20bab63da6cd55112cf1cfe6e0132224b4ca25da29b32db28e70e2478",
+  "annotation_sha256": "7188ae814cd1c13636633da58cbf1676f65dac1973eb65be945ad855ef927ad7",
+  "reviewed_at": "2026-10-16T08:23:35.976859+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 73,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged the text baseline TSH (<0.003) and free T4 (>5) with the Table 1 'w/o pretreatment' row (one pre-pretreatment test reported once); removed duplicate table items f039/f040, added table evidence and 'Before RAI' time to f036/f037",
+    "Reference-range difference text vs Table 1 kept as an ambiguity (rounding-level TSH; fT4 1.8 vs 1.48 likely print artefact); ambiguity texts and fact links updated",
+    "Smoking status current -> unknown (reported at presentation, not placed at the latest time)",
+    "Prior PTU and propranolol action unknown -> administered ('had been on treatment')",
+    "Merged abstract duplicate acute psychotic symptoms f011 into f010; removed symptoms_function duplicate f026 of outcome f073",
+    "Removed unsupported indication from abstract psychiatric medications f055; added abstract evidence to f038 and f056",
+    "Added care_plans monitoring fact f077 for repeat thyroid function tests at the 4-week return visit (time left on the event to avoid borrowing)",
+    "Added events e09 antipsychotic discontinuation, e10 missed 1-week visit (not_occurred), e11 ~1 year PTU/propranolol history, e12 onset of psychosis over the preceding month; moved facts out of e01/e04/e06 accordingly",
+    "Corrected relation e06->e08 from before to during (6-month follow-up spans the 1-month point); re-quoted e06->e07 with Table 1 After RAI 1 month / 3 months cells",
+    "Added 10 relations with literal support: e11<e05 ('After 1 year of ATD therapy'), e12<e01 ('preceding month'), e12 during e11, e03<e10 ('initially'), e10<e04 (1 week vs 4 weeks), e06<e09 ('allowing for'), e03<e09 (start->stop), e05<e07, e08 after e05, e07 during e08",
+    "Summary: replaced inferred 'tachycardia' with the heart rate; added Table 1 post-RAI values and repeat-TFT fact links"
+  ],
+  "unresolved": [
+    "Introduction, discussion and recommendation paragraphs are general or literature statements and are not recorded as patient facts, except the case-specific statements in b00004, b00028 and b00032.",
+    "Reference ranges differ between the text and Table 1; values are not merged across them and no flags are taken from ranges.",
+    "Table 1 uses + and − for psychotic symptoms without a legend; the interpretation is recorded in the fact notes.",
+    "The abstract and the case text both describe the same course; shared statements are cited together and not duplicated.",
+    "Caption-layer visual status is not_inspected; the single JPEG is inspected in the separate visual submission.",
+    "No supplements are listed in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 77,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (30-year-old man), roster 1 correct",
+      "All Table 1 cells present as observations or symptom items; text baseline labs are the w/o pretreatment row",
+      "RAI kept as a medication only (radiopharmaceutical drug, not a procedure)",
+      "Unnamed antithyroid drug withdrawn and unnamed antipsychotics stopped kept unnamed",
+      "Figure 1 viewed at full resolution and magnified crops; two text marks unreadable"
+    ],
+    "residual_risks": [
+      "Table 1 +/- symptom cells have no legend; 3-month row rests on the table sign alone",
+      "Which Table 1 row is the 4-week repeat test is not stated",
+      "Reference ranges differ between text and Table 1 (ambiguity, not conflict)"
+    ]
+  },
+  "physician_adjudicated": false
+}
