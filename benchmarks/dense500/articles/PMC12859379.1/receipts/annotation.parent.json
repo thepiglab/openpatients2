@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12859379.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "930abb3d2d10de3bc84129d16168e46004046b3234a7173d7ec12ae3dffe7102",
+  "annotation_sha256": "e0b27c07ede8534f0d8d0eecc1c067bd4f4d3478ec5edcf88deb640bf21c529f",
+  "reviewed_at": "2026-10-16T02:34:18.013077+00:00",
+  "source_segments_read": 50,
+  "facts_reviewed": 211,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f004 olanzapine overdose: verification_status confirmed -> provisional (ingestion is 'alleged' and no serum olanzapine level was available).",
+    "p1-f019 renamed 'Alleged ingestion ...'; '8 hours ago' anchored to the literal 'presented' in the same sentence.",
+    "p1-f023/f024 home olanzapine and lorazepam kept at action unknown with a note (source says only was taking ... for three to four years; not literally current); an earlier parent change to current was reverted after annotator dispute.",
+    "p1-f035 pinpoint pupil and p1-f036 miosis (Discussion) marked alternate_representation_of p1-f034 constricted pupils.",
+    "p1-f151 'Stool was not passed at this time' timed with its own literal 'at this time' (anchor 'day two').",
+    "Psychiatric reference (occurred) split from not_occurred evaluation event into new event p1-e22.",
+    "Added relations: day-N vital-sign events during the matching day table events (e16-e19 during e11-e14), e19 before discharge e20, discharge medications e15 same_time e20.",
+    "Added ambiguities: Na/K reference units printed mg/dL (kept as printed); room-air SpO2 on days 4-5 without described extubation; untimed examination sentences in the day paragraphs.",
+    "Summary claims 3-4 now cite table medication and day-4/5 facts they mention; claim 4 no longer dates untimed GCS findings."
+  ],
+  "unresolved": [
+    "The article has no figures and no supplements; all four tables (Tables 1 to 4) are in source.json and every non-dash cell is recorded.",
+    "Dash cells in Table 3 are not recorded as values.",
+    "Table 3 prints sodium and potassium reference values with mg/dL; the printed unit is kept as written and not corrected.",
+    "Examination sentences in the day-by-day paragraphs after the 'On day N' vital-sign clause carry no explicit time; per NO-BORROWING their findings keep null time (the day clause scopes only its own sentence).",
+    "The meaning of GCS verbal code VT and of the five unlabeled differential count values is not defined in the source.",
+    "Discussion sentences about cited literature and the conclusions are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 50,
+    "facts_reviewed": 211,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single 51-year-old man; roster count 1; no figures or supplements; all 4 tables present in source.json.",
+      "All 75 non-dash table cells verified as one fact each (Table 1: 18, Table 2: 12, Table 3: 33, Table 4: 12); dash cells skipped; Day 6 cells are discharge prescriptions (action ordered).",
+      "Overdose diagnosis is provisional: alleged ingestion, toxicological confirmation unavailable.",
+      "'On day N' lead clauses scope only their own vital-sign sentence; later exam sentences stay untimed (NO-BORROWING).",
+      "Measurement series sidecar: 8 series (TV, FiO2, Hb, TLC, Na, K, ionic Ca, CRP) checked cell by cell; units, owners and day times correct."
+    ],
+    "residual_risks": [
+      "10 NO-BORROWING warnings on day-five vitals are checker false positives: the source prints 'On day five. BP was ...' with a stray period; the fragment heads that sentence's vitals.",
+      "Untimed day-paragraph examination findings (GCS E2VTM4 -> E4VTM6 -> E4V5M6) lose their day; a looser reading of the lead clause would date them.",
+      "Na/K mg/dL units kept as printed; DLC five unlabeled values kept as text.",
+      "PEEP, ventilator rate and platelet rows are not measurement series (not drafted by the tool); they remain annotation observations."
+    ]
+  },
+  "physician_adjudicated": false
+}
