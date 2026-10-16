@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC13587186.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b4667983d371e96d25aedbfa572b76281c6508bd7ed70b9a55d00a2303b3c7b1",
+  "annotation_sha256": "174550bc64e2912207686cff700367bb4a4651abf061fee20248a872d92f4991",
+  "reviewed_at": "2026-10-16T08:52:16.763107+00:00",
+  "source_segments_read": 31,
+  "facts_reviewed": 114,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f089: replaced the bare \"At week 7\" time fragment with one contiguous Fig. 2 caption quote in which the panel G lead \"(G) At week 7\" scopes the hypofluorescence sentence that follows.",
+    "p1-f092: replaced the bare \"At week 10\" fragment plus a partial quote with the single caption sentence that states the week 10 time for panels H-J.",
+    "p1-f112: evidence extended to \"Currently, ...\" so the current temporality and time are inside its own quote; time Currently added.",
+    "p1-f080, p1-f081: added Fig. 1 caption and abstract wording of the same findings as extra evidence.",
+    "Events: CT/EEG split out of the hospital day 5 seizure event (new p1-e21, time null) so the event does not imply a time the source does not give; brain MRI/angiography split from the regular fundus examination event (new p1-e22); transfusion, blood dyscrasia improvement and marked clinical improvement moved out of the day 14 discharge event (new p1-e23, time null); eGFR, urinalysis and stool PCR moved out of the initial-laboratory event (new p1-e24, time null); physical examination signs and history negatives moved to the presentation event.",
+    "p1-e07 time_precision changed to range for \"by hospital day 8\".",
+    "Added 14 relations supported by stated hospital days and stated ophthalmic times: e02<e05 (initial vs hospital day 3), e05<e08, e05<e09, e06<e09, e07<e09, e05<e19, e06<e19, e07<e19, e12<e16 (seven weeks + three weeks later), e12<e18 (decreased to / Finally improved to), e19<e20 and e16<e20 (Currently), e02<e03 (initial labs, then \"Finally\" suspected), e12<e13 (initial ophthalmic examination before the regular 2-weekly examinations). No relation between the day 14 discharge and the hospital day 15 ophthalmic events (source inconsistency).",
+    "Summary claim 2 now covers the transfusions and blood dyscrasia improvement.",
+    "Ambiguities: HUS issue reworded (no case sentence confirms the diagnosis); added the discussion statement that E. coli was found by stool culture versus stool PCR in the case text and Table 1."
+  ],
+  "unresolved": [
+    "Figure pixels are described in visual.json, not in this annotation.",
+    "Table 1 rows for previously published cases are literature-review data and are not annotated as patients; only the row for this case is used.",
+    "Table 1 O and X cell meanings are not defined in its footnote.",
+    "The case text gives hospital day numbers for the inpatient course but no calendar dates; the date of the initial ophthalmic examination relative to hospital day 15 is not stated."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 31,
+    "facts_reviewed": 114,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient; Table 1 literature rows excluded and only the Our case row used (age 49 months, OU, O/X cells kept literal review_only, treatment None, final vision OD/OS 20/16).",
+      "The 9 initial-lab NO-BORROWING warnings are checker false positives: the colon lead clause \"Initial laboratory test results were as follows:\" scopes the semicolon list; left as is.",
+      "Typical HUS stays provisional: the case text says suspected and no later case sentence states confirmation; title, captions and discussion framing recorded as an ambiguity.",
+      "Hordeolum versus chalazion kept as a source conflict (both review_only).",
+      "Fig. 1 caption lead \"at the initial ophthalmic examination\" governs the fundus, OCT and visual acuity facts it labels; caption-lead times are kept.",
+      "Fig. 2 K-N: caption gives no modality, so annotation panel modality stays null; pixels show an angiogram (K), an en face OCTA map (L) and OCT B-scans (M, N), recorded in visual.json with pixel basis."
+    ],
+    "residual_risks": [
+      "Discharge on day 14 versus in-hospital ophthalmic complaint on hospital day 15 is unresolved; no order between them is recorded.",
+      "Care setting (emergency department in the abstract, clinic in the case text) is left unrecorded.",
+      "Table 1 O/X meanings are undefined in the footnote; the review_only cells are not interpreted.",
+      "figure_ehr_labels.json figure-level rationale for Fig. 1 mentions angiograms and en face vessel maps that Fig. 1 does not contain (agent-owned file; Sonnet to correct)."
+    ]
+  },
+  "physician_adjudicated": false
+}
