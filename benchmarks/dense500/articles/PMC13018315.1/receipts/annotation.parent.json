@@ -1,0 +1,66 @@
+{
+  "article_id": "PMC13018315.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3ae7d2a4b9710400c5a1c950909e5c5cd5e8537204a4b661add2cb381418ff66",
+  "annotation_sha256": "d6c1978087f3d45a1bebb64e85dc4459cc1d0fe54c013481a2e0c87673c087db",
+  "reviewed_at": "2026-10-16T08:04:27.179617+00:00",
+  "source_segments_read": 12,
+  "facts_reviewed": 123,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Thyroxine (p1-f017) and vitiligo management (p1-f019): \"was taking\"/\"was receiving\" set to action administered (not current) per ruling.",
+    "Neurological examination (p1-f030) text_value normalised to \"normal\" for a scoped normal exam (SECTION-SIGNS).",
+    "MELD score (p1-f041) moved from symptoms_function performance_score to observations kind physiologic (laboratory-derived score; dense500 precedent).",
+    "Removed p1-f043 (thyroid function normal): same statement already carried by the TSH item p1-f042, which quotes it.",
+    "Total fluid input/output (p1-f063, p1-f064) given the time \"throughout the procedure\" from their own sentence.",
+    "Urine osmolality conflict narrowed to the conflicting attribute: p1-f070 keeps 405 mOsm/kg on POD 6 as accepted without a flag; new review-only p1-f124 (flag normal: \"[normal]\", \"within normal range\") and p1-f071 (flag high) hold the conflicting classification; ambiguity relinked.",
+    "Chronic lacunar infarcts (p1-f105) set to confirmed with the MRI sentences that identify them; small vessel ischemic disease (p1-f104) stays provisional (\"consistent with\").",
+    "Nephrogenic DI (p1-f080) given its own stated time \"six days after undergoing LDLT\" (b00005).",
+    "Desmopressin start (p1-f106) given duration \"five days\" from b00005; BP/HR (p1-f077, p1-f078) given the Discussion restatement as additional evidence.",
+    "Events: added p1-e12 pre-operative laboratory evaluation, p1-e13 prophylactic antibiotics/methylprednisolone/supportive therapy, p1-e14 routine post-transplant follow-up; filled fact links for history, LDLT, POD 6 and MRI events.",
+    "Relations 6 -> 13: added pre-operative labs before LDLT, intra-operative bleeding during LDLT, LDLT before POD 10 stop and POD 17 discharge, POD 6 polyuria before POD 17 discharge (stated POD times from the same anchor), oral desmopressin start before stop, LDLT before routine follow-up.",
+    "Summary: removed the implication that jaundice was an admission finding; added normal pituitary, quality of life and resumed activities.",
+    "Article limitation for Figure 1 and Tables 1-4 (\"see PDF\") restated as unavailable media under MEDIA-UNAVAILABLE (complete, flagged; not viewed, not annotated)."
+  ],
+  "unresolved": [
+    "Figure 1 and Tables 1 to 4 are referenced only as \"see PDF\": the source declares no figure, table or supplement assets, so they are unavailable media under MEDIA-UNAVAILABLE (complete, flagged; media_available=false, content_reviewed=false). Their contents (Figure 1, pre-operative and post-operative laboratory values, anesthesia protocol, literature case table) were not viewed and are not annotated.",
+    "Two published central DI cases in the Discussion are cited literature and are not assigned to the index patient.",
+    "Urine osmolality (405 mOsm/kg) is called normal in the case report and high in the sentence confirming the diagnosis; the value is accepted and only the normal/high classification is review-only source conflict.",
+    "Brain MRI is described as showing no abnormality in several places while the findings paragraph lists involutional changes, small vessel disease and lacunar infarcts; unscoped statements are review-only.",
+    "The sentence about antibiotics places \"intravenous\" only before piperacillin-tazobactam, so no route is assigned to teicoplanin or fluconazole.",
+    "Whether endoscopic variceal ligation was completed is not stated (the bleed \"required\" it).",
+    "Blood pressure and heart rate on POD 6 are stated in a separate sentence without a time of their own; time left null."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 12,
+    "facts_reviewed": 123,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient (57-year-old man, LDLT from daughter); roster count 1 literal; donor stays as family_member subject.",
+      "Polyuria POD 6 time is not borrowed: b00004 sentence itself states the polyuria (\"started producing large quantities of urine\") and b00001 names polyuria with \"On the sixth day post-transplantation\"; gate warning is a checker false positive.",
+      "MRI: specific findings (involutional changes, small vessel disease, lacunar infarcts) are explicitly reported and accepted; only unscoped global \"no abnormality\" statements are review-only with an ambiguity.",
+      "EVL \"required\" kept action unknown; teicoplanin and fluconazole keep no route (intravenous written only before piperacillin-tazobactam).",
+      "No figure, table or supplement assets declared; Figure 1 and Tables 1-4 are \"see PDF\" only and unavailable."
+    ],
+    "residual_risks": [
+      "Table 1-4 contents (pre/post-operative laboratory values) are absent from the source text and not annotated.",
+      "Desmopressin start day is not literally stated; ordered after POD 6 polyuria only through the \"managed with\" style narrative is not asserted (no relation added).",
+      "Brain MRI timing relative to POD 6 is not stated; left unordered.",
+      "Remaining NO-BORROWING gate warning on p1-f066 is a checker false positive."
+    ]
+  },
+  "physician_adjudicated": false
+}
