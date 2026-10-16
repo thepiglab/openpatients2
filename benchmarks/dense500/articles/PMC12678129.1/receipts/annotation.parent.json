@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12678129.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3af360b941e5e3a785c45aa13743802175a25aa764986123800a72d9d48125eb",
+  "annotation_sha256": "0c0427aa1ebdb1f995f7ece0a38d4ef4af461fc6624ffc645f53bfa0dce88ee4",
+  "reviewed_at": "2026-10-16T07:24:50.680383+00:00",
+  "source_segments_read": 54,
+  "facts_reviewed": 114,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f090 to p1-f093: Table 3 normal AB-type serum control rows are another person's serum, not patient results.",
+    "Vancomycin frequency source conflict (abstract every day vs case text every 12 h): frequency removed from include fact p1-f027; added review-only source_conflict facts p1-f115 (every 12 h) and p1-f116 (every day); ambiguity rewritten as a conflict.",
+    "Death outcome p1-f109: removed related_condition (DIIHA); the causal link is only \"highly likely\" and stays an ambiguity; cause_as_documented cerebral infarction kept.",
+    "Hemoglobin 44 g/L low flag p1-f039: added literal support \"reduced hemoglobin\" (b00042).",
+    "Added p1-f117 postoperative vital signs stable and p1-f118 previous irregular antibody screening negative (historical).",
+    "Added literal evidence: III(±) text to p1-f055; b00043 screening-negative-before-hemolysis to p1-f048; b00043 no transfusion during hospitalization to p1-f036.",
+    "Events: moved admission screening p1-f048 from the emergency-sample workup event to the admission event; removed blood type from workup event; removed causality, platelet count and antiplatelet facts from the vancomycin-antibody test event; added p1-e17 antiplatelet antibody testing; added vital signs to postoperative event.",
+    "Relations: extended the Therefore quote to include both sentences; added March 2022 before June 2022, June 2022 before December 2024 admission, preoperative evaluations before surgery, eighth-postoperative-day hemoglobin fall before ninth-day death (both stated times quoted).",
+    "Summary no longer states the quarantined vancomycin frequency.",
+    "Ambiguities added for urine hemoglobin vs urinary occult blood (kept separate) and the Table 2/3 zero grade; screening cell III ± vs w recorded as a notation difference, not a conflict; article limitations updated."
+  ],
+  "unresolved": [
+    "Figure 1 values and annotations are pixel content recorded in the visual submission only; the hemoglobin 44 g/L and indirect bilirubin 131.4 μmol/L values also appear in the text and are recorded from it.",
+    "Reagent-cell antigen profiles in Tables 1 to 3 are reagent properties, not patient results, and are not recorded as patient facts.",
+    "Several discussion statements are author hypotheses (residual drug, IgM to IgG transition, causal link to cerebral infarction) and are kept as ambiguities.",
+    "Hospital admission is dated December 2024 in the case text; no exact dates are given for the surgery, transfusion or death beyond postoperative days.",
+    "No supplementary material is listed for this article.",
+    "Table 1 defines 0 as no agglutination; Tables 2 and 3 print 0 without their own legend, so their zero cells are flagged negative only where the text states no agglutination or no reactivity.",
+    "Table 3 rows using normal AB-type serum are laboratory control experiments with another person’s serum and are not recorded as patient results.",
+    "Vancomycin frequency conflicts between the abstract (every day) and the case text (every 12 h); only the frequency is quarantined as review-only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 54,
+    "facts_reviewed": 114,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (50-year-old man) with vancomycin-dependent IgG antibody hemolytic anemia on postoperative day 8 after left total knee replacement; death on postoperative day 9 is literally stated (died of cerebral infarction).",
+      "Every patient result cell of Tables 1 to 3 is recorded; control-serum rows of Table 3 are excluded as not patient data.",
+      "Figure 1 values (hemoglobin and indirect bilirubin series) are pixel content in visual.json only; the printed 44 g/L and 131.4 umol/L match the text, so no conflict.",
+      "Emergency transfusion requirement and three-unit RBC transfusion kept as separate facts because the source does not equate them."
+    ],
+    "residual_risks": [
+      "The vancomycin frequency conflict is arguably a wording difference (every day vs every 12 h); quarantined per orchestrator ruling.",
+      "Urine hemoglobin (abstract) and urinary occult blood (body) may be one finding counted twice.",
+      "Table 2 and Table 3 zero cells lack their own legend."
+    ]
+  },
+  "physician_adjudicated": false
+}
