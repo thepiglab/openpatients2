@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC12738868.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3a0ce64b16fce60409e15819bf1b67e6f609ce8942b6c0ddfc7d494a0da82a1b",
+  "annotation_sha256": "dfa6a6d09d74bbe4beacee6bb7799f58b551b11a6184761823dd8cf22c4c6727",
+  "reviewed_at": "2026-10-16T06:48:25.594414+00:00",
+  "source_segments_read": 23,
+  "facts_reviewed": 125,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added demographics age_at_presentation text_value newborn (p1-f126) from the abstract wording; sex stays a review_only source_conflict (male in abstract, female/she in case text).",
+    "Split the Apgar item into 1-minute (p1-f011) and 5-minute (p1-f127) scores of 10; removed the shared time text.",
+    "Extended diagnosis quotes for p1-f013 and p1-f014 so the stated diagnostic basis is inside the evidence.",
+    "Admission x-ray findings p1-f046/f047/f048: full abstract sentence quoted and time Upon transfer to our institution added from that sentence; Figure 1B caption added to p1-f046; merge kept because the caption links the abstract repeat x-ray and the case-text emergency x-ray as the one admission radiograph.",
+    "p1-f063 anesthesia: removed borrowed indication, added the b00012 maintenance sentence.",
+    "p1-f067 laparoscopic repair: added b00008 completion sentence; p1-f078 quote now contains the 3 mm size; p1-f086 body site greater curvature with Figure 2D caption evidence; p1-f113 quote covers its indication.",
+    "Added p1-f128 caption fact: isolation and clamping of short gastric vessels with Hemlock forceps (Figure 2B), order versus division left open.",
+    "ONE-STATEMENT: removed duplicate rash (p1-f111) and reflux (p1-f112) symptom items (manifestations kept as the reaction of the formula intolerance item p1-f110) and the methylene blue medication duplicate (p1-f083) of the demarcation procedure p1-f082.",
+    "Timeline: abstract one-day-history symptoms moved to their own event p1-e17; abstract feeding re-establishment on the seventh postoperative day moved out of the formula-intolerance event to p1-e18; rooming-in split from discharge (p1-e19) so day 20 is attached only to discharge; p1-f125 unlinked from the discharge event; by day 17 event precision set to range.",
+    "Added five literally supported relations: e07 before e09 (preliminary diagnosis ... subsequently underwent), e09 before e18 (seventh postoperative day), e11 same_time e18 (postoperative day 7 / seventh postoperative day), e12 before e13 (Initial feeding attempts ... Full enteral feeding was achieved), e13 before e19 (followed by transfer to rooming-in).",
+    "Removed sex pronouns from summary claims (sex is a source conflict) and the unsupported then ordering word in claim 1; refreshed ambiguity wording and article limitations (Figure 2F caption says schematic, pixels are a photograph)."
+  ],
+  "unresolved": [
+    "Abstract and case text disagree on sex (male versus female); both are retained as review-only source_conflict facts and not reconciled.",
+    "Day 17 and day 20 are not anchored as postoperative days or days of life in the source.",
+    "The abstract and case text describe the admission radiograph with different descriptors; they are merged only for the findings both state, with the Figure 1B caption linking them.",
+    "Discussion paragraphs are general or literature statements and are not recorded as patient facts except the anesthetic details stated for this infant in b00012.",
+    "Caption-layer visual status is not_inspected; the two JPEGs are inspected in the separate visual submission.",
+    "No supplements are listed in the source.",
+    "The Figure 2F caption calls the panel a postoperative schematic, but the pixels are a photograph of the infant abdomen with overlaid numbered circles; the visual record describes the pixels.",
+    "Sex is a source conflict, so authored summaries and event descriptions use no sex pronouns."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 23,
+    "facts_reviewed": 125,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single 34-week preterm neonate (smaller of twins) with spontaneous gastric perforation repaired laparoscopically; roster count 1 from the abstract case statement.",
+      "Sex male (abstract, he) versus female (case text, she) is a true source conflict kept review_only on both sides.",
+      "Abstract repeat x-ray and case-text emergency x-ray are one admission radiograph per the Figure 1B caption.",
+      "Day 17 and day 20 have no stated anchor; one-day history in the abstract is not reconciled with the case-text onset; both kept as ambiguities.",
+      "Uneventful wording recorded as absent complications; the two EVID-NEGATION warnings on p1-f098 are checker false positives (uneventfully)."
+    ],
+    "residual_risks": [
+      "Patient sex unresolved by the source.",
+      "Day 17/20 count basis unknown, so full enteral feeding and discharge are only ordered against each other.",
+      "Figure 2F caption calls the panel a schematic while the pixels are an annotated photograph."
+    ]
+  },
+  "physician_adjudicated": false
+}
