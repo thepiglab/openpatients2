@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC13126293.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "46915c0536e54961d6d27b1f976cf9cfb2bc28e0b6d0704f76a0e684dd0050be",
+  "annotation_sha256": "a29e46d36dcdc2a3b662236e876486f177f78f90e885c174392830a82b443643",
+  "reviewed_at": "2026-10-16T10:08:16.157491+00:00",
+  "source_segments_read": 39,
+  "facts_reviewed": 84,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f012/p1-f013 (enhanced CT/MRI procedures): removed body_site pelvis, not stated in their evidence sentence.",
+    "p1-f007 (sclerosing PEComa): laterality left with the literal tumor-location sentence from b00021; notes updated; kept in conditions only (no malignancy category stated).",
+    "Added p1-f084 care_plans: extended monitoring recommended by the authors (b00028), review_only/ambiguous because it may be an author recommendation rather than a patient plan; ambiguity added.",
+    "p1-f017 regular follow-up kept as action_status completed (source reports it carried out, including the one-year visit); moved out of the one-year follow-up event into its own event p1-e09 (time_text post-surgery); fact time set to post-surgery, relation after, anchor surgery.",
+    "Event p1-e03 description no longer implies pelvis; p1-e08 description tightened.",
+    "Relations: added e02 before e05 (presented for examination ... After comprehensive examinations ... referred), e03 before e06 (preoperative considerations), e05 before e06 (referred ... for surgery, postoperative pathology), e06 before e09 (post-surgery/postoperatively); added the b00007 After-quote to e03 before e05.",
+    "Figures: F1 panel D caption-layer modality set to null with an attribution note (pixels match Fig. 2 panel H, coronal MR-type), added an ambiguity for F2 panels F and G being printed but absent from the caption (E,H), and article limitations for the duplicate panel (not a PMC asset swap) and untimed laboratory tests."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual figure images inspected in the separate visual submission.",
+    "PEComa is recorded in conditions only; the source does not classify the tumor as malignant, benign or of uncertain malignant potential, so no oncology tumor item is created.",
+    "Immunohistochemistry specimen is not stated; markers are recorded without a specimen. CD34 (vascular +) is listed twice in the source and recorded once.",
+    "Consent, ethics approval and author contribution statements (b00029 to b00036) are administrative and not recorded as clinical facts.",
+    "Discussion statements about the patient (b00021 to b00023, b00028) are recorded only where they describe this patient; general PEComa literature statements are not copied.",
+    "Surgery date, operative hospital and extent of resection beyond the pelvic mass excision are not stated.",
+    "Parent pixel check: Fig. 1 panel D is the same coronal MR-type image as Fig. 2 panel H (cropped), although the Fig. 1 caption assigns C,D to the venous phase of the contrast-enhanced scan. The Fig. 1 asset otherwise matches its caption (panels A to C are axial CT), so this is an author-level duplicate panel, not a PMC asset swap; attribution of panel D to a phase or modality is unresolved.",
+    "Laboratory tests (b00010) carry no stated time or setting, so their order relative to referral and surgery is not established."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 39,
+    "facts_reviewed": 84,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single 27-year-old woman with a left adnexal/broad ligament sclerosing PEComa excised laparoscopically; right ovarian probable endometriotic cyst; no metastasis one year after the operation.",
+      "All 83 annotator facts verified against the source; quotes, polarity and times are literal; IHC list recorded per marker with CD34 duplicate recorded once.",
+      "One-year follow-up facts take their time from the b00002 sentence that literally scopes both laboratory and imaging results.",
+      "Fig. 1 panel D is the same image as Fig. 2 panel H (cropped) on pixels; the Fig. 1 asset otherwise matches its caption, so this is an author-level duplicate, not a PMC asset swap."
+    ],
+    "residual_risks": [
+      "Fig. 1 panel D phase/modality attribution unresolved; Fig. 2 panels F and G not named in the caption.",
+      "Laboratory tests and the earlier pelvic mass discovery are not ordered against the rest of the course.",
+      "No malignancy category stated for the PEComa; oncology section left empty by design."
+    ]
+  },
+  "physician_adjudicated": false
+}
