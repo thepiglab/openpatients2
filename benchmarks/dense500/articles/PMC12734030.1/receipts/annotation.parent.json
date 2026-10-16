@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12734030.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f15ca63991d7e37b520b24c549288ddfb3759c1cf898d392627789dfe530deeb",
+  "annotation_sha256": "2cb02a308a21924bcf19d280c8d317621e04879ed948e70445c382dba7fd6f8a",
+  "reviewed_at": "2026-10-16T07:00:30.503611+00:00",
+  "source_segments_read": 47,
+  "facts_reviewed": 91,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "OCT findings p1-f035 to p1-f038 and OCT procedure p1-f040: left-eye laterality added from the Figure 2 caption, whose lead sentence (left eye image) scopes the OCT findings it lists; caption quote added; limitation and ambiguity rewritten.",
+    "Fluorescein angiography p1-f076 to p1-f078: left-eye laterality/body site from the Figure 3 caption lead sentence that scopes panels a and b; caption quotes extended to include it.",
+    "Added p1-f091 color fundus photography of the left eye (Figure 1 caption) as a completed procedure.",
+    "p1-f007 adds the abstract complete vision loss quote; p1-f008 chickenpox adds the recovery sentence.",
+    "Suspected aPS (p1-f065) and considered varicella vasculopathy (p1-f089) promoted from review_only to include with assertion possible; the source states the suspicion/belief literally.",
+    "Valve disease (p1-f081) and underlying systemic condition (p1-f090) excluded by workup set to verification_status refuted; p1-f090 quote extended to Despite extensive work-up.",
+    "Timeline: admission event no longer bundles the examination, OCTA/OCT, diagnosis or chest X-ray (new events e17-e20 without invented times); COVID antigen test at the sibling infection moved out of the hospital-stay lab event to e23 with sister COVID e22; CSF analysis split to e21; drug bundle split into acyclovir e09, methylprednisolone e25, prednisone e24 and ceftriaxone/vitamin D/gastroprotection e26; etiologic workup e27 gets connective tissue disease, systemic condition and varicella vasculopathy.",
+    "Added eight literal relations: e22 before e03 (2 months before the onset), e23 same_time e22 (at the time of the sibling active infection), e25 before e24 (followed with), e09 overlaps e25 (combined with), e06 before e15 (on admission / one month after the admission), e06 before e12 and e12 before e15 (at admission / four days after / one month after the admission), e01 before e14 (exanthema emerged / recovered from the chickenpox infection).",
+    "Onset ambiguity rewritten: over 12 h and over six hours are compatible lower bounds, not a source conflict, so no review_only quarantine.",
+    "Summary claim 2 rewritten so admission tests, CSF and echocardiography are not presented as one unremarkable admission panel."
+  ],
+  "unresolved": [
+    "Figure pixels are described only in visual.json; the annotation figure rows stay caption-level.",
+    "Table 2 has no time column; only IgM aCL and IgG aβ2GP1 carry admission timing from the abstract sentence.",
+    "CRP reference-range unit (g/L) differs from the value unit (mg/L) in Table 1 and is kept literal.",
+    "Enoxaparin dose unit printed as mg/dan is kept literal.",
+    "Discussion statements about literature, cited cases and general mechanisms are treated as background, not patient facts.",
+    "OCT and fluorescein angiography laterality comes from the Figure 2 and Figure 3 caption lead sentences that scope the listed findings; the narrative sentences name no eye."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 47,
+    "facts_reviewed": 91,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single 6-year-old girl with left CRAO six days after chickenpox exanthema; roster count 1 from the abstract case statement.",
+      "IgM aCL 238.5 CU and IgG aβ2GP1 76.1 CU merges are valid: the text cites Table 2, the abstract repeats the same single values, and each fact carries the abstract sentence whose own on admission phrase supplies the time.",
+      "Chickenpox kept confirmed on the documented ongoing infection and recovery wording; the consult sentence strong suspicion of aPS and chickenpox is kept as an ambiguity.",
+      "Factor VIII 2.10 above the printed range is left unflagged (OBS-FLAG); the abstract unremarkable-except statement is an ambiguity.",
+      "CRP g/L range and enoxaparin mg/dan units kept as printed with ambiguities.",
+      "All 17 table rows of Tables 1 and 2 are individual observations."
+    ],
+    "residual_risks": [
+      "Chickenpox verification relies on author wording; CSF VZV culture and antibodies were negative.",
+      "Table 2 rows other than the two antibodies carry no time.",
+      "Follow-up OCT at 3 and 5 months has no stated anchor and is not ordered against the hospitalization."
+    ]
+  },
+  "physician_adjudicated": false
+}
