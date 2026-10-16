@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC13549080.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "77d4dba1530ae8860d92b3544e4a8f511b15dbc682850ac695b80be5dbabcd1a",
+  "annotation_sha256": "ddcbc2e1c2aaabfa7a8af65147bbb31c11376a4667bac220c8e0ecc872b23bea",
+  "reviewed_at": "2026-10-16T08:42:24.825170+00:00",
+  "source_segments_read": 18,
+  "facts_reviewed": 83,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f079 follow-up outcome text_value changed to \"doing well\"; \"asymptomatic\" kept once as the absent-symptom item p1-f080 (ONE-STATEMENT/EVID-NEGATION)",
+    "p1-f071 surgical-exploration outcome text trimmed to the outcome itself; no surgery item invented",
+    "p1-f053 rheumatoid vasculitis role differential -> unknown (provisional/possible kept; not a listed differential); b00009 ruling-out sentence added to its ambiguity",
+    "p1-f054/p1-f055 differentials assertion unknown -> possible (verification differential; features-absent wording kept as ambiguity, not refuted)",
+    "p1-f037 gallstones: added the b00005 restatement as evidence",
+    "Added p1-f081 hemoglobin normal levels before angiography (b00006), p1-f082 abstract symptom resolution outcome, p1-f083 care_plans two-month follow-up visit (completed); care_plans domain now documented",
+    "Event p1-e04 restricted to the \"On admission\" hemoglobin/WBC; untimed further labs, chest X-ray, ultrasonography and endoscopies moved to new p1-e13 (no borrowed admission time); anemia moved to examination event p1-e03",
+    "Event p1-e10 split: pain relief (e10), vomiting subsided/oral diet post-procedure (e15), blood counts and no recurrent bleeding (e16, untimed); added e14 normal hemoglobin and e17 symptom resolution",
+    "Added 6 literal relations: e01 overlaps e02 (for the past two months), e06 before e08 (Following resuscitation...), e14 before e07 (After achieving normal hemoglobin levels), e05 before e08 (CTA ... guiding therapy), e08 before e15 (post-procedure), e08 before e17 (leading to symptom resolution)",
+    "Summary claims 3-4 updated to cite the new facts; added ambiguity on the unanchored two-month follow-up"
+  ],
+  "unresolved": [
+    "Figure panels were pixel-inspected in the separate visual submission; the annotation figures keep caption-level status not_inspected.",
+    "The case text gives no calendar dates; only the hemoglobin and white blood cell count are placed \"on admission\", so other workup times stay null.",
+    "Rheumatoid vasculitis is described as suggested and probable; no tissue or test confirmation is stated.",
+    "Background, introduction and discussion statements about visceral artery pseudoaneurysms and treatment options are not patient facts.",
+    "No supplements are listed in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 18,
+    "facts_reviewed": 83,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient; all 80 draft facts verified against source quotes; no facts removed",
+      "Annotator flagged items resolved: route oral kept on methotrexate only; WBC 6.500/uL kept as ambiguity with no numeric parse; vasculitis provisional; differentials possible",
+      "Figure 1A left-margin text is cropped scanner acquisition text (partial letters/digits), consistent with timestamps_or_device_text; no direct identifier legible"
+    ],
+    "residual_risks": [
+      "e05 before e08 relies on \"provided crucial information for guiding therapy\" (result -> action)",
+      "Agent visual.json misplaces the darker renal sinus (it is in the image-right kidney in Fig 1A); agent privacy notes for figure-1 B, figure-3 A and figure-4 A/B wrongly say \"3D reconstruction\"; both need Sonnet correction before parent figure receipts are signed"
+    ]
+  },
+  "physician_adjudicated": false
+}
