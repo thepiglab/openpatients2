@@ -1,0 +1,66 @@
+{
+  "article_id": "PMC12754474.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "086cdc22cc350695f5fc694e8d302c8de002a7a27f3ab6a836a19b1c14d0cda1",
+  "annotation_sha256": "c0f0a35a8eae9f7f2446d0f08d67115061c561ded72dab238591ba03e3c97290",
+  "reviewed_at": "2026-10-16T05:19:36.250812+00:00",
+  "source_segments_read": 52,
+  "facts_reviewed": 220,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "b00026 parenthetical (local hospital, November 2023) governs only the no-cirrhosis sentence: removed borrowed time from MRCP/CT procedures p1-f055/f056 and first-sentence findings p1-f158..f163; p1-f164 and event p1-e02 now quote the dated sentence",
+    "b00028 single-sentence entry: p1-f058/f059/f166-f168 and p1-e09 now cite the whole sentence carrying (our hospital, January 2024)",
+    "Ammonia: p1-f153/f154 kept source_conflict (undated normal vs unscoped consistently high); p1-f155 (normal during post-discharge monitoring) set ambiguous; ambiguity text rewritten",
+    "Removed context labels misused as observation text_value (initial lab tests, Nth of N undated serial values, last review before discharge, deterioration text) on 33 observations; moved to notes; p1-f176..f182 timed before anchor 'discharged'",
+    "Medication actions: continued/maintained high-dose and tapered methylprednisolone administered (p1-f043/f044/f047); fenofibrate, ezetimibe (January 2024) and statin (acute phase) administered as 'unresponsive to/ineffective for' states use; maintained UDCA/statin and continued liver-protecting drugs administered (own sentences give no latest-time placement); vegan diet completed",
+    "Added p1-f217 bilirubin 84.3 umol/L on January 22, p1-f218 transaminases improved during methylprednisolone reduction, p1-f219 prealbumin significant decrease, p1-f220 cranial MRI procedure",
+    "Added 5 literally supported temporal relations (e02<e04, e02<e09, e04<e05, e04<e06, e06<e07); no relations among yearless dates",
+    "Fixed ambiguity fact links (arrow sequences, Fig 2 zero vs dash), summary citations, added limitations on parentheticals, figure order and undated duplicates",
+    "Visual F1 detailed description corrected (false claim that highest ALT/TBIL labels are at the right); figure-EHR/privacy sidecars rebound; F2 privacy flagged for serial-date column labels"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three JPEGs were inspected in the separate visual target.",
+    "Table 1 HDL-C and LDL-C cells for November 25, 2023 are dashes and are not recorded as values; the figure-embedded data table prints 0 for those cells, which is not treated as a result.",
+    "Arrow-listed serial values in the Laboratory examinations text carry no dates; they are recorded undated and are not mapped to Table 1 dates or to each other, except lipid values the text explicitly cites to Table 1.",
+    "Values printed on the plotted biochemistry chart (Figure 1) were not transcribed as facts.",
+    "Blood ammonia is described as normal (laboratory section and follow-up) and as consistently high (Discussion); all three statements are review-only (laboratory-section normal and Discussion high as source_conflict, follow-up normal as ambiguous).",
+    "The abdomen is described as non-tender and as having mild right upper quadrant tenderness in the same examination paragraph; kept as review-only source conflict.",
+    "Discussion mechanisms, literature statements, pseudohyponatremia, Lp-X and general recommendations are not patient facts; the patient-specific chylous plasma statement is recorded.",
+    "Year is not stated for July 26, December 29, March 1 and January 22 events; no ISO dates assigned.",
+    "Statin, fenofibrate and ezetimibe use is stated only as ineffective, unresponsive or maintained, without doses or start and stop dates.",
+    "Parent decision: the trailing (local hospital, November 2023) in b00026 closes only the no-cirrhosis sentence, so the first-sentence findings and the MRCP/CT procedure items carry no time; the single-sentence b00027/b00028/b00030-b00033 parentheticals govern their own sentences.",
+    "Figure 1 has no date axis and the left-to-right order of its printed values is opposite to its glucocorticosteroid arrows; Figure 2 plots values in the order opposite to its own data table; no chronology is taken from either image.",
+    "Undated arrow values in b00017/b00018 duplicate numerically identical dated or labelled values elsewhere (initial labs, discharge review, follow-up); they are not merged by number matching, so some measurements may appear twice."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 52,
+    "facts_reviewed": 220,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single 49-year-old woman, drug-induced cholestatic hepatitis with severe hyperlipidemia; roster 1 complete",
+      "All 38 Table 1 value cells present as dated observations; 2 dash cells not recorded; Fig 2 zeros recorded as ambiguity",
+      "Lipid arrow values merged with Table 1 cells only where the text cites Table 1 and analyte and value match; liver arrow values kept undated",
+      "RUQ tenderness vs non-tender abdomen kept as review-only literal contradiction"
+    ],
+    "residual_risks": [
+      "Undated arrow liver values duplicate numerically identical dated values (possible double counting)",
+      "Year not stated for January 22, March 1, July 26, December 29",
+      "Treating 'unresponsive to' as administration of fenofibrate/ezetimibe is a presupposition reading",
+      "Figure 1 chart values not transcribed as facts (undated, reversed order)"
+    ]
+  },
+  "physician_adjudicated": false
+}
