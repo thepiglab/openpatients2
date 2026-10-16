@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12263653.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2171f8cd1e2027fd7f574fa57637a55b2d97b50a63f5641adbca136610027451",
+  "annotation_sha256": "cf2fc64cb7417c075b0e79343b452fb9817e0da1a2dea8fdbd84e4d40bcce98f",
+  "reviewed_at": "2026-10-16T01:39:35.978437+00:00",
+  "source_segments_read": 56,
+  "facts_reviewed": 97,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f080 piperacillin/tazobactam continued throughout the 17-day stay: action current -> administered",
+    "p1-f069 initial otoendoscopy: laterality left from the Figure 1 caption cited by the case text",
+    "p1-f070 MRI and p1-f071 CT: laterality left from the Figure 2 caption, indication 'to confirm the diagnosis and assess the extent of bony involvement' from b00037",
+    "Added p1-f098 care_plans: multidisciplinary management with otorhinolaryngologists and infectious disease specialists (b00043, completed)",
+    "p1-e04 now also links the ten per-drug susceptibility results and is described without implying they were initial; p1-e07 links p1-f098",
+    "Added literal relations: e01 before e03 ('Prior treatment'), e07 after e04 ('Based on culture sensitivity results ... was initiated'), e13 after e03 ('Repeat otoendoscopy'), e08 after e03 ('admitted' / 'during hospitalization')",
+    "Merged duplicate procedure p1-f077 (caption follow-up otoendoscopy) into p1-f076 repeat otoendoscopy with left laterality from the Figure 3 caption; references repointed",
+    "Summary treatment claim updated for culture-guided start and multidisciplinary management"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEG figures are inspected in the separate visual target.",
+    "Abstract (clinical resolution) and case text (near-complete resolution, monitoring ongoing) differ on degree of resolution; both kept as review-only source-conflict facts.",
+    "Hemoglobin reference interval unit (mg/dL) differs from the result unit (g/dL); C-reactive protein has no unit in Table 1. Kept as printed.",
+    "Laterality of otalgia and retro- and preauricular pain is not separately stated.",
+    "Figure 3 caption wording about cerumen production and tympanic membrane is ambiguous; kept review-only.",
+    "Discussion and introduction statements about published series are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 56,
+    "facts_reviewed": 97,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single case, roster 1; all 15 Table 1 result rows present with printed units and reference text; all 10 per-drug susceptibilities present",
+      "Abstract 'clinical resolution without recurrence' vs case 'near-complete resolution' with ongoing monitoring: kept as a review_only source_conflict pair on the degree of resolution only; 'without recurrence' kept as an included item",
+      "Figure 3 caption scope of 'without' over cerumen production and tympanic membrane is ambiguous; both items kept review_only",
+      "Hemoglobin reference printed in mg/dL vs result g/dL and CRP row without unit kept as printed with an ambiguity",
+      "Laterality given only for otorrhea in the symptom sentence; pain items keep no side",
+      "'Initial laboratory investigations' time only on its first-sentence results; repeat otoendoscopy untimed (separate sentence from the three-month follow-up)",
+      "Two MOE condition items reflect a stated progression (presumptive admission diagnosis, then criteria met), not a duplicate",
+      "Viewed all four figures: Fig 2B/2C show no arrows despite the caption (recorded in visual limitations); Fig 4 background infographic; visual, figure-EHR and privacy sidecars consistent with pixels"
+    ],
+    "residual_risks": [
+      "Resolution degree left unresolved by design",
+      "Day-7 laboratory decline is not explicitly ordered against discharge beyond stated times",
+      "Omeprazole route not stated (oral modifies ciprofloxacin only)"
+    ]
+  },
+  "physician_adjudicated": false
+}
