@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC12604726.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "348b467150bb81d3bb2665d355f061b46120c6b5ad0c87ee6ac6c4017d5fc84d",
+  "annotation_sha256": "76c024e926e68d4fc357f83f4443e57d575407628da8abddceb443060f8037cc",
+  "reviewed_at": "2026-10-16T01:10:26.988095+00:00",
+  "source_segments_read": 28,
+  "facts_reviewed": 214,
+  "patients_reviewed": 5,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Absent progression items (p1-f041, p2-f033, p3-f034, p4-f037, p5-f032) and p1-f036: removed double-negative text_values (\"No sign of progression\" with assertion=absent).",
+    "p1-f016 and p5-f013 (table-only/conflicting clock-hour cells) renamed to the literal column label \"Clock hours of RD (Table 1)\"; added an ambiguity in p1 and p5 quoting the footnote \"RD: Recurring deposit\"; article limitation rewritten.",
+    "p1-f007 ERM and p1-f026 macular OCT: added Figure 1d caption quote and time \"at presentation\".",
+    "Added caption-stated OCT from the edge of detachment procedures: p1-f046 (Fig 1e), p4-f042 (Fig 2e), eye and time unstated.",
+    "p4 OCT ambiguity rewritten: the narrative cites Figure 2d/e in the left-eye sentence, while the caption says 2e is from the edge of the detachment, which is in the right eye.",
+    "p5-f007 \"Ocular complaints\" split into floaters, flashes (p5-f037) and field defects (p5-f038), all absent.",
+    "p5-f015 subretinal-fluid source: assertion=possible already encodes the hedge; changed from ambiguous/review_only to supported/include.",
+    "Added b00022 all-cases profile sentence: retinal corrugations absent and demarcation line absent for all five patients, shallow configuration for p1/p2/p5 (evidence added to p3-f016 and p4-f018).",
+    "p4-f004 role set to primary_diagnosis, consistent with the other cases.",
+    "Added literal relations: p1 e02<e03 (6 years back), p2 e01/e02<e03 (1 year/5 years back), p2 e06 after e05, p4 e04 after e03 (\"Finally\"), p5 e02<e03 (3 months before initial presentation).",
+    "p1-f028/f029 body_site now states fellow eye."
+  ],
+  "unresolved": [
+    "Table 1 footnote defines RD as Recurring deposit, which does not fit the Clock hours of RD column. Where the case text states the same clock-hour span of detachment (cases 2 to 4) the cell is cited with that fact; table-only or conflicting cells (cases 1 and 5) are labelled with the literal column header and carry an ambiguity.",
+    "Case 1: Table 1 lists 3 clock hours of RD while the case text states subretinal fluid spanning over 2 clock hours; kept as a source conflict.",
+    "Table 1 BCVA and spherical equivalence cells do not state the eye or a unit; they are recorded as table values without conversion to the Snellen notation used in the case text.",
+    "Discussion and series-level statements about subsets of the five patients (for example three of five already in follow-up, one with floaters and flashes, one diagnosed at the first retina evaluation) are not mapped to individual patients because the text does not name them.",
+    "Series-level sentences that explicitly name all patients (all patients underwent DLP, nepafenac advice, follow-up schedule, no progression, no field defect) are recorded for each of the five patients.",
+    "Figure pixels were reviewed in the separate visual submission; annotation figures keep not_inspected.",
+    "Fellow-eye values dashed in Table 1 (case 4) are not documented and have no item.",
+    "Series-level sentences that literally cover all cases (shallow configuration, no retinal corrugations, no demarcation line; no cystoid macular edema; minimum 1-year follow-up) are recorded for each of the five patients."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 28,
+    "facts_reviewed": 214,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Roster 5; Table 1 rows (b00007-b00011) are the earliest individual identity evidence and precede narratives, and age/sex pairs are unique, so numbering by table row is ROSTER-ORDER compliant.",
+      "All 49 non-dash Table 1 cells checked against facts; values match.",
+      "p1 3 vs 2 clock hours kept as a review_only source-conflict pair; \"over 2\" is read as 2 because case 3 uses the same wording with table value 2.",
+      "p5 fellow eye \"Lasered lattice (multiple)\" vs advised barrage laser: advice kept include, performance kept ambiguous review_only (the table could reflect later treatment).",
+      "Series sentences copied only where they literally cover all patients; subset statements (three of five, one of five) not mapped.",
+      "\"6 years back\" kept on the fellow-eye clause only, with the ambiguity retained."
+    ],
+    "residual_risks": [
+      "Table 1 BCVA and spherical equivalence cells do not state eye or unit; kept without conversion.",
+      "Fellow-eye laterality left unknown although logically the opposite eye.",
+      "Figure 2d/e eye attribution unresolved in the source."
+    ]
+  },
+  "physician_adjudicated": false
+}
