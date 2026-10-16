@@ -1,0 +1,50 @@
+{
+  "article_id": "PMC12841637.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1444f302f41d378e3c293247c894e77239764b82151eaecec6ed0804d981507e",
+  "annotation_sha256": "bf9043edd2476ed536f727a1615322411f701c9fc86bf4ee0ca67a65751edf62",
+  "reviewed_at": "2026-10-16T04:48:36.985160+00:00",
+  "source_segments_read": 174,
+  "facts_reviewed": 0,
+  "patients_reviewed": 0,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "source_coverage b00026-b00042 (Table 5 published comparison series): note corrected from \"31-patient series\" to literature aggregate from other centers",
+    "source_coverage b00005 background->aggregate (cohort size/roster evidence statement)",
+    "source_coverage b00018 background->aggregate (interpretive restatement of cohort operative data)",
+    "source_coverage b00045 background->aggregate (contains cohort-level statement that MICS was second most frequent setting in our series)"
+  ],
+  "unresolved": [
+    "Disposition aggregate_only: the source reports 31 consecutive intraoperative iatrogenic aortic dissection cases only as a cohort (percentages, means, medians in text and Tables 1-5); no patient has individual identity evidence or an individually described course, so no individual patient records are created and cohort statistics are not copied to placeholder patients.",
+    "reported_individual_count is 31 (literal) and roster_complete is false because none of the 31 stated individuals can be enumerated.",
+    "The source lists no figures and no supplements; the article contains Tables 1-5 (all present in source.json) and the text cites Tables 1-5.",
+    "Table 5 compares the cohort with published series from other centers; those are literature data, not patients of this article."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 174,
+    "facts_reviewed": 0,
+    "figures_viewed": 0,
+    "key_findings": [
+      "All 174 segments read incl. every row of Tables 1-5: 31-patient IAD cohort reported only as n/%, mean/SD, median/IQR; no case numbering, no per-patient rows, no individual with age/sex/course",
+      "Single-count mentions (one Type B patient, 1 preoperative dialysis, 1 SCI, 1 VF, POD 0/1/3 detections) lack any identity or course and are cohort cells, not individual cases",
+      "Disposition aggregate_only with patients [] and roster 31 / roster_complete false is correct; roster quote literal in b00005",
+      "Table 5 rows other than Our center are published external series; no figures and no supplements in source"
+    ],
+    "residual_risks": [
+      "Cohort data are not represented as patient records by design; article contributes no patient-level facts"
+    ]
+  },
+  "physician_adjudicated": false
+}
