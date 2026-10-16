@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC13592997.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ee6861a9d6678de0c5705f96e0051c97d2a2078240dc4778f6633ebfbed9bec8",
+  "annotation_sha256": "ce8155f8814f6a8f37c15c2c74eee2fab7dedcd4842f54e64d87262705eca879",
+  "reviewed_at": "2026-10-16T07:33:19.079100+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 77,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed medications item p1-f030 (hyperbaric oxygen) as a duplicate of procedures_devices p1-f037 (ONE-STATEMENT); protocol (100% oxygen, 0.25 MPa, 60 minutes, decompression 0.01 MPa/min) moved into the procedure statement and evidence; event p1-e05 and summary repointed.",
+    "Restored literal anchors: decompression phase (dyspnea, cough, frothy sputum), arrival at the emergency department (ED vitals and GCS), admission to the ward (ward vitals), and transferred to the Department of Rehabilitation Medicine for discharge 10 days later (same-sentence anchor).",
+    "Oxygen by face mask: added own-sentence time \"upon arrival\" (emergency services arrival) to fact and event p1-e02.",
+    "Added outcome p1-f078 (vital signs stabilized) with event p1-e18, and event p1-e17 for inability to sustain oxygenation with shallow rapid breathing indicative of early ARDS (p1-f028, p1-f010).",
+    "Relations: removed p1-e09 before p1-e10 (no literal order); added e17 before e09 (Consequently), e05 before e10 (caption: CT performed after HBOT), e18 before e10 (Once vital signs stabilized), e10 before e13 (repeat CT, resolution of gases), e13 before e14 (subsequently transferred). 7 -> 11 relations.",
+    "Added abstract b00004 evidence to diuretic, corticosteroid, bronchodilator, intubation and ventilation items; reworded the ECG ambiguity with the decision that it is not a literal source conflict; b00007 coverage set to patient_facts; article limitation on unanchored times updated.",
+    "Dropped p1-f066 from summary claim 2 sources because the claim text does not state the echocardiogram."
+  ],
+  "unresolved": [
+    "Case report of one patient; discussion statements about mechanisms are authors' interpretation and are kept as ambiguity, not facts.",
+    "The abstract CT showing APE cannot be mapped to a specific CT in the case text.",
+    "Caption-layer visual status not_inspected; actual images are inspected in the separate visual target.",
+    "Timing of some events is not anchored: endotracheal tube removal after 48 hours (reference point not stated) and the repeat CT 5 days after unnamed treatment; discharge 10 days later is counted from the transfer in the same sentence.",
+    "The patient expression of appreciation at follow-up is non-clinical and not recorded."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 78,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single 35-year-old man; roster count 1 is literal; all facts owned by p1.",
+      "The 18 NO-BORROWING warnings are checker false positives: \"On arrival at the emergency department, his vital signs were as follows: ...\" and \"Upon admission to the ward, his heart rate increased ...\" are lead clauses of the same sentence that states each value; the quotes are only split. Left unchanged.",
+      "ECG: sinus tachycardia (case text) vs \"electrocardiographic assessments revealed normal findings\" (discussion) concern the same single ECG but the discussion is an interpretive summary with no contradicting value, so it stays an ambiguity with flag unknown, not a source_conflict.",
+      "Abstract emergency chest CT showing APE kept as its own observation with an ambiguity; the source does not make it the same CT as the follow-up pulmonary CT.",
+      "Drug classes (b00010/b00004) and named drugs (b00015) are kept separate; intravenous route only on furosemide.",
+      "Endotracheal tube removal after 48 hours and the repeat CT 5 days after treatment have no literal reference point; anchors left null / \"treatment\". The 7:00 am December 24, 2024 time is a calendar time and needs no anchor.",
+      "Figures viewed at full resolution: F1 head CT with bilateral arrows, F2 four chest CT views with opacities and gas lucencies, F3 single chest CT slice. visual.json F3 general_description inverts image sides relative to its own detailed_description and the pixels (opacities are in the image-right lung)."
+    ],
+    "residual_risks": [
+      "Whether the abstract emergency chest CT is the same as the follow-up pulmonary CT is unresolved and may double-count one chest CT.",
+      "The 3-month follow-up is not ordered after discharge because no literal order word links them.",
+      "Visual F3 general_description side inversion must be corrected by the annotator before figure receipts are dual-signed."
+    ]
+  },
+  "physician_adjudicated": false
+}
