@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12777762.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7f6587d4bd956f8d00da7e963ecff76f7b48c1a812eb166335b6d0197babd286",
+  "annotation_sha256": "6b9185b690a9174d1d6ec86ff9c0ed171f11df145ecbbd3240146e80480cddb8",
+  "reviewed_at": "2026-10-16T07:14:42.582683+00:00",
+  "source_segments_read": 16,
+  "facts_reviewed": 66,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f007: restored literal anchor \"Posterior cervical decompression\" with relation after for \"at 12 months postoperatively\".",
+    "p1-f060, p1-f037, p1-f019: added the matching Figure 4, abstract, Figure 2 and Figure 1b caption quotes that restate the same findings.",
+    "p1-f041/p1-f042 (MP 0° and maximum thumb extension with elbow 90°/wrist 30° palmar flexion) unlinked from the surgery event p1-e06; the source gives no time or setting; ambiguity added.",
+    "Split p1-f065/p1-f066 out of p1-e13 into new outcome event p1-e14 so the \"As a result\" order applies only to them.",
+    "Added 6 relations with literal support: e01 before e06 (\"following cervical decompression surgery\"), e06 before e14 (\"As a result\"), e09 during e08, e08 during e07, e09 during e07 (stated postoperative day/week/four-week times), e07 before e11 (four weeks vs two years postoperatively).",
+    "Summary claim 2 reworded so reduced applies to left grip only, not pinch. Summary: removed the clinic-visit time borrowed onto MMT/pinch/grip/DASH, removed the unsupported claim that pinch was reduced, removed \"rehabilitation followed\" ordering; added hand-opening outcome."
+  ],
+  "unresolved": [
+    "Case heading handedness (right dominant) is printed only in a heading outside the source segments, so it is not recorded as a fact.",
+    "Table 1 is a flowchart image; its printed text is pixel content in the visual submission only and is not copied into facts. The image names a laminoplasty and spine-clinic rehabilitation that the case text does not state.",
+    "Preoperative pinch, grip, DASH-JSSH and MHQ-J values and the postoperative grip, MHQ-J and no-change statements carry no explicit time of their own, so their times stay null.",
+    "Discussion statements about literature, cadaveric work, WALANT and general expectations are background and are not recorded as patient facts.",
+    "Figure 3 image shows three printed panel letters while the caption describes two; correspondence between the caption text and the image panels is not fully resolved.",
+    "No supplements are listed in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 16,
+    "facts_reviewed": 66,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single 72-year-old man; facts verified against b00001-b00016; all 66 facts retained.",
+      "Annotator flags upheld: clinic-visit lead clause scopes only its own sentence; MHQ-J total 57 hand unknown; Figure 1 Preoperative relation unknown; decompression before referral supported by one year prior; grip flag low supported by \"indicating reduced strength on the left side\"; right-dominant only in a section heading, not a quotable segment, so not recorded.",
+      "Table 1 flowchart text (incl. laminoplasty and spine-clinic rehabilitation) kept as pixel content only."
+    ],
+    "residual_risks": [
+      "Figure 3 asset has panels a-c while the caption describes a-b; attribution unresolved.",
+      "Postoperative grip and MHQ-J values have no stated time; handedness not captured."
+    ]
+  },
+  "physician_adjudicated": false
+}
