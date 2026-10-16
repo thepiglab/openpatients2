@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC13174569.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "473bfc681ab563f9dae011a3d1cec161bedcde0a5c1de504acc6c845e2e8dde4",
+  "annotation_sha256": "a86ae0fd97de1521770d9e95c8eefa86094db0e5fa5ec2a8fdcdd6f6e20716cf",
+  "reviewed_at": "2026-10-16T08:20:30.694291+00:00",
+  "source_segments_read": 32,
+  "facts_reviewed": 76,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f058 globus pallidotomy: removed the right GP internus site borrowed from the post-operative CT finding sentence; body_site now globus pallidus from the procedure description, laterality right from the stated target 19 mm to the right of the midline.",
+    "p1-f074 lost to follow-up: removed follow_up_duration_text 'more than one year' (that is the follow-up that could not be done, not a duration).",
+    "Added p1-f076 conditions: hemichorea (primary diagnosis, confirmed), missing from the draft; linked to event p1-e03 and summary claim 1.",
+    "p1-f020/p1-f021 2018 brain MRI: set certainty ambiguous and scoring review_only because the burned-in scan date on Figure 2 (pixel content, values not copied) shows a later year; added an ambiguity.",
+    "Event p1-e07 (recurrence of HC movements) kind adverse_event -> presentation; p1-e20 description reworded so it no longer implies an approximate follow-up end.",
+    "Added relation p1-e11 before p1-e13 from the literal 'firstly, we ruled out other etiologies and, in the last step, chose globus pallidotomy'.",
+    "Video 1 recorded as unavailable media (external journal link, no declared PMC asset; complete, flagged); article limitation and ambiguity reworded."
+  ],
+  "unresolved": [
+    "Table 1 dates conflict with the stated postsurgical intervals and with the text for the depression diagnosis; recorded as ambiguities, not corrected.",
+    "Drug trials have no dates; order among them is not stated.",
+    "Caption-layer visual status not_inspected; the three JPEGs are described in visual.json.",
+    "Video 1 (cited in b00008 and b00021) is an external link to the journal website with no declared PMC asset: unavailable media, not viewed or described (MEDIA-UNAVAILABLE; complete, flagged).",
+    "Figure 2 carries burned-in direct identifiers (flagged by category only); its scan date does not match the 2018 MRI date in the text, so the MRI facts are review_only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 32,
+    "facts_reviewed": 76,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (68-year-old woman per pronouns) with post-CVA hemichorea; roster count 1 correct.",
+      "Table 1 follow-up rows are internally inconsistent (one-, three-, six-month rows dated 2023 after a May 2022 surgery; one-year row May 2023 before the six-month row); dates kept literal with an ambiguity; follow-up relations rely only on the row labels (postsurgical, one/three/six-month, one-year).",
+      "MDD date taken from Table 1 May 2019; text says 18 months after CVA; arithmetic-only mismatch kept as an ambiguity.",
+      "Haloperidol frequency left null (TDS follows diphenhydramine); aripiprazole dose '5 mg 1/2' kept literal; age 68 recorded as age_other with no time point.",
+      "Figure 2 has burned-in direct identifiers flagged by category only; no identifier values appear in any annotation or sidecar field.",
+      "Figure 3 caption says the lesion is highlighted but no highlight is visible (only a small red letter above two slices).",
+      "The unclear clause 'we did not see anyone' is not recorded as a fact; QOL improvement is kept as an author claim with no measure."
+    ],
+    "residual_risks": [
+      "Drug-trial order within 2018-2022 is not stated beyond paragraph order; the second drug list is not ordered against the 2022 recurrence.",
+      "Event p1-e19 (12-month follow-up, AIMS 2) has no literal order link to the pallidotomy event.",
+      "Visual F2 description groups the overlay ID number as a separate line; on the pixels it shares the sex/age line (minor wording, agent-owned file)."
+    ]
+  },
+  "physician_adjudicated": false
+}
