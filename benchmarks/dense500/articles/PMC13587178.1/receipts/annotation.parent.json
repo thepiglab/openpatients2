@@ -1,0 +1,66 @@
+{
+  "article_id": "PMC13587178.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b0cb404d3ab8b705278747cff57d1a395525c4cf290e390c3fd8a869c77035bd",
+  "annotation_sha256": "340aded23297c629d543f3d94ae121dae68b0694620998ee2558e8f9c35396f0",
+  "reviewed_at": "2026-10-16T09:11:45.720547+00:00",
+  "source_segments_read": 32,
+  "facts_reviewed": 168,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Hemodialysis start: judged loose discussion wording, not a literal conflict; case-text time \"1 week after presentation\" moved onto p1-f041 (include), duplicate timing item p1-f043 removed, discussion phrase p1-f044 set ambiguous/review_only, ambiguity rewritten.",
+    "GBM electron microscopy: degree conflict (markedly vs moderately thickened) kept review_only in p1-f061/p1-f062; added p1-f169 for the agreed thickened, wrinkled GBM (include).",
+    "p1-f046 anti-MPO: evidence widened to the full sentence so the \"were positive ... as well as\" predicate is inside the quote.",
+    "p1-f040 peak creatinine 9.19: added Table 1 Max Cr cell and discussion peak quote (same maximum).",
+    "p1-f090 rituximab: added the decision sentence that carries the indication (was borrowed). p1-f094 combination: added Table 1 CTX/RTX cells. p1-f002/f003: added Table 1 17/F cell. p1-f069: added discussion quote.",
+    "p1-f122 to p1-f130 work-up studies: time \"Six months after initiation of therapy\" from their own sentence.",
+    "p1-f156/f157 undetectable antibodies: removed time-implying names (\"at the most recent visit\"), flag negative.",
+    "p1-f134 Renastep: action ordered (covered by discharge prescription sentence).",
+    "Events: e02 time \"initial laboratory evaluation\" (order_only); e08 time \"1 week after presentation\"; mixed e16 split into IVMP pulses (e16), prednisone transition (e31), rituximab induction (e32), rituximab maintenance (e33), table-only IVIG (e34); positive ANCA serology moved to e09.",
+    "Relations: e14 before e15 replaced by e15 during e14 (third cyclophosphamide dose was reduced for the neutropenia); added 19 literally supported relations (initial/further, due to, then, repeat, transitioned, Given, admitted/discharged, initiation/remained, stated times from presentation, etc.); e20-before-e21 dropped after re-review (its quote orders nothing). p1-f094: Table 1 CTX/RTX/Other TX header quote added.",
+    "Added ambiguities: Fig. 2 footnote week-0 unstated; Fig. 4 two PLEX arrows vs 5 sessions and presentation vs Diagnosis axis; IVIG table-only. Article limitations updated."
+  ],
+  "unresolved": [
+    "Figure panels were pixel-inspected in the separate visual submission; the annotation figures keep caption-level status not_inspected.",
+    "Values printed inside Fig. 2 (treatment doses and weeks) and Fig. 4 (antibody curves) are pixel content and are not copied into facts.",
+    "The GBM thickening degree on electron microscopy differs between the case text and the Fig. 1 caption; both are review-only.",
+    "Most workup and treatment steps carry no stated times; only explicitly scoped times are recorded.",
+    "Table 1 rows other than the current-study row are published cases, not patients of this article.",
+    "No supplements are listed in the source.",
+    "Hemodialysis start: case text \"1 week after presentation\" kept; discussion \"dialysis dependence at presentation\" treated as loose wording (review-only ambiguity).",
+    "Fig. 4 shows two solid PLEX arrows against 5 PLEX sessions in the text; recorded as a figure limitation.",
+    "Fig. 2 caption footnote week numbers have no stated week-0 reference."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 32,
+    "facts_reviewed": 168,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single 17-year-old female, anti-GBM disease with anti-MPO antibodies; Table 1 rows 2-15 are literature cases and were not attributed to the patient.",
+      "Hemodialysis timing discrepancy is discussion paraphrase of a guideline criterion, kept as an ambiguity.",
+      "EM GBM thickening degree is a genuine text-vs-caption conflict, quarantined on the degree only.",
+      "Fig. 2 and Fig. 4 printed values stay pixel content in visual.json; caption footnote text is used as text.",
+      "Fig. 2 is a text summary of this patient own treatment course; annotator relabelled it clinical_chart_of_patient_data (includable) and the parent agreed."
+    ],
+    "residual_risks": [
+      "Week numbers in the Fig. 2 footnote have no stated week-0 reference.",
+      "IVIG is documented only in the Table 1 Other TX cell.",
+      "Several discussion-only statements (oligoanuria, higher baseline creatinine, minimal fibrosis, likely prodrome, likely anti-GBM-driven pathogenesis) are kept with their hedging.",
+      "Many workup and treatment steps carry no stated times; relations cover only literal order."
+    ]
+  },
+  "physician_adjudicated": false
+}
