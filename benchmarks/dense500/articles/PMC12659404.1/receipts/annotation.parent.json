@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC12659404.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2d0bfd94521dfa980d05edb57e635d147b55c35d06def782067f0ad9ba5666f4",
+  "annotation_sha256": "17ce92b6e73d3a2cfa8ebe746ab2689d337a45f38c2881e807250e0ddc584f2a",
+  "reviewed_at": "2026-10-16T00:58:52.831991+00:00",
+  "source_segments_read": 22,
+  "facts_reviewed": 43,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f017: replaced the invented combined text_value \"partially melted / partially degraded\" with the literal \"partially melted\" (b00009) and renamed it; the \"partially degraded\" quotes stay as evidence of the same intraoperative finding.",
+    "p1-e04 Ahmed valve implantation: removed p1-f031 (original corneal patch graft) because the source does not date the patch graft placement.",
+    "Added relation e01 (prior laser iridotomy and cataract surgery) before e05 (presentation) from the literal \"previously underwent ...\" quote.",
+    "Follow-up ambiguity: added the b00010 \"(shown in Fig. 2)\" quote, which ties the 2-year statement to Fig. 2 whose caption says one-year; the conflict is recorded as being on visit timing only.",
+    "Article limitations: patch graft timing and the SD2 video \"post op year 1\" caption recorded."
+  ],
+  "unresolved": [
+    "Follow-up duration is stated as 1 year (abstract, Fig. 2 caption) and as 2 years (surgical technique text, discussion); kept as review-only source_conflict items.",
+    "Laterality is stated only for the retinal vein occlusion and the tube exposure (right eye); other procedures and conditions leave laterality unknown.",
+    "Supplement SD1 (CARE checklist PDF) and SD2 (surgery video) are reviewed in the supplement manifest; no clinical facts were taken from video frames.",
+    "Dates of the prior surgeries and of the revision surgery are not stated beyond the relative times recorded.",
+    "The original corneal patch graft (f031) is not tied to the Ahmed valve implantation event because the source does not say when it was placed.",
+    "The SD2 operative video final frame carries a burned-in caption reading post op year 1, agreeing with the abstract and Fig. 2 caption; no facts were taken from the video."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 22,
+    "facts_reviewed": 43,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single 72-year-old man with right-eye tube exposure after Ahmed valve; revision with partial-thickness corneal button and fibrin-glued conjunctival autograft.",
+      "Follow-up 1 year (abstract, Fig. 2 caption, video caption) vs 2 years (b00010 citing Fig. 2, b00015): untimed coverage/no-recurrence outcomes included; timed f042/f043 review_only.",
+      "Laterality is stated only for RVO and the tube exposure; other items stay unknown (no inference from the right-eye tube to the valve or revision).",
+      "\"Severe conjunctival deficiency\" (abstract setting of this case) and \"advanced age\" (discussion: \"In this case, the patient had ... advanced age\") are literal statements about this patient and kept.",
+      "All 19 sampled SD2 frames viewed; they show the described operative steps with burned-in captions and a platform watermark and a final post op year 1 slit-lamp frame."
+    ],
+    "residual_risks": [
+      "Which follow-up visit Fig. 2 depicts remains unresolved by the source.",
+      "Laterality of glaucoma surgeries and the revision is not stated in text although clinically implied."
+    ]
+  },
+  "physician_adjudicated": false
+}
