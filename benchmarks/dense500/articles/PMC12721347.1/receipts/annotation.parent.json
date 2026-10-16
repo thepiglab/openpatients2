@@ -1,0 +1,52 @@
+{
+  "article_id": "PMC12721347.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "bf3b859b6ea5bc19511e8a1902a63b0fc909d6f77bd1f63caf5a338e9372a1ba",
+  "annotation_sha256": "871f2e3127c66244b6b182121b27272be4b31008e524b7efe15d346f85d85c0b",
+  "reviewed_at": "2026-10-16T05:52:25.221495+00:00",
+  "source_segments_read": 58,
+  "facts_reviewed": 127,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged \"mild renal impairment (raised creatinine)\" (abstract) into the early acute kidney injury condition, adding the conclusions quote \"early renal impairment\": one renal complication described three ways (ONE-STATEMENT); removed the paired ambiguity.",
+    "Added limitation: raw JATS for Table 1 has no bold markup, so the bold legend marks nothing literally and no flags come from it."
+  ],
+  "unresolved": [
+    "Figure 1 is a general guideline algorithm adapted from a published source; it carries no patient data and its pixels are reviewed separately in visual.json.",
+    "Table 1 states that elevated values are shown in bold, but bold formatting is not preserved in the source text; no high/low flags were taken from reference intervals.",
+    "BFCRS scores are authors' estimates (\"estimated\", \"approximately\").",
+    "Table 2 (DSM-5-TR catatonia criteria) is a general reference table, not patient data.",
+    "Raw JATS for Table 1 contains no bold markup, so the legend \"Elevated values are shown in bold\" marks nothing literally; only creatinine and CK carry high flags, from the case text."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 58,
+    "facts_reviewed": 127,
+    "figures_viewed": 1,
+    "key_findings": [
+      "All 17 Table 1 rows are present with value, unit, range and admission time; only creatinine and CK are flagged high, from the text wording.",
+      "Antipsychotic-induced catatonia, NMS and mood disorders are called ruled out/excluded (abstract, conclusions) but unlikely/less probable/less likely (discussion). That is a literal certainty conflict on the same diagnosis, so the 6 review_only source_conflict facts stay.",
+      "The hepatic panel stays unremarkable as stated, with an ambiguity against ALT 73 and bilirubin 25; the bold legend has no literal markup.",
+      "\"Electrolytes were normal\" stays one item because the text does not name the analytes.",
+      "Times follow TIME-LITERAL: \"Within 48 hours\" and \"By day seven\" are upper bounds (before, null anchor); \"nine months later\" uses the literal anchor \"that admission\".",
+      "All 7 relations have literal support (\"prior to\", \"nine months later\", \"after three to four days\", \"preceding\", \"reduction to\" after the admission score, \"later increased\", day three vs day four).",
+      "Table 2 and Figure 1 are background, not patient data."
+    ],
+    "residual_risks": [
+      "Hepatic panel normal versus out-of-range table values remains an unresolved ambiguity."
+    ]
+  },
+  "physician_adjudicated": false
+}
