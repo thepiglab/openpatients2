@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12843189.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6ad6887419994f5f3efedeeda2426e3a7daa22f289def56719d20f808c963aab",
+  "annotation_sha256": "d4dc49e1e85c964f90411afad462a793b4ea8409dcfdf3d7e02e894358e24c70",
+  "reviewed_at": "2026-10-16T06:22:52.021233+00:00",
+  "source_segments_read": 123,
+  "facts_reviewed": 74,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged duplicate lesion signs p1-f020 (abstract 'ulcerated, crusted lesion') and p1-f024 (Figure 1A caption 'ulcerated lesion on the left knee') into p1-f021 with all three quotes and body_site left knee; removed f020/f024 and their event links (ONE-STATEMENT).",
+    "p1-f022 (brownish side of the colour source_conflict) quote extended so its time text 'One week later (day 7)' is inside its own evidence.",
+    "p1-f037 voriconazole 200 mg every 12 h for 12 weeks: removed the 'While awaiting microbiological diagnosis' time, which governs the initiation, not the maintenance phase.",
+    "p1-f049 'positive donor-specific antibodies for CMV and EBV' set certainty ambiguous / review_only: meaning (anti-HLA DSA vs viral serostatus) and owner (donor vs recipient) are unclear.",
+    "p1-e16: removed p1-f018 (immunosuppressed state) from the imaging/blood-culture test event.",
+    "Relation p1-e13 same_time p1-e14 changed to unknown: neutropenia is concurrent with the 'appearance of the lesion', not stated to coincide with the day-7 examination.",
+    "Relations p1-e15 before p1-e20 (histology) and p1-e15 before p1-e21 (culture) changed to unknown: the source does not say these were done on the biopsy rather than the later excision specimen; ambiguity added.",
+    "Added five literally supported relations: e02 before e05 ('postoperative course'), e02 before e10 ('post-transplant course'), e17 before e22 ('While awaiting microbiological diagnosis'), e17 before e26 ('resolution thanks to ... systemic voriconazole'), e26 before e27 ('no recurrence ... To date').",
+    "Added article limitation on the Figure 1 caption printing (D) twice; pixels show one printed D over a framed PAS/Jones pair.",
+    "Removed relation e06 before e07 per orchestrator ruling: b00009 'She subsequently developed' opens a new paragraph with no named anchor; summary wording 'She later developed' changed to 'She also developed'."
+  ],
+  "unresolved": [
+    "Figures are caption-only in this annotation; pixels are described separately in visual.json.",
+    "Table 1 and Table 2 and the supplementary table describe published literature cases and pooled statistics, not the index patient; they are not patient facts.",
+    "Lesion color is brownish in the text and violaceous in the Figure 1 caption; recorded as a review-only source conflict.",
+    "The cell type of the neutropenia count is not stated.",
+    "Dates and exact times are not given; relative times are recorded as printed.",
+    "Supplement File S1 is a literature table of published cases and is not patient data.",
+    "Figure 1 caption prints the label (D) twice; the image prints a single D over a framed pair of PAS (left) and Jones silver (right) images, kept as one panel D."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 123,
+    "facts_reviewed": 76,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (47-year-old woman, kidney transplant recipient); Tables 1-2 and Supplement S1 are literature cases/pooled data and are correctly excluded; the index case is not a row in any table.",
+      "Lesion colour: brownish (case text) vs violaceous (Figure 1A caption) is a genuine text-vs-text conflict; both sides review_only, only the colour attribute quarantined.",
+      "Neutropenia value 0.57 x10^3/uL has no named cell type and a WBC reference range; kept with a generic name, no flag, ambiguity recorded.",
+      "Hallucinations are the stated reason for the switch, not attributed to voriconazole; voriconazole duration actually taken before the switch is not stated; day 7 has no named anchor. All kept as ambiguities without inference.",
+      "All 13 original relations checked for literal order support: 9 kept, 3 downgraded to unknown, none deleted; 5 added. 18 relations total."
+    ],
+    "residual_risks": [
+      "Histology/culture specimen source (biopsy vs excision) and the order of excision relative to diagnosis are unstated.",
+      "Total-body TC scan (case text) and total-body CT imaging (discussion) are probably the same study but kept as stated.",
+      "No physician adjudication."
+    ]
+  },
+  "physician_adjudicated": false
+}
