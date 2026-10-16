@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12820449.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ae1c80d52070138f5f1a2d5e31714c07126da27a0cdb496c8d22935ee7243400",
+  "annotation_sha256": "bc5313c0d764bcb19a96b63292270bed7392c308abe79ca633f399ff7acdfcdc",
+  "reviewed_at": "2026-10-16T02:07:49.837910+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 101,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f008 pedicle fractures promoted from ambiguous/review_only to supported/include (present, confirmed): both the Fig 3 caption and the discussion refer to 'the pedicle fractures' as present; only the protective mechanism is hedged.",
+    "Added p1-f101 observation: pedicle fractures on the transverse MRI section at T8 and T9 (Fig 3 caption), alternate representation of p1-f008.",
+    "Added p1-f102 observation (ambiguous, review_only): column separation protecting the cord, asserted by the caption and hedged as 'could be' in the discussion; ambiguity entry repointed to it.",
+    "Removed p1-f015 (condition duplicate of the imaging finding p1-f083 'possible spinal canal narrowing').",
+    "p1-f010 vertebral dislocation: removed borrowed body_site 'thoracic spine' not in its own evidence.",
+    "p1-f048 abstract 'asymptomatic on follow-up' set to ambiguous/review_only (body reports minimal or no pain at 2 and 6 months).",
+    "p1-f082 MRI abstract statement: text_value changed to the literal 'confirmed these findings' (no paraphrased referent).",
+    "p1-f062 instrumentation: removed borrowed body_site and the laminectomy indication; indication plus b00012 quote moved to p1-f065 laminectomy.",
+    "p1-f005: added the 'single, non-junctional level' evidence; p1-f061 renamed to the planned surgery under general anesthesia (kept planned, separate from performed surgery); p1-f087 discharge given the abstract main-clause evidence.",
+    "Timeline: split e16 into follow-up visits after 1 month (neuro intact) and new e19 early follow-up at 1 month after surgery (NRS 4/10); added e20 pre-operative status (NRS 7/10, pain despite immobilization, intact neurology), e21/e22 post-operative 2nd and 6th month radiographs; relations e20->e12, e12->e19, e19->e17, e12->e21, e21->e22 with literal support; removed e16->e17.",
+    "Summary claims updated for pedicle fractures and postoperative films; two ambiguities added (Figure 4 timing of 12 degree reading; 1-month follow-up statements).",
+    "p1-f066 three-level fixation changed from completed to planned (source only says it 'was selected'); removed from performed-surgery event e12 into new plan event p1-e23; e12 description, p1-f012 statement and summary claim no longer state a three-level construct was placed.",
+    "visual.json f4 panel A: corrected crossbar position (mid-height, not near the bottom), rod extent, upper markers, and recorded the tiny unreadable overlay text on the profile view; figure-EHR/privacy drafts regenerated and labels carried over; f4 A privacy flag set to timestamps_or_device_text."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual figure images inspected in the separate visual target.",
+    "Discussion and conclusions contain literature statements and general recommendations that are not recorded as patient facts.",
+    "The reported dates are relative (months since injury or surgery); no calendar dates are stated."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 101,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single 28-year-old woman; roster 1 from literal case statement; no cited cases imported.",
+      "Chest X-ray before CT supported by the abstract (initial chest radiograph; persistent pain led to CT); CT at the revisit is not given a relation.",
+      "Planned surgery under general anesthesia kept planned and separate from the performed instrumentation.",
+      "NRS series: pre-op 7/10, 4/10 at 1 month after surgery, minimal or no pain at 2 and 6 months.",
+      "Fig 3 A/B/C order agrees with pixels (middle grid shows bright CSF line consistent with T2; right group is axial); Fig 4 A/B order is caption order only."
+    ],
+    "residual_risks": [
+      "Fig 4 A/B assignment to 2nd vs 6th month rests on caption order; images carry no letters or readable dates.",
+      "Whether the 12 degree local kyphosis reading comes from the immediate postoperative or the Figure 4 films is not stated.",
+      "Number of instrumented levels actually placed is not stated in text; only the selection of three-level fixation is recorded (planned)."
+    ]
+  },
+  "physician_adjudicated": false
+}
