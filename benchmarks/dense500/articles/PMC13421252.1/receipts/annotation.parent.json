@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC13421252.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a6a7069ea4270cfb68c98b6c383b589202169baaecc8dc3b86d1fe8981744ae8",
+  "annotation_sha256": "57fdf60c210c5394a1c9c6dd53c77e330d55c3041b4d7c26e766eddb69980e9d",
+  "reviewed_at": "2026-10-16T07:59:59.170736+00:00",
+  "source_segments_read": 37,
+  "facts_reviewed": 94,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Embolization site treated as a source conflict: p1-f051 keeps the embolization (include) without a site and with time Before surgery literal in its own b00001 quote; site statements split into review_only source_conflict facts p1-f093 (segment 6: abstract, Fig. 3C/3D captions) and p1-f094 (segments 6 and 7: results text).",
+    "p1-f030 stage_context changed from pathologic to post_neoadjuvant following the printed ypT4N0 prefix; chemotherapy itself not labeled neoadjuvant.",
+    "Added p1-f092: local extension of disease without extrahepatic disease (b00011), flag negative.",
+    "p1-f088 now also cites the discussion statement of a normal extra-lesional liver parenchyma at pathology and carries flag normal; p1-f044 also cites the discussion restatement of the 41% remnant volume.",
+    "Moved p1-f075 (no postoperative bleeding) to the postoperative-course event p1-e17 and p1-f076 (optimal initial liver function) to the preoperative reassessment event p1-e10.",
+    "Added 7 literally supported temporal relations (CT before biopsy, CT before 3D reconstruction, first MDT before reconsideration, interventional radiology discussion before surgery, angiography before surgery via Afterwords, surgery before postoperative course); 12 relations total. A proposed surgery-before-12-month-follow-up relation was dropped per orchestrator ruling because the follow-up sentence names no anchor.",
+    "Rewrote the Table 1, embolization-site and stage ambiguities and article limitations to match these decisions."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEG figures are inspected in the separate visual submission.",
+    "Literature-review cases and the review statistics are not index-patient facts; the unlabeled final row of Table 1 was not used as evidence.",
+    "Fig. 4C CD34 stain is described only as marking endothelium; no stain result is recorded for it.",
+    "Stage is recorded with the source's yp prefix as post_neoadjuvant; the chemotherapy is not given a neoadjuvant setting label because the source calls it biologic selection.",
+    "Embolized aneurysm site is a source conflict (segment 6 vs segments 6 and 7); both site statements are review-only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 37,
+    "facts_reviewed": 94,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (78-year-old woman with Osler-Rendu-Weber disease and peri-hilar cholangiocarcinoma); literature cases in b00019-b00024 kept out of the record.",
+      "Table 1 last row (pCCA, H123458-B, 500, Uneventful, 10, 12) has no author and neither caption, footnote nor text marks it as our case; kept as ambiguity, not evidence.",
+      "Fig. 1 caption texts for B and C appear swapped against the pixel markers; visual rows describe pixels and the swap is a limitation.",
+      "Fig. 2 caption calls the tumor yellow while it renders orange; pixel colour is not a conflict side.",
+      "500 cc blood loss versus not showing any intra- and post-operative bleeding kept as an ambiguity; invaded (text) and contact (Fig. 2 caption) kept as separate observations; CD34 stain has no stated result."
+    ],
+    "residual_risks": [
+      "post_neoadjuvant stage context rests on the printed yp prefix only.",
+      "The 12-month follow-up event is unordered relative to surgery because the source names no anchor.",
+      "Panel-level Fig. 1 B/C attribution of caption claims remains unresolved."
+    ]
+  },
+  "physician_adjudicated": false
+}
