@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12829127.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8d57d2ccf757de20a94f55439a6104f41ab1796534a866dbe72f0403dac8153b",
+  "annotation_sha256": "4168b86738da8e4d036ba6a6885bc300ee5316d906843d00085ee3fb300bd946",
+  "reviewed_at": "2026-10-16T02:01:18.020704+00:00",
+  "source_segments_read": 31,
+  "facts_reviewed": 100,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "f011 FDS avulsion: removed body_site/laterality borrowed from case text (abstract sentence states neither)",
+    "f012 PIP fracture-dislocation: added b00005 radiograph evidence; body_site PIP joint, laterality left from that paragraph",
+    "f022, f034: removed borrowed body site/side; f033 laterality left from its own sentence",
+    "f008 denied prior hand trauma: verification_status refuted -> unknown (ASSERT-ABSENT)",
+    "f009 temporality historical -> unknown, concise name; f010 abstract 'sports collision' marked alternate_representation_of f009",
+    "f013 intact FDP moved from symptoms_function sign to observations; borrowed site removed",
+    "f050 evidence expanded to full anchor sentence; f082 'postoperative' moved from indication to time",
+    "Table 1 PIP extension last-session cell split: f089 = -10, new f099 = 0 at end of session",
+    "Added f100 six-week postoperative imaging (Figure 3 caption) with event e12; headings not used as times",
+    "Relations added: e03<e04 (Figure 1 preoperative imaging), e04<e08 ('recent repair'), e04<e09 ('well-healed incisions'), e04<e12",
+    "Events e04/e08/e09 linked to all their operative/follow-up facts; heading references removed from event descriptions and summary claim 4",
+    "Ambiguities added: heading-only visit times, therapy first-session date vs preoperative image timestamps, distal-phalanx FDS insertion wording",
+    "figure_privacy_flags: Figs 1 and 3 upgraded to direct_identifiers (radiographer initials on side markers plus timestamps)"
+  ],
+  "unresolved": [
+    "Figures inspected in the separate visual submission; caption-layer visual_status remains not_inspected.",
+    "Table 1 prints no unit; none assigned.",
+    "Discussion and introduction statements about mechanism and both tendons being injured are not recorded as facts (see ambiguities).",
+    "The sentence that the remainder of the surgical approach progressed as planned is not recorded as a separate fact.",
+    "Section headings (two-week and six-week follow-up) are in the packet but not in quotable segment text, so they are not used as times; only the Figure 3 caption supplies a six-week postoperative time for the imaging it shows."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 31,
+    "facts_reviewed": 100,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single patient; roster count 1 from the singular 'We present a rare case' (ROSTER-ORDER singular case statement)",
+      "Section headings are in the packet but not in quotable segment text, so TIME-LITERAL forbids them as times; only the Figure 3 caption gives a six-week postoperative time",
+      "Introduction tackle/axial-load mechanism and Discussion 'both tendons injured' correctly left as ambiguities (case text: finger caught in a jersey; FDP intact)",
+      "Table 1 has no unit; dates from column headers are literal and structurally governing"
+    ],
+    "residual_risks": [
+      "Two-week vs six-week visit order is not asserted",
+      "Therapy first-session date seems to precede the preoperative imaging; not reconciled"
+    ]
+  },
+  "physician_adjudicated": false
+}
