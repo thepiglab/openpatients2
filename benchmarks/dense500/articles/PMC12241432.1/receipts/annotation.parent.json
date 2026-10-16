@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12241432.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "200ad5c53de5660551761f856c2c761113b4f81556a85750296d748a7b93430c",
+  "annotation_sha256": "bec74db09d9b67251df81eee6a8d7ec9f71e34bd46865535f927a0a4607287b6",
+  "reviewed_at": "2026-10-16T09:29:37.503258+00:00",
+  "source_segments_read": 38,
+  "facts_reviewed": 113,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added 6 literally supported temporal relations (10 total): history before presentation (\"with a history of subfertility presented\"), conception before presentation at 13 + 1 weeks gestation, routine dating scan same_time initial dating TAUS, handheld scan before laparoscopy (\"pre-operative counselling\"), laparoscopy before discharge (\"day 9 post-operatively\"), discharge before outpatient follow-up.",
+    "Split the combined screening test (f049-f052) out of the initial-ultrasound event into p1-e17 so the same_time relation to presentation does not time the CST; split hormone profile/AMH (f053-f054) out of the history event into p1-e18 because they are not labelled as history.",
+    "Removed the post-histology secondary-AEP speculation (f017) from the MRI event.",
+    "Summary claim 3 no longer attributes bowel-serosa trophoblast to the laparoscopy or the surgical recommendation to the MDT; claim 2 no longer says repeat ultrasound localised the pregnancy to the left adnexa or that MRI failed to identify the site.",
+    "Figure 2 pixel ruling applied: NT 31.0 mm is a decimal print artefact (Figure 1B itself prints NT 3.1mm), PAPP-A 0.06 MoM matches, screening b-hCG 88 IU/L is not stated to be the Table 1 BhCG measurement, trisomy 21 >1 in 2 vs 1 in 2 is precision-level; all text/table facts kept include with rewritten ambiguities; no pixel value became a fact.",
+    "Dropped the paraphrased finding field on attempted ovarian salvage (f039); added an ambiguity that the same-day MRI has no named anchor.",
+    "Summary claim 3 rewritten so trophoblast excision is not tied to the bowel serosa (two separate source statements)."
+  ],
+  "unresolved": [
+    "Abstract conclusion (b00003) about the device enabling immediate bedside imaging and rapid decision-making, and the discussion comparison of handheld and standard image quality (b00024), are author claims about the device and not recorded as clinical facts.",
+    "Values printed inside Figure 2 (combined screening test image) are pixel content in visual.json only and are not facts; the image NT value differs by a decimal place from the caption and the image carries a PAPP-A truncation note.",
+    "Table 1 blood results have no collection time or flags in the source; times stay null.",
+    "The abstract, case text and discussion describe the role of MRI differently; recorded as an ambiguity, not reconciled.",
+    "No supplementary material or video is listed for this article."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 38,
+    "facts_reviewed": 113,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (27-year-old nulliparous woman); fetus kept in her record; roster count 1 literal.",
+      "Fetal death not recorded: source only states cessation of cord pulsation and loss of a wanted pregnancy.",
+      "Adnexectomy and left salpingo-oophorectomy kept as two procedures with an ambiguity (source does not equate them).",
+      "MRI abstract wording, Figure 2C,D mis-citation and GE Voluson Air vs Vscan Air kept as ambiguities.",
+      "Device-benefit and literature statements kept out of patient facts."
+    ],
+    "residual_risks": [
+      "Imaging sequence (repeat ultrasound, handheld ultrasound, MRI, Table 1 bloods) and ICU timing relative to surgery remain unordered because the source gives no order words.",
+      "Fibroid sizes are carried in the condition severity field for lack of a size attribute.",
+      "Figure 3 exam-number label flagged as a direct identifier by the annotator; a stricter reading could class it as device text."
+    ]
+  },
+  "physician_adjudicated": false
+}
