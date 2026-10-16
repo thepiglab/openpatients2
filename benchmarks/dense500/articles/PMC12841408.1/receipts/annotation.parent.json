@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC12841408.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f2f5b36eba12d8d7a23b84cdc20cd52b51d38a698a3b1709f904a2ed62e2e5b9",
+  "annotation_sha256": "3a98c146459e0172e6f8a070190e4dc81525920018291decef24124b7a2ef48e",
+  "reviewed_at": "2026-10-16T02:38:26.855502+00:00",
+  "source_segments_read": 117,
+  "facts_reviewed": 153,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Relation evidence for injury, rehabilitation, surgery, intervention and discharge split into one literal quote per sentence (the one-year window sentence plus the two dated sentences of each pair) instead of one long combined quote.",
+    "Meniscus surgery relation changed from during the point event \"rehabilitation commenced\" to after it, citing \"including meniscus surgery during rehabilitation\".",
+    "FMPS organization percentile (<75) no longer cites the sentence \"scored above the 75th percentile on most subscales\", which does not describe that row.",
+    "Knee fracture recovery time no longer labelled estimated; the source gives it without that word.",
+    "Added 7 events: initial interview, initial evaluation (Session 2), POMS after Session 5, and the four Table 3 PCS assessments (21 December, 12 April, 31 May, 29 June, no year added).",
+    "Added 10 relations: interview before evaluation (Table 1 session order), Session 2 before Session 5, Session 5 and each PCS assessment during the intervention (\"throughout the intervention\"), and consecutive PCS dates ordered within the stated 13 December to 30 June window.",
+    "Summary claim on follow-up cites the DASS-21 Normal severity cells it states.",
+    "visual.json: removed x-axis titles that are not printed on Figures 1-5 and corrected the Figure 4 cut-off line description (at about 5, not just above 4); figure-EHR and privacy sidecars regenerated with --draft and reviewed labels carried over; Figure 2 privacy note no longer mentions a cut-off label.",
+    "measurement_series.json: DASS-21 series ownership evidence now cites the sentence naming the depression, anxiety and stress scales for the player."
+  ],
+  "unresolved": [
+    "Figures were pixel-reviewed in a separate visual submission; the caption layer here is not_inspected. Chart values read from the plots are estimates and are not recorded as annotation facts.",
+    "Figure-only series (VAS by time of day, GHQ-12 and PSQI values, POMS factor values) are not typed as facts because the case text gives no corresponding numbers; they live in visual.json readings and are not asserted as exact.",
+    "Table dates and most text dates carry no year; no year or full date was added.",
+    "Dash cells in Table 2 (percentile for the dysfunctional and functional perfectionism rows) are missing values, not results; no items were created for them.",
+    "Table 5 cut-off rows are scale thresholds and the Score obtained label row has no data; they are not patient results.",
+    "Table 1 session 15 is described as follow-up and evaluation, while the text also describes a follow-up session three months after medical discharge; the relation is left unresolved.",
+    "The supplement ZIP holds PDFs (semi-structured interview analysis, intervention assessment questionnaire, match log, blank consent form); they are reviewed separately and are not part of the main article facts.",
+    "Author interpretations of causation, perfectionism-adherence links and literature comparisons are not recorded as patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 117,
+    "facts_reviewed": 248,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single 22-year-old female futsal player, roster 1; 153 article facts and 95 supplemental facts checked against text, Tables 1-5 and all 13 supplement pages.",
+      "Every Table 2-5 value cell is its own item; STAI and FMPS percentile cells under the Interpretation column are correctly read via the Percentile sub-header rows; dash cells and Table 5 cut-off rows are not results.",
+      "Table 1 session 15 versus the follow-up three months after discharge is kept as an ambiguity.",
+      "No year was added to any date printed without one; only 1 October 2022 and 14 November 2022 carry date_iso.",
+      "Meniscus surgery during rehabilitation is not linked to the earlier right-knee meniscus tear.",
+      "Plot readings from the five line charts stay in visual.json as estimates; no figure value became a fact.",
+      "Supplement: interview analysis, questionnaire answers and match log transcribed literally; consent form is a blank template; no names, signatures, club names or dates in any member."
+    ],
+    "residual_risks": [
+      "Author recovery-time estimates are stored as care_plans with unknown status for lack of a better section.",
+      "Match log scores and matchday numbers combined with the article context are quasi-identifying.",
+      "Two supplemental self-statements use assertion possible although the statement itself was made."
+    ]
+  },
+  "physician_adjudicated": false
+}
