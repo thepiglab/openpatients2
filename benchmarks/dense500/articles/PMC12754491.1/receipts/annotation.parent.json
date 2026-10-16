@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12754491.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e72d5d6953a2fc21c203fdbe20348347c12523c334cbc48d374a6b0b63414b8b",
+  "annotation_sha256": "828e92922a431ddb86754734d49c500aaeb066ffbfa8d84101679601d05f0daa",
+  "reviewed_at": "2026-10-16T05:24:03.983735+00:00",
+  "source_segments_read": 38,
+  "facts_reviewed": 133,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Coordinator ruling applied: p1-f035 tacrolimus 15-year regimen set to administered (not current, since tacrolimus was later withheld and stopped); p1-f070 no-imaging statement kept ambiguous review_only because its scope rests only on the section heading; e04 before e05 kept.",
+    "No-imaging item: text_value removed (a not-performed observation carries no result).",
+    "Medication actions: basiliximab and methylprednisolone induction set to administered.",
+    "Timeline: added events for the ABMR treatment (plasma exchange, IVIG, rituximab), the creatinine rise five years later, the second transplant biopsy with MMF and tacrolimus target changes, furosemide tapered off by postoperative day 4, and symptom improvement after day 4; filled the e03 id gap.",
+    "Added relations with literal support: first biopsy period before the rise \"Five years later\", ultrasonography before MRI (\"prompting further investigation\"), furosemide start before taper (same sentence), symptom improvement before resolution (\"improved ... and resolved\")."
+  ],
+  "unresolved": [
+    "Figure 1 pixels are reviewed in the separate visual submission; the caption-layer visual status here is not_inspected.",
+    "Table 1 is a general approach to acute kidney injury after liver surgery and contains no patient data, so no observations were taken from it.",
+    "Values printed inside Figure 1 are not source text segments and are not recorded as facts; they stay in the visual submission only.",
+    "Nationality wording (Thailand) is not recorded as race or ethnicity.",
+    "Authors' mechanistic explanations and hypotheses about reduced liver mass, ischemic injury and peak concentrations are not recorded as established facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 38,
+    "facts_reviewed": 133,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single 61-year-old man; roster count 1 literal.",
+      "Scope of \"a suspicion of\" over the three biopsy diagnoses is grammatically open; all three stay possible with the ambiguity; \"compatible with ABMR\" stays provisional.",
+      "Perioperative-complication and discharge-creatinine sentences sit in the transplant past-illness paragraph but do not name the operation; kept untimed with the ambiguity.",
+      "Tacrolimus target 5-8 ng/dL kept as printed; POD7 versus POD10 normalisation and figure day-7 AST/ALT 103/127 kept as an ambiguity.",
+      "Table 1 is a generic AKI differential; Figure 1 printed values verified cell by cell in zoomed crops and kept in visual.json only; EHR override to an includable patient chart confirmed."
+    ],
+    "residual_risks": [
+      "The abstract value 19.5 ng/mL appears only in the abstract and Figure 1 (day 3); the main text gives no day-3 trough.",
+      "Order between the second biopsy and the 14-year ultrasonography is not stated literally and is left open."
+    ]
+  },
+  "physician_adjudicated": false
+}
