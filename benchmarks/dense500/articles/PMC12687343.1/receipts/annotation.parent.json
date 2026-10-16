@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12687343.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "45513383ee811555b78c8488e92958acc4ecc1a0dc834644fa940b53325bf590",
+  "annotation_sha256": "227a2e6cba9c763200de5fa065880f1741512e053b40384ad76026c7f79e9a69",
+  "reviewed_at": "2026-10-16T05:12:17.618762+00:00",
+  "source_segments_read": 30,
+  "facts_reviewed": 133,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed the symptoms_function visual hallucinations item: the same statement is recorded once as the voriconazole reaction in allergies (ONE-STATEMENT); the voriconazole stop stays in medications.",
+    "Removed non-indication values from indication fields (declined caspofungin: risks of prolonged admission; lung biopsy: too high risk), moved to notes.",
+    "Counterfactual daily IV caspofungin via OPAT relabelled with a concise action_text, kept as a conditional care plan with the travel barrier in notes.",
+    "Agreed weekly rezafungin via OPAT and the MDT 3-month course set to action_status completed (both delivered January to April 2025); the agreement event set to occurred, kind other.",
+    "Added four supported relations: rezafungin course before the April 2025 CT (\"after a 3-month course\") and before the September 2025 IgG (\"after rezafungin\"); declined caspofungin before OPAT referral (\"therefore referred\"); CPA diagnosis May 2020 before posaconazole stop September 2020 (stated dates).",
+    "Visual: Figure 1a lesion corrected from thin-walled lucent lesion to a small central lucency with a thick bright rim against the posterior chest wall; figure-EHR and privacy drafts regenerated with labels carried over; Figure 2a subtitle date range flagged as timestamp text."
+  ],
+  "unresolved": [
+    "Single-patient case report; the health-economic cost analysis (b00018, b00021, b00023 cost statements and Figure 2c) is not recorded as patient clinical facts.",
+    "Caption-layer visual status is not_inspected; the two JPEG figures are inspected in the separate visual submission.",
+    "Figure 1 panel dates and findings come from the caption; the case text does not map individual CT scans to panels beyond the October 2024 and post-treatment citations.",
+    "Medications listed in the case presentation are recorded with action unknown because the text says only that medications included them.",
+    "The abstract and the Figure 1 caption each describe CT findings in different words; they are kept as separate observations without merging.",
+    "Plotted Figure 2 values are not typed as facts; only values printed in the text are recorded.",
+    "The text does not state the indication for voriconazole started in 2017.",
+    "No table is present in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 30,
+    "facts_reviewed": 133,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single 57-year-old woman with CPA; roster count 1 literal.",
+      "Medication list \"Medications included\" kept with action unknown; isavuconazole \"avoided\" kept as absent; costs not recorded as clinical facts and Figure 2c labelled other, not includable.",
+      "Figure 1 caption \"previously\" measurements map literally to October 2024 because the same sentence names the comparison of April 2025 (d) and October 2024 (c).",
+      "The five ambiguities (13.71 vs 13.72 per day, consolidation vs cavity wording, Figure 2 2019 vs voriconazole 2017, Figure 1a December 2019 vs May 2020 diagnosis, interval CT vs April 2025 CT) are uncertainties, not value conflicts; all facts stay included.",
+      "All 12 annotator relations checked against literal dates or order words; all supported."
+    ],
+    "residual_risks": [
+      "Figure 2b printed IgG values 163, 155 and 138 have only axis-estimated dates and are kept in the visual readings, not as facts.",
+      "Voriconazole reaction type left unknown; the source does not say allergy or intolerance."
+    ]
+  },
+  "physician_adjudicated": false
+}
