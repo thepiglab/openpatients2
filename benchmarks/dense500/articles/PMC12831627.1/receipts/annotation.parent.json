@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12831627.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "246078af77195328621b8dc076c478e2ad196210c5b8ec6d049972c2e516f0a8",
+  "annotation_sha256": "07f18c60229823f6aecc9429894adfb7fc91c0bd9ae5a90b4a40dd1224fe3dac",
+  "reviewed_at": "2026-10-16T06:40:00.887580+00:00",
+  "source_segments_read": 34,
+  "facts_reviewed": 129,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added p1-f124/p1-f125: continued IV vancomycin and meropenem before the day 25 step-down (b00011); meropenem route left null (coordinated phrase).",
+    "Added p1-f126 oral metronidazole given with IV co-amoxiclav (second step-down phase); no duration borrowed.",
+    "Added p1-f127 GP reassessment, p1-f128 microbiology consultant advice on day 4, p1-f129 no obvious sinister ENT pathology suspected (absent).",
+    "p1-f065 whole-body MRI: anchor \"repeat contrast-enhanced neck MRI\" set to null; the adjacent sentence before \"One week later\" is the repeat cultures; ambiguity added.",
+    "p1-f081 random blood glucose \"negative\" set ambiguous/review_only (meaning of a negative glucose unclear).",
+    "p1-f051 teicoplanin frequency once-daily added; p1-f055 route IV added; p1-f056 body-text evidence added; p1-f044 main-text evidence added and route/day basis noted (Figure 4 caption sentence states IV vancomycin on day 7).",
+    "Events: repeat neck US (e29) and repeat blood/urine cultures (e30) split from lumped events; virtual-ward transfer (e31) split from the MDT six-week decision; continued vancomycin/meropenem event e32 added; neurological-exam-throughout and no-organism facts unlinked from wrongly timed events.",
+    "Relations: removed e19->e20 (One week later follows the culture sentence) and added e30->e20; added 16 literally supported relations (referral->initial assessment, following-day re-presentation, repeat culture/US/MRI after initial, day 4<6<7<25<36<70 series, re-escalation after initial escalation, admission->six-week transfer and four-month MRI).",
+    "Day-numbering ambiguity rewritten: bare day numbers treated as one narrative count for ordering; day 5 of admission not ordered against them; article limitation updated.",
+    "Added ambiguities for coordinated route/duration phrases and for the shared three-day window in the fever/CRP sentence.",
+    "Summary rewritten into 5 phase claims; the claim that workup found no source replaced by the literal test results."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the four JPEGs were inspected separately in the visual submission.",
+    "Bare day numbers in the case text have no stated origin (one is \"day 5 of admission\"); they are treated as one narrative count for ordering only, and no calendar dates or offsets were derived.",
+    "Values printed inside Figure 4 are pixel content in the visual submission only and are not facts or conflict sides.",
+    "Discussion statements about cervical osteomyelitis in general, literature, imaging modalities and management are background and are not copied to the patient; only case-specific statements (our case, our patient, described case) were used.",
+    "EBV test wording leaves the other EBV markers unspecified; the random blood glucose result is reported only as negative."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 34,
+    "facts_reviewed": 129,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single 8-year-old male with C3-C4 cervical osteomyelitis; roster count 1 from the case statement.",
+      "MDT re-escalation is recommended in text and reported as made by \"These adjustments led to\" plus the later day 36 replacement of IV vancomycin; kept administered with recommendation in care_plans.",
+      "Vancomycin day 7 IV route/time accepted from the Figure 4 caption text, which writes IV before vancomycin and states day 7.",
+      "Figure 4 CRP readings are pixel-only and consistent with text values 37.4, 17.7 and 213.3 mg/L; no conflict."
+    ],
+    "residual_risks": [
+      "Bare day numbers have no stated origin; ordering among them assumes one narrative count.",
+      "Coordinated drug phrases leave the route of the second drug unstated (meropenem in re-escalation and continuation).",
+      "GLUED-TEXT warnings for the printed device logo text myray in Figure 3 are a checker false positive (transcribed printed text)."
+    ]
+  },
+  "physician_adjudicated": false
+}
