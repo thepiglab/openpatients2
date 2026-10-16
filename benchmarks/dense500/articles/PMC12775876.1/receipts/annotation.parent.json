@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12775876.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6a82c4c919af6c561076d22666b08228941c611d24e901104c1411f7e6b9cfae",
+  "annotation_sha256": "a4dc18ca93fded19b68ea9dd8950076cfd4ac25d97e97e26a8e824d39b1fe9f0",
+  "reviewed_at": "2026-10-16T06:55:01.571626+00:00",
+  "source_segments_read": 21,
+  "facts_reviewed": 93,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f013 uveitis role complication -> unknown (source attributes no cause; observed during treatment only)",
+    "p1-f025 renamed 'CT scan at revisit' -> 'CT scan of the left mandibular mass'; text does not place this CT at the revisit or make it the same study as the jaw CT",
+    "p1-f042 renamed to 'Subsequent CT scans' (no invented timing)",
+    "p1-f063 cumulative dose: 'As of manuscript submission' moved from duration_text to time (relation at)",
+    "p1-f088 action_text trimmed to 'Placed under observation'; p1-f090 decision action_status unknown -> completed",
+    "p1-f060 split: now Lenvatinib started; added p1-f091 Pembrolizumab started (same quote); removed alternate_representation_of from combined oncology treatment p1-f081",
+    "Added p1-f092 referral to the authors' department (completed) and p1-f093 revisit to the authors' hospital (completed)",
+    "Split revisit out of p1-e11 into new event p1-e22; e11 now the CT/PET imaging only (no implied revisit timing)",
+    "Relation e12->e14 re-quoted with b00014 'since ... mismatch-repair proficient, we chose LP therapy' (result -> action about that result); added e12->e13 with same quote",
+    "Removed relation e13->e14 (decision -> treatment start has no literal order wording)",
+    "Added e07->e22 ('revisited' after observation); added e17->e20 as relation unknown because the fifth-cycle regimen names no drug, so the cycle counts are not shown to be the same regimen",
+    "Summary claim 3 rewritten so the 4 cm CT is not placed at the 5-month jaw CT; fact links updated"
+  ],
+  "unresolved": [
+    "Literature statistics, cited published cases (Maxymiw, Dosoretz, Irani, Hirshberg, PEACOCC) and general review statements are not patient facts.",
+    "The case text gives no calendar dates; no dates were computed from relative times.",
+    "Case text does not name the drug for the 400 mg every six weeks regimen and the 3200 mg/body cumulative dose; both are review_only.",
+    "Caption-layer visual status not_inspected; actual images inspected in the separate visual target."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 21,
+    "facts_reviewed": 93,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; roster count 1 from 'We report a case'.",
+      "400 mg every six weeks and 3200 mg/body name no drug in their own sentences; kept review_only with ambiguity (pembrolizumab not borrowed from neighbouring sentences).",
+      "Uveitis, fatigue and rash kept as observed during treatment, no drug attribution; TMJ disorder verification unknown with ambiguity.",
+      "Surgery/RT 'considered' kept as care plan with status unknown; Highlights 'without surgery or radiotherapy' kept as absent procedures.",
+      "Merges checked: 4 cm CT text + Fig 1A caption (text cites Fig. 1A), PET text + Fig 1B caption, biopsy text + Fig 2B, sixth-cycle CT + Fig 3 caption all cite the figure; jaw CT at 5 months kept separate.",
+      "All 14 draft relations checked; 1 removed, 1 re-quoted, 3 added (one of them unknown)."
+    ],
+    "residual_risks": [
+      "Whether the 5-month jaw CT and the 4 cm CT are the same study is unresolved.",
+      "Fig 1A visual description was corrected by the annotator to the asymmetric rounded soft-tissue region and rechecked on pixels."
+    ]
+  },
+  "physician_adjudicated": false
+}
