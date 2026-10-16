@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC12889489.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8d20fe07b9d2dc691a3b2cf5ceade1240d17437adb332d38ef9a364c78175171",
+  "annotation_sha256": "12542b5b9716df4dac037e6415f7c525c248f6739ff9a5b8cf655d84076463fa",
+  "reviewed_at": "2026-10-16T08:13:28.947596+00:00",
+  "source_segments_read": 90,
+  "facts_reviewed": 162,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Home medications p1-f064..f070 (levo-thyroxine, dapagliflozin, metformin, glimepiride, rosuvastatin, amlodipine-telmisartan, carbamazepine): action current->administered, temporality current->unknown; \"ongoing medications\" at presentation is not the latest described time (carbamazepine was later stopped).",
+    "Steroid ending p1-f083 (dexamethasone stopped, b00050) and p1-f084 (rapid tapering of systemic steroids, b00074): judged compatible, not a source conflict; both restored to supported/include; ambiguity rewritten to forbid inferring an abrupt stop or a taper-then-stop sequence.",
+    "Added p1-f162 (outcomes): Figure 2 caption text \"resolution beginning on day 3 after carbamazepine withdrawal and supportive treatment\", linked to event p1-e20.",
+    "Split the retrospective RegiSCAR assessment (p1-f016 DRESS refuted, p1-f135 RegiSCAR 1) out of the differential event p1-e13 into new event p1-e25; removed admission-table HbA1c p1-f118 from history event p1-e01.",
+    "Added 14 literally supported temporal relations (10 -> 24): e01<e02, e02<e06, e03<e06 (13 vs 15 days from the drug start), e02<e15 (drug start -> stop), e10<e14 (Considering DKA -> management), e15<e20 (day 3 after carbamazepine withdrawal), e18<e22 (third vs fifth day of admission), e20<e21, e08<e19 (follow-up investigations), e14<e19 and e15<e19 (following fluid resuscitation and withdrawal), e13<e25 (initially vs retrospective), e14<e23 (resulted in full recovery), e09<e22 (preliminary -> confirmed).",
+    "Carbamazepine-interval ambiguity extended: the text itself (rash about 13 days after the drug, first fever lasting about 4 days, recurrence 2 days before admission) does not fit the 15-day interval; ambiguity only, f071 stays review_only per the image-value ruling.",
+    "Second pass: e18<e22 second quote widened to the fifth-day EuroSCAR sentence; e01<e02 and e08<e19 already quote both sides (carbamazepine initiation; Follow-up investigations) and are kept.",
+    "Summary claim 2 no longer states that the diagnosis was made after the differentials were considered (invented order); sepsis renamed sepsis-induced pustulosis."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEG figures were inspected in the separate visual submission.",
+    "Day numbers printed inside Figures 2 and 3 are pixel content only (visual.json); the related text facts carry review_only ambiguities rather than conflict sides.",
+    "Table 1 group header rows (CBC, RFT, ABG, LFT, Urine R/M/E) are dashes without values and are not observations; panel names are not copied into method or specimen.",
+    "Table 2 histology cell is a dash and is recorded as not reported, not as zero or as the declined biopsy.",
+    "Reference ranges are recorded as printed; flags only from the table remarks or the case words, never from ranges. WBC keeps the printed scientific-notation text with no unit.",
+    "Author hypotheses on the mechanism of DKA, dapagliflozin role and atypical timing are not recorded as facts; literature cases (b00070) are not index-patient facts.",
+    "The systemic steroid ending is described as stopped (b00050) and as rapidly tapered (b00074); judged compatible rather than conflicting, recorded as an ambiguity with both facts included.",
+    "The text interval from carbamazepine initiation to presentation (15 days) is arithmetically inconsistent with the stated rash onset (about 13 days) plus the febrile course; recorded as an ambiguity only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 90,
+    "facts_reviewed": 162,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single 54-year-old male index patient; roster count 1 from b00008 is literal.",
+      "Every Table 1 value row and every Table 2 score row is an observation with table time and reference range; flags come from the printed remarks.",
+      "Figure 3 prints carbamazepine Day 0, ER presentation Day 25 and resolution Day 28 versus 15 days in the text; pixel values stay in visual.json and the text facts f071 and f156 are review_only with ambiguities.",
+      "DRESS refuted rests on \"consistent with not a case of DRESS\" after a retrospective RegiSCAR of 1 and \"arguing against DRESS\"; sepsis-induced pustulosis \"considered unlikely\" kept as possible/differential, not refuted.",
+      "Bicarbonate mmol/l (text) vs mEq/l (table) is a unit-label ambiguity only; the observation keeps the table unit.",
+      "Figure 4 is an author mechanism schematic attributed as background; Figures 1 to 3 are the index patient."
+    ],
+    "residual_risks": [
+      "Day numbering in Figures 2 and 3 cannot be reconciled with the text; anchors of the fifth day remain unknown.",
+      "Indication for systemic steroids differs by passage (for AGEP in b00050; concern for DRESS overlap in b00073); both are recorded on their own facts.",
+      "The follow-up visit (e24) has no literal anchor and is unordered relative to the hospital course.",
+      "Pustule swab result \"growth of normal skin flora\" kept flag unknown (normalize OBS-FLAG suggestion not applied: the source does not call the result normal)."
+    ]
+  },
+  "physician_adjudicated": false
+}
