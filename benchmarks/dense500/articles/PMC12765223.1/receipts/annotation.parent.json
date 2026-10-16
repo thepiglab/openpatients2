@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC12765223.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "fe3975e11bdfa6c5288d5367485668e25c1b8eb3853fad5e882ccced3f9bb896",
+  "annotation_sha256": "01115eeb9d0cbae41d7d7641c113533c56e0bada71f19fd3a7f3802376af6dac",
+  "reviewed_at": "2026-10-16T03:22:40.892224+00:00",
+  "source_segments_read": 41,
+  "facts_reviewed": 145,
+  "patients_reviewed": 5,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f007/p1-f008 blepharospasm and epiphora: added the Table 1 Patient 1 row (Other clinical features cell) as evidence.",
+    "p1-f056 no recurrence: added the series sentence \"No recurrence was observed in any of the conjunctival sequestrum cases reported here\" (covers Patient 1); source_coverage b00029 now lists p1-p5.",
+    "p5-f010 black plaques conflict side: added the Figure 6B caption \"The black plaques noted clinically\" as evidence; updated statement, note and the plaque-color ambiguity (text brown vs Table 1 and Figure 6B black; Figure 6A dark).",
+    "p5-f022 no known history of listed causes (review_only): note and new ambiguity record that the listed causes include microbial infections while Patient 5 has a history of presumed chronic herpesvirus.",
+    "p4 site ambiguity: recorded that the discussion details given for Patient 4 (third eyelid, contralateral corneal sequestrum, bilateral entropion) match Patient 3 results, possible numbering error, unresolved.",
+    "Added temporal relations with literal support: p1-e05 and p1-e06 before p1-e09 (plaques preserved to be submitted for histologic review); p3-e02 before p3-e04 (Figure 4 caption: sequestrum removed by excisional biopsy).",
+    "Article limitations: added the ulceration-count and ipsilateral-count mismatches between series statements and the individual descriptions/Table 1, and the absence of literal order for Patients 2, 4 and 5.",
+    "visual.json Figure 2 panel C: the letter C box is at the top right, not top left (detailed_description and pixel_observations corrected); figure-EHR and privacy drafts regenerated and reviewed labels carried over; privacy notes made panel-type accurate (photographs have no scale bar)."
+  ],
+  "unresolved": [
+    "No supplements; Table 1 present in source.json and every row used. Six figures inspected in the visual submission; the annotation figure rows keep the caption-layer not_inspected convention.",
+    "All patients are cats (nonhuman). Breed is carried in case_context descriptions because the demographics schema has no breed attribute.",
+    "Source conflicts quarantined as review-only facts: Patient 2 conjunctival lesion eye (text left, Table 1 right); Patient 4 conjunctival site (lower palpebral versus third eyelid) and corneal laterality (same eye versus contralateral), both from the discussion; Patient 5 plaque color (brown in text, black in Table 1).",
+    "Series statements not copied to individuals because the covered set is unclear or counts only: \"In all cases, an amorphous black plaque\" (four additional cases or all five), three of four cases with ipsilateral corneal sequestra (Table 1 lists Patient 3 as contralateral), three cases with ulceration, entropion in three of four cases, and inflammatory cells and microorganisms in the surrounding propria.",
+    "Statements covering all five patients explicitly were copied to each: histology of all five conjunctival lesions, unknown infectious disease status, no recurrence in any case, and no known history of listed causes of conjunctival necrosis (kept review-only because detailed history was missing for some cases).",
+    "Surgical instruments, brand names, specimen fixation, and the corneal sequestrum histology availability counts are not recorded as separate facts.",
+    "Table 1 footnote a (archive source anonymized) is administrative and not recorded.",
+    "Series counts that disagree with the individual descriptions were not copied: \"Three of the cases had conjunctival ulceration\" while the case texts and captions report ulceration for Patients 1, 2, 4 and 5 and intact epithelium for Patient 3; \"Three of the four cases also had corneal sequestra ipsilaterally\" while Table 1 lists ipsilateral for Patients 2 and 4, contralateral for Patient 3 and absent for Patient 5.",
+    "No literal order links presentation and excision/histology for Patients 2, 4 and 5 (paragraph order only), so those events carry no relations."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 41,
+    "facts_reviewed": 145,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Five cats (nonhuman) in literal roster order; Table 1 rows, ages, sex and breed (case_context) verified per patient.",
+      "Four source conflicts verified as same-attribute conflicts and quarantined as paired review_only facts with attribute-free base facts: p2 conjunctival lesion eye (text left vs Table 1 right); p4 site (lower palpebral vs third eyelid in discussion); p4 corneal sequestrum same eye vs contralateral (discussion); p5 plaque color (brown text vs black Table 1/Figure 6B).",
+      "p4 bilateral entropion kept review_only ambiguous: discussion only, absent from results/Table 1, and clashes with entropion in three of four corneal-sequestrum cases.",
+      "Cohort statements copied only where the sentence names all five (histology of all five lesions, infectious status of the five patients, no recurrence in any case, no known history of listed causes as review_only); \"In all cases\" black plaque, three-of-four ipsilateral and three-with-ulceration counts correctly not copied (scope unclear and they disagree with individual data).",
+      "p3 corneal sequestrum verification unknown (presented for evaluation of) is correct; p3 and p5 presumed causes kept possible/provisional.",
+      "All 15 panels viewed at native resolution; descriptions pixel-only; caption-derived meanings kept in caption claims; no burned-in identifiers, faces or sensitive anatomy."
+    ],
+    "residual_risks": [
+      "Patients 2, 4 and 5 have no literal order between presentation and excision/histology, so their timelines are unordered.",
+      "The discussion statements about Patient 4 likely describe Patient 3 (numbering error), but this is not stated and stays quarantined in p4.",
+      "Corneal sequestrum verification for p1, p2 and p4 is confirmed on the basis of stated diagnosis wording rather than histology for p2 and p4."
+    ]
+  },
+  "physician_adjudicated": false
+}
