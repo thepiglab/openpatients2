@@ -1,0 +1,69 @@
+{
+  "article_id": "PMC12758019.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "cfa4754731b545559e875751294bf2272324dacd3777dd39984809b2dd7e7546",
+  "annotation_sha256": "26a969d579b4a0aa657903a9bf54bd867d61ff173f0de35e8cd59a266f4097c3",
+  "reviewed_at": "2026-10-16T01:18:20.995122+00:00",
+  "source_segments_read": 40,
+  "facts_reviewed": 213,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f014/f015/f016 (5+19 cycles May 2022-April 2024, 22nd dose February 2024, panuveitis at 66 weeks) changed from source_conflict/review_only to supported/include: the statements are literal and not literally contradictory; the 66-week vs calendar mismatch is arithmetic only. Ambiguity rewritten with must_not_infer on computing latencies.",
+    "p1-f016 and p2-f058 renamed to Panuveitis (no values in names); p1-f016 linked as alternate representation of the VKHLS diagnosis like p2-f058.",
+    "p1-f017 visual decline given its literal time \"One week after the 22nd dose\"; new event p1-e16 (22nd dose, February 2024) with relation before p1-e05.",
+    "p1-f073/f074 3-month BCVA: Table 1 prints Snellen 20/200 with logMAR 0.00 while the text gives 20/20; Snellen removed from the accepted items (logMAR 0.00 kept, table + text), added review_only source_conflict facts p1-f112/f113 (table 20/200 OD/OS) and p1-f114 (text 20/20 OU) with an ambiguity.",
+    "p1-f010 Tislelizumab split: combination-phase item keeps only the 200 mg quote; new medication item p1-f111 for maintenance therapy; p1-f013 alternate_representation_of repointed to p1-f111.",
+    "p1-f032 (mild KP after \"resolution of\") set ambiguous/review_only.",
+    "Concomitant-medication review (p1-f050, p2-f041) set ambiguous/review_only: sentence is not explicitly scoped to the cases.",
+    "Removed duplicates p1-f034 and p2-f027 (same text quote already cited by the 3-week optic disc table items).",
+    "p1-f107-f110 table OCT items trimmed to the RPE-deposit text clauses; p1-f035/f036 renamed as infrared-reflectance findings with Figure 1 caption evidence and caption-governed times (3-week/3-month post-treatment).",
+    "Added p2-f101 (Figure 2 caption: near-normal retinal morphology OS at 3 months); p2-f100 (Table 2 OS cell repeating Case 1 wording) set ambiguous/review_only; caption evidence added to p2-f099.",
+    "Added case-text diagnosis quotes to p1-f066/p2-f057, discussion Grade 2/Grade 4 quote to the CTCAE items, b00030 withdrawal quote to p2-f030, text Snellen quote to p1-f067.",
+    "p2 fifth cycle moved to its own event p2-e13 (September 2024); p2-e03 visual decline no longer carries the cycle date.",
+    "Added literal relations: p1-e10->e11 and p2-e07->e08 (caption \"3-week post-treatment\"), p1-e13->e14 and p2-e10->e11 (\"Subsequent follow-up\"), p1-e16->e05, p2-e13->e03; visit lead clauses added as event evidence.",
+    "Visit-implying names removed from untimed slit-lamp items; p2 summary no longer states the second injection came after the 3-week visit; p1 summary adds the 22nd-dose timing.",
+    "visual.json F2 panel J: pixels print J (not I twice); description, pixel observation and limitation corrected; infrared_reflectance submodality added for F2 E-J (paired IR + OCT panels). Figure-EHR and privacy sidecars regenerated with --draft and reviewed labels/flags carried over."
+  ],
+  "unresolved": [
+    "Case 1 tislelizumab statements (5 + 19 cycles from May 2022 to April 2024, 22nd dose in February 2024, panuveitis at 66 weeks) are hard to reconcile but not literally contradictory; kept as literal facts with an ambiguity, no arithmetic conflict recorded.",
+    "Case 1 baseline right eye BCVA is 0.01 logMAR in the text but 0.10 in Table 1 (review-only conflict pair); the Snellen 20/25 agrees.",
+    "Case 1 3-month BCVA Snellen is 20/200 in Table 1 but 20/20 in the text (review-only conflict); logMAR 0.00 agrees.",
+    "IOP unit is printed as mmgh in both tables; kept literally.",
+    "Table 2 prints Case 2 OS 3-month OCT as complete fluid absorption with reduced deposits, wording that repeats Case 1 and differs from the Figure 2 caption; kept review-only.",
+    "Text-only slit-lamp and fundus statements at the follow-up visits carry null fact-level time.",
+    "Discussion statements explicitly about both cases (causality scores, excluded differentials, unavailable ERG and antibody tests, TA choice) are attributed to both patients; the unscoped concomitant-medication review is review-only.",
+    "Case 1 CTCAE row labels the grade as anterior uveitis while the article calls the condition panuveitis; recorded as printed.",
+    "Figure pixels are inspected in visual.json, not in this caption-layer annotation."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 40,
+    "facts_reviewed": 213,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Two index patients (Case 1, Case 2) correctly separated; roster count 2 from \"two cancer patients\".",
+      "All 86 table cells (Tables 1-2) checked against raw XML, including the 3-month Case 1 Snellen 20/200 vs text 20/20 conflict missed by the annotator.",
+      "Case 1 dose/latency inconsistencies are not literal contradictions; kept as literal facts with an ambiguity.",
+      "All 24 figure panels viewed at magnification; Figure 2 prints panel letter J."
+    ],
+    "residual_risks": [
+      "Untimed slit-lamp/fundus text statements are grouped under visit events through the visit lead sentence only.",
+      "IOP unit kept literally as mmgh.",
+      "CTCAE grade row text (anterior uveitis) vs panuveitis recorded as printed.",
+      "No measurement_series.json was reviewed (draft only)."
+    ]
+  },
+  "physician_adjudicated": false
+}
