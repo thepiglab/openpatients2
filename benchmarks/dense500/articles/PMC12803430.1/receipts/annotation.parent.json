@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC12803430.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7fa33219baa0586d4fbc81146f7245238a61eebddc0c0d8e5aa6fa5029ed2005",
+  "annotation_sha256": "44e069f5f06dd0898f823a659c196e7ca03aee1dda3c2b0c87c9daec903b9acf",
+  "reviewed_at": "2026-10-16T04:48:55.263363+00:00",
+  "source_segments_read": 21,
+  "facts_reviewed": 61,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f017 arrhythmic MVP syndrome: verification_status confirmed -> provisional (source says the findings \"supported a diagnosis\"; no confirmation wording).",
+    "p1-e09 description reworded to \"Findings supported a diagnosis of arrhythmic mitral valve prolapse syndrome\".",
+    "p1-f051 6 mm disjunction: dropped the b00008 quote (MAD identification sentence, owned by p1-f011); kept b00009 (cites Figure 2 for the same frame and measurable disjunction) and the b00020 caption that prints 6 mm; text_value set to the caption phrase.",
+    "p1-e03: unlinked telemetry negatives p1-f036 to p1-f038 (source does not state telemetry is the same continuous monitoring that recorded the NSVT).",
+    "Added relation p1-e03 before p1-e04 (\"Ambulatory rhythm monitoring later demonstrated additional PVCs and short NSVT runs\").",
+    "Added relation p1-e08 before p1-e11 (abstract: referral \"due to the arrhythmic burden and high-risk structural findings\" that CMR identified; causal wording leading to an action)."
+  ],
+  "unresolved": [
+    "Figure captions only in this record; pixels are viewed in the separate visual submission, and Video 1 is frame-sampled in a separate sidecar.",
+    "No dates, ECG rates or intervals, blood pressure or numeric laboratory values are reported; the beta-blocker, dose and timing are not stated.",
+    "Introduction and Discussion text on MAD, wearables, guidelines and ICD indications is background or recommendation and is not attributed to the patient except sentences about \"our patient\", \"this patient\" or \"this case\".",
+    "Follow-up results, outcome and ICD decision are not reported; follow-up and ICD re-evaluation are plans only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 21,
+    "facts_reviewed": 61,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single 62-year-old male patient; roster count 1 from the abstract singular case statement.",
+      "Kept relations e03->e05 (\"Given the documented ventricular arrhythmia, a coronary angiography was performed\"; causal wording leading to an action), e05->e08 (\"prompting further evaluation with cardiac magnetic resonance imaging\") and e06->e08 (\"Prior to CMR acquisition\"). Did not add e08->e09: diagnosis based on findings does not order under the standing ruling.",
+      "EP study \"not pursued at this stage\" kept as procedures assertion=absent, action unknown, event not_occurred: an explicit negation, not declined or cancelled.",
+      "Smartwatch tracking (recommended) and ICD reassessment come from b00016, which opens \"In this patient\"; the ICD re-evaluation is also stated as planned in the case text b00011.",
+      "Abstract (12-lead surface ECG captured the VT) and case text (continuous monitoring; baseline 12-lead ECG not available) kept as an ambiguity: no fact asserts the recording device, so there is no conflicting attribute to quarantine.",
+      "All 3 still figures viewed at full resolution; VID1 6 sampled frames viewed and the PMC re-encoded duplicate (pmcvs_normal) spot-checked."
+    ],
+    "residual_risks": [
+      "Whether \"documented ventricular arrhythmia\" before angiography refers to the NSVT episode or the admission PVCs is not stated; the relation uses the NSVT event.",
+      "Figure 1 is a printed multi-lead ECG page, which fits the abstract wording more than \"continuous monitoring\"; left as ambiguity, not resolved.",
+      "NSVT kept confirmed: case text calls it \"documented NSVT\" although the first mention says \"consistent with\"."
+    ]
+  },
+  "physician_adjudicated": false
+}
