@@ -1,0 +1,51 @@
+{
+  "article_id": "PMC12798141.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b850e48811ac31293774cc2d1ab879d5895118564b1ff037956848c58bbb25a7",
+  "annotation_sha256": "123fd1290f783e5aa2a4a1425806f80959a9a7b616d168d479191f3db9c7cd3c",
+  "reviewed_at": "2026-10-16T02:15:08.573537+00:00",
+  "source_segments_read": 38,
+  "facts_reviewed": 200,
+  "patients_reviewed": 6,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "All six patients: removed injury(e00) -> presentation(e01) relation; its quotes (\"presented to our centre with closed transverse patellar fractures\", \"having resulted from a fall from standing height\") order fall before fracture but contain no wording ordering the injury before presentation. Injury -> surgery relations for A, C, D, E, F (b00024 \"within one week of injury\") kept; Patient B injury event now has no ordering link.",
+    "All six patients: presentation event description no longer says \"after a fall\" (order not literal).",
+    "All six patients: f016 pre-operative KSS not collected set certainty ambiguous / scoring review_only with an ambiguity entry; the b00025 sentence is series-level and does not explicitly cover all patients (NO-COHORT-COPY)."
+  ],
+  "unresolved": [
+    "Patients A to F are labelled only by table columns; the text names patients B and F individually in one sentence and B in another.",
+    "Series-level statements are copied to individuals only where the sentence explicitly covers all patients; the surgical technique sentences (incision, guidewires, suture tape passing, intra-operative flexion test, rehabilitation protocol) do not state all-patient scope and are not assigned.",
+    "Cohort means and ranges (mean displacement, operative time, union time, follow-up, KSS range and mean) are not copied to individuals.",
+    "Table I gives no unit for knee range of motion, no time anchor for the four-month columns, and does not say at what time point age was recorded.",
+    "Figure 1 and Figure 2 do not state which patient they show; no patient is assigned.",
+    "Caption-layer visual status is not_inspected; actual pixels are described in visual.json."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 38,
+    "facts_reviewed": 6,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Targeted pass on two items Sonnet disputed; the earlier full parent review of the remaining content stands",
+      "No source sentence literally orders injury before presentation",
+      "Pre-operative KSS sentence is a cohort statement without \"all patients\" wording"
+    ],
+    "residual_risks": [
+      "Patient B injury event is unlinked in the timeline",
+      "Pre-existing NO-BORROWING warnings on f007 surgery time \"within one week of injury\" (from the \"remaining patients\" sentence) left as previously reviewed"
+    ]
+  },
+  "physician_adjudicated": false
+}
