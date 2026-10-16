@@ -1,0 +1,52 @@
+{
+  "article_id": "PMC12695512.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4f70fdb6c00313e847f89048b4828117d1c727c112c52cf3ef1800f26586f5ea",
+  "annotation_sha256": "27ec35dc4f3b9debfcf2499279389541021288b78ceab54a1842b0040562dd11",
+  "reviewed_at": "2026-10-16T07:14:09.710405+00:00",
+  "source_segments_read": 14,
+  "facts_reviewed": 55,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f051: renamed absent treatment from 'Treatment of the second reaction' to 'Treatment of the glass-exposure reaction'; Table 1 row position does not establish order",
+    "p1-f045/f046/f048/f049/f050/f051 clinical statements reworded by trigger (spoon/glass) instead of first/second",
+    "p1-f037/f038: removed frequency 'daily' (\"daily therapeutic doses\" states a total daily dose, not a frequency); kept 'respectively' dose assignment 1000 mg cefuroxime, 2000 mg ceftriaxone",
+    "Removed the presentation-split ambiguity and limitation: JATS lists each Table 1 presentation term as a separate paragraph, confirming the eight splits",
+    "Added relations e05 during e01 and e06 during e01 ('two of these episodes (Table 1)') and e01 before e04 ('re-questioning ... reported that his anaphylactic reactions')",
+    "Summary: removed implied order ('After referral'), added Table 1 treatment cells and cephalosporin doses, split workup into its own phase claim"
+  ],
+  "unresolved": [
+    "Sentence order does not date the episodes; only Table 1 onset and resolution columns give relative times.",
+    "No figures or supplements are listed in the source.",
+    "Table 1 presentation cells appear space-joined in the text rendering; the JATS source lists each term as a separate paragraph, which confirms the four-term splits per row."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 14,
+    "facts_reviewed": 55,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single 38-year-old man; Table 1 has 2 rows (the two identified triggers), not 7; all 14 Table 1 cells captured (allergen, trigger, onset, 8 presentation terms, tryptase not measured, treatment, resolution)",
+      "Onset '5 min'/'10 min' kept as after the trigger cell (literal anchor, Onset time column); 'A few hours' resolution kept relation unknown (no reference point)",
+      "Certainty kept: allergy by proxy confirmed ('attributable to'), sensitisation confirmed ('confirming'), household sensitisation route possible ('likely')",
+      "Relations e02->e03 ('initial' + 'subsequently referred ... further assessment'), e01->e09 ('Considering the patient's history ... prescribed') and e08->e10 (documented tolerance -> recommendation) kept as RULINGS-supported"
+    ],
+    "residual_risks": [
+      "Seven episodes are undated; only two have Table 1 detail and their mutual order is unstated",
+      "Skin tests and drug provocation tests not listed as procedures_devices (optional under SECTION-IMAGING)"
+    ]
+  },
+  "physician_adjudicated": false
+}
