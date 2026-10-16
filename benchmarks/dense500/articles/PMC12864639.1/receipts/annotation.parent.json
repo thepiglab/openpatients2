@@ -1,0 +1,66 @@
+{
+  "article_id": "PMC12864639.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d2abaa0a8558f677b2639032149ece022ef57722cda2ff93e3bbb9edff2372b7",
+  "annotation_sha256": "a6fcbe9003c9efc81abbcf2c3293f84d60a5e754a2f38315f0ba8306a3b16391",
+  "reviewed_at": "2026-10-16T06:37:42.065237+00:00",
+  "source_segments_read": 13,
+  "facts_reviewed": 91,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f026 hemoglobin flag unknown -> low (source calls it mild anemia)",
+    "p1-f058 narrowed to the fibrotic inflammatory background descriptor; the discussion RS-cell quote added to p1-f055 instead of a second RS-cell finding",
+    "p1-f046 bilateral lymphadenopathy: discussion quote added; kept as ambiguity (right cervical + left inguinal), not a conflict",
+    "Added p1-f090 constitutional symptoms absent (b00003, abstract) as source_conflict review_only against the introduction's B-symptom statement about this case",
+    "Added p1-f091 gross description 'greyish-white lymphoid tissue' as ambiguous review_only with a new ambiguity: Fig 1 pixels show pink-tan tissue",
+    "Split event p1-e02 into laboratory investigations (e02) and imaging (new e12); added events e13 (uneventful post-surgical healing) and e14 (bone marrow biopsy); linked PAX-5, discussion histopathology and post-surgical tissue testing facts to events",
+    "Temporal relations 3 -> 7: imaging->biopsy (prompting), FNAC->biopsy (initial cytology), biopsy->histopathology (after surgery), biopsy->IHC (test of removed tissue), biopsy->healing (after surgery), kept referral->chemo and chemo->PET-CT plan",
+    "Summary claim 3 adds the bone marrow biopsy result",
+    "Removed ABVD->follow-up relation after coordinator review: its only quote is a purpose clause, which does not order events"
+  ],
+  "unresolved": [
+    "Ann Arbor stage conflicts between the abstract (IIIB) and the results and discussion (Stage II); no stage is accepted (both quarantined).",
+    "B symptoms are stated as present in the introduction but absent in the abstract, case presentation and discussion; fever, weight loss, skin itch and B symptoms are quarantined, night sweats absence is accepted.",
+    "CT nodal-region description conflicts between the results paragraph and the discussion; both quarantined, largest node size and pleural effusion retained.",
+    "The authors state they did not evaluate the chemotherapy treatment tolerance during their research period; no tolerance or response fact is recorded.",
+    "No explicit remission, response or death is stated; interim PET-CT results were awaited at the time of reporting.",
+    "Bone marrow biopsy and CD30 documentation appear only in the discussion; no timing is stated for the bone marrow biopsy.",
+    "Caption-layer visual status not_inspected; the three JPEGs were inspected in the separate visual submission.",
+    "The abstract and discussion are partly generic or literature-style prose; only statements about this patient were recorded.",
+    "The case-text gross description of Figure 1 (greyish-white) does not match the photograph colour; recorded review_only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 13,
+    "facts_reviewed": 91,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (72-year-old man, classical Hodgkin lymphoma); roster 1 correct",
+      "Stage IIIB (abstract) vs Stage II (results, discussion) kept as source conflict, both review_only",
+      "Introduction sentence 'This case stands out ... B symptoms such as fever, weight loss, and skin itch' refers to this case (next sentence matches its FNAC), so the B-symptom conflict is genuine; fever, weight loss, itch, B symptoms and constitutional symptoms quarantined, night sweats absence accepted",
+      "CT nodal regions (b00004) vs 'confined to cervical and inguinal' (b00009) kept as conflict on the nodal-region attribute only",
+      "Polymorphous vs fibrotic background and bilateral vs right/left nodes are ambiguities, not conflicts",
+      "Unremarkable PMH as absent 'Notable past medical history' follows prior dense500 practice; CD30 'not documented' kept as not_reported, never not_performed or negative",
+      "Bone marrow biopsy is a patient-specific discussion statement ('In this case') and kept; no time",
+      "No remission or response recorded: the discussion's 'as illustrated in this case' remission phrase contradicts PET-CT details awaited; kept as ambiguity only"
+    ],
+    "residual_risks": [
+      "Article has internal inconsistencies (stage, B symptoms, CT extent, background) that limit how many facts are scorable",
+      "Biopsy->IHC order relies on the test-of-removed-tissue rule rather than an explicit order word",
+      "Fig 1 colour mismatch with the text is unresolved"
+    ]
+  },
+  "physician_adjudicated": false
+}
