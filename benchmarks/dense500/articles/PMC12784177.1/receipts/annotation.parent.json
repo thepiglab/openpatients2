@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12784177.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "96557a7777f87c942c2ccb86f6f4a0e13938a5eb24032e28ec497cd2cf071019",
+  "annotation_sha256": "59f9077a1e285e340ed4c1f15b0238998c6aff04ee2b9c28563f8f0fd9799ebb",
+  "reviewed_at": "2026-10-16T06:15:39.446694+00:00",
+  "source_segments_read": 34,
+  "facts_reviewed": 112,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f087 immunodeficiency workup not performed: source_conflict -> ambiguous (review_only). Figure 6 flowchart text is pixel content and never a conflict side; the remaining ambiguity is textual (HIV test was done while the discussion says no immunodeficiency workup). Ambiguity entry and article limitation reworded accordingly.",
+    "p1-f061 serum WBC: flag unknown -> high, with the Table 1-citing text 'leukocytosis' (b00006, b00001) added as evidence; duplicate generic leukocytosis observation p1-f070 removed and its event/summary references dropped.",
+    "p1-f042 (six weeks IV ceftriaxone), p1-f044/p1-f045 (pneumococcal/meningococcal vaccines): action planned -> unknown; the source only says the infectious disease team recommended them. Event p1-e20 reworded as the consultation with recommendations, occurrence planned -> occurred, kind plan -> other.",
+    "p1-f107 patient's wish to consult other physicians: plan_type referral -> other (not a clinician referral).",
+    "Added relations e15->e18 ('improved since starting antibiotics'), e07->e14 ('Initial CT'), e14->e17 (abscess finding -> surgery offered for it), e11->e22 and e16->e22 ('Blood culture was repeated after antibiotic course completion'), e18->e23 (inpatient course vs follow-up 'after discharge')."
+  ],
+  "unresolved": [
+    "Figure captions carry caption-level claims only; pixels are described in visual.json.",
+    "Figure 6 flowchart pixel text lists an immunodeficiency investigation (HIV test, immunoglobulins) as a management step; image content is never a conflict side, and the text statement of no immunodeficiency workup is kept review_only as ambiguous because the HIV test was performed.",
+    "Table 1 values are from the admission workup; flags are taken only from the text that cites Table 1 and never from reference ranges.",
+    "The case text does not give calendar dates; times are relative phrases kept literal.",
+    "Discussion and introduction passages about literature cases, statistics and general recommendations are not patient facts.",
+    "NO-BORROWING warnings on p1-f088 to p1-f090 are retained deliberately: the b00005 sentence states that Figures 1-2 are the CT scans from the previous admission, so that time governs the caption findings."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 34,
+    "facts_reviewed": 113,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Single index patient (22-year-old man); roster count 1 from 'We report a case of a 22-year-old man'. Discussion literature cases (Giunta, Kendirli, Sadr) are not patient facts.",
+      "All nine Table 1 rows are observations; flags only where the Table 1-citing text names them (leukocytosis, high CSF protein, low CSF glucose and ratio); CRP/procalcitonin stay flag unknown because 'elevated inflammatory markers' does not name them.",
+      "Brain abscess kept provisional (MRI 'highly suggestive of an abscess'); previous-episode suspected abscess kept refuted with its own 'Last year' sentence.",
+      "Encephalocele: case text left frontal (include); discussion 'unilateral frontoethmoidal' kept as a separate review_only ambiguous fact with an ambiguity entry.",
+      "NO-BORROWING warnings on p1-f088-f090 are checker false positives: b00005 states Figures 1-2 are the CT scans from the previous admission, which governs the caption findings.",
+      "Figure 5 'LPH' is unexplained burned-in yellow text; visual.json transcribes it without interpretation and the privacy sidecar flags it as device text without the value implying identity."
+    ],
+    "residual_risks": [
+      "Figure 4 pixels look FLAIR-like although the caption says T1 with contrast; visual.json takes the modality from the caption only.",
+      "Whether the six-week ceftriaxone course and the vaccines were actually given is not stated; recorded as action unknown.",
+      "Timing of the refusal of surgical repair in b00005 (previous or present admission) is not stated and left unordered."
+    ]
+  },
+  "physician_adjudicated": false
+}
