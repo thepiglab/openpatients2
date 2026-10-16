@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC13313421.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6ca518b9a0c0e4fb878d9657387aa35270557913d9741bbb004c7a8a3579c4ad",
+  "annotation_sha256": "dac00ed2e8bd52724918ae7147523085b624c154b86618ceb754c8fc4e943631",
+  "reviewed_at": "2026-10-16T09:24:43.002217+00:00",
+  "source_segments_read": 45,
+  "facts_reviewed": 103,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f028 hemoglobin 97 g/L: flag set to low because the source itself classifies it (\"indicated anemia characterized by a hemoglobin level of 97 g/L\").",
+    "p1-f030 PIVKA-II kept unflagged: \"elevated\" literally precedes AFP only; ambiguity reworded accordingly.",
+    "p1-f052 follow-up Sonazoid ultrasound: flag negative -> unknown (imaging, not a qualitative test; result kept as text).",
+    "p1-f002 age: added the Table 1 row 18 Age cell and header as evidence (OBS-TABLE-ROWS).",
+    "p1-f062 general anesthesia: time \"after 15 days\" from its own quote.",
+    "p1-f066 mindfulness-based stress reduction: \"positive visualization\" removed as indication (it describes the technique; kept in evidence and notes).",
+    "p1-f060 cesarean: added discussion case statement b00036; p1-f101 remission: added b00036 case evidence.",
+    "Added 7 literally supported relations: e05 consent before e06 cesarean (\"Subsequently\"); e09 before e11 (\"postoperative recovery ... discharged\"); e09 during e13 (psychology support \"throughout the entire perioperative period\"); e16 diagnosis and e01 presentation (34 weeks) before e09 hepatectomy (34-week cesarean + 15 days) and before e07 CT (delivery + 10 days), quoting both stated times.",
+    "Summary claims 3-4 reworded so psychology support is perioperative and the anxiety/compliance improvement is not attributed to the follow-up assessments.",
+    "Added ambiguity: CBT described twice (immunotherapy misconceptions vs anxiety before surgery); survival ambiguity gained the b00036 \"(2 years)\" quote."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the 6 figure images were inspected in the separate visual submission.",
+    "Table 1 rows 1 to 17 describe literature cases reported by others and are not patient facts; only row 18 (present case) is used.",
+    "Discussion statements that mix general and case content (staged surgical protocol, emergency cesarean for huge HCC, mechanisms, guideline text) are not assigned to the patient.",
+    "Hemoglobin and PIVKA-II carry no flag because the source gives no flag word for them.",
+    "No anxiety scores, HADS results, doses beyond lenvatinib 8 mg/day, or dates are stated."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 45,
+    "facts_reviewed": 103,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Single index patient (33-year-old primigravida, HCC diagnosed at 34 weeks); newborn and fetal MRI kept in her record; only Table 1 row 18 used, rows 1-17 are literature cases.",
+      "Right lobectomy (abstract) and right hepatectomy (case text) recorded as one operation 15 days after the cesarean, with an ambiguity.",
+      "\"discharged for 3 weeks post-surgery\" kept with relation unknown and an ambiguity; four tumor sizes (US, CT, maximum diameter, specimen) kept as separate measurements.",
+      "BCLC/emergency-cesarean discussion sentence not assigned (mixes protocol and case); remission and quality of life recorded as stated by the authors.",
+      "Fig. 3 volume/attenuation values are pixel content only; device text flagged on Fig. 3 and Fig. 6, label card on Fig. 4B."
+    ],
+    "residual_risks": [
+      "Order of laboratory tests, MRI, Sonazoid ultrasound and 3D reconstruction relative to delivery is not stated and remains unlinked.",
+      "Start of Sintilimab/Lenvatinib relative to discharge and to the 2-month ultrasound is not stated.",
+      "Survival duration is stated approximately and as lower bounds; no exact follow-up length."
+    ]
+  },
+  "physician_adjudicated": false
+}
