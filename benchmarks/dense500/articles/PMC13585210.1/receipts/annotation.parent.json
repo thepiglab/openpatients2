@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC13585210.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0631d7471b92bef065a56dc52c2d0025115625dd122f31cdecdf56566d13638e",
+  "annotation_sha256": "92299a7895d532bf0e6a52f53f96540d1fd3f1423901e1ae407f9904c4cd0ee2",
+  "reviewed_at": "2026-10-16T07:50:43.877181+00:00",
+  "source_segments_read": 37,
+  "facts_reviewed": 105,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f105 (hospital admission recorded as a care_plans item; SECTION-CAREPLANS scope) and repointed event p1-e02 and summary references.",
+    "p1-f051 first LFTs: added the abstract quote that literally says \"the first LFTs\"; notes state it is not merged with admission ALT/AST or Table 1 cells.",
+    "p1-f100 LFT improvement: added the case-presentation quote that LFTs reached near-normal values at hospital discharge.",
+    "Event p1-e01 description no longer adds \"before admission\" wording; relation to admission now carried by a quoted relation.",
+    "Lab-day events p1-e05..p1-e09 now link every Table 1 result cell of their column (previously only SGOT, SGPT and ferritin).",
+    "Added events p1-e21 (relatives infected before symptom onset), p1-e22 (admission ALT/AST text values), p1-e23 (supplemental oxygen 5 L/min with SpO2 86% to 92%), p1-e24 (normal abdominal sonogram), p1-e25 (first LFTs >5x ULN).",
+    "Added 11 literally supported relations: relatives infection before symptoms; seven-day symptoms before admission; admission findings and admission ALT/AST same_time admission; first LFTs before remdesivir (\"treated with remdesivir despite the first LFTs\"); treatment days 2-5 before CT on treatment day 6 before oxygen reduction on treatment day 8; hospital day 6 fever before oxygen stop on hospital day 10 before discharge after 14 days; oxygen start before its discontinuation; Discharge day labs same_time discharge.",
+    "Added ambiguities: follow-up visits have no stated reference point (no order to discharge recorded); second chest CT findings carry no time of their own."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the single Figure 1 image was inspected in the separate visual target.",
+    "Table 1 reference ranges are printed in the row labels with units; units on result cells are taken from those row labels and no flags are derived from the ranges. Dash cells are not reported values.",
+    "Text ALT 286 and AST 217 on admission have the analyte labels reversed relative to Table 1 first-day SGOT 286 and SGPT 217; kept as ambiguity and both pairings review_only.",
+    "Table time headers (First day, Third day, Fifth day, Seventh day, Discharge day) do not name their reference point and are not equated to treatment or hospital days.",
+    "Consent statement in the introduction is administrative and not recorded as a clinical fact."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 37,
+    "facts_reviewed": 106,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single 6-year-old female, COVID-19 pneumonia with elevated liver enzymes treated with remdesivir and dexamethasone; roster count 1 from a singular case statement.",
+      "All 48 Table 1 value cells present as observations with literal units from the row-label reference parentheticals; dash cells correctly omitted.",
+      "Text ALT 286/AST 217 on admission vs Table 1 first-day SGOT 286/SGPT 217 is a label swap (ambiguity per rulings): only the four overlapping facts are review_only; Table days 3 to discharge stay include because only day 1 overlaps the text and the source does not show which side is mislabelled.",
+      "Table day headers share one unstated anchor; they order the lab-day events among themselves but are not equated to treatment or hospital days; Discharge day is tied to discharge.",
+      "Treatment-day and hospital-day counts are not converted into each other; relations only within one anchor.",
+      "Relatives list \"parents and grandfather and mother\" kept verbatim with an ambiguity; no member count inferred.",
+      "Supplemental oxygen kept in medications (administered 5 L/min nasal cannula, stopped day 10 of hospitalization).",
+      "Figure 1 viewed at full resolution with per-panel crops; visual descriptions consistent with pixels."
+    ],
+    "residual_risks": [
+      "The SGOT/SGPT label swap could affect every column if the table rows rather than the text are mislabelled; days 3 to discharge are scored include on the table labels.",
+      "Meropenem start, fever subsidence after 48 hours and follow-up visits have no literal anchor and remain unordered.",
+      "Measurement series scores the whole SGOT and SGPT rows review_only (series-level scoring), stricter than the annotation facts."
+    ]
+  },
+  "physician_adjudicated": false
+}
