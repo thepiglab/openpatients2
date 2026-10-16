@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC12584171.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "12a13ca26c2d26aa88eb9345fabd73c8be0f3fdb8983e5a0b9eaec71b218ea4f",
+  "annotation_sha256": "258ffa9a78cc94e1e936051037897fcaddacf3e522243354a6536787cbf35dad",
+  "reviewed_at": "2026-10-16T03:06:31.799325+00:00",
+  "source_segments_read": 29,
+  "facts_reviewed": 116,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1 relation e06->e07 changed from before to overlaps: cultures at 4 and 8 weeks after meropenem initiation fall within the 8-week course.",
+    "Added p1 relations with literal support: SUB placement before flush visit (\"1 month following SUB systems placement\"), CKD unmasked before SUB flush, diagnosis before meropenem (\"Thus, the cat was treated\"), negative follow-up cultures before euthanasia (\"shortly preceding this\").",
+    "Added p2 relation bile culture/susceptibility results before switch to meropenem and metronidazole (\"Thus, the dog was switched\").",
+    "Removed \"later\" from p2 summary (order of loss to follow-up is not stated).",
+    "Table 1 aminoglycoside gene text_values restored to literal cell spelling \"aph (6)-Id\"; urine leukocyte text_value keeps source en dash.",
+    "Table 1 underlining ambiguity rewritten: underlined entries identified from raw XML; all already differ in cell text; ambiguity copied to p2.",
+    "Added p2 ambiguity on scope of \"for 3 weeks\" across meropenem and metronidazole; kept as both drugs (supported by \"dual antibiotic therapy\").",
+    "Article limitations updated (underlining, figure-only second bile culture label).",
+    "visual.json corrected against pixels: cat meropenem bar spans about mid Oct-Nov to mid Dec-Jan; dog no-growth bile arrow ends just before July tick; figure-EHR and privacy sidecars regenerated with --draft and labels carried over."
+  ],
+  "unresolved": [
+    "The article states \"both patients\" without a numeric count; a cat and a dog are annotated and the numeric roster count is left null.",
+    "Figure 1 labels an Enterococcus urine culture for the cat that the text does not mention; it is described only in the visual review and not recorded as a clinical fact.",
+    "Figure month labels are not stated in the text and are not used as dates.",
+    "The text does not say whether the SUB flush was performed or which animal each sequence accession belongs to.",
+    "Meropenem and metronidazole duration of 3 weeks follows the coordinated phrase for the dog and is read as covering both drugs.",
+    "Discussion statements about cohorts, other households, a cited ST131 dog case and people are background and are not assigned to either animal.",
+    "Table 1 underlining that marks differences between isolates is not preserved in the parsed source text; the original XML underlines only entries whose cell text already differs.",
+    "Figure 1 also shows a second dog bile culture label (\"E. coli C. perf\") at the June tick and drug boxes without durations; arrow positions are read only in the visual review and are not used as dates."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 29,
+    "facts_reviewed": 116,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Two nonhuman patients (cat p1, dog p2) correctly separated; Table 1 cat/dog columns assigned per column with all 32 cells present.",
+      "Roster count left null: the source says \"both patients\"/\"a cat and a dog\" with no numeral, which the roster rule requires.",
+      "Cat euthanasia kept as outcome death with deceased_during_course: euthanasia is a death of the patient within the described course.",
+      "\"both animals\"/\"both patients\" sentences (clinical signs, negative follow-up cultures, diets, meropenem selection) explicitly cover both patients; consultation kept review_only because its per-patient scope is not stated.",
+      "Fig 1 Enterococcus urine culture for the cat confirmed in pixels; text does not mention it, so it stays visual-only."
+    ],
+    "residual_risks": [
+      "Five cat follow-up urine cultures kept as one observation with the shared result and combined time text.",
+      "Text class-level susceptibility statements coexist with per-cell Table 1 items; they are distinct statements but overlap in content.",
+      "Duration \"for 3 weeks\" assigned to both dog drugs by coordination.",
+      "Genomic/QC comparison facts are copied to both patients because the source states them for both isolates."
+    ]
+  },
+  "physician_adjudicated": false
+}
