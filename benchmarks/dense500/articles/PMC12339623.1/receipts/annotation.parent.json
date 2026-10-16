@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12339623.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "afd952f542056d602c08614dd05b0f245e802313fe15d75d69f826578c7f3845",
+  "annotation_sha256": "23d10bbebfa7f5f2c1a1ef3d7701106a0bd217cc3b79543a978460e66341b01e",
+  "reviewed_at": "2026-10-16T01:10:53.219362+00:00",
+  "source_segments_read": 37,
+  "facts_reviewed": 137,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged the p2 Table 1 final BCVA 0.9 cell into p2-f025 (left BCVA after four months, which the text calls his final visit), removing p2-f030 and repointing references; the other Table 1 worst/final BCVA cells stay separate table observations without borrowed eye or time.",
+    "p3-f025 follow-up OCT: body site OS from the Figure 3 caption sentence about panel d ('remains partially disrupted OS').",
+    "p3-f026 reduced clinical follow-up chosen by the patient: action_status unknown -> planned (event stays planned).",
+    "Fundus 'unremarkable / normal' text values for p1, p3, p4 set to 'normal' (scoped normal examination).",
+    "Added seven literal relations: p1 labs before diagnosis ('Ultimately'), p1 amoxicillin before improved vision ('resulting in'); p2 MEWDS considered before final diagnosis ('Initially'/'ultimately'), p2 four-month visit same_time final visit ('That marked his final visit'); p3 workup before diagnosis ('ultimately'), p3 improvement before opting for reduced follow-up ('had improved'); p4 episcleritis before presentation ('Two months prior').",
+    "p2 single-value ambiguity and the article limitation updated for the p2 merge."
+  ],
+  "unresolved": [
+    "Table 1 gives single values for some BCVA and refractive-error cells for Patients 1 and 2 under an OD/OS header; no eye was assigned. Table worst/final BCVA cells stay separate table observations, except Patient 2 final BCVA, which the text states at his final visit.",
+    "Eye laterality of Patient 1 findings differs between the Table 1 affected-eye cell (OD) and the OCT text and caption (OS or OU); retained without resolution.",
+    "The parenthetical values in the initial visual acuity statements were not interpreted beyond the source wording; no best-corrected or uncorrected labels were added.",
+    "Caption-layer visual status is not_inspected; actual images are inspected in the visual submission.",
+    "Discussion statements about general guidelines, literature and the AZOOR complex are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 37,
+    "facts_reviewed": 139,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Four patients numbered Patient 1-4 consistently in Table 1 and the case text; the abstract's anonymous 'one patient' is not identity evidence, so ROSTER-ORDER holds.",
+      "Patient 1 laterality: Table affected eye OD (symptomatic eye, BCVA and scotoma OD) vs OCT nodule OS and caption EZ disruption OU are not mutually exclusive, so kept as an ambiguity rather than a source_conflict pair; diagnosis laterality unknown.",
+      "Initial VA text_value keeps the literal parenthetical; numeric_value is the literal first number stated for that eye; uncorrected/corrected labels not inferred.",
+      "Follow-up OCT times come from caption lead sentences naming the panel ('OCT results at 4 months after starting treatment (d)'), which structurally govern the panel.",
+      "Patient 2 MEWDS absent/refuted after unremarkable IA is correct.",
+      "Abstract and discussion statements applied to all patients only where literal ('They were diagnosed ... resulting in improved vision', 'all current patients exhibited myopia', 'Our patients received treatment from dermatologists').",
+      "FA '(NA)' cells as not_performed per OBS-NOT-PERFORMED (not available).",
+      "All 16 panels viewed at full resolution with zoomed Goldmann charts; visual, EHR labels (Fig1d chart override) and privacy flags match pixels."
+    ],
+    "residual_risks": [
+      "Table worst/final BCVA cells for p1, p3 and p4 may duplicate text values but are not stated as the same measurement, so they stay separate.",
+      "Table 1 'central scotoma' and text 'significant scotoma OD' kept as separate items.",
+      "Abstract list of five worst acuities across four patients is not assigned to individuals."
+    ]
+  },
+  "physician_adjudicated": false
+}
