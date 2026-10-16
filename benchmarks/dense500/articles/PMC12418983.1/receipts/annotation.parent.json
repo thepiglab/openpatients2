@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12418983.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "77458931002bb73f6d5162a8cb35c04b9a78ccece938978e14194b08b94d693c",
+  "annotation_sha256": "8136a7c0275ab805fb716f7d0642658a9908716b22ae43bfcb7511afe165fe52",
+  "reviewed_at": "2026-10-16T01:53:17.806748+00:00",
+  "source_segments_read": 51,
+  "facts_reviewed": 208,
+  "patients_reviewed": 20,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "All 20 laryngeal-cyst conditions: replaced series inclusion-criterion evidence (b00008) with the explicit 'Endoscopy was employed to confirm the diagnosis ... in all 20 patients' (b00037); diagnostic_basis 'Endoscopy'",
+    "Added 21 treatment events (one per decoded Table 1 treatment fact not yet in the timeline, incl. plasma ablation for cases 8 and 12); no order between aspiration and ablation asserted",
+    "Added review_only/ambiguous no-recurrence outcome for the 18 'other children' (p1, p4-p20) from b00035/b00003 with matching ambiguities",
+    "Added ambiguities: cases 8 and 12 aspiration 'before intubation' vs Table 1 no intubation history; unnamed 'surgery' for cases 3 and 9 not linked to the table treatment",
+    "Source coverage for b00035/b00037 and article limitations updated (intubation N cells, table 2 caption numbering)"
+  ],
+  "unresolved": [
+    "Retrospective 20-patient case series; only Table 1 rows, the Table 1 footnote, case-numbered sentences and the three figure captions are assigned to individual patients. Cohort counts (symptoms, misdiagnosis, complications, CT/ultrasound counts, anti-reflux treatment in fourteen patients, recurrence statements) are not copied to individuals.",
+    "Figure captions refer to the 19th and 3rd child \"in table 2\" but the article contains only Table 1; ordinals are matched to Table 1 rows 19 and 3.",
+    "The Table 1 treatment cell \"4–2\" for patients 8 and 12 is decoded as cyst aspiration and plasma cyst ablation via the footnote; the cell does not state their order.",
+    "The \"surgery\" in the case 9 and case 3 post-surgery sentences is not named in those sentences and is not linked to a specific table treatment.",
+    "No patient ages, presenting symptoms, imaging or laboratory values are given per patient apart from the case-numbered text and figure captions.",
+    "Caption-layer figure visual status is not_inspected; actual pixels were inspected in visual.json.",
+    "History of intubation N cells (patients 6 to 20) are recorded as assertion=absent: under the Y/N column header the cell is the table's explicit negation; the EVID-NEGATION warnings on these items are checker false positives.",
+    "Figure 1-3 captions cite \"table 2\"; Figure 3 (3rd child) is corroborated by the case 3 text that cites Figure 3, which confirms the captions use Table 1 numbering, so Figures 1-2 are kept on row 19."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 51,
+    "facts_reviewed": 208,
+    "figures_viewed": 3,
+    "key_findings": [
+      "20 patients = Table 1 rows (literal 'Ultimately, 20 patients'); case numbers in text match rows (cases 7/18 = code 3, cases 8/12 = 4-2)",
+      "Captions' 'table 2' is a numbering error: Fig 3 '3rd child' is corroborated by the case 3 text citing Figure 3, so the same convention supports Fig 1/2 -> row 19",
+      "Intubation 'N' cells under the Y/N column header are the table's explicit negation; 30 EVID-NEGATION warnings are checker false positives",
+      "Bronchoscopy sentence literally covers all twenty; p3 1- and 2-week bronchoscopy sentence directly continues 'In the case of patient 3' and matches the case 3 follow-up text",
+      "Treatment codes decoded via footnote only; '4-2' carries no order"
+    ],
+    "residual_risks": [
+      "p19 figure attribution rests on the caption ordinal with a wrong table number",
+      "Membership of the 18 no-recurrence children is by exclusion (kept review_only)",
+      "Cohort-only counts (symptoms, misdiagnoses, pneumonia, anti-reflux in 14, CT in 17) cannot be assigned to individuals"
+    ]
+  },
+  "physician_adjudicated": false
+}
