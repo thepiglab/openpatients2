@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC12477040.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e3b3d041114079ab84977871a8c4a901f07708f56aeb562e3c2ff6e373b1786d",
+  "annotation_sha256": "6ed482a0cec9e442129246f82f6e397b84e03cbd45a6078423e46ea39328f4f7",
+  "reviewed_at": "2026-10-16T05:41:13.253782+00:00",
+  "source_segments_read": 46,
+  "facts_reviewed": 153,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f069 (glucose 9.34) and p1-f082 (BMI 24.86): values exist only in the graphical abstract image (b00005 is its alt text); pixel content stays in visual.json; mismatches kept as ambiguities.",
+    "Removed p1-f004 (birth month/year): date of birth is an identifier; age/DOB ambiguity rewritten without the value.",
+    "Merged b00011 pre-Mazdutide values into the Table 2 Baseline cells (single pre-treatment test): HbA1c f071->f105, uric acid f072->f113, TC f073->f121, TG f074->f129, BMI f077->f097, weight f076->f089; reference values carried to the merged items.",
+    "Merged pretreatment liver ultrasound f075 and Table Baseline cell f153 into f087 (Figure 2A caption ties pretreatment to Baseline); procedure f042 into f043; week-14 ultrasound Table cell f155 into f088 (flag normal for \"Normalized\").",
+    "Merged abstract/footnote percent changes into the Table 2 % Change cells: f084->f104, f081->f104, f085->f112, f086->f120; added b00003/b00029 evidence to weight, TC, TG, LDL percent-change cells.",
+    "HbA1c and uric acid percent changes: \"After 36 weeks\" is compatible with Week 42 vs Baseline; not a timing conflict; f112/f120 set supported/include.",
+    "End BMI 24.86 (f080) vs Table 24.85 is a rounding-level ambiguity, not a conflict: f080 certainty ambiguous/review_only; Table cells stay included.",
+    "Glucose 10.18 vs 11.0 and weight 87.5 vs 87.8 confirmed as source conflicts (each literally the starting value of the same course); both sides review_only.",
+    "Medication actions: f027 metformin in combination, f028 insulin 12 IU nightly, f029 metformin adjusted dose set to administered (regimens given; outcomes reported), with own-sentence evidence.",
+    "Added relations e22 before e23 (Table columns), e03 before e04 (\"Initial attempts\"), e04 before e05 (metformin initiated, regimen later modified); removed Table percent facts from the 36-week event e18.",
+    "Added ambiguity on the conflicting March 2024 dating of the insulin adjustment plus six weeks versus the pre-Mazdutide evaluation; updated limitations, b00005 coverage and graphical-abstract figure notes.",
+    "visual.json: corrected the graphical-abstract limitation that claimed image values were recorded as annotation conflicts; regenerated figure-EHR/privacy drafts and carried labels/flags over."
+  ],
+  "unresolved": [
+    "Single-patient case report; discussion statements about Mazdutide in adults and general mechanisms are not patient facts.",
+    "Table 2 NA cells are recorded as not reported without interpretation; no zero or normal substitution.",
+    "Table 2 reference ranges are not printed; text ranges in b00011 and b00029 differ and no flags were derived from them.",
+    "Values plotted in Figure 1 were not read as facts; Figure caption claims are kept separate from pixel review in visual.json.",
+    "Time-governed items use Table 2 column headers or in-sentence dates only; text-only items without their own time are null.",
+    "Source conflicts recorded as review-only facts: starting fasting glucose (10.18 vs 11.0 mmol/L) and starting weight (87.5 vs 87.8 kg). End BMI 24.86 vs 24.85 kg/m² is a rounding-level ambiguity (24.86 review-only).",
+    "The graphical abstract is an image; its alt text (b00005) describes printed values. Image-printed values are pixel content kept in visual.json only and are not facts; mismatches with the text (glucose 9.34, BMI 24.86) are ambiguities.",
+    "The birth month/year printed in the case is an identifier and is not stored."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 46,
+    "facts_reviewed": 170,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single 15-year-old male; roster 1 from \"We report the case of a 15-year-old male patient\".",
+      "All 72 Table 2 cells (incl. NA and % change cells) present; Table 1 rows present.",
+      "Graphical abstract values are pixel content only; no fact cites b00005.",
+      "Mazdutide stage NO-BORROWING warnings are checker false positives: each stage time is in the quote that also carries the stage dose, and the route sentence is the lead of the same Mazdutide protocol (b00002 also states 2 mg -> 4 mg -> 6 mg subcutaneously once weekly)."
+    ],
+    "residual_risks": [
+      "b00011 sentences after the first are left untimed (only the first sentence is time-scoped); merged values take time from the Table 2 Baseline column.",
+      "Starting fasting glucose 10.18 vs 11.0 may reflect different methods (lab vs glucometer); kept as a conflict because both are stated as the starting value.",
+      "March 2024 dating of the pre-Mazdutide evaluation conflicts with a March 2024 regimen change followed by six weeks; recorded as an ambiguity only."
+    ]
+  },
+  "physician_adjudicated": false
+}
