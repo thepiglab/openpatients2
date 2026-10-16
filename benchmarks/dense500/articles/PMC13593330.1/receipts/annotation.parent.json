@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC13593330.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c12934f29eda49fe0df9922000f91c74a1395b8b606abe5b0855ac185115d769",
+  "annotation_sha256": "09788e72b9d9658171c60c6421f5cce0f10e6cf5efd1cfe09db23bdbc8d04456",
+  "reviewed_at": "2026-10-16T07:35:20.763375+00:00",
+  "source_segments_read": 37,
+  "facts_reviewed": 130,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f023 community-acquired pneumonia: assertion unknown -> absent, verification unknown -> refuted (source: \"incorrectly diagnosed\"); name trimmed to the concept.",
+    "p1-f082 AI lung tumor lesion: assertion unknown -> absent, verification unknown -> refuted (source: \"mistakenly diagnosed\"); radiologist \"probably neoplastic\" item kept as possible.",
+    "p1-f029 smoking status unknown -> current (\"has never quit smoking\"); removed the ambiguity that forbade inferring current smoking.",
+    "p1-f113 suspected AFOP assertion present -> possible (provisional kept).",
+    "Added p1-f130 observation: histologic diagnosis not performed (\"lack of histologic diagnosis\").",
+    "Added literal b00011 quotes to p1-f120 (cough disappeared) and p1-f121 (reexamination CT).",
+    "Removed relation e04->e05 (seeing a doctor vs hospitalization not literally ordered; source conflicts on where the empirical therapy was given).",
+    "Added relations e03->e04 (therapy proved ineffective / no relief) and e10->e14 (no negative reactions to the steroids at the 6-month checkup); added the \"Initially\" quote to e03->e10.",
+    "Summary claim 1: \"had been incorrectly diagnosed\" -> \"was incorrectly diagnosed\" (pluperfect implied an unsupported order).",
+    "Ambiguities: rewrote the CAP/AI item for the refuted representation; added the empirical-therapy setting conflict and the pulse/heart-rate double statement.",
+    "Cleared irrelevant CA-129 notes on CEA and NSE."
+  ],
+  "unresolved": [
+    "Figure panels were pixel-inspected in the separate visual submission; the annotation figures keep caption-level status not_inspected.",
+    "The case text gives no calendar dates and almost no time anchors: the CT, laboratory tests and bronchoscopy are not placed relative to admission, so their times stay null.",
+    "AFOP is a suspected diagnosis from lavage-fluid cytology; the authors state there was no histologic diagnosis.",
+    "The captions print \"mediation window\", read in the visual submission as printed without correcting it.",
+    "Background and discussion statements about cavitary lung disease, tuberculosis, abscess, lung cancer and a previous AFOP case are not patient facts.",
+    "No supplements are listed in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 37,
+    "facts_reviewed": 130,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single 59-year-old man; roster 1 literal.",
+      "Incorrect CAP and mistaken AI tumor diagnoses recorded as refuted by the authors statement; EVID-NEGATION warnings are checker false positives.",
+      "Smoker is current (never quit).",
+      "Lab ranges printed without classification: no high/low flags set.",
+      "Pulse and heart rate kept as two printed statements; mNGS abstract/result merged as one test; caption sizes kept separate from text diameters."
+    ],
+    "residual_risks": [
+      "Location of the empirical CAP therapy relative to hospitalization is contradictory in the source.",
+      "Antibiotic discontinued by the MDT is not named and is not equated with moxifloxacin.",
+      "Printed oddities kept as printed (CA-129, L%/E% with absolute units, \"no touch of the liver, spleen and ribs\", \"mediation window\")."
+    ]
+  },
+  "physician_adjudicated": false
+}
