@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC12584070.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "bee69ff8a6026cd334b2f271d9ed139e9a9bba2436cee4b9125d2332d05142b0",
+  "annotation_sha256": "bc7b394b889f675e5c64a4628d2ee1763199df553bf0d8171b4d399f43bb3bf3",
+  "reviewed_at": "2026-10-16T04:22:46.478970+00:00",
+  "source_segments_read": 41,
+  "facts_reviewed": 105,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f086 (Figure 5A caption) narrowed to the conflicting attribute 'significant reduction in lesion volume and exudate'; text (30 days after dose adjustment = 35 + 30 = 65 days, citing Figure 5A) and caption (65 days) describe the same time point, so both f085 and f086 stay source_conflict/review_only.",
+    "Added p1-f103 (less friable masses) and p1-f104 (onset of re-epithelialization) from the Figure 5A caption at 65 days as included signs; they are not contradicted by the text. Linked to p1-e16; e16 description no longer asserts one side of the conflict.",
+    "Added p1-f105 exacerbation of ocular inflammation noticed by the owner (b00014), linked to p1-e09.",
+    "p1-f015/p1-f016 (Figure 5C caption, 120 days) set as alternate_representation_of p1-f012/p1-f013 because the text cites Figure 5C for the same end-of-therapy symblepharon and fibrosis; the 120 days vs 4 months and 5 days difference is arithmetic only, ambiguity text revised accordingly.",
+    "p1-f081 (Figure 2 caption worsening) set as alternate_representation_of p1-f079 (text worsening citing Figure 2).",
+    "p1-f062 abstract beta-glucan food supplement: action unknown -> administered (abstract says treatment was adjusted with it); kept ambiguous/review_only because the case text gives beta-glucans only in a topical lotion.",
+    "p1-f041 text_value 'clinical picture remains compatible with' -> 'intense'.",
+    "p1-e09 kind adverse_event -> treatment (owner-given medications; the worsening is e10).",
+    "Added relations p1-e16 before p1-e17 ('remained unsatisfactory ... Therefore, a compounded topical lotion ... was introduced') and p1-e19 before p1-e20 ('After 30 days ... resolved. It was decided to extend ... for another 30 days')."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the five JPEG figures were inspected in visual.json.",
+    "Single index patient; no tables, supplements or videos in the source.",
+    "Abstract wording about timing of lesion resolution, sequelae and beta-glucan form differs from the case text and is kept review_only or as ambiguity.",
+    "Figure 5A text versus caption description is recorded as a review_only source conflict.",
+    "Species-level Sporothrix identification was not reported.",
+    "Discussion and background literature about sporotrichosis and beta-glucans are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 41,
+    "facts_reviewed": 105,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single nonhuman patient (male mixed-breed kitten about 2 months old); roster count 1 from 'an atypical case'.",
+      "Figure 5A text vs caption is a genuine same-time-point conflict on the response assessment; kept review_only on both sides, non-conflicting caption findings included.",
+      "Abstract 'after 1 month of therapy ... only sequelae ... third eyelid adhesion' refers to a different, unanchored time point than the body's end-of-therapy symblepharon plus eyelid fibrosis, so it is not a literal conflict; abstract facts stay ambiguous/review_only and body facts stay included.",
+      "Abstract beta-glucan food supplement vs body topical lotion: no body statement denies a supplement; kept ambiguous/review_only.",
+      "Medication actions verified against wording: pre-referral drugs administered + temporality historical ('prior to'), washout held, acyclovir/gentamicin/itraconazole/SAMe/lotion started, owner drugs administered, extension ordered (decision).",
+      "'After this period' anchor 'this period' is a literal substring and refers to the 5-day acyclovir course quoted in the same evidence.",
+      "All 12 relations have literal order support.",
+      "Pixels of all five figures viewed with zoomed crops of each Figure 5 panel; visual descriptions match; human hands/thumb/finger with nail polish visible in Figures 2 and 5A-C are not faces or identifiers, privacy flags correct."
+    ],
+    "residual_risks": [
+      "Whether the Figure 5A text/caption discrepancy is an author error or a difference in judgement cannot be resolved from the source.",
+      "Abstract 'third eyelid adhesion' may be the same lesion as the body's symblepharon; left unreconciled.",
+      "Extension of antifungal therapy recorded as a decision (occurrence unknown) although the text gives a total treatment length."
+    ]
+  },
+  "physician_adjudicated": false
+}
