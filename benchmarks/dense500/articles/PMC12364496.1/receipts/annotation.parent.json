@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12364496.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "21a9e0226c95c54c702c37c00b2c8eba4cdc89fef6e5e03f1d3100fe0ab85aaa",
+  "annotation_sha256": "dfa5112a58ee07d6f6e4dbe9d158dd56d68a208fb6eea1089310038f106c0084",
+  "reviewed_at": "2026-10-16T07:09:57.150290+00:00",
+  "source_segments_read": 31,
+  "facts_reviewed": 65,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged p1-f006 (clinical diagnosis \"chronic purulent otitis media\") into p1-f004 (chronic suppurative otitis media): same diagnosis of the same patient (ONE-STATEMENT); repointed event p1-e04, summary and ambiguity references.",
+    "p1-f005 Kerstersia gyiorum infection: added the abstract WGS identification quote supporting diagnostic_basis.",
+    "p1-f034 susceptibility testing: removed annotator commentary (\"Table 1 lists 17\") from text_value; the 20-versus-17 count stays an ambiguity.",
+    "p1-f029 Gram stain: added the light-microscopy sentence and caption 1000x magnification as evidence and method.",
+    "Added p1-f066 care_plans follow-up visit (completed, \"At a subsequent follow-up\") linked to event p1-e12; care_plans domain now documented.",
+    "Relation p1-e06 before p1-e11: evidence now quotes the administration sentence plus \"instructed to continue\" (start precedes continuation).",
+    "Added relations p1-e01 before p1-e02 (self-treatment reported in her complaints at presentation, past perfect) and p1-e05 before p1-e08 (\"Pure bacteria were isolated and sent ... for WGS\").",
+    "Genome length ambiguity reworded as a one-character comma print artefact; Figure 2A pixel value kept in visual.json only.",
+    "Summary claim 3 now states the author remission, effectiveness and delayed-progression claims it cites; claim 1 wording aligned to \"history of alcohol consumption\"."
+  ],
+  "unresolved": [
+    "Single case report; the isolate (organism from patient) results are recorded as patient-specimen observations.",
+    "The abstract reports chloramphenicol resistance while the Discussion states susceptibility to all antibiotics; both sides are review-only conflict facts and Table 1 rows stay included.",
+    "Text says 20 antibiotics were tested but Table 1 lists 17 agents.",
+    "No dates, durations of follow-up or ages of onset are given beyond several years of ear canal fluid and ten days of ceftriaxone.",
+    "Figure pixel content is in visual.json; text and caption disagree on the GO versus KEGG panel order of Figure 2 (pixels match the caption).",
+    "Discussion statements about previous published cases and general disease course are background, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 31,
+    "facts_reviewed": 66,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single 52-year-old woman; roster 1; isolate results kept as index_patient observations with specimen field (Subject enum has no organism value).",
+      "Chloramphenicol: abstract resistant vs Discussion susceptible to all; both review_only source_conflict facts; Table 1 omits chloramphenicol and its 17 rows stay included.",
+      "Text says 20 antibiotics, Table 1 lists 17: ambiguity only.",
+      "Figure 2 C/D: pixels show KEGG in C and GO in D, matching the caption; text order swapped; labelling ambiguity only.",
+      "Genome length 507,9440 bp is a one-character print artefact: kept as text, included, with ambiguity.",
+      "Prior-treatment drugs p1-f018 to p1-f020 each carry \"Prior to commencing the bacterial culture\" literally in their own first quote."
+    ],
+    "residual_risks": [
+      "Order of presentation, examination, CT, clinical diagnosis and culture is paragraph order only and left unlinked.",
+      "Follow-up timing and whether drops were continued after instruction are not stated.",
+      "Author statement that lack of treatment \"delayed the condition progression\" is recorded as written though its meaning is unclear."
+    ]
+  },
+  "physician_adjudicated": false
+}
