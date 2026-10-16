@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12788975.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "160666cfb343111edff08d20b088fdc8641f7e6038ad8fc7fc97459afaa69df3",
+  "annotation_sha256": "104fc68be3c3f7151c074717ef033c0a96d265d17301bab55d6a5693a0ee5a29",
+  "reviewed_at": "2026-10-16T05:02:49.710815+00:00",
+  "source_segments_read": 76,
+  "facts_reviewed": 280,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "ONE-STATEMENT duplicates merged and removed (evidence carried over): p1-f206 groin cannulation -> p1-f097; p1-f208 family fasciotomy -> p1-f128; p1-f209 family ECLS 20 days/CRRT seven weeks -> p1-f140 and p1-f141; p1-f193 preemptively placed lines -> p1-f084/p1-f085; p1-f183 discharge -> p1-f156; p1-f201 transplant not required -> p1-f202 (p1-f203 already cites it); p1-f195 family ischemic stroke -> p1-f146 cerebral infarction (only one infarction reported).",
+    "Tertiary vs quaternary receiving center is a source conflict: p1-f133 (case text, quaternary) and p1-f207 (family, tertiary) set to source_conflict/review_only; added p1-f287 transfer with ECLS for transplant evaluation (include, level-neutral).",
+    "p1-f196 family \"second intracardiac thrombus\" set to ambiguous/review_only (unclear whether a later new thrombus or the subaortic thrombus seen together with the apical one).",
+    "School grade (completed second grade vs attending third grade) and orthopedic count (one procedure for cavovarus deformity vs multiple surgeries for foot drop) judged compatible, not conflicts; both sides stay included; ambiguity text updated.",
+    "Added Table 2 row events p1-e31 to p1-e38 (0 hour to Day 1) and chained all ten rows before each other using \"summarized in Table 2 in chronological order\"; removed p1-e05->p1-e10, which linked text events through table cells that are deliberately not merged.",
+    "Added text-sequence relations: e05->e06 (\"despite pericardiocentesis\"), e07->e08 (\"Based on ... worsening LVEF ... she was started on\"), e09->e10 (\"Therefore, she was intubated\"), e10->e11 (transient improvement with ventilation, then worsening), e11->e12 (preparation; arrest before cannulation), e15->e16 (abstract: thrombus \"required systemic thrombolysis\"), e21->e22 (\"Post-ECLS MRI\"), e25->e26 (\"Months after discharge ... foot drop\").",
+    "Agent video sidecar corrected: pixel-observation intervals shifted to the frames actually showing them (second clip 12-18 s, Resolution title 20 s, third clip 22-26 s) and the provisional patient_ids note replaced (p1 confirmed by the annotation)."
+  ],
+  "unresolved": [
+    "Single-patient case report with a family perspective section; family statements are retained as source statements about the same child and flagged where they differ from the case text.",
+    "Tables 1 and 2 are retained cell by cell; Table 2 times have no stated anchor and the table is not merged with similar text statements.",
+    "Table 1 CRP value and reference value use different units in the source and are kept literally.",
+    "Video 1 was frame-sampled separately (see the video inspection file); audio and continuous motion were not reviewed.",
+    "Discussion statements about risk, literature and institutional process are not patient facts and are not recorded."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 76,
+    "facts_reviewed": 286,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single two-year-old girl; roster count 1.",
+      "Table 1 (17 rows) and Table 2 (10 rows x 7 columns) verified one item per cell with literal values; \"Not done\" cells are not_performed.",
+      "Text and Table 2 items for pericardiocentesis, intubation, TPA vs alteplase, LVEF, troponin and the transfer remain unmerged per the merge rule; high flags only on BUN, anion gap and NT-proBNP (text cites Table 1) and troponin (\"markedly elevated\").",
+      "CRP 1.8 mg/L with reference <5 mg/dL kept literal as an ambiguity; value not converted.",
+      "ASD closure completed (\"her ASD was closed\"); orthopedic procedure action unknown (\"requiring\").",
+      "Viewed FIG1-3 and all 14 VID1 frames."
+    ],
+    "residual_risks": [
+      "Text and Table 2 duplicates (e.g. troponin 33,521, LVEF 66.4%/48%) are counted twice by design.",
+      "Head CT (Discussion) and outside-institution brain CT may be the same scan; kept separate with an ambiguity.",
+      "Table 2 ECLS activation at 16 hours may be the heads-up activation; not reconciled."
+    ]
+  },
+  "physician_adjudicated": false
+}
