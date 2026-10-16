@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC12743121.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "41f37307f4c628d32110994dd8df8335e6c44e64067bcc311f2172f8d5a319a7",
+  "annotation_sha256": "29da084d77c6d3a22a84f57695f66e837e389ab80c94df3220f86c006c359049",
+  "reviewed_at": "2026-10-16T03:19:45.168306+00:00",
+  "source_segments_read": 36,
+  "facts_reviewed": 287,
+  "patients_reviewed": 7,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged narrative euthanasia outcomes into the Table 1 death items (p2-f032 into p2-f008, p5-f047 into p5-f010, p6-f035 into p6-f007): one death per cat; p2 ambiguity reworded (euthanasia is the mode of death, not a conflict).",
+    "Case 3 ventral tongue (unsampled) and case 5 lateral tongue edges (only mild dysplasia; diagnosis from dorsal tongue) recorded as oral lesions, not diagnosed in situ carcinomas; removed oncology tumors p3-f007 and p5-f007; added ambiguities.",
+    "Added \"none of the cats had obvious signs of immunosuppression or a history of immunosuppressive therapy\" to all 7 cats (immunosuppression absent; immunosuppressive therapy absent): the sentence names the 7 cats of the series.",
+    "Added missing p1 Figure 2b caption histology (crowded vertically elongated basal cells, deep keratinized cells, perinuclear basophilic bodies).",
+    "p3 PV-induced cell changes text_value set to \"not visible\".",
+    "Added relations with literal order words: p3 e01 before e02 (\"initially\"), p3 e04 before e05 (\"12 months later\"), p4 e02 before e04 (\"re-sampled ... original biopsy\"), p7 e05 before e06 (\"At this time\" after 24 months).",
+    "p7 lesion growth event kind adverse_event changed to other.",
+    "Visual: Fig 1d description no longer names a \"dark eye\" (pixels show an unidentified dark rounded structure); figure-EHR and privacy drafts regenerated and reviewed labels/flags carried over."
+  ],
+  "unresolved": [
+    "Veterinary case series of 7 cats; each cat is a separate roster patient numbered by the Table 1 row order. Breed is kept only in case context because the demographics schema has no breed attribute.",
+    "Series-level and unlabelled sentences were not copied to individual cats: the abstract and discussion counts, outcome summaries, \"most of the cats\" statements, the unlabelled histology sentences that follow the all-7 sentence (basal-cell crowding, keratinized cells, brick-like bodies and blue-gray cytoplasm in the results paragraph), and the FcaPV1 versus FcaPV3 comparison paragraph.",
+    "Case 7 sex conflict: Table 1 gives MN (male neutered) while the case narrative uses the pronoun She; both are recorded as review-only source conflicts and no sex is accepted for case 7.",
+    "Case 6 outcome timing: Table 1 gives death 14 months after diagnosis, while the text places the hemangiosarcoma skin lesions 14 months after a follow-up that was about 1 month after sampling; recorded as an ambiguity.",
+    "Treatments given as \"treated symptomatically\" or \"treated for stomatitis\" are recorded as unspecified treatments because the source names no drug or procedure.",
+    "Table 1 image and the three figure rows are inspected in a separate visual submission; the caption-layer annotation keeps visual_status not_inspected.",
+    "Oncology biomarker items for p16 immunolabeling and PV DNA were not created; those results are recorded as observations.",
+    "\"none of the cats had obvious signs of immunosuppression or a history of immunosuppressive therapy\" names the 7 cats of the series and is recorded for each cat.",
+    "Unsampled or mildly dysplastic second oral sites (case 3 ventral tongue, case 5 lateral tongue edges) are recorded as oral lesions, not as diagnosed in situ carcinomas."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 36,
+    "facts_reviewed": 287,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Seven-cat series, roster 7 literal, p1-p7 by Table 1 row and Case 1-7 descriptions.",
+      "Case 7 sex: Table 1 MN vs narrative She is a genuine conflict; both review_only.",
+      "p6 \"stopped showing clinical signs of oral pain\" is correctly oral pain absent at that time; the EVID-NEGATION warning is a checker false positive.",
+      "Dysplasia \"loss of normal orderly arrangement\" items keep flag unknown; no normal flag is literal.",
+      "b00029 histology sentence literally names case 5 dorsal tongue and case 3 samples; Fig 2f pixels show case 5 H&E main field and case 3 p16 inset as captioned.",
+      "p6 14-month timing, p5 plaques vs masses and p3 12-month anchor are ambiguities, not conflicts; p2 died vs euthanatized is not a conflict."
+    ],
+    "residual_risks": [
+      "Basal-cell crowding and keratinization sentences after the all-7 sentence and the FcaPV1 comparison paragraph stay unassigned.",
+      "Abstract and discussion counts (multiple oral lesions in 4 cats, survival over a year in 2) are not attributed to specific cats.",
+      "p6 EVID-NEGATION warning on \"stopped showing\" left as a known false positive."
+    ]
+  },
+  "physician_adjudicated": false
+}
