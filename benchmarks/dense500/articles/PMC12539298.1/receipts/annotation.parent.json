@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC12539298.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "76ef12cb86bcb22b25f6a3b737a7dfbd61ebd6590f75eec84b1c2d66f2f154c2",
+  "annotation_sha256": "e7c87e1ece3855af2290d2513f30c38a34639ce34b6debc3777d0bd08b36c015",
+  "reviewed_at": "2026-10-16T04:40:40.563628+00:00",
+  "source_segments_read": 24,
+  "facts_reviewed": 104,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Clinical-normality conflict narrowed to the attribute that conflicts (status at 3 weeks): p1-f076 (clinically normal after a month) and p1-f077 (fully normal at 6 weeks) promoted to supported/include; added p1-f104 (discussion: nearly normal at the 3-week recheck) as source_conflict/review_only paired with p1-f075 (abstract: complete resolution within 3 weeks); ambiguity and limitation rewritten; summary claim 3 now states clinical normality after a month.",
+    "Removed facts the source does not time to the 1.5-year visit from event p1-e16: total hip replacement option (now conditional plan event p1-e20) and the discussion metatarsal rotation / suspected tarsal malformation / no further diagnostics (now untimed event p1-e21).",
+    "Added literally supported relations: presentation before re-evaluation (\"re-evaluated 3 weeks later\"); rapid resolution before the sampling refusal (\"declined ... due to the rapid resolution\"); initial carprofen course before the extra week (\"one more week\"); return to normal activity before the 1.5-year report (\"maintained normal activity\").",
+    "Coordinator ruling: removed the relation CT before the presumptive diagnosis, because basis wording (\"due to ... CT findings\") gives the reason for the diagnosis, not a time order.",
+    "Coordinator rulings: removed radiographs before CT (purpose wording, not order) and JPS/DPO discussion same_time THR election (discussed vs opted is not simultaneity); kept presentation before re-evaluation (stated duration).",
+    "visual.json: Fig 1b and Fig 2 arrow targets reworded to image-relative sides (the draft said left/right iliac wing, which read as anatomical sides opposite to the caption); figure-EHR and privacy drafts regenerated with --draft and reviewed labels carried over unchanged."
+  ],
+  "unresolved": [
+    "Single canine case report. SIJ aspiration and culture were not performed, so septic sacroiliitis is not definitively excluded and the diagnosis is presumed.",
+    "Source conflicts recorded as review-only facts: left tarsal hyperextension severity (abstract moderate bilateral versus case description mild left), clinical status at 3 weeks (abstract complete resolution versus discussion nearly normal), and degree of radiographic resolution at 6 weeks (text significant reduction versus Figure 2 caption mild resolution). Normality after a month and at 6 weeks is consistent and accepted.",
+    "The text cites Figure 2b for the CT study but Figure 2 is a single radiograph; the CT is Figure 1b.",
+    "Re-evaluation findings at 3 weeks and the 1.5-year examination findings carry no per-fact time because only the lead sentence states it; the events carry the stated times.",
+    "Introduction and discussion statements about humans, other dogs and the literature are background, not patient facts.",
+    "Caption-layer figure visual status is not_inspected; the images are inspected in the separate visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 24,
+    "facts_reviewed": 104,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single canine case; roster count 1; all case, abstract, discussion and caption statements checked against the source.",
+      "Tarsal hyperextension: right moderate agrees across sources and stays included; left mild vs abstract moderate bilateral kept as a source_conflict pair.",
+      "6-week radiograph degree (significant reduction vs caption mild resolution) kept as a source_conflict pair; abstract symmetric/left SIJ wording and the Figure 2b citation of the CT kept as ambiguities.",
+      "Diagnosis presumed non-septic erosive sacroiliitis (provisional); initial presumptive inflammatory and infectious sacroiliitis kept; septic sacroiliitis a possible differential, not excluded.",
+      "Recheck findings at 3 weeks and 1.5 years correctly have null fact times: the lead sentences are separate statements, not scoping headings; events carry the times."
+    ],
+    "residual_risks": [
+      "Radiographic marker characters in Fig 2 and Fig 3a are flagged as device text; they are positioning markers, not identifiers."
+    ]
+  },
+  "physician_adjudicated": false
+}
