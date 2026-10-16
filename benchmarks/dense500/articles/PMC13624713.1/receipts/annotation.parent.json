@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC13624713.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5c708492abc8c1c4877d21568646acf05e5c1be56dffee397684f0798d63a4e4",
+  "annotation_sha256": "cc2ea68b50f78660e66a518f7cb09a554eb001fed1fd69ba9b0998bdce00f163",
+  "reviewed_at": "2026-10-16T09:11:21.249172+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 57,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f012 comprehensive cardiac evaluation: \"She had never undergone\" is an explicit negation; assertion changed from present to absent (ASSERT-ABSENT).",
+    "p1-f054 absence of ST-T segment changes: flag normal -> unknown; the source does not call this result normal (OBS-FLAG).",
+    "p1-f035 ALCAPA syndrome: time \"during pregnancy\" from its own b00002 evidence; added literal confirmation quotes b00011 and b00015. Event p1-e06 given the same literal time text.",
+    "Added 7 literally supported relations: e02 (eighth week) before e03 (15 weeks), e03 before e10 (38 weeks), e02 before e10 (stated gestational ages, both quoted); e10 during e09 (\"Throughout gestation\" ... \"At 38 weeks\"); e11 delivery before e14 Takeuchi (\"postponement of surgical treatment until after delivery\"); e07 medical therapy before e14 (\"postpone the procedure ... using supportive therapy with beta-blockers and nitrates\"); e06 diagnosis before e11 (\"diagnosed ... during pregnancy\").",
+    "Summary claim 4 reworded so the referral is not said to be for a named procedure.",
+    "Added ambiguities: provisional maternal-stress attribution later called an oversight but never refuted; preeclampsia evaluation result, cesarean indication and gestational age at delivery not stated."
+  ],
+  "unresolved": [
+    "Figure pixels are described only in visual.json; annotation figure rows keep not_inspected per convention.",
+    "No dates are stated in the text; gestational ages and relative times are kept literally and the order of ECG, echocardiography, diagnosis and start of medical therapy is not stated.",
+    "Blood pressure is kept as literal text 110/65 mm Hg without a numeric parse.",
+    "Values printed inside images (ECG header text including a sex word, device heart-rate readouts, CT date and header fields) are pixel content only and are not reconciled with the text, which calls the patient a woman.",
+    "The discussion mentions Holter monitoring that should have been performed; it is not recorded as a patient action.",
+    "Cited literature cases (Nielsen et al., Lin et al.) are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 57,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (21-year-old primigravida) with ALCAPA syndrome diagnosed by echocardiography during pregnancy; newborn kept in her record (subject newborn).",
+      "Follow-up echocardiography \"normalized cardiac findings\" kept flag normal (source classification); preeclampsia kept possible/unconfirmed (evaluation only); maternal stress kept provisional initial attribution.",
+      "Holter monitoring \"should have been performed\" is an ambiguity only, never a fact.",
+      "ECG header sex word and CT/ECG date overlays are pixel content in visual.json only; no conflict recorded, no identifier values copied.",
+      "Blood pressure 110/65 mm Hg kept as text only."
+    ],
+    "residual_risks": [
+      "Order of ECG, echocardiography, diagnosis and start of medical therapy relative to the 15-week presentation is not stated and remains unlinked.",
+      "Cesarean relative to the 38-week hospitalization is ordered only by paragraph position, so no relation was added.",
+      "Pixel overlays show device dates that cannot be reconciled with the case timeline; they are not used."
+    ]
+  },
+  "physician_adjudicated": false
+}
