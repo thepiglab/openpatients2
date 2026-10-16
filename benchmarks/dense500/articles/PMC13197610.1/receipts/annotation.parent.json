@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC13197610.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "deb0e395af3fa11dd368649c1640ce2c437fded4d437951c60bf933e8e311677",
+  "annotation_sha256": "1e6e5099ef87e50bc40d66407227c04a6dcf1eb9265c17e6a7ed4911a2bfcc1a",
+  "reviewed_at": "2026-10-16T08:33:45.839824+00:00",
+  "source_segments_read": 114,
+  "facts_reviewed": 343,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged the two BFCRS 35 facts (f142 into f141): the score is reported once for this patient and later referred to as \"35 at presentation\"; ambiguity removed.",
+    "Merged the Table 1 UDA \"+ cannabinoid\" row (f228) into the text drug screen at the authors institution (f124): a single screen is reported there; time Hospital day 1 and range Negative from the table; the husband-denial ambiguity is kept.",
+    "Dash cells for BAC, Covid, HCG and RPP: now status resulted with the printed dash as text_value and flag unknown (a dash is distinct from the blank cells); ambiguity and limitation rewritten.",
+    "Removed f027 (conditions \"History of drug use\"), which duplicated the social_exposures statement f127.",
+    "Removed the inferred amlodipine indication (f093).",
+    "Fever 39.4 C (f095) flag set to high from the source word \"fevered\".",
+    "OSH primary psychosis diagnosis (f014) set to absent/refuted (abstract: initially misdiagnosed), OSH diagnosis kept in the clinical statement.",
+    "Moved the \"Initial labs\" text findings (f105, f106, f020) from the Hospital day 1 table event to the presentation exam event; urinalysis cells f229/f230 added to the Hospital day 1 event.",
+    "Added p1-f345/f346: reportedly previously elevated CRP and ESR (b00009).",
+    "Table images: verified printed titles Table 1/2/3 match the cited text tables; attribution kept unresolved because the JATS cross-references target the text table ids, not the unwrapped graphics (gate cannot link them); notes and a limitation added.",
+    "Added 10 literally supported relations: e01<e17, e10<e12, e12<e13, e11<e23 (\"initial OSH drug screen\"), e19<e20, e20<e28 (stated hospital days), e24<e27 (scheduled dose then increased), and e28/e31/e36 < e42 (\"complete recovery after ... combined treatment\")."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the 2 figure JPEGs and 3 table JPEGs were inspected in the separate visual target.",
+    "The diagnosis is probable autoimmune encephalitis; serum anti-neuronal autoantibodies were negative and CSF autoantibody studies were not performed.",
+    "Table 1 dash cells for BAC, Covid, HCG and RPP are kept as the printed dash with an unknown flag, not as negatives or as not reported.",
+    "No flags were derived from reference ranges; high, low or normal flags come only from source wording.",
+    "Hospital day numbers in the text are not mapped to the day of illness printed in Figure 2; figure-printed values stay in the visual target.",
+    "Table 3 and the discussion of published cases and mechanisms are general and are not patient facts.",
+    "Several statements are husband or family reports and are recorded as stated.",
+    "No supplementary files are listed for this article.",
+    "Table images (unwrapped graphics 3 to 5) print the titles Table 1, Table 2 and Table 3 and match the text tables, but the source has no JATS link from the cited tables to these graphics, so their attribution stays unresolved."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 114,
+    "facts_reviewed": 344,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient, 30-year-old woman 6 months post-partum; infant and lupus relatives kept in her record; roster count 1.",
+      "Probable antibody-negative autoimmune encephalitis kept provisional; NMS, primary psychosis, substance/cannabis-induced psychosis and para-infectious encephalitis kept as differentials (not refuted).",
+      "CSF WBC high flag is supported by the text \"mild lymphocytic pleocytosis\" citing Table 2.",
+      "Fever 39.4 C versus \"intermittent low-grade fever\" and the husband denial versus the positive cannabinoid screen are ambiguities, not source conflicts.",
+      "Hospital-day relations use stated times from the same anchor; Figure 2 illness days are pixel content and are not mapped to hospital days."
+    ],
+    "residual_risks": [
+      "Meaning of the Table 1 dash for BAC, Covid, HCG and RPP is unresolved (likely negative by table convention, not stated).",
+      "Whether the text OSH-to-ED sentence and the later transfer to the authors institution describe one transfer is unresolved.",
+      "Table 1/2 images are the patient tables by printed title and text citation but remain unresolved because the source has no JATS link to the graphics; the attribution gate cannot accept the text citation."
+    ]
+  },
+  "physician_adjudicated": false
+}
