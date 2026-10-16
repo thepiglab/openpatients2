@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC12795786.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "52dc905297bd76f58a2eb3aedd786dc2d74cf4b840200111c8f022094cacd773",
+  "annotation_sha256": "12c81af3ffdbd79baf1b61f8215fc50ed5a27ecaaec8de6f18a73ffad86c5937",
+  "reviewed_at": "2026-10-16T03:12:12.093370+00:00",
+  "source_segments_read": 40,
+  "facts_reviewed": 152,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Bromadiolone: text level p1-f062 (abstract + LC-Orbitrap discussion quote, method) and Table 2 cell p1-f063 kept as separate items because no sentence cites Table 2 for the value; ambiguity added on the identical values.",
+    "Removed the e14 before e15 relation and the p2/p3 presentation-before-discharge relations: no quote literally orders those pairs.",
+    "Merged introduction \"intra-abdominal bleeding\" (p1-f011) into hemoperitoneum p1-f009 as extra evidence (same condition).",
+    "Ruptured corpus luteal cyst: abstract states it flatly, case text says likely source; applied conflict rule: p1-f010 (provisional, right) and new p1-f102 (confirmed, abstract) both source_conflict review_only; ambiguity updated; summary now cites the CT observation instead.",
+    "Moved non-severity qualifiers (constant, persistent, worsening, frequent) from severity to text_value in p1-f016, p1-f019, p2-f014, p3-f014.",
+    "Set flag normal on follow-up INR 1.01 and PT 10.6 (p1-f067, p1-f068), stated as a normal coagulation profile.",
+    "Added the abstract cluster quote to the no-clear-exposure-history items of all three patients.",
+    "Added the Children's ED vs another local hospital ambiguity to p3 (the intro sentence covers both other household members); added case-text abnormal bleeding quote to p2/p3 bleeding diathesis.",
+    "Removed the quarantined age (9-year-old) from the p3 summary claim.",
+    "Added p1 relations with literal support: e10 before e11 (\"first continued\" IV, oral on postoperative day 6), e11 before e12 (\"tapered down ... upon discharge\"), e09 before e12 (20 hours after admission vs 10-day stay), e14 during e13 (two weeks after discharge within the 7-week taper).",
+    "Added p2/p3 toxicology diagnosis events with presentation-before-confirmation relations (\"subsequently confirmed\")."
+  ],
+  "unresolved": [
+    "Cases 2 and 3 are described in a single paragraph; their detailed management is cited to another publication and is not recorded here.",
+    "Source conflict: the introduction calls the two other household members teenage, while Case 3 is described as a 9-year-old boy; both age statements for Case 3 are review_only.",
+    "The introduction places the other two household members at another Children's ED while the case text says another local hospital; setting recorded without reconciliation.",
+    "The plural statements \"our patients\" (discharge follow-up) and \"the patients\" (transfusions before transfer) do not name cases and are not copied to individuals; the follow-up plan is review_only for p1.",
+    "Discussion, literature and guideline sentences (toxicity thresholds, treatment suggestions, trial results) are not patient facts and were not recorded.",
+    "Figure 1 pixels inspected in a separate visual target; the annotation figure row keeps the caption-layer status.",
+    "Abstract prothrombin time, text-only factor deficiency statements and the text bromadiolone level are kept separate from the Table 1 and Table 2 cells because the source does not cite the tables for those values or place them at the same time point.",
+    "Source conflict: the abstract states the hemoperitoneum was secondary to a ruptured corpus luteal cyst while the case text calls it the likely source; both certainty readings are review_only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 40,
+    "facts_reviewed": 152,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Three-member household bromadiolone cluster; roster 3 literal; p1 index woman fully described with Table 1 (19 cells) and Table 2.",
+      "Teenage introduction sentence literally covers both other household members; p3 age 9 vs teenage kept as source_conflict review_only; p2 teenage consistent with 19.",
+      "Platelet text statement cites Table 1 explicitly, so merging with the Table 1 cell is supported; abstract PT and subsequent factor assay text kept separate from Table 1.",
+      "\"our patients\" follow-up plan kept review_only on p1 only; \"the patients\" pre-transfer transfusion not copied to p2/p3 (only p1 was transferred).",
+      "CT time from the caption is literal for the CT itself; Figure 1 pixels match the visual record."
+    ],
+    "residual_risks": [
+      "Text bromadiolone level and Table 2 cell are separate items with identical values (ambiguity recorded).",
+      "Abstract PT >180 s (p1-f040) and the Table 1 PT cell have identical values but are separate items because no shared time point is stated.",
+      "Factor II/VII/IX/X \"markedly reduced\" text items may describe the same Table 1 factor assays.",
+      "Generic surgical intervention item (p1-f077) overlaps the specific laparoscopy/cystectomy/washout items."
+    ]
+  },
+  "physician_adjudicated": false
+}
