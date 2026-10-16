@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12831564.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "65bc1f7a45d660dccae3181316afa6e04bc6614e5595e0fe2bd6a7b81ce8ed1c",
+  "annotation_sha256": "1502ecbf0bf84156b5fa60b0c6f36c66a3fa5d07eed73c03f3cc97035f87973d",
+  "reviewed_at": "2026-10-16T09:41:40.385343+00:00",
+  "source_segments_read": 30,
+  "facts_reviewed": 111,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f106 (renal ongoing histodifferentiation) un-quarantined: a developmental description, not an abnormality claim, so it does not conflict with the discussion statement; the 9 abnormal lung/liver/kidney histology facts (f099-f105, f107) and the discussion statement f108 stay source_conflict/review_only (same newborn, same HE slides Figure 2D-2F).",
+    "p1-f108 flag negative -> normal (\"no ... abnormalities were identified\").",
+    "p1-f022 abstract-only claim of progressive degenerative and traumatic neural lesions: verification_status confirmed -> unconfirmed, certainty ambiguous, scoring review_only.",
+    "p1-f067 and event p1-e04: added the abstract quote stating identification at 28-29 weeks gestation during the only prenatal consultation, with its literal time (gestational_age, range).",
+    "Events p1-e06 (At birth) and p1-e14 (shortly after birth) reclassified as postnatal_age (exact / approximate).",
+    "Added 7 relations with literal support: e01 before e03 (\"previous\" pregnancies), e02 before e03 (16-18 vs 28-29 weeks), e03 same_time e04 (first presentation and only prenatal consultation, both at 28-29 weeks), e04 before e06 (\"prenatal\" identification vs birth), e06 before e07 (Apgar at one minute), e09 before e14 (\"unresponsive to resuscitation ... death\"), e06 before e18 (\"following a pregnancy affected by myelomeningocele\").",
+    "Conflict ambiguity and article limitations rewritten to state same subject/same examination and the scope of the quarantine; added limitation on unrecorded prognosis/causal phrases and unordered postmortem examination."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two actual JPEGs were inspected in the separate visual submission.",
+    "Index patient is the 29-year-old woman; fetus and newborn facts are kept in her record with subject fetus or newborn (ROSTER-RELATIVES). Placenta and umbilical cord histology use subject other.",
+    "Discussion statement that no pulmonary, hepatic or renal abnormalities were identified on histopathology (same newborn, same slides) conflicts with the listed abnormal lung, liver and kidney histology findings; those findings and the discussion statement are review_only. Renal ongoing histodifferentiation is not an abnormality claim and stays included.",
+    "Only the decision to proceed with caesarean delivery is stated; delivery mode is not stated.",
+    "Counterfactual and prognostic statements (earlier care could have improved outcomes, folic acid might have prevented the defect, ultrasound indicating a severe prognosis) are not recorded as facts.",
+    "Author labels for hyperkalemia (potassium 4.43 mmol/L), hyponatremia and hypocalcemia are kept as the author's words; no reference-range flags were derived.",
+    "Literature and cohort statements in the introduction and discussion (prevalence, recurrence risk, trials, fortification) are background and not copied to the patient.",
+    "The prognosis phrase \"indicating a severe prognosis\" and author causal statements (\"This condition resulted from an unmonitored pregnancy\") are not recorded as facts; the postmortem timing of the anatomopathological examination is not stated, so no relation orders it after death."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 30,
+    "facts_reviewed": 111,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (29-year-old woman); fetus, newborn, placenta and cord kept in her record; mother living_at_presentation, newborn death recorded under subject newborn.",
+      "All electrolytes, blood gas and lactate belong to the newborn (neonatal resuscitation paragraph); high/low flags follow the literal author words hyponatremia, hyperkalemia, hypocalcemia and elevated lactate attached to each value.",
+      "Caesarean recorded only as a decision (planned); delivery mode not stated.",
+      "Hydrocephalus pronounced (transfontanelle US) vs moderate internal (macroscopic autopsy) are different examinations: separate facts plus ambiguity, not a conflict.",
+      "Figure 1 photographs and Figure 2 HE panels viewed at full resolution; Fig 1B shows no scale, so the 8 x 8 x 1 cm size is caption/text-only."
+    ],
+    "residual_risks": [
+      "Potassium 4.43 mmol/L carries the author label hyperkalemia; kept as written with an ambiguity.",
+      "Discussion \"no pulmonary, hepatic, or renal abnormalities\" may mean no malformations; quarantined rather than reconciled.",
+      "Autopsy timing relative to death is not stated, so it is not ordered."
+    ]
+  },
+  "physician_adjudicated": false
+}
