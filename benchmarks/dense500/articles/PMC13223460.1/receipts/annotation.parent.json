@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC13223460.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d4a36f9f57457e18586132e6dd1e76f9694a9c4c176053cf4f6d8af57f39ddd8",
+  "annotation_sha256": "7ffb160508c037e37ee7272647ff0f0a3b67cb34bd0572e304d2ef1e167fe038",
+  "reviewed_at": "2026-10-16T07:51:04.158519+00:00",
+  "source_segments_read": 35,
+  "facts_reviewed": 71,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f019 gastric stromal tumor changed from provisional/present to assertion absent, verification refuted: the source states the patient was 'misdiagnosed' as having it; preoperative diagnosis kept as occurred event p1-e06; ambiguity reworded.",
+    "Fig. 3 panel C vs D re-adjudicated: panel D caption and pixels show glandular mucosal tissue with 'cancer cells', different tissue from the panel C spindle Schwann cell tumor, so no source conflict. p1-f055 (no mitosis) and p1-f057 (mild atypia) set supported/include; p1-f056, p1-f058, p1-f059 (panel D) set ambiguous/review_only; ambiguity and limitation rewritten (no carcinoma reported in text, not to be inferred).",
+    "p1-f033 two CT lesion sizes split into p1-f033 and new p1-f070, each without a borrowed body site; ambiguity repointed.",
+    "Added Fig. 1 caption findings: p1-f071 gastric body-fundus lesion slightly hypodense to muscle on plain scan and moderately enhanced; p1-f072 gastric angle lesion moderate enhancement becoming uniform.",
+    "Merged duplicate p1-f063 (recovered uneventfully, abstract) into p1-f065 (uneventful postoperative course); references repointed.",
+    "Removed non-anatomic body_site 'hearing' from p1-f017.",
+    "Added 5 literally supported temporal relations: e01 before e02 and e03 (before February vs February 1/19, 2024), e02 before e07 (February 1 vs 26, 2024), e06 before e07 ('before the operation and subsequently underwent'), e06 before e08 ('before the operation' vs 'postoperative pathological examination').",
+    "p1-e05 CT event linked to size/plain-scan/Fig. 1 caption facts; p1-e11 description no longer names EUS-FNA as certain antecedent; Fig. 2 citation ambiguity reworded (Fig. 2 A/C are unenhanced images); F2 no-arrow limitation added."
+  ],
+  "unresolved": [
+    "Figure pixels are reviewed in visual.json; caption-layer visual status stays not_inspected.",
+    "Figure 3 panel D caption describes glandular tissue with 'cancer cells' and nuclear division; this is different tissue from the panel C spindle cell tumor, not a conflict, but no carcinoma is reported in the text; panel D statements are review_only.",
+    "The text cites Fig. 2 for the plain scan appearance but the Fig. 2 caption describes lymph nodes.",
+    "Most case-text sentences carry no governing time; times are recorded only where the sentence states them (February 1, February 19 and February 26, 2024, before February, after admission).",
+    "No follow-up result is reported; only that regular follow-up was advised.",
+    "Introduction and discussion text on schwannoma in general is cohort or literature background and is not copied to the patient.",
+    "Figure 2 caption describes coloured arrows that are not present on the published image."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 35,
+    "facts_reviewed": 71,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single 55-year-old man; multiple gastric schwannomas confirmed by pathology/IHC after laparoscopic partial gastrectomy on February 26, 2024; preoperative gastric stromal tumor diagnosis stated to be a misdiagnosis.",
+      "Fig. 2 published image has no arrows although the caption describes coloured arrows.",
+      "Fig. 3 panel D shows and describes glandular tissue with 'cancer cells', unexplained by the text; kept review_only.",
+      "Procalcitonin is the only value marked '(increased)'; CRP left unflagged."
+    ],
+    "residual_risks": [
+      "Fig. 3 panel D may depict a lesion not discussed in the text (or a figure error); its findings are review_only.",
+      "Antecedent of 'this procedure was not implemented' (EUS vs EUS-FNA) is unresolved; kept review_only.",
+      "Relations e01 before e02/e03 rely on year-less 'before February' against February 2024 dates.",
+      "Admission date and timing of labs and CT relative to the outpatient visit are not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}
