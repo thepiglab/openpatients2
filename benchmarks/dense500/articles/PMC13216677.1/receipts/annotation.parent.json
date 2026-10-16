@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC13216677.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5c3ae3293fdb76f77f156ffd756b4c43b484b697199c685583865d5162be1913",
+  "annotation_sha256": "2955fd553deb1a97f1c83c3f2ab1e65060f239b3f04a5f313a2958ce43fe39da",
+  "reviewed_at": "2026-10-16T10:11:35.024677+00:00",
+  "source_segments_read": 21,
+  "facts_reviewed": 85,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f071/p1-f072: removed double negatives (absent items carried negated text_value); text_value now 'contraception use' and 'conception', f072 quote now includes its own 'Despite not using contraception, she did not conceive.'",
+    "p1-f009 (possible/unconfirmed endometrial hyperplasia): evidence quote extended to the contiguous sentence start so it names 'This patient' as subject",
+    "p1-e26: removed the discussion-only LNGIUS treatment fact p1-f067 and its b00015 quote; new event p1-e28 holds it, so the timeline does not equate the case-text hormonal IUD with the LNGIUS",
+    "p1-e10 description narrowed to its own fact (initial result revealed no abnormalities)",
+    "Added 4 literal temporal relations: e01 before e02 (menarche, then 'Initially'), e11 before e24 ('never been properly evaluated until ... prompted ... which confirmed'), e06 during e05 ('6 years ago' within 'over the past 7 years', both quoted), e10 before e07 ('initial result ... however, further evaluation was missed as she defaulted follow-up')",
+    "Updated the LNGIUS article limitation to record the parent decision",
+    "Orchestrator ruling: split p1-f082 so it keeps only the b00006 2020 default quote (text_value no longer says further evaluation was missed); new outcome p1-f085 (lost_to_follow_up, time null) from the undated b00011 statement with its own event p1-e29; new ambiguity that the two defaults are not stated to be the same (no 2020 date for the b00011 default)",
+    "Orchestrator ruling: relation from e10 (initial result) retargeted from e07 (2020 default) to e29 (the b00011 default); e01 before e02 kept"
+  ],
+  "unresolved": [
+    "The Figure 2 caption (atypical endometrial hyperplasia) conflicts with the case text citing Figure 2 for the pipelle result (well-differentiated endometrioid adenocarcinoma, FIGO grade 1); both are kept as review-only observations and the FIGO grade is not recorded as an include fact.",
+    "The discussion sentence that the prolonged interval from symptom onset to cancer may be explained by missed follow-up, the sentence that delays in seeking care resulted in serious outcomes, and the risk statement about obesity are author interpretations or non-specific and are not recorded as separate clinical facts.",
+    "Hyperplasia is recorded only as a possible, unconfirmed condition from a discussion sentence.",
+    "The discussion sentence that the patient was treated with an LNGIUS and high-dose progesterone refers to this patient (no citation in the sentence) and is recorded in oncology.treatments without a tumor link as its own timeline event; it is not literally identified with the hormonal intrauterine device in the case text, so the two are not merged.",
+    "No sex is recorded for the husband (the source prints \"His husband\"); no supplements and no tables exist; three single-panel figures were viewed in visual.json.",
+    "Written informed consent (b00010) is administrative and is not recorded as a fact."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 21,
+    "facts_reviewed": 85,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (27-year-old woman); roster count 1 literal; husband kept in p1 record as subject=other",
+      "Figure 2 caption (atypical endometrial hyperplasia) vs case text citing Figure 2 for pipelle well-differentiated endometrioid adenocarcinoma FIGO grade 1 is a genuine source conflict; only the histology attribute is quarantined (f056, f057 review_only); pipelle procedure f039 and hysteroscopy HPE carcinoma diagnosis stay include; FIGO grade not recorded as include",
+      "Discussion sentence 'The patient was treated with an LNGIUS combined with high-dose progesterone' carries no citation and is this patient's treatment; identity with the case-text hormonal intrauterine device is not literal, kept separate with an ambiguity",
+      "Historic admissions 'for blood transfusions' keep action unknown (purpose wording); interpretive discussion statements (missed follow-up explaining the interval, serious outcomes, obesity risk) add no new patient fact beyond those recorded",
+      "All three figures viewed at full resolution; visual, figure-EHR and privacy sidecars consistent with pixels (Fig 1 burned-in short device label flagged as device text)"
+    ],
+    "residual_risks": [
+      "The 2020 gynecological default (f082) and the undated discussion default (f085) may describe one event; kept separate with an ambiguity",
+      "Whether the 6-years-ago investigations and the discussion's initial normal result are the same is unresolved (ambiguity kept)",
+      "MRI 'did not reveal endometrial invasion' kept literally although myometrial invasion may have been meant"
+    ]
+  },
+  "physician_adjudicated": false
+}
