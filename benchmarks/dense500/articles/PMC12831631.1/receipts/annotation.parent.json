@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC12831631.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "94874b45c4216c10f2ebe40f5205da5710b2b01ea603a0de7e26dbd3c1d747af",
+  "annotation_sha256": "ef681e94964278fefa31b2d23be536e1c78285a4e0c4c978927fb60b754ae536",
+  "reviewed_at": "2026-10-16T06:04:55.683158+00:00",
+  "source_segments_read": 90,
+  "facts_reviewed": 122,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Suspected/presumed diagnoses (presumed UTI p1-f099, suspected urease-producer UTI p1-f100, initially suspected septic encephalopathy p1-f103) set to assertion=possible (verification provisional kept).",
+    "Added p1-f121 right femoral fracture (include; fracture type is the only conflicting attribute, typed versions p1-f008/p1-f009 stay review_only).",
+    "Added p1-f122 observation for catheterized urine appearance (turbid, purulent, gross hematuria); procedure finding was previously only in procedures_devices.",
+    "Renamed p1-f010 'Surgery at another hospital for hip fracture' to 'Fracture surgery at another hospital' ('hip' is not in the source); renamed p1-f106 to concise 'Hyperammonemia'.",
+    "p1-f090 intravenous fluids 'managed with' during hospitalization: action unknown -> administered.",
+    "p1-f068 ultrasonography: added the second b00044 sentence so the recorded finding (hydronephrosis, bladder debris) is quoted; p1-f094/p1-f095 quotes extended to include the 'Because of this rapid improvement' reason stated in the clinical statements; p1-f105 now quotes the culture result naming the organism.",
+    "Split event p1-e13 (occurrence unknown) into p1-e13 ceftazidime discontinued (occurred) and p1-e14 vancomycin change considered, no additional antimicrobial given (not_occurred).",
+    "Removed relation e02->e03 (surgery has no stated time; no literal order to the hematuria). Added e01->e02 ('for which ... then'), e07->e13 (drug start -> stop), e09->e14 ('based on the culture results'), e05->e12 (Table 2 hospital day 1 of drainage vs discharge on hospital day 12).",
+    "Summary: removed the quarantined urine pH 8.0 value from claim 2 (now alkaline urine, p1-f081) and fixed wording implying ultrasonography showed the head CT; added fracture to claim 1 and units to ammonia in claim 3."
+  ],
+  "unresolved": [
+    "The article has no figures and no supplements; no visual review applies.",
+    "Table 2 summarises 33 literature-review cases; only the row labelled \"This case\" is attributed to the index patient, the other 32 rows and the review percentages are cohort data.",
+    "Table 2 case number and reference number cells for the patient row are bibliographic identifiers and not recorded as clinical facts.",
+    "Urine pH differs between the text (8.0) and the Table 2 patient row (8.5); both are quarantined.",
+    "Table 2 time to improvement in consciousness (2 days) differs from the text describing improvement within the hour after catheter insertion; both are quarantined.",
+    "Fracture type (femoral neck vs trochanteric) and residence (nursing facility vs home) differ between the case description and the discussion; both versions are quarantined.",
+    "Table 1 arrows are recorded as high/low flags only as printed; unmarked cells have no flag, and no flags come from reference ranges.",
+    "Author speculation about mechanism (residual urine infected, ammonia absorption via the bladder wall) is not recorded as patient fact.",
+    "Several events (culture result, catheter removal and reinsertion, ceftazidime start) have no stated time relative to the day of admission; they are left unordered rather than ordered by paragraph position."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 90,
+    "facts_reviewed": 122,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient (95-year-old woman); roster count 1 from 'We report the case of a 95-year-old woman'.",
+      "Table 2 is a 33-case literature review; only row 32 'This case' belongs to the patient, and every cell of that row is represented (age, presenting symptom, gross hematuria, neurogenic bladder, urine pH 8.5, drainage day 1, time to improvement 2 days, C. urealyticum, ceftazidime).",
+      "All 37 Table 1 cells are separate observations with arrow flags only where printed; text ammonia 168 merged with the NH3 row because the text cites Table 1 for the single arrival measurement.",
+      "Five conflict pairs kept review_only: urine pH 8.0 (text) vs 8.5 (Table 2); improvement within the hour (text) vs 2 days (Table 2); femoral neck vs trochanteric fracture; nursing facility vs recuperating at home; urinary retention listed vs 'no obvious urinary retention'. The discussion statements are explicitly about 'the present case'/'our patient', so they are patient-owned.",
+      "Vancomycin was only considered: recorded as medication assertion=absent with the 'no additional antimicrobial therapy was given' negation in the quote and a not_occurred event."
+    ],
+    "residual_risks": [
+      "The residence and urinary retention conflicts could be read as loose wording rather than true contradictions; they are quarantined rather than reconciled.",
+      "Many in-hospital events (ceftazidime start, culture result, catheter removal/reinsertion) remain unordered relative to the admission day because the source gives no literal order.",
+      "Table 1 unflagged cells are left flag=unknown; the legend does not explicitly call unmarked values normal."
+    ]
+  },
+  "physician_adjudicated": false
+}
