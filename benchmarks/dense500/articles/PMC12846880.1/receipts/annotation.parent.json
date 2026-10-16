@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12846880.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "be1a891b770874b975070b5dc55f5229c096b235ea3004e51a6898de587b3663",
+  "annotation_sha256": "0f7a398dbce297ed637fc9157f82a9ca9c1a0b61f5c7ff8a96f6305de9199423",
+  "reviewed_at": "2026-10-16T02:21:39.537754+00:00",
+  "source_segments_read": 43,
+  "facts_reviewed": 106,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f100 \"bone union was achieved without complications\" (absent complication) set ambiguous/review_only: CT at one month showed a Takeuchi type I hinge fracture that the source never classifies; hinge fracture fact p1-f010 stays included; ambiguity must_not_infer tightened",
+    "p1-f066 OWDTO: laterality right added with the Figure 8 caption quote placing the open wedge site in the right knee; article limitation updated",
+    "Added p1-f106 care plan: varus correction and leg length equalization prioritized (b00025), linked to planning event p1-e07",
+    "Event p1-e20 description no longer equates the five-month ROM visit with the final follow-up",
+    "Relations added: e17 same_time e18 (both at one month), e09 and e10 during e08 (intraoperative arthroscopic captions)",
+    "Summary claim 4 no longer attributes the no-correction-loss finding to the one-month CT and no longer cites the review_only no-complication fact"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the ten JPEGs are inspected in the separate visual submission.",
+    "Preoperative leg length discrepancy appears as approximately 30 mm and as 32 mm; clinical SMDs (80/83 cm) and radiographic SMDs (84.3/87.5 cm) are kept as separate measurements.",
+    "CDI is called unchanged postoperatively while printed values are 0.84 and 0.83; author wording and values are both retained.",
+    "Laterality of the osteotomy is not stated in the operative text; it is taken from the Figure 8 caption, which places the open wedge site in the right knee.",
+    "Discussion statements about literature, general technique advantages and author causal interpretations are not recorded as patient facts.",
+    "Follow-up times differ across statements (final follow-up at five months, CT at seven months, pain-free at 12 months) and are kept at their own stated times."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 43,
+    "facts_reviewed": 106,
+    "figures_viewed": 10,
+    "key_findings": [
+      "Single index patient; roster 1",
+      "CDI 0.84 vs 0.83 called unchanged judged a rounding-level characterization, not a source conflict; values and wording kept with ambiguity",
+      "LLD approximately 30 mm vs 32 mm consistent (approximate wording); kept with ambiguity",
+      "Every follow-up fact carries only its own time (one month, two months, five months, seven months, 12 months)",
+      "Simulation SMDs 86.5/83.9 cm recorded as predictions; HCWHTO only simulated",
+      "Pelvic soft-tissue genital outline visible on 1C, 7A, 7B, 10A, 10B; sensitive-anatomy flags kept, consistent with prior radiograph precedent"
+    ],
+    "residual_risks": [
+      "NO-BORROWING warnings on p1-f040/p1-f041 kept: Fig. 2 caption lead \"Preoperative CT\" governs the same CT study cited in the text (judged checker false positive)",
+      "Simulation predictions sit in observations with status resulted; downstream must read them as predictions",
+      "Presentation, history and some operative steps lack literal ordering links"
+    ]
+  },
+  "physician_adjudicated": false
+}

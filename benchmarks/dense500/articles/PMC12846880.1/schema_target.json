@@ -1,7 +1,7 @@
 {
   "format": "dense-runtime-targets/1",
   "article_id": "PMC12846880.1",
-  "annotation_sha256": "22077e7037e56ca9c256c0aaeb22498ee3bca76423aeb2e5b0db164c5601b893",
+  "annotation_sha256": "0f7a398dbce297ed637fc9157f82a9ca9c1a0b61f5c7ff8a96f6305de9199423",
   "source_text_sha256": "be1a891b770874b975070b5dc55f5229c096b235ea3004e51a6898de587b3663",
   "schema_fingerprints": {
     "case_context": "d7439310910ef4a7d5e1706c5b9dc8a2b379f132a2562791c059a478b588ec71",
@@ -399,7 +399,7 @@
       "Caption-layer visual status not_inspected; the ten JPEGs are inspected in the separate visual submission.",
       "Preoperative leg length discrepancy appears as approximately 30 mm and as 32 mm; clinical SMDs (80/83 cm) and radiographic SMDs (84.3/87.5 cm) are kept as separate measurements.",
       "CDI is called unchanged postoperatively while printed values are 0.84 and 0.83; author wording and values are both retained.",
-      "Laterality of the operated limb is not stated in the operative text; figure captions label the postoperative images right knee.",
+      "Laterality of the osteotomy is not stated in the operative text; it is taken from the Figure 8 caption, which places the open wedge site in the right knee.",
       "Discussion statements about literature, general technique advantages and author causal interpretations are not recorded as patient facts.",
       "Follow-up times differ across statements (final follow-up at five months, CT at seven months, pain-free at 12 months) and are kept at their own stated times."
     ]
@@ -1679,13 +1679,17 @@
                 {
                   "quote": "a curved osteotomy was created distal to the tibial tuberosity",
                   "source_section": "b00016"
+                },
+                {
+                  "quote": "Coronal CT view of the right knee showing the open wedge site filled with the autologous bone graft",
+                  "source_section": "b00041"
                 }
               ],
               "name": "Open-wedge distal tuberosity tibial osteotomy (OWDTO)",
               "kind": "procedure",
               "action": "completed",
               "body_site": "tibia, distal to the tibial tuberosity",
-              "laterality": "unknown",
+              "laterality": "right",
               "indication": "Severe varus knee deformity with leg length discrepancy",
               "finding": null,
               "complication": null
@@ -3662,8 +3666,10 @@
           ]
         },
         "outcomes": {
-          "coverage": "complete",
-          "limitations": [],
+          "coverage": "limited",
+          "limitations": [
+            "Source-conflicted/ambiguous candidates are retained separately, not accepted as clinical facts."
+          ],
           "documentation_status": "documented",
           "documentation_evidence": [],
           "items": [
@@ -3685,29 +3691,6 @@
               ],
               "event": "recovery",
               "text_value": "Bone union was achieved",
-              "related_condition": null,
-              "disposition": null,
-              "follow_up_duration_text": null,
-              "cause_as_documented": null
-            },
-            {
-              "subject": "index_patient",
-              "assertion": "absent",
-              "temporality": "unknown",
-              "time": {
-                "text": null,
-                "relation": "unknown",
-                "anchor": null,
-                "date_iso": null
-              },
-              "evidence": [
-                {
-                  "quote": "bone union was achieved without complications",
-                  "source_section": "b00002"
-                }
-              ],
-              "event": "complication",
-              "text_value": "Bone union achieved without complications",
               "related_condition": null,
               "disposition": null,
               "follow_up_duration_text": null,
@@ -4065,6 +4048,29 @@
               "responsible_specialty": null,
               "urgency": null,
               "action_status": "recommended"
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Considering the patient’s age (54 years), BMI (28.6 kg/m²), and preexisting 32 mm discrepancy, both varus correction and leg length equalization were prioritized.",
+                  "source_section": "b00025"
+                }
+              ],
+              "action_text": "Prioritize both varus correction and leg length equalization",
+              "plan_type": "goals_of_care",
+              "target": "Varus deformity and leg length discrepancy",
+              "responsible_specialty": null,
+              "urgency": null,
+              "action_status": "completed"
             }
           ]
         }
@@ -4290,6 +4296,10 @@
                   "quote": "a curved osteotomy was created distal to the tibial tuberosity"
                 },
                 {
+                  "segment_id": "b00041",
+                  "quote": "Coronal CT view of the right knee showing the open wedge site filled with the autologous bone graft"
+                },
+                {
                   "segment_id": "b00016",
                   "quote": "A correction angle of 20° with a 25-mm opening gap was achieved."
                 },
@@ -4356,7 +4366,7 @@
               ]
             },
             {
-              "text": "Radiographs at one month showed MPTA 88 degrees, CDI 0.83 and slope 8 degrees. At two months the weight-bearing line ratio was 59.0% and radiographic SMD 86.5 cm, leaving about 1 cm discrepancy. CT at one month showed a type I hinge fracture without correction loss, and CT at seven months showed progressive bone healing. At five months knee flexion was 140 degrees with full extension. At 12 months he was pain-free and had returned to work.",
+              "text": "Radiographs at one month showed MPTA 88 degrees, CDI 0.83 and slope 8 degrees. At two months the weight-bearing line ratio was 59.0% and radiographic SMD 86.5 cm, leaving about 1 cm discrepancy. CT at one month showed a type I hinge fracture, with no correction loss observed during follow-up, and CT at seven months showed progressive bone healing. At five months knee flexion was 140 degrees with full extension. At 12 months he was pain-free and had returned to work.",
               "evidence": [
                 {
                   "segment_id": "b00039",
@@ -4465,7 +4475,7 @@
             "Caption-layer visual status not_inspected; the ten JPEGs are inspected in the separate visual submission.",
             "Preoperative leg length discrepancy appears as approximately 30 mm and as 32 mm; clinical SMDs (80/83 cm) and radiographic SMDs (84.3/87.5 cm) are kept as separate measurements.",
             "CDI is called unchanged postoperatively while printed values are 0.84 and 0.83; author wording and values are both retained.",
-            "Laterality of the operated limb is not stated in the operative text; figure captions label the postoperative images right knee.",
+            "Laterality of the osteotomy is not stated in the operative text; it is taken from the Figure 8 caption, which places the open wedge site in the right knee.",
             "Discussion statements about literature, general technique advantages and author causal interpretations are not recorded as patient facts.",
             "Follow-up times differ across statements (final follow-up at five months, CT at seven months, pain-free at 12 months) and are kept at their own stated times."
           ]
@@ -4757,7 +4767,8 @@
                 "p1-f092",
                 "p1-f093",
                 "p1-f050",
-                "p1-f051"
+                "p1-f051",
+                "p1-f106"
               ],
               "evidence": [
                 {
@@ -5354,7 +5365,7 @@
               "episode_id": null,
               "kind": "follow_up",
               "occurrence": "occurred",
-              "description": "Final follow-up at five months postoperatively with knee flexion 140 degrees and full extension",
+              "description": "Knee flexion of 140 degrees and full extension at five months postoperatively, reported at final follow-up",
               "fact_ids": [
                 "p1-f021",
                 "p1-f022",
@@ -5510,7 +5521,6 @@
               "description": "Postoperative alignment improved, limb length discrepancy reduced and bone union achieved without complications",
               "fact_ids": [
                 "p1-f099",
-                "p1-f100",
                 "p1-f101",
                 "p1-f105"
               ],
@@ -5923,6 +5933,81 @@
                   "quote": "At 12 months"
                 }
               ]
+            },
+            {
+              "edge_id": "edge19",
+              "from_event_id": "p1-e17",
+              "to_event_id": "p1-e18",
+              "relation": "same_time",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12846880.1:jats",
+                  "segment_id": "b00020",
+                  "segment_sha256": "3a494223ef5dcac346e3e0414a531ec8c22bcb45475bde088546a2f63b691741",
+                  "start": 0,
+                  "end": 38,
+                  "quote": "Postoperative radiographs at one month"
+                },
+                {
+                  "source_id": "PMC12846880.1:jats",
+                  "segment_id": "b00023",
+                  "segment_sha256": "bca9ac9709b6e326c857e57557fe92b7701c96817059f3bdc6022449982a8b17",
+                  "start": 0,
+                  "end": 31,
+                  "quote": "CT at one month postoperatively"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge20",
+              "from_event_id": "p1-e09",
+              "to_event_id": "p1-e08",
+              "relation": "during",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12846880.1:jats",
+                  "segment_id": "b00013",
+                  "segment_sha256": "2e72333416fccb42316bbf29acb6c53eab7bb7fb9503374e3140290aa7a98a6f",
+                  "start": 90,
+                  "end": 168,
+                  "quote": "The procedure was performed under general anesthesia with femoral nerve block."
+                },
+                {
+                  "source_id": "PMC12846880.1:jats",
+                  "segment_id": "b00037",
+                  "segment_sha256": "bfab5ac75e725130a6ae8cdab21c07c1095155d3e6be303717a026c0e3a3f9a6",
+                  "start": 9,
+                  "end": 45,
+                  "quote": "Intraoperative arthroscopic findings"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge21",
+              "from_event_id": "p1-e10",
+              "to_event_id": "p1-e08",
+              "relation": "during",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12846880.1:jats",
+                  "segment_id": "b00013",
+                  "segment_sha256": "2e72333416fccb42316bbf29acb6c53eab7bb7fb9503374e3140290aa7a98a6f",
+                  "start": 90,
+                  "end": 168,
+                  "quote": "The procedure was performed under general anesthesia with femoral nerve block."
+                },
+                {
+                  "source_id": "PMC12846880.1:jats",
+                  "segment_id": "b00038",
+                  "segment_sha256": "b3f97bfd2e2d0372ac47eafb3be7066d15f770832d25fdeeb4ccf8c1573d5010",
+                  "start": 9,
+                  "end": 45,
+                  "quote": "Intraoperative arthroscopic findings"
+                }
+              ]
             }
           ],
           "limitations": [
@@ -6217,7 +6302,8 @@
               "p1-f092",
               "p1-f093",
               "p1-f050",
-              "p1-f051"
+              "p1-f051",
+              "p1-f106"
             ],
             "evidence": [
               {
@@ -6814,7 +6900,7 @@
             "episode_id": null,
             "kind": "follow_up",
             "occurrence": "occurred",
-            "description": "Final follow-up at five months postoperatively with knee flexion 140 degrees and full extension",
+            "description": "Knee flexion of 140 degrees and full extension at five months postoperatively, reported at final follow-up",
             "fact_ids": [
               "p1-f021",
               "p1-f022",
@@ -6970,7 +7056,6 @@
             "description": "Postoperative alignment improved, limb length discrepancy reduced and bone union achieved without complications",
             "fact_ids": [
               "p1-f099",
-              "p1-f100",
               "p1-f101",
               "p1-f105"
             ],
@@ -7081,9 +7166,7 @@
               "p1-e13"
             ],
             [
-              "p1-e17"
-            ],
-            [
+              "p1-e17",
               "p1-e18"
             ]
           ],
@@ -7265,6 +7348,14 @@
           [
             "p1-e17",
             "p1-e22"
+          ],
+          [
+            "p1-e18",
+            "p1-e19"
+          ],
+          [
+            "p1-e18",
+            "p1-e20"
           ],
           [
             "p1-e18",
@@ -8162,23 +8253,11 @@
           ],
           [
             "p1-e17",
-            "p1-e18"
-          ],
-          [
-            "p1-e17",
             "p1-e23"
           ],
           [
             "p1-e17",
             "p1-e24"
-          ],
-          [
-            "p1-e18",
-            "p1-e19"
-          ],
-          [
-            "p1-e18",
-            "p1-e20"
           ],
           [
             "p1-e18",
@@ -8225,8 +8304,64 @@
             "p1-e24"
           ]
         ],
-        "same_time_groups": [],
-        "interval_relations": [],
+        "same_time_groups": [
+          [
+            "p1-e17",
+            "p1-e18"
+          ]
+        ],
+        "interval_relations": [
+          {
+            "edge_id": "edge20",
+            "from_event_id": "p1-e09",
+            "to_event_id": "p1-e08",
+            "relation": "during",
+            "offset": null,
+            "evidence": [
+              {
+                "source_id": "PMC12846880.1:jats",
+                "segment_id": "b00013",
+                "segment_sha256": "2e72333416fccb42316bbf29acb6c53eab7bb7fb9503374e3140290aa7a98a6f",
+                "start": 90,
+                "end": 168,
+                "quote": "The procedure was performed under general anesthesia with femoral nerve block."
+              },
+              {
+                "source_id": "PMC12846880.1:jats",
+                "segment_id": "b00037",
+                "segment_sha256": "bfab5ac75e725130a6ae8cdab21c07c1095155d3e6be303717a026c0e3a3f9a6",
+                "start": 9,
+                "end": 45,
+                "quote": "Intraoperative arthroscopic findings"
+              }
+            ]
+          },
+          {
+            "edge_id": "edge21",
+            "from_event_id": "p1-e10",
+            "to_event_id": "p1-e08",
+            "relation": "during",
+            "offset": null,
+            "evidence": [
+              {
+                "source_id": "PMC12846880.1:jats",
+                "segment_id": "b00013",
+                "segment_sha256": "2e72333416fccb42316bbf29acb6c53eab7bb7fb9503374e3140290aa7a98a6f",
+                "start": 90,
+                "end": 168,
+                "quote": "The procedure was performed under general anesthesia with femoral nerve block."
+              },
+              {
+                "source_id": "PMC12846880.1:jats",
+                "segment_id": "b00038",
+                "segment_sha256": "b3f97bfd2e2d0372ac47eafb3be7066d15f770832d25fdeeb4ccf8c1573d5010",
+                "start": 9,
+                "end": 45,
+                "quote": "Intraoperative arthroscopic findings"
+              }
+            ]
+          }
+        ],
         "ordered_event_ids": [
           "p1-e01",
           "p1-e02",
@@ -8261,7 +8396,7 @@
         "basis": "Source-gated model relations; paragraph order and event kind do not create chronology."
       },
       "reference_provenance": {
-        "annotation_sha256": "22077e7037e56ca9c256c0aaeb22498ee3bca76423aeb2e5b0db164c5601b893",
+        "annotation_sha256": "0f7a398dbce297ed637fc9157f82a9ca9c1a0b61f5c7ff8a96f6305de9199423",
         "materializer_version": "dense-runtime-targets/1",
         "fact_pointers": [
           {
@@ -8591,6 +8726,10 @@
               {
                 "segment_id": "b00016",
                 "quote": "a curved osteotomy was created distal to the tibial tuberosity"
+              },
+              {
+                "segment_id": "b00041",
+                "quote": "Coronal CT view of the right knee showing the open wedge site filled with the autologous bone graft"
               }
             ]
           },
@@ -9480,20 +9619,9 @@
             ]
           },
           {
-            "fact_id": "p1-f100",
-            "task": "outcomes",
-            "pointer": "/items/1",
-            "source_evidence": [
-              {
-                "segment_id": "b00002",
-                "quote": "bone union was achieved without complications"
-              }
-            ]
-          },
-          {
             "fact_id": "p1-f101",
             "task": "outcomes",
-            "pointer": "/items/2",
+            "pointer": "/items/1",
             "source_evidence": [
               {
                 "segment_id": "b00002",
@@ -9504,7 +9632,7 @@
           {
             "fact_id": "p1-f102",
             "task": "outcomes",
-            "pointer": "/items/3",
+            "pointer": "/items/2",
             "source_evidence": [
               {
                 "segment_id": "b00019",
@@ -9515,7 +9643,7 @@
           {
             "fact_id": "p1-f103",
             "task": "outcomes",
-            "pointer": "/items/4",
+            "pointer": "/items/3",
             "source_evidence": [
               {
                 "segment_id": "b00003",
@@ -9526,7 +9654,7 @@
           {
             "fact_id": "p1-f104",
             "task": "outcomes",
-            "pointer": "/items/5",
+            "pointer": "/items/4",
             "source_evidence": [
               {
                 "segment_id": "b00031",
@@ -9537,7 +9665,7 @@
           {
             "fact_id": "p1-f105",
             "task": "outcomes",
-            "pointer": "/items/6",
+            "pointer": "/items/5",
             "source_evidence": [
               {
                 "segment_id": "b00002",
@@ -9654,9 +9782,42 @@
                 "quote": "continued follow-up is warranted"
               }
             ]
+          },
+          {
+            "fact_id": "p1-f106",
+            "task": "care_plans",
+            "pointer": "/items/10",
+            "source_evidence": [
+              {
+                "segment_id": "b00025",
+                "quote": "Considering the patient’s age (54 years), BMI (28.6 kg/m²), and preexisting 32 mm discrepancy, both varus correction and leg length equalization were prioritized."
+              }
+            ]
           }
         ],
-        "quarantined_facts": [],
+        "quarantined_facts": [
+          {
+            "fact_id": "p1-f100",
+            "task": "outcomes",
+            "collection": "items",
+            "fields": {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "event": "complication",
+              "text_value": "Bone union achieved without complications"
+            },
+            "evidence": [
+              {
+                "segment_id": "b00002",
+                "quote": "bone union was achieved without complications"
+              }
+            ],
+            "clinical_statement": "Bone union achieved without complications",
+            "certainty": "ambiguous",
+            "scoring": "review_only",
+            "notes": "Abstract claim of no complications; CT at one month showed a Takeuchi type I hinge fracture that the source neither calls a complication nor denies as one, so the absent-complication assertion is kept review_only (ambiguity, not a literal source conflict); the hinge fracture finding itself stays included."
+          }
+        ],
         "synthetic_dates_generated": false,
         "missing_fields_policy": "Required nullable attributes=null; absent optional categorical knowledge=unknown; no clinical values inferred."
       },
@@ -11617,13 +11778,17 @@
                 {
                   "quote": "a curved osteotomy was created distal to the tibial tuberosity",
                   "source_section": "b00016"
+                },
+                {
+                  "quote": "Coronal CT view of the right knee showing the open wedge site filled with the autologous bone graft",
+                  "source_section": "b00041"
                 }
               ],
               "name": "Open-wedge distal tuberosity tibial osteotomy (OWDTO)",
               "kind": "procedure",
               "action": "completed",
               "body_site": "tibia, distal to the tibial tuberosity",
-              "laterality": "unknown",
+              "laterality": "right",
               "indication": "Severe varus knee deformity with leg length discrepancy",
               "finding": null,
               "complication": null
@@ -11635,7 +11800,8 @@
               "kind": "procedure",
               "action": "completed",
               "body_site": "tibia, distal to the tibial tuberosity",
-              "indication": "Severe varus knee deformity with leg length discrepancy"
+              "indication": "Severe varus knee deformity with leg length discrepancy",
+              "laterality": "right"
             },
             "evidence": [
               {
@@ -11661,6 +11827,14 @@
                 "start": 82,
                 "end": 144,
                 "quote": "a curved osteotomy was created distal to the tibial tuberosity"
+              },
+              {
+                "source_id": "PMC12846880.1:jats",
+                "segment_id": "b00041",
+                "segment_sha256": "853dbfae5d7a8dade8c49e69b8a89b8af2d218e8d34ce614091ebec1dfd3cf84",
+                "start": 38,
+                "end": 137,
+                "quote": "Coronal CT view of the right knee showing the open wedge site filled with the autologous bone graft"
               }
             ],
             "event_ids": [
@@ -15890,56 +16064,9 @@
             ]
           },
           {
-            "fact_id": "p1-f100",
-            "task": "outcomes",
-            "pointer": "/items/1",
-            "value_as_extracted": {
-              "subject": "index_patient",
-              "assertion": "absent",
-              "temporality": "unknown",
-              "time": {
-                "text": null,
-                "relation": "unknown",
-                "anchor": null,
-                "date_iso": null
-              },
-              "evidence": [
-                {
-                  "quote": "bone union was achieved without complications",
-                  "source_section": "b00002"
-                }
-              ],
-              "event": "complication",
-              "text_value": "Bone union achieved without complications",
-              "related_condition": null,
-              "disposition": null,
-              "follow_up_duration_text": null,
-              "cause_as_documented": null
-            },
-            "value_as_annotated": {
-              "subject": "index_patient",
-              "assertion": "absent",
-              "event": "complication",
-              "text_value": "Bone union achieved without complications"
-            },
-            "evidence": [
-              {
-                "source_id": "PMC12846880.1:jats",
-                "segment_id": "b00002",
-                "segment_sha256": "fe5d528a104a8fe110826c169a7e67a6a5b2f70cde053c60445c721d2374ccdb",
-                "start": 415,
-                "end": 460,
-                "quote": "bone union was achieved without complications"
-              }
-            ],
-            "event_ids": [
-              "p1-e23"
-            ]
-          },
-          {
             "fact_id": "p1-f101",
             "task": "outcomes",
-            "pointer": "/items/2",
+            "pointer": "/items/1",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -15991,7 +16118,7 @@
           {
             "fact_id": "p1-f102",
             "task": "outcomes",
-            "pointer": "/items/3",
+            "pointer": "/items/2",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -16044,7 +16171,7 @@
           {
             "fact_id": "p1-f103",
             "task": "outcomes",
-            "pointer": "/items/4",
+            "pointer": "/items/3",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -16096,7 +16223,7 @@
           {
             "fact_id": "p1-f104",
             "task": "outcomes",
-            "pointer": "/items/5",
+            "pointer": "/items/4",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -16148,7 +16275,7 @@
           {
             "fact_id": "p1-f105",
             "task": "outcomes",
-            "pointer": "/items/6",
+            "pointer": "/items/5",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -16702,6 +16829,55 @@
             ],
             "event_ids": [
               "p1-e24"
+            ]
+          },
+          {
+            "fact_id": "p1-f106",
+            "task": "care_plans",
+            "pointer": "/items/10",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Considering the patient’s age (54 years), BMI (28.6 kg/m²), and preexisting 32 mm discrepancy, both varus correction and leg length equalization were prioritized.",
+                  "source_section": "b00025"
+                }
+              ],
+              "action_text": "Prioritize both varus correction and leg length equalization",
+              "plan_type": "goals_of_care",
+              "target": "Varus deformity and leg length discrepancy",
+              "responsible_specialty": null,
+              "urgency": null,
+              "action_status": "completed"
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "action_text": "Prioritize both varus correction and leg length equalization",
+              "plan_type": "goals_of_care",
+              "action_status": "completed",
+              "target": "Varus deformity and leg length discrepancy"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12846880.1:jats",
+                "segment_id": "b00025",
+                "segment_sha256": "7dd21bef72e8f1850b648bca4ce2c403ab0fa92dc032f25f090d142fcd527566",
+                "start": 460,
+                "end": 622,
+                "quote": "Considering the patient’s age (54 years), BMI (28.6 kg/m²), and preexisting 32 mm discrepancy, both varus correction and leg length equalization were prioritized."
+              }
+            ],
+            "event_ids": [
+              "p1-e07"
             ]
           }
         ],
