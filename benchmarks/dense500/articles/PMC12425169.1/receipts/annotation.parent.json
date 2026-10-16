@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12425169.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5fd13cc3d8d0733009f280984a60d2043de655a92e13df551d9251452c170fff",
+  "annotation_sha256": "98c72935f19e57f1709ec203c0d01800ab7679faef6a25fef559f5a68c0e6dfd",
+  "reviewed_at": "2026-10-16T07:05:07.004117+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 58,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Split the combined left-side RLN/parathyroid fact: p1-f033 is now the left RLN identified and preserved, new p1-f052 the parathyroid glands identified and preserved (left-side dissection scope, number/position not stated).",
+    "Split the shared negation of severe compressive symptoms into dyspnea (p1-f012) and dysphagia (p1-f059), both absent with severity severe.",
+    "Removed p1-f046 (postoperative complications absent), a duplicate in outcomes of p1-f045 from the same 'uneventful recovery' quote.",
+    "Renamed p1-f008 to 'Significant past medical history' (absent) for the unremarkable-history statement; removed the non-severity value 'progressive' from p1-f010 severity.",
+    "Added referral care plan (p1-f053), cervical ultrasound and preoperative cervicothoracic CT as procedures (p1-f054, p1-f055), Figure 1 caption CT findings (absent brachiocephalic trunk p1-f056; right subclavian origin from left side of the arch, posterior to trachea and esophagus p1-f057) and Figure 2 caption NRLN course to the cricothyroid junction (p1-f058).",
+    "Added abstract corroborating quotes (b00002, b00003, b00004) to the CT, suspected/identified NRLN, absent RLN, nerve branch and recovery facts; anchored p1-f043 to its 'In the present case' wording.",
+    "Kept the IONM abstract/case-text merge as one intraoperative result and corrected the article limitation that said they were not merged.",
+    "Rebuilt the timeline from 5 to 9 events (referral/history, examination, ultrasound, CT, thyroidectomy, left dissection, right-lobe NRLN, recovery, discharge) and 7 literal relations: referral before surgery, 'Preoperative' CT before surgery, 'Given' CT before right-lobe suspicion, left dissection during surgery and 'first' before the right lobe, right lobe during surgery ('Intraoperatively'), discharge after surgery ('second postoperative day'). Dropped the unsupported surgery-before-recovery relation; recovery is left unordered with an ambiguity.",
+    "Rewrote summary claims to cover the added facts; care_plans domain now documented."
+  ],
+  "unresolved": [
+    "Discussion and introduction paragraphs are general or literature statements and are not recorded as patient facts, except the in-case statement in b00022 (\"In the present case\") that nerve function was preserved.",
+    "The abstract describes IONM confirming functional integrity of the nerve; the case text gives a positive motor response to proximal vagus stimulation. They describe the single intraoperative IONM confirmation and are recorded as one result citing both.",
+    "Figure 1 and Figure 2 caption sentences about the index patient's CT and operative photograph are recorded as caption-text observations; no values were read from pixels.",
+    "No dates, durations of surgery or laboratory values are given for the patient; thyroid status is stated only as euthyroid.",
+    "Caption-layer visual status is not_inspected; the three JPEGs are inspected in the separate visual submission.",
+    "No supplements are listed in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 58,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (48-year-old woman); abstract and case text describe the same course; discussion is literature apart from the in-case b00022 statement.",
+      "Annotator draft was accurate but thin: caption-stated CT and nerve-course findings, the referral and the diagnostic procedures were missing; one duplicate outcome and two combined facts were split or removed.",
+      "Relation set rebuilt so every relation quote states the order; recovery findings have no literal time and are not ordered."
+    ],
+    "residual_risks": [
+      "Unremarkable medical history recorded as an absent 'significant past medical history' condition; a scorer may expect no item.",
+      "The IONM abstract and case-text statements are merged as one result; they could be read as two statements.",
+      "Figure 1 caption says the right subclavian artery arises from the left side of the aortic arch; recorded literally, not reconciled with standard anatomy."
+    ]
+  },
+  "physician_adjudicated": false
+}
