@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC12969031.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7554b71ec491a8910b1bbbab1939ad3d2346d5bbb8859e67e85c902312dcf9a9",
+  "annotation_sha256": "fa4564b671411b24a4b61b4344089678fce0f53b14a3e8a87925c31c41f6e432",
+  "reviewed_at": "2026-10-16T09:16:52.640884+00:00",
+  "source_segments_read": 28,
+  "facts_reviewed": 140,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f047 urticarial eruption moved from conditions to allergies (ivIG, reaction_type unknown); source calls it a reaction that cut the dose short",
+    "Added p1-f052 allergies item ivIG -> aseptic meningitis as alternate representation of condition p1-f023 (authors refer to \"the reactions observed in patient 1\")",
+    "p3-f019 MMF gastrointestinal side effects moved from symptoms_function to allergies (adverse_effect, severity significant)",
+    "Removed p1-f049 care plan duplicating the 1 g/kg restart dosing already carried by medication p1-f044; full sentence quote moved to p1-f044",
+    "p1-f045 removed non-dose dose_text \"1 full dose\"",
+    "p3-f023 liver enzymes flag high -> unknown (source says transient increase only)",
+    "p3-f008 unremarkable medical history renamed to Prior medical conditions (absent)",
+    "Added p3-f047 observation for the diagnostic MRI findings (SECTION-IMAGING)",
+    "Split events whose fact times differed: p1 scores during ivIG (new e16) and starting CXCL9 (e17) out of e10; p2 skin improvement after 3 doses (e13) and stability 2 months after stopping (e14); p3 MRI/biopsy/labs (e09), MTX adherence and GI symptoms (e10), liver enzymes (e11), impetigo (e12), starting PGA-A (e13), blood work during ivIG (e14), 6-month remission (e15); p1-e12 kind adverse_event -> outcome",
+    "Added 14 temporal relations with literal order quotes (diagnosis same_time presentation, subsequent infusions, from/to and further values, Consequently, after N doses, while on the drug, during ivIG therapy); shortened two p3 relation quotes to the ordering clauses",
+    "Allergies domain coverage set to documented for p1 and p3; limitations updated for allergy placement, unassigned b00021 relapse sentence and the 30-minute timing ambiguity"
+  ],
+  "unresolved": [
+    "Values printed inside the Fig 1 graphs are pixel content recorded only in visual.json; the x-axis has no printed title or unit, and only the 0, 6, 8 and 10 ticks are labelled.",
+    "Patient 2 text says LoSAI decreased after 6 months of ivIG and that measures stayed relatively stable 2 months after stopping; the Fig 1 plots do not match for some measures, so those two facts are review_only with ambiguities.",
+    "Discussion sentence on aseptic meningitis and gastrointestinal upset does not say which patient had the gastrointestinal upset, so it is not assigned.",
+    "Scale values (PGA-A, PGA-D, LoSAI, LoSDI, LoSCAT) are given in text only as direction of change except patient 3 PGA-A 20 to 30; graphed values are not facts.",
+    "Discussion literature cases, review statistics and series-level CXCL9 statements are not patient facts.",
+    "Adverse drug effects are in allergies only where the source attributes them to a drug: ivIG reactions in patient 1 (aseptic meningitis, also kept as a condition; urticarial eruption) and MMF gastrointestinal side effects in patient 3. Symptoms the source only times after a dose (patient 2 nausea, patient 3 headache, diarrhea, nausea and vomiting) stay in symptoms_function.",
+    "The discussion sentence on relapse 4 months after stopping ivIG names only \"the patient with longer follow-up\"; it is not assigned, and patient 1 relapse is taken from the case text.",
+    "Whether \"30 minutes before infusion\" also times the saline bolus, acetaminophen and hydrocortisone is unstated; only rupatadine carries it."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 28,
+    "facts_reviewed": 140,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Three girls (7, 10, 13 years) correctly separated; cohort statements copied only where the sentence names all 3 patients (clinic follow-up, assessments, indication, improvement, 1 g/kg dosing)",
+      "Fig 1 plotted values are pixel-only; p2 LoSAI decrease and relative stability after stopping conflict with plotted points, so those two text facts remain review_only with ambiguities",
+      "b00016 aseptic meningitis/GI upset sentence not assigned: aseptic meningitis already in p1 text, GI upset patient unnamed",
+      "\"30 minutes before infusion\" kept on rupatadine only with an ambiguity"
+    ],
+    "residual_risks": [
+      "Aseptic meningitis as an ivIG reaction relies on the authors phrase \"reactions observed in patient 1\"",
+      "Fig 1 x-axis unit not printed; chart timing not mapped to text times",
+      "Fig 3/4 privacy notes mention cut-off text fragments that only Fig 2 shows (agent file; needs annotator fix)"
+    ]
+  },
+  "physician_adjudicated": false
+}
