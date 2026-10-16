@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC13593041.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "91df019900db11341e1d8fa0b6fe71d54d7ad86de9e7c9f5fd532f1f77968014",
+  "annotation_sha256": "c60b49bc1cd03abf1d25c6da990dc372172bb8a041ec792d5cbb763a703a2235",
+  "reviewed_at": "2026-10-16T07:30:06.778758+00:00",
+  "source_segments_read": 69,
+  "facts_reviewed": 173,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f019 leukocytosis absent: certainty ambiguous/review_only -> supported/include; the Table 1 WBC vs leukocytosis-threshold mismatch needs unit arithmetic on a misprinted unit column, so it is kept as an ambiguity, not a conflict (no flag from reference ranges).",
+    "p1-f173 Table 2 Outcome Recovery: ambiguous/review_only -> supported/include, related_condition Hemopericardium with the Table 2 caption quote; it is the hemopericardium-episode outcome and is not contradicted by the later death.",
+    "p1-f081/p1-f082 PFA-100 closure times: flag high added because the source itself calls them prolonged.",
+    "p1-f045 renamed 'Escalation of ET-specific therapy' (source does not name a hydroxyurea dose escalation for this patient); p1-f054 renamed 'Additional drainage of hemorrhagic fluid' (drainage site not stated).",
+    "p1-f056..f059 clinical statements no longer assert order relative to the NSTEMI episodes.",
+    "p1-f163 ET tumor: disease_extent hematologic added (consistent with prior dense500 ET annotations); never asserted malignant.",
+    "Events: hemopericardium p1-f016 moved from the examination event to the diagnosis event p1-e07; p1-e15 limited to pericardial fluid studies; new p1-e25 (PFA-100 prolonged) and p1-e26 (vWF multimer analysis not performed, not_occurred).",
+    "Relations added with literal order: e03->e04 (DAPT initiated immediately following PCI), e04->e05 (symptoms 1 month after starting DAPT), e04->e07 (bleeding 1 month following DAPT), e04->e14 (aspirin added -> discontinued), e19->e22 (repeat coronary angiography).",
+    "Summary claim 4 no longer places cilostazol in time (timing inconsistent across b00040, b00058, b00059).",
+    "Ambiguities rewritten: leukocytosis (arithmetic/unit, not conflict), Table 2 Recovery scope, platelet merge basis (text cites Table 1; Table 2 scoped to the hemopericardium episode), print artefacts extended to albumin and the WBC/platelet unit column."
+  ],
+  "unresolved": [
+    "Case report of one patient; the literature cases of Kayrak and Deshmukh in the discussion and Table 2 are not patient facts.",
+    "Table 1 columns are only labelled 1st to 4th under Hospitalization; no dates are stated and none are inferred. Blank Table 1 cells are not recorded as results.",
+    "Discussion statements of risk, predisposition and causation (for example DAPT may predispose to bleeding, high risk of thrombosis and bleeding) are authors interpretations and are not recorded as patient facts.",
+    "The discussion remark that the platelet count was lower than 1000 x 10^(9)/L is a threshold comparison and is not recorded as a separate observation.",
+    "Essential thrombocythemia is recorded in oncology as a myeloproliferative neoplasm as the source describes it; the source does not use the word malignant.",
+    "Figures were inspected in the separate visual submission; no supplements or videos are listed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 69,
+    "facts_reviewed": 173,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (71-year-old hemodialysis-dependent woman with ET); Kayrak and Deshmukh cases in the discussion and Table 2 kept out of the record.",
+      "All 78 Table 1 cells verified against the source rows; normal flags only on the 1st-column PT/INR/PTT, which the sentence coagulation studies were within normal limits (Table 1) scopes.",
+      "Platelet 720 merged across text, Table 1 1st column and Table 2 because the text cites Table 1 and Table 2 is scoped to the hemopericardium episode.",
+      "Cilostazol start timing is inconsistent across the narrative and discussion; recorded as an ambiguity with no time.",
+      "Both figures viewed at full resolution; visual descriptions match the pixels."
+    ],
+    "residual_risks": [
+      "ET recorded in oncology.tumors as a myeloproliferative neoplasm (source never says malignant); consistent with earlier dense500 precedent but ONC-BENIGN scope is a judgment.",
+      "Table 1 unit column misprints (WBC/platelet as uL, protein/albumin as mg/dL) and identical LDL/HDL are left as printed.",
+      "Table 1 4th Hospitalization column is not tied to a narrative event by the source.",
+      "Not physician-adjudicated."
+    ]
+  },
+  "physician_adjudicated": false
+}
