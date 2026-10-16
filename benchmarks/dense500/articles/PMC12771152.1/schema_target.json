@@ -1,7 +1,7 @@
 {
   "format": "dense-runtime-targets/1",
   "article_id": "PMC12771152.1",
-  "annotation_sha256": "9986c713daedd09bf0a116d1b98c8c2123e20eca78841d12420d53c45f9ff9c9",
+  "annotation_sha256": "0f14b4aa844bf2f4a74a4a56b737ea299d55c06c81ec20eae3bd857d6054eaec",
   "source_text_sha256": "abd9efce0e9f781665406d7d2b22891a98e38e2cc46dab0766e30a1c40c528ac",
   "schema_fingerprints": {
     "case_context": "d7439310910ef4a7d5e1706c5b9dc8a2b379f132a2562791c059a478b588ec71",
@@ -58,7 +58,7 @@
         ],
         "attribution_limitations": [
           "Results state supervised ambulation was achieved after five months, while the discussion states independent walking after five months for Case 1.",
-          "The text reports cadence 50 steps/min and GRFs of 96% (right) and 106% (left) after two months; Fig. 2A (26 sessions) shows a maximum plotted cadence of 45 steps/min and no right GRF of 96%. The session number at two months is not stated."
+          "The text reports cadence 50 steps/min and GRFs of 96% (right) and 106% (left) after two months; Fig. 2A plots 26 undated sessions whose highest plotted cadence is 45 steps/min. The session number at two months is not stated, so the text and plot cannot be aligned; plot readings are estimates."
         ]
       },
       {
@@ -190,11 +190,11 @@
     ],
     "limitations": [
       "Case 1 ambulation level after five months is described as supervised in the results and as independent walking in the discussion; both facts are review_only source conflicts.",
-      "Case 1 text values for cadence 50 steps/min and GRFs of 96% (right) and 106% (left) after two months do not match the plotted data in Fig. 2A (maximum plotted cadence 45 steps/min, no right GRF of 96%); these facts are review_only source conflicts and the session number at two months is not stated.",
       "Case 2 hyaluronic acid injection dates give day and month without a year; the route intra-articular comes from a later sentence naming these injections.",
-      "Case 2 \"in 2021\" ends a sentence covering the shock, inotropic treatment and necrosis and is applied as that sentence time to the shock and the necrosis.",
+      "Case 2 \"in 2021\" ends a sentence covering the shock, inotropic treatment and necrosis and is applied to the shock only; the necrosis is placed after the inotropic treatment.",
       "Chart values in Fig. 2 are estimated from the plots in the separate visual target and are not recorded as text facts.",
-      "The article has no tables and no supplementary files."
+      "The article has no tables and no supplementary files.",
+      "Case 1 text values (cadence 50 steps/min, GRFs 96% right and 106% left after two months) are kept as literal text facts; Fig. 2A plots undated sessions with a highest plotted cadence of 45 steps/min, recorded as an ambiguity."
     ]
   },
   "figure_attribution": [
@@ -438,7 +438,7 @@
           ],
           "attribution_limitations": [
             "Results state supervised ambulation was achieved after five months, while the discussion states independent walking after five months for Case 1.",
-            "The text reports cadence 50 steps/min and GRFs of 96% (right) and 106% (left) after two months; Fig. 2A (26 sessions) shows a maximum plotted cadence of 45 steps/min and no right GRF of 96%. The session number at two months is not stated."
+            "The text reports cadence 50 steps/min and GRFs of 96% (right) and 106% (left) after two months; Fig. 2A plots 26 undated sessions whose highest plotted cadence is 45 steps/min. The session number at two months is not stated, so the text and plot cannot be aligned; plot readings are estimates."
           ]
         },
         "source_text_omitted_from_release": true
@@ -664,31 +664,6 @@
               "clinical_status": "active",
               "role": "complication",
               "body_site": "upper extremities",
-              "laterality": "unknown",
-              "severity": null,
-              "diagnostic_basis": null
-            },
-            {
-              "subject": "index_patient",
-              "assertion": "present",
-              "temporality": "unknown",
-              "time": {
-                "text": null,
-                "relation": "unknown",
-                "anchor": null,
-                "date_iso": null
-              },
-              "evidence": [
-                {
-                  "quote": "After complete wound healing, silicone cosmetic prostheses for both upper limbs were fabricated on April 12, 2023.",
-                  "source_section": "b00009"
-                }
-              ],
-              "verification_status": "confirmed",
-              "name": "Wound healing",
-              "clinical_status": "resolved",
-              "role": "complication",
-              "body_site": null,
               "laterality": "unknown",
               "severity": null,
               "diagnostic_basis": null
@@ -1115,10 +1090,8 @@
           ]
         },
         "observations": {
-          "coverage": "limited",
-          "limitations": [
-            "Source-conflicted/ambiguous candidates are retained separately, not accepted as clinical facts."
-          ],
+          "coverage": "complete",
+          "limitations": [],
           "documentation_status": "documented",
           "documentation_evidence": [],
           "items": [
@@ -1271,6 +1244,104 @@
               "specimen": null,
               "method": null,
               "body_site": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": "After two months",
+                "relation": "after",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "After two months, cadence reached 50 steps/min with GRFs of 96% (right) and 106% (left).",
+                  "source_section": "b00008"
+                }
+              ],
+              "result_absent_reason": null,
+              "name": "Cadence after two months",
+              "kind": "physiologic",
+              "status": "resulted",
+              "text_value": null,
+              "numeric_value": 50.0,
+              "comparator": "=",
+              "unit": "steps/min",
+              "flag": "unknown",
+              "reference_range_text": null,
+              "specimen": null,
+              "method": null,
+              "body_site": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": "After two months",
+                "relation": "after",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "After two months, cadence reached 50 steps/min with GRFs of 96% (right) and 106% (left).",
+                  "source_section": "b00008"
+                },
+                {
+                  "quote": "The GRF value used in this study represents the average of the peak vertical GRFs measured during the stance phase across all steps in each training session, expressed as a percentage of body weight.",
+                  "source_section": "b00008"
+                }
+              ],
+              "result_absent_reason": null,
+              "name": "Right ground reaction force (GRF)",
+              "kind": "physiologic",
+              "status": "resulted",
+              "text_value": null,
+              "numeric_value": 96.0,
+              "comparator": "=",
+              "unit": "%",
+              "flag": "unknown",
+              "reference_range_text": null,
+              "specimen": null,
+              "method": "Average of the peak vertical GRFs measured during the stance phase across all steps in each training session, expressed as a percentage of body weight; footplate sensors of the Morning Walk system",
+              "body_site": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": "After two months",
+                "relation": "after",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "After two months, cadence reached 50 steps/min with GRFs of 96% (right) and 106% (left).",
+                  "source_section": "b00008"
+                },
+                {
+                  "quote": "The GRF value used in this study represents the average of the peak vertical GRFs measured during the stance phase across all steps in each training session, expressed as a percentage of body weight.",
+                  "source_section": "b00008"
+                }
+              ],
+              "result_absent_reason": null,
+              "name": "Left ground reaction force (GRF)",
+              "kind": "physiologic",
+              "status": "resulted",
+              "text_value": null,
+              "numeric_value": 106.0,
+              "comparator": "=",
+              "unit": "%",
+              "flag": "unknown",
+              "reference_range_text": null,
+              "specimen": null,
+              "method": "Average of the peak vertical GRFs measured during the stance phase across all steps in each training session, expressed as a percentage of body weight; footplate sensors of the Morning Walk system",
+              "body_site": null
             }
           ]
         },
@@ -1310,6 +1381,29 @@
           "documentation_status": "documented",
           "documentation_evidence": [],
           "items": [
+            {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "After complete wound healing, silicone cosmetic prostheses for both upper limbs were fabricated on April 12, 2023.",
+                  "source_section": "b00009"
+                }
+              ],
+              "event": "improvement",
+              "text_value": "Complete wound healing",
+              "related_condition": "Unhealed upper-extremity wounds",
+              "disposition": null,
+              "follow_up_duration_text": null,
+              "cause_as_documented": null
+            },
             {
               "subject": "index_patient",
               "assertion": "present",
@@ -1479,7 +1573,7 @@
               ]
             },
             {
-              "text": "The first session used cadence 25 steps/min and 8% body-weight support, with cadence gradually increased to 45 steps/min, support reduced to 0% and stair-ascending mode at 40 steps/min; mean GRF improved markedly. She ambulated 80 m with an elbow-support walker after two weeks, the goal rose to K-level 3, and silicone upper-limb prostheses were fabricated on April 12, 2023. She now walks independently on level ground and climbs stairs holding rails.",
+              "text": "First-session cadence was 25 steps/min with 8% body-weight support, gradually increased to 45 steps/min, support reduced to 0% and stair-ascending mode at 40 steps/min; mean GRF improved markedly; after two months cadence reached 50 steps/min with GRFs of 96% right and 106% left. She ambulated 80 m with an elbow-support walker after two weeks, the goal rose to K-level 3, and silicone upper-limb prostheses were fabricated on April 12, 2023. She now walks independently on level ground and climbs stairs holding rails.",
               "evidence": [
                 {
                   "segment_id": "b00008",
@@ -1524,17 +1618,25 @@
                 {
                   "segment_id": "b00009",
                   "quote": "She now ambulates independently on level ground and ascends and descends stairs while holding rails using both upper-limb prostheses."
+                },
+                {
+                  "segment_id": "b00008",
+                  "quote": "After two months, cadence reached 50 steps/min with GRFs of 96% (right) and 106% (left)."
+                },
+                {
+                  "segment_id": "b00008",
+                  "quote": "The GRF value used in this study represents the average of the peak vertical GRFs measured during the stance phase across all steps in each training session, expressed as a percentage of body weight."
                 }
               ]
             }
           ],
           "limitations": [
             "Case 1 ambulation level after five months is described as supervised in the results and as independent walking in the discussion; both facts are review_only source conflicts.",
-            "Case 1 text values for cadence 50 steps/min and GRFs of 96% (right) and 106% (left) after two months do not match the plotted data in Fig. 2A (maximum plotted cadence 45 steps/min, no right GRF of 96%); these facts are review_only source conflicts and the session number at two months is not stated.",
             "Case 2 hyaluronic acid injection dates give day and month without a year; the route intra-articular comes from a later sentence naming these injections.",
-            "Case 2 \"in 2021\" ends a sentence covering the shock, inotropic treatment and necrosis and is applied as that sentence time to the shock and the necrosis.",
+            "Case 2 \"in 2021\" ends a sentence covering the shock, inotropic treatment and necrosis and is applied to the shock only; the necrosis is placed after the inotropic treatment.",
             "Chart values in Fig. 2 are estimated from the plots in the separate visual target and are not recorded as text facts.",
-            "The article has no tables and no supplementary files."
+            "The article has no tables and no supplementary files.",
+            "Case 1 text values (cadence 50 steps/min, GRFs 96% right and 106% left after two months) are kept as literal text facts; Fig. 2A plots undated sessions with a highest plotted cadence of 45 steps/min, recorded as an ambiguity."
           ]
         },
         "timeline_v2": {
@@ -2183,7 +2285,11 @@
               "kind": "follow_up",
               "occurrence": "occurred",
               "description": "Cadence and GRFs reported after two months",
-              "fact_ids": [],
+              "fact_ids": [
+                "p1-f032",
+                "p1-f033",
+                "p1-f034"
+              ],
               "evidence": [
                 {
                   "source_id": "PMC12771152.1:jats",
@@ -2711,9 +2817,9 @@
                   "source_id": "PMC12771152.1:jats",
                   "segment_id": "b00017",
                   "segment_sha256": "945d693c1b8c8704dbea6ec97974f7b39de3a87a0972e81914b754ef0d1c57e5",
-                  "start": 275,
-                  "end": 312,
-                  "quote": "independent walking after five months"
+                  "start": 175,
+                  "end": 313,
+                  "quote": "In Case 1, the patient achieved ambulation with an elbow-support walker after two weeks of RAGT and independent walking after five months."
                 }
               ]
             },
@@ -2731,6 +2837,23 @@
                   "start": 223,
                   "end": 337,
                   "quote": "After complete wound healing, silicone cosmetic prostheses for both upper limbs were fabricated on April 12, 2023."
+                }
+              ]
+            },
+            {
+              "edge_id": "edge10",
+              "from_event_id": "p1-e14",
+              "to_event_id": "p1-e15",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12771152.1:jats",
+                  "segment_id": "b00017",
+                  "segment_sha256": "945d693c1b8c8704dbea6ec97974f7b39de3a87a0972e81914b754ef0d1c57e5",
+                  "start": 175,
+                  "end": 313,
+                  "quote": "In Case 1, the patient achieved ambulation with an elbow-support walker after two weeks of RAGT and independent walking after five months."
                 }
               ]
             }
@@ -3386,7 +3509,11 @@
             "kind": "follow_up",
             "occurrence": "occurred",
             "description": "Cadence and GRFs reported after two months",
-            "fact_ids": [],
+            "fact_ids": [
+              "p1-f032",
+              "p1-f033",
+              "p1-f034"
+            ],
             "evidence": [
               {
                 "source_id": "PMC12771152.1:jats",
@@ -3824,7 +3951,9 @@
           [
             [
               "p1-e14"
-            ],
+            ]
+          ],
+          [
             [
               "p1-e15"
             ]
@@ -3925,6 +4054,10 @@
           ],
           [
             "p1-e09",
+            "p1-e15"
+          ],
+          [
+            "p1-e14",
             "p1-e15"
           ],
           [
@@ -4463,10 +4596,6 @@
           ],
           [
             "p1-e14",
-            "p1-e15"
-          ],
-          [
-            "p1-e14",
             "p1-e16"
           ],
           [
@@ -4549,7 +4678,7 @@
         "basis": "Source-gated model relations; paragraph order and event kind do not create chronology."
       },
       "reference_provenance": {
-        "annotation_sha256": "9986c713daedd09bf0a116d1b98c8c2123e20eca78841d12420d53c45f9ff9c9",
+        "annotation_sha256": "0f14b4aa844bf2f4a74a4a56b737ea299d55c06c81ec20eae3bd857d6054eaec",
         "materializer_version": "dense-runtime-targets/1",
         "fact_pointers": [
           {
@@ -4641,17 +4770,6 @@
               {
                 "segment_id": "b00007",
                 "quote": "At rehabilitation onset, upper-extremity wounds were unhealed, preventing fabrication of upper-limb prostheses."
-              }
-            ]
-          },
-          {
-            "fact_id": "p1-f009",
-            "task": "conditions",
-            "pointer": "/items/5",
-            "source_evidence": [
-              {
-                "segment_id": "b00009",
-                "quote": "After complete wound healing, silicone cosmetic prostheses for both upper limbs were fabricated on April 12, 2023."
               }
             ]
           },
@@ -4884,9 +5002,61 @@
             ]
           },
           {
-            "fact_id": "p1-f035",
+            "fact_id": "p1-f032",
+            "task": "observations",
+            "pointer": "/items/5",
+            "source_evidence": [
+              {
+                "segment_id": "b00008",
+                "quote": "After two months, cadence reached 50 steps/min with GRFs of 96% (right) and 106% (left)."
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f033",
+            "task": "observations",
+            "pointer": "/items/6",
+            "source_evidence": [
+              {
+                "segment_id": "b00008",
+                "quote": "After two months, cadence reached 50 steps/min with GRFs of 96% (right) and 106% (left)."
+              },
+              {
+                "segment_id": "b00008",
+                "quote": "The GRF value used in this study represents the average of the peak vertical GRFs measured during the stance phase across all steps in each training session, expressed as a percentage of body weight."
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f034",
+            "task": "observations",
+            "pointer": "/items/7",
+            "source_evidence": [
+              {
+                "segment_id": "b00008",
+                "quote": "After two months, cadence reached 50 steps/min with GRFs of 96% (right) and 106% (left)."
+              },
+              {
+                "segment_id": "b00008",
+                "quote": "The GRF value used in this study represents the average of the peak vertical GRFs measured during the stance phase across all steps in each training session, expressed as a percentage of body weight."
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f009",
             "task": "outcomes",
             "pointer": "/items/0",
+            "source_evidence": [
+              {
+                "segment_id": "b00009",
+                "quote": "After complete wound healing, silicone cosmetic prostheses for both upper limbs were fabricated on April 12, 2023."
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f035",
+            "task": "outcomes",
+            "pointer": "/items/1",
             "source_evidence": [
               {
                 "segment_id": "b00008",
@@ -4984,112 +5154,6 @@
             "certainty": "source_conflict",
             "scoring": "review_only",
             "notes": "Results say supervised ambulation after five months; discussion says independent walking after five months."
-          },
-          {
-            "fact_id": "p1-f032",
-            "task": "observations",
-            "collection": "items",
-            "fields": {
-              "name": "Cadence after two months",
-              "kind": "physiologic",
-              "status": "resulted",
-              "flag": "unknown",
-              "numeric_value": 50,
-              "comparator": "=",
-              "unit": "steps/min",
-              "time": {
-                "text": "After two months",
-                "relation": "after",
-                "anchor": null,
-                "date_iso": null
-              },
-              "subject": "index_patient",
-              "assertion": "present"
-            },
-            "evidence": [
-              {
-                "segment_id": "b00008",
-                "quote": "After two months, cadence reached 50 steps/min with GRFs of 96% (right) and 106% (left)."
-              }
-            ],
-            "clinical_statement": "Cadence reached 50 steps/min after two months",
-            "certainty": "source_conflict",
-            "scoring": "review_only",
-            "notes": "Fig. 2A (26 sessions) plots cadence with a maximum of 45 steps/min and no right GRF of 96%; the text reports cadence 50 steps/min and GRFs of 96% (right) and 106% (left) after two months. The session number at two months is not stated."
-          },
-          {
-            "fact_id": "p1-f033",
-            "task": "observations",
-            "collection": "items",
-            "fields": {
-              "name": "Right ground reaction force (GRF)",
-              "kind": "physiologic",
-              "status": "resulted",
-              "flag": "unknown",
-              "numeric_value": 96,
-              "comparator": "=",
-              "unit": "%",
-              "method": "Average of the peak vertical GRFs measured during the stance phase across all steps in each training session, expressed as a percentage of body weight; footplate sensors of the Morning Walk system",
-              "time": {
-                "text": "After two months",
-                "relation": "after",
-                "anchor": null,
-                "date_iso": null
-              },
-              "subject": "index_patient",
-              "assertion": "present"
-            },
-            "evidence": [
-              {
-                "segment_id": "b00008",
-                "quote": "After two months, cadence reached 50 steps/min with GRFs of 96% (right) and 106% (left)."
-              },
-              {
-                "segment_id": "b00008",
-                "quote": "The GRF value used in this study represents the average of the peak vertical GRFs measured during the stance phase across all steps in each training session, expressed as a percentage of body weight."
-              }
-            ],
-            "clinical_statement": "Right GRF 96% after two months",
-            "certainty": "source_conflict",
-            "scoring": "review_only",
-            "notes": "Fig. 2A (26 sessions) plots cadence with a maximum of 45 steps/min and no right GRF of 96%; the text reports cadence 50 steps/min and GRFs of 96% (right) and 106% (left) after two months. The session number at two months is not stated."
-          },
-          {
-            "fact_id": "p1-f034",
-            "task": "observations",
-            "collection": "items",
-            "fields": {
-              "name": "Left ground reaction force (GRF)",
-              "kind": "physiologic",
-              "status": "resulted",
-              "flag": "unknown",
-              "numeric_value": 106,
-              "comparator": "=",
-              "unit": "%",
-              "method": "Average of the peak vertical GRFs measured during the stance phase across all steps in each training session, expressed as a percentage of body weight; footplate sensors of the Morning Walk system",
-              "time": {
-                "text": "After two months",
-                "relation": "after",
-                "anchor": null,
-                "date_iso": null
-              },
-              "subject": "index_patient",
-              "assertion": "present"
-            },
-            "evidence": [
-              {
-                "segment_id": "b00008",
-                "quote": "After two months, cadence reached 50 steps/min with GRFs of 96% (right) and 106% (left)."
-              },
-              {
-                "segment_id": "b00008",
-                "quote": "The GRF value used in this study represents the average of the peak vertical GRFs measured during the stance phase across all steps in each training session, expressed as a percentage of body weight."
-              }
-            ],
-            "clinical_statement": "Left GRF 106% after two months",
-            "certainty": "source_conflict",
-            "scoring": "review_only",
-            "notes": "Fig. 2A (26 sessions) plots cadence with a maximum of 45 steps/min and no right GRF of 96%; the text reports cadence 50 steps/min and GRFs of 96% (right) and 106% (left) after two months. The session number at two months is not stated."
           }
         ],
         "synthetic_dates_generated": false,
@@ -5685,58 +5749,6 @@
             ],
             "event_ids": [
               "p1-e07"
-            ]
-          },
-          {
-            "fact_id": "p1-f009",
-            "task": "conditions",
-            "pointer": "/items/5",
-            "value_as_extracted": {
-              "subject": "index_patient",
-              "assertion": "present",
-              "temporality": "unknown",
-              "time": {
-                "text": null,
-                "relation": "unknown",
-                "anchor": null,
-                "date_iso": null
-              },
-              "evidence": [
-                {
-                  "quote": "After complete wound healing, silicone cosmetic prostheses for both upper limbs were fabricated on April 12, 2023.",
-                  "source_section": "b00009"
-                }
-              ],
-              "verification_status": "confirmed",
-              "name": "Wound healing",
-              "clinical_status": "resolved",
-              "role": "complication",
-              "body_site": null,
-              "laterality": "unknown",
-              "severity": null,
-              "diagnostic_basis": null
-            },
-            "value_as_annotated": {
-              "name": "Wound healing",
-              "verification_status": "confirmed",
-              "clinical_status": "resolved",
-              "role": "complication",
-              "laterality": "unknown",
-              "subject": "index_patient",
-              "assertion": "present"
-            },
-            "evidence": [
-              {
-                "source_id": "PMC12771152.1:jats",
-                "segment_id": "b00009",
-                "segment_sha256": "a1f08ad8742f2eb9125e8a38171a8d4b689d6b5640023fd1efbad3faa19e785c",
-                "start": 223,
-                "end": 337,
-                "quote": "After complete wound healing, silicone cosmetic prostheses for both upper limbs were fabricated on April 12, 2023."
-              }
-            ],
-            "event_ids": [
-              "p1-e17"
             ]
           },
           {
@@ -6910,9 +6922,278 @@
             ]
           },
           {
-            "fact_id": "p1-f035",
+            "fact_id": "p1-f032",
+            "task": "observations",
+            "pointer": "/items/5",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": "After two months",
+                "relation": "after",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "After two months, cadence reached 50 steps/min with GRFs of 96% (right) and 106% (left).",
+                  "source_section": "b00008"
+                }
+              ],
+              "result_absent_reason": null,
+              "name": "Cadence after two months",
+              "kind": "physiologic",
+              "status": "resulted",
+              "text_value": null,
+              "numeric_value": 50.0,
+              "comparator": "=",
+              "unit": "steps/min",
+              "flag": "unknown",
+              "reference_range_text": null,
+              "specimen": null,
+              "method": null,
+              "body_site": null
+            },
+            "value_as_annotated": {
+              "name": "Cadence after two months",
+              "kind": "physiologic",
+              "status": "resulted",
+              "flag": "unknown",
+              "numeric_value": 50,
+              "comparator": "=",
+              "unit": "steps/min",
+              "time": {
+                "text": "After two months",
+                "relation": "after",
+                "anchor": null,
+                "date_iso": null
+              },
+              "subject": "index_patient",
+              "assertion": "present"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12771152.1:jats",
+                "segment_id": "b00008",
+                "segment_sha256": "daa77f06b1c368016ba4ac4055806748bcd02a83727fb6003e2a0d4fca0403ab",
+                "start": 787,
+                "end": 875,
+                "quote": "After two months, cadence reached 50 steps/min with GRFs of 96% (right) and 106% (left)."
+              }
+            ],
+            "event_ids": [
+              "p1-e13"
+            ]
+          },
+          {
+            "fact_id": "p1-f033",
+            "task": "observations",
+            "pointer": "/items/6",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": "After two months",
+                "relation": "after",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "After two months, cadence reached 50 steps/min with GRFs of 96% (right) and 106% (left).",
+                  "source_section": "b00008"
+                },
+                {
+                  "quote": "The GRF value used in this study represents the average of the peak vertical GRFs measured during the stance phase across all steps in each training session, expressed as a percentage of body weight.",
+                  "source_section": "b00008"
+                }
+              ],
+              "result_absent_reason": null,
+              "name": "Right ground reaction force (GRF)",
+              "kind": "physiologic",
+              "status": "resulted",
+              "text_value": null,
+              "numeric_value": 96.0,
+              "comparator": "=",
+              "unit": "%",
+              "flag": "unknown",
+              "reference_range_text": null,
+              "specimen": null,
+              "method": "Average of the peak vertical GRFs measured during the stance phase across all steps in each training session, expressed as a percentage of body weight; footplate sensors of the Morning Walk system",
+              "body_site": null
+            },
+            "value_as_annotated": {
+              "name": "Right ground reaction force (GRF)",
+              "kind": "physiologic",
+              "status": "resulted",
+              "flag": "unknown",
+              "numeric_value": 96,
+              "comparator": "=",
+              "unit": "%",
+              "method": "Average of the peak vertical GRFs measured during the stance phase across all steps in each training session, expressed as a percentage of body weight; footplate sensors of the Morning Walk system",
+              "time": {
+                "text": "After two months",
+                "relation": "after",
+                "anchor": null,
+                "date_iso": null
+              },
+              "subject": "index_patient",
+              "assertion": "present"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12771152.1:jats",
+                "segment_id": "b00008",
+                "segment_sha256": "daa77f06b1c368016ba4ac4055806748bcd02a83727fb6003e2a0d4fca0403ab",
+                "start": 787,
+                "end": 875,
+                "quote": "After two months, cadence reached 50 steps/min with GRFs of 96% (right) and 106% (left)."
+              },
+              {
+                "source_id": "PMC12771152.1:jats",
+                "segment_id": "b00008",
+                "segment_sha256": "daa77f06b1c368016ba4ac4055806748bcd02a83727fb6003e2a0d4fca0403ab",
+                "start": 485,
+                "end": 684,
+                "quote": "The GRF value used in this study represents the average of the peak vertical GRFs measured during the stance phase across all steps in each training session, expressed as a percentage of body weight."
+              }
+            ],
+            "event_ids": [
+              "p1-e13"
+            ]
+          },
+          {
+            "fact_id": "p1-f034",
+            "task": "observations",
+            "pointer": "/items/7",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": "After two months",
+                "relation": "after",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "After two months, cadence reached 50 steps/min with GRFs of 96% (right) and 106% (left).",
+                  "source_section": "b00008"
+                },
+                {
+                  "quote": "The GRF value used in this study represents the average of the peak vertical GRFs measured during the stance phase across all steps in each training session, expressed as a percentage of body weight.",
+                  "source_section": "b00008"
+                }
+              ],
+              "result_absent_reason": null,
+              "name": "Left ground reaction force (GRF)",
+              "kind": "physiologic",
+              "status": "resulted",
+              "text_value": null,
+              "numeric_value": 106.0,
+              "comparator": "=",
+              "unit": "%",
+              "flag": "unknown",
+              "reference_range_text": null,
+              "specimen": null,
+              "method": "Average of the peak vertical GRFs measured during the stance phase across all steps in each training session, expressed as a percentage of body weight; footplate sensors of the Morning Walk system",
+              "body_site": null
+            },
+            "value_as_annotated": {
+              "name": "Left ground reaction force (GRF)",
+              "kind": "physiologic",
+              "status": "resulted",
+              "flag": "unknown",
+              "numeric_value": 106,
+              "comparator": "=",
+              "unit": "%",
+              "method": "Average of the peak vertical GRFs measured during the stance phase across all steps in each training session, expressed as a percentage of body weight; footplate sensors of the Morning Walk system",
+              "time": {
+                "text": "After two months",
+                "relation": "after",
+                "anchor": null,
+                "date_iso": null
+              },
+              "subject": "index_patient",
+              "assertion": "present"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12771152.1:jats",
+                "segment_id": "b00008",
+                "segment_sha256": "daa77f06b1c368016ba4ac4055806748bcd02a83727fb6003e2a0d4fca0403ab",
+                "start": 787,
+                "end": 875,
+                "quote": "After two months, cadence reached 50 steps/min with GRFs of 96% (right) and 106% (left)."
+              },
+              {
+                "source_id": "PMC12771152.1:jats",
+                "segment_id": "b00008",
+                "segment_sha256": "daa77f06b1c368016ba4ac4055806748bcd02a83727fb6003e2a0d4fca0403ab",
+                "start": 485,
+                "end": 684,
+                "quote": "The GRF value used in this study represents the average of the peak vertical GRFs measured during the stance phase across all steps in each training session, expressed as a percentage of body weight."
+              }
+            ],
+            "event_ids": [
+              "p1-e13"
+            ]
+          },
+          {
+            "fact_id": "p1-f009",
             "task": "outcomes",
             "pointer": "/items/0",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "After complete wound healing, silicone cosmetic prostheses for both upper limbs were fabricated on April 12, 2023.",
+                  "source_section": "b00009"
+                }
+              ],
+              "event": "improvement",
+              "text_value": "Complete wound healing",
+              "related_condition": "Unhealed upper-extremity wounds",
+              "disposition": null,
+              "follow_up_duration_text": null,
+              "cause_as_documented": null
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "present",
+              "event": "improvement",
+              "text_value": "Complete wound healing",
+              "related_condition": "Unhealed upper-extremity wounds"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12771152.1:jats",
+                "segment_id": "b00009",
+                "segment_sha256": "a1f08ad8742f2eb9125e8a38171a8d4b689d6b5640023fd1efbad3faa19e785c",
+                "start": 223,
+                "end": 337,
+                "quote": "After complete wound healing, silicone cosmetic prostheses for both upper limbs were fabricated on April 12, 2023."
+              }
+            ],
+            "event_ids": [
+              "p1-e17"
+            ]
+          },
+          {
+            "fact_id": "p1-f035",
+            "task": "outcomes",
+            "pointer": "/items/1",
             "value_as_extracted": {
               "subject": "index_patient",
               "assertion": "present",
@@ -7443,9 +7724,9 @@
               "assertion": "present",
               "temporality": "unknown",
               "time": {
-                "text": "in 2021",
-                "relation": "at",
-                "anchor": null,
+                "text": "following inotropic treatment",
+                "relation": "after",
+                "anchor": "inotropic treatment",
                 "date_iso": null
               },
               "evidence": [
@@ -8819,11 +9100,11 @@
           ],
           "limitations": [
             "Case 1 ambulation level after five months is described as supervised in the results and as independent walking in the discussion; both facts are review_only source conflicts.",
-            "Case 1 text values for cadence 50 steps/min and GRFs of 96% (right) and 106% (left) after two months do not match the plotted data in Fig. 2A (maximum plotted cadence 45 steps/min, no right GRF of 96%); these facts are review_only source conflicts and the session number at two months is not stated.",
             "Case 2 hyaluronic acid injection dates give day and month without a year; the route intra-articular comes from a later sentence naming these injections.",
-            "Case 2 \"in 2021\" ends a sentence covering the shock, inotropic treatment and necrosis and is applied as that sentence time to the shock and the necrosis.",
+            "Case 2 \"in 2021\" ends a sentence covering the shock, inotropic treatment and necrosis and is applied to the shock only; the necrosis is placed after the inotropic treatment.",
             "Chart values in Fig. 2 are estimated from the plots in the separate visual target and are not recorded as text facts.",
-            "The article has no tables and no supplementary files."
+            "The article has no tables and no supplementary files.",
+            "Case 1 text values (cadence 50 steps/min, GRFs 96% right and 106% left after two months) are kept as literal text facts; Fig. 2A plots undated sessions with a highest plotted cadence of 45 steps/min, recorded as an ambiguity."
           ]
         },
         "timeline_v2": {
@@ -8836,7 +9117,7 @@
               "episode_id": null,
               "kind": "history",
               "occurrence": "occurred",
-              "description": "Hypoglycemic shock with inotropic treatment and onset of necrosis of both hands and feet",
+              "description": "Hypoglycemic shock in 2021 treated with inotropes, followed by necrosis of both hands and feet",
               "fact_ids": [
                 "p2-f004",
                 "p2-f023",
@@ -10323,6 +10604,40 @@
                   "quote": "In Case 2, functional walking was restored after only three weeks of RAGT."
                 }
               ]
+            },
+            {
+              "edge_id": "edge13",
+              "from_event_id": "p2-e08",
+              "to_event_id": "p2-e19",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12771152.1:jats",
+                  "segment_id": "b00014",
+                  "segment_sha256": "f85f557ac999f74535b934a95d0b2cb15cd9ed651df2171e31780e8bf2dc0209",
+                  "start": 0,
+                  "end": 194,
+                  "quote": "Before initiation of RAGT, the patient could stand independently but required minimal assistance for ambulation. After two weeks of training, she progressed to ambulation with a Lofstrand crutch"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge14",
+              "from_event_id": "p2-e11",
+              "to_event_id": "p2-e15",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12771152.1:jats",
+                  "segment_id": "b00013",
+                  "segment_sha256": "2b722285eafc4608bf50ecccc99648e16cfe6cc92e00a3673e4c49d19ff63834",
+                  "start": 455,
+                  "end": 566,
+                  "quote": "After the pain subsided following intra-articular hyaluronic acid injections and improved prosthetic adaptation"
+                }
+              ]
             }
           ],
           "limitations": [
@@ -10340,7 +10655,7 @@
             "episode_id": null,
             "kind": "history",
             "occurrence": "occurred",
-            "description": "Hypoglycemic shock with inotropic treatment and onset of necrosis of both hands and feet",
+            "description": "Hypoglycemic shock in 2021 treated with inotropes, followed by necrosis of both hands and feet",
             "fact_ids": [
               "p2-f004",
               "p2-f023",
@@ -11624,9 +11939,6 @@
               "p2-e17"
             ],
             [
-              "p2-e19"
-            ],
-            [
               "p2-e21"
             ],
             [
@@ -11665,6 +11977,11 @@
           ],
           [
             [
+              "p2-e19"
+            ]
+          ],
+          [
+            [
               "p2-e20"
             ]
           ]
@@ -11684,6 +12001,10 @@
           ],
           [
             "p2-e03",
+            "p2-e19"
+          ],
+          [
+            "p2-e03",
             "p2-e20"
           ],
           [
@@ -11696,11 +12017,19 @@
           ],
           [
             "p2-e04",
+            "p2-e19"
+          ],
+          [
+            "p2-e04",
             "p2-e20"
           ],
           [
             "p2-e06",
             "p2-e08"
+          ],
+          [
+            "p2-e06",
+            "p2-e19"
           ],
           [
             "p2-e06",
@@ -11712,7 +12041,15 @@
           ],
           [
             "p2-e07",
+            "p2-e19"
+          ],
+          [
+            "p2-e07",
             "p2-e20"
+          ],
+          [
+            "p2-e08",
+            "p2-e19"
           ],
           [
             "p2-e08",
@@ -11721,6 +12058,14 @@
           [
             "p2-e09",
             "p2-e10"
+          ],
+          [
+            "p2-e11",
+            "p2-e15"
+          ],
+          [
+            "p2-e11",
+            "p2-e16"
           ],
           [
             "p2-e12",
@@ -11970,10 +12315,6 @@
           ],
           [
             "p2-e03",
-            "p2-e19"
-          ],
-          [
-            "p2-e03",
             "p2-e21"
           ],
           [
@@ -12027,10 +12368,6 @@
           [
             "p2-e04",
             "p2-e18"
-          ],
-          [
-            "p2-e04",
-            "p2-e19"
           ],
           [
             "p2-e04",
@@ -12154,10 +12491,6 @@
           ],
           [
             "p2-e06",
-            "p2-e19"
-          ],
-          [
-            "p2-e06",
             "p2-e21"
           ],
           [
@@ -12206,10 +12539,6 @@
           ],
           [
             "p2-e07",
-            "p2-e19"
-          ],
-          [
-            "p2-e07",
             "p2-e21"
           ],
           [
@@ -12255,10 +12584,6 @@
           [
             "p2-e08",
             "p2-e18"
-          ],
-          [
-            "p2-e08",
-            "p2-e19"
           ],
           [
             "p2-e08",
@@ -12375,14 +12700,6 @@
           [
             "p2-e11",
             "p2-e14"
-          ],
-          [
-            "p2-e11",
-            "p2-e15"
-          ],
-          [
-            "p2-e11",
-            "p2-e16"
           ],
           [
             "p2-e11",
@@ -12607,6 +12924,7 @@
           "p2-e08",
           "p2-e09",
           "p2-e10",
+          "p2-e11",
           "p2-e12",
           "p2-e13",
           "p2-e15",
@@ -12620,7 +12938,6 @@
           "p2-e01",
           "p2-e02",
           "p2-e05",
-          "p2-e11",
           "p2-e14",
           "p2-e21",
           "p2-e22"
@@ -12631,7 +12948,7 @@
         "basis": "Source-gated model relations; paragraph order and event kind do not create chronology."
       },
       "reference_provenance": {
-        "annotation_sha256": "9986c713daedd09bf0a116d1b98c8c2123e20eca78841d12420d53c45f9ff9c9",
+        "annotation_sha256": "0f14b4aa844bf2f4a74a4a56b737ea299d55c06c81ec20eae3bd857d6054eaec",
         "materializer_version": "dense-runtime-targets/1",
         "fact_pointers": [
           {
@@ -13551,9 +13868,9 @@
               "assertion": "present",
               "temporality": "unknown",
               "time": {
-                "text": "in 2021",
-                "relation": "at",
-                "anchor": null,
+                "text": "following inotropic treatment",
+                "relation": "after",
+                "anchor": "inotropic treatment",
                 "date_iso": null
               },
               "evidence": [
@@ -13579,9 +13896,9 @@
               "body_site": "both hands and feet",
               "laterality": "bilateral",
               "time": {
-                "text": "in 2021",
-                "relation": "at",
-                "anchor": null,
+                "text": "following inotropic treatment",
+                "relation": "after",
+                "anchor": "inotropic treatment",
                 "date_iso": null
               },
               "subject": "index_patient",

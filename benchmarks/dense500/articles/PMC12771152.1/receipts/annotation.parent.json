@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC12771152.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "abd9efce0e9f781665406d7d2b22891a98e38e2cc46dab0766e30a1c40c528ac",
+  "annotation_sha256": "0f14b4aa844bf2f4a74a4a56b737ea299d55c06c81ec20eae3bd857d6054eaec",
+  "reviewed_at": "2026-10-16T02:20:47.741738+00:00",
+  "source_segments_read": 22,
+  "facts_reviewed": 86,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f032/f033/f034 (Case 1 cadence 50 steps/min and GRFs 96%/106% after two months) restored to supported/include: literal text; Fig. 2A plots undated sessions and its readings are visual estimates, so the mismatch is an ambiguity, not a source conflict. Ambiguity and article limitation reworded; summary claim cites the values.",
+    "p1-f009 complete wound healing moved from a present condition to an outcomes improvement item.",
+    "p2-f005 necrosis: removed the borrowed 'in 2021' (it modifies the hypoglycemic shock); time is now 'following inotropic treatment' (after, anchor inotropic treatment).",
+    "Relations added: p1-e14 before p1-e15 (two weeks and five months in the same b00017 sentence), p2-e08 before p2-e19, p2-e11 before p2-e15; p1-e09 to p1-e15 evidence widened to the full b00017 sentence.",
+    "Notes clarified on p1-f022 (preventing fabrication), p2-f004, p2-f011 (osteoarthritis verification unknown), p2-f024/f025 (no year; intra-articular printed in b00013 for the same injections).",
+    "visual.json Fig 1A: removed 'one hand grips a gray handle'; the pixels show a forearm on the arm support ending in a striped wrapping with no hand visible. Figure-EHR/privacy drafts regenerated and labels carried over."
+  ],
+  "unresolved": [
+    "Case 1 ambulation level after five months is described as supervised in the results and as independent walking in the discussion; both facts are review_only source conflicts.",
+    "Case 2 hyaluronic acid injection dates give day and month without a year; the route intra-articular comes from a later sentence naming these injections.",
+    "Case 2 \"in 2021\" ends a sentence covering the shock, inotropic treatment and necrosis and is applied to the shock only; the necrosis is placed after the inotropic treatment.",
+    "Chart values in Fig. 2 are estimated from the plots in the separate visual target and are not recorded as text facts.",
+    "The article has no tables and no supplementary files.",
+    "Case 1 text values (cadence 50 steps/min, GRFs 96% right and 106% left after two months) are kept as literal text facts; Fig. 2A plots undated sessions with a highest plotted cadence of 45 steps/min, recorded as an ambiguity."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 22,
+    "facts_reviewed": 86,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Two separate patients (Case 1 aged 72, Case 2 aged 51), roster 2 from the literal \"two cases\" statement; cited triple/quadruple amputee reports kept out.",
+      "Case 1 five-month ambulation: results say supervised, discussion says independent walking, both literally Case 1 after five months; kept as review_only source conflict (Fig. 3A caption supports supervised).",
+      "No estimated Fig. 2 plot readings were turned into text facts; chart readings stay in the visual record marked estimated_from_plot and match the pixels.",
+      "Figures 1 and 3: faces cropped, masked or turned away; no identifiable face; only device brand text."
+    ],
+    "residual_risks": [
+      "EVID-NEGATION warning on p1-f022 is a checker false positive: \"preventing fabrication\" is the negation cue in the quote.",
+      "Case 2 injection dates lack a year; osteoarthritis has no stated diagnostic basis."
+    ]
+  },
+  "physician_adjudicated": false
+}
