@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC13554742.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5e2ff0ba7a01253c8f3f0d62e06d0ce47a91a94cb5aaa1957c68ae670f3ae0e6",
+  "annotation_sha256": "a7b566e333aa7e5c982a3b2b0f8f42ec733a918af63869b24d43691ba1a5f64b",
+  "reviewed_at": "2026-10-16T09:57:11.339814+00:00",
+  "source_segments_read": 24,
+  "facts_reviewed": 73,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged duplicate lesion-onset statement p1-f013 (b00006 umbilical swelling six months prior to presentation) into p1-f014 (b00008 budding peri-umbilical lesion six months before), keeping both quotes; event p1-e01 now links p1-f014, p1-e02 links only the dermatology consultation care plan.",
+    "Quarantined p1-f047 (3.5 g/dl with no named analyte) as certainty ambiguous, scoring review_only; ambiguity retained.",
+    "p1-f073 outcome event changed from other to deterioration for 'The evolution was unfavorable'.",
+    "p1-f074 death time anchor set to the adjacent-sentence clause 'chemotherapy with pelvic external radiotherapy' per orchestrator ruling; ambiguity rewritten to say start versus end of treatment is unstated.",
+    "Removed relation p1-e17 before p1-e18 (quote does not order unfavorable evolution against death); added p1-e16 before p1-e18 (adjacent-sentence '6 months later') and p1-e06 before p1-e08 ('bleeding in the biopsy area' at the referral examination presupposes the earlier skin biopsy)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the single figure image was inspected in the separate visual submission.",
+    "The anemia value of 3.5 g/dl has no named analyte; no flag or reference range was assigned.",
+    "Staging system, chemotherapy drugs and the reference point of the 6-month interval to death are not stated.",
+    "The consent paragraph uses masculine pronouns for the patient; recorded as an ambiguity, sex follows the case text.",
+    "Discussion and literature-review statements are background, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 24,
+    "facts_reviewed": 74,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient, 61-year-old woman; death literally stated ('death occurred 6 months later', consent 'before death').",
+      "Cutaneous metastasis kept confirmed: pathology 'compatible with' plus the authors' 'biopsy allowed us to confirm'.",
+      "Consent paragraph 'his husband/his death' kept as an ambiguity (print artefact), documented sex follows 'woman'/'She'.",
+      "ACE flag high kept on the source word 'increased'; abbreviation not expanded. T4B N2 M1 kept with stage_system null.",
+      "'Non-operable' kept as a care plan with action_status unknown; no surgery asserted.",
+      "Figure 1 viewed at full resolution: single unlabelled close-up photograph of a lobulated crusted umbilical mass; visual, figure-EHR and privacy sidecars consistent with pixels."
+    ],
+    "residual_risks": [
+      "Order of the two ultrasounds, CT and MRI relative to each other and to the endometrial biopsy is not literally stated, so the timeline remains sparsely linked (4 relations for 18 events).",
+      "'The thoroco-abdominopelvic CT confirmed the ultrasound data' does not say which ultrasound, so no CT relation was added.",
+      "The 6-month interval to death may run from start or end of chemoradiotherapy."
+    ]
+  },
+  "physician_adjudicated": false
+}
