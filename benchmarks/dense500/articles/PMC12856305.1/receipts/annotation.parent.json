@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12856305.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b4d06d7dcdf23bc540175b3738cdb66058b9b87d1965e7e3e66ef670c13f1312",
+  "annotation_sha256": "86e55ec605d47cc914315728c00f8296ed29686c622175053dd0563950f5f798",
+  "reviewed_at": "2026-10-16T04:55:24.212540+00:00",
+  "source_segments_read": 24,
+  "facts_reviewed": 74,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f015/f016 \"Five minutes later\": anchor null -> \"post-procedural CT\" (immediately preceding sentence); ambiguity reworded",
+    "p1-f029/f039 \"Subsequent\": anchor null -> \"CT\" (preceding sentence CT)",
+    "p1-f030/f040/f041 \"The following day\": anchor null -> \"CT angiogram of Circle of Willis\" (preceding sentence)",
+    "p2-f028 \"the following day\": anchor null -> \"CT imaging\" (preceding sentence)",
+    "p2-f013 oxygen action unknown -> administered (\"on 15 L oxygen via non-rebreathe mask\")",
+    "Added outcomes p1-f044 (only mild residual ataxia persisted after 24 h) and p2-f030 (residual left-sided paresis after rehabilitation); p1 outcomes domain now documented",
+    "Added relations: p1 e03->e04, e01->e04 (abstract \"immediately following the procedure\"), e01->e06 (Fig 2 caption \"post-biopsy\"), e07->e08; p2 e01->e04 (Fig 6 caption \"post-biopsy\"), e04->e05",
+    "Article limitations updated for adjacent-sentence anchors and Fig 6 (cardiac left ventricle confirmed on pixels)"
+  ],
+  "unresolved": [
+    "Abstract sentences not explicitly covering both patients (supportive management improving symptoms, imaging confirming subarachnoid air) are not copied to either patient.",
+    "Discussion statements on incidence, mechanisms, risk factors and management are general; only the sentence naming the most probable mechanism in both cases presented is used for the two patients.",
+    "No tables and no supplements are listed in the source.",
+    "Relative times (\"Five minutes later\", \"Subsequent\", \"The following day\") are anchored to the event named in the immediately preceding sentence; no other reference points are inferred.",
+    "Time and cause of death for Case 2 are not stated; the death is taken only from the consent statement.",
+    "Case 2 figure captions use \"pneumocephalus\" (Fig. 5) and \"intraventricular air\" (Fig. 6); Fig. 6 pixels are chest CT views with circled gas in the cardiac region, consistent with the text \"left ventricle\" (cardiac, not cerebral ventricles). Neither caption term is treated as a separate fact."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 24,
+    "facts_reviewed": 73,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Two individual cases, roster 2 complete; ownership of all facts and figures correct",
+      "p2 death from consent sentence kept as death outcome with no time/cause plus deceased_during_course (only enum for alive-at-presentation then died; CTX-VITAL-STATUS); ambiguity forbids causal/temporal inference",
+      "Bronchovenous fistula kept possible/provisional for both (literal \"most probable in both cases presented\"); p2 cerebral air embolism kept verification unknown",
+      "Central bronchiectatic changes kept as observation: their existence is presupposed literally by \"avoiding central bronchiectatic changes\"",
+      "Fig 6 pixels: sagittal and axial chest CT with circled gas in the cardiac region, consistent with text left ventricle; caption intraventricular means cardiac"
+    ],
+    "residual_risks": [
+      "Adjacent-sentence anchors (five minutes after the post-procedural CT; MRI the day after the CTA; consciousness the day after CT) follow the standing ruling but the authors may have meant the biopsy as reference",
+      "p2 time of death unknown; may postdate the described course"
+    ]
+  },
+  "physician_adjudicated": false
+}
