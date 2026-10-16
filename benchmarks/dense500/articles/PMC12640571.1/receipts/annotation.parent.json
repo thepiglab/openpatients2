@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC12640571.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "39d604291ac3f6d4d6266796fea3af86e02b592cc8237659881df0a4170f7e87",
+  "annotation_sha256": "c3417089a7e09ccf5b83fa7a97b36884f322f17c8e1bb83cf9185a7542072ca0",
+  "reviewed_at": "2026-10-16T06:36:29.730378+00:00",
+  "source_segments_read": 74,
+  "facts_reviewed": 267,
+  "patients_reviewed": 7,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p7-f026 narrative urea 84.38 mg/dL: review_only/ambiguous -> include/supported as alternate_representation_of the Table 1 cell p7-f004 (84.3); rounding-level difference kept as an ambiguity, not a quarantine.",
+    "p6-f037 Table 2 hemodialysis for Patient 6: review_only -> include; literal Table 2 statement that the narrative does not contradict; possible misalignment kept as an ambiguity; summary updated.",
+    "Added p2-f042 and p3-f043: Table 2 Renal biopsy cells \"Suggestive of TMA\" as pathology observations citing the narrative \"confirmed\" sentences; suggestive-vs-confirmed recorded as an ambiguity about the same finding, not a conflict.",
+    "Merged duplicate p7-f037 (financial constraints) into p7-f027; repointed event and summary references.",
+    "p3: split the plasmapheresis event and added a plasma infusions/dialysis event with a literal \"followed by\" relation; separated low IgG for age (new p3-e11) with a result->action relation to IVIG; added history-before-presentation (\"one month back ... He presented\") and presentation-before-worsening (\"His condition worsened\") relations; Table 2 immunosuppression in its own event.",
+    "p4: added relation severe dyspnea \"In the last week\" before respiratory failure \"Upon arrival\" (two stated times from the same anchor); plasmapheresis indication now quotes its own \"As she had high anti-FH autoantibody\" sentence; removed regimen \"inotrope\" from milrinone.",
+    "p3-f032 now also cites the Table 2 CFH missense cell; p3-f036 action administered; p2-f040 maintenance dialysis action completed; p5-f014 removed body_site \"sclera and urine\".",
+    "p5 PLEX vs plasma infusion kept as a review-only source conflict (not a row-alignment error: the other P5/P6 Table 2 cells match their own narratives and the P5 cell is not the P6 treatment); ambiguity text and article limitations updated, including the cohort-level three-versus-five anti-FH inconsistency."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; actual images were inspected in the separate visual submission.",
+    "Table 1 columns Case 1 to Case 7 are matched to Patients 1 to 7 by case order and by identical values in each patient narrative; the table itself does not label them as the same people.",
+    "Cohort statements (for example three patients with anti-FH antibodies in the Results versus five in the Discussion and Table 1, median age, percentages) are not copied to individuals.",
+    "Figure 3 and Figure 4 captions describe zygosity opposite to the Patient 5 and Patient 6 narratives and Table 2; recorded as review-only source conflicts and not resolved from pixels.",
+    "The Discussion sentence about a previous child whose father died at 42 years of age does not name the patient and is not assigned.",
+    "Table 2 hematological recovery (days) cells are recorded as the cell value under that header without a literal duration phrase where the narrative gives none.",
+    "The Patient 7 urea is printed 84.38 mg/dL in the narrative and 84.3 in Table 1; both are kept as linked representations of one measurement (rounding-level ambiguity).",
+    "The Table 2 treatment cell for Patient 5 lists PLEX where the narrative says plasma infusion; the plasma therapy type is a review-only source conflict. Table 2 alone lists hemodialysis for Patient 6 (kept, with an ambiguity about possible misalignment).",
+    "The Results paragraph says anti-FH antibodies were detected in three (43%) patients, while Table 1 shows five positive values and the Discussion refers to five patients with anti-FH-associated HUS; this cohort-level inconsistency does not change the per-patient Table 1 and narrative results.",
+    "Table 2 says renal biopsy was suggestive of TMA for Patients 2 and 3 while the narratives say it confirmed TMA; recorded as ambiguities."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 74,
+    "facts_reviewed": 267,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Seven patients p1-p7 match Patient 1-7 headings; Table 1 Case N -> Patient N verified by matching values in every narrative (P1 urea/creatinine, P2 platelets/urea/creatinine, P3 C3 low and anti-FH negative, P4 C3 normal and anti-FH >2,400, P5 anti-FH 2,028, P6 creatinine 1.01 and anti-FH 1,853, P7 platelets/creatinine/schistocytes).",
+      "Figure 3/4 caption zygosity is opposite to the P5/P6 narratives and Table 2: both sides are text, kept as review-only conflicts on zygosity only; the deletion itself stays included. Pixels were not used to decide.",
+      "Discussion father-death family history refers to \"the previous child\" without a patient label; left unassigned with ambiguities in p5 and p6.",
+      "No cohort statements copied to individuals; all facts come from patient sections, Tables 1-3 and per-patient captions."
+    ],
+    "residual_risks": [
+      "Table 1 columns are matched to patients by value agreement, not by a printed label.",
+      "P7 Table 2 Not done for genetic/antibody findings remains review-only; the measured anti-FH stays included.",
+      "Most treatment-to-outcome orders are not literal (\"Hematological response was observed in five days\") and are not related.",
+      "Measurement series sidecar not created: Table 1 is a single presentation time point per patient (cross-sectional), not a serial table."
+    ]
+  },
+  "physician_adjudicated": false
+}
