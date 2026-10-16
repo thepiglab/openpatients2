@@ -1,0 +1,67 @@
+{
+  "article_id": "PMC13043444.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6f5398d98f4ff9c435869156548ea1601b94b8915e7aea566d845a0008fd08d4",
+  "annotation_sha256": "1107861571dc762e15293202c83cc415fd58dd8162f0ea581762e7a1f899264b",
+  "reviewed_at": "2026-10-16T08:04:10.766610+00:00",
+  "source_segments_read": 46,
+  "facts_reviewed": 104,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged the Table 2 initial-evaluation elevated FSH row (p1-f057) into the single reported FSH test p1-f048 with time Age 15 (FSH reported once for this patient).",
+    "Repeat TSH 13.33 (p1-f050) left unflagged: the abstract elevated-TSH wording describes the initial evaluation.",
+    "Added Table 2 Age 16 diabetes confirmation row as governing evidence and time to HbA1c, C-peptide and IAA/GAD65/ICA results (p1-f086, f087, f089-f091).",
+    "Ovaries reclassified from source conflict to ambiguity: MRI text fact p1-f062 restored to supported/include; Table 2 absent-ovaries cell p1-f063 ambiguous/review_only; added discussion non-visualization quotes to p1-f064.",
+    "Uterus conflict kept; abstract/conclusion uterovaginal aplasia/agenesis condition p1-f006 moved to the absent side (source_conflict, review_only) with the b00041 quote.",
+    "Diabetes type reclassified from conflict to ambiguity: suspected MODY p1-f016 supported/include as a differential; discussion-only type 2 statement p1-f017 ambiguous/review_only.",
+    "Metformin and sitagliptin action changed from planned to unknown: the source states only consent to initiate, neither a start nor a plan.",
+    "Merged the duplicate genetic-test facts (p1-f095 into p1-f094): one MODY/HNF1B genetic test, status not_performed (sampling never attended, testing could not be completed); pending wording kept in the ambiguity.",
+    "Added the scheduled-appointment sentence (b00039) to the genetic sampling care plan and the abstract referral sentence to the endocrinology referral.",
+    "Set flag=normal on bladder normal size/shape (p1-f071) and kidneys average size/normal position (p1-f074); left the mixed distended-bladder finding unflagged.",
+    "Split levothyroxine start (new event p1-e14) from the hypothyroidism diagnosis event, and the later consent to metformin/sitagliptin (new event p1-e15, occurrence unknown) from the initial refusal.",
+    "Removed relation e02->e04 (basis wording for a diagnosis does not order); added e02->e14 (result to action), e14->e07, e01->e07, e05->e11, e07->e11 (Table 2 stated ages), e03->e07 (abstract adjacent sentence One year later), e06->e07 (adjacent One year later), e09->e15 (initially ... later); removed e07->e08 because no quote orders symptom onset before the diabetes work-up (Further testing is a purpose clause relative to the glucose tests).",
+    "Rewrote ambiguities, article limitations and summary wording to match these decisions."
+  ],
+  "unresolved": [
+    "A source conflict is recorded for the uterus (rudimentary uterine bud in the MRI text vs absent in Table 2, the Fig. 2 caption and the abstract); both sides are review_only. The ovary wording (poorly visualized, not visualized, absent) and the diabetes type (type 2 in the discussion vs suspected MODY) are recorded as ambiguities; the Table 2 absent-ovaries cell and the type 2 statement are review_only.",
+    "Genetic testing for MODY (HNF1B sequencing) was requested but not completed; the source calls the results pending and then says testing could not be completed. No genetic result exists.",
+    "Table 2 Referral for MODY genetic testing carries a placeholder status cell (Pending/Completed/Not available) and is recorded with unknown status.",
+    "Discussion and lessons sentences about HNF1B mutations and a possible link to MRKH are speculative or general and are not recorded as patient facts; the multidisciplinary-approach statement is not recorded as a care plan because the source does not document which specialties actually evaluated her.",
+    "Metformin and sitagliptin are recorded with action unknown: the source states only consent to initiate; start, dose and response are not stated.",
+    "Only table-governed times (ages in Table 2) and explicit time phrases are recorded; most text facts have no governing time.",
+    "Caption-layer visual status is not_inspected; the three JPEGs are inspected in the separate visual submission.",
+    "No supplements are listed in the source and no follow-up outcome is reported."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 46,
+    "facts_reviewed": 106,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (female, presented at 15, now 19) with MRKH type II, right duplex kidney, subclinical hypothyroidism and early-onset diabetes; roster count 1.",
+      "Only genuine source conflict is uterus presence (rudimentary bud in MRI text vs absent in Table 2, Fig. 2 caption and abstract); ovary wording and diabetes type are ambiguities.",
+      "Table 2 is a dated event timeline (ages 15/16/19), not a numeric serial table; its ages are used as stated times for events, relations and the facts reported once.",
+      "Genetic testing for MODY/HNF1B was requested but never sampled; recorded not_performed.",
+      "Three single-panel MRI figures viewed at full resolution; visual descriptions match pixels."
+    ],
+    "residual_risks": [
+      "Table 2 MODY referral at age 19 may or may not be the text endocrinology referral; kept separate with an ambiguity.",
+      "Fasting glucose 126 mg/dL vs 8.4 mmol/L arithmetic mismatch kept as an ambiguity.",
+      "Urology consultation and genetic sampling appointment statuses unknown.",
+      "Metformin/sitagliptin actual start not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}
