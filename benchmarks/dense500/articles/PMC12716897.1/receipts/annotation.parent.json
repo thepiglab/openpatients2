@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC12716897.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ee02fe9af3adce6eb799d4718e87a56c29ce9d5457726530fe11fe8971271cd4",
+  "annotation_sha256": "fd5250dd530221d496d57ae896ea8df27bae5a8c31da18fa8f3447231db2840f",
+  "reviewed_at": "2026-10-16T01:11:37.517324+00:00",
+  "source_segments_read": 36,
+  "facts_reviewed": 92,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p2-f030 Ahmed valve insertion: time now comes from its own sentence \"on postoperative day 24\" (b00015, relation at) instead of the reoperation sentence; the reoperation sentence stays as indication evidence for the same operation (joined by \"Thus\"). Event p2-e12 time_text and evidence updated to match.",
+    "p2-f024 intravitreal antibiotic injection moved from procedures_devices to medications (route intravitreal as written, action historical, antibiotic unnamed).",
+    "Added literal relations: p2-e06 before p2-e12 (\"reoperation was performed on the 24th day after surgery\"), p2-e06 before p2-e14 (\"elevated IOP was noted on the day after surgery\"), p1-e07 before p1-e12 (\"throughout the postoperative period\").",
+    "p2 MMC ambiguity extended with the Figure 7 printed \"0.04% MMC for 3 minutes\" wording, kept as figure text only."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected in this file; the 7 JPEGs were inspected in the separate visual submission.",
+    "Figure 7 prints a clinical-course timeline whose day numbering for the 12 mmHg IOP (Day 2) differs from the case text (third day); the text value and day are kept and the difference is recorded as an ambiguity.",
+    "Sentences discussing Bakhsh et al. and Shinozaki et al. and Table 1 (graft comparison) describe published reports and general properties, not this report's patients, and are not recorded as patient facts.",
+    "The abstract and discussion statements that explicitly cover both cases are recorded for each patient; other discussion statements are general.",
+    "Time attached only where the fact's own sentence, a caption lead clause or a lead clause of the same sentence states it; sentences without their own time (for example IOP 26 mmHg) carry none."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 36,
+    "facts_reviewed": 92,
+    "figures_viewed": 7,
+    "key_findings": [
+      "Two index patients (59-year-old woman, 76-year-old man), roster count 2 literal, both right-eye scleral flap damage after MMC trabeculectomy repaired with preserved sclera.",
+      "p2-f040 NO-BORROWING warning is a checker false positive: \"it rose again to 20 mmHg on the sixth day\" is the value sentence itself; the abstract quote adds only the approximate value.",
+      "Figure 7 \"Day 2: IOP decreased to 12 mmHg\" vs text \"12 mmHg on the third day\" kept as ambiguity; text value and day retained.",
+      "\"The next day\" lead clause governs the 44 mmHg value and the drugs initiated in the same sentence; p1 IOP 26 mmHg stays untimed.",
+      "b00024 and b00028 explicitly say \"both cases\", so those outcomes are recorded for each patient; Table 1 and cited reports are not patient data.",
+      "p1 routes: \"eye drops\" is the literal heading of the drug list in the same quote; ofloxacin keeps \"eye ointment\"."
+    ],
+    "residual_risks": [
+      "Laterality of the p2 bleb-infection procedures and of several surgeries is clinically implied but not stated per item.",
+      "p2-e14 (discussion: elevated IOP the day after surgery) overlaps p2-e08 from the case text."
+    ]
+  },
+  "physician_adjudicated": false
+}
