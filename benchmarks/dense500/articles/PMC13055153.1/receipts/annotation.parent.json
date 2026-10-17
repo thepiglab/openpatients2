@@ -1,0 +1,76 @@
+{
+  "article_id": "PMC13055153.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ab880a89e98e77aac8f385f5f086dd846c56389484733403225a0d0fc11c4e66",
+  "annotation_sha256": "8d7675cac08f0cc12e43acb4272f50f84e8884df05f0dc5cd7d5c9ccc8d2a6d0",
+  "reviewed_at": "2026-10-17T20:57:10.807721+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 117,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Figure 3 caption quote removed from the first rash fact p1-f042 (source does not identify the photographed episode); caption rash recorded as its own review_only ambiguous fact p1-f117 linked to the Figure 3 ambiguity",
+    "WBC 2450/µL and neutrophils 1850/µL flag unknown -> low (source names them G2 leuko-neutropenia)",
+    "Event p1-e39 description no longer states \"during target therapy\" (caption vs text off-therapy period is an open ambiguity)",
+    "Event p1-e40 split: undated tracer non-fixation (p1-f116) moved to new undated event p1-e41 so it does not carry the 2018 time",
+    "Removed relation e28 (switch decision) before e29 (\"A subsequent CT scan\"): \"subsequent\" names no anchor",
+    "Relation e03 (vemurafenib 2011-2014) vs e05 (agreement to discontinue) set to unknown: the agreement ends the course, so \"entirely before\" is not stated",
+    "Relation e23/e39 unknown -> e39 (March 2019 CT/PET) before e23 (May 2019 restart), ordered by the two stated dates",
+    "Added relation p1-e02 before p1-e03: adjuvant vemurafenib after the axillary surgery (\"Adjuvant\")",
+    "Added relation p1-e03 before p1-e06: vemurafenib 2011-2014 before 2015 PET (stated years)",
+    "Added relation p1-e06 before p1-e09: 2015 PET before 2017 CT (stated years)",
+    "Added relation p1-e09 before p1-e40: 2017 CT before 2018 CT (stated years)",
+    "Added relation p1-e40 before p1-e39: 2018 CT before March 2019 CT/PET (stated dates)",
+    "Added relation p1-e19 before p1-e39: January 2019 discontinuation before March 2019 CT/PET (stated dates)",
+    "Added relation p1-e23 before p1-e35: May 2019 restart before November 2020 CT (stated dates)",
+    "Added relation p1-e11 before p1-e18: dabrafenib/trametinib initiation before the November 2018 CT done upon resumption of full therapy (\"re-\")",
+    "Added relation p1-e19 before p1-e21: January 2019 symptoms before their improvement",
+    "Added relation p1-e25 before p1-e27: leg rash and fever before the recurrent fever (\"recurrent\")",
+    "Added relation p1-e35 before p1-e36: November 2020 CT before the eye consultation described as subsequent to it in the same sentence",
+    "Ambiguities added: July 2018 imaging in Figures 1 and 2 not identified as one study (kept separate); encorafenib/binimetinib administration implied only by discontinuation wording (kept planned)",
+    "Summary claims 3-5 reworded: no causal \"led to\" for the admission or macular edema, and the left-eye treatment/follow-up is a decision, not a completed action"
+  ],
+  "unresolved": [
+    "Figure pixels are inspected in visual.json; annotation figure rows stay caption-level.",
+    "Article title calls the melanoma BRAF-mutated, but the case text gives no BRAF test or result; no biomarker recorded.",
+    "Imaging results are recorded without flags except one literal negative CT; no response category is chosen where the source says \"partial/complete\".",
+    "Figure 1 and Figure 2 captions both describe July 2018 CT; the source does not say they are the same scan, so they are not merged.",
+    "Decisions and recommendations (switch to encorafenib/binimetinib, discontinue encorafenib, recommended fluoroangiography and binimetinib discontinuation) are not recorded as completed actions.",
+    "Discussion hypotheses about mechanisms are not recorded as patient facts.",
+    "Figure 2 caption places the March 2019 CT/PET \"during target therapy\" while the text reports discontinuation in January 2019 and restart in May 2019; recorded as an ambiguity, not a conflict, because the text does not state that therapy was off in March 2019."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 117,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single 37-year-old woman; all 116 draft facts checked against b00001-b00011, b00020 and the three captions; quotes, polarity, times and actions verified.",
+      "Figure 2 caption \"during target therapy\" (March 2019) vs text discontinuation January 2019 / restart May 2019: both can be true (the text never states therapy was off in March), so kept as an ambiguity, not a conflict; the event description no longer asserts on-therapy status.",
+      "July 2018 CT in Figures 1 and 2: the source never identifies them as one study, so they stay separate with an ambiguity.",
+      "Switch to encorafenib/binimetinib, binimetinib discontinuation, encorafenib discontinuation and fluoroangiography with indocyanine green stay decided/recommended (not done); the later fluoroangiography result is a separate completed study.",
+      "Holds in b00005/b00006 are literal through the stated resumption/restart; August 2019 discontinuation is literal (\"prompting discontinuation\"); chest wall nodule removal stays action unknown (\"requiring\").",
+      "Partial/complete response kept review_only; BRAF mutation only in the title, no biomarker recorded.",
+      "Figure 3 caption rash separated from the first rash episode into its own review_only fact; pixels show legs only.",
+      "Dated events now ordered by their stated dates (2011-2014, 2015, 2017, 2018, November 2018, January/March/May 2019, November 2020); one unsupported \"subsequent\" relation removed."
+    ],
+    "residual_risks": [
+      "Pruritus-absent fact (quoted \"nonpruritic\") keeps 2 EVID-NEGATION warnings: known checker gap for an in-word negation.",
+      "Episode shown in Figure 3 and the study behind the May 2019 CT citation of Figure 2 remain unresolved.",
+      "The vemurafenib stop is represented only by the stated 2011-2014 range; the agreement to discontinue stays planned.",
+      "The ocular episode (after the switch decision) is not ordered against the August 2019 rash chain because the linking \"then\"/\"subsequent\" wording opens a new paragraph or names no anchor."
+    ]
+  },
+  "physician_adjudicated": false
+}
