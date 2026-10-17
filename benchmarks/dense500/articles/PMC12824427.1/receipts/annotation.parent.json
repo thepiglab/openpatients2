@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC12824427.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e9c9f48c928aee1c53ed505595896b16569b27b59adae5cb94bb8d4d1b6a85bf",
+  "annotation_sha256": "a624e4b05bf59dd30bc29a57de3a5567d7edf233485a7faf95df24c1552589b9",
+  "reviewed_at": "2026-10-17T20:56:48.897697+00:00",
+  "source_segments_read": 17,
+  "facts_reviewed": 47,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Personal history of angioedema (p1-f011): ruled a sequence of disclosure (assessment did not reveal; subsequently the patient revealed a history of HAE), not a source conflict; kept review_only/ambiguous with a rewritten note; family-history absence (p1-f036) stays included because the revealed history is the patient's own.",
+    "Ambiguity 1 rewritten to describe the disclosure sequence and the tension between 'previously unrecognized'/'HAE was unknown' and 'pre-existing clinical documentation' (added b00007 quote).",
+    "HAE (p1-f007): added the b00007 C1-Inhibitor quote that its diagnostic_basis field names; confirmed kept (flat author statements; testing done 'To confirm the diagnostic hypothesis', levels below the normal range).",
+    "Added indications from the source: ACE inhibitor -> hypertension ('hypertension on ... therapy'); icatibant -> hereditary angioedema ('Given this'). Chlorphenamine/dexamethasone evidence widened to include the suspected-allergy clause, but no indication recorded (orchestrator ruling: coordinated clauses do not state the drugs were given for the allergy).",
+    "Added missed facts p1-f046 (no previous anesthetic complications, conditions absent) and p1-f047 (spinal anesthesia, technical difficulties, action unknown) with an ambiguity that no spinal attempt is stated; linked to events e01/e03 and summary claim 1.",
+    "Added 5 temporal relations: e01->e02 ('Preoperative assessment'), e02 during e03 ('under general anesthesia'), e08->e10 and e10->e11 and e08->e11 (adjacent-sentence anchors 'Over the next two hours' and 'the following day' in the same paragraph)."
+  ],
+  "unresolved": [
+    "Figure 1 is described in the visual submission only; the case text and caption give no printed values for it.",
+    "The preoperative assessment found no personal or family history of angioedema while the HAE is later called previously unrecognized and revealed by the patient; the absent personal-history item is review-only.",
+    "Laryngeal mask airway insertion as the trigger is stated flatly in the introduction but hedged in the discussion; kept review-only.",
+    "Discussion and recommendation paragraphs are general literature and author recommendations, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 17,
+    "facts_reviewed": 47,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient, 79-year-old man; roster count 1 from 'A 79-year-old man'.",
+      "TURB completed is literal: 'undergoing transurethral resection ... under general anesthesia', 'The procedure lasted about 60 minutes', 'Postoperatively'.",
+      "LMA trigger kept review_only possible: 'triggered by' in the introduction versus 'likely acted as a trigger' and 'may be sufficient' in the discussion.",
+      "Fact times kept as the source states them: 'Over the next two hours' during with null anchor, 'within two hours' before with null anchor, 'the following day' after with null anchor, 'in the subsequent days' unknown.",
+      "Abstract 'acute facial edema' and case-text perioral edema kept as separate items with an ambiguity.",
+      "Figure 1 viewed at full resolution: lower-face close-up with swollen lips, upper face covered; visual, figure-EHR and privacy (partial face, no burned-in text, no sensitive anatomy) sidecars agree with the pixels."
+    ],
+    "residual_risks": [
+      "C1-Inhibitor test (e13) and no-prophylaxis event (e14) have no literal order link; 'in the subsequent days' names no anchor and 'already been supported' is diagnostic basis wording.",
+      "Spinal anesthesia item records only the stated technical difficulties; whether a block was attempted is unknown."
+    ]
+  },
+  "physician_adjudicated": false
+}
