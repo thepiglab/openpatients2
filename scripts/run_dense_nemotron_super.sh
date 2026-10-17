@@ -86,7 +86,7 @@ bootstrap="$work.bootstrap"
 [[ ! -e "$work" && ! -e "$bootstrap" ]] || { echo "Choose a new campaign path: $work" >&2; exit 1; }
 ref="${DENSE_REF:-HEAD}"
 revision="$(git -C "$repo" rev-parse "$ref^{commit}")"
-for required in scripts/benchmark_dense_nemotron_super.py scripts/dense_nemotron_super.sbatch \
+for required in scripts/benchmark_dense_nemotron_super.py scripts/dense_nemotron_super.sbatch scripts/vllm_rust_frontend.py \
     scripts/run_dense_nemotron_super.sh src/openpatients2/dense_nemotron_super.py \
     src/openpatients2/benchmark_reporting.py src/openpatients2/reasoning_lineage.py \
     src/openpatients2/nemotron_super_recipes.py src/openpatients2/muse_spark_recipe.py \

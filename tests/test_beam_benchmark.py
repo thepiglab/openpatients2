@@ -32,7 +32,7 @@ def test_beam_native_recipe_template_stops_and_gpu_allocation(campaign, tmp_path
     assert '--enable-expert-parallel' not in command['argv']
     assert cfg.speculative_config == {**beam.PROFILES[name]['speculation'],
                                      'model': str(work / 'runtime/weights/beam-draft')}
-    assert 'VLLM_ENGINE_READY_TIMEOUT_S=3600' in command['argv']
+    assert 'VLLM_ENGINE_READY_TIMEOUT_S=5400' in command['argv']
     assert ('--moe-backend' in command['argv']) == (gpus == 8)
     assert cfg.extra_args[cfg.extra_args.index('--chat-template') + 1].endswith('/chat_template.jinja')
     jobs = s.submit(work, 'account', 'qos', dry_run=True)['commands_without_dependencies']
@@ -147,7 +147,7 @@ def test_beam_cpu_probe_checks_native_modes_and_draft_without_cuda(tmp_path, mon
         get_reasoning_parser=lambda name: name == 'beam')))
     monkeypatch.setitem(sys.modules, 'transformers', SimpleNamespace(AutoTokenizer=SimpleNamespace(
         from_pretrained=lambda *a, **kw: Tokenizer())))
-    monkeypatch.setattr(sys, 'argv', ['probe', json.dumps({str(target): 'beam', str(draft): 'beam'}), '', '', 'beam'])
+    monkeypatch.setattr(sys, 'argv', ['probe', json.dumps({str(target): 'beam', str(draft): 'beam'}), '', '', 'beam', '{}'])
     exec(s.CPU_PROBE, {})
     assert [c['reasoning_effort'] for c in calls] == ['low', 'max']
     assert json.loads(capsys.readouterr().out)['native_thinking']

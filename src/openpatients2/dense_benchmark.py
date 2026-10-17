@@ -322,6 +322,7 @@ def serving(work, shard, logdir):
 def ledger_metrics(paths):
     metrics = {'model_calls': 0, 'failed_attempts': 0}
     reasoning_statuses = Counter()
+    finish_reasons = Counter()
     for k in ('prompt_tokens', 'completion_tokens', 'reasoning_tokens'):
         metrics[k] = 0
         metrics['unknown_' + k] = 0
@@ -336,6 +337,7 @@ def ledger_metrics(paths):
             if response is None:
                 continue
             metrics['model_calls'] += 1
+            finish_reasons[entry.get('metrics', {}).get('finish_reason') or 'unknown'] += 1
             reasoning_statuses[response.get('reasoning_status', 'unknown_legacy')] += 1
             if response.get('error') and not entry.get('errors'):
                 metrics['failed_attempts'] += 1
@@ -350,6 +352,7 @@ def ledger_metrics(paths):
         if metrics['unknown_' + k]:
             metrics[k] = None
     metrics['reasoning_statuses'] = dict(reasoning_statuses)
+    metrics['finish_reasons'] = dict(finish_reasons)
     return metrics
 
 
@@ -668,6 +671,9 @@ def aggregate(work):
               'all_attempt_seconds': sum(r['wall_seconds'] for r in all_attempts),
               'extraction_task_statuses': dict(sum((Counter(r.get('task_statuses', {})) for r in timing), Counter())),
               'articles_with_ehr_errors': sum(bool(r.get('ehr_errors')) for r in timing),
+              'generation_finish_reasons': dict(sum((Counter(r.get('finish_reasons', {})) for r in timing), Counter())),
+              'length_limited_calls': (sum(r['finish_reasons'].get('length', 0) for r in timing)
+                                       if timing and all('finish_reasons' in r for r in timing) else None),
               'operational_error_attempts': sum(r['status'] != 'done' for r in all_attempts),
               'throughput': rates,
               'worker_goodput': worker_goodput(timing, workers,

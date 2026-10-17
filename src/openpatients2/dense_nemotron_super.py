@@ -31,6 +31,7 @@ FORMAT = 'dense-nemotron-super/2'
 STORAGE_POLICY = 'download-benchmark-cleanup/1'
 DOWNLOAD_MEMORY = '128G'
 MKSQUASHFS_ARGS = '-processors 8 -mem 8G'
+STARTUP_TIMEOUT_SECONDS = 5400
 
 
 def prepare(root, work, expected=260, hours=12, with_images=True, include_test=False,
@@ -80,6 +81,8 @@ def prepare(root, work, expected=260, hours=12, with_images=True, include_test=F
             top_p=profile.get('top_p', .95), reasoning_strength=profile.get('reasoning_effort', 'medium'),
             template_date=profile.get('template_date'), stop_token_ids=profile.get('stop_token_ids'),
             vision_temperature=profile['vision_temperature'], top_k=None, nemotron_thinking=True,
+            max_output_tokens=32768, max_retry_tokens=32768, max_length_retry_tokens=49152,
+            require_full_output_budget=False, min_output_tokens=16384, timeout_seconds=1200,
             concurrency_per_endpoint=profile['concurrency'], summary_structured_output=False,
             max_figures=12 if definition['pixels'] else 0, focused_pixels=definition['pixels'])
         from .pilot_extract import PilotConfig
@@ -289,6 +292,14 @@ def serving(work, name, shard=0):
     spec = copy.deepcopy(profile['speculation'])
     if 'drafter' in profile:
         spec['model'] = str(weights_path(work, profile['drafter']))
+    extra_args = list(profile['extra_args'])
+    if definition['profile'] == 'redhat-fp8-dspark':
+        from .redhat_nemotron_recipe import quantization_overrides
+        extra_args += ['--hf-overrides', json.dumps(quantization_overrides(
+            b.read(weights_path(work, profile['model']) / 'config.json')))]
+    environment = dict(profile.get('environment', {}))
+    if definition['profile'] == 'spark':
+        environment['VLLM_RUST_FRONTEND_PATH'] = str(work / 'arms' / name / 'code/scripts/vllm_rust_frontend.py')
     # This path is deliberately explicit: the drafter is not the serving target.
     return ServingConfig(name=name, backend='vllm', version=runtime['version'],
         image_reference=runtime['image'], sif=str(work / 'runtime' / runtime['sif']),
@@ -299,8 +310,9 @@ def serving(work, name, shard=0):
         max_num_seqs=profile['max_num_seqs'], max_batched_tokens=profile['max_batched_tokens'],
         gpu_memory_utilization=profile['gpu_memory'], speculative_config=spec,
         kv_cache_dtype=profile.get('kv_cache_dtype', 'auto'),
+        startup_timeout_seconds=STARTUP_TIMEOUT_SECONDS,
         extra_args=['--generation-config', 'vllm', '--chat-template',
-                    str(weights_path(work, profile['model']) / 'chat_template.jinja')] + profile['extra_args'],
+                    str(weights_path(work, profile['model']) / 'chat_template.jinja')] + extra_args,
         # The target/draft snapshots share one read-only mount; caches are arm-local.
         bind_files={str(work / 'runtime/weights'): str(work / 'runtime/weights')},
         environment={'PYTHONDONTWRITEBYTECODE': '1', 'VLLM_WORKER_MULTIPROC_METHOD': 'spawn',
@@ -308,12 +320,12 @@ def serving(work, name, shard=0):
             'HF_XET_CACHE': str(cache / 'hf/xet'), 'HF_MODULES_CACHE': str(cache / 'hf/modules'),
             'VLLM_CACHE_ROOT': str(cache / 'vllm'), 'TRITON_CACHE_DIR': str(cache / 'triton'),
             'TORCHINDUCTOR_CACHE_DIR': str(cache / 'inductor'), 'XDG_CACHE_HOME': str(cache / 'xdg'),
-            **profile.get('environment', {})},
+            **environment, 'VLLM_ENGINE_READY_TIMEOUT_S': str(STARTUP_TIMEOUT_SECONDS)},
         validation_note=profile['adaptation'] + ' Context capped at 65,536 for the project comparison; requires real B200 smoke.')
 
 
 CPU_PROBE = '''
-import hashlib, json, pathlib, sys, vllm
+import hashlib, json, os, pathlib, subprocess, sys, vllm
 from transformers import AutoTokenizer
 from vllm.model_executor.models import ModelRegistry
 from vllm.reasoning import ReasoningParserManager
@@ -325,8 +337,15 @@ for module, expected in [('entrypoints/serve/tokenize/serving.py', sys.argv[2]),
     if expected:
         assert digest == expected, 'Upstream vLLM source identity mismatch'
 ReasoningParserManager.get_reasoning_parser(sys.argv[4])
+overrides = json.loads(sys.argv[5])
 for path, family in json.loads(sys.argv[1]).items():
     config = json.loads((pathlib.Path(path)/'config.json').read_text())
+    if str(path) in overrides:
+        from vllm.model_executor.layers.quantization.compressed_tensors.compressed_tensors import CompressedTensorsConfig
+        from vllm.model_executor.layers.vocab_parallel_embedding import VocabParallelEmbedding
+        quant = CompressedTensorsConfig.from_config(overrides[str(path)]['quantization_config'])
+        embedding = VocabParallelEmbedding.__new__(VocabParallelEmbedding)
+        assert quant.get_quant_method(embedding, 'language_model.model.embed_tokens') is None
     assert config['architectures'][0] in ModelRegistry.get_supported_archs()
     if config['architectures'] == ['LiLiCorrDraftModel']:
         assert config['block_size'] == 8 and config['dflash_config']['lilicorr_enabled']
@@ -369,6 +388,11 @@ for path, family in json.loads(sys.argv[1]).items():
                 add_generation_prompt=True, **kw) for kw in modes]
     assert rendered[0] != rendered[1], 'Native reasoning modes must differ'
     if family == 'spark':
+        os.environ['VLLM_USE_RUST_FRONTEND'] = '1'
+        from vllm import envs
+        help_text = subprocess.run([envs.VLLM_RUST_FRONTEND_PATH, 'serve', '--help'],
+            check=True, text=True, capture_output=True, timeout=60).stdout
+        assert '--engine-ready-timeout-secs' in help_text, 'Rust engine startup timeout is unsupported'
         assert t.convert_tokens_to_ids('<|eot|>') == 200008
         assert t.convert_tokens_to_ids('<|end_of_text|>') == 200001
         assert t.convert_tokens_to_ids('<|eom|>') not in [200001, 200008]
@@ -570,14 +594,21 @@ def download(work, profile_name):
                'VLLM_CACHE_ROOT': str(runtime / 'cpu-cache/vllm'), 'XDG_CACHE_HOME': str(runtime / 'cpu-cache/xdg'),
                'PYTHONDONTWRITEBYTECODE': '1'}
     engine_name = profile.get('engine', 'nemotron')
+    if engine_name == 'spark':
+        cpu_env['VLLM_USE_RUST_FRONTEND'] = '1'
     prefix = ['apptainer', 'exec', '--cleanenv', '--bind', f'{work}:{work}']
     for key, value in cpu_env.items():
         prefix += ['--env', f'{key}={value}']
     prefix += [str(sif), '/usr/bin/python3']
     models = {str(weights_path(work, model)): engine_name for model in models_to_download}
+    overrides = {}
+    if profile_name == 'redhat-fp8-dspark':
+        from .redhat_nemotron_recipe import quantization_overrides
+        path = weights_path(work, profile['model'])
+        overrides[str(path)] = quantization_overrides(b.read(path / 'config.json'))
     probe = subprocess.run(prefix + ['-c', CPU_PROBE, json.dumps(models),
         selected_engine['tokenizer_source_sha'] or '', selected_engine['registry_source_sha'] or '',
-        profile.get('reasoning_parser', 'nemotron_v3')], text=True, capture_output=True)
+        profile.get('reasoning_parser', 'nemotron_v3'), json.dumps(overrides)], text=True, capture_output=True)
     b.write(work / f'results/setup-probe-{profile_name}.json',
             {'returncode': probe.returncode, 'stdout': probe.stdout, 'stderr': probe.stderr})
     probe.check_returncode()
@@ -749,7 +780,7 @@ async def _worker(work, name):
     return await b.worker(arm, 0, campaigns=[arm],
         serving_factory=lambda _work, shard, _logs: serving(work, name, shard), runtime_probe=gpu_probe(profile),
         startup_check=startup, budget_seconds=m['nemotron_super']['hours'] * 3600 - 120,
-        article_timeout=1800)
+        article_timeout=3600)
 
 
 def status(work):
@@ -918,6 +949,7 @@ def aggregate(work):
                     'articles': len(common), 'seconds': paired_seconds, 'gpu_seconds': paired_seconds * profile['gpus'],
                     'throughput': throughput([{**receipts[name][aid], 'gpus_per_server': profile['gpus']} for aid in common])}
     result = {'format': FORMAT, 'complete': all(r['complete'] for r in reports.values()),
+        'all_extractions_valid': all(r['complete'] and r['all_extraction_tasks_valid'] == r['expected'] for r in reports.values()),
         'scoring_policy': {'semantic_judge_enabled': False,
             'item_matching': 'one-to-one evidence overlap and fuzzy names',
             'attribute_errors_scored_separately': True,
@@ -947,6 +979,18 @@ def aggregate(work):
     if not result['complete']:
         lines += ['INCOMPLETE: this archive contains diagnostic/partial results. '
                   'Archive creation does not mean the benchmark succeeded.', '']
+    lines += ['## Pipeline validity', '',
+              'Completed means the article attempt finished, not that every task passed. '
+              'Fully valid extraction is schema/evidence validation, not verified clinical accuracy.', '',
+              '| Arm | Fully valid extractions / planned | Failed tasks | Partial tasks | Articles with EHR errors | Length-limited calls |',
+              '|---|---:|---:|---:|---:|---:|']
+    for name, report in reports.items():
+        tasks = report['extraction_task_statuses']
+        length = report['length_limited_calls']
+        lines.append(f'| {name} | {report["all_extraction_tasks_valid"]} / {report["expected"]} | '
+                     f'{tasks.get("failed", 0)} | {tasks.get("partial", 0)} | '
+                     f'{report["articles_with_ehr_errors"]} | {length if length is not None else "unavailable"} |')
+    lines.append('')
     for scope, splits in metrics.items():
         for split, arms in splits.items():
             lines += [f'## {scope}: {split}', '', '| Arm | Completed / planned | Precision | Recall | Item F1 | F2 | Attribute accuracy |',

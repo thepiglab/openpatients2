@@ -49,7 +49,7 @@ def profile(model, gpus):
         'extra_args': ['--enable-auto-tool-choice', '--tool-call-parser', 'beam',
                        '--chat-template-content-format', 'string', '--max-parallel-loading-workers', '2']
                       + (['--moe-backend', 'triton'] if model == FP8 else []),
-        'environment': {'VLLM_ENGINE_READY_TIMEOUT_S': '3600', 'VLLM_BEAM_ALWAYS_CONSTRAIN_OUTPUT': '1'},
+        'environment': {'VLLM_ENGINE_READY_TIMEOUT_S': '5400', 'VLLM_BEAM_ALWAYS_CONSTRAIN_OUTPUT': '1'},
         'source': SOURCE,
         'adaptation': 'Official Beam launch image, pure TP (no EP), FP8 KV cache and Beam parsers. '
             f'{gpus}x B200 TP{gpus}; FP8 uses the recommended Triton MoE backend. '

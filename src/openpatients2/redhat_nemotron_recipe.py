@@ -3,6 +3,24 @@
 The FP8 card explicitly pairs these checkpoints. The DSpark serving command is
 the authority for drafting settings; Muse Spark's DSpark defaults do not apply.
 """
+import copy
+
+
+def quantization_overrides(config):
+    """Preserve the checkpoint's BF16 embedding exclusion after vLLM renames it.
+
+    The pinned vLLM mapper preserves regex targets verbatim. The checkpoint's
+    backbone.embeddings regex consequently misses language_model.model.embed_tokens.
+    --hf-overrides replaces dict fields, so send the ENTIRE original quant config.
+    """
+    quant = copy.deepcopy(config['quantization_config'])
+    if (quant.get('quant_method') != 'compressed-tensors'
+            or r're:.*backbone\.embeddings$' not in quant.get('ignore', [])):
+        raise ValueError('Unexpected RedHat embedding quantization exclusion')
+    alias = r're:.*(?:^|\.)model\.embed_tokens$'
+    if alias not in quant['ignore']:
+        quant['ignore'].append(alias)
+    return {'quantization_config': quant}
 
 FP8 = 'RedHatAI/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-FP8'
 DSPARK = 'RedHatAI/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B.dspark'
@@ -41,5 +59,7 @@ PROFILE = {
         'Client concurrency is capped at the existing benchmark limit of 64. NVIDIA parent vision sampling '
         'T=0.6/top_p=0.95 is retained; videos disabled for this image/text benchmark. '
         'Uses the already pinned NVIDIA official nightly with Qwen3 DSpark support. '
+        'Adds the vLLM-renamed embedding alias to the checkpoint quantization ignore list; '
+        'original weights/config remain byte-identical. '
         'Requires a real B200 smoke; no publisher speedup is claimed.',
 }

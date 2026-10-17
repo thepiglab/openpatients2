@@ -104,7 +104,7 @@
   },
   "overrides": {
     "context": 65536,
-    "max_output_tokens": 16384,
+    "max_output_tokens": 32768,
     "seed": 42,
     "hardware": "B200 replaces GB200; LiLiCorr uses the published Spark configuration on B200",
     "sampling": "NVIDIA explicit Model Summary recommendation: text T=1.0, pixels T=0.6, top_p=0.95. API image examples use T=1.0; the summary recommendation takes precedence. Fastino Super uses its quickstart T=0.0; its generation_config default is T=1.0.",
@@ -330,7 +330,7 @@
         "host_memory": "200G",
         "cpus": 16,
         "context": 65536,
-        "max_output_tokens": 16384,
+        "max_output_tokens": 32768,
         "max_num_seqs": 32,
         "client_concurrency": 32,
         "max_parallel_loading_workers": 2,
@@ -343,7 +343,7 @@
         "host_memory": "200G",
         "cpus": 16,
         "context": 65536,
-        "max_output_tokens": 16384,
+        "max_output_tokens": 32768,
         "max_num_seqs": 32,
         "client_concurrency": 32,
         "max_parallel_loading_workers": 2,
@@ -353,5 +353,18 @@
     "excluded_variants": [
       "reflection/Beam-1.0-501B-A23B (BF16)"
     ]
+  },
+  "hardware_smoke_corrections_2026_10_17": {
+    "evidence_campaign": "run-20261016-125831",
+    "startup_timeout_seconds": 5400,
+    "spark_timeout_transport": "scripts/vllm_rust_frontend.py forwards engine_ready_timeout_secs through --args-json; execs the original pinned binary",
+    "redhat_quantization_override": "Preserve complete original config; append re:.*(?:^|\\.)model\\.embed_tokens$ to ignore to maintain the original backbone.embeddings exclusion after the vLLM rename. Original snapshot bytes unchanged.",
+    "max_output_tokens": 32768,
+    "max_retry_tokens": 32768,
+    "max_length_retry_tokens": 49152,
+    "context_policy": "Exact tokenizer count; cap output to remaining 65536 context; require at least 16384 output tokens; never truncate source.",
+    "request_timeout_seconds": 1200,
+    "article_timeout_seconds": 3600,
+    "validation": "Local regression tests; corrected profiles require a new B200 smoke."
   }
 }

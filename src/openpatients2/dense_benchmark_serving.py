@@ -56,6 +56,7 @@ class ServingConfig(ConfigModel):
     experimental: bool = False
     validation_note: str = "Not hardware-tested by this project"
     startup_wave_size: int | None = Field(default=None, ge=1)
+    startup_timeout_seconds: float = Field(default=1800, gt=0, le=21600)
 
     @model_validator(mode="after")
     def topology(self):
@@ -197,7 +198,8 @@ class ServerGroup:
             raise ValueError("Apptainer is not on PATH; load the cluster module first")
         return snapshot
 
-    async def start(self, timeout: float = 1800):
+    async def start(self, timeout: float | None = None):
+        timeout = self.config.startup_timeout_seconds if timeout is None else timeout
         snapshot = self.preflight()
         self.logs.mkdir(parents=True, exist_ok=True)
         write_json(self.logs / "deployment.json", {"serving": self.config.model_dump(), "snapshot": snapshot,
@@ -244,7 +246,12 @@ class ServerGroup:
                                                                "ready_endpoints": [x["endpoint"] for x in self.commands]})
                         return self.commands
                     await asyncio.sleep(2)
-            raise TimeoutError("Serving readiness timeout")
+            write_json(self.logs / 'startup.json', {
+                'status': 'timeout', 'startup_seconds': time.monotonic() - start,
+                'timeout_seconds': timeout,
+                'logs': [str((self.logs / f'server-{i}.log').resolve()) for i in range(len(self.processes))],
+            })
+            raise TimeoutError(f"Serving readiness timeout after {timeout:g}s; inspect {self.logs}")
         except BaseException:
             try:
                 self.stop()

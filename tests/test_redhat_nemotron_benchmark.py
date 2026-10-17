@@ -27,6 +27,8 @@ def test_redhat_default_arm_freezes_target_and_draft_and_preserves_profiles(camp
     assert arm['drafter'] == {'id': redhat.DSPARK, 'revision': redhat.PINS[redhat.DSPARK]['revision']}
     assert arm['container'] == r.VLLM_IMAGE
     monkeypatch.setenv('CUDA_VISIBLE_DEVICES', '2,7')
+    b.write(s.weights_path(work, redhat.FP8) / 'config.json',
+            b.read(Path(__file__).parent / 'fixtures/redhat_nemotron_fp8_config.json'))
     cfg = s.serving(work, 'redhat-fp8-dspark-vision')
     command = render(cfg, str(work / 'arms/redhat-fp8-dspark-vision'))[0]
     assert command['devices'] == ['2', '7']
@@ -87,7 +89,8 @@ def test_redhat_metadata_pins_and_setup_ownership(campaign, tmp_path, monkeypatc
     def download(**kwargs):
         calls.append(kwargs)
         model = kwargs['repo_id']; path = kwargs['local_dir']
-        b.write(path / 'config.json', {'architectures': [redhat.PINS[model]['architecture']]})
+        b.write(path / 'config.json', b.read(Path(__file__).parent / 'fixtures/redhat_nemotron_fp8_config.json')
+                if model == redhat.FP8 else {'architectures': [redhat.PINS[model]['architecture']]})
         if model == redhat.FP8:
             (path / 'chat_template.jinja').write_text('fixture')
         if '*.safetensors' in kwargs['allow_patterns']:

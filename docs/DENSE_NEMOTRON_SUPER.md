@@ -21,7 +21,7 @@ their frozen model selection when resumed.
 
 ```bash
 # From openpatients2 on HiPerGator, first run a small end-to-end hardware check:
-DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=2 bash scripts/run_dense_nemotron_super.sh
+DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=4 bash scripts/run_dense_nemotron_super.sh
 bash scripts/run_dense_nemotron_super.sh status
 
 # After the small campaign terminates, run the full comparison:
@@ -37,7 +37,7 @@ To stop the current campaign and start a fresh eight-configuration smoke after u
 ```bash
 bash scripts/run_dense_nemotron_super.sh cancel && \
   DENSE_SUPER_PROFILES='' \
-  DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=2 bash scripts/run_dense_nemotron_super.sh
+  DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=4 bash scripts/run_dense_nemotron_super.sh
 ```
 
 `cancel` uses this checkout's last-campaign pointer, or an explicit campaign path
@@ -66,7 +66,7 @@ Credentials are never written into campaign receipts or exports.
 
 ```bash
 # Spark-only hardware smoke after access is approved:
-DENSE_SUPER_PROFILES=spark DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=2 \
+DENSE_SUPER_PROFILES=spark DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=4 \
   bash scripts/run_dense_nemotron_super.sh
 ```
 
@@ -79,7 +79,7 @@ DENSE_SUPER_WITH_IMAGES=1 bash scripts/run_dense_nemotron_super.sh
 DENSE_SUPER_WITH_IMAGES=0 bash scripts/run_dense_nemotron_super.sh
 # A smaller campaign can select configurations:
 DENSE_SUPER_PROFILES='nvfp4 lilicorr' DENSE_SUPER_LIMIT_ARTICLES=2 \
-  DENSE_HOURS=2 bash scripts/run_dense_nemotron_super.sh
+  DENSE_HOURS=4 bash scripts/run_dense_nemotron_super.sh
 ```
 
 The eight jobs are `fastino-text`, `nvfp4-vision`, `bf16-vision`, `lilicorr-vision`,
@@ -227,13 +227,33 @@ explicit per-request sampling. Tokenization uses the identical native template
 kwargs. Schemas are prompt instructions plus local validators, not constrained
 generation.
 
-Project-specific overrides are explicit: **65,536 context**, 16,384 output/repair
+Project-specific overrides are explicit: **65,536 context**, 32,768 output/repair
 tokens, 32,768 prefill tokens on BF16/Fastino/Muse Spark Open, 0.90 GPU utilization
 on NVIDIA MTP/Muse Spark Open profiles, 0.89 on Red Hat FP8 and 0.85 on Fastino, loopback ports and
 offline local snapshots.
 The official models support larger contexts; this comparison keeps the established
-source/output budget. Overflows fail visibly without source truncation. B200
+source context budget. Length-limited retries request up to 49,152 output tokens.
+Every request is tokenized first: output is capped at remaining context, with a
+minimum 16,384-token allowance; smaller allowances fail visibly without source
+truncation. Reasoning remains enabled and saved. B200
 replaces GB200; no B200 performance is claimed before a real run.
+
+The October 16 smoke exposed three initialization timeouts while weights were
+still loading or kernels were warming up. New Super runs allow **5,400 seconds**
+for server readiness and engine initialization. Spark uses a small executable
+wrapper to forward this timeout through the Rust frontend's `--args-json`
+bootstrap, which otherwise defaults to 600 seconds in the pinned launch image.
+The wrapper execs the original image binary and preserves its inherited socket
+descriptors; native templates/parsers and sampling are unchanged. CPU setup checks
+that the binary supports the timeout option before GPU inference.
+
+Red Hat's pinned FP8 config excludes `backbone.embeddings`, but vLLM preserves
+regex exclusions verbatim while renaming that layer to
+`language_model.model.embed_tokens`. The serving command adds only the renamed
+embedding exclusion via `--hf-overrides`, carrying the entire original
+quantization config because vLLM replaces dict-valued overrides. The downloaded
+config and weights remain byte-identical. A CPU loader-method probe checks that
+the embedding remains unquantized; the GPU smoke remains required.
 
 Sources:
 [Fastino Super](https://huggingface.co/fastino/Fastino-Nemotron-3.5-Super-VL-Healthcare),
@@ -322,8 +342,13 @@ not that inference succeeded. The comparison table shows completed/planned
 articles and reports quality as **not measured** when no attempts completed.
 The JSON retains full-reference missing-prediction penalties for accounting,
 with `quality_measured: false` distinguishing those from measured quality.
+The pipeline-validity table separately shows fully valid extractions, failed and
+partial tasks, EHR errors, and length-limited calls. `complete` means every attempt
+finished; `all_extractions_valid` tracks whether every extraction passed its
+schema/evidence checks. Neither field establishes semantic accuracy. Legacy
+receipts without finish-reason counts report truncations as unavailable.
 
-Each article has a 30-minute operational timeout; a worker stops taking articles
+Each article has a 60-minute operational timeout; a worker stops taking articles
 near its allocation deadline. Operational failures/pending articles are retained
 for explicit resume; completed invalid model outputs are scored and never rerolled.
 
@@ -354,7 +379,7 @@ sbatch --wait --account="${DENSE_ACCOUNT:-cai5724}" --qos="${DENSE_QOS:-cai5724}
   --partition=hpg-default --nodes=1 --ntasks=1 --cpus-per-task=1 --mem=2G \
   --time=01:00:00 --job-name=op2-super-clean-old \
   --wrap='python3 scripts/benchmark_dense_nemotron_super.py cleanup --work "$(cat runs/dense-nemotron-super-last-work.txt)"' &&
-DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=2 bash scripts/run_dense_nemotron_super.sh
+DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=4 bash scripts/run_dense_nemotron_super.sh
 ```
 
 Export `HF_TOKEN` (for example `set -a; source .env; set +a`) before launching the

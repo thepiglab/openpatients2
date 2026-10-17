@@ -79,8 +79,9 @@ class PilotConfig(ConfigModel):
     max_total_tokens: int = Field(default=32_000_000, ge=128, le=128_000_000)
     max_output_tokens: int = Field(default=16384, ge=128, le=32768)
     max_retry_tokens: int = Field(default=16384, ge=128, le=32768)
+    max_length_retry_tokens: int | None = Field(default=None, ge=128, le=65536)
     require_full_output_budget: bool = True
-    min_output_tokens: int = Field(default=128, ge=1, le=8192)
+    min_output_tokens: int = Field(default=128, ge=1, le=32768)
     max_repair_rounds: int = Field(default=1, ge=0, le=2)
     transport_retries: int = Field(default=1, ge=0, le=1)
     concurrency_per_endpoint: int = Field(default=64, ge=1, le=64)
@@ -572,6 +573,9 @@ class PilotRunner:
                         elif strategy:
                             current.append({'role':'user','content':strategy})
                 desired = self.config.max_retry_tokens if mode == 'repair' else self.config.max_output_tokens
+                if (mode == 'repair' and 'incomplete_finish:length' in repair_errors
+                        and self.config.max_length_retry_tokens is not None):
+                    desired = max(desired, self.config.max_length_retry_tokens)
                 entry = {'task': task, 'identity': identity, 'arm': self.arm, 'mode': mode,
                          'model': client.config.identity(), 'generation': client.config.generation(),
                          'request': safe_messages(current), 'messages_sha256': json_digest(current),
