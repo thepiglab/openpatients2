@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC13014107.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e28c920905cef2b330a9606a261a65a314749c3aee578292ed02b747580264d7",
+  "annotation_sha256": "98fc5d0f1038fd85fdf50b3d592bf28211a9cb5da3ac9a9555d86bc810ce24eb",
+  "reviewed_at": "2026-10-17T21:19:11.087989+00:00",
+  "source_segments_read": 41,
+  "facts_reviewed": 100,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f025: removed text_value \"ethyl chloride spray\" (the test stimulus, not a result); name now carries the literal source wording \"Loss of sensation to cold temperature (ethyl chloride spray)\".",
+    "p1-f010: marked alternate_representation_of p1-f009 (authors' \"pericardiac arrest\" label for the same peri-arrest event).",
+    "p1-f093: added the discussion restatement \"the rapid correction of bradycardia in response to atropine\" as evidence of the same outcome.",
+    "Added p1-f099 High vagal tone (conditions, assertion possible, ambiguous/review_only) from b00024 with an ambiguity; previously omitted patient-specific hypothesis.",
+    "Added p1-f100 possible adverse effect of dexmedetomidine (allergies, reaction_type adverse_effect, assertion possible, ambiguous/review_only) from the authors' b00003/b00028 attribution; linked to the existing causality ambiguity; allergies domain coverage and the article limitation updated.",
+    "Moved the block-level reassessment (p1-f082) out of the improvement event p1-e17 into new event p1-e22 (time \"promptly after the patient stabilized\").",
+    "Added 14 literally supported temporal relations (consent->spinal, block onset->dexmedetomidine start, dexmedetomidine->event via \"after receiving\", Table 2 Baseline/During/After headers, reversal with atropine and ephedrine, halt->resume, resume during surgery, oxygen increase, tourniquet inflated->released, postoperative care unit transfer, stabilization->block reassessment).",
+    "Verified the widened p1-f035 quote: a single contiguous sentence whose own clause \"it was started after block onset\" governs the dexmedetomidine start; time kept (not borrowed)."
+  ],
+  "unresolved": [
+    "The article has no figures and no supplements, so no visual or supplement review applies.",
+    "Age is 33 years in the abstract and 32 years in the case presentation; both are review_only source-conflict facts.",
+    "Table 2 labels the 70/42 mm Hg blood pressure as during the arrhythmia, but the discussion says that reading did not coincide with the moment of acute bradycardia.",
+    "The case text says the patient remained hemodynamically stable for the remainder of the procedure before describing intraoperative bradycardia and hypotension.",
+    "Terminology for the event varies (peri-arrest, pericardiac arrest, peri-cardiac arrest); no loss of circulation or resuscitation is described.",
+    "Causality between dexmedetomidine and the event is asserted by the title and conclusion while other explanations are discussed; it is recorded only as a possible adverse effect (review_only).",
+    "Discussion statements about other published patients and guideline dosing are background and not recorded as facts of this patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 41,
+    "facts_reviewed": 100,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single male patient; age conflict 33 (abstract) vs 32 (case text) kept as review_only source_conflict on both sides; sex accepted.",
+      "Table 2 70/42 mm Hg kept review_only with ambiguity because the discussion says it did not coincide with the moment of bradycardia.",
+      "\"Remained hemodynamically stable for the remainder of the procedure\" is an internal inconsistency of scope, not a resolvable sequence and not a single-attribute conflict; kept ambiguous/review_only without quarantining the well-attested bradycardia.",
+      "Peri-arrest/pericardiac arrest are author labels; no CPR described; ambiguity forbids inferring cardiac arrest.",
+      "High spinal, vasovagal response and high vagal tone are possible/review_only; dexmedetomidine attribution recorded only as a possible adverse effect.",
+      "Ephedrine route left null; two T8 block levels and the discussion baseline-HR statement kept separate from the Table 2 cells."
+    ],
+    "residual_risks": [
+      "measurement_series.json not written: the Table 2 parser treats the first data row (Baseline | HR | 78) as a header, so draft series use \"78\" as a time label; tooling issue, informational sidecar only.",
+      "p1-f081 keeps the \"After injection\" time from the scoping assessment sentence immediately preceding the T8 sentence."
+    ]
+  },
+  "physician_adjudicated": false
+}
