@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC11882160.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "df6473909d15a2ba67b3ea01cceb9378890c2a74b44a5f86f5811509ec1c9d46",
+  "annotation_sha256": "622af169f2f5b5399c2423b088aea5a3aab66388d2e0b36b6402725f95c5b718",
+  "reviewed_at": "2026-10-17T21:47:08.203358+00:00",
+  "source_segments_read": 16,
+  "facts_reviewed": 57,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Flare timing reclassified from source_conflict to ambiguity: the abstract \"One year later\" has no stated anchor date (resolution/withdrawal undated), so it is imprecise rather than contradictory. p1-f039 (In April, 2023) now supported/include; p1-f040 (abstract) ambiguous/review_only, alternate_representation_of p1-f039; ambiguity and article limitation rewritten.",
+    "Removed p1-f038 (undated flare-up): duplicate of the same case-text sentence now carried by p1-f039; event/summary references repointed.",
+    "p1-f045: added the Fig. 4 caption (\"Recurrence of pneumothorax after restarting medication.\"), which states the recurrence itself and was otherwise uncited.",
+    "Flagged items kept after checking literal support: p1-f048 stop (\"both resolving after discontinuation of the drug\"), p1-f042 restart (abstract \"was restarted\", Fig. 4 caption \"after restarting medication\", \"resulted in\"), p1-f035/p1-f047 completed (therapy delivered / \"resolved with conservative management\"), p1-f022 caption-literal drain position, psoriasis left unattributed; explanatory notes added.",
+    "Added p1-f058 care_plans follow-up (completed, \"after 1 year of follow-up\"), linked to p1-e18; care_plans domain now documented.",
+    "Split p1-f048 (second ustekinumab stop) out of p1-e17 into new event p1-e21: the source places the recurrence resolution after discontinuation and the vedolizumab change after that resolution, so one event could not hold both.",
+    "Added e04<e07 (abstract \"2 months later he presented a left-sided pneumothorax\") and e06<e13 (stated dates August 2022 and April 2023).",
+    "Added relations: e01<e02 (\"initially treated\"), e07<e08 (pneumothorax result -> drain for it), e04<e11 and e04<e14 (drug start -> stop / re-induction), e07<e11 (\"In light of ... development of a pneumothorax ..., the medication was withdrawn\"), e11<e14 and e12<e14 (abstract \"withdrawn ... resolved completely. One year later ... restarted\"), e14<e21 (start -> stop), e21<e16 (\"resolving after discontinuation\"); Fig. 4 caption added to e14<e15.",
+    "Not added (no literal order): flare e13 vs reinduction e14 (joined only by \"and\"/sentence order), surgery e10 vs withdrawal e11, author judgment e20 vs reinduction, and e19 (which pneumothorax \"the pneumothorax developed\" refers to is not stated).",
+    "Summary claim 3: replaced \"After a new Crohn’s disease flare-up, ... was reinduced\" (order not stated by the source) with a dated, unordered wording."
+  ],
+  "unresolved": [
+    "Figures 1 to 4 are caption-only in this annotation; pixels are described in visual.json.",
+    "The abstract’s approximate \"One year later\" for the Crohn’s disease flare-up has no anchor date; the case text dates the flare-up to April 2023. Recorded as an ambiguity (abstract timing review_only), not a source conflict.",
+    "No dates are given for the chest drain, CT scan, surgery or ustekinumab withdrawal; no intervals are inferred.",
+    "Author judgments about ustekinumab causation are association statements, not a confirmed adverse-drug diagnosis.",
+    "The supplement is a handwritten CARE checklist image-only PDF with no clinical data."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 16,
+    "facts_reviewed": 57,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (17-year-old boy); case content is b00002, b00005, the patient-specific discussion sentence in b00006, the b00007 conclusion and the four captions; SD1 is a handwritten CARE checklist with no clinical data.",
+      "Every case-text sentence checked against its fact; the short source explains the modest fact count.",
+      "Flare timing: abstract \"One year later\" has no anchor date, so it is an ambiguity, not a conflict; the April 2023 case-text fact is included and the abstract timing is review_only.",
+      "Second ustekinumab stop, re-induction, conservative management, enteral nutrition and caption-stated drain position are literal and kept; author causality kept as review_only (low probability) and possible (conclusion); psoriasis left unattributed.",
+      "Relations extended from 12 to 21 using initially, re-/restarted, One year later, In light of, after discontinuation and drug start -> stop; the vedolizumab event split from the second stop.",
+      "All four figures viewed at full resolution; visual descriptions match the pixels."
+    ],
+    "residual_risks": [
+      "The flare-up versus re-induction order and the surgery versus withdrawal order are not stated and stay unlinked.",
+      "Which pneumothorax \"at the time the pneumothorax developed\" refers to is not stated; p1-e19 is unlinked.",
+      "The F2 caption states a properly placed drain that is not distinguishable on the pixels."
+    ]
+  },
+  "physician_adjudicated": false
+}

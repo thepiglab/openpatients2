@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC13314280.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8bfcbcea75e61499355f97cfd1719cb5de187a6854a9bf25be89c447aa215f0e",
+  "annotation_sha256": "1cd0c334680466955bb434aaaa783b40701fd763665fadb5ec57b81e6ca501ec",
+  "reviewed_at": "2026-10-17T21:45:01.321882+00:00",
+  "source_segments_read": 19,
+  "facts_reviewed": 137,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Set literal own-evidence times left null: p1-f065 fistula 'During the second cycle of chemotherapy' (during, anchor 'second cycle'); p1-f104 leak 'postoperatively' (after); p1-f105 leak stopped 'on the 3rd postoperative day' (at); p1-f115/p1-f116 adjuvant chemotherapy '3 weeks postoperatively' (after); p1-f117 and p1-f130 'Post chemotherapy' (after, anchor 'chemotherapy'); p1-f123 Fig. 2 caption 'post-vaginoperitoneal fistula formation' (after, caption-governed).",
+    "Added p1-f137 medications: second cycle of chemotherapy (administered; drugs and completion not stated, noted) and event p1-e15 for it.",
+    "Linked p1-f030 (Fig. 1 caption, 'on initial presentation') to the presentation event p1-e01.",
+    "Added 13 temporal relations, each with literal order support: e01<e07 (initial presentation vs ascites resolved post-fistula), e02<e07 (no mass appreciated vs mass could now be appreciated), e04<e05 and e04<e13 (plan -> planned chemotherapy), e04<e09 ('preoperative diagnosis'), e05<e15 (first vs second cycle), e06 during e15 ('During her second cycle'), e06<e07 (gush then 'On examination ... now'), e06<e09 (fistula 'confirmed on exploratory laparotomy'), e07<e08 ('now planned'), e07<e09 (defect 'confirmed' at surgery), e09<e11 (repair -> stitch removal), e10<e13 (3rd postoperative day vs 3 weeks postoperatively).",
+    "Added the b00013 'after receiving one cycle of neoadjuvant chemotherapy' quote to the existing e05<e06 relation.",
+    "Summary claim 3 now cites p1-f137 for the second cycle it mentions."
+  ],
+  "unresolved": [
+    "Figure captions are author statements; actual pixels are described in visual.json.",
+    "The case text and the Fig. 4 caption print different depths for the ovarian masses; both are kept review_only as source conflicts.",
+    "Discussion hypotheses about the cause of the fistula and literature cases are not patient facts and were not recorded."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 19,
+    "facts_reviewed": 137,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (55-year-old postmenopausal woman, FIGO IVB mucinous ovarian adenocarcinoma, spontaneous vaginoperitoneal fistula during chemotherapy cycle 2); roster count 1 from 'a case of'.",
+      "Mass size 9 x 6 x 4 cm (text) vs 9 x 6 x 5 cm (Fig. 4 caption) kept as a source conflict on size only (both review_only); a different digit in a dimension is a different number.",
+      "Fig. 1 caption 'due to mass' vs text 'no abdominal mass could be appreciated', Fig. 4 'showing growth', 'immunocompromised' (hypothesis only), ADNEX non-partition, abstract 'interval debulking' vs listed operations, and CT deposits vs negative surgical palpation kept as ambiguities/review_only as drafted.",
+      "CEA high flag supported by 'raised levels of tumour markers such as' governing both CA-125 and CEA in one sentence; neoadjuvant setting of the first cycle supported by b00013 about this patient (not borrowed).",
+      "LDH U/ml with U/L range kept as printed; routine bloods remainder flag normal ('within normal range').",
+      "All 5 figures viewed at full resolution; Fig. 3 sensitive anatomy (perineum/external genitalia in a photograph) confirmed; Figs 4-5 internal operative views; no faces or burned-in text."
+    ],
+    "residual_risks": [
+      "Workup event p1-e03 has no literal order link to diagnosis (basis wording does not order) and remains unrelated.",
+      "Second-cycle chemotherapy drugs and completion not stated; p1-f137 records only the cycle.",
+      "EVID-NEGATION warning on the 'uneventfully' first-cycle outcome is a known checker gap, left as is."
+    ]
+  },
+  "physician_adjudicated": false
+}
