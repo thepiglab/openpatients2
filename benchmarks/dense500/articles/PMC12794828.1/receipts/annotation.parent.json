@@ -1,0 +1,76 @@
+{
+  "article_id": "PMC12794828.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c666b40cf8fa4c2edb717e306c92758a69461ea4b116ddb43f3f048abef9734c",
+  "annotation_sha256": "0d9f723eb122a8fb17b2886b384ca32ddd7a829b8ce342964219f90006a0683d",
+  "reviewed_at": "2026-10-17T21:47:50.851350+00:00",
+  "source_segments_read": 24,
+  "facts_reviewed": 116,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f014/p1-f015: thrombocytopenia severity reclassified from source conflict to ambiguity (discussion \"moderate\" has no time or value and cannot be tied to the initial mild 160,000/mm³ result); p1-f014 (case text, initial) restored to supported/include, p1-f015 ambiguous/review_only; ambiguity text and article limitation updated.",
+    "p1-f062: kept time \"after 48 hours\" (decision on NO-BORROWING warning): the abstract quote literally reports the same single reoperation that the case text calls the second-look surgery, with its time and result; the quote is a statement of this fact, not a neighbouring time fragment. Warning left as a checker false positive; notes added. No evidence or field reshaped.",
+    "p1-f090: removed the abstract quote \"free fluid in the abdominal cavity\" (b00001); the annotator's own ambiguity says the untimed abstract ultrasound must not be merged with either case-text ultrasound (the abstract places it before the hemoglobin drop, the case text reports the initial abdominal ultrasound as normal). The abstract ultrasound is recorded separately as p1-f116 (review_only).",
+    "Added p1-f116 (observations, ambiguous/review_only): abstract upper abdominal ultrasound with free fluid and hemangiomas, untimed and unassigned; linked to the existing abstract-ultrasound ambiguity.",
+    "p1-f044/p1-f045: added time \"In the immediate postoperative period\" from their own sentence (consistent with p1-f059/p1-f060 from the same sentence); action stays unknown (\"required\").",
+    "p1-e01: linked hemodynamic stability and the normal vital signs (p1-f033, p1-f068-f070) to the presentation, with the abstract quote placing hemodynamic stability at admission.",
+    "p1-e02: restricted to what the source calls initial (laboratory tests, abdominal ultrasound); its description and time \"Initial\" no longer cover the obstetric ultrasound, ECG/troponin, amylase/lipase or examination, which have no stated time and moved to their own untimed events.",
+    "p1-e03: limited to the facts of the \"Within ten hours of admission\" sentence; the liver enzymes and repeat fetal Doppler (no stated time) moved to untimed events p1-e23 and p1-e24.",
+    "Added untimed events p1-e18 (twin obstetric ultrasound), p1-e19 (chest pain protocol, ECG, troponin), p1-e20 (pancreatitis considered, amylase/lipase), p1-e21 (physical examination), p1-e22 (premature labor considered), p1-e23 (liver enzymes), p1-e24 (repeat fetal Doppler), p1-e25 (newborn intracranial hemorrhage and NICU/ward stay); previously unlinked facts now attached.",
+    "Added relation p1-e18 before p1-e24: \"Repeat\" fetal Doppler follows the earlier twin obstetric ultrasound.",
+    "Added relation p1-e24 before p1-e05: the cesarean finding refers back to \"the fetus with abnormal Doppler findings\".",
+    "Added relation p1-e02 before p1-e04: \"initial\" abdominal ultrasound precedes the later bedside abdominal ultrasound.",
+    "Added relation p1-e07 before p1-e09: scheduled re-operation precedes its execution as the second-look surgery.",
+    "Added relation p1-e09 before p1-e14: stated times: reoperation at 48 hours vs postoperative day 15 (after either operation).",
+    "Added relation p1-e15 before p1-e16: MRI is stated to be during the last weeks of the hospitalization that ends with discharge.",
+    "Added relation p1-e05 before p1-e25: delivery precedes the neonatal ICU stay (delivery -> neonatal transfer).",
+    "Added relation p1-e01 before p1-e19: the chest pain protocol is the action about the presenting chest pain.",
+    "Added relation p1-e01 before p1-e20: pancreatitis was considered because of the presenting epigastric pain (\"initially mimicked\").",
+    "Added relation p1-e01 before p1-e22: premature labor was considered because of the presenting pain episodes.",
+    "Kept p1-e06 before p1-e10 (postoperative CT): \"Postoperative\" does not name the operation, but both candidate operations (first laparotomy, second-look surgery) are at or after p1-e06, so the CT follows p1-e06 under either reading; no CT-vs-second-look order asserted.",
+    "Summary: removed implied timing of liver enzymes (\"within ten hours\" no longer covers them) and of MRI (\"later\"); replaced the uncited \"prolonged hospitalization\" with the two stated discharge durations (cites p1-f104/p1-f105).",
+    "Added ambiguity: cited differential-diagnosis list in the discussion is not assigned to the patient."
+  ],
+  "unresolved": [
+    "Abstract (40 days) and case text (42 days) give different hospitalization lengths for the patient; both recorded review_only as a source conflict.",
+    "Case text calls the initial thrombocytopenia mild (160,000/mm³); the discussion calls it moderate without time or value; recorded as an ambiguity (p1-f015 review_only), not a source conflict.",
+    "Newborn and the demised twin stay in the index patient record (fetus and newborn subjects); no separate roster patients.",
+    "Differential-diagnosis list, epidemiology, pathophysiology and management statements in the introduction and discussion are cited or general and are not patient facts.",
+    "Caption-layer visual status not_inspected; the three figures were inspected in the separate visual submission.",
+    "The ECG and troponin results are stated only as having excluded acute coronary syndrome; no values are given.",
+    "The abstract upper abdominal ultrasound (free fluid, hemangiomas) is untimed and is kept as a separate review_only observation, not merged with the initial or bedside ultrasound."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 24,
+    "facts_reviewed": 116,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (36-year-old woman, 28-week IVF twin pregnancy, spontaneous hepatic rupture from hemangioma); demised fetus and surviving newborn kept in her record as fetus/newborn subjects; roster count 1.",
+      "Every case-text sentence (b00007-b00015), abstract, aim and present-case discussion sentences (b00018, b00020) and the three captions checked against the facts; all 115 draft facts verified, none removed.",
+      "p1-f062 second-look time \"after 48 hours\" kept: the abstract literally reports the same single reoperation with that time and its result; gate NO-BORROWING warning judged a checker false positive.",
+      "Thrombocytopenia mild (case text, initial) vs moderate (discussion, untimed) reclassified from conflict to ambiguity; discharge 42 vs 40 days kept as a source conflict; newborn 40 days vs 40+4 kept as an ambiguity.",
+      "Events that implied unstated times were split (initial workup, within-ten-hours deterioration); eight untimed events and ten literal relations added (repeat Doppler, Doppler-to-cesarean back-reference, initial vs bedside ultrasound, planned-to-second-look, 48 h vs POD 15, MRI within hospitalization, delivery-to-NICU, symptom-to-workup).",
+      "Abstract ultrasound kept untimed and unmerged (new review_only fact); \"required\" transfusion/factors/vasoactives/fluids stay action unknown; infection types joined by \"or\" not recorded."
+    ],
+    "residual_risks": [
+      "p1-e03 before p1-e05 rests on the abstract sentence \"subsequently developed a drop ... and underwent an emergency cesarean section\".",
+      "Postoperative CT does not name its operation; only order after the first laparotomy is asserted.",
+      "Hemangiomas recorded as confirmed from the MRI and aim wording; no histology is reported.",
+      "Remaining NO-BORROWING warning on p1-f062 is a deliberate keep, not an unresolved error."
+    ]
+  },
+  "physician_adjudicated": false
+}
