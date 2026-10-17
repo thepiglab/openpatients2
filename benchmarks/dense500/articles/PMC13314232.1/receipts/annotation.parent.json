@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC13314232.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "83bef9e0a2db8b3fd4b937dfc076e143f3ef3557669c7f11e2b45ad0ac471d2d",
+  "annotation_sha256": "28b1c61ddf79339a6229b1f176c58ebf107a5412c336cf5443d11969c5a45e24",
+  "reviewed_at": "2026-10-17T21:42:12.332188+00:00",
+  "source_segments_read": 34,
+  "facts_reviewed": 116,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Age 28 (case text, Table 2) versus 26 (Fig. 2 caption) re-classified from ambiguity to source conflict per orchestrator precedent: p1-f002 made source_conflict/review_only and new p1-f115 (26-year-old, Fig. 2 caption, age_other) added as the other review-only side; ambiguity rewritten; case_context description and summary claim 1 no longer state the conflicting age",
+    "p1-f097 (drilling of the facial canal) no longer cites the Fig. 1D caption, which names the drilled anterior EAC, a different structure; new p1-f116 records the caption-stated drilling of the anterior EAC and is linked to the surgery event e10",
+    "p1-f099 (surgery advised elsewhere and declined): removed indication \"advised by many centers\", which is not an indication",
+    "p1-f047 (discussion: isolated widening of the facial canal) unlinked from e15 (Fig. 2 imaging); the sentence does not say whether imaging or surgery showed it",
+    "Summary claim 2: the differential is attributed to the repeat FNAC findings only, as the source states",
+    "Relations 6 -> 9: e02 (surgery advised by centers visited previously) before presentation e01 (\"previously\"); surgery e10 before the 3-month follow-up e13 (local recurrence after the en-bloc removal); e13 before death e14 (alive at the 3-month follow-up; death 5 months after surgery)",
+    "Article limitation on the 26 vs 28 age updated from ambiguity to source conflict",
+    "Roster label and identity evidence no longer assert the conflicting age (label now \"Young lady ...\", the literal \"a young lady\" wording; case_context description likewise; identity quote trimmed to \"lady with no significant comorbidities\"); Fig. 2 attribution note updated to source conflict"
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the three images are described in the separate visual submission.",
+    "The Fig. 2 caption gives the patient age as 26 years while the case text and Table 2 give 28 years; both ages are kept as review-only source-conflict facts.",
+    "The case text gives no dates; times are kept only where the source states them, and event order is limited to stated order wording.",
+    "Table 2 rows other than the Current study row describe published literature cases and are not index-patient facts.",
+    "The cytology differential is listed as alternatives and none is asserted; the source does not report a frozen section result or the date of the repeat FNAC.",
+    "The discussion statement that perineural spread was seen at both levels uses garbled level wording (macroscopic or macroscopic) and is not recorded as a fact.",
+    "The discussion sentence that the cited rarity of cervical node metastasis and 40% distant metastasis was in contrast to this case is not recorded as a separate fact because it does not say which attribute contrasts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 34,
+    "facts_reviewed": 116,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (28-year-old woman, right parotid HGT-AdCC); only the Table 2 \"Current study\" row is patient data, the other Table 2 rows are literature cases and carry no facts.",
+      "Every case paragraph (b00005-b00010), the Table 1 IHC cells, the Table 2 current-study row and all three captions checked against the facts; nothing patient-specific missing apart from the Fig. 1D anterior EAC drilling, now added.",
+      "Age 28 (case text, Table 2) versus 26 (Fig. 2 caption) is a genuine source conflict: both sides review-only, only the age attribute quarantined.",
+      "FNAC three-way differential (X or Y) and the Fig. 3 p53 low-grade weakly positive/negative wording stay review-only with ambiguities; Ki67 70% (caption) and 65-70% (Table 1) stay separate items with an ambiguity, not a conflict.",
+      "Clinical cT4aN2bM0 and pathologic pT4aN3bM0 kept as separate time-specific tumor entries per the oncology prompt.",
+      "IJV ligation is literally stated by the Fig. 1B caption (\"ligated end of IJV\"); kept as a completed procedure.",
+      "Relations raised from 6 to 9 using only \"previously\", recurrence after removal, and the alive 3-month follow-up before death 5 months after surgery.",
+      "All three figures viewed at full size with magnified crops; Fig. 1A shows an unmasked partial face and Fig. 1E an exposed breast with a black box over the nipple (areola edge visible above the box), so both privacy flags are correct."
+    ],
+    "residual_risks": [
+      "No literal order links the presentation, examination, imaging and FNAC events to the surgery other than the preoperative diagnosis and tarsorrhaphy; those pairs stay unordered.",
+      "The e13-before-e14 relation rests on the 3-month follow-up (patient alive, examined) preceding death 5 months after surgery; the follow-up anchor is not literally stated.",
+      "Fig. 1 visual general_description says \"Six-part composite\" although the figure has five panels (A-E); this is an agent-owned file and the annotator must correct it.",
+      "p1-f048 (Fig. 1C involved and normal facial nerve parts in one item) has a non-blocking OBS-FLAG review question; left unflagged because the item mixes an abnormal and a normal finding."
+    ]
+  },
+  "physician_adjudicated": false
+}
