@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC12846472.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a71f9824cce82e757df3db6d0bbd749468d00e3808f2527afbfa0dfae2457dd5",
+  "annotation_sha256": "9add3138c871dc618d45d1ce827cd2769fe391589bd777fdc742da5642a6579d",
+  "reviewed_at": "2026-10-17T21:38:34.828324+00:00",
+  "source_segments_read": 85,
+  "facts_reviewed": 288,
+  "patients_reviewed": 5,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Text-flag versus Table 1 value pairs (10 labs plus Case 1 heart rate and Case 5 normal vital signs) un-quarantined: the text fact keeps the source's own flag (text_value now the source word instead of \"... per case text\"), the Table 1 value fact is included without a flag, and each pair keeps one ambiguity stating that the value lies outside the printed interval, must_not_infer the flag from the range (OBS-FLAG; orchestrator ruling)",
+    "p1: TED severity moderate-to-severe (text) vs moderate (Table 1) adjudicated as compatible wording, not a conflict: f045 and f046 included with an ambiguity; the severity-less duplicate f044 (same quote as f045) removed and its references repointed to f045",
+    "Cases 1 and 5: 3-month (text) vs 4-month (Table 1) follow-up statements adjudicated as not a conflict (findings agree; the source never identifies them as the same assessment and reports follow-up beyond 3 months): p1-f058/f059 and p5-f060/f062/f064/f065 included with their own literal times and an ambiguity forbidding a merge; new event p1-e06 for the 4-month Table 1 statement",
+    "p3-f022 hypertension: temporality historical -> unknown and role history -> comorbidity (the sentence says \"controlled hypertension\", not \"history of\"; TEMPORALITY)",
+    "p4: Case 4 inflammatory-marker conflict narrowed to its attribute: f043 (CRP slightly elevated, text) and f044 (now \"Inflammatory markers\" normal, Table 1) stay review-only source_conflict; ESR \"remained unchanged\" (f042) included (no classification); the thyroid-function clause of the Table 1 cell split out as new included fact p4-f050",
+    "p5-f054 oral analgesics every 6 h for one month promoted to included: the frequency/duration applies to the analgesics under both readings; only the corticosteroid scope stays an ambiguity",
+    "Table 2 rows checked: they label patients by number in a \"Patients\" column (1, 2, 5 / 3, 4), not by \"Case N\"; the assignment patient N = Case N is kept (numbering and treatments match the case reports) and recorded as one ambiguity per patient",
+    "Timeline: new events p1-e06 (asymptomatic at 4 months, Table 1), p1-e07 and p2-e08 (two previous AstraZeneca doses), p1-e08 (tapering of oral corticosteroids initiated), p4-e06 (selenium and levothyroxine continued due to persistent exophthalmos); 17 relations added (8 -> 25), each with a literal order quote: \"previously received\" before the third dose, cohort sentence \"TED occurred between 3 and 20 days after receiving a COVID-19 vaccine\" (explicitly all five patients) for vaccine -> TED diagnosis, Figure 1 caption \"3-month follow-up after treatment\" for treatment -> 3-month follow-up in every case, \"Subsequently\" (p2), \"continued\" (p3, p4), \"Initially\" (p5 tonsillitis -> TED diagnosis and later management), 3-month -> 1-year follow-up (p5)",
+    "p1 and p2 outcome summary claims reworded so the 3-month time is not attached to untimed laboratory and treatment sentences"
+  ],
+  "unresolved": [
+    "Table 1 values are recorded without a time because its caption mixes baseline and outcome characteristics; times are kept only where a cell or sentence states them.",
+    "Where the case text classifies a result (normal, elevated, low) and the Table 1 value lies outside its printed reference interval, the text flag and the table value are separate included facts, the table value carries no flag, and an ambiguity records the discrepancy; flags are never derived from intervals.",
+    "Source conflicts (review-only, conflicting attribute only): Case 3 exophthalmos laterality at presentation (bilateral vs unilateral left), TED severity (moderate-to-severe vs mild) and 3-month thyroid function (free T4 slightly below normal vs thyroid function normalized); Case 4 inflammatory markers at follow-up (CRP slightly elevated vs normal). Case 1 severity (moderate-to-severe vs moderate) and the 3-month vs 4-month follow-up statements of Cases 1 and 5 are recorded as ambiguities, not conflicts.",
+    "Table 1 names products (ChAdOx1 nCoV-19, prednisone, methylprednisolone) that differ from the text wording (AstraZeneca vaccine, oral corticosteroids, corticosteroids); equivalence is not asserted except for the case 2 intravenous corticosteroid regimen, whose doses are identical.",
+    "Statements that vaccination history was obtained from the patient and confirmed from medical records have no clinical section and are not recorded as facts.",
+    "Discussion, limitations and conclusion paragraphs describe the series; counts such as numbers of patients with a finding were not copied to individuals. Figure 1 shows photographs with black rectangles over the eyes; the caption-level statement of improvement is not recorded as an individual fact.",
+    "The retrospective CAS estimates and the Table 2 group outcomes are assigned to the patients whose numbers the source lists, taking patient N as Case N (recorded as an ambiguity per patient)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 85,
+    "facts_reviewed": 288,
+    "figures_viewed": 10,
+    "key_findings": [
+      "Five-woman case series; roster order and the Case 1-5 narratives, every Table 1 column and the Figure 1 rows matched one to one.",
+      "Twelve text-classification versus Table 1 value pairs (10 labs, Case 1 heart rate, Case 5 normal vital signs) are not conflicts: the text flag and the unflagged table value are both included with an ambiguity each.",
+      "Genuine conflicts kept review-only on the conflicting attribute only: Case 3 exophthalmos laterality, Case 3 TED severity (moderate-to-severe vs mild), Case 3 free T4 slightly below normal vs thyroid function normalized at 3 months, Case 4 CRP slightly elevated vs inflammatory markers normal.",
+      "Case 1 severity (moderate-to-severe vs moderate) and the 3-month vs 4-month follow-up statements of Cases 1 and 5 are compatible statements recorded as ambiguities.",
+      "Included facts whose quotes carry quarantined words (p3 f030 exophthalmos, p3 f033 TED) leave the quarantined attribute out of their fields.",
+      "Table 2 labels patients by number, not by Case; patient N = Case N kept with an ambiguity per patient.",
+      "Relations raised from 8 to 25 with literal order evidence (previously, the cohort onset sentence, the Figure 1 caption \"follow-up after treatment\", Subsequently, continued, Initially).",
+      "Figure 1 viewed at full resolution and 2x/4x crops: ten eye-region photographs with black rectangles, Case 1-5 headings printed; visual, figure-EHR and privacy sidecars agree with the pixels."
+    ],
+    "residual_risks": [
+      "Whether the 3-month and 4-month follow-up statements of Cases 1 and 5 describe one visit is not stated; both are included with their own times.",
+      "Product names in Table 1 (ChAdOx1 nCoV-19, prednisone) are not merged with the text wording (AstraZeneca vaccine, oral corticosteroids) because the source never equates them.",
+      "Table 1 cells are recorded without times except where a cell states one; row labels such as \"at presentation\" are not used as times.",
+      "The Case 5 corticosteroid frequency/duration scope remains an ambiguity."
+    ]
+  },
+  "physician_adjudicated": false
+}
