@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12810977.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "302411427a48ca24976864da56cfd7c9dfd26df678cf66f5648a33554d6c9993",
+  "annotation_sha256": "2c65a3e593aa9fe3e7fbd0b3b2dd05231af556b080e8636799f64f992d9a22f7",
+  "reviewed_at": "2026-10-17T21:21:27.502474+00:00",
+  "source_segments_read": 36,
+  "facts_reviewed": 64,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Sex: the acknowledgments \"her\" is treated as an ambiguity against the consistent male/He case text; p1-f003 male restored to supported/include, p1-f004 female kept review_only (ambiguous); ambiguity and article limitation reworded.",
+    "\"for 3 months\": the duration follows the coordinated complaints after \"presented with\", so it applies to both lump and weakness; ambiguity removed, notes updated; abstract \"right iliac fossa mass\" quote added to the lump symptom.",
+    "Colon site kept as an ambiguity (biopsy vs resection specimens; CT places the caecal lesion intussuscepting into the ascending colon); ambiguity evidence extended with the CT and abstract HPE wording.",
+    "Haemoglobin 5.4 gm/dL flagged low because the source reports it as the value of severe anaemia; quote extended to include that classification.",
+    "Fig. 2 and Fig. 3 caption evidence added to the CT caecal lesion, intussusception and adrenal-protocol findings the text cites; adrenal-protocol finding body site set to left adrenal from the caption.",
+    "Adrenal tumour gross-finding label no longer adds \"Left\", which its evidence does not contain.",
+    "Added 5 observations: non-contrast CT ascending colon growth (Fig. 1 caption), colonoscopic biopsy histopathology, resection histopathology (with Fig. 5 caption), adrenal histopathology adrenal lipoma and abstract histopathology AML (both source_conflict review_only).",
+    "Added 6 literally supported temporal relations (adrenal lesion on CT -> adrenal-protocol CT -> further secretory evaluation; CT size and AML impression -> tumour board decision; surgery -> colon histopathology; surgery -> adjuvant chemotherapy).",
+    "Unresolved-scope bucket event occurrence set to unknown; Fig. 4/5/6 captions and abstract \"complete adjuvant treatment\" added as event evidence."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the six images are described in the separate visual submission.",
+    "The colon tumor site is worded caecum in the abstract, CT and biopsy but ascending colon in the resection histopathology and some captions; the biopsy and resection grades are recorded separately.",
+    "The case text gives no dates; only 3 months before presentation, before presenting to us, and the last 1 year of follow-up are stated, so most facts keep null time.",
+    "The adrenal lesion size is 5.5 × 5.3 cm on CT in the case text and 7.6 × 6.5 × 4.6 cm in the discussion with no method; the two are not merged.",
+    "Oncology treatments carry no tumor reference because the source does not explicitly link them.",
+    "Literature, incidence and guideline statements in the abstract, introduction and discussion are not copied to the patient.",
+    "The adrenal lesion diagnosis is a source conflict kept review_only: AML (abstract histopathology, discussion CT) versus adrenal lipoma (case text histopathology, Fig. 6 caption).",
+    "Sex is taken from the case text (male, He); the acknowledgments her is kept review_only as an ambiguity."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 36,
+    "facts_reviewed": 64,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Single 52-year-old male; colon carcinoma (caecum on biopsy/CT, ascending colon on resection) with pT3N2b, plus a normetanephrine-secreting left adrenal incidentaloma resected simultaneously.",
+      "Adrenal histopathology is a genuine source conflict: AML in the abstract versus adrenal lipoma in the case text and Fig. 6 caption.",
+      "Sex conflict downgraded to ambiguity: only the acknowledgments say her.",
+      "Supplement SD1 is a CARE checklist with no patient data."
+    ],
+    "residual_risks": [
+      "Oncology treatments keep tumor_ref null; the source never states which lesion the combined operation or adjuvant chemotherapy treated.",
+      "Adrenal size 5.5 x 5.3 cm (CT) and 7.6 x 6.5 x 4.6 cm (discussion, no method) are kept separate.",
+      "Surgery -> adjuvant chemotherapy relies on the meaning of adjuvant."
+    ]
+  },
+  "physician_adjudicated": false
+}
