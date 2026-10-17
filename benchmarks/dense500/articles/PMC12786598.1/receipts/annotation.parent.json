@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12786598.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "bae5d98ad16f6977abb9a1dfab6bc3970540ac0a5b66af8efa3908343f0d3743",
+  "annotation_sha256": "eedc55df62936531e24a97a50fc4cc64e1110bce217f13d2df4cb788150eed90",
+  "reviewed_at": "2026-10-17T22:01:10.432862+00:00",
+  "source_segments_read": 48,
+  "facts_reviewed": 68,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged duplicate blood-loss items: abstract \"minimal intraoperative blood loss\" and case \"blood loss was consistent with the procedure\" describe the single operation; p1-f054 removed, p1-f053 cites both.",
+    "Merged duplicate complication-absent items: abstract \"The procedure was uneventful\" and case \"The surgery was uncomplicated\"; p1-f065 removed, p1-f064 cites both; postoperative course p1-f066 kept separate.",
+    "Split obstetric history \"(2015, 2019)\" into two delivery items (p1-f056 2015, p1-f068 2019) and two events (p1-e04, p1-e23) with calendar values; ordered by stated years.",
+    "Moved discussion statement \"no macroscopic pelvic or peritoneal endometriosis ... in the present case\" from observations to conditions (pelvic or peritoneal endometriosis, absent/refuted); laparoscopic inspection finding p1-f050 kept as observation.",
+    "Added literal indication (diffuse adenomyosis and heavy menstrual bleeding) to the previous combined oral contraceptives, transdermal patch and vaginal ring; ambiguity reworded.",
+    "Added laparoscopy indication from b00030 (\"hemoperitoneum in conjunction with rising β-hCG levels necessitated surgical intervention\").",
+    "Added transvaginal ultrasound impression from the abstract (p1-f069) and outcome \"successfully managed by laparoscopic salpingectomy\" (p1-f070).",
+    "Split the outcome event into intraoperative (p1-e18, during laparoscopy) and postoperative course (p1-e22); added supported relations (recommendation and sonographic hemoperitoneum before laparoscopy, plan/laparoscopy before left salpingectomy, procedures before postoperative course, device in situ before ectopic pregnancy, history before presentation, 2015 before 2019 delivery).",
+    "Summary updated for removed/added facts.",
+    "Moved outcome p1-f070 (successfully managed by laparoscopic salpingectomy, b00007) out of postoperative-course event p1-e22 into its own outcome event p1-e24 with no time, per orchestrator ruling."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three figure images are reviewed in visual.json.",
+    "Table 1 rows other than the present case describe published case reports and are not index-patient facts; the literature-review counts and statements are aggregate.",
+    "Serial serum β-hCG values carry no individual times in the source; only the series is stated as within 24 h.",
+    "The abstract threshold β-hCG > 4000 mIU/mL is not identified with a specific serial value."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 48,
+    "facts_reviewed": 70,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; Table 1 present-case row only is patient data and every cell is covered.",
+      "Abstract β-hCG > 4000 mIU/mL kept separate from serial 3953/4041/4337 values with an ambiguity (not a conflict; not the same identified measurement).",
+      "Bilateral salpingectomy kept as right (treatment) and left (sterilization) completed items, with the planned bilateral item separate.",
+      "Figure 1 burned-in overlay includes an institution name and an exam date stamp; privacy sidecar should flag direct_identifiers (agent-owned, reported)."
+    ],
+    "residual_risks": [
+      "Serial β-hCG values have no individual times beyond within 24 h.",
+      "LNG-IUS indication taken from the abstract wording \"treated with\".",
+      "Fig 1 privacy flag category needs Sonnet correction to direct_identifiers."
+    ]
+  },
+  "physician_adjudicated": false
+}
