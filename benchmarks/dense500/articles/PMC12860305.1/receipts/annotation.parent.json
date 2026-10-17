@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12860305.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "be3ba386ab38c060f598fdd29b4d7264c9414e4f4ef56e351f9aa48feb548e6c",
+  "annotation_sha256": "651fa7b7b424ea18701c92cb1443211170436a8fce230518ae7cad85370dd038",
+  "reviewed_at": "2026-10-17T22:01:38.615087+00:00",
+  "source_segments_read": 22,
+  "facts_reviewed": 69,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f005 choroid plexus papilloma: verification_status confirmed -> provisional, taken from the case text 'These findings were most consistent with a CPP' (no confirm wording in the case text; abstract 'pathology revealing CPP' kept as evidence and noted in the ambiguity).",
+    "Added p1-f069 conditions: CPP as a differential diagnosis (assertion possible, differential) from the b00006 differential list, which names CPP; summary claim 2 now lists CPP and cites p1-f069.",
+    "p1-f024 levothyroxine: indication 'slightly elevated thyroid stimulating hormone' from the literal sentence ('a slightly elevated thyroid stimulating hormone at 4.5 uiu/mL ... treated with daily levothyroxine'); ambiguity narrowed to start date/continuation; summary wording 'treated with' instead of 'on'.",
+    "p1-f034 preoperative MRI: kept the text/Figure 2a-b caption merge (same study; the abstract itself describes this MRI as hyperintense and heterogeneously enhancing) and added that b00002 abstract quote as evidence.",
+    "p1-f047/p1-f048 calcitriol and thyroid panel 'remain normal': temporality current (present-tense ongoing statement); time stays null.",
+    "alternate_representation_of: p1-f055 (oncology MTC tumor) -> p1-f004; p1-f056 (oncology thyroidectomy) -> p1-f025.",
+    "Events: removed the earlier >9000 calcitriol value (p1-f031) from the 'At this time' event p1-e04 into new p1-e14; split germline testing and in silico predictions out of p1-e08 into p1-e11; split the untimed nodules/stability/metastasis assessment (p1-e12) and the planned surveillance (p1-e13, occurrence planned) out of the 36-month follow-up event p1-e10 so they do not inherit its time.",
+    "Added 6 temporal relations with literal order support: e01<e04 ('thyroid panel postthyroidectomy'), e04 same_time e03 (referral sentence + 'At this time'), e14<e04 ('declined from >9000 to 16'), e02<e05 (abstract 'found on prior imaging of her neck ... underwent MRI'), e01<e06 ('36-month postthyroidectomy and 33-month postcraniotomy'), e12<e13 ('stable ... with a plan for continued surveillance').",
+    "Added an ambiguity that the preoperative MRI/neuroaxis imaging, the nodules and the 'remain normal' follow-up labs are not literally timed or ordered; replaced the CPP-differential article limitation; added the Figure 1b axial-caption vs front-facing pixel limitation."
+  ],
+  "unresolved": [
+    "Figure pixels are inspected in the separate visual submission; caption-layer visual status stays not_inspected.",
+    "The source says calcitriol throughout; the unit pg/mL and the context are recorded as printed and the analyte is not renamed.",
+    "Discussion and literature statements about CDH1, CPP, MTC and the proposed two-hit mechanism are background, not patient facts.",
+    "The source does not state dates for the CT imaging or the MRI; only the stated relative times are recorded.",
+    "Unwrapped graphic 4 is an uncaptioned inline portrait-type image not linked to the patient.",
+    "Figure 1b is captioned as axial CT but the pixels show a front-facing (coronal-appearing) view; recorded as a visual limitation only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 22,
+    "facts_reviewed": 69,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (23-year-old woman, prior MTC T3N1bM0 treated with thyroidectomy, fourth ventricular CPP resected via suboccipital craniotomy and C1 laminectomy, germline CDH1 VUS); roster count 1 from 'We describe the case of a 23-year-old woman'.",
+      "Calcitriol printed as in the source (not renamed); 16 pg/mL keeps reference 'normal <7.7' with flag unknown (source never classifies it); >9000 kept without unit; later 'remain normal' untimed, flag normal; recorded as ambiguity, not a conflict. TSH flag high from 'slightly elevated'.",
+      "Text/caption merges checked: preoperative MRI (abstract describes the same MRI with the caption descriptors), brain tumor H&E histology and transthyretin IHC (single specimen, reported once, text cites Figures 2cd for these findings) are the same findings; Fig. 3 'complete resection' kept separate from text 'gross total resection'.",
+      "'Less likely ... metastatic' kept review_only (assertion possible, unconfirmed); Fig. 1 CT vs routine neck CT timing kept as ambiguity, not merged.",
+      "All figure assets viewed: F1 (CT a/b, thyroid H&E c/d), F2 (MRI a/b, brain tumor H&E c, transthyretin IHC d), F3 (postoperative MRI a/b), uncaptioned inline portrait photograph at the start of the body (not the patient)."
+    ],
+    "residual_risks": [
+      "Tumor exome sequencing is not literally ordered relative to the resection (orchestrator ruling). Preoperative MRI and neuroaxis imaging have no literal order link to the referral or craniotomy; histopathology/diagnosis is not literally ordered before follow-up.",
+      "CPP provisional vs confirmed is a judgment on hedged pathology wording.",
+      "Unit of the >9000 calcitriol value and the meaning of 'remain normal' against 16 pg/mL (normal <7.7) are unresolved in the source."
+    ]
+  },
+  "physician_adjudicated": false
+}
