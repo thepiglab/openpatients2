@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC13121812.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "bf02e3f36f9a939f23408dd5c01df7afe3cd6ff7a262d303388c33fbec63f49d",
+  "annotation_sha256": "306806e3f6393513997c9fd89413cfed4cd30af8f4fbb55484fa0a29cb1ce154",
+  "reviewed_at": "2026-10-17T21:49:35.408840+00:00",
+  "source_segments_read": 28,
+  "facts_reviewed": 101,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Age: same \"67-year-old\" tied to the initial aneurysm presentation (case text) and to the presentation two years after repair (abstract); arithmetic-only mismatch kept as an ambiguity, now BOTH age items (p1-f002, p1-f003) review_only; age removed from the patient label, case_context index_subject_description/statement and summary claim 1.",
+    "Motor status: Rutherford \"while preserving motor function\" item p1-f020 made review_only alongside the abstract \"without motor impairment\" item p1-f022 and added to the motor ambiguity; explicit \"initial lower extremity weakness and discoordination\" kept include.",
+    "Duplex \"at 6 and 12 months\": time text \"6\" was a reshaped fragment; kept one item per finding (p1-f055/f056/f057) with the literal time text \"6 and 12 months\", removed the 12-month duplicates p1-f058/f059/f060 and event p1-e20 (and its relation); event p1-e19 re-described; summary references updated.",
+    "p1-f012 \"an obvious cause of graft thrombosis was not apparent\" moved from conditions (assertion absent) to an imaging observation (assertion present, text_value literal) in the repeat-CTA paragraph citing Figure 3; evidence unchanged.",
+    "Considered operations moved from care_plans to procedures_devices (SECTION-CAREPLANS): open transfemoral embolectomy, redo aortobi-iliac reconstruction/axillobifemoral bypass, axillobifemoral bypass (assertion possible, action unknown) and open aortic surgery reserved for salvage (conditional, planned, future).",
+    "Decision care-plan items p1-f084, p1-f085, p1-f094 set to action_status completed (decisions were made); plan events p1-e10/p1-e14 stay planned.",
+    "p1-f048 text_value no longer repeats renal artery patency (that is p1-f047).",
+    "Added p1-f102 motor function intact (b00009 \"Given that his motor function was intact\"), p1-f103 lacked significant sensory or motor deficits (b00017, absent), p1-f104 endovascular thrombectomy evaluated but devices not available (possible, action unknown).",
+    "Relations: added e02->e03 (repair -> recovery/discharge), e01->e05 (\"after his initial presentation\"), e04->e05 (\"Therefore\"), e01->e06 (\"initially\" / \"second presentation\"), e07->e10 (result -> action on the thrombosed graft), e09->e10 (\"Given that his motor function was intact\"), e10->e11 (decision -> thrombolysis), e12->e15 (abstract \"Subsequent\"), e14->e15 (decision -> CERAB), e16->e17 (intraoperative -> postoperative), e21->e15 (decision to proceed -> LA CERAB); e15->e16 now also quotes \"completion angiography post CERAB\". Every existing relation evidence list re-read.",
+    "Article limitations updated for age, duplex time text and discussion-derived options."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected in annotation figures; actual JPEGs inspected in the separate visual submission.",
+    "Age 67 is attached to both the initial aneurysm presentation and the presentation two years later; both age items are review-only and the age is kept out of the label and summary.",
+    "Abstract states limb ischemia without motor impairment while the case text reports initial lower extremity weakness and discoordination; abstract item kept review-only.",
+    "Discussion states absence of significant comorbidity and an otherwise healthy patient alongside documented coronary artery disease and dyslipidemia; kept review-only.",
+    "Duplex at \"6 and 12 months\" is one source statement; recorded as one item per finding with the literal time text \"6 and 12 months\"; duplex images \"not shown\".",
+    "Several discussion sentences about the patient are authors' reasoning (options considered, judgments); recorded as considered/possible, not as performed.",
+    "Generic literature, background and interpretive claims (e.g. mortality and patency rates from cited studies, claims about the technique) are not patient facts.",
+    "Several patient-specific statements come from the discussion (options evaluated, judgments about motor and sensory status); considered operations are recorded as possible procedures, not as performed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 28,
+    "facts_reviewed": 104,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (male, aortobiiliac graft thrombosis two years after open repair) treated with thrombolysis then CERAB re-lining; roster 1, complete.",
+      "Age 67 attached to two presentations about two years apart: ambiguity (arithmetic-only), both age items review-only and kept out of label and summary.",
+      "Abstract \"without motor impairment\" and Rutherford \"preserving motor function\" vs case-text initial weakness: ambiguity, the preserved-motor items review-only.",
+      "Discussion \"absence of significant comorbidity\"/\"otherwise healthy\" vs documented CAD and dyslipidemia: ambiguity, discussion item review-only.",
+      "Fig 2B caption merged with the text angiography because the text cites Figure 2B; Fig 3 and Fig 5 caption findings kept as caption-only items with caption time.",
+      "All 5 figures (15 panels) viewed at full resolution; captions and panel attribution consistent with pixels."
+    ],
+    "residual_risks": [
+      "Duplex 6- and 12-month results are one item per finding with a two-point time text.",
+      "Discharge aspirin/apixaban action unknown (start time not stated); considered procedures recorded as possible with action unknown.",
+      "Visual limitations for Figs 2 and 4 carry boilerplate about red arrows that the images do not show; agent-owned, reported for Sonnet."
+    ]
+  },
+  "physician_adjudicated": false
+}
