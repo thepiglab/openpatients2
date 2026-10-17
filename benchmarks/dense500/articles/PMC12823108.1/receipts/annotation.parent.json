@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12823108.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3d5e48b044e620385f7d68f7b4c00e4bb0cd6285f976ef78f3b8704aacb1f674",
+  "annotation_sha256": "9ef8fc4635eed392aa2788a34b5c31799e9c9d2696615b9cf96deec1a3d19ebe",
+  "reviewed_at": "2026-10-17T21:26:11.304315+00:00",
+  "source_segments_read": 24,
+  "facts_reviewed": 138,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f068 (day 49 CT text finding 'stenosis and dilation of the bile ducts in both lobes'): time removed (NO-BORROWING). The Fig. 1b caption lead sentence carries only the time and governs the caption's own panel b findings (p1-f069, p1-f070), not this text-worded finding; evidence kept unchanged.",
+    "p1-f024 name changed from 'Recurrent pyogenic cholangitis' to 'Recurrent cholangitis without an evident cause' to match its own quote.",
+    "p1-f039 and p1-f103 clinical statements no longer imply a day 49 time the facts do not carry.",
+    "p1-f077 (laboratory tests not performed) given its own literal time 'following the transition to home-based care' (relation after).",
+    "Event links: baseline labs at first T-DXd administration (p1-f053, p1-f054) moved from the day 17 event to the T-DXd start event; concurrent E. coli infection (p1-f019) moved to the management-decision event with the immunosuppression item; transaminases throughout treatment (p1-f076) moved off the death event to the ERCP/lab-trend event.",
+    "Added ambiguity: Fig. 3 prints 82/52 for AST/ALT without units while the caption says transaminases stayed normal; pixel values stay in visual.json, the text fact stays included.",
+    "Summary claim 3 reworded so the review_only 'diagnosed' statement is attributed to the authors and SC stays suspected.",
+    "Temporal relations 10 -> 28: e06->e07 now quotes both stated days; added year-ordered pairs (2014/2020/2023/2024), 'Initial treatment' e01->e02, day-numbered pairs from the day 0 definition through days 17/32/49/71/99, 'additional antibiotic administration' e06->e09, 'SC developed ... after' e04/e05->e11, and 'In accordance with her wishes' e13->e14."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the 3 JPEGs were inspected in the separate visual submission.",
+    "Place of death is a source conflict: passed away at home versus died on day 99 of hospitalization (Fig. 3 caption); both sides review_only.",
+    "The diagnosis is suspected drug-induced sclerosing cholangitis; the day 49 paragraph says drug-induced cholangitis was diagnosed while the conclusion says a definitive diagnosis could not be established.",
+    "Values printed inside Fig. 3 (including AST/ALT and the γGTP point labelled 373 at Day 18) are pixel content only and are not compared with text values.",
+    "The agent causing the cholangitis cannot be attributed to a single drug among paclitaxel, bevacizumab and T-DXd (source limitation).",
+    "Introduction, discussion and literature-search statements about sclerosing cholangitis, other drugs and published cases are background, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 24,
+    "facts_reviewed": 138,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (58-year-old woman, HR+/HER2-low metastatic breast cancer) with suspected drug-induced sclerosing cholangitis after paclitaxel+bevacizumab and T-DXd; roster count 1 is literal.",
+      "Place of death conflict (at home vs 'day 99 of hospitalization') quarantined on the place attribute only (p1-f137, p1-f138 review_only); death on day 99 (p1-f136) included.",
+      "Text gammaGTP 373 U/L kept review_only because Fig. 3 prints 373 at Day 18 while the text paragraph is the day 17 visit; pixel values stay in visual.json.",
+      "IgG4 8 mg/dL below its printed range but called within normal limits: flag normal per source wording with an ambiguity; AMA U/mL vs U/dL unit mismatch kept literal with an ambiguity.",
+      "'Drug-induced cholangitis was diagnosed' vs 'definitive diagnosis could not be established': p1-f018 review_only with ambiguity; suspected drug-induced SC (p1-f015) included as provisional.",
+      "Author hypotheses (bile stasis, secondary bacterial cholangitis, strictures) and anorexia kept review_only."
+    ],
+    "residual_risks": [
+      "Which discharge the patient perspective (b00014) refers to is not stated; left unordered.",
+      "The day 49 workup items (antibiotics, ERCP, biopsy) have no literal order relative to the day 49 presentation or the day 71 discharge, so those pairs are left unrelated.",
+      "Fig. 3 AST/ALT pixel values (82/52, no units) could imply abnormal transaminases; not classified against outside ranges."
+    ]
+  },
+  "physician_adjudicated": false
+}
