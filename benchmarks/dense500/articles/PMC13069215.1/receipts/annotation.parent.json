@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC13069215.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6c26f27324b79e5fdb41cd9432bfb5f02b4e94a03fe93a452b5be4e7069ec307",
+  "annotation_sha256": "9c2547c7dd59fecdf8cb203b267617e18e19caf220a003466cd3761853746269",
+  "reviewed_at": "2026-10-17T22:10:57.641435+00:00",
+  "source_segments_read": 45,
+  "facts_reviewed": 107,
+  "patients_reviewed": 5,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed the four Figure 8 caption statements (p5-f028 RT3 recession at mandibular #24/#25, p5-f029 six-month partial coverage, p5-f030 composite restoration under rubber dam, p5-f031 24-month follow-up) from patient 5: the Figure 8 66-year-old female (RT3, mandibular, 24-month follow-up) matches no Table 1 row, and the only 66y female row (p5) is RT2, maxillary, Follow-up 6 m. The image bound to Figure 8 shows what its caption describes, so this is a caption/table mismatch, not a PMC asset swap. Figure 8 stays unresolved (figure scope, source_coverage b00045 patient_ids emptied, limitation and p5 ambiguity reworded, ambiguity no longer links facts).",
+    "Added review_only/ambiguous p1-f025 and p2-f019 'Restorative procedures' (completed) from the series sentences 'complete papilla fill ... in two sites (both RT3 cases; 40%) after/following adjunctive restorative procedures'; Table 1 has exactly two RT3 rows (patients 1 and 2) but the text names no patient, so each carries an ambiguity.",
+    "Added temporal relations with literal support for every patient: Jemt before (e05) < IT-CTG (e03) < Jemt after (e06) from the table header 'Jemt's papilla index before and after treatment'; baseline facial recession (e01) < IT-CTG (e03) from the 'baseline' column header.",
+    "p1: harvest steps (e08) < 3 weeks' follow-up of donor and recipient sites (e09), and IT-CTG (e03) < e09, from the Figure 7 caption 'follow-up from the donor and recipient sites'.",
+    "p5: Figure 1 'Pre-surgical' (e07) < surgical steps (e08, e09) < 'Immediately post-surgery' (e10) < 'Six-month follow-up' (e11); e09 < e11; initial periodontal therapy 'prior to surgery' (e02) < e09; e03 same_time e09 (same IT-CTG fact p5-f013 cites the Figure 1 (d) placement); Table 1 Follow-up '6 m' (e04) same_time Figure 1 'Six-month follow-up' (e11).",
+    "Orchestrator ruling: Figure 1 / Video S1 -> p5 is an attribute match only. p5-f019..p5-f027 (supported only by the Figure 1 caption) set ambiguous/review_only with one ambiguity (must_not_infer: Figure 1/Video patient is Table 1 row 5); relations touching Figure 1 events p5-e07..e11 set to unknown; Figure 1 summary claim and attribution note flag the attribute-only link. p5 facts with Table 1/text support stay include.",
+    "Annotation figures[]: Figure 1 (and Figure 8) set to scope unresolved with no patient on figure and panels, matching the visual, figure-EHR and supplement-manifest attribution."
+  ],
+  "unresolved": [
+    "Series-level percentages (40% complete papilla fill in RT3 sites, 60% partial fill in RT2 sites) disagree with the case-level Table 1 (Jemt after = 2 in four of five rows, including two RT2 rows); recorded as an ambiguity on the affected patients and never copied to individuals.",
+    "Figure 8 describes a 66-year-old female with RT3 recession at mandibular teeth #24/#25, partial coverage at six months, composite restoration and a 24-month follow-up, which matches no Table 1 row (the 66y female row is RT2, maxillary, Follow-up 6 m). The image bound to Figure 8 shows the content its caption describes, so this is a caption/table mismatch, not a PMC asset swap. Ownership unresolved; its statements are not recorded for any patient.",
+    "Figure 4 names no patient; attributed to p1 only through the Figure 7 caption cross-reference. Figures 5 and 6 are unresolved, and the text does not say which case received the tuberosity-graft modification.",
+    "Which two patients had esthetic concerns due to papilla loss and which three were referred for root coverage in the lower incisors is not stated per patient; recorded as ambiguity, no facts assigned.",
+    "Methods and postoperative-protocol sentences (anesthesia, tunneling, graft dimensions, suturing, postoperative care, visit schedule) are written for patients generally and not copied to individuals; only sentences explicitly covering all five patients were copied.",
+    "The lower lip frenectomy 2 to 6 months after the 3DT procedure is series-level and not assigned to a patient.",
+    "Video S1 (JERD-38-709-s001.mp4) is listed as a supplement; its description is not a source segment, so no facts are drawn from it. The video was frame-sampled for the supplement manifest only.",
+    "Pixel review is in visual.json; the annotation figures keep caption-layer status not_inspected."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 45,
+    "facts_reviewed": 109,
+    "figures_viewed": 8,
+    "key_findings": [
+      "Five patients mapped literally to Table 1 rows 1-5 (33y M RT3 mandibular; 47y F RT3 mandibular; 43y F RT2 maxillary; 53y M RT2 mandibular; 66y F RT2 maxillary); every row cell is an item.",
+      "Figure 1 attributed to p5 by an exact match of every caption attribute to row 5 (66y female, nonsmoking, systemically healthy, RT2, maxillary #8/#9, complete coverage, six-month follow-up); Video S1 (27 frames at 3 s viewed) shows the same Figure 1 scenes and its supplement description repeats that patient.",
+      "Figure 7 -> p1 (33y male, RT3, #24/#25); Figure 4 -> p1 only through 'Same patient as shown in Figure 4'. Figures 5 and 6 unresolved; Figures 2 and 3 background.",
+      "Figure 8 (66-year-old female, RT3 mandibular, 24-month follow-up) matches no row; pixels of the bound asset match its caption, so not an asset swap; no patient facts drawn from it.",
+      "Text 'complete fill in two RT3 sites (40%) / partial fill in three RT2 sites' vs Table 1 Jemt after = 2 in four rows kept as ambiguity on p3/p5; table values kept as facts. 'Papilla loss' applies to all five from 'five individuals with RT2 or RT3 recession and papilla loss'.",
+      "Referral split, methods/postoperative protocol, tuberosity-graft case, lower lip frenectomy and 'most patients' healing are not copied to individuals."
+    ],
+    "residual_risks": [
+      "Figure 1 / Video S1 -> p5 is attribute match only (Figure 1 facts review_only); agent-owned visual/EHR/manifest attribution still p5 pending Sonnet.",
+      "Restorative procedures for p1/p2 are review_only: mapped only via 'both RT3 cases'.",
+      "ASA I recorded as symptoms_function performance_score; Jemt index as symptoms_function sign.",
+      "GLUED-TEXT warning on 'cassette' in the Figure 3 visual description is a checker false positive, left as is."
+    ]
+  },
+  "physician_adjudicated": false
+}
