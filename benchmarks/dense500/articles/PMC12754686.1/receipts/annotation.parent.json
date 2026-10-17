@@ -1,0 +1,66 @@
+{
+  "article_id": "PMC12754686.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3d0764c9ac55668f5efbc42a59652001cd4c12b9537b485f2f05469d6a7fee1f",
+  "annotation_sha256": "c0d73f4a4ef22fc099e337cfe640b35ec4163da177b84c5ff580f55500e17be3",
+  "reviewed_at": "2026-10-17T21:41:31.187941+00:00",
+  "source_segments_read": 74,
+  "facts_reviewed": 227,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged admission platelet count text fact p1-f051 (\"On admission ... 12,000/μL\") into Table 1 \"At admission\" cell p1-f161: same test, same labelled time point, single value (consistent with the annotator's other text/table merges).",
+    "Restored literal time anchors \"admission\" (On/At admission facts) and \"diagnosis\" (vWF:RCo 30.1% at diagnosis).",
+    "Care plans recording only decisions set to action_status unknown: p1-f063 (\"it was decided there was no need to transfuse such factors\") and p1-f133 (\"tranexamic acid administration was decided\"). Kept completed: cleared for surgery and surgery postponed (both stated as having happened).",
+    "p1-f141 (three RBC units \"requiring the transfusion\") action administered -> unknown; p1-f117 (day-two \"needing two more units\") keeps administered with the Table 1 Day 2 cell \"after 2 RBC units\" and column header added as support.",
+    "p1-f099 intraoperative RBC transfusion: quote extended to include the hemoglobin drop that \"hence\" links to its indication.",
+    "p1-f131 \"platelet infusion and corticosteroid therapy applied\" moved from care_plans to medications and split into two items (p1-f131 platelet infusion, new p1-f228 corticosteroid therapy) with an ambiguity on which platelet pool it refers to; clinical statements carry no time beyond the quote (\"while surgery was delayed\").",
+    "Added b00001 \"who underwent urgent orthopedic surgery\" as evidence of the hemiarthroplasty p1-f073; added Table 1 header \"Day 8 after surgery (discharge)\" to the day-eight discharge conflict side p1-f122.",
+    "p1-f136 preexisting anemia temporality historical -> unknown.",
+    "Moved Table 1 Day 3 and Day 10 after admission cells out of the \"three days later\" and \"After seven days of corticotherapy\" events into new events p1-e25/p1-e26 (the source does not equate these times).",
+    "Reorganized discussion event p1-e23 to preoperative management only; neuraxial avoidance and intraoperative normothermia efforts linked to the surgery event; discussion presentation facts linked to admission.",
+    "Added 14 relations (12 -> 26), each with literal support: result->action (platelet count -> platelet pool), Table 1 column headers from the same admission anchor, \"given her prior history\", \"two years before\"/\"10 years before\", admission with intent -> surgery, postponed until -> surgery, cleared for surgery -> surgery, \"preoperatively\", intraoperative during surgery, intraoperative vs day one postoperatively, first 24 hours ICU vs day-one infirmary transfer, postoperative Hb drop after surgery; the TXA/platelet -> surgery relation now quotes the actual \"As suggested ... and the patient underwent\" sentence besides the recommendation.",
+    "Summary claims: deduplicated fact ids, decision wording for the factor transfusion, removed implied discharge order on the conflicted discharge day."
+  ],
+  "unresolved": [
+    "No figures or supplements are listed in the source.",
+    "Text and Table 1 values were merged into one item only where the source gives the same test and the same labelled time point with a single value; other text and table values stay separate.",
+    "Intraoperative platelet count (72,000/μL in text, 78,000 in Table 1) and discharge timing (day eight versus seven days after surgery) are recorded as source conflicts, review_only.",
+    "Table 1 intraoperative PT and aPTT cells print two unlabelled values; kept as text.",
+    "Text vWF and factor VIII values use IU/dL while Table 1 prints %; no unit conversion or merging.",
+    "The text refers to Table 1 for vWD management strategies; that content is Table 2 (literature summary, not patient data).",
+    "Table 1 Day 3 and Day 10 after admission columns are kept as their own events; the text times \"three days later\" (after the platelet pool) and \"After seven days of corticotherapy\" are not equated with them."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 74,
+    "facts_reviewed": 227,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient (77-year-old woman); Table 2 is a literature management summary, correctly excluded.",
+      "All 15 Table 1 data rows and every non-dash cell are observations (post-transfusion hemoglobin values and slash cells included); flags left unknown where only reference ranges are printed.",
+      "Intraoperative platelets 72,000 (text) vs 78,000 (Table 1) kept as a source conflict, both review_only.",
+      "Discharge day 8 postoperatively (case text, Table 1 header) vs \"seven days after surgery\" (discussion) kept as a conflict on the timed discharge facts; the undated discharge stays included.",
+      "Two sigmoidectomy mentions kept separate with an ambiguity (source does not identify them as the same operation).",
+      "NSAIDs and neuraxial anesthesia \"avoided\": assertion absent with action unknown, correct.",
+      "No figures or supplements in the source."
+    ],
+    "residual_risks": [
+      "Discharge 7 vs 8 days could be a day-counting convention rather than a true conflict.",
+      "72,000 vs 78,000 differs by one digit and could be a print error; kept as a conflict.",
+      "Text vWF/FVIII/platelet values with relative times are not merged with matching Table 1 Day 3/Day 10 cells; this double-counts likely identical measurements by design."
+    ]
+  },
+  "physician_adjudicated": false
+}
