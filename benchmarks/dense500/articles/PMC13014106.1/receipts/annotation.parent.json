@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC13014106.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "75a69bd583f62ad7ad1535014c445b7f831ba18201fe466c7fd379d976bd1864",
+  "annotation_sha256": "e2cdc19df3e526c0b51521be537c2e96a8abcbe366d41aa806afc267acd08876",
+  "reviewed_at": "2026-10-17T21:22:35.741715+00:00",
+  "source_segments_read": 34,
+  "facts_reviewed": 168,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Split 18 facts that merged rehabilitation-institute admission and discharge statements into separate admission and discharge facts (new p1-f154..p1-f171); admission and discharge are two time points.",
+    "Gave findings in the paragraph opened by \"On admission to the Qatar Rehabilitation Institute\" (b00011) and in the run opened by \"On discharge from the Qatar Rehabilitation Institute\" (b00012) those times, with contiguous quotes spanning from the scoping sentence to the finding; the untimed activities-of-daily-living paragraph (FIM 110/126, first MMSE) keeps no time.",
+    "Gave the neurosurgery-unit examination findings (p1-f038..p1-f045) the paragraph-opening time \"On admission to the neurosurgery unit at Hamad General Hospital\" with spanning quotes.",
+    "Removed condition p1-f005 \"Previously healthy\"; the wording now sits in case_context index_subject_description, consistent with other parent-reviewed articles.",
+    "Removed p1-f134 (complete blood tests ordered, result not_reported): the source says the results are presented in Table 1 (p1-f100..p1-f107); the sentence is kept as evidence of new admission-labs event p1-e16.",
+    "Merged conclusion restatement p1-f143 (\"dramatic improvement\") into p1-f142 as the same postoperative improvement.",
+    "Added events p1-e16 (admission labs, Table 1), p1-e17 (abdominal ultrasound and CT), p1-e18 (hematology evaluation); linked neurosurgery and rehabilitation assessment facts to p1-e08, p1-e12, p1-e14.",
+    "Added 10 supported relations (stated times from the same anchor, adjacent \"On admission\", abstract \"subsequently\", discharge same_time); all 9 annotator relations re-checked against their full evidence lists and kept.",
+    "Rewrote summary claim 4 to separate admission and discharge rehabilitation findings; updated the rehabilitation ambiguity and article limitation."
+  ],
+  "unresolved": [
+    "Figure 1 pixels were viewed in a separate visual submission; the caption layer stays not_inspected.",
+    "The abstract and case text give different MRI extents (C3 to T7 versus C3 to D6); both sides are review_only.",
+    "The neurological manifestation is called hemiparesis in some places and hemiplegia in others; both sides are review_only.",
+    "Literature statements about the number of previously reported cases differ (five, four, 22nd and sixth) and are not patient facts; Table 2 describes published cases from other reports and is not assigned to the patient.",
+    "Rehabilitation-institute findings take the admission or discharge time only inside the paragraph run that the admission or discharge sentence opens; the activities-of-daily-living paragraph before the discharge sentence is untimed.",
+    "Table 1 prints some normal ranges and one result unit in ways kept verbatim (ALT 0–1 U/L, total bilirubin <0–21, AST without unit).",
+    "Authors' hypotheses about prior dengue, serotype, antibody-dependent enhancement and mosquito transmission are not recorded as facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 34,
+    "facts_reviewed": 153,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (42-year-old male); Table 2 rows are published cases, correctly excluded.",
+      "MRI extent C3 to T7 (abstract) versus C3 to D6 (case text): D (dorsal) and T are the same vertebral notation (the abstract itself writes \"dorsal (T) 7\"), so levels 7 and 6 genuinely differ; kept as a source conflict with both sides review_only.",
+      "Hemiparesis versus hemiplegia kept as a source conflict on the descriptor only; limb power values are included.",
+      "Bangladeshi kept as ethnicity_as_documented with an ambiguity (nationality wording), matching most prior reviewed articles.",
+      "Table 1 print artefacts kept verbatim with an ambiguity; all 8 rows present with printed flags.",
+      "Figure 1 viewed at full resolution: single sagittal spinal MRI screen photograph with device text overlay; visual, figure-EHR and privacy sidecars agree with the pixels."
+    ],
+    "residual_risks": [
+      "Paragraph-scoped admission/discharge times for rehabilitation findings are a reading of \"On admission/On discharge\" as block openers; the ADL paragraph before the discharge sentence is left untimed though it probably belongs to the admission assessment.",
+      "\"On day 8\" transfer keeps a null anchor although arithmetic (8 + 12 = 20 days) suggests Hamad General Hospital admission.",
+      "Hemiparesis/hemiplegia conflict is a terminology judgement call."
+    ]
+  },
+  "physician_adjudicated": false
+}
