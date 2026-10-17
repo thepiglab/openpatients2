@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC13065870.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f0a7578532c6b9b6fc4e42d11e5e63d884d1d61365fa3448f0f465261fef7578",
+  "annotation_sha256": "a068c01d8889284d127830b82b6ac5ca47b22031a66012d0a734bdba322ca811",
+  "reviewed_at": "2026-10-17T22:01:16.111414+00:00",
+  "source_segments_read": 60,
+  "facts_reviewed": 128,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Restored the Case 4 clinical follow-up outcome the annotator deleted to clear an EVID-NEGATION warning (p4-f035, outcomes follow_up, text_value 'asymptomatic with unimpaired function', source wording); it is the only outcomes-section record of that follow-up. The warning is left and reported; p4-f033/p4-f034 keep the per-finding views.",
+    "Removed the false ambiguity in p1-p3 and the article limitation claiming the cases have no headings: the source prints literal 'Case 1'..'Case 4' section headings, so ownership is literal.",
+    "Split caption-timed findings from text findings at event level so text sentences do not take a caption's 'Preoperative' time: p1-e02 (Fig. 1 caption CT) vs new p1-e08 (text CT); p4-e02 (text CT, time removed) vs new p4-e08 (Fig. 4 caption CT); new p3-e08 (Fig. 3 caption Panorex and CT) split from p3-e03.",
+    "Added caption-only facts: p1-f030/p1-f031 (Fig. 1 preoperative CT right/left findings), p1-f032 (postoperative 3D CT), p2-f028 (preoperative 3D CT), p2-f029 (postoperative 3D CT reconstruction), p3-f032 (postoperative axial CT), with their own events.",
+    "Removed borrowed event times: p2 occlusion/jaw-opening facts moved out of the seven-month event (new p2-e09, no time); p3 CT showing PSD contact moved out of the six-month event (new p3-e09, no time); p2 hardware removal moved to its own event p2-e11 with occurrence unknown ('necessitated').",
+    "p4-f020 (discussion: application of following PSD components impossible) set ambiguous/review_only with a new ambiguity: the Case 4 text reports the washer PSD and drill guides were used.",
+    "Relations 10 -> 24, each with literal support (new or repointed): p1 e03<e04, e04<e05 (replacing unknown; 'deferred because ... had been achieved'), e04<e09; p2 e08<e04, e03<e04, e04<e10, e07<e11 ('necessitated'); p3 e08<e04 (repointed), e03<e04 ('led to the implementation'), e01<e02 ('initially'/'16 months post injury'), e04<e05 (post-hoc X-ray), e06<e07 ('alleviated symptoms'), e04<e09, e04<e10; p4 e08<e04 (repointed), e03<e04 ('as pre-planned'), e04<e07 (follow-up).",
+    "Added article limitation on the possible PMC asset swap (uncaptioned Fig. 2 panel h panoramic radiograph vs the Fig. 3 'Preoperative Panorex' missing from the Fig. 3 image)."
+  ],
+  "unresolved": [
+    "Patient ownership is literal: each case is printed under its own 'Case 1' to 'Case 4' section heading with Clinical Findings, Imaging and Planning, Implant Design, Surgical Procedure and Outcome subsections, and each figure caption opens with the matching 'Case N:' label.",
+    "Abstract, introduction, discussion recommendations and the generic AO classification in Table 1 are background or series-level statements and are not copied to individual patients.",
+    "Caption-stated times (Preoperative, Intraoperatively, 7 months postoperatively) govern only the caption content they introduce, not the narrative sentences that cite the figures.",
+    "Caption-visual discrepancies for Fig. 2 and Fig. 3 are described in visual.json; the figure pixels were viewed but patient attribution of Fig. 2 panel h is unresolved.",
+    "Author reflections on cause of PSD problems and design recommendations are interpretation, not recorded as patient facts.",
+    "Possible PMC asset swap or image/caption mismatch: Fig. 2 carries an uncaptioned panoramic radiograph (panel h) of an adult dentition with metal restorations and no visible fixation hardware, while the Fig. 3 image lacks the 'Preoperative Panorex' its caption lists as panel a and prints only the letters a, b and d on five sub-images. Visual rows describe the pixels each asset is bound to; Fig. 2 panel h attribution stays unresolved and no fact is taken from it."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 60,
+    "facts_reviewed": 128,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Four individual cases under literal 'Case 1'..'Case 4' headings; roster count 4 from 'We present four CHF cases'. Table 1 is a generic AO legend (background).",
+      "Action unknown kept where the source does not say the act was done: p1 left-side ORIF 'deferred', p2 hardware removal 'necessitated', p4 SIDMF removal 'became necessary' (ambiguity kept).",
+      "Fig. 2 panel h: adult dentition with metal restorations, no visible fixation hardware, uncaptioned; consistent with the Panorex missing from Fig. 3 but unproven; attribution left unresolved.",
+      "Fig. 3 image shows five sub-images with letters a, b, d only and no Panorex; whole-figure p3 attribution from the Case 3 caption is correct."
+    ],
+    "residual_risks": [
+      "EVID-NEGATION warning on restored p4-f035 is deliberate (global follow-up outcome in the source's wording).",
+      "Presentation, elastics and text-only CT events have no literal order link to surgery and remain unrelated.",
+      "Fig. 2 h / Fig. 3 asset mapping cannot be resolved from the source."
+    ]
+  },
+  "physician_adjudicated": false
+}
