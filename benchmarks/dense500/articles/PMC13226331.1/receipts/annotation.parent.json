@@ -1,0 +1,73 @@
+{
+  "article_id": "PMC13226331.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ac2d260c385b5011a5846a3002ed2ca416ab4791fa2ccaddb78d85968f3e7d19",
+  "annotation_sha256": "1b56801b238767beea5eaaaae33f80562148bccdf431ed6e50d1ea9aac319800",
+  "reviewed_at": "2026-10-17T20:52:16.554304+00:00",
+  "source_segments_read": 68,
+  "facts_reviewed": 371,
+  "patients_reviewed": 16,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1: added relation ocular symptom onset before ICI discontinuation (table discontinuation reason \"Temporary ocular irAE\")",
+    "p5: added relation ocular symptom onset before ICI discontinuation (table discontinuation reason \"Temporary ocular irAE\")",
+    "p6: added relation ocular symptom onset before ICI discontinuation (table discontinuation reason \"Temporary ocular irAE\")",
+    "p8: added relation ocular symptom onset before ICI discontinuation (table discontinuation reason \"Permanent ocular irAE\")",
+    "p9: added relation ocular symptom onset before ICI discontinuation (table discontinuation reason \"Permanent ocular irAE\")",
+    "p10: added relation ocular symptom onset before ICI discontinuation (table discontinuation reason \"Temporary ocular irAE\")",
+    "p11: added relation ocular symptom onset before ICI discontinuation (table discontinuation reason \"Permanent ocular irAE\")",
+    "p12: added relation ocular symptom onset before ICI discontinuation (table discontinuation reason \"Permanent ocular irAE\")",
+    "p16: added relation ocular symptom onset before ICI discontinuation (table discontinuation reason \"Permanent ocular irAE\")",
+    "p3 (case 2): event e05 relabelled from ICI discontinuation to therapy completed as scheduled (table reason \"Had already been completed as scheduled\")",
+    "p1 (case 15): choroidal neovascularization moved out of the final follow-up event into its own complication event; anti-VEGF injections moved out of the table Ocular Treatment event into their own event; CNV before anti-VEGF and CNV before final BCVA 20/40-or-worse relations added; vitiligo/poliosis unlinked from the initial-visit event (no time stated)",
+    "p8 (case 7): hypotony maculopathy moved into its own complication event with a cause relation to the final BCVA outcome; \"considered difficult to treat\" made ambiguous/review_only (general prognostic wording)",
+    "p12 (case 11): 20/40 after three courses of steroid pulse therapy moved out of the final follow-up event (text does not call it final) into its own event with relations after steroid pulse therapy and after the initial visit; optic atrophy moved into its own complication event",
+    "p16 (case 16): conflicting complication facts moved out of the final follow-up event into their own complication event (no time stated)",
+    "source_coverage: b00062/b00065 set to aggregate (cohort counts); b00055 note corrected",
+    "All 16 patients: unit removed from the individual age fact (Table 1 prints no unit; years is stated only for the cohort mean); ambiguity added per patient (orchestrator ruling)",
+    "All 16 patients: labels, case_context descriptions, age clinical_statements and first summary claims reworded to the literal table age without a unit; article limitation now says the unit is not printed for individual ages (orchestrator ruling)"
+  ],
+  "unresolved": [
+    "Retrospective single-center case series; patient numbers follow first mention in the source (patient 15 is named in the results text before Table 1), so patient ids p1..p16 do not match the table row numbers.",
+    "Blank or dash cells (systemic irAE, granulomatous inflammation, VKH disease-like uveitis, ocular complications) are not recorded as absence because the table has no legend stating their meaning.",
+    "HLA genotyping in two VKH disease-like uveitis patients, the one patient who improved spontaneously with ICI discontinuation alone, the six topical-only patients and the systemic steroid indications are described without naming patients and are not assigned to individuals.",
+    "Table 2 and the discussion are cohort-level statistics and literature comparisons and are not copied to individuals; Japanese ethnicity is recorded from the cohort sentence that explicitly covers all 16 patients.",
+    "Table 1 does not print a unit for individual ages (Age/sex column); only the cohort mean is stated in years, so individual ages carry no unit.",
+    "Case 16 ocular complication is a source conflict between suspected optic neuropathy (table) and suspected optic neuritis (text).",
+    "The article has no figures and no supplements."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 68,
+    "facts_reviewed": 371,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Every Table 1 row (cases 1-16) checked cell by cell against its patient: age/sex, neoplasm, ICI, tumor response, systemic irAE, onset, follow-up, laterality, inflammation type, AC cells per eye, granulomatous/VKH plus cells, initial/final BCVA per eye, CTCAE grade, discontinuation reason, ocular treatment and complication all present and correct; blank and dash cells correctly not recorded as absence.",
+      "Roster order verified: patient 15 is first named in b00013 before Table 1, so p1 = case 15, p2..p15 = cases 1..14, p16 = case 16; labels carry the table case number.",
+      "Text case mentions verified: b00013 (patient 15 vitiligo/poliosis), b00063 (the only optic neuritis case = case 11, also named in b00066), b00066 (cases 7, 11, 15, 16).",
+      "Case 7: b00066 lists hypotony maculopathy among the four causes of final BCVA 20/40 or worse and names it \"(case 7)\", so the outcome link is literal.",
+      "Case 11 initial BCVA: table Initial BCVA and text \"At the initial visit ... finger counting\" are the same single initial-visit measurement for this one patient, so the merge is kept with the ambiguity that 0.004 is not one of the methods CF conversions; 20/40 after steroid pulse therapy kept separate from table final 0.5.",
+      "Case 16 suspected optic neuropathy (table) vs suspected optic neuritis (text) kept as two review_only source_conflict facts.",
+      "Japanese ethnicity from b00008, which explicitly covers all 16 patients; care setting from b00010, which covers all consecutive patients.",
+      "Unlabelled cohort statements (HLA typing in two VKH patients, spontaneous improvement of one anterior uveitis patient, topical-only and systemic-steroid counts) correctly left unassigned."
+    ],
+    "residual_risks": [
+      "Individual ages carry no unit (Table 1 prints none; years is stated only for the cohort mean), recorded as an ambiguity per patient; labels, case_context descriptions, age clinical_statements, summaries and the article limitation use the literal table age without a unit.",
+      "Case 11 initial BCVA merge of 0.004 (decimal) and finger counting rests on both being the single initial-visit value; their numeric equivalence is not stated.",
+      "Relations ordering ocular symptom onset before ICI discontinuation rest on the table discontinuation reason column (ocular irAE) as a causal statement.",
+      "CTCAE grade and inflammation characteristics are linked to the initial-visit diagnosis event although the table gives no time for them."
+    ]
+  },
+  "physician_adjudicated": false
+}
