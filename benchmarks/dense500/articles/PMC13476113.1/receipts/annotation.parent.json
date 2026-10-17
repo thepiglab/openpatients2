@@ -1,0 +1,78 @@
+{
+  "article_id": "PMC13476113.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3683fcedf1678add8b6e904598ddd40874224d7875752bb27bbfbc8605b7b59e",
+  "annotation_sha256": "2ffbd9cd7655204a53fc2ee7fc43b26fcd91c8b7b29343c6397e419ce2603b04",
+  "reviewed_at": "2026-10-17T21:20:33.603088+00:00",
+  "source_segments_read": 134,
+  "facts_reviewed": 253,
+  "patients_reviewed": 9,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Table 1 age and gender cells added as evidence to the age and sex facts of patients 1 and 3-9 and the gender cell to the patient 2 sex fact (patient 2 table age stays only in its conflict fact)",
+    "p2: event e03 description no longer says \"preoperative\" (not stated); new event e07 for the postoperative coronal CT (f009, f010) ordered after resection (caption \"after the surgical removal\") and after cranioplasty (post-hoc imaging of the repair)",
+    "p3: Table 1 \"Total resection\" (f026) duplicated the narrative surgical removal (f025); merged into f025 with the table and Results quotes, f026 removed and references repointed",
+    "p3: Figure 3 caption T1 hyperintensity added to the narrative T1 conflict side f013; include fact f017 restricted to lesion size and sinus compression so it no longer asserts the conflicting T1 signal",
+    "p3: new event e06 postoperative CT (f019) after surgery; relation presentation (headache) before resection from \"underwent lipoma resection due to prominent headaches\"",
+    "p4: Table 1 localization/diagnosis cell added to the epidermoid condition; meningioma (site-free) also cited from the discussion; Results statement of conservative management of the two epidermoid cysts added to the nonsurgical follow-up plan; \"no growth or progression\" outcome event follow_up(absent) -> deterioration(absent); added FLAIR hyperintensity and no malignant-transformation features from the epidermoid discussion (sentences cover exactly the two epidermoid patients); ambiguity added for \"no clinical symptoms\" versus presenting headache; relation observation before follow-up findings",
+    "p5: Table 1 localization/diagnosis cell added to the epidermoid condition; Results conservative-management statement added to the nonsurgical follow-up plan; \"no progression\" outcome event -> deterioration(absent); FLAIR hyperintensity and no malignant-transformation features added from the epidermoid discussion",
+    "p6: surgery conflict re-checked against \"only the conflicting attribute\": surgery-dependent facts stay review-only and the Table 1 postoperative-image cell (f015) and pathology result (f016) were moved to review-only because they assert the contested operation; the dermoid cyst condition (f018) stays included but no longer asserts pathologic confirmation (verification unknown; evidence = table diagnosis, MRI \"suggestive of a dermoid cyst\", dermoid discussion); unsupported \"confirmed\" removed from the two side facts; side-free coronal MRI finding added as include (f029); Results conservative-management sentence added to the nonsurgical side; pathology event set to unknown; postoperative CT and postoperative-course events added (unknown) after the contested surgery",
+    "p7: discussion monitoring/no-surgery statements (b00117) set to ambiguous review-only: \"one of our patients\" is not a literal mapping (paragraph equates arachnoid with leptomeningeal cysts; imaging wording matches patient 2 Table cell); removed from the summary; Results \"arachnoid cyst ... right parietal swelling\" recorded as an ambiguity; conservative-management Results sentence added to the nonsurgical follow-up plan; \"no enlargement\" outcome -> deterioration(absent); medical treatment split into its own event and ordered after the presenting headache and before headache resolution",
+    "p8: new follow-up event (f022) ordered after biopsy (\"clinical follow-up after biopsy\")",
+    "p9: generic \"Surgery\" fact (f018) duplicated the excision (same operation, same Table 1 cell); merged into f019 with the narrative quote, f018 removed and references repointed",
+    "p9: outside-hospital report f006 no longer typed as imaging (test not named)",
+    "p9: control CT \"no abnormality requiring surgery\" flag negative -> unknown (a qualified, not an unqualified normal result)",
+    "p9: narrative T1-hyperintense and FLAIR-isointense facts (f008, f010) set to ambiguous review-only (panel 9B/9D sequence-label swap); side-free postoperative CT fact f031 added as include; relation surgery before postoperative CT/course (e07)",
+    "Results sentences in b00003 that name a single patient by diagnosis cited on the matching facts (p1 resection, p2 resection, p8 open biopsy, p9 excision and chemotherapy)",
+    "Summary claims under 25 words (p5 follow-up, p8 follow-up) merged into the neighbouring treatment claim (SUMMARY-CLAIMS)",
+    "Orchestrator ruling: b00112 FLAIR and no-malignant-transformation facts on p4/p5 (p4-f030, p4-f031, p5-f033, p5-f034) set to ambiguous review_only with one ambiguity entry per patient; their assignment rests on paragraph context"
+  ],
+  "unresolved": [
+    "Table 2 (literature review) and the PRISMA diagram describe published cases and a database search, not patients of this series.",
+    "Cohort-level statements (nine patients, headache in eight, MRI available for eight, four patients managed conservatively) are not copied to individual patients.",
+    "Discussion sentences that name the patient only by a generic phrase (for example the two patients with FLAIR hyperintensity, or that patients were managed without surgery) are not assigned to individuals.",
+    "Source conflicts kept review-only: patient 2 age 32 versus 33; patient 3 T1 signal; patient 4 meningioma site; patient 6 lesion side and whether surgery occurred; patient 8 bone involved; patient 9 lesion side.",
+    "Panel-label or sequence-label mismatches between narrative, caption and Table 1 (patient 4 Fig. 4A, patient 9 Fig. 9B and 9D) are recorded as ambiguities.",
+    "Caption-layer visual status is not_inspected; the ten images were inspected in visual.json.",
+    "Table 1 columns Preoperative image and Postoperative image are recorded as printed (Y or N) without inferring which examinations were performed.",
+    "Patient 6: only the contested attributes are review-only (side; surgery and every surgery-dependent finding including pathology); the dermoid cyst name, signal findings and examination are included with unknown verification status.",
+    "Patient 7: the discussion statement that \"one of our patients\" with an arachnoid cyst is being monitored without surgery is not literally assigned and stays review-only.",
+    "Patient 9: narrative sequence labels for Fig. 9B and 9D are swapped against the caption and Table 1; the narrative readings are review-only.",
+    "The narrative citation \"Fig. 7F\" is linked to Figure 6 in the source XML; Figure 7 is the figure meant by its caption and the other citations."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 134,
+    "facts_reviewed": 253,
+    "figures_viewed": 10,
+    "key_findings": [
+      "Nine-patient series; roster order, Table 1 rows 1-9 and case narratives b00026-b00034 matched one to one; Table 2 and the PRISMA diagram are literature/background and carry no patient facts.",
+      "Every Table 1 cell checked against its patient; age and gender cells now cited on the demographic facts.",
+      "Patient 2 age 32 (narrative) versus 33 (Table 1) kept as a source conflict: a different value in two units, not a print artefact.",
+      "Source conflicts kept review-only on the conflicting attribute only: p3 T1 signal (narrative and Fig. 3 caption hyperintense vs discussion hypointense), p4 meningioma site, p6 side, p6 surgery versus nonsurgical follow-up, p8 orbital versus parietal bone, p9 side.",
+      "p6: surgery-dependent facts (incl. pathology and the Table 1 postoperative-image cell) are the surgery side of the conflict; the dermoid cyst name, MRI signal findings, examination and headache stay included.",
+      "p7: discussion monitoring/no-surgery sentence (b00117) is not a literal mapping and is review-only ambiguous.",
+      "Epidermoid and arachnoid diagnoses stay provisional (narrative \"suggested\", \"interpreted as\", \"suggestive of\"); the unqualified Table 1 label does not contradict that and is recorded as ambiguity.",
+      "Figure label issues (Fig. 4A CT vs T1, Fig. 9B/9D sequence swap, Fig. 7F link to Fig. 6) recorded as ambiguities; narrative-only Fig. 9 readings review-only.",
+      "Relations raised from 13 to 24 using only literal order words or implied-necessary orders (postoperative imaging, due to, after biopsy, resolved with treatment)."
+    ],
+    "residual_risks": [
+      "Patient 5 has no temporal relation: the narrative states no order between imaging, refusal of surgery, advice and follow-up.",
+      "The b00112 epidermoid discussion sentences (FLAIR hyperintensity, no malignant-transformation features) are kept on patients 4 and 5 only as ambiguous review-only facts, because their assignment rests on paragraph context (orchestrator ruling).",
+      "The 1 GLUED-TEXT warning (\"automation\") is a checker false positive on text printed in the PRISMA diagram.",
+      "Pixel laterality in Figures 6 and 9 is not used to resolve the side conflicts."
+    ]
+  },
+  "physician_adjudicated": false
+}
