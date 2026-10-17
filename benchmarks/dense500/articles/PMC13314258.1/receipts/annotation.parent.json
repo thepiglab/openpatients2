@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC13314258.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2dbb04ab164ffcaffe6c0ff1cfdc4c873c473a49c929bb1bb772ab3161a755bb",
+  "annotation_sha256": "ecfe56ea71fa240264ffca4ebb86d0dc48703180f8f10197eab287cba4106b07",
+  "reviewed_at": "2026-10-17T21:34:10.561010+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 31,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f009: name \"Lesion appearance in Fig. 1 caption\" shortened to the clinical label \"Lesion appearance\" (NAME-LABEL); caption wording stays in evidence/text_value.",
+    "p1-f024/p1-f025: laterality set to left from the b00006 sentence describing the lesion (\"her left lower gingiva\"), which the case text examines, biopsies and diagnoses as OCC; quote added as that attribute's own evidence.",
+    "p1-f029: removed indication \"no clinical indication\" (inverted meaning: it is the reason the neck dissection was not done); assertion absent, action unknown kept.",
+    "Added p1-f031: Fig. 2D, E caption finding of sinuses and tracts filled with keratin debris (H&E), linked to p1-e05.",
+    "p1-e03: time_text \"preoperative\" (literal, order_only) set on the radiographic evaluation event.",
+    "Removed p1-e05 -> p1-e06: only diagnosis-basis wording (\"Based on the previously mentioned clinicopathological features\"), which does not order (ruling).",
+    "Added p1-e01 before p1-e02: \"presented with a 6 months history\" places the lesion history before the presentation examination.",
+    "Summary claim 2 cites p1-f031.",
+    "Added ambiguities: tumor laterality source; basis of the radiograph-to-decision order."
+  ],
+  "unresolved": [
+    "Single case; wide excision is stated only as the surgical decision, with no operation date, pathology of the excision, follow-up or outcome.",
+    "No laboratory, vital-sign, medication, allergy, family, social or perinatal data are stated for the patient.",
+    "Table 1 and the discussion describe literature entities, not this patient; the discussion clause \"as with our patient\" only restates the gingival site.",
+    "Caption descriptors in Fig. 1 (pinkish, exophytic) differ in wording from the text description; both kept as printed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 31,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (86-year-old woman); case text is b00006-b00008 plus Fig. 1-2 captions; Table 1 and Fig. 3 are literature/background and carry no patient facts.",
+      "Every case-text statement checked; the article reports no IHC, laboratory, medication or follow-up data, so the low fact count reflects the short source.",
+      "Wide excision kept as planned (decision only); neck dissection kept assertion absent / action unknown; bone involvement kept as negative radiograph result plus refuted bone invasion.",
+      "Fig. 1 caption pinkish/exophytic versus text colour kept as an ambiguity, not a conflict.",
+      "Tumor and condition laterality set to left from the presenting-lesion sentence; recorded as an ambiguity.",
+      "Relations: e05->e06 removed (diagnosis-basis wording); e01->e02 added; e04->e05 (biopsy -> histology) and e03->e07 (preoperative) kept."
+    ],
+    "residual_risks": [
+      "No outcome or follow-up is reported; whether the wide excision was performed is unknown.",
+      "Fig. 1 visual description misplaces the teeth (it says upper middle and upper right; pixels show the tooth row running from top centre to lower left); reported for the annotator to fix.",
+      "e03->e07 order rests only on the word preoperative."
+    ]
+  },
+  "physician_adjudicated": false
+}
