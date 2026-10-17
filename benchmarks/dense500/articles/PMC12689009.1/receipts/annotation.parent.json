@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12689009.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4f7d754829f9efb1f250b6978a15b46ac7b69adfc39eb07ae0035235b0f69139",
+  "annotation_sha256": "b6c76e079f9e5905ebedcbe56305b751029e008e9beb667b3432757adfe4b96a",
+  "reviewed_at": "2026-10-17T20:46:04.056094+00:00",
+  "source_segments_read": 80,
+  "facts_reviewed": 111,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed conditions item 'Previously healthy' (not a condition); kept the wording in case_context index_subject_description with the b00010 quote; summary reference repointed to p1-f001.",
+    "Split the admission-lab event: wound fluid culture, stool Gram stain and the text glucan statement (no stated time) moved to new event p1-e17; Table 1 dated glucan values got their own calendar events p1-e18 (August 24) and p1-e19 (September 2).",
+    "Added events p1-e20 (abstract progression to 99% TBSA), p1-e21 (systemic inflammation controlled by treatment) and p1-e22 (permanent vision loss).",
+    "Added 9 temporal relations with literal support: e03->e04 (diagnosis -> action), e05->e06 ('which rapidly progressed. Upon admission'), e05->e20 ('rapidly progressed to'), e06 same_time e09 (both 'admission'), e04->e11 ('Given the recent drug history'), e08->e14 ('Acute-phase' findings vs 'sequelae'), e01->e16 ('due to prior retinal detachment'), e12->e21 ('treatment successfully controlled'), e18->e19 (stated dates August 24 and September 2); added abstract 'subsequently' evidence to e01->e03.",
+    "Added abstract evidence to blood culture (p1-f087), penetrating keratoplasty (p1-f062) and visual acuity outcome (p1-f109); added abstract evidence to treatment event p1-e12.",
+    "Added ambiguity: stool Gram stain sentence cites Table 1 although Table 1 has no stool row; clarified that 99% TBSA vs over 80% detachment is an ambiguity, not a conflict."
+  ],
+  "unresolved": [
+    "Figure pixels are described in visual.json; annotation figure rows keep caption-only status.",
+    "Figure 2 prints a day-numbered timeline whose pixel content is not turned into facts; the text gives no calendar dates or day counts beyond those quoted.",
+    "Only external ocular photographs were preserved because of disease severity; no slit-lamp findings exist.",
+    "The text does not state when or whether brinzolamide was stopped, the eye for the 0.05 visual acuity, or the site of amniotic membrane transplantation.",
+    "Reference ranges are kept as printed; no flags were assigned from them. Flags come only from the source wording.",
+    "Discussion statements about HLA associations, mechanisms and recommendations are general and were not recorded as patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 80,
+    "facts_reviewed": 111,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (31-year-old man), roster count 1 from 'a rare case'.",
+      "SJS/TEN overlap diagnosis kept as confirmed: the patient's diagnosis is stated consistently; the introduction's BSA classification (>30% = TEN) versus the stated overlap label is an ambiguity, not reclassified.",
+      "99% TBSA (abstract) is consistent with over 80% detachment and >30% BSA; ambiguity only.",
+      "Table 1 glucan cell dates override the 'On admission' header; text 'significantly elevated' kept as a separate item because the source does not tie it to one of the two values.",
+      "Penetrating keratoplasty completed ('after which', abstract 'postoperative'), left eye from the same sentence; visual-acuity laterality left unassigned.",
+      "Brinzolamide stop never stated; not recorded (Naranjo item 3 uses 'or').",
+      "Brinzolamide adverse reaction kept as allergies assertion possible ('likely culprit', 'probable').",
+      "Figure 1 panels A-D and Figure 2 viewed at full resolution with crops; visual, figure-EHR and privacy sidecars agree with pixels; panel A groin is shadowed/covered, face covered."
+    ],
+    "residual_risks": [
+      "Figure 2 day numbers (Day 0/18/24/25, Hospital Day 28) are pixel-only and not used for timing.",
+      "Event ordering for treatment versus diagnosis and scores is left open where the text gives no order wording.",
+      "Glucan calendar dates have no year; time_calendar_value left empty."
+    ]
+  },
+  "physician_adjudicated": false
+}
