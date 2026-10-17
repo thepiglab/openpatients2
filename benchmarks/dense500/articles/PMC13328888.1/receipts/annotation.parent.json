@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC13328888.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0e444d11c10e849af54d8b5badff19698b890509e8536758aaf7d19f0142cd1a",
+  "annotation_sha256": "325b66838b5f585472db249d8547d9f7d666d1605b158961fda1b08eb79f35aa",
+  "reviewed_at": "2026-10-17T21:10:58.145445+00:00",
+  "source_segments_read": 15,
+  "facts_reviewed": 100,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f100 (care_plans \"conservative management\", status unknown): b00009 \"Similar to our case, most patients...\" is a cohort comparison; the patient-specific anticoagulant/antiplatelet start is already p1-f084-f086 and drug administration does not belong in care_plans",
+    "Removed p1-f101 (care_plans \"surgical or endovascular treatment judged high risk\", status unknown): a counterfactual author judgement (\"would have presented high risks\") that no plan/procedure slot can hold without implying a plan; recorded as an article limitation",
+    "p1-f087 anticoagulation initially not received: assertion absent -> present with action held (an affirmed withholding, per the medications prompt)",
+    "p1-f045 (Injury Severity Score higher) and p1-f046 (worse neurological status) made certainty ambiguous / review_only: comparative claims against a cited cohort with no patient value; ambiguity added",
+    "p1-f037 contusions: \"multiple\" moved from severity to text_value (not a severity grade)",
+    "Added p1-f102 occlusion of the left vertebral artery (include, no segment): the occlusion and side are uncontested; only the V1 vs V1/V2 extent stays quarantined in p1-f011/p1-f012/p1-f070 (conflict quarantines only the conflicting attribute)",
+    "Imaging-derived diagnoses (p1-f007, f009-f014, f070, new f102) moved from the undated grab-bag event p1-e20 to the imaging event p1-e06 (abstract: \"Radiographic imaging revealed ...\"); hemianopsia p1-f020 moved to p1-e10 (abstract: \"After regaining consciousness, the patient reported right-sided homonymous hemianopsia\")",
+    "New events: p1-e21 blood alcohol test (p1-f047/f048 split from the examination event p1-e05), p1-e22 anticoagulation initially withheld (occurrence not_occurred, time \"initially\"), p1-e23 persisting visual/neurological deficit upon discharge and during follow-up (p1-f096/f097); p1-e20 now holds only undated discussion-level diagnoses and its description states no time or grouping",
+    "Added 13 relations: e02<e21 (\"subsequent blood tests\" after the paramedics), e06<e08 (\"Given the presence of ultrasonographically confirmed free intra-abdominal fluid ... transferred to the operating theatre\"), e05<e08 (\"remaining normotensive\" then \"newly developed hemodynamic instability\"), e06<e11 (\"follow-up CT scan of the head\" after the whole-body CT), e22<e12 and e22<e13 (\"initially did not receive anticoagulation\"), e12<e15 (adjacent-sentence anchor \"a few days later\"), e15<e16 and e14<e16 (adjacent-sentence \"The subsequent course\"), e06<e19 and e11<e19 (post-hoc imaging: healing of the vascular injury, encephalomalacia in the ischemia-affected regions), e10<e23 and e10<e16 (visual deficit reported after regaining consciousness \"persisted\" upon discharge)"
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the five images are described in the separate visual submission.",
+    "The occluded vertebral artery segment is described as V1 in the abstract, case text and Fig. 1 caption but as V1 and V2 in the Fig. 2 caption and discussion; both sides are kept review_only.",
+    "The case text gives no dates or times except 6 months after discharge and a few days later; other facts keep null time and event order is limited to stated order wording.",
+    "The date of the MR angiography and brain MRI relative to the final follow-up is not stated.",
+    "Cohort percentages and literature statements in the discussion are not copied to the patient.",
+    "No hemoglobin, blood pressure or vital sign reference ranges are stated; flags follow the source words tachycardic, tachypneic, normotensive, hypotension and no abnormalities only.",
+    "The discussion states that surgical and endovascular treatment \"would have presented high risks\" because of contralateral vertebral artery hypoplasia; this counterfactual judgement is not recorded as a plan or procedure.",
+    "Event p1-e20 collects undated discussion-level diagnoses; it is not a single encounter and carries no time."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 15,
+    "facts_reviewed": 100,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single 18-year-old male pedestrian polytrauma case; all 101 draft facts checked against b00001-b00010 and the five captions for quotes, polarity, flags, times and actions.",
+      "Vital-sign flags verified: \"tachycardic (pulse rate of 132...)\", \"tachypneic (respiratory rate of 24...)\", \"normotensive (138/81)\" and \"hypotension (blood pressure of 87/55 mmHg)\" each govern exactly their value.",
+      "Occluded segment V1 (abstract, case text, Fig. 1) vs V1 and V2 over 6 cm (Fig. 2, discussion) kept as a source conflict on the segment attribute only; the uncontested left vertebral artery occlusion added as an included fact.",
+      "Discussion statements: foramen transversarium extension (\"as seen in our case\"), withheld anticoagulation (\"Our patient belongs to the subgroup\") and persistent deficits (\"falls within the 12%\") kept as patient-specific; ISS/neurological-status comparison with a cited cohort made review_only; cohort-framed conservative management and the counterfactual surgical/endovascular risk removed.",
+      "Pneumothorax keeps body_site \"left\"/\"right\" (literal; the Observation contract has no laterality field). Abstract \"contusions\" kept separate from the case-text \"bruises\".",
+      "Timeline: 3 events added, undated grab-bag event narrowed, 13 relations added, each with a literal order word, implied-necessary order or same-paragraph adjacent anchor.",
+      "All five figures viewed at full resolution; visual descriptions, single-patient attribution, clinical_imaging labels and viewer-text privacy flags match the pixels."
+    ],
+    "residual_risks": [
+      "Relations e10<e16 and e10<e23 rest on \"persisted\" and e05<e08 on \"newly developed\"; e15<e16 and e14<e16 rest on the same-paragraph \"The subsequent course\".",
+      "Abstract and case-text duplicates of the head/neck injury negatives (visible vs significant) remain separate items.",
+      "Timing of the follow-up MR angiography/MRI relative to the 6-month visit and whether the last follow-up with the aspirin reduction is the 6-month visit are not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}
