@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC13261403.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9a39dd2c2bbfd8605d2327bd60b23cc34dacde92fe9637cc0b26162006224c7e",
+  "annotation_sha256": "0d807cf2c0cef5d79306878c5910668499946382a991cb81d386be4f2feec6af",
+  "reviewed_at": "2026-10-17T21:12:31.090891+00:00",
+  "source_segments_read": 25,
+  "facts_reviewed": 164,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f157 merged the abstract \"deteriorated to AIS Grade A\" (no time) with the case-text \"further declined by HD 52\": the HD 52 time was borrowed for the Grade A statement. f157 now keeps only its abstract quote with time null; the HD 52 decline is a separate outcome p1-f163 (own sentence, by HD 52, relation before) in event p1-e19",
+    "Added outcome p1-f164 \"vital signs stabilized\" (b00006), linked to event p1-e20",
+    "Removed the bare Figure 2a/2c caption fragments that only supplied HD 27/HD 52 to text-only findings (p1-f103 bilateral foraminal stenosis C6-7, p1-f104 left foraminal stenosis C5-6, p1-f116 kyphosis progression); times set null/unknown. Findings the caption itself states keep the caption time (p1-f101, f102, f106-f110, f111, f113-f115, f117, f024)",
+    "p1-f111/f112/f113 now quote their own full sentence (\"On HD 52, follow-up cervical CT revealed ...\"), so HD 52 is literal in their own evidence; the Figure 2c caption quote was dropped from p1-f112 because the caption does not mention inflammation",
+    "Compressive myelopathy: abstract \"Imaging confirmed\" vs MRI \"possible\" (and CT \"probable\") ruled a source conflict on certainty; p1-f019 and p1-f020 both source_conflict/review_only (was ambiguity only)",
+    "Added ambiguities: caption \"evidence of spinal cord compression\" vs text \"probable\" (p1-f115); text-only CT findings without a stated day (p1-f103, f104, f116)",
+    "Events p1-e05 (\"by HD 27\") and p1-e13 (\"By HD 44\") time_precision exact -> range (upper bounds)",
+    "Added 16 relations: HD-numbered events ordered by stated days (e26<e03, e03<e07, e09<e12, e12<e14, e18<e23; same_time e11=e12, e12=e27, e18=e19, e19=e28), e11<e13 (\"further weakening\"), e12<e21 (\"Owing to ... deteriorating condition\"), e08<e16 (\"continued ... added\"), e16<e23 (regimen changed), e17<e20 (hemodialysis \"resumed\" after CRRT), e20<e22 (\"After ... transition back to nasal oxygen\"), e22<e25 (\"after one year of continuous rehabilitation\")",
+    "Summary claims 2 and 3 reworded so they no longer attach HD 42 to the untimed examination signs or imply \"followed\" ordering; claim 3 cites the new HD 52 decline item"
+  ],
+  "unresolved": [
+    "Table 1 blank cells (neurological level at HD 1; CRP at HD 1, HD52 and 1 year follow-up) are not recorded as values or zeros.",
+    "Table 1 values are recorded as separate items per cell with literal column headers as times; reference-range-only high/low flags were not added and no units were added to the scores.",
+    "Source conflicts are kept review_only: route of spread (hematogenous versus contiguous) and the HD 27 CT disc space description (destruction versus narrowing).",
+    "Text AIS motor scores are not merged with Table 1 motor-score rows because the text does not name the row; sensory scores and AIS grade and level are merged where text and table state the same value at the same time. Compressive myelopathy certainty (abstract confirmed vs text possible) is quarantined as a source conflict.",
+    "Text-only CT findings that the Figure 2 captions do not state carry no time (the caption time governs only its own content); findings the captions state keep HD 27/44/52.",
+    "Figure pixels are described only in the separate visual submission; the figure rows here keep not_inspected.",
+    "The Introduction statement about tetraplegia in published reports and the literature statements about vertebral osteomyelitis were treated as background, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 25,
+    "facts_reviewed": 164,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single 62-year-old man; all 162 draft facts checked against b00001-b00025 incl. all 46 non-blank Table 1 cells (values, column times, no flags) and both captions.",
+      "Merges checked against the merge ruling: AIS grade/level and sensory scores merged only where the text states the same hospital day (HD 42, HD 52) or cites Table 1 (1 year); text \"motor score\" 46/20/54 kept separate from TMS/UEMS rows.",
+      "p1-f157 split: abstract Grade A deterioration (no time) vs case-text decline by HD 52 (new p1-f163); the HD 52 time had been borrowed.",
+      "Caption times govern only caption content: text-only CT findings (foraminal stenoses, kyphosis) now untimed; caption-stated findings keep HD 27/44/52.",
+      "Source conflicts: route of spread (hematogenous vs contiguous), HD 27 CT destruction vs narrowing, and compressive myelopathy confirmed (abstract) vs possible (MRI text) - all both-sides review_only.",
+      "High-flow oxygen on HD 42 vs nasal-then-high-flow wording kept as an ambiguity (not contradictory).",
+      "Timeline: 28 events, relations expanded from 16 to 32 using stated hospital days, Table 1 column headers and literal order words."
+    ],
+    "residual_risks": [
+      "Text \"AIS motor score\" values duplicate Table 1 Total Motor Score values numerically but stay separate items because the text does not name the row.",
+      "Sensory score 42 \"by HD 52\" merged with the HD52 table cell (same label and stated day; text bound wording).",
+      "Untimed events (Foley, ICU/CRRT, neurosurgical consultation, evoked potentials) are only partly ordered.",
+      "F2c privacy row still flags identifiable_face; parent view is that a sagittal CT skin contour is not an identifiable face (agent file, Sonnet to correct)."
+    ]
+  },
+  "physician_adjudicated": false
+}
