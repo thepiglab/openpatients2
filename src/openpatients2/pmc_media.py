@@ -57,6 +57,31 @@ def child(node, name):
     return next((x for x in node if local_name(x.tag) == name), None)
 
 
+# A <caption> that only restates the float's number ("Figure 1.", "Table 2").
+BARE_CAPTION = re.compile(r"(?i)(fig(ure)?s?|tab(le)?s?|scheme|plate|image|photo|graph)\.?\s*\d+[a-z]?\s*[.:]?")
+
+
+def caption_parts(node) -> list:
+    """Caption-bearing children of a fig, fig-group or table-wrap, in document order.
+
+    <caption> takes precedence. Some publishers omit it, or reduce it to the bare
+    number, and put the legend in the float's own <statement> or <p> children; then
+    those children are the caption text (appended after a bare <caption>)."""
+    if node is None:
+        return []
+    caption = child(node, "caption")
+    text = xml_text(caption)
+    if text and not BARE_CAPTION.fullmatch(text) and text != xml_text(child(node, "label")):
+        return [caption]
+    legend = [x for x in node if local_name(x.tag) in {"statement", "p"} and xml_text(x)]
+    return ([caption] if caption is not None else []) + legend
+
+
+def caption_text(node, render=xml_text) -> str | None:
+    """Caption text for a float; see caption_parts. render is the node-to-text function."""
+    return " ".join(filter(None, (render(x) for x in caption_parts(node)))) or None
+
+
 def parsed_xml(text: str):
     # Normal JATS DOCTYPE declarations are permitted, but entity expansion and
     # external resources are not. XML requests have a separate response-size cap.
@@ -201,9 +226,9 @@ def parse_figures(xml: str, pmcid: str, version: int, media: list[dict], xml_url
         figures.append({"figure_key": key, "figure_id": fid, "figure_type": local_name(fig.tag),
                         "group_id": group.get("id") if group is not None else None,
                         "group_label": xml_text(child(group, "label")) if group is not None else None,
-                        "group_caption": xml_text(child(group, "caption")) if group is not None else None,
+                        "group_caption": caption_text(group) if group is not None else None,
                         "label": xml_text(child(fig, "label")),
-                        "caption": xml_text(child(fig, "caption")), "alt_text": xml_text(child(fig, "alt-text")),
+                        "caption": caption_text(fig), "alt_text": xml_text(child(fig, "alt-text")),
                         "article_anchor_url": f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}.{version}/#{quote(fid, safe='')}" if fid else None,
                         "source_xml_url": xml_url, "graphic_references": hrefs,
                         "media": matched, "image_urls": [x["url"] for x in matched if x["kind"] == "image"],

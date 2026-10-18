@@ -39,8 +39,12 @@ async def search_candidates(query: str, limit: int = 100, offset: int = 0, *, ht
 
 
 async def fetch_article(client: LiteratureClient, pmcid: str, version: int | None = None, *,
-                        source_views: tuple[str, ...] = (), max_asset_bytes: int = 12_000_000) -> dict:
-    """Select explicitly; never call the largest numeric version 'latest'."""
+                        source_views: tuple[str, ...] = (), max_asset_bytes: int = 12_000_000,
+                        permissive_only: bool = False) -> dict:
+    """Select explicitly; never call the largest numeric version 'latest'.
+
+    permissive_only=True applies license_policy's permissive-only policy (CC0/CC BY/CC BY-SA/public
+    domain) to the metadata pre-check and to the article decision; the default policy is unchanged."""
     if set(source_views) - {'pmc_text', 'pdf_firecrawl'}:
         raise ValueError('Unknown requested source view')
     objects = await client._version_objects(pmcid)
@@ -50,7 +54,7 @@ async def fetch_article(client: LiteratureClient, pmcid: str, version: int | Non
             continue
         raw, retrieval = await client._text(url, 'metadata')
         meta = json.loads(raw)
-        decision = license_decision(meta, [])
+        decision = license_decision(meta, [], permissive_only=permissive_only)
         if not decision['metadata_fetch_allowed'] or not meta.get('xml_url'):
             rejected.append({'version':v,'reason':decision['reason'] if not decision['metadata_fetch_allowed'] else 'xml_unavailable',
                              'license':decision}); continue
@@ -71,6 +75,10 @@ async def fetch_article(client: LiteratureClient, pmcid: str, version: int | Non
         raise ValueError('XML URL does not match article/version')
     xml, info = await client._text(url, 'xml')
     article = parse_article(xml, meta, {'metadata':meta_info,'xml':info})
+    if permissive_only:
+        # Re-decide from the same metadata and JATS statements under the permissive-only policy
+        # (equal to apply_permissive_only of the default decision, plus its data-waiver rule).
+        article['license'] = license_decision(meta, article['license']['statements'], permissive_only=True)
     article['status'] = ('eligible' if article['license']['allowed'] else
                          'license_review' if article['license']['outcome'] == 'review' else 'license_rejected')
     if article['status'] == 'eligible':

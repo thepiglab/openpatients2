@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC4912675.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "948d587776675048d1daf7b0288a5b54b29edca2489d0cb401e566485f26d5d7",
+  "annotation_sha256": "6f23ff42fcbab8c4158a124e688008bc05d504e090785fd8f364e7435a4bbdc1",
+  "reviewed_at": "2026-10-18T02:28:54.255331+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 287,
+  "patients_reviewed": 9,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added 17 temporal relations from stated times and implied-necessary orders: admission (July-August 2014-2015) before the Hospital discharge outcome for all nine cases (admission quote plus the time-labelled column header), and the hospital discharge outcome before the follow-up period for Cases 1-8 (discharge then outpatient follow-up); relations 8 -> 25.",
+    "Case 9 headache (p9-f020) changed from supported/include to ambiguous/review_only: its only source is the aggregate 9/9 count, while the Case 9 row lists no headache and only eight rows list it (arithmetic mismatch, an ambiguity, not a conflict); its event occurrence set to unknown and it was removed from the Case 9 summary; ambiguity and limitation text updated."
+  ],
+  "unresolved": [
+    "Table 1 prints Age and Duration of hospital stay as bare numbers without units, so no years or days are recorded; only the follow-up period column states month.",
+    "The Abstract, Methods and Conclusion make unquantified series-level statements (no history of thrombosis, oral contraceptive for more than 1 month to be able to fast, no other possible risk factors, CVT confirmed by magnetic resonance venography, thrombophilia and vasculitis assessments that were rollout, fasting women during Ramadan) without naming individual cases; they are copied to each case only as review_only facts. Statements that explicitly cover all patients (all patients used a short course OCP during Ramadan, nine cases used contraceptive pills to delay menstruation, nine patients with CVT admitted to the neurology ward, headache in 9/9 patients, review_only for Case 9 because the table rows disagree) are recorded for the cases they cover.",
+    "Cohort symptom counts and percentages in the Abstract, Discussion and Table 1 footnote (headache 9/9, vomiting 5/9, vertigo 4/9, nausea and seizure 33%, papilledema 33%, blurred vision 22%) agree with the symptoms listed in the Table 1 rows only for some symptoms (nausea and seizure) and disagree for others (for example vertigo, vomiting, papilledema, blurred vision and the headache count). Individual facts follow each patient own row and no count was recalculated or reconciled.",
+    "The Introduction says patients were admitted during July-August 2014, while the Abstract and Methods say July-August 2014-2015 (two consecutive years); each admission is recorded only as the stated July-August 2014-2015 window.",
+    "Table 1 prints some cells without separators (vomiting papilledema, low blood pressure vertigo, warfarin anticonvulsant); they are read as separate listed items without adding wording.",
+    "Figure 1 (brain magnetic resonance venography) is cited only for the series, shows no printed patient label, and is not attributed to any patient; its attribution is unresolved.",
+    "The Methods list of the most common clinical signs (headache, papilledema, seizures, sensorimotor deficit, decreased level of consciousness, hemorrhage) is an aggregate statement and is not mapped to individual cases beyond the Table 1 rows; one patient passed away is mapped to Case 9 only through the table cell and footnote that record the single death.",
+    "The Case 9 headache comes only from the statements that headache occurred in 9/9 patients; the Case 9 table row does not list it and only eight rows do, so it is kept review_only (count mismatch recorded as an ambiguity).",
+    "The Discussion hypothesis about dehydration, comparisons with other published series, regional mortality and incidence figures, and the Introduction general short course pill formulation are not patient facts, and no ingredients or doses are recorded for the cases."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 287,
+    "figures_viewed": 1,
+    "key_findings": [
+      "All nine Table 1 rows checked cell by cell against p1-p9 (age, sex, ethnicity, manifestations, involved veins, predisposing factor, treatment, discharge outcome, stay, follow-up); no missing or wrong cell found.",
+      "Explicit all-patient statements (all patients used a short course OCP during Ramadan; nine cases used pills to delay menstruation; 9 patients admitted July-August 2014-2015) are correctly copied; unquantified Patients/They statements are review_only.",
+      "Case 9 risk-factor conflict quarantines only the predisposing-factor attribute (abstract no other risk factors vs table obesity, both review_only); obesity and BMI 35 stay included. Footnote ** exclusions are review_only for Case 9 only.",
+      "Death: cell and footnote *** (marker on the Case 9 cell) are included; the unlabelled Discussion description is review_only. Cohort percentage mismatches are ambiguities per the arithmetic-mismatch ruling.",
+      "Figure 1 viewed at full resolution with enlarged halves; visual description matches pixels; attribution unresolved and not EHR-includable."
+    ],
+    "residual_risks": [
+      "Missing separators in Cases 1 and 8 (vomiting papilledema; low blood pressure vertigo; warfarin anticonvulsant) are read as separate items.",
+      "Age and hospital-stay units are not printed; follow_up_duration_text adds the month unit from the column header.",
+      "Introduction (July-August 2014) and Methods (2014-2015) periods disagree; recorded as an ambiguity."
+    ]
+  },
+  "physician_adjudicated": false
+}

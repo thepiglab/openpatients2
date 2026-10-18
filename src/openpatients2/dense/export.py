@@ -1,4 +1,12 @@
-"""Export only genuinely source-reviewed annotations; preserve every source right."""
+"""Export only genuinely source-reviewed annotations; preserve every source right.
+
+    op2 dense export                  # dense50 + dense500 -> data/dense_clinical_cases_v1 (unchanged)
+    op2 dense export --set dense500b  # dense500b alone   -> data/dense_clinical_cases_dense500b_v1
+
+dense500b (batch 2) is exported as a SEPARATE dataset, never merged into v1, so the v1 counts, split
+files and checklist are untouched. Its rows carry `reference_set: dense500b` (catalog rows) and
+`provenance.reference_set` (unified records); the default v1 output carries no such field.
+"""
 import copy
 from collections import Counter
 from datetime import datetime, timezone
@@ -11,9 +19,22 @@ from openpatients2 import dense_store as store
 from openpatients2.dense.validate import digest, validate
 from openpatients2.dense.schema_targets import with_review_only_items
 
-from openpatients2.dense import DENSE50, DENSE500 as ROOT, REPO
+from openpatients2.dense import DENSE50, DENSE500 as ROOT, DENSE500B, REPO
 ROOTS=[DENSE50, ROOT]
 OUT=REPO/'data/dense_clinical_cases_v1'
+# Selection target for statistics (None: the number of rows in ROOT/selection.json).
+TARGET_ARTICLES=500
+# None for the v1 release (no extra field); a name tags every catalog row and unified record.
+REFERENCE_SET=None
+# name -> (ROOT with selection.json, roots scanned, output folder, target, reference-set tag)
+EXPORT_SETS={'v1':(ROOT,[DENSE50, ROOT],OUT,500,None),
+             'dense500b':(DENSE500B,[DENSE500B],REPO/'data/dense_clinical_cases_dense500b_v1',None,'dense500b')}
+
+
+def configure(name):
+    """Point the exporter at one export set (module globals, as the tests monkeypatch them)."""
+    global ROOT, ROOTS, OUT, TARGET_ARTICLES, REFERENCE_SET
+    ROOT, ROOTS, OUT, TARGET_ARTICLES, REFERENCE_SET = EXPORT_SETS[name]
 # The release is the unified one-row-per-article dataset in OUT/data. The old
 # per-type JSONL files are kept only for the viewer/back-compat, under OUT/legacy.
 WRITE_LEGACY=True
@@ -32,9 +53,9 @@ STALE_RECEIPT_POLICY='withhold'
 # validators a local-LLM output must pass). Under 'withhold' a failing article is exported as not
 # completed with the reasons in article_checklist.json (`runtime_gate_errors`); 'raise' aborts.
 RUNTIME_GATES=True
-# Page-reviewed supplements (PDF, or PDF members of a declared ZIP): never image panels.
+# Document-like supplements (PDF pages, ZIP member PDFs, text units, composite ZIP/XLSX members): never image panels.
 DOCUMENT_SUPPLEMENT_FORMATS=('dense-supplemental-document-reference/1','dense-supplemental-archive-document-reference/1',
-                             'dense-supplemental-text-document-reference/1')
+                             'dense-supplemental-text-document-reference/1','dense-supplemental-composite-reference/1')
 # Media that cannot be obtained: a figure the dual-signed visual review records as status
 # 'unavailable' (the source declares no asset; limitations required) and a supplement declared
 # only as an external link (no fetchable PMC asset, e.g. YouTube; the dual-signed manifest row is
@@ -93,13 +114,11 @@ def supplement_inventory(source, reviewed=(), manifest=None):
         non_clinical=non_clinical_supplements(manifest)
         bases=manifest_gate_supplements(manifest,accept_external_unavailable=UNAVAILABLE_MEDIA_POLICY=='complete_flagged')
         external=external_unavailable_supplements(manifest)
+    from openpatients2.dense.supplement_review import review_status, sampled_video
     def status(sid):
         if sid in completed:
-            if completed[sid][0].get('format')=='dense-supplemental-text-document-reference/1':
-                return 'agent_and_parent_source_and_document_text_reviewed'
-            return ('agent_and_parent_source_and_document_pages_reviewed'
-                    if completed[sid][0].get('format') in DOCUMENT_SUPPLEMENT_FORMATS
-                    else 'agent_and_parent_source_and_pixels_reviewed')
+            # e.g. ..._document_text_and_images_reviewed, ..._spreadsheet_cells_reviewed, ..._sampled_video_frames_reviewed
+            return 'agent_and_parent_'+review_status(completed[sid][0])
         if bases.get(sid)=='manifest_video_frames_sampled':
             return 'agent_and_parent_manifest_video_frames_sampled'
         if sid in external:
@@ -109,6 +128,8 @@ def supplement_inventory(source, reviewed=(), manifest=None):
              'manifest_non_clinical_reviewed':s['supplement_id'] in non_clinical,
              'manifest_review_basis':None if s['supplement_id'] in completed else bases.get(s['supplement_id']),
              'external_media_unavailable':s['supplement_id'] in external,
+             # A signed review whose video members were inspected only through sampled frames (never continuous motion/audio).
+             'video_frames_sampled':s['supplement_id'] in completed and sampled_video(completed[s['supplement_id']][0]),
              'review_status':status(s['supplement_id']),
              **({'reviews':completed[s['supplement_id']][1]} if s['supplement_id'] in completed else {})}
             for s in source.get('supplements',[])]
@@ -438,8 +459,12 @@ def author_attribution(source,root):
 
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
-    retained=json.loads((ROOT/'retained-strata.json').read_text())
-    selection={r['article_id']:r for r in json.loads((ROOT/'selection.json').read_text())}
+    retained_path=ROOT/'retained-strata.json'
+    retained=json.loads(retained_path.read_text()) if retained_path.exists() or REFERENCE_SET is None else {}
+    selection_path=ROOT/'selection.json'
+    selection_rows=json.loads(selection_path.read_text()) if selection_path.exists() or REFERENCE_SET is None else []
+    selection={r['article_id']:r for r in selection_rows}
+    target_articles=TARGET_ARTICLES if TARGET_ARTICLES is not None else len(selection_rows)
     manifest=[]; final=[]; patient_bundles=[]; article_bundles=[]; visual_bundles=[]; supplement_bundles=[]; document_bundles=[]; clinical_supplement_bundles=[]; figure_panels=[]; draft_count=0
     supplement_manifest_rows=[]; figure_ehr_rows=[]; measurement_series_rows=[]; unified_candidates={}
     for root in ROOTS:
@@ -464,6 +489,8 @@ def main():
                 'review_status':'not_started','full_schema_review_status':'not_started','pixel_review_status':'not_started',
                 'source_provenance':source.get('retrieval',{}),
                 'source_supplements':None}
+            if REFERENCE_SET:
+                row['reference_set']=REFERENCE_SET
             ehr_status,ehr_reviewed,ehr_errors=ehr_sidecar_status(root,aid,source)
             signed_manifest=ehr_reviewed.get('supplement_manifest',(None,))[0]
             row['source_supplements']=supplement_inventory(source,manifest=signed_manifest)
@@ -680,7 +707,8 @@ def main():
                                 +receipt_summary('visual',visual[1] if visual else [])
                                 +[x for st,sr in supplements for x in receipt_summary('supplement:'+st['supplement_id'],sr)]
                                 +[x for name,(t,rr) in ehr_reviewed.items() for x in receipt_summary(name,rr)],
-                            'physician_adjudicated':False})
+                            'physician_adjudicated':False,
+                            **({'reference_set':REFERENCE_SET,'reference_root':root.name} if REFERENCE_SET else {})})
             manifest.append(row)
     assert len({r['article_id'] for r in manifest})==len(manifest)
     LEGACY=OUT/'legacy'; LEGACY.mkdir(exist_ok=True)
@@ -731,11 +759,11 @@ def main():
     assessments=[r['review']['assessment'] for r in final]
     challenge_keys=('rich_trajectory','normal_negative_evidence','serial_measurements',
                     'common_workflow','planned_vs_actual_challenge')
-    statistics={'target_articles':500,'acquired_candidate_articles':len(manifest),'drafted_articles':draft_count,
+    statistics={'target_articles':target_articles,'acquired_candidate_articles':len(manifest),'drafted_articles':draft_count,
         'parent_source_reviewed_articles':len(final),'physician_adjudicated_articles':0,
         'full_schema_reviewed_articles':len(article_bundles),
         'full_schema_reviewed_patients':len(patient_bundles),
-        'complete_500_article_release':len(final)==500 and len(article_bundles)==500 and all(figures_satisfied(r['pixel_review_status']) and all(supplement_satisfied(s) for s in r['source_supplements']) for r in manifest),
+        'complete_500_article_release':target_articles>0 and len(final)==target_articles and len(article_bundles)==target_articles and all(figures_satisfied(r['pixel_review_status']) and all(supplement_satisfied(s) for s in r['source_supplements']) for r in manifest),
         'pixel_reviewed_articles':sum(r['pixel_review_status']=='agent_and_parent_reviewed' for r in manifest),
         'articles_with_any_inspected_pixels':sum(any(f['status']=='inspected' for f in r['figures']) for r in visual_bundles),
         'reviewed_no_figure_inventories':sum(not r['figures'] for r in visual_bundles),
@@ -789,7 +817,7 @@ def main():
         import shutil
         shutil.rmtree(LEGACY,ignore_errors=True)
     lines=['# Dataset construction and distribution', '',
-        f"Target: 500 articles. Acquired candidates: {len(manifest)}. Drafted: {draft_count}. Parent source-reviewed: **{len(final)}**. Physician-adjudicated: **0**.",
+        f"Target: {target_articles} articles. Acquired candidates: {len(manifest)}. Drafted: {draft_count}. Parent source-reviewed: **{len(final)}**. Physician-adjudicated: **0**.",
         '',f'Reviewed data: {len(patients)} patient descriptions, {len(facts)} facts and {len(figures)} caption records.',
         '',f'Full runtime-schema bundles reviewed by both annotator and parent: {len(article_bundles)} articles / {len(patient_bundles)} patients. These have a separate review gate from the partial fact annotations.',
         '', 'Counts below describe this selected corpus, not population prevalence or medical accuracy.', '']
@@ -817,8 +845,15 @@ def main():
         f"Dual-reviewed supplement content manifests: {statistics['supplement_manifest_reviewed_articles']} articles / {statistics['reviewed_supplement_manifest_files']} files ({statistics['ehr_includable_supplement_files']} EHR-includable). Figure EHR labels: {statistics['figure_ehr_labeled_articles']} articles / {statistics['reviewed_figure_ehr_panels']} panels ({statistics['ehr_includable_figure_panels']} EHR-includable). Measurement series: {statistics['measurement_series_reviewed_articles']} articles / {statistics['reviewed_measurement_series']} series / {statistics['reviewed_measurement_points']} points.", '',
         'These sidecars (`supplement_manifests.jsonl`, `figure_ehr_labels.jsonl`, `measurement_series.jsonl`) separate images and files that would plausibly belong in a patient record (imaging, waveforms, pathology, clinical photos, patient data tables) from diagrams, checklists and literature content. They are informational checklist items, not completion gates. Peeks are literal machine copies; parsed numbers are deterministic parses of literal cells, never unit-converted. EHR-includability is an AI reference judgement, not physician adjudication.', '']
     (OUT/'DISTRIBUTIONS.md').write_text('\n'.join(lines)+'\n')
-    (OUT/'SELECTION_PLAN.md').write_text((ROOT/'SELECTION_PLAN.md').read_text())
+    if (ROOT/'SELECTION_PLAN.md').exists() or REFERENCE_SET is None:
+        (OUT/'SELECTION_PLAN.md').write_text((ROOT/'SELECTION_PLAN.md').read_text())
     print(json.dumps({k:statistics[k] for k in ['target_articles','acquired_candidate_articles','drafted_articles','parent_source_reviewed_articles','complete_500_article_release']}))
 
 
-if __name__=='__main__':main()
+if __name__=='__main__':
+    import argparse
+    parser=argparse.ArgumentParser(description='Build a dense reference release (see module docstring).')
+    parser.add_argument('--set',choices=sorted(EXPORT_SETS),default='v1',
+                        help='v1: dense50+dense500 (default); dense500b: its own dataset')
+    configure(parser.parse_args().set)
+    main()

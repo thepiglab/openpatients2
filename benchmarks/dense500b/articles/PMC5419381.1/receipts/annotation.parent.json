@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC5419381.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "80f507c7302c89152457ebeb0ca0523f7a7421d7a41f442c04ebe068596ae36f",
+  "annotation_sha256": "499e4d47a6563bba8cdbb60390ca66ffa8e281c9b28d6b702d0ef4e700ba9796",
+  "reviewed_at": "2026-10-18T02:24:03.575094+00:00",
+  "source_segments_read": 45,
+  "facts_reviewed": 56,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Table 3 medications (10 items): action current -> administered and temporality current -> unknown; the caption places the list prior to outpatient fondaparinux use, not at the latest described time (heading \"Current Daily Medications\" kept as evidence); note, limitation and summary wording updated.",
+    "Care plan \"Labs ordered\" (6 February 2016 column): action_status unknown -> completed, since the comment states the labs below were ordered; ambiguity reworded so it no longer contradicts the order -> result relation to the 13:39 Lab Test rows.",
+    "Added relations: pulmonary embolism history before presentation; past medical history (incl. HIT) before presentation; pulmonary embolism before warfarin thromboprophylaxis for it; no significant platelet reduction during fondaparinux therapy; fondaparinux tolerated (no bleeding, thromboembolic event or thrombocytopenia) during the therapy."
+  ],
+  "unresolved": [
+    "Single case; the article has no figures, supplements or videos, and Tables 2 and 3 are text tables.",
+    "Table 2 value cells print no unit: the platelet and PF4 units are read from the row Reference Range cell and the SRA UF HEP LOW DOSE unit from its \"Units: %\" cell, all kept literal.",
+    "Table 2 comment cells print clock times without a date: comment-derived items take only the column date and keep the clock time in the regimen text; the lab draw clock times are not applied to them.",
+    "The fondaparinux start date and the clinic visit date are not stated; the day 3 and 5 blood counts are instructions, and no day 5 count is reported.",
+    "The number of missed warfarin doses is \"one or possibly two\" and no exact count is recorded.",
+    "Two Table 2 comments mention hospital admission and heparin initiation appears on two dates; admission dates, number and reason are not stated and were not inferred or merged, and the admission context is kept in evidence and event descriptions rather than as separate care-episode facts.",
+    "Table 2 comments are aligned to the date columns by cell position (two comment positions are blank); the platelet row and the comment row have the same number of cells as the header row.",
+    "Table 3 is a medication list headed \"Current Daily Medications\" and captioned as prior to outpatient fondaparinux use: the items are recorded as administered at that list time (before the fondaparinux use) with temporality unknown, since the source does not place them at the latest described time.",
+    "No allergy statement is made; the history of heparin-induced thrombocytopenia is recorded once, as a condition.",
+    "Literature review text, guideline comparisons, hypothetical drug costs and Table 1 adverse-effect rates are not patient facts and were not recorded.",
+    "The case text uses an identifying pseudonym for the patient; it is not stored in any authored field and is avoided in quotes where possible."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 45,
+    "facts_reviewed": 56,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single case; all Table 2 cells (6 platelet columns with comments, SRA porcine, SRA low dose, PF4 IgG) and all 10 Table 3 cells are captured with literal units from the Reference Range cells and printed (L)/(H) flags.",
+      "Comment-cell heparin items take the column date only, clock times kept in regimen text; SRA in the history is not merged with Table 2 SRA rows; five day treatment from the cost sentence kept review_only with an ambiguity; missed dose count kept as an ambiguity.",
+      "Relation e16 -> e17 accepted as result -> action (fondaparinux prescribed until the INR was in range)."
+    ],
+    "residual_risks": [
+      "Comment-cell dates are taken from the lab-draw column headers by table position.",
+      "The (A) marker on the SRA porcine result is undefined in the source.",
+      "Fondaparinux start date and clinic visit date are not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

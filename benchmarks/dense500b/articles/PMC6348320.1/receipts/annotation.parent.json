@@ -1,0 +1,52 @@
+{
+  "article_id": "PMC6348320.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8d01550f4394c265a061e35cbbe7874338f4242a1e38858264063a2d29b854d7",
+  "annotation_sha256": "fe96323582d829163b2a3fc0281f8a0783b5cd41c987b12e617f628ca6aa9fe4",
+  "reviewed_at": "2026-10-18T02:19:55.605922+00:00",
+  "source_segments_read": 10,
+  "facts_reviewed": 50,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f044 (successfully resuscitated at 0447 h) set certainty=ambiguous, scoring=review_only under the pixel rule: the caption ties restored circulation to the last strip, whose device clock label precedes 0447 h by minutes; ambiguity rewritten accordingly.",
+    "p1-f035 (VF found at 0436 h) kept include: the VF strips are labelled after the arrival time, consistent with persisting VF, not a differing value for the same moment (justified in the ambiguity).",
+    "p1-f018 (no neurological deficit) given its own-clause time \"on the fourth hospital day\".",
+    "Added relations e06->e07 (immediately after 0416 h vs 0436 h), e20->e21 (ICD insertion before the shock it delivered), e10->e22 (September 2013 vs July 2016); ICD ambiguity updated."
+  ],
+  "unresolved": [
+    "Roster count left null: the source states a single case without a literal number, and the checker regex does not accept its wording.",
+    "Figure caption refers to a first and last column while the image shows stacked strips; no mapping inferred.",
+    "Device clock labels printed on the ECG strips are pixel content in the visual record only and are not reconciled with text clock times.",
+    "The cited literature case of a 4-year-old with congenital complete heart block is not an index-patient fact.",
+    "No supplements or tables; no measurement series applicable."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 10,
+    "facts_reviewed": 50,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index case; all five clock times (0340, 0416, 0436, 0447, 0511 h), fourth hospital day, May 2015 ICD shock and July 2016 follow-up captured literally.",
+      "ECG findings (sinus rhythm, transient coved-type V2 ST elevation, saddleback ST elevation on a different day) and normal angiography/echo captured.",
+      "\"His bed was dry\" kept as Wet bed assertion=absent; EVID-NEGATION warning is a checker false positive.",
+      "Roster count left null: no case-text quote matches the single-case regex (tooling limitation)."
+    ],
+    "residual_risks": [
+      "Figure 1 device clock vs text clock unreconciled; caption columns vs stacked strips.",
+      "Hedged causal claim (p1-f007) kept as possible."
+    ]
+  },
+  "physician_adjudicated": false
+}

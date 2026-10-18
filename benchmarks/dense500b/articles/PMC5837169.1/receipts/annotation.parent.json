@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC5837169.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5ee7d96893f9b4518e1756feee8b8475899030637f127e6d75435f4b2fa566d2",
+  "annotation_sha256": "142287caf0abdcba29149f9e26fc5df94b005963b5609bfa58c1fb8d897d3fcb",
+  "reviewed_at": "2026-10-18T02:24:35.152746+00:00",
+  "source_segments_read": 10,
+  "facts_reviewed": 64,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Documented sex adjudicated: p1-f003 now female from the four case-text uses of \"she\" (supported, include); p1-f004 (possessive His/his) set to male, ambiguous, review_only; ambiguity and article limitation reworded from conflict to ambiguity (precedent PMC12810977.1). Not inferred from multiparous/postpartum.",
+    "Added 9 literally supported temporal relations: e01 before e04 (\"02 hours after giving birth\"), e02 same_time e03 (received 02 hours after delivery = admission), e01 before e06 (postpartum hemorrhage), e06 before e07 (transfusion helped to manage the coagulopathy), e02 before e10 (\"returned\"), e10 before e14 (\"presented again rebleeding\"), e14 before e15 (\"resulting in ... after conditioning\"), e17 before e19 (\"retained after histological examination\"), e01 before e21 (\"in the postpartum period\")."
+  ],
+  "unresolved": [
+    "The source is a garbled, machine-translated rendering; unclear phrases such as \"28 years 5th visors\", \"was going after an amendment\" and \"retracted with a soft tissue integrity\" are kept literal and listed in the patient ambiguities without inference.",
+    "The case paragraph refers to the patient as \"she\" four times and once with the possessive \"His\" (the discussion also prints \"his admission\"); documented sex is taken from \"she\", the possessive slips are kept as a review_only ambiguity, and no sex_assigned_at_birth or gender_identity is inferred.",
+    "The admission platelet count is printed \"23 0000\" in the case text and \"23,000\" in the discussion; treated as a print artefact of one blood count, and no unit beyond the printed word platelets is added.",
+    "The name and initials printed in the case paragraph are not stored.",
+    "Caption-layer figure status is not_inspected; the two image files were inspected in the separate visual submission.",
+    "The retained diagnosis is described as \"of the body\", \"at the myometrium\" and in a garbled conclusion sentence; the discussion sentence is used for site assignment.",
+    "Discussion statements about hemangiomas in general (literature, pathogenesis, treatment options, CT angiography, MRI, biopsy) are background, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 10,
+    "facts_reviewed": 64,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Every vital (BP 76/44, HR 136, RR 39), lab (platelets 23,000, Hb 3.9 and 9, prothrombin 92%, normal aPTT/coagulation/labs), transfusion volume (1120/350/860 ml) and time point (02 hours, seven days, twenty five days, two weeks) checked literal.",
+      "Platelet count: case text \"23 0000\" and discussion \"23,000\" both describe the admission blood count (severe thrombocytopenia); one-character print artefact kept as one item with an ambiguity.",
+      "\"His medical history was featureless\": featureless is the negating word; absent past history is correct and the EVID-NEGATION warning is a checker false positive.",
+      "Garbled phrases (was going after an amendment, 5th visors, vaginal and perineal cervical lesions, retracted with a soft tissue integrity) kept literal with ambiguities; the retracted wording stays review_only.",
+      "\"None of the above treatments\" scoped to the listed conservative measures (hysterectomy and the stated drugs were given), with an ambiguity.",
+      "Both figures viewed at full resolution; visual descriptions match pixels; attribution to p1 supported by captions and citations."
+    ],
+    "residual_risks": [
+      "Machine-translated source; reading of garbled sentences may differ from the authors' intent.",
+      "Untimed in-hospital events (exam, transfusion, return-visit tests and treatments) remain unlinked because no order word states their position."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC5178336.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c46c5a8473699e3e5c133d9e83cdceb84b97fca5dbd19117f34946049dd7c69b",
+  "annotation_sha256": "caf1ce13d0b8c6bfa351c88f4fc2d35da45b181b651a0d070ab7c3f7614b2ff2",
+  "reviewed_at": "2026-10-18T02:30:41.309354+00:00",
+  "source_segments_read": 50,
+  "facts_reviewed": 158,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f001 care_setting changed from the emergency room (only decided, occurrence unknown) to the Service of General Psychiatry, with the admission quote as evidence.",
+    "p1-f102 (divine punishment belief): removed the b00008 priest-request quote, a different statement already recorded as p1-f037; added the b00022 \"in our patient\" lead sentence that makes it patient-specific.",
+    "p1-f061 split under the merge rule: \"He did not eat for fear of dying\" stays p1-f061; \"Negativism emphasized, he did not eat\" becomes new p1-f158 (linked to p1-e20); the source does not identify them as one statement.",
+    "Added relations e01->e05 (ages 13 and 45), e23->e25 (no improvement -> family decision -> admission), e29->e34 (aripiprazole start -> decreased delusions after two weeks), e34->e35, e33->e35 (\"Being improved ... discharged\") and e29->e35 (in-hospital care -> discharge after four weeks); e25->e35 not added because the four-week hospitalization is not identified with the General Psychiatry admission.",
+    "Depression ambiguity reworded: \"no depressive symptoms\" is compatible with documented anxiety, guilt and desire of dying (never labelled depressive by the source), not a conflict."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the single figure image is reviewed in visual.json.",
+    "Figure 1 is a theoretical-model diagram from the literature and Table 1 lists disorders reported in the literature; neither is patient data.",
+    "Only explicit lead clauses (Since the age of 13, At age 45, At age 49, and the stated days or months before admission to our unit) are assigned as times; other narrative sentences carry no time, and no calendar dates are stated.",
+    "Discussion sentences are used only where they literally say our patient; the unspecified list of phenomena and the plural statement about patients are quarantined as review_only.",
+    "Diagnoses described as proposed stay provisional; Cotard syndrome is not among the proposed diagnoses of the case section although the abstract and introduction say the patient developed it.",
+    "The hospitals, the three day hospitalization, our unit and the service of General Psychiatry are not identified with each other in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 50,
+    "facts_reviewed": 158,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index case; every dose (olanzapine 5 and 10, clonazepam 2 and 3, fluoxetine 10, quetiapine 50, haloperidol 30 IM, aripiprazole 30 mg/day), lab (vitamin B12 190 pg/mL ref 200-900, Dimer-D 1.45 ug/ml ref <0.5), 4 kg weight loss and time point (ages 13/45/49, three months, fifteen days, 20/7/4 days before admission, three days, two and four weeks) is literal.",
+      "Proposed diagnoses (GERD, esophagitis, seborrheic dermatitis) are the team working diagnoses, kept provisional; schizophrenia confirmed by first and repeat diagnosis.",
+      "Clonazepam 2 mg/day only decided (planned); aripiprazole administration confirmed by \"treated with aripiprazole\" and \"During this treatment\"; admission stated by \"before being admitted\", ER visit only decided (unknown).",
+      "Discussion facts (delusions of negation, divine punishment, \"when hospitalized\" immortality) are literal about \"our patient\"; the unspecified phenomena list and plural \"The patients also improved\" stay review_only.",
+      "Fig 1 viewed: literature theory diagram, background; visual.json, figure-EHR and privacy sidecars match the pixels."
+    ],
+    "residual_risks": [
+      "Admission to the General Psychiatry service is not literally identified with \"our unit\" or the four-week hospitalization; no relation links it to discharge.",
+      "Stop of olanzapine and clonazepam after fifteen days not tied to a specific course.",
+      "Cotard type I classification kept present with unknown verification (conditional phrasing)."
+    ]
+  },
+  "physician_adjudicated": false
+}

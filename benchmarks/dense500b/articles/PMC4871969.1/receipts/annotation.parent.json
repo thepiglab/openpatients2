@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC4871969.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2eebc93a3e2f8a3d0479c815fc8f4e521c1a7fd8ddb589cef099fcff56b2bd31",
+  "annotation_sha256": "b8a1616fe74a2ad546975507046638e68952f6628310359e4ae78dfb16bb7949",
+  "reviewed_at": "2026-10-18T02:35:02.349233+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 174,
+  "patients_reviewed": 9,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed pupillary dilation and 30-degree line B-scan procedure facts (f010, f011) from all nine patients: the b00008 Methods sentences do not explicitly cover every patient (NO-COHORT-COPY ruling); repointed events and summaries.",
+    "Removed the segmentation method attribute and its b00008 quote from every baseline/minimal/maximum CRT cell for the same reason.",
+    "Patient 8 baseline subretinal fluid and intraretinal cysts kept with text_value present (caption states the findings without grading; a result is required).",
+    "Pixel rule (Figure 2 viewed and traced): Table 1 cells that differ from the plotted line set ambiguous/review_only with ambiguities: p1 (patient 4) minimal CRT 361 and day of maximal CRT; p3/p5/p6 (patients 1, 3, 5) day of maximal CRT; p7 (patient 6) minimal CRT, its day, maximum CRT and its day; p9 (patient 9) maximum CRT and its day. Chart-level differences (patient 1 minimal CRT, patient 8 minimal CRT/day) recorded as ambiguities only.",
+    "Added p1 ambiguity on the Figure 3 arrow on tile 19 versus the day-18 recurrence text (text facts kept).",
+    "Added relations p1-e02 before p1-e07 (posttreatment) and p2-e08 before p2-e09 (first day vs two-day follow-up, both quoted).",
+    "Updated article limitations (Methods sentences not copied, Figure 2 vs Table 1 differences, Figure 4 day-17 bar vs Results mean) and b00008 coverage note."
+  ],
+  "unresolved": [
+    "Roster numbering follows first mention of individual identity evidence: article patient 4 (Discussion) is p1, patient 8 (Figure 1 caption) is p2, then Table 1 rows in row order; labels keep the article patient numbers.",
+    "Table 1 prints no units; the text gives micrometres only for series-level mean CRT values and the figure axes, so table cell units are left null and no unit is added.",
+    "Table 1 does not define the first day of CRT reduction, day of minimal CRT, day of maximal CRT or Maximum CRT columns; for several patients Maximum CRT equals or is below Baseline CRT while the day of maximal CRT is 1 or equals the first day of CRT reduction. All cells are recorded literally and the inconsistencies are kept as ambiguities, not resolved.",
+    "The text and captions that name patient 4 and patient 8 are linked to Table 1 rows 4 and 8 only through the shared patient number.",
+    "Series-level statements are not copied to individuals: mean CRT values and P values, subgroup means by FA classification, the counts of four predominantly classic and five occult patients (not assigned to patients), the mean number of 27.8 OCT examinations, and the sentence that no ocular or systemic side effects developed during the follow-up period.",
+    "The reported mean difference of 206.1 μm does not equal the difference between the reported mean baseline and mean final CRT values; this series-level arithmetic mismatch is not resolved and not a patient fact.",
+    "Eligibility criteria (age of 50 years or more, previously untreated active CNV, central macular thickness over 250 μm, VA between 20/25 and 20/400, unremarkable past ocular history) are design criteria and are not recorded as patient facts; the unremarkable past ocular history is not stated for any individual patient.",
+    "Figure 2 daily CRT values exist only as plotted lines; no daily value is printed, so none is recorded as a fact (estimated chart readings stay in visual.json).",
+    "Which eye was the study eye is not stated; laterality is left unknown.",
+    "Methods sentences that do not explicitly cover every patient (pupillary dilation, 30-degree line B-scan with eye tracking, automated segmentation used to assess CRT, exclusion rule) are not copied to individual patients; daily SD-OCT is recorded because the Methods state data were collected daily from all patients.",
+    "Figure 2 plotted lines differ from several Table 1 cells (patient 4 minimal CRT; patient 6 minimal and maximum CRT and their days; patient 9 maximum CRT; day of maximal CRT for patients 1, 3, 4 and 5); those cells are review_only with ambiguities. Plotted values stay pixel content.",
+    "Figure 4 plots the day-17 mean bar at about 390, above the Results mean of 336.5 on day 17; both are series-level and no patient fact depends on them."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 174,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Every Table 1 cell checked against its row for all nine patients; all values match.",
+      "Table 1 prints no units; null units confirmed per no-added-units ruling.",
+      "Table internal inconsistencies (maximum equal to or below baseline, first-reduction day equal to day of maximum) are undefined-column ambiguities, not source conflicts: no second source statement gives a different value for the same attribute.",
+      "Patient 4 and 8 narrative/captions mapped to Table 1 rows by identical article patient numbers; Figure 2 baselines match Table 1 for all nine legend numbers.",
+      "Cohort statements copied only where the sentence says all/each/the patients or names all nine; side effects, means, classic/occult counts not copied."
+    ],
+    "residual_risks": [
+      "Figure 2 readings are visual estimates from a 654-pixel JPEG (about 2.4 micrometres per pixel).",
+      "Day-count convention and Maximum CRT definition in Table 1 remain undefined.",
+      "Age column recorded as age_at_presentation (study enrolment)."
+    ]
+  },
+  "physician_adjudicated": false
+}

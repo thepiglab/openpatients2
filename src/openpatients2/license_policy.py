@@ -17,6 +17,15 @@ PERMISSIVE_LICENSES = {'MIT', 'MIT-0', 'Apache-2.0', 'BSD-2-Clause',
                        'BSD-3-Clause', 'ISC', '0BSD', 'Unlicense'}
 ACCEPTED_LICENSES = CC_LICENSES | PERMISSIVE_LICENSES | {'PDM', 'Public domain worldwide'}
 ND_LICENSES = {'CC BY-ND', 'CC BY-NC-ND'}
+# Optional stricter policy (`permissive_only=True`): only CC0, CC BY, CC BY-SA and public
+# domain grants are accepted; NC/ND terms and software licenses are rejected. The default
+# policy (POLICY_VERSION) is unchanged; a decision made under this flag carries its own version.
+# /2 adds one narrow acceptance: an article-level CC BY license whose only other grant is the
+# BMC/Springer "CC0 waiver applies to the data made available in this article" sentence
+# (reason article_cc_by_with_cc0_data_waiver). Decisions from /1 are still recognized.
+PERMISSIVE_ONLY_POLICY_VERSION = 'article-adaptations-permissive-only/2'
+PERMISSIVE_ONLY_POLICY_VERSIONS = {'article-adaptations-permissive-only/1', PERMISSIVE_ONLY_POLICY_VERSION}
+PERMISSIVE_ONLY_LICENSES = {'CC0', 'CC BY', 'CC BY-SA', 'PDM', 'Public domain worldwide'}
 # These are absence-of-classification markers, not grants in their own right.
 UNKNOWN_CODES = {'', 'unknown', 'other', 'custom', 'non-cc', 'non cc', 'no-cc', 'none', 'n/a',
                  'public domain', 'public-domain', 'pd'}
@@ -32,6 +41,11 @@ URLS = re.compile(r'(?:https?://|www\.)[^\s<>"\']+|(?<![\w./])creativecommons\.o
 NONARTICLE = re.compile(r'\b(?:software|source code|code|datasets?|data sets?|figures?|images?|supplements?|supplementary material)\b', re.I)
 ARTICLE = re.compile(r'\b(?:this|the|entire)\s+(?:article|paper|work|publication)\b', re.I)
 WORLDWIDE_PD = re.compile(r'\b(?:this|the|entire)\s+(?:article|paper|work|publication)\s+is\s+(?:dedicated to|in)\s+the public domain\s+(?:worldwide|throughout the world)\b', re.I)
+CC0_URL = r'(?:https?://)?(?:www\.)?creativecommons\.org/publicdomain/zero/1\.0/?'
+# The publisher's data-only CC0 sentence, verbatim apart from whitespace and URL scheme. Nothing
+# looser (no other wording, no other waiver, no other scope) is treated as data-only.
+DATA_WAIVER = re.compile(rf'\s*The Creative Commons Public Domain Dedication waiver\s*\(\s*{CC0_URL}\s*\)\s*'
+    r'applies to the data made available in this article(?:,\s*unless otherwise stated(?:\s+in a credit line to the data)?)?\.', re.I)
 RESTRICTED = re.compile(r'\bno[\s-]*derivatives\b|\bcannot be changed\b|\ball rights reserved\b|\bnot (?:licensed|distributed|available) under\b|\b(?:additional|further) restrictions\b', re.I)
 
 
@@ -125,12 +139,66 @@ def _lane(code, version):
     return 'noncommercial_compatible'
 
 
-def license_decision(metadata: dict, statements: list[dict]) -> dict:
+def apply_permissive_only(decision: dict) -> dict:
+    """Restrict a default-policy decision to PERMISSIVE_ONLY_LICENSES (never loosens it)."""
+    out = {**decision, 'policy_version': PERMISSIVE_ONLY_POLICY_VERSION}
+    if out.get('allowed') and out.get('code') not in PERMISSIVE_ONLY_LICENSES:
+        out.update(allowed=False, outcome='rejected', reason='license_not_permissive_only', release_lane=None)
+    if out.get('code') is not None and out['code'] not in PERMISSIVE_ONLY_LICENSES:
+        out['metadata_fetch_allowed'] = False   # known NC/ND/software terms: skip the XML download
+    return out
+
+
+def _without_data_waiver(statement):
+    """The license statement minus its data-only CC0 sentence, or None when that narrow pattern is absent.
+
+    Requires exactly one DATA_WAIVER sentence, and that nothing else in the statement (text,
+    url or nested links) names CC0 or the public domain once that sentence is removed."""
+    if statement.get('type') != 'license':
+        return None
+    text = str(statement.get('text') or '')
+    matches = list(DATA_WAIVER.finditer(text))
+    if len(matches) != 1 or (license_identity(statement.get('url')) or {}).get('code') in {'CC0', 'PDM'}:
+        return None
+    stripped = {**statement, 'text': (text[:matches[0].start()] + text[matches[0].end():]).strip(),
+                'urls': [u for u in statement.get('urls', []) if (license_identity(u) or {}).get('code') != 'CC0']}
+    if any(r['code'] in {'CC0', 'PDM', 'Public domain worldwide'} for r in _statement_identities(stripped)) \
+            or re.search(r'public domain|publicdomain|\bCC[\s-]*0\b|waiver', stripped['text'], re.I):
+        return None
+    return stripped, matches[0][0].strip()
+
+
+def license_decision(metadata: dict, statements: list[dict], *, permissive_only: bool = False) -> dict:
     """Allow known adaptation grants; leave unknown/conflicting terms for review.
 
     allowed is the extraction gate. metadata_fetch_allowed is ONLY permission to
     retrieve bounded official OA XML to inspect its rights, not to export it.
+    permissive_only=True applies the stricter PERMISSIVE_ONLY policy on top, including its one
+    extra acceptance (article CC BY + data-only CC0 waiver). The default policy never applies it.
     """
+    decision = _decision(metadata, statements)
+    if not permissive_only:
+        return decision
+    decision = apply_permissive_only(decision)
+    if decision['allowed']:
+        return decision
+    waived = [_without_data_waiver(s) for s in statements]
+    if not any(waived):
+        return decision
+    alt = apply_permissive_only(_decision(metadata, [w[0] if w else s for w, s in zip(waived, statements)]))
+    # Only rescue an article whose remaining article-level grant is exactly CC BY.
+    if not (alt['allowed'] and alt['code'] == 'CC BY' and alt['statement_codes'] == ['CC BY']
+            and alt['reason'] == 'explicit_allowlist'):
+        return decision
+    return {**alt, 'reason': 'article_cc_by_with_cc0_data_waiver', 'statements': statements,
+            'license_evidence': decision['license_evidence'],
+            'data_waivers': [{'statement_index': i, 'code': 'CC0', 'version': '1.0', 'scope': 'data_made_available_in_article',
+                              'as_documented': w[1]} for i, w in enumerate(waived) if w],
+            'obligations': [*alt['obligations'], 'cc0_waiver_covers_data_only_not_article_text']}
+
+
+def _decision(metadata: dict, statements: list[dict]) -> dict:
+    """The default-policy decision (POLICY_VERSION)."""
     raw = metadata.get('license_code')
     meta = license_identity(raw)
     records, explicit, ambiguous_scope, restricted, compound = [], set(), False, False, False
@@ -205,7 +273,7 @@ def license_decision(metadata: dict, statements: list[dict]) -> dict:
     if code == 'Apache-2.0': obligations += ['identify_changes', 'retain_applicable_NOTICE_and_attributions']
     if code == 'BSD-3-Clause': obligations.append('no_endorsement')
     if code in CC_LICENSES | {'PDM'} and not version: obligations.append('resolve_version_before_release')
-    return {'policy_version':POLICY_VERSION, 'allowed':allowed, 'outcome':outcome, 'reason':reason,
+    decision = {'policy_version':POLICY_VERSION, 'allowed':allowed, 'outcome':outcome, 'reason':reason,
         'metadata_fetch_allowed':eligible_metadata and (not meta or meta['code'] not in ND_LICENSES),
         'code':code, 'version':version, 'versions':versions, 'jurisdictions':jurisdictions,
         'raw_code':raw, 'metadata_identity':meta, 'statements':statements,
@@ -214,13 +282,19 @@ def license_decision(metadata: dict, statements: list[dict]) -> dict:
         'basis':'metadata_and_article' if meta and explicit else 'metadata' if meta else 'article_permissions',
         'release_lane':_lane(code, version) if allowed else None, 'obligations':obligations,
         'notice':'Keep source terms, versions, jurisdiction, authors and changes; acceptance is not blanket relicensing. Asset exceptions are separate.'}
+    return decision
 
 
-def recheck_license(decision: dict) -> dict:
-    """Offline recheck; never rehabilitate a rejected/reviewed acquisition."""
+def recheck_license(decision: dict, *, permissive_only: bool | None = None) -> dict:
+    """Offline recheck; never rehabilitate a rejected/reviewed acquisition.
+
+    A decision made under the permissive-only policy is rechecked under it too
+    (permissive_only=None infers this from its policy_version)."""
     if not decision.get('allowed'):
         return decision
+    if permissive_only is None:
+        permissive_only = decision.get('policy_version') in PERMISSIVE_ONLY_POLICY_VERSIONS
     # raw_code=None is meaningful for grants recovered from JATS permissions.
     raw = decision.get('raw_code') if 'raw_code' in decision else decision.get('code')
     return license_decision({'license_code':raw, 'is_retracted':False, 'is_pmc_openaccess':True},
-                            decision.get('statements', []))
+                            decision.get('statements', []), permissive_only=permissive_only)

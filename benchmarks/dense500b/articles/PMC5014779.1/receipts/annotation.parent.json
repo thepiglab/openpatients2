@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC5014779.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "459f474fdc3b3c84ec8470e201b55877d25267aa03af8bc7e462b3d8fc28c399",
+  "annotation_sha256": "c0bad2ab3d35cd30514db0ac168419eeca21cd86693b5d6b1ef3d52b80dc7a24",
+  "reviewed_at": "2026-10-18T02:25:43.807084+00:00",
+  "source_segments_read": 14,
+  "facts_reviewed": 73,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added outcome fact p1-f073 (discharge from the hospital) and event p1-e28, quoting the predischarge echocardiography sentence.",
+    "Added relation p1-e12 before p1-e16: ventriculotomy placed along the planned incision line (plan then execution; both quotes).",
+    "Added relation p1-e15 before p1-e16: final incision location determined by epicardial echocardiography, then the ventriculotomy placed (result then action).",
+    "Added relation p1-e11 during p1-e27 from the literal 'Intraoperative' transesophageal echocardiography caption.",
+    "Added relation p1-e27 before p1-e26: no recurrence to date after complete resection ('re-' order word, quote of both sentences).",
+    "Added relation p1-e24 during p1-e25: 6 months after the operation lies within the 24 months since the operation (two stated times from the same anchor, both quoted).",
+    "Added relation p1-e23 before p1-e28 from 'prior to discharge from the hospital'.",
+    "Cited p1-f073 in the outcome summary claim."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected in this file; the two figures are inspected from pixels in the separate visual submission.",
+    "The tumor size is 16 mm (transthoracic echocardiography), 20 mm (computed tomography) and 18 mm (direct visualization); the three values are kept as separate measurements, not as a source conflict.",
+    "The stalk is called very short, short, extremely short and short and wide in different sentences; each descriptor is kept in its own observation.",
+    "The stalk, attachment, left ventricular diameter and ejection fraction sentences of the case presentation name no modality and no time, so none is assigned.",
+    "The echocardiography that detected the mass incidentally is not stated to be the same examination as the later echocardiography; they are kept separate, and the cholecystectomy status is not stated.",
+    "The transaortic and transmitral approaches were considered inadequate or examined; the source gives no declined or cancelled status, so they are review_only.",
+    "Operative steps carry no stated times; only the words \"then\" and \"preoperatively\" and the postoperative time points order events.",
+    "No recurrence is stated both \"to date\" and \"in the 24 months since the operation\"; the two statements are not identified as the same follow-up.",
+    "The statement that the method provided a good guide without being complicated is an authors' evaluation of the technique and is not recorded as a patient fact."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 14,
+    "facts_reviewed": 73,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single 66-year-old man; all dimensions (16, 20, 18 mm tumor; LV 52/30, 50/26, 51/30 mm; EF 80, 85, 75 %; aortic annulus 21 mm; 3-cm ventriculotomy; 5 mm distance; >5 mm margins) checked literally against the text.",
+      "Discussed transaortic, transmitral, superior septal and Dubost approaches were considered for this patient and rejected; kept review_only with action unknown, never performed or planned.",
+      "Cholecystectomy status is not stated; kept review_only with action unknown.",
+      "Case-presentation stalk, attachment, LV diameter and EF sentences name no modality; no method is assigned (the TTE sentence does not scope them).",
+      "Operative margin merged with the Fig 2 caption because the text cites Fig. 2; the histopathology margin stays separate; 'to date' and '24 months' recurrence statements stay separate.",
+      "Fig 1 shows a burned-in exam date and time stamp; per orchestrator precedent it should be flagged as direct_identifiers in the agent-owned privacy sidecar."
+    ],
+    "residual_risks": [
+      "Ventriculotomy before closure is an implied-necessary order rather than an explicit order word.",
+      "The order between the discharge echocardiography and the 6-month echocardiography is not stated literally and is left unlinked.",
+      "Privacy sidecar still lists timestamps_or_device_text for Fig 1 pending the annotator's change."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -6,8 +6,8 @@ import re
 from pathlib import PurePosixPath
 from urllib.parse import urlparse
 
-from .pmc_media import (XLINK, child, local_name, media_manifest, metadata_flag,
-                        metadata_identifiers, parse_figures, parsed_xml, xml_text,
+from .pmc_media import (XLINK, caption_parts, caption_text, child, local_name, media_manifest,
+                        metadata_flag, metadata_identifiers, parse_figures, parsed_xml, xml_text,
                         _match_graphic)
 from .jats_links import cross_references, bibliography, marked_text
 
@@ -81,7 +81,7 @@ def parse_article(xml: str, metadata: dict, retrieval: dict | None = None) -> di
             return
         parsed_tables.add(id(node))
         label = _clean(child(node, 'label'))
-        caption = _clean(child(node, 'caption'))
+        caption = caption_text(node, _clean) or ''
         headers = []
         group_heading = None
         thead_rows = {id(row) for h in node.iter() if local_name(h.tag) == 'thead'
@@ -157,20 +157,22 @@ def parse_article(xml: str, metadata: dict, retrieval: dict | None = None) -> di
         for node in back:
             if local_name(node.tag) in {'app-group', 'app', 'sec'}:
                 visit(node, ['Appendix'])
+    def notation(nodes):
+        return any(local_name(x.tag) in {'sup','sub','msup','msub'} for n in nodes for x in n.iter())
     for fig in figures['figures']:
         fig_node = next((x for x in article.iter() if local_name(x.tag) in {'fig', 'fig-group'}
                          and x.get('id') == fig['figure_id']), None)
         if fig_node is not None:
-            for key, tag in (('caption','caption'),('alt_text','alt-text')):
-                node = child(fig_node,tag)
-                if node is not None and any(local_name(x.tag) in {'sup','sub','msup','msub'} for x in node.iter()):
-                    fig[key] = _clean(node)
+            if notation(caption_parts(fig_node)):
+                fig['caption'] = caption_text(fig_node, _clean)
+            node = child(fig_node,'alt-text')
+            if node is not None and notation([node]):
+                fig['alt_text'] = _clean(node)
         if fig.get('group_id'):
             group = next((x for x in article.iter() if local_name(x.tag) == 'fig-group'
                           and x.get('id') == fig['group_id']), None)
-            node = child(group,'caption') if group is not None else None
-            if node is not None and any(local_name(x.tag) in {'sup','sub','msup','msub'} for x in node.iter()):
-                fig['group_caption'] = _clean(node)
+            if group is not None and notation(caption_parts(group)):
+                fig['group_caption'] = caption_text(group, _clean)
         text = '\n'.join(x for x in [fig['label'], fig['group_caption'], fig['caption'], fig['alt_text']] if x)
         add('figure_caption', text, 'Figures', fig_node if fig_node is not None else article,
             figure_id=fig['figure_key'], cross_references=cross_references(fig_node) if fig_node is not None else [],
@@ -208,6 +210,18 @@ def parse_article(xml: str, metadata: dict, retrieval: dict | None = None) -> di
             x['ref_type'] == 'table' and table_id in x['target_ids']
             for x in s.get('cross_references', []))]
         fig['source_segment_ids'] = list(dict.fromkeys([*fig.get('source_segment_ids', []), *linked]))
+        # A table's raster image has no caption of its own; the containing
+        # table-wrap's label and caption describe it. Its table segments already
+        # carry that text, so cite the first one rather than adding a duplicate.
+        if not fig.get('caption'):
+            table_node = next((x for x in article.iter() if local_name(x.tag) == 'table-wrap'
+                               and x.get('id') == table_id), None)
+            caption = caption_text(table_node, _clean) if table_node is not None else None
+            if caption:
+                fig['label'] = fig.get('label') or _clean(child(table_node, 'label')) or None
+                fig['caption'] = caption
+                fig['caption_segment_ids'] = [s['segment_id'] for s in segments if s.get('table_id') == table_id
+                                              and s['kind'] in {'table', 'table_row'} and caption in s['text']][:1]
     supplements = []
     for node in article.iter():
         tag = local_name(node.tag)

@@ -93,6 +93,45 @@ function meter(label, n, of, href) {
   return el;
 }
 
+/* Themes: one card per group; each lane is a bar split into the original 500 and batch 2, plus its completion.
+   Completion is the export checklist's when the server has one, else the full-schema review status. */
+function themes(all, scheme) {
+  const done = r => r.completed ?? r.status === 'schema_reviewed';
+  const original = r => r.reference_set !== 'dense500b';
+  const tally = rows => ({n: rows.length, old: rows.filter(original).length, done: rows.filter(done).length});
+  const lanes = {}, tagged = {};
+  for (const r of all) {
+    if (!r.theme) continue;
+    (lanes[r.theme.lane] ||= []).push(r);
+    for (const t of r.theme.tags || []) if (t !== r.theme.lane) tagged[t] = (tagged[t] || 0) + 1;
+  }
+  const max = Math.max(1, ...Object.values(lanes).map(rows => rows.length));
+  const key = h('p', 'theme-key muted', h('span', 'swatch c1'), 'Original 500', h('span', 'swatch c2'), 'Batch 2 (750)',
+    h('span', 'swatch done'), 'Completed');
+  const cards = scheme.map(g => {
+    const rows = g.lanes.flatMap(l => lanes[l.lane] || []);
+    if (!rows.length) return null;
+    const t = tally(rows);
+    return h('div', 'theme-card',
+      h('a', {class: 'theme-head', href: view({theme: g.group}), title: g.description},
+        h('span', 'theme-name', g.name), h('span', 'theme-n', fmt(t.n)),
+        h('span', 'theme-sub', `${fmt(t.old)} original · ${fmt(t.n - t.old)} batch 2 · ${pct(t.done, t.n)} completed`)),
+      g.lanes.filter(l => lanes[l.lane]).map(l => {
+        const x = tally(lanes[l.lane]);
+        const fill = (cls, w) => { const f = h('span', cls); f.dataset.w = w; return f; };
+        const row = h('a', {class: 'theme-lane', href: view({theme: l.lane})},
+          h('span', 'theme-lane-name', l.name),
+          h('span', 'theme-track', fill('theme-seg c1', x.old / max), fill('theme-seg c2', (x.n - x.old) / max)),
+          h('span', 'theme-lane-n', fmt(x.n)),
+          h('span', 'theme-done', fill('theme-done-fill', x.done / x.n)));
+        tip(row, `${l.name}: ${fmt(x.n)} articles (${fmt(x.old)} original, ${fmt(x.n - x.old)} batch 2) · ` +
+          `${fmt(x.done)} completed · ${fmt(tagged[l.lane] || 0)} more carry it as a secondary tag`);
+        return row;
+      }));
+  });
+  return h('div', null, key, h('div', 'theme-grid', cards));
+}
+
 function stat(id, label, value, sub, href) {
   $(id).replaceChildren(h(href ? 'a' : 'div', {class: 'stat-body', href},
     h('span', 'stat-label', label), h('span', 'stat-value', value), sub && h('span', 'stat-sub', sub)));
@@ -121,6 +160,8 @@ function render(c) {
   stat('t-reviewed', 'Reviewed records', fmt(reviewed.length), `${pct(reviewed.length, all.length)} of articles`, view({status: 'schema_reviewed'}));
   stat('t-patients', 'Patients', fmt(patients), 'individual records');
   stat('t-facts', 'Extracted facts', fmt(factTotal), `${fmt(sum(reviewed, r => r.event_count))} timeline events`);
+
+  if (c.themes) $('c-themes').replaceChildren(themes(all, c.themes));
 
   const source = count(all, r => r.status === 'source_reviewed');
   $('c-status').replaceChildren(donut([

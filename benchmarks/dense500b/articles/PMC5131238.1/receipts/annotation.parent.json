@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC5131238.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2b031dbd5708f151dba9f4b17800bc10bab01b09417375999c6a6152d9f400a8",
+  "annotation_sha256": "2c2eb3dc7b8a68071ccd6510ec4e37dc26d87a19b38ffc777c9a7ff55248da5a",
+  "reviewed_at": "2026-10-18T02:37:13.548596+00:00",
+  "source_segments_read": 63,
+  "facts_reviewed": 68,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed the regimen field from rehydration (p1-f031) and empirical antibiotic (p1-f032): it held one shared phrase naming both treatments, not a dosing regimen.",
+    "Event p1-e17 description no longer says \"Second\" (an order the source does not state); now names the reported WBC and neutrophil values.",
+    "Added 11 literally supported relations: past episodes before the present admission (e12>e01), admission X-ray same_time admission (e02=e01), initial condition therefore surgeon exam (e01>e05), labs \"still within normal limits\" after the admission labs (e03>e09), admission before the same-admission colonoscopy (e01>e13), pain reoccurred then increased progressively (e14>e15), admission X-ray before the \"new\" X-ray (e02>e18), colonoscopy before mild postcolonoscopy symptoms (e13>e22), intraoperative findings during the laparotomy (e25 during e23), colonoscopy before the intraoperative postcolonoscopy condition (e13>e25), in-hospital stable course before discharge (e28>e30)."
+  ],
+  "unresolved": [
+    "Table 1 holds 38 rows (37 published literature cases plus the authors' own case) without labelling the index row; no Table 1 cell is recorded as an index-patient fact (see the patient ambiguity).",
+    "Discussion cohort statistics (38 patients, sex and age summaries, treatment and condition counts) are aggregate literature-review content and are not copied to the individual.",
+    "Source conflict: the Discussion states no symptoms prior to the procedure while the abstract and case text describe abdominal pain before the colonoscopy; both sides are review_only.",
+    "Whether the general practitioners' rehydration and empirical antibiotic administration were actually given is not stated beyond considered necessary; action recorded as unknown.",
+    "The WBC and neutrophil values in the acute abdomen sentence have no stated sampling time; the neutrophil percentage carries no source classification.",
+    "Authors' etiologic statements (fecalith, overinsufflation, scope trauma, 20-hour interval, postcolonoscopy complication) are hedged hypotheses and are recorded as possible or review_only, not as established causes.",
+    "Annotation figures keep caption-level status not_inspected; the five JPEGs were inspected in the separate visual target.",
+    "The article lists no supplementary material."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 63,
+    "facts_reviewed": 68,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index case (60-year-old woman); Table 1 literature rows excluded; the unlabelled last Table 1 row stays an ambiguity only (no mapping by matching numbers).",
+      "Discussion \"no symptoms prior to the procedure\" vs abstract nontypical pain is a source conflict quarantined on both sides (f015, f016); admission pain f014 kept included.",
+      "Rehydration and empirical antibiotics only \"considered necessary\": action unknown is correct.",
+      "Same-clause 24 h time on flatulence and absent fever accepted; WBC 9.02 normal flag is the source classification (\"without white blood cell count disturbance\"); colonoscopy no-inflammation caption flagged negative accepted.",
+      "Near-duplicates checked under ONE-STATEMENT: abstract RLQ pain, three normal-laboratory statements and two fever statements are distinct statements or distinct time points; kept.",
+      "Hedged etiology (fecalith, overinsufflation or scope trauma, early appendicitis exclusion) correctly review_only.",
+      "All five figures viewed at full resolution with zoomed crops; Fig 3(a) is an erect chest film showing subdiaphragmatic gas under the abdominal X-ray caption, a caption-scope mismatch, not a PMC asset swap; panel letters (a)/(b) are printed on the images."
+    ],
+    "residual_risks": [
+      "WBC 9.02 and neutrophils 78.6% are left untimed although they sit in the 24 h acute-abdomen sentence; absent fever carries that time."
+    ]
+  },
+  "physician_adjudicated": false
+}

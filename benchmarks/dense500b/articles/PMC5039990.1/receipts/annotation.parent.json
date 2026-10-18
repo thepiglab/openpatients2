@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC5039990.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0aaa2a985371fb3b89d6ba70d9bfef9cfdc0ed25f5db987b422f1a4340d1dc9c",
+  "annotation_sha256": "9aec8717eb3c5e9f57c01602928906d828a904a80c9064291b6090d60b237762",
+  "reviewed_at": "2026-10-18T02:34:13.280608+00:00",
+  "source_segments_read": 25,
+  "facts_reviewed": 191,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Creatinine 8.6 mg/dL (text, on the day of admission; p1-f053) and 10.5 (Table 1 Day 1, days following paraquat ingestion; p1-f104) restored from ambiguous/review_only to supported/include: the source does not equate Day 1 with the admission day, so they are two literal time points, not one measurement in conflict; the ambiguity and article limitation were rewritten accordingly.",
+    "Unmerged the Overall-vital-signs sentence from the pulse sentence (p1-f042) and the On-arrival blood pressure (p1-f043): matching numbers alone do not make them the same measurement, and the normal flag no longer transfers to the timed On-arrival value. Added p1-f190 (pulse 71 beats/min, flag normal) and p1-f191 (blood pressure 90/60 mm Hg, flag normal) from the Overall sentence, consistent with the already separate p1-f044/p1-f045; linked them to event p1-e08 and the vital-signs ambiguity.",
+    "Added four supported relations: treatments during admission (p1-e16), hemodialysis started early after the admission (p1-e21) and the day-of-admission urea/creatinine (p1-e14) each before the discharge (p1-e24) (in-hospital care before the discharge ending the stay); oral lesions on examination (p1-e08) before the nystatin prescribed for the oral lesions (p1-e17) (finding before the action about it)."
+  ],
+  "unresolved": [
+    "Figure captions in source.json are only the labels Figure 1 to Figure 3. The original JATS (raw.xml) holds a short <statement> for each figure that was not captured as a segment, so it cannot be quoted as evidence: Figure 1 \"Oral ulcerations and edematous lip.\"; Figure 2 \"X-ray chest posteroanterior (PA) view showing mild bilateral patchy consolidation especially in hilum.\" (the case text says the initial chest x-ray was normal); Figure 3 \"CT-scan of the thorax without contrast day 2 following paraquat poisoning showed sub- segmental collapses in the right costophrenic area.\" None of these is recorded as a fact.",
+    "Table 1 prints no units, uses decimal commas in many cells (kept as printed text with no numeric value) and does not expand the NA and K headers; every cell is recorded with its Day label and the caption anchor \"paraquat ingestion\".",
+    "The Table 1 caption anchors Day 1 to Day 9 to paraquat ingestion, while the text places referral 7 days after ingestion and gives admission and discharge values that match Day 1 BUN and Day 9 values; this is not reconciled (see ambiguities).",
+    "Creatinine on the day of admission is 8.6 in the text versus 10.5 in Table 1 Day 1; the source does not equate Day 1 with the day of admission, so both are kept as separate time points (see ambiguities). The Table 1 Day 5 BUN printed as 3,4 is quarantined as a probable print artefact.",
+    "Source conflict: the case text says an unknown quantity of a liquid was ingested while the Discussion says a low dose of paraquat was ingested; both quantity facts are review_only.",
+    "Several case-text sentences are garbled (for example \"auscultationl.The\", \"three cessation of dialysis\", the verbless Ventolin and becotide treatments); recorded literally without repair.",
+    "Visual status of figures is not_inspected in this file; the three images were inspected in visual.json."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 25,
+    "facts_reviewed": 191,
+    "figures_viewed": 3,
+    "key_findings": [
+      "All 90 Table 1 cells checked programmatically and by eye against segments b00006-b00014: value text, Day label, caption anchor, no added units, decimal-comma cells kept as text without numeric value.",
+      "Table 1 Day labels stay anchored literally to paraquat ingestion; text admission and discharge values (urea 212, BUN 19, Cr 1.3, Cr 8.6) are not merged with Day 1 or Day 9 cells because the source never says they are the same measurement.",
+      "Day 5 BUN printed 3,4 kept as printed and quarantined as an ambiguous probable print artefact (ambiguity, not conflict).",
+      "Unknown quantity (case text) versus low dose (Discussion) kept as a source conflict on the quantity attribute only, both sides review_only.",
+      "Verbless Ventolin nebulizer and becotide spray accepted as administered (listed as other treatments following admission alongside received antibiotics) with an ambiguity; multi-target comprehensive therapy kept as a medication regimen with an ambiguity that it is not equated with the Qilu scheme.",
+      "Both dialysis facts and both referral facts left unmerged with ambiguities; every original relation's full evidence list re-read and each states the order (ingestion anchors, Day column labels, because/after wording).",
+      "Figures viewed at full resolution: F1 lower-face oral photograph, F2 frontal chest radiograph, F3 photographed four-slice chest CT montage with burned-in patient text; visual, figure-EHR, privacy and measurement-series sidecars consistent with pixels and Table 1."
+    ],
+    "residual_risks": [
+      "Figure captions live in JATS <statement> elements not captured in source.json; they are only noted as a limitation and the Figure 2 statement (patchy consolidation) differs from the text's normal initial chest x-ray.",
+      "Table 1 timing (days following ingestion) is internally inconsistent with referral 7 days after ingestion; a reader may still assume Day 1 is the admission day.",
+      "Ventolin/becotide administration rests on a garbled verbless sentence."
+    ]
+  },
+  "physician_adjudicated": false
+}

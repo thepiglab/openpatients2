@@ -1,0 +1,52 @@
+{
+  "article_id": "PMC5558298.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9abf267ad75313c8ce5967f979ec4f340149ad93165770e5ca4c792d95db8016",
+  "annotation_sha256": "09247619a1ca0266c9aef8b7305ad16f872114d5be982936f188a555caa98373",
+  "reviewed_at": "2026-10-18T02:22:45.779711+00:00",
+  "source_segments_read": 9,
+  "facts_reviewed": 54,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added p1-f055 Ectopic pregnancy (conditions, confirmed) from the abstract sentence about the presented case (b00001); laterality left unknown.",
+    "p1-f008 (first MTX dose) given indication \"ectopic pregnancy\" with the b00001 quote as its own evidence; route still null.",
+    "p1-f036 calcium folinate given route \"infusion\" from its own evidence.",
+    "Removed p1-f047 glucarpidase assertion=absent: \"not available in Turkey\" states availability, not non-administration; recorded as an ambiguity instead.",
+    "Ectopic/indication ambiguity and limitation rewritten; summary claim 1 now cites p1-f055.",
+    "Added relations e09->e10 (\"Despite the supplementary treatment ... continued\"), e10->e11 (persisting high MTX -> plasmapheresis for lowering MTX levels), e06->e13 and e11->e13 (in-stay care -> discharge ending the stay); e11->e12 evidence gained \"regressed with plasmapheresis\"."
+  ],
+  "unresolved": [
+    "Table 1 (Complete blood count values) is an image-only table; its printed values (including platelet counts and day 1 to day 10 rows) are pixel content in visual.json and are not typed facts.",
+    "The figure assets bound to Figure 1 and Figure 2 appear swapped relative to their captions; attribution of the pixels to the captions is unresolved.",
+    "The ectopic pregnancy diagnosis and methotrexate indication are stated only in the abstract sentence about the presented case, not in the case paragraph.",
+    "It is not stated whether the first admission sentence describes the first admission or the readmission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 9,
+    "facts_reviewed": 54,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index case; every text lab (beta-hCG 2279, 2304, 91; Hb 6.4, 6.2; WBC 2000, 1600; creatinine 1.76; MTX >2 picograms/L), both MTX doses, blood products (4 and 6 units), discharge/readmission and 18-day stay with one week ICU captured literally.",
+      "Table 1 is a JATS graphic inside table-wrap t1 (no XML cells); its 24 printed cells stay in visual.json only; the text Hb/WBC values match the first two rows.",
+      "Figure assets g2/g3 bound to Figure 1/2 show the mouth and the chest rash respectively, the reverse of the captions; visual rows describe the pixels with unresolved attribution."
+    ],
+    "residual_risks": [
+      "Whether the opening admission sentence describes the first admission or the readmission is unresolved; \"the second day\" readmission anchor is unnamed.",
+      "Creatinine 1.76 mg/dL unflagged against \"no renal insufficiency\" kept as an ambiguity."
+    ]
+  },
+  "physician_adjudicated": false
+}

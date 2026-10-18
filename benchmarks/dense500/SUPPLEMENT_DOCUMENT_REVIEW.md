@@ -59,7 +59,7 @@ op2 dense supplement_assets extract benchmarks/dense500 --article ARTICLE --supp
 
 ## Video supplements
 
-`op2 dense supplement_review` has no video contract (it reviews PDF pages and image pixels). For a source-listed video file (MP4, MOV, ...) the dual-signed supplement manifest (`op2 dense supplement_manifest_review`, `dense-supplement-manifest/1`) is the content review; no extra sidecar and no schema change is needed. The manifest row satisfies `supplement_review_or_no_supplements` (`openpatients2.supplement_manifest.manifest_gate_supplements`, basis `manifest_video_frames_sampled`) only when all of the following hold:
+`op2 dense supplement_review` has no contract for a standalone video (video members of a ZIP are reviewed as sampled frames by the composite path below). For a source-listed video file (MP4, MOV, ...) the dual-signed supplement manifest (`op2 dense supplement_manifest_review`, `dense-supplement-manifest/1`) is the content review; no extra sidecar and no schema change is needed. The manifest row satisfies `supplement_review_or_no_supplements` (`openpatients2.supplement_manifest.manifest_gate_supplements`, basis `manifest_video_frames_sampled`) only when all of the following hold:
 
 - machine block: `download_status: downloaded`, `detected_type: video`, `inspection_status: peeked` (ffprobe duration/frame count read from the cached file);
 - review: `content_class: video`, `classification_basis: full_content`, meaning both reviewers rendered and personally viewed sampled frames (e.g. contact sheets at a fixed interval across the whole duration, plus full-resolution frames where detail matters);
@@ -70,7 +70,7 @@ Patient scope, ownership evidence and `ehr_includable`/`ehr_modality: video` fol
 
 **External-link media.** A supplement declared only as an external link (YouTube etc.) has no fetchable PMC asset: acquisition records `download_status: no_declared_asset` (or `rejected_host`). Record it honestly in the manifest: `classification_basis: caption_and_filename_only`, `ehr_includable: false`, and a limitation saying the media was not viewed. It is never a content review. Under the default `UNAVAILABLE_MEDIA_POLICY='complete_flagged'` in `src/openpatients2/dense/export.py` (the same policy applies to figures recorded `status: unavailable`), the dual-signed row satisfies the gate with basis `manifest_external_media_unavailable`. The article completes, flagged: the checklist lists the supplement in `unavailable_media` (and `unavailable_external_supplement_ids`), the inventory `review_status` is `external_media_unavailable`, `content_inspected` stays false, and the unified record sets `media_available: false` and `content_reviewed: false`. `UNAVAILABLE_MEDIA_POLICY='block'` keeps such articles incomplete.
 
-## Word-processor supplements (DOCX/DOC/RTF/ODT, or such members of a ZIP)
+## Word-processor supplements (DOCX/DOC/RTF/ODT/PPTX/ODP, or such members of a ZIP)
 
 Format `dense-supplemental-text-document-reference/1` (Pydantic `TextDocumentTarget` in `src/openpatients2/dense/supplement_review.py`). It is reviewed like a PDF, but the unit of inspection is a literal **text unit** instead of a rendered page. Text is extracted offline by `openpatients2.document_text`, using the shipped firecrawl-anydoc structured model (`to_document`, Inline.text runs only). Hosted OCR and Markdown output are disabled in the worker, and nothing is uploaded. There is no lossy fallback: a file anydoc cannot read cannot be completed by this path.
 
@@ -107,4 +107,83 @@ op2 dense supplement_review benchmarks/dense500 --article ARTICLE --supplement S
 - **ZIP archives.** The `archive` block keeps the declared ZIP. All word-processor members must be reviewed; any other member makes the review `partial`. Receipts bind `archive_sha256`.
 - **Receipts and export.** Receipts have status `source_and_document_text_reviewed`. Export reports `agent_and_parent_source_and_document_text_reviewed`, and the supplement satisfies `supplement_review_or_no_supplements`.
 - **Runtime pipeline.** It reads the same text: `ehr_tasks.load_transcriptions` and `measurement_series_review.reviewed_transcriptions` offer every literal unit under the same `A<asset>-U<unit>` ids (`openpatients2.document_text.reviewed_text`). Local models and measurement series can therefore cite the reviewed units.
+- **PPTX/ODP** are text documents too (`extract-text`). PPTX units are cross-checked against the slides' `a:t` text (`verified_against_pptx_xml`). Slide boundaries are not units: open the deck when slide context matters.
 
+## Images embedded in DOCX/PPTX (and XLSX/ODF)
+
+Text units never cover pixels. `extract-text` (and `extract-members`) also inventory every embedded media part (`word/media/*`, `ppt/media/*`, `xl/media/*`, ODF `Pictures/*`). The exact part bytes are copied into the cache, and each part becomes one `embedded_images` entry on its asset: `image` (1..n), `part`, pseudo-URL `ASSET_URL#part=PART`, SHA256, bytes, path, `media_type`, `preview_path`/`preview_sha256` (an offline `sips` PNG for TIFF/BMP), and `review`.
+
+- **Complete coverage.** Every embedded image needs a `review`, otherwise the sidecar stays `partial`. EMF/WMF/SVG or unknown parts have no raster view, so they keep the review partial.
+- **Review shape** (`ImageReview`). It uses the supplemental image contract's semantics:
+  - `inspection_method: viewed_pixels`;
+  - `visual`, a `FigureVisuals` object with `figure_id` set to the supplement id. Panels carry pixel cues, and citations must be literal article quotes;
+  - `privacy`, exactly one `PanelFlags` per panel;
+  - the page-review fields (contents, clinical relevance, patient IDs, rights, limitations);
+  - `ownership_evidence`, required whenever `patient_ids` is non-empty: a literal article segment quote or a supplement transcription.
+- **Clinical data.** Table panels, clinical charts with readings, and any `clinical_data`/`mixed` image need `clinical_data` transcriptions with `asset_url` = the part pseudo-URL, the image SHA256, `page: null`, an inspected `panel` and a non-empty `visual_cue`.
+- **Legacy sidecars.** A sidecar drafted before images were inventoried has no `embedded_images` key. Signing re-reads the package and refuses while it embeds any image: re-run `extract-text`, then inspect every image.
+- **Status.** Receipts become `source_and_document_text_and_images_reviewed` (export: `agent_and_parent_...`). A document without images keeps `source_and_document_text_reviewed`.
+
+```sh
+op2 dense supplement_assets extract-text benchmarks/dense500 --article ARTICLE --supplement SID   # units + embedded_images
+# view each embedded_images[].path (or preview_path), fill blocks and every embedded_images[].review, then validate/sign as above
+```
+
+### Videos embedded in DOCX/PPTX/ODF (`embedded_videos`)
+
+A media part whose bytes are a video (MP4/MOV/M4V/AVI/MKV/WebM/MPEG by magic bytes, e.g. `ppt/media/media1.mp4`) is not an image row. It goes into a separate `embedded_videos` list on the same asset. Each entry has `video` (1..n), `part`, pseudo-URL `ASSET_URL#part=PART`, SHA256, bytes and the path of the exact part bytes. It also carries the machine fields of a composite `video` member: ffprobe `probe`, fixed-interval `sampling.frames` (PNG paths, SHA256), `content_inspected: sampled_frames`, `continuous_motion_inspected: false`, `audio_inspected: false` and pre-filled `limitations`. A poster image of the clip stays an ordinary `embedded_images` row.
+
+- **Sampling.** `extract-text` and `extract-members` take `--every S` / `--max-frames N` (default every 2 s, 60 frames). Pass a small `--every` for short clips.
+- **Review.** `frame_blocks` must cover every sampled frame, in order, exactly as for a composite video member: whole-frame privacy flags (`panel: null`), ownership evidence for attributed blocks. Transcriptions cite the part pseudo-URL and the frame index in `page`, with `panel: null` and a visual cue.
+- **Coverage.** Validation re-reads the package. The image and video inventories must equal its non-video and video parts. It re-probes each clip and re-hashes every frame. Dropping a clip, thinning its frames or leaving its `frame_blocks` short fails.
+- **Legacy sidecars.** A sidecar without the `embedded_videos` key lists video parts as unviewable `embedded_images` rows. It still validates as `partial` but can never complete: re-run the extraction.
+- **Status.** The receipt status adds `_and_sampled_video_frames`, e.g. `source_and_document_text_and_images_and_sampled_video_frames_reviewed`, and the export sets `video_frames_sampled: true`. Continuous motion and audio are never claimed as reviewed.
+
+## Mixed ZIPs, image/video/XLSX members, standalone XLSX (composite)
+
+Format `dense-supplemental-composite-reference/1` (Pydantic `CompositeSupplementTarget`) covers one source-listed ZIP whose members may be of different kinds. It also covers directly declared XLSX (or other non-video) assets. A ZIP of only PDFs or only word-processor files may still use the older contracts.
+
+```sh
+op2 dense supplement_assets acquire benchmarks/dense500 --article ARTICLE
+op2 dense supplement_assets extract-members benchmarks/dense500 --article ARTICLE --supplement SID [--every 0.1] [--max-frames 60]
+# copy SID.document.draft.json to SID.document.json, review every member, then:
+op2 dense supplement_review benchmarks/dense500 --article ARTICLE --supplement SID                      # validate (dry run)
+op2 dense supplement_review benchmarks/dense500 --article ARTICLE --supplement SID --role agent --reviewer "Claude Sonnet 5.5 annotator" --notes "<what you inspected>"
+```
+
+**Member classification.** `extract-members` classifies every non-junk member by its bytes, using magic bytes and then the OOXML parts. An extensionless DOCX is therefore `text`/`docx`. It writes supported members under hashed names into the capped cache. `archive.members` binds `[member, kind, detected_type]`. Signing re-hashes the ZIP and every member and re-classifies them. Any `unsupported` member (for example CSV, plain text, DICOM, nested ZIP, or above the 250 MB member cap) keeps the review `partial`. Each `assets` entry has a `kind`, with its own exact-coverage rule:
+
+| kind | machine fields | coverage that must be complete |
+|---|---|---|
+| `pdf` | pdfinfo `page_count` | one `pages` review per page (PDF rules) |
+| `text` | units, extraction, `embedded_images`, `embedded_videos` | `blocks` cover every unit, every embedded image has a review, and every embedded video's `frame_blocks` cover its sampled frames |
+| `image` | `media_type`, preview | one `review` (ImageReview, as above) |
+| `video` | ffprobe `probe`, `sampling.frames` (paths, SHA256) | `frame_blocks` cover every sampled frame, in order |
+| `spreadsheet` | `extraction.sheets` inventory, `embedded_images` | one `sheet_reviews` entry per sheet, and its row blocks cover every non-empty row |
+
+**Video members (sampled frames only).** Frames are sampled with the `op2 dense video_frames` machinery (`probe`, `sample`). They are taken at fixed `--every` intervals from 0 to two frame intervals before the end, spread evenly when `--max-frames` would truncate. The default is every 2 s: pass a small `--every` (e.g. `0.1`) for sub-second clips. Validation recomputes the timestamps from the probe, so a thinned or cherry-picked frame list fails. The part records:
+
+- `content_inspected: sampled_frames`;
+- `continuous_motion_inspected: false` and `audio_inspected: false`;
+- non-empty `limitations` that state the sampling scope (the draft pre-fills this).
+
+Each frame block is a review of the viewed frames, with a whole-frame privacy flag set (`panel: null`) and ownership evidence. Transcriptions cite the frame index in `page`, with `panel: null` and a visual cue. The status names the sampling: e.g. `source_and_sampled_video_frames_reviewed`. The export inventory sets `video_frames_sampled: true`. Frames between samples, continuous motion and audio are never claimed as reviewed.
+
+**Spreadsheets** (`XlsxReader` in `openpatients2.supplement_peek`, streaming, no formula evaluation). Cell text is the stored literal value: the cached `<v>` of a formula, a shared or inline string, or an unformatted number (dates stay serial numbers).
+
+- **Inventory.** The draft binds a per-sheet inventory: name, state, non-empty row count, `row_ranges` of non-empty rows, `max_column`, `cell_count` and `cells_sha256`. `extraction.sheets_sha256` binds the whole inventory. Each sheet's rows are dumped as JSONL (`row_dump`, `{"row": n, "cells": {"A": ...}}`) for reading.
+- **Hard cap.** A sheet above 250,000 non-empty rows or 5,000,000 cells (or with a missing or oversized part) is `truncated: true`. It can only be reviewed as `partial`, never silently cut.
+- **Row blocks.** Blocks are ordered, non-overlapping `first_row..last_row` runs. Each contains at least one non-empty row, and together they cover every non-empty row of the sheet. Use `inspection_method: every_row_read`. `homogeneous_block_summary` is allowed for large uniform runs (for example a variant list), but its `limitations` must state what was summarized. Attributed blocks need `ownership_evidence`.
+- **Transcriptions** cite `page` = 1-based sheet index, `table_label` = sheet name, `cell` = A1 reference (e.g. `C2`) and `panel: null`. With the file present, the text must occur literally in that parsed cell, and validation and signing re-parse the workbook.
+- **Clinical coverage.** Every clinical/mixed block needs a clinical transcription within its rows. Fact owners must be listed on the containing block.
+- **Status.** `source_and_spreadsheet_cells_reviewed`.
+
+**Composite status.** The receipt status names every reviewed kind, e.g. `source_and_document_pages_and_document_text_and_images_and_spreadsheet_cells_reviewed`. Export prefixes `agent_and_parent_`, and the supplement satisfies `supplement_review_or_no_supplements`. Receipts bind the target, the asset hashes and `archive_sha256`. Any changed member, inventory, frame or review makes them stale.
+
+**Not covered by this path.** The following stay partial, or use the manifest:
+
+- standalone videos, which keep the manifest sampled-frames basis;
+- embedded images inside DOC/RTF, which cannot be enumerated;
+- vector images (EMF/WMF/SVG);
+- CSV/TSV/text/DICOM members;
+- truncated sheets.

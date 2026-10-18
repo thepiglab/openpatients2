@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC5093248.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b68c423c18dac47255ca5c7da22efceaf6ce515816442ab2f156560bed2c901d",
+  "annotation_sha256": "268dbbdf975fd0cb6bc2ef88f2b81edfce52e99b2fbb7d2765a5e7e0cd24e114",
+  "reviewed_at": "2026-10-18T02:36:40.100310+00:00",
+  "source_segments_read": 35,
+  "facts_reviewed": 104,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Imaging \"no ...\" findings (p1-f084 no contrast enhancement, p1-f087 no new lesions, p1-f092 no sclerotic changes, p1-f093 no active lesions, p1-f094 no active disease): flag negative -> unknown; OBS-FLAG reserves positive/negative for qualitative tests and the source gives no normal classification for these findings.",
+    "p1-f093 (\"Since there were no active lesions on MRI\") promoted from ambiguous/review_only to supported/include: a literal patient-specific statement; the unidentified MRI stays recorded as an ambiguity and the fact is not merged with any MRI.",
+    "Added event p1-e31 (no active lesions on MRI) and relation e31 before e24 (\"Since there were no active lesions on MRI, treatment plan was continued\").",
+    "Added 5 more literally supported relations: e04 same_time e05 (one \"A year ago\" governs the Azathioprine suspension and Adalimumab initiation), e05 before e14 (\"Eight months following Adalimumab infusion\"), e06 before e29 (\"first clinical attack took place days following the second dose\"), e09 before e30 (\"Adalimumab was then stopped\" / \"eight months after halting Adalimumab\"), e14 before e18 (\"no new attack since then\")."
+  ],
+  "unresolved": [
+    "Table 1 is a literature review table of other studies and contains no patient of this case.",
+    "The report gives no calendar dates; times are relative expressions with unstated or differing reference points.",
+    "The neurological examination wording is internally inconsistent about which findings were abnormal (recorded as an ambiguity).",
+    "The diagnosis stays suspected (induced or provoked); interpretive Discussion statements are review-only.",
+    "Caption-level MRI findings are separate facts; figure pixels are described only in the visual submission.",
+    "No supplements are listed in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 35,
+    "facts_reviewed": 104,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Every lab, CSF item (normal, OCB negative, acellular, IgG index 0.53, normal protein/LDH/glucose), serology (ANA, RF, C-ANCA, P-ANCA negative; HLA-B27), VEP, MRI (five months later; repeat with contrast; six months later), X-ray, drug course (methotrexate, cyclosporine, azathioprine 3 mg/kg, adalimumab second dose, IV methylprednisolone, methylprednisolone, oral prednisolone, conditional rituximab) and follow-up time point checked literal against b00005-b00016.",
+      "Neurological examination: \"normal except for [pupils]\" followed by signs \"also noticed\" read as an imprecise scope statement, not a source conflict; scope fact stays review_only with an ambiguity, the individually stated signs stay included.",
+      "Kept review_only: induced or provoked MS (X or Y), uncovering latent MS interpretation, highly susceptible, AS/sarcoidosis rule-out purpose clause, improbable infection/lymphoma, Discussion \"revealed both\" uveitis (wording strength, ambiguity not conflict; \"hints of\" included as possible).",
+      "Not merged: the three no-active-lesions/disease MRI statements and the repeat MRI; Discussion first/second attacks not equated with the anesthesia/paresis episodes. Caption MRI findings keep null time. McDonald criteria statement accepted as an observation. Ethnicity Arabic / from Syria accepted.",
+      "Both figures (9 panels) viewed at full resolution with enlarged crops; visual descriptions, EHR labels and privacy flags match pixels."
+    ],
+    "residual_risks": [
+      "The six-month MRI of the Discussion, the repeated MRI and the no-active-lesions MRI may be one study; kept separate because the source never identifies them.",
+      "Discussion attacks are probably the anesthesia and paresis episodes but are not equated in the text.",
+      "Anesthesia (e07) and paresis (e14) episodes are not directly ordered: their times use different anchors (second dose vs Adalimumab infusion) and no quote orders them (orchestrator ruling).",
+      "Many untimed workup events (VEP, CSF, labs, exam, X-rays) remain unlinked because no order word places them."
+    ]
+  },
+  "physician_adjudicated": false
+}

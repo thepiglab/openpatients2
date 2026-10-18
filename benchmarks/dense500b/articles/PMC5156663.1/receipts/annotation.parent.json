@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC5156663.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f1c588665472a6ee178da5af8c78948cf92b412e202277c6fc0ac180b50793ed",
+  "annotation_sha256": "6ec184d6e5e378baee559d7194d72c96bc8266cba1e0be53cc6097ab670f6028",
+  "reviewed_at": "2026-10-18T02:31:32.403766+00:00",
+  "source_segments_read": 16,
+  "facts_reviewed": 89,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f084/p1-e15 arrival: removed the borrowed destination (transfer sentence from the previous paragraph) from evidence, action_text and event description; added an ambiguity for the cross-paragraph '3 hours later'.",
+    "Removed relation transfer (p1-e14) before arrival (p1-e15): its only order support was a cross-paragraph adjacent-sentence anchor.",
+    "Added p1-f089 Thrombolysis (procedure, completed) from 'One hour after thrombolysis' and linked it to event p1-e09; not linked to tenecteplase (ambiguity kept).",
+    "Added relations: presentation pain score before pain 'reduced to 5/10'; image-acquisition modifications during coronary angiography; angiographic distal thrombus before tirofiban 'to treat the distal thrombus'; tirofiban, CCU observation and bedside ultrasonography before discharge.",
+    "Added the angiography sentence to the evidence of relation p1-e18 before p1-e23 (test before its result).",
+    "Event p1-e22 (JL4/JR4 coronary cannulation) kind changed from treatment to test."
+  ],
+  "unresolved": [
+    "Figure captions are only the labels \"Figure 1.\" and \"Figure 2.\"; pixel content is described in visual.json and no caption claims are made.",
+    "The abdominal ultrasonography sentence is internally inconsistent (inversion of the abdominal viscera versus liver and gallbladder on the right and spleen on the left); the three findings are review-only.",
+    "Source spellings such as \"Creatinine Kinase\" and \"Judgkins\" are kept as printed; ligature-split words such as \"fl uoroscopy\" appear only inside quotes.",
+    "No time is stated for the vital signs and ECG of the paragraph that opens with \"One hour after thrombolysis\" apart from the pain score sentence; the laboratory results, ECG and angiography have no stated time.",
+    "The decision to convert to a trans-femoral approach is stated without an explicit statement that it was performed.",
+    "Discussion sentences about published cases, general technique and author opinion are not patient facts.",
+    "No supplementary material or video is listed for this article."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 16,
+    "facts_reviewed": 89,
+    "figures_viewed": 7,
+    "key_findings": [
+      "Ultrasound sentence is a genuine internal contradiction (inversion vs liver/gallbladder right, spleen left); only the three organ-position/inversion findings are review_only, the ultrasonography procedure and the separately stated situs inversus stay included.",
+      "'at presentation' sits in one elliptical vitals sentence and governs each listed vital; post-thrombolysis BP/HR/SaO2/ECG are separate sentences and stay untimed.",
+      "Fig1 prints no panel letters (text-only 1A/1C citations), so one whole-figure mixed panel; the waveform/includable override is acceptable as all three images are this patient's data.",
+      "'decided not to PCI' kept as declined/not_occurred; trans-femoral conversion kept as planned; 'Judgkins' and 'Creatinine Kinase' kept as printed."
+    ],
+    "residual_risks": [
+      "The second ECG image in Figure 1 is not cited by the text; its timing and lead placement are unknown.",
+      "Procedure action 'declined' for a clinician decision not to perform PCI is the closest available enum.",
+      "Creatinine Kinase unit IU/ml is kept as printed."
+    ]
+  },
+  "physician_adjudicated": false
+}

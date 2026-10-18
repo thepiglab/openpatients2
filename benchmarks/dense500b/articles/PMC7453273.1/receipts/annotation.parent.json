@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC7453273.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8282677a070cbbd364992079d392ac0e32fa6d12634adc7b031026d9d7f1f84f",
+  "annotation_sha256": "0dc5cce8955ea4652877d981b337e97e05d998ad68abef43a9e566652baa52fb",
+  "reviewed_at": "2026-10-18T03:46:03.034307+00:00",
+  "source_segments_read": 58,
+  "facts_reviewed": 97,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f060 name 'Left ventriculogram on day 9' -> 'Left ventriculogram' (NAME-LABEL: no time in the name; caption time stays in time.text).",
+    "p1-f064/f065/f066 temporality unknown -> historical (evidence '6 months prior to the patient's hospitalisation'; notes already said historical).",
+    "p1-f017 removed a note that contradicted laterality=right; p1-f016 diagnostic_basis paraphrase 'Chest X-ray concern' -> 'Chest X-ray'.",
+    "Pacemaker: DDD 60–130 moved out of the implantation procedure's finding (p1-f042) into a new device item p1-f096 'Dual chamber Biotronik pacemaker' (device_present, evidenced by the implant sentence and the 6-week interrogation with 100% ventricular pacing).",
+    "Added p1-f097 (review_only, ambiguous): Table 2 row 24 (first author's surname, 2020, 81 F, no citation; 'Including our case') CIED Yes, F/U 3 months, Resolved No; ambiguity rewritten (3-month vs text 6-month follow-up).",
+    "Event p1-e05 no longer implies ED timing for troponin/BNP (those sentences give no time); new event p1-e18 for the troponin/BNP results; p1-f060 linked to the day-9 catheterisation event p1-e10, device p1-f096 to the 6-week interrogation p1-e14.",
+    "Added 7 literally supported relations: CHB found -> transport ('for the management of ... complete heart block'); transport -> echocardiogram ('after transfer'); CHB -> pacemaker ('heart block which required pacemaker insertion'); catheterisation and pacemaker implantation -> discharge (in-hospital care before the discharge ending the stay); prior investigations and prior referral -> presentation ('6 months prior to the patient's hospitalisation', 'had previously been referred').",
+    "Summary: removed 'taking' (current use not stated for the admission list) and the ED timing of troponin/BNP; added cardiac MRI/biopsy not pursued to the claim that cites it.",
+    "p1-f097 follow_up_duration_text \"3\" -> \"3 months\" with the Table 2 header quote \"F/U period (months)\" added as evidence (orchestrator ruling 2).",
+    "source_coverage b00057 -> unresolved/p1 (row 24 review_only); article limitations updated (row 24; supplement-caption-only 'preserved basal function' not recorded)."
+  ],
+  "unresolved": [
+    "Table 1 has blank Peak cells for TSH and BNP; no value was recorded for them and Peak values carry no stated time.",
+    "Table 2 rows 1-23 are literature cases, not patient facts; row 24 apparently describes the index case and is recorded review_only because the table does not label it.",
+    "Figure pixels are inspected in visual.json; supplementary figures and the PPTX-embedded video clips are handled in the supplement reviews, not as article facts.",
+    "Medication list under the admission heading is recorded with action unknown because the sentence does not state current use.",
+    "The supplement captions (source supplement metadata, not article segments) add 'preserved basal function' for the presentation echocardiogram clips; it is not quotable from an article segment and is not recorded as a fact."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 58,
+    "facts_reviewed": 97,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (81-year-old woman); roster count 1 literal.",
+      "All 18 Table 1 cells present as separate observations; BNP text+table merged (single BNP reported, same value/range); hs troponin (text) kept separate from Troponin I (table) because troponin was measured repeatedly and the assay names differ, with an ambiguity.",
+      "Echo 'after transfer' (text) vs 'on presentation' (Figure 2 caption) and ventriculogram 'near normalisation' (text) vs 'resolution' (Figure 3 caption) kept as separate facts with ambiguities; caption times govern only the caption-stated findings.",
+      "p1-f041 day-9 time is the catheterisation's own time ('This was performed on day 9 postpresentation' refers to the catheterisation); the NO-BORROWING gate warning is a checker false positive and the quote is left as is.",
+      "Admission and discharge medication lists keep action unknown; cardiomegaly and resistant hypertension stay possible/unconfirmed ('concerns regarding'); cardiac MRI and biopsy 'not pursued' are status not_performed."
+    ],
+    "residual_risks": [
+      "Table 2 row 24 ownership rests on the author-name match; kept review_only.",
+      "Echo/ventriculogram duplicate facts (text vs caption) are both include; a scorer may count the same study twice.",
+      "hs troponin 525 and Troponin I initial 525 may be one measurement (both include).",
+      "supp-2 (PPTX with 4 MP4 clips) document review is partial and unsigned pending a tooling decision."
+    ]
+  },
+  "physician_adjudicated": false
+}

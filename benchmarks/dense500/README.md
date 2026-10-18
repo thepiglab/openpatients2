@@ -55,7 +55,7 @@ Free-text notes inside signed files may quote old paths; they are content (bound
 
 `op2 dense <tool> [args]` (same as `python -m openpatients2.dense.<tool>`; `op2 dense --help` lists them,
 `op2 dense <tool> --help` shows options). Run from anywhere: default roots and caches resolve from the
-repository checkout. `R` below is `benchmarks/dense500` or `benchmarks/dense50`.
+repository checkout. `R` below is `benchmarks/dense500`, `benchmarks/dense50` or `benchmarks/dense500b` (batch 2, see its README).
 **A `--role` call is a signature: validate by running the same command without `--role`.**
 
 | step | command | writes | reads |

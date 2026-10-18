@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC6060766.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ad6c3d53c08e5dd73d54742c41b8959aac1613b728273060339d3906539b8e5d",
+  "annotation_sha256": "5a7e4b33f1410cff21d352da6839e76172d4e1efd64c6d99356cdabcc28b716d",
+  "reviewed_at": "2026-10-18T03:49:31.025668+00:00",
+  "source_segments_read": 42,
+  "facts_reviewed": 228,
+  "patients_reviewed": 6,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed the b00035 series conclusion ('significant visual and anatomic improvement in all affected eyes') from all six patients: a cohort efficacy claim whose 'significant' refers to the cohort test; each patient's own BCVA and anatomic outcomes are already recorded (p1-p6 f009 removed, references repointed).",
+    "Removed the unquantified series sentence 'During the follow-up more than 6 months, no recurrence occurred.' from per-patient recurrence facts and outcome events (NO-COHORT-COPY); recurrence now rests on each Table 1 Recurrence? cell (time null for Cases 1, 2 and 6).",
+    "Merged the Table 1 Recurrence? cell into the case-text recurrence statement for Cases 3, 4 and 5 (one statement per patient; p3-f008, p4-f008, p5-f008 folded into p3-f019, p4-f021, p5-f015).",
+    "Cleared the misused severity field on the 'Major sequelae of PDT' absent conditions (it held the example list) and on Case 5 glaucoma (it held the visual acuity).",
+    "Removed evidence quotes that do not state the finding: the Case 4 text sentence on resolved detachment from the TA-disappearance fact (p4-f035) and the Case 6 SRF-resolution sentence from the normal-fundus fact (p6-f028).",
+    "Added one literal order relation for Case 4: prior corticosteroids 'prior to visiting our hospital' before the baseline examination, whose BCVA is stated 'when he came to our outpatient facility'; no relation from '1 month prior to examination', because that examination is not named as the baseline visit.",
+    "Added review_only fellow-eye classic CSC for Cases 1, 4 and 6 with ambiguities: the b00010 sentence assigns it by excluding the one patient with fellow-eye glaucoma, mirroring the existing review_only 'remaining four patients' mapping for Cases 5 and 6; the Case 1 ambiguity states the clash with its text-named fellow-eye focal RPE detachment.",
+    "Marked b00035 source coverage as aggregate and added article limitations for the uncopied series statements."
+  ],
+  "unresolved": [
+    "Figure pixels are described in visual.json; the annotation figure rows keep the caption-layer not_inspected status.",
+    "Methods-level PDT protocol details (half-dose 3 mg/m^2 intravenous verteporfin, 689 nm laser 15 min after infusion, 50 J/cm^2 for 83 s, light avoidance for 48 h, follow-up visits at 1, 3 and 6 months) are not individuated to patients because the protocol paragraph does not explicitly cover each patient.",
+    "Series statistics (mean spots, mean logMAR BCVA, percentages, ranges, fellow-eye classic CSC in five patients, peripheral hyperfluorescent foci in five eyes, sub-retinal fibrin in three eyes, retinal folds in two eyes) are not assigned to individuals unless the case text or a sentence covering all six states them.",
+    "Fig. 1 is an aggregate chart of five eyes; its printed values are pixel content in visual.json only.",
+    "The unlabelled series narrative about the one eye with a second PDT gives BCVA 20/20 at 1 month after the second PDT, which differs from the Case 3 text (third month); both are quarantined as review-only.",
+    "Case 3 first-session BCVA 20/25 sits in a sentence whose 1-month time attaches to the B scan finding, so its time is left null.",
+    "Written informed consent and ethics approval statements are administrative and were not recorded as patient facts.",
+    "The series sentences on recurrence (\"no recurrence occurred\") and the conclusion of improvement in all affected eyes are not copied to individuals; per-patient recurrence comes from Table 1 and the case texts.",
+    "Fellow-eye classic CSC (five patients, excluding the patient with glaucoma) and the remaining-four-patients classic CSC history are assigned by exclusion as review_only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 42,
+    "facts_reviewed": 228,
+    "figures_viewed": 7,
+    "key_findings": [
+      "Six-patient roster from Table 1 rows matches case narratives and figure captions (case 1, patients 2, 3, 5, 6, case 4); numbering by first mention.",
+      "Series sentences kept per patient only where they explicitly cover all six (b00007 six patients, b00010 all six patients, b00018 six eyes, b00019 all six eyes, b00020 sequelae in any eyes).",
+      "Case 3 BCVA 20/20 timing conflict (b00019 one eye with second PDT, 1 month after; Case 3 text, third month after) correctly quarantined; b00019 is identifiable as Case 3 only through the unique second PDT, so it stays review_only.",
+      "Table-to-text merges checked: baseline/6-month BCVA, spot count/diameter and reattachment/SRF month cells merge only where the measurement is reported once; Case 2 baseline cell vs the age-37 narrative BCVA and Case 3 6th-month cell vs second-PDT narrative kept separate with ambiguities.",
+      "PDT spot counts and diameters are Table 1 cells; ProcedureDevice has no parameter field, so observations kind other is the correct home.",
+      "Table 1 holds per-patient BCVA at two labelled time points (baseline, 6th month after PDT); all twelve cells are captured as observations."
+    ],
+    "residual_risks": [
+      "Case 3 BCVA 20/25 after the first PDT keeps a null time although its sentence opens with 1 month after PDT for the B scan clause.",
+      "Exclusion-based assignments (remaining four patients; fellow-eye classic CSC) are review_only and may be accepted or rejected by adjudication.",
+      "Case 5 6-month BCVA merges a time-less narrative value with the Table 1 6th-month cell because it is the only post-PDT BCVA reported for that patient."
+    ]
+  },
+  "physician_adjudicated": false
+}

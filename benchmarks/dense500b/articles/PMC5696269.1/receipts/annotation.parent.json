@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC5696269.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "427745d0f121b1a443920a2e933aa0ad4d67575b9c35b71f8f064a5666e1038c",
+  "annotation_sha256": "3a7bff58d32524c0fc45520d6cb0cdd8c06cfe86b9a972faf818c9f1e6c39b06",
+  "reviewed_at": "2026-10-18T03:40:59.560486+00:00",
+  "source_segments_read": 18,
+  "facts_reviewed": 92,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f032 hemolysis: verification_status confirmed -> unknown (source says \"consistent with\" and \"resolution of hemolysis\", no confirmation wording); added ambiguity on hemolysis certainty.",
+    "p1-f030/p1-f031 LDH and serum-free hemoglobin: added literal time \"at this time\" from their own sentence.",
+    "p1-f028: added the Fig. 2a caption quote as evidence (text cites Fig. 2 for the same measurement); below/beyond wording kept as ambiguity.",
+    "p1 withdrawal arithmetic (3 cm from 5.9 cm vs 2.4 cm after): kept as ambiguity, not conflict - only one post-repositioning value is stated; noted panel b caliper text differs at rounding level only.",
+    "p1-f037 and p2-f042: removed the distance value from the procedure name (NAME-LABEL); distance stays in evidence and clinical_statement.",
+    "p1-e07 split: arrival event now holds only the \"On arrival\" findings; new p1-e13 holds the placement waveform and motor current readings (no stated time).",
+    "p1 relation e07->e08 removed (quote spanned three intervening sentences; not an adjacent-sentence anchor); replaced by p1-e13->e08 using the adjacent \"Next morning\" sentence and \"remained unchanged\".",
+    "p1 relations e09->e12 and e10->e12: evidence replaced with the literal \"repeat\" / post-hoc imaging quotes plus the caption \"after repositioning\" for the caption findings; article limitation reworded.",
+    "p1-f029 (3.5 cm at the time of placement) moved from the TTE event p1-e09 to the placement event p1-e04.",
+    "p1 summary claim 2 reworded so the waveform and motor-current readings are not dated to arrival.",
+    "p2-f040/f044/f045: added Fig. 3 caption quotes as evidence (text cites Fig. 3 for the same findings); p2-f041 gained the \"As evidenced by this case\" discussion quote.",
+    "p2 relations added: e01->e02 (\"with history of ... presented\") and e10->e12 (\"repeat POC TTE\").",
+    "source_coverage: b00001 and b00015 reassigned as explicitly shared statements for p1 and p2; b00016 (manufacturer illustration caption) set to background; b00014 linked to p2. This clears the unresolved segment IDs in the materialized roster.",
+    "Article limitation on video sampling updated to record the parent tail sampling (0.6 s steps to 1.8 s)."
+  ],
+  "unresolved": [
+    "Five MP4 supplements (Additional files 1-5, each about 1.9-2.0 s long) were frame-sampled separately (annotator every 0.5 s from 0 to 1.5 s; parent additionally every 0.6 s from 0 to 1.8 s) and are reviewed only in the supplement manifest; they add no clinical facts. Audio and continuous motion were not reviewed.",
+    "Figure pixels are described only in visual.json; Fig. 1 is a manufacturer illustration, not a patient image.",
+    "The discussion and device description paragraphs are general and are not copied to either patient except where the text says \"in this case\" or \"our patient\".",
+    "No dates or ages for events are given beyond relative times; temporal relations are recorded only where the text states an order.",
+    "The relation from the Impella withdrawal to the repeat POC TTE rests on the repeat TTE demonstrating the corrected catheter position (post-hoc imaging) and, for the Fig. 2b/c caption findings, on the caption wording \"after repositioning\"; the caption time governs only the caption findings."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 18,
+    "facts_reviewed": 92,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Two individually described cases (52-year-old man with malpositioned Impella CP; 67-year-old man on VV-ECMO with Avalon cannula migrated into the hepatic vein); roster count 2 from \"we present two case reports\".",
+      "All text and caption facts verified against b00005-b00018; no tables; five MP4 supplements (1.87-2.0 s) viewed at 0/0.5/1.0/1.5 s and again at 0.6 s steps to 1.8 s; they add no facts.",
+      "Withdrawal arithmetic mismatch and below/beyond wording are ambiguities, not conflicts; hemolysis affirmed but not confirmed; outlet migration kept as possible (\"We suspect\")."
+    ],
+    "residual_risks": [
+      "\"history of ... presented\" accepted as an order (historical before presentation) for both patients.",
+      "Withdrawal to repeat-TTE order relies on post-hoc imaging and the caption \"after repositioning\", which the text does not name as the 3 cm withdrawal.",
+      "Agent-owned visual.json (Fig. 3 modality as_documented) and figure_privacy_flags.json (Fig. 2c caliper text, Fig. 1 ID-like field) need Sonnet corrections."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -319,54 +319,112 @@ def _column_index(ref):
     return value - 1
 
 
-def read_xlsx(path, *, max_rows=PEEK_ROWS, max_columns=PEEK_COLUMNS, max_chars=200):
-    """Minimal XLSX reader (no formula evaluation): sheet -> (row_count, first rows)."""
-    import xml.etree.ElementTree as ET
-    ns = {'m': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main',
-          'r': 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'}
-    with zipfile.ZipFile(path) as archive:
-        names = set(archive.namelist())
-        def load(name):
-            info = archive.getinfo(name)
-            if info.file_size > MAX_XML_BYTES:
-                raise ValueError(f'{name} exceeds peek bound')
-            return archive.read(name)
-        shared = []
+XLSX_NS = {'m': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main',
+           'r': 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'}
+# Full (review) reads stream each part; a part above this uncompressed size is not read at all.
+XLSX_MAX_PART_BYTES = 400_000_000
+
+
+class XlsxReader:
+    """Streaming XLSX reader (no formula evaluation: a formula cell yields its cached <v> text).
+
+    `sheets` = [{'name', 'state', 'target', 'available'}] in workbook order; `rows(sheet)` yields
+    (row_number, {column_index: text}) for every <row> element, parsed incrementally."""
+
+    def __init__(self, path, *, max_part_bytes=XLSX_MAX_PART_BYTES):
+        import xml.etree.ElementTree as ET
+        self.ET, self.max_part_bytes = ET, max_part_bytes
+        self.archive = zipfile.ZipFile(path)
+        try:
+            self._load()
+        except BaseException:
+            self.archive.close()
+            raise
+
+    def _load(self):
+        ET = self.ET
+        names = set(self.archive.namelist())
+        self.shared = []
         if 'xl/sharedStrings.xml' in names:
-            for si in ET.fromstring(load('xl/sharedStrings.xml')).findall('m:si', ns):
-                shared.append(''.join(t.text or '' for t in si.iter(f'{{{ns["m"]}}}t')))
-        workbook = ET.fromstring(load('xl/workbook.xml'))
+            with self._open('xl/sharedStrings.xml') as stream:
+                for _, elem in ET.iterparse(stream):
+                    if elem.tag == f'{{{XLSX_NS["m"]}}}si':
+                        self.shared.append(''.join(t.text or '' for t in elem.iter(f'{{{XLSX_NS["m"]}}}t')))
+                        elem.clear()
+        with self._open('xl/workbook.xml') as stream:
+            workbook = ET.parse(stream).getroot()
         rels = {}
         if 'xl/_rels/workbook.xml.rels' in names:
-            for rel in ET.fromstring(load('xl/_rels/workbook.xml.rels')):
-                rels[rel.get('Id')] = rel.get('Target')
-        sheets = []
-        for sheet in workbook.iter(f'{{{ns["m"]}}}sheet'):
-            target = rels.get(sheet.get(f'{{{ns["r"]}}}id'), '')
-            target = target.lstrip('/')
+            with self._open('xl/_rels/workbook.xml.rels') as stream:
+                rels = {rel.get('Id'): rel.get('Target') for rel in ET.parse(stream).getroot()}
+        self.sheets = []
+        for sheet in workbook.iter(f'{{{XLSX_NS["m"]}}}sheet'):
+            target = rels.get(sheet.get(f'{{{XLSX_NS["r"]}}}id'), '').lstrip('/')
             target = target if target.startswith('xl/') else 'xl/' + target
-            if target not in names:
-                sheets.append({'name': sheet.get('name'), 'row_count': None, 'rows': []}); continue
-            root = ET.fromstring(load(target))
-            rows = root.findall('.//m:sheetData/m:row', ns)
-            grid = []
-            for row in rows[:max_rows]:
-                values = {}
-                for cell in row.findall('m:c', ns):
-                    kind = cell.get('t'); v = cell.find('m:v', ns)
+            self.sheets.append({'name': sheet.get('name'), 'state': sheet.get('state') or 'visible',
+                                'target': target, 'available': target in names})
+
+    def _open(self, name):
+        if self.archive.getinfo(name).file_size > self.max_part_bytes:
+            raise ValueError(f'{name} exceeds the XLSX part bound')
+        return self.archive.open(name)
+
+    def part_bytes(self, sheet):
+        return self.archive.getinfo(sheet['target']).file_size
+
+    def rows(self, sheet):
+        m = XLSX_NS['m']
+        with self._open(sheet['target']) as stream:
+            parent = None; previous = 0
+            for event, elem in self.ET.iterparse(stream, events=('start', 'end')):
+                if event == 'start':
+                    if elem.tag == f'{{{m}}}sheetData':
+                        parent = elem
+                    continue
+                if elem.tag != f'{{{m}}}row':
+                    continue
+                number = int(elem.get('r')) if (elem.get('r') or '').isdigit() else previous + 1
+                previous = number; values = {}
+                for cell in elem.findall(f'{{{m}}}c'):
+                    kind = cell.get('t'); v = cell.find(f'{{{m}}}v')
                     if kind == 's' and v is not None:
-                        text = shared[int(v.text)] if v.text and int(v.text) < len(shared) else ''
+                        text = self.shared[int(v.text)] if v.text and int(v.text) < len(self.shared) else ''
                     elif kind == 'inlineStr':
-                        text = ''.join(t.text or '' for t in cell.iter(f'{{{ns["m"]}}}t'))
+                        text = ''.join(t.text or '' for t in cell.iter(f'{{{m}}}t'))
                     else:
                         text = v.text if v is not None and v.text is not None else ''
                     ref = cell.get('r')
-                    index = _column_index(ref) if ref else len(values)
-                    if index < max_columns:
-                        values[index] = text[:max_chars]
-                width = max(values, default=-1) + 1
-                grid.append([values.get(i, '') for i in range(width)])
-            sheets.append({'name': sheet.get('name'), 'row_count': len(rows), 'rows': grid})
+                    values[_column_index(ref) if ref else max(values, default=-1) + 1] = text
+                yield number, values
+                if parent is not None:
+                    parent.clear()
+
+    def close(self):
+        self.archive.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        self.close()
+
+
+def read_xlsx(path, *, max_rows=PEEK_ROWS, max_columns=PEEK_COLUMNS, max_chars=200):
+    """Minimal XLSX peek (no formula evaluation): sheet -> (row_count, first rows). Parts above the
+    peek bound raise, exactly as before; full reviews use XlsxReader with its larger streaming bound."""
+    sheets = []
+    with XlsxReader(path, max_part_bytes=MAX_XML_BYTES) as reader:
+        for sheet in reader.sheets:
+            if not sheet['available']:
+                sheets.append({'name': sheet['name'], 'row_count': None, 'rows': []}); continue
+            grid = []; count = 0
+            for _, values in reader.rows(sheet):
+                count += 1
+                if count <= max_rows:
+                    values = {i: t[:max_chars] for i, t in values.items() if i < max_columns}
+                    width = max(values, default=-1) + 1
+                    grid.append([values.get(i, '') for i in range(width)])
+            sheets.append({'name': sheet['name'], 'row_count': count, 'rows': grid})
     return sheets
 
 

@@ -17,6 +17,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, unquote, urlsplit
 
+from .article_themes import assign as assign_themes, classify as classify_themes, scheme as theme_scheme, xml_features
 from .dense_store import load as _load_store
 
 STATIC = Path(__file__).with_name('viewer_static')
@@ -147,7 +148,7 @@ def bound(receipt, **expected):
 
 
 class Library:
-    def __init__(self, dataset: Path, source_roots: list[Path]):
+    def __init__(self, dataset: Path, source_roots: list[Path], checklists: list[Path] = ()):
         self.dataset = dataset.resolve()
         # The release is now unified rows in data/; the viewer reads the per-type
         # back-compat files the exporter keeps under legacy/.
@@ -158,7 +159,9 @@ class Library:
         self.export_stamp = None
         self.exports = {}
         self.entries = {}
-        self.strata_stamp, self.strata = None, {}
+        self.strata_stamp, self.strata, self.lanes = None, {}, {}
+        self.checklists = [Path(path).resolve() for path in checklists]
+        self.checklist_stamp, self.completed = None, {}
 
     def _strata(self):
         """Specialty per article from the checked-in selection files, as the dataset exporter assigns it.
@@ -166,15 +169,40 @@ class Library:
         files = [root / name for root in self.roots for name in ('selection.json', 'retained-strata.json')]
         signature = tuple(stamp(path) for path in files)
         if signature != self.strata_stamp:
-            strata = {}
+            strata, lanes = {}, {}
             for path in files:
                 data = read(path) if path.exists() else None
                 if isinstance(data, dict):
                     strata.update({aid: s for aid, s in data.items() if isinstance(s, str)})
                 elif isinstance(data, list):
                     strata.update({r['article_id']: r['stratum'] for r in data if isinstance(r, dict) and r.get('stratum')})
-            self.strata, self.strata_stamp = strata, signature
+                    lanes.update({r['article_id']: r['lane'] for r in data if isinstance(r, dict) and r.get('lane')})
+            self.strata, self.lanes, self.strata_stamp = strata, lanes, signature
         return self.strata
+
+    def _completed(self):
+        """Article completion from the export checklists (optional; they live in the gitignored data folder)."""
+        signature = tuple(stamp(path) for path in self.checklists)
+        if signature != self.checklist_stamp:
+            completed = {}
+            for path in self.checklists:
+                try:
+                    articles = (read(path) or {}).get('articles') or {}
+                except (ValueError, OSError):
+                    continue
+                completed.update({aid: bool(row.get('completed')) for aid, row in articles.items() if isinstance(row, dict)})
+            self.completed, self.checklist_stamp = completed, signature
+        return self.completed
+
+    def _themes(self, aid, title, root, patients, roster):
+        """Theme group and lane: the selection's lane when it has one, else the rule-based classifier."""
+        raw = _load_store().path(root, 'raw-xml', aid) if root else None
+        features = xml_features(raw.read_text(errors='replace') if raw and raw.exists() else '')
+        cohort = [patient_summary(p) for p in patients]
+        rules = classify_themes(title or '', **features, stratum=self._strata().get(aid),
+                                ages=[p['age_years'] for p in cohort], species=[p['species'] for p in cohort],
+                                patients=max(len(patients), (roster or {}).get('reported_individual_count') or 0))
+        return assign_themes(self.lanes.get(aid), rules)
 
     def _exports(self):
         signature = tuple(stamp(self.dataset / f'{name}.jsonl') for name in FILES)
@@ -343,6 +371,8 @@ class Library:
                                         or p.get('burned_in_identifiers') == 'direct_identifiers'
                                         for f in (privacy_flags or {}).get('figures', []) for p in f.get('panels', [])),
                     text_available=bool(source))
+        meta['theme'] = self._themes(aid, meta.get('title'), root, patients, roster)
+        meta['reference_set'] = root.name if root else meta.get('reference_set')
         return scrub({'article_id': aid, 'metadata': meta, 'source': source_view, 'patients': patients,
                 'annotation': annotation, 'roster': article.get('roster'),
                 'figure_attribution': article.get('figure_attribution'), 'visual': visual,
@@ -374,7 +404,8 @@ class Library:
                                'patient_count', 'figure_reviewed', 'text_available', 'article_url',
                                'disposition', 'figure_count', 'has_tables', 'supplement_count', 'article_type',
                                'figure_ehr_labeled', 'privacy_concern', 'supplements_extracted',
-                               'section_facts', 'section_patients', 'event_count', 'cohort')}
+                               'section_facts', 'section_patients', 'event_count', 'cohort', 'theme',
+                               'reference_set')}
                         row['license'] = (meta.get('source_license') or {}).get('code', 'Unknown')
                         row['revision'] = digest(signature)
                         self.entries[aid] = (signature, row)
@@ -384,9 +415,10 @@ class Library:
                                'revision': digest(signature), 'text_available': False}
                 else:
                     row = cached[1]
-                rows.append(row)
+                completed = self._completed().get(aid)
+                rows.append({**row, 'completed': completed} if completed is not None else row)
             revision = digest(rows)
-            return {'articles': rows, 'revision': revision,
+            return {'articles': rows, 'revision': revision, 'themes': theme_scheme(),
                     'updated_at': datetime.now(timezone.utc).isoformat(),
                     'note': 'AI source-reviewed reference annotations; not physician-adjudicated gold.'}
 
@@ -499,14 +531,18 @@ def build(library, output):
 def add_parser(sub):
     parser = sub.add_parser('viewer', help='Browse every article and its latest reviewed extraction')
     parser.add_argument('--dataset', type=Path, default=Path('data/dense_clinical_cases_v1'))
-    parser.add_argument('--source-root', type=Path, action='append', help='Annotation root (repeatable); defaults to dense50 and dense500')
+    parser.add_argument('--source-root', type=Path, action='append', help='Annotation root (repeatable); defaults to dense50, dense500 and dense500b')
+    parser.add_argument('--checklist', type=Path, action='append',
+                        help='Export article_checklist.json for completion counts (repeatable); defaults to both dense datasets')
     parser.add_argument('--host', default='127.0.0.1')
     parser.add_argument('--port', type=int, default=8765)
     parser.add_argument('--build', type=Path, help='Write a portable static website into a new/empty directory')
 
 
 def dispatch(args):
-    library = Library(args.dataset, args.source_root or [Path('benchmarks/dense50'), Path('benchmarks/dense500')])
+    library = Library(args.dataset, args.source_root or [Path('benchmarks/dense50'), Path('benchmarks/dense500'), Path('benchmarks/dense500b')],
+                      args.checklist or [args.dataset / 'article_checklist.json',
+                                         Path('data/dense_clinical_cases_dense500b_v1/article_checklist.json')])
     if args.build:
         return build(library, args.build)
     server = ThreadingHTTPServer((args.host, args.port), handler(library))

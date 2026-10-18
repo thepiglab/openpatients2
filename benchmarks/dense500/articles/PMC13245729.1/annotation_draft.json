@@ -357,19 +357,18 @@
             "subject": "index_patient",
             "assertion": "present",
             "name": "Warfarin",
-            "action": "administered",
-            "regimen": "Anticoagulation targeting an international normalized ratio (INR) of 2.5–3.5"
+            "action": "administered"
           },
           "evidence": [
             {
               "segment_id": "b00011",
-              "quote": "He was anticoagulated with warfarin targeting an international normalized ratio (INR) of 2.5–3.5"
+              "quote": "He was anticoagulated with warfarin"
             }
           ],
-          "clinical_statement": "Anticoagulated with warfarin targeting INR 2.5-3.5",
+          "clinical_statement": "Anticoagulated with warfarin",
           "certainty": "supported",
           "scoring": "include",
-          "notes": ""
+          "notes": "INR target range conflicts with the supplement slide set; the target is quarantined in p1-f073."
         },
         {
           "fact_id": "p1-f013",
@@ -700,9 +699,9 @@
             }
           ],
           "clinical_statement": "Desaturated, oxygen saturation 75% in room air",
-          "certainty": "supported",
-          "scoring": "include",
-          "notes": ""
+          "certainty": "source_conflict",
+          "scoring": "review_only",
+          "notes": "Article side of a source conflict: the supplement slide set (sup1, unit A1-U0015) gives SpO2 70% in air. The 93% on 15 L oxygen (p1-f026) agrees and stays included."
         },
         {
           "fact_id": "p1-f026",
@@ -853,21 +852,19 @@
             "name": "INR",
             "kind": "laboratory",
             "status": "resulted",
-            "numeric_value": 2.9,
-            "comparator": "=",
             "text_value": "therapeutic",
             "flag": "unknown"
           },
           "evidence": [
             {
               "segment_id": "b00012",
-              "quote": "The INR was therapeutic (2.9)"
+              "quote": "The INR was therapeutic"
             }
           ],
-          "clinical_statement": "INR therapeutic at 2.9",
+          "clinical_statement": "INR therapeutic on presentation",
           "certainty": "supported",
           "scoring": "include",
-          "notes": ""
+          "notes": "Numeric INR conflicts with the supplement slide set; the value is quarantined in p1-f074."
         },
         {
           "fact_id": "p1-f033",
@@ -1611,9 +1608,9 @@
             }
           ],
           "clinical_statement": "One leaflet segment at the bifurcation of the abdominal aorta",
-          "certainty": "supported",
-          "scoring": "include",
-          "notes": ""
+          "certainty": "source_conflict",
+          "scoring": "review_only",
+          "notes": "Site side of a source conflict: the article text places one segment at the bifurcation of the abdominal aorta, while the article Figure 4 caption (p1-f075) and the supplement slide set (sup1, units A1-U0041 and A1-U0043) say descending aorta. Only this site is quarantined; the right common iliac segment (p1-f061) is stated by every source."
         },
         {
           "fact_id": "p1-f061",
@@ -1656,7 +1653,6 @@
             "name": "Embolised leaflet fragments",
             "verification_status": "confirmed",
             "role": "complication",
-            "body_site": "bifurcation of the abdominal aorta and right common iliac artery",
             "diagnostic_basis": "Computed tomography"
           },
           "evidence": [
@@ -1672,7 +1668,7 @@
           "clinical_statement": "Embolised mitral valve leaflet fragments located by CT",
           "certainty": "supported",
           "scoring": "include",
-          "notes": ""
+          "notes": "Aortic site is quarantined in p1-f060 and p1-f075 (text vs Figure 4 caption and slide set); right common iliac site is in p1-f061."
         },
         {
           "fact_id": "p1-f063",
@@ -1926,6 +1922,79 @@
           "certainty": "supported",
           "scoring": "include",
           "notes": ""
+        },
+        {
+          "fact_id": "p1-f073",
+          "task": "medications",
+          "collection": "items",
+          "fields": {
+            "subject": "index_patient",
+            "assertion": "present",
+            "name": "Warfarin",
+            "action": "administered",
+            "regimen": "Anticoagulation targeting an international normalized ratio (INR) of 2.5–3.5"
+          },
+          "evidence": [
+            {
+              "segment_id": "b00011",
+              "quote": "He was anticoagulated with warfarin targeting an international normalized ratio (INR) of 2.5–3.5"
+            }
+          ],
+          "clinical_statement": "Warfarin INR target 2.5-3.5 per the article text",
+          "certainty": "source_conflict",
+          "scoring": "review_only",
+          "notes": "Article side of a source conflict: the supplement slide set (sup1, unit A1-U0014) states warfarin to maintain INR 2-3. Only the target range is quarantined; warfarin use is accepted in p1-f012."
+        },
+        {
+          "fact_id": "p1-f074",
+          "task": "observations",
+          "collection": "items",
+          "fields": {
+            "subject": "index_patient",
+            "assertion": "present",
+            "name": "INR",
+            "kind": "laboratory",
+            "status": "resulted",
+            "numeric_value": 2.9,
+            "comparator": "=",
+            "flag": "unknown"
+          },
+          "evidence": [
+            {
+              "segment_id": "b00012",
+              "quote": "The INR was therapeutic (2.9)"
+            }
+          ],
+          "clinical_statement": "INR 2.9 per the article text",
+          "certainty": "source_conflict",
+          "scoring": "review_only",
+          "notes": "Article side of a source conflict: the supplement slide set (sup1, unit A1-U0024) gives INR 2.7. Only the value is quarantined; the therapeutic INR is accepted in p1-f032."
+        },
+        {
+          "fact_id": "p1-f075",
+          "task": "observations",
+          "collection": "items",
+          "fields": {
+            "subject": "index_patient",
+            "assertion": "present",
+            "name": "Leaflet fragment in descending aorta",
+            "kind": "imaging",
+            "status": "resulted",
+            "text_value": "leaflet fragments (arrows) in the descending aorta",
+            "flag": "unknown",
+            "method": "computed tomography",
+            "body_site": "descending aorta"
+          },
+          "evidence": [
+            {
+              "segment_id": "b00028",
+              "quote": "Coronal computed tomography scan demonstrating leaflet fragments (arrows) in the descending aorta"
+            }
+          ],
+          "clinical_statement": "Leaflet fragment in the descending aorta per the Figure 4 caption",
+          "certainty": "source_conflict",
+          "scoring": "review_only",
+          "notes": "Caption side of a source conflict: the article text names the bifurcation of the abdominal aorta (p1-f060); the supplement slide set also says descending aorta. Neither site is preferred."
         }
       ],
       "events": [
@@ -2137,7 +2206,7 @@
         },
         {
           "event_id": "p1-e11",
-          "description": "CT scan showing a fractured leaflet in two segments, embolised to the abdominal aorta bifurcation and right common iliac artery",
+          "description": "CT scan showing a fractured leaflet in two segments, one within the right common iliac artery",
           "occurrence": "occurred",
           "fact_ids": [
             "p1-f058",
@@ -2146,7 +2215,8 @@
             "p1-f061",
             "p1-f062",
             "p1-f063",
-            "p1-f064"
+            "p1-f064",
+            "p1-f075"
           ],
           "time_text": "Three days following surgery",
           "kind": "test",
@@ -2354,11 +2424,12 @@
             "p1-f019",
             "p1-f018",
             "p1-f071",
-            "p1-f072"
+            "p1-f072",
+            "p1-f073"
           ]
         },
         {
-          "text": "The timeline table records presentation with cardiogenic shock; he was normotensive (123/67) but tachycardic, tachypnoeic and desaturated with a mechanical first heart sound, loud apical murmurs and bilateral mid-zone crepitations; INR was 2.9. Transthoracic echocardiography on admission gave a mean mitral inflow gradient of 20 mmHg without obvious regurgitation but limited valve assessment. He deteriorated, was intubated and ventilated with inotropes, and transoesophageal echocardiography showed an absent mechanical valve leaflet with severe mitral regurgitation.",
+          "text": "The timeline table records presentation with cardiogenic shock; he was normotensive (123/67) but tachycardic, tachypnoeic and desaturated with a mechanical first heart sound, loud apical murmurs and bilateral mid-zone crepitations; INR was therapeutic. Transthoracic echocardiography on admission gave a mean mitral inflow gradient of 20 mmHg without obvious regurgitation but limited valve assessment. He deteriorated, was intubated and ventilated with inotropes, and transoesophageal echocardiography showed an absent mechanical valve leaflet with severe mitral regurgitation.",
           "fact_ids": [
             "p1-f020",
             "p1-f021",
@@ -2383,7 +2454,7 @@
           ]
         },
         {
-          "text": "Over the following two hours his respiratory and circulatory support needs escalated and he underwent urgent mechanical mitral valve replacement with a 27 mm St. Jude prosthesis; the right-sided leaflet was absent at surgery. CT three days following surgery showed a fractured leaflet in two segments at the abdominal aortic bifurcation and right common iliac artery, left in situ with no impaired lower limb perfusion.",
+          "text": "Over the following two hours his respiratory and circulatory support needs escalated and he underwent urgent mechanical mitral valve replacement with a 27 mm St. Jude prosthesis; the right-sided leaflet was absent at surgery. CT three days following surgery showed a fractured leaflet in two segments, one within the right common iliac artery and the aortic one placed differently by the text and the Figure 4 caption, left in situ with no impaired lower limb perfusion.",
           "fact_ids": [
             "p1-f049",
             "p1-f050",
@@ -2395,7 +2466,8 @@
             "p1-f061",
             "p1-f062",
             "p1-f063",
-            "p1-f064"
+            "p1-f064",
+            "p1-f075"
           ]
         },
         {
@@ -2521,7 +2593,7 @@
           ]
         },
         {
-          "issue": "Location of embolised leaflet segments: table versus text",
+          "issue": "Location of the aortic leaflet segment: text versus Figure 4 caption, table and supplement slide set",
           "evidence": [
             {
               "segment_id": "b00010",
@@ -2536,11 +2608,12 @@
               "quote": "Coronal computed tomography scan demonstrating leaflet fragments (arrows) in the descending aorta and right common iliac artery."
             }
           ],
-          "must_not_infer": "The table says distal aorta, the Figure 4 caption says descending aorta and right common iliac artery, and the text names the bifurcation of the abdominal aorta and the right common iliac artery. These are compatible descriptions at different precision, not a conflict; do not equate them or add a site.",
+          "must_not_infer": "Source conflict on the aortic site: the text says the bifurcation of the abdominal aorta, the Figure 4 caption says descending aorta, the table says distal aorta, and the supplement slide set (sup1, A1-U0041, A1-U0043) says descending aorta. Both article statements of the aortic site are review_only; do not choose or equate them. The right common iliac segment is stated by every source.",
           "fact_ids": [
             "p1-f059",
             "p1-f060",
-            "p1-f061"
+            "p1-f061",
+            "p1-f075"
           ],
           "segment_ids": [
             "b00010",
@@ -2612,6 +2685,56 @@
           ],
           "segment_ids": [
             "b00017"
+          ]
+        },
+        {
+          "issue": "Room-air oxygen saturation: article 75% versus supplement slide set 70%",
+          "evidence": [
+            {
+              "segment_id": "b00012",
+              "quote": "desaturated with oxygen saturations of 75% in room air"
+            }
+          ],
+          "must_not_infer": "The supplement slide set (sup1, A1-U0015) gives SpO2 70% in air. Source conflict, unresolved; do not choose either value.",
+          "fact_ids": [
+            "p1-f025"
+          ],
+          "segment_ids": [
+            "b00012"
+          ]
+        },
+        {
+          "issue": "Warfarin INR target: article 2.5-3.5 versus supplement slide set 2-3",
+          "evidence": [
+            {
+              "segment_id": "b00011",
+              "quote": "He was anticoagulated with warfarin targeting an international normalized ratio (INR) of 2.5–3.5"
+            }
+          ],
+          "must_not_infer": "The supplement slide set (sup1, A1-U0014) states warfarin to maintain INR 2-3. Source conflict, unresolved; warfarin use itself is not in conflict.",
+          "fact_ids": [
+            "p1-f012",
+            "p1-f073"
+          ],
+          "segment_ids": [
+            "b00011"
+          ]
+        },
+        {
+          "issue": "Presenting INR value: article 2.9 versus supplement slide set 2.7",
+          "evidence": [
+            {
+              "segment_id": "b00012",
+              "quote": "The INR was therapeutic (2.9)"
+            }
+          ],
+          "must_not_infer": "The supplement slide set (sup1, A1-U0024) gives INR 2.7. Source conflict on the value, unresolved; the therapeutic status is not contradicted.",
+          "fact_ids": [
+            "p1-f032",
+            "p1-f074"
+          ],
+          "segment_ids": [
+            "b00012"
           ]
         }
       ]
@@ -3010,12 +3133,12 @@
     }
   ],
   "article_limitations": [
-    "Supplement ZIP (slide set and three videos) is not a source segment; its slides carry additional clinical data that no supplement review path in the tooling covers.",
     "Figure pixels are described in visual.json only; values printed inside the images are not clinical facts.",
     "Source table time labels (calendar year, age, Day N) have no stated anchor; they are kept literal.",
     "Table states presentation with cardiogenic shock while the text states normotensive on presentation; judged not a literal conflict (normotension does not exclude cardiogenic shock) and recorded as an ambiguity.",
-    "The supplement slide deck repeats this case with clinical values that are not in the article and in places differ from it (for example the INR target range, presenting oxygen saturation and INR value); none were transcribed and the article text governs.",
-    "Unassigned inline image ytac439il1.jpg (positioned with the lead author biography) was not viewed by the annotator or the parent reviewer; it is presumed non-patient author content but is not described, classified or attributed."
+    "Unassigned inline image ytac439il1.jpg (positioned with the lead author biography) was not viewed by the annotator or the parent reviewer; it is presumed non-patient author content but is not described, classified or attributed.",
+    "The supplement slide set (sup1) repeats this case and conflicts with the article on room-air oxygen saturation, warfarin INR target, presenting INR and the aortic fragment site; those article-side attributes are review_only (source_conflict) and the slide values are recorded in the supplement review sidecar, not here.",
+    "The aortic site of the embolised segment differs within the article (text: bifurcation of the abdominal aorta; Figure 4 caption: descending aorta); both are review_only."
   ],
   "annotation_provenance": {
     "annotator_model": "Claude Sonnet 5.5 annotator",

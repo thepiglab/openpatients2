@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC4856729.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "092abb8dcfb9fa94987747f93540bdca103d6c988638dcf1fc1f6457bd70847c",
+  "annotation_sha256": "436f3003adb14382fb4de2762b480b3d87a42d259c4d3d9fa6497e16735f8c6e",
+  "reviewed_at": "2026-10-18T02:52:04.976519+00:00",
+  "source_segments_read": 116,
+  "facts_reviewed": 364,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f053 (audiometry frequency-range conflict side): narrowed quote, text_value and statement to the standard PTA frequency list (0.25-8 kHz), the attribute actually in conflict with the 0.125-16 kHz range; the non-conflicting HFA list (9-16 kHz) was removed from the quarantined fact.",
+    "p1-f048 (HFA procedure): added the literal HFA frequency sentence (9, 10, 11.2, 12.5 and 16 kHz) as evidence and in the clinical statement so the non-conflicting attribute stays included."
+  ],
+  "unresolved": [
+    "Caption-layer visual_status stays not_inspected in this annotation; all seven figure JPEGs were inspected in the separate visual submission.",
+    "Tables 1 and 2 print mean SCP amplitudes without a unit; a microvolt unit appears only inside the figure axes (pixels), so no unit is attached to those cells.",
+    "Dash cells in Tables 1 and 2 (training days without usable mean SCP amplitudes) are missing cells, not zero values, and are not recorded as facts; the captions give two alternative reasons and do not say which applied to which day.",
+    "Table 1 and 2 cell times are the Block and Day column headers; the day number is carried in the observation name because the Day header cells hold bare numerals.",
+    "Author interpretations and hypotheses (hedged TFI-based statements about sleep, optimism and cognitive clarity, mechanisms of the pitch change, why left-hemisphere effects were larger, cortical excitation threshold) are not extracted as patient facts; one hedged observation is kept review_only.",
+    "The introduction, the literature comparisons and the mechanistic discussion describe other studies and are background; discussion sentences that restate Tables 1 to 5 are merged into the matching table-cell facts instead of being repeated.",
+    "THI, BDI I and TFI were experimental Polish versions; the authors caution that interpretation thresholds of the original instruments may not transfer, and the interpretation words in the source are kept as the authors' wording.",
+    "Only the THI states a time (\"before the training\"); the baseline audiometry, BDI and HFA sentences state no time and are not given one.",
+    "Table 3 percentage cells, the Table 1 and 2 Difference rows, one decimal-comma cell, and several text-versus-table label differences are kept as printed and recorded as ambiguities; audiometry frequency range is recorded as a source conflict.",
+    "The patient's initials occur only inside verbatim evidence quotes; no authored field contains them."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 116,
+    "facts_reviewed": 364,
+    "figures_viewed": 7,
+    "key_findings": [
+      "Single 50-year-old man with chronic tinnitus since 2006; SCP neurofeedback started 2013 in three blocks; roster count 1 literal.",
+      "All 123 non-dash Table 1-2 cells verified programmatically against the source rows: value, block time text, day in name, no unit, comparator =; dashes are missing cells, not facts.",
+      "Table 3 (TFI, 27 cells incl. difference cells) and Tables 4-5 (QEEG, 19 rows before/after/change) verified cell by cell.",
+      "Audiometry 0.125 vs 0.25 kHz lower bound kept as a true source conflict (two stated values for the same tested range), now quarantined to the PTA list only.",
+      "Table 3 percentages vs footnote formula (4 cells), Difference rows off by 0.1 or sign-flipped (11 columns), 17,6 %, Fig 3 caption 5 days vs 6 block-3 columns, and the T3 high-alpha sentence citing Table 4 in the eyes-closed paragraph are arithmetic/print/citation issues: ambiguities, not conflicts; agreed.",
+      "f059 tinnitus intensity takes Before the training from the immediately preceding sentence that reports the same pre-training tinnitus matching; quoted together, acceptable under the test-result ruling; the 2 NO-BORROWING warnings are non-blocking.",
+      "THI score time left null (completion sentence with before the training is not the immediately preceding sentence); the THI event carries the literal time.",
+      "Relation e06 to e07 rests on Finally in the clinical narrative, read as a sequence statement; all other relations quote stated years, followed by, before/after, previous/remaining blocks.",
+      "Abstract close to normal changes kept with no flag (not the source calling a result normal).",
+      "Patient initials appear only inside verbatim quotes; no authored field carries them."
+    ],
+    "residual_risks": [
+      "Finally (e06 before e07) could be read as a discourse marker rather than temporal order.",
+      "visual.json contains plot-point estimates in Figs 1-3, 5 and 7 that the annotator must remove; figure receipts not signed by the parent until then.",
+      "Audiometry range conflict could alternatively be read as a nominal device range; it is kept review_only."
+    ]
+  },
+  "physician_adjudicated": false
+}

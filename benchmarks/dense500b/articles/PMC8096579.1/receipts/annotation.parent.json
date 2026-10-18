@@ -1,0 +1,76 @@
+{
+  "article_id": "PMC8096579.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d92408ba2625a5781b20f6027e798888bac37acaaef6e38b570db6b3b79bc876",
+  "annotation_sha256": "005e1d923cba97c0d1edd660b5d508614379633034a85bc9a60b730c2527af89",
+  "reviewed_at": "2026-10-18T02:41:00.943213+00:00",
+  "source_segments_read": 85,
+  "facts_reviewed": 206,
+  "patients_reviewed": 7,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f016 IC-users follow-up -> ambiguous/review_only + ambiguity",
+    "p2-f016 IC-users follow-up -> ambiguous/review_only + ambiguity",
+    "p3-f016 IC-users follow-up -> ambiguous/review_only + ambiguity",
+    "p3-f006 Genetic to clarify -> supported/include, assertion present, verification unconfirmed",
+    "p4-f016 IC-users follow-up -> ambiguous/review_only + ambiguity",
+    "p4-f006 Genetic to clarify -> supported/include, assertion present, verification unconfirmed",
+    "p5-f016 IC-users follow-up -> ambiguous/review_only + ambiguity",
+    "p6-f016 IC-users follow-up -> ambiguous/review_only + ambiguity",
+    "p6-f006 Genetic to clarify -> supported/include, assertion present, verification unconfirmed",
+    "p6 relation p6-e02 before p6-e07 added",
+    "p6 relation p6-e08 before p6-e07 added",
+    "p6 relation p6-e08 before p6-e10 added",
+    "p7-f016 IC-users follow-up -> ambiguous/review_only + ambiguity",
+    "p7 relation p7-e02 before p7-e07 added",
+    "p7 relation p7-e08 before p7-e07 added",
+    "p7 relation p7-e08 before p7-e10 added",
+    "p1-p7 summaries: periodic follow-up sentence reworded as review-only (no new claims)"
+  ],
+  "unresolved": [
+    "The seven normal-hearing control-group children are described only as a group (mean and range of age, audiometric criteria); they are not individually described and are not rostered.",
+    "Individual P1 latencies, IT-MAIS/MAIS and MUSS percentages, word-list percentages and correlation statistics are printed or plotted only inside figures (pixel content): recorded in visual.json, not as facts. Table 2 values are group means and are not copied to individuals.",
+    "Unlabelled counts of children are not assigned to individuals: one child at the maximum IT-MAIS/MAIS value at nine months, three children with lower MUSS scores, three children with word-list data, two children with maximum auditory performance and one with maximum oral language performance.",
+    "Source conflict: the abstract says children 6 and 7 stopped effective CI use after the first year of activation while Results say after nine months; both timings are kept review-only.",
+    "Aggregate mean values in the study-group description (sensory deprivation one year and six months; hearing aid use one year and nine months) are not the arithmetic means of the Table 1 columns; individual Table 1 values are kept literally and the aggregate means are not copied.",
+    "The Discussion uses 'maximum auditory skills (comprehension)' for three children and 'maximum auditory performance' for two children without naming a measure for the second count; the three-child count is mapped to subjects 1, 2 and 5 only as a review-only fact and the two-child count is not assigned.",
+    "Table 3 column headers read '9 months' and '5 years' without stating the reference point; the methods say after nine months of CI use.",
+    "Table 2 footnote marks significance with a hash but the table cells use an asterisk (print artefact, aggregate only).",
+    "Roster: reported count seven is the study group; the seven control children are aggregate-only and not counted as individually described patients.",
+    "Subjects 6 and 7 are first named in Results (b00026), before the Table 1 rows; patients are numbered by the Table 1 subject numbers and their identity evidence is the Table 1 row.",
+    "The Authors' Contributions paragraph (b00052) names people who are not in the article's author list; it is administrative, not clinical, and is not used."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 85,
+    "facts_reviewed": 206,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Roster of seven study-group subjects follows Table 1 subject numbers; controls aggregate-only; every Table 1 and Table 3 cell captured per subject.",
+      "Cohort statements copied only where the sentence covers the whole group ('These children', 'Each SG child', 'all the children', 'all individuals'); the 'IC users underwent periodic follow-up' sentence does not say all and is now review-only for every subject.",
+      "Table 1 'Genetic to clarify' (subjects 3, 4, 6) is a literal patient cell: included as an unconfirmed genetic etiology rather than review-only.",
+      "Subjects 6 and 7: Results label them literally ('Two children (6 and 7)') as the two who stopped effective use and Table 1 lists effective use No only for them, so Abstract/Discussion statements about the two children who stopped/discontinued effective use are attributed to them; the stop timing (abstract 'after the first year of activation' vs Results 'after nine months') stays a review-only source conflict on both sides.",
+      "'decrease or stabilization' (X or Y), abstract 'gradual development' and the Discussion '>50% of the listened words' mapping to subjects 1, 2 and 5 remain review-only with ambiguities.",
+      "Added literal-order relations for subjects 6 and 7 (activation before stopping effective use; consistent use up to the ninth month before stopping and before the five-year worsening).",
+      "No individual plotted values were turned into facts; Figure 4 printed percentages and Figure 5 printed statistics stay pixel content."
+    ],
+    "residual_risks": [
+      "visual.json still carries plot-position estimates (Figures 1, 2, 3, 5) that must be removed by the annotator before the visual, figure-EHR and privacy receipts can be parent-signed.",
+      "Figure 3 subplots carry no protocol titles; IT-MAIS/MAIS vs MUSS assignment comes from caption order only.",
+      "Study-group mean sensory deprivation and hearing-aid durations in the text differ from the Table 1 column means (arithmetic-only, recorded as limitation).",
+      "The Authors Contributions paragraph names people from a different article (publisher error)."
+    ]
+  },
+  "physician_adjudicated": false
+}

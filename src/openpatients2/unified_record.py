@@ -271,11 +271,14 @@ def build_supplements(source, *, manifest=None, reviewed=(), statuses=None, pres
                             'contents_summary': target['contents_summary'],
                             'archive': {k: target['archive'][k] for k in ('url', 'sha256', 'md5', 'members')} if target.get('archive') else None,
                             'assets': [{k: deepcopy(a.get(k)) for k in ('url', 'member', 'sha256', 'page_count', 'pages',
-                                                                        'media_type', 'extraction', 'units', 'blocks')
+                                                                        'media_type', 'extraction', 'units', 'blocks', 'kind',
+                                                                        'embedded_images', 'embedded_videos', 'review', 'probe',
+                                                                        'sampling', 'frame_blocks', 'content_inspected',
+                                                                        'sheet_reviews')
                                         if k in a or k in ('url', 'member', 'sha256', 'page_count', 'pages')}
                                        for a in target['assets']]}
-                owners |= {pid for a in target['assets'] for p in a.get('pages', []) + a.get('blocks', [])
-                           for pid in p['patient_ids']}
+                from .dense.supplement_review import target_patient_ids
+                owners |= target_patient_ids(target)
             if target.get('clinical_data'):
                 clinical = deepcopy(target['clinical_data'])
                 owners |= {pid for f in clinical['facts'] for pid in f['patient_ids']}

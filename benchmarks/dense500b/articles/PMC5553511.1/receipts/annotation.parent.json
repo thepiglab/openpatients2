@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC5553511.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f180a82d754f12680ac638df689ed756d2f290a5ee5655adf7762f757a08904e",
+  "annotation_sha256": "adaf6a0567f4d66e8eaa4a151958dff97ccf908f06d9e1f052b9d797c661d3c0",
+  "reviewed_at": "2026-10-18T02:29:07.029966+00:00",
+  "source_segments_read": 39,
+  "facts_reviewed": 120,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Heparin prophylaxis (\"administered to the patients\") and early-mobilization encouragement (\"Patients were encouraged\") lack an all-patients quantifier: made review_only (ambiguous) for p1-p4; their events set to occurrence unknown.",
+    "Melanoma resection facts keep only the explicit four-patient sentence and the Table 1 site; \"The melanomas were fully resected\" (abstract wide margins, Results appropriate margins) moved to a new review_only fact per patient.",
+    "Removed the \"first reconstructive option ... for these patients\" indication and quote from the four reconstruction facts (no all-patients quantifier); recorded as an ambiguity.",
+    "No major complications for Cases 2-4 made review_only: the sentence is series level and the Table 1 dashes have no legend.",
+    "Added a tumor board decision event per patient and relations: resection before reconstruction (Objective: defects after melanoma resection; Case 2 also the Secondary cell), sentinel node biopsy before tumor board decision (based on posterior sentinel node status), reconstruction before limb-function recovery (after a minimal 5-year follow-up).",
+    "Rewrote treatment and outcome summary claims to drop review-only content; updated domain coverage, source coverage notes, ambiguities and article limitations."
+  ],
+  "unresolved": [
+    "Cohort level statements are not copied to individual patients unless the sentence explicitly covers all four patients or all cases: mean age, the sex split of three females and one male, the mean skin paddle size and range, the mean surgical time and range, and the count of patients with a vascular risk factor.",
+    "Series level outcome statements that name the series rather than the patients (100% flap survival, no partial flap necrosis, major complications not observed) are not copied to individual patients.",
+    "Sex is not documented for any individual patient: the text gives only counts (three females and one male) and Table 1 has no sex row, so no documented sex fact is recorded.",
+    "Operative Technique sentences without an all-patients quantifier (general anesthesia and margin protocol, in situ margin protocol, pivot point marking and intraoperative decision, tunneled or rotated pedicle, sentinel node biopsy technique with tracer and dye, 20-degree leg elevation, no pressure on the flap until the fourth postoperative week) describe the series and are not copied to individuals.",
+    "Counts without a named patient are not assigned to any patient: one tunneled pedicle (Fig. 5) with the rest rotated, and two patients who needed flap debulking 4 weeks after flap transposition.",
+    "The surgical indication criteria and the dermatology visit sentence in Methods describe patients who met the surgical indications and are not recorded as facts of each patient.",
+    "Source discrepancies recorded as ambiguities, not conflicts: the stated mean age of 54 years versus the Table 1 ages; three patients with a vascular risk factor versus a comorbidity for all four cases; three donor defects closed primarily and one skin graft versus two primary closures, one secondary closure and one skin graft.",
+    "The unit printed for the skin paddle sizes in the Results is cm with a superscript 3; these cohort statistics are not recorded.",
+    "Discussion and Conclusions are literature and author opinion; the sentence that heel numbness has not been a problem in our patients evaluates the series, and the sentence that no lesions have been documented due to the numbness names no subject, so neither is recorded as a patient fact.",
+    "All six figures are single photographs whose captions name no case, so figure ownership is unresolved; pixels are described in visual.json only.",
+    "The source lists no supplementary files.",
+    "Parent review: sentences about \"the patients\", \"Patients\", \"The melanomas\" or \"these patients\" without an all-patients quantifier (heparin prophylaxis, early mobilization, full resection, first reconstructive option) are not accepted per-patient facts; they are review only or recorded as ambiguities.",
+    "Table 1 prints dashes in the Complications row for Cases 2 to 4 without a legend, and the text statement of no major complications except patient number one is series level, so no major complications is review only for Cases 2 to 4. The Clark cell of Case 2 is blank and is not recorded.",
+    "Patient number one in the text is matched to Table 1 Case 1 by the same ordinal label, corroborated by the cellulitis and inguinal dissection cells."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 39,
+    "facts_reviewed": 120,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Every Table 1 cell checked against Cases 1-4 (age, comorbidities incl. the <break/>-split Case 3 cell, site, Breslow, Clark incl. blank Case 2 cell, margin, timing of reconstruction, donor closure, sentinel node, inguinal dissection, complications, follow-up, recurrence/metastasis); all correct.",
+      "Sex is given only as cohort counts (three females, one male); no per-patient sex fact is supportable. Age row has no time point: age_other kept.",
+      "Patient number one matched to Case 1 by the same ordinal label, corroborated by the cellulitis and dissection cells.",
+      "Mean age 54 vs Table ages (mean 52.5), 3 vs 4 risk-factor patients and 3 primary donor closures vs 2 primary + 1 secondary are arithmetic/count mismatches kept as ambiguities, not conflicts.",
+      "All six figure captions name no case; attribution stays unresolved."
+    ],
+    "residual_risks": [
+      "Reading \"the patients\"/\"The melanomas\" in a 4-patient series as not explicitly covering all four is a strict reading of the cohort-copy rule.",
+      "Review-only by elimination: foot defect sites, Case 2 4-week secondary reconstruction, Case 4 2 x 3 cm graft.",
+      "Oral antibiotics clause may attach to the cellulitis or to the dissection; indication left unrecorded."
+    ]
+  },
+  "physician_adjudicated": false
+}

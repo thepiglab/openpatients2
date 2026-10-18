@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC4934552.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "27d9da913d55d6312ba09ef1607ff03129b623517977b95e9b0a2eeeb42fe7b5",
+  "annotation_sha256": "3c162306aa775326f669c7c8384517230be560d8d08a10c5010c8f3da0014818",
+  "reviewed_at": "2026-10-18T02:45:26.470929+00:00",
+  "source_segments_read": 49,
+  "facts_reviewed": 197,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f069 protective sensation: changed from a present item with text_value 'absent via 10 g monofilament testing' to assertion=absent with label 'Protective sensation (10 g monofilament)' (EVID-NEGATION).",
+    "p1-f013 diabetic neuropathy: quarantined (ambiguous/review_only) and new ambiguity added: the patient list is introduced by 'Of these' but the risk-factor list names diabetic nephropathy, not diabetic neuropathy.",
+    "p1-f167 note and the week 12 unit ambiguity: removed reliance on Figure 10 (plot estimates are never evidence); the ambiguity now rests only on the printed mm/cm mix and drops the caption quote.",
+    "article_limitations: rewrote the Figure 10 sentence; no chart values are read, only printed labels and qualitative trends.",
+    "Added relation p1-e15 before p1-e16 (inconclusive MRI/x-ray result -> tagged WBC scan ordered about it), quoting both adjacent sentences of b00019."
+  ],
+  "unresolved": [
+    "No supplementary files or videos are listed for this article.",
+    "All ten figures were pixel-reviewed in visual.json; image content is pixel content and never a clinical fact here. The Figure 10 chart prints no data values and its lines carry no point markers, so no values are read from it; only printed labels and qualitative trends are described.",
+    "The stated ABPI values may be assigned to the wrong sides relative to the stated pressures; both are kept as printed with an ambiguity.",
+    "The week 12 wound dimensions are printed in mm while the depth is printed in cm; the dimension fact is review-only with an ambiguity.",
+    "Most sentences in the initial visit paragraph carry no time of their own, so only the debridement sentence is tied to the initial visit.",
+    "Author assessments (prognosis, risk, benefit of felt offloading, TIME model achievements) are kept as outcomes with event other or as possible items and are not observed clinical events.",
+    "Literature citations, guideline recommendations, scale definitions and general statements in the introduction and discussion are not patient facts.",
+    "The 30 mmHg compression of the multi-layer wrap is followed by a citation; the 8 mmHg compression of the elastic tubular bandage is stated without a citation.",
+    "The source does not state whether the follow-up visit the following week and the week 16 follow-up visit are the same visit."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 49,
+    "facts_reviewed": 197,
+    "figures_viewed": 10,
+    "key_findings": [
+      "Single index patient (47 year-old female, type 1 DM, left plantar DFU); roster count 1 literal; husband and children stay in her record.",
+      "ABPI right 0.92 / left 0.95 kept as printed; arithmetic-only mismatch with stated pressures is an ambiguity per ruling, not a conflict.",
+      "Week 12 0.5 x 0.5 mm dimension review_only (mm/cm mix); 0.1 cm depth kept.",
+      "'Five days later' (b00019) and 'the following week' (b00025) open new paragraphs: anchors null; b00026 'Five days later' is anchored to the initial visit within its own paragraph. BWAT 15 'At this point' anchored to week 15 in the adjacent sentence of the same paragraph, both quoted.",
+      "Caption times (NPWT week 4, felt/wrap/boot week seven, week 12 re-application) are used only for the facts each caption itself states.",
+      "Following-week visit and week 16 visit kept as separate events with an ambiguity; no order between them.",
+      "Prognosis, risk and author assessments kept as outcomes event other; TIME-model framing review_only; RCW not equated with the walker boot; 30 mmHg wrap compression kept on the wrap fact with an ambiguity about the citation.",
+      "Merges of blindness, Charcot deformity, education and wound closure restatements checked: each merges the same condition/action/event; the 98-105 day statement and 100% epithelialization stay separate items."
+    ],
+    "residual_risks": [
+      "Author assessments typed as outcomes other may be scored as outcomes downstream.",
+      "30 mmHg wrap pressure may be a literature value rather than a patient measurement (ambiguity recorded).",
+      "visual.json Figure 10 still holds plot-estimated readings until the annotator removes them; visual, figure-EHR and privacy parent receipts are not signed."
+    ]
+  },
+  "physician_adjudicated": false
+}

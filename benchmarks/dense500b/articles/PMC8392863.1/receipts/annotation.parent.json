@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC8392863.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5018017c23b1803a5c4eeb9ea593b5901e69deb4d3aacf70ed2308d7f2649e01",
+  "annotation_sha256": "e4c97dcf8d02fe53a321c5480821fd952bcb1cf95cecbb9069ad1ff9f5df6161",
+  "reviewed_at": "2026-10-18T02:41:43.171238+00:00",
+  "source_segments_read": 50,
+  "facts_reviewed": 116,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Late-onset visual impairment vs progressive vision loss from age three reclassified from source conflict to ambiguity: the label is undefined and plausibly means late blindness (late-blind comparison group, blindness at 80). p1-f007 (label) now ambiguous/review_only; p1-f014 (onset at age three) promoted to supported/include; redundant p1-f013 removed; event p1-e01 now carries the literal age \"He was three\".",
+    "Removed 14 protocol-method / data-handling items that are not patient facts: seating in a quiet room (f044), electrode net, vertex reference, impedance criterion, sampling rate, software version (f069-f073), analyzed/retained/discarded minutes and retained channels from the Methods (f075-f079), epoch counts (f082-f083), choice of representative electrodes (f093). Event, summary, source-coverage and limitation entries updated.",
+    "Modularity and participation coefficient (f111, f112) assigned to the theta networks with literal support (Discussion b00040 links the modularity increase to the theta connectivity decrease; Figure 4 caption presents every graph metric in the theta band); ambiguity rewritten.",
+    "Added relations: cathedral description during the VH period (e19 during e18), additional details at the end of the EEG acquisition (e21 during e16), neuropsychological examination before its scores (e09 before e11), ophthalmologic examination before its findings (e10 before e12)."
+  ],
+  "unresolved": [
+    "Single-patient case report of EEG during and without visual hallucinations; the EEG results are scalp-level and the authors state that EEG spatial resolution is low and no compelling evidence for specific brain regions is available.",
+    "The left and right hemisphere regions of the alpha-band complexity increase conflict between Results and Discussion and are kept review-only; the undefined label late-onset visual impairment is review-only as an ambiguity against the stated onset of progressive vision loss at age three.",
+    "Values printed inside images (figures and the supplementary PDF) are pixel content only; critical t-values from the Figure 3 and Figure 5 captions are review-only because the supplementary images print different thresholds.",
+    "The source writes VS where VH is used elsewhere; the printed wording is kept and not corrected.",
+    "The MRI exam, gray matter volume and fMRI findings of this patient are cited to an earlier report; only the statements made about this patient in this article are recorded, and the MRI result is not available here.",
+    "EEG acquisition settings (hardware, reference, impedance, sampling rate, software), preprocessing and data-handling parameters (analyzed and discarded durations, retained channels, epoch counts, choice of representative electrodes) are methods and are not recorded as patient facts; the recording duration and periods, artifacts, Results-stated retained clean data and critical t-values of this recording are recorded.",
+    "Hallucination sentences of the results paragraph after the lead sentence carry no per-fact time because the lead sentence is not part of each fact quote; the scope of the later hallucination paragraph is not stated.",
+    "Supplementary PDF (Figures S1 to S6, Tables S1 to S3) is typed separately in the supplement review; pixel descriptions of the five main figures are in the visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 50,
+    "facts_reviewed": 131,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (85-year-old man with retinitis pigmentosa and CBS); history ages 3, teenage years, 70 and 80, cognitive scores 79/79 and 22/22, ophthalmologic findings, CBS criteria and EEG results captured literally.",
+      "Alpha-band complexity left/right hemisphere regions swapped between Results b00034 and Discussion b00042 kept as a true source conflict (both sides review_only); midline frontal and large-scalp findings included.",
+      "Figure 3 and Figure 5 caption critical t-values stay review_only ambiguities: Figure S2/S6 image labels differ and are pixel content only.",
+      "Theta frontal decrease, midline posterior increases and theta graph metrics take the VH-versus-RS time of the immediately preceding sentence naming the same comparison, quoted contiguously; accepted.",
+      "Gray matter volume and fMRI connectivity are this patient's findings from the authors' earlier single-patient CBS report (ref 20) and are kept; the MRI result itself is not given here.",
+      "Blindness vs light perception, VS typo, unnamed electrode for delta/theta RS>VH and b00024 scope remain ambiguities."
+    ],
+    "residual_risks": [
+      "Boundary between patient-specific recording facts and methods is a judgment: Results-stated clean-data minutes and caption critical t-values are kept, Methods acquisition settings are not.",
+      "Visual submission still prints Figure 4 bar-height estimates; Sonnet must remove them, so visual/figure-EHR/privacy parent receipts are not signed."
+    ]
+  },
+  "physician_adjudicated": false
+}

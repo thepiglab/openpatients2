@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC7770219.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3ac19af4251d86fa01ffdb5cd50679d0fbe8658de99ef4b58efa5c352079af91",
+  "annotation_sha256": "a9c6f7f0e8a2aef372e344fedfd455b3f0084262b1d8108ff7e4da2787dc433b",
+  "reviewed_at": "2026-10-18T03:43:36.417985+00:00",
+  "source_segments_read": 67,
+  "facts_reviewed": 369,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Temporality reset to unknown where the item quote carries no history label: 2011 muscle MRI (observation and procedure) and symmetric muscle edema, hypomyopathic classification, absent lung involvement, Pneumocystis pneumonia, lymphopenia at that time, and the high-dose corticosteroid and methotrexate exposure.",
+    "Anti-Mi-2 detection given its own literal year: added the b00047 quote \"Mi-2 detected in 2011\" and time \"in 2011\"; temporality historical retained.",
+    "Undetectable autoantibodies (anti-dsDNA, anti-Sm, anti-Scl 70, anti-citrullinated peptides, rheumatoid factor, anti-cardiolipin, anti-beta2-glycoprotein I) and the undetectable CMV viral load flagged negative (qualitative not-detected results).",
+    "Removed a non-literal frequency (\"mg/day tapering at 10-days intervals\") from the prednisolone taper; the literal regimen is kept.",
+    "Added missed facts: severe respiratory distress despite three immunosuppressants (b00059) and \"her condition remained critical\" after methylprednisolone pulses and IVIG (b00052).",
+    "Timeline: Table 1 cells no longer grouped into events at other dates. November 1 column cells removed from the tofacitinib-start event (which keeps no date because the start date is the conflicting attribute) into their own November 1 event; March 8, 2020 cells removed from the March 9, 2020 last-visit event into their own event; flow cytometry cells printed as October 23 and October 30 moved out of the October 21 and November 1 column events into their own dated events.",
+    "Undated immunology (ANA, anti-Jo-1, Coombs, myositis panel, other autoantibodies, HLA) and echocardiography moved out of the October 1, 2019 presentation event into an undated work-up event; the NK count >100 after about four months of tofacitinib moved to its own event.",
+    "Lung-transplantation event: description limited to the discussion, occurrence occurred, kind other (the discussion happened; transplantation is not stated as planned or done).",
+    "Added 15 literal relations: deterioration during prednisone/azathioprine/tacrolimus (Fig 2 caption \"While the patient was treated\"); deterioration before admission (\"required admission\"); tofacitinib start before repeated PFT (day 1 vs day 22), before ferritin days 50-75 and before NK rebound (\"after approximately four months of therapy\"); initial FVC 59% before the series (\"initial decline\"); table header dates ordering the column events; October 23 flow cytometry during admission (\"second day of admission\"); March 8, 2020 cells before the March 9, 2020 last visit. Tofacitinib-to-nintedanib relation now also cites \"nintedanib three weeks later\" and \"Thereafter\".",
+    "Ambiguities: flow-date ambiguity now links the October 23/30 flow cytometry cells (it pointed to the unrelated CD4/CD8 end-of-period fact); added admission-day arithmetic ambiguity (admission October 21 vs CT \"on hospital admission\" October 22 vs \"second day of admission\" October 23) and a Figure 3B representative-example ambiguity."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected in annotation figures; actual images inspected in the separate visual submission.",
+    "Table 1 dash cells (no result) are not recorded as observations; Table 1 reference-range column is kept as reference_range_text without flags because the table assigns no flags.",
+    "Tofacitinib start is dated October 30, 2019 (day 1) in the text and Figure 1 caption but November 1 in the Table 1 description; recorded as two review-only source_conflict items.",
+    "Text ferritin values (1,695, 1,192, 1973, 717, 575, 367, 304) are not merged with table cells except November 18 (915 μg/L, same calendar date); the text day numbers are kept as literal time text.",
+    "Values printed inside images and plot readings are in visual.json only and are not facts here; Figure 2 and Figure 3A plot values are not transcribed.",
+    "Statements about published cases from Asia and the literature in the introduction and discussion are not patient facts.",
+    "Authors’ hypotheses (epitope spreading, NK cell redistribution to lung, CD4+CXCR4+ T cell subset) are interpretations and are not recorded as findings."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 67,
+    "facts_reviewed": 369,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (74-year-old woman, anti-Jo-1 positive, anti-MDA5 negative RPILD treated with tofacitinib then nintedanib); roster count 1 from the abstract.",
+      "Tofacitinib start: October 30, 2019 (day 1) in the text and Figure 1 caption vs November 1 in the Table 1 caption; the day numbering (November 18 = day 20, December 25 = eight weeks) follows October 30. Kept as an undated core start fact plus two review_only source_conflict date items, per the conflict ruling.",
+      "Ferritin: only 915 on November 18, 2019 is merged with the table (text date equals the column date). 1973 (no own date, \"highest measured level\") is review_only as a possible duplicate of the November 1 cell; 1,695, 1,192, 717, 575, 367 and 304 (day 132) stay separate text items; 304 day 132 vs March 8, 2020 and 717 day 50 vs 722 December 25 recorded as ambiguities.",
+      "Flow cytometry cells in the October 21 and November 1 columns are timed literally October 23 and October 30 from the table flow-date row; CD4 264 cites the Figure 3 caption sentence dated October 23 (same analyte, value and printed date).",
+      "NK 106 and CD4/CD8 4.6 \"end of the period\" statements are kept separate from the March 8, 2020 cells (no source statement makes them the same measurement); CD4/CD8 has no unit (ratio printed with /µl).",
+      "All 176 Table 1 value cells are observations with literal column (or flow-row) dates; dash cells excluded. Five-month means flagged only from the source words (thrombocytopenia, monocytopenia, lymphopenia, increased, cytopenia, within normal limits). Ferritin table cells unflagged.",
+      "Pixels of F1-F3 viewed: no plot estimates for the F2 ferritin/FVC chart or F3A; F1 C/D print 30.10.2019 and 18.11.2019 (pixel text only)."
+    ],
+    "residual_risks": [
+      "Possible double representation of the same draws in text and table (304, 106, 4.6) because the source never identifies them as the same measurement.",
+      "Figure 3B is attributed to p1 from the single-case context; the caption calls it a representative example without a date (facts review_only).",
+      "Several work-up items (BAL, first PET/CT, FVC 59%) have no literal date and remain unordered relative to admission."
+    ]
+  },
+  "physician_adjudicated": false
+}

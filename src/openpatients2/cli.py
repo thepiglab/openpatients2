@@ -110,7 +110,7 @@ def dense_usage():
     from .dense import TOOLS
     width = max(map(len, TOOLS))
     lines = ["usage: op2 dense <tool> [args...]   (op2 dense <tool> --help for a tool's options)", "",
-             "Tools for benchmarks/dense500 and benchmarks/dense50 (modules in openpatients2.dense):"]
+             "Tools for benchmarks/dense500, benchmarks/dense500b and benchmarks/dense50 (modules in openpatients2.dense):"]
     lines += [f"  {name:<{width}}  {text}" for name, text in TOOLS.items()]
     lines += ["", "Validation is the same command WITHOUT --role; a --role call is a signature."]
     return "\n".join(lines)

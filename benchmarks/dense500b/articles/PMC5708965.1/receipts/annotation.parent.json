@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC5708965.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5027f100cd9d5fc6ee9280c48edbb8433daa8ab5333576c2256288871883a83c",
+  "annotation_sha256": "c40dd57bcc0596423554f23b4644f5c62b8f4ce6c6fb2a5a52fa0af884368562",
+  "reviewed_at": "2026-10-18T03:36:18.634213+00:00",
+  "source_segments_read": 39,
+  "facts_reviewed": 113,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f011 (symptoms_function 'worsening of symptoms'): same b00009 statement as outcomes deterioration p1-f104 (ONE-STATEMENT); event p1-e03 and summary claim 1 repointed to p1-f104.",
+    "Added p1-f114 medications 'Steroid therapy' administered during her first hospitalization (b00012 'steroid therapy received...', b00025 'like our patient experienced during her first hospitalization'); not merged with the prednisolone prescription; b00025 source coverage changed to patient_facts.",
+    "p1-f101/p1-f102 alcohol persisted/resumed: status current -> unknown (use is not placed at the latest described time); added literal times 'after diagnosis of the illness and her first hospitalization' / 'after her first hospitalization' anchored to 'first hospitalization'.",
+    "Restored literal anchors: p1-f022 'first hospitalization', p1-f048 'second hospitalization'.",
+    "Events p1-e03 and p1-e05 (disease worsening) kind adverse_event -> outcome (no drug harm stated); p1-e03 time_kind duration -> relative.",
+    "Discharge event p1-e10 evidence and the p1-e09->p1-e10 relation quote trimmed to end at 'she was discharged' so neither side of the 14 vs 25 day conflict is selected.",
+    "Added relation p1-e02 before p1-e03 (prescribed a 2-month course of prednisolone, symptoms worsened after 2 months).",
+    "Ambiguity on undated text ultrasound values extended: text spleen 56 mm vs 56.2 mm printed in the Table 4 image is a rounding-level difference, text kept as written."
+  ],
+  "unresolved": [
+    "Tables 1-4 (admission laboratory data, liver function, CBC, ultrasound series) and Table 5 exist only as images; their values are pixel content in visual.json and are not typed clinical facts.",
+    "The abstract (14 days) and case text (25 days) disagree on the interval from admission to discharge; both are quarantined as source_conflict facts.",
+    "The abstract and case text anchor the 2 years of heavy drinking differently (disease onset versus admission).",
+    "Text-stated ultrasound measurements are undated and are not matched to Table 4 rows.",
+    "Figure 6 prints no data labels; only qualitative trends and axis ticks are recorded, with no plot estimates."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 39,
+    "facts_reviewed": 113,
+    "figures_viewed": 11,
+    "key_findings": [
+      "Single 30-year-old woman with Zieve syndrome; roster count 1 from the abstract case statement.",
+      "Tables 1-5 are image-only; all 142 printed table cells in visual.json were checked against the pixels (values, units, dates, reference ranges) and match; no typed facts from table pixels and the measurement series stays empty.",
+      "Discharge interval 14 days (abstract) vs 25 days (case text) kept as two review_only source_conflict facts plus an included discharge fact without interval.",
+      "Heavy-drinking duration anchored to disease onset (abstract) vs admission (case text) kept as review_only conflict pair with an included 60 g/d base fact; persisted vs resumed drinking kept as two facts plus an ambiguity.",
+      "Lipids 'normal or below normal' review_only with ambiguity; 'almost normalized' follow-up observations carry flag unknown; moon face and related signs recorded without the hedged 'likely due to' steroid cause (ambiguity)."
+    ],
+    "residual_risks": [
+      "Undated text ultrasound measurements and the 70 to 56 mm spleen change cannot be tied to Table 4 dates from text alone.",
+      "Print oddities in table images (Hct 5.8%, Table 3 platelets 162 per uL, Figure 6 in umol/L and g/L) are kept as printed in visual.json only.",
+      "Drinking-duration conflict is anchor-level (onset vs admission, 4 months apart) and might alternatively be read as imprecision."
+    ]
+  },
+  "physician_adjudicated": false
+}

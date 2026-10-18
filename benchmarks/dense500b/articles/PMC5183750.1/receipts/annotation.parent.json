@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC5183750.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "060347d4a0cec9fbd20ea654676fb5ecb4c16930c5b87a6662d47046c9839f44",
+  "annotation_sha256": "ada44d8b15f0b6610345b62b9ca5a0099655f55914e477628f42a357ec4039dd",
+  "reviewed_at": "2026-10-18T02:10:56.725892+00:00",
+  "source_segments_read": 30,
+  "facts_reviewed": 64,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Apgar 1/5/10-minute performance_score items: time relation changed from at to after with literal anchor birth (minutes counted from birth); section symptoms_function kept per SECTION-SIGNS",
+    "p1-f012 SVT condition: added the current-case Table 1 row as evidence for the Arrhythmia type cell (OBS-TABLE-ROWS coverage)",
+    "p1-f050 subsequent adenosine doses: quote extended within its own sentence to include 'over the next 45 minutes'; time set during, anchor null",
+    "p1-f060 no cardiovascular compromise: quote extended within its own sentence to 'Throughout these events'; time set during, anchor null",
+    "Added relations e01->e02 (delivery, Apgar at birth, then Initial resuscitation), e01->e05 (birth -> event at 30 hours of age), e05->e09 (Fig 3 caption: X-rays taken after onset of SVT), e06->e08 (ECG diagnostic for SVT -> 'This was initially treated with intravenous adenosine'; result -> action), e10->e11 ('After 11 weeks he was discharged')"
+  ],
+  "unresolved": [
+    "Table 1 literature rows other than the current-case row concern other patients and are not patient facts.",
+    "Figure 2 caption rate 260 differs from the text rate 259 at rounding level; recorded as an ambiguity.",
+    "Values printed inside images are recorded only in the visual submission.",
+    "Adenosine route is stated only in the abstract; intermediate doses are not itemized."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 30,
+    "facts_reviewed": 64,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single preterm male twin neonate; roster 1 correct; Table 1 literature rows correctly excluded, current-case row and its footnote captured",
+      "All stated vitals, ECG values (rate 259, QTc 303 ms, absent p-waves, no flutter waves), MABP 31 and 35 mmHg, adenosine doses 50/100/150/escalating to 300/final 300 mcg/kg, 20-minute recurrence, 45-minute window and 11-week discharge captured literally",
+      "ECG rate text 259 vs caption 260 kept as a rounding-level ambiguity, caption value review_only; image header value 259 is pixel content only",
+      "Tachycardia sign and SVT condition are distinct statements (presenting sign vs ECG-confirmed diagnosis), not ONE-STATEMENT duplicates",
+      "Adenosine route intravenous kept only on the abstract item; not borrowed to per-dose items",
+      "Discharge 'After 11 weeks' has no literal reference point; anchor null with ambiguity (adjacent-sentence ruling does not supply one)"
+    ],
+    "residual_risks": [
+      "Apgar time relation after/birth is a representational choice; prior articles used at with null anchor",
+      "Fig 3 '2 days' and Fig 2 header measurements (QRSD, QT, axes) are pixel-only and not facts",
+      "MABP 35 mmHg is undated beyond 'throughout these events' in a neighbouring sentence"
+    ]
+  },
+  "physician_adjudicated": false
+}

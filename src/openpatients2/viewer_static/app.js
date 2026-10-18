@@ -20,8 +20,8 @@ const ICONS = {
 };
 
 const state = {
-  catalog: [], catalogRevision: null,
-  filter: {q: '', status: '', specialty: '', advanced: {}},
+  catalog: [], catalogRevision: null, themes: [], themeNames: {},
+  filter: {q: '', status: '', specialty: '', theme: '', advanced: {}},
   article: null, aid: null, pid: null, tab: 'summary', revision: null,
   generation: 0, refreshing: false,
   expanded: new Set(),
@@ -108,16 +108,24 @@ const ADVANCED = {
     none: r.figure_count > 0 && !r.figure_reviewed})[v],
   article_type: (r, v) => r.article_type === v,
   license: (r, v) => r.license === v,
+  tag: (r, v) => (r.theme?.tags || []).includes(v),
+  batch: (r, v) => v === 'dense500b' ? r.reference_set === 'dense500b' : !!r.reference_set && r.reference_set !== 'dense500b',
 };
+/* A theme filter value is a group (all its lanes) or one lane; it matches the primary theme only. */
+const themeMatch = (r, v) => !v || r.theme?.group === v || r.theme?.lane === v;
+const themeName = r => r.theme && state.themeNames[r.theme.lane];
+/* The theme lane, unless it only repeats the specialty (dense500b strata are their lanes). */
+const themeLabel = r => r.theme && r.primary_stratum !== r.theme.lane
+  && themeName(r)?.toLowerCase() !== pretty(r.primary_stratum || '').toLowerCase() ? themeName(r) : null;
 const advancedMatch = r => Object.entries(state.filter.advanced).every(([k, v]) => !v || !ADVANCED[k] || ADVANCED[k](r, v));
 
 function filteredCatalog() {
-  const {q, status, specialty} = state.filter;
+  const {q, status, specialty, theme} = state.filter;
   const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
   const rank = {schema_reviewed: 0, source_reviewed: 1, updating: 2, pending: 3};
   return state.catalog
-    .filter(r => (!status || r.status === status) && (!specialty || r.primary_stratum === specialty) && advancedMatch(r)
-      && terms.every(t => [r.title, r.article_id, r.primary_stratum].join(' ').toLowerCase().includes(t)))
+    .filter(r => (!status || r.status === status) && (!specialty || r.primary_stratum === specialty) && themeMatch(r, theme) && advancedMatch(r)
+      && terms.every(t => [r.title, r.article_id, r.primary_stratum, themeName(r)].join(' ').toLowerCase().includes(t)))
     .sort((a, b) => (rank[a.status] ?? 4) - (rank[b.status] ?? 4) || titleOf(a).localeCompare(titleOf(b)));
 }
 
@@ -128,7 +136,7 @@ function renderCatalog() {
     ? `${state.catalog.length} articles · ${reviewed} reviewed`
     : `${rows.length} of ${state.catalog.length} articles`;
   $('articles').replaceChildren(...rows.map(r => {
-    const meta = [r.primary_stratum && pretty(r.primary_stratum),
+    const meta = [r.primary_stratum && pretty(r.primary_stratum), themeLabel(r),
       r.status === 'schema_reviewed' ? (r.patient_count ? plural(r.patient_count, 'patient') : 'aggregate series only') : r.status === 'updating' ? 'updating…' : 'not reviewed yet'];
     return h('button', {
       type: 'button', class: 'article-row' + (r.status === 'schema_reviewed' ? '' : ' unreviewed') + (r.article_id === state.aid ? ' active' : ''),
@@ -157,7 +165,33 @@ function renderSpecialties() {
     const opts = [...new Set(state.catalog.map(r => r[field]).filter(Boolean))].sort();
     el.replaceChildren(h('option', {value: ''}, 'Any'), ...opts.map(v => h('option', {value: v}, label(v))));
   }
+  renderThemes();
   syncAdvanced();
+}
+
+/* Theme menu: each group, then its lanes (indented), with primary-theme counts; empty lanes are left out. */
+function renderThemes() {
+  const primary = {}, tagged = {};
+  for (const r of state.catalog) {
+    if (!r.theme) continue;
+    primary[r.theme.group] = (primary[r.theme.group] || 0) + 1;
+    primary[r.theme.lane] = (primary[r.theme.lane] || 0) + 1;
+    for (const t of r.theme.tags || []) tagged[t] = (tagged[t] || 0) + 1;
+  }
+  const options = [h('option', {value: ''}, 'Any theme')], tags = [h('option', {value: ''}, 'Any')];
+  for (const g of state.themes) {
+    if (!primary[g.group]) continue;
+    options.push(h('option', {value: g.group, class: 'dd-group'}, `${g.name} (${primary[g.group]})`));
+    for (const l of g.lanes) {
+      if (primary[l.lane]) options.push(h('option', {value: l.lane}, `\u2003${l.name} (${primary[l.lane]})`));
+      if (tagged[l.lane]) tags.push(h('option', {value: l.lane}, `${l.name} (${tagged[l.lane]})`));
+    }
+  }
+  const select = $('theme-filter');
+  select.replaceChildren(...options);
+  select.value = primary[state.filter.theme] ? state.filter.theme : '';
+  state.filter.theme = select.value;
+  document.querySelector('[data-filter="tag"]').replaceChildren(...tags);
 }
 
 /* Advanced filters persist per browser; stale values (e.g. a license no longer present) are dropped. */
@@ -193,7 +227,8 @@ async function refresh() {
   try {
     const c = await get('api/catalog.json');
     if (c.revision !== state.catalogRevision) {
-      state.catalog = c.articles; state.catalogRevision = c.revision;
+      state.catalog = c.articles; state.catalogRevision = c.revision; state.themes = c.themes || [];
+      state.themeNames = Object.fromEntries(state.themes.flatMap(g => [[g.group, g.name], ...g.lanes.map(l => [l.lane, l.name])]));
       renderSpecialties(); renderCatalog();
     }
     $('sync').textContent = 'Updated ' + new Date().toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'});
@@ -273,7 +308,7 @@ function renderHeading() {
   const a = state.article, m = a.metadata;
   const authors = (m.authors || []).map(v => typeof v === 'string' ? v : v.name || '').filter(Boolean);
   const byline = authors.length > 3 ? `${authors.slice(0, 3).join(', ')} et al.` : authors.join(', ');
-  const eyebrow = [m.primary_stratum && pretty(m.primary_stratum), m.article_type && words(m.article_type), m.pmcid || a.article_id];
+  const eyebrow = [m.primary_stratum && pretty(m.primary_stratum), themeLabel(m), m.article_type && words(m.article_type), m.pmcid || a.article_id];
   const links = [link('PubMed Central ↗', m.article_url),
     h('a', {href: `api/articles/${encodeURIComponent(a.article_id)}.json`, download: a.article_id + '.json'}, 'Download JSON')].filter(Boolean);
   $('article-heading').replaceChildren(
@@ -1236,7 +1271,8 @@ function enhanceSelect(select) {
   const loading = () => !state.catalog.length && select.options.length <= 1
     ? h('li', {class: 'dd-loading', 'aria-disabled': 'true'}, 'Loading…') : null;
   const fill = () => list.replaceChildren(...[...select.options].map((o, i) => {
-      const li = h('li', {role: 'option', id: `${label.replace(/\W+/g, '-')}-opt-${i}`, 'aria-selected': String(o.selected), class: o.selected ? 'selected' : null},
+      const li = h('li', {role: 'option', id: `${label.replace(/\W+/g, '-')}-opt-${i}`, 'aria-selected': String(o.selected),
+        class: [o.selected && 'selected', o.className].filter(Boolean).join(' ') || null},
         h('span', 'dd-check', o.selected ? icon('check') : null), o.textContent);
       li.addEventListener('pointermove', () => { if (active !== i) highlight(i); });
       li.addEventListener('click', () => choose(i));
@@ -1334,8 +1370,9 @@ $('advanced-toggle').onclick = () => {
 {
   const p = new URLSearchParams(location.hash.slice(1));
   const keys = Object.keys(ADVANCED);
-  if (!p.has('article') && [...p.keys()].some(k => k === 'specialty' || k === 'status' || keys.includes(k))) {
+  if (!p.has('article') && [...p.keys()].some(k => k === 'specialty' || k === 'status' || k === 'theme' || keys.includes(k))) {
     state.filter.specialty = p.get('specialty') || '';
+    state.filter.theme = p.get('theme') || '';
     state.filter.status = $('status').value = p.get('status') || '';
     state.filter.advanced = Object.fromEntries(keys.map(k => [k, p.get(k) || '']).filter(([, v]) => v));
     store('filters', JSON.stringify(state.filter.advanced));
@@ -1344,6 +1381,7 @@ $('advanced-toggle').onclick = () => {
 }
 syncAdvanced();
 $('specialty').addEventListener('change', () => { state.filter.specialty = $('specialty').value; renderCatalog(); });
+$('theme-filter').addEventListener('change', () => { state.filter.theme = $('theme-filter').value; renderCatalog(); });
 $('text-search').addEventListener('input', debounce(() => runFind(), 120));
 $('text-search').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); stepMatch(e.shiftKey ? -1 : 1); } });
 $('toggle-library').onclick = toggleLibrary;

@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC5187466.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d029991596aa1bb8b7da34ba8b2d670fa83b657256cc27a02fa97c74f5a9e71e",
+  "annotation_sha256": "7dd3a008bbf93dfbb51fc3878b539cd36b0332c3fce75e89e4a47cfdda06a2d7",
+  "reviewed_at": "2026-10-18T02:25:16.335340+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 118,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f090/p1-f091 Gram and acid-fast stains: specimen 'fluid' was borrowed from the preceding fluid-analysis sentences; set specimen null, evidence reduced to the stain sentence itself, ambiguity added.",
+    "p1-f083 renamed 'Attempted ultrasound guided drainage of the abscess' to keep the source's 'attempted'; action completed retained because fluid was collected and analysed.",
+    "p1-e14 description no longer implies the stains were of the collected fluid; summary claim 2 likewise.",
+    "Added 7 literal temporal relations: immigration 'one year ago' before presentation; presentation before empiric anti-TB start ('Given her history and presentation'); regimen start before discharge on it and before all medications were stopped; consult before neurosurgery 're'-evaluation; TB clinic follow-up and regimen start before the 'last clinic visit, six months into her treatment course'.",
+    "Per orchestrator ruling: removed consult -> initial reluctance relation (not literally ordered); updated p1-f090/p1-f091 notes to match the null specimen."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the two MRI images were inspected separately in the visual target.",
+    "No calendar dates are stated; all times are literal relative expressions and no calendar values or numeric offsets were derived.",
+    "The source gives no reference ranges or interpretation flags for the laboratory values, so no high or low flags were assigned except where the source says elevated.",
+    "The abstract back swelling and the case text left flank swelling are kept as separate statements; the source does not state they are the same lesion.",
+    "Sentences describing \"the swelling\" (first noticed, progression, current size) do not repeat the site, so no body site is recorded for them; only the chief complaint sentence gives the left flank.",
+    "The specimen origin of the cultures from drained abscess is not stated (ultrasound guided fluid or the later paraspinal drainage).",
+    "Figure 1 caption says expansile mass while the case text says expansile abscess; both wordings are kept as written.",
+    "The introduction says the cold abscess was the only manifestation of tuberculosis; other documented findings (cervical lymph nodes, icteric sclera, right upper quadrant pain, elevated transaminases) have no stated cause and were not attributed.",
+    "Nationality (Nigeria) is stated but no race or ethnicity is documented, so none was recorded.",
+    "Discussion and conclusion paragraphs are general review text without patient-specific statements and are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 118,
+    "figures_viewed": 2,
+    "key_findings": [
+      "All labs (15 values + HIV + blood cultures), 5 vitals/BMI, 6 fluid results and 2 stains are captured literally with comparators.",
+      "Blood culture 'remained sterile' kept as flag negative (source's own qualitative result); 'elevated transaminases' kept as flag high.",
+      "Initial surgical drainage kept action unknown (only 'reluctant'); BCG-as-a-child, 'At this time' same_time and follow-up MRI after CT relations verified as literal.",
+      "Abstract back swelling kept separate from left flank swelling with ambiguity."
+    ],
+    "residual_risks": [
+      "Specimen of 'cultures from drained abscess' is not stated (ultrasound vs paraspinal drainage); kept as ambiguity.",
+      "Immigration 'one year ago' assumed relative to the presentation narrative.",
+      "EVID-NEGATION warning on p1-f041 ('nontender') is a checker false positive."
+    ]
+  },
+  "physician_adjudicated": false
+}

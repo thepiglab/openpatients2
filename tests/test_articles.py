@@ -197,6 +197,49 @@ def test_nested_figure_preserves_inline_text_order():
     assert 'Before emphasis after.' in a['text']
 
 
+FIG = '<fig id="F1"><label>Figure 1</label><caption><p>Case 1 radiograph.</p></caption><graphic xlink:href="fig1"/></fig>'
+
+
+def figure_caption(xml):
+    a=parse_article(xml,article()['metadata'])
+    fig=a['figures'][0]
+    segment=next(s for s in a['segments'] if s['segment_id'] in fig['caption_segment_ids'])
+    return fig, segment
+
+
+def test_statement_only_figure_uses_statement_as_caption():
+    xml=XML.replace(FIG,'<fig id="F1"><label>Figure 1</label><graphic xlink:href="fig1"/>'
+        '<statement><p>Oral ulcerations and edematous lip.</p></statement></fig>')
+    fig,segment=figure_caption(xml)
+    assert fig['caption']=='Oral ulcerations and edematous lip.'
+    assert segment['kind']=='figure_caption' and segment['text']=='Figure 1\nOral ulcerations and edematous lip.'
+
+
+def test_bare_number_caption_is_completed_by_figure_paragraphs():
+    xml=XML.replace(FIG,'<fig id="F1"><caption><p>Figure 1.</p></caption><graphic xlink:href="fig1"/>'
+        '<p><bold>Figure 1A:</bold> ECG with complete heart block.</p></fig>')
+    fig,_=figure_caption(xml)
+    assert fig['caption']=='Figure 1. Figure 1A: ECG with complete heart block.'
+
+
+def test_real_caption_takes_precedence_over_figure_statement():
+    xml=XML.replace(FIG,'<fig id="F1"><label>Figure 1</label><caption><p>Case 1 radiograph.</p></caption>'
+        '<graphic xlink:href="fig1"/><statement><p>Unrelated statement.</p></statement></fig>')
+    fig,segment=figure_caption(xml)
+    assert fig['caption']=='Case 1 radiograph.' and 'Unrelated' not in segment['text']
+    assert figure_caption(XML)[0]['caption']=='Case 1 radiograph.'
+
+
+def test_table_image_takes_its_table_wrap_caption_without_new_segment():
+    xml=XML.replace('<table><thead>','<graphic xlink:href="tab1"/><table><thead>')
+    base=parse_article(XML,article()['metadata'])
+    a=parse_article(xml,article()['metadata'])
+    image=next(f for f in a['figures'] if f['figure_type']=='unwrapped_graphic')
+    assert (image['label'],image['caption'])==('Table 1','Results')
+    assert [s['segment_id'] for s in a['segments']]==[s['segment_id'] for s in base['segments']]
+    assert 'Results' in next(s for s in a['segments'] if s['segment_id']==image['caption_segment_ids'][0])['text']
+
+
 def test_table_group_time_survives_on_following_rows():
     xml=XML.replace('<tr><td>Case 1</td>', '<tr><td colspan="2">At 48 h</td></tr><tr><td>Case 1</td>')
     a=parse_article(xml,article()['metadata'])

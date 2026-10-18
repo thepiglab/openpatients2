@@ -1,4 +1,4 @@
-"""Literal text units of word-processor supplements (DOCX/DOC/RTF/ODT), shared by both pipelines.
+"""Literal text units of word-processor/slide supplements (DOCX/DOC/RTF/ODT/PPTX/ODP), shared by both pipelines.
 
 One extraction path for the dense reference (`openpatients2.dense.supplement_review`, format
 `dense-supplemental-text-document-reference/1`) and the runtime (local-LLM) pipeline
@@ -11,14 +11,19 @@ Units, in document order:
   paragraph  one heading/paragraph/list/quote/code line (non-blank)
   table_row  one table row; cells joined by ' | ' (covered/merged slots are empty strings),
              with `table` and `row` coordinates
-DOCX units are cross-checked against the raw w:t text of word/document.xml; a unit whose text
-(or any cell) is not literal there is listed in `nonliteral_units` and may not be quoted.
+DOCX units are cross-checked against the raw w:t text of word/document.xml (PPTX: the a:t text of
+ppt/slides/slideN.xml); a unit whose text (or any cell) is not literal there is listed in
+`nonliteral_units` and may not be quoted. Slide boundaries are not units.
+
+`embedded_images` lists the pixels embedded in a container document (word/media, ppt/media,
+xl/media, ODF Pictures/) as exact part bytes; text units never cover them.
 """
 from __future__ import annotations
 
 import hashlib
 import json
 from pathlib import Path
+import re
 import subprocess
 import sys
 import zipfile
@@ -30,7 +35,13 @@ TEXT_DOCUMENT_TYPES = {
     'doc': 'application/msword',
     'rtf': 'application/rtf',
     'odt': 'application/vnd.oasis.opendocument.text',
+    'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'odp': 'application/vnd.oasis.opendocument.presentation',
 }
+# Embedded media parts of OOXML (DOCX/PPTX/XLSX) and ODF (ODT/ODP) packages.
+EMBEDDED_IMAGE_PART = re.compile(r'^(word/media|ppt/media|xl/media|Pictures)/[^/]+$')
+MAX_EMBEDDED_IMAGES = 500
+MAX_EMBEDDED_IMAGE_BYTES = 100_000_000
 MAX_BYTES = 50_000_000
 TOOL = f'anydoc@{ANYDOC_VERSION}'
 UNIT_WORKER = r'''
@@ -112,10 +123,11 @@ def extract_units(path, fmt):
         else:
             units.append({'unit': n, 'kind': 'paragraph', 'table': None, 'row': None, 'text': u['text'], 'cells': None})
     nonliteral = []
-    if fmt == 'docx':
+    raw = None
+    if fmt in ('docx', 'pptx'):
         try:
             with zipfile.ZipFile(path) as archive:
-                raw = _docx_text(archive)[0]
+                raw = _docx_text(archive)[0] if fmt == 'docx' else _pptx_text(archive)
         except (zipfile.BadZipFile, KeyError, ValueError):
             raw = None
         if raw is not None:
@@ -127,7 +139,42 @@ def extract_units(path, fmt):
             'unit_count': len(units), 'table_count': len({u['table'] for u in units if u['table'] is not None}),
             'nonliteral_units': nonliteral,
             'literal_verification': ('verified_against_docx_xml' if fmt == 'docx' and not nonliteral else
+                                     'verified_against_pptx_xml' if fmt == 'pptx' and raw is not None and not nonliteral else
                                      'partial' if nonliteral else 'unverified_format')}
+
+
+def _pptx_text(archive):
+    """Raw a:t paragraph text of every slide, in slide order (the PPTX analogue of DOCX w:t)."""
+    import html
+    slides = sorted((n for n in archive.namelist() if re.fullmatch(r'ppt/slides/slide\d+\.xml', n)),
+                    key=lambda n: int(re.search(r'(\d+)\.xml$', n).group(1)))
+    paragraphs = []
+    for name in slides:
+        xml = archive.read(name)
+        for para in re.findall(rb'<a:p[ >].*?</a:p>|<a:p/>', xml, re.S):
+            paragraphs.append(b''.join(re.findall(rb'<a:t(?: [^>]*)?>([^<]*)</a:t>', para)).decode('utf-8', 'replace'))
+    return html.unescape('\n'.join(paragraphs))
+
+
+def embedded_images(path):
+    """[(part, bytes)] for every embedded media part of a DOCX/PPTX/XLSX/ODT/ODP package, sorted by part name.
+
+    Non-ZIP formats (DOC/RTF) return None: their embedded pictures cannot be enumerated by this path."""
+    try:
+        archive = zipfile.ZipFile(path)
+    except zipfile.BadZipFile:
+        return None
+    with archive:
+        infos = sorted((i for i in archive.infolist() if not i.is_dir() and EMBEDDED_IMAGE_PART.match(i.filename)),
+                       key=lambda i: i.filename)
+        if len(infos) > MAX_EMBEDDED_IMAGES:
+            raise ValueError(f'More than {MAX_EMBEDDED_IMAGES} embedded images; not reviewable by this path')
+        out = []
+        for info in infos:
+            if info.file_size > MAX_EMBEDDED_IMAGE_BYTES:
+                raise ValueError(f'Embedded image {info.filename} exceeds the per-image byte cap')
+            out.append((info.filename, archive.read(info)))
+    return out
 
 
 def unit_transcription_id(asset_index, unit):
@@ -137,10 +184,11 @@ def unit_transcription_id(asset_index, unit):
 
 def reviewed_text(target):
     """{(supplement_id, transcription_id): text} a reviewed supplement sidecar offers to other tasks: its
-    reviewer-authored clinical transcriptions plus, for text documents, every literal extracted unit."""
+    reviewer-authored clinical transcriptions plus, for text documents (and text members of composite
+    sidecars), every literal extracted unit."""
     out = {(target['supplement_id'], t['transcription_id']): t['text']
            for t in (target.get('clinical_data') or {}).get('transcriptions', [])}
-    if target.get('format') == 'dense-supplemental-text-document-reference/1':
+    if target.get('format') in ('dense-supplemental-text-document-reference/1', 'dense-supplemental-composite-reference/1'):
         for key, text in unit_transcriptions(target).items():
             out.setdefault(key, text)
     return out

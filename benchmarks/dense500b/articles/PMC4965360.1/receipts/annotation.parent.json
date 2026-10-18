@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC4965360.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d9ab978c61a9170014bf01dde70dc50dd633b4b4b4fa4d331e04a75b44f82423",
+  "annotation_sha256": "a94830d154d44c24757b4ea6c8c95f026e9d688b6f859ed3b3db4d130ebe5454",
+  "reviewed_at": "2026-10-18T02:31:50.306002+00:00",
+  "source_segments_read": 29,
+  "facts_reviewed": 72,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added 7 literal temporal relations: cefazolin 'had been given' before the fever/diarrhea onset; septic shock/MODS before the recommended surgery ('In our case that ... developed ... was recommended'), before PMX-HP/rhTM ('to improve septic shock ... to control DIC') and before CHDF ('replacement therapy to ARF'); platelet decline before platelet transfusion; PMX-HP/rhTM before the excellent outcomes ('resulted in') and before the absent MODS progression ('produced ... the inhibition of MODS progression').",
+    "CHDF/platelet-transfusion ambiguity now notes that the Fig. 3 'PLT transfusion' lane is pixel content only and does not change the text fact's action."
+  ],
+  "unresolved": [
+    "Single case report; the course is told in prose with one table of values at the time of ICU transfer and four chart figures of the clinical course.",
+    "Table 1 is the only tabulated set of values and has one time point; repeated measurements exist only as plotted points in Figs. 1 to 4, which are pixel content recorded in the visual review and not as facts.",
+    "The radiological findings behind the exclusion of colonic perforation and toxic megacolon, and the number, timing and doses of PMX-HP and rhTM treatments, are not described in the text.",
+    "Four cycles of CHDF and platelet transfusion are stated as necessary or controllable, so their action is recorded as unknown rather than completed.",
+    "Table 1 labels Symbolic blood pressure and Median blood pressure and the PaO2 footnote expansion are kept as printed.",
+    "Authors’ mechanistic speculation, literature statements and general recommendations in the abstract, discussion and conclusions are not patient facts and are not recorded.",
+    "Figure day axes and treatment lanes are not defined in the captions; no day-to-hour conversion is made."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 29,
+    "facts_reviewed": 72,
+    "figures_viewed": 4,
+    "key_findings": [
+      "All 22 Table 1 cells captured literally at 'the time of ICU transfer' with comparators and printed labels (Symbolic/Median blood pressure kept as printed with an ambiguity).",
+      "Per rulings: CHDF ('were necessary'), platelet transfusion ('controllable with') and vasopressor agents ('requiring') stay action unknown; dopamine at ICU transfer is a separate administered table fact not equated with the text's vasopressor.",
+      "'CDAC or MRSA-associated enteritis' suspicion kept review_only (X or Y ruling); the first of the 'consecutive toxin A tests' is not equated with the diagnostic test.",
+      "'The onset' read as the fever/diarrhea onset with an ambiguity; 'immediately' orders symptoms before oral vancomycin; 'overcame fulminant CDAC' recorded as recovery five days after the treatments.",
+      "No fact uses Fig. 4's ICU-transfer day or any plotted value; all figure content stays pixel-only."
+    ],
+    "residual_risks": [
+      "Pluperfect 'had been given' is used to order cefazolin before the symptom onset.",
+      "visual.json still carries 88 plot-estimated readings, which the orchestrator ruling forbids; Sonnet must remove them before the visual/figure-EHR/privacy parent receipts can be signed.",
+      "GLUED-TEXT warnings on 'Roman' in the Fig. 4 visual text are checker false positives."
+    ]
+  },
+  "physician_adjudicated": false
+}
