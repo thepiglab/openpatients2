@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12805282.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9756a0030c9008224a577471290ae20c7c02940c2b5a10ad2ed051f2cc7cfd36",
+  "annotation_sha256": "f6679334bbb9ccbc291d91f90672f93fd43c76fa2e93db0612d37da3191bb39c",
+  "reviewed_at": "2026-10-17T21:12:21.744419+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 222,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "BIS clinical statements p1-f049/p2-f048/p3-f047: removed \"at the event\" (the text sentence states no time; the ambiguity already forbids placing it)",
+    "p1-f065 PVI: removed indication \"persistent atrial fibrillation\" borrowed from the admission sentence (kept on the admission care-plan item p1-f042)",
+    "Added p1-f080: Table 2 row 1 intervention cell \"propofol bolus (50 mg)\" (review_only like the other Table 2 cells; p2/p3 already had their intervention cells)",
+    "Unlinked maintenance propofol/fentanyl/dexmedetomidine (f020-f022) from the induction/LMA insertion events p1-e02 and p2-e03 so they are not ordered before PFA",
+    "p1-e06/p2-e07 \"within 3 minutes\": time_precision approximate -> range",
+    "Relations: e06->e07 (p1), e06->e07 (p2), e06->e07 (p3) set to unknown (adjacent sentences/\"subsequent\" without a stated order between those two events); added 17 literal relations: p1 admission->first PFA (\"admitted for catheter ablation\"), induction/LMA->first PFA (\"until PFA initiation\"), event->propofol recovery, first episode->subsequent episodes, PVI->postoperative outcome; p2 LMA->event (\"until PFA initiation\"), event->rocuronium (\"restored\"), RFA 4 years prior->reconnection, reconnection->reisolation, rocuronium->sugammadex (\"antagonize\"), procedure->postoperative outcome; p3 event->rescue rocuronium (\"restored\"), first->additional rocuronium, TOF 4/4 same_time ventilatory failure, rescue rocuronium->sugammadex reversal, procedure->postoperative outcome",
+    "p2: added ambiguity recording that \"recurrence\" is read as AF recurrence (same-sentence context); p2-f037 kept",
+    "BIS notes p1-f049/p2-f048/p3-f047 reworded so they imply no measurement time (p1 note said \"after the event onset\")"
+  ],
+  "unresolved": [
+    "Table 2 has no case-number column; its rows are mapped to cases by order and agreement with the case text, so table-only cells (total doses, BIS before PFA, minimum SpO2, interventions, outcomes, event sites) are review-only.",
+    "Unlabeled procedural sentences in the case-report paragraph (atropine, BIS monitor, coronary sinus catheter, transseptal puncture, sheath, posterior wall applications) are kept review-only for each case; sentences that say all cases or standardized protocol are included.",
+    "Laryngospasm was suspected and was not directly confirmed by fiberoptic visualization.",
+    "Supplementary Material mmc1 (DOCX) describes sequential fluoroscopic clips for case 3 and Supplementary Video 1 (mmc2) is a fluoroscopy video; no facts were taken from either, and the DOCX has no review path in this environment.",
+    "Discussion statements about the series, the cited published case and general recommendations are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 222,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Three-case series (p1 67M persistent AF, p2 68F recurrent paroxysmal AF after RFA, p3 52M long-standing persistent AF) of difficult ventilation with suspected laryngospasm during PFA under GA with an LMA; roster 3 literal.",
+      "Table 2 has no case column and its caption/text state no row order; row-to-case mapping rests on agreement with each case narrative (sites, SpO2, BIS, NMBA), so table-only cells stay review_only (not literal).",
+      "Cohort sentences used only where they explicitly cover all cases (no respiratory history, GA with LMA, standardized anesthetic protocol, PulseSelect in all cases, PVI protocol consistent across all cases, LMA functioned before the events, no beta-agonists, consent); unlabelled protocol sentences (atropine, BIS monitor, CS catheter, transseptal puncture, sheath, posterior-wall lines) review_only per patient.",
+      "CHF/HT/DM (p1) and HT (p2, p3) are literally listed in each patient's CHADS2 cell with the abbreviations defined in the Table 1 footnote.",
+      "Laryngospasm kept as possible/provisional (suspected, not fiberoptically confirmed).",
+      "Figure 1 viewed at full resolution with zoomed crops: printed distances match the caption values; panels A/B/C attributed to cases 1/2/3 by the caption."
+    ],
+    "residual_risks": [
+      "mmc1 DOCX (video legend for case 3) has no supplement review path (anydoc not installed); its text was seen only via the machine peek and no facts were taken from it; article held for the user supplement decision.",
+      "mmc2 video reviewed only as 17 sampled frames (every 3 s); continuous motion and audio not reviewed.",
+      "The \"standardized\" anesthetic protocol doses are ranges applied per the series statement; individual doses were adjusted per patient and only Table 2 totals (review_only) are individual.",
+      "p2 \"recurrence\" read as AF recurrence (ambiguity recorded)."
+    ]
+  },
+  "physician_adjudicated": false
+}
