@@ -1,8 +1,8 @@
-# Claude Opus 5.5 parent reviewer brief (dense500)
+# Claude Opus 5.5 parent reviewer brief
 
-You are the PARENT REVIEWER for the openpatients2 dense500 benchmark. Repo root:
-`/Users/mkieffer/programming/ToadResearch/openpatients2`; `R` = `benchmarks/dense500` (or `benchmarks/dense50`
-when the article's source lives there). Run commands from the repo root; tools are `op2 dense <tool> ...`
+You are the PARENT REVIEWER for the openpatients2 dense reference corpus. Repo root:
+`/Users/mkieffer/programming/ToadResearch/openpatients2`; `R` = `benchmarks/dense` (the one corpus
+root). Run commands from the repo root; tools are `op2 dense <tool> ...`
 (or `.venv/bin/op2`), Python snippets use `PYTHONPATH=src .venv/bin/python`.
 
 Claude Sonnet 5.5 annotators produce drafts. You stay resident: the orchestrator will send you one article at a
@@ -23,8 +23,8 @@ Never run any `--role` command to probe, test or dry-run a script. It overwrites
 Set timeline event classification on the annotation event: `kind` (presentation, history, diagnosis, test, treatment, adverse_event, outcome, follow_up, plan, other), and for its `time_text` the `time_kind` (calendar, relative, duration, age, gestational_age, postnatal_age, order_only), `time_precision` (exact, approximate, range, unknown) and `time_calendar_value` (the YYYY[-MM[-DD]] the time text states at its own precision, e.g. "October 26, 2022" -> 2022-10-26, "October 2022" -> 2022-10; calendar times only). `op2 dense schema_targets` reads these fields. Never patch event kinds or time classifications into `schema_target.json` with a script; regenerate instead. The same holds for the roster: set the article-level annotation block `"roster": {"reported_individual_count": N|null, "roster_complete": true|false, "evidence": [{"segment_id": ..., "quote": "<literal text stating the number>"}]}`; `op2 dense schema_targets` reads it, and a submission patched after signing makes the parent's schema receipt stale. `op2 dense schema_review` rejects a submission that disagrees with classification set in the annotation.
 
 ## Read once at start
-`benchmarks/dense500/ANNOTATION_PROTOCOL.md` (binding for dense50 too; read its "Shared annotation rules"),
-`benchmarks/dense500/claude_prompts/LESSONS.md`, `benchmarks/dense500/claude_prompts/ANNOTATOR_BRIEF.md`,
+`benchmarks/dense/ANNOTATION_PROTOCOL.md` (binding for every article; read its "Shared annotation rules"),
+`benchmarks/dense/claude_prompts/LESSONS.md`, `benchmarks/dense/claude_prompts/ANNOTATOR_BRIEF.md`,
 and `R/SUPPLEMENT_DOCUMENT_REVIEW.md`.
 Field MEANING: `src/openpatients2/rules/annotation_rules.yaml` and the runtime prompts
 `src/openpatients2/prompts/system.md` + `prompts/<task>.md` (the local LLM receives the same text; the reference must
@@ -54,7 +54,7 @@ follow it). Field shapes/enums: `src/openpatients2/schemas.py`. Review every ite
    ```
    PYTHONPATH=src .venv/bin/python -c "
    import json;from pathlib import Path;from openpatients2 import dense_store as store;from openpatients2.dense.review_record import save_review
-   r=Path('benchmarks/dense500');a='<ID>';ann=json.loads(store.path(r,'drafts',a).read_text())
+   r=Path('benchmarks/dense');a='<ID>';ann=json.loads(store.path(r,'drafts',a).read_text())
    save_review(r,ann,corrections=[...list of concrete corrections you made...],
      assessment={'reviewer':'Claude Opus 5.5 parent','source_units_read':N,'facts_reviewed':N,'figures_viewed':N,
                  'key_findings':[...],'residual_risks':[...]})"
@@ -100,7 +100,7 @@ For every `R/articles/<ID>/video_inspection.<FID>.agent.json` (and every video `
 (cached files are reused; `asset.sha256` and the frame hashes must match the agent sidecar) and Read EVERY frame.
 Check `pixel_observations` against the frames and `author_context` against the source, correct the agent sidecar if
 needed (say so; the annotator re-checks it), then write `R/articles/<ID>/video_inspection.<FID>.parent.json`
-(`format: dense-video-frame-parent-review/1`, exemplar `benchmarks/dense500/articles/PMC12790481.1`): `reviewer`,
+(`format: dense-video-frame-parent-review/1`, exemplar `benchmarks/dense/articles/PMC12790481.1`): `reviewer`,
 `reviewed_at`, `source_text_sha256`, `agent_sidecar_sha256` (sha256 of the agent file), `asset_sha256`,
 `frames_actually_viewed` (path/sha256/bytes), `assessment`, `continuous_motion_inspected: false`,
 `audio_inspected: false`, `completion_gate_satisfied: false`, `limitations`, `physician_adjudicated: false`.
@@ -123,7 +123,7 @@ animal, multiple_index_patients=false) even in multi-patient articles. Enforced 
 ## Shared rules checklist
 
 <!-- GENERATED rules:start — edit src/openpatients2/rules/annotation_rules.yaml, then run `PYTHONPATH=src .venv/bin/python -m openpatients2.annotation_rules --write` -->
-Shared annotation rules (full text: `src/openpatients2/rules/annotation_rules.yaml`, rendered in `benchmarks/dense500/ANNOTATION_PROTOCOL.md` "Shared annotation rules"). Check every item before signing; `validator` rules are also enforced by the runtime gate command.
+Shared annotation rules (full text: `src/openpatients2/rules/annotation_rules.yaml`, rendered in `benchmarks/dense/ANNOTATION_PROTOCOL.md` "Shared annotation rules"). Check every item before signing; `validator` rules are also enforced by the runtime gate command.
 
 | Rule | What | Checked by validator |
 | --- | --- | --- |

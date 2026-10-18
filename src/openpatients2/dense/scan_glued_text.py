@@ -1,6 +1,6 @@
 """Read-only scan for free text with dropped inter-word spaces ("aftersevenmonths") in dense annotations.
 
-    op2 dense scan_glued_text [--root benchmarks/dense500] \
+    op2 dense scan_glued_text [--root benchmarks/dense] \
         [--folder annotations] [--article PMC...] [--out findings.json]
 
 Every string leaf of an annotation is classified by its path:
@@ -26,7 +26,7 @@ from pathlib import Path
 from openpatients2.glued_text import find_glued
 from openpatients2 import dense_store as store
 
-from openpatients2.dense import DENSE500 as ROOT
+from openpatients2.dense import CORPUS as ROOT
 SKIP_KEYS = frozenset('''quote segment_id segment_ids fact_id fact_ids event_id from_event_id to_event_id patient_id
 patient_ids figure_id alternate_representation_of article_id schema_version text_sha256 xml_sha256 panel tumor_ref
 date_iso annotator_model'''.split())

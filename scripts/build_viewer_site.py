@@ -19,7 +19,7 @@ def main():
         parser.error('Bun is required to minify the generated JavaScript and CSS')
 
     repo = Path(__file__).resolve().parents[1]
-    roots = [repo / 'benchmarks' / name for name in ('dense50', 'dense500')]
+    roots = [repo / 'benchmarks' / 'dense']
     expected = {p.parent.name for root in roots for p in root.glob('articles/*/source.json')}
     if not expected:
         raise ValueError('No article sources found; refusing to publish an empty library')

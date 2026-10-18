@@ -1,14 +1,15 @@
-"""dense500b: selection-file acquisition (network mocked), the permissive-only policy, and root handling."""
+"""Corpus acquisition (selection files, network mocked), the permissive-only policy, and the one-root corpus."""
 import asyncio
 import hashlib
 import json
 from pathlib import Path
 import shutil
+from collections import Counter, defaultdict
 
 import pytest
 
 from openpatients2 import dense_store as store
-from openpatients2.dense import DENSE50, DENSE500, DENSE500B, ROOTS
+from openpatients2.dense import CORPUS
 from openpatients2.license_policy import (PERMISSIVE_ONLY_POLICY_VERSION, POLICY_VERSION, license_decision,
                                           recheck_license)
 
@@ -72,7 +73,7 @@ def row(pmcid, lane, group, role):
 @pytest.fixture
 def selection(tmp_path, monkeypatch):
     acquire = __import__('openpatients2.dense.acquire', fromlist=['x'])
-    other = tmp_path / 'dense500'; other.mkdir()
+    other = tmp_path / 'other'; other.mkdir()
     (other / 'selection.json').write_text(json.dumps([{'article_id': 'PMC20.1', 'pmcid': 'PMC20'}]))
     rows = [row('PMC10', 'renal', 'g1', 'primary'),       # NC: rejected under --permissive-only
             row('PMC20', 'renal', 'g2', 'primary'),       # already in another root
@@ -93,7 +94,7 @@ def selection(tmp_path, monkeypatch):
         return art
 
     monkeypatch.setattr(acquire, 'fetch_article', fake_fetch)
-    root = tmp_path / 'dense500b'
+    root = tmp_path / 'corpus'
     return acquire, root, path, other, calls
 
 
@@ -101,7 +102,7 @@ def test_selection_mode_falls_back_to_same_lane_alternates_and_dedupes_all_roots
     acquire, root, path, other, calls = selection
     client = FakeClient()
     summary = asyncio.run(acquire.acquire_selection(root, path, permissive_only=True, client=client,
-                                                    other_roots=[other]))
+                                                    other_roots=[other], selection_round=3))
     assert client.closed
     assert summary == {'acquired': ['PMC11.1', 'PMC12.1'], 'unfilled_slots': ['PMC30']}
     assert all(flag for _, flag in calls) and 'PMC20' not in [p for p, _ in calls]
@@ -114,6 +115,7 @@ def test_selection_mode_falls_back_to_same_lane_alternates_and_dedupes_all_roots
     for r in manifest:
         assert r['stratum'] == r['lane'] == 'renal' and r['selection_role'] == 'alternate'
         assert r['license_policy_version'] == PERMISSIVE_ONLY_POLICY_VERSION and r['permissive_only']
+        assert r['selection_round'] == 3 and 'split' not in r
         assert r['selection_file_sha256'] == hashlib.sha256(path.read_bytes()).hexdigest()
         for kind in ('sources', 'raw-xml', 'source-text'):
             assert store.path(root, kind, r['article_id']).exists()
@@ -142,71 +144,81 @@ def test_selection_mode_respects_limit_and_validates_rows(selection, tmp_path):
         acquire.load_selection(bad)
 
 
-def test_dedupe_reads_every_dense_root_and_caches_are_per_root():
+def test_dedupe_reads_the_corpus_and_caches_are_per_root():
     acquire = __import__('openpatients2.dense.acquire', fromlist=['x'])
-    assert DENSE500B in ROOTS and DENSE50 in ROOTS and DENSE500 in ROOTS
-    used = acquire.existing_pmcids(ROOTS)
-    assert {x['pmcid'] for x in json.loads((DENSE500 / 'selection.json').read_text())} <= used
-    assert {aid.split('.')[0] for aid in store.article_ids(DENSE50, 'sources')} <= used
-    assert acquire.default_cache(DENSE500) == '/tmp/op2-dense500-metadata.sqlite'
-    assert acquire.default_cache(DENSE500B) == '/tmp/op2-dense500b-metadata.sqlite'
+    used = acquire.existing_pmcids([CORPUS])
+    assert {x['pmcid'] for x in json.loads((CORPUS / 'selection.json').read_text())} <= used
+    assert {aid.split('.')[0] for aid in store.article_ids(CORPUS, 'sources')} <= used
+    assert acquire.default_cache(CORPUS) == '/tmp/op2-dense-metadata.sqlite'
 
 
-# ---- dense500b as a root -----------------------------------------------------------------------------
+# ---- the one-root corpus ------------------------------------------------------------------------------
 
-AIDS = ('PMC12134816.1', 'PMC12605513.1')   # completed dense500 articles (figures; document supplement)
+def test_selection_covers_every_article_once_with_round_and_split():
+    rows = json.loads((CORPUS / 'selection.json').read_text())
+    ids = [r['article_id'] for r in rows]
+    assert len(ids) == len(set(ids)) and set(ids) == set(store.article_ids(CORPUS, 'sources'))
+    assert all(r['selection_round'] in (1, 2) and r['split'] in ('train', 'validation', 'test') for r in rows)
+    # Round 1 (the original 500) keeps its frozen split; round 2 is 60/20/20 within every selection lane.
+    assert Counter(r['split'] for r in rows if r['selection_round'] == 1) == {'train': 300, 'validation': 100, 'test': 100}
+    lanes = defaultdict(Counter)
+    for r in rows:
+        if r['selection_round'] == 2:
+            lanes[r['lane']][r['split']] += 1
+    for lane, counts in lanes.items():
+        n = sum(counts.values())
+        assert counts == {'train': 3 * n // 5, 'validation': n // 5, 'test': n // 5}, lane
+    assert not [p for p in (CORPUS.parent).iterdir() if p.is_dir() and p.name != 'dense']
+
+
+AIDS = ('PMC12134816.1', 'PMC12605513.1')   # completed corpus articles (figures; document supplement)
 
 
 @pytest.fixture
-def batch2(tmp_path, monkeypatch):
-    root = tmp_path / 'dense500b'
+def copied(tmp_path):
+    root = tmp_path / 'copy'
     for aid in AIDS:
-        if not store.path(DENSE500, 'source-text', aid).exists():
-            pytest.skip('dense500 caches unavailable')
-        shutil.copytree(store.article_dir(DENSE500, aid), store.article_dir(root, aid))
-    selection = {r['article_id']: r for r in json.loads((DENSE500 / 'selection.json').read_text())}
+        if not store.path(CORPUS, 'source-text', aid).exists():
+            pytest.skip('corpus caches unavailable')
+        shutil.copytree(store.article_dir(CORPUS, aid), store.article_dir(root, aid))
+    selection = {r['article_id']: r for r in json.loads((CORPUS / 'selection.json').read_text())}
     (root / 'selection.json').write_text(json.dumps([selection[a] for a in AIDS]))
     return root
 
 
-def test_tools_give_the_same_verdicts_at_a_dense500b_root(batch2):
+def test_tools_give_the_same_verdicts_at_any_root(copied):
+    """Receipts bind content, not paths: a copied article folder passes the same gates."""
     from openpatients2.dense.reference_gates import run_gates
     from openpatients2.dense.validate import validate
     from openpatients2.dense.visual_review import reviewed_visual_target
     from openpatients2.dense.supplement_review import reviewed_supplement_targets
     for aid in AIDS:
-        here, there = run_gates(DENSE500, aid), run_gates(batch2, aid)
+        here, there = run_gates(CORPUS, aid), run_gates(copied, aid)
         assert here['passed'] == there['passed'] and len(here['errors']) == len(there['errors'])
-        source = json.loads(store.path(batch2, 'sources', aid).read_text())
-        assert validate(json.loads(store.path(batch2, 'annotations', aid).read_text()), source) == []
-        assert reviewed_visual_target(batch2, aid) is not None
-        assert len(reviewed_supplement_targets(batch2, aid)) == len(reviewed_supplement_targets(DENSE500, aid))
+        source = json.loads(store.path(copied, 'sources', aid).read_text())
+        assert validate(json.loads(store.path(copied, 'annotations', aid).read_text()), source) == []
+        assert reviewed_visual_target(copied, aid) is not None
+        assert len(reviewed_supplement_targets(copied, aid)) == len(reviewed_supplement_targets(CORPUS, aid))
 
 
-def test_export_set_dense500b_is_separate_and_tagged(batch2, tmp_path, monkeypatch):
+def test_export_carries_selection_round_as_data(copied, tmp_path, monkeypatch):
     exporter = __import__('openpatients2.dense.export', fromlist=['x'])
-    name, sets = 'dense500b', exporter.EXPORT_SETS
-    assert sets['v1'][:3] == (DENSE500, [DENSE50, DENSE500], exporter.REPO / 'data/dense_clinical_cases_v1')
-    assert sets[name][0] == DENSE500B and sets[name][1] == [DENSE500B] and sets[name][2] != sets['v1'][2]
+    assert exporter.ROOT == CORPUS and exporter.OUT == exporter.REPO / 'data/dense_clinical_cases_v1'
     out = tmp_path / 'release'
-    for key, value in {'ROOT': batch2, 'ROOTS': [batch2], 'OUT': out, 'TARGET_ARTICLES': None,
-                       'REFERENCE_SET': name}.items():
-        monkeypatch.setattr(exporter, key, value)
+    monkeypatch.setattr(exporter, 'ROOT', copied)
+    monkeypatch.setattr(exporter, 'OUT', out)
     exporter.main()
+    selection = {r['article_id']: r for r in json.loads((copied / 'selection.json').read_text())}
     manifest = [json.loads(x) for x in (out / 'legacy/manifest.jsonl').read_text().splitlines()]
     assert sorted(r['article_id'] for r in manifest) == list(AIDS)
-    assert all(r['reference_set'] == name for r in manifest)
-    checklist = json.loads((out / 'article_checklist.json').read_text())
-    v1 = json.loads((exporter.REPO / 'data/dense_clinical_cases_v1/article_checklist.json').read_text())
-    for aid in AIDS:
-        assert checklist['articles'][aid]['completed'] == v1['articles'][aid]['completed']
+    for r in manifest:
+        assert r['selection_round'] == selection[r['article_id']]['selection_round']
+        assert r['split'] == selection[r['article_id']]['split'] and 'reference_set' not in r
     unified = [json.loads(x) for split in ('train', 'validation', 'test')
                for x in (out / f'data/{split}.jsonl').read_text().splitlines()]
-    assert unified and all(r['provenance']['reference_set'] == name and
-                           r['provenance']['reference_root'] == 'dense500b' for r in unified)
-    statistics = json.loads((out / 'statistics.json').read_text())
-    assert statistics['target_articles'] == len(AIDS)
-    assert not (out / 'SELECTION_PLAN.md').exists()
+    assert unified and all(r['provenance']['selection_round'] == 1 and 'reference_root' not in r['provenance']
+                           for r in unified)
+    assert json.loads((out / 'statistics.json').read_text())['target_articles'] == len(AIDS)
 
 
 # ---- permissive-only/2: article CC BY + data-only CC0 waiver (BMC/Springer) --------------------------

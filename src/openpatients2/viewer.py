@@ -25,6 +25,9 @@ ASSETS = ('index.html', 'home.js', 'common.js', 'cohort.html', 'cohort.js', 'vie
 TYPES = {'html': 'text/html; charset=utf-8', 'js': 'text/javascript; charset=utf-8', 'css': 'text/css; charset=utf-8',
          'webmanifest': 'application/manifest+json; charset=utf-8', 'png': 'image/png'}
 ID = re.compile(r'^[A-Za-z0-9][A-Za-z0-9_.-]{0,120}$')
+# Journal, keywords and affiliations per article, read once from the gitignored raw XML and checked in
+# inside each source root, so a clone without raw XML (the Pages build) classifies themes identically.
+THEME_FEATURES = 'article_theme_features.json'
 FILES = ('manifest', 'annotations', 'patients', 'article_bundles', 'figure_visuals',
          'supplement_visuals', 'supplement_documents')
 LIVE = ('sources', 'annotations', 'reviews', 'schema-submissions', 'schema-agent-reviews',
@@ -159,25 +162,26 @@ class Library:
         self.export_stamp = None
         self.exports = {}
         self.entries = {}
-        self.strata_stamp, self.strata, self.lanes = None, {}, {}
+        self.strata_stamp, self.strata, self.lanes, self.rounds = None, {}, {}, {}
+        self.features_stamp, self.features = None, {}
         self.checklists = [Path(path).resolve() for path in checklists]
         self.checklist_stamp, self.completed = None, {}
 
     def _strata(self):
-        """Specialty per article from the checked-in selection files, as the dataset exporter assigns it.
-        The export manifest carries the same value, but it is not in Git, so static builds need this."""
-        files = [root / name for root in self.roots for name in ('selection.json', 'retained-strata.json')]
+        """Specialty, lane and selection round per article from the checked-in selection.json, as the dataset
+        exporter assigns them. The export manifest carries the same values, but it is not in Git, so static
+        builds need this."""
+        files = [root / 'selection.json' for root in self.roots]
         signature = tuple(stamp(path) for path in files)
         if signature != self.strata_stamp:
-            strata, lanes = {}, {}
+            strata, lanes, rounds = {}, {}, {}
             for path in files:
                 data = read(path) if path.exists() else None
-                if isinstance(data, dict):
-                    strata.update({aid: s for aid, s in data.items() if isinstance(s, str)})
-                elif isinstance(data, list):
-                    strata.update({r['article_id']: r['stratum'] for r in data if isinstance(r, dict) and r.get('stratum')})
-                    lanes.update({r['article_id']: r['lane'] for r in data if isinstance(r, dict) and r.get('lane')})
-            self.strata, self.lanes, self.strata_stamp = strata, lanes, signature
+                rows = [r for r in data if isinstance(r, dict) and r.get('article_id')] if isinstance(data, list) else []
+                strata.update({r['article_id']: r['stratum'] for r in rows if r.get('stratum')})
+                lanes.update({r['article_id']: r['lane'] for r in rows if r.get('lane')})
+                rounds.update({r['article_id']: r['selection_round'] for r in rows if r.get('selection_round') is not None})
+            self.strata, self.lanes, self.rounds, self.strata_stamp = strata, lanes, rounds, signature
         return self.strata
 
     def _completed(self):
@@ -194,10 +198,23 @@ class Library:
             self.completed, self.checklist_stamp = completed, signature
         return self.completed
 
+    def _theme_features(self):
+        files = sorted({root / THEME_FEATURES for root in self.roots})
+        signature = tuple(stamp(path) for path in files)
+        if signature != self.features_stamp:
+            features = {}
+            for path in files:
+                if path.exists():
+                    features.update(read(path))
+            self.features, self.features_stamp = features, signature
+        return self.features
+
     def _themes(self, aid, title, root, patients, roster):
         """Theme group and lane: the selection's lane when it has one, else the rule-based classifier."""
-        raw = _load_store().path(root, 'raw-xml', aid) if root else None
-        features = xml_features(raw.read_text(errors='replace') if raw and raw.exists() else '')
+        features = self._theme_features().get(aid)
+        if features is None:
+            raw = _load_store().path(root, 'raw-xml', aid) if root else None
+            features = xml_features(raw.read_text(errors='replace') if raw and raw.exists() else '')
         cohort = [patient_summary(p) for p in patients]
         rules = classify_themes(title or '', **features, stratum=self._strata().get(aid),
                                 ages=[p['age_years'] for p in cohort], species=[p['species'] for p in cohort],
@@ -372,7 +389,8 @@ class Library:
                                         for f in (privacy_flags or {}).get('figures', []) for p in f.get('panels', [])),
                     text_available=bool(source))
         meta['theme'] = self._themes(aid, meta.get('title'), root, patients, roster)
-        meta['reference_set'] = root.name if root else meta.get('reference_set')
+        self._strata()
+        meta['selection_round'] = self.rounds.get(aid, meta.get('selection_round'))
         return scrub({'article_id': aid, 'metadata': meta, 'source': source_view, 'patients': patients,
                 'annotation': annotation, 'roster': article.get('roster'),
                 'figure_attribution': article.get('figure_attribution'), 'visual': visual,
@@ -405,7 +423,7 @@ class Library:
                                'disposition', 'figure_count', 'has_tables', 'supplement_count', 'article_type',
                                'figure_ehr_labeled', 'privacy_concern', 'supplements_extracted',
                                'section_facts', 'section_patients', 'event_count', 'cohort', 'theme',
-                               'reference_set')}
+                               'selection_round')}
                         row['license'] = (meta.get('source_license') or {}).get('code', 'Unknown')
                         row['revision'] = digest(signature)
                         self.entries[aid] = (signature, row)
@@ -528,21 +546,41 @@ def build(library, output):
     return {'output': str(output), 'articles': len(catalog['articles'])}
 
 
+def write_theme_features(roots):
+    """Refresh each root's checked-in theme features from raw XML (articles without it keep their row)."""
+    store = _load_store()
+    for root in roots:
+        path = root / THEME_FEATURES
+        features = read(path) if path.exists() else {}
+        for aid in store.article_ids(root, 'sources'):
+            raw = store.path(root, 'raw-xml', aid)
+            if raw.exists():
+                features[aid] = xml_features(raw.read_text(errors='replace'))
+        # One article per line keeps diffs readable.
+        lines = [f'{json.dumps(aid)}: {json.dumps(features[aid], ensure_ascii=False)}' for aid in sorted(features)]
+        path.write_text('{\n' + ',\n'.join(lines) + '\n}\n', encoding='utf-8')
+        yield {'path': str(path), 'articles': len(features)}
+
+
 def add_parser(sub):
     parser = sub.add_parser('viewer', help='Browse every article and its latest reviewed extraction')
     parser.add_argument('--dataset', type=Path, default=Path('data/dense_clinical_cases_v1'))
-    parser.add_argument('--source-root', type=Path, action='append', help='Annotation root (repeatable); defaults to dense50, dense500 and dense500b')
+    parser.add_argument('--source-root', type=Path, action='append', help='Annotation root (repeatable); defaults to benchmarks/dense')
     parser.add_argument('--checklist', type=Path, action='append',
-                        help='Export article_checklist.json for completion counts (repeatable); defaults to both dense datasets')
+                        help='Export article_checklist.json for completion counts (repeatable); defaults to the dataset\'s')
     parser.add_argument('--host', default='127.0.0.1')
     parser.add_argument('--port', type=int, default=8765)
     parser.add_argument('--build', type=Path, help='Write a portable static website into a new/empty directory')
+    parser.add_argument('--write-theme-features', action='store_true',
+                        help=f'Refresh {THEME_FEATURES} in each source root from raw XML, then exit')
 
 
 def dispatch(args):
-    library = Library(args.dataset, args.source_root or [Path('benchmarks/dense50'), Path('benchmarks/dense500'), Path('benchmarks/dense500b')],
-                      args.checklist or [args.dataset / 'article_checklist.json',
-                                         Path('data/dense_clinical_cases_dense500b_v1/article_checklist.json')])
+    roots = args.source_root or [Path('benchmarks/dense')]
+    if args.write_theme_features:
+        return list(write_theme_features(roots))
+    library = Library(args.dataset, roots,
+                      args.checklist or [args.dataset / 'article_checklist.json'])
     if args.build:
         return build(library, args.build)
     server = ThreadingHTTPServer((args.host, args.port), handler(library))

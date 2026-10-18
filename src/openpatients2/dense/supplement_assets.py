@@ -1,6 +1,6 @@
 """Acquire one article's declared supplements into a bounded, non-release cache.
 
-Commands (ROOT is benchmarks/dense500, benchmarks/dense500b or benchmarks/dense50):
+Commands (ROOT is benchmarks/dense, the default):
   op2 dense supplement_assets acquire ROOT --article ID [--force]
   op2 dense supplement_assets peek    ROOT --article ID      # recompute peeks from cached files
   op2 dense supplement_assets status  [ROOT]                 # cache usage and caps
@@ -33,7 +33,7 @@ import httpx
 
 from openpatients2.supplement_peek import PEEK_VERSION, extension, peek_file
 from openpatients2 import dense_store as store
-from openpatients2.dense import DENSE500, REPO
+from openpatients2.dense import CORPUS, REPO
 
 CACHE = REPO / 'data/.dense-supplement-cache'
 VIDEO_TYPES = {'.mp4': 'video/mp4', '.m4v': 'video/x-m4v', '.mov': 'video/quicktime', '.avi': 'video/x-msvideo',
@@ -591,7 +591,7 @@ def cleanup(root, aid, *, cache=None, verify=None):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('command', choices=['acquire', 'peek', 'status', 'cleanup', 'extract', 'extract-text', 'extract-members'])
-    parser.add_argument('root', type=Path, nargs='?', default=DENSE500)
+    parser.add_argument('root', type=Path, nargs='?', default=CORPUS)
     parser.add_argument('--article'); parser.add_argument('--force', action='store_true')
     parser.add_argument('--supplement')
     parser.add_argument('--every', type=float,

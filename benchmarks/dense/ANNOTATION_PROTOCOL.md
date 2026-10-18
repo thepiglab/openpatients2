@@ -15,7 +15,7 @@ come from `src/openpatients2/schemas.py`; field *meaning* comes from the shared 
 and the task prompt `src/openpatients2/prompts/<task>.md`, which every annotator and
 reviewer must read for each task they annotate. The mechanically checkable rules are
 enforced by `openpatients2.semantic_rules` in both pipelines (rule IDs appear in error
-messages as `[ID]`). This protocol governs dense50 articles too.
+messages as `[ID]`). This protocol governs every corpus article.
 
 The final deliverable is a prototype of the full Glimmer patient bundle, not
 only a list of positive facts. The fact annotation below is the evidence-linked
@@ -236,7 +236,7 @@ its own contract, independent agent and parent receipts (binding source, sidecar
 asset and patient-identity hashes plus the sidecar contract fingerprint), and
 goes stale on any change. The checklist reports them as `informational_checks`
 outside `completed`. Commands are `op2 dense <tool> ...` (from any directory);
-`R` = `benchmarks/dense500`.
+`R` = `benchmarks/dense`.
 
 **Supplement manifest** (`dense-supplement-manifest/1`, `R/articles/ID/supplements/manifest.json`),
 required when the source lists supplements:

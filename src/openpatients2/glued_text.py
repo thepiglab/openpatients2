@@ -9,7 +9,7 @@ Shared by both pipelines (rule GLUED-TEXT in rules/annotation_rules.yaml):
 
 A token is suspect when it is not a known word (shipped corpus vocabulary, the article's own
 source tokens, or a simple inflection of either) but splits into known words. The vocabulary
-(rules/glue_vocab.tsv.gz: word, count, document frequency) is built from the dense500 source
+(rules/glue_vocab.tsv.gz: word, count, document frequency) was built from the first 477 corpus source
 texts by `build_vocab`; only words seen >=3 times in >=2 articles may be segmentation parts, so a
 glued artefact in one source cannot become a segment. Segmentation is a unigram Viterbi search
 (two best kept, so the margin to the runner-up is part of the confidence).

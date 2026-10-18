@@ -3,18 +3,19 @@
 This selects candidate text, never fabricates annotations or review receipts.
 Run from the repository root using the existing project environment.
 
-    op2 dense acquire discover                     # dense500 title discovery (hard-coded LANES)
-    op2 dense acquire acquire [--limit 477]        # dense500 acquisition from acquisition/approved-titles.json
-    op2 dense acquire acquire --root benchmarks/dense500b --selection-file SEL.json \
-        [--permissive-only] [--limit N] [--cache PATH] [--recheck-held]
+    op2 dense acquire acquire --selection-file SEL.json --round N \
+        [--root benchmarks/dense] [--permissive-only] [--limit N] [--cache PATH] [--recheck-held]
+
+(The round-1 discover/approved-titles stages that built the first 500 were retired once that round was
+complete; they are in git history before the corpus was unified, and their records stay in acquisition/.)
 
 Selection mode reads a JSON list of rows {pmcid, lane, group, role: primary|alternate, title, journal,
 year} (optional: split, reason, patient_count_hint). Primaries are acquired in file order; a primary that
-fails the license policy, acquisition, the title screen, or is already in any root (dense50, dense500,
-dense500b, the target) is replaced by the next unused alternate of the same lane (same group first).
-Rows are appended to <root>/selection.json with lane/group/slot metadata and the license policy version;
-every attempt is logged in <root>/acquisition/decisions.json. Rate limits and the byte budget match the
-default mode; the metadata cache is per root (/tmp/op2-<root name>-metadata.sqlite) unless --cache.
+fails the license policy, acquisition, the title screen, or is already in the corpus (or any other root
+given) is replaced by the next unused alternate of the same lane (same group first).
+Rows are appended to <root>/selection.json with lane/group/slot metadata, the license policy version and
+`selection_round` (--round); assign their splits once the round is complete (see benchmarks/dense/SELECTION.md);
+every attempt is logged in <root>/acquisition/decisions.json. Rate limits and the byte budget are bounded; the metadata cache is per root (/tmp/op2-<root name>-metadata.sqlite) unless --cache.
 --recheck-held re-attempts license_review holds logged under an older policy version, so unfilled
 slots can be filled from alternates the current policy accepts; filled slots are not touched.
 """
@@ -25,46 +26,15 @@ import json
 from pathlib import Path
 import re
 
-import httpx
-
-from openpatients2.corpus import fetch_article, search_candidates
+from openpatients2.corpus import fetch_article
 from openpatients2.literature_client import LiteratureClient, LiteratureConfig
 from openpatients2 import dense_store as store
 from openpatients2.license_policy import PERMISSIVE_ONLY_POLICY_VERSION, POLICY_VERSION
 
-from openpatients2.dense import DENSE50, DENSE500, ROOTS
+from openpatients2.dense import CORPUS
 
-ROOT = DENSE500
 SELECTION_ROLES = ('primary', 'alternate')
 EXCLUDED_TITLE = re.compile(r'^(retract|correction|corrigendum|erratum)|^\[', re.I)
-LANES = {
-    'cardiac': 'cardiac OR myocarditis OR cardiomyopathy OR arrhythmia',
-    'vascular': 'aortic OR vascular OR thrombosis OR embolism',
-    'respiratory': 'pulmonary OR pneumonia OR respiratory OR asthma',
-    'gastrointestinal': 'gastric OR intestinal OR bowel OR esophageal',
-    'hepatic': 'hepatic OR hepatitis OR liver OR biliary',
-    'renal': 'renal OR kidney OR nephrotic OR glomerulonephritis',
-    'endocrine': 'diabetes OR adrenal OR thyroid OR hypoglycemia',
-    'neurology': 'encephalitis OR seizure OR neuropathy OR stroke',
-    'psychiatry': 'psychosis OR schizophrenia OR depression OR catatonia',
-    'infectious': 'infection OR meningitis OR tuberculosis OR sepsis',
-    'autoimmune': 'lupus OR vasculitis OR autoimmune OR arthritis',
-    'dermatology': 'dermatitis OR psoriasis OR cutaneous OR pemphigus',
-    'hematology': 'hemolytic OR thrombocytopenia OR pancytopenia OR anemia',
-    'oncology': 'carcinoma OR lymphoma OR leukemia OR sarcoma',
-    'pediatric': 'child OR pediatric OR paediatric OR adolescent',
-    'neonatal': 'neonatal OR newborn OR neonate OR congenital',
-    'obstetric': 'pregnancy OR pregnant OR postpartum OR obstetric',
-    'gynecologic': 'ovarian OR uterine OR endometriosis OR endometrial',
-    'surgical': 'postoperative OR reconstruction OR surgical OR transplantation',
-    'ophthalmology': 'ocular OR retinal OR corneal OR ophthalmic',
-    'ent': 'laryngeal OR otitis OR sinusitis OR cochlear',
-    'musculoskeletal': 'fracture OR osteomyelitis OR spinal OR tendon',
-    'toxicology': 'poisoning OR overdose OR anaphylaxis OR drug-induced',
-    'veterinary': 'dog OR canine OR cat OR feline OR equine OR camel',
-}
-
-
 def save(path, obj):
     path.parent.mkdir(parents=True, exist_ok=True)
     temp = path.with_suffix(path.suffix + '.tmp')
@@ -72,38 +42,9 @@ def save(path, obj):
     temp.replace(path)
 
 
-async def discover():
-    output = ROOT / 'acquisition/candidates.json'
-    rows = json.loads(output.read_text()) if output.exists() else []
-    existing = {r['lane'] for r in rows}
-    async with httpx.AsyncClient(timeout=60) as http:
-        for lane, terms in LANES.items():
-            if lane in existing:
-                continue
-            title_terms = ' OR '.join(t.strip()+'[Title]' for t in terms.split(' OR '))
-            query = (f'({title_terms}) AND ("case report"[Title] OR "case series"[Title]) '
-                     'AND ("2020/01/01"[Publication Date] : "2025/12/31"[Publication Date])')
-            found = await search_candidates(query, limit=70, http=http)
-            await asyncio.sleep(.6)
-            response = await http.get('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi',
-                params={'db': 'pmc', 'id': ','.join(x[3:] for x in found['pmcids']),
-                        'retmode': 'json', 'tool': 'openpatients2'})
-            response.raise_for_status()
-            result = response.json()['result']
-            lane_rows = [{'lane': lane, 'pmcid': 'PMC'+x, 'title': result[x].get('title'),
-                          'pubdate': result[x].get('pubdate'), 'query': query}
-                         for x in result.get('uids', [])]
-            rows.extend(lane_rows)
-            save(output, rows)
-            print(f'{lane}: {len(lane_rows)} candidates', flush=True)
-            await asyncio.sleep(.6)
-
-
 def default_cache(root):
-    """Metadata cache per root; dense500 keeps its historical path."""
-    root = Path(root)
-    return '/tmp/op2-dense500-metadata.sqlite' if root.resolve() == DENSE500.resolve() \
-        else f'/tmp/op2-{root.name}-metadata.sqlite'
+    """Metadata cache per root."""
+    return f'/tmp/op2-{Path(root).name}-metadata.sqlite'
 
 
 class BudgetExceeded(RuntimeError):
@@ -113,7 +54,7 @@ class BudgetExceeded(RuntimeError):
 class BoundedClient(LiteratureClient):
     def __init__(self, cache=None):
         super().__init__(LiteratureConfig(
-            cache=cache or default_cache(DENSE500), concurrency=1,
+            cache=cache or default_cache(CORPUS), concurrency=1,
             cloud_requests_per_second=3, retries=1,
             max_xml_bytes=2_000_000, max_metadata_bytes=1_000_000,
             max_versions=8, max_listing_pages=2))
@@ -127,78 +68,6 @@ class BoundedClient(LiteratureClient):
         if kind == 'xml':
             self.last_xml = value[0]
         return value
-
-
-async def acquire(limit=477):
-    candidates = json.loads((ROOT / 'acquisition/approved-titles.json').read_text())
-    manifest_path = ROOT / 'selection.json'
-    manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else []
-    used = {x['pmcid'] for x in manifest}
-    used.update(aid.split('.')[0] for aid in store.article_ids(DENSE50, 'sources'))
-    log_path = ROOT / 'acquisition/decisions.json'
-    log = json.loads(log_path.read_text()) if log_path.exists() else []
-    attempted = {x['pmcid'] for x in log}
-    client = BoundedClient()
-    network_path = ROOT/'acquisition/network.json'
-    if network_path.exists():
-        client.stats.update(json.loads(network_path.read_text()))
-    retained = json.loads((ROOT/'retained-strata.json').read_text())
-    initial_count = len(manifest)
-    try:
-        for lane in LANES:
-            target = (30 if lane in ['pediatric','neonatal'] else 20)-list(retained.values()).count(lane)
-            have = sum(x['stratum'] == lane for x in manifest)
-            pool = [x for x in candidates if x['lane'] == lane]
-            for candidate in pool:
-                if len(manifest)-initial_count >= limit:
-                    return
-                if have >= target:
-                    break
-                pmcid = candidate['pmcid']
-                if pmcid in used or pmcid in attempted:
-                    continue
-                if EXCLUDED_TITLE.search(candidate['title']):
-                    log.append({**candidate, 'decision': 'exclude_title_or_nonenglish'})
-                    attempted.add(pmcid)
-                    continue
-                if client.stats['metadata_xml_bytes_received'] > 140_000_000:
-                    raise RuntimeError('150 MB total acquisition cap approached; stopping safely')
-                client.last_xml = None
-                try:
-                    article = await fetch_article(client, pmcid)
-                    decision = article['status']
-                    if decision == 'eligible' and not article.get('has_body_text'):
-                        decision = 'missing_body'
-                    if decision == 'eligible' and not article.get('text', '').strip():
-                        decision = 'empty_text'
-                    if decision == 'eligible':
-                        article_id = write_article(ROOT, article, client.last_xml)
-                        manifest.append({'article_id': article_id, 'pmcid': pmcid,
-                            'title': article['title'], 'stratum': lane,
-                            'source_url': article['source_url'], 'doi': article.get('doi'),
-                            'license': article['license'], 'text_sha256': article['text_sha256'],
-                            'xml_sha256': article['xml_sha256'], 'selection_status': 'candidate_source_acquired',
-                            'prior_benchmark_exposure': False, 'split': candidate['split'],
-                            'source_family_check': 'pending_full_text_screen',
-                            'selection_reason': candidate['reason'],
-                            'patient_count_hint': candidate['patient_count_hint'],
-                            'annotation_status': 'not_started', 'review_status': 'not_started'})
-                        used.add(pmcid); have += 1
-                        save(manifest_path, manifest)
-                    log.append({**candidate, 'decision': decision,
-                        **({'eligibility_details': article.get('rejected', []),
-                            'versions': article.get('versions', [])}
-                           if decision != 'eligible' else {})})
-                except Exception as error:
-                    log.append({**candidate, 'decision': 'fetch_error', 'error': str(error)})
-                attempted.add(pmcid)
-                save(log_path, log)
-                save(ROOT/'acquisition/network.json', dict(client.stats))
-                print(f'{lane} {have}/{target}; {len(manifest)}/477: {pmcid} {log[-1]["decision"]}', flush=True)
-    finally:
-        save(log_path, log)
-        save(ROOT/'acquisition/network.json', dict(client.stats))
-        await client.close()
 
 
 def write_article(root, article, xml):
@@ -262,7 +131,7 @@ def stale_held(log, policy_version):
 
 
 async def acquire_selection(root, selection_file, *, limit=None, permissive_only=False, cache=None,
-                            client=None, other_roots=None, recheck_held=False):
+                            client=None, other_roots=None, recheck_held=False, selection_round=None):
     """Acquire the selection file's primaries in order, falling back to same-lane alternates.
 
     recheck_held=True makes license holds recorded under an older policy version attemptable again,
@@ -273,7 +142,7 @@ async def acquire_selection(root, selection_file, *, limit=None, permissive_only
     selection_sha = hashlib.sha256(Path(selection_file).read_bytes()).hexdigest()
     manifest_path = root / 'selection.json'
     manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else []
-    roots = list(dict.fromkeys(Path(r).resolve() for r in [*(ROOTS if other_roots is None else other_roots), root]))
+    roots = list(dict.fromkeys(Path(r).resolve() for r in [*(other_roots or ()), root]))
     used = existing_pmcids(roots)
     log_path = root / 'acquisition/decisions.json'
     log = json.loads(log_path.read_text()) if log_path.exists() else []
@@ -331,6 +200,7 @@ async def acquire_selection(root, selection_file, *, limit=None, permissive_only
                     'text_sha256': article['text_sha256'], 'xml_sha256': article['xml_sha256'],
                     'selection_status': 'candidate_source_acquired', 'prior_benchmark_exposure': False,
                     **({'split': row['split']} if row.get('split') else {}),
+                    **({'selection_round': selection_round} if selection_round is not None else {}),
                     'source_family_check': 'pending_full_text_screen',
                     'selection_reason': row.get('reason') or f'Supplied selection list: lane {row["lane"]}, group {row["group"]} ({row["role"]}).',
                     'patient_count_hint': row.get('patient_count_hint'),
@@ -376,23 +246,18 @@ async def acquire_selection(root, selection_file, *, limit=None, permissive_only
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('stage', choices=['discover', 'acquire'])
-    parser.add_argument('--limit', type=int, default=None,
-                        help='max new articles this run (default 477 for dense500; all slots with --selection-file)')
-    parser.add_argument('--root', type=Path, help='target root for --selection-file mode (e.g. benchmarks/dense500b)')
-    parser.add_argument('--selection-file', type=Path, help='JSON list of selection rows (see module docstring)')
+    parser.add_argument('stage', choices=['acquire'])
+    parser.add_argument('--selection-file', type=Path, required=True, help='JSON list of selection rows (see module docstring)')
+    parser.add_argument('--round', type=int, required=True, dest='selection_round',
+                        help='selection round recorded on every acquired row (the next after selection.json\'s highest)')
+    parser.add_argument('--root', type=Path, default=CORPUS, help='target root (default benchmarks/dense)')
+    parser.add_argument('--limit', type=int, default=None, help='max new articles this run (default: all slots)')
     parser.add_argument('--permissive-only', action='store_true',
                         help='accept only CC0, CC BY, CC BY-SA and public domain (reject NC/ND)')
     parser.add_argument('--recheck-held', action='store_true',
                         help='re-attempt license holds recorded under an older policy version (unfilled slots only)')
     parser.add_argument('--cache', help='metadata cache path (default /tmp/op2-<root name>-metadata.sqlite)')
     args = parser.parse_args()
-    if args.selection_file or args.root:
-        if args.stage != 'acquire' or not (args.selection_file and args.root):
-            parser.error('--root and --selection-file go together, with the acquire stage')
-        print(json.dumps(asyncio.run(acquire_selection(args.root, args.selection_file, limit=args.limit,
-            permissive_only=args.permissive_only, cache=args.cache, recheck_held=args.recheck_held)), indent=2))
-    elif args.permissive_only or args.cache or args.recheck_held:
-        parser.error('--permissive-only, --cache and --recheck-held apply to --selection-file mode only')
-    else:
-        asyncio.run(discover() if args.stage == 'discover' else acquire(477 if args.limit is None else args.limit))
+    print(json.dumps(asyncio.run(acquire_selection(args.root, args.selection_file, limit=args.limit,
+        permissive_only=args.permissive_only, cache=args.cache, recheck_held=args.recheck_held,
+        selection_round=args.selection_round)), indent=2))

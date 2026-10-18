@@ -7,14 +7,15 @@ from pathlib import Path
 import pytest
 
 from openpatients2.article_themes import FALLBACK, GROUPS, LANES, PRIORITY, assign, classify, scheme, xml_features
-from openpatients2.viewer import Library
+from openpatients2.viewer import THEME_FEATURES, Library
 
-BENCH = Path(__file__).resolve().parents[1] / 'benchmarks'
+CORPUS = Path(__file__).resolve().parents[1] / 'benchmarks' / 'dense'
+checked_out = pytest.mark.skipif(not (CORPUS / 'selection.json').exists(), reason='benchmarks not checked out')
 
 
-def test_scheme_has_every_dense500b_lane_under_its_own_group():
-    rows = json.loads((BENCH / 'dense500b' / 'selection.json').read_text())
-    for row in rows:
+def test_scheme_has_every_selection_lane_under_its_own_group():
+    rows = json.loads((CORPUS / 'selection.json').read_text())
+    for row in (r for r in rows if r.get('lane')):
         assert LANES[row['lane']][0] == row['group']
     groups = [g['group'] for g in scheme()]
     assert groups == list(GROUPS) and all(g['name'] and g['lanes'] for g in scheme())
@@ -84,34 +85,43 @@ def test_xml_features_read_front_matter_only():
 
 
 def _checked_in_articles():
-    """(reference set, article id, title, selection lane, raw XML) for every checked-in article."""
-    strata = {}
-    for name in ('dense500', 'dense500b'):
-        strata.update({r['article_id']: r for r in json.loads((BENCH / name / 'selection.json').read_text())})
-    for name in ('dense50', 'dense500', 'dense500b'):
-        for folder in sorted((BENCH / name / 'articles').iterdir()):
-            row = strata.get(folder.name) or {'title': json.loads((folder / 'source.json').read_text())['title']}
-            raw = folder / 'raw.xml'
-            yield name, folder.name, row, raw.read_text(errors='replace') if raw.exists() else ''
+    """(selection round, article id, selection row, raw XML or None) for every checked-in article."""
+    rows = {r['article_id']: r for r in json.loads((CORPUS / 'selection.json').read_text())}
+    for folder in sorted((CORPUS / 'articles').iterdir()):
+        row = rows[folder.name]
+        raw = folder / 'raw.xml'
+        yield row['selection_round'], folder.name, row, raw.read_text(errors='replace') if raw.exists() else None
+
+
+@checked_out
+def test_checked_in_theme_features_cover_every_article_and_match_raw_xml():
+    # Raw XML is gitignored; this table lets a fresh clone (the Pages build) classify themes as locally.
+    table = json.loads((CORPUS / THEME_FEATURES).read_text())
+    articles = list(_checked_in_articles())
+    assert sorted(table) == sorted(aid for _, aid, _, _ in articles), 'run `op2 viewer --write-theme-features`'
+    for _, aid, _, raw in articles:
+        if raw is not None:
+            assert table[aid] == xml_features(raw), f'{aid}: run `op2 viewer --write-theme-features`'
 
 
 def _held_out(aid):
-    """The fixed half of dense500b kept out of rule tuning (the other half was the development set)."""
+    """The fixed half of round 2 kept out of rule tuning (the other half was the development set)."""
     return int(hashlib.sha256(aid.encode()).hexdigest(), 16) % 2 == 1
 
 
-@pytest.mark.skipif(not (BENCH / 'dense500b' / 'selection.json').exists(), reason='benchmarks not checked out')
-def test_all_articles_get_a_theme_and_rules_recover_most_dense500b_lanes():
+@checked_out
+def test_all_articles_get_a_theme_and_rules_recover_most_round2_lanes():
+    features = json.loads((CORPUS / THEME_FEATURES).read_text())
     old, held, primary, tagged = Counter(), 0, 0, 0
-    for name, aid, row, raw in _checked_in_articles():
-        rules = classify(row['title'], **xml_features(raw), stratum=row.get('stratum'))
+    for selection_round, aid, row, _ in _checked_in_articles():
+        rules = classify(row['title'], **features[aid], stratum=row.get('stratum'))
         final = assign(row.get('lane'), rules)
         assert final['lane'] in LANES and final['tags'][0] == final['lane']
-        if name == 'dense500b':
+        if selection_round == 2:
             assert final['basis'] == 'selection' and final['lane'] == row['lane']
             if _held_out(aid):
                 # The stratum is the lane itself here, so the rules must do without it.
-                blind = classify(row['title'], **xml_features(raw))
+                blind = classify(row['title'], **features[aid])
                 held += 1
                 primary += blind['lane'] == row['lane']
                 tagged += row['lane'] in blind['tags']
@@ -127,19 +137,22 @@ def test_all_articles_get_a_theme_and_rules_recover_most_dense500b_lanes():
 
 
 def test_catalog_carries_themes_scheme_and_checklist_completion(tmp_path):
-    root, dataset = tmp_path / 'dense500b', tmp_path / 'export'
+    root, dataset = tmp_path / 'corpus', tmp_path / 'export'
     dataset.mkdir()
-    for aid, title in (('PMC1.1', 'Holter monitoring in palpitations'), ('PMC2.1', 'A rare tumour')):
+    for aid, title in (('PMC1.1', 'Holter monitoring in palpitations'), ('PMC2.1', 'A rare tumour'), ('PMC3.1', 'A rare tumour')):
         path = root / 'articles' / aid / 'source.json'
         path.parent.mkdir(parents=True)
         path.write_text(json.dumps({'article_id': aid, 'title': title, 'text_sha256': 'h', 'segments': []}))
-    (root / 'selection.json').write_text(json.dumps([{'article_id': 'PMC2.1', 'stratum': 'x', 'lane': 'africa'}]))
+    (root / 'selection.json').write_text(json.dumps([{'article_id': 'PMC2.1', 'stratum': 'x', 'lane': 'africa', 'selection_round': 2}]))
+    # No raw XML here: PMC3.1's keywords come from the checked-in features table in the root.
+    (root / THEME_FEATURES).write_text(json.dumps({'PMC3.1': {'journal': None, 'keywords': ['Echocardiography'], 'affiliations': []}}))
     checklist = tmp_path / 'article_checklist.json'
     checklist.write_text(json.dumps({'articles': {'PMC1.1': {'completed': True}}}))
     catalog = Library(dataset, [root], [checklist]).catalog()
     rows = {r['article_id']: r for r in catalog['articles']}
     assert rows['PMC1.1']['theme'] == {'lane': 'ecg_waveform', 'group': 'data_rich_x', 'tags': ['ecg_waveform'], 'basis': 'rules'}
     assert rows['PMC2.1']['theme']['lane'] == 'africa' and rows['PMC2.1']['theme']['basis'] == 'selection'
+    assert rows['PMC3.1']['theme']['lane'] == 'echo_cardiac'
     assert rows['PMC1.1']['completed'] is True and 'completed' not in rows['PMC2.1']
-    assert {r['reference_set'] for r in rows.values()} == {'dense500b'}
+    assert rows['PMC2.1']['selection_round'] == 2 and rows['PMC1.1']['selection_round'] is None
     assert catalog['themes'] == scheme()

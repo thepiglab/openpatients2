@@ -1,8 +1,8 @@
-# Lessons from the prior Codex (GPT-6 orchestrator + GPT-6.1 Sol annotators) dense500 run
+# Lessons from the prior Codex (GPT-6 orchestrator + GPT-6.1 Sol annotators) run on the first 500 articles
 
 Source: digests of ~/.codex/sessions/*01a0eac3-14bb-7161-82cb-90e1d8f10c7d*. Subagent prompt text was encrypted and is not recoverable.
 
-## User requirements (dense500)
+## User requirements (first 500 articles)
 - Full Glimmer-shaped patient bundle per article: all 14 clinical schemas + timeline + summary + figure attribution ("It needs to be everything. Like everything.").
 - Figures: pixels actually inspected before any visual claim; caption-only claims labelled separately.
 - Stronger model personally verifies every output against the article. Validator success is never review.

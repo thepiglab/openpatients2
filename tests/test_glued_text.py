@@ -81,7 +81,7 @@ def dense():
 
 
 def _reference():
-    root = ROOT / 'benchmarks/dense50'; aid = 'PMC13624771.1'
+    root = ROOT / 'benchmarks/dense'; aid = 'PMC13624771.1'
     return (json.loads(store.path(root, 'annotations', aid).read_text()),
             json.loads(store.path(root, 'sources', aid).read_text()))
 

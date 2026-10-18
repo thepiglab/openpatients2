@@ -16,7 +16,7 @@ Used by schema_review --role (clinical gates must pass before a receipt is writt
 export (failing articles are withheld; reasons go to article_checklist.json).
 
     op2 dense reference_gates \
-        benchmarks/dense500 --article ID [--folder annotations] [--groups clinical media]
+        benchmarks/dense --article ID [--folder annotations] [--groups clinical media]
 """
 import argparse
 import copy

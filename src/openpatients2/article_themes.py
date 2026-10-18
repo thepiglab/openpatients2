@@ -1,14 +1,14 @@
 """Themed categories for every reference article: theme group -> sublane.
 
-The scheme is the dense500b selection's own `group`/`lane` labels plus one catch-all group. Articles
-that carry a selection lane keep it as their primary theme. The others (dense50, dense500) are
-classified here by fixed rules over their own data: title, journal, keywords and affiliations from the
+The scheme is the round-2 selection's own `group`/`lane` labels plus one catch-all group. Articles
+that carry a selection lane keep it as their primary theme. The others (round 1, which was selected by
+specialty stratum) are classified here by fixed rules over their own data: title, journal, keywords and affiliations from the
 JATS XML, the selection stratum, and the reviewed patients' count, ages and species. No model and no
 randomness: the same inputs always give the same themes.
 
 Every matching lane becomes a tag. The primary theme is the lane the stratum or title puts first, else the
 first matching lane in `PRIORITY`; an article that matches nothing is "rare / acute, other". The terms and
-order were tuned on half of dense500b (lanes hidden); tests/test_article_themes.py scores the other half.
+order were tuned on half of round 2 (lanes hidden); tests/test_article_themes.py scores the other half.
 """
 from __future__ import annotations
 

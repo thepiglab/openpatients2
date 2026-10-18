@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 from openpatients2.dense_store import load as load_store
 store = load_store()
 RELEASE = ROOT / 'data/dense_clinical_cases_v1'
-R = ROOT / 'benchmarks/dense500'
+R = ROOT / 'benchmarks/dense'
 AID = 'PMC12786310.1'
 
 

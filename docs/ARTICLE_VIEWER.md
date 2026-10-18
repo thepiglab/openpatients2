@@ -37,7 +37,7 @@ static build, the export is assembled in the browser from the article files. No 
 extra dependencies, or article downloads are needed.
 
 The default library combines `data/dense_clinical_cases_v1` with live sources and
-reviewed targets in `benchmarks/dense50` and `benchmarks/dense500`. There are no
+reviewed targets in the corpus, `benchmarks/dense`. There are no
 article IDs embedded in the page. New source files enter the catalog, and new
 reviewed targets appear automatically. The page checks every 15 seconds and when
 it becomes visible again. It preserves the selected
@@ -144,8 +144,11 @@ Bun 1.2.13 minifies the generated JavaScript and CSS. JSON is compacted without
 changing its data. Only the generated website is uploaded. The viewer source,
 layout, interactions, review gates, and relative URLs are unchanged.
 
-Pages includes the checked-in sources and current reviewed records from both
-`benchmarks/dense50` and `benchmarks/dense500`. Ignored workstation exports under
+Pages includes the checked-in sources and current reviewed records of every article in
+`benchmarks/dense`. Themes come from the checked-in `benchmarks/dense/article_theme_features.json`
+(journal, keywords and affiliations read from the gitignored raw XML), so Pages classifies articles
+exactly as a local checkout does; refresh it with `op2 viewer --write-theme-features` after acquiring
+articles (a test fails while it is stale). Ignored workstation exports under
 `data/` are not part of this build; exported enrichments available only there
 will not appear on Pages. Drafts and stale reviews remain withheld by the viewer.
 Images and supplementary files still link to their original hosts.

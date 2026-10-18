@@ -1,4 +1,4 @@
-"""Tools for the dense clinical reference sets (benchmarks/dense50, benchmarks/dense500, benchmarks/dense500b).
+"""Tools for the dense clinical reference corpus (benchmarks/dense: one root, one continuing article set).
 
 The benchmark folders hold only data and docs; every tool lives here and runs as
 `op2 dense <tool> ...` (or `python -m openpatients2.dense.<tool> ...`). Per-article paths come
@@ -8,17 +8,13 @@ repository checkout, never from the current directory.
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
-DENSE500 = REPO / 'benchmarks' / 'dense500'
-DENSE50 = REPO / 'benchmarks' / 'dense50'
-# Batch 2 (permissive-licensed, gap-targeted lanes; acquired from a supplied selection list).
-# Same per-article layout and annotation protocol as dense500; exported as its own dataset.
-DENSE500B = REPO / 'benchmarks' / 'dense500b'
-ROOTS = [DENSE50, DENSE500, DENSE500B]
+# Every article, whichever selection round brought it in (selection.json records the round, lane and split).
+CORPUS = REPO / 'benchmarks' / 'dense'
 
 # `op2 dense <tool>`: name -> one-line description (the module docstring has the details).
 # Library-only modules (review_record, sidecar_receipts, signing_guard, coverage_audit) are imported, not run.
 TOOLS = {
-    'export': 'Build data/dense_clinical_cases_v1 from dense50+dense500 (--set dense500b: its own dataset)',
+    'export': 'Build data/dense_clinical_cases_v1 from the whole corpus',
     'reference_gates': 'Runtime checker gates for a reference annotation (ROOT --article ID)',
     'validate': 'Validate annotations against their sources (ROOT [--folder drafts|annotations])',
     'normalize': 'Apply the shared annotation rules and regenerate schema targets (dry run unless --apply)',
@@ -33,6 +29,6 @@ TOOLS = {
     'supplement_assets': 'Acquire / peek / extract supplementary files (cache-managed)',
     'supplement_manifest_review': 'Draft / validate / sign the supplement manifest',
     'supplement_review': 'Validate / sign a supplement content review',
-    'acquire': 'Discover or acquire candidate articles (discover|acquire [--limit N]; acquire --root R --selection-file F; network)',
+    'acquire': 'Acquire a selection list into the corpus (acquire --selection-file F [--root R]; network)',
     'scan_glued_text': 'Report glued-word tokens in annotations with proposed segmentations',
 }

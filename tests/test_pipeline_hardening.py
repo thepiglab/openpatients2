@@ -124,10 +124,10 @@ def test_temporality_rule_matches_the_reference_convention():
     """References leave temporality unknown for most facts (the materializer fills omitted fields with unknown)."""
     from pathlib import Path
     import pytest
-    root = Path(__file__).resolve().parents[1] / 'benchmarks' / 'dense500' / 'articles'
+    root = Path(__file__).resolve().parents[1] / 'benchmarks' / 'dense' / 'articles'
     files = sorted(root.glob('*/annotation.json'))[:80]
     if not files:
-        pytest.skip('dense500 annotations unavailable')
+        pytest.skip('corpus annotations unavailable')
     values = [(f.get('fields') or {}).get('temporality', 'unknown') for a in map(lambda p: json.loads(p.read_text()), files)
               for patient in a['patients'] for f in patient['facts'] if f['task'] != 'case_context']
     assert values.count('unknown') / len(values) > 0.6

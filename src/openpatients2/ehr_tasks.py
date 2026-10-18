@@ -8,7 +8,7 @@ Tasks (names used by the runner, attempt ledger and prompt overrides):
 
 The model chooses labels and cell IDs; code carries forward every machine field
 (deterministic defaults, peeks, hashes, literal cells, parsed numbers). Each
-checker converts the model output into the exact dense500 sidecar format and runs
+checker converts the model output into the exact reference-corpus sidecar format and runs
 the same validator the reference sidecars pass, so outputs can be scored
 directly against dual-signed references. Outputs remain unreviewed model claims.
 """

@@ -13,7 +13,7 @@ layout as the dense benchmark roots, openpatients2.dense_store):
   OUTPUT/data/unified.jsonl                       openpatients2-unified-article/1 (same builder as the release)
 
 --supplement-assets and --supplement-transcriptions take a dense benchmark root (e.g.
-benchmarks/dense500): acquisition records are read from articles/ID/supplements/assets.json and
+benchmarks/dense): acquisition records are read from articles/ID/supplements/assets.json and
 reviewed supplement targets from articles/ID/supplements/<SID>.{document,visual}.json.
 
     python -m openpatients2.ehr_pipeline --config ehr.yaml --articles sample.jsonl --run-dir RUN \

@@ -12,7 +12,7 @@ fetched. The MP4 goes into the shared, gitignored figure cache (`data/.dense-fig
 against the source MD5 and probed with ffprobe, and frames are sampled with the system `ffmpeg` at fixed
 timestamps across the whole duration. Frames are PNGs in the same cache folder; their paths, timestamps and
 hashes are printed together with a `video_inspection_template` for the record a reviewer writes after viewing
-them (`articles/<ID>/video_inspection.<FID>.<role>.json`; see benchmarks/dense500/claude_prompts). A video
+them (`articles/<ID>/video_inspection.<FID>.<role>.json`; see benchmarks/dense/claude_prompts). A video
 supplement is recorded in the supplement manifest instead (basis `manifest_video_frames_sampled`).
 
 Downloading and sampling are not inspection. This tool never writes into articles/. `--cleanup` removes only
@@ -32,7 +32,7 @@ from urllib.parse import urlparse
 import httpx
 
 from openpatients2 import dense_store as store
-from openpatients2.dense import DENSE500
+from openpatients2.dense import CORPUS
 from openpatients2.dense.figure_assets import CACHE, MAX_CACHE_BYTES
 from openpatients2.dense.supplement_assets import ALLOWED_HOSTS, MAX_FILE_BYTES, CacheFull, _probe, _stream, cache_usage
 from openpatients2.supplement_peek import VIDEO_EXTENSIONS
@@ -267,7 +267,7 @@ def cleanup(aid, *, video=None, root=None, cache=None):
 if __name__ == '__main__':
     p = argparse.ArgumentParser(prog='op2 dense video_frames', description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument('root', type=Path, nargs='?', default=DENSE500)
+    p.add_argument('root', type=Path, nargs='?', default=CORPUS)
     p.add_argument('--article', required=True)
     p.add_argument('--video', help='Filename of one listed video (required when several are listed)')
     p.add_argument('--every', type=float, default=DEFAULT_EVERY, help='Seconds between sampled frames')

@@ -134,7 +134,7 @@ Unresolved attribution and failed or partial tasks remain visible in the output.
 
 ## Optional EHR stages and the unified article record
 
-Both the automated pipeline and the dense500 reference release emit the same
+Both the automated pipeline and the dense reference release emit the same
 row: `openpatients2-unified-article/1`, one row per article, built by the shared
 [`unified_record`](../src/openpatients2/unified_record.py) builder/validator. The
 four EHR stages are new runtime tasks
@@ -164,7 +164,7 @@ task contracts and their fingerprints are unchanged.
              CPU: same validators as the reference sidecars
                             |
                             v
-   unified_record.build_record  <-- the same builder the dense500 export uses
+   unified_record.build_record  <-- the same builder the dense export uses
                             |
                             v
    one row per article: patients[] (14 sections, summary, timeline, refs),
@@ -209,7 +209,7 @@ Run (all stages off unless enabled in the YAML):
 python -m openpatients2.ehr_pipeline --config ehr.yaml --articles sample.jsonl --run-dir RUN \
     --output OUT --endpoints http://127.0.0.1:8000/v1 --context 131072 \
     [--image-manifest RUN_MEDIA/vision-assets/manifest.json] \
-    [--supplement-assets benchmarks/dense500] [--supplement-transcriptions benchmarks/dense500]
+    [--supplement-assets benchmarks/dense] [--supplement-transcriptions benchmarks/dense]
 python -m openpatients2.unified_scoring --reference data/dense_clinical_cases_v1/data \
     --predicted OUT/data/unified.jsonl --out score.json
 ```

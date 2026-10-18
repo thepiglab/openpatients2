@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 
 from openpatients2 import cli
-from openpatients2.dense import DENSE50, DENSE500, TOOLS
+from openpatients2.dense import CORPUS, TOOLS
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -14,7 +14,7 @@ def test_every_listed_tool_is_a_runnable_module_and_roots_resolve_from_the_packa
     for tool in TOOLS:
         spec = importlib.util.find_spec(f'openpatients2.dense.{tool}')
         assert spec is not None and "__name__=='__main__'" in Path(spec.origin).read_text().replace(' ', '')
-    assert DENSE500 == ROOT / 'benchmarks/dense500' and DENSE50 == ROOT / 'benchmarks/dense50'
+    assert CORPUS == ROOT / 'benchmarks/dense'
     assert not list((ROOT / 'benchmarks').rglob('*.py'))
 
 

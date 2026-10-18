@@ -5,7 +5,7 @@
 
 Runtime prompt files (prompts/<task>.md) end with a generated SHARED RULES block. Code-built
 prompts (roster/summary/timeline in article_tasks, figure visual/EHR/privacy instructions) call
-`prompt_block()` at import, so they cannot drift. Reference documents (dense500 protocol and
+`prompt_block()` at import, so they cannot drift. Reference documents (corpus protocol and
 Claude briefs) contain a generated block between HTML comment markers. Edit the YAML, never a block.
 """
 from __future__ import annotations
@@ -33,11 +33,11 @@ REPO = Path(__file__).resolve().parents[2]
 # Reference documents: path relative to the repo root -> (style, audience). 'full' renders the rule
 # text of rules whose `docs` list the audience; 'checklist' lists every rule ID and title.
 DOCS = {
-    'benchmarks/dense500/ANNOTATION_PROTOCOL.md': ('full', 'protocol'),
-    'benchmarks/dense500/claude_prompts/ANNOTATOR_BRIEF.md': ('checklist', None),
-    'benchmarks/dense500/claude_prompts/PARENT_REVIEWER_BRIEF.md': ('checklist', None),
-    'benchmarks/dense500/claude_prompts/RESIGN_BRIEF.md': ('checklist', None),
-    'benchmarks/dense500/claude_prompts/BACKFILL_BRIEF.md': ('full', 'backfill'),
+    'benchmarks/dense/ANNOTATION_PROTOCOL.md': ('full', 'protocol'),
+    'benchmarks/dense/claude_prompts/ANNOTATOR_BRIEF.md': ('checklist', None),
+    'benchmarks/dense/claude_prompts/PARENT_REVIEWER_BRIEF.md': ('checklist', None),
+    'benchmarks/dense/claude_prompts/RESIGN_BRIEF.md': ('checklist', None),
+    'benchmarks/dense/claude_prompts/BACKFILL_BRIEF.md': ('full', 'backfill'),
 }
 
 
@@ -77,7 +77,7 @@ def doc_block(style, audience):
     rules = load_rules()
     if style == 'checklist':
         lines = ['Shared annotation rules (full text: `src/openpatients2/rules/annotation_rules.yaml`, rendered in '
-                 '`benchmarks/dense500/ANNOTATION_PROTOCOL.md` "Shared annotation rules"). Check every item before '
+                 '`benchmarks/dense/ANNOTATION_PROTOCOL.md` "Shared annotation rules"). Check every item before '
                  'signing; `validator` rules are also enforced by the runtime gate command.', '',
                  '| Rule | What | Checked by validator |', '| --- | --- | --- |']
         lines += [f'| `{r["id"]}` | {r["title"]} | {"yes" if r.get("validator") else "review"} |' for r in rules]

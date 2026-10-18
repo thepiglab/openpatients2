@@ -17,9 +17,9 @@ AID = 'PMC10998798.1'
 @pytest.fixture
 def specimen(tmp_path, monkeypatch):
     from openpatients2.dense import supplement_review as module
-    source=json.loads(store.path(ROOT/'benchmarks/dense50','sources',AID).read_text())
-    annotation=json.loads(store.path(ROOT/'benchmarks/dense50','annotations',AID).read_text())
-    target=json.loads(store.path(ROOT/'benchmarks/dense50','supplement-visual-submissions',AID,sid='MOESM1').read_text())
+    source=json.loads(store.path(ROOT/'benchmarks/dense','sources',AID).read_text())
+    annotation=json.loads(store.path(ROOT/'benchmarks/dense','annotations',AID).read_text())
+    target=json.loads(store.path(ROOT/'benchmarks/dense','supplement-visual-submissions',AID,sid='MOESM1').read_text())
     target.pop('pixel_match_to_main_figure',None)
     assignment=target['analysis']['attribution']['assignments'][0]
     assignment.update(scope='unresolved',patient_ids=[],evidence=[{'segment_id':'b00068','quote':next(z['text'] for z in source['segments'] if z['segment_id']=='b00068')}])

@@ -1,14 +1,14 @@
 # Backfill brief: EHR sidecars for already-completed articles
 
 You are a "Claude Sonnet 5.5 annotator" adding the new EHR multimodal sidecars to articles that are ALREADY
-completed (parent-reviewed). Repo root `/Users/mkieffer/programming/ToadResearch/openpatients2`; `R` = the
-article's root (`benchmarks/dense500` or `benchmarks/dense50`); tools run as `op2 dense <tool> ...`
+completed (parent-reviewed). Repo root `/Users/mkieffer/programming/ToadResearch/openpatients2`; `R` =
+`benchmarks/dense` (the one corpus root); tools run as `op2 dense <tool> ...`
 (or `.venv/bin/op2`; any working directory).
 
 Read first: the figure rules at the end of this brief (generated from `src/openpatients2/rules/annotation_rules.yaml`,
 also given to the local-LLM figure prompts), the "EHR multimodal sidecars" section of
-`benchmarks/dense500/ANNOTATION_PROTOCOL.md`, step 4b of
-`benchmarks/dense500/claude_prompts/ANNOTATOR_BRIEF.md`, and `src/openpatients2/figure_ehr.py` /
+`benchmarks/dense/ANNOTATION_PROTOCOL.md`, step 4b of
+`benchmarks/dense/claude_prompts/ANNOTATOR_BRIEF.md`, and `src/openpatients2/figure_ehr.py` /
 `src/openpatients2/supplement_manifest.py` for the enums.
 
 ## Signing: a `--role` call is a signature

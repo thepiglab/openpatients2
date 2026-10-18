@@ -316,9 +316,9 @@ def test_export_streams_reviewed_patient_rows(library):
 def test_specialty_comes_from_checked_in_selection_without_an_export(library):
     lib, root, dataset, source = library
     (dataset / 'manifest.jsonl').unlink()
-    (root / 'selection.json').write_text(json.dumps([{'article_id': AID, 'stratum': 'cardiac'}]))
+    (root / 'selection.json').write_text(json.dumps([{'article_id': AID, 'stratum': 'cardiac'},
+                                                     {'article_id': 'PMC124.1', 'stratum': 'renal'}]))
     put(root, 'sources', {**source, 'article_id': 'PMC124.1'}, 'PMC124.1')
-    (root / 'retained-strata.json').write_text(json.dumps({'PMC124.1': 'renal'}))
     strata = {r['article_id']: r['primary_stratum'] for r in lib.catalog()['articles']}
     assert strata == {AID: 'cardiac', 'PMC124.1': 'renal'}
 

@@ -1,6 +1,6 @@
 """One self-contained row per article: `openpatients2-unified-article/1`.
 
-Shared by the dense500 reference export and the automated pipeline, so both
+Shared by the dense reference export and the automated pipeline, so both
 emit exactly the same record and a scorer can compare them field by field.
 All joins are resolved here: patients, figure panels (pixel analysis, owner
 attribution, EHR label, privacy flags), supplements (manifest class, reviewed

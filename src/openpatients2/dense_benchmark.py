@@ -181,26 +181,36 @@ def prepare(root, work, expected, download_media=False, *, splits=None, make_arc
     root, work = root.resolve(), work.resolve()
     if work.exists():
         raise ValueError('Use a new output directory; frozen campaigns are never overwritten')
-    refs = {}
     release = root / 'data/dense_clinical_cases_v1/data'
     frozen = root / 'configs/hipergator/dense-benchmark/reference.jsonl.gz'
+    sources = []
     if all((release / f'{s}.jsonl').exists() for s in ('train', 'validation', 'test')):
-        reference_rows = [row for split in ('train', 'validation', 'test')
-                          for row in rows(release / f'{split}.jsonl').values()]
-    elif frozen.exists():
+        sources.append(('release', [row for split in ('train', 'validation', 'test')
+                                    for row in rows(release / f'{split}.jsonl').values()]))
+    if frozen.exists():
         with gzip.open(frozen, 'rt') as f:
-            reference_rows = [json.loads(line) for line in f if line.strip()]
-    else:
+            sources.append(('frozen', [json.loads(line) for line in f if line.strip()]))
+    if not sources:
         raise ValueError('Neither completed release nor tracked frozen reference exists')
-    for row in reference_rows:
+    # The corpus keeps growing, so the local release can outgrow a campaign; the tracked frozen packet
+    # is what an `expected` count (e.g. the 260-article campaigns) was frozen on. Use the first source
+    # whose completed count matches, release first.
+    found = {}
+    for name, reference_rows in sources:
+        refs = {}
+        for row in reference_rows:
             aid = row['article_id']
             if not row.get('completion', {}).get('completed'):
                 continue
             if aid in refs or row['split'] not in ('train', 'validation', 'test') or not all(row['completion']['checks'].values()):
                 raise ValueError(f'Duplicate or inconsistent completed reference: {aid}')
             refs[aid] = row
-    if len(refs) != expected:
-        raise ValueError(f'Expected {expected} completed articles, found {len(refs)}; inspect before changing --expected')
+        found[name] = len(refs)
+        if len(refs) == expected:
+            break
+    else:
+        counts = ', '.join(f'{n} {c}' for n, c in found.items())
+        raise ValueError(f'Expected {expected} completed articles, found {counts}; inspect before changing --expected')
     if splits is not None:
         if not set(splits) <= {'train', 'validation', 'test'} or not splits:
             raise ValueError('Invalid split selection')

@@ -1,8 +1,8 @@
-# Claude Sonnet 5.5 annotator brief (dense500)
+# Claude Sonnet 5.5 annotator brief
 
 You are a dense clinical annotator ("Claude Sonnet 5.5 annotator") for the openpatients2
-dense500 benchmark. Repo root: `/Users/mkieffer/programming/ToadResearch/openpatients2`.
-`R` below means `benchmarks/dense500` (or `benchmarks/dense50` if the article's source lives there).
+dense reference corpus. Repo root: `/Users/mkieffer/programming/ToadResearch/openpatients2`.
+`R` below means `benchmarks/dense` (the one corpus root).
 Run every command from the repo root. Tools: `op2 dense <tool> ...` (or `.venv/bin/op2`); Python snippets: `PYTHONPATH=src .venv/bin/python`.
 
 Your work will be independently reviewed by a stronger parent reviewer (Claude Opus 5.5) who reads
@@ -19,13 +19,12 @@ Never run any `--role` command to probe, test or dry-run a script. It overwrites
 Set timeline event classification on the annotation event: `kind` (presentation, history, diagnosis, test, treatment, adverse_event, outcome, follow_up, plan, other), and for its `time_text` the `time_kind` (calendar, relative, duration, age, gestational_age, postnatal_age, order_only), `time_precision` (exact, approximate, range, unknown) and `time_calendar_value` (the YYYY[-MM[-DD]] the time text states at its own precision, e.g. "October 26, 2022" -> 2022-10-26, "October 2022" -> 2022-10; calendar times only). `op2 dense schema_targets` reads these fields. Never patch event kinds or time classifications into `schema_target.json` with a script; regenerate instead. The same holds for the roster: set the article-level annotation block `"roster": {"reported_individual_count": N|null, "roster_complete": true|false, "evidence": [{"segment_id": ..., "quote": "<literal text stating the number>"}]}`; `op2 dense schema_targets` reads it, and a submission patched after signing makes the parent's schema receipt stale. `op2 dense schema_review` rejects a submission that disagrees with classification set in the annotation.
 
 ## Read first (required)
-1. `benchmarks/dense500/ANNOTATION_PROTOCOL.md` — the binding contract for dense500 AND dense50 articles (the dense50
-   copy is superseded). Follow it exactly, including its "Shared annotation rules" section.
+1. `benchmarks/dense/ANNOTATION_PROTOCOL.md` — the binding contract for every corpus article. Follow it exactly, including its "Shared annotation rules" section.
 1b. The shared rules file `src/openpatients2/rules/annotation_rules.yaml` and, for every task you annotate, the runtime
    task prompt `src/openpatients2/prompts/<task>.md` (plus `system.md`). These define what each field MEANS; the local
    LLM is given the same text, so the reference must follow it exactly. The checklist at the end of this brief lists
    every rule ID.
-2. `benchmarks/dense500/claude_prompts/LESSONS.md` — defects the previous reviewer kept finding. Check each.
+2. `benchmarks/dense/claude_prompts/LESSONS.md` — defects the previous reviewer kept finding. Check each.
 3. `R/SUPPLEMENT_DOCUMENT_REVIEW.md` — only if the article has supplements.
 4. One completed exemplar for format: `R/articles/PMC12310273.1/annotation.json`,
    `R/articles/PMC12310273.1/visual.json`, `R/articles/PMC12310273.1/schema_target.json`.
@@ -53,7 +52,7 @@ If `R/articles/<ID>/annotation.json` already exists (parent-approved), do NOT to
 
 ## Steps (both modes)
 1. Draft/fix the annotation. Validate until it prints `[]` (structural + shared semantic rules):
-   `PYTHONPATH=src .venv/bin/python -c "import json;from pathlib import Path;from openpatients2 import dense_store as store;from openpatients2.dense.validate import validate,semantic_errors;r=Path('benchmarks/dense500');a='<ID>';an=json.loads(store.path(r,'drafts',a).read_text());s=json.loads(store.path(r,'sources',a).read_text());print(validate(an,s)+semantic_errors(an,s))"`
+   `PYTHONPATH=src .venv/bin/python -c "import json;from pathlib import Path;from openpatients2 import dense_store as store;from openpatients2.dense.validate import validate,semantic_errors;r=Path('benchmarks/dense');a='<ID>';an=json.loads(store.path(r,'drafts',a).read_text());s=json.loads(store.path(r,'sources',a).read_text());print(validate(an,s)+semantic_errors(an,s))"`
    (use `R` for the article's root). Supply every attribute the source supports: the materializer turns an omitted
    categorical field into `unknown` (e.g. a plain number needs `comparator: "="`, a numeric age needs its literal
    `text_value`, a result called normal needs `flag: "normal"`).
@@ -118,7 +117,7 @@ owning figure/supplement (no network).
 2. Video figure (`figure_id` set): in `visual.json` the figure row stays `status: unavailable`, `assets: []` (the
    figure contract is image-only) with a limitation saying the MP4 was frame-sampled separately and naming the
    sidecar. Write `R/articles/<ID>/video_inspection.<FID>.agent.json` from the template (exemplar:
-   `benchmarks/dense500/articles/PMC12790481.1`): keep `asset`, `media_probe`, `sampling` (only frames you viewed);
+   `benchmarks/dense/articles/PMC12790481.1`): keep `asset`, `media_probe`, `sampling` (only frames you viewed);
    fill `pixel_observations` (`sample_interval_seconds` + what is visible, no inference), `author_context` (patient ids,
    subject, literal evidence quotes, rationale) and `limitations` (sampling scope; audio and continuous motion not
    reviewed). Frames never add clinical facts; facts still come from the text.
@@ -150,7 +149,7 @@ animal, multiple_index_patients=false) even in multi-patient articles. Enforced 
 ## Shared rules checklist
 
 <!-- GENERATED rules:start — edit src/openpatients2/rules/annotation_rules.yaml, then run `PYTHONPATH=src .venv/bin/python -m openpatients2.annotation_rules --write` -->
-Shared annotation rules (full text: `src/openpatients2/rules/annotation_rules.yaml`, rendered in `benchmarks/dense500/ANNOTATION_PROTOCOL.md` "Shared annotation rules"). Check every item before signing; `validator` rules are also enforced by the runtime gate command.
+Shared annotation rules (full text: `src/openpatients2/rules/annotation_rules.yaml`, rendered in `benchmarks/dense/ANNOTATION_PROTOCOL.md` "Shared annotation rules"). Check every item before signing; `validator` rules are also enforced by the runtime gate command.
 
 | Rule | What | Checked by validator |
 | --- | --- | --- |

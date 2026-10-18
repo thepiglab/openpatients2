@@ -18,12 +18,14 @@ living overview whenever the pipeline changes.
 - `src/openpatients2/dense/` — the dense reference-set tools, run as `op2 dense <tool>` (`op2 dense --help`):
   acquisition, review/receipt tools, rules normalization, runtime gates and `op2 dense export`, which builds
   `data/dense_clinical_cases_v1/`.
-- `benchmarks/dense500/` — the dense reference-set data and docs only (no code): annotation protocol, agent briefs,
-  selection records and per-article folders. See its [README](benchmarks/dense500/README.md)
-  and [annotation protocol](benchmarks/dense500/ANNOTATION_PROTOCOL.md). `benchmarks/dense50/` holds the first retained
-  articles and is exported together with dense500. Everything about one article (source, annotation, schema target,
-  figure/supplement reviews, EHR sidecars, receipts) lives in one folder, `benchmarks/<root>/articles/<ID>/`, with
-  fixed file names resolved only by `openpatients2.dense_store` (map in the dense500 README).
+- `benchmarks/dense/` — the dense reference corpus, data and docs only (no code): one continuing set of articles
+  (currently 1,250 from two selection rounds) with one `selection.json` recording each article's round, stratum/lane,
+  license and split, plus the annotation protocol, agent briefs and acquisition records. See its
+  [README](benchmarks/dense/README.md), [selection and splits](benchmarks/dense/SELECTION.md) and
+  [annotation protocol](benchmarks/dense/ANNOTATION_PROTOCOL.md). Everything about one article (source, annotation,
+  schema target, figure/supplement reviews, EHR sidecars, receipts) lives in one folder,
+  `benchmarks/dense/articles/<ID>/`, with fixed file names resolved only by `openpatients2.dense_store`.
+  `op2 dense export` turns the whole corpus into one dataset, `data/dense_clinical_cases_v1/`.
 - `docs/` — [pipeline overview](docs/PIPELINE_OVERVIEW.md), [article viewer](docs/ARTICLE_VIEWER.md),
   [schema review v2.1](docs/SCHEMA_REVIEW_V2_1.md), and the proposed
   [source-claim compiler](docs/SOURCE_CLAIM_COMPILER_DESIGN.md) design.

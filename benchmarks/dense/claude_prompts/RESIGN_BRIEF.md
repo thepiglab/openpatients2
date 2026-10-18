@@ -1,7 +1,7 @@
 # Re-sign brief: articles whose receipts went stale after a shared-rules normalization
 
-Repo root `/Users/mkieffer/programming/ToadResearch/openpatients2`; `R` = the article's root (`benchmarks/dense500`
-or `benchmarks/dense50`); tools run as `op2 dense <tool> ...` (or `.venv/bin/op2`; any working directory).
+Repo root `/Users/mkieffer/programming/ToadResearch/openpatients2`; `R` = `benchmarks/dense` (the one
+corpus root); tools run as `op2 dense <tool> ...` (or `.venv/bin/op2`; any working directory).
 
 ## Signing: a `--role` call is a signature
 
@@ -13,7 +13,7 @@ Set timeline event classification on the annotation event: `kind` (presentation,
 
 ## When this applies
 `op2 dense normalize` brings annotations in line with the shared rules (`src/openpatients2/rules/annotation_rules.yaml`,
-rendered into `benchmarks/dense500/ANNOTATION_PROTOCOL.md` "Shared annotation rules" and into the runtime prompts)
+rendered into `benchmarks/dense/ANNOTATION_PROTOCOL.md` "Shared annotation rules" and into the runtime prompts)
 and regenerates schema targets. It never signs, so after it changes an article:
 - the schema receipts (`receipts/schema.agent.json`, `receipts/schema.parent.json`) are stale when the target changed;
 - the parent source receipt (`receipts/annotation.parent.json`) is stale when the annotation changed;
@@ -63,7 +63,7 @@ Per-article diff (each change with old -> new, by migration) and open items: a d
 ## Shared rules checklist
 
 <!-- GENERATED rules:start — edit src/openpatients2/rules/annotation_rules.yaml, then run `PYTHONPATH=src .venv/bin/python -m openpatients2.annotation_rules --write` -->
-Shared annotation rules (full text: `src/openpatients2/rules/annotation_rules.yaml`, rendered in `benchmarks/dense500/ANNOTATION_PROTOCOL.md` "Shared annotation rules"). Check every item before signing; `validator` rules are also enforced by the runtime gate command.
+Shared annotation rules (full text: `src/openpatients2/rules/annotation_rules.yaml`, rendered in `benchmarks/dense/ANNOTATION_PROTOCOL.md` "Shared annotation rules"). Check every item before signing; `validator` rules are also enforced by the runtime gate command.
 
 | Rule | What | Checked by validator |
 | --- | --- | --- |

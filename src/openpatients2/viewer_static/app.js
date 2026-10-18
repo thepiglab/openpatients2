@@ -109,12 +109,11 @@ const ADVANCED = {
   article_type: (r, v) => r.article_type === v,
   license: (r, v) => r.license === v,
   tag: (r, v) => (r.theme?.tags || []).includes(v),
-  batch: (r, v) => v === 'dense500b' ? r.reference_set === 'dense500b' : !!r.reference_set && r.reference_set !== 'dense500b',
 };
 /* A theme filter value is a group (all its lanes) or one lane; it matches the primary theme only. */
 const themeMatch = (r, v) => !v || r.theme?.group === v || r.theme?.lane === v;
 const themeName = r => r.theme && state.themeNames[r.theme.lane];
-/* The theme lane, unless it only repeats the specialty (dense500b strata are their lanes). */
+/* The theme lane, unless it only repeats the specialty (round-2 strata are their lanes). */
 const themeLabel = r => r.theme && r.primary_stratum !== r.theme.lane
   && themeName(r)?.toLowerCase() !== pretty(r.primary_stratum || '').toLowerCase() ? themeName(r) : null;
 const advancedMatch = r => Object.entries(state.filter.advanced).every(([k, v]) => !v || !ADVANCED[k] || ADVANCED[k](r, v));

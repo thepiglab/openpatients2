@@ -7,9 +7,9 @@ on:
       - '.github/workflows/pages.yml'
       - 'scripts/build_viewer_site.py'
       - 'src/**'
-      - 'benchmarks/dense50/**'
-      - 'benchmarks/dense500/**'
+      - 'benchmarks/dense/**'
       - 'tests/test_viewer.py'
+      - 'tests/test_article_themes.py'
       - 'pyproject.toml'
       - 'uv.lock'
   pull_request:
@@ -17,9 +17,9 @@ on:
       - '.github/workflows/pages.yml'
       - 'scripts/build_viewer_site.py'
       - 'src/**'
-      - 'benchmarks/dense50/**'
-      - 'benchmarks/dense500/**'
+      - 'benchmarks/dense/**'
       - 'tests/test_viewer.py'
+      - 'tests/test_article_themes.py'
       - 'pyproject.toml'
       - 'uv.lock'
   workflow_dispatch:
@@ -48,7 +48,7 @@ jobs:
       - name: Install locked dependencies
         run: uv sync --locked
       - name: Check viewer export and review boundaries
-        run: uv run --locked pytest -q tests/test_viewer.py
+        run: uv run --locked pytest -q tests/test_viewer.py tests/test_article_themes.py
       - name: Build and optimize the static viewer
         run: uv run --locked python scripts/build_viewer_site.py _site
       - name: Upload website only

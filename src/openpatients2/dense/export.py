@@ -1,11 +1,10 @@
 """Export only genuinely source-reviewed annotations; preserve every source right.
 
-    op2 dense export                  # dense50 + dense500 -> data/dense_clinical_cases_v1 (unchanged)
-    op2 dense export --set dense500b  # dense500b alone   -> data/dense_clinical_cases_dense500b_v1
+    op2 dense export      # benchmarks/dense -> data/dense_clinical_cases_v1
 
-dense500b (batch 2) is exported as a SEPARATE dataset, never merged into v1, so the v1 counts, split
-files and checklist are untouched. Its rows carry `reference_set: dense500b` (catalog rows) and
-`provenance.reference_set` (unified records); the default v1 output carries no such field.
+One corpus, one dataset: every article in benchmarks/dense/selection.json is a catalog row, whichever
+selection round acquired it. Stratum, split, prior exposure and `selection_round` come from that file;
+catalog rows and unified records carry `selection_round` as data.
 """
 import copy
 from collections import Counter
@@ -19,22 +18,8 @@ from openpatients2 import dense_store as store
 from openpatients2.dense.validate import digest, validate
 from openpatients2.dense.schema_targets import with_review_only_items
 
-from openpatients2.dense import DENSE50, DENSE500 as ROOT, DENSE500B, REPO
-ROOTS=[DENSE50, ROOT]
+from openpatients2.dense import CORPUS as ROOT, REPO
 OUT=REPO/'data/dense_clinical_cases_v1'
-# Selection target for statistics (None: the number of rows in ROOT/selection.json).
-TARGET_ARTICLES=500
-# None for the v1 release (no extra field); a name tags every catalog row and unified record.
-REFERENCE_SET=None
-# name -> (ROOT with selection.json, roots scanned, output folder, target, reference-set tag)
-EXPORT_SETS={'v1':(ROOT,[DENSE50, ROOT],OUT,500,None),
-             'dense500b':(DENSE500B,[DENSE500B],REPO/'data/dense_clinical_cases_dense500b_v1',None,'dense500b')}
-
-
-def configure(name):
-    """Point the exporter at one export set (module globals, as the tests monkeypatch them)."""
-    global ROOT, ROOTS, OUT, TARGET_ARTICLES, REFERENCE_SET
-    ROOT, ROOTS, OUT, TARGET_ARTICLES, REFERENCE_SET = EXPORT_SETS[name]
 # The release is the unified one-row-per-article dataset in OUT/data. The old
 # per-type JSONL files are kept only for the viewer/back-compat, under OUT/legacy.
 WRITE_LEGACY=True
@@ -459,257 +444,254 @@ def author_attribution(source,root):
 
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
-    retained_path=ROOT/'retained-strata.json'
-    retained=json.loads(retained_path.read_text()) if retained_path.exists() or REFERENCE_SET is None else {}
-    selection_path=ROOT/'selection.json'
-    selection_rows=json.loads(selection_path.read_text()) if selection_path.exists() or REFERENCE_SET is None else []
+    selection_rows=json.loads((ROOT/'selection.json').read_text())
     selection={r['article_id']:r for r in selection_rows}
-    target_articles=TARGET_ARTICLES if TARGET_ARTICLES is not None else len(selection_rows)
+    target_articles=len(selection_rows)
     manifest=[]; final=[]; patient_bundles=[]; article_bundles=[]; visual_bundles=[]; supplement_bundles=[]; document_bundles=[]; clinical_supplement_bundles=[]; figure_panels=[]; draft_count=0
     supplement_manifest_rows=[]; figure_ehr_rows=[]; measurement_series_rows=[]; unified_candidates={}
-    for root in ROOTS:
-        for source_aid in store.article_ids(root,'sources'):
-            source=json.loads(store.path(root,'sources',source_aid).read_text()); aid=source['article_id']
-            # Acquisition writes the source before its manifest checkpoint.
-            if aid not in selection and aid not in retained:
-                continue
-            sel=selection.get(aid,{})
-            review_path=store.path(root,'reviews',aid); annotation_path=store.path(root,'annotations',aid)
-            drafted=store.path(root,'drafts',aid).exists(); draft_count+=drafted
-            row={'article_id':aid,'pmcid':source['pmcid'],'pmid':source.get('pmid'),
-                'doi':source.get('doi'),'title':source['title'],'article_type':source.get('article_type') or 'unspecified',**author_attribution(source,root),
-                'article_url':source['source_url'],'xml_url':source.get('xml_url'),
-                'text_sha256':source['text_sha256'],'xml_sha256':source['xml_sha256'],
-                'primary_stratum':sel.get('stratum',retained.get(aid)),
-                'split':sel.get('split','train'),'prior_benchmark_exposure':aid in retained,
-                'source_family_check':sel.get('source_family_check','pending_cross_article_check'),
-                'source_license':source['license'],
-                'changes_from_source':'AI clinical extraction in runtime schemas, relative event relations, summaries and figure annotation; source and pixel reviews tracked separately.',
-                'annotation_status':'drafted' if drafted else 'not_started',
-                'review_status':'not_started','full_schema_review_status':'not_started','pixel_review_status':'not_started',
-                'source_provenance':source.get('retrieval',{}),
-                'source_supplements':None}
-            if REFERENCE_SET:
-                row['reference_set']=REFERENCE_SET
-            ehr_status,ehr_reviewed,ehr_errors=ehr_sidecar_status(root,aid,source)
-            signed_manifest=ehr_reviewed.get('supplement_manifest',(None,))[0]
-            row['source_supplements']=supplement_inventory(source,manifest=signed_manifest)
-            row['ehr_sidecar_status']=ehr_status
-            if ehr_errors: row['ehr_sidecar_errors']=ehr_errors
-            review_current=True
-            gates=None
-            if RUNTIME_GATES and annotation_path.exists():
-                from openpatients2.dense.reference_gates import run_gates
+    root=ROOT
+    for source_aid in store.article_ids(root,'sources'):
+        source=json.loads(store.path(root,'sources',source_aid).read_text()); aid=source['article_id']
+        # Acquisition writes the source before its manifest checkpoint.
+        if aid not in selection:
+            continue
+        sel=selection.get(aid,{})
+        review_path=store.path(root,'reviews',aid); annotation_path=store.path(root,'annotations',aid)
+        drafted=store.path(root,'drafts',aid).exists(); draft_count+=drafted
+        row={'article_id':aid,'pmcid':source['pmcid'],'pmid':source.get('pmid'),
+            'doi':source.get('doi'),'title':source['title'],'article_type':source.get('article_type') or 'unspecified',**author_attribution(source,root),
+            'article_url':source['source_url'],'xml_url':source.get('xml_url'),
+            'text_sha256':source['text_sha256'],'xml_sha256':source['xml_sha256'],
+            'primary_stratum':sel.get('stratum'),
+            'split':sel.get('split','train'),'prior_benchmark_exposure':sel.get('prior_benchmark_exposure') is True,
+            'source_family_check':sel.get('source_family_check','pending_cross_article_check'),
+            'source_license':source['license'],
+            'changes_from_source':'AI clinical extraction in runtime schemas, relative event relations, summaries and figure annotation; source and pixel reviews tracked separately.',
+            'annotation_status':'drafted' if drafted else 'not_started',
+            'review_status':'not_started','full_schema_review_status':'not_started','pixel_review_status':'not_started',
+            'source_provenance':source.get('retrieval',{}),
+            'source_supplements':None}
+        if sel.get('selection_round') is not None:
+            row['selection_round']=sel['selection_round']
+        ehr_status,ehr_reviewed,ehr_errors=ehr_sidecar_status(root,aid,source)
+        signed_manifest=ehr_reviewed.get('supplement_manifest',(None,))[0]
+        row['source_supplements']=supplement_inventory(source,manifest=signed_manifest)
+        row['ehr_sidecar_status']=ehr_status
+        if ehr_errors: row['ehr_sidecar_errors']=ehr_errors
+        review_current=True
+        gates=None
+        if RUNTIME_GATES and annotation_path.exists():
+            from openpatients2.dense.reference_gates import run_gates
+            try:
+                gates=run_gates(root,aid)
+            except (ValueError,KeyError,TypeError,FileNotFoundError) as exc:
+                gates={'passed':False,'errors':[{'gate':'reference_gates.crashed','patient_id':None,'detail':str(exc)[:300]}],'warnings':[]}
+            row['runtime_gates']={'passed':gates['passed'],'errors':gates['errors'][:25],'error_count':len(gates['errors']),
+                                  'warning_count':len(gates['warnings'])}
+        if review_path.exists() and STALE_RECEIPT_POLICY=='withhold':
+            review=json.loads(review_path.read_text());annotation=json.loads(annotation_path.read_text())
+            if review.get('annotation_sha256')!=digest(annotation) or review.get('source_text_sha256')!=source['text_sha256']:
+                review_current=False
+                row.update(annotation_status='annotated',review_status='stale_source_review_receipt')
+            elif validate(annotation,source):
+                review_current=False
+                row.update(annotation_status='annotated',review_status='invalid_annotation',
+                           withheld_reason=validate(annotation,source)[:5])
+        if review_path.exists() and review_current:
+            review=json.loads(review_path.read_text());annotation=json.loads(annotation_path.read_text())
+            assert review['status']=='source_reviewed' and review['source_read_in_full']
+            assert review['annotation_sha256']==digest(annotation),f'{aid}: stale review receipt'
+            assert review['source_text_sha256']==source['text_sha256'],f'{aid}: stale source receipt'
+            errors=validate(annotation,source)
+            assert not errors,(aid,errors)
+            row.update(annotation_status='annotated',review_status='parent_source_reviewed')
+            record=copy.deepcopy(annotation)
+            record.update(source={k:row[k] for k in ['pmcid','pmid','doi','title','authors','article_url','xml_url','source_license']},
+                          split=row['split'],primary_stratum=row['primary_stratum'],review=review)
+            record['source_media']=[{**{k:fig.get(k) for k in
+                ['figure_id','article_anchor_url','source_xml_url','graphic_references',
+                 'media','image_urls','rights_statements','reuse_status']},
+                'figure_id':fig.get('figure_key') or fig.get('figure_id')}
+                for fig in source.get('figures',[])]
+            from openpatients2.dense.supplement_review import reviewed_supplement_targets
+            try:
+                supplements=reviewed_supplement_targets(root,aid)
+            except (ValueError,KeyError,TypeError,FileNotFoundError) as exc:
+                if STALE_RECEIPT_POLICY!='withhold':
+                    raise
+                supplements=[]; row['stale_supplement_receipt']=str(exc)[:500]
+            row['source_supplements']=supplement_inventory(source,supplements,manifest=signed_manifest)
+            record['source_supplements']=row['source_supplements']
+            documents=[(st,sr) for st,sr in supplements if st.get('format') in DOCUMENT_SUPPLEMENT_FORMATS]
+            document_bundles.extend({**copy.deepcopy(st),'reviews':sr,'split':row['split']} for st,sr in documents)
+            supplemental_clinical=supplemental_clinical_records(supplements,annotation,row['split'])
+            clinical_supplement_bundles.extend(supplemental_clinical)
+            final.append(record)
+            ehr_release={}
+            if 'supplement_manifest' in ehr_reviewed:
+                st,sr=ehr_reviewed['supplement_manifest']
+                ehr_release['supplement_manifest']={**copy.deepcopy(st),'reviews':sr}
+                supplement_manifest_rows.extend({'format':st['format'],'article_id':aid,'split':row['split'],
+                    **copy.deepcopy(f),**species_fields(annotation,f['review']['patient_ids']),
+                    'source_license':source['license'],'reviews':sr} for f in st['files'])
+            privacy=None; labels_map=None
+            if 'figure_privacy_flags' in ehr_reviewed:
+                from openpatients2.figure_privacy import panel_flags
+                pt,pr=ehr_reviewed['figure_privacy_flags']
+                ehr_release['figure_privacy_flags']={**copy.deepcopy(pt),'reviews':pr}
+                privacy=panel_flags(pt)
+            if 'figure_ehr_labels' in ehr_reviewed:
+                from openpatients2.figure_ehr import label_rows
+                from openpatients2.dense.visual_review import reviewed_visual_target
+                lt,lr=ehr_reviewed['figure_ehr_labels']
+                ehr_release['figure_ehr_labels']={**copy.deepcopy(lt),'reviews':lr}
+                labels_map={(f['figure_id'],p['panel']):p['label'] for f in lt['figures'] for p in f['panels']}
+                # Flags are informational: they never change ehr_includable.
+                figure_ehr_rows.extend({**r,**species_fields(annotation,r['patient_ids']),
+                    'privacy_flags':(privacy or {}).get((r['figure_id'],r['panel'])),
+                    'privacy_flags_status':ehr_status.get('figure_privacy_flags'),
+                    'source_license':source['license'],'reviews':lr}
+                    for r in label_rows(aid,lt,reviewed_visual_target(root,aid)[0],row['split']))
+            if 'measurement_series' in ehr_reviewed:
+                from openpatients2.measurement_series import series_rows
+                mt,mr=ehr_reviewed['measurement_series']
+                ehr_release['measurement_series']={**copy.deepcopy(mt),'reviews':mr}
+                measurement_series_rows.extend({**r,**species_fields(annotation,r['patient_ids']),
+                    'source_license':source['license'],'reviews':mr}
+                    for r in series_rows(aid,mt,row['split']))
+            try:
+                reviewed=reviewed_schema_target(root,annotation,source)
+            except ValueError as exc:
+                if STALE_RECEIPT_POLICY!='withhold':
+                    raise
+                reviewed=None
+                row['full_schema_review_status']='stale_schema_receipt' if 'stale/missing' in str(exc) else 'invalid_schema_target'
+                if 'stale/missing' not in str(exc):row['withheld_reason']=str(exc)[:500]
+            if reviewed and gates is not None and not gates['passed']:
+                if STALE_RECEIPT_POLICY!='withhold':
+                    raise ValueError((aid,'runtime gates failed',gates['errors'][:5]))
+                reviewed=None; row['full_schema_review_status']='runtime_gate_failed'
+            if reviewed:
+                from openpatients2.measurements import observation_measurements
+                from openpatients2.figure_visuals import panel_columns
+                from openpatients2.dense.visual_review import reviewed_visual_target
+                target,receipts=reviewed
                 try:
-                    gates=run_gates(root,aid)
+                    visual=reviewed_visual_target(root,aid)
                 except (ValueError,KeyError,TypeError,FileNotFoundError) as exc:
-                    gates={'passed':False,'errors':[{'gate':'reference_gates.crashed','patient_id':None,'detail':str(exc)[:300]}],'warnings':[]}
-                row['runtime_gates']={'passed':gates['passed'],'errors':gates['errors'][:25],'error_count':len(gates['errors']),
-                                      'warning_count':len(gates['warnings'])}
-            if review_path.exists() and STALE_RECEIPT_POLICY=='withhold':
-                review=json.loads(review_path.read_text());annotation=json.loads(annotation_path.read_text())
-                if review.get('annotation_sha256')!=digest(annotation) or review.get('source_text_sha256')!=source['text_sha256']:
-                    review_current=False
-                    row.update(annotation_status='annotated',review_status='stale_source_review_receipt')
-                elif validate(annotation,source):
-                    review_current=False
-                    row.update(annotation_status='annotated',review_status='invalid_annotation',
-                               withheld_reason=validate(annotation,source)[:5])
-            if review_path.exists() and review_current:
-                review=json.loads(review_path.read_text());annotation=json.loads(annotation_path.read_text())
-                assert review['status']=='source_reviewed' and review['source_read_in_full']
-                assert review['annotation_sha256']==digest(annotation),f'{aid}: stale review receipt'
-                assert review['source_text_sha256']==source['text_sha256'],f'{aid}: stale source receipt'
-                errors=validate(annotation,source)
-                assert not errors,(aid,errors)
-                row.update(annotation_status='annotated',review_status='parent_source_reviewed')
-                record=copy.deepcopy(annotation)
-                record.update(source={k:row[k] for k in ['pmcid','pmid','doi','title','authors','article_url','xml_url','source_license']},
-                              split=row['split'],primary_stratum=row['primary_stratum'],review=review)
-                record['source_media']=[{**{k:fig.get(k) for k in
-                    ['figure_id','article_anchor_url','source_xml_url','graphic_references',
-                     'media','image_urls','rights_statements','reuse_status']},
-                    'figure_id':fig.get('figure_key') or fig.get('figure_id')}
-                    for fig in source.get('figures',[])]
-                from openpatients2.dense.supplement_review import reviewed_supplement_targets
-                try:
-                    supplements=reviewed_supplement_targets(root,aid)
-                except (ValueError,KeyError,TypeError,FileNotFoundError) as exc:
+                    # A stale visual receipt (e.g. the patient identity hash changed after a label respacing)
+                    # withholds THIS article with a reason; it never aborts the release.
                     if STALE_RECEIPT_POLICY!='withhold':
                         raise
-                    supplements=[]; row['stale_supplement_receipt']=str(exc)[:500]
-                row['source_supplements']=supplement_inventory(source,supplements,manifest=signed_manifest)
-                record['source_supplements']=row['source_supplements']
-                documents=[(st,sr) for st,sr in supplements if st.get('format') in DOCUMENT_SUPPLEMENT_FORMATS]
-                document_bundles.extend({**copy.deepcopy(st),'reviews':sr,'split':row['split']} for st,sr in documents)
-                supplemental_clinical=supplemental_clinical_records(supplements,annotation,row['split'])
-                clinical_supplement_bundles.extend(supplemental_clinical)
-                final.append(record)
-                ehr_release={}
-                if 'supplement_manifest' in ehr_reviewed:
-                    st,sr=ehr_reviewed['supplement_manifest']
-                    ehr_release['supplement_manifest']={**copy.deepcopy(st),'reviews':sr}
-                    supplement_manifest_rows.extend({'format':st['format'],'article_id':aid,'split':row['split'],
-                        **copy.deepcopy(f),**species_fields(annotation,f['review']['patient_ids']),
-                        'source_license':source['license'],'reviews':sr} for f in st['files'])
-                privacy=None; labels_map=None
-                if 'figure_privacy_flags' in ehr_reviewed:
-                    from openpatients2.figure_privacy import panel_flags
-                    pt,pr=ehr_reviewed['figure_privacy_flags']
-                    ehr_release['figure_privacy_flags']={**copy.deepcopy(pt),'reviews':pr}
-                    privacy=panel_flags(pt)
-                if 'figure_ehr_labels' in ehr_reviewed:
-                    from openpatients2.figure_ehr import label_rows
-                    from openpatients2.dense.visual_review import reviewed_visual_target
-                    lt,lr=ehr_reviewed['figure_ehr_labels']
-                    ehr_release['figure_ehr_labels']={**copy.deepcopy(lt),'reviews':lr}
-                    labels_map={(f['figure_id'],p['panel']):p['label'] for f in lt['figures'] for p in f['panels']}
-                    # Flags are informational: they never change ehr_includable.
-                    figure_ehr_rows.extend({**r,**species_fields(annotation,r['patient_ids']),
-                        'privacy_flags':(privacy or {}).get((r['figure_id'],r['panel'])),
-                        'privacy_flags_status':ehr_status.get('figure_privacy_flags'),
-                        'source_license':source['license'],'reviews':lr}
-                        for r in label_rows(aid,lt,reviewed_visual_target(root,aid)[0],row['split']))
-                if 'measurement_series' in ehr_reviewed:
-                    from openpatients2.measurement_series import series_rows
-                    mt,mr=ehr_reviewed['measurement_series']
-                    ehr_release['measurement_series']={**copy.deepcopy(mt),'reviews':mr}
-                    measurement_series_rows.extend({**r,**species_fields(annotation,r['patient_ids']),
-                        'source_license':source['license'],'reviews':mr}
-                        for r in series_rows(aid,mt,row['split']))
-                try:
-                    reviewed=reviewed_schema_target(root,annotation,source)
-                except ValueError as exc:
-                    if STALE_RECEIPT_POLICY!='withhold':
-                        raise
-                    reviewed=None
-                    row['full_schema_review_status']='stale_schema_receipt' if 'stale/missing' in str(exc) else 'invalid_schema_target'
-                    if 'stale/missing' not in str(exc):row['withheld_reason']=str(exc)[:500]
-                if reviewed and gates is not None and not gates['passed']:
-                    if STALE_RECEIPT_POLICY!='withhold':
-                        raise ValueError((aid,'runtime gates failed',gates['errors'][:5]))
-                    reviewed=None; row['full_schema_review_status']='runtime_gate_failed'
-                if reviewed:
-                    from openpatients2.measurements import observation_measurements
-                    from openpatients2.figure_visuals import panel_columns
-                    from openpatients2.dense.visual_review import reviewed_visual_target
-                    target,receipts=reviewed
-                    try:
-                        visual=reviewed_visual_target(root,aid)
-                    except (ValueError,KeyError,TypeError,FileNotFoundError) as exc:
-                        # A stale visual receipt (e.g. the patient identity hash changed after a label respacing)
-                        # withholds THIS article with a reason; it never aborts the release.
-                        if STALE_RECEIPT_POLICY!='withhold':
-                            raise
-                        visual=None; row['pixel_review_status']='stale_visual_receipt'
-                        row['withheld_reason']=str(exc)[:500]
-                    visual_rows=[]
-                    if visual:
-                        from openpatients2.figure_ehr import derive_default
-                        vt,vr=visual
-                        row['pixel_review_status']=pixel_review_status(source,vt)
-                        row['unavailable_figure_ids']=[f['figure_id'] for f in vt['figures'] if f['status']=='unavailable']
-                        for f in vt['figures']:
-                            if f['status']!='inspected':continue
-                            raw_panels={p['panel']:p for p in f['analysis']['visual']['panels']}
-                            for panel in panel_columns(aid,f['analysis']['visual']):
-                                assignments=[a for a in f['analysis']['attribution']['assignments'] if a['panel'] is None or a['panel']==panel['panel']]
-                                owners=sorted({p for a in assignments for p in a['patient_ids']})
-                                visual_rows.append({**panel,'split':row['split'],'patient_ids':owners,
-                                    'assignments':assignments,'assets':f['assets'],'source_license':source['license'],
-                                    'review_status':'agent_and_parent_source_and_pixels_reviewed','pixel_accuracy_measured':False,
-                                    **panel_ehr_fields(f['figure_id'],panel['panel'],ehr_status,labels_map,privacy,annotation,owners,
-                                                       default=derive_default(raw_panels[panel['panel']],assignments))})
-                        visual_bundles.append({**copy.deepcopy(vt),'reviews':vr,'split':row['split'],
-                            'ehr_label_status':ehr_status.get('figure_ehr_labels'),
-                            'privacy_flags_status':ehr_status.get('figure_privacy_flags'),
-                            'panel_ehr':[{'article_id':aid,'figure_id':r['figure_id'],'panel':r['panel'],'patient_ids':r['patient_ids'],
-                                          **{k:copy.deepcopy(r[k]) for k in EHR_PANEL_FIELDS}} for r in visual_rows]})
-                        figure_panels.extend(visual_rows)
-                    elif not source.get('figures') and row['pixel_review_status']!='stale_visual_receipt':
-                        row['pixel_review_status']='no_source_figures'
-                    supplemental_rows=[]
-                    for st,sr in supplements:
-                        if st.get('format') in DOCUMENT_SUPPLEMENT_FORMATS:
-                            continue  # PDF pages never become image panels or vision observations.
-                        supplement_bundles.append({**copy.deepcopy(st),'reviews':sr,'split':row['split']})
-                        for panel in panel_columns(aid,st['analysis']['visual']):
-                            assignments=[a for a in st['analysis']['attribution']['assignments'] if a['panel'] is None or a['panel']==panel['panel']]
+                    visual=None; row['pixel_review_status']='stale_visual_receipt'
+                    row['withheld_reason']=str(exc)[:500]
+                visual_rows=[]
+                if visual:
+                    from openpatients2.figure_ehr import derive_default
+                    vt,vr=visual
+                    row['pixel_review_status']=pixel_review_status(source,vt)
+                    row['unavailable_figure_ids']=[f['figure_id'] for f in vt['figures'] if f['status']=='unavailable']
+                    for f in vt['figures']:
+                        if f['status']!='inspected':continue
+                        raw_panels={p['panel']:p for p in f['analysis']['visual']['panels']}
+                        for panel in panel_columns(aid,f['analysis']['visual']):
+                            assignments=[a for a in f['analysis']['attribution']['assignments'] if a['panel'] is None or a['panel']==panel['panel']]
                             owners=sorted({p for a in assignments for p in a['patient_ids']})
-                            supplemental_rows.append({**panel,'media_kind':'supplement','supplement_id':st['supplement_id'],
-                                'split':row['split'],'patient_ids':owners,
-                                'assignments':assignments,'assets':st['assets'],'source_license':source['license'],
+                            visual_rows.append({**panel,'split':row['split'],'patient_ids':owners,
+                                'assignments':assignments,'assets':f['assets'],'source_license':source['license'],
                                 'review_status':'agent_and_parent_source_and_pixels_reviewed','pixel_accuracy_measured':False,
-                                **panel_ehr_fields(st['supplement_id'],panel['panel'],ehr_status,None,None,annotation,owners,
-                                                   out_of_scope='not_in_sidecar_scope_supplement_image')})
-                    figure_panels.extend(supplemental_rows)
-                    row['full_schema_review_status']='agent_and_parent_source_reviewed'
-                    article_bundles.append({'article_id':aid,'split':row['split'],
-                        'roster':target['roster'],'figure_attribution':target['figure_attribution'],
-                        'pixel_review_status':row['pixel_review_status'],
-                        'visual_reference':aid if visual else None,
-                        'schema_fingerprints':target['schema_fingerprints'],
-                        'source_media':record['source_media'],
-                        'source_supplements':record['source_supplements'],
-                        'supplemental_clinical':supplemental_clinical,'reviews':receipts,
-                        'ehr_sidecar_status':ehr_status,
-                        'supplement_manifest':ehr_release.get('supplement_manifest'),
-                        'figure_ehr_labels':ehr_release.get('figure_ehr_labels'),
-                        'measurement_series':ehr_release.get('measurement_series'),
-                        'figure_privacy_flags':ehr_release.get('figure_privacy_flags'),
-                        **species_fields(annotation,[p['patient_id'] for p in annotation['patients']])})
-                    for bundle in target['patients']:
-                        bundle=copy.deepcopy(bundle)
-                        bundle.update(split=row['split'],primary_stratum=row['primary_stratum'],
-                            article_id=aid,review={'annotation':review,'full_schema':receipts},
-                            clinical_review_status='source_reviewed_ai_reference',
-                            source_media=record['source_media'],
-                            source_supplements=record['source_supplements'])
-                        bundle['observation_measurements']=observation_measurements(
-                            bundle['sections']['observations'],source['segments'])
-                        bundle['supplemental_clinical']=patient_supplemental_clinical(
-                            supplemental_clinical,bundle['source']['patient_target']['patient_id'])
-                        if visual:
-                            pid=bundle['source']['patient_target']['patient_id']
-                            bundle['vision']['status']=row['pixel_review_status']
-                            bundle['vision']['panels']=[p for p in visual_rows if pid in p['patient_ids']]
-                            bundle['vision']['visual_reviews']=visual[1]
-                            bundle['vision']['caption_only']['limitations'].append('The caption-only companion retains its original scope; independently inspected pixels are in vision.panels and the article visual bundle.')
-                        if supplements:
-                            pid=bundle['source']['patient_target']['patient_id']
-                            bundle['vision']['supplement_panels']=[p for p in supplemental_rows if pid in p['patient_ids']]
-                            bundle['vision']['supplement_reviews']=[r for st,reviews in supplements if st.get('format') not in DOCUMENT_SUPPLEMENT_FORMATS for r in reviews]
-                        bundle['ehr']=patient_ehr_summary(bundle['source']['patient_target']['patient_id'],
-                                                          ehr_status,ehr_reviewed,annotation)
-                        bundle['source']['attribution']={k:row[k] for k in
-                            ['title','authors','article_url','source_license','changes_from_source']}
-                        patient_bundles.append(bundle)
-                    unified_candidates[aid]=dict(
-                        article={'title':row['title'],'authors':row['authors'],'article_url':row['article_url'],
-                                 'license':source['license']},
-                        split=row['split'],primary_stratum=row['primary_stratum'],
-                        identities=annotation['patients'],
-                        # Quarantined facts are exported as review_only items (scoring contract).
-                        patient_bundles=[with_review_only_items(b) for b in patient_bundles if b['article_id']==aid],
-                        source=source,visual_target=visual[0] if visual else None,
-                        visual_status=row['pixel_review_status'],
-                        labels=ehr_reviewed.get('figure_ehr_labels',(None,))[0],
-                        privacy=ehr_reviewed.get('figure_privacy_flags',(None,))[0],
-                        manifest=ehr_reviewed.get('supplement_manifest',(None,))[0],
-                        supplement_reviews=supplements,
-                        series=ehr_reviewed.get('measurement_series',(None,))[0],
-                        statuses=ehr_status,
-                        provenance={'generator':'dense500_reference_export',
-                            'annotation_review':{k:review.get(k) for k in ('reviewer','review_type','reviewed_at','status',
-                                'source_read_in_full','annotation_sha256','source_text_sha256')},
-                            'annotator_model':annotation.get('annotation_provenance',{}).get('annotator_model'),
-                            'receipts':receipt_summary('full_schema',receipts)
-                                +receipt_summary('visual',visual[1] if visual else [])
-                                +[x for st,sr in supplements for x in receipt_summary('supplement:'+st['supplement_id'],sr)]
-                                +[x for name,(t,rr) in ehr_reviewed.items() for x in receipt_summary(name,rr)],
-                            'physician_adjudicated':False,
-                            **({'reference_set':REFERENCE_SET,'reference_root':root.name} if REFERENCE_SET else {})})
-            manifest.append(row)
+                                **panel_ehr_fields(f['figure_id'],panel['panel'],ehr_status,labels_map,privacy,annotation,owners,
+                                                   default=derive_default(raw_panels[panel['panel']],assignments))})
+                    visual_bundles.append({**copy.deepcopy(vt),'reviews':vr,'split':row['split'],
+                        'ehr_label_status':ehr_status.get('figure_ehr_labels'),
+                        'privacy_flags_status':ehr_status.get('figure_privacy_flags'),
+                        'panel_ehr':[{'article_id':aid,'figure_id':r['figure_id'],'panel':r['panel'],'patient_ids':r['patient_ids'],
+                                      **{k:copy.deepcopy(r[k]) for k in EHR_PANEL_FIELDS}} for r in visual_rows]})
+                    figure_panels.extend(visual_rows)
+                elif not source.get('figures') and row['pixel_review_status']!='stale_visual_receipt':
+                    row['pixel_review_status']='no_source_figures'
+                supplemental_rows=[]
+                for st,sr in supplements:
+                    if st.get('format') in DOCUMENT_SUPPLEMENT_FORMATS:
+                        continue  # PDF pages never become image panels or vision observations.
+                    supplement_bundles.append({**copy.deepcopy(st),'reviews':sr,'split':row['split']})
+                    for panel in panel_columns(aid,st['analysis']['visual']):
+                        assignments=[a for a in st['analysis']['attribution']['assignments'] if a['panel'] is None or a['panel']==panel['panel']]
+                        owners=sorted({p for a in assignments for p in a['patient_ids']})
+                        supplemental_rows.append({**panel,'media_kind':'supplement','supplement_id':st['supplement_id'],
+                            'split':row['split'],'patient_ids':owners,
+                            'assignments':assignments,'assets':st['assets'],'source_license':source['license'],
+                            'review_status':'agent_and_parent_source_and_pixels_reviewed','pixel_accuracy_measured':False,
+                            **panel_ehr_fields(st['supplement_id'],panel['panel'],ehr_status,None,None,annotation,owners,
+                                               out_of_scope='not_in_sidecar_scope_supplement_image')})
+                figure_panels.extend(supplemental_rows)
+                row['full_schema_review_status']='agent_and_parent_source_reviewed'
+                article_bundles.append({'article_id':aid,'split':row['split'],
+                    'roster':target['roster'],'figure_attribution':target['figure_attribution'],
+                    'pixel_review_status':row['pixel_review_status'],
+                    'visual_reference':aid if visual else None,
+                    'schema_fingerprints':target['schema_fingerprints'],
+                    'source_media':record['source_media'],
+                    'source_supplements':record['source_supplements'],
+                    'supplemental_clinical':supplemental_clinical,'reviews':receipts,
+                    'ehr_sidecar_status':ehr_status,
+                    'supplement_manifest':ehr_release.get('supplement_manifest'),
+                    'figure_ehr_labels':ehr_release.get('figure_ehr_labels'),
+                    'measurement_series':ehr_release.get('measurement_series'),
+                    'figure_privacy_flags':ehr_release.get('figure_privacy_flags'),
+                    **species_fields(annotation,[p['patient_id'] for p in annotation['patients']])})
+                for bundle in target['patients']:
+                    bundle=copy.deepcopy(bundle)
+                    bundle.update(split=row['split'],primary_stratum=row['primary_stratum'],
+                        article_id=aid,review={'annotation':review,'full_schema':receipts},
+                        clinical_review_status='source_reviewed_ai_reference',
+                        source_media=record['source_media'],
+                        source_supplements=record['source_supplements'])
+                    bundle['observation_measurements']=observation_measurements(
+                        bundle['sections']['observations'],source['segments'])
+                    bundle['supplemental_clinical']=patient_supplemental_clinical(
+                        supplemental_clinical,bundle['source']['patient_target']['patient_id'])
+                    if visual:
+                        pid=bundle['source']['patient_target']['patient_id']
+                        bundle['vision']['status']=row['pixel_review_status']
+                        bundle['vision']['panels']=[p for p in visual_rows if pid in p['patient_ids']]
+                        bundle['vision']['visual_reviews']=visual[1]
+                        bundle['vision']['caption_only']['limitations'].append('The caption-only companion retains its original scope; independently inspected pixels are in vision.panels and the article visual bundle.')
+                    if supplements:
+                        pid=bundle['source']['patient_target']['patient_id']
+                        bundle['vision']['supplement_panels']=[p for p in supplemental_rows if pid in p['patient_ids']]
+                        bundle['vision']['supplement_reviews']=[r for st,reviews in supplements if st.get('format') not in DOCUMENT_SUPPLEMENT_FORMATS for r in reviews]
+                    bundle['ehr']=patient_ehr_summary(bundle['source']['patient_target']['patient_id'],
+                                                      ehr_status,ehr_reviewed,annotation)
+                    bundle['source']['attribution']={k:row[k] for k in
+                        ['title','authors','article_url','source_license','changes_from_source']}
+                    patient_bundles.append(bundle)
+                unified_candidates[aid]=dict(
+                    article={'title':row['title'],'authors':row['authors'],'article_url':row['article_url'],
+                             'license':source['license']},
+                    split=row['split'],primary_stratum=row['primary_stratum'],
+                    identities=annotation['patients'],
+                    # Quarantined facts are exported as review_only items (scoring contract).
+                    patient_bundles=[with_review_only_items(b) for b in patient_bundles if b['article_id']==aid],
+                    source=source,visual_target=visual[0] if visual else None,
+                    visual_status=row['pixel_review_status'],
+                    labels=ehr_reviewed.get('figure_ehr_labels',(None,))[0],
+                    privacy=ehr_reviewed.get('figure_privacy_flags',(None,))[0],
+                    manifest=ehr_reviewed.get('supplement_manifest',(None,))[0],
+                    supplement_reviews=supplements,
+                    series=ehr_reviewed.get('measurement_series',(None,))[0],
+                    statuses=ehr_status,
+                    provenance={'generator':'dense_reference_export',
+                        'annotation_review':{k:review.get(k) for k in ('reviewer','review_type','reviewed_at','status',
+                            'source_read_in_full','annotation_sha256','source_text_sha256')},
+                        'annotator_model':annotation.get('annotation_provenance',{}).get('annotator_model'),
+                        'receipts':receipt_summary('full_schema',receipts)
+                            +receipt_summary('visual',visual[1] if visual else [])
+                            +[x for st,sr in supplements for x in receipt_summary('supplement:'+st['supplement_id'],sr)]
+                            +[x for name,(t,rr) in ehr_reviewed.items() for x in receipt_summary(name,rr)],
+                        'physician_adjudicated':False,
+                        **({'selection_round':sel['selection_round']} if sel.get('selection_round') is not None else {})})
+        manifest.append(row)
     assert len({r['article_id'] for r in manifest})==len(manifest)
     LEGACY=OUT/'legacy'; LEGACY.mkdir(exist_ok=True)
     for name in LEGACY_FILES:
@@ -763,7 +745,7 @@ def main():
         'parent_source_reviewed_articles':len(final),'physician_adjudicated_articles':0,
         'full_schema_reviewed_articles':len(article_bundles),
         'full_schema_reviewed_patients':len(patient_bundles),
-        'complete_500_article_release':target_articles>0 and len(final)==target_articles and len(article_bundles)==target_articles and all(figures_satisfied(r['pixel_review_status']) and all(supplement_satisfied(s) for s in r['source_supplements']) for r in manifest),
+        'complete_release':target_articles>0 and len(final)==target_articles and len(article_bundles)==target_articles and all(figures_satisfied(r['pixel_review_status']) and all(supplement_satisfied(s) for s in r['source_supplements']) for r in manifest),
         'pixel_reviewed_articles':sum(r['pixel_review_status']=='agent_and_parent_reviewed' for r in manifest),
         'articles_with_any_inspected_pixels':sum(any(f['status']=='inspected' for f in r['figures']) for r in visual_bundles),
         'reviewed_no_figure_inventories':sum(not r['figures'] for r in visual_bundles),
@@ -845,15 +827,14 @@ def main():
         f"Dual-reviewed supplement content manifests: {statistics['supplement_manifest_reviewed_articles']} articles / {statistics['reviewed_supplement_manifest_files']} files ({statistics['ehr_includable_supplement_files']} EHR-includable). Figure EHR labels: {statistics['figure_ehr_labeled_articles']} articles / {statistics['reviewed_figure_ehr_panels']} panels ({statistics['ehr_includable_figure_panels']} EHR-includable). Measurement series: {statistics['measurement_series_reviewed_articles']} articles / {statistics['reviewed_measurement_series']} series / {statistics['reviewed_measurement_points']} points.", '',
         'These sidecars (`supplement_manifests.jsonl`, `figure_ehr_labels.jsonl`, `measurement_series.jsonl`) separate images and files that would plausibly belong in a patient record (imaging, waveforms, pathology, clinical photos, patient data tables) from diagrams, checklists and literature content. They are informational checklist items, not completion gates. Peeks are literal machine copies; parsed numbers are deterministic parses of literal cells, never unit-converted. EHR-includability is an AI reference judgement, not physician adjudication.', '']
     (OUT/'DISTRIBUTIONS.md').write_text('\n'.join(lines)+'\n')
-    if (ROOT/'SELECTION_PLAN.md').exists() or REFERENCE_SET is None:
-        (OUT/'SELECTION_PLAN.md').write_text((ROOT/'SELECTION_PLAN.md').read_text())
-    print(json.dumps({k:statistics[k] for k in ['target_articles','acquired_candidate_articles','drafted_articles','parent_source_reviewed_articles','complete_500_article_release']}))
+    (OUT/'SELECTION_PLAN.md').unlink(missing_ok=True)
+    if (ROOT/'SELECTION.md').exists():
+        (OUT/'SELECTION.md').write_text((ROOT/'SELECTION.md').read_text())
+    print(json.dumps({k:statistics[k] for k in ['target_articles','acquired_candidate_articles','drafted_articles','parent_source_reviewed_articles','complete_release']}))
 
 
 if __name__=='__main__':
     import argparse
     parser=argparse.ArgumentParser(description='Build a dense reference release (see module docstring).')
-    parser.add_argument('--set',choices=sorted(EXPORT_SETS),default='v1',
-                        help='v1: dense50+dense500 (default); dense500b: its own dataset')
-    configure(parser.parse_args().set)
+    parser.parse_args()
     main()

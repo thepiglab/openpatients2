@@ -107,7 +107,7 @@ def dense(monkeypatch):
 
 def test_annotation_and_materialized_target_share_the_rules_and_timeline_vocabulary(dense):
     validator, targets = dense
-    root = ROOT / 'benchmarks/dense50'; aid = 'PMC13624771.1'
+    root = ROOT / 'benchmarks/dense'; aid = 'PMC13624771.1'
     annotation = json.loads(store.path(root, 'annotations', aid).read_text())
     source = json.loads(store.path(root, 'sources', aid).read_text())
     patient = annotation['patients'][0]
@@ -132,7 +132,7 @@ def test_annotation_and_materialized_target_share_the_rules_and_timeline_vocabul
 
 def test_review_only_facts_are_exported_as_flagged_items(dense):
     _, targets = dense
-    root = ROOT / 'benchmarks/dense50'; aid = 'PMC13294519.1'
+    root = ROOT / 'benchmarks/dense'; aid = 'PMC13294519.1'
     annotation = json.loads(store.path(root, 'annotations', aid).read_text())
     source = json.loads(store.path(root, 'sources', aid).read_text())
     bundle = targets.materialize(annotation, source)['patients'][0]
@@ -149,7 +149,7 @@ def test_review_only_facts_are_exported_as_flagged_items(dense):
 
 def test_series_round_trip_uses_reviewed_supplement_transcriptions(monkeypatch):
     from openpatients2.dense.reference_gates import media_gates
-    root = ROOT / 'benchmarks/dense500'; aid = 'PMC12786310.1'
+    root = ROOT / 'benchmarks/dense'; aid = 'PMC12786310.1'
     if not store.path(root, 'measurement-series', aid).exists():
         pytest.skip('reference series not present')
     source = json.loads(store.path(root, 'sources', aid).read_text())
@@ -302,7 +302,7 @@ def test_event_classification_lives_in_the_annotation(dense, monkeypatch):
     validator, targets = dense
     import importlib
     schema_review = importlib.import_module('openpatients2.dense.schema_review')
-    root = ROOT / 'benchmarks/dense50'
+    root = ROOT / 'benchmarks/dense'
     for aid in store.matching_ids(root, 'annotations', 'PMC*'):   # read-only: first article with a timed event
         annotation = json.loads(store.path(root, 'annotations', aid).read_text())
         source = json.loads(store.path(root, 'sources', aid).read_text())
@@ -311,7 +311,7 @@ def test_event_classification_lives_in_the_annotation(dense, monkeypatch):
             if not baseline['source_gate_errors'] and not validator.validate(annotation, source):
                 break
     else:
-        pytest.skip('no clean dense50 article with a timed event')
+        pytest.skip('no clean corpus article with a timed event')
     event = next(e for e in annotation['patients'][0]['events'] if e.get('time_text'))
     event.update(kind='follow_up', time_kind='relative', time_precision='approximate')
     assert not validator.validate(annotation, source)
@@ -514,7 +514,7 @@ def test_roster_block_in_the_annotation_is_the_single_source(dense):
     validator, targets = dense
     import importlib
     schema_review = importlib.import_module('openpatients2.dense.schema_review')
-    root = ROOT / 'benchmarks/dense50'
+    root = ROOT / 'benchmarks/dense'
     for aid in store.matching_ids(root, 'annotations', 'PMC*'):     # read-only: a clean single-patient article
         annotation = json.loads(store.path(root, 'annotations', aid).read_text())
         source = json.loads(store.path(root, 'sources', aid).read_text())
@@ -523,7 +523,7 @@ def test_roster_block_in_the_annotation_is_the_single_source(dense):
             if not baseline['source_gate_errors']:
                 break
     else:
-        pytest.skip('no clean single-patient dense50 article')
+        pytest.skip('no clean single-patient corpus article')
     segment = source['segments'][0]
     annotation['roster'] = {'reported_individual_count': None, 'roster_complete': True, 'evidence': []}
     assert not validator.validate(annotation, source)

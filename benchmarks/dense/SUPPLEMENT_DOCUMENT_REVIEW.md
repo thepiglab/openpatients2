@@ -7,8 +7,8 @@ Preserve each original source-listed asset URL, MD5 (or null if absent), origina
 Validate and sign only your own inspection:
 
 ```sh
-op2 dense supplement_review benchmarks/dense500 --article ARTICLE --supplement SUPPLEMENT
-op2 dense supplement_review benchmarks/dense500 --article ARTICLE --supplement SUPPLEMENT --role agent --reviewer 'YOUR REVIEWER IDENTITY' --notes 'Actual full-page inspection notes'
+op2 dense supplement_review benchmarks/dense --article ARTICLE --supplement SUPPLEMENT
+op2 dense supplement_review benchmarks/dense --article ARTICLE --supplement SUPPLEMENT --role agent --reviewer 'YOUR REVIEWER IDENTITY' --notes 'Actual full-page inspection notes'
 ```
 
 Signing checks actual PDF bytes, original MD5, SHA256, byte count and `pdfinfo` page count. Poppler's `pdfinfo` must be available; its absence cannot be treated as completion. A complete sidecar requires exact source asset coverage and exactly one inspected entry for every PDF page. Partial/unavailable sidecars need limitations and cannot receive completed receipts. Downloading, parsing or rendering alone never establishes human/agent inspection.
@@ -44,8 +44,8 @@ Production `time.text` and `date_iso`, when supplied, must also occur literally 
 A source-listed ZIP is reviewed per member PDF with `dense-supplemental-archive-document-reference/1` (Pydantic `ArchiveDocumentTarget` in `src/openpatients2/dense/supplement_review.py`). The sidecar goes in the same place: `articles/ARTICLE/supplements/SUPPLEMENT.document.json`.
 
 ```sh
-op2 dense supplement_assets acquire benchmarks/dense500 --article ARTICLE
-op2 dense supplement_assets extract benchmarks/dense500 --article ARTICLE --supplement SUPPLEMENT
+op2 dense supplement_assets acquire benchmarks/dense --article ARTICLE
+op2 dense supplement_assets extract benchmarks/dense --article ARTICLE --supplement SUPPLEMENT
 ```
 
 `extract` checks the cached ZIP hash. It reads the central directory, ignoring `__MACOSX`/`.DS_Store` junk, and writes only the PDF members, under hashed names, into this article's folder of the capped supplement cache (250 MB per member, 30 GB shared cap). It records `articles/ARTICLE/supplements/SUPPLEMENT.archive_members.json` and a skeleton at `articles/ARTICLE/supplements/SUPPLEMENT.document.draft.json`. Copy the skeleton to `articles/ARTICLE/supplements/SUPPLEMENT.document.json`, then inspect every rendered page of every member PDF. Fill `pages` exactly as for PDFs, set `status: inspected`, the classification and a summary, and remove the DRAFT text.
@@ -82,13 +82,13 @@ DOCX units are cross-checked against the raw `w:t` text of `word/document.xml`. 
 
 ```sh
 # 1. acquire (as for every supplement), then draft the review skeleton (extracts ZIP members into the cache)
-op2 dense supplement_assets extract-text benchmarks/dense500 --article ARTICLE --supplement SID
+op2 dense supplement_assets extract-text benchmarks/dense --article ARTICLE --supplement SID
 # 2. copy articles/ARTICLE/supplements/SID.document.draft.json to articles/ARTICLE/supplements/SID.document.json, read EVERY unit
 #    (open the original file too when layout matters), fill `blocks`, status, classification, summary, clinical_data
 # 3. validate (no --role: this is the dry run)
-op2 dense supplement_review benchmarks/dense500 --article ARTICLE --supplement SID
+op2 dense supplement_review benchmarks/dense --article ARTICLE --supplement SID
 # 4. sign only after reading every unit (a --role call is a signature)
-op2 dense supplement_review benchmarks/dense500 --article ARTICLE --supplement SID --role agent --reviewer "Claude Sonnet 5.5 annotator" --notes "<what you read>"
+op2 dense supplement_review benchmarks/dense --article ARTICLE --supplement SID --role agent --reviewer "Claude Sonnet 5.5 annotator" --notes "<what you read>"
 ```
 
 - **Units and extraction are machine fields; never edit them.** `extraction.units_sha256` binds the units. With the cached file present, validation re-extracts and requires identical units, tool version and nonliteral list.
@@ -125,7 +125,7 @@ Text units never cover pixels. `extract-text` (and `extract-members`) also inven
 - **Status.** Receipts become `source_and_document_text_and_images_reviewed` (export: `agent_and_parent_...`). A document without images keeps `source_and_document_text_reviewed`.
 
 ```sh
-op2 dense supplement_assets extract-text benchmarks/dense500 --article ARTICLE --supplement SID   # units + embedded_images
+op2 dense supplement_assets extract-text benchmarks/dense --article ARTICLE --supplement SID   # units + embedded_images
 # view each embedded_images[].path (or preview_path), fill blocks and every embedded_images[].review, then validate/sign as above
 ```
 
@@ -144,11 +144,11 @@ A media part whose bytes are a video (MP4/MOV/M4V/AVI/MKV/WebM/MPEG by magic byt
 Format `dense-supplemental-composite-reference/1` (Pydantic `CompositeSupplementTarget`) covers one source-listed ZIP whose members may be of different kinds. It also covers directly declared XLSX (or other non-video) assets. A ZIP of only PDFs or only word-processor files may still use the older contracts.
 
 ```sh
-op2 dense supplement_assets acquire benchmarks/dense500 --article ARTICLE
-op2 dense supplement_assets extract-members benchmarks/dense500 --article ARTICLE --supplement SID [--every 0.1] [--max-frames 60]
+op2 dense supplement_assets acquire benchmarks/dense --article ARTICLE
+op2 dense supplement_assets extract-members benchmarks/dense --article ARTICLE --supplement SID [--every 0.1] [--max-frames 60]
 # copy SID.document.draft.json to SID.document.json, review every member, then:
-op2 dense supplement_review benchmarks/dense500 --article ARTICLE --supplement SID                      # validate (dry run)
-op2 dense supplement_review benchmarks/dense500 --article ARTICLE --supplement SID --role agent --reviewer "Claude Sonnet 5.5 annotator" --notes "<what you inspected>"
+op2 dense supplement_review benchmarks/dense --article ARTICLE --supplement SID                      # validate (dry run)
+op2 dense supplement_review benchmarks/dense --article ARTICLE --supplement SID --role agent --reviewer "Claude Sonnet 5.5 annotator" --notes "<what you inspected>"
 ```
 
 **Member classification.** `extract-members` classifies every non-junk member by its bytes, using magic bytes and then the OOXML parts. An extensionless DOCX is therefore `text`/`docx`. It writes supported members under hashed names into the capped cache. `archive.members` binds `[member, kind, detected_type]`. Signing re-hashes the ZIP and every member and re-classifies them. Any `unsupported` member (for example CSV, plain text, DICOM, nested ZIP, or above the 250 MB member cap) keeps the review `partial`. Each `assets` entry has a `kind`, with its own exact-coverage rule:

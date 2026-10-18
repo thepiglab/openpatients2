@@ -16,7 +16,7 @@ store = load_store()
 def release(tmp_path,monkeypatch):
     validate=importlib.import_module('openpatients2.dense.validate')
     exporter=importlib.import_module('openpatients2.dense.export')
-    source=ROOT/'benchmarks/dense50'
+    source=ROOT/'benchmarks/dense'
     reviewed='PMC13624771.1';draft='PMC13624887.1'
     for aid in (reviewed,draft):
         for folder in ('sources','drafts'):
@@ -28,13 +28,13 @@ def release(tmp_path,monkeypatch):
     receipt=json.loads(store.path(tmp_path, 'reviews', reviewed).read_text())
     receipt['annotation_sha256']=validate.digest(json.loads(store.path(tmp_path, 'annotations', reviewed).read_text()))
     store.path(tmp_path, 'reviews', reviewed, mkdir=True).write_text(json.dumps(receipt))
-    (tmp_path/'retained-strata.json').write_text(json.dumps({reviewed:'gastrointestinal',draft:'dermatology'}))
-    (tmp_path/'selection.json').write_text('[]')
-    (tmp_path/'SELECTION_PLAN.md').write_text('Test selection plan')
+    (tmp_path/'selection.json').write_text(json.dumps([
+        {'article_id':aid,'stratum':stratum,'split':'train','prior_benchmark_exposure':True,'selection_round':1}
+        for aid,stratum in ((reviewed,'gastrointestinal'),(draft,'dermatology'))]))
+    (tmp_path/'SELECTION.md').write_text('Test selection plan')
     out=tmp_path/'release';out.mkdir()
     (out/'README.md').write_text('---\nlanguage: [en]\n---\nTest card\n')
     monkeypatch.setattr(exporter,'ROOT',tmp_path)
-    monkeypatch.setattr(exporter,'ROOTS',[tmp_path])
     monkeypatch.setattr(exporter,'OUT',out)
     # Tests may switch the policy by assignment; monkeypatch restores it afterwards.
     monkeypatch.setattr(exporter,'STALE_RECEIPT_POLICY',exporter.STALE_RECEIPT_POLICY)
@@ -59,7 +59,7 @@ def test_release_excludes_unreviewed_targets_and_separates_catalog(release):
     assert json.loads((out/'schema.json').read_text())['$id']=='openpatients2-unified-article/1'
     assert '<!-- unified-fields:start -->' in (out/'README.md').read_text()
     assert not (out/'legacy'/'test.jsonl').read_text()
-    assert json.loads((out/'statistics.json').read_text())['complete_500_article_release'] is False
+    assert json.loads((out/'statistics.json').read_text())['complete_release'] is False
     progress=json.loads((out/'article_checklist.json').read_text())
     queue=progress['articles']
     assert len(queue)==2

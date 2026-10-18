@@ -4,7 +4,7 @@ Reviewers run this after editing an annotation: it applies the mechanical rule f
 judgment items in needs_review.json and regenerates the schema target (schema_target.draft.json,
 merged into schema_target.json).
 
-Scope: annotations (articles/<ID>/annotation.json) in dense50 + dense500 + dense500b (or --root R ...), plus drafts
+Scope: annotations (articles/<ID>/annotation.json) in benchmarks/dense (or --root R ...), plus drafts
 (annotation_draft.json) that have no promoted annotation (a draft
 byte-identical to its annotation is kept identical). Idempotent: a second run changes nothing.
 Dry run by default; `--apply` writes. Nothing is signed: every changed article needs re-signing
@@ -53,7 +53,7 @@ import re
 import time
 
 from openpatients2 import dense_store as store
-from openpatients2.dense import ROOTS
+from openpatients2.dense import CORPUS
 from openpatients2.semantic_rules import (BENIGN_TUMOR, HISTORY_DENIAL, LEGACY_OCCURRENCE, MALIGNANT,
                                           HYPHENS, NEVER_CUE, NORMAL_CUE, NORMAL_RESULT, POSITIONAL_LABEL,
                                           REFUTED_CUE, literal_span, visual_question_marks)
@@ -528,7 +528,7 @@ def candidates(roots, only=None):
             yield root, aid, folder, path
 
 
-def run(apply=False, skip=(), only=None, roots=ROOTS, now=None, allow_recent=False):
+def run(apply=False, skip=(), only=None, roots=(CORPUS,), now=None, allow_recent=False):
     from openpatients2.dense.schema_targets import materialize
     from openpatients2.dense.validate import digest, validate
     now = now or time.time()
@@ -622,14 +622,14 @@ def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument('--apply', action='store_true'); p.add_argument('--skip', nargs='*', default=[])
     p.add_argument('--article', nargs='*'); p.add_argument('--report')
-    p.add_argument('--root', type=Path, action='append', help='Limit to this root (repeatable; default: all dense roots)')
+    p.add_argument('--root', type=Path, action='append', help='Limit to this root (repeatable; default: benchmarks/dense)')
     p.add_argument('--allow-recent', action='store_true',
                    help='Do not skip recently modified articles (use only with --article for an article you are re-signing)')
     args = p.parse_args()
     if args.allow_recent and not args.article:
         p.error('--allow-recent requires --article')
     report = run(apply=args.apply, skip=set(args.skip), only=set(args.article) if args.article else None,
-                 allow_recent=args.allow_recent, roots=args.root or ROOTS)
+                 allow_recent=args.allow_recent, roots=args.root or [CORPUS])
     if args.report:
         Path(args.report).write_text(json.dumps(report, ensure_ascii=False, indent=1) + '\n')
     print(json.dumps(report['summary'], indent=1))
