@@ -14,6 +14,13 @@ if [[ "${1:-}" == --bootstrap ]]; then
   export DENSE_SOURCE_REVISION="$revision"
   uv sync --locked --extra data --no-dev --python 3.12
   selection=()
+  read -r -a splits <<< "${DENSE_SUPER_SPLITS:-train}"
+  selection+=(--splits "${splits[@]}" --selection-seed "${DENSE_SUPER_SELECTION_SEED:-42}")
+  if [[ -n "${DENSE_SUPER_EXPECTED:-}" ]]; then selection+=(--expected "$DENSE_SUPER_EXPECTED"); fi
+  if [[ -n "${DENSE_SUPER_ARTICLE_IDS:-}" ]]; then
+    read -r -a articles <<< "$DENSE_SUPER_ARTICLE_IDS"
+    selection+=(--article-ids "${articles[@]}")
+  fi
   if [[ "${DENSE_INCLUDE_TEST:-0}" == 1 ]]; then selection+=(--include-test); fi
   case "${DENSE_SUPER_WITH_IMAGES:-1}" in
     1) selection+=(--with-images);;
@@ -26,7 +33,7 @@ if [[ "${1:-}" == --bootstrap ]]; then
     selection+=(--profiles "${profiles[@]}")
   fi
   "$UV_PROJECT_ENVIRONMENT/bin/python" scripts/benchmark_dense_nemotron_super.py prepare \
-    --root "$snapshot" --work "$work" --expected 260 --hours "$hours" "${selection[@]}"
+    --root "$snapshot" --work "$work" --hours "$hours" "${selection[@]}"
   "$UV_PROJECT_ENVIRONMENT/bin/python" scripts/benchmark_dense_nemotron_super.py submit \
     --work "$work" --account "$account" --qos "$qos"
   exit
@@ -88,11 +95,15 @@ ref="${DENSE_REF:-HEAD}"
 revision="$(git -C "$repo" rev-parse "$ref^{commit}")"
 for required in scripts/benchmark_dense_nemotron_super.py scripts/dense_nemotron_super.sbatch scripts/vllm_rust_frontend.py \
     scripts/run_dense_nemotron_super.sh src/openpatients2/dense_nemotron_super.py \
+    src/openpatients2/benchmark_selection.py src/openpatients2/staged_timeline.py \
+    src/openpatients2/semantic_benchmark.py src/openpatients2/speculation_metrics.py \
+    scripts/freeze_super_reference.py docs/SEMANTIC_BENCHMARK.md \
     src/openpatients2/benchmark_reporting.py src/openpatients2/reasoning_lineage.py \
     src/openpatients2/nemotron_super_recipes.py src/openpatients2/muse_spark_recipe.py \
     src/openpatients2/redhat_nemotron_recipe.py src/openpatients2/beam_recipe.py docs/DENSE_NEMOTRON_SUPER.md \
     configs/hipergator/nemotron-super/provenance.json \
-    configs/hipergator/dense-benchmark/reference.jsonl.gz; do
+    configs/hipergator/nemotron-super/reference.jsonl.gz \
+    configs/hipergator/nemotron-super/reference-manifest.json; do
   git -C "$repo" cat-file -e "$revision:$required" 2>/dev/null || {
     echo 'The selected commit lacks the complete Super benchmark. Commit/push the implementation and pull it on HiPerGator before launching.' >&2
     exit 1

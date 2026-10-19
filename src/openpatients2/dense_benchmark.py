@@ -110,7 +110,7 @@ def check_snapshot(work):
     return m
 
 
-def freeze_media(source, article_dir, out, download=False):
+def freeze_media(source, article_dir, out, download=False, max_figures=12):
     from .pilot_media import _mime, load_asset
     from .license_policy import recheck_license
     raw_path = article_dir / 'figure_assets.json'
@@ -119,8 +119,8 @@ def freeze_media(source, article_dir, out, download=False):
         raise ValueError(f'Stale image manifest: {source["article_id"]}')
     by_id = {f['figure_id']: f for f in raw['figures']}
     result = []
-    if len(source['figures']) > 12:
-        raise ValueError('More than 12 figures requires an explicit campaign design change; refusing truncation')
+    if not 1 <= max_figures <= 48 or len(source['figures']) > max_figures:
+        raise ValueError(f'More than {max_figures} figures requires an explicit campaign design change; refusing truncation')
     for figure in source['figures']:
         row = {'article_id': source['article_id'], 'figure_id': figure['figure_key'],
                'source_license': source['license']}
@@ -176,7 +176,7 @@ def freeze_media(source, article_dir, out, download=False):
 
 
 def prepare(root, work, expected, download_media=False, *, splits=None, make_archive=True, article_selector=None,
-            freeze_images=True):
+            freeze_images=True, reference_path=None, figure_limit=12):
     from .pilot_extract import PilotConfig, source_gate
     root, work = root.resolve(), work.resolve()
     if work.exists():
@@ -184,10 +184,14 @@ def prepare(root, work, expected, download_media=False, *, splits=None, make_arc
     release = root / 'data/dense_clinical_cases_v1/data'
     frozen = root / 'configs/hipergator/dense-benchmark/reference.jsonl.gz'
     sources = []
-    if all((release / f'{s}.jsonl').exists() for s in ('train', 'validation', 'test')):
+    if reference_path is not None:
+        reference_path = Path(reference_path)
+        with gzip.open(reference_path, 'rt') as f:
+            sources.append(('explicit_snapshot', [json.loads(line) for line in f if line.strip()]))
+    elif all((release / f'{s}.jsonl').exists() for s in ('train', 'validation', 'test')):
         sources.append(('release', [row for split in ('train', 'validation', 'test')
                                     for row in rows(release / f'{split}.jsonl').values()]))
-    if frozen.exists():
+    if reference_path is None and frozen.exists():
         with gzip.open(frozen, 'rt') as f:
             sources.append(('frozen', [json.loads(line) for line in f if line.strip()]))
     if not sources:
@@ -206,11 +210,12 @@ def prepare(root, work, expected, download_media=False, *, splits=None, make_arc
                 raise ValueError(f'Duplicate or inconsistent completed reference: {aid}')
             refs[aid] = row
         found[name] = len(refs)
-        if len(refs) == expected:
+        if len(refs) == expected or (expected is None and reference_path is not None and refs):
             break
     else:
         counts = ', '.join(f'{n} {c}' for n, c in found.items())
         raise ValueError(f'Expected {expected} completed articles, found {counts}; inspect before changing --expected')
+    reference_source, completed_reference_count = name, len(refs)
     if splits is not None:
         if not set(splits) <= {'train', 'validation', 'test'} or not splits:
             raise ValueError('Invalid split selection')
@@ -244,7 +249,7 @@ def prepare(root, work, expected, download_media=False, *, splits=None, make_arc
         out = work / 'inputs' / aid
         write_rows(out / 'source.jsonl', [source])
         if freeze_images:
-            media.update(freeze_media(source, paths[0].parent, out, download=download_media))
+            media.update(freeze_media(source, paths[0].parent, out, download=download_media, max_figures=figure_limit))
         items.append({'article_id': aid, 'split': ref['split'], 'source_characters': len(source['text']),
                       'figures': len(source['figures']), 'source_text_sha256': source['text_sha256']})
     # Greedy work assignment uses SOURCE size and image count, never annotated
@@ -263,6 +268,9 @@ def prepare(root, work, expected, download_media=False, *, splits=None, make_arc
                 'model': {'id': MODEL, 'revision': REVISION}, 'drafter': {'id': DRAFTER, 'revision': DRAFT_REVISION},
                 'container': IMAGE, 'template_sha256': TEMPLATE_SHA,
                 'files': inventory(work, ['code', 'inputs', 'reference'])}
+    manifest['reference_selection'] = {'source': reference_source, 'completed_articles_before_selection': completed_reference_count,
+        'requested_expected': expected,
+        'snapshot_sha256': sha(reference_path) if reference_path is not None else None}
     write(work / 'manifest.json', manifest)
     # A portable input archive: never include raw checkout, secrets, venv, models.
     archive = work.with_suffix('.inputs.tar.gz')
@@ -387,6 +395,10 @@ async def run_article(work, item, endpoint, attempt):
                'status': 'error', 'attempt': attempt.name, 'gpus_per_server': cfg.get('gpus_per_endpoint', 1),
                'timing_basis': 'single active article per server; includes source/token validation and repairs; excludes server startup and queue'}
     runner = None
+    spec_before = None
+    if manifest.get('capture_speculation_metrics'):
+        from .speculation_metrics import snapshot
+        spec_before = await snapshot(endpoint)
     try:
         context = manifest.get('context', CONTEXT)
         runner = ArticleRunner(cfg, attempt / 'extraction', [endpoint], context, 'targeted')
@@ -420,6 +432,9 @@ async def run_article(work, item, endpoint, attempt):
         if runner:
             await runner.close()
         receipt.update(wall_seconds=time.monotonic() - start, ended_unix=time.time())
+        if spec_before is not None:
+            from .speculation_metrics import snapshot, delta
+            receipt['speculation'] = delta(spec_before, await snapshot(endpoint))
         receipt.update(ledger_metrics([attempt / 'extraction/attempts.jsonl', attempt / 'ehr/calls/attempts.jsonl']))
         write(attempt / 'receipt.json', receipt)
     return receipt
@@ -632,6 +647,7 @@ def aggregate(work):
     from .unified_scoring import score
     from .benchmark_reporting import throughput, worker_goodput
     from .reasoning_lineage import export_fact_index
+    from .speculation_metrics import summarize as speculation_summary
     reference = rows(work / 'reference/unified.jsonl')
     if set(reference) != {x['article_id'] for x in m['articles']}:
         raise ValueError('Reference membership differs from frozen campaign')
@@ -686,6 +702,8 @@ def aggregate(work):
                                        if timing and all('finish_reasons' in r for r in timing) else None),
               'operational_error_attempts': sum(r['status'] != 'done' for r in all_attempts),
               'throughput': rates,
+              'speculation': [dict(article_id=r['article_id'], **r['speculation']) for r in timing if 'speculation' in r],
+              'speculation_summary': speculation_summary(timing),
               'worker_goodput': worker_goodput(timing, workers,
                   default_gpus=m.get('extraction', {}).get('gpus_per_endpoint', 1), missing_receipts=missing_worker_receipts),
               'reasoning_capture': dict(sum((Counter(r.get('reasoning_statuses', {})) for r in all_attempts), Counter())),

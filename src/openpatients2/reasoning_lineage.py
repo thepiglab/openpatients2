@@ -17,6 +17,7 @@ def link_fact_reasoning(rows, task_results, model):
         name = task['task']
         canonical = canonical_clinical_task(name) or {
             'summary_completion': 'summary', 'timeline_completion': 'timeline_v2',
+            'timeline_events': 'timeline_v2', 'timeline_relations': 'timeline_v2',
             'ordering_review': 'timeline_v2'}.get(name, name)
         for attempt in task.get('attempts', []):
             sequence = attempt.get('ledger_sequence')

@@ -24,8 +24,8 @@ their frozen model selection when resumed.
 DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=4 bash scripts/run_dense_nemotron_super.sh
 bash scripts/run_dense_nemotron_super.sh status
 
-# After the small campaign terminates, run the full comparison:
-bash scripts/run_dense_nemotron_super.sh
+# After the small campaign passes, run a representative development sample:
+DENSE_SUPER_LIMIT_ARTICLES=24 DENSE_HOURS=24 bash scripts/run_dense_nemotron_super.sh
 bash scripts/run_dense_nemotron_super.sh status
 bash scripts/run_dense_nemotron_super.sh verify
 WORK="$(cat runs/dense-nemotron-super-last-work.txt)"
@@ -46,11 +46,16 @@ submission ledgers, and cancels only recorded jobs still in your queue. It waits
 up to 60 seconds for them to disappear; if they are still stopping, rerun `cancel`.
 Other campaigns are untouched. Downloads and partial results are retained.
 
-Default: eight configurations × **217 train/validation articles = 1,736 article
-runs**. The 43 test articles are preserved. Train and validation scores are
-separate. This is a development comparison, not a blinded clinical validation.
-Small checks choose the first article IDs deterministically; they are operational
-smokes, not representative quality samples. Each arm also runs synthetic startup
+The committed reference now contains **526 completed articles: 316 train, 105
+validation, and 105 test**. The default split is **train only**: without a limit,
+eight configurations × 316 articles = 2,528 article runs. Use a small development
+sample first; a full run can exceed one allocation's time limit and require resume.
+Validation and test remain separate explicit selections. This is a development
+comparison, not a blinded clinical validation.
+Limited samples use deterministic SHA256 ordering with round-robin source strata
+(split, figures present, tables present, and source length), seed 42. They no longer
+select the first lexicographic article IDs. A two-article sample is still only an
+operational smoke. Each arm also runs synthetic startup
 checks outside article timing. No annotated roster, facts, figure labels or
 supplement transcription enters model inference.
 
@@ -94,10 +99,78 @@ their figure/EHR scopes and timings differ; these labels do not create extra job
 Direct CLI preparation also defaults to images where supported; `prepare --text-only`
 explicitly disables pixels, and `prepare --with-images` retains the default behavior.
 
-`DENSE_INCLUDE_TEST=1` explicitly opts into test evaluation. `DENSE_HOURS` defaults
+`DENSE_SUPER_SPLITS='validation'` selects validation; test requires BOTH
+`DENSE_SUPER_SPLITS='test'` and `DENSE_INCLUDE_TEST=1`. Merely authorizing test does
+not add it to training runs. Split scores remain separate when multiple splits
+are explicitly selected. `DENSE_HOURS` defaults
 to 12 **per server**, including startup; it is not an overall completion estimate.
 Other launcher controls: `DENSE_ACCOUNT`, `DENSE_QOS`, `DENSE_REF`, or an absolute
 output directory as the first positional argument.
+
+The launcher uses `configs/hipergator/nemotron-super/reference.jsonl.gz`, with its
+checksum and split counts in `reference-manifest.json`. It never silently falls
+back to the older 260-article packet used by other campaigns. Refresh after a
+reviewed release changes with `python3 scripts/freeze_super_reference.py`, then
+commit both files. `DENSE_SUPER_EXPECTED` optionally asserts an exact completed
+snapshot count; omitting it uses the manifest's count. Existing campaigns retain
+their frozen references. Preparation checks source hashes against the reference.
+
+`DENSE_SUPER_ARTICLE_IDS` selects exact IDs from the requested splits, mutually
+exclusive with `DENSE_SUPER_LIMIT_ARTICLES`. To repeat the last regression cases:
+
+```bash
+DENSE_SUPER_LIMIT_ARTICLES='' DENSE_SUPER_SPLITS=train \
+DENSE_SUPER_ARTICLE_IDS='PMC10998798.1 PMC12134816.1' DENSE_HOURS=4 \
+  bash scripts/run_dense_nemotron_super.sh
+```
+
+Unset `DENSE_SUPER_ARTICLE_IDS` before a stratified sample. Override its seed with
+`DENSE_SUPER_SELECTION_SEED`. New Super campaigns allow up to 48 frozen figures
+per article (one new training article has 13); each request still follows the
+publisher's per-prompt image limit. Missing or rights-restricted assets stay
+explicit. Full source context remains intact; very long new articles can still
+fail the exact-token context check instead of being silently shortened.
+
+## Changes following the October 17 run
+
+Timelines now use source-segment batches for event extraction, followed by batches
+of focal events for relation linking. Each request sees the full source. Events
+are assigned deterministic IDs, and cross-batch relations can reference the full
+event registry. Only exact duplicate event content is collapsed; no semantic
+merging is assumed. Combined contradictions quarantine relations and make the
+assembled timeline partial rather than choosing a convenient chronology.
+
+Repairs of these stages return only invalid stable-ID atoms. Accepted neighbors
+stay local and cannot be rewritten by the repair response. Failed batches remain
+visible in stage coverage and the final timeline status. Original and repair
+reasoning stay in the ordinary ledgers and final fact lineage. These changes need
+a fresh hardware smoke; earlier quality/throughput scores do not validate them.
+
+Measurement-series instructions now explicitly require a unit and basis even
+for baseline-zero offsets; absent timing remains null. Ownership citations use
+exactly one segment or cell. Existing validators remain strict.
+
+To diagnose RedHat's low draft acceptance, use the optional controlled baseline:
+
+```bash
+DENSE_SUPER_PROFILES='redhat-fp8-dspark redhat-fp8-no-spec' \
+DENSE_SUPER_SPLITS=train DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=4 \
+  bash scripts/run_dense_nemotron_super.sh
+```
+
+Both arms use the same target checkpoint, quantization override, GPU topology,
+sampling, client concurrency and server settings. The second omits the drafter
+and speculative config. It is an explicit diagnostic experiment, excluded from
+the default eight configurations. The existing serial CPU download/cleanup
+lifecycle is retained. New article receipts capture speculative counter snapshots
+and acceptance deltas; missing, reset or unsupported counters are unavailable,
+not zero. The counters follow [vLLM's speculative-decoding metric definitions](https://docs.vllm.ai/en/v0.20.2/api/vllm/v1/spec_decode/metrics/).
+The two arms' output lengths may differ, so also compare document and
+answer-token throughput rather than only total generated tokens.
+
+Offline semantic judging is documented in [SEMANTIC_BENCHMARK.md](SEMANTIC_BENCHMARK.md).
+It operates on saved outputs, preserves the original scores and archive, and
+requires an explicitly selected judge endpoint/model/revision and calibration.
 
 ## Publisher recipes and sampling
 

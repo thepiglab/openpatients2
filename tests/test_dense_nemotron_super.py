@@ -40,7 +40,8 @@ def campaign(tmp_path):
     with gzip.open(root / 'configs/hipergator/dense-benchmark/reference.jsonl.gz', 'wt') as out:
         out.write(''.join(json.dumps(ref) + '\n' for ref in refs))
     work = tmp_path / 'campaign'
-    s.prepare(root, work, expected=3, profiles=['fastino', 'nvfp4', 'bf16', 'lilicorr'], with_images=False)
+    s.prepare(root, work, expected=3, profiles=['fastino', 'nvfp4', 'bf16', 'lilicorr'], with_images=False,
+              splits=['train', 'validation'])
     return work, refs[:2], root
 
 
@@ -88,7 +89,8 @@ def test_vision_replaces_text_for_all_three_nvidia_profiles(campaign, tmp_path, 
     frozen = []
     monkeypatch.setattr(b, 'freeze_media', lambda *a, **kw: frozen.append(a[0]['article_id']) or {})
     work = tmp_path / 'vision'
-    s.prepare(root, work, expected=3, with_images=True, profiles=['fastino', 'nvfp4', 'bf16', 'lilicorr'])
+    s.prepare(root, work, expected=3, with_images=True, profiles=['fastino', 'nvfp4', 'bf16', 'lilicorr'],
+              splits=['train', 'validation'])
     m = s.check(work)
     assert len(m['nemotron_super']['arms']) == 4 and len(frozen) == 2
     assert {name for name in m['nemotron_super']['arms'] if name.endswith('-vision')} == {

@@ -212,6 +212,12 @@ def visual_messages(article, roster, figure_id, pixels, *, joint=False, refined=
     messages[1]['content'][0]['text'] = messages[1]['content'][0]['text'].split('\nSCHEMA:\n')[0] + '\nSCHEMA:\n' + json.dumps(schema.model_json_schema())
     messages[0]['content'] = INSTRUCTION + (REFINEMENT_INSTRUCTION if refined else '') + ('\nAlso return a separate attribution object: each panel scope, subject and patient IDs '
         'must follow exact caption/case citations. Never use image resemblance to infer identity.' if joint else '')
+    if refined:
+        messages[0]['content'] += ('\nSCHEMA CHECK: Every grounded tag/claim includes basis, visual_cue, evidence and certainty. '
+            'For basis=pixels, provide an inspectable visual_cue and explicitly include evidence=[] when no text citation applies. '
+            'For basis=caption or article, evidence must contain exact segment_id/quote citations; never omit the evidence key. '
+            'Choose either distinct panels OR one whole-figure entry. Do not add a whole-composite panel alongside its subpanels. '
+            'Copy printed panel labels consistently; do not invent labels to fill the schema.')
     return messages
 
 

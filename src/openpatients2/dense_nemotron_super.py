@@ -34,8 +34,8 @@ MKSQUASHFS_ARGS = '-processors 8 -mem 8G'
 STARTUP_TIMEOUT_SECONDS = 5400
 
 
-def prepare(root, work, expected=260, hours=12, with_images=True, include_test=False,
-            limit_articles=None, profiles=None):
+def prepare(root, work, expected=None, hours=12, with_images=True, include_test=False,
+            limit_articles=None, profiles=None, splits=None, selection_seed=42, article_ids=None):
     if not 1 <= hours <= 72 or (limit_articles is not None and limit_articles < 1):
         raise ValueError('Invalid hours/article limit')
     selected = list(DEFAULT_PROFILES) if profiles is None else list(profiles)
@@ -43,17 +43,39 @@ def prepare(root, work, expected=260, hours=12, with_images=True, include_test=F
         raise ValueError('Select unique, supported profiles')
     definitions = {k: v for k, v in arm_definitions(with_images).items() if v['profile'] in selected}
     pixels = any(v['pixels'] for v in definitions.values())
+    from .benchmark_selection import select_articles
+    splits = tuple(('train',) if splits is None else splits)
+    if not splits or len(set(splits)) != len(splits) or not set(splits) <= {'train', 'validation', 'test'}:
+        raise ValueError('Select unique train/validation/test splits')
+    if 'test' in splits and not include_test:
+        raise ValueError('Test selection requires --include-test')
+    reference = root / 'configs/hipergator/nemotron-super/reference.jsonl.gz'
+    # Legacy explicit-count callers can still use their historical packet.
+    # Default launches must never silently fall back to the old 260 reference.
+    if not reference.exists() and expected is None:
+        raise ValueError('Missing current Super reference snapshot; refresh and commit it before launching')
+    if reference.exists():
+        metadata = b.read(reference.with_name('reference-manifest.json'))
+        if metadata['sha256'] != b.sha(reference):
+            raise ValueError('Current reference snapshot checksum mismatch; refresh the reference packet')
+        if expected is None:
+            expected = metadata['articles']
     result = b.prepare(root, work, expected, download_media=pixels,
-        splits=None if include_test else ('train', 'validation'), make_archive=False,
-        freeze_images=pixels, article_selector=(lambda rows: [r['article_id'] for r in
-            sorted(rows, key=lambda r: r['article_id'])[:limit_articles]]) if limit_articles else None)
+        splits=splits, make_archive=False, reference_path=reference if reference.exists() else None,
+        freeze_images=pixels, figure_limit=48, article_selector=lambda rows: select_articles(
+            root, rows, limit_articles, selection_seed, article_ids))
     m = b.read(work / 'manifest.json')
     shutil.copyfile(root / 'docs/DENSE_NEMOTRON_SUPER.md', work / 'code/docs/DENSE_NEMOTRON_SUPER.md')
+    if (root / 'docs/SEMANTIC_BENCHMARK.md').exists():
+        shutil.copyfile(root / 'docs/SEMANTIC_BENCHMARK.md', work / 'code/docs/SEMANTIC_BENCHMARK.md')
     m.update(format=FORMAT, git_head=os.environ.get('DENSE_SOURCE_REVISION') or m['git_head'],
              container=None, model=None, drafter=None,
              nemotron_super={'storage_policy': STORAGE_POLICY, 'hours': hours, 'arms': definitions, 'profiles': selected,
                  'with_images': pixels, 'input_policy': 'supported-modalities-once' if with_images else 'text-only',
-                 'include_test': include_test, 'limit_articles': limit_articles,
+                 'include_test': 'test' in splits, 'limit_articles': limit_articles,
+                 'selection': {'splits': list(splits), 'seed': selection_seed, 'article_ids': article_ids,
+                     'method': 'explicit-ids' if article_ids else 'source-stratified-sha256/1',
+                     'strata': ['split', 'figures_present', 'tables_present', 'source_length']},
                  'recipes': {name: copy.deepcopy(PROFILES[name]) for name in selected},
                  'pins': {model: PINS[model] for name in selected
                           for model in [PROFILES[name]['model']] + ([PROFILES[name]['drafter']] if 'drafter' in PROFILES[name] else [])},
@@ -69,6 +91,7 @@ def prepare(root, work, expected=260, hours=12, with_images=True, include_test=F
         am = copy.deepcopy(m)
         am.pop('nemotron_super')
         am.update(experiment_arm=name, arm_profile=definition, text_only=not definition['pixels'],
+                  capture_speculation_metrics=True,
                   model={'id': profile['model'], 'revision': PINS[profile['model']]['revision']},
                   drafter=({'id': profile['drafter'], 'revision': PINS[profile['drafter']]['revision']}
                            if 'drafter' in profile else None),
@@ -83,8 +106,9 @@ def prepare(root, work, expected=260, hours=12, with_images=True, include_test=F
             vision_temperature=profile['vision_temperature'], top_k=None, nemotron_thinking=True,
             max_output_tokens=32768, max_retry_tokens=32768, max_length_retry_tokens=49152,
             require_full_output_budget=False, min_output_tokens=16384, timeout_seconds=1200,
+            staged_timeline=True,
             concurrency_per_endpoint=profile['concurrency'], summary_structured_output=False,
-            max_figures=12 if definition['pixels'] else 0, focused_pixels=definition['pixels'])
+            max_figures=48 if definition['pixels'] else 0, focused_pixels=definition['pixels'])
         from .pilot_extract import PilotConfig
         PilotConfig.model_validate(am['extraction'])
         if not definition['pixels']:
@@ -97,7 +121,7 @@ def prepare(root, work, expected=260, hours=12, with_images=True, include_test=F
     b.write(work / 'manifest.json', m)
     b.write(work / 'prepared.json', {'manifest_sha256': b.sha(work / 'manifest.json')})
     return {**result, 'archive': None, 'arms': list(definitions),
-            'article_runs': len(definitions) * m['article_count'], 'test_evaluated': include_test}
+            'article_runs': len(definitions) * m['article_count'], 'test_evaluated': 'test' in m['splits']}
 
 
 def check(work):
@@ -293,7 +317,7 @@ def serving(work, name, shard=0):
     if 'drafter' in profile:
         spec['model'] = str(weights_path(work, profile['drafter']))
     extra_args = list(profile['extra_args'])
-    if definition['profile'] == 'redhat-fp8-dspark':
+    if definition['profile'] in {'redhat-fp8-dspark', 'redhat-fp8-no-spec'}:
         from .redhat_nemotron_recipe import quantization_overrides
         extra_args += ['--hf-overrides', json.dumps(quantization_overrides(
             b.read(weights_path(work, profile['model']) / 'config.json')))]
@@ -602,7 +626,7 @@ def download(work, profile_name):
     prefix += [str(sif), '/usr/bin/python3']
     models = {str(weights_path(work, model)): engine_name for model in models_to_download}
     overrides = {}
-    if profile_name == 'redhat-fp8-dspark':
+    if profile_name in {'redhat-fp8-dspark', 'redhat-fp8-no-spec'}:
         from .redhat_nemotron_recipe import quantization_overrides
         path = weights_path(work, profile['model'])
         overrides[str(path)] = quantization_overrides(b.read(path / 'config.json'))
@@ -991,6 +1015,18 @@ def aggregate(work):
                      f'{tasks.get("failed", 0)} | {tasks.get("partial", 0)} | '
                      f'{report["articles_with_ehr_errors"]} | {length if length is not None else "unavailable"} |')
     lines.append('')
+    lines += ['## Speculative decoding diagnostics', '',
+              '| Arm | Articles with counters / completed | Accepted draft tokens / drafted | Acceptance |',
+              '|---|---:|---:|---:|']
+    for name, report in reports.items():
+        spec = report['speculation_summary']
+        ratio = spec['acceptance_fraction']
+        label = f'{100 * ratio:.2f}%' if ratio is not None else 'unavailable'
+        counts = (f'{spec["accepted_tokens"]:.0f} / {spec["drafted_tokens"]:.0f}'
+                  if spec['drafted_tokens'] is not None else 'unavailable')
+        lines.append(f'| {name} | {spec["articles_measured"]} / {spec["articles_expected"]} | {counts} | {label} |')
+    lines += ['', 'Counter differences exclude startup probes. Missing/reset/unsupported counters are unavailable; '
+              'acceptance alone does not measure speedup. Compare an otherwise identical speculation-off arm.', '']
     for scope, splits in metrics.items():
         for split, arms in splits.items():
             lines += [f'## {scope}: {split}', '', '| Arm | Completed / planned | Precision | Recall | Item F1 | F2 | Attribute accuracy |',
@@ -1067,7 +1103,7 @@ def main(argv=None):
         p.add_argument('--work', type=Path, required=True)
         if command == 'prepare':
             p.add_argument('--root', type=Path, default=Path.cwd())
-            p.add_argument('--expected', type=int, default=260)
+            p.add_argument('--expected', type=int, help='Optional exact completed snapshot count assertion')
             p.add_argument('--hours', type=int, default=12)
             modalities = p.add_mutually_exclusive_group()
             modalities.add_argument('--with-images', dest='with_images', action='store_true', default=True,
@@ -1075,6 +1111,9 @@ def main(argv=None):
             modalities.add_argument('--text-only', dest='with_images', action='store_false',
                 help='Run each profile once without image pixels')
             p.add_argument('--include-test', action='store_true')
+            p.add_argument('--splits', nargs='+', choices=['train', 'validation', 'test'], default=['train'])
+            p.add_argument('--selection-seed', type=int, default=42)
+            p.add_argument('--article-ids', nargs='+')
             p.add_argument('--limit-articles', type=int)
             p.add_argument('--profiles', choices=list(PROFILES), nargs='+')
         if command == 'submit':
@@ -1088,13 +1127,15 @@ def main(argv=None):
     if args.command == 'recipe':
         result = {'engines': {p.get('engine', 'nemotron'): engine(p) for p in PROFILES.values()},
                   'pins': PINS, 'profiles': PROFILES, 'default_profiles': list(DEFAULT_PROFILES),
-                  'default_arms': arm_definitions(), 'default_input_policy': 'supported-modalities-once',
+            'default_arms': {k: v for k, v in arm_definitions().items() if v['profile'] in DEFAULT_PROFILES},
+            'default_input_policy': 'supported-modalities-once',
                   'context_override': b.CONTEXT}
     else:
         work = args.work.resolve()
         if args.command == 'prepare':
             result = prepare(args.root.resolve(), work, args.expected, args.hours, args.with_images,
-                             args.include_test, args.limit_articles, args.profiles)
+                             args.include_test, args.limit_articles, args.profiles, args.splits,
+                             args.selection_seed, args.article_ids)
         elif args.command == 'submit':
             result = submit(work, args.account, args.qos, args.resume, args.dry_run)
         elif args.command in ('download', 'cleanup'):

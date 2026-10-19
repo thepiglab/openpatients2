@@ -64,7 +64,8 @@ def repair_snapshot(task, value, checker):
     snapshot = deepcopy(value)
     snapshot.pop('limitations', None)
     snapshot.pop('coverage', None)
-    collections = {'timeline_v2': ('events', 'edges'), 'ordering_review': ('edges',),
+    collections = {'timeline_v2': ('events', 'edges'), 'timeline_events': ('events',),
+                   'timeline_relations': ('edges',), 'ordering_review': ('edges',),
                    'clinical_inventory': ('features',), 'figure_visuals': ('panels',),
                    'figure_attribution': ('assignments',), 'pixel_attribution': ('assignments',),
                    'summary': ('claims',), 'measurement_series_extraction': ('series',)}.get(task, ())
@@ -83,7 +84,7 @@ def repair_snapshot(task, value, checker):
         kept = []
         for item in value.get(collection, []):
             probe = deepcopy(value); probe[collection] = [item]
-            if task == 'timeline_v2':
+            if task in {'timeline_v2', 'timeline_events'}:
                 if collection == 'events': probe['edges'] = []
                 else:
                     probe['events'] = snapshot['events']
@@ -99,7 +100,8 @@ def repair_snapshot(task, value, checker):
 
 def changed_accepted_atoms(task, protected, candidate):
     """Full-object retry cannot rewrite an already source-gated graph/panel atom."""
-    collections = {'timeline_v2':('events','edges'), 'figure_visuals':('panels',),
+    collections = {'timeline_v2':('events','edges'), 'timeline_events':('events',),
+                   'timeline_relations':('edges',), 'figure_visuals':('panels',),
                    'figure_attribution':('assignments',), 'pixel_attribution':('assignments',),
                    'summary':('claims',), 'measurement_series_extraction':('series',)}.get(task, ())
     if not collections or not isinstance(protected,dict) or not isinstance(candidate,dict): return []
@@ -330,3 +332,80 @@ case context and multi-collection oncology stay on full-section retry.
                 'next_batch_indices':[x['index'] for x in self.repair_batch()],
                 'clinical_entailment_verified':False,
                 'pending':deepcopy(self.pending), 'trace':deepcopy(self.trace)}
+
+
+class TimelineAtomRepair:
+    """Repair only invalid stable-ID events/edges; accepted neighbors stay local."""
+    def __init__(self, task, value, checker):
+        self.task, self.checker = task, checker
+        self.collection = 'events' if task == 'timeline_events' else 'edges'
+        self.id_key = 'event_id' if task == 'timeline_events' else 'edge_id'
+        self.original = deepcopy(value)
+        self.accepted, self.pending = {}, {}
+        self.order = [v[self.id_key] for v in value[self.collection]]
+        self.trace = []
+        for atom in value[self.collection]:
+            self._consider(atom)
+
+    def _probe(self, atom):
+        value = deepcopy(self.original)
+        value[self.collection] = [atom]
+        return value
+
+    def _consider(self, atom):
+        key = atom[self.id_key]
+        try:
+            checked = self.checker(self._probe(atom))
+            self.accepted[key] = checked[self.collection][0]
+            self.pending.pop(key, None)
+            self.trace.append({'id': key, 'decision': 'accepted'})
+        except (ValueError, TypeError, KeyError) as exc:
+            self.pending[key] = {'candidate': deepcopy(atom), 'errors': [str(exc)[:2000]]}
+            self.trace.append({'id': key, 'decision': 'needs_repair', 'errors': [str(exc)[:2000]]})
+
+    @classmethod
+    def create(cls, task, value, checker):
+        if task not in {'timeline_events', 'timeline_relations'} or not isinstance(value, dict):
+            return None
+        coll, key = ('events', 'event_id') if task == 'timeline_events' else ('edges', 'edge_id')
+        atoms = value.get(coll)
+        if (not isinstance(atoms, list) or not atoms or any(not isinstance(a, dict) or
+                not isinstance(a.get(key), str) or not a[key] for a in atoms)
+                or len({a[key] for a in atoms}) != len(atoms)):
+            return None
+        if task == 'timeline_events' and value.get('edges') != []:
+            return None
+        plan = cls(task, value, checker)
+        return plan if plan.pending else None
+
+    def instruction(self):
+        return ('Repair ONLY the invalid timeline atoms listed below. Return the same JSON envelope/schema, '
+            'but include only these IDs in ' + self.collection + '. Keep each requested ID unchanged. '
+            'Accepted neighbors are retained by code: do not return or modify them. Correct only against '
+            'the immutable source. Preserve supported details and use literal evidence.\nINVALID_ATOMS:\n' +
+            json.dumps(self.pending, ensure_ascii=False))
+
+    def apply(self, value):
+        if not isinstance(value, dict) or not isinstance(value.get(self.collection), list):
+            raise ValueError('Timeline repair needs the requested atom collection')
+        atoms = value[self.collection]
+        keys = [a.get(self.id_key) if isinstance(a, dict) else None for a in atoms]
+        if len(set(keys)) != len(keys) or any(k not in self.pending for k in keys):
+            raise ValueError('Timeline repair contains duplicate or unrequested IDs')
+        for atom in atoms:
+            self._consider(atom)
+
+    def output(self):
+        value = deepcopy(self.original)
+        value[self.collection] = [deepcopy(self.accepted[k]) for k in self.order if k in self.accepted]
+        return value
+
+    def audit(self):
+        return {'policy': 'timeline-invalid-atoms/1', 'accepted_ids': list(self.accepted),
+                'pending_ids': list(self.pending), 'trace': deepcopy(self.trace)}
+
+    def repair_batch(self):
+        return list(self.pending)
+
+    def quarantine_pending_times(self):
+        return []

@@ -5,6 +5,8 @@ profiles adapt the GB200 recipes; LiLiCorr adapts the Spark low-concurrency reci
 """
 from __future__ import annotations
 
+import copy
+
 from .muse_spark_recipe import ENGINE as SPARK_ENGINE, PINS as SPARK_PINS, PROFILE as SPARK_PROFILE
 from .redhat_nemotron_recipe import PINS as REDHAT_PINS, PROFILE as REDHAT_PROFILE
 from .beam_recipe import ENGINE as BEAM_ENGINE, PINS as BEAM_PINS, PROFILES as BEAM_PROFILES
@@ -96,6 +98,14 @@ PROFILES = {
 
 # Every publisher configuration, including Muse Spark, participates by default.
 DEFAULT_PROFILES = tuple(PROFILES)
+
+# Explicit diagnostic arm, excluded from the default publisher comparison.
+# Target bytes, sampling, concurrency, topology and kernels are unchanged.
+PROFILES['redhat-fp8-no-spec'] = copy.deepcopy(REDHAT_PROFILE)
+PROFILES['redhat-fp8-no-spec'].pop('drafter')
+PROFILES['redhat-fp8-no-spec'].update(speculation=None,
+    adaptation='Controlled RedHat FP8 baseline: same target, sampling and serving settings as '
+               'redhat-fp8-dspark with speculative decoding disabled. Not a publisher recipe.')
 
 
 def arm_definitions(with_images=True):

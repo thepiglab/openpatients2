@@ -37,7 +37,7 @@ def test_default_includes_spark_access_image_and_eight_gpu_job(campaign, tmp_pat
 def test_explicit_spark_uses_its_own_image(campaign, tmp_path, monkeypatch):
     root = campaign[2]
     work = tmp_path / 'all-models'
-    s.prepare(root, work, expected=3, profiles=list(s.PROFILES), with_images=False)
+    s.prepare(root, work, expected=3, profiles=list(s.DEFAULT_PROFILES), with_images=False)
     m = s.check(work)
     assert list(m['nemotron_super']['profiles']) == ['fastino', 'nvfp4', 'bf16', 'lilicorr', 'spark', 'redhat-fp8-dspark', 'beam-fp8-dflash2', 'beam-nvfp4-dflash2']
     assert len(m['nemotron_super']['arms']) == 8
@@ -66,7 +66,7 @@ def test_default_runs_each_profile_once_with_supported_modalities(campaign, tmp_
     result = s.prepare(campaign[2], work, expected=3)
     m = s.check(work)
     assert len(m['nemotron_super']['arms']) == 8
-    assert result['article_runs'] == 16
+    assert result['article_runs'] == 8  # training-only default, one training fixture
     assert m['nemotron_super']['input_policy'] == 'supported-modalities-once'
     assert set(m['nemotron_super']['arms']) == {
         'fastino-text', 'nvfp4-vision', 'bf16-vision', 'lilicorr-vision', 'spark-vision',
@@ -77,7 +77,7 @@ def test_default_runs_each_profile_once_with_supported_modalities(campaign, tmp_
         arm = b.read(work / 'arms' / name / 'manifest.json')
         assert arm['text_only'] is not definition['pixels']
         assert arm['extraction']['focused_pixels'] == definition['pixels']
-        assert arm['extraction']['max_figures'] == (12 if definition['pixels'] else 0)
+        assert arm['extraction']['max_figures'] == (48 if definition['pixels'] else 0)
 
 
 def test_legacy_dual_condition_campaign_remains_inspectable_and_cleanable(campaign, tmp_path, monkeypatch):

@@ -324,10 +324,14 @@ SERIES_INSTRUCTION = '''Extract serial numeric measurements from the literal tab
 Group value cells into series: one series = one measurement for one patient (or unresolved/aggregate) over several time points.
 Refer to cells ONLY by cell_id; never type a number. measurement_name must be text from the name cell. Use time_cell_id for the
 column/row header giving the time point, with time_text copied from that cell; set offset_value/offset_unit only when the number
-is printed in time_text (or 0 for the first/baseline point, with offset_basis). unit_text must be copied from the cell named by
+is printed in time_text. Every non-null offset_value, INCLUDING baseline zero, requires BOTH a source-supported
+offset_unit and a stated offset_basis. A first/baseline column alone does not establish a time unit: leave
+offset_value, offset_unit and offset_basis null when the unit or basis is unstated; retain literal time_text.
+unit_text must be copied from the cell named by
 unit_cell_id (e.g. a reference-range or header cell). Set cell_status (refused, discontinued, held, not_given,
 prn_or_emergency) only when a printed legend/footnote cell (legend_cell_id) defines the cell's token or footnote marker;
-a dash is never zero. Patient ownership needs a literal quote from an article segment or a cell;
+a dash is never zero. Patient ownership needs a literal quote from exactly one article segment OR cell:
+set exactly one of segment_id/cell_id and set the other to null, never both or neither;
 aggregate/cohort tables are 'aggregate'. Skip rows that are not serial measurements. Do not convert units.'''
 
 

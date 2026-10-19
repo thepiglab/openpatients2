@@ -74,7 +74,7 @@ class PilotConfig(ConfigModel):
     max_patients_per_article: int = Field(default=8, ge=1, le=48)
     max_patients: int = Field(default=96, ge=1, le=384)
     max_figures_per_article: int = Field(default=24, ge=0, le=48)
-    max_figures: int = Field(default=12, ge=0, le=12, description='Pixel figures across this entire arm')
+    max_figures: int = Field(default=12, ge=0, le=48, description='Pixel figures across this entire arm; frozen campaigns can cover up to 48')
     max_calls: int = Field(default=4096, ge=1, le=8192)
     max_total_tokens: int = Field(default=32_000_000, ge=128, le=128_000_000)
     max_output_tokens: int = Field(default=16384, ge=128, le=32768)
@@ -110,6 +110,9 @@ class PilotConfig(ConfigModel):
     prompt_overrides: dict[str, str] = Field(default_factory=dict)
     prompt_mode: Literal['supplement', 'rewrite'] = 'supplement'
     timeline_completion: bool = False
+    staged_timeline: bool = False
+    timeline_segment_batch_size: int = Field(default=8, ge=1, le=32)
+    timeline_relation_batch_size: int = Field(default=6, ge=1, le=16)
     summary_completion: bool = False
     scatter_calls: bool = False
     experimental_pipeline: Literal['original', 'evidence_ledger'] = 'original'
@@ -363,6 +366,13 @@ def timeline_messages(article: dict, patient: dict, record_id: str, facts: dict[
         '\nSCHEMA:\n' + json.dumps(timeline_wire_schema())}]
 
 
+def timeline_relations_wire_schema():
+    schema = timeline_wire_schema()
+    schema['properties'] = {k: v for k, v in schema['properties'].items() if k in {'edges', 'limitations'}}
+    schema['required'] = ['edges', 'limitations']
+    return schema
+
+
 def safe_messages(messages: list[dict]) -> list[dict]:
     value = copy.deepcopy(messages)
     for message in value:
@@ -419,6 +429,7 @@ class PilotRunner:
             'figure_visuals': FigureVisuals.model_json_schema(),
             'pixel_attribution': FigureReview.model_json_schema(),
             'timeline_v2': timeline_wire_schema(), 'timeline_completion': timeline_wire_schema(),
+            'timeline_events': timeline_wire_schema(), 'timeline_relations': timeline_relations_wire_schema(),
             'summary_completion': ARTICLE_TASKS['summary'].model_json_schema(), 'ordering_review': ordering_schema(),
             'claim_audit': ClaimAudit.model_json_schema(),
             'clinical_inventory': ClinicalInventory.model_json_schema(),
@@ -642,7 +653,7 @@ class PilotRunner:
                                 from .overnight_repairs import canonical_figure_identity
                                 candidate, identity_audit = canonical_figure_identity(candidate, identity)
                                 entry['figure_identity_normalization'] = identity_audit
-                            if task in {'timeline_v2', 'timeline_completion', 'ordering_review'}:
+                            if task in {'timeline_v2', 'timeline_completion', 'ordering_review', 'timeline_events', 'timeline_relations'}:
                                 candidate, span_audit = resolve_timeline_spans(candidate,
                                     identity['article_id'] + ':jats', segments)
                                 entry['span_resolution'] = span_audit
@@ -663,6 +674,7 @@ class PilotRunner:
                             latest_candidate = copy.deepcopy(candidate)
                             if plan:
                                 plan.apply(candidate); candidate = plan.output()
+                                latest_candidate = copy.deepcopy(candidate)
                                 entry['item_repair'] = plan.audit()
                                 if plan.pending:
                                     partial = candidate
@@ -693,6 +705,11 @@ class PilotRunner:
                             if packet is not None and plan is None and targeted:
                                 plan = ItemRepair.create(task, candidate, packet['text'], segments,
                                     policy=self.config.refinement_policy)
+                                if plan:
+                                    entry['item_repair'] = plan.audit()
+                            elif plan is None and targeted and task in {'timeline_events', 'timeline_relations'}:
+                                from .targeted_repair import TimelineAtomRepair
+                                plan = TimelineAtomRepair.create(task, candidate, checker)
                                 if plan:
                                     entry['item_repair'] = plan.audit()
                     entry['errors'] = errors
@@ -727,7 +744,9 @@ class PilotRunner:
         quarantine = []
         if data is None and partial_builder and self.config.refinement_policy == 'source_aware':
             try:
-                partial, quarantine = partial_builder(latest_candidate)
+                recovery_candidate = (plan.output() if plan is not None and task in {'timeline_events', 'timeline_relations'}
+                                      else latest_candidate)
+                partial, quarantine = partial_builder(recovery_candidate)
             except (ValueError, TypeError, KeyError) as exc:
                 partial = None
                 quarantine = [{'kind':'partial_recovery_failure','reason':str(exc),
@@ -888,6 +907,9 @@ class PilotRunner:
             from .ledger_pipeline import assemble_episodes
             timeline, delta_tasks, episode_receipt = await assemble_episodes(self,article,patient,rows,identity,replica,sources)
             extra_tasks.extend(delta_tasks)
+        elif self.config.staged_timeline:
+            from .staged_timeline import extract as extract_timeline
+            timeline = await extract_timeline(self, context_article, patient, facts, rows, identity, replica, sources)
         else:
             timeline = await self.call('timeline_v2', timeline_messages(context_article, patient, rid, facts, rows,
                                       refined=self.config.refinement_policy == 'source_aware'),
