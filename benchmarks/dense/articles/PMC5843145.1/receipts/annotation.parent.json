@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC5843145.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "585630a6a79db2c689d3762afddb63eb56624c8386d7a15158841b0608a88d20",
+  "annotation_sha256": "6a85699cc18d87132c363f144ef515191dc74c1726ba49475f8c7ba329a0f886",
+  "reviewed_at": "2026-10-21T03:09:09.235996+00:00",
+  "source_segments_read": 17,
+  "facts_reviewed": 86,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Hydrocortisone (p1-f028): indication set to Pneumocystis pneumonia; evidence widened to the literal treatment clause \"as well as PCP ... with high-dose intravenous trimethoprim-sulfamethoxazole (TMP-SMX) and high-dose intravenous corticosteroids (hydrocortisone)\".",
+    "Permissive hypoxaemia (p1-f032): finding cleared; the accepted saturation and PaO2 ranges are tolerance targets, not findings or results (kept in evidence and notes). Tidal volumes stay as the maintained parameter of the lung protective strategy.",
+    "Lower respiratory tract infection (p1-f020): temporality historical -> unknown (part of the presented illness, no history wording).",
+    "Day-four oxygen saturation (p1-f081): text_value \"in the region of 80%\" added to keep the approximate wording; comparator stays \"=\".",
+    "Events: PCP diagnosis and hypoxaemic respiratory failure moved out of the admission-investigations event into new diagnosis event p1-e15 (basis wording, unordered); p1-e03 evidence now quotes its admission time phrases.",
+    "Presentation event p1-e02: time_text \"3-day history\" removed (symptom duration, not the presentation time).",
+    "Outcome \"successfully weaned from mechanical ventilation\" (p1-f085) moved from the oxygen-supplementation event to the extubation event.",
+    "Added relations: intubation/ventilation p1-e04 before extubation p1-e11 (device start -> removal, both quoted); ventilation strategies p1-e10 before ICU discharge p1-e14 (\"During this period\" care within the stay ending in discharge).",
+    "Added ambiguity: extubation and NIV joined by \"and\" with no order word; left unordered.",
+    "Summary claim 1: crackles wording restored to \"scattered bilateral predominantly basal\"; claim 2 now cites every negative microbiology fact."
+  ],
+  "unresolved": [
+    "The article has no figures, tables or supplements; there is no pixel content.",
+    "Blood gas values are printed without units and are recorded without units.",
+    "Discussion and literature-review paragraphs describe published or general information and are not patient facts.",
+    "PCP is a clinical diagnosis in the body text; see patient ambiguities."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 17,
+    "facts_reviewed": 86,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient; discussion paragraphs b00007-b00017 are background except the b00013 sentence \"Our patient was not on ART at the time of presentation.\"",
+      "PCP kept provisional: body text says the diagnosis \"was considered\", treatment was empirical on the WHO clinical case definition, and the PCP direct fluorescence antigen test was negative; the abstract wording \"diagnosed with PCP\" is recorded as an ambiguity.",
+      "Blood gas values carry no printed units and none were added; gas Hb/SpO2 kept separate from laboratory Hb and examination saturation; type II respiratory failure vs pCO2 34.7 kept as an ambiguity.",
+      "Ventilator settings weaned to a higher delta pressure are recorded literally with an ambiguity.",
+      "All 10 relations checked against their full evidence lists; \"On the basis of his clinical condition and investigations, the patient was intubated\" orders investigations before an action (result -> action), not a diagnosis."
+    ],
+    "residual_risks": [
+      "Laboratory haemoglobin is printed as 11.6 g/L and recorded as printed.",
+      "Specimen of the Auramine O stain and bacterial culture is not stated and left null.",
+      "Nasal cannula oxygen at discharge recorded as action completed although it continued at discharge."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC8023954.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8177b61209ef0ee3b2d3e98932b7bd5bb95b11de19e4037c8d45183372996cd9",
+  "annotation_sha256": "2242e1440fc89d1ae05d057f88bb674cddbae0b32462ad4c34c069f5b1c6c4c0",
+  "reviewed_at": "2026-10-21T08:29:31.662864+00:00",
+  "source_segments_read": 65,
+  "facts_reviewed": 0,
+  "patients_reviewed": 0,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Rewrote the Table 1 NRS-pain limitation: \"62 (1.9)\" vs 6.2 elsewhere recorded as a print artefact (ambiguity), removing the inapplicable \"kept as printed\" wording since no facts exist.",
+    "Rewrote the bilateral-row limitation: truncated \"18 (\" now cross-referenced to the literal discussion count of 18 patients with bilateral complaints; N = 158 knees header vs per-patient row wording kept as an unreconciled denominator.",
+    "Rewrote the 43-patient limitation: the abstract/methods do not contradict the 3-injection count; the issue is only that the 2-week-interval patients are not identified.",
+    "Rewrote the lost-to-follow-up \"more men (64%)\" limitation to quote the source and state the missing group size.",
+    "Added limitation: Figure 1 prints 123 one-sided + 18 bilateral = 141 under \"Patients included in analysis (n = 140)\" (pixel content, visual target only)."
+  ],
+  "unresolved": [
+    "Disposition aggregate_only: the source reports a prospective case series of 140 patients (158 knees) with knee osteoarthritis treated with ACP only through group-level means, confidence intervals, counts, percentages and regression coefficients; no patient has individual identity evidence or an individually described course, so no individual patient records are created and group statements are not copied to placeholder patients.",
+    "reported_individual_count is 140 (literal) and roster_complete is false because none of the 140 stated individuals can be enumerated.",
+    "Table 1 prints the baseline NRS-pain row as \"62 (1.9)\" while the abstract, Table 2 and the results text give a baseline mean NRS-pain of 6.2 on a 0 to 10 scale (Table 2: 6.2 (5.8–6.5)); the missing decimal point is treated as a print artefact (ambiguity, not a source conflict) and is not corrected.",
+    "The Table 1 row \"Bilateral treatment, n\" is printed truncated as \"18 (\" with no closing value; the discussion states that 18 patients with bilateral complaints were included. The Table 1 header counts N = 158 (knees) while rows such as age and female sex are described per patient (\"Baseline characteristics of 140 included patients (158 knees)\"); whether each row uses patients or knees as its denominator is not stated by the source.",
+    "All patients received 3 ACP injections; 43 patients received 1 of the 3 injections with a 2-week interval and all others had a 1-week interval. The source does not identify which patients these were, so the schedule is not attributable to individuals.",
+    "The statement that the group lost to follow-up at 12 months \"consisted of more men (64%)\" is a subgroup statement with no printed group size or denominator; it is not attributed to individual patients.",
+    "Figure 1 (recruitment flowchart) prints \"Patients included in analysis (n = 140)\" with sub-items of 123 patients with one-sided treatment and 18 with bilateral treatment, which add to 141; 140 patients with 18 bilateral treatments matches the 158 knees printed in the same box and in the text. These counts are pixel content recorded only in the visual target; the mismatch is not reconciled by the source.",
+    "Figures 1 to 3 are group-level figures (recruitment flowchart and two mean-score plots); ownership is aggregate. Pixels were reviewed in the separate visual target; no values were read from plot geometry. Values printed inside the images are recorded only in that visual target."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 65,
+    "facts_reviewed": 0,
+    "figures_viewed": 3,
+    "key_findings": [
+      "aggregate_only confirmed: all 65 segments (abstract, methods, results, discussion, Tables 1-3 and three captions) read; no patient is individually described anywhere (no vignette, no per-patient table row, no example patient in captions or discussion); Tables 1-3 are group means/SD, counts, CIs and regression coefficients.",
+      "Roster 140 with roster_complete false is literal (b00009 \"140 patients (158 knees) could be included\"); patients [] is allowed per rulings.",
+      "Figures viewed at full resolution: F0001 recruitment flowchart (printed counts only), F0002 KOOS5 mean/CI line plot and F0003 KOOS subscale mean line plot; all aggregate; no plot estimates in the annotation or visual target.",
+      "Source inconsistencies recorded as limitations: Table 1 NRS 62 vs 6.2, truncated bilateral row \"18 (\", N = 158 knees header vs per-patient rows, Fig 1 123+18=141 vs 140, unidentified 43 two-week-interval patients, lost-to-follow-up \"more men (64%)\" without denominator.",
+      "65 source_coverage rows checked: aggregate/background/figure_caption dispositions sensible; no row claims patient facts."
+    ],
+    "residual_risks": [
+      "No reviewed measurement_series.json: the machine draft parses Table 2/3 group means and regression rows; these are aggregate, not patient-level series.",
+      "AI reference annotation, not physician adjudicated."
+    ]
+  },
+  "physician_adjudicated": false
+}

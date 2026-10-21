@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12861934.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b526480d45873735d32df91cc0a00c4bef024b4518aabde44eadb68fd94b4c6a",
+  "annotation_sha256": "485bb73585ccc44c411a276f345654e85b4b636e4c2a9559072ac32d655ee28b",
+  "reviewed_at": "2026-10-21T18:10:00.908927+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 134,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Labs printed in the \"Initial laboratory work-up displayed ...\" sentence (f039-f056) take that sentence's own time \"Initial\" (at, anchor null) with the sentence-opening quote; event e05 time_text Initial (order_only); the untimed coagulation, hypercoagulable, genetic and COVID results split into new event e25.",
+    "f007 label trimmed to \"New-onset heart failure\" (reduced-EF wording is background, not the patient label).",
+    "f011 end-stage cardiomyopathy verification unknown -> provisional (\"was considered to have\").",
+    "f010 thrombi diagnostic_basis set to the literal \"echocardiogram done on admission\" with its b00012 quote.",
+    "f074 \"no ischemia identified\" flag negative -> unknown (imaging finding, not a qualitative test).",
+    "f128 follow-up \"will require\" action_status planned -> recommended; event e23 occurrence planned -> unknown.",
+    "Added f131 abstract LVEF 15 % as review_only/ambiguous (modality and time unstated; not merged with TTE or MRI); linked into the LVEF ambiguity.",
+    "Added f132 cardiac MRI scarring in the same segments as stress PET, f133 lung infarcts condition (b00018), f134 myocardial infarction observed on explanted heart pathology (b00016; embolic cause stays hedged ambiguity).",
+    "Right heart catheterization (f094, cancelled) moved out of the occurred TTE event into its own not_occurred event e24.",
+    "Abstract stress-test fact f076 removed from the stress PET event e07 (not merged).",
+    "e12 CICU transfer kind treatment -> other; e22 time_kind duration -> relative.",
+    "Added 7 relations: e04->e14 (presentation opens the stay), e06->e16 (TEE compared with \"the echocardiogram done on admission\"), e15->e17 (explanted heart pathology), e15->e19 (allograft rejection biopsy), e18->e21 (inotropes started then weaned), e21->e22 (in-hospital care -> discharge), e22->e23 (discharge -> follow-up).",
+    "Added ambiguity for the unanchored \"the next day\" CICU transfer; summary wording fixed (shock at presentation; follow-up required, not planned)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the three figure images were inspected separately in visual.json.",
+    "Laboratory reference intervals are copied as printed; no high/low flags were derived from them.",
+    "Abstract LVEF 15 % and abstract stress-test infarct percentage name no modality and are not merged with body-text results.",
+    "The case gives no calendar dates; all timing is relative to presentation, VA-ECMO placement or transplantation.",
+    "Discussion hypotheses about etiology (alcohol-induced cardiomyopathy, coronary embolization) are hedged and recorded only as ambiguities."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 134,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (42-year-old man); 3 figures, no tables or supplements in raw.xml.",
+      "INTERMACS kept as printed digit 1 with ambiguity; abstract LVEF 15 % and abstract stress-test statement kept separate as review_only.",
+      "Hedged diagnoses provisional (end-stage CM, ischemic CM, ACR 2R); RHC cancelled and not_occurred; GDMT absent; DOAC at discharge unknown; inotropes administered (weaned).",
+      "Relations now link history -> presentation -> VA-ECMO -> OHT -> rejection biopsy/treatment -> weaning -> discharge -> follow-up."
+    ],
+    "residual_risks": [
+      "17 non-blocking NO-BORROWING warnings on f040-f056: the \"Initial\" time comes from the same sentence as each lab value (orchestrator ruling), a checker false positive.",
+      "e15->e19 order rests on rejection being of the transplanted heart (allograft biopsy), not on an order word.",
+      "\"hexagonal anticoagulant\" kept literal; \"activating clotting time\" possible duplicate recorded only as an ambiguity."
+    ]
+  },
+  "physician_adjudicated": false
+}

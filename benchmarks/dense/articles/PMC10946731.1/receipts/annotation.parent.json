@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC10946731.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "49db30b8b9eb852c2bf6caf7e97090fe2d4e0721f7a9e98d8ff659cf20d8b2e5",
+  "annotation_sha256": "a8b1abacc2a707d89cedb069b584dbbf4ec979726ea7ba3962e409b0eeb67050",
+  "reviewed_at": "2026-10-21T13:48:25.466260+00:00",
+  "source_segments_read": 126,
+  "facts_reviewed": 166,
+  "patients_reviewed": 8,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p2-f019 RMSSD deterioration: evidence replaced by the full b00095 sentence naming RMSSD; 'at follow-up' removed from name (window not stated for P2)",
+    "p3-f017/p7-f016 split: RMSSD improved in therapy (in therapy) and new facts p3-f022/p7-f022 'did not remain improved at follow-up' (at follow-up); removed unstated 'reliable'",
+    "p1-f014/f015 text_value no longer adds 'reliable' not stated in b00069",
+    "p1-p7 f005 condition names: removed added 'ICD-10' (only the code is printed)",
+    "p2-f006 years with psychosis Unknown: literal Table 2 cell, now supported/include citing the cell only; text sentence kept as ambiguity",
+    "p4-f014 delusion distress time changed from 'until follow-up (T5)'/until to 'follow-up (T5)'/at",
+    "p8-f004 alcohol use status current -> unknown (not placed at latest described time)",
+    "Added PBIQ-R improved by follow-up for p1-p7 from explicit 'all seven' (b00095)",
+    "Added b00113 voice- and delusion-related distress reducing for P1 (include) and delusion-related distress reducing for P7 (review_only, ambiguity: clause also asserts voice distress for P7 who has no current voices)",
+    "p6 summary no longer states the disputed delusion-distress attribution; p6 ambiguity linked to p6-f015 only"
+  ],
+  "unresolved": [
+    "Case series of seven completers plus one non-completer; Table 2 and the supplement cover the seven completers only, with participant codes mapped to p1-p7 and pseudonyms not recorded.",
+    "One additional person who did not start the intervention (work commitments) is mentioned only in aggregate and is not a roster patient.",
+    "Group-level statistics and RCI counts are aggregate and are not copied to individuals; supplement Tables S2-S6 hold the per-participant values and are reviewed separately.",
+    "Figure values are pixel content: visual.json holds qualitative descriptions only; no plot values were read into facts.",
+    "Discussion sentences are attributed to participants only where they name them; the delusion-distress list printing P6 twice is kept review-only for P6."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 126,
+    "facts_reviewed": 166,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Roster: P1-P7 Table 2 completers plus the individually described non-completer (b00054) as p8; the pre-start dropout is aggregate only",
+      "CFTp '26 weekly sessions over 6-9 months' and follow-up '6-8 weeks after finishing the intervention' kept: the Intervention/Follow-up phase design statements are the facts' own statements; NO-BORROWING warnings are checker false positives",
+      "Completion copied to p1-p7 only via explicit 'the seven who did engage with the full 26 sessions' and 'All seven provided full outcome and process measures across all assessment points'",
+      "P6 in 'P1, P3, P6 and P6' kept review_only (one-character print artefact); fourth case not inferred",
+      "S2 up arrow vs S3 -1.95 for P2 PBIQ-R T2->T3 is a true intra-supplement conflict (S3 count row and Table 3 agree with S3); all other 391 S2/S3 cells agree",
+      "No pseudonyms in authored annotation fields"
+    ],
+    "residual_risks": [
+      "Protocol-level intervention and follow-up windows applied to each completer as ranges",
+      "Figure 2 baseline lengths per participant are pixel content only; only P5's 2-week baseline is text-literal",
+      "Figure 2 visual.json wrongly says P1 has larger markers at each timepoint (pixels: T1, T2, T5 only); agent must correct"
+    ]
+  },
+  "physician_adjudicated": false
+}

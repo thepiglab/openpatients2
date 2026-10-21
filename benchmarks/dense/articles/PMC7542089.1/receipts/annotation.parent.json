@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC7542089.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "542f00741e177e50f9bdbba0c275da9373d747152f0dc0017788652a765db7f0",
+  "annotation_sha256": "e47ce872e2f7c3fb951f4663880dd726239a145177443c08b88c5f3cff32a3d9",
+  "reviewed_at": "2026-10-21T04:28:23.944949+00:00",
+  "source_segments_read": 37,
+  "facts_reviewed": 110,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed duplicate symptoms_function fact for McConnell’s sign: it is an echocardiographic finding already in the TTE observation (ONE-STATEMENT/SECTION-SIGNS).",
+    "Added observation for \"the inflammatory parameters were progressively increasing (Table 1)\" (untimed, trend as worded).",
+    "D-dimer text statement kept review_only/ambiguous, flag set to normal as worded, discussion quote \"having normal D-dimer level on presentation until the day of event\" added; ambiguity reworded: qualitative statement vs reference-range comparison of the day-7 table value 0.79, not a two-number source conflict; table cells stay flag unknown.",
+    "Ferritin Arrival 907 recorded numerically; only the period-printed values (1.328, 1.653, 1.746, 1.909) stay text.",
+    "ECG on admission \"normal sinus rhythm\" flag set to normal (normalize OBS-FLAG item).",
+    "Fibrinolysis no-improvement outcome: removed inferred related_condition; added abstract quote \"fibrinolytic therapy was not effective\".",
+    "Death outcome related_condition changed from an inferred composite to the literal \"Fatal thromboembolism\" (b00034); Table 2 current-study row quoted with its header.",
+    "Prophylactic anticoagulation fact gained discussion and Table 2 current-study row evidence; still not linked to enoxaparin (not stated).",
+    "Pulmonary embolism fact gained the Table 2 current-study row evidence (diagnostic modality TTE); no time added from the Day of diagnosis cell.",
+    "Split the lumped treatment/test event into admission ECG (on admission), chest X-ray + PCR + COVID-19 diagnosis (untimed), and in-hospital drug treatment; events 10 -> 12.",
+    "Relations 5 -> 8: added presentation -> bedside TTE (presentation opens the stay), TTE -> alteplase (result -> action about that result, also abstract sequence), alteplase overlaps VA-ECMO preparations (\"while\"); kept presentation -> treatment, presentation -> day 2, day 2 -> day 5 -> day 8 (same admission-day anchor), arrest -> death (\"subsequently\").",
+    "Source coverage: discussion segment b00034 changed to patient_facts; article limitations note supplement-caption-only findings (severe tricuspid regurgitation) not recorded as facts."
+  ],
+  "unresolved": [
+    "No figures in the source. Three echocardiography videos (Video 1-3) are listed as supplements and are reviewed by sampled frames in the supplement manifest only; their pixels are not used as facts.",
+    "Table 2 rows other than the current-study row describe published literature cases and are not patient facts.",
+    "Ferritin table values kept as text because the printed period is ambiguous.",
+    "No planned or recommended follow-up is documented because the patient died.",
+    "Supplement video captions (not article text segments) additionally describe a modified parasternal short-axis view of a large right atrial thrombus and a Doppler view of severe tricuspid regurgitation; these caption statements have no text segment and are not recorded as facts.",
+    "Table 2 prints day of diagnosis 8 for the current study; no time was added to the pulmonary embolism fact from the table cell."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 37,
+    "facts_reviewed": 110,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient (54-year-old man, COVID-19 pneumonia, RA/RV thrombi, PE, fatal); all 67 Table 1 value cells present with header times and literal units; Table 2 literature rows excluded.",
+      "D-dimer \"normal until day 8\" vs day-7 table value 0.79 above the printed range is an ambiguity (no second number), text side review_only.",
+      "Intubation action unknown (\"requiring\"); VA-ECMO planned; SaO2 98% and chest X-ray untimed (no own time, no borrowing).",
+      "Three MP4 echo supplements: 18 sampled frames (0-2.5 s, 0.5 s step) viewed; pixels not used as facts."
+    ],
+    "residual_risks": [
+      "Event order between day-8 deterioration, TTE, arrest and death beyond the literal links stays partially unordered.",
+      "Ferritin period-printed values ambiguous (decimal vs thousands separator)."
+    ]
+  },
+  "physician_adjudicated": false
+}

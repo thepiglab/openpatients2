@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC9811192.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7f385a48390f95a7d248af39206b212eae43fdbaee567d0e7ef2ef77452c81bd",
+  "annotation_sha256": "2411d176b368e5ad73e265d6d26adba3cc6c1afb0f64e3cf21dd9e2c0b505c79",
+  "reviewed_at": "2026-10-21T13:02:08.846658+00:00",
+  "source_segments_read": 28,
+  "facts_reviewed": 74,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Ultrasonography septal defect: the case text (atrial septal defect) and the discussion (atrioventricular defect) give two values for the same ultrasonography finding; p1-f032 changed from include to source_conflict + review_only (added the b00006 restatement), p1-f047 from ambiguous to source_conflict; p1-f048 text_value limited to the undisputed findings; ambiguity and article limitation reworded as a source conflict; atrial septal defect removed from summary claim 2; p1-f047 linked to the ultrasonography event p1-e04.",
+    "p1-f068 \"consistent with autosomal dominant inheritance\": set certainty ambiguous + review_only, because the same paragraph describes carrier parents and a compound heterozygous child and the background states autosomal recessive inheritance.",
+    "p1-f046 (case-text side of the metabolic disease conflict): the clause asserts proof, so assertion present / verification confirmed, with the full low-vitamin-D clause as evidence; stays source_conflict + review_only against the refuted discussion side p1-f045.",
+    "p1-f043 admission differential of metabolic disease: added the discussion restatement \"was suspected to have metabolic disease at admission\" and its time (at admission).",
+    "Relation p1-e08 -> p1-e09 changed from before to unknown: \"Therefore ... was confirmed\" is diagnosis-basis wording and the quote does not itself name the Sanger/parental analysis (RULINGS); evidence now carries both b00013 sentences."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four images are inspected in the separate visual target.",
+    "The Discussion lists examinations that ruled out metabolic disease without individual results; no per-test observations were created.",
+    "Pathogenicity wording of the two B3GALT6 variants is inconsistent in the source (pathogenic versus variant of uncertain significance); kept review_only.",
+    "Metabolic disease is stated both as proven by low vitamin D and as ruled out; kept review_only.",
+    "Ultrasonography septal defect type is a source conflict (atrial septal defect in the case text versus atrioventricular defect in the discussion); both sides are review_only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 28,
+    "facts_reviewed": 74,
+    "figures_viewed": 4,
+    "key_findings": [
+      "One index patient (4-month-old boy); roster of one is complete; parents appear only as family_genetics subjects.",
+      "B3GALT6 c.942G>C and c.808G>A: base variant facts (heterozygous missense) are scored; the conflicting classification (VUS in ACMG vs pathogenic in abstract/introduction) is quarantined on separate review_only facts.",
+      "Metabolic disease: admission differential scored; \"proof for metabolic disease\" vs \"ruled out\" both review_only.",
+      "Septal defect type is a source conflict; patent foramen ovale and left hydrocele testis remain scored.",
+      "The ~20 examinations listed as ruling out metabolic disease report no individual results; no per-test facts, limitation recorded.",
+      "Figures: 4 figures (F1 A-C photos, F2 A-C radiographs, F3 A-B sequencing screenshots, F4 Sanger grid) viewed at full resolution with crops; F1A eye bar lies below the closed eyes, so the eyes and lower face are visible."
+    ],
+    "residual_risks": [
+      "Ethnicity recorded from \"Chinese child\", which may denote nationality.",
+      "\"without deformity and bleeding\" is recorded as two absent perinatal items; the sentence does not state at-birth scope explicitly.",
+      "Ultrasonography, x-ray and laboratory events carry no stated time and are not ordered against the admission.",
+      "Visual and privacy sidecars describe the F1A bar as covering the eyes; the pixels show it below the eyes (reported for the annotator to correct)."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC11002118.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7edd773d2cc5297603f0737643b11d3e4a61619dec2ffe673c85fdfeb277fe11",
+  "annotation_sha256": "cba85c06f371a48097bb9946366e4ebe097a88619f5a4b93d86afc7ac112eb4a",
+  "reviewed_at": "2026-10-21T09:23:18.373285+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 78,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed relation p1-e08 -> p1-e09 (surgery before histology): the two adjacent sentences carry no order word and the source never says the histology was of the removed tissue.",
+    "Added relation p1-e03 -> p1-e10 (eslicarbazepine as second drug before antiseizure medication withdrawal; drug start -> its stop), quoting both b00007 and b00009.",
+    "Added an ambiguity for the Figure 2B caption fragment 'At 1:49.' whose full stop separates the time from the behaviour sentence it governs (one-character print artefact), linked to p1-f041."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the actual images are inspected in the separate visual submission.",
+    "Figure 1 timeline entries and dates exist only as image text and are not recorded as facts; the text states the surgery came thirteen months after the first symptoms.",
+    "Figure 3 box plots show per-segment spectral power distributions; no numeric values are printed, so none are recorded.",
+    "Two supplementary videos (Video_1, Video_2) are listed without descriptions in the article; they are reviewed in the supplement manifest and are not made clinical facts.",
+    "Results of MRI, cerebrospinal fluid examination and the autoimmune/paraneoplastic antibody examination are not stated separately in the text.",
+    "The abstract describes episodes lasting several minutes to hours while the case section says tens of minutes at first and 3 h later; recorded as authored.",
+    "Discussion statements about insulinoma, hypoglycemia mechanisms, published reviews and management recommendations are background and not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 78,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (46-year-old man); all 78 facts checked against the source, including the 18 Figure 2 caption sign facts with video-offset times anchored to the literal 'Seizure 1'/'Seizure 2' panel titles.",
+      "Time of day: case section says predominantly nighttime and early morning at first, the 'In our case' discussion says all seizures occurred at night; kept as an ambiguity (qualifier discrepancy, no two numbers), discussion side review_only.",
+      "Pre-ictal EEG bitemporal (b00010) vs diffuse (b00015) slowing kept as an ambiguity; both facts as authored.",
+      "Absent seizure-like episodes after surgery (p1-f076) is independently literal ('the patient was seizure-free'); outcome p1-f077 text_value is the printed abstract wording 'seizure-like episodes completely disappeared after the insulinoma removal'.",
+      "Glucose 0.5 mmol/l time 'Subsequently' is anchored by the adjacent sentence in the same paragraph (b00008).",
+      "MRI, CSF and antibody examinations were performed but their results are not stated: status unknown, not_reported.",
+      "Figure 1 timeline month-year dates are pixel content only; no fact uses them.",
+      "Video_1 and Video_2 have no description and no in-text citation; ownership stays unresolved."
+    ],
+    "residual_risks": [
+      "Event p1-e09 (histological diagnosis) has no ordering relation because the source does not literally order it after surgery.",
+      "Supplementary videos plausibly show the two Figure 2 seizures (durations and on-screen times fit), but that is attribute matching and is not recorded as ownership.",
+      "Analysed EEG segment durations and p-values are recorded as physiologic observations of the patient's recording."
+    ]
+  },
+  "physician_adjudicated": false
+}

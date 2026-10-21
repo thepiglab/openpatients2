@@ -1,0 +1,66 @@
+{
+  "article_id": "PMC11182287.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ea5888c31ee6f1ff4cb987c4e93cdffed3040125d01f06ca53be089e718de832",
+  "annotation_sha256": "40f1e98473cbc8bb4aa21f8bf0ff555579fc05d221ddf8153d3b6ab524ad79e6",
+  "reviewed_at": "2026-10-21T13:45:56.005191+00:00",
+  "source_segments_read": 37,
+  "facts_reviewed": 135,
+  "patients_reviewed": 5,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Raw XML and source.json checked: no fig, graphic, media or supplementary-material elements; no figures or supplements apply.",
+    "Added for all five patients a prior corticosteroid medication (historical) and a treatment event from the explicit all-case Discussion sentence \"In all cases ... after previous inadequate response to corticosteroids\"; corticosteroids -> ATT relation.",
+    "b00021 \"in none of the cases was there a suspicion of reinfection\" is not copied to patients (no suspicion is not absence; the same sentence says reinfection is difficult to exclude); recorded as an article limitation quoting both phrases. The scoped alternative-disease negative also stays uncopied.",
+    "Added initial presentation events for p1-p4 (p5 already had one) and separate initial-resolution outcome events for p1-p4; presentation -> ATT and ATT -> resolution relations from b00031/b00018/b00015.",
+    "p4: split the merged corticosteroid fact: f011 is now the corticosteroid given with ATT (b00018, administered); the prior inadequate-response course is a separate historical fact; ATT event no longer carries the outcome.",
+    "Added missing literal relations: p1 first recurrence -> isoniazid/prednisolone (table \"First recurrent episode Initial treatment\"), recurrence same_time systemic workup, resolution -> recurrence, presentation -> second recurrence (11 years after the initial presentation) and -> last follow-up (20 years after); p4 resolution -> first recurrence, first recurrence -> betamethasone/prednisolone acetate, presentation -> last follow-up (18 years after); p2/p3 initial resolution -> last follow-up (b00002 \"the five of them had more than 10 years of follow-up after uveitis resolution upon ATT completion\"); p5 presentation -> ATT and -> resolution, resolution -> recurrence, recurrence -> MMF/adalimumab.",
+    "p1 second-recurrence relation now also quotes \"The next recurrent episode ...\" (text) besides the table times.",
+    "CME during follow-up (p1-f013, p4-f015, p5-f015): clinical_status recurrence -> unknown (not stated as a recurrence of CME).",
+    "p1 corneal decompensation and p3 cataract: role complication -> unknown (no causal link stated); right/left laterality kept from the parenthesis attached to that eye's BCVA value.",
+    "p2: merged duplicate CME-absent items (text \"recurrent CME\" and Table 1 \"CME during follow-up: No\") into one item citing both.",
+    "p5 adalimumab: removed duration \"for 5 years\" (table attaches it to the combination, text to the whole recurrence treatment; ambiguity kept). p5 recovery outcome: removed misused follow_up_duration_text.",
+    "p1 initial condition renamed to \"Posterior uveitis with unspecific choroidal lesion and vitritis\"; p1 initial-resolution outcome also cites \"was free of inflammation for 8 years after ATT\".",
+    "TBU ambiguity for all patients now also quotes \"reflecting the high probability of true TBU\", verification kept unknown.",
+    "Summaries updated for the prior corticosteroids; p1 summary no longer implies order between the right-eye BCVA and the corneal decompensation."
+  ],
+  "unresolved": [
+    "The source has no figures and no supplements, so no visual, figure-EHR, privacy or supplement sidecars apply.",
+    "Table 1 is a one-row-per-patient summary, not a serial per-patient table, so no measurement series is recorded.",
+    "Two further patients of the earlier seven-patient series lacked follow-up and are described only in one sentence each; they are not roster patients.",
+    "Cohort statements (inclusion criteria such as positive Mantoux/TST, median follow-up, counts of recurrences, anti-TNF effectiveness, Table 2 literature) are not copied to individuals.",
+    "Table 1 prints best corrected visual acuity as bare decimals without a stated scale or unit.",
+    "The authors hedge that recurrences may not signify true tubercular uveitis; the TBU label is recorded with verification unknown.",
+    "Reinfection is not recorded per patient: the discussion says \"in none of the cases was there a suspicion of reinfection based on the clinical history and absence of other organ involvement\" but also \"it can be difficult to exclude a reinfection with TB even after a thorough examination\"; no suspicion is not an assertion that reinfection was absent. The sentence that no alternative systemic disease or infection was identified is scoped to recurrent episodes and repeats the case-level statements, so it is not copied either."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 37,
+    "facts_reviewed": 135,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Five Table 1 cases, each with a Results Case N paragraph; roster 5 complete (b00002).",
+      "Methods all-patient statements (ATT 2HRZE/4HRE, HIV not positive, no side effects or non-compliance) and the b00031 \"In all cases\" sentence explicitly cover all five; the Mantoux/TST inclusion criterion is a cohort diagnostic basis and is not copied.",
+      "p1 \"still used\" mycophenolate mofetil and dexamethasone \"Until the end of the follow-up\" places use at the latest described time, so action current is allowed; last-visit table treatments are administered; \"Other medication\" items are unknown.",
+      "BCVA values are bare decimals without scale; flag unknown.",
+      "p5 \"No other ... causes ... after repeated systemic workup\" is refuted; p1 \"No other cause ... was noted\" stays unknown."
+    ],
+    "residual_risks": [
+      "TBU verification unknown is a judgment from the authors' hedge; provisional would also be defensible.",
+      "Prednisone (table) vs prednisolone (text) for p1 is kept as an ambiguity, not a conflict.",
+      "Corneal decompensation (p1, right) and cataract (p3, left) laterality come from the parenthesis placement next to one eye's BCVA."
+    ]
+  },
+  "physician_adjudicated": false
+}

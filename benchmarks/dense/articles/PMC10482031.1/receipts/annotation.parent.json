@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC10482031.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "59e62ae56a0933707dcf1ac89ed93bf392b4bd3f1cefa43b6c615ca6bf92d0cf",
+  "annotation_sha256": "1cf54547572ffba0c2634a9cf86a910e27f59c360225982462fe89769ce27ade",
+  "reviewed_at": "2026-10-21T13:11:13.304622+00:00",
+  "source_segments_read": 131,
+  "facts_reviewed": 144,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "CBC/renal summary vs Table 1 (Hct Low, K High): judged a panel-summary vs row-flag ambiguity, not a two-value source conflict; printed row flags kept; renal-function summary p1-f098 made review_only/ambiguous alongside the CBC summary p1-f096; ambiguity rewritten with the potassium row quote.",
+    "ENA p1-f087 flag positive -> high (numeric CU value, printed High in Table 1, discussion \"ENA was high\" added as evidence); ANA p1-f083 keeps positive per corpus titre convention; ambiguity and limitation reworded.",
+    "Mother: p1-f014 renamed \"Unnamed medication\" (source says only \"her medication\"); p1-f007 unremarkable perinatal history subject -> mother (sentence subject \"She\"); p1-f017 adds the b00047 obstetrician-surveillance quote.",
+    "p1-f046 NLE diagnostic_basis nulled (no stated basis wording); NLE diagnosis moved out of the heart-block event into new event p1-e21.",
+    "p1-f116/p1-f117 now quote their full sentence with own time \"Two weeks later\"; p1-f128 follow_up_duration_text removed (an age, not a duration).",
+    "Fever split: p1-f035 keeps the presentation \"no fever\"; added p1-f143 \"remained well, afebrile\" (later course, b00123).",
+    "Added p1-f144 the baby's course of antibiotics \"In this admission\" (b00123), not equated with cefotaxime/ampicillin.",
+    "Events: p1-e18 now only the maternal IV dose and the baby's antibiotic course (kind treatment); new p1-e19 maternal obstetric follow-up without surveillance (f016, f017 moved out of e18); new p1-e20 Holter findings split from imaging event p1-e12; new p1-e22 repeated workup and normal EEG/ECG/echo split from the two-week visit p1-e15 (not time-tied).",
+    "Relations: evidence strengthened for e01->e02 (early pregnancy -> delivery), e02->e03, e03->e04 (adjacent sentence + \"again\"/\"The next day\"), e04->e05, e14->e15, e14->e17 (discharge quoted). Added e05->e06, e05->e09 (ordered -> performed/result), e07->e08 (\"then\"), e08->e20 (Holter -> its result), e08->e13 (sent to PICU -> remained stable in PICU), e05->e14 (admission -> discharge), e10->e14 (in-stay care -> discharge), e10->e16 (levetiracetam start -> stop), e09->e16 (\"repeat EEG\"), e11->e22 (\"Repeated laboratory workup\"), e02->e17 (birth -> visit at stated age).",
+    "Ambiguities added: maternal \"one dose of IV antibiotics in this admission\" vs GBS antibiotics vs baby course not equated; post-discharge repeated workup timing not tied to the two-week visit; anti-RNP positive is the authors' conclusion from Sm/RNP and anti-Sm, not a separate assay.",
+    "Summary phase 3 mentions afebrile course citing p1-f143."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two figures are inspected in visual.json.",
+    "Table 1 hematocrit is labelled Low and potassium High while the text says the complete blood count and renal function were within normal range; the CBC and renal summary statements are review_only.",
+    "Mother's SLE, hypothyroidism, GBS, antibiotics and Table 2 antibody results are recorded in the index record with subject mother; Table 3 and other literature-review content are not index-patient facts.",
+    "No time is borrowed for table results or follow-up sentences; ordering relations are only those stated by the quotes.",
+    "Unlabelled \"the mother was found to have GBS ... received antibiotics\" and the later \"mother received one dose of IV antibiotics in this admission\" are kept as separate items because the source does not equate them.",
+    "ANA keeps flag positive (titre, text \"positive speckled\"); ENA keeps flag high (numeric CU value with printed High in Table 1 and \"ENA was high\" in the discussion)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 131,
+    "facts_reviewed": 144,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index neonate; mother items (GBS, hypothyroidism, SLE, Table 2 early-pregnancy antibodies) stay in p1 with subject mother; Table 3 rows are all literature cases.",
+      "Every Table 1 row is one observation; text-table merges (ANA 1:320, C3 low, C4 normal, ENA, Sm/RNP, anti-Sm, Ro, La, U1RNP-70kD, NT-proBNP, troponin T, ammonia, glucose) rest on the text explicitly summarizing Table 1; \"other autoantibodies negative\" and \"anti-RNP positive\" kept separate.",
+      "F1 viewed with crops: 26 labelled rows, rows 25 and 26 each show five brief deflections at matching positions; no interpretation stated as pixel reading; only software/device text. F2 is an external U1-SnRNP schematic."
+    ],
+    "residual_risks": [
+      "CBC/renal summary vs Hct Low/K High could be read as a source conflict; treated as ambiguity since no single value has two numbers.",
+      "Relations e05->e14 and e10->e14 rest on the same-stay implied-order ruling; Table 1 labs and imaging are not ordered against admission because their timing is unstated."
+    ]
+  },
+  "physician_adjudicated": false
+}

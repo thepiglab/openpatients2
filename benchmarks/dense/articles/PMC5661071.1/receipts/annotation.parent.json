@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC5661071.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d7f24cf3a5c40ebba1af6c19f519f0c529e77865a6aea7f52c0ee59df461911a",
+  "annotation_sha256": "4401be1ca0c3c5af2fd9a0fd43e8378252f446acc3c5945d9ba61fcbec8d25aa",
+  "reviewed_at": "2026-10-21T03:34:05.793542+00:00",
+  "source_segments_read": 35,
+  "facts_reviewed": 135,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "f042/f043 liver and spleen axes (209 cm/158 cm): certainty ambiguous, scoring review_only; Figure 1(a) pixel overlays read \"mm\" while text/caption print cm",
+    "f044 abdominal CT other findings and f113 head CT other findings: flag unknown -> normal (\"did not show other abnormalities\"/\"without evidence for other abnormalities\")",
+    "f012 leukemic meningitis kept confirmed; added abstract evidence \"dying three months later with leukemic meningitis\"",
+    "f119 lumbar puncture: added the CSF sentence that carries its finding",
+    "f125 failure to respond to GEM-P: outcome event deterioration -> other",
+    "added f131 periods of fever ≥ 38.5°, f132 fibrinogen < 150 mg/dl criterion not met, f133 no hemophagocytosis in BM and liver, f134 improvement in clinical status and blood analysis after first GEM-P, f135 Figure 3 caption negative markers (CD25, Ig kappa/lambda)",
+    "e11 \"after the second GEM-P\": time_kind relative/exact -> order_only/unknown",
+    "e11->e12 and e13->e14: added the immediately preceding anchor sentence to each relation quote",
+    "added relations e05->e18 (\"107 days after the diagnosis\"), e06->e10 (GEM-P repeated; second GEM-P), e07->e11 (first vs second BM evaluation), e14 same_time e15 (\"At that time\" adjacent sentence)",
+    "ambiguities: axes entry updated for the \"mm\" overlays; added Figure 2 circulating cells vs presentation count entry"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual images are inspected in the separate visual submission.",
+    "Discussion and literature sentences about other ANKL/ENKTL cohorts are background and not patient facts.",
+    "Liver and spleen axes are printed in cm (Figure 1(a) overlays end in \"mm\") and kept as printed, review_only; LDH 429 versus 1587 IU/L at the urgent admission is an unresolved source conflict.",
+    "Blood values after the first GEM-P and at the urgent admission carry no explicit time label; periods of fever of 38.5 degrees or more and unmet hemophagocytic syndrome criteria from the retrospective discussion are recorded without a time.",
+    "Figure 2 caption title says bone marrow cytomorphology but its body describes peripheral blood smears; flow plot percentages and karyogram labels are image content only.",
+    "Several flow cytometry results are marked data not shown in the source and are recorded only as stated."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 35,
+    "facts_reviewed": 135,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (36-year-old man, CD56-negative EBV-positive ANKL); discussion cohorts not copied.",
+      "LDH 429 vs 1587 IU/L at the urgent admission: same evaluation, no distinct times stated -> two numbers for one value, kept as source_conflict review_only.",
+      "Liver/spleen axes printed 209 cm/158 cm in text and caption; Figure 1(a) viewer overlays end in \"mm\" (digits illegible) -> facts ambiguous review_only, pixel text stays in visual.json.",
+      "Post-first-GEM-P and urgent-admission blood values have no own time label and stay untimed.",
+      "Leukemic meningitis kept confirmed: CSF \"consistent with\" plus literal author assertions in abstract and discussion; first right 6th-nerve palsy stays provisional (\"compatible\").",
+      "Karyotype notation i(7q) vs i(7)(q10), \"77\" count, CD56 marrow vs blood, abdominal vs TAP CT, Figure 2 title vs body and printed \"8d\" are ambiguities, not two-number conflicts.",
+      "Relations checked against literal order words; added diagnosis->death, first->second GEM-P, first->second BM evaluation and the \"At that time\" same_time link."
+    ],
+    "residual_risks": [
+      "e12->e13 crosses a paragraph; kept because \"when the alternative schema was being discussed\" refers back to the decision to change chemotherapy.",
+      "HScore 30.1% and the HS criteria are retrospective author statements without a time.",
+      "Visual/privacy text for Figure 1(a) mentions only one measurement overlay; the first CT image carries a second one (agent-owned sidecars, change requested)."
+    ]
+  },
+  "physician_adjudicated": false
+}

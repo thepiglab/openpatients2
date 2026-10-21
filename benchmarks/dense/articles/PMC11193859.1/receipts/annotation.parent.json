@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC11193859.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ea057e176ffed70c177651f021245311190fcc690ef962d21603312b26257d0b",
+  "annotation_sha256": "dfe7f5ad714f1b83cd9a1e0d3a80097b22143b0d0ad016c5c7fa09fe6d41a4ee",
+  "reviewed_at": "2026-10-21T13:54:01.529675+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 164,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Split the untimed case-text brain/spinal MRI ('After that', p1-e13) from the Figure 1/2 caption findings dated September 18 (new p1-e26); the caption date no longer governs text facts.",
+    "Moved the Discussion MRI reexamination and Figure 6 caption facts (p1-f097..f102) out of the 1-year follow-up event into their own untimed event p1-e27, ordered after the initial MRI by the re- word.",
+    "Added four CSF examination events for the Table 1 Sept 19, Sept 22, Sept 29 and Oct 9 columns with header-ordered relations from the Sept 16 lumbar puncture.",
+    "Added facts: self-measured temperature up to 37.8 C (p1-f162), Figure 5 caption CSF exudation around the stapes (p1-f163) and CSF blowout after stapes removal (p1-f164).",
+    "p1-f043 CSF otorrhea diagnosis: removed the operative leak site and quote borrowed from a different statement; the operative leak stays as observation p1-f096.",
+    "p1-f050 stopped 'the drugs': evidence now quotes the antituberculosis regimen and the maintenance sentence it refers back to.",
+    "p1-f044: moved the 'exact details of the specific drug were not given' parenthetical out of regimen into notes.",
+    "Relations e05-e06, e06-e07, e10-e11, e14-e15, e19-e20, e13-e14 now quote both sides of the order word ('Therefore', 'Hence', 'After 3 days', drug start-stop).",
+    "Removed the encephalitis history fact from the otorhinolaryngology consultation event.",
+    "Ambiguities updated/added: subdural vs epidural decision, CSF otorrhea separation, caption-date vs text MRI, untimed Discussion MRI reexamination."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual images inspected in visual.json.",
+    "Table 1 dates (Sept/Oct) and caption dates carry no year; no calendar values assigned.",
+    "Text and Figure 2 caption differ on epidural versus subdural for the C5 to T5 lesions; both kept review_only.",
+    "Drug identities of the early infusion treatment are not given in the article.",
+    "No supplementary material is listed in the source XML."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 164,
+    "figures_viewed": 7,
+    "key_findings": [
+      "Single index patient (24-year-old woman); no supplementary material in raw.xml; graphical abstract is an uncaptioned schematic with unresolved ownership.",
+      "All 45 Table 1 cells checked against the source and the column headers; flags stay unknown (no normal flag for 'close to normal').",
+      "C5-T5 lesion location: text 'subdural' vs Figure 2 caption 'epidural' kept as an ambiguity with both facts review_only, because the source does not identify the untimed text MRI with the Sept 18 caption examination.",
+      "Denied CSF otorrhea symptom, stated CSF otorrhea diagnosis and operative CSF leakage kept as separate statements.",
+      "'X or Y' differential (recurrent intracranial infection or tuberculosis recurrence) stays review_only on both sides.",
+      "Adjacency relations checked: 'After 3 days' anchors on the adjacent sentence in the same paragraph (b00004); 'After that' and 'Therefore' order; recommendation of surgery -> surgery performed.",
+      "No calendar values: all dates lack a year."
+    ],
+    "residual_risks": [
+      "Relative order of the Sept 18 caption MRI against the Sept 16 lumbar puncture is not encoded (year-less dates).",
+      "Whether the Discussion MRI reexamination is the in-hospital reexamination is not stated.",
+      "Figure 6 caption pairs cervical levels with 'lumbar disc herniation'; kept as printed, review_only."
+    ]
+  },
+  "physician_adjudicated": false
+}

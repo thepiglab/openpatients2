@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC9822717.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "89199ced5de0d9b0a3a8400269b1378b1470eac7d6447d5b31f532e181540429",
+  "annotation_sha256": "d2ba14c7b135795f218059abb78be9f2ad48cfefc3104d2ade9eb83ee8cbb673",
+  "reviewed_at": "2026-10-21T09:31:33.020295+00:00",
+  "source_segments_read": 50,
+  "facts_reviewed": 287,
+  "patients_reviewed": 7,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "All 7 patients: age_other unit \"years\" removed and the b00011 range sentence dropped from age evidence (the Table 1 cell prints the number only; the range quote only supplied the unit).",
+    "All 7 patients: tumor resection fact now quotes the per-patient Table 1 \"History of tumor resection | Yes\" cell; moved out of the prior-regimen event into its own history event (no order asserted); prior-regimen event evidence set to the Table 1 header/cell quote.",
+    "All 7 patients: Table 3 regorafenib \"dose at initiation\" action started -> administered (footnote: started at 40-80 mg for a week, then increased to the dose listed).",
+    "p3-p7: added e03 (combination therapy) before progression/discontinuation event, quoting the Table 2 \"time to progression/therapy discontinuation\" header and row cell.",
+    "p1: split dose adjustments (f031-f033) from the HFS event into p1-e10; added HFS before dose adjustment (\"necessitated\").",
+    "p2: added MSI-negative biomarker (p2-f034) from \"none had microsatellite instability\" (explicitly covers all seven; p2 has no MSI cell); removed \"Received in an outside facility\" from the 5-FU regimen field (kept in statement/evidence).",
+    "p3: split the side-effect event into Table 3 grade 3 hypertension (e04), hypertensive urgency (e10), BP medication adjustment (e11) and no recurrence (e12, not_occurred); added urgency -> adjustment and adjustment -> no recurrence relations; removed \"adjusted\" from the regimen field.",
+    "p4: Table 2 progression time \"30\" (no unit; inconsistent with PD at 8 weeks) set ambiguous/review_only and linked to the ambiguity; duplicate FOLFOX + Avastin listing noted.",
+    "p5: split initial 80 mg start (e10) and increase to 120 mg (e11) with \"subsequently\" relation; added HFS before discontinuation; added the text transition to a different therapy due to reported tolerance (p5-f039).",
+    "p7: Table 1 \"Regorafenib monotherapy\" no longer merged with the text \"started on regorafenib initially as monotherapy before the addition of 5-FU\" (new f045/f046, event e10 before combination e03); Table 1 facts keep header time \"prior to Rego+ 5-FU\".",
+    "p7: split pneumonitis event into pneumonitis (e04), home oxygen (e11, occurrence unknown), steroid course (e12) and new improvement outcome (f047, e13); added pneumonitis -> home oxygen (\"necessitating\") and steroid -> improvement relations.",
+    "p7: Table 2 \"None\" therapy-after (f042) and new text \"transitioned to a different therapy\" (f048) both ambiguous/review_only, linked to the ambiguity (unnamed therapy, possibly the steroid course; not two values of one number).",
+    "Summaries: p2/p4 \"no side effects listed\" -> \"reported as well-tolerated\"; p4 comorbidity wording; p2 5-FU outside facility."
+  ],
+  "unresolved": [
+    "The article has no figures or supplements; all content comes from text and three per-patient tables (one row per segment).",
+    "Table cells for prior chemotherapies, mutations, comorbidities and subsequent therapies print several entries run together without separators; they were split by regimen or marker name and their sequence is not stated.",
+    "Series-level statements (ethnicity counts, unlabelled dose reductions, 5-FU dosing counts, imaging assessment, two patients with prior regorafenib monotherapy, MSI statement) are not attributed to individuals unless the sentence names the patient or covers all seven.",
+    "Table 2 progression/discontinuation time header gives no unit; the value 30 for patient 4 is not consistent with its 8-week progressive-disease best response and is kept review_only as an ambiguity.",
+    "Discussion text cites published cases and trials (Ma, Wang, Marks, Lin, Sanoff, CORDIAL, ReDOS) which are not patients of this series and are not annotated."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 50,
+    "facts_reviewed": 287,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Seven individually tabulated mCRC patients (Tables 1-3, one row per segment); every table cell checked against facts; no figures or supplements.",
+      "Run-together cells split by literal entry names with no added words and no order asserted; p4 duplicate FOLFOX + Avastin recorded once as an identical item.",
+      "Series sentences copied only where they explicitly cover all seven (metastatic CRC, history of resection, treating center, inclusion histology, none had MSI); unnamed sentences (160 mg pneumonitis, 6-8 week progression, dose-reduction counts) not attributed.",
+      "p5 80 -> 120 mg text vs Table 3 120 mg at initiation is consistent with the footnote (ambiguity, not conflict); p1 HFS grade 2 vs grade 1-2 kept separate.",
+      "p4 unitless Table 2 progression time 30 and p7 Table 2 None vs text transition to a different therapy kept as review_only ambiguities."
+    ],
+    "residual_risks": [
+      "Adenocarcinoma histology and biopsy basis come from the case-series definition sentence (inclusion criterion), applied to all seven.",
+      "Care setting Houston Methodist Cancer Center comes from the inclusion sentence covering all included patients; p2 5-FU was received in an outside facility.",
+      "Table 1 regimen order within cells is unknown; ordinal lines of therapy not assigned."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC7042134.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5174301429d6c3525927221d527d2c6a4d40d85797eabf0f5cd44a7b2eefe80a",
+  "annotation_sha256": "f7ebcdd1e21d7e5b1247818d9cb9888a68daaa8c4a97e71a485ebc87735c43d7",
+  "reviewed_at": "2026-10-21T08:13:13.303141+00:00",
+  "source_segments_read": 31,
+  "facts_reviewed": 93,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f088 no specific therapy: certainty source_conflict + review_only; the supplementary slide set states she is currently managed with furosemide, ramipril and atorvastatin (RULINGS: supplement-vs-article contradictions are source conflicts, both sides review_only). Ambiguity added; article limitation reworded as a source conflict.",
+    "p1-f089 discharge: only the conflicting therapy attribute quarantined (disposition \"No specific therapy\" removed, text_value \"Discharged\"); the discharge itself stays included.",
+    "Discharge facts moved out of the 3-month follow-up event p1-e08 into new untimed event p1-e09 (the discharge sentence states no time and does not say whether discharge is from the 2018 admission or clinic follow-up); e08 description updated.",
+    "Summary paragraph 4 no longer states the disputed no-specific-therapy discharge; medications domain note updated.",
+    "p1-f064 (2015) and p1-f081 (2018) confirmed takotsubo: added the literal \"three confirmed recurrent episodes\" quote (b00003); p1-f045 gains the same quote.",
+    "p1-f045 2014 diagnosis: diagnostic_basis set to null (the drafter synthesised a basis list including the InterTak score; the source states no basis wording).",
+    "p1-f079 end-systolic MRI image: added the sentence identifying Figure 4F as the end-systolic phase.",
+    "p1-f017/p1-f024 \"on each occasion\" angiography: clinical statements made per-year (1988, 1998).",
+    "Added p1-f092 previous myocardial infarction absent/refuted (\"ruling out any current or previous myocardial infarction\"; \"no evidence of myocardial injuries noted on subsequent cardiac magnetic resonance\") in e04, and p1-f093 \"Stressors were identified on three occasions\".",
+    "Relation p1-e04 -> p1-e05 now quotes the 2014 presentation, the apical ballooning and the LVEF recovery \"after 4 months\" (recovery of the function impaired in that episode).",
+    "Ambiguity added: 2015 \"supporting the diagnosis of apical Takotsubo\" vs the unassigned apical-to-mid-cavity type.",
+    "p1-f092 previous myocardial infarction refuted: certainty source_conflict + review_only (orchestrator ruling; the slide set U12 lists 3 previous myocardial infarctions, supplement fact sup1-f006 review_only); ambiguity added; not in the summary.",
+    "Ambiguity added for the hedging difference between the article 2015 ventriculogram \"probable mild area of hypokinesis\" and slide U20 \"mild hypokinesis\"; p1-f061 unchanged.",
+    "Article limitation 1 no longer calls the AVI files Movies M1 to M7 (file names are Supplementary_Video1 to 7; the file-to-movie mapping is not stated)."
+  ],
+  "unresolved": [
+    "A ZIP supplement holds a slide set and seven AVI clips (Supplementary_Video1 to 7); the article cites Movies M4 to M7 but the file-to-movie mapping is not stated. Their review is recorded in the supplement sidecars, not as article facts.",
+    "Source conflict: the supplementary slide set states she is currently managed with furosemide, ramipril and atorvastatin, while the article says she was discharged on no specific therapy; both sides are review_only and not reconciled.",
+    "The abstract and discussion hedge the total of six recurrences; only the 2014, 2015 and 2018 episodes are described as confirmed takotsubo.",
+    "Timeline-table ECG and enzyme statements are kept separate from the case-text statements when the source does not identify them as the same measurement.",
+    "Caption-layer figure visual status is not_inspected; actual pixels are reviewed in visual.json."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 31,
+    "facts_reviewed": 93,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (76-year-old woman) with three confirmed takotsubo episodes (2014, 2015, 2018) and three earlier episodes labelled myocardial infarction (1986, 1988, 1998), kept review_only as hedged.",
+      "Age kept as age_other: the article does not state the reference time of \"76-year-old\" (the slide set says she presented aged 76 in 2014, but that is supplement text).",
+      "Timeline-table and case-text statements left unmerged unless they are the same angiography/echo/MRI of the same episode; CK 233 vs 1.7 x ULN kept as two observations with an ambiguity.",
+      "\"On each occasion\" angiography follows the 1986/1988/1998 sentence and the abstract states normal coronary arteries on each of those occasions.",
+      "Figures F1-F4 (22 panels) attributed by caption and case text; F5 is a captionless portrait in the lead author biography, unresolved, not patient data."
+    ],
+    "residual_risks": [
+      "Previous myocardial infarction (article refuted vs slide stated) is a review_only source conflict.",
+      "Supplement medication list vs article discharge statement is unreconciled (both review_only).",
+      "The e04 -> e05 order rests on the recovery being of the 2014 episode the paragraph describes; the \"after 4 months\" anchor is not named.",
+      "Duplicate per-source items (timeline vs case-text chest pain for 2015 and 2018; ambulance ECG vs timeline ECG 2018) may double-count against merged predictions."
+    ]
+  },
+  "physician_adjudicated": false
+}

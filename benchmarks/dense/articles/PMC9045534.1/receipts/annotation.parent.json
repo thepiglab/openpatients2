@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC9045534.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ff36649a9d3d6e66cfc553a2f26915b7b92b24f0bbac5d4821ec59771d6db473",
+  "annotation_sha256": "b2482aa6a4f6b5caef0f9411143a8d0ca6808feb569f96e5050acf8c3e635f33",
+  "reviewed_at": "2026-10-21T08:55:26.146380+00:00",
+  "source_segments_read": 21,
+  "facts_reviewed": 74,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f021 low socioeconomic status: status current -> unknown (discussion sentence does not place it at the latest time).",
+    "p1-f037 left shift: negation 'without left shift' no longer stored as a present text_value; now name 'Left shift', assertion present, flag negative.",
+    "p1-f061 COVID-19 (possible/provisional): added literal b00006 'diagnostic hypothesis' and b00010 'possible etiology' evidence.",
+    "p1-f063 Alteplase 90 mg: action started -> administered (follows the initiated 10 mg dose; administration completed).",
+    "Added events p1-e15 (deep venous thrombosis developed) and p1-e16 (progression to extensive acute PE) with relation e15 before e16 citing b00003 'and then progressed' and b00001 'and later by'.",
+    "Added relations: e02 fever history before e03 presentation (reported history in the presentation paragraph); e03 presentation before e05, e06, e07, e08 and e13 discharge (stay rule, order only); e12 dual antiaggregation start before e14 instruction to maintain it.",
+    "Did not keep e09 Alteplase -> e11 repeat CTA: the repeat-CTA sentence ties it only to the first CTA (covered by e07 -> e11), per orchestrator ruling.",
+    "Relation e07 CTA -> e09 Alteplase: added b00010 'CTA of the chest enabled the PE to be diagnosed and treatment initiated'.",
+    "Summary claim 1 rewritten: removed unsupported 'vital signs ... unremarkable' and 'laboratory tests unremarkable apart from WBC'; now lists only stated findings.",
+    "Anticoagulant ambiguity expanded with b00013/b00014 quotes; added ambiguities for the 'antifibrinolytic' wording and for undated DVT/PE onset versus edema onset.",
+    "source_coverage b00009 -> patient_facts (contains one patient-specific sentence restating recorded findings)."
+  ],
+  "unresolved": [
+    "Abstract describes asymptomatic COVID-19 while the case text describes oligosymptomatic COVID-19 with fever and mild dyspnea; infection supported only by a rapid IgG-positive, IgM-negative test.",
+    "The article carries each figure twice (English and Portuguese captions) bound to the same three image files; the six figure entries are kept as listed.",
+    "Discussion statements citing meta-analyses, guidelines and general literature are background, not patient facts; discussion-section rationale for the treatment choice is not recorded beyond patient-specific statements.",
+    "No anticoagulant is recorded; the source only states that dual antiaggregation was chosen.",
+    "Caption-layer visual status not_inspected; the three CTA images were inspected in the separate visual target."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 21,
+    "facts_reviewed": 74,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Single index patient (57-year-old man); roster count 1 literal.",
+      "COVID-19 kept possible/provisional with abstract 'asymptomatic' vs case 'oligosymptomatic' as an ambiguity; serology IgG positive, IgM negative.",
+      "PE confirmed by CTA; DVT confirmed by Doppler, role unknown; PESI 67 class II performance_score from a patient-specific discussion sentence.",
+      "Absent fever 'when examined' (b00004) and 'On physical examination ... free from fever' (b00005) describe the same examination; kept as one item.",
+      "Alteplase 10 mg + 90 mg intravenous, indication left null (no indication in its own sentence).",
+      "Discharge 'after 6 days in hospital' keeps anchor null (no literal anchor in its sentence).",
+      "Three distinct CTA images, each bound to an English and a Portuguese caption entry; pixels viewed with crops; no burned-in text beyond panel letters."
+    ],
+    "residual_risks": [
+      "Decision to use dual antiaggregation instead of anticoagulation is only an ambiguity, not an absent medication item.",
+      "Exam vitals and laboratory values carry no time (no time phrase in their own sentences).",
+      "Presentation-to-workup relations rely on the stay rule (order only)."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC8672424.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "cc8080fd971890187bb5f26da05d8deb3e5235632fdce6353480a4d0d751b7f7",
+  "annotation_sha256": "795a18cdf8f92b1e38d8b057c337b7f0728fb55e03a528ad3d0c087f935b343c",
+  "reviewed_at": "2026-10-21T08:10:35.869270+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 58,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "IHC evidence now carries the marker words: p1-f034/p1-f035 b00015 quote extended from the subject-less fragment \"were strongly positive in this case\" to the full sentence naming CD68 and CD163; Melan A/SOX-10 (p1-f029-f032) and CD10/CD68/CD163 melanoma-negative (p1-f036-f038) caption quotes extended so each names its marker; CD10 p1-f033 adds \"as was the case here\" (b00015).",
+    "Melanoma condition p1-f018 and tumor entries t1/t2 (p1-f021, p1-f022) now cite the literal knee-lesion-to-melanoma chain (b00001 abstract, b00004 examination) supporting primary_site/laterality; t2 also cites the subtype sentence for histology.",
+    "t1 and t2 marked alternate_representation_of the melanoma condition p1-f018; BRAF direction flipped to the corpus convention (biomarker p1-f048 -> observation p1-f049).",
+    "Added p1-f058: squamous cell carcinoma refuted for the nodular part of the lesion (b00015 \"determining that it was not melanoma or squamous cell carcinoma\"), linked to diagnosis event p1-e09.",
+    "Care plan p1-f057 action_text no longer says \"put in place\" (status unknown refers to whether the plan was carried out); plan event p1-e14 stays occurrence unknown (validator: plan events cannot be occurred).",
+    "Relations added: p1-e01->p1-e03 (past medical history), p1-e02->p1-e03 (\"stopped four years ago\"), and excision biopsy p1-e05 before microscopy p1-e07, immunohistochemistry p1-e08, AFX diagnosis/excision adequacy p1-e09 and BRAF analysis p1-e10 (testing of removed tissue).",
+    "Article limitations: size-measurement limitation reworded (separate measurements, not a conflict); added notes on the negated disjunction and on the unordered MDT discussion."
+  ],
+  "unresolved": [
+    "Single case; no post-treatment outcome, recurrence status or follow-up result is stated.",
+    "No dates are given; the order of excision biopsy, histology, BRAF analysis, wide local excision with sentinel node biopsy and the multidisciplinary discussion is only partly stated.",
+    "The clinical lesion size (2 x 1cm) and the macroscopic nodule (12 x 10 x 8mm) and adjacent plaque (7 x 6mm) sizes are separate measurements; the source does not relate them, and they are not treated as a conflict.",
+    "Discussion statements about AFX and melanoma in general and about the cited cases are literature background, not facts about this patient.",
+    "Figure panels were inspected in the separate visual submission; caption-layer visual status stays not_inspected.",
+    "The negated disjunction \"denied any sunbed use or excessive sun exposure\" is recorded as two absent exposures (a denial covers each alternative); this differs from an affirmative \"X or Y\", which asserts neither.",
+    "The multidisciplinary meeting and plan are stated only in the Conclusions and are not ordered against the wide local excision or sentinel node biopsy."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 58,
+    "figures_viewed": 9,
+    "key_findings": [
+      "Single index patient; discussion b00015 has three literal in-case statements (CD68/CD163 strongly positive, CD10 positive, nodule not melanoma or SCC); other discussion paragraphs are literature background.",
+      "AFX kept as a condition only: the case never calls this nodule malignant; \"low-grade cutaneous sarcoma\" (b00010) is general discussion, recorded as an ambiguity.",
+      "Staging split into pathologic pT3a AJCC 8 (t1) and clinical stage 2A with no named system (t2), as the oncology prompt directs for distinct assessments.",
+      "\"denied any sunbed use or excessive sun exposure\" kept as two absent exposures: a denial negates each alternative, unlike an affirmative X-or-Y.",
+      "Sentinel nodes \"benign\", WLE \"scarring only\" and \"well excised\" keep flag unknown (no normal/negative wording; no margin value stated).",
+      "All nine histology images viewed at full resolution: FIG1 has no text; FIG2-FIG9 carry only slide-viewer zoom and field-area overlay text (timestamps_or_device_text); visual descriptions match the pixels and contain no plot readings."
+    ],
+    "residual_risks": [
+      "The Melanoma Multidisciplinary meeting and the plan are not ordered against the wide local excision or sentinel node biopsy.",
+      "The excision biopsy is linked to t1 (pathologic assessment) in oncology.treatments; t1 and t2 describe one melanoma."
+    ]
+  },
+  "physician_adjudicated": false
+}

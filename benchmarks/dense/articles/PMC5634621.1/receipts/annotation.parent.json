@@ -1,0 +1,53 @@
+{
+  "article_id": "PMC5634621.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6a1b3634fbda8a4bdd1b2921de79ed22b92c693ded937caf30185f50b7e82828",
+  "annotation_sha256": "73c78bd0dbc147e95e2c4752191dd55b3b3a2db2a41b601b63fb287e72bd9490",
+  "reviewed_at": "2026-10-21T13:21:53.143484+00:00",
+  "source_segments_read": 12,
+  "facts_reviewed": 63,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f041/p1-f042: replaced the bare presentation quote \"presents with a left forearm mass\" (site/laterality borrowed from the symptom sentence) with the abstract quote in which the lymphoma is found in \"this skin mass\", the left forearm mass the patient presented with.",
+    "Events: e04 narrowed to histology and immunohistochemistry of the excised mass (the \"excised ... mass\"/\"neoplastic B-lymphoid follicles\" back-references); the anti-EBV LMP antibody, FISH and PCR facts (f035-f040, f056-f061) moved to new event e08, which is not ordered against the excision because their sentences name no specimen (consistent with tumor_ref null on those biomarkers).",
+    "Relations: added e02 (presentation with the left forearm mass) before e03 (excisional biopsy of \"this skin mass\"), a definite back-reference to the single presented lesion.",
+    "Ambiguities added: \"no other treatment\" vs excision not stated as treatment (f013, f062); unnamed specimen for the LMP antibody, FISH and PCR studies."
+  ],
+  "unresolved": [
+    "Single case report with no dates; no calendar times, ages at events or follow-up duration are stated, and the patient was lost to follow-up.",
+    "Segment b00008 describes a single literature case and cohort-level comparison; it is not assigned to the index patient.",
+    "Caption-layer visual status is not_inspected; the two JPEGs were inspected in the separate visual submission. Figure 2 carries capital panel letters on the images in addition to the lowercase letters printed beneath them.",
+    "The diagnostic excision is not stated as definitive treatment; no oncology treatment was recorded as given."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 12,
+    "facts_reviewed": 63,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (89-year-old woman); b00008 literature case and b00002/b00006/b00007 background excluded except the b00007 \"as seen in our case\" PCR sentence.",
+      "Diagnosis kept confirmed: abstract and conclusion state the case as PCFCL with H/RS-like cells; the introduction \"favor\" hedge is kept as an ambiguity.",
+      "\"No other treatment was initiated\" kept as an absent oncology treatment; excision not recorded as treatment because the source never calls it therapeutic (ambiguity added).",
+      "Every immunophenotype marker for the follicles and the H/RS-like cells is its own observation with an oncology biomarker alternate; \"largely CD45+\" and \"approximately 20-30%\" kept as text; method only where \"By immunohistochemistry\" is quoted.",
+      "Relations: history->presentation, presentation->excision (\"this skin mass\" back-reference), excision->histology/IHC, diagnosis->no further treatment (\"Given\"); molecular studies and loss to follow-up left unordered.",
+      "Both JPEGs viewed (12 microscopy panels); visual.json describes colours and printed letters only, no plot readings; privacy flags none on all panels match the pixels."
+    ],
+    "residual_risks": [
+      "Relation presentation->excision rests on the definite back-reference \"this skin mass\" in the abstract rather than an order word.",
+      "FISH/PCR/LMP antibody specimen is unstated, so these studies are not ordered against the excision."
+    ]
+  },
+  "physician_adjudicated": false
+}

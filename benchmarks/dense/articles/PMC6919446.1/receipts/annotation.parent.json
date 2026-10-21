@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC6919446.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e289ec3a67296c94d84f1a0729606306cdfd244bee73ea402f22b77d2e0ad1c6",
+  "annotation_sha256": "f3c805b9a6fc3afa85c32e5872b591e255709df8a14f942a604c7d9b4c2c148d",
+  "reviewed_at": "2026-10-21T08:11:55.382867+00:00",
+  "source_segments_read": 35,
+  "facts_reviewed": 102,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f041 (TEE estimated LVEF 50% on hospital day 11) set ambiguous/review_only with an ambiguity: the image-only Table 1 prints a different EF entry under D11; image values stay pixel content only.",
+    "p1-f042/p1-f043/p1-f044 (echocardiography normal chambers, wall motion, EF 67%) removed from the discharge event p1-e19 into new untimed event p1-e24; the text gives no time for this echocardiogram. Kept include (the image table prints the same value, so no disagreement); ambiguity added.",
+    "Abstract \"electrical storm twice during ECMO support\" p1-f008 moved out of the refractory VT/VF event p1-e11 into new event p1-e21; added outcome p1-f102 \"successfully treated with the combination with IABP\" (b00004).",
+    "p1-e05 split: no-improvement outcome (p1-e05), family counselling (new p1-e22) and ER-to-EICU transfer (new p1-e23).",
+    "Heparin, intermittent transfusion, distal leg catheter and review-only initial flow rate moved out of the 6-hours-after-EICU-admission event p1-e06 into new untimed event p1-e25 so they borrow no time.",
+    "Relations rebuilt (9 -> 20): kept treatment->no improvement, ECMO->short VT, short VT->refractory VT/VF (now quoting both adjacent sentences), echo->IABP, IABP->AF and the same-anchor hospital-day chain; replaced the bundled e04->e05 / e05->e06 pair with counselling->transfer (\"After explaining\"), transfer->ECMO (EICU admission back-reference) and presentation->diagnosis/treatment/transfer (stay-opening presentation, order only); added ECMO start->withdrawal, IABP start->wean, IABP initial pace ratio->decrease, ECMO start->flow decrease, ECMO->abstract storm (\"during ECMO support\"), abstract storm->IABP (\"treated with the combination with IABP\") and hospital-stay complications->discharge.",
+    "Ambiguities added for the untimed EF 67% echocardiogram, the TEE LVEF vs image table, and abstract \"ECMO was initiated immediately after admission\" vs text \"6 hours after EICU admission\"; electrical-storm ambiguity reworded.",
+    "Summary rewritten so the TTE (reported after VA-ECMO in the text) sits in the EICU phase and the EF 67% echocardiogram is not presented as a discharge finding."
+  ],
+  "unresolved": [
+    "Table 1 is an image-only table; its values are pixel content in visual.json and are not annotated as facts, so no numeric laboratory series is recorded.",
+    "Caption-layer visual status not_inspected; the actual images are inspected in the separate visual submission.",
+    "The discussion contains literature statements and hedged author interpretation that are not recorded as patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 35,
+    "facts_reviewed": 102,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient; b00016-b00017 hedged/explanatory author discussion not recorded; b00014 biopsy-not-performed and b00015 IVIG purpose are literal patient statements.",
+      "Table 1 is an image-only table (unwrapped-graphic-4); all 148 printed cells were checked against pixels in visual.json and none are facts; the qualitative text labs are recorded without numbers.",
+      "The initial flow rate of 4.5 L/min names no device and stays review_only, not attached to ECMO; tracheotomy and the distal leg catheter are action unknown (\"required\").",
+      "ECG findings come from text and the Figure 1 caption; caption times (at presentation, after ECMO support, after IABP implantation, at discharge) govern only caption-stated findings.",
+      "Figures viewed at full resolution: F1 four photographed ECGs (no legible identifiers), F2 monitor photo with device text and printed numerals only, F3 echo frame with machine settings text, Table 1 image."
+    ],
+    "residual_risks": [
+      "The refractory VT/VF episode is not ordered against IABP because \"on the following day\" most plausibly refers to the echocardiogram, and the abstract storms are not identified with the text episodes.",
+      "TTE (EF 18%), etiologic tests and the qualitative labs remain untimed and unordered.",
+      "\"All laboratory tests returned to normal\" at discharge is kept as the text states it; no reference-range check against the image table was made."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC10733174.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e29dff1920b4b600f7eaaa99e748c71b776e9fee651220b8c005c801feca8e57",
+  "annotation_sha256": "c14efbfeb9366325b370acbc9cc2fe2bc60c8e77aca758dac898a70431cc9123",
+  "reviewed_at": "2026-10-21T13:22:16.743823+00:00",
+  "source_segments_read": 71,
+  "facts_reviewed": 222,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1 interval VA-ECMO start -> redo AVR: printed 3 days (case text, abstract) vs printed 2 days (Table 3) ruled a source conflict per RULINGS; time removed from the scored redo AVR fact, Table 3 pre-operative fact set review_only/source_conflict, two review_only side facts added (case text, abstract); 17->19 September date difference kept as arithmetic-only ambiguity.",
+    "p1 total ECMO: printed 18 days (case text) vs printed up to 19 days (discussion) ruled a source conflict; two review_only side facts added; Table 3 \"12 AV-7 VV\" kept scored (sum mismatch is arithmetic only).",
+    "p3 interval VA-ECMO start -> redo MVR: printed 3 days (case text, Table 3) vs \"one day later\" (abstract) ruled a source conflict; time removed from scored redo MVR fact, Table 3 fact set review_only, two review_only side facts added; summary claim no longer states the disputed 3 days.",
+    "p2 severe mitral regurgitation (text) vs moderate paravalvular leak (Figure 2A caption) ruled one finding (text cites Figure 2A for the same TOE study, same ring detachment) with a severity conflict: severity removed from the scored TOE and dehiscence facts and summary, two review_only severity facts added.",
+    "p2 Table 1 \"Before ECMO\" ambiguity reworded: not a contradiction (ECMO began after surgery), only the pre/post-surgery timing is unknown. p2 decannulation ambiguity now also cites the abstract \"3 days after surgery\"; de-cannulation time anchor set to null (anchor not named in its sentence).",
+    "p2 cardiopulmonary bypass action completed -> unknown (\"the decision was made to use\"). p3 thrombolysis fact restored to supported/include with action unknown (the decision is literal; administration not stated).",
+    "Added p1 heart arrest from the 17 September summary row (not identified as the 16 September arrest; ambiguity added) and linked to p1-e07.",
+    "Added caption-text facts: p1 Figure 1A Doppler peak velocity 4.8 (unit printed \"ms\", ambiguity), mean gradient 59 mmHg, acceleration time 90 ms, Figure 1C opacities; p2 Figure 2C chest imaging (plus review_only \"effusion or thickening\"), Figure 2D dehiscence due to endocarditis; p3 Figure 3A embolism location, Figure 3B max velocity 2.2 (no unit), mean gradient 15 mmHg, mean pressure time 180 ms, Figure 3C, Figure 3D explant.",
+    "Added ambiguity: p1 text calls the Figure 1A/B study transthoracic while the caption says transoesophageal.",
+    "Relations: added presentation -> first in-hospital test for p1 (e02->e03), p2 (e03->e04), p3 (e02->e03); removed p3 e05->e07 (shock -> VA-ECMO quote had no order word)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three figure images and the supplementary ECG image were inspected in separate visual and supplement targets.",
+    "The summary figure is a table whose Patient N heading rows are separate segments; ownership of its rows comes from that heading order and the dates have no year.",
+    "Table 1 dash cells (Case 3 left ventricular ejection fraction before surgery) and Table 2 dash cells (Case 2 SAVE score) are missing values and are not recorded as facts.",
+    "Discussion statements about the authors' three cases are used only where they explicitly cover all patients or name the case; the study-level classification of the cases as inoperable and the SAVE survival below 50 percent statement are not individuated.",
+    "Interval and duration disagreements between the narrative, the summary figure and Table 3 are recorded as ambiguities and are not reconciled.",
+    "Values printed inside the echocardiography images and the supplementary ECG are pixel content and appear only in visual.json.",
+    "Parent review: printed numbers that disagree for one interval (Case 1 pre-operative ECMO 3 vs 2 days, Case 1 total ECMO 18 vs 19 days, Case 3 pre-operative ECMO 3 days vs one day) and the Case 2 regurgitation severity (severe vs moderate) are source conflicts quarantined in review_only facts; date-difference and sum mismatches are ambiguities.",
+    "Figure caption findings (Doppler values, chest imaging, explant descriptions) are recorded as caption-text facts; values printed inside the images stay in visual.json."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 71,
+    "facts_reviewed": 222,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Three index patients (57M, 39M deceased, 21F); ownership of the year-less summary-figure rows follows the Patient N heading rows; Tables 1 to 4 split by Case # columns; dash cells not recorded.",
+      "Printed-number disagreements for one interval (p1 3 vs 2 pre-operative days, p1 18 vs 19 total days, p3 3 days vs one day) and p2 severity (severe vs moderate) quarantined as source conflicts at attribute level; date differences and sums are ambiguities.",
+      "p1 STEMI (summary row) vs angiography without significant lesions is an ambiguity (different attributes); alteplase thrombolysis merged with the single text thrombolysis.",
+      "Figure 3 caption owns the Case 3 TTE despite the text citing Figure 2B; ambiguity kept. Hb mg/dL and lactate range 05-1.6 kept as printed.",
+      "sup1 ECG viewed: burned-in identifier number, date-time stamp, institution name and device serial are present; no values leaked into any annotation or sidecar file (grep)."
+    ],
+    "residual_risks": [
+      "p1 false-path discussion sentence stays review_only: the paragraph opens with the first case but the sentence is separated by general literature sentences.",
+      "E. coli coinfection unattributed (one of case 1 or case 3).",
+      "Event p2-e10 combines the telephone follow-up and the death in the subsequent year."
+    ]
+  },
+  "physician_adjudicated": false
+}

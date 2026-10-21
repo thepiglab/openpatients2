@@ -1,0 +1,66 @@
+{
+  "article_id": "PMC11720018.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6c36da30ed1bafb1f8311c9c9942d295ee2a3349067beca643923e28b93b04b8",
+  "annotation_sha256": "aab2b6fa9126adc572b5c2ecce11b457a761ebd157968e50981b90b73cd5e0a6",
+  "reviewed_at": "2026-10-21T14:15:35.545849+00:00",
+  "source_segments_read": 45,
+  "facts_reviewed": 226,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed the fabricated \"850\" Case 3 third-trimester Sensor Use claim: raw.xml, source.json and source.txt all print 85; p3-f070 restored to supported/include, its ambiguity and the article limitation deleted.",
+    "p3-f024 (Case 3 second-trimester ps-TIR 68%, text twice vs a different Figure 3 printed value): certainty source_conflict -> ambiguous (image values are pixel content, never a conflict side); stays review_only with the ambiguity.",
+    "p3-f038 caesarean section: removed borrowed indication \"polyhydramnios\" (the source states the admission, not the caesarean, was for polyhydramnios).",
+    "Planned pregnancy (Y/N) N cells: deleted the three text_value \"N\" observations (p1-f062, p2-f049, p3-f048) and merged each table row into the narrative unplanned-pregnancy fact as reproductive_perinatal planned pregnancy, assertion absent (p1-f010, p2-f010, p3-f007).",
+    "Merged Table 1 Pre-pregnancy HbA1c row into the narrative pre-conception HbA1c for Case 1 (p1-f063 -> p1-f012) and Case 2 (p2-f050 -> p2-f014); same pre-pregnancy value of the same patient. First-trimester column cells and the month-before-conception CV stay separate (different stated times).",
+    "Deleted p1-f058 (methods InPen device_present), a duplicate of the Case 1 narrative p1-f027.",
+    "Added p1-f088 SMBG monitoring (care_plans, from \"She was still monitoring her glucose levels with both SMBG and isCGM.\").",
+    "Added events: pre-conception metrics (p1-e11, p2-e08, p3-e08); first 2 weeks of InPen ps-TIR (p1-e12); Case 1 text second/third-trimester TAR/TBR (p1-e13, p1-e14); Case 3 third-trimester TIR and insulin need (p3-e09); Table 1 trimester I/II/III column events for each case (p1-e15..e17, p2-e09..e11, p3-e10..e12). Delivery events p1-e08 and p2-e07 now carry their stated gestational-age time.",
+    "Added 29 literal temporal relations quoting both stated times from the same pregnancy anchor: pre-pregnancy/pre-conception -> first trimester or first gestational-week event; stated gestational weeks in ascending order (13 -> 15 -> 30 -> 38; 8 -> 10 -> 28 -> 37 -> 39 + 1; 8 -> 37); Table 1 trimester headers I -> II -> III and II trimester (weeks 13-26) -> delivery/admission week; text second -> third trimester (\"was decreased\", \"increased from ... to\").",
+    "Case 2 28-week ambiguity now cites the Table 1 III trimester (weeks 27-40) heading and notes Figure 2 shows those metrics under II TRIMESTER (pixel content); linked all four 28-week facts.",
+    "Added ambiguities for Case 2 and Case 3: Table 1 first-trimester HbA1c equals the pre-pregnancy HbA1c at a different stated time.",
+    "Summaries: removed unsupported \"Before conception she used MDI\" (p1), \"By 30 weeks\" -> \"At 30 weeks\" (p1), \"by 28 and 37 weeks\" -> \"at 28 and 37 weeks\" (p2), and removed the borrowed \"at the end of pregnancy\" time from the Case 2 29.7-unit total daily dose.",
+    "p2-e02 description no longer claims the MDI regimen was pre-pregnancy (not stated)."
+  ],
+  "unresolved": [
+    "Figure images were pixel-reviewed in visual.json; printed bar labels are pixel content and are not facts in this annotation.",
+    "Table 1 is split into one-row segments with the trimester heading rows as separate segments; each table cell is a separate observation citing its row and heading.",
+    "Case 3 second-trimester ps-TIR in the text (68%) differs from the value printed in Figure 3; the text fact is review_only and the image value stays in visual.json.",
+    "Case 3 printed component insulin doses do not sum to the printed total daily dose; recorded as an ambiguity.",
+    "The retrospective case series states that it cannot be compared as a case series and has no control group; discussion statements about all three patients are series-level and were not copied to individuals.",
+    "Narrative and Table 1 values with different anchors (stated gestational weeks versus trimester columns; the month before conception versus the first-trimester column) are kept as separate facts; the narrative pre-conception HbA1c and BMI are merged with the Table 1 pre-pregnancy rows, which report the same pre-pregnancy value.",
+    "Planned pregnancy (Y/N) cells printed N are recorded as planned pregnancy with assertion absent, merged with each narrative statement that the pregnancy was unplanned or not planned."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 45,
+    "facts_reviewed": 231,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Three individually described pregnant women with type 1 diabetes (Cases 1-3) using the InPen with Guardian 4 CGM; roster 3/3 from the methods sentence.",
+      "Table 1 cells all present as per-case observations; text-table merges limited to the same label and time (pre-pregnancy BMI/HbA1c, Case 3 first/third-trimester CV).",
+      "All three CGM stacked-bar figures viewed at full resolution; printed values match visual.json readings; Figure 3 II TRIMESTER TIR differs from the text 68%; Figure 2 places the 28-week metrics under II TRIMESTER although Table 1 defines trimester III as weeks 27-40.",
+      "No supplementary material declared in raw.xml.",
+      "Methods sentences explicitly covering all three women (antenatal visits at a local outpatient clinic; managed with an InPen system) copied; discussion counts (\"two out of the three cases\") and series-level outcomes not assigned."
+    ],
+    "residual_risks": [
+      "Case 3 Table 1 second- and third-trimester bolus/basal insulin values are identical to Case 1 (possible copy error); kept as printed with an ambiguity.",
+      "Case 3 printed component doses do not sum to the printed total daily dose (ambiguity).",
+      "Pre-pregnancy HbA1c text/table merges for Cases 1 and 2 rely on \"prior to conception\" and \"pre-pregnancy\" denoting the same time point.",
+      "Reference-gate warnings left as checker false positives: EVID-NEGATION on \"unplanned\" (p1-f010, p3-f007) and NO-BORROWING on p1-f012 whose time is in its own narrative sentence."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC5538079.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "456f397cfd4f96adb0d7efa6425f45b0f75f186966c7cf46775935c98bff43b1",
+  "annotation_sha256": "f0f741fac60fee1eaebeffb8d22054bcb0827fcc77ff31b7bdffe5b3c32deb14",
+  "reviewed_at": "2026-10-21T03:42:52.011864+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 76,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Figure 1 findings stated by the caption itself (gingival swelling grade 2-3, edematous gingiva with hemorrhage, no mucositis, no xerostomia) given the caption lead-sentence time with the caption quotes; other first-visit exam findings keep null time (no governing time sentence).",
+    "Paclitaxel: six-times repetition no longer asserted for paclitaxel (contradicted by docetaxel plus carboplatin only in the third course); count kept on carboplatin; ambiguity p1-a01 extended.",
+    "Oncology chemotherapy item renamed Platinum-based adjuvant chemotherapy (its evidence never names paclitaxel).",
+    "Added allergies adverse_effect item: bevacizumab induced gingival inflammation (unhedged \"certainly induced\" / \"induced by administration of bevacizumab\"); ambiguity p1-a04 rewritten (poor hygiene worsening and counseling attribution kept; plaque synergy stays hedged).",
+    "Specimen \"serum\" removed from CEA, CA19-9, CA125, WBC and platelet result items: it is printed only in the separate monitoring sentence (no borrowing).",
+    "Outcome \"had to wait several additional weeks ... for complete tolerance of inflammation\" changed from scored improvement to recovery, certainty ambiguous, review_only, with ambiguity p1-a09 extended.",
+    "PMTC of subgingival area \"became possible\": action completed -> unknown. Very-soft-brush item: \"while the gingival symptom came out strongly\" moved from indication to time.",
+    "Added bevacizumab facts from the Figure 3 caption text: last administration at the 21st course; 6-week interval between 17th and 18th course.",
+    "Times added to bevacizumab second-to-sixth course and the additional-16 item (\"after that\", anchor sixth course); docetaxel adverse-effect time \"in the third course\".",
+    "Events restructured: e06 split into e06 (first-injection effects) and e17 (docetaxel/carboplatin third course); e18 added (general effects decreased, oral problem worsened); e12 split into e12 (bevacizumab 10 additional) and e19 (regular dental visits); e20 added (21st course last bevacizumab); absent bevacizumab-effect conditions unlinked from the gingival-symptom event; duplicate diagnosis facts unlinked from the presentation event.",
+    "Added 13 literal relations (course-ordinal pairs quoting both ordinals, \"followed by\", \"after the 11th course\", \"first time\"/\"regularly\", \"these general effects have decreased\", exam result -> counseling, end of chemotherapy) and an explicit unknown relation between the referral visit and the first dental-office visit.",
+    "Ambiguities added/extended: bevacizumab count arithmetic (16 / sixth bevacizumab-only course / 10 / 21st last), implanted-teeth wording not recorded as a device.",
+    "Summary rewritten without disputed counts or review_only facts; allergies domain set documented."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three JPEGs were inspected separately in visual.json.",
+    "Figure 3 values are plotted only; no values were read from the plots and the observations record the printed qualitative trends and reference ranges only.",
+    "White blood cell and platelet values are stated as data not shown.",
+    "Introduction and discussion statements about other patients, trials and general chemotherapy or mucositis knowledge are not patient facts.",
+    "No tables or supplements; no measurement series applicable."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 76,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (44-year-old Japanese woman, ovarian cancer IIIc and endometrial cancer); discussion literature cases correctly excluded.",
+      "Course drug identity is internally inconsistent (paclitaxel regimen x6 vs docetaxel in third course) and bevacizumab counts do not reconcile; recorded as ambiguities, not reconciled.",
+      "Bevacizumab cause of the gingival inflammation is an unhedged author statement and is now recorded as an adverse effect.",
+      "Figure 3 line charts have no printed data values; no plot readings anywhere.",
+      "Figures 1 and 2 are grayscale (zero chroma), while visual.json and figure_ehr_labels.json describe them as color photographs (agent fix needed)."
+    ],
+    "residual_risks": [
+      "The two dental visits (gynecologist-suggested clinic visit and first dental-office visit at the 11th course) may be the same encounter; kept separate with an unknown relation.",
+      "\"First injection\" drug is unnamed; the general adverse effects are not attributed to a drug.",
+      "Course ordinals are classified as relative times with exact precision."
+    ]
+  },
+  "physician_adjudicated": false
+}

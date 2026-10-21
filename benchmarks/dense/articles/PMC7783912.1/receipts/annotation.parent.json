@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC7783912.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "75429e0d5be79bb185b84ed92e6cad442312213e30cad62845468c744e0610ee",
+  "annotation_sha256": "385208787012fe529afb743595fbd0eb2d3fa82c910bd5482e8bd239d7c87c9d",
+  "reviewed_at": "2026-10-21T08:25:10.643748+00:00",
+  "source_segments_read": 48,
+  "facts_reviewed": 78,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f069 cervical collar/scoop immobilisation and p1-f071 rolling onto a scoop stretcher: assertion absent -> present (affirmed cancelled procedures, same convention as p1-f070 and the procedures_devices prompt); p1-f070 head realignment kept action=cancelled, assertion=present on the source semantics, with notes rewritten.",
+    "p1-f054 SpO2 during the episode: status unknown / result_absent_reason not_reported -> not_performed / not_performed (no accurate reading could be obtained; no result exists).",
+    "p1-f053 respiratory rate 24: flag high -> unknown (\"raised slightly to 24 bpm\" states a rise, not a classification).",
+    "p1-f051 to p1-f054: names \"during unanticipated event\" -> \"during shock episode\" (source never says unanticipated).",
+    "p1-f063 modified Trendelenburg: added indication shock with the abstract quote \"We successfully reversed the shock using the modified Trendelenburg position\"; sodium chloride route and indication stay null.",
+    "p1-f004 fall: added \"had fallen in his own home\" evidence for the home setting; time relation before -> at.",
+    "p1-f005: removed duration misused as severity.",
+    "p1-f007 and p1-f076: time relation after (null anchor) -> at \"On follow-up the next day\".",
+    "Added p1-f078 pain absent (\"comfortable and without pain\") when head realignment was withheld.",
+    "Added relation p1-e10 before p1-e15 from the back-reference \"The ward staff were unaware of the episode of shock experienced in the ambulance.\"",
+    "Sodium chloride route ambiguity now quotes the whole access/administration sentence and both intravenous fluid sentences; added an ambiguity recording why the Table 1 and abstract 154/119 mmHg are one measurement."
+  ],
+  "unresolved": [
+    "No figures or supplements are listed in the source, so there are no pixels to review.",
+    "Hedged causes of the shock and the dehydration statement are review_only; they are not asserted diagnoses.",
+    "The assessment environment (confined space, low-level lighting) and general guideline and literature statements in the discussion are not recorded as patient facts.",
+    "The method used to establish the C3, C6 and C7 dislocation is not stated."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 48,
+    "facts_reviewed": 78,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single 84-year-old male patient; no figures or supplements; Table 1 is one initial time point.",
+      "Hedged shock causes (crush syndrome, spinal cord concussion, orthostatic hypotension, neurogenic shock) and dehydration are review_only, never asserted.",
+      "Not-done procedures are affirmed cancelled items (assertion present), consistently across all three.",
+      "Relations each carry an order statement; the transport-to-assessment purpose clause and the new-paragraph \"next day\" anchor are not used; the follow-up is ordered after the shock only by the ward-staff back-reference.",
+      "Initial \"cervical spine injury was unlikely\" judgement kept as an ambiguity against the later deformity and dislocation; assessment environment kept as a limitation."
+    ],
+    "residual_risks": [
+      "p1-e01 before p1-e02 (fall, then about 12 hours on the floor) rests on the single sentence \"tripped and fell the previous night ... and had been on the floor for approximately 12 hours\" without an explicit order word.",
+      "Merging the Table 1 and abstract 154/119 mmHg values depends on the abstract describing the pre-shock reading.",
+      "Gate warning NO-BORROWING on p1-f004 is a checker false positive: the time is in the fact's own sentence (b00006); the added b00005 quote only supplies the home setting."
+    ]
+  },
+  "physician_adjudicated": false
+}

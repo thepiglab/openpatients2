@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC12998256.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "594b18be9f1ccf4421ecdab3d985cf5466c68f154c1a7a1bcce4afdc93e044e1",
+  "annotation_sha256": "e40b622b6b385a1f29ae5039c08da061e4ff772a6a53824fcd86d54d5aff708c",
+  "reviewed_at": "2026-10-21T17:54:44.050701+00:00",
+  "source_segments_read": 29,
+  "facts_reviewed": 101,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added p1-f097: first-ECG ST segment depression stated by the Figure 1 caption (untimed caption fact, in event p1-e03).",
+    "Added p1-f098 orthopneic examination sign, p1-f099 Killip Class III-IV performance_score (SECTION-SIGNS), p1-f100 provisional working diagnosis \"considered as HF following AMI\", p1-f101 emergency coronary angiography not performed (Discussion sentence about this patient).",
+    "Moved untimed follow-up NT-proBNP 2224.0 and Hs-CnTI 33.5 (p1-f073/f074) out of the 17-day outcome event p1-e10 into new untimed test event p1-e16; the preceding sentence names HF improvement/weaning, not these tests, so no time is borrowed.",
+    "Added events p1-e16, p1-e17 (working diagnosis), p1-e18 (emergency CAG not performed, not_occurred).",
+    "Added 8 literal relations: presentation p1-e01 before admission-timed events e03 (upon admission), e05 (after admission), e09 (within 20 h after admission), e08 (in-stay preoperative phase), e11 (18th day of admission); initial echo e04 before 27-day echo e14 (\"initial\"); e03 before e16 (NT-proBNP \"decreased to\"); e05 before e16 (Hs-CnTI \"returned to\"). Added second-ECG/initial-ECG quotes to the existing e03->e05 relation.",
+    "Morphine p1-f067: removed duration_text \"6-h interval\" (dose spacing, not a therapy duration). Torsemide p1-f068: removed indication \"diuretic\" (drug class, not indication). Plaque rupture p1-f058: role primary_diagnosis -> unknown (provisional cause of AMI).",
+    "Ambiguities: rewrote lab-time and Figure 1 items; added Figure 5 caption vs text wording (LAD severe vs 60%, proximal vs middle RCA, posterior vs posterolateral branch) and the ER ECG/POCT item.",
+    "Summary: removed unsupported \"multivessel disease\" characterisation; named the actual angiographic findings; added new facts. jats-graphic-1 attribution note cites the graphical-abstract paragraph b00002; ownership stays unresolved."
+  ],
+  "unresolved": [
+    "Single-case report; Introduction and Discussion statements on incidence, mortality and mechanisms are literature background and are not copied to the patient.",
+    "Figure rows keep the caption layer only (visual_status not_inspected); pixels of the seven images are described in visual.json, and the two echocardiography videos were frame-sampled separately (video_inspection sidecars).",
+    "The source has no supplementary-material entries (raw XML checked); the two videos are PMC figure media.",
+    "No dates or admission-relative times are given for most tests; times are only recorded where the source sentence states them."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 29,
+    "facts_reviewed": 101,
+    "figures_viewed": 8,
+    "key_findings": [
+      "Single 73-year-old man; STEMI with anterolateral papillary muscle rupture, severe MR and acute HF; phased conservative therapy, MVR+CABG on day 18, postoperative LCOS/pulmonary infection/AKI, discharge criteria met.",
+      "All 7 figure images plus the abstract graphic viewed at full size with magnified crops of the Fig 3 top-edge text (illegible glyph bottoms only); both MP4 videos re-sampled with the agent sampling and all 7 frames viewed, hashes match.",
+      "Aspirin \"0.1 qd\" kept without unit; anti-infection etc. \"considering\" not recorded as delivered; meeting discharge criteria kept as outcome other, no discharge event invented."
+    ],
+    "residual_risks": [
+      "Fig 5 caption site/severity wording differs from text; text values kept as include.",
+      "Most tests lack admission-relative times; echo, CT and CAG are only partially ordered.",
+      "Caption ST depression on first ECG vs \"persistent ST elevation\" on the second ECG left as ambiguity."
+    ]
+  },
+  "physician_adjudicated": false
+}

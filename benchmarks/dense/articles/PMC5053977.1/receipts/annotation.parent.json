@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC5053977.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "252148747dbdeccb57eb69e7e6e28c10b8bee5603df3e285066b45f836982280",
+  "annotation_sha256": "86bfb2ce13f0571fc42d7cd39fcff22a195752fb8e96d401d5f4b81e161d7902",
+  "reviewed_at": "2026-10-21T13:42:33.026061+00:00",
+  "source_segments_read": 48,
+  "facts_reviewed": 70,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f051 'prior normal values' set certainty ambiguous / scoring review_only and renamed 'Prior normal values'; the sentence does not literally name the analyte (counts or liver values); ambiguity added.",
+    "Added p1-f068 leukocyte count and p1-f069 thrombocyte count observations: 'sudden decline' 'during the next days' (b00022), relation after, anchor null; linked to p1-e12.",
+    "Added p1-f070 medications 'Concomitant medication' administered, time 'At that time' (b00008 stable/unchanged concomitant medication); linked to p1-e10.",
+    "Added b00043 'the patient suffered from reduced leukocyte and thrombocyte counts' as second evidence for p1-f008 leukopenia and p1-f009 thrombocytopenia.",
+    "Removed case_context/demographic facts p1-f001..f003 from diagnosis event p1-e02.",
+    "Added relation p1-e10 before p1-e12 ('At the day of hospitalization, prior alternative medication had not been declared').",
+    "Did not add p1-e15 before p1-e16: on re-check no order word links the deterioration to the intervention discussion."
+  ],
+  "unresolved": [
+    "Figure 1 plotted values are not printed as numbers and are not estimated; blood count and enzyme values appear only as qualitative trends in the visual submission, not as facts.",
+    "No serial per-patient numeric table exists in the article text; Table 1 is a single RUCAM scoring table and Table 2 is a literature survey of animal studies.",
+    "Cause of death is speculative and no autopsy was performed; causation of toxicity by DCA and ART is hedged by the authors.",
+    "The dose of DCA, its route and the exact day of hospital admission are not stated.",
+    "Abstract says death 10 days after the infusion while the timeline gives 9 days (148 to 157 days after surgery)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 48,
+    "facts_reviewed": 70,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (52-year-old man, GBM); no supplements in raw.xml; Table 2 is an animal literature survey and is not patient data.",
+      "p1-f036 DCA time '148 days after surgery' kept: the b00009 timeline line 'Infusion of ART and DCA 148 days after surgery' itself names DCA and its infusion, so the time is the fact's own; the NO-BORROWING gate warning is a checker false positive.",
+      "Death 157 days after surgery vs abstract '10 days after the infusion' (148 to 157 = 9 days) is an arithmetic-only mismatch kept as an ambiguity.",
+      "RUCAM rows kept as printed with an ambiguity; none is a two-values-for-one-attribute conflict (age row scored 0 of 0 to +1 names the unmet criterion; 'no hypotension' concerns the liver-injury assessment, not the later terminal hypotension; course and concomitant-drug cells are scoring wording).",
+      "Hedged DCA/ART causation and 'X or Y' causes (VA or TMZ; aspiration pneumonia or internal bleeding) are not asserted; p1-f012 is review_only.",
+      "Liver and bone marrow toxicity confirmed ('died with severe liver and bone marrow toxicity'); leukopenia/thrombocytopenia confirmed (abstract plus b00043); exsiccosis provisional ('signs of').",
+      "Adjuvant TMZ 'ruled out' = medication absent, action unknown; autopsy declined; family end-of-life decision = goals_of_care declined; DCA/ART recorded as medications only.",
+      "F1 viewed at full resolution with crops: six patient lab line charts, no printed point values, no identifiers; visual.json has no plot estimates or positional readings and all panels are attributed to p1."
+    ],
+    "residual_risks": [
+      "visual.json tick and trend wording defects (panel A tick 10, panel B tick 140 and first-segment rise, panel E wording) were fixed by the agent and re-verified against the pixels.",
+      "Events p1-e15/p1-e16 are not directly ordered (no order word); p1-e16 is ordered before death only. Event p1-e09 (CT/Fet-PET progression, steroid escalation) has no literal order link to the infusion: 'At that point' opens a new paragraph.",
+      "The exact hospitalization day relative to surgery is not stated, so p1-e12 is not tied to the 154-day first signs of toxicity."
+    ]
+  },
+  "physician_adjudicated": false
+}

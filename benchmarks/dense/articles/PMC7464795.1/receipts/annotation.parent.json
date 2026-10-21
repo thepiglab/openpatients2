@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC7464795.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "60afe1cefa4e6836d254b71642402ccbf4e8d10a8f19bfba14358a56096d1ecf",
+  "annotation_sha256": "8b2e9f3220f30962637b761f129c9b7ef9a90e15b9ee4de95da6f6f6e1718928",
+  "reviewed_at": "2026-10-21T03:28:47.140126+00:00",
+  "source_segments_read": 44,
+  "facts_reviewed": 149,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "All patients: outcome facts \"tolerated the procedure well\" and \"no complications\" (abstract \"The patients ...\"), \"no surgical complications\" (\"in our group\") and \"marked improvement in obstructive symptoms\" (\"our patients\") set to certainty ambiguous + scoring review_only; these sentences lack an explicit all-patients quantifier (RULINGS cohort rule). \"None of the patients experienced anesthetic complications\" and \"all patients had notable improvement\" stay included.",
+    "All patients: added an ambiguity listing those series-level outcome sentences; summary claim 3 rewritten to cite only the explicit all-patient outcomes (no anesthetic complications, notable improvement on follow-up PSG) and no longer cites the review_only tolerance fact.",
+    "All patients: Table 3 initial obstructive AHI moved out of the follow-up PSG event e13 into new event e14 (time \"Initial\"), with relation e14 before e13 quoting the Table 3 header row (time-labelled Initial / Post-HNS columns).",
+    "All patients: percentage-change observation no longer carries the Post-HNS time (heading governs the neighbouring column; the change compares both time points).",
+    "p1, p3: midazolam premedication event e05 description no longer says \"Oral\" (route only in the unattributed two-patient sentence); evidence switched from the cohort sentence to the Table 2 \"Midazolam Premedication\" header and the patient row; added relation e05 before e09 (premedication) with that evidence.",
+    "All patients: hydromorphone, ketorolac, glycopyrrolate, Decadron and Zofran table facts (where present) linked to the HNS placement event e09 alongside fentanyl and dexmedetomidine; IV line placement event kind treatment -> other.",
+    "p3: Table 1/Table 3 ambiguity corrected; Table 1 total AHI (not obstructive) carries the CPAP-titration footnote, Table 3 initial obstructive AHI carries one, post-HNS recorded during optimal positioning.",
+    "Article limitations: added the Table 2 \"plan and medications\" reading (administered because the text cites Table 2 for drugs received/used and nonzero cells match stated counts) and the series-level outcome policy."
+  ],
+  "unresolved": [
+    "Series-level statements that do not name patients are not assigned to individuals: comorbidity counts, previous surgery types, CPAP versus BiPAP split, epinephrine and ephedrine boluses for transient bradycardia, post-operative oral airway, home NIPPV, post-operative fentanyl and dexmedetomidine, and transient bradycardia. They are recorded as per-patient ambiguities.",
+    "Table 2 zero-dose cells are not converted into absent-medication facts; positive cells are read as administered doses and yes/no cells as used/not used. Table 2 gives no unit for midazolam.",
+    "Table 2 is titled \"Anesthetic plan and medications\"; its cells are read as what was given because the results text cites Table 2 for drugs received or used (midazolam premedication in two patients, multimodal analgesia and PONV prophylaxis in all patients) and the nonzero cells match the stated counts (midazolam and glycopyrrolate in two patients each). Route (oral) and indication (secretions, pre-operative anxiety) from those count sentences are not attached to individuals.",
+    "Series-level outcome sentences without an explicit all-patients quantifier (\"The patients tolerated the procedure well and experienced no complications\", \"no surgical complications occurred in our group\", \"our patients had a marked improvement in obstructive symptoms\") are kept per patient as review_only.",
+    "Average case length (244 min, range 227 to 260 min), average obstructive AHI change of 87.4 percent, and FDA, STAR trial and published-series statements are series-level or background and are not individual facts.",
+    "Table 1 and Table 3 print no unit for AHI, oximetry nadir or end tidal carbon dioxide; none was added.",
+    "The Figure 1 caption is a generic device schematic and is not attributed to any patient; caption-layer status is not_inspected, pixels reviewed in visual.json."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 44,
+    "facts_reviewed": 149,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Three individuated paediatric trisomy 21 patients (Table 1 rows 1-3: 10-year-old F, 19-year-old F, 13-year-old M) with severe refractory OSA receiving HNS placement 2017-2019; roster order matches table numbering.",
+      "Table 2 (titled \"Anesthetic plan and medications\") read as administered: the results text cites Table 2 for drugs received/used and nonzero midazolam and glycopyrrolate cells match the stated two-patient counts.",
+      "Midazolam for p1/p3 comes from the Table 2 cells only; oral route, anxiety indication and p2 respiratory-depression history stay unattached (attribution by table matching/exclusion is not literal).",
+      "Unattributed one-patient events (bradycardia, epinephrine/ephedrine, oral airway, home NIPPV \"his\", PACU fentanyl/dexmedetomidine) and count-only comorbidities/surgery types/CPAP-vs-BiPAP are ambiguities, not facts.",
+      "Table 1 and Table 3 obstructive AHI kept separate; Table 3 series (3 two-point series) matches the printed cells exactly.",
+      "Figure 1 is a generic device line drawing (background), no identifiers."
+    ],
+    "residual_risks": [
+      "Table 2 title includes \"plan\"; reading cells as administered relies on the text citing the table for given drugs.",
+      "Relation e05 before e09 rests on the word \"Premedication\" in the Table 2 header.",
+      "The 2017-2019 placement period is series-level, applied to each patient by the sentence covering all three.",
+      "End tidal CO2 for p1 printed N/A; kept as not_reported (N/A may mean not available or not applicable).",
+      "Table 2 zero-dose cells are not recorded as absent medications."
+    ]
+  },
+  "physician_adjudicated": false
+}

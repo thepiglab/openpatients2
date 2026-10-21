@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC7252766.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "abf1ac4fc78dd14dd6241c1678acb905e9159e3b8a19dcc87d27def0c0bab904",
+  "annotation_sha256": "dbffc462b3b2a167ab71cb4c0ceec69c3df0da00ff25ce0331cd06a0a17550e0",
+  "reviewed_at": "2026-10-21T04:12:19.795458+00:00",
+  "source_segments_read": 66,
+  "facts_reviewed": 142,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Congestive heart failure (named only as a confounding etiology in the discussion) changed from verification confirmed to unknown.",
+    "Moderate hyponatremia \"within three days\" re-timed to relation after, anchor \"oral amiodarone use\": the sentence coordinates both intervals with one reference point (\"within three days and ... within six days of oral amiodarone use, respectively\"); the remaining bare-within gate warning is a checker false positive.",
+    "Blood urea nitrogen \"lower ... in comparison with that at admission\" flag changed from low to unknown (comparison, not a reference-range flag).",
+    "Table 3 current-case baseline sodium 134 meq/l made ambiguous/review_only so the literature-summary cell does not duplicate the Table 1 admission sodium.",
+    "Nadir-day source conflict quarantined on both sides: case-text nadir timing (\"in less than 24 hours\" after the seventh-day 113 meq/l) and discussion \"on the sixth day\" are both source_conflict/review_only; added an untimed include fact for the undisputed nadir value 110 meq/l (quotes from both sections); summary now cites that fact.",
+    "Removed the review_only sixth-day nadir fact from the seventh-day event.",
+    "Split the day-4 event: the \"fourth day following admission\" event now holds only the shortness of breath; repeated chest X-ray, BNP, sodium 126 meq/l and hyponatremia moved to an untimed event so no neighbouring-sentence day is borrowed; discussion-dated hypouricemia left out of the case-text day-4 event.",
+    "Home hydrochlorothiazide discontinuation \"upon admission\" moved out of the day-4 diuretic event into its own upon-admission event.",
+    "Cumulative amiodarone totals removed from the ninth-day discontinuation event (3,200 mg given its own third-day event; 3,800 mg left unevented); tolvaptan total 60 mg removed from the eighth-day event.",
+    "Discussion normalization \"nine days after discontinuation\" split from the day-18 sodium event (identification rests on arithmetic only); relation amio_stop -> normalization keeps the literal quote; day-18 event kind changed to test.",
+    "Relations: d4->diuretics re-pointed to the sodium-drop event with both literal quotes (\"prior to any use of diuretics\", \"right after the hyponatremia was first detected\"); amiodarone start -> sodium drop now quotes \"dropped following the introduction of the amiodarone\"; added presentation -> examination/admission labs/heparin/cardioversion/amiodarone start (stay order), HCTZ stop upon admission -> resumed, amiodarone loading -> reduction, HCTZ resumed -> discontinued, day 4 -> day 5 reduction, day 5 -> day 6 symptoms, HCTZ stop -> seventh-day drop (\"the next day\"), Table 2 results -> SIADH suspected (\"At that point\"), eighth-day tolvaptan -> ninth-day discontinuation, ninth-day discontinuation -> day-10 drop.",
+    "Summary claim 3 reworded so the 126 meq/l sodium drop carries no day (shortness of breath alone is dated to the fourth day following admission); article limitation for Figure 1 now lists every pixel-only legend entry (lisinopril 20 mg, hydrochlorothiazide 12.5 mg, NaCl 1 g PO) and states they are not facts or conflict sides."
+  ],
+  "unresolved": [
+    "Single case report with a literature review: only the 79-year-old patient is individuated. Table 3 rows other than the one labelled \"current case\" describe published cases by other authors and are not facts about this patient; paragraph b00006 is a literature summary.",
+    "Day counting is inconsistent across sections (first sodium drop on the third day, the fourth day or 3 days post-amiodarone; nadir on the sixth day versus the seventh day or later; day 13 and day 18 \"after discharge\" versus hospital days). The nadir-day conflict is quarantined as review_only; the other differences are recorded as ambiguities.",
+    "Text values for serum and urine osmolarity and the fractional excretions repeat Table 2 numbers without naming a day or table; they are kept as separate review_only observations rather than merged.",
+    "Printed units are kept as printed even where they look inconsistent (Osm/l versus Osm/kg, mg/ml and meq/ml for random urine values, mg/dl in the GFR reference range, meq/dl on the Figure 1 axis).",
+    "Figure 1 (a chart of the patient's serum sodium and medication timing) prints legend entries that the text does not state: lisinopril 20 mg, hydrochlorothiazide 12.5 mg and NaCl 1 g PO (the text gives NaCl tablets 3 g/day and no hydrochlorothiazide dose). Legend text is pixel content recorded only in visual.json; it is not a fact or a conflict side, no medication fact was created from the figure, and no values were estimated from the plot.",
+    "Caption-layer visual status not_inspected; Figure 1 was inspected in the separate visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 66,
+    "facts_reviewed": 142,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (79-year-old woman); Table 3 rows other than the current-case row and paragraph b00006 are literature cases and stay out.",
+      "First sodium drop: case text dates only the shortness of breath to the fourth day; the 126 meq/l sentence is undated, and the discussion/Table 3 give third day / 3 days post-amiodarone: recorded as ambiguity, not a conflict.",
+      "Nadir day: discussion \"sixth day\" versus case text nadir less than 24 hours after the seventh-day 113 meq/l (Table 3: 7 days) is a source conflict on the day only; both sides review_only, value kept.",
+      "Table 3 \"Day 7 (112 meq/l)\" is the first-increase/trend column, not the Table 2 113 meq/l; kept review_only, not merged and not a conflict.",
+      "Text osmolarity and fractional-excretion values kept separate from Table 2 and review_only; all units kept as printed (Osm/l vs Osm/kg, mg/ml, meq/ml, mg/dl GFR range, meq/dl figure axis).",
+      "Causal attribution to amiodarone kept hedged (possible adverse effect); day-10 recurrence cause (\"likely due to\") not recorded.",
+      "Figure 1 viewed at full resolution with legend and plot crops: no printed data labels; legend-only medication entries are pixel content only."
+    ],
+    "residual_risks": [
+      "Day-count conventions differ between the case text, discussion, Table 3 and the Figure 1 x-axis; events without a literal day stay untimed.",
+      "\"day 18 after discharge\" day base is unresolved; no discharge event recorded.",
+      "TIME-LITERAL warning on the coordinated \"within three days\" is a checker false positive (anchor is in the item's own evidence)."
+    ]
+  },
+  "physician_adjudicated": false
+}

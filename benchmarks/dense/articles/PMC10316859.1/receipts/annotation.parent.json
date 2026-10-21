@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC10316859.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9955dc8c6c0c48fcf5cd68b075cbfb29c4f70f34882c8e7ac1d029ed77800288",
+  "annotation_sha256": "6c9c18425bc619c3de3945579f619562074f62da063adae7763f52231ae41ddd",
+  "reviewed_at": "2026-10-21T09:09:19.710709+00:00",
+  "source_segments_read": 40,
+  "facts_reviewed": 93,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "CA-125: case text \"elevated to 271 U/ml (normal, < 35 U/ml)\" vs discussion \"tumor markers in our case were within th reference values range\" treated as a source conflict on the elevation status: p1-f013 keeps value/unit/reference scored with flag unknown; added review_only source_conflict facts p1-f089 (elevated, high) and p1-f090 (discussion, within range); ambiguity rewritten; summary no longer states the disputed elevation.",
+    "beta-HCG and AFP \"not elevated\" kept flag unknown (not a normal-flag phrase); notes added.",
+    "p1-f005 metastatic disease role comorbidity -> unknown (extent of the DSRCT, not a comorbidity); verification unknown kept.",
+    "Added p1-f088 unremarkable past medical history (conditions, absent/unknown, history).",
+    "Added p1-f091 transaminase levels normalised soon after (observation, flag normal), linked to p1-e11.",
+    "Dropped relation p1-e06 -> p1-e08: the PET/CT prompting the second debulking is not identified with the earlier non-metabolic paraaortic PET/CT; added p1-f092 and event p1-e16 (PET/CT with suspect malignancy propagation) with p1-e16 -> p1-e08 (\"Because of ... we conducted\"), plus an ambiguity.",
+    "Split the final follow-up: p1-e15 keeps the case-text status 40 months after initial diagnosis (plus new p1-f093 \"still alive with EFS of 40 months\"); new p1-e17 is the July follow-up appointment (\"40 months after the treatment\") with relations from p1-e03, p1-e07, p1-e08, p1-e10, p1-e13 quoting the treatment sentence and the follow-up sentence.",
+    "Relations added: p1-e01 -> p1-e02 and p1-e01 -> p1-e03 (\"initially presented\"), p1-e03 -> p1-e04 (histology of removed tissue), p1-e03 -> p1-e07 (\"adjuvant chemotherapy following gross total tumor resection ... as shown in this particular case\").",
+    "Relation evidence improved: p1-e12 -> p1-e13 now quotes both full sentences; p1-e04 -> p1-e15 quotes the diagnosis and the 40-month sentence.",
+    "Radiotherapy completion (p1-f053/p1-f084) additionally cites the Table 1 present-case row (RT).",
+    "Ambiguities added: \"tno tumor disease\" one-character artefact; unordered pairs (admission anchor, thrombocytopenia therapy, chemotherapy vs SDS vs bone marrow biopsy, ultrasonography vs laparotomy). Figure ambiguity reworded: explicit caption credit to reference 12 governs (external)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the actual image is inspected in the separate visual submission.",
+    "Fig. 1 is credited to a cited published case in its caption while the discussion cites it for this case; treated as external.",
+    "Table 2 is a literature table; only the Present case row is used. Table 1 rows other than the Present case row describe published cases.",
+    "Literature statistics, survival rates and published-case comparisons in the discussion are not patient facts.",
+    "No calendar dates are printed; follow-up and treatment timing are relative only. The final follow-up month is given without a year.",
+    "CA-125 elevation is a source conflict between the case presentation (elevated, 271 U/ml, normal < 35 U/ml) and the discussion (tumor markers within the reference range); the value is scored and the elevation status is review_only.",
+    "The two PET/CT scans (non-metabolic paraaortic node; suspect propagation before the second surgery) and the two 40-month follow-up statements are not identified as the same and are kept separate."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 40,
+    "facts_reviewed": 93,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (19-year-old nulliparous woman, ovarian-involved DSRCT); Table 1 rows 1-16 and Table 2 literature rows are published cases; only the Present case rows are used.",
+      "Fig. 1 caption credits reference 12 (Engohan-Aloghe et al., a published ovarian DSRCT case); external, not includable, despite the discussion \"Our microscopic findings ... (Fig. 1)\".",
+      "IHC merge accepted: the only marker-level IHC of the present case is the primary tumor stain; the discussion cites Table 2 for \"our material\"; text and Table 2 agree cell for cell (++ diffuse, + focal, - negative) and the EWS/WT1 PCR column is the single described PCR.",
+      "Radiotherapy recorded completed from the abstract, Table 1 RT and \"during the course of therapy\".",
+      "Figure viewed at full resolution with scale-bar crop: H&E nests of small round cells in desmoplastic stroma; only an unreadable scale-bar label; no identifiers."
+    ],
+    "residual_risks": [
+      "CA-125 conflict could alternatively be read as the discussion meaning only the other markers; treated as a conflict on the elevation status only.",
+      "p1-e03 -> p1-e07 rests on a discussion sentence (\"following gross total tumor resection ... as shown in this particular case\").",
+      "Relations into the July follow-up (p1-e17) rely on \"40 months after the treatment\" back-referencing the preceding treatment-modality sentence."
+    ]
+  },
+  "physician_adjudicated": false
+}

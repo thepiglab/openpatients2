@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC5447014.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "916cb2b0db41092fdac14fa93fc949e9ce4b2722f208536476f282187a86b3f0",
+  "annotation_sha256": "cacaed2712bff2f54ac093e3e4d7f58df9504930b72b57b47cf914dd04ab1416",
+  "reviewed_at": "2026-10-21T13:30:31.629621+00:00",
+  "source_segments_read": 119,
+  "facts_reviewed": 0,
+  "patients_reviewed": 0,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Reworded the article limitation on telemedicine use so it no longer implies tension between 'half did not use TM' / 'five participants did not utilize FaceTime appointments' and the 16 physician TM visits; the counts are consistent.",
+    "Added an article limitation recording that b00060 and b00106 mention single unnamed participants ('one person', 'another patient', 'A participant noted') with no identity evidence or individual course, so no patient record is created."
+  ],
+  "unresolved": [
+    "Disposition aggregate_only: the source is a 10-participant feasibility study of iPad telemedicine in spinal cord injury reported only as counts, means, percentages and survey frequencies; no participant has individual identity evidence or an individually described course, so no individual patient records are created and cohort statements are not copied to placeholder patients.",
+    "reported_individual_count is 10 (literal, \"Ten participants were enrolled\") and roster_complete is false because none of the 10 individuals can be enumerated.",
+    "Quality-of-life and satisfaction results cover 8 of the 10 participants (two did not complete the 6-month follow-up); these group results are not attributed to individuals.",
+    "The abstract reports age as \"34.4 (18-54) years\" while Table 1 and the results print \"34.4 ± 14.4\" (mean ± SD); these are different statistics for the same mean, not a conflict, and neither is attributed to an individual.",
+    "The text says half of the participants did not use telemedicine in the study and that \"five participants did not utilize FaceTime appointments\"; it reports 16 physician TM visits in total. These counts are consistent (the visits came from the other participants) and are recorded as printed without attribution to individuals.",
+    "Table 2 prints one set of column headers for all rows although several questions (N-R) use different answer categories in separate header rows; the table is aggregate and no cell is attributed to an individual participant.",
+    "Anecdotal comments in Table 2 are unattributed participant quotes and are not assigned to any patient.",
+    "Results text b00060 and b00106 mention single unnamed participants (\"one person felt more comfortable continuing to see a local physician in-person\", \"another patient was able to coordinate appointment times\", \"A participant noted\"); these carry no identity evidence, demographics or individual clinical course, cannot be linked to any enrolled participant, and are not made into patient records.",
+    "Figures 1 and 2 are a process flow diagram and group-level charts; their pixels are described only in visual.json and no patient is assigned.",
+    "No supplements are listed by the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 119,
+    "facts_reviewed": 0,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Read all 119 segments (abstract, methods, Tables 1-3, results, discussion, captions); raw.xml has no supplementary-material or media entries.",
+      "No participant is individually described: Table 1 and Table 3 are group counts/means, Table 2 survey cells are frequencies (n = 8) and its anecdotal quotes are unattributed; no 'Participant N' or case narrative exists. Disposition aggregate_only with patients [] is correct.",
+      "Roster: reported_individual_count 10 from literal 'Ten participants were enrolled'; roster_complete false is correct because the 10 cannot be enumerated.",
+      "Abstract '34.4 (18-54) years' (mean with range) and Table 1 '34.4 ± 14.4' (mean ± SD) are different statistics of the same mean, not a source conflict.",
+      "Figure entries F1 (background flow diagram) and F2 A-C (aggregate bar charts) are correctly scoped with caption-literal evidence and no patient ids; source_coverage rows (aggregate/background/figure_caption) checked for all 119 segments."
+    ],
+    "residual_risks": [
+      "Aggregate-only article: no patient-level facts, events or relations exist to score; the reference contributes only disposition, roster and figure scoping."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,67 @@
+{
+  "article_id": "PMC8703483.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "01a929fbe8dbc6e82cc46b11c2c9abd58db46bdbe33b446df14aeaeba60973e5",
+  "annotation_sha256": "5fb8c5eec33fc21ba5147979325897433e4e5dd93bbab7519c5a559e8e1ef7c6",
+  "reviewed_at": "2026-10-21T08:44:02.107636+00:00",
+  "source_segments_read": 36,
+  "facts_reviewed": 65,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Dose: 28 g (text, x4) vs Table 3 \"2800 mg\" ruled a one-character (dropped-zero) print artefact -> ambiguity; 28 g stays include, 2800 mg stays review_only; 24.5 g / \"about 24 g\" are author absorbed-amount estimates, not the ingested amount; ambiguity text rewritten accordingly.",
+    "Home quetiapine 200 mg per day: action unknown -> administered (\"treated with\" states the treatment was given; not current).",
+    "Medication names p1-f017/p1-f018 \"Quetiapine overdose ingestion\"/\"... as printed in Table 3\" -> \"Quetiapine\" (drug name as stated).",
+    "Table 3 QT prolongation at 9 h and 24 h: flag high added, consistent with the included \"increase in the QT-interval\".",
+    "Early half-life fact: evidence now the whole b00018 sentence so the referent of \"this half-life\" (5-7 h literature value) is quoted; text_value literal \"this half-life was confirmed\".",
+    "36-48 h concentration increase: specimen \"serum\" removed and name made specimen-neutral; b00019 does not name the specimen (no attribute matching to the Table 1 serum row).",
+    "Added p1-f064 fluoxetine absent (\"there was no co-intake of fluoxetine\").",
+    "Added p1-f065 cardiac arrest at the Table 3 9 h column (the same cell's chest pain and QT prolongation were already separate items); linked to event p1-e17.",
+    "Relations: Table 3 chain relations now also quote the \"after the overdose\" header; arrest -> CPR also quotes b00022 resuscitation of the heart attack; added ingestion -> sampling (first serum assessment \"about 4 h after intoxication\"), ingestion -> 3 h Table 3 finding (\"after the overdose\"), ER arrival -> gastric aspiration, sampling \"on arrival\", and in-hospital supportive treatment (order only), gastric aspiration -> measurement of the aspirate.",
+    "Summary paragraph 3 now cites the Table 1 36 h and 48 h serum facts that show the fall and later rise.",
+    "Table 3 vs text ambiguity rewritten: QT prolongation at 24 h vs \"normalized after resuscitation maneuvers\" and 9 h arrest vs ER arrival are kept as separate un-merged items (not a numeric conflict).",
+    "Article limitations: Fig 1 seven markers vs eight serum values; Table 3 9 h items now recorded."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three graphics are reviewed in the separate visual target.",
+    "Table 3 contains two cited literature cases (reference-numbered rows) that are not recorded as patient facts.",
+    "Blank Table 1 cells (serum 12 h and 72 h; urine 30 min, 90 min and 8 h) are not documented values and are not recorded.",
+    "Author half-life statements carry no numeric half-life for this patient; no values were calculated.",
+    "No discharge, disposition or follow-up beyond Table 1 and Table 3 time columns is stated.",
+    "Ingested amount printed as 28 g in the text and 2800 mg in Table 3; treated as a one-character print artefact (ambiguity), the Table 3 value is review_only.",
+    "Table 3 9 h cell (QT prolongation, chest pain and cardiac arrest) is recorded as separate time-labelled items because the source does not identify it with the emergency room events in the text.",
+    "Figure 1 draws seven markers while Table 1 lists eight serum values; the source does not state how markers correspond to table columns, and no values are read from the plots."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 36,
+    "facts_reviewed": 65,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (75-year-old man); Table 3 Pollak/Harmon rows are cited literature cases and are excluded.",
+      "All 15 Table 1 values (8 serum, 7 urine), all Table 2 cells and the Table 3 this-case row checked cell by cell; blank Table 1 cells are not values.",
+      "Admission serum 6.45: Table 1 Admission cell merged with the text \"6.45 mg/L evaluated on admission\" because the text names the same specimen and time point; unit field keeps the table µg/mL, the text unit stays literal in the quote.",
+      "HPLC-MS/MS method is literal for the serum/urine samples (b00013 paragraph ends \"The results are reported in Table 1\"); not applied to Table 2 gastric specimens.",
+      "Author-derived items: 24.5 g absorbed and the ~10 mg/L assumed peak stay review_only; 3.465 g gastric content (sum of Table 2), half-life statements and the 36-48 h increase are literal author statements about this patient.",
+      "No discharge disposition is stated (abstract \"from the admission to the discharge\" only) -> ambiguity, no outcome fact.",
+      "Figures 1 and 2 and the Table 3 arrow graphic viewed at full resolution with crops; Fig 1 has seven markers vs eight serum values; Fig 2 axis prints \"comcentration\"."
+    ],
+    "residual_risks": [
+      "Whether Table 3 2800 mg is a print error for 28000 mg is not stated by the source.",
+      "Table 3 hour columns (after the overdose) and Table 1 columns (after admission) are different anchors; their relation to the text emergency-room events is not stated.",
+      "Discharge and final outcome are not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

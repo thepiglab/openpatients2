@@ -1,0 +1,71 @@
+{
+  "article_id": "PMC8376443.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ad5aba5e315f478d0e2c1fde7842e5f222b0e032b6ce4afd0f772b90f5947b8c",
+  "annotation_sha256": "0e3b51c576732efc73b3ad944baa6ddb70f19330df33b1e78b836cbd022a8970",
+  "reviewed_at": "2026-10-21T03:34:54.202507+00:00",
+  "source_segments_read": 21,
+  "facts_reviewed": 178,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f010 acute coronary syndrome: abstract states it literally for patient 1 (not contradicted by the case text) -> supported/include, verification confirmed, time \"subsequently\" after \"new-onset CHB\".",
+    "p1: b00011 \"initial and subsequent troponin levels were normal for all the patients\" explicitly covers every patient -> source conflict with \"Cardiac troponins were significantly raised\": p1-f055 -> source_conflict/review_only; added cohort-side p1-f061 (source_conflict/review_only).",
+    "p1 relations added: e01 history before e02 presentation (history in presentation sentence); e05 initial labs before e08 CHB (\"Initial\" vs day 5); e08 CHB before e09 immediate work-up (result -> investigation); e08 before e10 (\"continued ... for a further three days\").",
+    "p1 summary: removed disputed troponin rise; added ACS (now include).",
+    "p2-f004 \"Italian\" ethnicity_as_documented: demonym may be nationality (prompt forbids ethnicity from nationality) -> ambiguous/review_only with ambiguity (precedent PMC12588875.1).",
+    "p2-f019 inotropic support: \"continued with increasing inotropic support\" states delivery -> action administered.",
+    "p2: same b00011 conflict -> p2-f043 peak troponin T 5003 ng/L source_conflict/review_only; added cohort-side p2-f049 (source_conflict/review_only).",
+    "p2 added: f050 hemodynamic instability (b00011 names patient 2; hedged cause not recorded); f051 12-lead ECG rhythm CHB (text + Figure 2 caption, caption time governs its own finding).",
+    "p2 events: split multiorgan failure (f009, f010, f022, f043, f049) out of the day 7 shock event into new p2-e13; f051 -> e06, f050 -> e07.",
+    "p2 ambiguities: CHB/multiorgan-failure ambiguity reworded (abstract order recorded, no conflict); troponin ambiguity reworded as source conflict.",
+    "p2 relations added: e01 before e02 (\"immediately upon arrival\"); e04 before e05 (\"Initial\" vs day 7); e05 shock before e13 multiorgan failure (\"progressed into\"); e06 CHB before e13 (abstract \"subsequently\"); e06 CHB before e09 pacing (\"requiring temporary pacing\"); e06 before e07 (\"These episodes ... continued\").",
+    "p2 summary: removed disputed peak troponin T.",
+    "p3-f040 LDH and p3-f041 D-dimer: \"elevated procalcitonin (...), LDH (...), D-dimer ..., but normal troponin T\" -> the source word \"elevated\" governs the list -> flag high.",
+    "p3-f043 time.text \"ECG on admission\" -> \"on admission\".",
+    "p3-f023 previous LSCS: temporality historical (\"previous\").",
+    "p3 added: f065 cohort-side subsequent-troponin statement (ambiguous/review_only); f066 hemodynamic compromise absent during CHB (abstract).",
+    "p3 ambiguities: troponin/echo ambiguity reworded; added ICU-day vs admission-day anchor ambiguity (text vs Figure 3(b) caption).",
+    "p3 relations added: e05 ICU admission before e09 (day 5 of admission to ICU); e03 initial work-up before e09; e09 CHB during e06 prone ventilation (\"at the time\"); e06 proning before e11 ECMO decision (\"as ... improved with proning\"); e08 echo EF 30% before e12 repeat echo."
+  ],
+  "unresolved": [
+    "Supplementary Table 1 (reference ranges) and Table 2 (event timeline for patients 1, 2 and 3) are in a DOCX supplement reviewed separately; no supplement value is copied into the main-text facts.",
+    "The discussion says initial and subsequent troponin levels were normal for all the patients; this explicitly covers every patient and contradicts the patient 1 (significantly raised troponins) and patient 2 (peak troponin T 5003 ng/L) narratives, so both sides are source_conflict/review_only; the copy to patient 3 is review_only. The sentence that echocardiography was not suggestive of underlying cardiomyopathy names no patients and stays an ambiguity.",
+    "The abstract names acute coronary syndrome for patient 1 (kept as stated) and orders CHB before multiorgan failure for patient 2 (recorded as a relation); the case text uses neither wording and does not contradict them.",
+    "Caption-layer visual status not_inspected; the three ECG images are inspected in the separate visual submission.",
+    "Several inline reference markers are empty in the source text (brackets without numbers); cited literature is not attributed to any patient.",
+    "Supplement Table 2 numbers days of hospitalization; the article text uses ICU-day and admission-day counts. Supplement day labels are not converted into article times and supplement order is not used for article relations."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 21,
+    "facts_reviewed": 178,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Read all 21 source segments, all 36 units of the supp-1 DOCX (Table 1 reference ranges, Table 2 day-by-day timeline) and all three ECG figures (six panels) at full resolution with crops.",
+      "Discussion b00011 \"initial and subsequent troponin levels were normal for all the patients\" explicitly covers every patient and contradicts the p1 and p2 narratives: both sides source_conflict/review_only; p3 copy review_only; the echocardiography generalization names no patients and stays an ambiguity.",
+      "p1 acute coronary syndrome is stated in the abstract (and supplement Day 8 row) and not contradicted: include. p2 abstract order CHB before multiorgan failure is literal (\"subsequently\") and recorded; not a conflict with the case text.",
+      "p3 \"elevated procalcitonin, LDH, D-dimer ... but normal troponin T\": elevated governs the list, LDH and D-dimer flagged high. \"Italian man\" kept review_only (demonym may be nationality).",
+      "Relations expanded from 9 to 24, each with literal order wording or same-anchor stated times; supplement day labels (days of hospitalization) are not used for article relations.",
+      "No supplement-vs-article contradiction found; the supplement Day 1 row for patient 1 (unit 18) is non-literal in extraction and cannot be quoted."
+    ],
+    "residual_risks": [
+      "p2-f033 keeps the time \"Initial\" from the immediately preceding sentence about the same initial laboratory workup (RULINGS allow); the NO-BORROWING warning is a checker false positive.",
+      "ICU-day, admission-day and supplement hospitalization-day counts are not reconciled; p3 CHB is \"day 5 of admission to ICU\" in text but supplement places ICU admission after Day 2 and CHB on hospital Day 5 (arithmetic-only mismatch, ambiguity).",
+      "The cohort troponin statement is copied to p3 as review_only by judgement; a stricter reading of the cohort rule would score it.",
+      "ECG traces are not read for rates or intervals; all ECG interpretations come from text and captions."
+    ]
+  },
+  "physician_adjudicated": false
+}

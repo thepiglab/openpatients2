@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC6095960.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "fe5ce98057b235bc44eb71a37f7b441270b5067f48c91c3ca5e30d257d92190e",
+  "annotation_sha256": "676a2e02466c16c3146cc506e75b09dedf424de77d21e942c002e36e3d533053",
+  "reviewed_at": "2026-10-21T08:10:24.892014+00:00",
+  "source_segments_read": 31,
+  "facts_reviewed": 32,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f021 initial valproate >10389.5 umol/l: value kept literal but certainty ambiguous + review_only; Figure 1 (the patient's valproate course) prints a y-axis of 0 to 1500 umol/L. Per RULINGS image content is pixel content and never a conflict side, so the text fact becomes review_only with an ambiguity (ambiguity and article limitation reworded); removed from summary claim sources.",
+    "p1-f026 \"a serum concentration of 255.4 umol/l\": the sentence names no analyte; attribution to valproate by adjacency to the monitoring sentence is not literal. Renamed \"Serum concentration\", certainty ambiguous + review_only, ambiguity reworded; event p1-e09 description neutralised; value removed from summary claim 2.",
+    "p1-f028 decreasing \"drug concentrations\": label changed from \"Valproate concentration\" to the source term \"Drug concentration\"; ambiguity added; event p1-e11 and summary claim 3 wording aligned.",
+    "p1-f014 hemodiafiltration: added the Discussion quote \"We used HDF as treatment modality relatively early in the treatment course.\" (our case); b00023 coverage set to patient_facts.",
+    "Relation p1-e06 same_time p1-e07: added the Figure 1 caption quote stating both HDF and L-carnitine were initiated on admission (two stated times from the same anchor) alongside \"Simultaneously\".",
+    "Added relation p1-e03 before p1-e13 (intubation -> extubation, implied-but-necessary order; both quotes).",
+    "Added relation p1-e04 before p1-e06 (ICU admission opening the stay -> in-hospital L-carnitine initiated \"on admission\" per the caption; order only).",
+    "Added relation p1-e11 before p1-e14 (in-hospital post-HDF measurements -> the final transfer ending the stay; \"She finally was transferred\").",
+    "Event p1-e05 description no longer says \"Admission\" (the laboratory sentence states no time)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two JPEGs were inspected in the separate visual submission.",
+    "The systematic literature review (Table 1, Figure 2, Description of the published cases) concerns published cases and a cohort of 316 patients and is not index-patient data.",
+    "Initial valproate concentration is printed as >10389.5 μmol/l while the Figure 1 y-axis is printed 0 to 1500 μmol/L; the text value is kept literally as review_only and not reconciled with the figure.",
+    "The dose of valproate ingested is an assumption by the authors; no dated clock times or calendar dates are given, so event order rests on explicit order words only.",
+    "Supplement SM1 is a literature search-strategy appendix with no patient data."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 31,
+    "facts_reviewed": 32,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (46-year-old woman) with severe acute valproic acid intoxication; Table 1 and the literature review rows are published cases and stay aggregate (only the \"Present case\" row cited).",
+      "HDF and L-carnitine take \"on admission\" from the Figure 1 caption, which itself states that finding, so the caption-time ruling is satisfied; the \"Simultaneously\" same_time relation is also supported by the caption.",
+      "Mild hyperammonemia and severe CNS depression are literal Discussion statements about \"our patient\"; ammonia 197 ug/ml with a g/dl range and blood alcohol \"1.18%0\" kept literally as ambiguities (print artefacts, not conflicts).",
+      "Assumed 56 g ingestion stays in social_exposures (substance, status unknown) with the assumption carried in notes and an ambiguity; the abstract states it without hedging.",
+      "GCS -> intubation and intubation -> ICU transfer are not ordered by an order word (\"intubated immediately and transferred\"), so no relation was added for them.",
+      "Figures viewed at full resolution: F1 line chart (eight markers, axis ticks only, no data labels) and F2 literature flowchart; visual.json has no positional or estimated readings."
+    ],
+    "residual_risks": [
+      "The initial valproate concentration (>10389.5 umol/l) is likely a magnitude/unit issue against the plotted course but cannot be reconciled without plot readings; it is review_only.",
+      "Timeline linkage of the pre-hospital events (found unconscious, GCS on EMS arrival, intubation, ICU transfer) stays partial because the source gives no order words between them."
+    ]
+  },
+  "physician_adjudicated": false
+}

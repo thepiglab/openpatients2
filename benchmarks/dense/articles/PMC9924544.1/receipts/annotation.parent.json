@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC9924544.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "04b1f4de6c538a76de7d3437927be1345552f8f642aed6a7fe964fc16f7b4de9",
+  "annotation_sha256": "48e92ccdf77529684c729b3829771f81112bc308d2d46ebb1c49f9cb26e7f3ea",
+  "reviewed_at": "2026-10-21T08:21:15.747686+00:00",
+  "source_segments_read": 15,
+  "facts_reviewed": 39,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added p1-f039: accepted side-free lower rib cage pain (severe, throbbing and shooting; about three weeks prior to consultation); only the laterality stays quarantined in review_only p1-f008/f009/f010.",
+    "case_context chief_complaint set to the side-free label \"hypochondrium pain\" with the clinic-visit quote.",
+    "p1-f031 (10 days apart side of the interval conflict): added the abstract \"ten days apart\" quote.",
+    "Tramadol, acetaminophen, diclofenac: \"Conservative therapy\" moved from indication to regimen.",
+    "p1-f033 counseling: quote extended to include and time set to \"During this period\".",
+    "p1-f024 chest x-ray flag negative -> normal (\"detected nothing\"; imaging is not a qualitative test).",
+    "p1-f035 text_value set to the source wording \"same symptoms\"; anchor notes for f035/f038 rewritten.",
+    "p1-e04 clinic visit: removed time_text (the three weeks is the pain duration, not the visit time); p1-e03 time_precision exact.",
+    "Added relations: e02->e04 (pain developing three weeks prior to consultation), e07->e08 (adjacent-sentence \"two weeks later\"), e04->e08 and e05->e08 (\"returned\", \"initial\"), e09->e11 (abstract \"This resulted in\"). e10->e12 was proposed and then dropped per orchestrator ruling (\"after three months\" names no anchor).",
+    "Laterality and anchor ambiguities and summary claim 1 rewritten; summary keeps the disputed side and interval out."
+  ],
+  "unresolved": [
+    "Laterality of the pain is contradictory across the article (left lower rib cage in one sentence, right elsewhere); kept review_only and unresolved.",
+    "The interval between the two lidocaine infiltration series conflicts (ten days apart vs within one week); kept review_only and unresolved.",
+    "No dates or dated timeline are given; durations are relative and several anchors are unnamed.",
+    "Caption-layer visual status is not_inspected; the two JPEGs are inspected in visual.json.",
+    "Diagnostic criteria for the diagnosis are described only in general discussion text and are not attributed to this patient as the diagnostic basis."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 15,
+    "facts_reviewed": 39,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient; 13 case/discussion segments plus 2 captions read in full.",
+      "Laterality conflict (left in one b00003 sentence vs right elsewhere) quarantined at the side attribute only; facts and relations whose quotes merely contain \"right\" carry no side and stay included.",
+      "Infiltration interval conflict (10 days apart vs within the space of one week) quarantined in review_only p1-f031/f032; lidocaine administration accepted in medications without interval.",
+      "\"oral\" scoped to the analgesics only; \"for one week\" applied to the whole conservative regimen with an ambiguity.",
+      "Both clinical photographs viewed at full resolution: no face, identifiers or sensitive anatomy."
+    ],
+    "residual_risks": [
+      "Resumption of activity (e12) has no order relation: \"after three months\" names no anchor.",
+      "Whether the \"initial injury evaluation\" is the sports-clinic visit is not stated; it is kept a separate event.",
+      "Rehabilitation action_status unknown (\"initiated\")."
+    ]
+  },
+  "physician_adjudicated": false
+}

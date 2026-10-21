@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC7692694.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "976fbdb362a62dd4daefee8cbea32c05328ea2b368152adf0b60b952615010bc",
+  "annotation_sha256": "6043f8402c5e57dd9d0925f4ed6de4d1c4697cbd18bafbdb06d73dd766fda1f2",
+  "reviewed_at": "2026-10-21T04:33:28.058713+00:00",
+  "source_segments_read": 81,
+  "facts_reviewed": 240,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Age and sex facts now also cite their Table 1 rows (Age, Gender) for all three patients (OBS-TABLE-ROWS: value in text and table is one item citing both).",
+    "Pre-ECMO lung compliance <20 mL/cmH2O facts additionally cite the explicit all-three Discussion sentence (b00014).",
+    "Table 1 unit/value ambiguity now links the PaO2/FiO2 facts (row repeats the PaO2 values for Patients 1 and 3 and the PaCO2 value for Patient 2) and quotes that row.",
+    "p3: merged duplicate COVID-19 condition p3-f058 into p3-f004 (time '10 days previously', before 'transferred to our hospital'); event and summary references repointed.",
+    "p2: merged duplicate neuromuscular-blocker administration p2-f063 into the Table 2 item p2-f035 (same handling as convalescent plasma); event/summary references repointed.",
+    "p1: convalescent plasma moved into its own event (p1-e10); the b00017 \"after CP infusion\" relation now runs from CP infusion (not the whole lopinavir/ritonavir-hydroxychloroquine-ceftazidime event) to the 3-day improvement.",
+    "p1: ECMO-discontinuation event time \"after 14 days\" reclassified time_kind duration -> relative (anchored to VV-ECMO start).",
+    "p2: added relation sedative/NMB stop (day 7) before their re-administration (\"again\", re- order word).",
+    "Added per-patient ambiguities for figure-vs-text differences (Fig 1 antibiotic band order; Fig 3 cefepime and methylprednisolone; Fig 5 methylprednisolone and \"27 (Removal)\"); pixel labels kept out of facts and relations.",
+    "p1 summary claim 2: replaced the meta sentence about tables with the Table 2 facts it cites (tracheostomy, right femoral inflow line)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the six JPEGs are inspected in the separate visual submission.",
+    "The general Case Report and Discussion paragraphs describe pooled management (pump flow, sweep gas, heparin, steroid dosing, recruitment, weaning criteria) without per-patient labels; only review_only facts and ambiguities carry them.",
+    "Table 1 partial-pressure rows print the unit cmH_(2)O and the PaO2/FiO2 row repeats other printed values; recorded exactly as printed.",
+    "Table 1 column headers carry unlabelled dates in parentheses that are not interpreted.",
+    "Table 2 prints the Patient 3 ICU length of stay as a non-numeric string.",
+    "ECMO duration in Table 2 differs by one day from the hospital-day arithmetic for Cases 2 and 3 (counting convention not stated).",
+    "Authors expected poor outcomes from pre-ECMO compliance and compare with published cohorts; these are discussion statements, not individual facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 81,
+    "facts_reviewed": 240,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Three individually described patients (Cases 1-3) owned by case headings, Table 1/2 columns and figure captions; roster 3 from the abstract.",
+      "Unlabelled protocol sentences b00004, b00005 (tracheostomy/recruitment/weaning/decannulation criteria), b00006 and b00016 contain no all-patients wording; kept review_only with an ambiguity. Only b00003, b00005 compliance sentence + \"Thus\" ultra-protective ventilation, b00012 recovery and b00014 compliance explicitly cover all three.",
+      "Table 1 cmH2O units for PaO2/PaCO2 and the PaO2/FiO2 row that repeats other cells are recorded as printed with an ambiguity; header dates and ICU LOS \"6/14-\" not interpreted.",
+      "ECMO duration day-count differences (Cases 2 and 3) are arithmetic-only ambiguities, not conflicts; p2 \"On day 7\" left unanchored with an ambiguity.",
+      "Figure band labels (Fig 1 antibiotic order, Fig 3 cefepime/methylprednisolone, Fig 5 methylprednisolone and 27 (Removal)) are pixel content only; no text-vs-table conflict exists (cefotaxime is in both text and Table 2).",
+      "GLUED-TEXT warnings on \"Allplex\" are checker false positives (product name)."
+    ],
+    "residual_risks": [
+      "Table 1 header dates and the PaO2/FiO2 row may be print errors; values kept as printed.",
+      "Case 1 antibiotic sequence in Figure 1 differs from the text; text order is used only where literal.",
+      "Methylprednisolone use per patient is stated only in pixels and protocol sentences, so it stays review_only."
+    ]
+  },
+  "physician_adjudicated": false
+}

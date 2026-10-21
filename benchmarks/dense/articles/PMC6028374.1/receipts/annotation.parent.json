@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC6028374.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "409eb7f2259cea901f5b54d06239c07031307ee2555eb6301a99505cae4a9994",
+  "annotation_sha256": "eca6edbd8e2c4c19b40be711186e563cd51c83fbf623f5561ba75f07fe114a45",
+  "reviewed_at": "2026-10-21T08:32:38.019350+00:00",
+  "source_segments_read": 19,
+  "facts_reviewed": 100,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p2-f014 (VT rate 170 beats/min): certainty ambiguous, scoring review_only under the image-value ruling, because the Fig. 3 Panel A device readout prints a different number; added a p2 ambiguity; removed the rate from the p2-e03 description, summary claim 1 and the Fig. 3 caption_summary (disputed values stay out of summaries).",
+    "p2-f028 (GLS -19.6%): flag normal -> unknown and the b00005 'LGS was normal' quote removed; the Discussion sentence uses LGS, not the GLS of the case text, so the identification would add words; the LGS sentence stays as a p2 ambiguity.",
+    "Added p1-f051 and p2-f049 (Lake Louise CMR criteria: fulfilled at least the first and third criteria) from 'Our two patients fulfilled at least the first and third criteria', which explicitly covers both patients; linked to the CMR events; p1 ambiguity keeps the no-T2-inference warning.",
+    "Added p1-f050 CMR interpretation 'suggestive of myocarditis' (b00003) and p2-f048 immediate ECG procedure (b00004).",
+    "p2-f008: 'new-onset' moved out of severity into text_value.",
+    "p1-f037 renamed 'Septal hypersignal and late gadolinium enhancement on CMR' to match its kept single-fact wording.",
+    "Added 13 literal relations: p1 admission->ECG ('rapidly performed'), ECG result->cardioversion, admission->labs ('in admission'), admission->TTE (stay opener), labs/angiography->CMR ('In front of these nonconclusive investigations'), admission->2-month follow-up; p2 ECG->pharmacological cardioversion, presentation->labs and TTE (stay opener), TTE and labs/angiography->CMR ('In the sight of this VT with apparent normal heart'), CMR->diagnosis ('Hence'), presentation->reexamination ('reexamined').",
+    "b00008 ambiguity notes that 'in this case' does not name a patient; source_coverage for b00005 and b00011 set to patient_facts."
+  ],
+  "unresolved": [
+    "Figure pixels are described only in visual.json; the annotation figure rows stay caption-level.",
+    "Case 1 and Case 2 are under \"First Case\" and \"Second Case\" headings; Discussion sentences are copied to individuals only when they literally cover both (\"our both cases\", \"our patients\").",
+    "Culprit drug (cocaine for the first patient, cannabis for the second) and the VT mechanism are hedged by the authors and are not recorded as asserted causes.",
+    "The Discussion statement that \"our two patients fulfilled at least the first and third criteria\" is not mapped to individual criterion facts.",
+    "No tables or supplements; no serial per-patient tables, so no measurement series."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 19,
+    "facts_reviewed": 100,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Two individuated patients under First Case / Second Case: 38-year-old man (p1) and 39-year-old man (p2); roster count 2 from 'we present two cases'.",
+      "p1 toxic myocarditis confirmed ('the diagnosis ... was admitted'); p2 VT and myocarditis provisional ('highly suggestive', 'most likely diagnosis').",
+      "Discussion cohort sentences copied only where literal for both: b00009 'In our both cases', b00012 'In our patients', b00005 'Our two patients', b00011 'In both cases'.",
+      "Culprit drug and VT mechanism are hedged ('seems', 'likely', 'evocated') and kept only as ambiguities.",
+      "All four figures viewed at full resolution with crops: Fig 2A and 4A strain screens print a calendar date-time stamp; Fig 3A device text prints a heart-rate readout differing from the stated 170 beats/min; printed GLPS_Avg values match the text GLS."
+    ],
+    "residual_risks": [
+      "Ongoing drug and tobacco exposure events are left unordered against presentation (orchestrator ruling: exposure overlaps presentation, no onset event).",
+      "p2 VT kept provisional although the caption and later text say 'this VT'.",
+      "Fig 4A strain text box is blurred; only legible readings recorded in visual.json."
+    ]
+  },
+  "physician_adjudicated": false
+}

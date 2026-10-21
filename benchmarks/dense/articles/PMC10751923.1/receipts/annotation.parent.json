@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC10751923.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "25e2a98682f359cf5da15f04c05b73d391b199845288901fabefb6c479a6cdec",
+  "annotation_sha256": "ac808eab5cb495206418e30c7f942face279f14cbd5bf3ffb81d8fa1a64d7e84",
+  "reviewed_at": "2026-10-21T08:03:06.576066+00:00",
+  "source_segments_read": 46,
+  "facts_reviewed": 235,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged the case-text statement that AST/ALP increases first became apparent at age 3 years (citing Table 1) with the Table 1 age-3 AST (65 U/L) and ALP (576 U/L) cells; flag high from the text; removed the two standalone qualitative facts.",
+    "Merged the AMA-M2 positive 4 months and negative 6 months after treatment text statements with the Table 1 Months-after-treatment 4 and 6 cells (same named time points); removed the duplicate cell facts.",
+    "Renamed the Table 1 month-4 \"Other AAbs\" cell \"SLA/LP Equ\" to anti-SLA/LP antibodies with flag indeterminate and added the footnote quotes that expand anti-SLA/LP and Equ.",
+    "Corrected the note and ambiguity that called the text liver panel equal to Table 1 day 1: the coinciding values are in the day -7 column; they stay separate because the text never names that day.",
+    "Removed the timing-only duplicate PBC condition item; the diagnosis time (a week after discharge) stays on the diagnosis event.",
+    "Removed indications borrowed into ursodeoxycholic acid and prednisolone (their sentence names no indication); changed the 1-month improvement related_condition to cholestasis.",
+    "Added healthy parents family fact.",
+    "Split the referral/admission event into referral and admission; added sonography -> admission (Given ... liver cirrhosis) relation; admission -> in-hospital UDCA/silymarin replaces referral -> UDCA.",
+    "Moved copper/manganese decrease and tremor/ataxia/pruritus improvement out of the 1-month event (no stated time) into a separate response event with the abstract response sentence; added treatment -> response relation.",
+    "Split the single Table 1 grab-bag event into age, hospital-day and months-after-treatment events; added hospital-day labs -> discharge and treatment -> post-treatment labs relations from the column-group headers and footnote c.",
+    "Attached the at-diagnosis postural tremor and ataxia facts to the diagnosis event.",
+    "Removed the invented After admission order from summary claim 2; added ambiguities for AMA positivity cited as a diagnostic basis versus the negative workup immunoblot, and for the abstract more than 5 years duration versus onset after age 13; updated limitations on bold marking, merges and unrecorded discussion statements; refined b00038/b00039 coverage notes."
+  ],
+  "unresolved": [
+    "Table 1 cells marked NT (not tested) are not individual observations; 70 NT cells were not recorded as facts and appear only as missing cells in the measurement series.",
+    "Table 1 footnote says bold results are abnormal; bold marking exists in the raw XML but not in the quotable source text, so no flags were taken from it or from reference ranges; abnormality is recorded only where the text says so (age-3 AST/ALP via the merged text statement).",
+    "Text and Table 1 values that coincide numerically are merged only where the text names the same time point as the table column (age-3 AST/ALP, AMA-M2 at 4 and 6 months after treatment); the undated workup values are kept separate.",
+    "Discussion statements about other published pediatric PBC cases (Table 2) and general prognosis are not patient facts. Copper and manganese correlation with GGT is a patient-level analytic claim without values and was not recorded; the prognostic risk-factor statement (baseline cirrhosis, ductopenia, PBC with AIH features) and the hedged \"long-term follow-up may be warranted\" are discussion interpretation, not recorded as facts or care plans.",
+    "Caption-layer visual status not_inspected; the single JPEG is inspected in the separate visual target."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 46,
+    "facts_reviewed": 235,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient; every non-NT Table 1 cell is an observation (70 NT cells excluded) with time from its column group.",
+      "PBC confirmed (Ludwig stage IV, APASL basis); AIH features provisional because authors state APASL criteria not met; DILI and HCC kept possible (hedged low likelihood); esophageal varices refuted by endoscopy; Wilson disease refuted.",
+      "Text and table values merged only where the text names the table time point (age 3; 4 and 6 months after treatment).",
+      "The anicteric -> jaundice absent EVID-NEGATION warning is a checker false positive per the rule text (afebrile analogue)."
+    ],
+    "residual_risks": [
+      "Table 1 bold (abnormal) marking is in raw XML only; table cells carry no flags.",
+      "Day -7 text/table liver panel and day-10 copper/manganese coincide numerically but are kept as separate facts.",
+      "Biopsy timing relative to discharge is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

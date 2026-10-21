@@ -633,10 +633,22 @@ def stats(values):
 def status(work):
     m = read(work / 'manifest.json')
     done, pending = [], []
+    latest_errors = {}
     for item in m['articles']:
         _, r = completed_attempt(work, item['article_id'])
         (done if r else pending).append(r or item['article_id'])
+        if not r:
+            attempts = sorted((work / 'results/articles' / item['article_id']).glob('attempt-*/receipt.json'))
+            if attempts:
+                latest = read(attempts[-1])
+                latest_errors[item['article_id']] = latest.get('error_type') or latest.get('status', 'unknown')
+    workers = [read(p) for p in (work / 'results/workers').glob('*/job-*/receipt.json')]
     return {'expected': len(m['articles']), 'completed': len(done), 'pending': pending,
+            'completed_without_prediction': sum(not r['has_prediction'] for r in done),
+            'completed_without_model_calls': sum(r.get('model_calls') == 0 for r in done),
+            'pending_with_failed_attempt': latest_errors,
+            'worker_outcomes': dict(Counter(r.get('status', 'unknown') for r in workers)),
+            'completion_note': 'Completed counts finished attempts, including extraction failures; worker outcomes are historical receipts, not live queue state.',
             'completed_with_prediction': sum(r['has_prediction'] for r in done),
             'article_seconds': stats([r['wall_seconds'] for r in done]),
             'all_extraction_tasks_valid': sum(r.get('all_extraction_tasks_valid', False) for r in done)}

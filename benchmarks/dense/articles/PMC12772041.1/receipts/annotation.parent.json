@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12772041.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2f9c9264446d5353cacf344ff5e8b52795f5fc05aba80e0df3e8ef83a60fef38",
+  "annotation_sha256": "f1bd50412e85aea8dcb1a01f0aedeab4f8e761d7e6ea1c0fe39d830873970bd0",
+  "reviewed_at": "2026-10-21T18:11:32.332254+00:00",
+  "source_segments_read": 64,
+  "facts_reviewed": 103,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Brain MRI procedure (p1-f049): added Fig. 1 caption quote \"Brain MRI at presentation\" and time \"at presentation\"; the caption states the study itself was at presentation. T2/FLAIR hyperintensities (p1-f088) and the cytotoxic-oedema interpretation (p1-f092) stay untimed because the caption does not state them.",
+    "Paraneoplastic antibodies (p1-f080..f084): specimen \"serum and CSF\" set from the panel sentence already in their evidence, which states the paraneoplastic panel was performed on both serum and CSF.",
+    "Added refuted differentials from the abstract sentence \"Differential diagnoses such as autoimmune encephalitis, ... vascular, metabolic and other viral causes were excluded\": autoimmune encephalitis (p1-f097), vascular cause (p1-f098, also b00044 \"exclude ischemic or venous causes\"), metabolic cause (p1-f099), other viral causes (p1-f100); abstract quote also added to ADEM (p1-f009) and Bickerstaff (p1-f010).",
+    "Added suspected viral encephalitis (p1-f101, possible/provisional, b00038 \"Given the suspicion of viral encephalitis\").",
+    "Added recent primary EBV infection (p1-f102, possible/provisional; b00033 \"supporting a recent primary infection\" is basis wording, not confirmation).",
+    "Added immune status from the Table 3 present-case row (p1-f103: immunocompromised state absent, verification unknown, quote \"Immunocompetent\"); row also added as evidence to CSF EBV-DNA PCR (p1-f066). Ambiguity and source_coverage for b00051 updated.",
+    "Split history event: p1-e01 is now only the herpes zoster episode \"two years earlier\"; new p1-e16 holds arterial hypertension (no time) so the zoster time is not attached to hypertension; e01 and e16 ordered before the presentation by the presentation-sentence history ruling.",
+    "Added relations: p1-e16 before p1-e02 (history in presentation sentence); p1-e02 same_time p1-e03 (\"was admitted\" / \"On admission\"); p1-e05 before p1-e15 (\"reaching ... GCS 3\" / \"remained comatose\").",
+    "Rewrote summary into four phase claims; the draft cited the EBV encephalitis diagnosis without stating it, and omitted ICU intubation/ventilation and the excluded differentials.",
+    "source_coverage b00044 changed to patient_facts (its \"In this case\" sentence supplies the ischemic/venous exclusion)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two JPEGs are inspected in visual.json.",
+    "Literature-review rows of Table 3 and discussion statements are not patient facts; the present-case row supplies immune status only.",
+    "Time of the CSF, serology, autoimmune panel, culture and imaging sequence relative to hospital day is not stated; no hospital-day times were derived.",
+    "Case text gives no sex-assigned-at-birth, ethnicity or social history beyond absent travel and exposure."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 64,
+    "facts_reviewed": 103,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (82-year-old man), fatal bilateral thalamic EBV encephalitis; no supplements (source supplements list empty, no supplementary-material in raw.xml).",
+      "Table 1 values merged with the text sentence that cites \"(Table 1)\" (WBC, CRP, glucose); time \"on admission\" from the table caption; creatinine/ALT/AST/Na/K flags left unknown, aggregate renal/hepatic/electrolyte normal statements kept as separate observations.",
+      "Anti-EBV IgM/IgG: Table 2 titled CSF vs text \"Serological testing\" is a specimen ambiguity, not a source conflict (one value per result); specimen left null with an ambiguity.",
+      "Follow-up MRI \"10 days later\" is ordered after the first MRI by the definite back-reference \"follow-up\"; anchor stays null because it is a separate paragraph.",
+      "Intubation and mechanical ventilation \"required\" kept action unknown; ICU transfer completed.",
+      "Fig. 1 panel A: magnified the yellow overlay at the lower edge; only the top rows of about three glyphs are visible, no date fragment is discernible, so timestamps_or_device_text is correct (partial-date-stamp ruling not triggered)."
+    ],
+    "residual_risks": [
+      "p1-f103 (immunocompromised state absent from the Table 3 cell \"Immunocompetent\") triggers a non-blocking EVID-NEGATION warning; \"Immunocompetent\" is a negating word like \"afebrile\", so polarity was kept.",
+      "Specimen of anti-EBV IgM/IgG remains unresolved (CSF table vs serological wording).",
+      "Ordering of CSF, panels, imaging and treatments relative to the ICU transfer is not stated and is left unordered."
+    ]
+  },
+  "physician_adjudicated": false
+}

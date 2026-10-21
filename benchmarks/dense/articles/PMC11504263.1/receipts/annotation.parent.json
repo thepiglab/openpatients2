@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC11504263.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ed6652aaa2b3895bbfcdf0ced760dfa0e2b4c551028cdbbfeb83351fc5d17596",
+  "annotation_sha256": "5e5d2d96d297593a4f98b7d51add8dedd01135663b774d5d9448441bbef4c887",
+  "reviewed_at": "2026-10-21T13:42:18.654704+00:00",
+  "source_segments_read": 54,
+  "facts_reviewed": 0,
+  "patients_reviewed": 0,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed the false print-artefact claim of \"0.500\" in Table 4 (raw.xml prints 0.50); replaced with the real artefacts: decimal comma \"4,7%\" and Table 2 percentages inconsistent with N = 21 (9 (40.9%), 4.7%, 14.2%), recorded as rounding/arithmetic ambiguities.",
+    "Rewrote the VZV/HSV limitation to quote the printed counts without asserting an unprinted HSV total; kept 10 vs 9+1+3 = 13 as an arithmetic ambiguity, HZV1/2 8 vs Table 2 HSV1/2 7/1/2, EBV table-only.",
+    "Extended the phacoemulsification ambiguity with the Methods sentence that cataract surgery was concomitantly performed in phakic eyes (vs 11 phaco at vitrectomy, 19 or 21 phakic eyes, 5 more during follow-up).",
+    "Added a limitation documenting the Table 3 mid-table header rows (On/Off for Macular status, Phakic/Pseudophakic for Lens status) and the Table 4 ON yes/ON no header row, verified against raw.xml and the Results text.",
+    "Added a limitation that the Discussion singles out one CMV/HSV-1 patient with herpes viral encephalitis history but does not individuate them; aggregate_only kept per corpus precedent (PMC7813732.1).",
+    "Added an ambiguity for the interval anchor (Results: ARN diagnosis to RD onset 33.3 days; Conclusions: development of symptoms to RD about 30 days).",
+    "Updated source_coverage notes for b00017 and the mid-table header segments b00046, b00048, b00052."
+  ],
+  "unresolved": [
+    "Disposition aggregate_only: the source is a retrospective single-centre case series of 21 eyes of 21 patients reported only as counts, means, ranges, percentages and p-values; no patient has individual identity evidence or an individually described course, so no individual patient records are created and cohort statements are not copied to placeholder patients.",
+    "reported_individual_count is 21 (literal, \"21 eyes of 21 patients\") and roster_complete is false because none of the 21 stated individuals can be enumerated.",
+    "The Results state that two patients had a past medical history of herpes viral encephalitis and one patient had a history of breast cancer, a thyroid nodule and cutaneous herpes zoster, but the patients are not identified and are not individuated; no patient records or facts were created for them.",
+    "Source conflict (cohort level): the Results state that \"all the eyes resulted in phakic status\" during the RD diagnosis, while Table 3 prints Lens status Phakic 19 (90.5%) and Pseudophakic 2 (9.5%); not reconciled and no per-eye lens status is recorded.",
+    "Source conflict (cohort level): the Abstract and Table 3 give retinal reattachment in 91% (RD recrudescence in 2 of 21 eyes), while the Discussion states \"a final postoperative anatomic success in all cases\" and later \"90.5% of cases\"; not reconciled.",
+    "Ambiguity (arithmetic): the Results report VZV \"detected in 10 eyes (9 in the aqueous humor, 1 in the vitreous, and 3 in both intraocular fluids)\", and Table 2 prints the same 9, 1 and 3; 9 + 1 + 3 is 13, not 10. The Results report \"HZV1/2 detected in 8 eyes\" while Table 2 labels the row HSV1/2 and prints 7 aqueous, 1 vitreous and 2 both (no total printed). The Results also state HSV1/2 in 2 eyes in both fluids, one eye with CMV and HSV1 in the vitreous and 2 CMV-positive patients (Table 2 CMV: 1 aqueous, 1 vitreous), and Table 2 lists EBV in 2 aqueous samples that the text never mentions. Values are recorded as printed, not reconciled, and no per-patient assignment is made.",
+    "Ambiguity: the Methods state \"Cataract surgery was concomitantly performed in phakic eyes\", while the Results give phacoemulsification with IOL in 11 cases (52.3% of eyes) at vitrectomy against 19 phakic eyes in Table 3 (or all eyes phakic per the Results), and again 5 eyes (23.8%) during follow-up, \"3 in a subsequent surgery\"; the sentences are not reconciled, and 52.3% differs from the Table 3 encircling-band 11 (52.4%) and 11/21 only by rounding.",
+    "Print artefacts and rounding recorded as printed: \"1 (4,7%)\" with a decimal comma in the Table 2 HSV1/2 vitreous cell; Table 2 percentages do not all match N = 21 (VZV aqueous \"9 (40.9%)\", where 9/21 is 42.9%; \"4.7%\" and \"14.2%\" for 1 and 3 of 21 by truncation). These are arithmetic or rounding ambiguities, not conflicts.",
+    "The macula-off BCVA in Table 4 and the optic-nerve-group BCVA stated in the Results (preoperative 1.91 and postoperative 1.83 LogMAR) are cohort subgroup means, not patient values.",
+    "Figures 1 and 2 show retinal images that the text does not assign to an identified patient; pixels are described only in visual.json and ownership stays unresolved.",
+    "No supplements are listed by the source, and raw.xml contains no supplementary-material or media entries.",
+    "Table structure: Table 3 has mid-table header rows. After the Yes/No rows, a header row \"On | Off\" governs the Macular status row (6 (28.6%) on, 15 (71.4%) off), which agrees with the Results \"In 15 eyes (71.4%), the RD was also present in the macular region (macula-off)\"; a second header row \"Phakic | Pseudophakic\" governs the Lens status row (19 (90.5%) phakic, 2 (9.5%) pseudophakic). Table 4 likewise has a header row \"ON yes (N = 14) | ON no (N = 7)\" governing its last two BCVA rows (1.91 ± 0.80 and 1.83 ± 0.55 for ON yes), which agree with the Results optic-nerve-group values. The segmented source repeats the first header of each table on every row, so the repeated \"Yes | No\" and \"Macula Off | Macula On\" headers in those segments do not govern these rows.",
+    "The Discussion states that of the 2 CMV cases \"1 testing positive also for HSV-1\" and \"that single patient had a past medical history of herpes viral encephalitis\". This links two attributes to one unidentified series member (no age, sex, eye or course), as with the Results statements about the 2 encephalitis patients and the 1 patient with breast cancer, thyroid nodule and cutaneous herpes zoster; consistent with corpus precedent for single-patient counts inside series statistics, no patient record is created.",
+    "Ambiguity: the Results give 33.3 ± 27.5 days between \"the ARN diagnosis, and the RD onset\", while the Conclusions give \"an interval of around 30 days between the development of symptoms and RD\"; the two anchors differ and are not reconciled."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 54,
+    "facts_reviewed": 0,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Aggregate-only is correct: all four tables are cohort-level (N = 21 columns or subgroup means), raw.xml has no per-patient rows; single-patient comorbidity and CMV/HSV-1 statements carry no identity or course, so patients [] with reported_individual_count 21 and roster_complete false.",
+      "Source conflicts confirmed at cohort level: Results \"all the eyes resulted in phakic status\" vs Table 3 lens status 19 phakic / 2 pseudophakic; Abstract 91% reattachment and Discussion 90.5% vs Discussion \"anatomic success in all cases\".",
+      "Table 3/4 split header rows map as stated in the new limitation and agree with the Results text (15 macula-off; ON group 1.91/1.83).",
+      "No supplementary-material or media elements in raw.xml; two figure graphics only.",
+      "Both figures viewed at full resolution with magnified crops: Figure 1 two green-tinted retinal images with asterisks and arrows, Figure 2 two round colour fundus-style images; no printed text, faces or sensitive anatomy; ownership unresolved; before/after left-right assignment in Figure 1 is a caption claim only."
+    ],
+    "residual_risks": [
+      "The Figure 1 and 2 images may come from study patients, but the source never says which; they stay unattributed and non-includable.",
+      "Cohort-level counts (PCR, phaco, reattachment) are internally inconsistent in the source and are recorded only as limitations; no aggregate facts are scored."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC11614591.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "491037408048561b6c3538b7d4dfcf76ccd1d3f20d6f1d066ba350a640fe6dc8",
+  "annotation_sha256": "5b6d92bfb92f7f53120f4d0caf2c34a0a63824b66749199880ef2814694a94e0",
+  "reviewed_at": "2026-10-21T13:51:54.027021+00:00",
+  "source_segments_read": 108,
+  "facts_reviewed": 264,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Homemade liquid diet p1-f021 moved from social_exposures to procedures_devices (nonpharmacologic_therapy, completed); diets given by tube are therapy.",
+    "Merged p1-f032 (reason for choosing PEG over the NGT) into p1-f031 (the same multidisciplinary decision); event and summary references repointed.",
+    "Added the abstract \"history of ischemic stroke\" quote to p1-f007 (historical temporality; the b00008 \"history of\" list does not cover the stroke).",
+    "Added untimed text BMI items p1-f258 (18.2), p1-f259 (15.0) and p1-f260 (16.2): their own sentences state no time, so they are not merged with the Table 1 cells; ambiguity added.",
+    "Text BMI 15.7 (p1-f041) kept review_only as an ambiguity: its time (22 days after adding the main course) is not literally the Table 1 8th month column; the figure 15.2 label is pixel content; Table 1 15.2 (p1-f093) stays include.",
+    "p1-f054 (3.1 kg gain) now also cites its discussion restatement with its own time \"1 month after (April, 2024)\" after the HEF prescription.",
+    "Flags from the text classification of specific results plus the printed table interval: August urea/creatinine low and CRP high (b00015 \"abnormal\"), August BMI low (b00010 abnormal anthropometrics; b00081 underweight), August glucose normal (\"not altered at admission\"), February glucose high (b00070 abnormal; b00089 \"one elevated glucose value\"), April urea/creatinine/potassium low and CRP high (b00089 \"last laboratory assessment ... abnormal\").",
+    "Added p1-f261 sarcopenia absent/refuted at the first two calf measurements (b00083 \"not yet classified as sarcopenic\").",
+    "Added energy-intake increases p1-f262 (NEF +500 Kcal daily) and p1-f263 (HEF +318 Kcal), and monitoring care plans p1-f264 (laboratory parameters monitored) and p1-f265 (CC/MUAC measured periodically).",
+    "Events: anemia (throughout follow-up) removed from the February assessment event p1-e09; new BMI and energy facts linked to their events.",
+    "Relations added: e01 same_time e02 (\"At admission (August, 2023)\"), e01 same_time e03 (\"upon admission\"), e01 before e06 (NGT \"present at admission\" replaced by PEG), e15 before e18 (\"1 month after (April, 2024)\" the HEF).",
+    "Ambiguities rewritten/added: BMI 15.7 vs 15.2 (ambiguity, not a two-sided conflict), weight arithmetic incl. the 9.5 kg baseline, MUAC and CC printed \"Normal value\" labels vs text cutoffs, hedged causes vs recorded flags, existing-sarcopenia wording at PEG vs not yet sarcopenic, chronic inflammation as GLIM criterion only (no condition), untimed text BMI items."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the single JPEG was inspected in the separate visual submission.",
+    "Table 1 and Table 2 time labels are printed per month with calendar months; Table 1 prints 2rd month; no table values were converted or corrected.",
+    "Table 3 diet composition cells (four printed diet columns; the title says three diets) are recorded as observations of the energy and nutrient composition of each diet given to this patient, tied to the printed diet column names; the source gives them no time points.",
+    "Text BMI 15.7 (22 days after adding the main course) differs from Table 1 8th month 15.2; the text value is review_only as an ambiguity (the times are not literally the same column).",
+    "No supplementary material is listed in the source (no supplementary-material element in the JATS XML)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 108,
+    "facts_reviewed": 264,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient, 78-year-old man in a nursing home with post-stroke dysphagia, malnutrition (GLIM stage 1) and sarcopenia, fed by PEG; no supplements in the JATS XML.",
+      "All 186 table cells (Table 1 24, Table 2 54, Table 3 108) checked programmatically and by eye against the source rows and column headers; values, units and times match; potassium \"4,3\" kept as text.",
+      "Table 3 diet composition kept as observations of the diets given to this patient (precedent: energy intake as observation in PMC12310273.1); the title says three diets but four columns are printed (ambiguity).",
+      "Merges checked: August anthropometrics/labs (text cites Table 1/2 at admission, August, 2023), February urea/creatinine/CRP (\"At this time (February, 2024)\", Table 2) and May BMI (\"One month later (May, 2024)\") are the same labelled measurements; untimed text BMIs not merged.",
+      "MUAC/CC admission flag normal follows the explicit text; the printed table \"Normal value\" labels contradict the text cutoffs and are kept as an ambiguity.",
+      "Abstract claim of improved muscle mass and biochemistry stays review_only; chronic inflammation is not a condition; diets are nonpharmacologic therapy, NEF/HEF medications, gastric stasis possible.",
+      "Figure 1 viewed at full resolution: twelve dated markers, six printed BMI labels (18.8, 18.2, 15.0, 15.2, 16.2, 16.8); calendar dates are direct identifiers and appear in no authored field (grep checked)."
+    ],
+    "residual_risks": [
+      "The text BMI 15.7 is likely a misprint of 15.2 but is kept review_only rather than resolved.",
+      "Flags rely on the text classifying named results together with the printed intervals; February urea/creatinine/CRP stay unflagged (\"improvement\").",
+      "Table 1 anthropometric chain relations use the follow-up month headers; text events in the same months are not ordered against them."
+    ]
+  },
+  "physician_adjudicated": false
+}

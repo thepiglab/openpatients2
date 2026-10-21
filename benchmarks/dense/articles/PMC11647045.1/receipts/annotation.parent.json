@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC11647045.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "20f2d0df7d8eb5ce0b194ed46e1e47706dcafd767de0f748e225ae05212965ab",
+  "annotation_sha256": "f27b586c51ccb65d38f60689d12acaaf4f2d266c5ac977aea7427f0e40e14b40",
+  "reviewed_at": "2026-10-21T14:20:40.524135+00:00",
+  "source_segments_read": 29,
+  "facts_reviewed": 66,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Generic-antibiotic non-cure outcome (p1-f063, abstract) moved out of the cefmetazole event p1-e07 into a new outcome event p1-e13 with the abstract and the discussion restatement \"refractory to conservative treatment for 9 days\"; p1-e03 -> p1-e13 -> p1-e09 ordered by the abstract \"but her disease was not cured, we therefore attempted\".",
+    "p1-e09 -> p1-e12 (day 9 vs 17th day, no stated anchor) no longer rests on the two day numbers alone: evidence now the day 9 sentence plus the abstract \"the successful treatment made her discharged on the 17th day\" (in-hospital care before discharge of the same stay).",
+    "p1-e09 -> p1-e10 now quotes the antecedent of \"After that\" (\"Finally, we could remove the stone.\") and the abstract \"After stone removal ... when we contrasted\".",
+    "Added relations: presentation p1-e02 before admission exam p1-e04, admission labs p1-e05 and admission CT p1-e06; admission CT p1-e06 before repeated plain CT p1-e08 (\"repeated\"); contrast study p1-e10, improvement p1-e11 and admission p1-e03 before discharge p1-e12.",
+    "Added observation p1-f066 \"the inflammatory response did not improve\" (linked to p1-e07).",
+    "p1-f054 hepatobiliary enzymes: time On admission from the immediately preceding admission blood-test sentence (already quoted); flag kept unknown (\"no elevated\" is not a source call of normal).",
+    "Removed the negated leakage from the complication field of procedure p1-f025 (kept as observation p1-f062); removed the unstated endoscopy method from location item p1-f060.",
+    "Unlinked the discussion \"Herein, CT images revealed no stones\" facts p1-f007/p1-f008 from the repeat-CT event (CT not specified) and added an ambiguity.",
+    "Merged the thin outcome summary claim into the treatment claim; added ambiguities for the 35.8 degree admission temperature vs \"continued to have a fever\" and for the antibiotics/cefmetazole outcome attribution; reworded the hospital-day and hepatobiliary ambiguities."
+  ],
+  "unresolved": [
+    "Single case report; the source gives no calendar dates, only on admission, during the night, day 9 and the 17th day.",
+    "Table 1 is parsed with its first row (WBC and TP) repeated in every segment; each analyte was taken once from its own row. The table prints no reference intervals.",
+    "No doses, routes or durations are given for the antibiotics or cefmetazole.",
+    "No follow-up after discharge is reported; the discussion's statements on recurrence and published cases are not patient facts.",
+    "Caption-layer visual status is not_inspected; the three JPEG figures are inspected in the separate visual submission. The source lists no supplementary material (raw XML checked)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 29,
+    "facts_reviewed": 66,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; all 24 Table 1 cells checked against observations; WBC text (/mm^(3), cites Table 1, on admission) merged with the table row keeping /µL and an ambiguity.",
+      "Generic admission antibiotics and cefmetazole are not linked by the source and stay separate items.",
+      "No supplementary material in raw.xml; figure bindings follow the XML graphic hrefs (g002, g003, g001).",
+      "All three figures (9 panels) viewed at full resolution with crops of Figure 1b and 1c; no burned-in identifiers."
+    ],
+    "residual_risks": [
+      "Day 9 and the 17th day have no stated anchor.",
+      "Figure 1c coronal plane is taken from the caption; not confirmable from the magnified pixels.",
+      "The discussion \"Herein\" CT statement does not name which CT."
+    ]
+  },
+  "physician_adjudicated": false
+}

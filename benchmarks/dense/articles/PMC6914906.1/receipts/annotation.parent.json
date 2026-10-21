@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC6914906.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "15da2414b15f73cdd7fd83f3f4c9e4cbe9cbcd69433548f53910d289af5664dc",
+  "annotation_sha256": "7c955d2a64bf9f2e6ffd1128460a9e1232cb35c3d26c3bf19f1d30b9755a9b96",
+  "reviewed_at": "2026-10-21T13:02:40.598971+00:00",
+  "source_segments_read": 32,
+  "facts_reviewed": 73,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f036 trochlear groove: flag normal -> unknown; \"relatively normal\" (b00008) is a qualified normal (RULINGS: \"almost normalized\" is not normal). Merge with the discussion \"normal trochlea\" (same preoperative radiographs) kept, with a new ambiguity.",
+    "p1-f068 and p1-f069 (stand/walk, sit with flexed knee): removed the borrowed \"5-year follow-up\" time and the b00023 follow-up sentence quote; that sentence is not immediately preceding (one intervening sentence). p1-f064-f066 keep the time (immediately preceding sentence names the 5-year follow-up, both quoted).",
+    "Graft angle ruled an ambiguity, not a source conflict (source does not identify the 30° securing and the 60° \"also performed in this patient\" statement as the same step); added review_only ambiguous fact p1-f073 for the b00021 60° statement; p1-f057 stays review_only; ambiguity rewritten with must_not_infer.",
+    "p1-f051 patellar tunnel finding now carries the patient-stated \"on 60° of knee flexion\" (b00020).",
+    "p1-f056 screw finding: removed the added unit \"mm\" on the diameter (source: \"a diameter of 4.5 and a length of 65 mm\").",
+    "p1-f038 extensive lateral release: replaced the general recommendation quote (b00024 \"should be done\") with the literal treatment statement in b00001.",
+    "p1-f039 lateral capsule release: added b00016 quote stating the capsule release was done and proved inadequate (b00009 only says \"decided to release\").",
+    "p1-f010 time relation unknown -> since (\"since 25 years before\").",
+    "Added ambiguities for MPFL rupture (hedged, review_only p1-f014) and for the trochlear groove wording.",
+    "Events: split confirmation X-ray (new p1-e12, postoperatively) from layered closure (p1-e11); moved footprint incisions p1-f050 from graft harvest to the patellar event p1-e09; later events renumbered p1-e13 brace, p1-e14 rehab plan, p1-e15 5-year follow-up.",
+    "Relations: removed p1-e09->p1-e10 (quote ordered only steps inside the femoral event), p1-e08->p1-e11 (quote ordered closure vs X-ray inside one event) and p1-e10->p1-e11 (\"then\" opening a new paragraph); replaced the b00005 basis for release -> follow-up with b00001 \"treated with ... with 5-year follow-up data\".",
+    "Relations added: p1-e01->p1-e06 (\"25 years after injury\"), p1-e01->p1-e07 (treating the named existing dislocation, b00001), p1-e09/p1-e10->p1-e12 (confirmation of endobutton/screw position \"postoperatively\"), p1-e11->p1-e12 (\"After that\"), p1-e10->p1-e14 (\"After eight weeks postsurgery\"), p1-e10->p1-e15 (follow-up after the treatment, b00001).",
+    "Summary: fixed ETHIBOND placement (femoral side, anchored to the screw and washer, not patellar); follow-up paragraph no longer places stand/walk/sit at the 5-year time."
+  ],
+  "unresolved": [
+    "Figure captions are caption-layer only here; pixels are described in visual.json.",
+    "General technique, literature and recommendation statements in the Introduction and Discussion were not recorded as patient facts.",
+    "The statement that the endobutton on the patellar side showed an excellent outcome is a technique-level conclusion and was not recorded as a patient fact.",
+    "Whole mechanical axis radiography was not performed, so femoral anteversion and Q angle data are lacking per the source.",
+    "Knee flexion angle at graft fixation (30° in b00019 vs 60° \"also performed in this patient\" in b00021) is an ambiguity; both statements are review_only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 32,
+    "facts_reviewed": 73,
+    "figures_viewed": 7,
+    "key_findings": [
+      "Single index patient (49-year-old man), roster 1; discussion literature and technique statements correctly excluded.",
+      "30° vs 60° graft-fixation angle is an ambiguity (different possible steps), both sides review_only.",
+      "\"Relatively normal\" trochlear groove is not flag normal; trochlear dysplasia refuted by \"normal trochlea, contrary to trochlear dysplasia\".",
+      "MPFL rupture is hedged (\"most probable cause\"), kept possible/review_only.",
+      "Remaining NO-BORROWING warnings on p1-f064-f066 are permitted by the result-sentence ruling (adjacent sentence naming the 5-year follow-up, both quoted).",
+      "Rehabilitation flexion steps and brace discharge kept action unknown (\"could\"); brace in full extension recorded as a device in use.",
+      "All 7 figures viewed at full resolution with corner crops: no faces, no sensitive anatomy, no burned-in identifiers; Fig 6 R is a side marker; Fig 2a corner mark illegible."
+    ],
+    "residual_risks": [
+      "Which fixation step the 60° knee flexion statement refers to is unresolved.",
+      "Follow-up functional findings (stand/walk, sit) carry no fact-level time although they appear in the follow-up paragraph."
+    ]
+  },
+  "physician_adjudicated": false
+}

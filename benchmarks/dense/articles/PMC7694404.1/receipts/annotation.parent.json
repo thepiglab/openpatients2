@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC7694404.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "50f9a4958bc68255141c9bb0ff2d036c7048837a5fcfeecbef5e0cdb9c2305fc",
+  "annotation_sha256": "547a3cb38467d53df5c41c7aa0f6f0c49158364d3f5c081d25fd612f0fe79314",
+  "reviewed_at": "2026-10-21T08:27:17.823821+00:00",
+  "source_segments_read": 60,
+  "facts_reviewed": 166,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Urine osmolality: text 105 mOsm/kg (b00009, untimed, no Table 1 citation) and Table 1 9-mo 130 mOsm/L are not identified by the source as one measurement; p1-f032 and p1-f121 changed from source_conflict/review_only to supported/include as separate facts; p1-f032 unlinked from the 9-month event; ambiguity and article limitation rewritten.",
+    "FENa: p1-f115 keeps the b00009 text and Table 1 9-mo cell (sentence cites Table 1 explicitly) but drops the discussion quote and the normal flag; added p1-f157 for the discussion statement \"normal at presentation at 0.7%\" with its own literal time, not merged on the matching value; ambiguity rewritten.",
+    "p1-f040 urinary calcium \"increased\": flag high -> unknown (trend wording, not a high classification).",
+    "p1-f003 age 9 months: attribute age_at_presentation -> age_other (the patient first presented at birth and at 7 months).",
+    "p1-f047 growth velocity at diagnosis: anchor set to literal \"diagnosis\"; moved from the 30-month event p1-e16 to the diagnosis event p1-e12; p1-f048/p1-f049 (untimed) removed from p1-e16 with an ambiguity.",
+    "Untimed b00007 facts (renal ultrasound suspicion, normal urinary calcium excretion, Bartter III suspicion, blood pressure not evaluated) moved out of the 7-month event p1-e06 into new untimed event p1-e18; untimed polyuria p1-f019 removed from p1-e07; untimed conditions p1-f011, p1-f010 and consanguinity p1-f025 removed from p1-e09, p1-e17 and p1-e13.",
+    "p1-e10 split: 15-month echocardiogram stays in p1-e10; introduction of calcium antagonists and beta-blockers moved to new untimed event p1-e19 with relation p1-e10 before p1-e19 (\"which led to\").",
+    "Added facts: p1-f158 very mild hypercalciuria (b00023, \"as seen in our case\"); p1-f159 parents and sibling in good health; p1-f160/p1-f161 renin and aldosterone not tested before 7 months; p1-f162 other urinary electrolytes not analyzed; p1-f163-f165 Table 1 Therapies None at 7, 9 and 12 mo (assertion absent); p1-f166 findings suggestive of monogenic hypertension (possible).",
+    "Relations: merged the duplicate p1-e16 -> p1-e17 pair into one relation with both quotes; added p1-e01 before p1-e02 (birth -> neonatal admission), p1-e04 before p1-e05 (\"subsequently discharged\"), p1-e03 before p1-e06 (two stated postnatal ages), p1-e18 before p1-e12 (\"initially misdiagnosed as Bartter syndrome III type\"), p1-e10 before p1-e19.",
+    "Ambiguities added: THF ratio 20 vs \"over 20\" (b00025); 36-month echo Normal (Table 1) vs regression (text); 30-month clause scope over growth velocity and weight; scope of \"not confirmed by genetic testing\"; four-day stay blood pressure readings placed at 9 months via b00020.",
+    "Summary claims 2-4 reworded so untimed findings carry no borrowed time; b00025 source coverage set to patient_facts."
+  ],
+  "unresolved": [
+    "Supplement PDF (Table S1, ACMG criteria) is reviewed in the supplement manifest and is not a source of patient facts.",
+    "Table 1 dashes were treated as missing cells and not as zero or not-performed results; Therapies None cells were recorded as absent therapy at 7, 9 and 12 mo.",
+    "The untimed text urine osmolality (105 mOsm/kg) and the Table 1 9-month value (130 mOsm/L) are not identified by the source as one measurement and are kept as separate facts.",
+    "Figure pixel review is in visual.json; values printed inside the figures are pixel content and not facts. Caption-layer visual_status is not_inspected by convention.",
+    "Discussion paragraphs about cohorts, literature cases and general pathophysiology are not index-patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 60,
+    "facts_reviewed": 166,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single patient (roster 1 literal): preterm SGA girl of consanguineous parents with hypokalemic metabolic alkalosis from 4 days, failure to thrive, nephrocalcinosis, later hypertension and ventricular hypertrophy; AME confirmed by urine steroid metabolome and homozygous HSD11B2 c.900dup.",
+      "All 75 numeric Table 1 cells and the renal/cardiac ultrasound and therapy cells checked against the source; text-table merges kept only where the text cites Table 1 or states the same time (uK/uCr and FENa 9 mo, 15-mo echo, 30-mo osmolality, 7-mo renin/aldosterone).",
+      "30-month urine osmolality kept merged (text cites Table 1 and states 30 months); unit printed mOsm/kg in text vs mOsm/L in the table, text unit kept with an ambiguity (label inconsistency, same value).",
+      "Echo b00007 tied to 7 months through the discussion back-reference to the normal echocardiography at 7 months; Bartter III recorded as suspected (possible) and as misdiagnosed (absent/refuted).",
+      "Figures: Fig 1 background algorithm; Figs 2-4 patient growth charts with printed SDS labels only (no positional readings); Fig 5 pedigree with parent and index chromatograms, whole figure in the index record."
+    ],
+    "residual_risks": [
+      "The 9-month urine osmolality text (105 mOsm/kg) and table (130 mOsm/L) may describe the same admission; the source does not say so.",
+      "FENa \"at presentation\" (p1-f157) is probably the 9-month value (p1-f115) but is kept separate; possible double count.",
+      "Birth weight and length SDS printed with a dash; sign not interpreted (Fig 3 prints -4,98 as pixel content only).",
+      "Start times of the antihypertensive drugs, low sodium diet, spironolactone and amiloride are not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

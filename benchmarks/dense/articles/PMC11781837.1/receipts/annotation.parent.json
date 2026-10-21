@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC11781837.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b7b531a53769d8a8ef1640fb15bb957c74d39c58ffdf1b3ed05379ca0f79d921",
+  "annotation_sha256": "120549f29e5c6a130c77bc932884f47b72fa8ea575d3326a113d6234ca479120",
+  "reviewed_at": "2026-10-21T18:01:52.426653+00:00",
+  "source_segments_read": 18,
+  "facts_reviewed": 73,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f047 surgical resection: action cancelled -> assertion absent, action unknown (never stated as ordered/scheduled; corpus precedent for not-feasible procedures); event p1-e21 kind plan -> treatment, occurrence not_occurred kept; ambiguity added.",
+    "p1-f027/f028/f060 (drowsiness, GCS 13, glucose 873): time \"On the following day\" applied under the RULINGS result-sentence rule (sentence directly follows and describes the deterioration), both sentences quoted.",
+    "p1-f070 deterioration: replaced the later pH-sentence quote with the abstract deterioration sentence that names worsening DKA (no cross-sentence borrowing).",
+    "Split p1-e16: pH 7.13 and mechanical ventilation moved to untimed p1-e17; bleeding p1-e18 limited to vomitus/melena; hemoglobin 9.9 and 7.7 g/dL split into p1-e25 and p1-e26 with relation e25 before e26 (\"decreased from 9.9 g/dL to 7.7 g/dL\").",
+    "Removed relation p1-e21 before p1-e22 (no order word between the surgery decision and supportive care); added p1-f073 family discussions (care_plans counseling, completed) and event p1-e24 with relation e24 before e22 (\"Following thorough discussions\").",
+    "Added relations: e08 before e11 (\"next cycle\"), e10 before e14/e17/e18/e19/e20/e22 (presentation opens the stay -> in-hospital care), e10 before e16 (glucose 539 then \"rose to 873\"), e12 before e17 (pH 7.159 then \"dropped to 7.13\"); trimmed e09 before e08 evidence to the HbA1c \"prior to starting treatment\" sentence.",
+    "p1-f072 best supportive care: removed misused target field; p1-f065 renamed \"Oozing bleeding in the necrotic area\" (sentence does not name endoscopy).",
+    "Event p1-e04 time_kind duration -> relative (\"Three years post-treatment\").",
+    "Summary claims 2-4 rewritten so untimed findings (pH 7.159, C-peptide, ketones, pH 7.13, ventilation) are not dated to day 34 or the following day; ambiguities for \"On the following day\" and hemoglobin rewritten; limitation updated."
+  ],
+  "unresolved": [
+    "Single case report; discussion paragraphs on checkpoint-inhibitor diabetes, DKA and mesenteric ischemia are literature background and are not copied to the patient.",
+    "Printed reference-range units for creatinine, glucose and arterial pH are inconsistent with the measured quantities; kept literal without correction.",
+    "Causal links (pembrolizumab to T1DM, DKA to mesenteric ischemia) are hedged or temporal in the source and are not recorded as established causes.",
+    "Only the deterioration sentence and the sentence directly after it carry \"On the following day\"; later findings (pH 7.13, ventilation, bleeding, hemoglobin, endoscopy, CT) have no stated time.",
+    "Figure captions are not pixel inspection; the actual images are described in visual.json.",
+    "The source states no supplementary material."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 18,
+    "facts_reviewed": 73,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (78-year-old woman, recurrent cervical SCC) with fulminant T1DM/DKA after one pembrolizumab-containing cycle, gastric/small-bowel ischemic necrosis, death from septic shock; no tables or supplements (raw.xml checked: 4 figures, no supplementary-material, no table-wrap).",
+      "NO-BORROWING warning on p1-f008 is a checker false positive: \"T1DM developed after a single dose of pembrolizumab\" is the fact's own sentence about T1DM.",
+      "Mis-printed reference-range units (creatinine mg/mL, glucose mEq/l, pH ng/mL) kept literal with an ambiguity; hedged causes (DKA \"likely contributed\", Figure 4 \"possible\" mechanism) not recorded as established.",
+      "FIG4 is an author mechanism schematic (background, not includable); FIG1-3 are index-patient MRI/CT/endoscopy with no burned-in identifiers."
+    ],
+    "residual_risks": [
+      "\"On the following day\" is anchored by adjacency to the anti-GAD sentence (RULINGS); clinically it may refer to the day after presentation.",
+      "Time applied to drowsiness/GCS/glucose 873 rests on the result-sentence ruling; validator still warns NO-BORROWING.",
+      "EVID-NEGATION warning on p1-f047: \"too compromised to tolerate\" / \"unfeasible\" are the only non-performance cues in the source.",
+      "Presentation-opens-stay relations assume the day-34 presentation and the following-day care are one stay; the source never says \"admitted\"."
+    ]
+  },
+  "physician_adjudicated": false
+}

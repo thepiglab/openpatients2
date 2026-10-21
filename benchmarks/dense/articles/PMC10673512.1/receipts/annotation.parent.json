@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC10673512.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c265e5864e78ffd6ef4cd0038f0f925eb124bbfdf3ea04092e83aa1879369019",
+  "annotation_sha256": "9f45cba399611ece08e9e7457eab73aec027783d0fa2bb411358682926220010",
+  "reviewed_at": "2026-10-21T04:32:21.035755+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 104,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Seronegative RA condition: removed body_site borrowed from the presentation sentence (diagnosis sentence states no site).",
+    "Worsening arthritis: removed text_value that held the basis clause rather than a value.",
+    "ESR and KL-6 at diagnosis: evidence quotes extended to include 'elevated' so the high flag is literal.",
+    "KL-6 1440 at diagnosis (IU/mL in text vs U/mL in Table 1): kept merged as the same diagnostic measurement but reclassified as an ambiguity (one-character unit label), certainty ambiguous, review_only.",
+    "D_LCO/VA 69.9% text fact: removed borrowed Table 1 caption time and caption evidence; added abstract quote; remains source_conflict/review_only against Table 1 68.0%.",
+    "KL-6 2460 IU/mL: flag high -> unknown ('increased' states a change, not a flag).",
+    "Abatacept 750 mg/week dose fact made ambiguous/review_only because image-only Figure 2 labels the row mg/4 weeks; added an include fact for abatacept administration from the abstract without the disputed dose; ambiguity added.",
+    "Intravenous cyclophosphamide: added route intravenous and dose_value/unit 800 mg with the b00004 case sentence defining IVCY.",
+    "Conditional antifibrotic option moved from care_plans to medications (assertion conditional, action unknown) per SECTION-CAREPLANS; not planned.",
+    "Added relations e04->e06 (abstract 'Initial treatment ... was started; however ... worsening') and e08->e10 (adjacent-sentence 'Subsequent treatment changes included abatacept'); added abstract evidence to e10->e11.",
+    "Summary: removed unsupported 'heavy' smoker and 'synovitis' wording; rephrased remission/ILD worsening sentence; summary cites the include abatacept fact.",
+    "Ambiguities added: prednisolone 'from 5 mg' vs Figure 2 pixels, NSIP 'alternative diagnosis' status, RA vs RA-ILD diagnosis anchors."
+  ],
+  "unresolved": [
+    "Figure 2 is an image-only clinical-course table; its printed values are pixel content recorded only in visual.json, not as facts.",
+    "Intervals are relative to \"RA diagnosis\" or \"diagnosis with RA\" and are approximate; no calendar dates other than June 2017 are given.",
+    "Discussion sentences about published studies and general JAK inhibitor evidence are background, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 104,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient; all case text, Table 1 rows, both captions and both figures read.",
+      "D_LCO/VA 69.9 (text) vs 68.0 (Table 1) kept as source conflict; Figure 2 prints 69.9 but is pixel content only.",
+      "KL-6 IU/mL vs U/mL treated as an ambiguity on a merged fact.",
+      "Figure 2 values remain in visual.json only; abatacept mg/4 weeks label quarantines the text dose.",
+      "Relations checked against RULINGS: same-anchor RA-diagnosis intervals, drug start->stop/taper, renal dysfunction led to UPA selection, purpose clause for PSL/TAC change."
+    ],
+    "residual_risks": [
+      "Figure 1 J/I panel glyphs are not legible at the published resolution; assigned by the caption pairing layout.",
+      "Event e16 (publication follow-up) and e17 (conditional option) have no literal ordering relation.",
+      "Reference gate NO-BORROWING warning on the IVCY fact is a false positive: the time comes from the fact's own b00006 sentence; the b00004 quote carries the route."
+    ]
+  },
+  "physician_adjudicated": false
+}

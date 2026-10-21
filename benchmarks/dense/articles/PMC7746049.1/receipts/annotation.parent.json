@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC7746049.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "03330a9d7217c5c06a05b157f3298eb343b33b61cb463f4d9136c60a27eccb4d",
+  "annotation_sha256": "adbab3ffb04c5e8ac1e9e977388af765adc9833b46dea7d4b59c8343287e8adf",
+  "reviewed_at": "2026-10-21T08:33:36.189664+00:00",
+  "source_segments_read": 55,
+  "facts_reviewed": 106,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Duration \"weeklong\" (abstract) vs \"five days\" (case text) reclassified from source conflict to ambiguity (approximation): p1-f014/f015 fatigue and flu-like symptoms now carry the case-text time \"five days\" from their own sentence; duplicate review-only p1-f103/f104 removed; abstract p1-f105/f106 kept review_only with certainty ambiguous; ambiguity, limitation and coverage note reworded.",
+    "Prodromal event p1-e01 now holds only fatigue and flu-like symptoms (the only symptoms the sentence says \"preceded\" the jaundice), time_text \"five days\" (duration); nausea, tan stools, dark urine and subjective fevers moved to the presentation event p1-e02.",
+    "p1-f036 HIV prophylaxis: action current -> administered (ruling: \"current\" at history-taking is not the latest described time); temporality keeps the literal \"current\".",
+    "p1-f085 IV drug use: removed duration_text (\"last administration three years prior\" is not a duration); added the b00046 \"our patient admitted to a history of IV drug use\" quote.",
+    "p1-f086 sex with other men: removed the \"during his hospitalization\" time (it times the disclosure, not the behavior); relation unknown with a note.",
+    "p1-f041 MRCP and findings p1-f075..f078: evidence extended to the full sentence and time \"During the patient’s two-day hospital course\" (during, anchor \"hospital course\") from their own sentence.",
+    "p1-f017/f018 tan stools and dark urine: added the literal b00043 \"as in this case including pale (i.e., acholic) stools and dark urine\" quote; b00043 coverage changed to patient_facts.",
+    "p1-f008 suspected acute hepatitis: added the b00053 presumptive ED diagnosis quote.",
+    "Added p1-f107 hemodynamic stability at admission (b00039, anchor \"admitted\"; separate from the ED vitals) and p1-f108 Figure 1 caption finding \"Gall Bladder Contraction with Wall Thickening\", with an ambiguity against the text wording \"wall edema\".",
+    "Added 10 relations: presentation p1-e02 before ED care p1-e04/e05/e06/e07/e09/e10 (presentation opens the stay); admission p1-e11 before hepatitis panel results p1-e13 (\"pending\"), Day 2 repeat panel p1-e15 and discharge p1-e16; in-hospital MRCP p1-e12 before discharge p1-e16."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the single CT image is inspected in visual.json.",
+    "Abstract \"weeklong\" and case-text \"five days\" for the pre-presentation fatigue and flu-like symptoms are treated as an approximation (ambiguity); the abstract items are review-only.",
+    "Table 1 reports one emergency department time point; its caption is not a stated clock time, so laboratory items carry no time.",
+    "Cholecystitis, obstructive jaundice and diabetes mellitus at ED stage are suspected only; later diagnostic status is recorded only where stated.",
+    "Discussion, epidemiology and prophylaxis paragraphs are background and not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 55,
+    "facts_reviewed": 108,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (male in his early 30s) with acute hepatitis A; every Table 1 cell (23 analytes) checked; text/table merges are valid because b00009 cites Table 1 for the same ED evaluation, and high/low flags come only from the text words thrombocytopenia, hyperglycemia, hyperbilirubinemia, transaminitis and elevated PT-INR.",
+      "Suspected cholecystitis, obstructive jaundice, acute hepatitis, liver dysfunction and new-onset diabetes stay possible/provisional; diabetes is confirmed separately by the b00040 \"newly diagnosed\" HbA1c sentence.",
+      "Care plans: follow-up planned, \"entailed\" counseling/monitoring unknown, GI hepatotoxic-medication avoidance recommended, no medication facts for the example drugs.",
+      "Relation p1-e01 -> p1-e02 encodes order only (\"preceded\"), not the duration."
+    ],
+    "residual_risks": [
+      "The weeklong/five-day call is an approximation judgment; an orchestrator reading it as two numbers would restore source_conflict on both sides.",
+      "History events (asthma, HIV prophylaxis, IV drug use three years prior) are not ordered against the presentation because no history wording sits in the presentation sentence.",
+      "\"Supportive care was provided\" (b00053) is not itemized; it is carried only inside the improvement outcome quote."
+    ]
+  },
+  "physician_adjudicated": false
+}

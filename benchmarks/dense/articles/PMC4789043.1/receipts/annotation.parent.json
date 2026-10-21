@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC4789043.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "df8c840fcd4a7104adceaced79669f940a17e6e0d16032864c0381ddc4b65824",
+  "annotation_sha256": "3a1ce3f784df299533331a39295f515fb70b73c7c5aed5e5b51474c3d64dcf51",
+  "reviewed_at": "2026-10-21T03:26:51.367270+00:00",
+  "source_segments_read": 108,
+  "facts_reviewed": 0,
+  "patients_reviewed": 0,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Rewrote the hospital-stay limitation: the abstract (not only Figure 3) claims a significantly lower stay in Group A without an AKI qualifier, against Table 1 (7 +/- 2 days in both groups) and the results statement that the stay was the same in both groups.",
+    "Extended the Figure 4 limitation: sNGAL on axes and panel titles vs pNGAL in caption/text (sNGAL undefined), panel letters (a)-(e) and T0-T4 printed only on the image with no caption letters, and identical printed p = 0.787 in panels (d) and (e) with different r values.",
+    "Added limitation: Figure 1 panels (a)/(b) and (c)/(d) are cited together for a sentence covering presence and absence of AKI; which panel shows AKI vs non-AKI is not stated, so order-based attribution is unresolved.",
+    "Added limitation: the results text promises means in Tables 2 and 3, which print only medians and percentiles.",
+    "Added limitation: abstract vs methods wording of what was measured in Group A."
+  ],
+  "unresolved": [
+    "Disposition aggregate_only: the source reports a randomized single-centre series of 24 acute decompensated heart failure patients only through group-level counts, means, medians, percentiles and plots; no patient has individual identity evidence or an individually described course, so no individual patient records are created and group statements are not copied to placeholder patients.",
+    "reported_individual_count is 24 (literal) and roster_complete is false because none of the 24 stated individuals can be enumerated.",
+    "The text says 5/13 (38.46%) patients with CKD developed AKI, while it also says CKD was present in 7/24 patients and Table 1 lists CKD as 4 in Group A and 3 in Group B; the denominator in the 5/13 statement is not reconciled.",
+    "The methods say the NGAL threshold of 200 ng/mL was used in patients of Group B, yet Group B had creatinine and eGFR measured alone and NGAL was measured in Group A; the source wording is not reconciled.",
+    "Table 1 reports hospital stay of 7 ± 2 days in both groups and the results text says the duration of hospital stay was the same in both groups, while the abstract states that hospitalization stay was significantly lower in Group A without restricting the statement to patients with AKI; the results text and Figure 3 restrict the significant difference (p = 0.037) to patients who developed AKI. The statements are not reconciled by the source.",
+    "Table 2 and Table 3 contain print anomalies in which a printed 25th percentile exceeds the median or the 75th percentile is lower than the 25th (for example the uNGAL T = 0 Non-AKI row, the pCREA T = 4 AKI row of Group A, and the T = 3 AKI row of Group B); they are kept as printed and not corrected.",
+    "Subclinical AKI is stated as 2 patients by RIFLE and 4 patients by AKIN; the group allocation of these patients and the percentages plotted in Figure 2 are not reconciled with those counts.",
+    "Figure 4 axes and panel titles print sNGAL where the caption and text use pNGAL (plasma NGAL); the source does not define sNGAL. The Figure 4 caption names no panel letters; the letters (a) to (e) and the time labels T0 to T4 are printed only on the image. Panels (d) and (e) both print p = 0.787 with different r values (−0.148 and −0.063); kept as printed, possibly a print error.",
+    "The Figure 1 caption and the results text cite panels (a) and (b), and panels (c) and (d), together for a sentence covering both presence and absence of AKI; no panel prints AKI status and the source does not state which panel of each pair shows patients with or without AKI. Any assignment by sentence order is not literal and remains unresolved.",
+    "The results text says mean, median, 25th and 75th percentiles are summarized in Tables 2 and 3, but both tables print only medians and percentiles.",
+    "The abstract says NGAL, creatinine and eGFR were measured in Group A, while the methods list plasma NGAL, urinary NGAL and creatinine with eGFR calculated in all patients; the wording differs but is not contradictory.",
+    "Figures 1 to 4 are group-level plots; ownership is aggregate and they are not individual patient data. Pixels were reviewed in the separate visual target; no values were read from plot geometry."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 108,
+    "facts_reviewed": 0,
+    "figures_viewed": 4,
+    "key_findings": [
+      "aggregate_only confirmed: whole source (abstract, methods, results, discussion, Tables 1-3, four captions) read; no patient is individually described anywhere (no vignette, no per-patient table row, no example patient); Tables 1-3 are group counts, means +/- SD and medians/percentiles; Figures 1-4 are box, bar and scatter plots of groups.",
+      "Roster 24 with roster_complete false is literal (b00017 \"A case series of 24 patients\"); patients [] is allowed for aggregate-only articles per rulings.",
+      "Lane ckd_renal fits (AKI/CKD focus); the title itself says case series, and the disposition aggregate_only prevents the series being read as an individual case report.",
+      "Figures viewed at full resolution with crops: no plot estimates in the annotation; Figure 1 (c)/(d) y axis prints GFR reduction (mL/min/1.73 m2) with a single mL.",
+      "Source inconsistencies recorded as limitations: CKD 5/13 denominator, Group B NGAL threshold wording, hospital-stay abstract vs Table 1, Table 2/3 percentile print anomalies, Subclinical AKI 2 (RIFLE) vs 4 (AKIN), sNGAL vs pNGAL, repeated p = 0.787, Fig 1 AKI panel attribution, mean vs median tables."
+    ],
+    "residual_risks": [
+      "visual.json (agent-owned) misreads the Figure 1 (c)/(d) axis unit as mL/mL/min/1.73 m2 and assigns the presence-of-AKI and absence-of-AKI clauses to single Figure 1 panels by sentence order; reported for Sonnet correction.",
+      "AI reference annotation, not physician adjudicated."
+    ]
+  },
+  "physician_adjudicated": false
+}

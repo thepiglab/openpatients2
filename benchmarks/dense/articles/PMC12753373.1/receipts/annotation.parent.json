@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12753373.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5f91028419a31801650b228fa947a684f52db4140645723e2122c6a069cf4b5b",
+  "annotation_sha256": "68a18116d3d692f5fcf12503e6bcfe38905ee841043164dee9a8fa016376dc37",
+  "reviewed_at": "2026-10-21T13:22:27.204558+00:00",
+  "source_segments_read": 42,
+  "facts_reviewed": 106,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f021 osimertinib on 7 Dec 2023 ('Ongoing osimertinib'): action current -> administered; 7 Dec is not the latest described time.",
+    "p1-f024 anti-MAC therapy on the 5 Jan 2024 row: action started -> administered; the row lists the therapy but does not state initiation.",
+    "p1-f087 CMV BAL-PCR 20,000 copies/mL and p1-f088 CD4+ 0.16x10^9/L: added the case-text quote (b00005) so the item cites both text and Table 1 for the same measurement.",
+    "Event membership: removed baseline ALC p1-f069 from presentation p1-e08; removed undated text CT findings p1-f100 and p1-f103 and their '(Figure 1B)'/'(Figure 1D)' fragments from caption-dated CT events p1-e09/p1-e19 (caption time governs only caption findings); removed retrospective MAC refutation p1-f013 from BAL-NGS test p1-e11; removed the undated serology sentence facts p1-f093..f098 from the 18 Feb diagnosis event p1-e20.",
+    "Added 10 literal relations: e08<e10, e18<e19, e18<e20 (presentation/re-admission opening a stay -> in-stay care, order only); e02<e09, e09<e14, e19<e27 (Fig 1 caption dates A-E), e08<e11 (28 December 2023 vs 5 January 2024), e18<e22 (re-admission 18 February vs ganciclovir 21 February 2024), e13<e17 (erlotinib rechallenge start -> 8 Feb discontinuation), e26<e28 (8 Mar discharge row -> 1 May palliative care row).",
+    "Ambiguities: rewrote the vital-status ambiguity (Introduction/Table 2 fatal wording, Figure 2 image terminal-outcome callout is pixel content, palliative care, no death reported) with Table 2 and palliative-care quotes; added Table 2 ALC 0.48 at the 7 Jan rechallenge vs text ALC decline 2.13->1.28; added Figure 2 image-only ALC/WBC data labels are visual.json only and the matching text values stay facts.",
+    "Summary: removed the 'viral PCR was not urgently performed' clause (no fact backs it) and rephrased the day-7/day-21 sentence so it does not attribute the day count to ganciclovir beyond the source wording."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two JPEGs and the supplementary image were inspected in separate visual targets.",
+    "Table 1 is a timeline whose cells are free-text event rows; rows are recorded as dated facts and no measurement series is claimed.",
+    "Table 2 and the Discussion are recommendations and hypotheses (immune-fibrotic axis) and are not recorded as patient facts; Supplementary Figure S1 is a hypothetical schematic.",
+    "Figure 2 prints chart values (lymphocyte and white blood cell counts) inside the image; those are pixel content kept in visual.json only, so any text or table fact for the same quantity is not merged with them.",
+    "The Introduction, Discussion and Figure 2 use fatal, lethal or terminal wording while no death is reported.",
+    "Several procedure and medication statuses use required, discharged on or listed-in-row wording and are recorded with unknown action where completion or current use is not stated."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 42,
+    "facts_reviewed": 106,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (75-year-old woman, stage IV EGFR ex19del NSCLC); no death reported anywhere, including the Figure 2 caption; the Figure 2 image prints a terminal-outcome callout which is pixel content only; subject_state living_at_presentation kept with an ambiguity.",
+      "Figure 2 printed ALC/WBC values agree with the text where both exist (0.48, 1.87, 2.13, 1.28, CD4 0.16/0.15, FVC/DLCO, SpO2 90%); image-only values (ALC 0.60/0.49/1.65 and all WBC values) are not facts; no image/text conflict so text facts stay include.",
+      "CD4 nadir 0.16 (Discussion/Table 2) vs later Table 1 value 0.15 on 4 Mar 2024 is an internal inconsistency of a summary claim, not two numbers for one dated measurement: kept as an ambiguity with no nadir fact.",
+      "Viral PCR not urgently performed / CMV investigation deferred does not literally state non-performance (CMV BAL-PCR was later performed): no not_performed observation, ambiguity kept.",
+      "MAC infection refuted (misdiagnosed) while the BAL-NGS MAC DNA result stays positive; erlotinib intolerance kept as an allergy/intolerance item from the literal table wording; methylprednisolone by 25 Jan uses relation before with null anchor."
+    ],
+    "residual_risks": [
+      "Relations e12<e13 and e16<e15 order event start dates (5 Jan vs 7 Jan; 12 Jan row vs 16 Jan discharge) while the steroid course and continued erlotinib/antimycobacterials overlap the later event.",
+      "Day-7 and day-21 times (virologic clearance, symptom resolution) have no literal anchor and stay relation before with null anchor.",
+      "Figure 2 calendar dates are flagged as direct identifiers; they are clinical event dates also printed in the article text."
+    ]
+  },
+  "physician_adjudicated": false
+}

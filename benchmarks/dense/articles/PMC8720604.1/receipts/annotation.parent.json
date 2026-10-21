@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC8720604.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "37dbd1dea3e99c89866eb382705fba7c7219fdfd67449df1031316b1bcb7a5df",
+  "annotation_sha256": "9febc43f90a772b2bd4e70113bdb1c6b6b44fec411b1615e0396c9fc954f2045",
+  "reviewed_at": "2026-10-21T08:58:59.931891+00:00",
+  "source_segments_read": 15,
+  "facts_reviewed": 56,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Infected TGDC (p1-f020) changed from ambiguous/review_only to supported/include: the Discussion sentence is literal about \"The patient discussed here\" (ruling: unlabelled discussion sentences are assigned when literal). Verification and role stay unknown, and the ambiguity now only forbids inferring the timing, workup or treatment of the infection. Added to summary claim 2.",
+    "Left thyroid nodule on ultrasound (p1-f023) now also quotes the immediately preceding follow-up neck US sentence, which names the same test, and takes its time \"After 1.6 years\" (result-sentence ruling). The isthmus and lymphadenopathy facts stay untimed because their sentence does not directly follow the timed one.",
+    "Added p1-f056 care_plans referral from a family medicine clinic (completed). It is linked to the presentation event e02 and to summary claim 1.",
+    "Relations added: e03 TGDC diagnosis before e04 scheduled follow-up (\"due to ... a regular ENT and US follow-up was scheduled\", adjacent sentences); e06 FNA showing papillary carcinoma before e09 thyroidectomy and neck dissection \"for papillary thyroid carcinoma\" (result before action about that result).",
+    "Added an ambiguity recording that the Discussion \"neck and chest CT\" (next step after the Bethesda VI report) is identified with the single preoperative CT of the case report. The CT body site and the e06-before-e07 relation rest on this identification.",
+    "Rewrote the article limitation on ultrasound images 1 and 2: the printed labels (\"RT CERV LN\", \"Dist 0.445 cm\", \"Rt Lobe\") are an author caption-to-image mismatch, not a PMC asset swap. Patient attribution follows the captions, and no pixel value is a fact."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the five images are inspected in visual.json.",
+    "Literature cases cited in the Discussion (published by other authors) and general statements are background and are not index-patient facts.",
+    "No calendar dates are stated; ordering relies on stated sequence words only.",
+    "Printed labels on ultrasound images 1 and 2 (\"RT CERV LN\" with \"Dist 0.445 cm\"; \"Rt Lobe\") differ from the captions and text (TGDC 5 × 8 mm; left thyroid lobe nodule). This is an author caption-to-image mismatch, not a PMC asset swap (each asset matches its own figure slot); patient attribution follows the captions, and no pixel value becomes a fact."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 15,
+    "facts_reviewed": 56,
+    "figures_viewed": 5,
+    "key_findings": [
+      "One index patient: a 48-year-old medically free man with a thyroglossal duct cyst, managed conservatively. After 1.6 years, follow-up ultrasound found a left thyroid nodule; FNA showed Bethesda VI papillary carcinoma. He had total thyroidectomy, the Sistrunk procedure and central neck dissection. Histology showed classical papillary carcinoma (T1bN0aM0, 1.2 cm), and the TGDC was free of carcinoma. He was discharged on day three on levothyroxine 150 mg (printed unit kept, ambiguity), with an unremarkable follow-up.",
+      "Figures 1 and 2 print \"RT CERV LN\"/\"Dist 0.445 cm\" and \"Rt Lobe\", which match neither the captions nor the text (5 x 8 mm midline lesion; left lobe nodule). Each asset sits in its own figure slot, so this is a caption-to-image mismatch, recorded as a limitation; patient attribution stays with the captions.",
+      "T1bN0aM0 is kept literal (N0a as printed) with no staging system. \"No cervical lymphadenopathy\" is a negative imaging observation. The follow-up 5 x 8 mm midline lesion is kept separate from the initial cyst and the CT lesion (ambiguity).",
+      "Levothyroxine \"discharged on\" has action unknown (ruling). The \"Follow-up\" time with a null anchor applies to the follow-up examination, US, CT and TFT facts."
+    ],
+    "residual_risks": [
+      "The CT body site \"neck and chest\" and the FNA-before-CT order depend on identifying the Discussion CT with the case-report CT.",
+      "e08 (options offered, total thyroidectomy chosen) before e09 rests on \"chose the second one\" followed by \"were implemented\", read as a chosen treatment later given.",
+      "The levothyroxine unit \"mg\" is implausible clinically but is printed twice; it is kept as printed."
+    ]
+  },
+  "physician_adjudicated": false
+}

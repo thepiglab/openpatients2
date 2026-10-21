@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12745399.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9e699dd81247a8c6dce01fa8f57745ac4c97f22fd1d5b6b61d9fc2eae5579197",
+  "annotation_sha256": "5075c4a7a249aca4bc52042ee722838d38df4f37db6db2f040de5d08214af414",
+  "reviewed_at": "2026-10-21T17:59:28.679108+00:00",
+  "source_segments_read": 28,
+  "facts_reviewed": 74,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Remission depth ruled a source conflict on one attribute over one period: text 'complete remission for more than 43 months' (p1-f069) and abstract 'nonexistent disease' (p1-f072) vs Figure 2 caption 'minimal residual abnormalities and near-complete radiologic remission' on the March 2024, September 2024 and April 2025 scans (p1-f046..f048, inside the >43-month window); all five set certainty source_conflict, scoring review_only; ambiguity rewritten with the Introduction/Discussion complete-remission quotes; disputed depth removed from the summary.",
+    "p1-f006 weight loss: evidence widened to its own sentence, which states October 2021; time set to October 2021 (at).",
+    "p1-f031 Ki-67 ~80%: flag unknown -> high (source says 'high proliferative index').",
+    "p1-f049 tumor stage_context clinical -> unknown (source does not label the stage clinical or pathologic).",
+    "Added p1-f074 allergies: intolerance to 5-FU infusion (b00010 'the lack of tolerance of the patient to 5-FU infusion'), linked to plan event p1-e08; allergies domain now documented.",
+    "Added 5 literal relations: e06<e08 (b00014 'Early termination of FOLFOX ... necessitated the therapeutic priorities to be reviewed' + b00010 'Taking into account ... the lack of tolerance'), e01<e09 and e05<e09 (October 2021 vs May 2022), e09<e10 (May 2022 vs June 21, 2022), e09<e16 (b00004 'complete remission and long-term survival after changing the treatment strategy and having the combination').",
+    "Ambiguities: Fig 2 'initial scans' note now says May 2022 precedes June 21, 2022 by calendar but the caption does not call them pre-treatment baselines; FOLFOX stop/maintenance note now says only the interval and stop date are unstated; added literal 'billboard metastases' ambiguity and the 'Molecular profiling also suggested' hedge ambiguity.",
+    "Summary claims 3-4 rewritten: 5-FU intolerance added, disputed remission depth (complete/near-complete) removed; article limitation updated."
+  ],
+  "unresolved": [
+    "Figure pixels are described in visual.json; the annotation figures keep not_inspected as per convention.",
+    "Case text gives no dates for gastroscopy, laboratory work-up or FOLFOX stop; none were inferred.",
+    "Discussion sentences (b00013-b00018) are interpretation and background; only index-patient statements (FOLFOX termination, absence of post-treatment biopsy and Claudin18.2 testing) were extracted.",
+    "No supplementary material is listed in the source or raw.xml.",
+    "Remission depth is a source conflict (complete remission and nonexistent disease vs near-complete radiologic remission with minimal residual abnormalities); both sides are review_only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 28,
+    "facts_reviewed": 74,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (65-year-old woman, stage IV poorly differentiated gastric adenocarcinoma with multiple liver metastases); no supplements in source.json or raw.xml.",
+      "NO-BORROWING warning on p1-f065 (S-1) is a checker false positive: May 2022, the dose and the frequency are in the same sentence as S-1; the abstract quote only supplies the literal route \"oral\". Left unchanged.",
+      "Abstract \"total regression of primary lesion of the gastric lesion\" is literal source text about the index patient and is not contradicted elsewhere; kept include. 46 months overall survival vs >43 months remission stays an ambiguity (no shared anchor).",
+      "FOLFOX stop is now ordered before the maintenance start via the plan (necessitated / taking into account the lack of tolerance); May 2022 maintenance start precedes the June 21, 2022 scan by calendar date.",
+      "Figure 1 caption findings stay separate from the text gastroscopy/biopsy facts (not identified by the source as the same measurement)."
+    ],
+    "residual_risks": [
+      "Gastroscopy/biopsy (e02), work-up (e03) and diagnosis (e04) stay unordered: the gastroscopy was done at a local hospital with no time, and the diagnosis sentence uses basis wording only.",
+      "Remission conflict quarantines the dated follow-up CT findings (Fig 2 d-f) as review_only; the scan events remain.",
+      "The article is poorly worded throughout (\"intentional weight loss\", \"FOLOX\", \"billboard metastases\"); terms are kept literal with ambiguities."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC5749285.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "596c62892c9b05d12b7f359f5d4e5a40ecd92de87ed2f2aa096ac7ec6f9abab2",
+  "annotation_sha256": "21a062c07c7a332d73ed09032d676722042b8e952aa109d407d552efddf2928c",
+  "reviewed_at": "2026-10-21T08:56:09.120583+00:00",
+  "source_segments_read": 59,
+  "facts_reviewed": 194,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed relation p1-e09->p1-e10: its only support was diagnostic basis wording (\"With these examination and laboratory findings, we strongly suspected hepatopulmonary syndrome\"), which does not order under the rulings; recorded as an ambiguity.",
+    "Added relation p1-e03->p1-e08 (stated ages \"at the age of 8 months\" and \"Between the age of 1 and 4 years\", same anchor, both quoted).",
+    "Added relation p1-e06->p1-e13: the MRI first detected the single liver lesion and the exploration was \"with a view to resection of the liver lesion\" (definite back-reference).",
+    "p1-f005 (age 4 years at the second presentation) restored to supported/include: the scanned cardiology report age refers to a later consultation and is pixel content, so it is not the same value; supplement ambiguity rewritten to cover age, onset, diagnosis timing, organ sizes and the laparotomy wording without reconciling.",
+    "p1-f136 name trimmed to \"Hepatopulmonary syndrome\" (severity stays in the severity field).",
+    "p1-f001 index_subject_description no longer states the diagnosis was made \"at 4 years\" (not literal).",
+    "Summary claim 1: \"soft\" moved from the hepatomegaly to the abdomen (source: abdomen distended and soft; hepatomegaly irregular and nontender); chest X-ray \"unremarkable\" instead of \"negative\".",
+    "Added ambiguities: Table 1 unit/magnitude inconsistencies (bilirubin µmol/L with 0.8/0.53, protein/albumin in mg/dL, counts per mL, creatinine interval) with values copied as printed and no flags; \"pulmonary angiography or technetium-99m MAA\" X-or-Y wording for review_only p1-f147; unordered 4-year work-up steps.",
+    "Article limitations updated (supplement values are pixel content; partial ordering after the 4-year presentation)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two figure JPEGs are reviewed in visual.json.",
+    "Supplement f1 is a DOCX of scanned histopathology and cardiology reports (images only); its printed values are pixel content reviewed in the supplement sidecar, not copied into the article facts or used as conflict sides.",
+    "Table 1 value cells carry no units; units and reference intervals are copied from the row labels as printed and no high/low flags were assigned from them. Dash cells are missing values, not zeros.",
+    "Text statements about the 8-month and 4-year laboratory findings are kept separate from Table 1 cells because the source does not tie them to the same measurements.",
+    "The case describes the 8-month admission, the MRI \"3 months later\", propranolol and later ultrasound scans without calendar dates; only stated ages and intervals are recorded.",
+    "Discussion paragraphs mostly cite literature; only sentences that say \"our patient/child\" were used as index-patient facts.",
+    "Echocardiography, exploration and wedge biopsy are not ordered against each other or against the CT; the timeline after the 4-year presentation is only partly ordered."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 59,
+    "facts_reviewed": 194,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (boy, 8 months to 4 years); all 52 Table 1 value cells present as separate facts with row-label units and intervals as printed and no flags.",
+      "Cryptogenic cirrhosis and severe hepatopulmonary syndrome kept confirmed from \"assessed as having\" (biopsy-backed); discussion \"most likely\" recorded as an ambiguity; hemangioma provisional (\"consistent with\"/\"suggestive of\", not found at exploration or biopsy).",
+      "Text summaries (\"raised creatinine\", Hb 17.1, platelets 100 x 109/L) are not merged with Table 1 cells; the source does not tie them to the same measurement.",
+      "Transesophageal (case) versus transthoracic (discussion) echo and exploration versus laparotomy are left as ambiguities, not merged.",
+      "Both figure JPEGs and all four supplement page images viewed at full resolution with crops (growth-chart column, CT header and acquisition text)."
+    ],
+    "residual_risks": [
+      "Supplement f1 image reviews record relevance \"background\" for scanned patient reports; that classification is not honest and must change to clinical_data, which leaves the supplement review incomplete under the no-facts-from-images ruling (orchestrator decision).",
+      "The 4-year work-up (echo, CT, exploration, biopsy) is only partly ordered because the source gives no order words.",
+      "p1-f014 \"Neonatal period uneventful\" keeps an EVID-NEGATION warning; it is the perinatal outcome stated as such."
+    ]
+  },
+  "physician_adjudicated": false
+}

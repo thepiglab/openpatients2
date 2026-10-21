@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC5642424.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d1eab3f700662b87fa74e538883dd37e0aa7cf479a9a10a96ab78c07e875136a",
+  "annotation_sha256": "72276d96e8322c5396e2a7a1f60df3d94a860613965530b1fedb49e329e6859c",
+  "reviewed_at": "2026-10-21T03:11:21.956805+00:00",
+  "source_segments_read": 14,
+  "facts_reviewed": 32,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f016 pimozide: removed indication \"Motor and vocal tics\" borrowed from another sentence (NO-BORROWING); notes now say no dose/route/duration/indication stated.",
+    "p1-f017 partial response: removed borrowed related_condition.",
+    "p1-f011 school performance: clinical_statement no longer adds the unstated \"before the tics intensified\".",
+    "p1-f013 impaired school/social functioning: evidence widened to its own full sentence and given its own time \"One year after the first evaluation\" (after, anchor \"first evaluation\").",
+    "Split p1-f022 (rapid severity progression and poor response to treatment) out of the risperidone/topiramate event into new event p1-e11 (outcome).",
+    "Removed relation p1-e06 -> p1-e07: \"poor response to treatment\" names no specific treatment, so the quote does not order the risperidone/topiramate switch before the MRI; replaced by p1-e11 -> p1-e07 before (\"led to ... an MRI was ordered\").",
+    "Moved the birth fact p1-f009 out of the history event into new event p1-e10 and added p1-e10 -> p1-e03 before (birth -> visit at a stated age), quoting both sentences.",
+    "Rewrote the MRI/genetic-order ambiguity to also cover the unnamed treatment behind the poor response.",
+    "Article limitation now says no family-history documentation (the patient own PANK 2 test is documented in family_genetics).",
+    "Figure f1 attribution_notes no longer repeat the caption letter label for the patient."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the actual JPEG was inspected in a separate visual target.",
+    "Dates are relative only (two years earlier, one year after the first evaluation, ten months after the diagnosis); no calendar dates and no absolute ages for later events.",
+    "No numeric values are printed for prolactin, doses beyond risperidone 3 mg/day and the topiramate maximum of 100 mg/day, or MRI findings beyond the qualitative description.",
+    "Pimozide dose, duration and the dates of the MRI and genetic testing are not stated; no allergy, family history, social, oncology or care-plan documentation is present.",
+    "Discussion statements about Tourette syndrome pathology and PKAN epidemiology are background, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 14,
+    "facts_reviewed": 32,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (13-year-old girl) with tics, later genetically confirmed atypical PKAN; roster count 1 and complete.",
+      "Relations kept: past medical history -> evaluation; tic onset \"two years earlier\" -> evaluation (adjacent-sentence anchor); evaluation -> \"One year after the first evaluation\"; \"initially\" pimozide -> \"switched\" to risperidone; diagnosis -> \"Ten months after the diagnosis\".",
+      "Tourettism kept as confirmed complication (source: \"PKAN as a secondary cause of Tourettism\"); Tourette syndrome itself not recorded, held as an ambiguity.",
+      "Conservative items accepted: pimozide without dose, topiramate \"up to the dosage of 100 mg/day\" as text, prolactin high from \"elevated\", MRI as procedure plus imaging observation (SECTION-IMAGING), PANK 2 result as the patient own genetic_test in family_genetics, birth as reproductive_perinatal newborn item.",
+      "Figure viewed at full resolution with crops: coronal and axial T2 views, symmetric small brighter deep gray foci, only scanner orientation letters; eye of the tiger stays a caption/text claim."
+    ],
+    "residual_risks": [
+      "Which treatment the poor response refers to is unstated; the MRI vs genetic testing order is unstated.",
+      "Tourettism verification_status confirmed rests on author wording, not a stated diagnostic test.",
+      "Pimozide discontinuation is implied by \"switched\" but not recorded as a separate fact."
+    ]
+  },
+  "physician_adjudicated": false
+}

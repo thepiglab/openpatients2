@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC13225172.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e47b9de31943663751500004e70fa7a2d18c87757056b8b8f0ab45decba5eba1",
+  "annotation_sha256": "e20f023c79ffe3897fd4f150722fc2e07f6b19c18fa4b9ed376abdf7d004309a",
+  "reviewed_at": "2026-10-21T17:54:47.727317+00:00",
+  "source_segments_read": 38,
+  "facts_reviewed": 42,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "case_context subject_state unknown -> deceased_during_course (patient alive at presentation, stated deceased in consent statement; precedent PMC12856305.1)",
+    "p1-f025 PCR clear-bands text fact restored to supported/include; Figure 3 pixel observations kept as visual limitation and ambiguity only (image content is never a conflict side)",
+    "Added severity 'mild' to hypohidrosis, hypotrichosis and hypodontia from 'mild typical traits of HED'",
+    "p1-f028 X-linked presumption re-attributed to index_patient with full literal quote",
+    "p1-f029 suspected affected relatives: added caption and refusal (IV-3) evidence",
+    "p1-f032 action_text renamed to 'Referral to genetic counseling' (referral completed; counseling itself not stated)",
+    "Added p1-f040 ethnicity_as_documented Sudanese, p1-f041 possible de novo mutation, p1-f042 qualified 'no obvious family history' as review_only ambiguous",
+    "Split e03 into referral (e03, no time) and 2014 molecular testing (e11); split e05 into blood sampling (e05) and PCR/sequencing result (e12)",
+    "Relations 1 -> 6: e02->e03 (This led to), e03->e11 (referral to center where testing was performed), e02->e11 (2012 vs 2014), e05->e12 (sample -> sequencing, 'after the sequencing'), e07->e09 (outcome of interventions), e09-e10 unknown",
+    "Kept f040 ethnicity_as_documented Sudanese per corpus precedent; ambiguities rewritten for PCR pixels, family history and death; added ambiguity on the post-evaluation anchor and diagnosis/sequencing order; summary, domain notes and article limitations updated"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual images are described in visual.json.",
+    "Exon 2 of EDA was not sequenced; no mutation excluded outside the 8 sequenced exons and no other gene was tested.",
+    "The patient is stated to be deceased with no date or cause; subject_state is deceased_during_course and the death event has no time or order relative to follow-up.",
+    "Relatives (including those in the pedigree and gel) are not individually described and are not roster patients; no clinical data are assigned to them.",
+    "Table 1 (PCR primer sequences) is laboratory method content and is not recorded as patient facts.",
+    "Figure 3 pixels show no visible band in two exon 1 lanes and a single faint exon 5 lane, which does not visibly match the text statement of clear bands for all participants; recorded as a visual limitation, the text fact is kept.",
+    "Pedigree symbols (filled, crossed, double line) are pixel content only and are not used as family facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 38,
+    "facts_reviewed": 42,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (36-year-old Sudanese man, HED, no EDA mutation in 8 sequenced exons); relatives stay in the proband record.",
+      "No supplements (raw.xml has no supplementary-material); Table 1 is primer method content only.",
+      "Figure 3 top gel shows no visible band in two exon 1 lanes and one faint exon 5 lane; text fact kept, pixel observation in visual.json.",
+      "Patient stated deceased with no date or cause; subject_state deceased_during_course; follow-up vs death order unknown."
+    ],
+    "residual_risks": [
+      "'post-evaluation' names no specific evaluation; no relation set from it (e04->e09 dropped after re-check).",
+      "2014 molecular testing and the described EDA sequencing are probably the same episode but are kept separate.",
+      "Six family members vs proband plus five remains an ambiguity."
+    ]
+  },
+  "physician_adjudicated": false
+}

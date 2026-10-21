@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC7717226.2",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "426ba925a131b6d41aaecd08e23596e9f88207e3606054cf825f5a8dd7d52374",
+  "annotation_sha256": "3fefbc8beb49499db32243dada5cfc7f2b6b6444859b730ac9ae073b43f41e37",
+  "reviewed_at": "2026-10-21T08:27:22.592567+00:00",
+  "source_segments_read": 64,
+  "facts_reviewed": 201,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f133 serum creatinine: removed the borrowed time \"from Day 14\" (the preceding sentence names end-organ dysfunction, not the creatinine test) and narrowed the quote to its own sentence.",
+    "p1-f069 repeat TTE: removed the unstated \"on VA ECMO\" from name and statement; event p1-e11 description reworded likewise.",
+    "Event p1-e07 description no longer names the disputed glycoprotein inhibitor class (drug identity conflicts with the supplement slide set).",
+    "Added p1-f201 narrow complex tachycardia during PEA arrest following defibrillation (omitted rhythm finding), linked to p1-e08.",
+    "Added events p1-e35 (insufficient LV venting diagnosed), p1-e36 (woke with GCS 14), p1-e37 (end-organ dysfunction from Day 14), p1-e38 (oliguria, creatinine rise, CVVH), p1-e39 (acute liver injury and GI bleeding), p1-e40 (deterioration over the following week), p1-e41 (multiorgan failure); c_mof moved from p1-e31 to p1-e41.",
+    "Added 18 literal relations: e02>e04, e04>e05 (On arrival), e06>e07 and e06>e12 (lesion then its treatment), e08>e09, e09>e10 (until / followed by), e11>e12 (then), e14>e15 and e14>e34 (before transfer to ICU / on arrival in ICU), e15>e17 (given ... blood tests), e35>e21 (after ... was diagnosed), e21>e22 (over the next 24 h), e10>e22 (cannulae placed then removed), e26>e37 (Day 9 / Day 14), e38>e40 (CVVH commenced then acidosis despite haemofiltration), e39>e40 (over the following week), e41>e31 (given), e31>e32 (end of life care then death).",
+    "Summary paragraph 1: \"anterior myocardial infarction\" reworded to the literal LAD territory wording; paragraph 3: removed the disputed Impella access site, removed the inferred \"worsening hypoxia led to\" wording, added the stated Day 3/6/8/9 times.",
+    "Ambiguity on Day-14 text labs reworded to state that the text results carry no time of their own.",
+    "Figure 2 attribution note records the caption (trans-oesophageal) versus case text (TEE and fluoroscopy) method question for panel C."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEGs were inspected in the separate visual submission.",
+    "Table 1 blank cells are not recorded as values; no flags were set from reference ranges.",
+    "Supplement (ZIP of a PPTX slide set and five angiography or echocardiography videos) differs from the article on the antiplatelet drug named before LAD stenting and on the day of death; both sides are review_only and the supplement side is not typed as facts because the supplement review is partial (EMF parts cannot be rendered by the review path).",
+    "Text and table values are merged only where the source ties them together (Table 1 cited by the text); Day 14 text values and the Day 4 and PAFC values are kept as separate facts.",
+    "Timeline table rows with empty day cells carry no stated day.",
+    "Figure 4 is an uncaptioned author portrait and is not patient data."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 64,
+    "facts_reviewed": 201,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (43-year-old male smoker) with COVID-19, coronary thrombosis, PEA arrest, VA ECMO then Impella 5.0, death; every Table 1 cell is a fact; timeline-table blank day cells (rowspan 1 in raw XML) correctly carry no Day.",
+      "Supplement PPTX text read in full: slide 27 names Ticagrelol where the article names tirofiban, and slide 40 gives death on day 14 versus the article timeline Day 21 / abstract third week; article side kept review_only (tirofiban p1-f046, timed death p1-f197), time-free death fact included, summaries carry neither value.",
+      "D-dimer ng/L (text) vs ng/mL (table label): unit null, review_only, ambiguity. Troponin 18 509 vs 18 509.6 and reference 0-58 vs 0.0-0.58 treated as rounding/decimal print ambiguity with the table cell used. ALT IU/L vs U/L kept separate.",
+      "Impella access left subclavian (text, timeline, slide) vs left axillary (Figure 3 caption) kept as an ambiguity and removed from the summary."
+    ],
+    "residual_risks": [
+      "sup1 composite sidecar cannot complete: the PPTX embeds two EMF parts with no raster view in the review tooling, so the supplement stays partial and unsigned; the slide-side values are not typed facts.",
+      "e31>e32 (end of life care then death) and e08>e09 (arrest then promptly initiated CPR) rely on implied-but-necessary order rather than an explicit order word.",
+      "Events p1-e16 (swabs sent) and p1-e36 (awakening) have no literal ordering link.",
+      "Figure 1 vessel identities per panel come from the case text citations; Figure 2C pixels are a projection image while its caption says trans-oesophageal."
+    ]
+  },
+  "physician_adjudicated": false
+}

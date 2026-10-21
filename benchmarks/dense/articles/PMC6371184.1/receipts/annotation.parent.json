@@ -1,0 +1,69 @@
+{
+  "article_id": "PMC6371184.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7d0844d11e66c7af1e41e5b5045fd5a0ab47eb44338532d2cbbd4ae07f51a72c",
+  "annotation_sha256": "fb492bce01b5fe4c8bcfa4b0a6da34a5603316cd0b6009f039c0aadb1cba1535",
+  "reviewed_at": "2026-10-21T03:16:41.523538+00:00",
+  "source_segments_read": 110,
+  "facts_reviewed": 143,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed relation p1-e05 -> p1-e06: the discussion sentence \"Latter results especially prompted us to advise ...\" is not identified as the neuropsychologist advice event (different stated time frame).",
+    "Removed relation p1-e09 -> p1-e10: \"three weeks later\" is separated from \"we advised against further driving\" by two generic sentences, so the quote does not state the order.",
+    "Removed relations p1-e05/p1-e12/p1-e13 -> p1-e14: \"After all, diagnostic information was available\" is punctuated as \"After all,\" and names no test; diagnosis basis wording does not order.",
+    "Kept p1-e03 -> p1-e05 (\"After explorative neuropsychological examination during the first appointment, an extensive neuropsychological examination was conducted\").",
+    "Added relation p1-e07 -> p1-e08 (scheduling of the second consultation, then \"At the time of the appointment, the patient did not show up\", back-reference to the one described appointment).",
+    "Added relation p1-e15 -> p1-e16 (informed of the diagnosis at the concluding appointment; social worker \"repeated information on diagnosis\" in future appointments).",
+    "Home visit p1-f125 and continued driving p1-f139: time anchor \"advised against further driving\" removed (anchor not in an adjacent sentence); time text \"three weeks later\" kept.",
+    "Citalopram p1-f046/p1-f047: evidence widened to contiguous quotes so drug name, dose and indication come from each fact's own evidence (the \"continued\" fact previously quoted only \"the medication was continued up to consultation with us\").",
+    "Lumbar puncture p1-f053: borrowed indication \"cerebrospinal fluid analysis\" removed; name \"Lumbar puncture\".",
+    "Cerebral microangiopathy p1-f007: verification_status confirmed -> unknown (presence stated, \"may add\" hedges only its contribution; no confirmation wording); diagnostic_basis quotes the MRI finding.",
+    "Confidentiality non-disclosure items p1-f120/p1-f121/p1-f122: action_status declined -> assertion absent with action_status unknown (explicit clinician negatives, not patient refusals); p1-f120 action_text rephrased as the positive action \"Informing patient and daughter of results in advance\".",
+    "Counseling on impact on daily living p1-f129: recommended -> completed (counseling given at the concluding appointment).",
+    "Beer one glass per week p1-f099 and ninepins p1-f107: status current -> unknown (reported at first consultation, not placed at the latest described time).",
+    "Wrong-way driving p1-f043: added the authors' own discussion statement \"the patient exhibited at-risk driving behavior ... just prior to the appointment\" and its literal time.",
+    "Added p1-f142 CSF markers for neurodegenerative disease \"pathological\" (group statement, flag unknown) and p1-f143 outcome: social worker support helped her cope and alleviated some emotional distress.",
+    "Summary: removed the unstated per-analyte claim that total and phosphorylated tau were pathological and the unsupported \"three weeks later\" ordering after the rescheduled meeting.",
+    "Ambiguities: added one for the unordered course steps; VLMT-D1 row noted as printing the same values as RAVLT trial 1; advice-time-frame ambiguity extended.",
+    "Source coverage b00057 (routine MRI/CSF practice) changed to background."
+  ],
+  "unresolved": [
+    "The article has no figures and no supplements; no visual, figure-EHR privacy content or supplement review applies.",
+    "Table 1 is a single-time neuropsychological result table, not a serial table; each row is one observation with its raw score and z-Score column text, units only where the source prints them.",
+    "Third-party accounts (partner, daughter, caller) are contradictory or hearsay and are recorded with that provenance; alcohol facts from third parties are review_only.",
+    "Cohort, literature and policy statements in the introduction and discussion are not assigned to the patient.",
+    "No medication was started for the dementia: a cholinesterase inhibitor was only proposed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 110,
+    "facts_reviewed": 143,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient (75-year-old woman, Memory Clinic, 2015); no figures or supplements; introduction, workflow and discussion background not assigned to her.",
+      "Every Table 1 row is one item: MMSE, GDS and BDI-II as symptoms_function performance scores; the norm-referenced neuropsychological battery (z-scores) as observations kind other; the decimal-comma z-score 0,1 kept literally with an ambiguity.",
+      "Alcohol: patient statements included; daughter and partner accounts review_only with an ambiguity.",
+      "CSF: tau and phosphorylated tau flags unknown (only the group is called pathological); beta-amyloid 1-42 kept normal as stated with the printed cut-off direction recorded as an ambiguity (print artefact, not a conflict).",
+      "Hedged items (pointed toward, might indicate, suggestible of, suspicious of) kept as possible; the cholinesterase inhibitor is a recommended care plan only, no medication item.",
+      "All 9 remaining relations checked against their full evidence lists."
+    ],
+    "residual_risks": [
+      "Several events (GP labs, neuropsychologist advice, MRI, CSF, home visit, working differential diagnosis) remain unordered because the source gives no literal order.",
+      "Status of the 20 mg citalopram after the first consultation is not reported.",
+      "The partner is identified as the speaker of paragraph b00033 only by the daughter paragraph that follows."
+    ]
+  },
+  "physician_adjudicated": false
+}

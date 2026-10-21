@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC8827508.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ab1db67a5e0c3442aa62ff4aae301040e424b7393a18177e30355ae13389aea4",
+  "annotation_sha256": "cf67b94f313eee355f580f7c231980722d642e15926cf718fa8d865e75082c43",
+  "reviewed_at": "2026-10-21T07:55:46.977940+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 59,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Summary: removed the disputed ages (28 case text vs 26 abstract) and their fact ids; age facts stay source_conflict/review_only.",
+    "Tuberculosis diagnosis: removed body_site/laterality borrowed from the CT sentence; added the granuloma result sentence to its evidence; kept confirmed (authors report the case as primary calvarial tuberculosis on histopathology with acid-fast bacilli; culture result not reported).",
+    "Osteomyelitis (possible): evidence widened to its own full CT sentence so the right frontal site is literal.",
+    "Epidural/subgaleal collections: removed borrowed body_site/laterality.",
+    "Initial CT observation facts: removed method 'non-contrast CT' borrowed from the advising sentence (kept on the CT procedure fact).",
+    "Histopathology result: removed specimen borrowed from the earlier sending sentence; added a separate procedure fact for the pericranium sent for histopathology (p1-f057) and an ambiguity.",
+    "Anti-tuberculous drugs: duration_text rewritten to literal wording (removed added word 'then').",
+    "Outcomes: removed inferred related_condition on symptoms subsided; 'completed the course of therapy' text_value no longer adds 'anti-tubercular'; ambiguity added.",
+    "Care plan follow-up CT: removed inferred target.",
+    "Added caption facts: Figure 2 histopathology (giant cell, lymphocytes, caseous necrosis, bone fragments) and Figure 1 axial CT (bone erosion, epidural and subgaleal collections), both untimed.",
+    "Figure 3 caption findings detached from the timed 1-month CT event (caption states no time); ambiguity added.",
+    "Split event 'IV antibiotics continued and good postoperative recovery' into a treatment event and a postoperative recovery outcome event; surgery->recovery relation now points to the recovery event only.",
+    "Admission event kind treatment -> other; completion event description no longer names the unnamed therapy.",
+    "Relations added: initial CT (extra-axial collection) -> admission for removal of the collections (result -> action); ATT start -> well at time of writing (abstract 'doing well after anti-tubercular therapy'); abstract quote added to ATT start -> course completed."
+  ],
+  "unresolved": [
+    "Age is printed as 26 in the abstract and 28 in the case report text; both are kept review-only.",
+    "Pus culture result and wider tuberculosis workup (Mantoux, ESR, serology) are not reported for the patient.",
+    "Caption-layer visual status not_inspected; actual images inspected in the separate visual submission.",
+    "Figure 3 caption findings carry no time of their own; the text places the follow-up CT after 1 month.",
+    "Discussion content is general literature and not copied to the patient except sentences literally about this case."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 59,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index male patient; all 27 source segments read, including abstract, discussion and three captions.",
+      "Age 28 (case text) vs 26 (abstract) kept as source conflict, review_only, and removed from the summary.",
+      "Diagnosis kept confirmed on histopathology plus acid-fast bacilli; pus culture sent but result not reported (observation status ordered, not_reported).",
+      "Discussion facts limited to literal our-case/our-patient sentences (no trauma documented, no other active TB focus, chest radiograph normal).",
+      "Non-smoker recorded as absent/current (not never; no lifelong wording); social drinker present/current from present-tense sentence; TB-contact hostel exposure kept status unknown.",
+      "All implied-order relations checked against RULINGS: admission opens stay, drug start -> continued, specimen -> result, AFB -> ATT via then, ATT start -> completion, surgery -> post-operative recovery."
+    ],
+    "residual_risks": [
+      "Admission -> IV antibiotic start relies on the admission-opens-stay implied order.",
+      "Follow-up CT after 1 month and the completion of therapy have no literal anchor to other events beyond the stated relations.",
+      "visual.json and figure_privacy_flags.json need small agent corrections (panel-text attribution and Figure 1 panel A privacy description) reported separately."
+    ]
+  },
+  "physician_adjudicated": false
+}

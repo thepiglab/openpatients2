@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC6940056.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b7fb4de6fa4122486aae89d6762d7e0270d4a488dd446e5eb3bb3341a3403dee",
+  "annotation_sha256": "e71d9ca0c1658955666b8d0e862b747e082ab8334d268b947db0b75572796b92",
+  "reviewed_at": "2026-10-21T08:05:23.357024+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 66,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Re-check after refresh: dropped a proposed e01 presentation -> e02 examination relation (no literal order; the stay ruling does not cover an outpatient visit); kept e06 -> e22 (non-resolution by marsupialization is its outcome) and e06 -> e24 (bone windows made, later filled: post-hoc finding).",
+    "p1-f010 space infection: role complication -> comorbidity; removed diagnostic_basis that held the cause (\"secondary to a carious right mandibular first molar\"), which stays in the quote.",
+    "p1-f033: removed anchor \"observation\" (\"After 6 months of observation\" names a duration, not an anchor event); relation after, anchor null.",
+    "p1-f036 radiographic examination and p1-f040 marsupialization: removed body_site \"mandible\" not present in their own quotes.",
+    "p1-f044 packing: removed misused finding field; p1-f057 povidone-iodine packing: removed non-indication \"irrigation and packing of the cystic cavity\".",
+    "p1-f065 \"followed for 10 years with no sign of relapse and reoccurrence\": certainty ambiguous, scoring review_only, new ambiguity (image-only Table 1 prints a recurrence row inside the follow-up; pixel content is not a conflict side) and removed from the summary.",
+    "Events: p1-e04 split into space-infection surgery (e04) and tooth extraction (new e20); p1-e08 split into pretreatment-specimen findings (e08), post-marsupialization histology/IHC at the base of the resolved lesion (new e21), no-reduction at the unresolved site (new e22) and serial orthopantomograms (new e23); untimed bone-window defects moved out of the 4-month radiograph event e09 into new e24.",
+    "Relations: e04->e05 repointed to e20 (extraction) -> e05 (biopsy from the extraction wound); e06->e08 repointed to e06->e21 (\"after marsupialization\"); e06->e13 three-sentence quote replaced by the two ordering sentences (\"attempted first\" / \"However ... an aggressive approach was taken\"); e11->e12 gains the case-text adjacent \"After 6 months of observation\" sentence.",
+    "Relations added: e03 diagnosis -> e20 extraction of the offending tooth; e20 extraction -> e06 marsupialization (extraction socket enlarged for irrigation); e06 -> e22 (did not resolve by marsupialization alone); e06 -> e24 (bone windows made, later filled).",
+    "Article limitation and ambiguity on figure numbering reworded: the assets agree with their captions (F1-F3 panoramic radiographs, F4-F5 histology); the in-text callouts are misnumbered, not an asset swap."
+  ],
+  "unresolved": [
+    "Table 1 is an image-only table: its printed dates and event labels are pixel content recorded in visual.json only and are not used as facts, event times or relation evidence.",
+    "Figure callouts in the text (Fig. 2 to Fig. 5) do not match the printed caption numbering; the image assets agree with their captions, so figure attribution follows the captions and the text callouts are treated as misnumbered.",
+    "The Figure 1 caption wording \"from one condyle to the other\" versus the text statement that both condyles were spared is recorded as an ambiguity, not resolved.",
+    "Alternative treatments (enucleation, cystectomy, resection) are discussed as not chosen for this case and are not recorded as facts.",
+    "Dates are not stated in the text; follow-up times are relative (4 months, 2 years, 6 months, 3 years, 40 months, 10 years) and their anchors are only partly stated.",
+    "Discussion statements about cited cases (Gupta et al, Pogrel, Ninomiya et al) are not attributed to the index patient.",
+    "The image-only Table 1 prints a recurrence row inside the 10-year follow-up; the abstract statement of no relapse over 10 years is therefore review_only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 66,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Single index patient (35-year-old woman) with a nonsyndromic parakeratinized panmandibular OKC and right buccal/submandibular space infection; all 66 facts checked against quotes, polarity, sites and times.",
+      "Image-only Table 1 (dates, \"Recurrence observed\" row) stays in visual.json only; the abstract no-relapse-over-10-years fact is review_only with an ambiguity.",
+      "Pixels of all five figure assets match their own captions; the in-text callouts Fig. 2-5 are misnumbered, so attribution follows captions.",
+      "Condyles: text states both condyles spared (kept include); caption \"from one condyle to the other\" kept as an ambiguity, not a conflict.",
+      "Ki-67/bcl-2 no-reduction at \"the above site\" keeps no body_site; 40-month resolution keeps a null anchor."
+    ],
+    "residual_risks": [
+      "Region labels (4th quadrant, 42 and 43 region, between lower right lateral incisor and canine, lower right anterior region) are kept separate; the source does not identify them as the same.",
+      "The 2-year, 3-year, 40-month and 10-year times have unstated anchors; the late-course events are only partly ordered.",
+      "Reduced Ki-67/bcl-2 at the base of the resolved lesion also cites the discussion sentence about \"the healing sites\" as the same observation."
+    ]
+  },
+  "physician_adjudicated": false
+}

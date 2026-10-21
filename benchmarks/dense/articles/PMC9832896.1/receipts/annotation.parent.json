@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC9832896.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "28750669b19d1c9be80addd4ec8fa854dde914167a3b8cbd517ebf7cfa4357c1",
+  "annotation_sha256": "72647038f1a46c235303c51dc4b174f719efc49781a63bc6665fb0c0672e71f8",
+  "reviewed_at": "2026-10-21T13:29:05.694570+00:00",
+  "source_segments_read": 9,
+  "facts_reviewed": 55,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Event membership: removed dyspnea symptom p1-f008 from the post-therapy outcome event p1-e18 (no borrowed outcome time for a symptom that pre-existed therapy); moved metastases condition p1-f005 from the 'After 6 months' Tg event p1-e09 to the FDG PET/CT detection event p1-e11.",
+    "p1-f005 sternal/pulmonary metastases: kept verification confirmed and added the Figure 2 caption quote 'confirmed the lesions detected by FDG PET/CT' (b00009) to its evidence.",
+    "Added care_plans p1-f055 and plan event p1-e19 from the abstract sentence 'Considering the high levels of somatostatin receptor expression in such metastases, we planned lu177 DOTA-TATE therapy.'",
+    "Added 6 literal relations: e02<e03 (diagnosed ... and treated, treating the named condition), e03<e01 ('nine years ago' ... 'at that point' before the referral), e04<e07 ('first serum Tg' vs the follow-up Tg of the same test), e11<e13 ('confirmed the findings of FDG PET/CT ... Therefore ... received'), e12<e19 ('Considering' the Ga-68 finding), e19<e15 (planned therapy later given as two cycles).",
+    "FDG/Ga-68 relation kept unknown; added the abstract Ga-68 sentence and the Figure 2 caption back-reference to its evidence; the ambiguity is rewritten as a source conflict on scan order (abstract vs case text and caption); article limitation updated.",
+    "Rewrote the 'After 14 months'/'After 6 months' ambiguity (anchors stay null; the unanchored 'After N months' results are not ordered by adjacency) and extended the dyspnea ambiguity.",
+    "Summary paragraph 2: removed the unsupported 'After an empirical dose' and 'then' orders between the 500 and 30,000 ng/mL Tg values, stated the scan-order conflict instead of 'Ga-68 confirmed them', and added the plan."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two JPEG figures are inspected in the separate visual submission.",
+    "Metastases are imaging-defined; no histology of the metastases is documented.",
+    "Source conflict: the order of FDG PET/CT and Ga-68 DOTA-TATE PET/CT differs between abstract and body text/caption.",
+    "Anchors of \"After 14 months\" and \"After 6 months\" are not stated; the sentence on guideline-based management is incomplete.",
+    "TSH 33 has no printed unit; radionuclide therapy modality is not classified by the source.",
+    "Discussion sentences cite published cohorts (Cinkir and Elboga, Versari, Budiawan) and are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 9,
+    "facts_reviewed": 55,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (59-year-old woman, RAI-refractory FTC, pT2N0 nine years earlier) treated with lu177 DOTA-TATE; discussion cohorts (Cinkir and Elboga, Versari, Budiawan) correctly excluded.",
+      "Scan order is a source conflict: abstract has Ga-68 first and FDG on the next day, the case text and the Figure 2 caption have FDG first; relation kept unknown, no fact carries the one-day interval.",
+      "The male pronoun in the first-Tg sentence is a typographical inconsistency recorded as an ambiguity; Tg/TSH/anti-Tg facts kept; TSH 33 has no unit and none is added.",
+      "Dyspnea is only documented as improved; kept as a present symptom with no time and not in the outcome event; the improvement is the outcome item.",
+      "Metastases are imaging-defined but stated categorically by the authors and Ga-68 PET/CT \"confirmed the lesions\"; verification confirmed kept, no histology implied (ambiguity kept).",
+      "Lu-177 200 mci receipt and the two-cycle course kept separate (no equation of the receipt with the first cycle); I-131 empirical dose has tumor_ref null; radionuclide modality unknown (source gives no classification)."
+    ],
+    "residual_risks": [
+      "The 14-month and 6-month Tg results are unanchored; only e04<e07 (first vs follow-up Tg) orders them, so the empirical I-131 dose and the diagnostic scan float in the timeline.",
+      "Order of the referral (presentation) relative to the follow-up Tg values is not stated.",
+      "Two tumor records (t1 primary at diagnosis, t2 metastatic assessment) describe the same cancer because the materializer forbids a shared tumor_ref across the timeline."
+    ]
+  },
+  "physician_adjudicated": false
+}

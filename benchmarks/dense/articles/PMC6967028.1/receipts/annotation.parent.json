@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC6967028.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a6e9311575da1c82a19fb4217f5daf755b2fc091721dce4440d305c294bc697c",
+  "annotation_sha256": "d628c63e56d142062a43457bce5ab5d62842f13983c0815d5d8e18e3e1549bd1",
+  "reviewed_at": "2026-10-21T04:13:14.449829+00:00",
+  "source_segments_read": 14,
+  "facts_reviewed": 62,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed the borrowed chest-compression indication (VT and BP < 40 mmHg came from preceding sentences); added an ambiguity instead.",
+    "Removed the shared indication \"hypertension and symptomatic epilepsy\" from telmisartan and sodium valproate individually; drug-to-condition pairing is unstated (ambiguity kept).",
+    "No preceding ECG change: kept as a present observation with flag negative and added the missing result text_value \"no preceding ECG change\" (the draft had no result value).",
+    "Extended hyperkalemia, renal function and acidosis/rhabdomyolysis/hemolysis quotes to include the subject cue \"In this case\".",
+    "VT condition: added the recovery quote that supports clinical_status resolved; K 6.4 anchor restored to the literal phrase \"recovery from VT\".",
+    "Chief complaint changed from the VT complication to the scheduled aneurysm clipping that brought the patient to surgery.",
+    "Added facts: separation of the arachnoid membrane of the Silvius cleft \"At that time\" of the VT; normal examination data confirmed before extubation.",
+    "Timeline rebuilt to 24 events: history split into hematoma, symptomatic epilepsy, hypertension and previous medication; BP < 40 mmHg detached from the VT event (no stated time); body temperature removed from the post-VT blood gas event; surgical totals (time, blood loss, fluids, urine) removed from the \"At the end of surgery\" event.",
+    "Added literal relations: hematoma before epilepsy (\"after cranial hematoma\"); epilepsy and hypertension before their treatment; previous medication before OR arrival and before the preoperative tests (\"previously\" vs \"Preoperative\"); preoperative tests before mannitol (preoperative vs after surgical incision); VT same_time arachnoid separation (\"At that time\"); BP fall before immediate chest compression; VT before chest compression; end of surgery before postoperative course.",
+    "Roster evidence moved to the singular case statement \"We report on a 62-year-old man\" (b00002).",
+    "Summary claim 2 no longer asserts VT co-occurred with BP < 40 mmHg; states the two in source order."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the two JPEG figures were inspected separately in visual.json.",
+    "Single-case report; discussion statements about other published cases and general mannitol or hyperkalemia effects are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 14,
+    "facts_reviewed": 62,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (62-year-old man, elective clipping of unruptured AComA aneurysm); VT about 20 min after mannitol, recovered after chest compression; K 6.4 mEq/L after recovery treated with calcium gluconate, furosemide and insulin/glucose.",
+      "Preoperative Na/K kept as preoperative: \"Preoperative\" heads the coordinated phrase \"12-lead ECG ... and routine laboratory tests, including serum Na ... and potassium\" in the facts own sentence; ambiguity retained.",
+      "After 60 min and after 2 min keep null anchors; rx -> K 3.2 kept on the adjacent-sentence \"After N\" ruling; peaked T waves -> disappearance from the same sentence.",
+      "K 6.4 in abstract and in the blood gas sentence treated as the one reported post-VT potassium (abstract restates the same measurement and sequence); other blood gas values carry no time of their own.",
+      "Hyperkalemia due to mannitol is asserted, not hedged (\"In this case ... despite hyperkalemia due to mannitol\"); the hedged b00010 sentence concerns the cause of the VT and is an ambiguity. Acidosis, rhabdomyolysis, hemolysis refuted from \"In this case ... no findings of\".",
+      "Clipping fact keeps scheduled and completed sentences: the completion sentence back-references the single described procedure.",
+      "Both ECG figures viewed at full resolution; visual.json has no plot estimates; privacy flags none and EHR waveform labels match pixels."
+    ],
+    "residual_risks": [
+      "BP < 40 mmHg is unlabelled (systolic or mean) and untimed; ordering to chest compression rests on adjacent-sentence \"immediately\".",
+      "Merging the abstract and results K 6.4 mEq/L as one measurement relies on the abstract restating the case.",
+      "No measurement series: the article has no tables."
+    ]
+  },
+  "physician_adjudicated": false
+}

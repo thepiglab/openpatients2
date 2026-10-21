@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC9938053.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6c21f654ec2e5292001374af8d6e2c662483d991f8187a9710cee6b892c74c5e",
+  "annotation_sha256": "b3141bc1c5c1120c396ec99506fd78b1cd049059d6d6eca20a05c79e064d08b0",
+  "reviewed_at": "2026-10-21T13:32:28.284169+00:00",
+  "source_segments_read": 17,
+  "facts_reviewed": 92,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Three-month run: only \"Three months afterwards, the patient did not complain any more discomfort\" carries the time; removed the borrowed time and extra quotes from p1-f024, p1-f025 (pain/swelling decline, no signs of inflammation) and p1-f071, p1-f072 (normalized leukocyte/CRP); moved them out of p1-e19 into undated events p1-e28 and p1-e29.",
+    "Cone beam tomography: the text sentence cites Fig. 6A and states no time, the Fig. 6 caption lead dates panel A 6 months after ibandronate; not a source conflict. Merged caption fact p1-f074 into p1-f073 (both quotes, caption time, include) and gave it its own event p1-e30; ambiguity rewritten.",
+    "Fig. 6B caption finding p1-f075 now carries the caption lead time (6 months after ibandronate administration) with the lead sentence quoted.",
+    "Fig. 1 caption: p1-f078 now quotes the full caption sentence (no words dropped) and is included; the stated extent \"from the right premolar region to the posterior border of the ramus\" is a new review-only ambiguous fact p1-f087; both moved from the March 2020 CT event into new event p1-e25 (Initial imaging).",
+    "Fig. 5C bone scintigraphy p1-f065 is a literal, caption-timed finding: set supported/include; identity with the text SPECT stays an ambiguity; moved with new Fig. 5A/5B caption facts p1-f088, p1-f089 into new event p1-e26 (Imaging 6 months after surgery).",
+    "Discussion imaging p1-f079 (single index case, attribution literal): supported/include with no time; session ambiguity kept.",
+    "Added p1-f090/p1-f091 (Fig. 7A/7B caption histology after ibandronate application), p1-f092 (excision of the fistula, \"the excised fistula\"), p1-f093 (segments displayed regular healing after 6 months, discussion).",
+    "Events split so no fact inherits a time from its event: antibiotics (p1-e23) and premolar extraction (p1-e24) out of the two-year-history event; further course (p1-e31) out of the implant event; prosthetic rehabilitation start (p1-e32, occurrence occurred, action unknown) out of the nine-month follow-up; p1-e12 time precision unknown.",
+    "Relations added (13): e08->e17 (diagnosis affecting the resected and reconstructed mandible), e08->e14 and e08->e16 (imaging/biopsy of the fibula transplant), e03->e14 (\"another CT-scan\"), e25->e08 (\"Initial situation\"), e08->e26 (caption \"6 months after surgery\"), e08->e27 (\"After 6 months\" after resection), e11->e12 (discharge -> follow-up), e13->e18 (symptoms resistant to surgical treatment -> ibandronate), e18->e30 and e30->e22 (6 vs 9 months after ibandronate), e19->e22 (3 vs 9 months after ibandronate), e18->e21 (Fig. 7 caption \"after ibandronate application\").",
+    "Small fixes: p1-f002 numeric age 50 year; p1-f010 role unknown; p1-f011 body site removed (the site phrase qualifies the bony enlargement only); p1-f085 text_value/evidence restricted to what its quotes state.",
+    "Summary reduced from 8 to 6 phase claims; removed the borrowed three-month timing of labs and cone beam tomography."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual 7 JPEGs inspected in the separate visual submission.",
+    "Cone beam tomography is dated only by the Fig. 6 caption (6 months after ibandronate); the text sentence states no time.",
+    "Fig. 1 caption starts the lesion extent in the right premolar region while describing the left hemimandible; the extent is review-only.",
+    "Dates are month-level only; no day-level dates in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 17,
+    "facts_reviewed": 92,
+    "figures_viewed": 7,
+    "key_findings": [
+      "Single index patient; roster, ownership and cited-literature exclusion correct.",
+      "No source conflicts remain: the CBT timing rests on the Fig. 6 caption only; the text never states three months for the CBT.",
+      "Fig. 1 caption lesion extent from the right premolar region is not a literal contradiction of the left hemimandible (the extent may cross the midline); kept as a review-only extent fact.",
+      "p1-f036 June 2020 NO-BORROWING warning is a checker false positive: \"The resection was performed in June 2020\" is the definite back-reference to the single subtotal hemimandibulectomy just decided.",
+      "Diagnosis vs imaging/histology left unordered (basis wording); 29 relations each with literal order support."
+    ],
+    "residual_risks": [
+      "Discussion sentence on bur biopsies (vital bone with persisting subperiostal fibrosis) is not merged with the implant-operation biopsies; source does not identify them.",
+      "Text SPECT and Fig. 5C bone scintigraphy may be one study; kept as two literal items with an ambiguity.",
+      "Several post-ibandronate findings (pain/swelling decline, normalized labs, further course) are undated by design."
+    ]
+  },
+  "physician_adjudicated": false
+}

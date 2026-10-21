@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC6906706.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "776c3f05da9e8dcbf331198421014354f2edbb6676bac4c5014069337045ad05",
+  "annotation_sha256": "a749c2e8fbdaa50006efffdc803019bad6fec20701def02fbc03828f8a655409",
+  "reviewed_at": "2026-10-21T08:13:24.732595+00:00",
+  "source_segments_read": 73,
+  "facts_reviewed": 70,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Ruled the right-gutter pexy organ a source conflict (case text b00027 jejunum vs abstract b00005 duodenopexy): p1-f062 kept scored as \"Pexy in the right gutter\" without the organ; added review_only source_conflict facts p1-f069 (jejunum, case text) and p1-f070 (duodenopexy, abstract), both alternate_representation_of p1-f062; ambiguity rewritten.",
+    "p1-f063 (discussion \"pexy of the small and large bowel\") set review_only with alternate_representation_of p1-f061/p1-f062: same fixation as the case-text pexies, not a second procedure.",
+    "p1-f044 and p1-f045 (Fig. 4 caption-only findings) given the caption's own time: \"Intra-operative\", during, anchor \"laparotomy\" (caption-time ruling); note that the caption does not name which laparotomy.",
+    "p1-f065 readmission: removed related_condition \"Midgut volvulus\" (not stated in the re-admission sentence).",
+    "Added relations p1-e01 before p1-e02 (age 22 vs \"during his childhood\", both age-anchored), p1-e02 before p1-e06 (stay-opening admission before in-stay diagnosis), p1-e02 before p1-e10 (\"re-admitted\").",
+    "Added ambiguity on CT \"no evidence of midgut volvulus recurrence\" vs recurrence found at laparotomy (method discordance, not a conflict); note on p1-f043.",
+    "Interval ambiguity (abstract \"less than two years\" vs body \"Two years after\") re-worded with the parent ruling: rounding/approximation ambiguity, not a source conflict.",
+    "Updated b00005 source-coverage note and the article limitation on abstract wording."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEG figures are inspected in visual.json.",
+    "No dates, drug therapy, vital-sign values or numeric laboratory values are reported; qualitative results are kept as stated.",
+    "Table 1 and the discussion describe published adult Ladd series and are not patient facts.",
+    "Abstract interval (\"less than two years\") is an ambiguity against the case text; the abstract \"duodenopexy\" conflicts with the case-text jejunal pexy and is quarantined review_only.",
+    "Discussion generalisations on diagnosis delay and management are not copied to the patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 73,
+    "facts_reviewed": 70,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (22-year-old man); Table 1 and the discussion series are literature, correctly excluded.",
+      "Abstract duodenopexy vs case-text jejunal pexy is a site conflict; quarantined the organ only.",
+      "Abstract \"less than two years\" vs body \"Two years after\" kept as an ambiguity (rounding), not a conflict.",
+      "WBC \"increase\"/\"elevated\" supports flag high; CT \"no evidence of recurrence\" kept flag negative as reported with a discordance ambiguity.",
+      "All 19 relations checked against RULINGS; in-stay order-only and Post-operative relations are supported; diagnosis to CT purpose clause correctly not ordered.",
+      "Split personal/family history absent items accepted (one negation sentence covering two scopes)."
+    ],
+    "residual_risks": [
+      "Which laparotomy Fig. 4 shows rests on the text citation in b00021; the caption does not say.",
+      "Exact interval between the Ladd procedure and re-admission is unresolved (abstract vs body)."
+    ]
+  },
+  "physician_adjudicated": false
+}

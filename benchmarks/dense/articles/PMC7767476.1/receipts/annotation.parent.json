@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC7767476.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "404b5e6e8455c953c1c80734db48ebc57a6ad216958c442acf70688bed53a6a0",
+  "annotation_sha256": "bb38a229ff8b86dea89352d818bdd66a27d81f1c3635cabdef8953d8f5b47da2",
+  "reviewed_at": "2026-10-21T08:41:40.311930+00:00",
+  "source_segments_read": 89,
+  "facts_reviewed": 114,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "OIRD conditions (p1-f024, p2-f032, p3-f023): time now taken from each case's own Table 3 row \"OIRD at day of opioid treatment\" (2/8/1, anchor opioid treatment), with the Table 3 \"Opioid-induced respiratory event\" row added as evidence; p1 no longer uses the day-two sentence time, which describes the signs, not the OIRD label.",
+    "p3-f026 buprenorphine start: indication replaced by the Table 3 case-row indication \"Musculoskeletal pain\" (draft borrowed \"Severe musculoskeletal pain\" from the preceding sentence); table indication and route rows added as evidence.",
+    "p3-f029: \"repeated fatigue\" moved from indication to regimen (reason for dose reduction); new p3-f036 records the initiated dose increase to a 5 microgram/h patch.",
+    "p2-f015 BMI text_value set to the literal cell \"21.3 (68)\" instead of a composed label.",
+    "Added p2-f036 day-1 oxygen supply with action unknown (\"requiring\" only) linked to p2-e03.",
+    "p2 summary no longer attaches the Table 3 88% value to the day 8 event (it contradicted the draft ambiguity).",
+    "p1-e08 split: pain relief outcome (p1-e08) and no respiratory depression under levomethadone (new p1-e09, during p1-e07).",
+    "Added relations: p1-e02 before p1-e04 (drug start to stop), p1-e02 before p1-e07 (\"A second opioid-based pain therapy\"), p1-e09 during p1-e07; p2-e01 before p2-e02 (admission opening the stay), p2-e05 before p2-e06 (adjacent \"On day 8 of therapy\"), p2-e06 before p2-e07 (\"Further into the inpatient course\"); p3-e01 before p3-e02 (refractory to tilidine, alternative initiated), p3-e02 before p3-e04 (patch start to removal), p3-e04 before p3-e05 (\"In the remainder of the inpatient course\"). p1-e03 before p1-e04 evidence now quotes the sentence the \"As a result\" refers to plus the Table 3 intervention.",
+    "Table 3 evidence added to text-stated conditions (spastic cerebral palsy in all three, Ohtahara syndrome, lissencephaly).",
+    "Ambiguities added: p2 \"increased myoclonus, seizures\" scope; p3 Table 3 Interventions row read as performed vs text \"requiring\"."
+  ],
+  "unresolved": [
+    "The article is a scoping review plus three case reports; only the three Case sections and Table 3 case rows are patient facts. Review results and Table 2 are literature aggregates and are not assigned to patients.",
+    "Table 3 patient characteristics are not dated individually; values are recorded without times except where the case text states them.",
+    "Case sections give no calendar dates; times are relative to treatment start.",
+    "Figure 1 is a literature-selection flow chart with no patient data."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 89,
+    "facts_reviewed": 114,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Three individual cases (Case 1-3) plus a scoping review; review text, Table 2 and the PRISMA chart are aggregate and correctly unassigned.",
+      "Ages 18/20 vs Table 3 18.8/20.6 are whole-year vs decimal ages, consistent and kept as ambiguities, not conflicts.",
+      "BMI text and table merged: the same characteristic of the same patient with matching value and percentile; \"(2.)\" is the 2nd percentile the text states.",
+      "Antibiotics for p1 pneumonia stay action unknown (\"necessitating\"); 70 kg MED conversions excluded as hypothetical; Case 3 hedged contributors kept as an ambiguity only.",
+      "p2 lowest SpO2 88% and the 10-substance vs four-drug comedication lists stay unlinked ambiguities."
+    ],
+    "residual_risks": [
+      "Table 3 Interventions rows are read as performed interventions; the text only says \"requiring\".",
+      "p2 \"On day 8 of therapy\" is ordered after the second attempt by adjacency; the day count could start from the first attempt.",
+      "Schema roster lists aggregate and figure-caption segments as unresolved_segment_ids because the materializer has no aggregate bucket.",
+      "b00021 monitoring statement about the case children is left as background (not copied to individuals)."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC9719403.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0264449080eac3a2643e31c7b83adab3f3dc8be42f43db0ffcfe8026ed0b3abb",
+  "annotation_sha256": "95d462e569cfb046c0ce79d1784266dc93cdd3ea5ef42846138aa8285461a805",
+  "reviewed_at": "2026-10-21T13:06:24.972581+00:00",
+  "source_segments_read": 49,
+  "facts_reviewed": 170,
+  "patients_reviewed": 8,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added a before relation from the 0-month HIT-6/MHD/AMD event to the prophylactic-prescription event for patients 1, 2, 3, 4, 6, 7 and 8, citing the methods outcome definition (before treatment) and the Figure 1 caption (before treatment (0 months)); the prescription is not ordered against 1-month values.",
+    "Added patient 6 outcome fact p6-f023 (satisfied with the prescribed prophylactic medications), event p6-e06 and relation p6-e02 before p6-e06 (definite back-reference to the prescribed medications); summary claim updated.",
+    "Added article limitation for the cohort 0-month HIT-6 IQR mismatch (58-64 in abstract/text vs 57-64 in the Table 1 median row), which the draft had missed.",
+    "Added article limitations documenting cohort statements deliberately not copied to individuals and the scope of the new 0-month ordering."
+  ],
+  "unresolved": [
+    "Cohort median age is printed as 30 (24-51) in the abstract and text but as 30 (28-51) in the Table 1 median row; no individual value is changed. The median row is cohort-level and is not a patient fact.",
+    "Cohort median 3-month monthly headache days is printed as 2 (2-8) in the abstract and Treatment efficacy text but as 5 (2-8) in the Table 1 median row. Both are cohort-level statistics, not patient facts, and are not reconciled.",
+    "The text calls the Table 1 Onset age column median the past years from the first repetitive headache; the onset values are recorded as review_only without a unit.",
+    "The abstract describes eight patients treated by telemedicine for three months, but patients 5 and 6 have no three-month values and were referred at the one-month follow-up visit.",
+    "Source typos kept as printed in evidence: Propranorol, MDH, MMD and OCT analgesics.",
+    "Table 1 uses a dash for empty Comorbidities and Medication cells without defining it; dashes are not recorded as negatives. Individual patient ages in Table 1 have no stated reference time.",
+    "Figure 1 caption visual status not_inspected in this annotation; the image was inspected in the separate visual.json.",
+    "Discussion statements about telemedicine and published studies are not patient facts.",
+    "Cohort median 0-month HIT-6 is printed as 63 (58-64) in the abstract and Treatment efficacy text but as 63 (57-64) in the Table 1 median row; cohort-level only, not reconciled.",
+    "Cohort-level statements without explicit coverage of every patient are not copied to individuals: no major adverse effects of the prophylactic medications, the planned medication adjustment, face-to-face consultations and referral to local doctors, and the methods description of re-examination on the seventh day.",
+    "The 0-month column is identified with before treatment by the methods outcome definition and the Figure 1 caption; that wording orders each patient's 0-month values before the prophylactic prescription. The prescription is not ordered against the 1-month values because Table 1 does not state when each listed drug was started."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 49,
+    "facts_reviewed": 170,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Verified all 66 per-patient HIT-6, MHD and AMD table values and all ages, diagnoses, comorbidities, medications and prescribed prophylactics against Table 1 (raw JATS has a single header row; only the Referred cells span three columns).",
+      "Onset age column: header says Onset age, text calls the column median past years from the first repetitive headache with years; numbers are identical, so this is a label-meaning ambiguity, not a numeric conflict. Kept review_only, no unit added.",
+      "Cohort-wide sentences applied to all eight are explicit universal statements (eight women, all patients, no one, the eight consecutive patients); unlabelled cohort statements are not copied.",
+      "Patients 5 and 6 referred at the one-month follow-up visit; table says another clinic, text says nearby home doctor: kept as ambiguity; three-month abstract claim recorded as ambiguity/limitation.",
+      "FIG1 viewed at full resolution: aggregate box plots, visual.json has printed text and qualitative shape only, no median/whisker/box positions."
+    ],
+    "residual_risks": [
+      "Cohort-level median/IQR mismatches (age, 0-month HIT-6, 3-month MHD) recorded only as limitations.",
+      "Propranolol medication label normalises the table spelling Propranorol (also spelled propranolol in the text); evidence keeps the table spelling.",
+      "Table 1 dash cells are undefined and not recorded as negatives."
+    ]
+  },
+  "physician_adjudicated": false
+}

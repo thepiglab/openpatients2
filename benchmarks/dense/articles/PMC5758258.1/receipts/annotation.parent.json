@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC5758258.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8970f6a841c168ff17916cad81c0825d8bce465f33529a23eb74aeba05b39d8e",
+  "annotation_sha256": "fee3db50008efb787098054201b23db7dd22b4f27735cffc1bad924c685b5b8f",
+  "reviewed_at": "2026-10-21T03:50:29.624634+00:00",
+  "source_segments_read": 16,
+  "facts_reviewed": 44,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f011 (LCX ~70%, text) and p1-f012 (Fig. 1A caption, 70% medial LAD) changed from ambiguous to source_conflict (review_only kept): the text cites Fig. 1A for the same 70% medial-segment lesion, so one lesion is given two vessels; ambiguity text and article limitation rewritten accordingly.",
+    "p1-f008 ECG flag negative -> unknown: ECG is not a qualitative test and \"no significant ischemic changes\" does not call the ECG normal.",
+    "p1-f021 Promus stent kept review_only/ambiguous (not a third device, not a conflict): ambiguity now cites the abstract \"2 stents\" and forbids adding a third stent.",
+    "Split event p1-e10: guidewire adjustment stays occurred; new p1-e21 \"Balloon had to be withdrawn\" with occurrence unknown (requirement wording; p1-f029 action unknown kept).",
+    "Added p1-f044 observation for the selective coronary angiography result (long proximal-to-medial LAD stenosis) per SECTION-IMAGING; linked to p1-e04 and summary claim 1.",
+    "p1-f026 radiography text_value now carries the full reported result (malapposition and longitudinal compression with shortening/curling).",
+    "p1-f031 and p1-f037 IVUS procedures: added Fig. 1D/1F caption evidence and the caption-stated times (\"immediately after longitudinal compression\", \"after dilation\").",
+    "Relations added: e02->e04, e02->e05, e02->e06, e02->e19 (admission opening the stay), e06->e07 (\"For stent placement ... first\"), e09 during e08 (\"when the balloon was first introduced\"), e09->e21 (\"At this point\"), e09->e14 (Fig. 1D caption), e09->e15 (named compression improved after GRIP dilation), e17->e19 (in-hospital care -> discharge). e09->e10 evidence narrowed to the guidewire clause.",
+    "No relation links the abstract \"another balloon\" step (p1-e13) to the case-text second IVUS (p1-e17): the source does not identify them (orchestrator ruling).",
+    "Summary claim 3 no longer cites p1-f030 (abstract \"another balloon\"), which the claim text does not state.",
+    "Article limitation added: Fig. 1C/1E print the letters \"D\"/\"F\" beside the white arrows; the caption does not explain them, no link inferred."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the Figure 1 image is inspected in the separate visual submission.",
+    "Source conflict: the case text places the approximately 70% medial-segment stenosis cited to Fig. 1A in the LCX, while the Fig. 1A caption places the 70% type A lesion in the medial LAD; both kept review_only as source_conflict.",
+    "Case text names two Element stents (abstract: 2 stents) while the discussion says the Promus stent was also used in the case; no third stent is described and the identity is not reconciled (ambiguity).",
+    "Several balloons are described without stating whether they are the same; steps are not merged and only supported orders are linked.",
+    "The article states no medications, laboratory values or care plans for the patient.",
+    "Fig. 1C and 1E print the letters \"D\" and \"F\" beside the white arrows; the caption says the arrows mark the compressed proximal stent and does not explain the letters, so no link to the IVUS panels is inferred."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 16,
+    "facts_reviewed": 44,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (60-year-old woman) confirmed; discussion sentences used only where they say \"the case reported here\"/\"In the case reported here\".",
+      "70% lesion: same lesion (text cites Fig. 1A, caption A) with vessel LCX vs LAD = source conflict; panel A pixels print only the vessel labels \"LCX\" and \"LAD\", no percentage.",
+      "Promus (discussion) vs two Element stents (case text, abstract \"2 stents\"): identity unstated, kept as ambiguity, not an additional device.",
+      "Balloon identities (Voyager NC, \"another balloon\", overlapping-stent post-dilation balloon, GRIP) are not stated as the same; kept separate.",
+      "Figure 1 viewed at full resolution with crops of A, C, E, D, F: C and E carry white arrows with printed letters \"D\" and \"F\"; no burned-in identifiers; visual.json, figure-EHR labels and privacy flags match the pixels."
+    ],
+    "residual_risks": [
+      "Gate warnings NO-BORROWING on p1-f031/p1-f037 are judged false positives: the Fig. 1D/1F captions themselves state that the IVUS was performed and when; the text identifies these IVUS examinations by citing Fig. 1D/1F.",
+      "Whether the Voyager NC post-dilation was completed before withdrawal is not explicit; kept as the text states it (\"followed by post-dilation\").",
+      "AI reference annotation, not physician adjudicated."
+    ]
+  },
+  "physician_adjudicated": false
+}

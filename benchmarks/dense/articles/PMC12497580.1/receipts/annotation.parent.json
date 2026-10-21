@@ -1,0 +1,66 @@
+{
+  "article_id": "PMC12497580.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "24f2f40754ffaa6b378963838ef645fe703f917fdd3a533e8c09917e2b2a963d",
+  "annotation_sha256": "833d3ec0398058565cd1a7a40abd1d68bfef87c34204764370bd0aac2874e919",
+  "reviewed_at": "2026-10-21T17:57:34.392862+00:00",
+  "source_segments_read": 73,
+  "facts_reviewed": 141,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged duplicate symptom p1-f013 (painful vision loss) into p1-f012 (one statement, one item).",
+    "p1-f024: removed invented severity \"reduced\"; reduction kept as text_value.",
+    "p1-f041/f042: removed the visit time the clinical statement added to the untimed initial OCT.",
+    "p1-f062-f065: time now from the Figure 4 caption, which itself states RNFL and GCC thinning at 8-month follow-up (caption quote added).",
+    "p1-f066: time \"at admission\" from the later sentence stating the initial 1:1,000 titer at admission (quote added).",
+    "p1-f069-f090: removed specimen \"serum\" from CBC and CMP rows (not stated by the source).",
+    "p1-f116/f117: methylprednisolone and azithromycin action ordered -> administered (\"After completing the course of medications\").",
+    "p1-f121: added literal time \"During his admission\".",
+    "p1-f124: prednisone taper finished, relation at -> before the 8-month appointment (past perfect).",
+    "p1-f126: removed invented lumbar puncture finding text.",
+    "Added p1-f139/f140 (Figure 4A caption RNFL thickening, two quadrants OD, four quadrants OS, on initial presentation), p1-f141 (recent prednisone dose decrease), p1-f142 (Figure 2 caption retinal hemorrhage adjacent to an inferior vein).",
+    "Events: untimed findings moved out of timed events (new p1-e21 initial OCT, p1-e22 admission-paragraph exam/fundoscopy findings, p1-e24 follow-up findings); added p1-e23 Figure 4A initial-presentation OCT.",
+    "Relations: added e06->e07, e07->e08 (3 days later), e07->e12 (additional methylprednisolone), e12->e19 (taper start -> finished), e22->e14 (repeat fundoscopy), e14->e24 (previously identified hemorrhages resolved), e23->e19 (caption \"subsequent ... at 8-month follow-up\"); repointed repeat-OCT relation to e21; added literal admission/abstract quotes to e06->e08, e09->e12, e12->e13.",
+    "Ambiguities: CBC/CMP recorded as ambiguity (qualitative summary vs flagged values, not two numbers); added Figure 4A session ambiguity, untimed-findings ambiguity, transfer/admission non-linkage.",
+    "Summary paragraphs rewritten so untimed findings carry no time; prescribed (not \"treated\") pre-onset medications."
+  ],
+  "unresolved": [
+    "Table 2 and the literature-review sentences describe published cases from cited reports; they are not index-patient facts and were not copied.",
+    "Values printed inside Figure 4 (OCT report maps) are pixel content kept in visual.json only; they are not facts.",
+    "Table 1 gives no collection time; its values are recorded without a time.",
+    "The source has no supplementary material (raw XML checked for supplementary-material and media entries).",
+    "Examination sentences take a visit time only when the immediately preceding sentence names the same assessment with its time; other admission and follow-up findings are untimed (see ambiguities).",
+    "Figure 4 panel B is captioned as showing ganglion cell complex thinning, but the printed report labels only RNFL maps, quadrants and sectors; no GCC label is printed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 73,
+    "facts_reviewed": 141,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient; Table 2 and literature sentences correctly excluded.",
+      "Drafter-dropped times for non-adjacent admission/6-week findings comply with the result-sentence ruling; retained adjacent times (exam, admission VA, 6-week VA) accepted.",
+      "Table 1 vs \"unremarkable\" text is an ambiguity, not a source conflict.",
+      "Laterality correctly unset for admission hemorrhages, initial disc edema and the contralateral eye.",
+      "No supplementary material in raw.xml."
+    ],
+    "residual_risks": [
+      "Admission VA time relies on the preceding subjective-vision sentence (judgement under the result-sentence rule).",
+      "Figure 4A session (initial ophthalmology OCT vs repeat OCT) is unresolved in the source.",
+      "visual.json Fig 4 panel B limitations[1] is a copy of panel A text (mentions thickening); annotator must fix."
+    ]
+  },
+  "physician_adjudicated": false
+}

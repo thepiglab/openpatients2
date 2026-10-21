@@ -1,0 +1,67 @@
+{
+  "article_id": "PMC6198101.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ea113cc7c06f7977bb61321fe116aae1a00f466ae8031491229c0b09ca5110b5",
+  "annotation_sha256": "aa98ea5770f6a3b2436958c1c9168c84032cd86ea44193bd3ed391ea0c1945fd",
+  "reviewed_at": "2026-10-21T04:17:38.844250+00:00",
+  "source_segments_read": 40,
+  "facts_reviewed": 129,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f006 (MBC condition): removed body_site borrowed from the recurrence sentence; own evidence names only MBC",
+    "p1 summary claim 3: removed the disputed 11.5-year survival figure and its fact link",
+    "p3-f010/p3-f011: removed duration_text 4 cycles; the sentence times the cCR after 4 cycles, not the total cycles given",
+    "p2-f013: added the Case 2 discussion quote (trastuzumab without chemotherapy as postoperative therapy)",
+    "p4-f016: added the missing 'left chest' quote that its note relied on for laterality",
+    "Added p2-f042 right lung scar observation from the Fig. 2 caption",
+    "Added p1-f038 and p2-f043 endocrine therapy resistance (possible, provisional) from the discussion sentence naming Cases 1 and 2",
+    "Added relations p1-e01>p1-e02 (histology of resected tissue), p1-e07>p1-e10, p3-e03>p3-e06, p4-e02>p4-e07 (drug start before stop), p2-e02>p2-e03 ('postoperative therapy'), p2-e04 during p2-e03 ('during adjuvant endocrine therapy')",
+    "p2-e02>p2-e04 relation: replaced the bare fragment quote with the full mastectomy and metastasis sentences",
+    "Article limitations: Fig. 4/5 not an asset swap (panel C published as Fig. 5), source typos, Table 1 internal inconsistencies"
+  ],
+  "unresolved": [
+    "Table 1 reports a 45-patient HER2-positive cohort that does not individuate the four cases; it is treated as aggregate and no facts were taken from it. Its n of 45 differs from the 40 plus 5 patients in the Methods text; not reconciled.",
+    "Caption-layer visual status not_inspected in this annotation; the five images are reviewed in visual.json.",
+    "Case 2 subtype wording conflicts between the case text and the Fig. 2 caption; both sides are review_only and the subtype is kept out of labels and summaries.",
+    "Case 1 printed survival of 11.5 years after termination of anti-HER2 therapy does not match the dates and durations in its own paragraph; kept review_only.",
+    "Discussion sentences about \"all patients\" (tapering, small tumor volume, asymptomatic, 1 to 2 metastatic sites, maintenance for 1 to 4 years) are not literally attributed to the four cases; tapering is review_only per patient and the others were not extracted.",
+    "Fig. 4 caption lists a panel C that is not on the image bound to Fig. 4; the same text is the Fig. 5 caption, whose image shows the tapering schematic.",
+    "Supplements: none listed in the source. Figure images are not downloaded as part of source.json; pixel review is in visual.json.",
+    "Several results are described only as \"non-pathological values\" (CEA, CA15-3, NCC-ST-439); recorded as normal without numeric values.",
+    "Fig. 4 and Fig. 5 are not an asset swap: gr4 shows the panels A and B the Fig. 4 caption describes, and the Fig. 4 caption's panel C text is printed again as the Fig. 5 caption, whose image gr5 shows the tapering schematic; panel C appears to have been published as a separate figure.",
+    "Source typos kept literally in quotes: \"5-fulorouracil\", \"trastzumab\" (Introduction), \"surgical recession\" (Fig. 3 caption, labelled as resection), \"11.5 year\", \"a non-pathological values\", \"HER 3+\" and \"Ope\" in the Fig. 1 caption legend versus \"Op\" on the image.",
+    "Table 1 internal inconsistencies (aggregate, not extracted): the HER2 2+ FISH-amplified percentage 6 (3.3) does not match 6 of 45, and the visceral metastasis counts for all patients (51, 76, 40, 4) sum to 171, not 45."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 40,
+    "facts_reviewed": 129,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Four individuated cases with Case N headings; Table 1 is a 45-patient aggregate and stays out of patient records",
+      "Case 2 subtype luminal-HER2 (text) vs HER2-enriched (Fig. 2 caption) kept as source_conflict, both review_only, out of label and summary",
+      "Case 1 '11.5 year' survival after termination is an arithmetic-only mismatch with its own dates: review_only ambiguity",
+      "'All patients' tapering sentences do not name the four cases; tapering stays review_only per patient; 'All 4 patients ... terminated' is literal and included",
+      "'Case 1 had never received trastuzumab' contradicts the MBC trastuzumab unless scoped to adjuvant therapy: absent, ambiguous, review_only",
+      "Fig. 4 image has panels A and B only; caption panel C text equals the Fig. 5 caption and gr5 shows the taper schematic: no swap"
+    ],
+    "residual_risks": [
+      "Fig. 1B modality assigned PET from appearance only (uncertain)",
+      "p2 VATS biopsy and Case 3/4 diagnosis events are unordered; the source gives no literal order",
+      "non-pathological tumor marker values mapped to flag normal"
+    ]
+  },
+  "physician_adjudicated": false
+}

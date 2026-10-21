@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC13297645.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "05a55e93d10f4c098ca61a62ed3f83c175c9ba3bc7b06332757dcc478ed04727",
+  "annotation_sha256": "c23763121806fed5849c61323c56fb008ea9821106eccf59a90d85693033e38c",
+  "reviewed_at": "2026-10-21T08:47:43.095977+00:00",
+  "source_segments_read": 74,
+  "facts_reviewed": 98,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f008 VDA diagnosis: added unhedged case statements (b00004 \"MD complicated by Tumarkin drop attacks\", b00018 \"her VDAs\") supporting confirmed status.",
+    "p1-f006/f007 hearing loss role comorbidity -> unknown (finding of the primary disease).",
+    "p1-f010 right vestibular hypofunction: time set from its own abstract sentence (\"Post-treatment\"); removed the bedside-HIT quote that does not state the condition.",
+    "Post-gentamicin caloric degree disputed (areflexia text vs markedly reduced caption vs caloric weakness Table 1): p1-f075 now ambiguous/review_only, p1-f076 narrowed to the caption degree (review_only); added included p1-f095 (severe right-sided hypofunction, residual nystagmus during testing) and p1-f096 (left responses preserved).",
+    "p1-f087 remission text no longer attributes remission to the corticosteroid (not stated).",
+    "p1-f057 gentamicin: removed non-literal duration_text \"two injections\"; indication grounded in b00018 (same drug); Table 1 injection rows added as evidence.",
+    "p1-f058 maintenance betahistine: action/temporality current (present-tense \"remains\" in the two-year follow-up paragraph); moved to the two-year event.",
+    "Added p1-f097 (post-injection positioning/avoid-swallowing instruction) and p1-f098 (minimal improvement on initial medical therapy).",
+    "Events: one-month event p1-e16 reduced to its own sentence cluster; new p1-e23 post-gentamicin vestibular testing, p1-e24 Table 1 early post-treatment row, p1-e25 untimed mild dizziness/satisfaction, p1-e26 slight instability prompting cVEMP; one-year event p1-e18 limited to its own fact.",
+    "Relations: removed e06->e07 (cross-paragraph \"After one year\" with no named anchor) and e13->e16 (repointed to e23 with the after-gentamicin quotes); added e01->e07 (\"returned\"), e13->e24 (\"post-treatment\" row), e13->e25 (\"treatment results\"), e26->e21 (instability prompting cVEMP).",
+    "Ambiguities: caloric-degree and presentation-timing items extended (Table 1 and Fig 1 evidence); vHIT item notes same-metric wording; added one-month anchor ambiguity. Summary claims 2-4 rewritten to drop the disputed areflexia and unstated order."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the 11 figure JPEGs are inspected in the separate visual submission.",
+    "Baseline vHIT gain numbers conflict between case text and Figure 4 caption and are review_only; values printed inside images are recorded only in visual.json.",
+    "The first intratympanic dexamethasone course has no stated injection count or dates; no calendar dates are given anywhere in the article.",
+    "Discussion literature review, Table 2 (published studies) and general statements are not patient facts.",
+    "Table 1 is a chronological narrative summary with no numeric serial values; no measurement series built.",
+    "No supplements are listed in the source.",
+    "Degree of the post-gentamicin right caloric response is disputed (areflexia in text, markedly reduced in the Figure 7 caption, caloric weakness in Table 1); degree facts are review_only, the shared severe right-sided hypofunction finding is included.",
+    "The one-month reassessment has no literal anchor and is left unordered; parent reviewer removed relations that relied on cross-paragraph anchors."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 74,
+    "facts_reviewed": 98,
+    "figures_viewed": 11,
+    "key_findings": [
+      "Baseline vHIT: text and Fig 4 caption both call the value the median gain of the same pre-gentamicin test; right 0.82 vs 0.73 is a source conflict, left 0.9 vs 0.91 a rounding ambiguity; all four review_only. Image-printed regression slopes stay in visual.json only.",
+      "Caloric degree after gentamicin is disputed across text, Fig 7 caption and Table 1; only the degree is quarantined.",
+      "Fig 1/Fig 2 \"at presentation\" is ambiguous between first visit and drop-attack presentation; kept as ambiguity.",
+      "PTA 61/19 in b00010 have no unit or time and stay separate from the dB HL caption values.",
+      "Drafter NO-BORROWING fixes checked: re-quoted times use own or scoping sentences; null times are merited.",
+      "Visual readings are printed_exact only and match pixels; device-text privacy flags on Figs 3, 4, 7, 8, 11 correct; no dates or names in any image."
+    ],
+    "residual_risks": [
+      "One-month reassessment and two-year follow-up events have no literal order links.",
+      "Treated ear for the intratympanic injections is never stated (laterality unknown)."
+    ]
+  },
+  "physician_adjudicated": false
+}

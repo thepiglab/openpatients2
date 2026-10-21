@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC4992185.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7c896cb58bf72e28b09b27450bc82706314b2f4f0d639fe6cc762925847cebde",
+  "annotation_sha256": "b04a88bfbddf94185d580dd11d60d9ff8d45e11011d8ec47ccf4e6b4695bdc4f",
+  "reviewed_at": "2026-10-21T14:10:59.962411+00:00",
+  "source_segments_read": 34,
+  "facts_reviewed": 256,
+  "patients_reviewed": 8,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Methods b00010 statements (no past liver disease, transfusion, tattoos, metabolic syndrome; denial of herbal medicines; negative family history; no consanguinity; hepatitis B and C serology) describe the study patients before the exclusion criteria and are not stated to be exactly the eight cases: 72 per-patient copies (9 per patient) set certainty ambiguous, scoring review_only; Methods ambiguity rewritten and linked to them.",
+    "Alcohol and hepatotoxic-drug absent facts kept scored on the Discussion b00025 statement about these eight khat users (excluded by history); the Methods cohort quote removed from their evidence; summaries reworded from 'denied' to 'excluded'.",
+    "Patient 1 khat amount: the abstract range 15-128 is a series summary that states no value for patient 1, so the mismatch with the table value 10 is an ambiguity, not a two-value source conflict; amount merged into p1-f012 (as for the other seven), quarantined duplicate p1-f013 removed, ambiguity and article limitation rewritten.",
+    "Patient 3: khat hepatotoxicity (abstract 'one man', Discussion 'one of our subjects') and Schistosoma infection (Discussion 'this patient') are not literally labelled as patient number 3; set review_only with a rewritten ambiguity and removed from the summary. Results b00024 biopsy findings stay scored (literal 'patient number 3').",
+    "Family history domain coverage set to not_documented (only review_only Methods statements).",
+    "Summaries: thin outcome claim merged into the workup claim for every patient (claims 25-85 words); non-clinical meta sentence about flags removed.",
+    "Source coverage notes for b00005, b00010, b00014, b00026 and b00027 rewritten to state what is and is not copied."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the single figure is reviewed in the separate visual submission.",
+    "Case 1 to Case 8 are the eight table rows; the article has no Case N headings, so narrative sentences are linked to rows only where literal (patient number 3 for the biopsy).",
+    "Cohort statements in Results and Discussion (average age 41 years, seven of eight stopped chewing khat, three died from upper GI haemorrhage within three months, four improved after stopping khat, four of eight died) are not copied to individuals; individual outcomes come from the Table 1 Outcome column.",
+    "Table 1 reference intervals are footnote text whose SGOT and SGPT aliases are swapped against the footnote definitions; values carry no high or low flags.",
+    "Laboratory values, ultrasound findings and presentation have no stated dates or time points other than the Presentation column header; no measurement series was built because each patient has one set of values.",
+    "No supplementary material is listed in raw.xml.",
+    "The abstract range of khat use (15–128 bundles per day times years of use) does not include the Table 1 value printed for patient 1 (10); the range is a series summary, so this is recorded as an ambiguity and the table value is kept.",
+    "Methods statements about the study patients (no past liver disease, transfusion, tattoos or metabolic syndrome; denial of hepatotoxic drugs, herbal medicines and alcohol; negative family history; no consanguinity; hepatitis B and C serology) precede the exclusion criteria and are not stated to cover exactly the eight cases; they are kept review_only.",
+    "Abstract and Discussion statements about the biopsied subject (one man, one of our subjects, this patient) are not labelled as patient number 3; khat hepatotoxicity and Schistosoma infection are review_only for patient 3."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 34,
+    "facts_reviewed": 256,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Eight table patients (Table 1 rows) numbered by row; every Table 1 cell hand-checked against raw.xml (no colspan/rowspan in body rows; two-row header with Laboratory results spanning ALT/AST/ALKP/T Bili); no supplementary material in raw.xml.",
+      "Age kept as age_other (table column Age (yrs); the average age at presentation is a cohort statement).",
+      "SGOT/SGPT aliases in the reference-range footnote are swapped against the footnote definitions: kept as a per-patient ambiguity linked to the ALT/AST facts and an article limitation; no high/low flags.",
+      "p6 total bilirubin N.A. = not_performed (footnote 'N.A, Study not done'); p2 'without diuretics' absent; p4 'with diuretics' administered; deaths p1/p3/p6 upper GI haemorrhage, p8 died at home with cause printed as a question; cohort counts not copied.",
+      "Ultrasound cells with missing commas split into separate findings with an ambiguity.",
+      "Figure 1 (4 panels, printed letters a-d) viewed at full resolution: H&E-type liver micrographs; panels cited in the Results paragraph that opens with the biopsy of patient number 3, so attribution to p3 is literal; text strip under the panels is pixel content only; no privacy identifiers.",
+      "Relations: only literal ones kept (stopping khat before improvement in p2 and p4; improved initially then died in p8); no column header other than Presentation states a time, so presentation-to-outcome order is not added."
+    ],
+    "residual_risks": [
+      "Whether the Methods 'patients' are exactly the eight cases is a judgement; if read as exact, 72 review_only items would be scorable.",
+      "Discussion b00025 'common causes ... were excluded' is read as covering the eight cases named in the preceding sentence.",
+      "Lab units (u/L, mg/dl) come from the footnote reference ranges governing the Laboratory results header."
+    ]
+  },
+  "physician_adjudicated": false
+}

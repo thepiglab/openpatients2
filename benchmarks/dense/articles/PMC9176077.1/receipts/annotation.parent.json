@@ -1,0 +1,52 @@
+{
+  "article_id": "PMC9176077.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e2c85b8c82cd9aed5fa56cf74b56e4441adfc1835dfff85e633da98501243155",
+  "annotation_sha256": "adfe8a3dd9ba2793062b179e435387d6d29c2d0278359fb569604c006be56162",
+  "reviewed_at": "2026-10-21T08:25:39.114769+00:00",
+  "source_segments_read": 8,
+  "facts_reviewed": 45,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f038 oncology tumor histology trimmed to 'marginal zone lymphoma'; the immunoglobulin M component stays as its own biomarker p1-f040",
+    "Summary claim 1 rewritten so it states the facts it cites (chloraminophene 1997 to 2001 for anemia and medullary involvement, intestinal recurrence before 2008 R-C, gastric relapse for 2011 R-B, mesenteric recurrence 2018) instead of 'for earlier disease'",
+    "source_coverage b00003 note: first sentence is literally about the index patient but only restates facts already recorded from b00002"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the single JPEG was inspected separately in visual.json.",
+    "Case timing is mostly calendar years and relative intervals; no admission dates, tuberculosis treatment start date, or follow-up duration are stated.",
+    "Discussion text on other published cases, Vigibase reports and general tuberculosis epidemiology is background and not assigned to the patient.",
+    "Whether tuberculosis was a reactivation or new infection, and any causal contribution of ibrutinib, is not established for this patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 8,
+    "facts_reviewed": 45,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (85-year-old man, MZL on ibrutinib plus rituximab, pulmonary TB); roster 1, complete",
+      "All 45 facts checked against b00002 wording: times literal (since 1997, between 1997 and 2001, in 2008, in 2011, In 2018, after 6 months of therapy, during follow-up); recurrence facts correctly carry no year since the years govern the treatment clauses",
+      "9 relations verified: calendar-year pairs quote both stated years (incl. the adjacent-sentence 2011 to 2018 quote); after/following/for (treating named condition) wording; ibrutinib to CT via 'after 6 months of therapy' in the adjacent sentence with the therapy-identity ambiguity recorded; anti-TB treatment overlaps improvement via 'under treatment'",
+      "Hypogammaglobulinemia kept as condition plus 6 g/L observation (flag low from the source word), matching corpus convention for 'mild X (value)' statements",
+      "Figure 1 viewed at full resolution with 3x crops of all four panels; panel letters and titles printed only in pixels, so annotation panels [] with the letters described in visual.json; no burned-in identifiers"
+    ],
+    "residual_risks": [
+      "'therapy' in the CT sentence is read as the 2018 ibrutinib plus rituximab combination from the adjacent sentence",
+      "Start of anti-TB treatment relative to the CT and diagnosis is not stated; no relation added",
+      "Causal role of ibrutinib and reactivation versus new infection remain an ambiguity (b00005)"
+    ]
+  },
+  "physician_adjudicated": false
+}

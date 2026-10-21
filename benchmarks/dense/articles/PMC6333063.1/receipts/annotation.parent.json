@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC6333063.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0937cbf3783210a5eb6be058f710052c06a1a5c6a583926c2f749d21d98bff6f",
+  "annotation_sha256": "2ca0ad66c317e390e714b1551b70ce8c4e88d8afefe69f22b5b73e5245e7e846",
+  "reviewed_at": "2026-10-21T03:56:50.662696+00:00",
+  "source_segments_read": 13,
+  "facts_reviewed": 44,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f033 ruptured LV aneurysm: removed body_site \"posterolateral left ventricle\" and the b00007 evidence; the discussion sentence \"The posterolateral site of the aneurysm is also uncommon.\" opens a new paragraph without naming this case and the case narrative states a different location description, so it is kept only as a new patient ambiguity (b00007 coverage note updated).",
+    "p1-f014 ECG rhythm flag unknown -> normal (source calls it \"a normal sinus rhythm\"; OBS-FLAG).",
+    "p1-f021 \"missed on preoperative examination with TTE\": name relabelled \"Ruptured LV aneurysm on preoperative TTE\", text_value \"missed on preoperative examination with TTE\", assertion present kept (aneurysm present but undetected; not an absent finding); polarity note added.",
+    "p1-f024 cardiac tamponade: removed unstated diagnostic_basis \"TTE and intraoperative TEE\"; removed from TTE event p1-e05 (kept in diagnosis event p1-e08).",
+    "p1-f036 probable previous asymptomatic MI (possible/provisional/historical, hedged cause) removed from diagnosis event p1-e08 (discussion hypothesis, not part of the diagnosis).",
+    "p1-f001 care_setting \"Emergency room, then cardiac surgery\" -> \"Emergency room, then surgery\" (source wording).",
+    "Relation p1-e05 -> p1-e06 removed (adjacent sentences, no stated order).",
+    "Relations added: e02->e03 and e02->e12 (transfer/admission opening the stay -> ER care and discharge, order only); e05->e07 and e05->e09 (\"preoperative examination with TTE\" vs \"Intraoperatively\"/\"During surgery\"); e07->e08 (\"Therefore, the patient was diagnosed\"); e07 during e09 (\"Intraoperatively\"); e09->e11 (\"During surgery\" vs \"Postoperatively ... uneventful recovery\").",
+    "Article limitation on dissection rewritten: TTE impression (possible/provisional) vs later \"No dissection of the ascending aorta was identified\" (absent/refuted) is a staged update, not a conflict."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; figure pixels are described in visual.json.",
+    "Supplement movies S1 to S4 (MP4) are frame-sampled separately and are not clinical facts in this annotation.",
+    "No dates, laboratory values or follow-up duration are given; times are relative only.",
+    "The TTE impression of ascending aortic dissection (possible/provisional) and the later statement that no dissection of the ascending aorta was identified (absent/refuted, surgery narrative) are a staged update, not a source conflict."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 13,
+    "facts_reviewed": 44,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (55-year-old patient, referred to as \"He\"); documented sex male kept from the unambiguous pronoun per DEMO-SEX-WORDING.",
+      "Dissection: TTE \"indicated\" -> possible/provisional (p1-f022); \"No dissection of the ascending aorta was identified\" in the surgery narrative -> absent/refuted (p1-f037); ordered by \"preoperative\" TTE vs surgery; ambiguity kept.",
+      "Metoprolol \"medication history\" historical; prior MI \"probably\" possible/historical, no causal link asserted; BP 76/48 mm Hg kept as text with flag unknown (no hypotension/shock stated; \"hemodynamically unstable\" recorded as a sign).",
+      "Figures 1-3 viewed with crops: ECG has no burned-in text; TEE stills carry a burned-in exam date/time header (direct_identifiers category) and device text; blank ID fields; Figure 3 is a color-Doppler still.",
+      "Movies S1-S4 frames viewed (agent 2 s sample, 25 frames, plus a 1 s parent spot-check, 47 frames): 2 s sampling misses content, e.g. dense mosaic color flow in the round cavity of Movie S4 at 7 s and 9 s."
+    ],
+    "residual_risks": [
+      "Placement of \"No dissection of the ascending aorta was identified\" in the surgery event relies on its position between the \"During surgery\" and \"Postoperatively\" sentences; the fact itself carries no time.",
+      "Video frames are pixel content only; no clinical facts were drawn from them.",
+      "AI reference annotation, not physician adjudicated."
+    ]
+  },
+  "physician_adjudicated": false
+}

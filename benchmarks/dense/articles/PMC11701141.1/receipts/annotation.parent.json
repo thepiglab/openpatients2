@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC11701141.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6dfd05b5c75162b5e2cf56175fc4fcf7ae5075d77010552a04249893a050e63f",
+  "annotation_sha256": "bb53ce8c7ffb4544071176f02d2a581310adf63a60bcb7d1bb4eeb467f5f1fef",
+  "reviewed_at": "2026-10-21T13:47:06.008179+00:00",
+  "source_segments_read": 32,
+  "facts_reviewed": 115,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed relation p1-e19 (prone ventilation 'from day 5', b00010) before p1-e23 ('On day 8', b00011): 'from day 5' sits beside the ECMO-relative 'third/fourth/fifth day after ECMO' series and the source does not show it shares the day count of the b00011 series; different/unknown anchors never order a pair.",
+    "Kept the b00011 'On day 8/10/14/17/23' relations: one bare day count in one paragraph, both stated times quoted; recorded this decision in the day-number ambiguity.",
+    "Added relation p1-e13 before p1-e15 (blood gas PH 7.07 then 'rechecked the blood gas analysis after 1 h'; re- word).",
+    "Moved VA-ECMO initial settings (p1-f085) and 210 ml/kg/min initiation flow (p1-f086) into the ECMO-start event p1-e17; p1-e18 now holds only the 'Thereafter' lung-rest titration with PaO2/PaCO2.",
+    "Removed caption-only findings from text-timed events (p1-f031 Figure 4 left pleural effusion from the fifth-day event p1-e22; p1-f036 Figure 6 improved exudative lesions from the day-17 event p1-e32) into untimed events p1-e35/p1-e36, with an ambiguity; captions state no time.",
+    "Added missed facts: p1-f113 large number of bubbles in the water-sealed bottle, p1-f114 chest tube fixed without falling off or shifting (event p1-e34), p1-f115 chest tube position changes further compromised lung ventilation (event p1-e16).",
+    "Removed unsupported related_condition 'bronchopleural fistula' from p1-f106 (lack of improvement of pulmonary findings and oxygenation).",
+    "p1-f019/p1-f020: 'frequently' moved from severity to text_value.",
+    "Summary claims 2 and 4 rewritten to remove order the source does not state (PPV before drainage/HFOV; 12 h/24 h x-rays after the restart)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the six chest x-ray JPEGs are inspected in the separate visual submission.",
+    "The reference point of the day numbers in the Case report is not stated; no calendar dates or ECMO-relative days are assigned to them.",
+    "Ventilator and ECMO settings are recorded in statements and quotes because the procedure model has no structured setting fields; Discussion interpretation and general ECMO statements are not patient facts.",
+    "Two supplementary JPEG images are declared in the source with no description; they are reviewed in the supplement manifest and are not attributed to a patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 32,
+    "facts_reviewed": 115,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Single index patient (11-h-old male newborn); roster count 1 from 'We present a case of a newborn'. Every fact, event, relation, quote, enum and time checked against b00001-b00032.",
+      "Day numbers: the bare b00011 series is one day count; 'from day 5' is not ordered; ECMO-relative third/fourth/fifth-day relations quote both stated times with the same ECMO anchor.",
+      "Blood gas sets 1-4 untimed (only set 5 'after 1 h'); 12 h/24 h x-rays 'after intubation' left unordered because several intubations are implied and none is the single described intubation.",
+      "BPF diagnosed (b00007, confirmed) and later 'suspected' (b00010, provisional) are two source statements of different status, kept separately with an ambiguity, not duplicates.",
+      "210 ml/kg/min is literal for this patient: 'In this study, initiation of VA-ECMO was set at' in a single-case report. Lowering PEEP, VV/awake ECMO and 'BPT' stay ambiguities only.",
+      "gestational_age_weeks null is correct per the reproductive_perinatal prompt ('38 weeks and 4 days' kept as text_value); cesarean procedure subject mother, delivery item subject index patient.",
+      "Viewed all six figure JPEGs and both supplement JPEGs at full resolution with corner crops: frontal infant chest radiographs; F2-F6 carry only an L side marker (F5 also a scale symbol); no names, IDs or dates."
+    ],
+    "residual_risks": [
+      "The anchor of the b00011 day series is unstated; ordering within the series relies on the shared bare 'day N' notation in one paragraph.",
+      "SD1/SD2 look like arrow-free versions of Figures 5 and 6 but the source never says so; they remain unattributed and not EHR-includable."
+    ]
+  },
+  "physician_adjudicated": false
+}

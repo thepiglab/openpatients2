@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12952367.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "14664f3f04df7b955041599c414f892ca1260f6a3a584bb82f5b00488f83c4a6",
+  "annotation_sha256": "201b6195f727f654839caae79941689855cd761f736249951045a71d8430162b",
+  "reviewed_at": "2026-10-21T13:51:08.363879+00:00",
+  "source_segments_read": 63,
+  "facts_reviewed": 113,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Moved the text-stated ESR and procalcitonin results (p1-f083, p1-f084) out of the abdominal ultrasound event into their own untimed test event p1-e10; they stay separate from the Table 1 rows (the sentence neither cites Table 1 nor states a time) and a new ambiguity records the possible duplicate.",
+    "Added a review_only symptom item (p1-f113) and an ambiguity for the Introduction sentence \"chronic course with ill-defined right flank and right upper quadrant abdominal pain, as was the case in this report\"; b00005 coverage now patient_facts.",
+    "Added missing literal relations: diagnosis before appendectomy (same \"With the diagnosis of ...\" sentence), presentation before abdominal ultrasonography (\"Further investigation\") and before the appendectomy (presentation opens the stay), and Table 1 investigations \"during the patient’s hospitalization\" before the discharge ending that stay.",
+    "Print-artefact ambiguity now also covers the Table 1 calcium value 9.401 (kept as printed).",
+    "Abstract \"unremarkable apart from the stool examinations\" ambiguity now links the Table 1 ESR and procalcitonin rows as well as the text items.",
+    "p1-f005 \"no known chronic medical condition\": temporality historical -> unknown (not labelled as history).",
+    "Event time classification: appendectomy \"after stabilizing his hemodynamic status\" -> order_only/unknown; discharge \"after 48 hours\" -> relative."
+  ],
+  "unresolved": [
+    "Figure 1 pixels are inspected in the separate visual submission; the annotation caption layer stays not_inspected.",
+    "Source conflict between the abstract and Table 1 on the stool examination pus cells; both sides are review_only and the red blood cell and bacteria statements come only from the abstract.",
+    "Table 1 values are recorded exactly as printed (hemoglobin unit mg/dl, creatinine reference range 0-5—1.2, calcium 9.401); no flags were derived from reference ranges, and abnormal flags appear only where the text says increased.",
+    "The ESR and procalcitonin values restated in the text are kept separate from the day-of-admission table rows because the text does not state their time.",
+    "The Discussion ultrasound sentence is review_only because its link to this patient is not literal. The Patient perspective is a first-person account and is kept as separate symptom items.",
+    "Antibiotics are named only as a purpose of the secured intravenous lines; no administration, drug, dose or route is stated. The type of operation (open or laparoscopic) is not stated for this patient.",
+    "No supplementary material is listed in the source XML."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 63,
+    "facts_reviewed": 113,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (27-year-old man, subhepatic acute appendicitis, appendectomy); roster 1 complete; raw.xml has no supplementary-material element (data-availability boilerplate only).",
+      "Stool examination: abstract \"many pus\" vs Table 1 \"Few pus cells\" is one qualitative value of the single described stool examination, kept as a source conflict with both sides review_only; abstract-only red cells and motile bacteria stay included (not contradicted).",
+      "Diagnosis confirmed: Case text states \"With the diagnosis of\" and the operation found an inflamed subhepatic appendix; the abstract \"suspected\" is kept as an ambiguity.",
+      "Discussion ultrasound (b00054) has no literal case marker: review_only. \"partially compressible\" is grammatically ambiguous between appendix and fecalith: review_only.",
+      "Antibiotics stay action unknown (IV lines secured \"for ... antibiotics\"); operation approach not stated.",
+      "Discharge absent symptoms stay untimed (no literal \"at discharge\"), linked to the discharge event; patient-perspective symptoms are kept as separate first-person items with an ambiguity, not merged.",
+      "Figure 1 viewed at full resolution with crops: A operative photograph, B removed appendix with brown fragments on gauze; caption pink arrows are purple-magenta; caption 6.55 mm / 1 cm repeat the ultrasound values on a scale-less specimen photograph (ambiguity kept)."
+    ],
+    "residual_risks": [
+      "The text ESR/procalcitonin and the Table 1 rows may be one measurement counted twice; kept separate per the merge rule with an ambiguity.",
+      "Relations presentation -> ultrasound/appendectomy and investigations -> discharge rest on the same-stay order-only ruling.",
+      "Panel B gauze imprints are illegible; the timestamps_or_device_text flag is precautionary."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC10756951.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "df7e6d52fc3580151f3b5898c4b941f84d57a9791992e44c4818814f044e2adc",
+  "annotation_sha256": "88431d67a7ecffea0f25634d207c0cc568c23651184c10ad3c30829721300324",
+  "reviewed_at": "2026-10-21T13:24:23.436300+00:00",
+  "source_segments_read": 108,
+  "facts_reviewed": 184,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added the governing Table 2 caption time (on admission, quoting \"Venous blood gases on admission\") to all 16 venous blood gas rows, which had no time.",
+    "Removed the time and the preceding-sentence quote from the follow-up laboratory results fact (p1-f146): the preceding sentence times the clinic examination but does not name laboratory tests; functional ability keeps the examination time with both sentences quoted.",
+    "Split the five TTE findings stated once for the day 12 and day 30 studies into day 12 facts (p1-f135..f139) and day 30 facts (p1-f170..f174); the day 30 facts attach to the day 30 TTE event; ambiguity updated.",
+    "Added the provisional diagnoses of rhabdomyolysis and acute kidney injury from the case text (p1-f175, p1-f176) beside the unqualified Table 3 Day 0 diagnosis, with an ambiguity; split the old merged diagnosis event into the Table 3 Day 0 diagnosis event and an untimed provisional-diagnosis/hydration/nephrology event (p1-e27).",
+    "Added severe myalgia (discussion basis sentence) and absent trauma, seizures and medication side effects stated for this patient in the discussion (p1-f177..f180, event p1-e28).",
+    "Added the Table 3 Day 6 MRI necrotizing fasciitis cell as a review_only ambiguous observation (p1-f181); text hedge kept on the condition.",
+    "Added the MRI findings stated in the Figure 4, 5 and 6 captions (biceps and triceps muscle abscesses, rotator cuff edema) as untimed observations (p1-f182..f184).",
+    "Relations: admission -> symptoms changed from before to overlaps (complaints present at admission); admission same_time admission vitals/labs added; admission -> provisional diagnosis added; Day 0 diagnosis relation re-quoted with the Day 0 row; Day 3 rowspan cell quoted for the ultrasound row relations; antibiotic and hydration -> favorable recovery (leading to) added; post-discharge IV antibiotic -> three-week clinic examination (same anchor, both quoted) added.",
+    "Summary claim 2 now states the provisional diagnosis; coverage notes and the Table 3 matching limitation updated."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the eight JPEGs were inspected in the separate visual submission.",
+    "Table 3 (timeline) rows are matched to text events only where the same test and time are named (day 3 echocardiogram, blood culture, repeat blood culture, renal parameters, arthrotomy, discharge); findings without their own printed day carry no time. The TTE findings stated once for the day 12 and day 30 studies are recorded once per time point.",
+    "Table 3 places the clinic review on Day 45 while the text says three weeks following discharge (Day 35); both are kept as printed.",
+    "Discussion statements about published cases and general epidemiology are not patient facts; the hedged sepsis-induced mechanism for the index patient is not recorded as an asserted cause.",
+    "No reference-range-only high/low flags were applied to Table 1 or Table 2 values."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 108,
+    "facts_reviewed": 184,
+    "figures_viewed": 8,
+    "key_findings": [
+      "Single index patient (35-year-old man); all 45 Table 1 and 16 Table 2 cells are admission observations without reference-range flags.",
+      "Discharge fact (text 35 days plus Table 3 Day 35) is one event; the NO-BORROWING warning on it is a checker false positive.",
+      "Day 45 clinic review versus three weeks after discharge is an arithmetic-only mismatch and stays an ambiguity.",
+      "Necrotizing fasciitis (suggestive vs revealed) and wrist arthritis (suggested, septic on MRI, reactive on histopathology) are differing test wordings, recorded as ambiguities, not source conflicts.",
+      "The hedged sepsis mechanism for rhabdomyolysis is not recorded as a cause."
+    ],
+    "residual_risks": [
+      "Text TEE and MRI findings are grouped with the Table 3 Day 5 and Day 6 events but carry no time themselves.",
+      "Which TTE images (Figures 7, 8) come from day 12 or day 30 is not stated.",
+      "Respiratory rate unit kept as printed (\"minutes per minute\")."
+    ]
+  },
+  "physician_adjudicated": false
+}

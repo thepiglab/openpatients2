@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC8403174.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b5ea86759cd0abffd60031f3c09e564e308259f53fef4d403299edc3fed2bb3d",
+  "annotation_sha256": "da7372d038c36b1fed4ab39abfc9c9b6578aee02d9ac0fe45fa65bba053922f2",
+  "reviewed_at": "2026-10-21T09:02:52.326107+00:00",
+  "source_segments_read": 49,
+  "facts_reviewed": 95,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f018 (audiogram procedure): removed laterality left and body_site left ear; the sentence places the hearing-loss RESULT in the left ear, not the test; the result keeps left ear on p1-f017 and p1-f005.",
+    "p1-e03 split: congestion sentence (p1-e03) and the \"She then developed\" noise/SUD 8/10/sleep sentence (new p1-e12), both kind history, so the literal \"then\" order can be recorded.",
+    "p2: added oncology tumor p2-f034 (recurrent ependymoma, posterior fossa, left lateral recess of the fourth ventricle, disease_status recurrence) and oncology treatment p2-f035 (fourth craniectomy for resection, surgery, given) as alternate representations of p2-f006 and p2-f018; p2-f006 clinical_status recurrence; oncology domain coverage unresolved -> documented; summary claim 1 cites them.",
+    "Added 12 literal relations: p1 e03>e12 (\"then developed\"), e05>e07 (first treatment vs \"After 3 treatments\"), e01>e10 (June 19, 2019 vs June 2020), e01>e11 (eighteen months follow-up in the office); p2 e02>e03 (had completely lost hearing / the loss of hearing happened after the craniectomy), e05>e07 and e05>e08 (first session vs after the second/third treatment), e03>e11 (July 21 vs August 21, 2020); p3 e01>e02 (tube implanted to help drain the fluid), e05>e06 (2018 vs June 2020), e06>e08 (June 2020 vs July 2, 2020), e08>e12 (July 2 vs September 24, 2020).",
+    "Article limitations: roster decision (reported 14, incomplete, three individuated cases) and the unattributed illustration photographs with side-view faces."
+  ],
+  "unresolved": [
+    "Table 2 summarizes 14 patients, three of whom are described in detail as Case 1 to Case 3, but the article never says which rows correspond to which case; ages differ for two plausible matches (57 vs 59 and 52 vs 56). The 14 table rows are therefore not extracted as patient facts and only p1 to p3 are in the roster.",
+    "Table 2 has no per-patient serial measurements (one row per patient with a single follow-up result), so no measurement series was built.",
+    "The Discussion sentence restating each case in a phrase (\"long-term severe sinusitis\", \"puncture to the eardrum\") adds wording not present in the case sections and was not extracted as facts.",
+    "The shared treatment description (points, devices, 25 Hz microcurrent and 2 Hz millicurrent dosage, Table 1) is general methodology and was not assigned to individual patients; case text names only \"Tinnitus Main and Modified Protocols\".",
+    "Caption-layer visual status is not_inspected; actual images are inspected in separate visual targets.",
+    "Study-level claims of effectiveness in the Abstract and Conclusion are not copied to individual patients.",
+    "Roster: the article states 14 patients in Table 2 and that three of them are described in detail; only Cases 1 to 3 are individuated with narrative courses, so the roster holds p1 to p3 (reported 14, roster incomplete). The other 11 rows cannot be separated from the three detailed cases without attribute matching, so they are not rostered as separate patients.",
+    "Figures 1 to 4 are photographs of a person used to illustrate treatment points; the article does not say who is photographed and ties no image to a case. Side-view faces are visible in Figures 1 and 3 and are flagged in the privacy sidecar."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 49,
+    "facts_reviewed": 95,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Three individuated cases (Case 1-3 headings) plus Table 2 of 14 patients; Table 2 rows 4, 11 and 12 resemble the cases but two ages differ (59 vs 57, 56 vs 52) and the text never maps rows to cases, so no row is linked (attribute matching is not literal). Roster reported 14, incomplete, matching the PMC7775645.1 convention.",
+      "Laterality kept only where the fact's own sentence states the ear (p1 250 Hz and 4-6 kHz results, p2 low/high-pitch result, p2 SNHL, p3 hearing loss, ear drum hole and ear tube stay unlateralized, with ambiguities).",
+      "p3 ENT suggestion (another ear tube) is a recommended care plan and the steroid an ordered medication; neither outcome is stated.",
+      "Shared methods (points, 25 Hz / 2 Hz dosage, Table 1) and Discussion restatements are not assigned to patients.",
+      "Figures 1-5 viewed at full resolution: technique photographs of an unidentified person (not attributed to any case) and a schematic; side-view faces in f1 and f3 correctly flagged, no burned-in text."
+    ],
+    "residual_risks": [
+      "Ependymoma is placed in oncology on nomenclature (malignant CNS neoplasm) although the source states no grade or malignancy wording.",
+      "p1 follow-up at 1 year (ENT) and 18 months (office) are not ordered against each other because their anchors are not stated; p1 \"One year ago\" onset is not ordered against the presentation.",
+      "p3 treatment plan (6 weeks, 12 treatments) stays a planned event; completion of all 12 treatments is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,68 @@
+{
+  "article_id": "PMC9175940.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "647f639f8e92ef95795b7f68cc0ecb71ff27c99135cccf6d5d3c9ea25c73e28a",
+  "annotation_sha256": "02f5a619c5c84c74fef19da17eb0a09800d5dec6be3c420d7e05da1456e264dc",
+  "reviewed_at": "2026-10-21T08:23:35.696806+00:00",
+  "source_segments_read": 19,
+  "facts_reviewed": 210,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added p1-f096 cholecystectomy procedure (completed, recent, for necrotizing cholecystitis) and linked it to p1-e01.",
+    "p1-f031 antibiotics: added the stated duration \"a week\".",
+    "p1-f043, p1-f045, p2-f063, p2-f064 inotropes/vasopressors: action administered -> unknown (\"requiring\" alone).",
+    "Genetic testing p1: Case 1 \"No complement regulatory gene mutations were identified\" (p1-f090) restored to supported/include; Discussion \"the other patient did not undergo genetic testing\" (p1-f091) is attribution by exclusion -> ambiguous/review_only, not a conflict side; ambiguity, domain coverage and limitation rewritten.",
+    "Recorded an ambiguity that Patient 1 anticardiolipin/anti-beta2 glycoprotein units (SGU/GPL) are printed in the reverse convention to Patient 2; values kept as printed; both kept flagged high (one \"elevated\" over the coordinated pair).",
+    "Split p1 pre-return therapy (heart failure therapy, prednisone, mycophenolate, eculizumab) out of the return presentation p1-e12 into new event p1-e27, ordered before p1-e12 by the \"Despite ... returned weeks later\" sentence.",
+    "Removed p1 relations without an order word: e06->e08 and e06->e09 (quotes span separate sentences), e12->e13 (adjacent sentences, no order word), e18->e19 (\"also\").",
+    "Added p1 relations e23->e24 (adjacent \"Her subsequent hospital course\") and e25->e26 (\"last reported ... Ultimately, given the patient's condition\").",
+    "p1 summaries: removed causal \"producing\" and the unstated order of cardiogenic shock after the complications; shock moved to the final phase with its catheterization evidence.",
+    "p2-f041 ADAMTS13 34%: value undisputed -> supported/include with flag unknown; only the abnormal/normal status is quarantined (p2-f042 normal stays review_only). p2-f055 TTP ruled out -> supported/include (only its stated basis conflicts).",
+    "p2-f011 removed inferred body_site \"heart valve\"; p2-f017 removed invented indication \"therapeutic anticoagulation\"; p2-f078 removed \"homozygous\" from inheritance (zygosity stays in interpretation).",
+    "Added p2-f114 diuresis (administered; \"responded well to diuresis\") and event p2-e22 for kidney improvement with diuresis.",
+    "Added p2 relations e07->e12 (heparin start -> its transition to dalteparin) and e10/e11/e12 -> e13 (in-hospital care -> discharge ending the stay).",
+    "p2 summaries: added CRRT and diuresis; \"MRI confirmed\" -> \"MRI showed\".",
+    "TMA ambiguity for p2 now cites the Discussion \"clinicopathologic signs of TMA\" sentence alongside \"in those biopsied\"."
+  ],
+  "unresolved": [
+    "Figures 1 and 2 belong to Patient 1; pixels are described in the separate visual submission and the figure rows here keep not_inspected.",
+    "Genetic testing for Patient 1: the case states no complement regulatory gene mutations were identified (kept); the Discussion says \"the other patient\" did not undergo genetic testing, attributed only by exclusion and kept review-only.",
+    "ADAMTS13 status for Patient 2 conflicts between the case (abnormal at 34%) and the Discussion (normal for each patient); the 34% value is kept with an unknown flag and the Discussion normal flag is review-only.",
+    "Patient 2 is described as not requiring dialysis after continuous renal replacement therapy was started; the statements are not reconciled.",
+    "Discussion sentences about the literature, mechanisms and cited studies are background and are not assigned to either patient.",
+    "The genetic methods paragraph describes patient samples generally; its ownership between the two patients is unresolved because of the genetic testing conflict.",
+    "Figure 1B printed view titles (2 Chamber left, 4 Chamber right) are the reverse of the caption order; the caption's purple arrow is not distinguishable in the grayscale pixels."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 19,
+    "facts_reviewed": 210,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Two individuated patients under PATIENT 1/2 headings; Discussion sentences copied only where they say both/each patient or name a patient.",
+      "Fig 1B printed titles (2 Chamber left, 4 Chamber right) reverse the caption order; purple arrow not distinguishable in grayscale pixels; recorded as limitations.",
+      "Patient 1 genetic-testing Discussion sentence is attribution by exclusion: review_only ambiguity, not a source conflict.",
+      "Patient 2 ADAMTS13: only the abnormal/normal status is quarantined; the 34% value and the stated TTP ruling-out are kept.",
+      "Patient 2 CRRT started vs \"did not require dialysis\": ambiguity; the no-dialysis fact stays review_only.",
+      "Relations without a literal order word were removed; implied-necessary orders (drug start->stop, in-hospital care->discharge) added."
+    ],
+    "residual_risks": [
+      "Patient 1 eculizumab is listed among earlier immunosuppressants and later \"subsequently started\" at 900 mg IV weekly; the source does not reconcile them (ambiguity kept).",
+      "Patient 1 anti-beta2 glycoprotein \"elevated\" flag depends on reading one adjective over the coordinated antibody pair.",
+      "Patient 2 TMA kept provisional although the Discussion groups both patients as having clinicopathologic signs of TMA."
+    ]
+  },
+  "physician_adjudicated": false
+}

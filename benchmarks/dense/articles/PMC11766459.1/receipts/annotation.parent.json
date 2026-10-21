@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC11766459.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ed0ee2a976088c5e50121cb663443adaac1d4e25f15186adb49a31da32f1f020",
+  "annotation_sha256": "7ef2a789edc6574d2149a99903e133c2b5d4dadba0c759b9bb16574d565dd279",
+  "reviewed_at": "2026-10-21T14:05:55.205150+00:00",
+  "source_segments_read": 24,
+  "facts_reviewed": 134,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added ethnicity_as_documented 'Japanese' (p1-f129) per corpus precedent; removed the limitation that declined it",
+    "Added absent 'Notable medical history' condition (p1-f130) from 'who had no notable medical history'",
+    "Added ritodrine dose increase to 200 ug/min after the rescue cerclage (p1-f131, event p1-e31, relation e05 before e31 from 'which ultimately required')",
+    "Added literal present-case discussion facts from b00017: modified WHO class 1 (p1-f132) and absent known baseline cardiovascular risks (p1-f133); b00017 coverage changed to patient_facts",
+    "Added pre-pregnancy screening ECG result 'no arrhythmias' as review_only/ambiguous (p1-f134) because it rests on self-report and the discussion says pre-conception ECG data are absent; linked to e01 and the self-report ambiguity",
+    "Kept 'approximately' wording on baseline HR 180 bpm (p1-f093 text_value)",
+    "Split initial-treatment event: p1-e20 now bisoprolol 2 mg + UFH (occurred); new p1-e32 holds as-needed verapamil and chosen spironolactone with occurrence unknown",
+    "Removed relation e09->e12 (the 'Subsequently ... following morning' anchor is the adjacent overnight sentence); added e11->e12 with that adjacent pair",
+    "Added literal relations: e01->e02 (prior to pregnancy), e03->e07 (palpitations since initiation), e06->e08 and e08->e09 (same-anchor gestational ages), e09->e13 (day before the transfer), e13->e14 (transfer -> arrival), e14->e17 (ECG showing SVT -> its treatment), e18->e23 (presentation NT-proBNP -> follow-up decline), e26->e27 (postpartum), e28->e29 (discharge -> one-month follow-up); e20->e22 evidence now quotes 'initial' plus 'Subsequently'",
+    "Added ambiguity: spironolactone/verapamil administration not stated in text; Figure 4 drug bars and bisoprolol 2->4->2 label are pixel-only",
+    "Reworded ritodrine-indication ambiguity (ambiguity, not source conflict) and self-report ambiguity (adds b00017 uncertainty quote)",
+    "Summary no longer says spironolactone was given; LVEF about 30% changed to LVEF 30%; claim 1 now cites p1-f130"
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the four JPEG figures were inspected separately in visual.json.",
+    "Values printed inside Figure 4 are pixel content recorded only in visual.json and are not facts.",
+    "Printed LV end-diastolic and end-systolic reference ranges appear transposed relative to the measurements; kept as printed without flags.",
+    "Spironolactone and as-needed verapamil are described as chosen or part of a strategy; administration is not stated in the text.",
+    "Discussion sentences are recorded as patient facts only where they literally refer to the present case.",
+    "Pre-pregnancy ECG normality rests on self-report only.",
+    "Figure 4 prints drug bars (including a bisoprolol 2 → 4 → 2 mg/d label and an oral spironolactone bar) that are pixel content only; they do not change the text-based medication actions."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 24,
+    "facts_reviewed": 134,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (35-year-old pregnant woman); fetus/newborn facts correctly kept in p1; no tables or supplements in raw.xml",
+      "Six normal labs keep 'at presentation': the adjacent preceding sentence names the same laboratory data and its time (RULINGS result-sentence rule); the 12 NO-BORROWING warnings are checker false positives",
+      "LV diameters 4.8/3.8 cm kept as printed with no flags; transposed-looking reference ranges are an ambiguity, not a conflict",
+      "Ritodrine indication abstract 'preterm labor' vs narrative 'threatened miscarriage' tocolysis is an ambiguity (same tocolytic use, different obstetric label), not a source conflict",
+      "Hedged ritodrine causation stays an ambiguity; either/or diagnoses (T-CM or PPCM; AT or AFL) are review_only",
+      "Spironolactone ('was chosen') and as-needed verapamil ('strategy included') are never stated as given in text; action unknown"
+    ],
+    "residual_risks": [
+      "mWHO class 1 is an authors' assignment based on self-reported baseline; recorded as stated",
+      "Figure 4 bisoprolol bar is misdescribed in visual.json (agent-owned) and must be corrected by the annotator",
+      "Time of LVEF 54% postpartum and NT-proBNP 131 pg/mL is not stated in their own sentences and stays null"
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC7813732.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6c39aa6fb6ff8e6b930048a2f0a62db8e49bee9f01ead48a1203632727457f44",
+  "annotation_sha256": "51acfce241bb3efc9aaa45861317e0ed968fcce428f42ab2a82fc7470ce23afa",
+  "reviewed_at": "2026-10-21T04:00:38.075398+00:00",
+  "source_segments_read": 34,
+  "facts_reviewed": 0,
+  "patients_reviewed": 0,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Replaced the drafter's inconsistency limitation: 12/22 = 55% and 10/22 = 45% are consistent; the real gap is that the antisynthetase antibody list accounts for only 10 of the 22 ASS patients and the source gives no antibody result for the other 12.",
+    "Added limitation recording source wording kept as printed: anti-RF glossed as anti-neutrophil cytoplasmic antibodies, ANF for antinuclear antibodies, 'last five years' vs records 2014 to 2020, mediastinal window level 400-500 HU / width 20-40 HU.",
+    "Added limitation explaining why single-patient counts (erythema in one patient, single antibody counts, one probable UIP) do not individuate a patient.",
+    "Rewrote the Fig. 4 limitation: 'the same patient' links only its two panels to one unidentified series member and individuates no patient; panel identity across Figs. 2 and 5 is not stated.",
+    "Added limitation: Fig. 2, 4 and 5 captions name no panel letters; a/b come from letters printed on the images (Fig. 1, 7, 8 captions do name a/b).",
+    "Added limitation for Fig. 9: caption text states 38 mm main pulmonary arterial diameter; image prints 32 mm and 38 mm as pixel content (visual only); the vessel measured by the 32 mm line is not named by the source; no patient fact is created.",
+    "Fig. 2 and Fig. 5 attribution notes changed from 'one unidentified member' to 'one or more unidentified members' because the captions do not say both panels show the same patient; Fig. 4 note now cites the caption's same-patient statement; Fig. 2/4/5 notes say the panel letters come from the image."
+  ],
+  "unresolved": [
+    "Disposition aggregate_only: the source reports 22 patients with antisynthetase syndrome and interstitial lung disease only as a series (counts, percentages, mean age); no patient has individual identity evidence, so no individual patient records are created and series statements are not copied to placeholder patients.",
+    "reported_individual_count is 22 (literal) and roster_complete is false because none of the 22 stated individuals can be enumerated.",
+    "Series counts are arithmetically consistent (10/22 = 45% triad and 12/22 = 55% ILD only; patterns 6 + 5 + 2 + 4 + 5 = 22; fibrotic 2 definite UIP + 1 probable UIP + 2 fibrotic NSIP = 5). The antisynthetase antibody list (anti-Jo-1 six, anti-OJ, anti-PL-12, anti-PL-7 and anti-EJ one each) accounts for 10 of the 22 patients diagnosed with ASS; the source does not state antisynthetase antibody results for the other 12, and no antibody is mapped to a patient. Not reconciled.",
+    "Source wording kept as printed, not corrected: anti-RF is glossed as anti-neutrophil cytoplasmic antibodies; antinuclear antibodies are abbreviated ANF; the study period is described as the last five years while records were reviewed from 2014 to 2020; the mediastinal window is printed as window level 400–500 HU and window width 20–40 HU.",
+    "Single-patient counts (erythema in only one patient; anti-OJ, anti-PL-12, anti-PL-7, anti-EJ, anti-SSB and anti-RF each in one patient; one patient with probable UIP) are series statistics; none is linked to an identifiable patient or to another statement about the same person, so they do not individuate a patient and the article stays aggregate_only.",
+    "The results text reports that pleural effusion was present in 9 patients (41%) and pulmonary hypertension in 6 (27%) without saying which patients; the rest of the series counts likewise cannot be assigned to individuals.",
+    "Fig. 1 to Fig. 9 each show one or more unidentified series members; the text does not link any image to a numbered patient, so ownership is unresolved and none is EHR-includable. Pixels were reviewed in the separate visual target.",
+    "Fig. 4 caption says the two images show the same patient at different levels; this links only its two panels to one unidentified series member (one of the 2 mixed NSIP/OP patients) and does not individuate a patient with any other stated fact. Whether the panels of Figs. 2 and 5 show the same patient is not stated.",
+    "Panel letters: the Fig. 1, 7 and 8 captions name panels (a) and (b); the Fig. 2, 4 and 5 captions name no panel letters, and their a/b labels are taken from the white letters printed on the images.",
+    "Fig. 9: the caption text states a main pulmonary arterial diameter of 38 mm with a pulmonary artery to ascending aorta ratio greater than 1:1 for the one unidentified patient shown; the image itself prints 32 mm and 38 mm beside two measurement lines. The printed values are pixel content (visual target only). The caption does not name the vessel measured by the 32 mm line, and with no patient record the caption value is not a patient fact.",
+    "The source has no supplements or tables; the only quantitative image text is the two printed measurement labels in Fig. 9, kept in the visual target as pixel content."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 34,
+    "facts_reviewed": 0,
+    "figures_viewed": 9,
+    "key_findings": [
+      "aggregate_only confirmed: all 34 segments read (abstract, introduction, methods, results, discussion, 9 captions); there is no vignette, per-patient table or example patient; every clinical statement is a series count, percentage or mean.",
+      "Fig. 4 'the same patient' and Fig. 9's 38 mm caption value each concern one unidentified series member but are not linked to any other stated fact about that person, so they do not individuate a patient; single-patient counts (erythema, single antibodies) are series statistics.",
+      "Roster 22 with roster_complete false is literal; patients [] is allowed for aggregate-only articles per rulings.",
+      "All 9 images viewed at full resolution with corner crops: panel letters a/b printed on Figs. 1, 2, 4, 5, 7, 8; arrows on Figs. 3 and 8a; Fig. 6 upper-left black rectangle is uniform black (pixel values 0-4) with no text; Fig. 9 prints 32 mm and 38 mm beside two measurement lines across the two anterior mediastinal vessels, and the source does not name the vessel under the 32 mm line.",
+      "Series counts checked arithmetically and are consistent; antibody list covers 10 of 22 patients; source wording oddities recorded as limitations."
+    ],
+    "residual_risks": [
+      "visual.json (agent-owned) uses interpretive wording beyond the captions for Figs. 5 and 6 ('metallic-appearing', 'cyst-like', 'traction-type airway dilatation') and mislocates Fig. 5b as the aortic arch level; reported for Sonnet correction.",
+      "AI reference annotation, not physician adjudicated."
+    ]
+  },
+  "physician_adjudicated": false
+}

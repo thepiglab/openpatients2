@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC8739263.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "11b3bcf35a33e1deead29f6ff2ff01a11e9903c70c65f0608dec584d4a878e4d",
+  "annotation_sha256": "71d0083ea00257d0f8c355243c073579b0f4e9036e9ab63d42d7222a0f7001e0",
+  "reviewed_at": "2026-10-21T07:57:20.075280+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 31,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Condition renamed to 'Ruptured retinal arterial macroaneurysm' and given the abstract aim sentence (b00001, 'MH following ruptured retinal arterial macroaneurysm (RAMA)') as added evidence alongside the 'In our report ... stage IV MH caused by RAMA rupture' sentence (b00005).",
+    "Unnamed medicine: name changed from the invented label 'Unspecified medicine' to 'Medicine'; indication shortened to 'Submacular hemorrhage'; kept as administered with the existing ambiguity that drug, dose and route are not stated.",
+    "Pars plana vitrectomy: removed unstated body_site 'eye'; added indication 'Macular hole' from b00001 ('vitrectomy with peeling the internal limiting membrane for the treatment of macular hole').",
+    "ILM peeling: added the same b00001 indication; finding changed to the literal 'The ILM with 2 disk diameters of the fovea was removed' (draft had added the word 'within').",
+    "BCVA improvement outcome: removed related_condition 'Full-thickness macular hole' (not stated in the BCVA sentence).",
+    "Face-down positioning moved out of the surgery event into its own plan event p1-e10 (occurrence unknown, recommended care plan) with relation p1-e07 before p1-e10 quoting 'following the surgery'.",
+    "Added ambiguity that the final BCVA 15/100 has no stated time or order; expanded the 5-month ambiguity to say the anchor (presentation vs medicine) is not stated and no order links hemorrhage absorption to the macular-hole OCT.",
+    "Source coverage: b00001 changed from background to patient_facts for p1."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEGs were inspected in the separate visual target.",
+    "The medicine given for the submacular hemorrhage is not named; the eye operated on and the eye for the final visual acuity are not stated.",
+    "Cited literature cases (a 67-year-old woman and another patient) in the discussion are not this patient and are not recorded.",
+    "No dates, laboratory values, allergies, family or social history are documented."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 31,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (65-year-old woman); discussion cases (Colucciello and Nachbar, Ciardella and Gaetano) are cited literature and correctly excluded.",
+      "Stage IV and RAMA rupture accepted: b00005 'In our report ... stage IV MH caused by RAMA rupture' and b00001 refer literally to this single reported case and are unhedged.",
+      "Laterality of the surgery and of the final BCVA correctly left unassigned (no eye named).",
+      "Observation plus outcome pairs for MH closure and BCVA 15/100 kept as measurement versus clinical-course views, consistent with corpus practice; no identical repeated item within a section.",
+      "Relations checked: 'Because of' (result to action), 'Then, 5 months later' (adjacent-sentence anchor in same paragraph), 'then given' (adjacent sentence), 'after 4 weeks of the surgery', 'following the surgery'; no relation quote spans intervening sentences.",
+      "Face-down positioning 'was asked' kept as recommended, not planned or completed.",
+      "Viewed all four images at full resolution with a corner crop of F1: F1 prints a small scale or timing label ('200' plus a glyph) in the lower left, no names, dates or faces; F2 to F4 OCT scans carry no text."
+    ],
+    "residual_risks": [
+      "Presentation, FFA and final BCVA events are unordered because the source gives no order words for them.",
+      "The 5-month anchor is null because the source does not say what it is counted from.",
+      "Visual target modality rows cite captions that do not name the modality (agent-owned; change requested)."
+    ]
+  },
+  "physician_adjudicated": false
+}

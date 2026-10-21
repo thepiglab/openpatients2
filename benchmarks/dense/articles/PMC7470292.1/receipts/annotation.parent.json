@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC7470292.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c2f20916433c42f6499817881e79f2f16365f2c24e1f45282c4749f2048041a0",
+  "annotation_sha256": "c2e655b26d912df8caa0e5ca23b69cf6cf470ae9021fedc5e0d5be09d91d342c",
+  "reviewed_at": "2026-10-21T03:13:51.592108+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 60,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added relation p1-e01 (4-month wound history) before p1-e02 (admission), quoting \"was admitted to hospital in Isfahan, with symptoms including a 4-month history of a cutaneous wound on his left foot acquired during agriculture\".",
+    "Added relation p1-e04 (initial tuberculosis diagnosis/suspicion and anti-tuberculosis drugs) before p1-e09 (N. mexicana identification) under the \"initially X -> later diagnosis\" rule, quoting the abstract \"At first, ... the patient was diagnosed as having tuberculosis\" and \"the micro-organism was identified as N. mexicana\".",
+    "Added relation p1-e06 (wound biopsy and BAL obtained and cultured) before p1-e08 (isolate characterisation), culture of a specimen -> its result, quoting both sentences.",
+    "p1-e04 evidence: added the abstract sentence \"At first, due to clinical examination and laboratory test, the patient was diagnosed as having tuberculosis\" (same initial TB episode).",
+    "p1-f031 (direct PCR of BAL): added the abstract quote \"Direct PCR of BAL was performed for this patient\".",
+    "Summary claim 3 reworded to follow the source: identification and isolation from both BAL and the wound (abstract) stated separately from the direct PCR of the BAL sample and sequence analysis of the foot-wound isolate (b00014); it no longer implies that the single tested isolate came from both specimens."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the five JPEGs were inspected in the separate visual submission.",
+    "Isolate-level laboratory results (phenotype, biochemistry, susceptibility, 16S rRNA) are not tied by the source to BAL versus wound.",
+    "Tuberculosis is described as diagnosed in the abstract and suspected in the case text; kept provisional.",
+    "The statement that the patient was not treated after 2 weeks is unclear and no treatment failure is inferred.",
+    "No dates, hospital course dates, discharge or follow-up beyond 6 months of therapy are reported; relative timing only.",
+    "The abstract and results use plural wording although one patient is described; roster kept at one.",
+    "Discussion statements about literature cases, animals and general nocardiosis are not index-patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 60,
+    "figures_viewed": 5,
+    "key_findings": [
+      "One index patient (57-year-old male farmer); plural \"cases\"/\"patients\" in the abstract and b00014 is wording only, roster 1 with ambiguity; b00005 and b00022 say \"the first case ... in a patient\".",
+      "Tuberculosis: abstract \"diagnosed\" vs case text \"suspected\" is a verification-status wording difference, not two different values, so it stays an ambiguity with the fact review_only possible/provisional, not a source conflict; TB is not recorded as refuted (only M. tuberculosis PCR on BAL was negative).",
+      "\"the patient was not treated after 2 weeks\" is kept only as an ambiguity; p1-e04 -> p1-e05 is supported because \"after 2 weeks\" in the adjacent sentence of the same paragraph is anchored to \"anti-tuberculosis drugs were initiated\".",
+      "Specimens: BAL/wound isolation (abstract), direct PCR of BAL and sequence analysis of the foot-wound isolate (b00014, one shared clause, two tests) are specimen-literal; isolate-level phenotype, biochemistry, susceptibility and DSH41 16S results keep specimen \"isolate\" because the source never says which specimen DSH41 came from.",
+      "p1-e09 -> p1-e10 accepted: \"After clinical and laboratory diagnosis\" back-references the single described diagnosis; p1-e10 -> p1-e11 rests on \"subsequently\" in the same sentence. Dissemination stays possible/provisional.",
+      "ESR unit kept as printed \"mm h^(−1 )\"; p1-f005 left-foot laterality is the same wound described in the abstract sentence, not a neighbouring fact; tuberculosis drugs are unnamed in the source; F5 bootstrap numbers are pixel content (visual.json only).",
+      "All 11 relations checked against their full evidence lists."
+    ],
+    "residual_risks": [
+      "The genus-specific PCR is described as a 596 bp target while the Fig. 3 gel is captioned as 16SrRNA PCR amplification; no band size is read from the gel.",
+      "Which specimen yielded isolate DSH41 is not stated; Fig. 3 lane 1 is \"DSH41 isolate from culture\" and lane 2 \"direct BAL samples\", which does not establish the wound origin.",
+      "No dates, discharge or follow-up beyond the 6-month course are reported."
+    ]
+  },
+  "physician_adjudicated": false
+}

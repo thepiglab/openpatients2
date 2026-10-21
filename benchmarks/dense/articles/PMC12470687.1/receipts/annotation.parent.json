@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC12470687.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "476af92d756c33b1c4c1fecd7555ae775f6d70568c8092b1b54aa1a1b0603783",
+  "annotation_sha256": "8bba43c59b42e10caaca6df2c539cf9045a23df4cfc953e16ddba3706fc6916d",
+  "reviewed_at": "2026-10-21T13:26:39.317874+00:00",
+  "source_segments_read": 104,
+  "facts_reviewed": 354,
+  "patients_reviewed": 14,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p6 follow-up (text one-year follow-up vs Table 1 10 months): reclassified from source_conflict to ambiguous (possible rounding), both still review_only; ambiguity text updated; follow-up split out of the in-hospital treatment event into p6-e04.",
+    "p13 ACE-R: Table 1 value 71 was merged with the six-month text score although the text reports two scores (83 initial, 71 at six months) and the table prints no time; unmerged (p13-f023 text only) and added p13-f030 untimed Table 1 ACE-R as ambiguous/review_only with an ambiguity, matching the p5 handling.",
+    "Added one untimed observation per patient for the Table 2/Table 3 EEG Findings cell (p1-f027 ... p14-f021, 14 facts; OBS-TABLE-ROWS), not merged into timed text/caption EEG facts.",
+    "Added caption-only EEG findings with no text description: p2 Figure 2B and 2C, p7 Figure 7B (untimed, linked to the events whose text cites those panels).",
+    "Added Discussion 'respectively' first-seizure facts for patients 8 (18 months) and 9 (20 years) to match p7/p12/p14; added p10 Discussion value 19 months as ambiguous/review_only and reworded the p10 ambiguity (different reference points; one-character difference).",
+    "p8: added levetiracetam and phenytoin 'started' facts for the 'then initiated' event (p8-e03 previously linked only the 'stopped' facts).",
+    "Field fixes: p1-f007 severity 'recent-onset' and p8-f017/f018 severity 'recent' moved to text_value; p8-f004 severity 'bilateral convulsive' removed and the name carries the source phrase; p10-e01 and p14-e01 time_kind duration -> relative.",
+    "p7-e02 before p7-e03 relation evidence replaced with quotes that state the order ('Initial EEG' ... 'follow-up EEG').",
+    "New history events p11-e03 (similar shorter episodes, memory complaints) and p12-e03 (prior unmedicated seizures) split from the presentation events.",
+    "Added 13 relations: p1 e03<e04, p2 e01<e02, p4 e01<e02 (treatment of the named existing myoclonus / speech disturbance), p5 e03<e04, p6 e02<e03 (presentation opens the stay) and e03<e04 (follow-up), p9 e03<e06 (follow-up), p10 e02<e04 ('previous recordings') and e02<e07 ('Initial' vs 'Follow-up'), p11 e03<e01 and p12 e03<e01 (history), p13 e02<e05 ('MRI abnormality was resolved') and e05<e06 ('Consequently').",
+    "p13-f028 (Discussion: no further deterioration over six months) linked to the six-month reevaluation event; p10-e07 evidence now includes the text follow-up EEG sentence; p6 summary and article limitations updated."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the actual images are inspected in separate visual targets.",
+    "Patient 6 follow-up is a one-year follow-up in the text and 10 months in Table 1 (possible rounding; ambiguity, both review-only). Patient 9 follow-up is six years in the text and 228 months in Table 1 (source conflict, both review-only).",
+    "ACE-R score for patient 10 is 78 in the text and 76 in Table 1 (one-character difference; ambiguity, both review-only).",
+    "Table 1 prints one untimed ACE-R value per patient; it is merged with the text only for patients whose case text reports a single ACE-R score. For patients 5 and 13 (two text scores at different times) the table value is a separate review-only item.",
+    "Table 2 and Table 3 EEG Findings cells are recorded as one untimed table item per patient and are not merged into the timed text or caption EEG facts; the Medication cells are represented by the text medication facts.",
+    "Discussion statements are copied to a patient only where the sentence names that patient (the 'respectively' interval sentences, Case 13). Group-level statements, Table 4 and series-wide percentages are not copied to individual patients.",
+    "Patient 12 and patient 14 follow-up durations are printed as dashes in Table 1 and are not recorded.",
+    "Hedged author interpretations (for example that epileptic activity was causally related to cognitive impairment in patient 13) are not recorded as asserted causes."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 104,
+    "facts_reviewed": 354,
+    "figures_viewed": 15,
+    "key_findings": [
+      "14 individuated patients (Patients 1-6 Group 1, 7-14 Group 2) numbered by first mention; roster count 14 literal.",
+      "Source conflict kept only for patient 9 follow-up (six years vs 228 months); patient 6 one-year vs 10 months and patient 10 ACE-R 78 vs 76 are ambiguities; all sides review_only.",
+      "Table 1 merges accepted only for single-score patients; patients 5 and 13 table ACE-R values are separate review-only items; Table 1 dashes (patients 12, 14) have no fact.",
+      "Seizure types from Tables 2/3 kept as conditions with verification unknown unless the case text diagnoses them; hedged causes (p4 possible role, p9 presumed encephalitis, p13 epileptic causation) not asserted.",
+      "All 28 assets of 15 figures viewed at full resolution with crops of Figure 1 and Figure 14; Figure 14 MRI carries a hospital name, ID numbers and a birth-date-style line (direct identifiers), not copied anywhere."
+    ],
+    "residual_risks": [
+      "Table 2/3 EEG cells and caption-only EEG findings are untimed; panel-to-recording mapping relies on text citations.",
+      "Discussion interval sentence uses unstated reference points (dementia onset or MCI diagnosis); kept with null anchors except the literal dementia onset phrase.",
+      "Several patients lack ordering between the diagnostic workup and the first treatment because the source states none."
+    ]
+  },
+  "physician_adjudicated": false
+}

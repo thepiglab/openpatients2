@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC13649084.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9512c2fbf04546594439c4117987f5e42f0376c06e8c5c9086f559992ae2d2ce",
+  "annotation_sha256": "68121e2b778fb3999b249ef2c6467ab67a08093f426210e24bb46913d923b628",
+  "reviewed_at": "2026-10-21T13:58:05.505157+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 30,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Flare-up: treated the text statement that the patient remained free from disease flare-ups throughout the six-month follow-up and the same-paragraph (and abstract) flare-up in the sixth month of follow-up as a source conflict; both facts (p1-f022, p1-f023) are now certainty source_conflict, scoring review_only.",
+    "Split the undisputed clause \"did not require any additional treatments\" out of p1-f022 into its own include outcome fact (p1-f027).",
+    "Added the Figure 1D caption flare-up after 6 months as a separate caption-governed recurrence fact (p1-f028) and event (p1-e14), so the undisputed flare-up stays scored.",
+    "Added the Figure 1A caption seborrheic dermatitis flare-up before treatment as a sign (p1-f029) and presentation event (p1-e13); added the six-month follow-up as a completed care_plans follow-up item (p1-f030).",
+    "Added six temporal relations: flare-up before treatment before the initial exosome application (caption A plus \"For the alleviation of SD symptoms ... was applied\", treating an existing condition); caption A before B and B before C (same \"treatment\" anchor, both quotes); initial application before the Day 2 improvement (text cites Figure 1B for the improvement after the initial treatment); SD history and the prior 10-year treatments before the initial application (abstract presentation sentence \"long-standing history of SD, unresponsive to traditional treatments, underwent a novel treatment regimen\", plus \"had previously received\").",
+    "Rewrote the flare-up ambiguity as the source conflict with abstract and caption evidence; rewrote the 1 day vs Day 2 ambiguity as a day-numbering ambiguity (no conflict, not merged); added the Discussion ASCE definition quote to the product-label ambiguity.",
+    "Summary claims rebuilt so the disputed flare-free and sixth-month statements stay out; article limitation on the flare-up rewritten as a source conflict and a limitation added for the caption-treatment ordering basis; care_plans domain coverage set to documented."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two actual images were inspected in the separate visual target.",
+    "The PGA, IGA, scaling and erythema score values appear only inside the Figure 2 image and are recorded in visual.json, not as facts.",
+    "Source conflict: the text reports both freedom from flare-ups throughout the six-month follow-up and a flare-up during the sixth month of follow-up; both statements are review_only and the Figure 1D flare-up after 6 months is kept as a separate caption fact.",
+    "The first treatment product label (ASCE) differs from the text description (rose stem cell-derived exosomes); no resolution is inferred.",
+    "The Exobalm regimen is recorded as prescribed; the source does not separately confirm each application phase.",
+    "Single case; Discussion and Conclusion statements about efficacy and generalization are study-level and are not patient facts.",
+    "Caption \"treatment\" (Figure 1A, 1B) is ordered against the initial exosome application because the text cites Figure 1B for the improvement after the initial treatment and the exosomes were applied for the alleviation of SD symptoms."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 30,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (40-year-old man, recalcitrant seborrheic dermatitis); raw.xml has no supplementary-material or media elements, so there are no supplements.",
+      "Figure 2 PGA, IGA, scaling and erythema scores are printed only inside the image table; they are in visual.json only, no facts, consistent with the rulings.",
+      "Figure 1 (asset g002) shows four facial photos with eye bars matching captions A to D; Figure 2 (asset g001) is the score line chart; the visual rows are bound to the correct assets and no swap exists.",
+      "Exobalm phases are prescribed (action ordered, occurrence unknown); phase order relations use \"followed by\" and \"and then\"; exosome to prescription via \"Hence\" and \"post-procedural\".",
+      "Lack of sleep and PM2.5 are stated author attributions (\"was attributed to\"), not hedged; kept as present exposures with status unknown and no time."
+    ],
+    "residual_risks": [
+      "Ordering caption \"treatment\" against the initial exosome application relies on the text citing Figure 1B for the improvement after the initial treatment.",
+      "Text and caption improvements (1 day vs Day 2) and flare-ups (sixth month vs after 6 months) are kept as separate events that may describe the same occurrences.",
+      "Prior oral prednisolone use is not ordered against the novel treatment because its sentence states no order word."
+    ]
+  },
+  "physician_adjudicated": false
+}

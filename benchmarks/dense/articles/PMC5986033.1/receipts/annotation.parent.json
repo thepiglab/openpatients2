@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC5986033.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "addcae88fadd2709ed4956e089f68af771ec90d86c98a4ba614597bc2dc659c5",
+  "annotation_sha256": "3c0ba2459824ec2763862aa8baa4707cc21c0356bbce10ee6cf51a7c1b32b421",
+  "reviewed_at": "2026-10-21T04:24:55.690565+00:00",
+  "source_segments_read": 16,
+  "facts_reviewed": 41,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f035 necrosis: assertion absent -> present with flag negative (negative pathology finding pattern, as for atypia/mitosis); kept review_only for ownership.",
+    "p1-f015 extensions: added Figure 2 caption quote as second literal source for direction toward the popliteal fossa.",
+    "Added p1-f039: round nodule shape from the literal \"In our patient\" discussion sentence (b00006).",
+    "Added p1-f040 oncology tumor t1 nodular melanoma assertion=possible (ONC-BENIGN: source explicitly evaluated the lesion as possible malignancy); oncology coverage documented.",
+    "Added p1-f041 care_plans follow-up (1 year) completed; outcome p1-f038 now also cites the literal \"our patient\" b00009 sentence.",
+    "Added relation e04 before e07 (excision, then no recurrence over 1 year of follow-up; \"re-\" orders against the excision, same sentence b00009).",
+    "Added relation e04 before e06 (excision under a \"preliminary\" melanoma diagnosis precedes the final dermatofibroma diagnosis made on histology of the removed tissue).",
+    "Added ambiguities: gradual vs rapid enlargement wording; Figure 3 caption \"blue arrow\" vs three blue arrows on the pixels."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEGs were inspected in the separate visual target.",
+    "Factor XIIIa and CD34 results conflict between the case text and the discussion; all four sides kept review_only.",
+    "HMB 45, Melan A and necrosis appear only in a discussion paragraph without literal patient ownership; kept review_only.",
+    "No dates, ages at events or laboratory values beyond the printed durations; no medications, allergies or family history documented."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 16,
+    "facts_reviewed": 41,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single patient (12-year-old boy, hemosiderotic dermatofibroma of the right knee mimicking melanoma); roster count 1 from the \"we report a case\" sentence.",
+      "Stain conflict confirmed: case text FXIIIa positive / CD34 negative vs discussion CD34 positive / FXIIIa negative; all four sides kept source_conflict review_only, no reconciliation.",
+      "HMB 45, Melan A and necrosis appear only in unlabelled discussion sentences of b00008 (after \"In the histopathological examination of our patient\"); per ruling on unlabelled discussion sentences and given the conflicting stain list in the same paragraph, kept ambiguous review_only.",
+      "Extension direction toward the popliteal fossa supported by b00006 (sentence referring to the nodule just described for our patient) and by the Figure 2 caption.",
+      "Figure 1 caption \"leg\" vs text \"right knee\" kept as an ambiguity (same lesion, less specific site), not a conflict.",
+      "Figure 3 pixels show three blue arrows and three black arrows; caption says \"blue arrow\"; recorded as an ambiguity and visual limitation.",
+      "Nodular melanoma recorded as provisional differential (assertion possible) plus oncology alternate representation; dermatofibroma stays a condition (ONC-BENIGN).",
+      "No recurrence over 1 year of follow-up kept as outcome; follow-up care plan added; relations excision->follow-up and excision->final diagnosis added."
+    ],
+    "residual_risks": [
+      "HMB 45/Melan A/necrosis ownership is plausible for the single patient but not literal; left review_only.",
+      "Excision -> final diagnosis order relies on the \"preliminary diagnosis\" wording and histology of the removed tissue, not an explicit order word.",
+      "Pigment colours described in the dermoscopy caption are not clearly separable in the pixels."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC6979564.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "127f2676c75532378f843857b0ac637a44719c80f16e129150a97f6a58c1233d",
+  "annotation_sha256": "d6af8c141a845ecb1ab1c29a4c4712bc01ea7b770dc3af90d7a2fe40d0328963",
+  "reviewed_at": "2026-10-21T04:41:03.089776+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 193,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Donor AKI and uptake-histology cohort facts: b00021 quote extended to include its subject \"Donors in this series\"; histology \"no significant histological changes\" set to flag normal (ruling: \"no significant abnormalities\" = normal).",
+    "Table 1 UO cells (p1-f017, p2-f016, p3-f016, p4 UO): subject changed from other (donor) to unknown and name to \"UO\"; the column is undefined and not labelled donor or recipient.",
+    "Donor CPK: draft merged text (U/L, IU/L) and Table 1 (UI/mL) and kept the text unit as include. Split into the text fact and a new Table 1 C.P.K. fact, both source_conflict/review_only (1000-fold unit inconsistency); CPK removed from summaries; ambiguity rewritten.",
+    "Recipient ages given numeric_value and unit years (text_value unchanged).",
+    "Added per patient two literal all-donor cohort facts: donor oliguria (b00028 \"these three donors were in a clear phase with oliguria\") and UNOS standard donor category (b00021 \"All donors in this series\").",
+    "Case 3 sex conflict split into two review_only source_conflict facts (\"Female\" and the pronoun \"He\"), each quoting only its own side.",
+    "p2 residual diuresis: \"without residual diuresis\" moved from a present observation carrying the negation as text_value to symptoms_function sign with assertion absent (an absent observation has no result to materialize).",
+    "Added relations: p1 improvement (from the second week after transplantation) before discharge (30th postoperative day), both times quoted; p4 transplantation before improvement (21st postoperative day) and before discharge (29th POD).",
+    "Summaries for p2-p4: the thin transplant/induction claim (17-22 words, below the 25-word SUMMARY-CLAIMS floor) merged into the following course claim; p3 claims now cite all three infections and the donor smoking fact.",
+    "Summary claims now cite the cold-ischemia and maintenance-immunosuppression facts they state."
+  ],
+  "unresolved": [
+    "Four recipients (Cases 1-4); donors are subject \"other\" inside the recipient record, and Cases 1 and 2 share one donor (three donors in total).",
+    "Table 1 Cr (1)-(7) columns do not state whose creatinine they report, the unit, or the week anchor; their values are kept review_only with subject unknown and no unit added.",
+    "Table 1 UO(mL) is undefined (note truncated at \"UO:\") and not labelled donor or recipient; kept review_only with subject unknown, not merged with the text donor diuresis.",
+    "Donor CPK is printed UI/mL in Table 1 but U/L or IU/L in the text (1000-fold unit difference); both sides are review_only source conflicts.",
+    "Case 3 is introduced as \"Female\" but later referred to as \"He\"; documented sex is a review_only source conflict.",
+    "Discussion attributes a long dialysis time to \"the first case\" and a 25-hour CID to \"the third case\", which do not match Results (Case 2 has 9 years 5 months and 25 hours 5 minutes); not assigned to any patient. TIF is undefined and not equated to CID.",
+    "Case 4 \"unknown baseline disease for 1 year and 5 months\" is ambiguous in what the duration refers to.",
+    "Table 1 Cr (7) values (1.1, 1.6, 0.8, 2.2) are 7th-column values and are different time points from the text \"currently\" creatinine values; not merged.",
+    "No figures, supplements or videos in the source; no visual task is applicable."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 193,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Four kidney recipients (Cases 1-4); donors recorded as subject other inside each recipient record; Case 2 donor facts rest on the literal \"The donor is the same as that of Case 1 patient.\"",
+      "Table 1 Cr (1)-(7): footnote gives only \"cr in the Nth week\" with no unit, owner or anchor; kept review_only, subject unknown, no unit; not merged with the text current creatinine.",
+      "Donor CPK unit conflict (text U/L or IU/L vs Table 1 UI/mL) quarantined as two source_conflict facts; Case 3 sex conflict (\"Female\" vs \"He\") split into two source_conflict facts.",
+      "Discussion b00031 dialysis/CID case references and the undefined TIF abbreviation contradict or are not tied to Results; kept as ambiguities only. Table UO column undefined (note truncated at \"UO:\"): subject unknown, review_only.",
+      "Cohort statements copied only where literal all-scope: all donors in AKI, Donors in this series (KDIGO III, histology, UNOS standard), these three donors oliguria, all recipients satisfactory, all patients DGF; rhabdomyolysis kept hedged (possible)."
+    ],
+    "residual_risks": [
+      "Table 1 Cr series and UO column owner remain unresolved by the source; downstream must not treat them as recipient post-transplant values.",
+      "Case 4 \"unknown baseline disease for 1 year and 5 months\" probably garbles a dialysis duration; left ambiguous, no dialysis recorded.",
+      "Events anchored to \"day of hospitalization\" are not ordered against postoperative-day events (different anchors)."
+    ]
+  },
+  "physician_adjudicated": false
+}

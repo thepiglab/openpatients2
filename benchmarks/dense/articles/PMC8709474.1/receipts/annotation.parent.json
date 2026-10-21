@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC8709474.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "cd997d652a5f9f6b7ffef91f1007714797323ab625fc419407c2835761dbfe51",
+  "annotation_sha256": "a71041dae3885b7ca335cad1c9d5dd4b7b24103f3e22255adbfbe4596c5812e3",
+  "reviewed_at": "2026-10-21T09:03:31.605957+00:00",
+  "source_segments_read": 18,
+  "facts_reviewed": 67,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f036 CSF white cell count flag unknown -> high: the source calls 234 cells/ul a 'pleocytosis' (its own elevated-count classification) and prints the 0-5 interval.",
+    "p1-f034 second urinalysis flag unknown -> negative ('did not reveal any signs of infection'); kept as a separate observation, not merged with or set against p1-f032.",
+    "p1-f026 IVIG split: f026 action stopped -> started at 'On hospital day six' (start time no longer attached to the stop); new p1-f067 IVIG stopped after two sessions due to severe hypotension, time unknown, route 'intravenous' from its own quote.",
+    "p1-f028 name 'Plasmapheresis, five sessions' -> 'Plasmapheresis' (NAME-LABEL); five sessions kept in statement and evidence.",
+    "p1-f006 HSV-2 encephalitis: removed diagnostic_basis and body_site 'central nervous system' (not stated by its evidence; NO-INFERENCE).",
+    "p1-f007 urinary tract infection: removed diagnostic_basis (source never names the culture as the basis); kept the 'our patient' discussion quote and the culture quote.",
+    "p1-f058 persistent fevers/chorea: removed related_condition 'HSV-2 encephalitis' (not stated by that sentence).",
+    "p1-f065 complete recovery: removed follow_up_duration_text borrowed from the preceding sentence.",
+    "p1-f008 suspected parainfectious CNS autoimmunity: include with the literal hospital-day-six case quote; the discussion 'possible autoimmune cause of chorea' sentence moved to the ambiguity only (hedged author interpretation).",
+    "Events: CSF infectious workup and CSF autoimmune panel facts (f044-f050, f055) moved from p1-e07 into the lumbar puncture event p1-e06 (results of that CSF); p1-e07 now holds the non-CSF tests with its own quote.",
+    "New event p1-e16 rehabilitation completed (p1-f066 moved out of the discharge event p1-e14).",
+    "Relations added: p1-e03 presentation (opens the stay) -> p1-e04 presentation work-up, -> p1-e09 hospital-day-six IVIG, -> p1-e14 hospital-day-27 discharge (stay-opening rule, order only); p1-e14 discharge to acute rehabilitation -> p1-e16 rehabilitation completed (discharge -> outpatient care)."
+  ],
+  "unresolved": [
+    "No figures, tables or supplements are listed in the source.",
+    "No timing is given for the lumbar puncture, CSF results, urine studies or other workup relative to hospital day; none is inferred.",
+    "The source states there is no EEG data or brain biopsy; these are recorded only as an absence of data in the discussion, not as items.",
+    "Discussion statements about latent reactivation and mechanisms are hedged author interpretation and are not extracted as facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 18,
+    "facts_reviewed": 67,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient (72-year-old woman, HSV-2 encephalitis with chorea); no figures, tables or supplements.",
+      "The two urinalysis statements are kept as separate observations with an ambiguity: the source never identifies them as the same test, and there are no conflicting numbers, so not a source conflict.",
+      "CSF pleocytosis flagged high from the source classification; lymphocyte 95% stays unknown; protein, IgG index, IgG synthesis and CRP high from elevated/increased; OCB positive.",
+      "IVIG start (hospital day six) and stop (after two sessions, severe hypotension) split so the start time is not attached to the stop.",
+      "Stay-opening presentation ordered before the presentation work-up, hospital-day-six IVIG and hospital-day-27 discharge; rehabilitation completion separated from discharge.",
+      "Serum autoimmune panel and gait correctly not_performed; hedged discussion mechanisms not extracted."
+    ],
+    "residual_risks": [
+      "Timing of the second urinalysis and of non-CSF work-up relative to ceftriaxone is not stated.",
+      "Discussion sentence calling the patient immunocompetent is not extracted as an item.",
+      "Acyclovir start relative to hospital day six IVIG is not literally ordered and is left unlinked."
+    ]
+  },
+  "physician_adjudicated": false
+}

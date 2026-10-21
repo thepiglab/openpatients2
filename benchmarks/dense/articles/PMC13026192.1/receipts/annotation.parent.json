@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC13026192.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b305da3de5a04371c97781e520d67b706ca72cdf007442245d3fdf3ec523d952",
+  "annotation_sha256": "86a2481598eadcbb00403820cd4829074847471527c8f761cae81f9b4bccefff",
+  "reviewed_at": "2026-10-21T13:50:58.708178+00:00",
+  "source_segments_read": 97,
+  "facts_reviewed": 193,
+  "patients_reviewed": 21,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "PTSD condition (p1-p21 f002): kept as present/include on the abstract sentence that describes all 28 enrolled patients as patients with PTSD; removed the b00008 inclusion-criterion evidence and the diagnostic_basis, and set verification_status unknown, because a DSM-5 clinical-interview requirement is not a statement about each patient.",
+    "Prism neurofeedback (f003): kept action completed as 'therapy given' on the literal all-28 'treated with Prism neurofeedback' sentence plus the Table 6 sessions cell; replaced the note that inferred completion from completer-table membership; does not assert full-protocol completion.",
+    "Sessions observation (f004) renamed from 'Prism sessions completed' to 'Prism neurofeedback sessions' (Table 6 header is 'Sessions'); summaries now say Table 6 lists N sessions.",
+    "Baseline-before-Prism relation (e01->e02, all 21): kept the b00014 Methods definition of baseline timing and added the patient's own Table 6 row as second evidence.",
+    "p21: added an ambiguity recording that the unlabelled poor-responder sentence (61 to 60) matches the row only by values; no fact.",
+    "Source coverage: b00008 changed to aggregate with no patient IDs; notes for b00001 and b00014 rewritten.",
+    "Article limitations: rewrote the PTSD scope note; added the Discussion combined TMS/ketamine/Prism patient versus the Methods adjunctive counts (unattributed) and the Figure 1 'Did not start (n = 2)' versus 'all 28 treated' tension."
+  ],
+  "unresolved": [
+    "Only the 21 completers have individual rows (Table 6); the 7 early discontinuers (reasons given only as counts) have no individual data and are not in the roster.",
+    "Table 6 identifies patients only by number: no age, sex, history, medications or comorbidities are stated per patient. PTSD is recorded for each table patient from the abstract statement that the 28 enrolled patients had PTSD; the DSM-5 clinical-interview confirmation is an inclusion requirement and is not recorded as a per-patient diagnostic basis.",
+    "Narrative outcome sentences (military PTSD with TBI, childhood trauma, concurrent TMS or ketamine) carry no patient label; they are matched to rows only by identical printed baseline and endpoint values and are kept review only or as ambiguities. For the two 56-point patients (3 and 4) the source does not say which has military and childhood trauma plus TBI.",
+    "Follow-up (three patients, including a sequence of PCL-5 values 8 to 0 to 14), booster sessions (four patients), subgroup, strategy-count and bridge-intervention examples (sleep apnea, psychotherapy readiness, suicide risk) are unlabelled and not assigned to roster patients. Cohort statistics and response rates are not copied to individuals.",
+    "Discussion calls 85.7% the clinically significant improvement rate, while Results and Table 3 give 90.5% (19/21) for the 10-point threshold and 85.7% (18/21) for the 15-point conservative threshold; recorded here as a source inconsistency at series level, not quarantined in any patient fact.",
+    "Figure 1 prints \"Did not start (n = 2)\" while the text says failure to complete enrollment (n = 2); aggregate only. Figures 2 to 4 give no printed per-patient values and no plot estimates are recorded.",
+    "Supplementary Tables S1 and S2 (PDF in a ZIP) are reviewed in the supplement sidecar; Table S1 identifies 11 patients by number with strategy counts and examples.",
+    "Caption-layer visual status is not_inspected; actual images are inspected in visual.json.",
+    "Discussion describes a patient at high suicide risk after combined TMS, ketamine and Prism, while Methods lists the adjunctive treatment as one patient with TMS and two with ketamine; the source does not identify this patient in Table 6, so nothing is attributed.",
+    "Figure 1 prints 'Did not start (n = 2)' among the early discontinuations, while the abstract describes all 28 enrolled patients as treated with Prism; the roster holds only the 21 completers, so this affects no patient record."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 97,
+    "facts_reviewed": 193,
+    "figures_viewed": 4,
+    "key_findings": [
+      "21 Table 6 completers are the roster; 7 non-completers have no individual data (roster_complete false, count 28).",
+      "Narrative matches by identical printed values (p1 TBI, p7/p20 ketamine, p16 TMS) stay review_only; p2 childhood trauma and the p3/p4 military-plus-TBI patient are ambiguities with no fact.",
+      "Discussion/Conclusion 85.7% 'clinically significant' versus Results/Table 3 90.5% is a series-level inconsistency kept in limitations; no patient value is disputed.",
+      "Supplement Table S1 'Patient N' labels use the same patient numbering as Table 6 and all 11 PCL-5 change cells equal the Table 6 change for the same number.",
+      "Figure 4 shows only six teal circles although the legend prints n=7 (one point hidden or missing); the agent visual row says seven."
+    ],
+    "residual_risks": [
+      "Linking supplement 'Patient N' labels to Table 6 row numbers relies on the shared numbering of the same article, not an explicit statement.",
+      "PTSD and Prism treatment rest on the abstract's all-28 statement; Figure 1 lists 2 'Did not start' discontinuers, which does not touch the 21 completers.",
+      "Baseline-before-treatment order for each patient rests on a Methods definition of baseline timing."
+    ]
+  },
+  "physician_adjudicated": false
+}

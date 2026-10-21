@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC6029867.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8a7824cdeb38becf1ea8eaaaa540b1c4fe8fd62f956dfe8f59ff58c69cfedbd4",
+  "annotation_sha256": "1f2d7f7bd28ee1c8598e8c58292577a2fccd655a68240a63d4e081e8b2068676",
+  "reviewed_at": "2026-10-21T04:10:38.228011+00:00",
+  "source_segments_read": 54,
+  "facts_reviewed": 158,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged the anion gap text values (p1 32 mmol/L, p2 27 mmol/L, each sentence citing Table 1) into the 0 hour Table 1 cells (p1-f052, p2-f046; unit mmol/L from text, p2 flag high from \"elevated\"); removed duplicate text facts p1-f025 and p2-f020 and repointed events/summaries.",
+    "Narrowed the text-vs-table ambiguity to beta hydroxybutyrate and glucose, whose sentences do not cite Table 1 or a time point (kept unmerged).",
+    "Removed the patient 2 table-layout ambiguity: raw JATS has an explicit in-body Patient 2 time header row (0, 2.5, 5, 8, 14 h); recorded as an article limitation about the parsed segment preamble instead.",
+    "Acute gastrointestinal illness (both patients, literal \"both patients\" discussion sentence): role complication -> unknown, verification_status confirmed -> unknown, since it preceded DKA.",
+    "DKA condition evidence: added the introduction sentence \"We report two patients diagnosed with canagliflozin-associated DKA\"; added per-patient ambiguity that association, not causation, is stated (no adverse-effect record).",
+    "Presentation events now carry the abstract ED presentation sentence for each patient; added GI-illness events (p1-e08, p2-e07).",
+    "Added literal relations: GI illness before DKA diagnosis (\"The onset of DKA in both patients followed acute gastrointestinal illness\"); ED presentation before diagnosis, treatment, in-hospital anion gap normalization and discharge (presentation opening the stay); p1 treatment before discharge; p2 anion gap normalization before discharge.",
+    "p1 metformin/glipizide transition vs discharge changed from before to unknown (\"transitioned ... and discharged\" states no order).",
+    "Summaries: folded the one-sentence Table 1 claims into the workup phase claims (SUMMARY-CLAIMS length) and reworded the p1/p2 treatment claims; no new facts."
+  ],
+  "unresolved": [
+    "No figures or supplements are listed in the source.",
+    "Table 1 blank cells (patient 1 beta hydroxybutyrate at 3 hours; patient 2 AST at 0 hours) and dash cells are treated as missing, not as values.",
+    "Table 1 asterisks are defined only as values of note; no high/low flags were derived from them or from reference ranges.",
+    "The case text says vital signs are in Table 1, but Table 1 contains no vital-sign rows; no vital values are recorded.",
+    "Discussion mechanisms, cohort and FDA statements are background and are not copied to the patients.",
+    "The parsed Table 1 segments repeat the patient 1 header in every row preamble; the raw JATS table has an explicit in-body row \"Patient 2 | 0 | 2.5 | 5 | 8 | 14\" under a repeated \"Time after presentation (hours)\" row, so patient 2 cells take those time columns."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 54,
+    "facts_reviewed": 158,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Two individuated patients (p1 55-year-old woman with T2DM, p2 54-year-old man with T1DM), both on canagliflozin 300 mg daily, with DKA after GI illness; roster 2/2 from \"We report two patients\".",
+      "Table 1 raw XML checked: p1 rows under the thead header (0, 3, 6.5, 10, 12 h), p2 rows under the in-body \"Patient 2\" header row (0, 2.5, 5, 8, 14 h); all 103 table-cell facts match their cells; blank and dash cells omitted.",
+      "Lipase 165 U/L (text) vs 164 (table) is a one-character difference treated as an ambiguity per rulings; both sides review_only and kept out of summaries.",
+      "p1 insulin route intravenous rests on the abstract sentence that explicitly covers both patients; pre-presentation drugs (\"on ...\") recorded as administered; pancreatitis recorded as possible (\"suggested\").",
+      "Asterisks are defined only as values of note; no flags derived. No figures or supplements in the source."
+    ],
+    "residual_risks": [
+      "Beta hydroxybutyrate and glucose text values are probably the 0 hour table values but are kept separate because the source does not tie them.",
+      "Whether p1 metformin/glipizide transition happened before or at discharge is not stated.",
+      "AI reference annotation, not physician adjudicated."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC11960213.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "689bfd03e809a0e27c2255ec5ca46c5ce7e00feda1b30bce05b59bce129c91bb",
+  "annotation_sha256": "1da105ff384b38fb2dcd563728470743712f966242d6dd3ed3a173ba4ced6645",
+  "reviewed_at": "2026-10-21T13:33:21.642156+00:00",
+  "source_segments_read": 13,
+  "facts_reviewed": 86,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added literal own-sentence times: f012 and f044-f047 'After admission'; f041-f042 'After discharge'; f062-f063 and f077-f078 'after discharge'; f076 'After 10 days of hospitalization'.",
+    "Merged duplicate caption fact f079 into f032 (same 2014 EEG, Fig. 3a); f032 now cites text and caption with caption-stated time 'in 2014'.",
+    "Renamed f016 to 'Unresponsiveness to painful stimuli' (present sign without a negation word in the label).",
+    "Added f083 ethnicity_as_documented 'Chinese', f084 '1 + month of recurrence', f085 historical recovery of the 1991-2008 episodes after 2-6 months of glucocorticoids, f086 AE antibodies not_performed before 2014 (new not_occurred event e15), f087 2014 levetiracetam with unsuccessful seizure control.",
+    "Added relations e02->e03 and e07->e09 and e11->e12 (admission opening a stay precedes its in-hospital workup), e02->e06 ('After discharge'), e08->e10 (diazepam/midazolam given to manage the existing SE).",
+    "Event e06 given time_text 'After discharge' (relative).",
+    "Summary claims 1 and 3 reworded to remove an unsupported causal link (hypoventilation -> ICU; recovered on drugs) and the 'no abnormality' paraphrase of the tumor-only CT finding.",
+    "Added ambiguity: abstract places hippocampal hyperintensity in the last two episodes, while the 2020 MRI is normal in the text and caption; f082 ambiguity notes Fig. 1 pixel-only treatment text for 2022.",
+    "Added Fig3 panel b (printed on the image) to the caption layer, attributed via the case text 'Figs. 2b and 3b'."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three figure images are reviewed in the separate visual submission.",
+    "Fig. 1 is an image-only timeline of all eight episodes (diagnoses, treatments, recovery times); its printed text is pixel content kept in the visual submission only and is not a fact source.",
+    "The Fig. 3 caption labels the 2020 EEG as (a) rather than (b); the image has panels a, b and c.",
+    "Reference-range comparisons printed in the text are kept as reference text; high flags only where the source says leucocytosis or elevated protein.",
+    "Discussion statements about literature cohorts and ILAE definitions are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 13,
+    "facts_reviewed": 86,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; no supplementary material in raw.xml or source.json.",
+      "Fig. 1 prints only years (no month or day), so no direct-identifier dates; its text stays in visual.json only.",
+      "Fig. 3 device text is clock times and a page label only (no calendar date); Fig. 2 prints years only.",
+      "Recurrent anti-NMDAR encephalitis kept provisional ('propose'); autoimmune-associated epilepsy confirmed per the Conclusions.",
+      "Discussion claim of poor immunotherapy response in the last two episodes stays review_only with an ambiguity (2022 text gives levetiracetam only).",
+      "e03->e04 relation kept: 'Thus' is an order word, not pure basis wording."
+    ],
+    "residual_risks": [
+      "Fig. 3 caption mislabels the 2020 EEG as (a); panel b attribution relies on the case text.",
+      "CSF pleocytosis and pressure flags left unknown; 'pleocytosis' not attributed to a single count.",
+      "Admission -> workup relations rely on the in-hospital-care ruling (order only)."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC10781609.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b6924469d9f1a7aa6b7a6f6977bc41890713157dc2ab3f36519487b241023025",
+  "annotation_sha256": "1d5c3da2aefb1f88b234914a6717dc212c391f7bf920638c234fe5fb88e019da",
+  "reviewed_at": "2026-10-21T13:34:48.150322+00:00",
+  "source_segments_read": 25,
+  "facts_reviewed": 57,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f036 absent stomach bubble moved from symptoms_function sign to observations (imaging, assertion present, text_value \"absent\", flag unknown): it is an ultrasound finding, not a physical-examination sign.",
+    "p1-f001 care_setting set to \"primary care\" from the present-case discussion sentences (b00008) naming the primary care medical officer.",
+    "p1-f011 polyhydramnios given time \"at 28 weeks of gestation\" with the literal present-case sentence in b00008.",
+    "p1-f014 trisomy 18 given time \"at 28 weeks of gestation\" with the literal present-case sentence in b00010.",
+    "p1-f052 stillbirth: cause_as_documented \"CDH and underlying trisomy 18\" and related_condition set from the unhedged \"resulting in\" sentence (b00010, full sentence quoted).",
+    "p1-f055 offer of options recast as completed counseling (were given the option); p1-f056 demise discussion set to completed.",
+    "p1-f057 b00012 decision for expectant management and comfort care set ambiguous/review_only (unlabelled discussion sentence, \"they\" has no literal antecedent) and removed from summary fact_ids; ambiguity reworded.",
+    "Summary paragraph 2 no longer merges the absent stomach bubble with the thoracic stomach bubble.",
+    "Stomach-bubble ambiguity also cites the b00009 present-case sentence listing both findings; amnioreduction ambiguity reworded.",
+    "Relations added: p1-e06 -> p1-e09 and p1-e05 -> p1-e09 (b00010 stated times 28 and 34 weeks of gestation, \"resulting in\"); p1-e08 -> p1-e09 (amnioreduction is antenatal, placed during the pregnancy, before delivery)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the two ultrasound images are described in the separate visual submission.",
+    "Case text is brief: no dates, drug names, doses, laboratory values or maternal follow-up beyond delivery are stated.",
+    "The first scan reports both an absent stomach bubble and a stomach bubble in the thoracic cavity; kept as written.",
+    "Polyhydramnios severity wording differs between introduction and discussion; no grade assigned.",
+    "Foetus, stillbirth and parents’ decisions are kept in the index patient record (subject fetus), not as separate patients."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 25,
+    "facts_reviewed": 57,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (35-year-old G4P3 woman); foetus, stillbirth and parents kept in her record with subject fetus.",
+      "No supplementary material in raw.xml or source.json.",
+      "Stomach bubble absent vs in the thoracic cavity kept as two literal findings with an ambiguity, not a source conflict.",
+      "Edwards syndrome only suggested/consistent in the case text; trisomy 18 recorded as the confirmed karyotype finding.",
+      "Polyhydramnios severity (moderate-to-severe vs moderate) left ungraded with an ambiguity.",
+      "Uneventful previous pregnancies recorded as absent complications, the form EVID-NEGATION prescribes for uneventful.",
+      "Two ultrasound images viewed at full resolution: device text (scanner name, depth scale, cropped menu labels) only, no names or dates."
+    ],
+    "residual_risks": [
+      "Referral -> MFM detailed scan relation relies on the referral naming the MFM consultant who performed the scan (indefinite article in the scan sentence).",
+      "Amnioreduction -> delivery order is implied by the antenatal nature of amnioreduction, not by an order word.",
+      "Stillbirth cause relies on the authors' \"resulting in\" wording attached to the diagnosis clause."
+    ]
+  },
+  "physician_adjudicated": false
+}

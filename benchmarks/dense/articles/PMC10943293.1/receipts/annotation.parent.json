@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC10943293.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f6c0d293f3ff1878cd9ae7652829fdae8cad6ff7c3beb5071b25380ca5b924ec",
+  "annotation_sha256": "957ecd14a9f09f397c14cd3067060cd1efe89623ed38a67c43eb10019f2e4705",
+  "reviewed_at": "2026-10-21T13:10:24.752254+00:00",
+  "source_segments_read": 32,
+  "facts_reviewed": 34,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f002 age 17-year-old (case text) reclassified from ambiguous to source_conflict (review_only): Table 1 \"Our case\" prints 16/F, two different numbers for one value per the orchestrator rulings.",
+    "Added p1-f033: Table 1 \"Our case\" age 16 as the other side of the age source conflict (review_only, no unit added).",
+    "Added p1-f034: Table 1 \"Our case\" localization \"Spreading from the hips to the legs and trunk\" / \"Last 2-months\" as a separate review_only ambiguous item (not merged with the text wording in p1-f008).",
+    "p1-f015 text_value replaced by the literal phrase \"reported to have newly formed\".",
+    "p1-f030 ROS1 FISH evidence now quotes the full sentence containing its negation, plus the Table 1 \"Our case\" genetics cell; p1-e07 evidence extended to the full HRAS/ROS1 sentence.",
+    "Added relation p1-e06 (excision of one larger lesion for genetic analysis) before p1-e07 (HRAS NGS / ROS1 FISH results), quoting the two adjacent sentences.",
+    "Ambiguities updated: age is a source conflict (p1-f002, p1-f033); localization ambiguity links p1-f034; specimen ambiguity reworded.",
+    "Article limitations updated for the age source conflict, the Figure 1 caption range A-C versus four panels, and Figure 4 panel B brown colour versus the PRAME-negative caption."
+  ],
+  "unresolved": [
+    "Table 1 \"Our case\" row prints 16/F while the text says 17-year-old (source conflict, both review_only); the localization wording also differs (ambiguity).",
+    "Table 1 rows for other authors are previously published cases and are not index-patient facts.",
+    "Discussion paragraphs are general background; only literal \"in this case\" statements were used.",
+    "The article does not state the lesion sites sectioned for histology or the specimen used for the genetic tests.",
+    "Figure pixels are inspected in the separate visual submission; the caption layer here stays not_inspected.",
+    "Figure 1 caption names panels A to C while the image has panels A to D; panels C and D show the shoulder and upper back.",
+    "Figure 4 panel B shows brown-coloured material although the caption states no PRAME staining; pixels cannot determine chromogen versus pigment."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 32,
+    "facts_reviewed": 34,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (young woman, eruptive disseminated Spitz nevus); Table 1 rows other than \"Our case\" are published cases and stay out of the patient record.",
+      "Age 17 (text) vs 16 (Table 1) is a source conflict; both sides review_only.",
+      "Text and Table 1 \"Our case\" IHC and genetics cells describe the same tests of the single case and are merged as second evidence; localization wording differs and is kept separate.",
+      "Relations: onset before presentation; histology/IHC before exclusion of melanoma (Thus); excision before genetic results (adjacent sentences). Diagnosis basis wording and the recommendation are not ordered.",
+      "All four figure assets viewed at full resolution with crops; panel letters A-D (Fig 1-3) and A-B (Fig 4) are printed on the images."
+    ],
+    "residual_risks": [
+      "Which lesions were sectioned for histology and whether the excised lesion was among them is not stated.",
+      "Figure 4 panel B shows brown-coloured material although the caption says no PRAME staining; pixels cannot separate chromogen from melanin.",
+      "Figure 1 caption range A-C does not name panel D.",
+      "Recommendation event occurrence stays unknown; no follow-up result is reported."
+    ]
+  },
+  "physician_adjudicated": false
+}

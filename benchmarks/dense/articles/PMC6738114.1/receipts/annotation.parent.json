@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC6738114.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7c1bee95167aa63092e5322834565d5658ab597952b1a2c21820e425bc64b669",
+  "annotation_sha256": "339a546e476737f0ffb4ff33c1c40216be743784ec78bb49b0f66e9fe0747c2c",
+  "reviewed_at": "2026-10-21T04:20:31.674624+00:00",
+  "source_segments_read": 55,
+  "facts_reviewed": 97,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f017 procedure name \"Breast and axillary ultrasound\" corrected to \"Axillary ultrasound\"; the source names only an ultrasound of the axillary mass.",
+    "Maximum relative infant dose 0.091% (comparator <=) now also cites the Discussion restatement in b00049.",
+    "Event p1-e14 reworded so the not_occurred plan reads as the hormonal therapy itself (not recommended), removing a double negative.",
+    "Event time classifications: e09 \"2 weeks after delivery\" precision exact; e11 \"after the 9th week\" precision approximate; e13 \"Following the completion of chemotherapy\" time_kind order_only.",
+    "Added relation e10 before e13: breast milk expressed and discarded \"until chemotherapy was completed\" and radiotherapy \"Following the completion of chemotherapy\" (same anchor, both quoted).",
+    "Added relation e11 before e12: the relative infant dose is calculated \"Based on\" the 27 h breast milk concentration (result to calculation).",
+    "Added ambiguity: abstract says milk levels drop below the minimum quantifiable dose at 72 h, Results/Table 1 give 71.25 h; treated as abstract approximation, not a conflict.",
+    "Corrected article limitation that wrongly called the 71.25 and 75.75 h samples quantified."
+  ],
+  "unresolved": [
+    "Figures 1 to 3 plot the same concentrations printed in Table 1; plot points are not read, only printed table values and text values are recorded.",
+    "The relative infant dose uses a population 50th centile infant weight estimate, not a measured infant weight, and a standard daily milk volume of 150 mL/kg per the formula; the formula image has no resolved asset.",
+    "Table 1 time labels and the text sampling times differ in places (2.75 h versus 3 h, plasma 6.5 and 8.5 h not tabulated, a 193 h row not in the text list); see ambiguities.",
+    "Time of each concentration is the Table 1 row label in hours; the table does not state the reference point, and the Results/abstract state hours following chemotherapy for some values only.",
+    "Table cells that are blank (plasma after 6 h, milk before 3 h) are not reported and are not recorded as zero or missing results.",
+    "Whether the sampled dose was the 9th weekly dose, and the number of paclitaxel cycles delivered after the pause, are not stated explicitly.",
+    "The abstract and Results give 72 h as the time of the maximum relative infant dose; the milk samples at 71.25 and 75.75 h are below the minimum quantifiable concentration and 72 h is not a listed sampling time."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 55,
+    "facts_reviewed": 97,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (33-year-old woman, breast cancer in pregnancy); roster count 1 from the singular case statement.",
+      "Text vs Table 1 time labels (milk 2.75 h vs 3 h row, plasma 6.50/8.50 h listed but 3/6 h rows printed, 193 h row absent from the text list) are ambiguities: the source never ties a specific row to a different-labelled sample, so no single measurement has two values.",
+      "2050 ng/mL (text, peak at 1 h) vs 2050.92 (Table 1, 1 h) is a rounding difference; both kept as items with an ambiguity.",
+      "Merges at milk 27 h (6.83 ng/mL) and 71.25 h (<mqc, text <2.5 ng/mL) are supported: same specimen, same stated time point, same value in text and table.",
+      "<mqc cells: \"<\" from the cell, 2.5 ng/mL from the governing Table 1 footnote; LC/MS/MS method from the breast milk assay paragraph, applied to milk items only (plasma items carry no method).",
+      "Nine weekly paclitaxel cycles in total, six before the pause at 36 weeks: consistent counts, not a conflict.",
+      "Radiotherapy dose 50 Gray in 25 fractions is kept in the evidence quote; neither procedures_devices nor oncology.treatments has a dose field.",
+      "Figures 1-3 are line graphs without printed data labels; visual.json has no readings or plot estimates."
+    ],
+    "residual_risks": [
+      "Table 1 time labels may be shifted against the Methods sampling times; time attributes of plasma 3 h and 6 h and milk 3 h rows are as printed.",
+      "Hormonal therapy non-recommendation is encoded as care plan assertion absent / action_status recommended and a not_occurred plan event.",
+      "Relative infant dose inputs include a population-centile infant weight estimate, recorded as an estimate.",
+      "Equation graphic has no declared asset and was not viewed."
+    ]
+  },
+  "physician_adjudicated": false
+}

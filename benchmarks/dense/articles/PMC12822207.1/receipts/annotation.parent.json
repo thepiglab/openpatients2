@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC12822207.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f2ca255f0e6f09bc7c2577e5a59d444ace7e5c6d45f10997dd2a7429a10c1f9a",
+  "annotation_sha256": "5b69bddef71a1f4df685ea33c06ee5b1a15991d65e17db214c737b8e853be1c1",
+  "reviewed_at": "2026-10-21T18:07:42.144370+00:00",
+  "source_segments_read": 55,
+  "facts_reviewed": 163,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f120 (outcome 'remains asymptomatic'): it restated the same 4-year statement already recorded as symptoms absent (p1-f025) and carried the negation word as a present text_value (ONE-STATEMENT, EVID-NEGATION). References repointed to p1-f025.",
+    "Un-merged p1-f022 (right-eye conjunctivitis, text) from Table 2; added the Table 2 Day 1 clinical findings fever, cough, shortness of breath, right-sided conjunctivitis and left-sided thigh wound (p1-f125..p1-f129) and the ~Day -5 symptom-onset row (p1-f130..p1-f133) as table items with their row times.",
+    "Un-merged text and Table 2 medication items (empirical piperacillin/tazobactam and clarithromycin, IV corticosteroids, cyclophosphamide withheld, IV ciprofloxacin, ceftriaxone, low-dose corticosteroid reintroduction, corticosteroid taper): text items p1-f032/033/034/037/038/041/044/045 keep only text evidence and no borrowed Day time; Table 2 items added as p1-f134..p1-f141 with their row times.",
+    "Un-merged text and Table 2 procedures: emergency dialysis/Shaldon catheter (p1-f046/047), dialysis trial withdrawal (p1-f051), plasmapheresis (p1-f052), abdominal ultrasound (p1-f056) lose the borrowed Day time; Table 2 items added p1-f142, p1-f143, p1-f144, p1-f146. Removed the text quote from the Day 11 tunneled-catheter insertion p1-f049 (the text states only that dialysis later ran via it). Added text 'followed by catheter removal' as p1-f145. Chest CT procedure p1-f055 now cites the caption, whose day 2 equals the Table 2 Day 2.",
+    "Un-merged Day 1 laboratory values: text creatinine 6.77, eGFR 8 and CRP 306 (p1-f059/060/062) now cite only their own sentence with time 'Initial laboratory tests' (as urea and leukocytes); Table 2 Day 1 creatinine, eGFR, CRP, proteinuria, hematuria and ultrasound added as p1-f147..p1-f152; text proteinuria/hematuria and ultrasound lose the borrowed Day 1.",
+    "Split chest imaging findings by source statement: text X-ray p1-f074 (no time, literal wording, 'supine' method removed), caption X-ray p1-f153 (day 1), Table 2 X-ray p1-f154 (Day 1, bilateral infiltrates); text CT p1-f075 (no time), caption CT p1-f155 (day 2), Table 2 CT p1-f156 (Day 2). A caption's time governs only its own findings.",
+    "Un-merged biopsy result (Table 2 Day 9 p1-f096; text overall result added p1-f157), blood culture (text p1-f097 timed 'directly after this plasmaperhesis'; Table 2 Day 10 p1-f158), F. tularensis serology (text p1-f099/100 'during the second week after admission'; Table 2 Day 14 p1-f159/160), creatinine 2.70/eGFR 24 and urine output (text p1-f104/105/106 untimed; Table 2 Day 12-14 p1-f161..163). Added the missed Table 2 Day 15-22 'further improvement' outcome p1-f164.",
+    "p1-f006 typhoidal tularemia: verification_status differential (hedged alternative classification). p1-f118 full recovery: removed related_condition 'acute kidney injury' (not stated).",
+    "Rebuilt the timeline (50 events): text and Table 2 statements are separate events unless both name the same time point (admission; day 1 X-ray caption and Table 2 Day 1; day 2 CT caption and Table 2 Day 2; day 24 discharge; 4-year follow-up). TEE split from ECG/ultrasound. Time precision fixed: ~Day −5, ~Month 5 and 'over the following months' approximate; Day 12–14, Day 15–22, 'days 1–3, 5, 7, 9, and 11', 'Year 1, 2, 3, 4' and 'during the second week after admission' range.",
+    "Relations rebuilt (42): every pair is ordered by its own quotes (same-anchor hospital Day labels, 'directly afterward', 'later', 'Thereafter', 'followed by', 're-introduced', test -> result, result -> action, drug start -> stop, admission -> in-hospital care/discharge, discharge -> follow-up). Dropped the former e06->e25 pairing that read Shaldon-then-tunneled catheter use as ordering the Day 11 insertion; it is now ordered by Table 2 Day 1 and Day 11.",
+    "Summary: removed p1-f120 citation (now p1-f025); claim 2 cites the text biopsy result p1-f157 and wording kept free of X-ray laterality."
+  ],
+  "unresolved": [
+    "Figures 1-3 are inspected in visual.json; Figure 1 is a literature-search flow diagram and not patient data.",
+    "Table 3 literature rows and the systematic review are published cases or methods and are not patient facts; only the present-case row is recorded.",
+    "Supplements are a search-strategy document and a CARE checklist; they carry no patient data and are reviewed in their own sidecars.",
+    "Table 2 is a timeline summary introduced by a general pointer; its rows are recorded as their own items with their Day labels, separate from the narrative statements, and day-level order within a single Day is not stated.",
+    "Quantitative proteinuria and convalescent complement samples were not available; electron microscopy was not performed.",
+    "The Table 2 Day labels and the text day numbers (day 7, days 1-3, day 24 of hospitalization) are treated as one hospital-day count; the day on which counting starts is not defined beyond 'Day 1 | Admission'."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 55,
+    "facts_reviewed": 163,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (73-year-old man); Table 3 literature rows and the systematic review are not patient facts; only the present-case row is recorded (p1-f124).",
+      "Text and Table 2 statements were merged on the general pointer 'The clinical timeline is summarized in Table 2'; per the merge rule they are now separate items, grouped in one event only where both name the same time point.",
+      "Urea and leukocyte quotes (one contiguous span of their own sentence including 'Initial laboratory tests') are literal and take no time from another sentence; kept, and the same form used for text creatinine, eGFR and CRP.",
+      "Hemodialysis seven sessions kept completed: the sentence lists the session days, a literal statement that they took place.",
+      "Chest X-ray laterality (text 'left-sided' of unclear scope vs Table 2 'bilateral infiltrates') recorded as an ambiguity, not a source conflict; no laterality attribute.",
+      "Hedged items kept non-asserted: typhoidal tularemia possible/differential, atypical pneumonia possible/provisional, tularemia as trigger of the glomerulonephritis only as an ambiguity. Text CRP flag high because the sentence calls the inflammatory markers elevated and CRP is the marker it lists.",
+      "Table 2 '~Month 5' and 'Year 1, 2, 3, 4' kept as literal relative times with approximate/range precision.",
+      "Supplements: MOESM1 search-strategy docx (27 units) and MOESM2 one-page CARE checklist carry no patient data."
+    ],
+    "residual_risks": [
+      "Text 'Initial laboratory tests' values and the Table 2 Day 1 values are almost certainly the same draw but are kept as separate items because the source does not say so.",
+      "Hospital-day numbering is treated as one count across text and Table 2.",
+      "visual.json Fig1 transcribes 'tularaemia' in the eligibility box where the pixels print 'tularemia'; agent must correct."
+    ]
+  },
+  "physician_adjudicated": false
+}

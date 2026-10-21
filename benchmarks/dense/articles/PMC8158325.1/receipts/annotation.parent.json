@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC8158325.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "65a65fad0f022b40e8e2a8cf6c5ba341b62ef0a76e9db4379a5259daa43d0035",
+  "annotation_sha256": "d8d1a9c607a9f17389a76599b4e43a07dbdb0e2707be646a610cb80bd5492c5e",
+  "reviewed_at": "2026-10-21T08:21:26.990674+00:00",
+  "source_segments_read": 14,
+  "facts_reviewed": 67,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "COVID-19 pneumonitis: removed diagnostic_basis \"PCR positive\" and the PCR quote; the source never states the diagnosis rests on the PCR (PCR stays its own observation).",
+    "Mechanical ventilation: added the literal \"was successfully weaned off the ventilator\" so completion does not rest on \"requiring\" alone.",
+    "Pressure support ventilation: added the literal \"while on pressure support ventilation ...\" quote; the weaning sentence states only the aim.",
+    "CT 9 days after ICU admission renamed \"CT scan\" (source does not say chest).",
+    "Dynamic compliance unit kept as printed, ml/cmH20 (subscript markup only removed), instead of the silently corrected ml/cmH2O; ambiguity records the probable one-character O/0 print artefact.",
+    "Earlier X-ray (not yet present 3 days prior): quote extended to the whole sentence so the pneumothorax it refers to is inside the evidence.",
+    "Added imaging observations: chest radiography 2 days later showing right-sided apical pneumothorax (time from the immediately preceding sentence naming the imaging, per ruling) and chest CT findings citing the case text, \"No airway injury was identified on CT\" and the Figure 2 caption.",
+    "Added device facts: Cooper Surgical esophageal catheter and Servo U mechanical ventilator from the measurement sentence.",
+    "Pneumothorax site ambiguity extended: the Figure 2 caption calls the CT pneumothorax apical while the case text calls the same CT finding ventral; body_site stays null.",
+    "Figure 2 attribution note rewritten: assets bound correctly (no asset swap); the Paw/Pes/PL key printed in the Figure 2 caption matches Figure 1 axis labels; article limitation added.",
+    "Added 6 relations: symptoms since 2 weeks -> hospital admission (presentation sentence); hospital admission -> admission labs and cefotaxime (stay-opening, order only); deep sedation on ICU admission -> sedation weaned (start -> taper); high drive/large tidal volumes -> sedation increased/pressure support decreased (result -> action); transpulmonary measurement -> pneumothorax radiograph (literal Discussion \"measurements before detection of gross barotrauma\")."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the 2 JPEGs are inspected in the separate visual submission.",
+    "Dates are relative to ICU admission or to the imaging described; no calendar dates are stated.",
+    "Ventilator setting and result sentences of the transition to pressure support ventilation carry no stated time of their own; no time was borrowed.",
+    "Discussion paragraphs mix literature statements and case statements; only literal \"Our patient\" statements were used.",
+    "The abbreviation key for Paw, Pes and PL is printed in the Figure 2 caption although these labels appear only on the Figure 1 image; both figure assets match their own main captions."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 14,
+    "facts_reviewed": 67,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (67-year-old man, COVID-19 pneumonitis, ICU); all 12 text segments and both captions read; raw XML checked for the caption structure and the printed unit.",
+      "Figure 2 caption in the XML has a second paragraph defining Paw, Pes and PL; Figure 1 asset prints those axis labels and Figure 2 asset shows the two CT panels A and B, so binding is correct and the asset-swap ruling does not apply.",
+      "Antibiotics and conservative treatment stay action unknown (\"was chosen\"); barotrauma stays provisional with an ambiguity (abstract \"developed\" vs case \"most likely cause\"); cefotaxime kept as two separately stated administrations (pre-ICU and with methylprednisolone).",
+      "Day 9 CT before day 10 methylprednisolone: both stated from the same ICU-admission anchor, both quoted; kept.",
+      "\"2 days later\" opens a new paragraph so it gives no anchor; the measurement-before-imaging order is taken only from the literal Discussion \"before detection of gross barotrauma\". Measurement -> sedation increase not added (the stated purpose is the drive/tidal volumes of the preceding sentences, not the measurement).",
+      "Discussion \"Our patient ... bilateral pulmonary consolidations\" is literal for the index patient; kept with no time.",
+      "visual.json has printed ticks and qualitative trace shapes only; no readings or positional statements."
+    ],
+    "residual_risks": [
+      "Gate warning NO-BORROWING on the 2-days-later radiograph time is the ruled exception (preceding sentence names the same imaging and its time); left as is.",
+      "Ventilator settings and results of the pressure support phase have no stated time.",
+      "Whether the added antibiotics were given and which agent is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

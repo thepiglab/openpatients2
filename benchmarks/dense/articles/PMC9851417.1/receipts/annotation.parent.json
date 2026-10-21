@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC9851417.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9d9ab4dd53cccc6361b279e5a6a43913aa7fdcd0a68511fb2bb2251161ed737f",
+  "annotation_sha256": "a3c649a96df64d54355d34e6129bf069afd981116bc6639bd8d4eb047b6668e7",
+  "reviewed_at": "2026-10-21T13:26:29.340881+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 69,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f017 tobacco (\"he was a non-smoker\") and p1-f018 alcohol (\"did not drink alcohol\") changed from present/never to assertion absent with status unknown (SOC-NEVER; corpus convention, no explicit never-use wording).",
+    "p1-f044 to p1-f047 (potassium, corrected calcium, phosphate, magnesium): added the \"Blood tests were unremarkable with normal electrolytes\" quote so each normal flag is supported by its own evidence; the bracket after \"normal electrolytes\" lists all five analytes.",
+    "p1-f022 right-sided pacemaker: evidence widened to the full sentence so the stated indication (insulation failure and noise detection with inhibition of pacing) is inside its own quote (NO-BORROWING).",
+    "p1-f001 care setting: added the b00015 quote naming the local cardiac centre; p1-f010 left-sided lead failure: added the Three years prior table row stating explantation of the left-sided device due to lead failure.",
+    "p1-f012 presenting dizziness: added the Day 1 timeline table row as governing evidence and time Day 1 (at).",
+    "p1-e08 chest X-ray event: time_text set to the caption phrase \"following external pacemaker implantation\" (order_only).",
+    "Added three literal relations: presentation e04 -> pacing check e05 (presentation opening the stay -> in-hospital tests), temporary wire insertion e06 -> e07 (which contains removal of that wire), pacing-check lead failure e05 -> strategy discussion e10 (\"Given the failure of three of four previous implanted leads ... were discussed\").",
+    "Summary claim 4 now cites p1-f029 for the femoral venous access it states."
+  ],
+  "unresolved": [
+    "Figure pixels inspected in the separate visual target; caption-layer visual status is not_inspected.",
+    "Figure 5B histogram values are not printed and are not recorded; only qualitative description is given.",
+    "Discussion literature claims are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 69,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (90-year-old man); all 33 segments read incl. the six-row timeline table and five captions; discussion and literature claims kept out of patient facts.",
+      "All 13 drafter relations checked against their full evidence: Day 1 rows -> Day 7 row (stated times, same table), 8 years prior -> 3 years prior (same anchor, both quoted), history in presentation sentence -> presentation, venogram/strategy discussion -> Micra (\"considered the best option\" then \"underwent implantation\"), implant -> post-procedural checks / discharge \"the following day\", discharge -> 6-week follow-up.",
+      "p1-f064/f065 6-week AM-VP 86.9% and VP 12.8%: the frequency sentence immediately follows the sentence naming the same 6-week pacing check and its time; both quoted, so the time stands under the binding ruling (checker NO-BORROWING warning is a false positive).",
+      "Considered strategy (dual-chamber re-implant with laser extraction) and transfer to the cardiac centre stay care plans with action_status unknown; sedation drugs keep route and indication null; \"mild\" is not assigned to tricuspid regurgitation (ambiguity).",
+      "Six right-sided leads (discussion, \"at one stage\") vs five (Figure 2 caption, after external pacemaker implantation with the femoral wire removed) kept as an ambiguity at different time points, not a conflict.",
+      "Figures viewed at full resolution with crops: Fig 1 strip prints paper speed plus an untranscribed alphanumeric record-like string (flagged direct_identifiers, conservative); Fig 2 prints projection text and a side marker; Fig 5B prints no bar values (qualitative only)."
+    ],
+    "residual_risks": [
+      "Two checker NO-BORROWING warnings remain on p1-f064/f065 (adjacent-sentence same-assessment time allowed by ruling).",
+      "Post-implant atrial-lead threshold, impedance, p-wave amplitude, Micra sensing and 93.3%/6.5% frequencies keep time null; their sentences do not name the post-procedural check.",
+      "The Fig 1 alphanumeric string could be an ECG-device serial rather than a patient record number; it is flagged conservatively as direct_identifiers and never transcribed.",
+      "Supplement sup1 (ytac474_supplementary_data.pptx) is listed in PMC metadata but was not acquired or reviewed; no supplement manifest exists yet."
+    ]
+  },
+  "physician_adjudicated": false
+}

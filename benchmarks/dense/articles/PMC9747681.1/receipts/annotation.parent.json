@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC9747681.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7e69d3c5264287efc299a6af8f0aea1aff3d83098f05e89cdfe483b8500aa852",
+  "annotation_sha256": "16fa135d6c8df54a449ea9d54aa225bfb9603cf1ba72d61baccd531e438858a3",
+  "reviewed_at": "2026-10-21T13:12:09.735740+00:00",
+  "source_segments_read": 28,
+  "facts_reviewed": 45,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Split repeated gastric ulcers (f005) out of the PPI event e03 into new history event e10, so the literal orders can be recorded.",
+    "Added e02 before e10 (\"not as severe as at the initial presentation\", initial = Figure 1 endoscopy cited for the five-years-prior exam).",
+    "Added e10 before e01 (history of repeated gastric ulcers in the sentence adjacent to the presentation; presented due to recurrent gastric ulcers).",
+    "Added e01 before e04 (introduced to the hospital to investigate the pain, then upper endoscopy; referral -> that investigation).",
+    "Added e04 same_time e05 (aortic CT on the same day; Figure 2 caption places endoscopic and CT findings at diagnosis).",
+    "e05 before e07 now quotes both stated times from the same anchor (findings at diagnosis; bypass two weeks after diagnosis); added e04 before e07 on the same basis.",
+    "Restored literal time anchors: initial endoscopy (f024, f034), initial presentation (f032, f033), diagnosis (f035, f038, f039).",
+    "Rewrote the two timing ambiguities to match the recorded relations; added a limitation that the PPI course is unordered.",
+    "Merged the 22-word postoperative summary claim into the treatment-phase claim (SUMMARY-CLAIMS 25-85 words)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the actual images are inspected in the separate visual submission.",
+    "No calendar dates are printed; timing is relative only (five years earlier, same day, two weeks after diagnosis).",
+    "Table 1 lists published literature reports and is not patient data; the discussion statements about CIG in the literature are not patient facts.",
+    "Video S1 (supplement deo2192-supitem-0001) is cited in the text for the endoscopic whitening; it is reviewed in the supplement manifest by sampled frames and no clinical fact is taken from it. The empty supplement entry deo2192-supinfo-0001 has no declared asset.",
+    "The mucosal color change is described by the authors as occurring with gastric dilatation; the discussion causes are hypotheses and are not recorded as asserted causes.",
+    "Whether the discussion sentence about no white mucosal development once the stomach was fully dilated refers to the endoscopy at diagnosis or after surgery is not stated; it is kept as an ambiguity.",
+    "The proton pump inhibitor course has no stated time and is not ordered against the other events."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 28,
+    "facts_reviewed": 45,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (63-year-old man, chronic ischemic gastritis); Table 1 is literature only and correctly excluded.",
+      "All 45 facts verified against text and captions; caption times govern only caption-stated findings (f032, f033, f035, f038, f039, f041); f031 takes its time from its own text sentence.",
+      "\"No findings were seen in the antrum\" kept as flag normal (no pathologic findings).",
+      "Helicobacter label spelling is a NAME-LABEL normalisation; evidence keeps the source spelling Heliobacter.",
+      "Hedged discussion causes and the \"once fully dilated\" sentence stay out of facts as ambiguities.",
+      "Pixels of g002/g003/g001 match the Figure 1/2/3 captions (3, 4 and 4 panels); no swap. Video S1 frames sampled every 2 s over 53.6 s: endoscopic and narrow-band views with author overlay captions only, no dates or identifiers."
+    ],
+    "residual_risks": [
+      "Diagnosis anchor is only the caption phrase \"at diagnosis\"; exact day of diagnosis is not stated.",
+      "PPI course timing relative to the initial endoscopy is not stated and left unordered.",
+      "Discussion sentence on collapsed mucosa (f036) is assigned to the diagnostic endoscopy event without a stated time."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12481542.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "28c90381cffd936f97aabecb871606f2bc8e240da96d65349093f8a37ffd9d02",
+  "annotation_sha256": "c956d0fc78e55df907f704c5157a915e7831cb8191e33451ea427b4f09019db3",
+  "reviewed_at": "2026-10-21T14:07:10.141613+00:00",
+  "source_segments_read": 15,
+  "facts_reviewed": 102,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Abstract \"high FT3 and FT4 levels with a non-suppressed TSH\" un-merged from the February 2024 admission values (the abstract states no time; the age-7 workup also showed high TSH/FT3/FT4): p1-f066/f067/f068 now cite only the admission sentence, TSH loses text_value \"non-suppressed\", FT3/FT4 flags set to unknown (ranges printed, no classification); three new untimed abstract facts p1-f097 FT3 high, p1-f098 FT4 high, p1-f099 TSH non-suppressed.",
+    "TSH \"normal\" sentence removed from the birth event (birth sentence does not name TSH) into its own untimed event p1-e17; added p1-f100 \"no other investigations were performed\" (status not_performed).",
+    "Diagnosis event p1-e03 now holds only the diagnosis (abstract + discussion \"At 7 years of age, when she was diagnosed\" quotes); the untimed blood tests, pituitary MRI and molecular/family testing moved to new untimed workup event p1-e18.",
+    "Psychiatric onset (age 16, p1-e09) split from the untimed hospitalizations/follow-up/AN and depression treatment (new p1-e19); p1-f015 eating disorders verification set to unknown (stated only as the reason for hospitalization, like AN/depression).",
+    "p1-f092 \"thyroid functioning was within limits\" moved from outcomes to observations (flag unknown); added untimed p1-f101/f102 FT3/FT4 \"mild elevation\" (flag high) in the current-status event.",
+    "Removed inferred diagnostic_basis from osteoporosis p1-f011; removed redundant \"negative\" text_value from absent Blumberg/Murphy signs; p1-f077 renamed REMS Z-score; fracture notes no longer call \"leading to mild trauma\" a cause; p1-f028 (target height) removed from the admission test event; case_context description says 17 years of disease (discussion quote added to p1-f010).",
+    "Relations added: birth -> diagnosis at 7 and diagnosis at 7 -> tibial fracture at 10 (same age anchor, both quotes); tachycardia onset -> bisoprolol (\"since tachycardia was not under control\"); psychiatric onset -> hospitalizations for psychiatric disorders; suicide attempt at 20 -> admission of the 24-year-old (age anchor); discharge -> \"Today\" follow-up.",
+    "Ambiguities updated (abstract lab split, untimed workup/TSH, untimed follow-up thyroid sentence); summary rewritten into five phase claims without the abstract-derived flags on admission values."
+  ],
+  "unresolved": [
+    "Single case report; the article has no figures, no tables and no supplementary material (raw XML checked for supplementary-material and media entries).",
+    "Only dates given are February 2024 for the admission and ages for earlier events; the blood tests and workup at the age of 7 carry no time of their own, and no exact interval between events is derived.",
+    "Reference ranges are recorded only where printed; no flag was derived from a reference range.",
+    "Discussion sentences mixing literature (receptor expression, prevalence, cited cohort of 72 individuals) with our-patient statements: only the sentences literally about our patient were used."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 15,
+    "facts_reviewed": 102,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient; no figures, tables, media or supplementary material (raw.xml has no fig, table-wrap, graphic, media or supplementary-material element).",
+      "Osteoporosis (DXA, author-stated) vs REMS \"non-osteoporotic results\" kept as an ambiguity between different tests, not a source conflict.",
+      "\"already treated with\" medications at admission are administered; only the \"Today ... still treated\" antidepressants and bisoprolol are current.",
+      "TRIAC: administered since the diagnosis, stopped \"two years earlier\"/\"until 2 years ago\", \"not introduced again\" recorded as absent.",
+      "Age chain relations quote both ages; \"Since the diagnosis\", \"until 2 years ago\", admission -> hospital workup -> discharge follow RULINGS."
+    ],
+    "residual_risks": [
+      "Untimed abstract FT3/FT4/TSH facts may duplicate either the admission or the diagnostic-workup tests.",
+      "Diagnostic workup and the normal TSH have no literal order against the diagnosis or birth and stay unlinked.",
+      "Admission and psychiatric hospitalization recorded as care_plans items (drafter representation kept)."
+    ]
+  },
+  "physician_adjudicated": false
+}

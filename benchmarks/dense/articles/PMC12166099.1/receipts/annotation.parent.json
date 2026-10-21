@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12166099.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8d802a5097812af9ff09bcee1b9fb16a8aa3c7db29cfb442edf9cc7b99b01376",
+  "annotation_sha256": "545950069c5d892669ea89ffe3ef7696ebf7ff739b0fa6f471d31f115d8ca9a1",
+  "reviewed_at": "2026-10-21T14:17:13.930609+00:00",
+  "source_segments_read": 55,
+  "facts_reviewed": 112,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "f027 right superior vestibular neuritis: kept verification_status confirmed (authors' diagnostic statement 'These findings indicated ...' plus 'we report a case of vestibular neuritis'; the stated uncertainty is about cause); added the b00005 case statement as evidence and rewrote the note.",
+    "f030 'Bilateral CP in caloric testing' (b00037): include -> ambiguous/review_only; the discussion paragraph is unlabelled, so attribution is not literal; its difference from the initial right-absent/left-3.4 description is an ambiguity, not a conflict.",
+    "f037 declined repeat caloric testing: time text restored to the literal 'At four and seven months post-onset' with relation after and literal anchor 'onset'.",
+    "Moved the 21 Table 1/2 'Two months' cells out of the presentation event p1-e06 ('Two months later', anchored to the illness) into a new test event p1-e12 timed by the unanchored column header 'Two months'; the header is not equated with the presentation.",
+    "p1-e07 initial findings also lists the two merged cells f053 (vHIT 0.76, text cites Table 1) and f092 (HUT INOH, text cites Table 1), which belong to both the initial findings and the two-month column.",
+    "p1-e09 time text 'By four months' -> 'Four months' (the column header that times its 21 table cells); header quote added to its evidence. 'By four months' stays on f038/f039 (before, anchor null).",
+    "Removed the untimed follow-up statements f041-f046 (DHI, HADS, sway, HUT 'persistent', p13 latency, sacculo-collic) and the whole-course outcome f050 from the 'At seven months' event p1-e10 (membership lent them a time their sentences do not state); new follow-up event p1-e13 'Over a seven-month follow-up' holds them with the abstract facts f048/f049. f037 (declined at four AND seven months) now listed in both p1-e09 and p1-e10.",
+    "Relations 5 -> 13. Kept e05->e06 and e01->e06. Added: e02->e05 (onset -> resolution of the same vertigo); e02 same_time e04 (b00038 'vertigo onset coincided with COVID-19 detection' + Table 3 'Our case ... 0 days'); e06->e07 (presentation -> initial findings); e07 overlaps e12 (initial vHIT 0.76 cites Table 1 and is the Two months cell); e12->e09, e09->e10, e12->e10 quoting the Table 1 and Table 2 headers 'Two months | Four months | Seven months'; e07->e09 re-evidenced with the 're-' word 'declined repeat caloric testing' (old quote did not order the pair); e07->e10 re-evidenced with the initial 0.76 and 'improved (from 0.76 to 1.96)'; e07->e13 abstract 'initially indicated ... Over a seven-month follow-up'; e10->e11 result -> planned follow-up about that result."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two JPEGs were inspected in the separate visual submission.",
+    "Table 1 and Table 2 time columns (Two, Four, Seven months) have no stated anchor; no calendar dates are given.",
+    "Table 1 paired cells (rt/lt, open/closed eyes) are kept as text_value strings; no reference-range-derived high/low flags were added.",
+    "Table 1 reference column reads \"Not yet released\" for Foulage test rows and is kept literally as reference text.",
+    "Hedged statements (possible VZV reactivation, suggested autonomic dysfunction, suggested sacculo-collic reflex impairment) are review_only possible facts.",
+    "Discussion statements about cognitive impairment, general recovery trajectories and Table 3 literature cases are not copied to the patient.",
+    "Treatment (p1-e08) and emergency CT/MRI (p1-e03) have no literal order against the other events and remain unlinked."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 55,
+    "facts_reviewed": 112,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (57-year-old man, vestibular neuritis after COVID-19); all 55 segments read incl. Tables 1-3 and both captions; raw.xml has no supplementary-material or media elements.",
+      "Every Table 1 and Table 2 cell (57 values plus the symptoms row and HUT row) is its own fact timed by its column header; Table 2 'Reference (abnormal)' thresholds stay in quotes/notes because symptoms_function has no reference field; no flags derived from ranges.",
+      "Only vHIT 0.76 and HUT INOH (text cites Table 1) and vHIT 1.96 (text states 'At seven months') are merged with table cells; narrative cVEMP normal, oVEMP reduced, caloric 3.4 deg/s and p13 14.6->26.1 ms stay separate and untimed.",
+      "Right superior vestibular neuritis kept confirmed ('These findings indicated' is the diagnostic statement; uncertainty in the article concerns cause).",
+      "'Bilateral CP' (b00037, unlabelled discussion paragraph) is review_only with an ambiguity, not a conflict; HUT Normal at four months vs 'persistent autonomic dysfunction' is an ambiguity, not a conflict.",
+      "Timeline restructured: two-month table cells moved out of the presentation event into an event timed by the 'Two months' header; untimed follow-up statements moved out of the 'At seven months' event; relations 5 -> 13, all with literal order (column headers, 're-', 'initially', 'coincided', onset -> resolution, result -> planned follow-up).",
+      "Both figures viewed at full resolution with crops: printed 2/4/7 months labels, peak markers and scale text only; no plot readings in visual.json; FIG2 tiny illegible header text flagged as device text with dates not excludable."
+    ],
+    "residual_risks": [
+      "p1-e06 -> p1-e07 (presentation -> 'Initial findings' heading) relies on the heading directly following the presentation sentence rather than an explicit order word.",
+      "The Table 1/2 'Two months' column is not equated with the 'Two months later' presentation; the column anchor is unstated.",
+      "Treatment (p1-e08) and emergency CT/MRI (p1-e03) remain unlinked because the source gives no literal order for them."
+    ]
+  },
+  "physician_adjudicated": false
+}

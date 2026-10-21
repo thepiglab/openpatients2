@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC11684853.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d287eb4ef10ee9c52c71b9a6f76aa532aedb9845bd0ada47bd6e6544d21dd798",
+  "annotation_sha256": "79823f805ceecdf9fae81e0c193b0315c53743d58b8e8e8ff60d1691ed7ffa87",
+  "reviewed_at": "2026-10-21T13:55:11.331476+00:00",
+  "source_segments_read": 21,
+  "facts_reviewed": 103,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed empty event e16 (Table 1 Admission column): the admission text values and Table 1 Admission cells are already merged facts in e04 (same stated time point); e04 now cites both the text and the Table 1 header, and the Admission->Day 3 header relation now runs e04->e17.",
+    "Relation e08->e09 now quotes both adjacent sentences (IVC filter sentence and 'Over the course of the next three days'), per the adjacent-sentence anchor ruling.",
+    "Relation e02->e12 now quotes both the Conclusions 'Upon arrival ... prompting investigative questioning' and the case-text 'Upon further questioning ... his daughter revealed'.",
+    "Removed relation e15->e19: 'Antibody titers came back positive, and labs on discharge' joins the two with 'and' only; the source does not place the titer result before discharge.",
+    "Added relations e13->e19 and e14->e19 ('On day five of the patient's admission' is in-hospital care before the discharge ending that stay) and e02->e03, e02->e05 (presentation opening the stay before its workup; order only).",
+    "Event e14 (IgM ordered) given the time of its own sentence 'On day five of the patient's admission' (the time governs both clauses); e13 description and evidence narrowed to the lab improvement.",
+    "f021 jaundice: 'diffuse' moved from severity to text_value 'diffusely jaundiced' (extent, not severity).",
+    "f099 and f100: removed related_condition 'Leptospirosis' (not stated in the outcome sentences).",
+    "Summary claim 2 reworded: HIDA did not itself raise concern for cholecystitis and the infectious panels did not rule out alcohol abuse (MRCP and PEth did). Claim 4 reworded: 'liver tests had improved' removed (discharge total bilirubin 8.2 exceeds the admission 5.3); discharge values stated as printed and fact_ids narrowed.",
+    "Ambiguity texts updated with the decisions on the admission hemoglobin conflict and the separate 'next three days' vs Table 1 'Day 3' observations; e19 description corrected (discharge labs live in e18)."
+  ],
+  "unresolved": [
+    "The article lists no figures and no supplements (raw.xml checked); no visual, figure-EHR or privacy sidecars apply.",
+    "Admission hemoglobin differs between the text (12.5 g/dL) and Table 1 (12.80); both sides are review-only.",
+    "Table 1 Direct bilirubin Admission cell is a dash and is not recorded as a value.",
+    "No flags were derived from Table 1 reference ranges; flags are set only where the source states a result negative.",
+    "Narrative three-day values and the Table 1 Day 3 column are kept as separate observations because the source does not identify them as one time point.",
+    "Discussion paragraphs mostly describe published literature; only explicit index-patient sentences were used."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 21,
+    "facts_reviewed": 103,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient; raw.xml has no fig, supplementary-material or media elements (pmc-prop-has-supplement no); only Table 1 (TAB1).",
+      "Admission Hgb 12.5 g/dL (text 'on admission') vs 12.80 (Table 1 Admission): same stated time, two different numbers, not rounding -> source conflict, both sides review_only.",
+      "'Over the course of the next three days' is not literally the Table 1 'Day 3' column: kept as separate observations (matching numbers alone never merge).",
+      "Admission and discharge text/table merges rest on shared stated times ('on admission'/'Admission', 'on discharge'/'Discharge'); CK IU/L vs U/L and albumin 3.1 vs 3.10 recorded as print variants.",
+      "Direct bilirubin Admission dash not recorded as a value; flags only from 'negative'/'positive' wording; acalculous and acute cholecystitis possible/provisional with the IR disagreement as ambiguity; PCT drain action unknown.",
+      "US -> HIDA -> MRCP kept in one unordered workup event ('Further', 'Subsequent' with no named anchor).",
+      "All 36 Table 1 points (12 series) hand-checked against the source table; 35 parsed plus the dash as missing_cell."
+    ],
+    "residual_risks": [
+      "NO-BORROWING warning on p1-f072 is a checker false positive: 'on discharge' and 'Cr of 1.29 mg/dL' are in the same quoted sentence.",
+      "e08->e09 relies on the adjacent-sentence anchor for 'next three days'; Table 1 suggests the span may count from admission.",
+      "Heparin contraindication is recorded only as the IVC filter indication, not as a separate medication fact.",
+      "Zosyn efficacy and 'susceptible' wording kept as an ambiguity only."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,66 @@
+{
+  "article_id": "PMC12565445.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ebaa14258f2c57c51e04369b532ee7182ba8957bb0e2bc07b4519f79de235f20",
+  "annotation_sha256": "c09490e7886ce03ee2924b7b87abd5ef62b7e37075498ec9f66f1ca4ac43bdde",
+  "reviewed_at": "2026-10-21T18:09:32.941472+00:00",
+  "source_segments_read": 43,
+  "facts_reviewed": 100,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "All patients: vHIT procedure facts now cite the per-patient abstract sentence (\"In each patient, vHIT examinations were performed preoperatively and at one month, three months, and one year after the surgery\") and the per-patient figure caption; times taken from the abstract sentence; the series-level Methods schedule is kept only as supporting evidence; label \"Video head impulse test (vHIT)\".",
+    "All patients: the 16 vHIT-sequence relations (pre-op vHIT -> surgery -> 1 month -> 3 months -> 1 year) now quote the per-patient caption \"recorded before surgery and at 1, 3, and 12 months postoperatively\" plus the abstract \"In each patient\" sentence instead of the series-level Methods sentence b00007.",
+    "All patients: surgery events cite the per-patient approach sentence b00009; p2/p4 translabyrinthine resection also cites the literal completion \"after the TL approach (cases #2 and #4)\" (b00009 only says \"was chosen\").",
+    "p2/p3/p4: split the lumped presentation event into the first symptom (e01) and the later preoperative symptoms (new e08); relations e01->e08 (\"first symptom\"), e08->e04 (\"before tumor removal\" / \"prior to the surgery\" / \"prior to surgical treatment\"), and p2 e02->e08 (\"After diagnosis\").",
+    "p1: p1-f017 contralateral overt saccades timed \"Before surgery\" from the immediately preceding saccade sentence; p1-f022/f023 timed \"One month after surgery\" and p1-f027 \"one year after the surgery\" (quotes were present but time was missing).",
+    "p1: unlinked untimed p1-f018 (RALP/LARP normal), p1-f019 (SHIMP) from the preoperative vHIT event and p1-f028 (\"after surgery\" SHIMP) from the one-year event (paragraph-position linkage).",
+    "p2: preoperative time added to p2-f016..f019 (\"In the preoperative vHIT examination\"); p2-f022 timed \"After the surgery\"; untimed SHIMP p2-f020 unlinked from the preoperative event.",
+    "p3: p3-f017/f018 (RALP/LARP and SHIMP normal) timed from the preceding \"Before the surgery\" sentence; p3-f022 (\"early follow-up visit\") unlinked from the one-month event; p3-f023 time set to \"by the one-year follow-up\", relation before (upper bound).",
+    "p4: p4-f017/f018 timed \"preoperative\"; p4-f019 (ASC/PSC covert saccades) left untimed and unlinked; p4-f020 timed \"Postoperatively\".",
+    "Discussion evidence added: b00031 to p1-f015/f016, p3-f015/f016, p4-f017/f018; b00032 to p2-f016/f017; b00033 to p3-f017.",
+    "p4 ambiguities added: Discussion b00033 (\"covert saccades ... in the LSC only\", RALP/LARP standard for Patients #3 and #4) contradicts the p4 Results ASC/PSC sentence and Table S1; Figure 4 one-year lateral gain label 0.52 vs Table S1 0,54.",
+    "Summaries for p1/p2/p4 rewritten so untimed findings are not placed at the preoperative time; label-only clinical statements of observations expanded to short statements; source coverage of b00031-b00033/b00035 corrected."
+  ],
+  "unresolved": [
+    "Table S1 (PDF in the supplement ZIP) is reviewed in the supplement sidecar; its per-canal saccade and gain cells are not repeated as article facts.",
+    "The methods sentence on histopathology (b00009) names no patient and is not assigned to individuals.",
+    "Case 1 to Case 4 list labels are read as Patients 1 to 4 (Methods \"cases #2 and #4\", Figure 5 row labels).",
+    "Gain values printed inside figure images are pixel content and appear only in visual.json.",
+    "Visual status in figures[] is caption-level; pixels are described in visual.json.",
+    "Discussion sentences that name patients literally are cited as additional evidence on the matching Results facts, not typed twice.",
+    "The Discussion statement that Patients #3 and #4 had covert saccades in the LSC only contradicts the Patient #4 Results sentence and Table S1 for the ASC/PSC; recorded as an ambiguity.",
+    "Figure 4 one-year lateral gain label (0.52) differs from Table S1 (0,54); pixel value kept in visual.json only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 43,
+    "facts_reviewed": 100,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Four individually numbered patients; Results headings \"Patient #N\", Table S1 banners \"PATIENT #N\", Figure 1-4 titles \"PATIENT #N\" and Figure 5 rows \"Case N\"; the article itself uses \"patients #1 and #3\" and \"cases #2 and #4\" interchangeably, so Case N = Patient #N is literal numbering.",
+      "Histopathology sentence b00009 names no patient; kept as an ambiguity only (not copied to individuals).",
+      "Surgery per patient is literal: b00008 \"The patients underwent tumor resection\" plus per-patient approach sentence b00009, caption \"postoperatively\" and \"after the TL approach (cases #2 and #4)\".",
+      "vHIT schedule now rests on per-patient captions and the abstract \"In each patient\" sentence; Table S1 columns per patient print the same four time points.",
+      "Discussion \"(cases #2 and #4)\" random saccades at one year is literal per case; kept include with the existing ambiguity against the Table S1 per-canal patterns.",
+      "Gains: \"reduced\"/\"decreased\" left flag unknown; \"below the normal value\" flag low; no flags from the 0.8-1.2 Methods range."
+    ],
+    "residual_risks": [
+      "Five NO-BORROWING gate warnings are times taken from the immediately preceding sentence naming the same vHIT assessment (allowed by the orchestrator rulings; both sentences quoted).",
+      "Several Results findings (p1 RALP/LARP and SHIMP, p2 SHIMP, p4 ASC/PSC) stay untimed in the annotation; their timed values are in Table S1 (supplement sidecar).",
+      "Figure 2 and Figure 4 gain labels are at low resolution; the Figure 4 one-year label reads 0.52 against Table S1 0,54."
+    ]
+  },
+  "physician_adjudicated": false
+}

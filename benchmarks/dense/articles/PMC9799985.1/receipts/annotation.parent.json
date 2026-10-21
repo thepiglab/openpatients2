@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC9799985.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "de862ed644ab80478d08e659b64a69788b8473009445b9eb7070226ce8924187",
+  "annotation_sha256": "ebfe27ccbf76ab3056afb83d095b34daa3944ba6501c6f7b217d4244312277f5",
+  "reviewed_at": "2026-10-21T09:26:56.155920+00:00",
+  "source_segments_read": 29,
+  "facts_reviewed": 34,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f031 one-year return: ambiguous/review_only -> supported/include; its own sentence carries the time (anchor first visit). The Figure 4 caption time is anchored to treatment, so it is not a conflict.",
+    "p1-f033 birth of central incisors and p1-f026 space maintainer installed: time \"after 6 months of treatment\" (anchor treatment) from the Figure 4A caption that states them; p1-f033 -> supported/include.",
+    "Added p1-f034 symptoms_function \"Upper lateral exfoliation\" (Figure 4A caption, after 6 months of treatment).",
+    "p1-f027 levothyroxine sodium: merge of b00014 and b00021 kept (same patient, same hormone replacement); dose_value/dose_unit removed because \"25mcg, box of 30 Tablets\" is a prescription listing, regimen no longer carries the target \"ideal 3 mcg/kg/day\"; ambiguity added.",
+    "p1-f013 hypothyroidism: added the Discussion sentence about \"The patient in the present study\".",
+    "p1-f021 panoramic radiograph: removed unstated body_site.",
+    "Events: p1-e08 now only the performed restorations; new p1-e12 (plan, occurrence unknown) for the proposed extractions of 85/75 and the chosen Nance arch; new p1-e10 (Figure 4A photos, after 6 months of treatment); new p1-e11 outcome (improved quality of life); p1-e09 keeps only the one-year return; p1-f030 moved to p1-e07.",
+    "Relations added: e07->e08 (\"initially there was a hormone replacement\" + proposed dental treatment), e07->e10 (\"initially\" + \"after 6 months of treatment\"), e07->e11 (\"immediate initiation of the patient’s hormonal treatment, led to an improved quality of life\").",
+    "Ambiguities rewritten for Figure 4 timing (different anchors, both can hold) and proposed vs performed dental treatment; summary claim 3 rewritten; b00001 abstract coverage -> patient_facts."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual images are inspected in the separate visual target.",
+    "Discussion sentences on levothyroxine pharmacology, hypothyroidism features and tooth-eruption mechanisms are general literature, not patient facts.",
+    "Printed laboratory values inside Figure 3 are pixel content only and not facts; the text gives no TSH or T3/T4 values.",
+    "Source gives dental treatment as proposed; only the restorations are stated as performed.",
+    "Figure 4 caption time (after 6 months of treatment) and text time (one year after the first visit) use different anchors; both kept."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 29,
+    "facts_reviewed": 34,
+    "figures_viewed": 4,
+    "key_findings": [
+      "One girl, 9 years 8 months; all 34 facts checked against quotes, polarity and times.",
+      "Figure 4 caption (\"after 6 months of treatment\") and text (\"One year after the first visit\") use different anchors; both are kept, not a conflict.",
+      "Only restorations of 54 and 64 are performed; extractions of 85/75 are proposed and the Nance arch is chosen (action unknown, never planned). Caries list 54/64/74/85 vs extraction 85/75 kept as an ambiguity.",
+      "TSH 5.91 is printed only in Figure 3 (pixel content); hormone dosage exam and serum TSH stay not_reported and separate.",
+      "Only the improved quality of life sentence of the Discussion is a patient outcome; the levothyroxine sentence is attributed via \"The patient in the present study\" paragraph."
+    ],
+    "residual_risks": [
+      "Relations e07->e08 and e07->e10 rest on \"initially\" in the multidisciplinary-treatment sentence.",
+      "Whether 25mcg is tablet strength or administered dose is not stated.",
+      "Whether Figure 4A/B photos are from one session or two is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,53 @@
+{
+  "article_id": "PMC6334887.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "21564d870d11e09e704d8c91213c60bb0e2f5a02c751b6f507b896076e197d8f",
+  "annotation_sha256": "24d05d55492ff1a7e6deb0e1edc69eb6a4b0c71e962de8bf0c7be606505aefcf",
+  "reviewed_at": "2026-10-21T04:06:05.360922+00:00",
+  "source_segments_read": 17,
+  "facts_reviewed": 56,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Surgical decompression: procedure action planned -> unknown and event p1-e16 occurrence planned -> unknown (kind plan -> treatment); the only support is the purpose clause of the transfer, which names a future goal and reports no plan or performance.",
+    "Removed relation p1-e15 -> p1-e16 (purpose clause does not order; surgery not reported).",
+    "Added relations p1-e06 -> p1-e11 and p1-e06 -> p1-e14 (admission opening the stay -> ward events/in-hospital care, order only) and p1-e14 -> p1-e15 (diagnosis -> neurosurgery consult and transfer for its decompression).",
+    "AKI condition: replaced the inferential diagnostic_basis (linking creatinine/BUN) with the literal \"initial impression\" at admission and added the b00006 admission quote and the \"In our case\" lead-in to the resolution quote; verification kept confirmed (abstract \"admitted with\" + Discussion \"In our case ... resolved\").",
+    "Summary and event descriptions: removed unsupported \"elevated BUN and creatinine\", \"low TSH\" and \"severe\" wording and the FT4-as-low implication; values stated as printed; ft4 fact linked to its summary paragraph.",
+    "Cleaned a placeholder fact note on the visual-disturbance negation; updated the decompression ambiguity and article limitation."
+  ],
+  "unresolved": [
+    "Single case; surgical decompression is only the stated purpose of the transfer; neither the surgery nor any outcome after transfer is reported.",
+    "Reference-range-only comparisons were not turned into high/low flags except where the source itself calls the result low or names the condition.",
+    "The Discussion hedges the mechanism of acute kidney injury; no cause is asserted.",
+    "Caption-layer visual status not_inspected; the two JPEGs were inspected in the separate visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 17,
+    "facts_reviewed": 56,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient; case text b00003-b00006 plus Discussion b00012 (\"In our case\") and b00011 (\"as in our case\" low prolactin) attributed literally; other Discussion text is background.",
+      "Lab flags set low only where the source names the condition or says low (sodium, potassium, cortisol, prolactin, initial BP); TSH, glucose, BUN, creatinine left unknown.",
+      "Hedged AKI mechanism (b00014 \"likely mechanism\") kept as an ambiguity only; \"12-18 hours later\" kept with null anchor plus ambiguity; adjacent-sentence order e10 -> e11 and \"Subsequent\" e12 -> e13 are within the same paragraph b00006; e11 -> e12 supported by b00012 \"with the development of double vision, MRI brain was considered\".",
+      "Both figures viewed at full resolution with quadrant crops: visual descriptions match pixels; no burned-in identifiers or device text (only orientation letters, FL and 1 cm rulers); MRI facial profile is soft-tissue outline, not a face."
+    ],
+    "residual_risks": [
+      "Anchor of \"Approximately 12-18 hours later\" is unnamed; order relative to persistent symptoms rests on the adjacent-sentence ruling.",
+      "Transfer recorded as completed care-plan referral; nothing after transfer is reported."
+    ]
+  },
+  "physician_adjudicated": false
+}

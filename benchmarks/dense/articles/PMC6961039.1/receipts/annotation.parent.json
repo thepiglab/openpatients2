@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC6961039.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c40b0ef0379560ded5ff525596359508c5a09160095461a484158a81a44873c6",
+  "annotation_sha256": "1142a4f49dcd30abb6e4d5bd69284f219f93767e867a4affba486adb3a96dfff",
+  "reviewed_at": "2026-10-21T07:54:18.415647+00:00",
+  "source_segments_read": 54,
+  "facts_reviewed": 94,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1: split the b00019 presentation (new p1-e14 with demographics/comorbidities) from the b00020 admission (p1-e02 now fever and inflammation markers only); the history->presentation relation now targets p1-e14 because the b00019 quote does not mention the admission",
+    "p1: added outcome p1-f042 (successful abatement of the acute infection) with event p1-e15 and relation p1-e15 before p1-e09 (\"After successful abatement ..., he was planned for surgical resection\")",
+    "p1: added observation p1-f043 from the Figure 7 caption (\"Radiological imaging of the foot in Case 1, arrow shows verrucous tumor mass\"), modality and time left unstated",
+    "p1: relation p1-e09 (resection planned) before p1-e10 (deep excision) now quotes both the plan and the September 2018 excision",
+    "p1: added relation p1-e07 (histology showing SCC) before p1-e10 (deep excision of his carcinoma), result -> action about that result",
+    "p2: sentinel lymph nodes p2-f041 kind pathology -> other (method not stated); flag normal kept for \"inconspicuous\"",
+    "p2: piperacillin/tazobactam p2-f033 action started -> administered (\"after an initial antibiotic treatment\")",
+    "p2: removed the b00032 \"This entity was proven in Case 2\" quote from p2-f023 and recorded an ambiguity (referent may be the Gottron term for shank ulcers)",
+    "p2: added literal relations e03 before e05 (histology; \"At that time\" gangrene treatment; \"After successful treatment ... discharged\"), e05 before e06 (discharged and subsequent resection planned), e05 before e07 (discharged; \"admitted once more\"), e11 before e12 (second resection; graft \"finally\" and NPWT \"directly post-operative\"); e09 before e10 now quotes the primary excision",
+    "p2: p2-f001 case_context, p2-f006 ulcer condition and p2-e01 now quote the b00021 sentence from \"gaunt woman\" on, so the disputed age stays only in the quarantined age facts and out of summary-claim evidence"
+  ],
+  "unresolved": [
+    "Case 2 age conflict: abstract gives 71 year-old, Case 2 paragraph gives 72 year old; both held review_only, neither chosen.",
+    "Abstract mentions the woman before the man, but patients are numbered by Case heading (Case 1 male = p1, Case 2 female = p2), which follows the case sections where identity evidence is anchored.",
+    "Discussion statements are used for individual patients only where they explicitly say \"our two cases\" or \"our cases\"; literature cases (cited reports) are not patient facts.",
+    "Caption-layer visual status is not_inspected; the actual JPEGs were inspected in separate visual targets.",
+    "Figure 7 pixels show cross-sectional and 3D reformatted images while the Case 1 text mentions conventional X-rays and the caption says radiological imaging; modality is not resolved from the source.",
+    "Dates printed inside figures are pixel content and are not copied into facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 54,
+    "facts_reviewed": 94,
+    "figures_viewed": 9,
+    "key_findings": [
+      "Two individual cases (Case 1 man, Case 2 woman); roster numbered by the Case headings with identity evidence in the case sections; the abstract names the woman first in the same sentence that also names the man, accepted and documented as an article limitation",
+      "Case 2 age conflict (abstract 71 vs case text 72) held as two review_only age facts; no age in the p2 label, case_context fields or summaries; the 72 wording remains only inside literal evidence quotes, which is not a label or summary",
+      "\"Our two cases\"/\"our cases\" discussion sentences (no lymph node or distant metastases; x-ray and ultrasound negative; extremity preserved, R0 after follow-up resection) explicitly cover both patients and are kept for both",
+      "DFU status for Case 1 comes from the conclusion and abstract sentences that name both cases; Case 2 text itself says \"the DFU\"",
+      "Judgement calls accepted: continuous smoking = current; avoided total resection = cancelled/not_occurred at that time; p1 second resection completed (\"After the second surgical excision\"); sentinel nodes inconspicuous = normal; mixed infection as both a condition and the microbiology result",
+      "Figure 7 pixels are CT reformats and a 3D rendering although the Case 1 text mentions conventional X-rays; modality tag kept uncertain; Figures 8 and 9 attributed to p2 by literal citations in the Case 2 paragraph; Figure 2 stays background even though its two photographs match Figure 3 (March 2018) and Figure 4 (Apr 2018) panels, because matching pixels is not literal attribution"
+    ],
+    "residual_risks": [
+      "Roster order could be argued from the abstract (woman first); numbering follows the Case 1/Case 2 headings",
+      "Relations between the p1 presentation and admission are not stated and left open",
+      "No long-term follow-up; the authors say long-term results cannot be presented"
+    ]
+  },
+  "physician_adjudicated": false
+}

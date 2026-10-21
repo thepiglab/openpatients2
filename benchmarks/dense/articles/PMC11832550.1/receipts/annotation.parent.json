@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC11832550.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8198b11c5392a2ce2d7dee963b97a43e068dd59a44276b46ba0bdb12087ae80f",
+  "annotation_sha256": "c7c55b6f55ce6be12bd9cb6e143373db229083e03252184c183a66f57aac759e",
+  "reviewed_at": "2026-10-21T17:55:45.735138+00:00",
+  "source_segments_read": 32,
+  "facts_reviewed": 115,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f083 (TEE: no retrograde flow at the coronary artery inlet of the sinus Valsalva): restored time '45 h after starting ECMO' (relation after, anchor 'starting ECMO') quoting both the immediately preceding TEE sentence and the result sentence (result-sentence rule); the remaining NO-BORROWING gate warning is a checker false positive.",
+    "Removed p1-f049 (Discussion chest X-ray 'complete white-out with no air in the lung field'): 'the chest X-ray imaging' back-references the single chest X-ray of the case; its quote was added to p1-f048 so the finding is recorded once.",
+    "p1-f056 (V-V ECMO in F(SVC)-J(RA) configuration): added the explicit index-case Introduction quote (b00008); kept separate from the conversion action p1-f055 (configuration vs conversion).",
+    "p1-f078 (lung rest FIO2 0.30): added the Discussion restatement quote (b00025) to the Table 1 item instead of leaving it unrecorded.",
+    "p1-f020 (nivolumab): evidence now includes the clause stating the bladder cancer indication.",
+    "Added p1-f116 arterial line in the left radial artery (b00028).",
+    "Split the untimed 'Other blood values' blood gas and the deterioration/frothy sputum/manual ventilation facts out of the timed 'Upon admission to the ICU' event p1-e05 (now kind treatment) into new untimed event p1-e24 (the preceding sentence names ventilator settings, not a blood test, so no time is assigned).",
+    "Removed Discussion fact p1-f115 (reinfusion tip near coronary sinus) from the TEE event p1-e15.",
+    "Added relations: e04 before e20 (ICU admission vs 'On day 12 of the ICU admission'); e09 before e10 (PAC insertion before sampling from the tip of the PAC); e10 before e18 (muscle relaxation initiated before its stop); e12 before e15 (21 h vs 45 h after ECMO start); e08-e09 relation now quotes both sentences around 'Then'.",
+    "Added ambiguity: Fig. 2 label 'Adjusted the drainage cannula' vs text/Supplemental Video 2 description stating the reinfusion cannula tip was pulled upward (text kept; label is pixel content).",
+    "Summary claim 1 no longer places the blood gas at ICU admission; claim 3 now states the cited recirculation ratio."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two JPEGs were inspected in the separate visual submission.",
+    "Three supplementary fluoroscopy/echocardiography videos (MPEG) were frame-sampled and reviewed through the supplement manifest only; on-screen values and continuous motion are not transcribed as facts.",
+    "Fig. 2 plotted values are not read; only printed text (labels, ticks, legends) is recorded in visual.json. Ventilator and ECMO settings are recorded only from Table 1 and the text.",
+    "The ICU admission blood gas values carry no time because their sentence states none of its own; days 13, 14 and 24 carry no anchor phrase.",
+    "Muscle relaxant identity is not stated in the text; Rocuronium appears only in the Figure 2 abbreviations and is review_only.",
+    "Discussion comparisons (Bonacchi et al. 16 cases, DLC and V-P ECMO systems, general physiology) are not index-patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 32,
+    "facts_reviewed": 115,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (65-year-old man, adjuvant nivolumab after cystectomy, ARDS from aspiration, V-A to V-AV to V-V ECMO); all Table 1 cells recorded with run-hour headings as times.",
+      "Cause of repeated cardiac arrest differs between abstract (ARDS) and case text (hypoxia): kept as an ambiguity, both wordings recorded as stated.",
+      "Abstract PaO2/PPAO2 '>200 mmHg' summary kept as separate statements from the specific measurements (different statements, no single measurement identified).",
+      "Rocuronium appears only in the Fig. 2 abbreviation list: review_only.",
+      "Days 13, 14, 24 keep null anchors; their adjacent-sentence ordering within one paragraph is kept."
+    ],
+    "residual_risks": [
+      "p1-f083 carries a known NO-BORROWING checker false positive.",
+      "Fig. 2 plotted values are not read (no plot estimates); timing of individual blood gases within the 64 h is only partly stated.",
+      "Supplement videos contain partly cut-off burned-in text resembling a patient ID number and a birth year (direct_identifiers category); manifest wording must be corrected by the annotator before the parent manifest signature."
+    ]
+  },
+  "physician_adjudicated": false
+}

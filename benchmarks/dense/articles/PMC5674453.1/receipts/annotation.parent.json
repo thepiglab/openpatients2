@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC5674453.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5513bf28792fa7166873b7805546be62c0c25fbc685484350987432d1ca2d2a8",
+  "annotation_sha256": "dd006111880484f2f089448acc83faf4e526eeead62c93af32a22f744c5b84a5",
+  "reviewed_at": "2026-10-21T03:31:42.622866+00:00",
+  "source_segments_read": 50,
+  "facts_reviewed": 150,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f008, p1-f010 to p1-f014 and event p1-e03: removed \"at the local hospital\" from clinical statements/description; the antibiotic and workup sentences name no setting (NO-BORROWING).",
+    "p1-f015 ascites, p1-f016 pleural effusion, p1-f113 anasarca: role changed from primary_diagnosis/comorbidity to unknown (manifestations; TAFRO syndrome is the primary diagnosis).",
+    "p1-f113 anasarca (untimed Discussion sentence) unlinked from the \"After admission\" treatment event p1-e06.",
+    "p1-f131: name changed to \"Total ascites volume\" (source says the ascites \"reached a total of 7,300 mL\", not a drained volume).",
+    "Added p1-f150 onset of illness (\"He had been well until 3 weeks before admission.\") with event p1-e21 (history) and relation p1-e21 -> p1-e02 (two stated times from the same admission anchor).",
+    "Added relations: p1-e01 -> p1-e04 (age 24 vs 59-year-old presentation, both quoted); p1-e09 -> p1-e10 (\"Cardiac arrest immediately followed. Although he was resuscitated\"); p1-e09 -> p1-e12 (drainage \"to alleviate shock\", treating the named existing shock); p1-e17 -> p1-e18 (\"however, the anasarca worsened. Therefore, starting on day 24\"); p1-e14 -> p1-e20 (in-hospital drainage -> discharge ending the stay, order only).",
+    "Arrest-cause ambiguity: added the unhedged Introduction sentence and explained the hedged Discussion wording; p1-f140 stays possible/review_only.",
+    "Summary claims 1 and 4 reworded: no unstated setting, onset added, \"some inflammatory parameters\" as printed, cyclosporin A \"given from day 24 along with\" as printed."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the 2 JPEG figures are inspected in visual.json.",
+    "Figure 2 prints CRRT, HD and CPA labels and bars that the text never describes; image-only content is kept in visual.json and not turned into patient facts. No values were estimated from the plots.",
+    "Table 2 is a single admission time point; it is not a serial table, so no measurement series sidecar was made.",
+    "Text findings (increased WBC, CRP, IL-6, VEGF, hypoalbuminemia, thrombocytopenia, HIV and HHV-8 negative) are merged with the same-analyte Table 2 cells; anemia, renal dysfunction and abnormal coagulation are not tied to specific table rows.",
+    "Fbg meaning, PAIgG unit print artefact, adrenaline and plasma-product administration wording, and the hedged mechanism of the arrest are kept as ambiguities.",
+    "Day numbers (day 10 to day 112) share the hospital-day numbering; the Figure 2 axis is in weeks and no calendar dates are given."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 50,
+    "facts_reviewed": 150,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (59-year-old Japanese man, TAFRO syndrome, PEA arrest day 17, discharged home day 112); roster count 1, complete.",
+      "All 59 Table 2 cells present with caption time \"on admission to our hospital\"; text-table merges (WBC, CRP, IL-6, VEGF high; albumin and platelets low; HIV and HHV-8 negative) accepted because the admission paragraph states \"All laboratory findings are summarized in Table 2\" and the table caption fixes the admission time point; anemia, renal dysfunction and abnormal coagulation kept unmerged.",
+      "Fbg (Coagulation group, footnote \"fasting blood glucose\") stays ambiguous/review_only; PAIgG unit \"ng/10^(7) calls\" kept literal with an ambiguity; ethnicity \"Japanese\" is documented.",
+      "Adrenaline (\"was necessary\") and crystalloid/albumin/FFP/plasma concentrate (\"was required\") stay action unknown per RULINGS; no later sentence states they were given; the odd indication wording is kept literal with an ambiguity.",
+      "Times checked: tocilizumab start has no day (not borrowed from day 18); IL-6 567 keeps \"at this point\" with null anchor; day-N pairs quote both days; \"Therefore, starting on day 24\" orders worsening anasarca before cyclosporin A; 7,300 mL keeps \"on the first day\" with unnamed anchor; Discussion 3,000-5,000 mL/day range kept separate from the 3,576 mL/day average.",
+      "Both figures viewed at full resolution with a crop of the Fig 2 treatment bars: histology A-F matches the visual descriptions; Fig 2 readings arrays are empty and no plot values are estimated; CRRT, HD and CPA stay pixel-only in visual.json."
+    ],
+    "residual_risks": [
+      "Text-table merge rests on the summary sentence \"All laboratory findings are summarized in Table 2\"; the HIV/HHV-8 text sentence itself carries no time.",
+      "Whether the ascites caused the arrest is hedged in the Discussion; recorded as review_only possible.",
+      "Measurement-series machine draft (21 heuristic series from the single admission table) is not a real series; no measurement_series.json made."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC13357970.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "15c2ef9834ab18d6e18874b031bb4f074876a660470cb0f888c0f5bdfbb5b810",
+  "annotation_sha256": "44b1f23cbac35b249876b6572ff4cfb3106eb7c341986e648a1fa7a3352520d7",
+  "reviewed_at": "2026-10-21T17:57:05.570918+00:00",
+  "source_segments_read": 79,
+  "facts_reviewed": 219,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f128 urgent surgical debridement: removed the b00022 \"noted upon surgical debridement\" quote and finding; with two debridements described, those findings (f052, f053, f013) are not attributable to the initial one and were removed from event p1-e04; ambiguity added.",
+    "p1-f056 persistent tachycardia \"Postoperatively ... transferred to the ICU\" (b00022) removed from the post-March-8 event p1-e15: the operation is not named and the text places the patient in the ICU before the March 8 surgery; ambiguity added.",
+    "p1-f108 split: Table 6 Day 3 \"lactate normalized to 1.7 mmol/L\" was merged into the Table 5 core-period cell on matching number only; f108 keeps the Table 5 cell (normal flag removed, it came from the Table 6 wording); new p1-f206 holds the Table 6 value with flag normal (\"normalized\"); ambiguity added.",
+    "p1-f185 family history: bare \"non-contributory\" recorded as present Family history with interpretation non-contributory (corpus precedent), not as an absent condition.",
+    "p1-f005 provisional infectious fasciitis role differential -> primary_diagnosis; p1-f205 wife wish subject other -> family_member; p1-f186 ICU discharge relation at; p1-f200 urgency (was a frequency) cleared; p1-f167 statement typo; p1-f083 cites the Table 5 admission TEE-column cell.",
+    "Added facts: f207 dobutamine dose limited due to LV thrombus (literal present-case limitation sentence); f208/f209 intraoperative CVP 25 and 18 mmHg as printed; f210 initial resuscitation (Day 1, text + Table 6); f211 sedation on admission; f212-f215 NE/DB/amiodarone/esmolol on Table 6 Day 2; f216 ongoing anticoagulation Day 2; f217 preoperative anticoagulation (Discussion literal); f218 improved wound healing postoperative Days 1-5 (Table 6); f219 TTE at 1 month.",
+    "Relations: evidence of e03->e09, e09->e13, e13->e14, e13->e17 replaced with quotes that state the order (text \"After initial resuscitation ... decreased\", full Table 6 rows, Table 5 time labels); added e03 same_time e01, e13 during e10, e16->e19, e17->e19, e21->e19 (in-hospital care before discharge), e19->e24.",
+    "Ambiguities: day-label ambiguity now states Table 5 Day2 vs Table 6 Day 3 vs March 8; CVP, dobutamine and fever ambiguities linked to facts; new ambiguities for the unattributed debridement findings, the unnamed postoperative ICU transfer, the Table 6 lactate 1.7, the Day 5 TTE (ICU vs postoperative day anchors) and the untimed Table 2 laboratory row.",
+    "Summary claim 1 \"hypotensive\" (interpretive word not in the source) -> \"with blood pressure\"; claim 2 \"Admission testing\" -> \"Initial testing\" (CRP/troponin come from the untimed Table 2 row); b00063 coverage set to patient_facts."
+  ],
+  "unresolved": [
+    "Figure pixels were inspected in a separate visual target; the caption-layer figure rows here stay not_inspected.",
+    "Table 1 (LVEF-stratified TEE framework), Table 3 probe parameters other than manufacturer/model, and Table 4 standard imaging planes are general or equipment information and are not patient facts.",
+    "Table 5 ranges (MAP, HR, drug doses) are kept as printed text ranges without numeric values; dashes in the Key TEE findings column are missing cells, not negative findings.",
+    "Day labels in Tables 5 and 6 do not match the March 8 surgery date if Day 1 is March 5; both are kept literally.",
+    "Discussion statements are used only where they literally describe this patient (differential reasoning, limitations); literature statements are not copied to the patient.",
+    "Values printed inside the TEE images are pixel content and are recorded only in the visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 79,
+    "facts_reviewed": 219,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (41-year-old man, Aeromonas hydrophila necrotizing fasciitis, septic shock, previously undiagnosed severe DCM with LV apical thrombus); every fact, relation and ambiguity checked against source text, Tables 2, 5 and 6.",
+      "Merges kept where the source labels the same time point: admission vitals (text On admission + Table 2 Admission vital signs), admission TTE (Table 2 admission, Table 5 Admission, text), admission lactate (text + Table 5 Admission + Table 2), Pro-BNP (text Initial + Table 2), preoperative lactate 3.1 (text morning of surgery, Table 5 preoperative morning, Table 6 Day 2), end-of-surgery lactate 1.7 (text + Table 5 End of surgery), Day 5 TTE. Table 6 Day 3 lactate split out.",
+      "Kept separate correctly: pre-induction OR vitals vs Table 5 preoperative-morning ranges; text intraoperative dosing (whole procedure) vs Table 5 core period (0.5 h).",
+      "Takotsubo refuted (\"excluded\"); septic cardiomyopathy and supply-demand ischemia stay possible differentials; persistent-flutter cardiology consultation \"required\" stays unknown.",
+      "F1/F2 viewed at full resolution with crops: F2 printed panel LVIDs 5.3 cm, ESV 138 ml, EF 20 %, %FS 9 %, LVIDd 5.9 cm, EDV 172 ml lives only in visual.json; no identifiers, device text only."
+    ],
+    "residual_risks": [
+      "Day numbering (Table 5 Day2, Table 6 Day 3, March 8) is internally inconsistent; only Table 6 row order is used.",
+      "Day 5 TTE merge rests on identical \"Day 5\" labels and findings while the implied anchors (ICU vs postoperative day) differ.",
+      "Table 2 baseline laboratory row merged with text initial/admission values for Pro-BNP and lactate.",
+      "CVP 25 and 18 printed in mmHg likely a unit misprint (targets in cmH2O); kept as printed."
+    ]
+  },
+  "physician_adjudicated": false
+}

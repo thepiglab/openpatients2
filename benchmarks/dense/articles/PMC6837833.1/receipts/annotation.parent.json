@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC6837833.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e53bee0b130e82f302a444d02382fe71013488fd8fc614c486359f83ecdaab18",
+  "annotation_sha256": "12180a1b7dbd962c5c60dedbbc0d0bbdc64848a68593b549de96f039faa5d253",
+  "reviewed_at": "2026-10-21T03:32:20.100394+00:00",
+  "source_segments_read": 47,
+  "facts_reviewed": 156,
+  "patients_reviewed": 6,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Case attribution: the six case paragraphs are labelled by source section headings \"Case series / Case 1\"..\"Case 6\" (JATS <title>Case N</title>); replaced the \"unlabelled paragraph / Figure-callout chain\" notes on all six case_context facts, the figure attribution notes, the Table 2 source_coverage notes and article limitation 1; removed the p1 ambiguity that called the paragraph unlabelled.",
+    "Case 4 Table 2 brainstem dash: recast p4-f016 (narrative patchy brainstem changes) and p4-f017 (table dash) from source_conflict to ambiguous (an undefined dash is not a second value); both stay review_only.",
+    "Case 4: removed the disputed brainstem clause from the included MRI procedure finding (p4-f019) and from the first summary claim (p4-f016 dropped from its fact_ids).",
+    "Case 2 ambiguity widened: the CT named a left cerebellar hypodensity, so the Table 2 \"Bilateral\" cell may summarise CT plus MRI; added the CT quote and p2-f011 to the ambiguity.",
+    "p2-f015 contrast enhancement: removed body_site \"pons and right cerebellar hemisphere\" (the sentence does not localise \"some enhancement\").",
+    "Added relations: p1 presentation before ward deterioration; p2 presentation \"on HAART\" before HAART optimised; p3 presentation on anti-tuberculosis medication before \"continued\"/HAART optimised; p4 \"not on HAART\" before advice regarding ART; p5 presentation before discharge; p6 presentation \"pregnant at 30 weeks gestation\" before emergency caesarean; p6 imaging with \"No contrast ... because of the pregnancy\" before the caesarean.",
+    "Article limitation 3 rewritten for the Case 2 and Case 4 table ambiguities."
+  ],
+  "unresolved": [
+    "Each case paragraph sits under a \"Case N\" section heading (source segment headings \"Case series / Case N\"); Table 2 rows (Case column 1.-6.) and the Figure captions use the same Case numbers, and Table 2 is stated to summarise the findings of the patients presented, so its cells are merged with the narrative facts.",
+    "Table 2 gives CD4 as 10^(6)/L while the text gives cells/µL; the numbers match and the unit expressions are recorded as printed.",
+    "Case 2 Table 2 cerebellar involvement (Bilateral) is not matched by the narrative MRI (right cerebellar hemisphere; the CT named the left cerebellar hemisphere); Case 4 Table 2 brainstem involvement is an undefined dash while the narrative reports patchy changes in the brainstem and the caption patchy changes in the pons; both are recorded as ambiguities with the disputed facts review_only.",
+    "Case 5 HAART and anti-tuberculosis treatment sentence is ambiguous; only the absence of HAART is recorded as included.",
+    "Statements about the series as a whole (only one patient showed post contrast enhancement, prevalence, prognosis, literature comparisons) are not copied to individuals; only statements covering all six patients explicitly are used.",
+    "Visual status in the annotation figures is not_inspected by convention; the six images were inspected separately in visual.json."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 47,
+    "facts_reviewed": 156,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Six individually described HIV-positive adults with isolated posterior fossa PML (Cases 1-6); roster count 6 from \"a case series of six patients\", complete; numbering matches first mention and the Case headings.",
+      "Table 2 merge accepted: one row per Case, Case column matches the section headings, and b00024 states the table summarises the findings of the patients presented; CD4 10^(6)/L and cells/µL are the same quantity, recorded as printed.",
+      "Series statements copied only where they explicitly cover all patients: PML diagnosis (b00034 six patients), JC PCR positive (b00034/b00038 \"All\"), no supratentorial involvement (b00035 \"All our patients\"); \"enhancement in only one of the patients\" not copied.",
+      "Case 3 and Case 4 JC PCR positive rests on their Table 2 rows plus the all-patients statements (literal per-Case cells).",
+      "Case 5 \"not on HAART and anti-tuberculosis treatment\" scope: HAART absent holds on both readings; anti-TB treatment and pulmonary TB kept review_only.",
+      "\"On HAART\"/\"on anti-tuberculosis medication\" at presentation kept with action unknown (not current); \"continued\"/\"optimised\" administered.",
+      "Case 6: contrast not_performed observation, foetal distress subject fetus, emergency caesarean as procedure plus delivery item (ONE-STATEMENT allowance).",
+      "All six images viewed at full resolution with crops: F0001 FLAIR posterior fossa signal is subtle and the caption extent is not confirmable from pixels (visual.json says so); F0006 right-cerebellar (image-left) T2 hyperintensity visible; F0002b ring-like cerebellar enhancing focus; F0005 image-right cerebellar low density on both CT panels."
+    ],
+    "residual_risks": [
+      "Case 4 brainstem involvement and Case 2 cerebellar laterality remain review_only ambiguities between Table 2 and the narrative.",
+      "Case 3 Table 2 brainstem dash is held only as an ambiguity, not as a fact.",
+      "Test events (CT, MRI, CSF) are not ordered against discharge because the source does not place them within the admission."
+    ]
+  },
+  "physician_adjudicated": false
+}

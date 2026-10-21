@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC7813535.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8c2e36cfb87f205db56dcc8866f28b3b8e8bac90546ec6f7a6e60079d17029c4",
+  "annotation_sha256": "37406cc4abda36217e890b8b1c281f65dabfc5890c63520bc78fedbc12a4186f",
+  "reviewed_at": "2026-10-21T08:34:54.136012+00:00",
+  "source_segments_read": 12,
+  "facts_reviewed": 42,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Erythrocyte sedimentation rate p1-f026: flag unknown -> high; \"an elevated C-reactive protein of 14.00 mg/dL and erythrocyte sedimentation rate of 95 mm/h\" is read as \"elevated\" governing both coordinated markers, consistent with the corpus decisions on coordinated value-bearing pairs; summary updated.",
+    "Review of systems p1-f009: renamed from \"Review of systems, other findings\" to \"Review of systems\" with text_value \"otherwise unremarkable\" and a statement making it a scoped normal assessment, not a present symptom (not expanded into denials).",
+    "Gentamicin p1-f038: removed the non-literal indication \"Streptococcus gordonii endocarditis, narrowed per sensitivities\" (the sentence gives only the basis \"sensitivities of the S. gordonii\" for both narrowed drugs).",
+    "Hospital-day-three cultures p1-f033: name \"Repeat blood cultures\" -> \"Blood cultures\" (no \"repeat\" in the source).",
+    "Presentation event p1-e02: removed time_text \"three weeks\" (duration of the fevers, not the time of the presentation) and its time classification.",
+    "Relations: quoted both ends for empiric start -> narrowing, positive cultures -> narrowing, positive cultures -> hospital-day-three cultures, and presentation -> discharge; added presentation -> empiric antibiotics, presentation -> blood cultures, presentation -> TTE (presentation opens the stay) and narrowed antibiotics -> discharge (in-hospital care -> discharge).",
+    "Flossing ambiguity: added the introduction restatement \"We present a case of flossing-induced mitral IE on a native valve.\" and clarified no cause is recorded on the diagnosis; coverage notes for b00002 and b00010 updated.",
+    "Summary paragraphs rewritten to list all denials and normal panels and to drop the non-source phrase \"consistent with endocarditis\"."
+  ],
+  "unresolved": [
+    "Figure 1 caption-layer status is not_inspected; the image was inspected in the separate visual submission.",
+    "Culture, imaging and laboratory dates are not given; only hospital day three is stated for cleared cultures.",
+    "Discussion paragraphs are literature background and were not assigned to the patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 12,
+    "facts_reviewed": 42,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single patient; all 12 segments read (abstract, introduction, case paragraph, eight discussion paragraphs, Figure 1 caption). Discussion b00004-b00011 is literature/general guidance; the only case-referring sentences (\"highlighting the unique nature of this case\", \"The above case represents an unusual etiology\", \"We present a case of flossing-induced mitral IE\") add no new patient facts.",
+      "Flossing causation is an unhedged author claim but untested; kept as an ambiguity, not a diagnosis cause.",
+      "Discharge \"on two weeks of outpatient gentamicin infusions and four weeks of penicillin infusions\" stays action unknown per the \"discharged on X\" ruling; no route recorded for penicillin G.",
+      "Relations e03 -> e02 (\"previously evaluated ... during this time\") and e01 -> e02 (history in the presentation sentence) are literal; TEE -> diagnosis is basis wording and is not ordered.",
+      "Fever is one symptom with the literal 103.0 degrees Fahrenheit nightly reading; persistence without an identified source is a separate statement.",
+      "FIG1 viewed at full resolution with crops: the yellow mark at the top edge is a single cropped scanner orientation glyph (about 10 px), not a date, name or institution; timestamps_or_device_text is appropriate. The white arrow points up and to the RIGHT, not up and to the left as visual.json states."
+    ],
+    "residual_risks": [
+      "The scope of \"elevated\" over the ESR is a reading of a coordinated phrase; the ESR value itself is literal.",
+      "Hospital admission is implied only by \"hospital day three\"; no separate admission fact was added.",
+      "Visual.json arrow direction error must be corrected by the annotator; visual, figure-EHR and privacy parent receipts were not signed."
+    ]
+  },
+  "physician_adjudicated": false
+}

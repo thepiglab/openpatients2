@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC12225513.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b2a237b370190711847eeefad7a5bf460702fd1234b965b1ff1ada1d9efb14ea",
+  "annotation_sha256": "cab87cc78a130c8307ba612b2b8147dc9a8082e3a12f346e0030640474680355",
+  "reviewed_at": "2026-10-21T13:51:16.875563+00:00",
+  "source_segments_read": 10,
+  "facts_reviewed": 76,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Temporality set to unknown for p1-f010, f014-f016, f020-f023, f035-f038, f062 (their own quotes carry no history label); kept historical only for the MI and the \"Two years before pregnancy\" lipid values. Rosuvastatin three-month course p1-f014 action historical -> administered.",
+    "p1-f006/f007 (ischemic cardiomyopathy, angina pectoris): evidence widened to the full abstract sentence \"We present a 38-year-old primigravida with ...\" binding the diagnoses to the patient.",
+    "p1-f026: DALI, 3 h and 5000 mL details were named but not quoted; added the two DALI sentences as evidence.",
+    "p1-f041..f048 first-apheresis \"X to Y\" values: notes no longer justify the before/after split with the later pregnancy-period sentence (borrowing); split rests on the sentence's own \"X to Y\"; ambiguity added.",
+    "p1-f050/f051 pregnancy LDL-C ranges: time \"During pregnancy\" from the immediately preceding sentence naming the same LDL apheresis (RULINGS result-sentence rule; both quoted).",
+    "p1-f073 no cardiovascular complications: time \"during this period\" anchored to the total time off statin therapy, with the preceding 22-month sentence quoted.",
+    "p1-f052 BP range flag normal; p1-f053 proteinuria and p1-f013 edema changed from review-only unknown to included scoped normal evaluations (\"thoroughly monitored and in order\"), without asserting absence.",
+    "Events: pregnancy LDL-C ranges linked to p1-e10, newborn length/head circumference/Apgar to p1-e11, uncomplicated postpartum to p1-e12.",
+    "Relations: fuller literal evidence for e01->e05 (abstract \"Stent placements followed acute myocardial infarction\"), e02->e03 (abstract \"prompted statin therapy\"), e03->e06 (drug start -> its stop), e07->e08 (\"Considering high lipid values\"), e10->e11 and e11->e12 (cesarean sentence quoted).",
+    "Relations added: e08->e10 (preconception period vs during pregnancy, same anchor) and e05->e08 (apheresis commenced for prevention of stent restenosis of the existing stents).",
+    "Ambiguities: MI-timing and statin-start items reworded (dangling modifier and arithmetic-only age mismatch = ambiguities, not source conflicts); edema/proteinuria item updated; added ezetimibe \"resumed\" without described prior use, and the first-apheresis \"X to Y\" reading."
+  ],
+  "unresolved": [
+    "The article has no figures, tables or supplements; no pixel review applies.",
+    "Source inconsistencies (MI wording in the introduction, statin start age and order in the discussion) are recorded as ambiguities; neither sentence is used as a timed fact.",
+    "The 60% TC/LDL-C reduction is untimed in its own sentence; the pregnancy LDL-C ranges take \"During pregnancy\" from the preceding sentence. Neither is merged with the first-apheresis values.",
+    "The first-apheresis values are split into start and end values on the sentence's own \"X to Y\" wording."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 10,
+    "facts_reviewed": 76,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient (38-year-old primigravida with HoFH and prior coronary stents); newborn facts kept in p1 with subject newborn. raw.xml has no fig, table-wrap, supplementary-material or media elements.",
+      "MI timing (introduction) and statin start in the early thirties (discussion) are ambiguities, not source conflicts: no two stated values for one attribute; the case text orders MI before stents and the stents before the 10-week visit.",
+      "\"in order\" plus the following \"also within normal limits\" read as a normal evaluation for BP, edema and proteinuria monitoring; absence is not asserted.",
+      "Relations increased from 12 to 14, each with literal or RULINGS implied-order support."
+    ],
+    "residual_risks": [
+      "Reference gate warns NO-BORROWING on p1-f050/f051; the time follows the RULINGS result-sentence rule (immediately preceding sentence on the same pregnancy LDL apheresis, both quoted) and is kept as a checker false positive.",
+      "The e05->e08 relation rests on \"for secondary prevention of ... stent restenosis\" presupposing the existing stents.",
+      "SGA newborn stays verification unknown (\"is considered\")."
+    ]
+  },
+  "physician_adjudicated": false
+}

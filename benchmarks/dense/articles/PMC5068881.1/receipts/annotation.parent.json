@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC5068881.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0c35e54b9406ac2c7e18c0b1aeaa23491d620b67fc6a276689429405b0447d36",
+  "annotation_sha256": "71b98efe33a255edcb7218a8fc819bb39777d03b493a3048d5711cbe54af5d93",
+  "reviewed_at": "2026-10-21T09:08:59.735209+00:00",
+  "source_segments_read": 110,
+  "facts_reviewed": 0,
+  "patients_reviewed": 0,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed the daily-adherence limitation: 17 missing of 392 daily assessments leaves 375 and 375/14 = 26.79, so the stated means are consistent with the missing counts and no discrepancy exists.",
+    "Limitation on the 504 weekly-assessment total now states that the per-scale counts sum to 252.",
+    "Participant-label limitation now also covers the supplement (Table S.3, Figure S1 and the baseline trend results for participants 5, 10 and 14), which use the same study numbers without any case narrative, so the article stays aggregate-only.",
+    "Supplement limitation now states that the supplement review is partial because seven of eight embedded DOCX images are EMF that the tooling cannot render.",
+    "Equation-image limitation and the unwrapped-graphic-4 caption summary now state that the image in the TAR(1) display-formula slot shows only the Y-overbar mean symbol, so the TAR(1) equation is not available as an image."
+  ],
+  "unresolved": [
+    "Disposition aggregate_only: the source reports a non-concurrent multiple baseline case series of 14 patients with bipolar disorder only through cohort counts, means, test statistics and participant-level plots; no patient has individual identity evidence or an individually described clinical course in the text, so no individual patient records are created and cohort statements (for example improvement in 11 of 14 patients, more zero QIDS-SR scores in 7 of 14 patients, a mean of 11.6 sessions) are not copied to placeholder patients.",
+    "reported_individual_count is 14 (literal) and roster_complete is false because none of the 14 stated individuals can be enumerated from the text.",
+    "The participant-level plots in Figures 1 and 2 print the labels Participant 1 to Participant 14 on the image only. The supplement uses the same study numbers (both figure captions and Supplementary Table S.3 and Figure S1 order participants by start of mood monitoring) for per-participant QIDS-SR summary statistics, weekly score plots and baseline trend results for three participants, but neither the article nor the supplement gives any participant a case narrative, demographics, diagnosis or course, so these study numbers are not treated as individuated patients and the plots and rows are kept as aggregate.",
+    "The Figure 2 caption defines mild depression as QIDS-SR 9 or below (and not 0) and moderate depression as QIDS-SR 9 or above, so the value 9 falls in both states; the Results text uses a threshold of less than 9 and 9 or more in one sentence and greater than 9 in another. Kept as printed and not reconciled.",
+    "The Methods give 504 as the total of primary outcome weekly assessments behind the 27 outstanding ones (5.36%), while the per-scale weekly counts stated elsewhere (70 baseline plus 56 post-treatment QIDS-SR assessments, and the same for BAI) sum to 252, not 504; kept as printed and not reconciled.",
+    "Supplementary Materials (one DOCX, tp2015207x1.docx) hold additional tables and results referenced by the text; they are reviewed separately in the supplement sidecars. That review is partial: seven of the eight embedded images in the DOCX are EMF vector images that the review tooling cannot render, so they were not pixel reviewed.",
+    "The three small equation images outside figure elements (the autoregressive model, the mean-of-score symbol and the transition matrix) are Methods content with no caption and are not patient data. The image placed after the sentence introducing the threshold autoregressive (TAR(1)) model shows only the symbol Y with an overbar, so the TAR(1) equation itself is not available as an image in the source package. Pixels of all five images were reviewed in the separate visual target; no values were read from plot geometry."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 110,
+    "facts_reviewed": 0,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Aggregate-only confirmed: 14-patient MAPP case series reported only through cohort tables, test statistics and per-participant plots/rows under study numbers (Participant 1-14, P1-P14) with no individual narrative, demographics or course; patients [] and roster 14 (not complete) are correct.",
+      "Equation images (AR(1) form, Y-bar symbol in the TAR(1) slot, Markov transition matrix) have no caption or figure cross-reference, so scope unresolved is the only valid choice; background would require caption-linked evidence.",
+      "Figures 1 and 2 viewed at full resolution with 2x crops; no identifiers; visual.json carries only printed ticks/labels and qualitative descriptions.",
+      "Supplement DOCX text (all paragraphs and four tables) read independently; seven of eight embedded images are EMF with no supported raster route."
+    ],
+    "residual_risks": [
+      "The supplement links study numbers to per-participant QIDS-SR statistics and baseline trends; a stricter reading could treat these as individuated, but there is no clinical narrative to build a patient record from.",
+      "Supplement review stays partial (EMF tool gap), so the article remains withheld."
+    ]
+  },
+  "physician_adjudicated": false
+}

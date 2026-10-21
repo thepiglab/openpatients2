@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC8786394.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "04ae6373e41494c68aebb215481332ca22be6629854acadba26b897804f42d3a",
+  "annotation_sha256": "8642c45df57137cfda256b42c0d38964cddb51d7e48e3087339847be4f9afbd6",
+  "reviewed_at": "2026-10-21T09:01:30.325695+00:00",
+  "source_segments_read": 31,
+  "facts_reviewed": 88,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added p1-f085 observation: coronary angiogram status not_performed / result_absent_reason not_performed (OBS-NOT-PERFORMED), linked to p1-e29; procedure p1-f053 kept as action cancelled",
+    "Added p1-f086 observation: abstract \"Extensive ischemia workup was negative\" (flag negative), linked to p1-e30",
+    "Added p1-f087 coronary vasospasm and p1-f088 plaque rupture as assertion possible / unconfirmed from \"Vasospasm and plaque rupture could not be excluded in this case\", linked to p1-e31 and the SCM ambiguity",
+    "p1-e29 kind plan -> test (a test that was not performed); p1-e32 time_precision exact -> range (\"within five days\")",
+    "Added 16 literal order relations: presentation opening the stay before ED findings, head CT, CTA, MRI, cEEG, empiric antibiotics, lumbar puncture/CSF, troponin, initial echo and NSTEMI therapy; presentation before seizure-free \"after Day 6 of her admissions\"; cEEG seizures before midazolam for seizure suppression and before \"one more seizure\"; ICU upgrade for intubation before extubation/step-down; home propafenone before its discontinuation; initial echo dysfunction before its resolution",
+    "Summary claim 2 no longer states levetiracetam treated status epilepticus; claims 3 and 4 add the not-performed angiogram, possible vasospasm/plaque rupture and the negative ischemia workup"
+  ],
+  "unresolved": [
+    "Table 1 and the literature-review discussion describe cited reports and cohort statements, not the index patient, and are not copied to the patient.",
+    "Both echocardiograms are source-listed MP4 videos; they are frame-sampled in separate video inspection sidecars and the video rows in the image-only visual record stay unavailable. Continuous motion and audio were not reviewed.",
+    "Stress cardiomyopathy is called a made diagnosis in the abstract and a likely diagnosis in the discussion because no coronary angiogram was performed.",
+    "The troponin values 155 and 768 share one stated time; they are not given separate times."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 31,
+    "facts_reviewed": 88,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient; Table 1 (b00010-b00026) and literature discussion are cited cases, correctly excluded",
+      "Stress cardiomyopathy kept verification confirmed (abstract \"A diagnosis of stress cardiomyopathy has been made\"; \"met all the other criteria\"), with the discussion's \"likely diagnosis\" and no-angiogram caveat kept as an ambiguity",
+      "Intubation action unknown (only \"upgraded to the ICU for intubation\"); extubation completed; benzodiazepine coma kept separate from the named midazolam infusion",
+      "\"All antibiotics were stopped and only acyclovir was continued\" applied to the named empiric list (Bactrim, vancomycin, ceftriaxone) as a definite back-reference within the same paragraph",
+      "NSTEMI only as the indication of guideline-directed therapy; \"questionable stroke or postictal state\" review_only",
+      "Both MP4 echo videos re-sampled (hashes match agent sidecars) and all 19 frames viewed; VID1 frames carry a burned-in calendar date/clock time and two capital letters (direct_identifiers category), VID2 none"
+    ],
+    "residual_risks": [
+      "NO-BORROWING warning on p1-f075 is a checker false positive: the EF result sentence takes \"five days later\" from the immediately preceding sentence naming the same repeat echo, quoted together (RULINGS)",
+      "Troponin 155 and 768 share the one stated time; EKG flag left unknown (source does not call the EKG normal)",
+      "Videos reviewed by sampled frames only; continuous motion and audio not reviewed; video privacy recorded only as limitations because the privacy contract has no panel rows for unavailable (video) figures"
+    ]
+  },
+  "physician_adjudicated": false
+}

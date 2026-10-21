@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC9799706.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8c19ec3e066b27282a3d9bae46819b365b6ae9107a3652a28d7eb9ec2b98bd11",
+  "annotation_sha256": "b85f85cdf8c03d3d56b5a7d986025cafd2609c5ff5cb9c46a90e28e92055c02d",
+  "reviewed_at": "2026-10-21T12:58:07.057559+00:00",
+  "source_segments_read": 14,
+  "facts_reviewed": 77,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "CSF source conflict per RULINGS (one CSF study, two contradictory results): p1-f057 CSF protein 66 mg/dl elevated set source_conflict/review_only; added p1-f075 'Normal CSF study' (discussion) as source_conflict/review_only; ambiguity updated; disputed protein removed from summary claim 3. CSF antibodies kept include because the discussion itself cites them as intrathecal antibody evidence.",
+    "p1-f054 (b00009 'left insular ribboning with temporal, basifrontal and thalamic changes') renamed without 'MRI' and set ambiguous/review_only: modality unstated and basifrontal involvement was a PET finding in the case; ambiguity added.",
+    "Added p1-f076 personality change (abstract) and p1-f077 acyclovir assertion=absent ('improvement by IVIG without acyclovir'); removed the matching article limitation.",
+    "p1-f007 hyponatremia role complication -> unknown (role not stated); p1-f044 regimen trimmed to 'a course' (no IVIG text); p1-f070 self-referential anchor 'follow-up' -> null.",
+    "Events: split 'Currently on an improving course' (new p1-e12, outcome) from the 3-month follow-up p1-e11; linked exam sign facts p1-f023..f035 to p1-e07.",
+    "Relations: e01->e02 before -> overlaps (comorbidities stated as present at the illness, no onset); e05->e06 evidence now quotes both Day 9 and Day 15; e06->e07 adds the examination quote; added e02->e03 (test on 'Day 2 of fever' anchored to the fever), e03->e04 ('onset of symptoms after four days of testing positive'), e10->e12 ('improvement by IVIG'), e10->e11 (follow-up at 3 months after the in-hospital IVIG course).",
+    "Fig2 annotation panels [] -> A and B (letters printed on the image, FIG-LABELS) with caption evidence; caption does not distinguish them.",
+    "Added ambiguity for printed 'LGI2' antibody name (possible misprint, kept literal)."
+  ],
+  "unresolved": [
+    "Discussion statements about published cohorts, other cases and mechanisms are not patient facts.",
+    "Day numbers use different or unstated anchors (day 1 of illness, Day 2 of fever, bare Day 5, 9 and 15); relations rely on same-anchor pairs or literal order words only.",
+    "Figure pixels are described in visual.json; caption-layer figure status here remains not_inspected."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 14,
+    "facts_reviewed": 77,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (61-year-old male) with COVID-19-related possible autoimmune encephalitis and transcortical sensory aphasia; discussion literature/cohort statements not copied.",
+      "Discussion 'Normal CSF study' contradicts the case's elevated CSF protein: quarantined as a source conflict (both sides review_only), following the PMC9773366.1 CT precedent.",
+      "Discussion 'after four days of testing positive' vs case Day 2 PCR / Day 5 onset is arithmetic-only: kept as an ambiguity, but its literal order (PCR before onset) is used as a relation.",
+      "Day labels use different or unstated anchors (day 1 of illness, Day 2 of fever, bare Day 5/9/15); only same-anchor or order-word pairs are related.",
+      "Fig1 A-D and Fig2 A/B pixels viewed: A/B look fluid-attenuated although the caption says T2 (caption claim kept); C carries the arrow, D is an ADC-like map, but the caption does not assign C/D; no laterality markers, no burned-in text, no faces."
+    ],
+    "residual_risks": [
+      "Whether 'Normal CSF study' was meant to cover the CSF antibody results is unresolved; antibodies kept include.",
+      "e01-e02 'overlaps' and e10-e11 order rely on rulings for comorbidity adjectives and follow-up after in-hospital care.",
+      "Acyclovir absence rests on one discussion phrase."
+    ]
+  },
+  "physician_adjudicated": false
+}

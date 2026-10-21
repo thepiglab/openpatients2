@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC7728662.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "dded94492bc57e9c30bcabcf70333e712881df78ec2c0816c1c900c96529616f",
+  "annotation_sha256": "f6e075e1c7ff4a1acf9e0f285f115da065b1abb2fc64d869eb157a3814c92cde",
+  "reviewed_at": "2026-10-21T08:24:18.481001+00:00",
+  "source_segments_read": 17,
+  "facts_reviewed": 88,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added p1-f088 ethnicity_as_documented \"Chinese\" from \"A 57 year-old Chinese man\" (corpus convention).",
+    "p1-f006 smoking: name trimmed to \"Smoking\"; duration_text \"over 20 years\" added from its own quote.",
+    "p1-f024 lung cancer condition: severity \"clinical stage cT2aN1M0, IIB\" replaced by the quoted \"stage IIB\" (cT2aN1M0 was not in its evidence).",
+    "p1-f029 tumor: stage_context set to clinical (\"the clinical staging\").",
+    "p1-f035 neoadjuvant pembrolizumab: borrowed indication \"neoadjuvant therapy\" removed (not in its quote).",
+    "p1-f036 plan suspension: COVID-19 outbreak removed from indication (it is the reason for holding, kept in the quote and notes).",
+    "Split clinical staging (p1-f029) out of the planned pneumonectomy event into new occurred diagnosis event p1-e27; the \"Thus\" relation from PD-L1 detection now targets the staging.",
+    "Added relations: needle biopsy before PD-L1 detection on the specimen; adverse effects during the neoadjuvant treatment (\"During the treatment\"); chemotherapy start before its suspension (drug start -> stop); suspension after the fourth cycle before the fifth cycle initiation.",
+    "Tumor-marker event time texts aligned with the fact time texts (dropped leading \"on\").",
+    "Reworded the Figure 4 tumor-marker ambiguity without pixel date values; added an ambiguity that the year-less marker dates are not calendar-dated or ordered."
+  ],
+  "unresolved": [
+    "Figure pixels are reviewed in visual.json; the annotation figure rows keep caption-only status.",
+    "Figure 4 prints the first postoperative CA-125/CEA values under a different date than the text; those two facts are review_only with an ambiguity.",
+    "The source states further data were not available after the last tumor marker measurement; no later follow-up is documented.",
+    "Chemotherapy cycle dates printed only inside Figure 4 are pixel content and are not used as facts.",
+    "Pembrolizumab route for the neoadjuvant doses is not stated and is left unset.",
+    "No literal order links the presentation, brain MRI, postoperative adverse effects or the year-less tumor-marker dates to other events."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 17,
+    "facts_reviewed": 88,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient; every fact quote is literal; discussion sentences used only where they say \"this case\".",
+      "Figure 4 prints the first postoperative CA-125/CEA values under the follow-up visit date rather than June 5th; per the image-content ruling the figure is not a conflict side and p1-f080/p1-f081 stay review_only with an ambiguity (dropping their time would reshape the fact).",
+      "Gemcitabine/cisplatin take the five-cycle duration and date range from \"The chemotherapy plan was implemented for five cycles from ...\", which names the same regimen; the 4 NO-BORROWING warnings are checker false positives (the quote also carries duration_text).",
+      "Year-less tumor-marker dates and the pembrolizumab dose list stay without date_iso; marker events are not ordered; \"August 4st/29st\" kept literally with an ambiguity.",
+      "Tumor laterality left is literal from the left lower lobe masses considered malignant and the avoided resection of the left lung.",
+      "F1/F3 panels alternate CT and fused PET-CT and F2 is CT only, as visual.json records."
+    ],
+    "residual_risks": [
+      "\"Symptomatic treatment\" is recorded as an unnamed medication; the source does not say it was a drug.",
+      "Figure 4 chemotherapy cycle dates and the follow-up-box marker values are pixel content only.",
+      "Presentation, brain MRI and postoperative adverse effects have no literal order links."
+    ]
+  },
+  "physician_adjudicated": false
+}

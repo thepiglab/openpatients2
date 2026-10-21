@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC9197736.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d9eb97d49d5cf8affca481de35387835d121c7c86a42f2adb3ad57fb66822287",
+  "annotation_sha256": "ebc29efda83c2626b42717f6d5077aa13910f344c9ebd8cff6b448fd0b95bbd0",
+  "reviewed_at": "2026-10-21T09:17:45.991433+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 44,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f029 renamed \"Vitreous opacities\" (was \"... on ultrasound\"): the discussion sentence states no modality; removed from POCUS event p1-e05.",
+    "p1-f031 renamed \"Retina attachment\" (was \"... on ultrasound\"); p1-f031 and p1-f008 (discussion-only sentences) removed from diagnosis event p1-e09.",
+    "Added p1-f044: capsule sentence \"In our case ocular POCUS showed ... representing the pre-retinal membrane rather than the retina\" as an imaging observation linked to p1-e05; b00010 coverage changed to patient_facts.",
+    "Added relation p1-e03 -> p1-e04 (presented to the ED due to vision changes; onset sentence quoted).",
+    "Added relations p1-e04 -> p1-e06 and p1-e06 -> p1-e07 (abstract: presented, ophthalmology consulted, discharged from the ED; same ED stay).",
+    "Added relation p1-e05 -> p1-e07 (emergency physician ultrasound during the ED stay before the ED discharge).",
+    "Added ambiguity: discussion-only vitreous opacities / fully attached retina not tied to an examination, eye or time.",
+    "Added article limitation: s1 caption says narrated but the s1 MP4 has no audio stream; only s4 has audio."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two JPEG images and four MP4 supplements were inspected in separate visual and manifest records.",
+    "Diagnosis timing differs between the abstract (ED consultation) and the Case report (after the next-morning repeat ultrasound); left unplaced.",
+    "Laterality is stated only in some sentences; findings from sentences that do not say \"right\" carry no laterality.",
+    "Whether the discussion sentences about vitreous opacities and the attached retina refer to the initial or repeat ultrasound is not stated; modality and time left unset.",
+    "Date and interval of the vitrectomy are not stated.",
+    "Discussion statements about retinal detachment, vitreous detachment, choroidal detachment, incidence and the comparison table are general teaching, not patient facts.",
+    "The s1 Video caption describes a narrated video, but the s1 MP4 has no audio stream; only the unlabelled s4 MP4 has an audio stream. Supplement attribution follows the XML links only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 44,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient; all 43 drafted facts checked against b00002, b00005, b00006, b00015, b00016, b00018; none removed.",
+      "Diagnosis timing (abstract: at ophthalmology consult; case report: after next-morning repeat ultrasound) kept as an unplaced ambiguity: the abstract states no time, so no stated times conflict.",
+      "Retinal detachment kept as a differential: \"differentiated from a RD\" is diagnosis-basis wording, not refutation; flat/attached retina kept as observations.",
+      "\"the next morning\" opens its paragraph, so no adjacent-sentence anchor applies; time relation stays unknown with anchor null. \"eventually\" vitrectomy ordered only after the adjacent-sentence diagnosis.",
+      "All 11 relations checked against their full evidence lists.",
+      "Both ultrasound images and 29 sampled frames of the four MP4 supplements viewed."
+    ],
+    "residual_risks": [
+      "Abstract and case report disagree on when Valsalva retinopathy was diagnosed.",
+      "Ordering of the ophthalmology consult within the ED stay rests on the abstract narrative.",
+      "Unlabelled supplements s2-s4 resemble the same examination but have no literal ownership."
+    ]
+  },
+  "physician_adjudicated": false
+}

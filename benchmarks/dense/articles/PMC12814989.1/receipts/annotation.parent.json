@@ -1,0 +1,67 @@
+{
+  "article_id": "PMC12814989.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "21d18ab9d964da817337ba9bba3578529d6ff0af8acda5fe1e185a397eb59a2a",
+  "annotation_sha256": "6140e2f64adc1e6096b78ebb09d29d077baed5f6abdfca4122e4a984c69f8c7a",
+  "reviewed_at": "2026-10-21T18:09:01.320964+00:00",
+  "source_segments_read": 129,
+  "facts_reviewed": 280,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f030 Case 1 procalcitonin: removed the high flag and the b00014 'elevated C-reactive protein, and procalcitonin' quote; the coordination is ambiguous, so no flag (ambiguity text rewritten, article limitation added).",
+    "p1-f042 Case 1 Table 4 'AKI stage | None' (source-conflict side): verification_status refuted -> unknown (a table None is a stated absence, not a workup refutation) and removed severity 'None'; conflict with 'All patients developed acute kidney injury' (p1-f043) kept, both review_only.",
+    "Added p1-f079 multiorgan dysfunction for Case 1 from discussion sentences that explicitly cover all cases ('Multiorgan dysfunction was observed in all cases'; 'multiorgan involvement observed in all three cases'), consistent with the cohort rule applied to bacteremia, mechanical ventilation and lung resection.",
+    "Removed p2-f006 (family_genetics genetic_test Factor V Leiden): ONE-STATEMENT duplicate of condition p2-f005; no genetic test is described. family_genetics domain set to not_documented; Table 4 comorbidity row added as evidence to p2-f005 and p2-f007.",
+    "p2-f059 flucloxacillin indication changed from 'MSSA bacteremia' (word not in the sentence) to the MSSA growth in blood and sputum cultures that prompted escalation.",
+    "p2-f069 and p3-f063 vasopressor support: added time 'shortly after ICU admission' (relation after, anchor 'ICU admission') from the abstract sentence naming Cases 2 and 3, already in their evidence.",
+    "Added p3-f104 hepatic cytolysis (presenting laboratory evaluation, b00060), previously omitted; linked to p3-e04.",
+    "Split p3-e17: ECMO-ineligibility decision (kind other; f095, f064, f092, f103) and new death event p3-e18 'later the same day' (f099-f102), with e17 before e18 from 'deemed ineligible ... died later the same day'.",
+    "Added literal relations. p1: e02 before e04/e05/e06/e08/e09/e11/e12/e13 (presentation opening the stay, order only); e14 before e15 (b00111 'progressed to refractory ARDS ... ultimately requiring transfer'); b00108 'prompted CT reassessment and informed subsequent escalation decisions, including transfer' added to e13 before e15; e15 before e17 (tracheostomy on day 11 of the tertiary stay); e15 before e18 (transfer opens tertiary ICU stay); e16 before e19 ('subsequently returned').",
+    "Added relations p2: e02 before e04/e05/e06/e07/e09/e11 (presentation opens stay); e12 before e13 (transfer opens the tertiary-center stay).",
+    "Added relations p3: e02 before e04/e05/e06/e07/e10/e11 (presentation opens stay); e07 before e09 ('continued along with penicillin G'); e11 before e12 ('prompted ... escalation'); e15 before e16 ('Despite CRRT ... persisted'); e17 before e18 ('died later the same day').",
+    "Dropped the provisional p3-e15 (CRRT) before p3-e17 (ECMO ineligibility) relation after the annotator dispute: no wording states that CRRT began before the decision (necessitating CRRT orders only the dysfunction before CRRT).",
+    "Article limitation on CT day counts reworded: anchors differ (ICU day vs hospital day) but the numbers agree per case (6, 6, 11); no true conflict."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the nine JPEGs were inspected in the separate visual submission.",
+    "Cohort-level abstract, discussion and literature statements are not copied to individuals except sentences that explicitly cover all patients or name Cases.",
+    "Table 4 AKI stage None for Case 1 conflicts with the discussion statement that all patients developed AKI; both sides are review_only for Case 1.",
+    "ICU-day and hospital-day counts for the CT timing use different anchors in the text, captions, abstract and Table 4; the numbers agree per case (6, 6, 11) and no common anchor is inferred.",
+    "Table 4 antibiotic durations count only days given in the peripheral ICU.",
+    "Table 4 dash cells for Case 3 (tertiary ICU, return to peripheral hospital, discharge disposition, sequelae) are not recorded as facts.",
+    "No supplementary material is listed in raw.xml.",
+    "Procalcitonin for Case 1 carries no flag because \"elevated\" may modify only C-reactive protein in the text."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 129,
+    "facts_reviewed": 280,
+    "figures_viewed": 9,
+    "key_findings": [
+      "Three individually described adults (Cases 1-3) in order of first mention; roster 3 from \"three consecutive adult patients\"; Case 3 deceased_during_course, Cases 1-2 living. No supplementary material in raw.xml.",
+      "Tables 1-3 are single admission time points per case and every row is an observation; Table 4 columns were hand-checked against raw.xml (Case 1 | Case 2 | Case 3, all cells colspan 1); No/None cells are negatives and dash cells are not recorded.",
+      "Case 1 AKI: Table 4 AKI stage None vs discussion \"All patients developed acute kidney injury\" is the same attribute (AKI presence for Case 1): source conflict, both review_only.",
+      "CT timing: text day 6 of ICU stay / day 6 of hospitalization, captions ICU day 6 / ICU day 11, abstract days 6, 6, 11 and Table 4 admission-to-CT 6, 6, 11 agree numerically per case; only the anchors differ, so ambiguities, not conflicts.",
+      "Table 4 antibiotic durations map to the single text course of each drug combination and quote the footnote that only peripheral-ICU days were recorded; Case 3 intubation rests on the literal Table 4 admission-to-intubation cell and the abstract sentence covering all patients.",
+      "Cohort sentences copied only where they explicitly cover all patients or name cases (bacteremia, invasive mechanical ventilation, no lung resection, multiorgan dysfunction, vasopressors/septic shock for Cases 2 and 3); the myoglobin order (36,000 then 41,000 ng/mL) stays an ambiguity."
+    ],
+    "residual_risks": [
+      "Many relations are order-only links from the presentation that opens each stay to in-stay events; within-stay order between unanchored paragraphs (e.g. \"Over the following days\" opening a new paragraph) is left open.",
+      "Table 4 SOFA/APACHE II/SAPS II slash cells are split by the row-label order; APACHE II and SAPS II carry no stated time.",
+      "Case 3 ECMO-ineligibility decision (p3-e17) is ordered only before the death; its order relative to CRRT start is left open because no wording states it."
+    ]
+  },
+  "physician_adjudicated": false
+}

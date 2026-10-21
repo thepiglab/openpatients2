@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC9411080.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ff16eea7e968f661c13f39c9066998ed91c0df516a81e9034fe483b59fde81ea",
+  "annotation_sha256": "d9b32b59bf6209c62ff134afeb8182476c84ea6efb1fd2dab4a40fb52a7c2206",
+  "reviewed_at": "2026-10-21T13:03:21.374981+00:00",
+  "source_segments_read": 74,
+  "facts_reviewed": 112,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added newborn Apgar score as symptoms_function performance_score (p1-f108); birth_weight_text trimmed to the literal \"3030 g\".",
+    "Added omitted umbilical artery and vein base excess values (p1-f109 -8.4, p1-f110 -7.6; no unit printed).",
+    "Added omitted normal lochia exam finding (p1-f111).",
+    "p1-f030 polyuria: time no longer borrowed from the polydipsia sentence; now \"On the second day postpartal\" from the abstract polyuria sentence plus the 14 l/day sentence.",
+    "p1-f039 perioperative erythrocyte concentrates: own \"perioperatively\" time and full sentence quote.",
+    "Osmolality on desmopressin split per analyte: p1-f056 urine and new p1-f112 serum, both 106 mosmol/kg as printed, flag normal (\"normalized\"), review_only ambiguous.",
+    "Six-week Table 3 TSH, fT3, fT4, prolactin, LH, FSH, estradiol: flag normal from \"her hormone levels had normalized (Table 3)\"; cortisol 31.7 (printed above its 6.2-19.4 range) keeps flag unknown with ambiguity.",
+    "Removed borrowed day-3 membership: postpartum TSH/fT3/fT4/prolactin/cortisol values and hypopituitarism/hypothyroidism/Addison diagnoses moved from e09 to new event e16 \"Postpartum hormone assessment\" (time Postpartum); prepartal-not-available removed from e09; DI diagnosis removed from day-2 e08; AMH removed from day-4 e10.",
+    "As-needed desmopressin (p1-f090) moved from e10 to new event e17 ordered after the hyponatremia/pause event e11 by the in-paragraph \"Thereafter\".",
+    "Added relations: e01 before e04 (\"postpartum curettage\"), e03 before e05 (\"To treat the atony\"), e05 overlaps e04 (\"administered perioperatively\"), e01 before e07 (Table 2 \"Day after delivery | First day\"), e06 before e08 (\"transferred back to the intermediate care unit\"), e01 before e16 (\"Hormone values postpartum\"), e16 before e14 (Table 3 column headers), e11 before e17 (\"Thereafter\" within paragraph); e07->e08 also cites \"followed by polyuria and polydipsia on the day after\".",
+    "Ambiguities updated: prolactin µlU artefact linked; Table 3 timing entry rewritten; free T4 unit conflict entry restated with both quotes; osmolality entry links both analytes.",
+    "Source coverage: b00064, b00071, b00072 marked patient_facts (restate index-patient facts)."
+  ],
+  "unresolved": [
+    "The article has no figures; no visual task applies.",
+    "Systematic-review content (Table 4 and discussion) concerns cited cases and cohort statistics and is not assigned to the patient; the Olmes et al. column of Table 4 only restates text facts.",
+    "Table 3 postpartum column versus the text day-3/day-4 timing is not resolved; see ambiguities.",
+    "Free T4 unit conflict between text and Table 3 is quarantined on the unit only.",
+    "Six-week Table 3 values take flag normal from the collective \"hormone levels had normalized\" statement, except cortisol (printed above its range; flag withheld).",
+    "Several treatment and assessment events (postpartum hormone assessment, transient hyponatremia, as-needed desmopressin) have no stated day and are ordered only where the source states order."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 74,
+    "facts_reviewed": 112,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient (28-year-old primigravida); newborn facts kept with subject newborn; Table 4 literature cases and the Olmes et al. column not recorded as separate facts.",
+      "Free T4 postpartum: two units for one value (text µg/ml vs Table 3 ng/dl) is a conflict on the unit only; value 0.63 and flag low kept without a unit, review_only. fT3 1.71 pg/nl vs 1.7 pg/ml, LH IU/ml vs mIU/ml, prolactin µlU/ml are one-character/rounding artefacts (ambiguity, table kept).",
+      "Text+table merge for LH/FSH kept: the text cites Table 3 and takes the fourth day from the immediately preceding sentence naming gonadotropin analysis; Table 3 \"Postpartum\" is compatible. Other postpartum values keep only \"Postpartum\" and are no longer placed on day 3.",
+      "Cortisol 15.2 \"low normal range\" = normal; TSH normal on the source word; \"confirming postmenopausal status\" not a condition.",
+      "All 16 Table 3 series points match the printed cells, column times (Postpartum / 6 weeks after birth) and row units."
+    ],
+    "residual_risks": [
+      "Shared osmolality 106 for urine and serum is likely a print error; both review_only.",
+      "Six-week cortisol 31.7 conflicts with the collective \"normalized\" statement; flag withheld.",
+      "Measurement-series excluded-cell reasons for Table 2 cells (b00017-b00020) are mislabelled as Table 1/Table 4; agent must correct."
+    ]
+  },
+  "physician_adjudicated": false
+}

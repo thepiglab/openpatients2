@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC8718547.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f2cdf9be8ec1ad31059deac2b018c586015642c912340a3cfe74a234b3c43369",
+  "annotation_sha256": "2180b2916598789d8c1c8fe0f5783427c61511191229471d2838e59d11fd3a7c",
+  "reviewed_at": "2026-10-21T09:03:11.110623+00:00",
+  "source_segments_read": 21,
+  "facts_reviewed": 54,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f012 morbid obesity: certainty ambiguous, scoring review_only; it is stated only in a present-tense discussion sentence (\"it is difficult to evaluate HALT or RLM by TEE\") that does not literally name the patient.",
+    "p1-f029 TEE: kept include as a completed procedure but its evidence is now only the literal patient sentence; the borrowed \"finding\" from the following generic sentence was removed and moved to new review_only observation p1-f051.",
+    "Added p1-f051 (review_only): TEE evaluation of HALT or RLM difficult due to morbid obesity and poor acoustic window.",
+    "Added p1-f053 (include, no time): follow-up MDCT showed resolution of HALT and RLM. Only the disputed interval (4 months vs three months/3-month) stays quarantined on review_only p1-f041/p1-f042; the finding itself is undisputed. Linked to p1-e13 and summary claim 3.",
+    "Added p1-f052 single antiplatelet use following 6 months of dual antiplatelet therapy (b00011 \"followed by single antiplatelet use\") with new event p1-e20 and relation p1-e06 before p1-e20; not merged with the \"concurrent single antiplatelet medication\" (p1-f020) or clopidogrel; antiplatelet ambiguity extended.",
+    "Added p1-f054 outcome: TAVR complications absent (\"received TAVR ... uneventfully in November 2019\"), linked to p1-e03. The EVID-NEGATION gate warning on it is a checker false positive (\"uneventful\" is a listed negating word in the rule).",
+    "p1-f048 reduced MR and PH: quote extended to the full sentence and given that sentence's own time \"within 3 months\" (relation before, anchor null).",
+    "p1-e13 follow-up MDCT event evidence trimmed to \"MDCT showed resolution of HALT and RLM (Figures 2B,D,F,H)\" so the disputed interval is not carried by the event; relation p1-e11 before p1-e13 now leads with the interval-free b00010 quote (\"after NOAC treatment as evidenced by the resolution of HALT and RLM in MDCT\"); the two interval quotes remain only as agreeing order evidence.",
+    "p1-f039 anchor corrected to the literal phrase \"NOAC use\".",
+    "Relations added: p1-e04 before p1-e05 (adjacent-sentence \"thereafter\"); p1-e09 before p1-e13 (\"resolution of HALT and RLM\" back-references the HALT and RLM found on the first MDCT); p1-e06 before p1-e20 (\"followed by\"). p1-e07 before p1-e11 gains the b00011 quote \"NOAC was used after detecting the onset of Af and THV leaflet thrombosis.\"; p1-e02 before p1-e03 evidence split into the two calendar-date quotes.",
+    "Added ambiguity: hemoglobin unit printed as mg/dl kept literally (possible one-character print artefact); morbid obesity/TEE ambiguity reworded and linked to p1-f051."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two JPEGs were inspected in the separate visual target.",
+    "Follow-up MDCT interval after NOAC treatment conflicts (4 months in case text, three months in abstract and Figure 2 caption); both sides review_only and the interval is not asserted.",
+    "Values printed inside the echocardiographic images are pixel content in the visual target only, not facts.",
+    "Hemoglobin unit printed as mg/dl is kept literally; rivaroxaban dose and the identity of the single antiplatelet drug are not stated.",
+    "Discussion sentences about cited trials, meta-analyses and guidelines are not patient facts; the supplement Data_Sheet_1.PDF is listed by the source but its contents are reviewed separately."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 21,
+    "facts_reviewed": 54,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (77-year-old man); all 50 drafted facts, 19 events, 13 relations and 6 ambiguities checked against quotes, polarity, units and times; 4 facts, 1 event, 3 relations and 1 ambiguity added.",
+      "Follow-up MDCT interval conflict (4 months in b00007 vs Three months in the abstract and 3-month in the Figure 2 caption): both time sides review_only, interval absent from summaries, event times and labels; the NOAC -> follow-up MDCT relation encodes only order, which both sides agree on.",
+      "Figure 1 printed overlay values (15, 48, 17.42 mmHg) agree with the text and stay in visual.json only; Figure 2 column headers print exam year and month (direct identifiers) and visual.json currently transcribes them, which the annotator must remove.",
+      "Bare \"within 3 months\" keeps relation before with a null anchor; single antiplatelet is not identified with clopidogrel; warfarin vs NOAC is an ambiguity only; Hb 7.2 mg/dl kept literal."
+    ],
+    "residual_risks": [
+      "Discussion restatement of the gradient series (normal immediately post-TAVR, abnormal increase, normal after NOAC use) is kept as three qualitative observations separate from 15/48/17 mmHg because the source cites Figure 1 as a whole, not the same time points; a prediction merging them matches only one side.",
+      "Morbid obesity is review_only; a reader attributing it to the patient from the \"However\" context would disagree.",
+      "Single antiplatelet after DAPT (p1-f052) and the concurrent single antiplatelet at NOAC start (p1-f020) are two items; they may be the same course."
+    ]
+  },
+  "physician_adjudicated": false
+}

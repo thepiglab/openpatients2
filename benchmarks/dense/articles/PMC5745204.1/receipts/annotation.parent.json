@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC5745204.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4fac0ffcca2e04d09eb006ce250714b8f9bac72e7f52776de31987bc8c429752",
+  "annotation_sha256": "c4978312f8d514dc1239cde2e66d0b47ea337e8fb03c60a0241ece84068350b0",
+  "reviewed_at": "2026-10-21T04:15:00.154746+00:00",
+  "source_segments_read": 14,
+  "facts_reviewed": 60,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added p1-f059 observation: residual tumor classification R0 from the discussion sentence introduced by \"In this case\" (b00009).",
+    "Added p1-f060 review_only/ambiguous procedure \"Preoperative rectal washing\" from b00010 \"in this case ... despite preoperative rectal washing\"; ownership is literal but the source does not identify it with the intraoperative povidone-iodine anal canal washing; ambiguity p1-a03 rewritten to cover both facts without reconciling them.",
+    "Renamed p1-f037 absent procedure from \"Surgical treatment of the recurrence\" to \"Operation\"; the sentence does not name the target.",
+    "Added relation p1-e01 before p1-e02 (past medical history -> presentation) quoting the presentation and past-medical-history sentences.",
+    "Corrected ambiguity p1-a01 wording: the 14-month follow-up has no stated reference point (it is not stated as an interval from surgery).",
+    "Summary paragraph 3 now cites the R0 and tumor-free-margin facts (p1-f049, p1-f059)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two photographs are reviewed in visual.json.",
+    "Discussion and background statements about published retractor-site recurrences and recurrence rates are literature, not facts about the index patient.",
+    "The case text gives no calendar dates; times are relative to surgery or follow-up as printed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 14,
+    "facts_reviewed": 60,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient; abstract, case presentation, \"In this case\" discussion clauses and both captions are owned by p1; background/discussion literature cases not copied.",
+      "Abstract \"2 years ago\" versus 14-month follow-up kept as ambiguity p1-a01; abstract quote only supports the curative intent of the proctectomy, no time taken from it.",
+      "Hedged seeding mechanism (\"most likely\", \"probably\") kept as review_only possible finding with ambiguity p1-a02, not an asserted cause.",
+      "Anchor \"proctectomy\" on postoperative/preoperative times is a literal source phrase and the only operation before those times; kept.",
+      "Relations e10->e08 use two stated postoperative times from the same anchor, both quoted; e11->e13 supported by \"not operated because of her general condition\".",
+      "\"(12N−/12N)\" kept verbatim as text; Dworak 1 poor therapeutic response kept as pathology observation, not attached to the chemotherapy record."
+    ],
+    "residual_risks": [
+      "Relative order of the 14-month follow-up versus stoma closure and the recurrence work-up versus the follow-up visit is not literal and left unlinked.",
+      "visual.json Fig1 description needs agent correction (see report); figure receipts not parent-signed in this pass."
+    ]
+  },
+  "physician_adjudicated": false
+}

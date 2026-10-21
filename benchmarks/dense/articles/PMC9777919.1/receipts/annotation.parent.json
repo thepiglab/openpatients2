@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC9777919.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d60a04211ace6380b45b96b8761443368fcc79faba995748c6e0b1319b76484e",
+  "annotation_sha256": "195a28c9a4ba4460b974671e424b97df81ea0214351c6628913fc6ed1a1d0131",
+  "reviewed_at": "2026-10-21T08:45:00.723512+00:00",
+  "source_segments_read": 66,
+  "facts_reviewed": 63,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f004, p3-f004, p4-f004 WSN diagnosis: added the Introduction quotes \"the occurrence of WSN in four members of the same family\" and \"The patients included the proband, his father and twin sisters\" (explicit all-member wording); p3/p4 also gain the b00006 quote that states the twins' lesion sites carried in body_site/laterality.",
+    "p2-f002 documented sex: evidence extended to \"Because the father had no obvious symptoms in his oral mucosa, he had never consulted a doctor\" so the quote carries the noun \"father\" with the pronoun.",
+    "p2-f003 father WSN: clinical_status unknown -> recurrence, with the quote \"This observation verified the recurrence of WSN.\"",
+    "p2-f019 retinoic acid / vitamin A acid cream: merge kept (same patient in this report, same one-week improvement and three-month recurrence, Figure 8); Discussion quote extended to the full sentence and time \"after the biopsy\" (relation after, anchor biopsy) added from its own sentence; ambiguity reworded.",
+    "p2-f021 recurrence: time anchor removed (reference point of \"After three months\" is not named).",
+    "Added p2-f022 care_plans: one-week outpatient review, follow_up, completed (\"One week later, the outpatient review showed ...\"), linked to event p2-e07; p2 care_plans domain now documented.",
+    "p1 summary claim 2 rewritten without the review-only, unattributed preliminary plan (p1-f019 stays review_only in care_plans)."
+  ],
+  "unresolved": [
+    "The twin sisters were not sequenced and no biopsy or treatment is described for them or for the proband; abstract and conclusion attribute the K4 mutation to all four members.",
+    "The sentence about denied genital lesions refers to \"the patients\" without naming them; it is kept review-only for each patient.",
+    "The sister 1 and sister 2 identities come from figure captions only; the text findings cover both twin sisters.",
+    "Tables 1 to 3 report published mutations, differential diagnoses and treatment reports; except the Table 1 row marked \"This study\" they are not this study's patients.",
+    "Caption-layer visual status not_inspected; actual images inspected in the separate visual target."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 66,
+    "facts_reviewed": 63,
+    "figures_viewed": 8,
+    "key_findings": [
+      "Four index patients (proband boy, father, twin sisters 1 and 2), roster order by first mention; mother kept as a relative inside p1. All 63 facts checked against quotes, polarity, attribution and times.",
+      "\"The patients denied having genital lesions\" lacks explicit all-patient wording (and the twins were six months old): review_only on all four, as drafted.",
+      "Twins' WSN rests on explicit wording (\"four members of the same family ... The patients included the proband, his father and twin sisters\"; \"WSN in monozygotic twins ... was confirmed\"). The authors' K4 attribution to all four is an etiological claim, not a measured value; the twins have only a not_performed sequencing observation, so it is an ambiguity, not a source conflict, and no K4 variant is recorded for them.",
+      "Figure 7 base letters are printed as separately spaced letters on the pixels; the spaced transcription in visual.json is faithful. Boxed segments verified: C A A C A A C A A (Wild, Mother wild) vs C A A C A A (Proband mutant, Father mutant).",
+      "Tables 1-3 are literature; only the Table 1 \"This study\" row (M, 2, 4/5, Asp 146 del, 1A) is cited, on p1."
+    ],
+    "residual_risks": [
+      "Sister 1 / sister 2 identity rests on the Figure 3 and 4 captions only; all text findings are shared by both twins.",
+      "The preliminary plan (biopsy with expectant management/pharmacological treatment) is kept review_only on p1 although its subject is unnamed.",
+      "Retinoic acid cream (Case Report) and vitamin A acid cream (Discussion) are one merged treatment."
+    ]
+  },
+  "physician_adjudicated": false
+}

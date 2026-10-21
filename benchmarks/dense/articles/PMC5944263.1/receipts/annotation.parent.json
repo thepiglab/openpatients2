@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC5944263.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a6422fc9026e9bf3d00b5ff906a72b2340de95c76f4524a9083de07451aa0543",
+  "annotation_sha256": "8d5533b13b43eea414c411cb8b3473dfa3e39d29ca35481b871229049a11275f",
+  "reviewed_at": "2026-10-21T03:40:20.793512+00:00",
+  "source_segments_read": 63,
+  "facts_reviewed": 196,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "IL-10: text \"no IL-10 was detected\" vs 0.39 FPKM (Table 1, SM1) decided as source conflict; p1-f080 and p1-f150 source_conflict/review_only.",
+    "Fold values 3-fold/2-fold (p1-f053, p1-f054) and TIL-in-blood 5%/10.7%/8.9% (p1-f173..f175) set review_only/ambiguous: Figure 2B/3F images print 3.04/2.25 and 5.01/10.71/8.91 (image values stay in visual.json).",
+    "Pattern 3 timing 48 vs 24 months and PBMC-POST-1 6 vs 12 months (Fig 1 caption + SM11 vs SM9 legend) recorded as source conflict; p1-f159 review_only; disputed timing removed from names of p1-f165/p1-f166.",
+    "Vemurafenib \"2 years of intermittent treatment\" (p1-f018) set ambiguous/review_only as rounding of the dated 21 months.",
+    "p1-f079 name now lists TIGIT as in its quote.",
+    "Added p1-f196 (qualitative CD8/CD4/CD20 infiltration increase, b00006) and linked it to p1-e09 and the summary.",
+    "Relations: removed e04->e08 (quote did not order the pair); e06->e08 now cites b00051 \"after receiving 13 immunizations\"; added calendar-dated e02->e04, e04->e09, e09->e11, e11->e12.",
+    "p1-e12 kind adverse_event -> outcome (disease progression).",
+    "Summaries no longer cite review-only facts (f053, f054, f159); ambiguities updated/added; two article limitations added (Fig 3H count sum, SM9 timing)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three figure images are inspected in the separate visual submission with printed values only and no plot readings.",
+    "Figure 2B ratio table and Figure 3 data labels are image content and are not recorded as facts.",
+    "Eleven supplements (Tables S1 to S6, Supplementary Figures 1 to 4 and the supplementary methods) are reviewed in the supplement sidecars; the article text refers to Figure S1 in Supplementary Material.",
+    "Study-level trial descriptions, cited literature on other patients and interpretive discussion are not copied to the patient.",
+    "Blood sample timing labels are inconsistent across the figure caption and text (see ambiguity).",
+    "Figure 3H prints pattern counts 208, 187, 152 and 158 (sum 705) under total=706; printed counts versus text percentages are recorded as limitations only.",
+    "Supplementary Figure 3 labels PBMC-POST-1 as 12 months while the Figure 1 caption and supplementary methods give 6 months (source conflict, see ambiguities)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 63,
+    "facts_reviewed": 196,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single patient #006 correctly rostered; all 67 Table 1 cells present with correct values (CXCL1 and CTLA4 conflict with SM1, review_only).",
+      "Abstract 50% prevalent-clone statement is a rounding of the 51% TQ-TIL figure; left unrecorded with an ambiguity.",
+      "Serum IgG increase is cited to earlier work; kept review_only.",
+      "239 coding mutations vs 7+72+156=235 kept as arithmetic-only ambiguity (review_only); 31-month CR vs dates kept as ambiguity."
+    ],
+    "residual_risks": [
+      "Clone-tracking percentages derive from author-defined patterns whose time points are inconsistently labelled across the source.",
+      "SM1 IL10 and SM9 timing facts need agent-side review_only changes before supplement parent receipts for SM1/SM9."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,66 @@
+{
+  "article_id": "PMC7009001.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d3d768006835c65a196d32f1caaaa65693d809d1a550455b69f394dab65658bd",
+  "annotation_sha256": "580289751a4b6b2c9a5c6097fcfa5eaf3b7afce517209f45da70144c9723a4d0",
+  "reviewed_at": "2026-10-21T04:01:05.939449+00:00",
+  "source_segments_read": 62,
+  "facts_reviewed": 99,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Quarantined the confirmed streptococcal TSS condition (certainty ambiguous, review_only): neither abstract quote names the syndrome (\"led to the diagnosis\" is anaphoric); added ambiguity p1-a06; the literal provisional TSS fact from b00013 stays scored. Diagnosis event p1-e26 relabelled accordingly.",
+    "Patient label and case_context description no longer assert confirmed streptococcal TSS (now: shock, rash, considered toxic shock syndrome and necrotizing fasciitis).",
+    "Bedside fasciotomy given body_site upper limb, laterality left, from the Figure 4 caption (b00062) with the Figure 3 caption; added the missed suture-of-fasciotomy procedure (b00062) and event p1-e28 with fasciotomy-before-suture relation.",
+    "Rewrote ambiguity p1-a04: contralateral limb is contralateral to the named left upper limb but its identity is not stated; no laterality for necrotizing fasciitis or the Figure 3 limb.",
+    "Steroid titration fact renamed from Hydrocortisone to Steroid (the sentence names only \"the steroid\"); ambiguity p1-a03 updated.",
+    "Acute otitis media: removed laterality bilateral and body_site borrowed from the CT finding clause.",
+    "Split the ear CT result into middle-ear soft-tissue visibility (flag unknown) and normal mastoid without lytic lesions (flag normal).",
+    "Culture result fact given its own stated collection time \"at admission\" (anchor admission).",
+    "Fluid expansions: dose_text made literal (\"totaling 60mL/kg\"); action ordered kept (indicated is not given); added ambiguity p1-a07 on whether 60mL/kg includes the earlier 20mL/kg.",
+    "Added cefepime and clindamycin regimen-completed (stopped) facts from b00018 to the hospital discharge event.",
+    "Ward transfer time relation changed from after to at (\"from the sixth day of hospitalization\").",
+    "Relation p1-e25 -> p1-e27 re-evidenced with the sequence wording (ward stay to complete the regimen; discharge after completing it) instead of day numbers from different anchors.",
+    "Added literal relations: e06->e20 and e20->e25 (hospitalization days 1, 3, 6), e15->e23 (ICU days 2 and 5), e10->e22 and e22->e23 (epinephrine start, taper, suspension), e06->e11 (\"After ... shock, we considered TSS\"), e01->e03 (presenting history before ward admission), e18->e28, e20->e27 (cefepime start before regimen completion).",
+    "Summary claim 4 no longer cites the quarantined TSS fact; mentions the left upper limb fasciotomy."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEGs are inspected in the separate visual target.",
+    "Dose units for norepinephrine and hydrocortisone are printed oddly and kept as printed.",
+    "Skin, tissue, muscle and blood culture results are not reported; only left-ear secretions are named.",
+    "Discussion and tables (CDC definition, staphylococcal versus streptococcal TSS) are literature background and not assigned to the patient.",
+    "Day numbering uses different anchors (ICU admission versus hospitalization)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 62,
+    "facts_reviewed": 99,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (female infant aged 1 year and 2 months); literature tables 1 and 2 and discussion are background, not patient facts.",
+      "TSS is literally only \"considered\" in the case text; the abstract diagnosis sentence does not name it, so the confirmed fact is review_only.",
+      "Necrotizing fasciitis kept confirmed: b00058 states it as \"presented in this case\" and the figure captions state the fasciotomy was due to it.",
+      "Transfusion and vitamin K stay action unknown (\"requiring\"); expansions stay ordered (\"indicated\").",
+      "Culture results: no negative results inferred for skin, tissue or muscle cultures (ambiguity p1-a01).",
+      "Odd norepinephrine and hydrocortisone dose units kept as printed with ambiguity p1-a02.",
+      "Figure 1 shows an infant trunk with no face, genitalia or text; sensitive_anatomy=false agreed."
+    ],
+    "residual_risks": [
+      "The ICU-day ordering e15->e23 treats \"ICU admission\" and \"intensive care\" as the same anchor.",
+      "Fasciotomy laterality rests on the Figure 4 caption alone.",
+      "Whether \"the cultures collected at admission\" are ward or ICU admission cultures is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

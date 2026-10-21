@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC11703952.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7fe6f025a24bbbffe51f077421f62e7907a1dd259a0bae78f8e80637a9b058b7",
+  "annotation_sha256": "a506cac289e2f83a1caa35f73c6a4b55f1ab05f26a6167c5638b55f522fe4394",
+  "reviewed_at": "2026-10-21T13:54:43.684619+00:00",
+  "source_segments_read": 57,
+  "facts_reviewed": 102,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f001 index_subject_description: 'Adolescent girl' replaced by the case's own wording '16-year-old woman ...'.",
+    "Merged text 'high reticulocyte count' (p1-f014, removed) into the Table 1 reticulocyte row p1-f029 (flag high, both quotes): the text says 'Blood tests (Table 1) showed', so it is the same measurement.",
+    "Moved the Hematology-ward admission p1-f020 from care_plans to outcomes (event other, disposition Hematology ward): admission is not a follow-up/referral/monitoring/counseling care plan.",
+    "p1-f067/p1-f084/p1-f094 (platelets under 10, below 100, higher than 150): added the printed multiplier unit '× 10^(9 )/L' so the comparator numeric is not unitless.",
+    "p1-f087/p1-f088 (no symptoms, thyroid function unaltered): time 'At that time' anchored to 'corticosteroids were discontinued', quoting their own sentence and its antecedent.",
+    "p1-f086 (text anti-TPO 8,547 UI/ml, review-only): added b00049 'high titers ... just before baricitinib treatment' evidence and flag high.",
+    "Added p1-f103: 'There were no other significant findings.' on the blood tests (flag normal).",
+    "Split p1-e15 into referral at discharge (p1-e15, kind other, time 'At discharge') and the alopecia areata diagnosis (new p1-e28); split p1-e18 into the timed anti-TPO/thyroid event and new p1-e27 (untimed autoimmune screening + NGS), so the same_time relation to steroid discontinuation no longer covers the NGS.",
+    "p1-e19 time_text '2 years after the initial thrombocytopenia episode' (relative).",
+    "Relations: removed e18->e19 'then' (re-pointed to e27->e19, the sentence 'then' follows) and e15->e16 (now e28->e16). Added e02->e05 (presentation opens stay), e04->e06 (anemia/thrombocytopenia -> bone marrow to rule out causes), e10->e14 ('after 2 weeks of iron supplements'), e11 same_time e15 ('At discharge'), e18->e19 and e17->e19 (b00049 'just before baricitinib treatment'), e04->e19 ('2 years after the initial thrombocytopenia episode'), e19->e21 ('Treatment was well tolerated ... five months later'), e04->e23 ('repeated'), e11->e26 (4-year follow-up after discharge).",
+    "Ambiguities: autoimmune-screening table rows added to the caption-time ambiguity; new ambiguities for the unconfirmed thyroid/secondary-ITP link and for the pixel-only IVIG dose / AA complete response label.",
+    "Summary claim 3 no longer states that IVIG failure caused prednisone or that iron preceded discharge; claim 4 adds the platelet unit and the '2 years' timing."
+  ],
+  "unresolved": [
+    "One index patient. Table 1 (Complementary tests at diagnosis) holds one time point only, so it is not a serial measurement table.",
+    "Source conflict: the text prints a platelet count of 6 × 10^(9 )/L from the blood tests it cites as Table 1, and Table 1 prints 7 × 10^(9)/L; two plausible numbers for one measurement, both review-only.",
+    "Table 1 prints hemoglobin as 660 g/L with a 110–156 g/L reference range although the text reports marked anemia; recorded as printed, review-only.",
+    "Table 1 puts the anti-microsomal antibodies, the autoimmune screening and the NGS panel under tests at diagnosis while the text places them later, when corticosteroids were discontinued; the anti-microsomal facts are review-only and the NGS and screening text facts carry no time.",
+    "Figure 1 is a chart of platelet count, anti-TPO antibodies, treatments and disease course whose plotted values are pixel content only; no values are read from the plot.",
+    "No supplementary material is listed in the source or the raw XML."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 57,
+    "facts_reviewed": 103,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (16-year-old woman, cITP and alopecia areata); roster 1. No supplements: raw.xml has no supplementary-material or media element; the data-availability sentence is boilerplate.",
+      "Platelets 6 (text, 'Blood tests (Table 1)') vs 7 (Table 1 row): same measurement, two plausible values -> source conflict, both review-only; not a print artefact.",
+      "Hemoglobin 660 g/L (110-156) kept as printed, ambiguous and review-only (implausible one-character-type misprint against 'marked microcytic anemia').",
+      "Anti-TPO 8547: Table 1 'at diagnosis' vs text 'At that time' (steroid discontinuation) and discussion 'just before baricitinib'; both review-only, unmerged; 167.5 IU/ml one year later is include.",
+      "NGS table row and text describe the same single 192-gene panel with the same result: merged without a time; table-only rows keep the caption time 'at diagnosis'; IgA/IgM rows have no printed unit and none was added; text and table smears kept separate.",
+      "Viewed F1 at full resolution with three band crops: printed axis ticks, legend, dose labels and disease-course labels only; no data labels, no identifiers. visual.json has no plot estimates or numeric positional readings."
+    ],
+    "residual_risks": [
+      "'five months later' and 'one year later' have no named anchor; facts stay null-anchored, and only the order after baricitinib start is asserted.",
+      "Table 1 mixes values from the first presentation and from the later autoimmune work-up under one caption time; table-only autoimmune rows keep 'at diagnosis' with an ambiguity."
+    ]
+  },
+  "physician_adjudicated": false
+}

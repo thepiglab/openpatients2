@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC9176036.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1560d06173c2b08349748b25c79dbb42541c69725b097695257e4240cb18a6d9",
+  "annotation_sha256": "83f82874b3b34a7466adf27acb1dd99bef80c6aeac6e9f7aaf67d299b4031197",
+  "reviewed_at": "2026-10-21T08:31:14.904823+00:00",
+  "source_segments_read": 37,
+  "facts_reviewed": 64,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f050 Table 1 IPSS Int-2: ambiguous/review_only -> supported/include; the column is the original IPSS (footnote) while the text grades very high risk by the revised IPSS, two different scoring systems, so no conflict or ambiguity hold; name made a concise label and the ambiguity text reworded.",
+    "p1-f037/p1-f038 names shortened to CD4 count / HIV viral load (table provenance kept in statement and notes).",
+    "p1-f018 Lamivudine in the January 2018 switch: action started -> administered (3TC is in both the initial and the switched regimen).",
+    "p1-f009 RBC transfusion dependency: evidence widened to its own September 2018 sentence and time set to In September 2018.",
+    "p1-f043 acid-fast/fungal microorganisms: specimen bone marrow and \"on histology\" removed (not stated in its own sentence).",
+    "p1-f057 terminal platelet count: flag unknown -> low (source says \"deficient platelet levels\"); preserved renal function and increasing WBC left unflagged with notes.",
+    "Table 1 row 24 (This report) added as second evidence to the age, MDS-EB-1, initial ART drug and azacitidine facts (one item citing table and text).",
+    "Added ambiguity: age 61 printed in the 2002 HIV-diagnosis sentence; kept as case age without anchor.",
+    "Event p1-e14 split: RUNX1 FISH stays in p1-e14; new p1-e17 holds the second marrow reassessment and biopsy (f053, f054).",
+    "Added 9 literal before-relations: e01->e02 (ART initiated for the diagnosed HIV), e02->e03 (initiated, then remained on it), calendar e01(2002)->e04(Jan 2018), e05(Jan 2018)->e06(Sep 2018), e06(Sep 2018)->e16(Jul 2019), e03->e11 (MDS after 16 years of well-controlled HIV), e09->e13 and e11->e13 (trisomy 8 / MDS followed by clonal karyotypic evolution), e11->e17 (marrow maintained the MDS-EB-1 pattern)."
+  ],
+  "unresolved": [
+    "Table 1 rows 1 to 23 describe published cases from other reports and are not index-patient facts.",
+    "Table row for this report has no printed time points for CD4 count, viral load or IPSS.",
+    "Time of the RUNX1 FISH, the second bone marrow findings and the final hematological parameters is not stated.",
+    "Figure pixels are described in visual.json; caption-layer visual_status remains not_inspected."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 37,
+    "facts_reviewed": 64,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient; Table 1 rows 1-23 are cited literature cases and correctly excluded; row 24 (This report) is the index patient.",
+      "Table IPSS Int-2 and text revised-IPSS very high risk are different scoring systems, both included.",
+      "Table CD4 929 and VL ND kept as untimed separate items, not merged with the 16-year text statement; Progression to AML No kept as an absent condition from the authors own row.",
+      "Hedged ART-to-secondary-MDS hypothesis kept as ambiguity only; no asserted cause.",
+      "RUNX1 FISH, second marrow and terminal labs have no literal time; the repeat karyotype keeps \"7 months later\" with null anchor; e12->e13 uses the adjacent-sentence anchor.",
+      "Figure 1 viewed at full resolution with panel crops; visual.json panel descriptions, printed variant labels (p.Y591* on pixels vs p.Y591*A in caption) and attribution verified; no plot estimates; privacy flags none on all panels match pixels."
+    ],
+    "residual_risks": [
+      "Table 1 Time from HIV 16 years is not a separate fact; it is represented by the 16-year ART duration and 2002 diagnosis facts.",
+      "e01->e02 rests on ART being the treatment of the just-diagnosed HIV infection in the same sentence.",
+      "Karyotype panels A/D labelled pathology (EHR override) is a category judgement; electropherogram panel C kept other."
+    ]
+  },
+  "physician_adjudicated": false
+}

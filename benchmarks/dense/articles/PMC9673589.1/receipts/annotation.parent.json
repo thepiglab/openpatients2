@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC9673589.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d479417c03760d81497afe6d0e3a11d3113b3327d594a576602d22769cb67267",
+  "annotation_sha256": "9e33f555f6525a3822f545ab8037c8ed2757d87118362335b9f16a3f667715df",
+  "reviewed_at": "2026-10-21T03:58:22.060997+00:00",
+  "source_segments_read": 55,
+  "facts_reviewed": 55,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f004 ethnicity_as_documented \"Saudi-Arabian\": a nationality descriptor, and the demographics prompt forbids deriving ethnicity from nationality; noted as an article limitation.",
+    "Added p1-f056 allergies adverse_effect: lamotrigine -> unmasking of Brugada syndrome and onset of syncopal episodes (abstract b00001 and discussion b00011 state the attribution); linked to event p1-e05; allergies coverage set documented.",
+    "Flags p1-f034 (no type 1 Brugada pattern on pre-lamotrigine ECGs; negative -> unknown), p1-f036 (no structural heart disease; normal -> unknown) and p1-f038 (EEG without spike-and-wave or lateralizing abnormalities; normal -> unknown): the source does not call these results normal/negative.",
+    "p1-f029 note corrected: the \"2 mm\" wording is in the Figure 1 caption, not Figure 2; the >2 mm vs 2 mm difference stays an ambiguity (comparator/rounding), fact kept include.",
+    "p1-f007 text_value no longer says \"more frequent than prior seizures\"; now \"presenting differently and occurring more frequently\" as the source words it.",
+    "p1-e18 (recommendation to neurology to discontinue lamotrigine) occurrence planned -> occurred and kind plan -> other: the recommendation was made; recommended is never planned.",
+    "p1-e08 shortness of breath kind adverse_event -> presentation (symptom of the presenting episode, not a treatment complication).",
+    "Relations added: p1-e06->p1-e07 (seizure terminated after lorazepam), p1-e09->p1-e12 (ECGs \"were repeated\"), p1-e05->p1-e10 (referred for investigation of his recurrent syncopal episodes), p1-e05->p1-e16 (ICD recommendation \"Due to ... the presence of syncope\").",
+    "Ambiguity added for p1-f028: ICD recorded as declined on \"refused further treatment\" after the ICD discussion.",
+    "Summary rewritten: removed \"normal awake EEG\" and \"remained on levetiracetam\" (not stated), removed the claim that genetic testing was recommended, added the lamotrigine discontinuation and the most recent admission seizure without ordering it against the ED ECG."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the 3 JPEGs were inspected in the separate visual target.",
+    "Tables 1 and 2 describe published cases from the reference list and are not index-patient data; Discussion text about other patients, genes and mechanisms is background.",
+    "Induced rhythm at the electrophysiological study is a source conflict between article text (polymorphic ventricular tachycardia) and the Figure 2 caption (ventricular fibrillation).",
+    "No dates are given; ordering is limited to what the text states.",
+    "\"Saudi-Arabian\" is a nationality descriptor; it is not recorded as ethnicity or race."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 55,
+    "facts_reviewed": 56,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (27-year-old Saudi-Arabian male); Tables 1 and 2 and the Discussion are literature cases/background except b00011 and b00044, which restate this patient.",
+      "Induced rhythm at the electrophysiological study is a true caption-vs-text conflict about the same induced event (text: polymorphic ventricular tachycardia terminated through cardioversion; Figure 2 caption: ventricular fibrillation terminated by a 360-J shock); both rhythm facts stay review_only and the procedure fact omits the rhythm.",
+      "ST elevation \"greater than 2 mm\" (text) vs \"2 mm\" (Figure 1 caption) is a comparator/rounding ambiguity, not a conflict.",
+      "Epilepsy kept verification unknown (\"presumed idiopathic epilepsy\" in the abstract); \"most recent admission\" and \"initial admission\" are not equated; levetiracetam prior (historical) and current kept separate with an ambiguity.",
+      "Recommendation->lamotrigine stop relation kept: the source states the recommended discontinuation was carried out; drug start->stop and other implied orders conform to RULINGS.",
+      "All three figures viewed at full resolution with crops: F1/F3 paper twelve-lead ECGs with lead labels only; F2 A-C electrophysiology-system screens with device text (\"Arrhythmia Induction\", \"Print Review 12 Lead\") and small cycle-length numbers; no plot estimates in visual.json."
+    ],
+    "residual_risks": [
+      "ICD declined rests on \"refused further treatment\" following the ICD discussion (ambiguity recorded).",
+      "Brugada syndrome is recorded as confirmed on the authors' statements without genetic confirmation (testing refused).",
+      "The baseline ED ECG, lorazepam seizure admission and cardiology workup are not mutually ordered beyond what the text states."
+    ]
+  },
+  "physician_adjudicated": false
+}

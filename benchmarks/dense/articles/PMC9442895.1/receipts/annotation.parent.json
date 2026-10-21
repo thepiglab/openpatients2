@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC9442895.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4aa73132b0cd3cbc885295a67d701404917eb3011a668bd9a6f215a7b810477e",
+  "annotation_sha256": "ddad0a986ef14f0fde6bc634c26130e8fe0daf25992d90fa47667eecb4246875",
+  "reviewed_at": "2026-10-21T08:00:55.869033+00:00",
+  "source_segments_read": 62,
+  "facts_reviewed": 251,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1 Ginkgo prescription: label standardised to \"Ginkgo biloba extract\" (quotes keep the source spelling \"Gingko\"); indication \"presence of short-term tinnitus\" added from the discussion sentence naming the first patient; quote extended to \"Because of this resistance\".",
+    "p1 counseling: action_status recommended -> completed (\"Treatment was composed by: - Counseling ...\"); dropped the borrowed TRT quote.",
+    "p1 environmental sound therapy: recommended -> declined (patient disagreed, reinforced, did not adhere), with those quotes.",
+    "p1: added care_plans tinnitus retraining therapy recommended (b00055 \"recommended for both patients\").",
+    "p1: added relation treatment -> May 2013 visit (single sentence \"we suggested to keep the medication for a further three months\": continuation of an ongoing drug).",
+    "p2 Ginkgo: action unknown -> administered, adding the literal discussion quotes \"we tried the same schedule for BGA\" and \"performed it regularly together with the medication\"; no dose borrowed.",
+    "p2 treatment event: plan/planned -> treatment/occurred (advice is never planned; trial stated); added relation to May 2014 (\"advised ... for 3 months. After 5 months (May 2014)\").",
+    "p2 tinnitus retraining therapy: merged the duplicate procedures_devices item into one care_plans counseling item with action_status completed.",
+    "p2 audiological exam text facts (hearing thresholds, LDL range, acoustic reflexes, exam procedure) moved from the November 2013 first-visit event to the Nov 2012 brought-audiometry event the sentence cites (Tables 4, 5); item times stay null; ambiguity reworded.",
+    "p2: added parents oriented about empiric evidence (care_plans counseling completed) and care sought outside their country after unsuccessful previous attempts (social_exposures access_to_care), both from b00059 which names the patient.",
+    "Removed patient initials from authored notes and source-coverage notes; b00057 coverage set to p1.",
+    "Summaries updated for the above; spelling \"Ginkgo\" in labels/statements."
+  ],
+  "unresolved": [
+    "The article has no figures or supplements; Tables 1-5 are recorded as observations from the text.",
+    "Ginkgo-related discussion sentences that state causation or mechanism are not recorded as patient facts; the authors state that the role of tinnitus retraining therapy in the success is not clear.",
+    "The side-effects sentence in the discussion is not literally assigned to one patient and is kept review-only for the second patient.",
+    "Patient initials printed by the source appear only inside literal evidence quotes; no authored field carries them."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 62,
+    "facts_reviewed": 251,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Two individual boys (p1 tinnitus + hyperacusis, p2 hyperacusis only); roster 2 complete.",
+      "All 192 table cells (Tables 1-5) checked against the source rows as observations with row times.",
+      "Side-effects sentence kept review_only on p2 with ambiguity on both patients (unlabelled discussion).",
+      "First visit February 2013 vs first table row March 2013 left as an ambiguity; initial battery event untimed.",
+      "Shared statements copied only where the sentence covers both cases (b00007, b00052, b00055, b00061)."
+    ],
+    "residual_risks": [
+      "Event grouping places untimed paragraph sentences (e.g. tinnitus barely perceived) under the visit event of their paragraph.",
+      "Conclusion sentence (b00061) kept as an outcome for both children although it is an author conclusion.",
+      "Patient initials (PFB, BGA) remain inside literal evidence quotes only."
+    ]
+  },
+  "physician_adjudicated": false
+}

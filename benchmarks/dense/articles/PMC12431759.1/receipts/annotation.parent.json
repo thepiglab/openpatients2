@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12431759.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7290871ac8ec326a3498d32515cf170ecfbddefec25d17307937d64633474581",
+  "annotation_sha256": "b0fdfca7aa27a7b28625264b67482939362b833235302395ff8e67466f477dda",
+  "reviewed_at": "2026-10-21T14:10:14.699123+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 122,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f057 (continued remission at the booster session), a duplicate of outcome p1-f097; removed it from p1-e20.",
+    "p1-f052/p1-f053 text_value no longer borrows the drug name from the neighbouring sentence ('side effect on the dose of 30 mg orally daily').",
+    "p1-f096 follow_up_duration_text set to its own quote's wording ('first month of posttreatment follow-ups').",
+    "IPT activities not tied to a phase by the source were removed from the phase events: p1-e16 now holds only p1-f071; p1-e17 only p1-f072 and p1-f078 (stepwise flare-up approach p1-f091, help-seeking/communication work, parent check-ins, closeness circle, role-transition focus, limited sick role and the whole-course fact p1-f070 are no longer placed in a phase).",
+    "Added p1-f122 (final-phase consolidation of skills and exploration of ending therapy) and p1-f123 (uncertainty and fear of becoming 'her own therapist'), both in p1-e19 with the literal 'In the final phase' time.",
+    "Added patient-specific literal quotes to the phase-order relations p1-e16->p1-e17 and p1-e17->p1-e19 (the original quote was the generic IPT description).",
+    "Added relation p1-e07 -> p1-e10 (pain peak 'last year (age 14)' before the presentation of the currently 15-year-old patient).",
+    "Rewrote the depression-severity ambiguity: decided as a source conflict (the mild current episode and the severe depression at presentation describe the same attribute at the same time); JFM 'severe' kept as undisputed with an explanatory note on p1-f004."
+  ],
+  "unresolved": [
+    "Single index patient; Introduction, Discussion and Conclusion literature statements, risk statements and prevalence figures are background and not patient facts.",
+    "No laboratory values, vital signs or Beck inventory scores are printed; the lab monitoring and inventories are recorded only as stated.",
+    "Figure 1 content is printed text inside the image and is described only in visual.json; no facts are taken from it.",
+    "Depression severity (mild current episode vs severe at presentation) and the duloxetine titration timing (1 week vs a month) are source conflicts kept review-only.",
+    "No supplementary material is listed in the source XML."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 123,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (15-year-old girl with juvenile-onset fibromyalgia and early-onset persistent depressive disorder); raw.xml has one figure, no tables and no supplementary material.",
+      "NO-BORROWING warning on p1-f004 is a checker false positive: the time and the JFM diagnosis are in the same quoted sentence.",
+      "Duloxetine 60 mg increase timing (after 1 week vs a month after initiation) is a source conflict; the start -> increase order is undisputed and the relation stands.",
+      "Depression severity mild (current episode) vs severe (presentation, Discussion) kept as a review-only source conflict.",
+      "Therapy duration (16 weeks vs 14 to 16 weeks vs 4+7+4 sessions), JFM diagnosis age (15) vs current age 15, PDD diagnosis timing and the 'he' pronoun are recorded ambiguities.",
+      "Figure 1 viewed at full resolution: a coping-chart infographic (severity faces, Pain and Exhaustion action lists); no facts taken from its printed text."
+    ],
+    "residual_risks": [
+      "Whether the Discussion's 'severe level of depression' means the overall disorder rather than the current episode is a judgment; both sides are quarantined.",
+      "Beck inventories have no printed scores; recorded qualitatively only."
+    ]
+  },
+  "physician_adjudicated": false
+}

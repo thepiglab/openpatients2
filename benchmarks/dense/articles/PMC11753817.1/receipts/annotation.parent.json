@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC11753817.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "655468d67bf0a3156f815faaae3e5147352679c842dfe72cb13ba8f8a67b57ca",
+  "annotation_sha256": "15f36d660475404b45dec4fc8afff4b0a8c97c5bbc1c40974495e89d1561362a",
+  "reviewed_at": "2026-10-21T13:58:45.397657+00:00",
+  "source_segments_read": 57,
+  "facts_reviewed": 91,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "ECG: removed duplicate right bundle branch block fact (p1-f047); single conduction fact p1-f048 = incomplete RBBB, include, citing both b00007 sentences and the Fig 2 caption; first-mention wording kept as an ambiguity (less specific mention, not a conflict).",
+    "Chest X-ray split: p1-f045 = increased bronchovascular markings (flag unknown); added p1-f094 \"otherwise normal\" (flag normal).",
+    "Leukocytes: merged text \"mild leukocytosis\" (p1-f056 removed) into Table 1 row p1-f071 (11.2, flag high, time Initial blood tests) because b00008 cites Table 1, consistent with the existing D-dimer merge; reference value 6.2 kept as printed.",
+    "Cough (p1-f014): added time \"a day's duration\" (during) from \"cough of a day's duration\"; the other three symptoms stay undated with an ambiguity.",
+    "Removed p1-f016 (acromegaly symptoms persisted), a duplicate of the acromegaly condition active-status evidence.",
+    "Wells score moved from observations to symptoms_function performance_score.",
+    "Vital signs the source classifies (febrile, tachypneic, tachycardia) flag high; systemic examination text_value normal; RV strain role unknown (complication not stated).",
+    "Events: initial blood tests event limited to D-dimer, leukocytes and CRP; added p1-e14 for the undated Table 1 panel; Wells score unlinked.",
+    "Relations: added presentation -> exam, chest X-ray, ECG, echocardiography, initial blood tests and discharge (stay-opening rule); acromegaly diagnosis vs hypophysectomy (both in 2018) recorded unknown; LMWH -> rivaroxaban relation now also cites b00043.",
+    "Summary rewritten to 3 phase claims (no one-day duration on all symptoms, ECG as incomplete RBBB); ambiguities rewritten and added (diabetes/hypertension treatment unnamed, 2018 order, cortisol/INR units); b00047/b00053 coverage set to patient restatement."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual figure images inspected in the separate visual target.",
+    "Table 1 prints no collection time; only the D-dimer and leukocyte rows, which the initial blood test sentence cites, carry that time.",
+    "The ECG is called right bundle branch block in one sentence and incomplete right bundle branch block in the next and in the Figure 2 caption; recorded once as incomplete with an ambiguity.",
+    "Table 1 contains printed unit or reference-range oddities (bilirubin unit, leukocyte reference value, no cortisol or INR unit) kept exactly as printed.",
+    "Discussion sections are literature background and are not copied to the patient; b00047, b00052 and b00053 restate the index case.",
+    "No supplementary material is listed in the source or raw XML."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 57,
+    "facts_reviewed": 93,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single 36-year-old man with acromegaly and massive bilateral PE despite negative D-dimer; roster 1/1 complete.",
+      "RBBB vs incomplete RBBB is one ECG described at two levels of specificity; recorded once as incomplete.",
+      "Table 1 is an undated single panel; only rows cited by the initial blood test sentence (D-dimer, leukocytes) carry that time.",
+      "No supplementary material in source.json or raw.xml."
+    ],
+    "residual_risks": [
+      "Table 1 print oddities (bilirubin mg/dl with 0-21 range, leukocyte reference 6.2, unitless cortisol/INR) kept as printed.",
+      "Scope of \"of a day's duration\" over the first three symptoms is unresolved.",
+      "Discussion b00052 restates the anticoagulation sequence and supports the LMWH -> rivaroxaban order together with b00043."
+    ]
+  },
+  "physician_adjudicated": false
+}

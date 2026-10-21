@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC7769828.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "fef40cc6f71cdd3a4d2d4b247cf8c2852f3d90adf305a9d9510c955359e239ea",
+  "annotation_sha256": "b474c3226b70b5ed0fce481a031e063388acaf9a0fcb8c2065210a8fb8adf066",
+  "reviewed_at": "2026-10-21T08:25:11.132407+00:00",
+  "source_segments_read": 55,
+  "facts_reviewed": 275,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged the text-only LDH item (501 IU/L) into the Table 1 admission LDH item (501 U/liter): same initial panel per 'Initial blood and urinary examination are shown in Table 1', equivalent unit label; flag high from 'Inflammatory markers were elevated'; references repointed.",
+    "Ferritin admission (text 2951 ng/mL vs Table 1 mg/liter) and procalcitonin admission (text 4.31 mg/ml vs Table 1 ng /ml reference interval) reclassified from unit ambiguity to source_conflict; all four sides review_only; ambiguity text and limitation rewritten.",
+    "DVT laterality set to left from 'acute thrombosis of left common femoral vein'; femoral/popliteal side not inferred (note).",
+    "Added own-sentence times: convalescent plasma 'on hospital day six' and 'On day nine', dexamethasone 'since hospital day six', heparin 'after CRRT was started'.",
+    "Removed unstated indication from coumadin.",
+    "Removed values from names (CRRT prescribed dose, HFNC 15 L) and kept them in clinical statements.",
+    "Moved 'continued on hemodialysis on Monday, Wednesday, and Friday schedule' from care_plans to procedures_devices (completed).",
+    "Added outcome improvement 'renal function improved on day 45' (b00053) linked to the last-hemodialysis event.",
+    "Added 8 literally supported relations (history->presentation, presentation->ED workup, oxygen->'Then' intubation, presentation->insulin/antibiotics, CRRT->'After a week on CRRT', CRRT day two->dexamethasone day six, oliguria prior to day 42->last HD day 45, day 48 creatinine->discharge); 11 -> 19."
+  ],
+  "unresolved": [
+    "The article lists no figures and no supplements; no visual, figure-EHR or privacy sidecars apply.",
+    "The ED arterial blood gas sentence prints PCO_(2) arterial as both 16 and 66 (source conflict) and a total value of 6; none is accepted.",
+    "Day 48 creatinine differs between text (1.30) and Table 1 (1.38); both are review-only.",
+    "Ferritin and procalcitonin admission values carry incompatible units between text and Table 1 (source conflicts, both sides review-only); LDH IU/L vs U/liter is one item. Table 1 units are kept as printed (including odd labels such as White cells per ml).",
+    "The Table 1 Events row (CRRT, Off CRRT, HD, Last HD under Hospital Day 2/19/20/45) agrees with the hospital days stated in the text; the text sentences are cited for ordering.",
+    "Discussion paragraphs mostly describe published literature; only explicit index-patient sentences were used.",
+    "No flags were derived from Table 1 reference ranges; high flags come only from text that calls a value elevated, tachycardic, tachypneic, hypoxic or hypotensive."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 55,
+    "facts_reviewed": 275,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single patient; all case text, Table 1 rows and the index-patient discussion sentences (b00049, b00051, b00053-b00055) checked; b00050/b00052 are literature background.",
+      "Arterial PCO2 16 vs 66 kept as source conflict; 'PCO_(2) total arterial 6' ambiguous; all three review_only.",
+      "Day 48 creatinine 1.30 (text) vs 1.38 (table) kept as a one-character print-artefact ambiguity per rulings; both review_only and absent from summary.",
+      "Merges verified: creatinine prior/admission/day 19/day 20 and admission Na/K/glucose/CRP share analyte and stated time point; ED glucose 559, ED lactate and ketonuria, and text bicarbonate vs table carbon dioxide stay separate.",
+      "Remdesivir/tocilizumab 'no ... was given during the hospitalization' supports assertion absent; home medications action unknown; 'off pressor' stopped with drug unnamed.",
+      "Flags only from text wording (tachycardic, tachypneic, hypoxic, hypotensive, elevated); none from Table 1 reference ranges."
+    ],
+    "residual_risks": [
+      "Table 1 unit labels are odd (White cells per ml, ferritin mg/liter) and kept as printed.",
+      "D-dimer admission flag left unknown because 'initially elevated' may not scope D-dimer.",
+      "Bare 'day N' and 'hospital day N' treated as the same hospital-day counter for ordering."
+    ]
+  },
+  "physician_adjudicated": false
+}

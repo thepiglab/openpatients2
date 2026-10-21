@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC6984189.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6d8b5b07d71f0a706f5fff1b17d959b756ab5c4c09b1092b07d06de446663de2",
+  "annotation_sha256": "c8050ae5b59d43d09bdfe43bc39d2d8c9b21fe8df547a37c62d26aa4375527bf",
+  "reviewed_at": "2026-10-21T04:33:17.648873+00:00",
+  "source_segments_read": 48,
+  "facts_reviewed": 105,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Summary claim 1: replaced \"severe hypercalcemia\" (severity not stated for hypercalcemia; \"severe\" modifies the presenting symptoms) with \"elevated calcium\".",
+    "Removed the abstract-only 15 cm liver mass fact (p1-f093, review_only) from the CT event p1-e04: the abstract does not identify which imaging study gave that size and \"hypermetabolic\" points away from the CT; the fact stays review-only with its ambiguity.",
+    "Added symptoms_function sign p1-f105: initial physical examination otherwise unremarkable (scoped normal exam, SECTION-SIGNS), linked to p1-e03 and summary claim 1.",
+    "Added the abstract \"intrahepatic cholangiocarcinoma\" quote to the oncology tumor p1-f037 so its primary_site \"liver (intrahepatic)\" has its own evidence.",
+    "Summary claim 1 no longer cites the corrected-calcium fact, whose quote also carries the disputed WBC value 16.60; the Table 1 calcium row supports \"elevated calcium\".",
+    "Article limitation reworded so the disputed age, WBC and AFP values no longer appear in it (it is carried into the summary companion limitations); the values stay in the ambiguities and review-only facts.",
+    "Clinical statements of the four disputed-side facts (both ages, text WBC, text AFP) no longer print the disputed number, matching the table-side wording; values remain in fields, notes and ambiguities.",
+    "Added 4 literal relations: e02 before e05 (abstract \"presented ... and was admitted\"; presentation opens the stay), e02 before e04 (CT performed to evaluate the presenting abdominal pain), e03 before e05 (elevated corrected calcium result before treatment for hypercalcemia of malignancy), e05 before e10 (the first admission before the \"recurrent admissions\")."
+  ],
+  "unresolved": [
+    "The age differs between the abstract and the case presentation, and the initial white blood cell count and alpha-fetoprotein differ between Table 1 and the text; all are kept as review-only source conflicts (values in the ambiguities).",
+    "The abstract liver mass size (15 cm) and the CT size (19.1 x 14.7 cm) are not identified by the source as the same measurement.",
+    "No dates, doses, chemotherapy cycles, discharge details or cause of death are stated; the PTC placement is described as required without confirming it was done.",
+    "Caption-layer visual status is not_inspected; the three JPEGs are described in the separate visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 48,
+    "facts_reviewed": 105,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single individual case (roster 1, complete); deceased during course; all 48 segments incl. Table 1 rows and 3 captions read.",
+      "Source conflicts confirmed and kept review-only on both sides with ambiguities: age 57 (abstract) vs 67 (case text); WBC 17.60 (Table 1) vs 16.60 (text); AFP 2.2 (Table 1) vs 1.6 (text).",
+      "Not conflicts, kept as ambiguities: Table calcium 15.2 vs text corrected calcium 15.5 (different analytes, separate items); abstract 15 cm vs CT 19.1 x 14.7 cm (not identified as the same measurement); abstract \"after three months\" vs case \"within three months\" (death time uses the case wording, relation after anchored to diagnosis).",
+      "CEA 1.5 ng/mL merged table+text with the reference range left unset because the table (0.0 - 2.4) and text (<5.0) give different ranges; flag unknown.",
+      "Table-text merges (phosphorus, ALP, intact PTH, PTHrP, CA 19-9, CEA) accepted: Table 1 is \"Initial laboratory investigations\" and the text describes the same initial evaluation with matching values and ranges; PTHrP row label \"Hormone0Related\" is a one-character artefact recorded as an ambiguity.",
+      "Lab time \"Initial\" comes from the governing Table 1 caption (literal in each row quote); PTC \"required\" kept action/occurrence unknown; metastatic disease possible (PET-CT suspicion) with bony metastasis absent per the conclusion.",
+      "Figures viewed at full resolution: FIG1 one red arrow (left image) and three blue arrows (right image) match the caption; FIG2 H and E low/high power; FIG3 two brown-chromogen IHC fields; left/right stain assignment follows the caption and is noted as a limitation. No burned-in text, faces or sensitive anatomy."
+    ],
+    "residual_risks": [
+      "Table-text merges for analytes stated in the \"His other laboratory values included\" sentence rely on the shared initial-evaluation context rather than a time stated in that sentence.",
+      "Imaging-to-diagnosis order (CT/PET-CT before biopsy diagnosis) is left unlinked because no literal order word connects a specific study to the diagnosis.",
+      "No dates, doses or chemotherapy cycles are reported; recurrent admissions and complications have no stated times."
+    ]
+  },
+  "physician_adjudicated": false
+}

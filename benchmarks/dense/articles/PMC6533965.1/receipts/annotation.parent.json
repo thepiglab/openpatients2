@@ -1,0 +1,52 @@
+{
+  "article_id": "PMC6533965.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "434801dc43e5f0811de85ba1ccf438340ab1541292c3d5ab5a0da14a351f40b2",
+  "annotation_sha256": "4f60adc709287d6d612c348fe37b01d9af13c7ca2a25fcdf48a3b31b8e30a2b2",
+  "reviewed_at": "2026-10-21T04:07:07.796088+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 58,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed relation e15->e18: \"Fifteen days later\" opens a new paragraph with no named anchor and the Figure 7 caption time (\"15 days after surgery\") governs only the caption appearance, not the text improvement sentence; ambiguity text updated.",
+    "White gingival coloration sign (p1-f015) now carries only the text quote and text time; the Figure 1 caption (which asserts necrosis, not \"suggestive of\") moved to the necrotic gingival lesions condition with the caption time \"First week of ICU admission\".",
+    "Added procedures_devices fact p1-f014 for the pediatric ICU admission and linked it to event e04 (previously empty fact_ids) and the first summary paragraph.",
+    "Added literal relations: initial diagnosis e03 before septic shock diagnosis e07 (\"initial\"); ICU admission e04 before gradual elimination of necrosis e09 (\"after a period of hospitalization\") and before scraping/chlorhexidine e11 (\"during the ICU stay\"); biopsy e12 before culture of the biopsied bone tissue e13."
+  ],
+  "unresolved": [
+    "Single case report with seven unlettered clinical photographs, radiograph and specimen photograph; no tables or supplements.",
+    "Dates and times of most events are not stated; the six-month treatment period and the anchor of \"Fifteen days later\" are not dated.",
+    "Discussion sentences are assigned to the patient only where they say \"the patient\" or \"the present case\"; literature statements are not patient facts.",
+    "The Discussion statement that bacteria settled in the lungs and the author interpretation of low immunity are review_only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 58,
+    "figures_viewed": 7,
+    "key_findings": [
+      "Single index patient (six-year-old girl, CKD on PD) with P. aeruginosa septic shock, necrotic gingival lesions, bone involvement treated with antibiotics and surgery, HIV detected after six months; no cited cases mixed in.",
+      "Discussion facts kept only where literal (\"the patient had maxillary osteomyelitis\", \"in this case\"); lung involvement and immune-status interpretation review_only; b00017 back-reference kept as ambiguity only.",
+      "Initial diagnoses kept with verification unknown; PD action unknown; the two osteomyelitis conditions kept separate; antibiotic cycles not assigned to drugs.",
+      "All seven figures viewed at full resolution; visual descriptions, EHR labels and privacy flags match the pixels."
+    ],
+    "residual_risks": [
+      "Surgery-to-improvement interval is only in the Figure 7 caption and is not used to order the timeline.",
+      "b00016 mentions a high degree of bone destruction in the maxilla inside an interpretive sentence; not added as a separate fact.",
+      "\"another fifteen days\" of levofloxacin is not ordered after the first antibiotic course (no explicit anchor)."
+    ]
+  },
+  "physician_adjudicated": false
+}

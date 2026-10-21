@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC9669661.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "51baf6c6888e156c58b3d1222eaaa04bfe1f5b545bf564aeb6a5e226ca079b36",
+  "annotation_sha256": "1b5f33bcf64276a30297a28760282bdbceee8207291cae44432b396108c5ede1",
+  "reviewed_at": "2026-10-21T09:27:09.431812+00:00",
+  "source_segments_read": 75,
+  "facts_reviewed": 171,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Table 2 FEMH \"No recurrence\" vs discussion \"the patient experienced recurrent VT\" ruled a source conflict on one attribute: p1-f130 set to source_conflict/review_only and the discussion statement added as p1-f136 (source_conflict, review_only); ambiguity 1 rewritten to name both sides.",
+    "Added the per-row Table 1 percent-decrease-versus-25.0-Gy cells for this patient (p1-f139 to p1-f170, alpha/beta 10 and 2.5 for organs at risk, spinal cord, esophagus, stomach, heart substructures, mean heart, aorta, atria, LAD, RCA, ventricles, valves and ICD); the discussion 71%/80% mean-heart and 58-98% late heart-substructure decreases merged as rounding with an ambiguity.",
+    "Discussion 40-93% acute heart-substructure decrease vs Table 1 51.2-91.8% recorded as a source conflict (p1-f171 vs the table cell), both review_only, with an ambiguity.",
+    "Added medications continued unchanged after SBRT and the second electrophysiology study (p1-f134 antiarrhythmic agents, p1-f135 heart failure treatments; administered) and ITV/CTV dose grading 15 and 18 Gy (p1-f137, p1-f138).",
+    "p1-f045 (scar zones < 0.5 mV) now also cites Figure 2B caption and takes its caption-stated time \"After SBRT\"; p1-f047 renamed so it no longer asserts that \"this zone\" is the RVOT.",
+    "Timeline: added events e19 (post-RVOT-ablation LVEF/NT-proBNP/troponin), e20/e21 (cardiac MRI before/after SBRT, moved out of the follow-up event), e22 (pre-SBRT medications), e23 (medications unchanged after SBRT and second EP study); moved p1-f132 to the second EP study event.",
+    "Added 15 literal relations: ECG showing clinical VT before the LAVA ablation; ICD implantation before the ICD therapies (e08, e11) and before the CRT-D upgrade; first before second EP study; SBRT before second EP study (Fig 2B and Fig 5 captions); SBRT before the needed second SBRT; RVOT ablation before the post-ablation findings; MRI before SBRT / after SBRT; pre-SBRT drugs before SBRT; SBRT and second EP study before unchanged medications; SBRT before the >1-year follow-up.",
+    "No relation between the recurrent VT storms after ablation (e08) and SBRT (e10): no sentence states their order, so a proposed refractory-VT-before-SBRT link was not kept.",
+    "Updated the Table 1 limitation and added a limitation that the hedged 42/67% toxicity-risk projection is not recorded."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the five figure images are inspected in the separate visual submission.",
+    "Table 1 literature-constraint columns (25 Gy constraints and their EQD2) are not patient measurements and are not recorded; the FEMH dose columns and the per-row percent-decrease-versus-25.0-Gy columns for this patient are recorded.",
+    "Figure 5 printed values (NYHA class, blood pressure, LVEF, NT-proBNP, troponin T, creatinine at timepoints) are pixel content recorded only in the visual submission, not as text facts.",
+    "No calendar date is given for the SBRT; the period \"From April 2021 through June 2022\" is not assigned to the treatment date.",
+    "Discussion and Table 2 literature rows (published series) are not facts about the index patient.",
+    "The discussion estimate that the risk of acute and late coronary or heart toxicity could be reduced by 42 and 67% is a hedged projection and is not recorded as a patient fact."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 75,
+    "facts_reviewed": 171,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (63-year-old man) correctly rostered; Table 2 literature rows and discussion literature not attributed.",
+      "Text+table merges checked as the same measurement: mean heart 2.2 Gy, spinal cord 2.0, esophagus 4.4, mitral valve 6.5, RCA 6.9, LV/RV medium 0.8/5.0, PTV 65.75 cm3 (Table 2), treatment duration 24 min (Table 2); \"left coronary arteries\" 4.2 Gy kept separate from the LAD row with an ambiguity; abstract 65.8 kept as a rounding ambiguity.",
+      "First EP study and LAVA ablation keep no time: the \"One year ago\" sentence names the VT storm, not the EP study, so the adjacent-sentence rule does not apply. Second SBRT \"needed to be delivered\" stays unknown; sedation and anesthesia absent; pre-SBRT drugs administered.",
+      "Discussion \"confirmed a new lesion located at the RVOT\" kept review_only against the results \"No low-voltage zone or LAVA\".",
+      "Figure 5 printed NYHA/LVEF/troponin values live only in visual.json; no text fact merged with them.",
+      "All five figures viewed at full resolution with crops (F2 E/F cut-off date-like stamps, F3 camera date stamp and eye-barred faces, F4 DVH labels and dose legend, F5 printed data labels)."
+    ],
+    "residual_risks": [
+      "Table 2 \"No recurrence\" may mean no recurrence at the treated substrate; kept as a review_only conflict rather than resolved.",
+      "Percent-decrease cells are dosimetric comparisons against 25 Gy constraints, recorded as observations of kind other.",
+      "Visual and figure-privacy sidecars need agent corrections (F3 faces are only eye-barred, the gowned person in the group photo is unmasked; F5B diastolic also rises at the last category); parent visual/privacy/figure-EHR receipts not signed."
+    ]
+  },
+  "physician_adjudicated": false
+}

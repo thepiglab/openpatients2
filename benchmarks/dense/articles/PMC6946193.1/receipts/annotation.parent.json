@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC6946193.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c22fab04aee31be1ece83ed2f55f4a7b974d0bd01a52c6452d7b869b6782fc29",
+  "annotation_sha256": "7fbb2c17577fa9985e3745482a54cf86ba7474340520c5413a5de37248444ac4",
+  "reviewed_at": "2026-10-21T04:34:33.012905+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 42,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Renamed the confirmed rupture condition to \"Delayed rupture of cavernous segment of the ICA\" (dropped \"spontaneous\" because the cause is disputed in the source) and added the case-report rupture-point sentence as evidence.",
+    "Renamed the absent \"immediately after the procedure\" condition to the same rupture concept; the time stays on the item.",
+    "Added the Figure 1 G/H caption sentence (which itself states the finding on intraoperative DSA) to the rupture-point observation and set method intraoperative DSA.",
+    "Split the intraoperative rupture-point detection out of the diagnostic DSA event into new event p1-e13, related as during the fistula occlusion (p1-e09) with the Intraoperatively sentence, the rupture-point sentence and the G/H caption.",
+    "Moved the total-occlusion outcome out of the repeat-angiography event into new event p1-e14 ordered before the POD 5 discharge (its own before-discharge sentence); the source does not tie occlusion to the repeat angiography.",
+    "Replaced relation PLED (e03) -> repeat angiography (e05), which no quote orders, with PLED (e03) -> discharge on postoperative day 5 (e06).",
+    "Added relation discharge (e06) -> emergency return (e07) from the abstract sentence \"Two months after discharge\"; kept e03 -> e07 from the body sentence (each relation uses one anchor only).",
+    "Event e11 time_kind duration -> relative (\"2 weeks after the procedure\"); e07 time_precision approximate -> exact (no hedge in \"Two-month\").",
+    "Added the abstract lessons sentence (manipulation resulted in the weakness and tear) to the rupture-cause ambiguity; reworded the rupture-vs-fistula ambiguity; added article limitations on panel D appearance and undefined panel F symbols."
+  ],
+  "unresolved": [
+    "Abstract dates the emergency return two months after discharge while the case body says two months after the operation; no date is reconciled.",
+    "Cause of the rupture is not asserted: authors favor a delayed spontaneous event but cannot rule out procedural manipulation.",
+    "Discussion statements about the cited Rehman basilar artery case and literature are not patient facts.",
+    "Caption-layer visual status not_inspected; pixels reviewed in visual.json.",
+    "Figure 1D is captioned as postoperative DSA but its pixels look like a reconstructed device image rather than a subtracted projection; acquisition type is not resolved.",
+    "Figure 1F carries a star, arrowhead, straight arrow, curved arrow and double-headed arrow whose meanings are not defined in the caption."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 42,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (72-year-old woman); Rehman et al. discussion case kept out of the record.",
+      "Emergency return dated two months after discharge (abstract) vs after the operation (body): different anchors, recorded as an ambiguity, each used only for its own relation.",
+      "Rupture cause is internally inconsistent (spontaneous vs cannot rule out vs abstract says manipulation resulted); no cause asserted.",
+      "Rupture and CCF kept separate; fundoscopy kept as \"did not yield much\" with no flag; imaging flags unknown because no normal/abnormal wording; coils explicitly absent (\"without coils\").",
+      "Figure 1 viewed at full resolution with crops: panel I also carries yellow institution text at the upper right (visual and privacy sidecars must be updated by the agent)."
+    ],
+    "residual_risks": [
+      "Panel D acquisition type (caption DSA vs reconstructed appearance) unresolved.",
+      "Relation e01 -> e02 and e07 -> e08 rest on the admission-opens-stay ruling, not explicit order words."
+    ]
+  },
+  "physician_adjudicated": false
+}

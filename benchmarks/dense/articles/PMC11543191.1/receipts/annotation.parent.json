@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC11543191.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b6a70bb694bca744b0e6fc040963142489fb22fb7570593abd59279aaace6b64",
+  "annotation_sha256": "a1a8311802cd3dd8301ff4490045b7ede2e9f7a0a61bf0b85347446f8ba7414f",
+  "reviewed_at": "2026-10-21T14:07:06.663057+00:00",
+  "source_segments_read": 51,
+  "facts_reviewed": 72,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added p1-f067 aura, p1-f068 blurry vision and p1-f069 other cranial nerve lesions as absent (b00017 'with no aura, blurry vision, or other cranial nerve lesions', time 24 h later), linked to the headache event p1-e07 and summary claim 3.",
+    "Added caption facts: p1-f070 'Subtotal left deafness on tonal audiometry' (Fig 4), p1-f071 catch-up saccades for the lateral and posterior SCC (Fig 2), p1-f072 absent visual input in the sensory analysis (Fig 3B, caption only); added the Fig 3 caption quotes as second evidence to p1-f056, p1-f058 and p1-f059.",
+    "Split the 10-day reassessment event: p1-e11 now holds only the literal 10 days later encounter (walking with rollator, no vertigo, Romberg, nystagmus); the VHIT, posturography and audiometry facts (incl. p1-f009) moved to new untimed event p1-e14 so the 10 days later time is not borrowed by the investigation sentences; the 'Based on these results' rehabilitation relation now starts from p1-e14.",
+    "Added relations: p1-e05 treatment before p1-e06 improvement ('clinical improvement after corticosteroid injections', b00034); p1-e08 MRI before p1-e10 transfer/anticoagulant ('then' order word plus result-to-action); p1-e02 presentation before p1-e03 ER examination and before p1-e05 in-hospital treatment (presentation opening the stay, order only). Split the two-sentence e10->e11 quote into two quotes.",
+    "p1-f005 multiple acute ischemic strokes: role complication -> unknown (not stated as a complication). p1-f010 renamed 'Profound deafness' (the draft label inferred 'the affected ear').",
+    "Added b00034 'clinical improvement after corticosteroid injections ...' as second evidence of p1-f062.",
+    "Rewrote summary claims 2-4 so the intravenous route is attached only to methylprednisolone, the new negatives are cited and the investigations are not presented as timed.",
+    "Ambiguities: hearing ambiguity now records the decision that none of the five hearing statements is a source conflict and includes p1-f070; reassessment-timing ambiguity updated for the split event; new ambiguity on infarction responsible for the presenting deficit versus embolism after only one methylprednisolone dose (no treatment-infarction order recorded); new ambiguity on caption absent visual input versus text."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the five JPEGs were inspected in the separate visual submission.",
+    "The hearing statements differ in wording (no current hearing loss, 2013 left sudden sensorineural hearing loss, severe left sensorineural hearing loss, subtotal left deafness, profound deafness in that ear) and are left unreconciled.",
+    "Printed values inside Figures 2 and 3 (anterior canal gains, sensory analysis percentages) are pixel content and live only in visual.json.",
+    "Timing of the Video Head Impulse Test, posturography and audiometry relative to the 10 days later sentence is not stated; they form a separate untimed event.",
+    "The authors state retrospective design and lack of laboratory work to rule out other vascular risk factors; no laboratory results are reported.",
+    "The source has no supplementary material (raw.xml checked)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 51,
+    "facts_reviewed": 72,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (59-year-old man, vertigo mimicking vestibular neuritis, labyrinthine infarction from embolic vertebral artery); raw.xml has no tables, no supplementary material (pmc-prop-has-supplement no) and five figures, all viewed at full resolution with crops.",
+      "Hearing statements (no current hearing loss reported, 2013 left SSNHL, severe left SNHL on audiometry, caption subtotal left deafness, discussion profound deafness in that ear) are different attributes or time points or wording grades, not a source conflict; the discussion statement stays review_only.",
+      "Left vestibular neuritis stays provisional (retained, then described as mimicked; never called misdiagnosed); steroid causation stays an ambiguity.",
+      "Methylprednisolone 120 mg per day versus 'only one dose' is an ambiguity; IV route only on methylprednisolone; valsartan/hydrochlorothiazide 'was under' stays action unknown.",
+      "Fig 1 caption 'Obliterated left vertebral artery' and text 'no opacification' kept as separate facts; VHIT, posturography and audiometry carry no time (result-sentence rule: the 10 days later sentence does not name those tests).",
+      "Anterior canal gains 0,95/0,98 are pixel-only (visual.json); text records them as normal."
+    ],
+    "residual_risks": [
+      "'then' opening paragraph b00019 is used to order MRI before transfer; the RULINGS exclusion is specific to 'Subsequently'.",
+      "visual.json needs agent corrections (F1 arrow direction, F2 curve-height wording and tick limitation, F3B tag position) and the F5 privacy flag should become direct_identifiers for the illustrator signature; visual, figure-EHR and privacy parent receipts are not signed."
+    ]
+  },
+  "physician_adjudicated": false
+}

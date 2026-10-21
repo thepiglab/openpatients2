@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC5715405.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "acf48c4beb37c6cbf2497124401a05acab7e3b6b89f6b013c38ce2fcaf40c8af",
+  "annotation_sha256": "ffe871c230695237934da108ba95859c56879af8b1b74f2eadb7ad47e754f93d",
+  "reviewed_at": "2026-10-21T03:37:14.217490+00:00",
+  "source_segments_read": 22,
+  "facts_reviewed": 84,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Bleomycin (p1-f064): indication \"Electrochemotherapy\" removed (a procedure, not a stated indication).",
+    "ECT (p1-f057): unsupported body_site removed; indication set to \"Prostate cancer\" with the literal b00011 quote \"successful ECT to treat prostate cancer\".",
+    "Electrode placement (p1-f061): added the quote placing the electrodes ventrally and dorsally of the sphincter externus to support its body_site.",
+    "Diagnostic basis: p1-f006 cleared (mpMRI basis was not stated as the basis); p1-f004 reduced to \"Biopsy-proven\" (Gleason/PIRADS are attributes, not basis).",
+    "Observation methods set where the quoted sentence names the test: mpMRI for p1-f014/f015/f016 (mpMRI clause added to evidence), p1-f025/f026; MRI for p1-f021, f031-f037, f039, f040. p1-f019 (lymphadenopathy/bony metastases) keeps method null because no test is named.",
+    "Electroporation voltage and current (p1-f028/f029): kind physiologic -> other (device electrical parameters); both plus intervention duration p1-f030 added to the ECT event.",
+    "Added facts: minor urge incontinence from the Discussion (p1-f078); Figure 3A caption no hematuria at 1 day post-ECT (p1-f079); Discussion no fluid/air collections on the 24 h MRI (p1-f080); Figure 3C caption 6-month negative findings with the caption time (p1-f081); biopsy (p1-f082); ADT continuation at ECT (p1-f083, administered); bladder catheter removal (p1-f084).",
+    "Event membership: caption ADC values p1-f020/f022/f027 joined to the baseline, 4-week and 1-day-pre-treatment MRI events through the text figure citations and matching caption times; new facts placed in their events.",
+    "Relations: added TUR-P history before presentation (past perfect \"had undergone ... 2 years before\"), baseline MRI before ADT (Figure 1A \"Pre-ADT therapy\"), 4-week MRI before the 1-day pre-treatment MRI (both anchored to ADT start: \"After 4 weeks\" / \"After three months of ADT\"); e03->e06 and e05->e06 evidence extended with the ADT-continuation, \"The treatment with ECT\" and \"1 day before intervention\" quotes; e09->e10 extended with the same-anchor b00013 quote \"8 weeks and 6 months after ECT\".",
+    "Ambiguities rewritten: continence/potency characterizations vs scores (added \"almost restored\" and \"remained continent and potent after treatment\"); adverse-event statements (cause-scoped \"no adverse events from bleomycin or electroporation\" kept as a different attribute from the overall adverse-event list; minor urge incontinence noted); untimed post-treatment scores (added the 6-month restoration statements); new PIRADS 6 as-printed ambiguity."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three JPEG figures are inspected in the separate visual submission.",
+    "Time points for post-treatment IPSS and IIEF-5 results are not stated in their sentences and are left null.",
+    "ADC units are kept exactly as printed (mm^(2)/sec); dose units for Bicalutamide 150 and Ciprobay 500 are not printed and none were added.",
+    "Discussion sentences are generic or restate the case; no separate facts were taken from literature statements.",
+    "Conclusion adverse events (hematuria, transient urge incontinence) are review_only ambiguities; the cause-scoped Discussion statement of no adverse events from bleomycin or electroporation is kept.",
+    "Figure 2 ultrasound distances and device settings are printed only in the pixels and are kept in the visual submission, not as facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 22,
+    "facts_reviewed": 84,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; Discussion/Conclusion sentences used only where literal about him.",
+      "Conflict ruling: \"no adverse events resulting from Bleomycin administration or the electroporation procedure\" is cause-scoped and the Conclusion list covers the whole treatment incl. catheterization, so they are not two values of one attribute; hematuria and transient urge incontinence stay review_only ambiguities, the scoped negative stays included.",
+      "Continent/potent and \"fully restored\" vs IPSS 2->5 and IIEF 21->16->19 are qualitative category statements, not numeric conflicts; recorded as an ambiguity.",
+      "Post-treatment IPSS/IIEF sentences carry no literal 8-week or 6-month scoping; times stay null.",
+      "ADT timing (4 weeks + 6 weeks vs three months) is an arithmetic mismatch -> ambiguity; bicalutamide 150 and Ciprobay 500 keep no unit.",
+      "Typos (IPPS, AHD, regredience) kept as printed; PSA 7.1 at presentation and 7 pretreatment not merged.",
+      "Figure 2 distances (Dist 1-6 in mm) and scanner settings are pixel-only and kept only in visual.json; Fig 2 privacy flag timestamps_or_device_text is correct; Fig 1/3 show only row letters."
+    ],
+    "residual_risks": [
+      "\"prior treatment\" / \"intervention\" are read as the ECT session from same-paragraph wording (\"The treatment with ECT\"; caption \"1 day before intervention\").",
+      "Caption ADC values are joined to the text MRI events through the figure citations; ADC unit kept as printed (mm^(2)/sec).",
+      "The 24 h (text) and 1 day (caption) post-ECT MRI are treated as the same examination via the Fig. 3A citation."
+    ]
+  },
+  "physician_adjudicated": false
+}

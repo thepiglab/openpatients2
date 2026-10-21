@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC9107860.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0e97153d24d707f44e7745dd4d09a78fa07f478d3852dc372fe12e1524df1405",
+  "annotation_sha256": "0acf2060201ce180349e5f32c3d8620cde082d51f03486a3157cde5a24481eac",
+  "reviewed_at": "2026-10-21T08:45:49.378383+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 59,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Retro-orbital pain: added the abstract quote \"presented with left retro-orbital pain\" (same presenting symptom) as its own evidence; body_site now \"left retro-orbital\"; removed the now-resolved laterality ambiguity.",
+    "Normal TSH, FSH, prolactin, free thyroxin, cortisol and LH: time \"Pre-operative\" from the immediately preceding sentence naming the same hormone analysis, both sentences quoted (RULINGS result-sentence rule).",
+    "Desmopressin: action administered -> unknown (\"requiring desmopressin\" alone does not state administration); event description reworded.",
+    "Thyroid hormone/steroids: b00012 \"supplemented\" and b00021 \"long-term ... therapy\" split into separate items (p1-f058, p1-f059 added); not identified by the source as the same course; supplementation removed from the third-postoperative-day DI event into its own untimed event.",
+    "Left-eye acuity \"remained mild perception of light\" removed from the one-week event (own sentence states no time) into its own untimed event.",
+    "Walking without support and 6/36 acuity removed from the six-month follow-up event into their own untimed event; outcomes functional_outcome p1-f057 marked alternate_representation_of p1-f030.",
+    "Neurological improvement outcome: removed unsupported related_condition; time \"after the surgery\"; new event ordered after surgery.",
+    "Added events for postoperative hypothyroidism (ordered after surgery by \"postoperatively\") and DI corrected eventually with long-term thyroid/steroid therapy (ordered after DI onset by \"corrected eventually\").",
+    "Added presentation -> CT, MRI, Doppler, hormone analysis, diagnosis and surgery (presentation opens the stay; surgery also \"due to the presence of hemiparesis and visual deficit\"). Follow-up relation now quotes both times.",
+    "MRI ICA text_value \"compressed by the mass\" -> literal \"compressed\"; care_setting \"inpatient neurosurgical care\" (not stated) -> \"Emergency department\".",
+    "Summary paragraphs 3-4 rewritten so untimed statements carry no borrowed time; limitations updated."
+  ],
+  "unresolved": [
+    "Discussion sentences about general pituitary apoplexy literature are background and not patient facts.",
+    "The hands and feet statement in the examination paragraph is internally inconsistent and recorded as review-only.",
+    "Times of the post-operative left eye visual acuity, of walking without support and of the 6/36 acuity, of the thyroid hormone and steroid supplementation and of the correction of diabetes insipidus are not stated in their own sentences and are left null; these are kept as separate untimed events rather than inside the one-week or six-month events.",
+    "Imaging, diagnosis and surgery are not ordered against each other: the diagnosis is \"based on\" the imaging (basis wording) and the stated surgery indications are clinical deficits and technical factors, not an imaging result."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 59,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (26-year-old man); discussion sentences with \"our case\"/\"In our case\" (b00014, b00015, b00020, b00021) are literal about him; the rest is literature background.",
+      "b00005 \"enlarged hands and feet revealed normal findings\" is self-contradictory; kept review_only, assertion unknown, with an ambiguity.",
+      "Hedged cause \"might have predisposed\" kept as an ambiguity only; Doppler \"no evidence of thrombosis or significant narrowing\" flagged normal.",
+      "b00020 literally states the indication for this patient's emergency surgery (hemiparesis and visual deficit).",
+      "Imaging, diagnosis and surgery left unordered against each other (basis wording only); post-operative chain uses same-anchor postoperative times.",
+      "All three figures viewed at full resolution with edge crops: Fig 2 shows one black and one white arrow per panel while the text names black arrows for both structures (limitation in visual.json); Fig 2A edge marks are illegible tick-like marks, no date."
+    ],
+    "residual_risks": [
+      "NO-BORROWING gate warnings on prolactin, free thyroxin and cortisol are checker false positives: the preceding sentence names the same pre-operative hormone analysis (RULINGS permits quoting both).",
+      "Walking, 6/36 acuity and post-operative left-eye acuity are untimed and unordered although they sit in the one-week and six-month paragraphs.",
+      "Desmopressin recorded as action unknown although a dose is given."
+    ]
+  },
+  "physician_adjudicated": false
+}

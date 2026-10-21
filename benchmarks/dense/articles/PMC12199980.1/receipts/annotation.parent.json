@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC12199980.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9331ccc42b6b39ec9de1c10daffe5d26da26f9fbfe1843673fc228f2c1f2f548",
+  "annotation_sha256": "87faccebb1784d3dd0f3a622ae5044217f64e412084593c4a10337c01a86c036",
+  "reviewed_at": "2026-10-21T14:16:43.234010+00:00",
+  "source_segments_read": 37,
+  "facts_reviewed": 198,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-e10 (day-8 visit and hospitalization) time changed from \"22 May 2020\" to the literal \"day 8\": the text never equates day 8 with a calendar date and the admission date is not stated; the 22 May 2020 lab items keep the Table 1 date (merge with the day-8 sentence kept because it cites Table 1).",
+    "p1-f097 (6 L IV fluids, first 2 L before the initial ABG) split from the bicarbonate event p1-e15 into new event p1-e23, because the draft relation \"admission ABG before e15\" contradicted the 2 L infused before the ABG; added p1-e23 overlaps p1-e14.",
+    "Moved the early-hours pH 7.12 to 7.18 rise and pCO2 drop (p1-f138, p1-f139) out of the post-bicarbonate outcome event into new event p1-e24, ordered after the admission ABG by \"an increase in his pH from 7.12 to 7.18\".",
+    "Added p1-f198 (later pCO2 increase, b00015) to the hospital-course event.",
+    "Added relations p1-e10 before p1-e14 (hospitalized, then on admission), p1-e14 before p1-e24, p1-e23 before p1-e19 and p1-e15 before p1-e19 (in-hospital IV hydration before the discharge row).",
+    "Relation p1-e08 (decline between day 4 and day 7) to p1-e09 (day 7 visit) changed from before to overlaps; the range includes day 7 and the decline is reported at that visit.",
+    "Relation p1-e04 same_time p1-e06 now quotes both stated 14 May 2020 times (text presentation and Table 1 row).",
+    "Text eGFR 28 / creatinine 2.78 (p1-f135, p1-f136) kept review-only as an ambiguity (no stated date; Table 1 dates them 29 May after discharge), and unlinked from the hospital-course event so they are not placed in the stay.",
+    "p1-f093 carvedilol stopped: evidence extended to the full 22 May 2020 Table 1 row and time set to an upper bound (before 22 May 2020) from \"Up to this point\".",
+    "Added same-sentence times to p1-f033 (murmur absent, baseline) and p1-f049 (hypotension, on repeat physical examination).",
+    "Added ambiguities for the Table 1 \"md/dL\" creatinine header print artefact and for day 8 vs 22 May 2020; rewrote the eGFR 28, treadmill, vitamin D and carvedilol ambiguity texts.",
+    "Summary claim 4 no longer cites the review-only Vitamin D3 item; source coverage for the abstract b00001 set to patient_facts (it is quoted for HF-CS)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the two figure JPEGs were inspected in the separate visual submission and values read from plots are not recorded.",
+    "Supplement ZIP (Figure S1 EKGs, Table S1 medication list, Table S2 additional labs) is reviewed in the supplement sidecar; Table S2 carbon dioxide values for 5.23.2020 and 5.24.2020 and the 5.14.2020 treadmill time conflict with Table 1 and the text, and the vitamin D form after discharge differs (D2 vs D3).",
+    "Text lab values and Table 1 rows with identical numbers are not merged unless the text cites the table (22 May 2020 row).",
+    "Hedged mechanistic and causal statements in the Discussion are not asserted as facts.",
+    "A separate published case (Campbell and Liebman) in the Discussion is not this patient.",
+    "The admission date and length of hospital stay are not stated except through the 28 May 2020 discharge row."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 37,
+    "facts_reviewed": 198,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (57-year-old man, type 5 CRS decompensating to HF-CS); Campbell and Liebman case in the Discussion excluded.",
+      "Source conflicts with both sides review-only: Table 1 vs Table S2 carbon dioxide on 23 and 24 May 2020 (8 vs 11, 13 vs 18); baseline treadmill time text 1 min 4 s vs Table S2 258 s on 5.14.2020; Vitamin D3 (text) vs Vitamin D2 (Table S1 06.12.2020).",
+      "Text eGFR 28 / creatinine 2.78 is an ambiguity, not a conflict (no stated date; Table 1 places them on 29 May after discharge).",
+      "Baseline and follow-up text labs not merged with matching Table 1 rows (no stated date); the 22 May row is merged with the day-8 sentence because it cites Table 1.",
+      "Figure 1 x-axis dates/times and supplement EKG headers (institution, supervising physician name, date/time stamps) are pixel identifiers, never transcribed; no leak found in any article file."
+    ],
+    "residual_risks": [
+      "Hedged causal statements (medication-induced volume depletion, polypharmacy) are kept out of facts; only the treatment-indication conditions are asserted.",
+      "Admission date and length of stay are not stated; the discharge date comes only from the Table 1 row.",
+      "Table S2 IV fluids row (2 to 8 L) is not stated to be cumulative; the text 6 L hospital total and the 2 L clinic saline are not reconciled."
+    ]
+  },
+  "physician_adjudicated": false
+}

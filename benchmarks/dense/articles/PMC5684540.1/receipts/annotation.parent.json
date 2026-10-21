@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC5684540.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "85b2cd411d280c6a389a9a4f6e0a773521a306bf2f58ded5429805d3afd954d2",
+  "annotation_sha256": "01f9b9774ba3b001a8fea203d69f0db09bcc2b9caaf91ff9a0e5bc1c0cfb8430",
+  "reviewed_at": "2026-10-21T03:40:07.840133+00:00",
+  "source_segments_read": 23,
+  "facts_reviewed": 66,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed inferred diagnostic_basis and single clinical_status from the dermatomyositis and ILD conditions (p1-f004, p1-f005).",
+    "Respiratory insufficiency text_value changed from \"persisted after prednisolone and cyclosporine A\" to \"persisted\" (source says \"Meanwhile\").",
+    "Removed borrowed indication from IVCY 500 mg (p1-f026); oxygenation support quote widened to its own full sentence.",
+    "PaO2 flag set to low from the source wording \"a low PaO2\".",
+    "Table 1 This case Admission/after-RTX ferritin (781, 186) and admission KL-6 (602) merged into the text facts as one item citing both, with table-column times. The CK 278 table cell is not linked to the text CK fact, because its column has no time label.",
+    "Replaced long header-to-cell table quotes with short literal header, row and cell quotes; removed the non-time \"[maximum]\" time text from the two table maxima.",
+    "Added review_only arthritis fact from the Discussion (\"revealed prior to initiating treatment in the present case\") linked to the arthritis/arthralgia ambiguity.",
+    "Split the additional 750 mg IVCY dose into its own event; moved table maxima and PSL/CsA during-or-after-RTX out of the post-RTX outcome event (new event for PSL/CsA).",
+    "Relations: e06->e07 re-evidenced with \"eventually insufficient\"; merged duplicate e08->e09; e10->e07 (even after), e07->e08 (RTX ameliorated refractory involvement), e03->e08 (125th day since initiation of the therapy).",
+    "Clinical remission cause_as_documented trimmed to the source wording \"administration of rituximab (RTX)\".",
+    "Per orchestrator ruling: e04 overlaps e05 dropped (the sentence before Meanwhile does not name the oral PSL/CsA therapy); CK table quote removed from p1-f034.",
+    "Summary rewritten as four phase paragraphs; added ambiguities for Figure 4 mPSL pulses and oxygen flows (pixel only); updated Table 1 limitation."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; figure pixels are described separately in visual.json.",
+    "Six literature-review patients in Table 1 and the discussion are cited cases, not index patients, and are not annotated.",
+    "Table 1 This case row: the Admission and after-RTX ferritin values (781, 186) and the admission KL-6 (602) are the same measurements as the text values and are recorded as one item citing both; the table-only maxima (ferritin 1437, KL-6 1674) and after-RTX KL-6 (638) are separate items without a time.",
+    "Numbers printed inside Figure 4 are pixel content and are not recorded as facts.",
+    "Treatment dates other than the 125th day for rituximab are not stated in the text.",
+    "Figure 4 prints a 112 indexes anti-MDA5 antibody label, IV-CsA 140 mg daily, oral CsA doses, a PSL taper and oxygenation-support flows with no text counterpart; these are pixel content in visual.json only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 23,
+    "facts_reviewed": 66,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient; six Table 1 literature cases correctly excluded.",
+      "Figure 2 elbow row prints (c),(d),(e) while the caption defines d, e, f; positional mapping confirmed on pixels.",
+      "Figure 4 values (112 indexes, mPSL pulses, IV-CsA 140 mg, O2 flows) stay pixel content in visual.json; no plot estimates.",
+      "Table 1 This case Admission/after-RTX values are the same measurements as the text and are merged."
+    ],
+    "residual_risks": [
+      "Duration-before-RTX anchor differs between text (initiation of therapy) and table footnote (hospitalization); kept as ambiguity.",
+      "Whether the 750 mg IVCY dose is a seventh dose or one of the six cycles is not stated in text.",
+      "Arthritis vs arthralgia unresolved; arthritis kept review_only."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC10801110.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "95766e9423fdbe8007485704fce19d40a6bc9a36e62328ef6474b02fc6b91f50",
+  "annotation_sha256": "0cffdcdaed211675a2eb53e9d0933a7f49fb603b55b0e0484e28532ef8e5085b",
+  "reviewed_at": "2026-10-21T13:25:32.212483+00:00",
+  "source_segments_read": 54,
+  "facts_reviewed": 137,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Medication facts p1-f093/f094/f095: the drafter quote stopped at \"Duolin inhaler\" and did not contain methylprednisolone; all three now quote the full \"for which she was on pharmacological treatment such as ...\" sentence.",
+    "p1-f011 (abstract musculoskeletal renal difficulties) and p1-f012 (Discussion cardiovascular and joint involvement): unhedged literal statements, assertion possible -> present, verification unconfirmed -> unknown; both stay review_only with their ambiguities.",
+    "p1-f036 Figure 1A caption lower-abdomen rash: review_only -> supported/include; it is a compatible refinement of the text abdomen, kept as a separate caption statement like panel B (p1-f035).",
+    "p1-f108 normal remaining lung parenchyma: removed the borrowed method \"CT thorax examination\"; the source says \"after these investigations\".",
+    "Split Table 2 row 3: p1-f118 pursed lip breathing completed (outcome sentence plus the text statement about Figure 2); new p1-f136 dyspnea-relieving position with status unknown.",
+    "Added p1-f137 therapist ROM exercises for an upper limb, completed, from the text statement about Figure 4; the Table 2 bilateral active ROM protocol row p1-f122 stays unknown. Added the Figure 3 text statement to ACBT flutter p1-f120.",
+    "p1-f125 aerobic exercises and manual muscle therapy: completed -> unknown (means named in a goal sentence). p1-f132: removed follow_up_duration_text (four weeks is the treatment duration).",
+    "p1-f017 joint pain: added the Discussion \"At the time of referral ... joint pain in all four limbs\" quote and body site all four limbs.",
+    "Moved the rash facts from the examination event p1-e05 to the presentation event p1-e03 (they come from the presentation paragraph).",
+    "Relations: added p1-e09 -> p1-e11 and p1-e11 -> p1-e12 from the Pre/Post treatment column headers of Tables 1 and 3; added the Table 1 header to e09 -> e12 and the Table 2 \"At the outset of treatment\" quote to e10 -> e11.",
+    "Rewrote the Figure 1 and Table 2 ambiguities; added an ambiguity that the presentation CT/bronchoscopy and the diagnosis-paragraph bronchoscopy/CT thorax are not identified as the same; updated summary paragraphs 1 and 3."
+  ],
+  "unresolved": [
+    "Case text MMRC grade 4 conflicts with Table 3 pre-treatment MMRC grade 3; both quarantined as review-only.",
+    "Discussion statements about cardiovascular involvement and MRC grade 5 are not supported elsewhere in the case and are kept review-only.",
+    "Table 3 six-minute walk distance has no printed unit and the rate of perceived exertion scale is not defined; no units or scales were inferred.",
+    "Table 2 is a protocol; only some listed exercises are stated as performed, the rest are recorded with unknown status.",
+    "Investigations in the presentation paragraph and the diagnosis paragraph are not stated to be the same; no CBC result is reported.",
+    "Caption-layer visual status is not_inspected in this annotation; the four JPEGs were inspected in the separate visual target.",
+    "Discussion and introduction sentences on general SLE, sickle cell disease and literature findings are background, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 54,
+    "facts_reviewed": 137,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (30-year-old woman, known SLE with class 4 lupus nephritis for seven years); no dates.",
+      "MMRC pre-treatment grade 4 (text, twice) vs Table 3 Grade 3 kept as a source conflict, both review_only; post-treatment Grade 1 included.",
+      "Discussion \"MRC grading has been modified to grade 5\" kept review_only/ambiguous (scale unclear).",
+      "All 56 Table 1 MMT cells checked against raw.xml: Right spans columns 2-3 and Left columns 4-5 (colspan 2 each); grades and Pre/Post mapping correct.",
+      "Medications in the \"such as\" list are what she \"was on\" for the diagnosed conditions: administered with the shared indication.",
+      "The two bronchoscopy statements are not identified as the same procedure (no definite back-reference; \"also\"), so they stay separate.",
+      "Table 3 values kept as printed: 6MWD 290/420 with no unit, RPE 7/3 with no scale, incentive spirometry in cc, TLC in liters."
+    ],
+    "residual_risks": [
+      "The Discussion cardiovascular claims may be copied from another paper (same paragraph mentions sickle cell disease); kept review_only.",
+      "The routine-checkup investigations (X-ray, bronchoscopy, CT thorax) are not ordered relative to presentation or referral.",
+      "Table 2 protocol items without a performance statement are status unknown."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12756496.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8b7996cfefb6a1bc46ce63c030db45f4258a2ecf2c95e7a450e84ba3a295d8b9",
+  "annotation_sha256": "1989524f4242deb2af497c8a6b6238561105f8869f900e4caae85f7e25720f11",
+  "reviewed_at": "2026-10-21T18:08:15.125994+00:00",
+  "source_segments_read": 90,
+  "facts_reviewed": 0,
+  "patients_reviewed": 0,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Roster set to reported_individual_count 405 (literal '405 mild CE patients were included in the retrospective analysis', b00027), roster_complete false, following corpus precedent for aggregate_only cohorts; drafter had null with no evidence.",
+    "Group-size limitation rewritten: the drafter said the text and Figure 1 both give 248/157; Figure 1 pixels print the sizes against the opposite labels and are pixel content only. Recorded that Table 1/Table 3 N = 220/147 equal the stated cured counts, and the 245 embryo-type denominator.",
+    "Cure-rate conflict wording corrected: abstract and Results give 88.40%, Table 2 prints 91.67% for 220/248; 220/248 matches neither.",
+    "Regimen limitation completed with the abstract variant (500 mg daily for 5 days) in addition to the 6-day/7-day variants; added the delayed-group start and follow-up cycle inconsistencies.",
+    "Added the Figure 1 caption exclusion count (20) mismatch as a text-side ambiguity, with the image count kept visual-only.",
+    "Table 3 limitation made specific (64/220 printed as 20.09%; delayed ongoing-No 12/113 vs early-miscarriage 10/113); 'cystic endometritis' wording and the 'Case Report' label recorded; draft wrongly attributed 'cystic' to a title-vs-text contrast.",
+    "Source coverage note for b00075 corrected from methods to discussion; confirmed no supplementary material in raw.xml."
+  ],
+  "unresolved": [
+    "Disposition aggregate_only: a retrospective cohort of infertile women with mild chronic endometritis compared by azithromycin timing; the source reports only group-level counts, means, rates and regression results and describes no individual patient, so no patient records are created and cohort statements are not copied to placeholder patients.",
+    "reported_individual_count is 405, the literal number of mild CE patients included in the retrospective analysis (following the corpus precedent for aggregate-only cohorts); roster_complete is false because none of the 405 individuals is enumerated or described individually.",
+    "Group-size ambiguity: the Results text gives the 405 included patients as an Immediate treatment group (n = 248) and a Delayed treatment group (n = 157), while the Table 1 and Table 3 column headings print N = 220 and N = 147, which equal the cured counts stated in the text (220 and 147); the source does not say that Table 1 is restricted to cured patients. Table 1 embryo-type rows use the denominator 245 for the immediate group. The Figure 1 image prints the two group sizes against the opposite group labels; values printed in images are pixel content only (visual.json) and are not a conflict side.",
+    "Source conflict on the immediate-group cure rate: the abstract and the Results text give 88.40% (the Results text with 220/248), while Table 2 prints 220/248 (91.67%); 220/248 itself does not compute to either percentage. Recorded, not reconciled.",
+    "Azithromycin regimen is described inconsistently: the abstract says 500 mg oral azithromycin daily for 5 days; the Subjects section says 500 mg on day 1 followed by 250 mg daily for 6 days; the Azithromycin treatment section says 500 mg on the first day, 250 mg on the second day, once daily for 7 consecutive days; the Figure 2 caption says 500 mg on day 1, 250 mg daily on days 2-6 within a 7-day course. The Introduction and section headings call it a 7-day course. The dosing printed inside the Figure 2 image is pixel content only.",
+    "Treatment and follow-up timing is described inconsistently: the delayed group starts azithromycin during the proliferative phase of the subsequent cycle in one paragraph and on the first day of menstruation in the following cycle in another, and the Azithromycin treatment section says delayed-group follow-up samples were collected in the secretory phase of the same cycle as the hysteroscopy, while the Figure 2 caption places the CD138 re-evaluation in the subsequent cycle. The Discussion also describes the comparison as follow-up timing rather than treatment timing.",
+    "The Figure 1 caption says 20 patients were excluded, which does not match the stated counts (833 mild CE patients, 405 included); the exclusion count printed inside the Figure 1 image is pixel content only and is not used as a fact.",
+    "Table 3 internal inconsistencies kept as printed: clinical pregnancy Negative 64/220 is printed as 20.09%; the delayed-group ongoing pregnancy 'No' count (12/113) differs from its early miscarriage 'Yes' count (10/113), whereas the immediate group shows 18/156 for both. The pregnancy outcome counts printed inside the Figure 1 image differ from Table 3 and are pixel content only.",
+    "Other wording issues kept as printed: the article is labelled 'Case Report' although it is a retrospective cohort study, and the closing summary refers to 'mild cystic endometritis' where the rest of the article concerns chronic endometritis.",
+    "Figures 1 and 2 are a cohort inclusion flowchart and a treatment/follow-up protocol schematic reviewed on pixels in the separate visual target; they carry no individual patient and are not EHR-includable. The article has no supplementary material (none listed in the article XML)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 90,
+    "facts_reviewed": 0,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Aggregate-only retrospective cohort (3,271 screened, 405 mild CE included); every segment is cohort-level, methods, discussion or back matter; no individuated patient anywhere, so patients [] is correct.",
+      "No supplementary-material or media elements in raw.xml; only the two figure graphics.",
+      "Both figures are aggregate flowcharts; visual.json transcribes printed text only, no plot estimates; privacy none; EHR non-includable diagrams."
+    ],
+    "residual_risks": [
+      "Numerous internal numeric inconsistencies in the source (group sizes, cure rate, regimen, Table 3 counts) are recorded as limitations, not reconciled."
+    ]
+  },
+  "physician_adjudicated": false
+}

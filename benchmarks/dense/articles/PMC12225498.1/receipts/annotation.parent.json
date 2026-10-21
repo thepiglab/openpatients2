@@ -1,0 +1,66 @@
+{
+  "article_id": "PMC12225498.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3865fd852485959c79e531ac73b37a153a6942db6f2205c57fa13c859aafbb00",
+  "annotation_sha256": "6af0577171248e522531f1a590c80e223e3bda2159d95b25318970878cb5b985",
+  "reviewed_at": "2026-10-21T13:54:19.742595+00:00",
+  "source_segments_read": 48,
+  "facts_reviewed": 319,
+  "patients_reviewed": 11,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Checked every Table 1 cell (23 data rows x 11 columns) against raw.xml: all data cells have colspan=1, the five colspan=12 rows are section headings, and the column-to-patient mapping is correct for all 11 patients.",
+    "Age facts changed from age_at_presentation to age_other because the table and text state no reference time for the ages.",
+    "Blood culture cells reading No are no longer flagged negative with status resulted: recorded as Positive blood cultures with the literal cell value No, status unknown, flag unknown, because the source does not state that blood cultures were drawn for every patient. The p8 Yes cell stays a positive blood culture.",
+    "Added per patient (all 11) facts from sentences that explicitly cover all patients: clinical stability in the ED, vasopressors absent and intensive fluid resuscitation absent in the ED (b00013), clinical improvement at discharge and improved inflammatory markers (b00014), and no death at home during the HAH days (b00018). Fever and dysuria clauses were not copied.",
+    "Split the hospital-at-home stay event from the home antibiotic event (not_occurred for the two NONE columns) and added events for initial emergency department treatment and discharge with clinical improvement.",
+    "Added 51 temporal relations, each quoting order-stating text that covers all patients: ED treatment before the HAH stay (Initially, all patients ... ED; later admission or transfer to HAH), HAH stay before discharge (in-stay care to the discharge ending it), discharge before the 30-day outcomes (Methods: the 30 days after discharge), and for the 9 treated patients the home antibiotic during the HAH stay and after the urine culture result it was tailored to (each patient).",
+    "Reworded the cohort ambiguities (deaths, AKI timing and resolution, re-admission cause, untreated patients) so they state that linking the unnamed-patient sentences to a table column would rest on cell matching only; added the Methods intravenous-antibiotic indication to the NONE ambiguity, the positive blood culture row to the p8 sex/pronoun ambiguity, new ambiguities on the five O-category patients (grouped non-urinary diagnoses) and on the three NA recurrence patients (Discussion says no recurrent UTIs).",
+    "Added article limitations for the abstract 57% vs Results 36.3% diabetes discrepancy, the Discussion no-recurrence statement vs three NA cells, the Methods IV-antibiotic indication vs two untreated patients, the relation basis, blood culture No handling and age_other; replaced the no-relations limitation.",
+    "Summaries rebuilt as four phase claims per patient covering the added ED, discharge and outcome facts; source coverage updated for the segments now used."
+  ],
+  "unresolved": [
+    "Retrospective case series reported as one table with a column per patient; patient numbers are the table column numbers and no narrative per patient is given.",
+    "Cohort sentences (cause of death, cause of re-admission, AKI resolution, non-urinary admitting diagnoses, fever in the emergency department, impaired cognition, direct versus delayed HAH admission) are not attributed to individual patients because they name no patient.",
+    "Text says E. coli was the most common pathogen in seven out of nine patients, while the Table 1 genus row lists E in seven of eleven columns; the denominator differs and is left unreconciled. Small percentage differences between abstract and body (for example 27.2% vs 27.3%, 77.7% vs 77.8%, 36.3% for 4 of 11) are rounding.",
+    "The text pronoun his for the single patient with a positive blood culture conflicts with the female gender listed for the column with that blood culture; recorded as an ambiguity only.",
+    "The abstract says 57% had diabetes mellitus, while the Results give four out of eleven (36.3%) and Table 1 lists four Yes cells; this is a cohort-level discrepancy with no per-patient value in dispute, so the table cells are kept.",
+    "The Discussion says there were no cases of recurrent UTIs during the 30-day follow-up, while the Results and Table 1 give three patients as not available; the table value is kept and the discrepancy is recorded as an ambiguity on those patients.",
+    "The Methods say all cases referred to HAH were indicated for completion of intravenous antibiotics, while the Results say two patients were not treated with antibiotics and Table 1 lists two NONE cells.",
+    "Temporal relations use only sentences that state the pathway for all patients: initial emergency department treatment before the HAH stay, the HAH stay before discharge, the home antibiotic during the HAH stay and after the urine culture result it was tailored to, and the 30-day outcomes after discharge. No per-patient time is given; the 30-day outcome facts keep only their row-label wording with relation unknown.",
+    "Blood culture cells reading No are recorded as the literal cell value without a negative flag because the source does not state that blood cultures were drawn for every patient.",
+    "Table 1 ages carry no stated reference time, so they are recorded as age_other.",
+    "The source has no figures and no supplementary material (raw XML checked)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 48,
+    "facts_reviewed": 319,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Retrospective series of 11 hospital-at-home patients with ESBL-positive urine cultures; individual data exist only as Table 1 columns 1 to 11.",
+      "raw.xml has no fig, graphic, media or supplementary-material elements; there are no figures or supplements to view.",
+      "Cohort sentences about unnamed subsets (two deaths from non-UTI causes, two re-admissions, AKI during HAH and its resolution, two untreated patients, five non-urinary diagnoses, fever, cognition) are not attributed; they appear only as ambiguities.",
+      "The his pronoun for the single positive blood culture conflicts with the female sex in that table column: ambiguity, table sex kept.",
+      "Seven of nine E. coli in the text vs seven of eleven E cells, and abstract/body percentage differences, are cohort-level limitations.",
+      "Full-row table evidence quotes with the column header row follow corpus precedent for column-per-patient tables (e.g. PMC10730335.1, PMC12798141.1, PMC12830030.1)."
+    ],
+    "residual_risks": [
+      "The all-patient relations and facts rely on Methods/Results/Discussion sentences that state the pathway for the whole cohort, not per-patient narrative.",
+      "Admitting diagnosis category O is recorded as a present condition named Other admitting diagnosis; the specific diagnosis is unknown.",
+      "Re-admission, death and recurrence at 30 days keep only the row-label time wording with relation unknown."
+    ]
+  },
+  "physician_adjudicated": false
+}

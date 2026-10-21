@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC10247292.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0a59e071c0cbeef1496cb9d858016955e714a030437e5b2b827041cf49c8fcae",
+  "annotation_sha256": "6c25a764c0f2e06a79f69d869306502fa9020ba373d06daea9ab781169c44e0c",
+  "reviewed_at": "2026-10-21T13:10:30.023986+00:00",
+  "source_segments_read": 45,
+  "facts_reviewed": 87,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed the untimed ankle CT (f050/f062) and absent referral letter (f084) from the '11 years before the index presentation' event p1-e03 (event membership was lending them a time their own sentences do not state); ankle CT is now its own untimed test event p1-e16.",
+    "Removed nicotine dependence (f005) from the meningioma history event p1-e02.",
+    "Relation e12->e13 now quotes only the sentence stating 'after four weeks of steroid therapy'; relation e12->e14 now quotes the prednisone start and its taper (drug start -> taper) instead of a three-sentence span.",
+    "Added relation e04 before e05 (adjacent sentences: unilateral onset, then 'her symptoms progressed' to bilateral loss within one week) and e02 overlaps e10 (meningioma stated with a 40-year duration, still present on the current CT/MRI).",
+    "Reworded the cause ambiguity: the abstract's 'we conclude' is an unhedged author conclusion, while the discussion/conclusions hedge it; added the 'favors ... culprit' quote; no cause fact (no cause field).",
+    "Clarified the ankle-CT/referral-letter time ambiguity (time phrase scopes only its own sentence).",
+    "Event p1-e05 'Within one week' time_precision exact -> range (upper bound)."
+  ],
+  "unresolved": [
+    "Figure pixels are reviewed in visual.json; the caption layer keeps visual_status not_inspected.",
+    "Pure tone audiogram thresholds and the speech audiometry table are printed inside Figure 1 (image content) and are kept only in visual.json, never as facts; the text records only the caption-level severity statements.",
+    "The hearing-loss cause is hedged across the abstract, discussion and conclusions; no cause is asserted as a fact.",
+    "The timing of the otolaryngology evaluation, CT and MRI relative to each other is not stated; no order is recorded among them.",
+    "Cited literature statements in the introduction and discussion are not attributed to the patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 45,
+    "facts_reviewed": 87,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (79-year-old woman); all 45 segments read including both tables and five captions; every Table 1 and Table 2 cell is an observation with printed units (Hb mg/dl kept as printed, empty platelet reference kept empty, MPO/PR3 '<1.0' flag unknown).",
+      "RF IgM/IgG/IgA split is literal: the text prints '+RF IgM > 100, +RF IgG 7.5, +RF IgA 20' and the Table 1 cell lists the three isotypes under the IU/mL row with reference <15; nothing added.",
+      "Abstract 'we conclude' RA is the cause is unhedged, but the body hedges it and the condition schema has no cause field; kept as an ambiguity, no cause fact.",
+      "VP shunt placed in the 1980s and the CT 'right transparietal approach ventriculostomy shunt' kept as separate facts with an ambiguity.",
+      "'Within one week' has no literal reference point in its sentence: relation before, anchor null kept; progression ordered after the unilateral onset via adjacent sentences.",
+      "Ankle CT and absent referral letter keep null times ('At that time (11 years ago)' scopes only its own sentence) and were removed from the 11-years-before event.",
+      "Whisper test results are bedside exam signs in symptoms_function; tinnitus resolution is abstract-only and ordered after steroids and leflunomide by the abstract sentence.",
+      "Figures viewed at full resolution with crops: audiogram symbol counts (6 circles, 6 X, 6 '>', 4 '[') verified, no positional readings; speech table values only in visual.json; 26 mm image labels kept as pixel content."
+    ],
+    "residual_risks": [
+      "Applying the abstract's 'after treatment with steroids and leflunomide' to the tinnitus clause is the natural reading of the compound sentence but not syntactically certain.",
+      "Exam, hand X-ray and Table 2 grouped in one rheumatology-visit event without a stated order relative to the presentation or prednisone start.",
+      "FIG5 privacy flag should be device text, not direct_identifiers (a single cut-off numeral, no date); agent sidecar change pending."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC9949279.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "770d655ae8aad0556f77c5288546172670a84e62cf12a41fbac4d46b425e936d",
+  "annotation_sha256": "3aa3645ff1d0307c6e4fe8ba05d1f67e17d3852f02acb21aa2bac4ce921a8186",
+  "reviewed_at": "2026-10-21T09:17:57.532079+00:00",
+  "source_segments_read": 19,
+  "facts_reviewed": 68,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f061 label now carries the stated count: 'Plasma exchange, 5 sessions' (count was otherwise lost).",
+    "Split event p1-e08: standard labs + serologies (b00008, now incl. f042-f044) vs new p1-e13 etiological CVT assessment (b00009 facts f022, f045-f056, previously missing from any event).",
+    "Split p1-e10 (plasma exchange only) from new p1-e14 (LMWH curative dose) and p1-e15 (vitamin K antagonist relay).",
+    "p1-e11 limited to f066 (the only fact carrying 'after completion of the course of plasma exchange'); untimed follow-up improvement and repeat muscle grades moved to new untimed p1-e16 (follow_up).",
+    "Added p1-e17 (neurological improvement during plasma exchange and anticoagulants, f067) and p1-e18 (COVID-19 suspected, f005); added f007 to p1-e03.",
+    "Added literal relations: e01 before e02 (b00006 'one week before the onset of GBS symptoms' + b00001 'complicated one week later by headaches, and general weakness'); e01 before e18 ('Given ... symptoms, COVID-19 infection was suspected'); e07 before e13 (MRI showing CVT -> etiological assessment of that CVT); e14 before e15 ('with relay by vitamin K antagonist'); e17 during e10 ('improved during treatment with plasma exchange and anticoagulants')."
+  ],
+  "unresolved": [
+    "Single case report; the Timeline paragraph gives only one relative time (fever, cough and vomiting one week before GBS symptom onset) and the admission month; most work-up and treatment steps have no stated time or order.",
+    "Standard laboratory tests are reported only as \"negative\" without values; kept review_only.",
+    "Treatment doses and durations are given only for hydroxychloroquine; plasma exchange sessions and heparin are not dated, and no indication is stated for any drug.",
+    "Figure 1 pixels are reviewed in the separate visual submission; the caption is the only source for the laterality of the unvisualized sinus."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 19,
+    "facts_reviewed": 68,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (66-year-old man) correctly rostered; discussion cases (Italian, Scheidl, Spanish teams) correctly excluded.",
+      "Routine labs reported only as 'were also negative' kept ambiguous/review_only with flag unknown: OBS-FLAG reserves negative for qualitative tests and 'negative' is not 'normal'; serologies keep flag negative.",
+      "Thrombophilia 'unremarkable' and protein C/S/AT III 'no deficiency' kept flag normal.",
+      "GBS condition grounded on the literal 'the onset of GBS symptoms'; AMAN diagnosis on 'Acute motor axonal polyradiculoneuropathy was diagnosed'; b00015 'consistent with AMAN' duplicates f008 and is not added.",
+      "Text MRI sentence cites Figure 1, so merging the caption finding into f033 is source-supported.",
+      "'A new PCR test' after the positive COVID-19 PCR kept as a literal re-test order; target pathogen of the new PCR stays unasserted.",
+      "No order asserted between hydroxychloroquine, plasma exchange and heparin (paragraph order only); admission->in-hospital ruling not extended to CSF/PCR/labs/treatment because the stay's care is not described as in-hospital."
+    ],
+    "residual_risks": [
+      "Interpretation of 'negative' for routine labs remains ambiguous by design.",
+      "Repeat muscle-testing grades and follow-up improvement are untimed and unordered against treatment."
+    ]
+  },
+  "physician_adjudicated": false
+}

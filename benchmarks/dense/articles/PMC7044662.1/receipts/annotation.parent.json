@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC7044662.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "73f41b15e5b5409b30164b18e71159c1a4fc13713671db3c3d6d6677058dcf4e",
+  "annotation_sha256": "0c55c0a934901039a8e63f53ed9e3569452221a00439f79aa6f776a4565269d6",
+  "reviewed_at": "2026-10-21T04:01:26.901480+00:00",
+  "source_segments_read": 29,
+  "facts_reviewed": 42,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Moved the untimed JOA 23 / ODI 24% facts out of the one-month follow-up event into their own untimed event (different assessment from the one-month VAS sentence); rewrote the summary and ambiguity so no one-month time is implied for them.",
+    "Moved the untimed baseline VAS/JOA/ODI scores and physical examination signs out of the admission event (timed by the symptom window \"in the last 1 week\") into an untimed assessment event; widened the ambiguity to cover the examination findings.",
+    "Removed anterior thigh pain (discussion sentence, no own duration) from the 10-year history event and added an ambiguity forbidding the 10-year duration or left side.",
+    "Set the L2-3 disc herniation condition laterality to unknown: the source gives the left side only for the compressed nerve roots (kept on the separate compression condition).",
+    "Split the pre-decompression MEP decrease into its own event and added literal relations: MEP decrease before decompression (\"before decompression\", b00014), MEP decrease during surgery, and MEP increase during surgery (\"intraoperative MEP after decompression\", b00007).",
+    "Set time anchors to the literal phrases \"decompression\" and \"the free nucleus pulposus being removed\" on the two MEP observations.",
+    "Changed flag negative to unknown on the X-ray (no instability) and CT (no calcification) imaging observations; negative is reserved for qualitative tests and the source does not call them normal.",
+    "Moved \"progressive\" from severity to text_value on the radicular pain and numbness symptoms.",
+    "Cleared the IONM procedure finding field (it held the electrode montage, which is technique) and kept the montage in the clinical statement; linked IONM to the monitoring event.",
+    "Set the one-year follow-up event time_kind to relative."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the six JPEG figures are inspected in the separate visual submission.",
+    "Single case report; the discussion cites a nine-case institutional experience and literature, which are not patient facts.",
+    "Medications, doses and anesthetic agents are not reported; no numeric MEP amplitudes are printed in the text.",
+    "No dates are given; times are relative (last 1 week, next day, one month, one year).",
+    "Baseline VAS/JOA/ODI sentences and one-month JOA/ODI sentences state no time of their own; see patient ambiguities."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 29,
+    "facts_reviewed": 42,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Single index patient (60-year-old man, L2-3 upper lumbar disc herniation, PELD with MEP/frEMG monitoring); roster count 1 is literal.",
+      "One-month JOA/ODI and baseline VAS/JOA/ODI/examination sentences carry no own time; kept untimed per the same-test rule.",
+      "frEMG \"No abnormal frEMG signals\" is flag normal; the 30% MEP improvement is literature and the 1-of-9-cases statement is a cohort statement, neither copied to the patient.",
+      "MRI and CT kept as one combined observation: the text sentence states both jointly and cites Figs. 3 and 5, so the MRI caption is the same study; the CT calcification caption is a separate fact.",
+      "Implied-order relations (admission to surgery, history to presentation, awakening to next-day discharge, discharge to one-year outpatient follow-up) match the rulings; got out of bed stays untimed inside the discharge event."
+    ],
+    "residual_risks": [
+      "Whether \"left\" governs the first-toe strength grade is grammatically open (ambiguity recorded).",
+      "\"In this study\" MEP sentence in the discussion is attributed to the index patient because the same paragraph describes this patient waking pain-free; the nine-case series is not otherwise described.",
+      "Assessment and JOA/ODI reassessment events have no literal ordering relation."
+    ]
+  },
+  "physician_adjudicated": false
+}

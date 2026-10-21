@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC9422550.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "712c3c546d0ae82c2b949f49f884197f8d3075c460ba7974bab57dbd04bed62c",
+  "annotation_sha256": "c839548f59b8bea8a5665aff79da4fde6f9d3719f0cf8328b89996e0c480ada6",
+  "reviewed_at": "2026-10-21T12:57:36.957104+00:00",
+  "source_segments_read": 22,
+  "facts_reviewed": 52,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Antibiotic/systemic/inhaled corticosteroid facts (f007-f009) and the refused biopsy (f010): quotes extended to include the sentence-own time \"During this period\" (relation during, anchor \"progressive dysphonia for four years\"); route \"systemic\" on f008 and \"inhaled\" on f009 copied from the source words. No indication added (not stated).",
+    "Added relations e02 -> e05 and e03 -> e05 (before): \"the patient once again decided to seek care and came to our service\" in the adjacent sentence orders the earlier treatments/refusal before the presentation (re- word).",
+    "Added the conclusion quote \"favorable outcome after radiotherapy treatment\" as a second evidence item on e14 -> e15.",
+    "Flags from the source words: myelogram \"increased erythrocyte series\" flag high; \"low proliferative index\" flag low; PET-CT \"no evidence of significant radioconcentration changes in the other analyzed regions\" flag normal (RULINGS).",
+    "f033 renamed \"Histopathology\" (was \"Bone marrow histopathology\") to match the recorded scope ambiguity of \"bone marrow immunohistochemistry and histopathology\" (no specimen assigned).",
+    "Linked dual views with alternate_representation_of: tumor f043 -> condition f039; biomarkers f044-f048 -> IHC observations f023, f024, f027, f028, f029; oncology radiotherapy f049 -> procedure f050.",
+    "Tumor f043: added the present-case discussion quote on disease in the glottic and supraglottic regions; laterality/extent/status kept unknown (not stated).",
+    "Removed f006 (no alterations in cervical ganglionary chains) from the videolaryngoscopy event e06: the source does not state it as a videolaryngoscopy finding.",
+    "Summary paragraph 1 now also cites the attributed discussion statements f041/f042."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the five JPEGs are inspected in the separate visual submission.",
+    "Discussion sentences about literature (laryngeal MALT lymphoma, amyloidosis, treatment options, cited reports) are not patient facts and are not copied to the patient.",
+    "No stage, dates or follow-up duration are stated for the patient; radiotherapy dose is not stated."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 22,
+    "facts_reviewed": 52,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (27-year-old man) correctly rostered; all other discussion content (literature, cited studies) correctly excluded except the \"In the present case\" sentence and the conclusion.",
+      "f041 immunocompromised state assertion=absent from \"immunocompetent\" kept: EVID-NEGATION treats a word that negates a specific finding (afebrile -> fever absent) as that finding absent; the gate warning is a cue-list false positive.",
+      "CT \"In previous examinations\", laboratory tests, PET-CT and bone-marrow work-up have no literal order against the presentation or radiotherapy; left unordered with the drafter ambiguity for the CT.",
+      "Figures: endoscopic still, axial neck CT, two H&E/Congo red panels, H&E/CD20 panels and axial PET-CT viewed at full resolution with edge crops; CT overlay text (AVERAGE, numeric strings, scale bar) carries no date or name; black blocks at the CT top edge are masks with no legible text."
+    ],
+    "residual_risks": [
+      "\"Bone marrow\" may govern both immunohistochemistry and histopathology; kept as an ambiguity without a specimen.",
+      "Kappa/lambda plasmocyte results keep flag unknown (source does not say positive).",
+      "Chronic laryngitis signs kept as an observation, not a condition."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,70 @@
+{
+  "article_id": "PMC8915992.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "34f7bb5a3a1c9e025619781afa8c32ec582eefb867e3a9cca153aabfcfde1370",
+  "annotation_sha256": "8b2d03d97d0c2585f5d2781cf3b05d0a3e810da638cfe0b12d1d9ac759467d88",
+  "reviewed_at": "2026-10-21T03:28:05.540516+00:00",
+  "source_segments_read": 65,
+  "facts_reviewed": 218,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p2 roster label: removed \"after meningitis\" (implied FNS followed meningitis); now \"late-onset severe facial nerve stimulation\" (b00021 \"late onset of FNS\").",
+    "p1-f039 (Table 1 aetiology \"Unknown, progressive\") set ambiguous/review_only: names no condition.",
+    "p1-f056 cheek movement during intraoperative testing set supported/include with the full sentence naming patient 1.",
+    "p1-f070 method corrected from BKB to live-voice open-set sentences (Table 2 cell).",
+    "p1-f040 gained text evidence \"They developed FNS during their first year of CI use.\"",
+    "Added p1-f079 FNS thresholds with the MED-EL implant 44-48 nC/phase (b00048).",
+    "Added p1-f080/p2-f069 BKB >90% before developing FNS and p1-f081/p2-f070 performance 40 percentage points below best scores (b00058).",
+    "Added p1-f082/p2-f071 male-speaker BKB lower than before severe FNS onset (b00005, patients 1 and 2 named).",
+    "Added p1-f083/p2-f072/p3-f059 minimal changes required during the first 2 months (explicit all-patients sentence b00047).",
+    "Added p2-f073/p3-f060 loudness reported at FN-threshold levels from the Fig. 2 caption text (moderate-loud / soft).",
+    "p2 insertion depth: results \"same depth\" (b00039) vs discussion \"marginally shallower\" (b00059) quarantined as source_conflict review_only (p2-f074/p2-f075); p2-f051 now carries only the seven extra-cochlear electrodes.",
+    "Events: p1-e09 split into 1-yr (e09) and 1.5-yr (new e13) speech tests; untimed outcome facts moved out of timed events into new p1-e14 and p3-e12 (no borrowed times); p2 untimed comparisons moved to p2-e12; p1-f045 moved to the programming-trials event.",
+    "Relations added (18): offer/decision -> reimplantation for all three (recommendation later given), pre-reimplantation header -> reimplant, reimplant -> programming/postactivation/new-implant outcomes (device implantation -> events of that device), p1 1-yr -> 1.5-yr (same-anchor column times), p2/p3 FNS onset -> programming trials (treating named existing condition / footnote c).",
+    "p1 summary: removed \"about\" before 2 months (not in source).",
+    "Source coverage b00058/b00059 updated; article limitations record the non-copied cohort sentences, the uninterpreted Full Insertion (Yr) years, and that supplement acquisition found no declared supplements."
+  ],
+  "unresolved": [
+    "Three supplementary DOCX files (supplementary tables 1 and 2, supplementary figures 1 and 2 are cited in the text) are listed as figures s001 to s003 with no caption and no resolved URL, and the source declares no supplements; their content was not reviewed.",
+    "Cohort-level statements without an explicit all-patient wording (for example activation 2 to 6 weeks after surgery, electrode position confirmed by postoperative X-ray, programming limited loudness) are not copied to individual patients.",
+    "Values printed inside Figure 2 are pixel content recorded only in visual.json; no estimated plot values are recorded.",
+    "Patient sex and exact ages are not stated; the series reports adults only.",
+    "Discussion of a single control sample reimplanted with the same device cites supplementary table 2 and is not a patient of this series.",
+    "The Methods count of five electrodes tested for patient 1 conflicts with 12 of 16 in Table 2; patient 2 has 13 versus 14 electrodes tested.",
+    "Discussion sentence \"All patients achieved adequate volume percept without FNS for stimulus MMA\" is a study-level conclusion and is not copied; it is not treated as a conflict with patient 1 reaching only \"medium\" loudness on single-electrode testing, because \"adequate\" is not a loudness rating and MCL was reached for all active electrodes in routine programming.",
+    "Discussion sentence \"none of the presented patients have experienced FNS since reimplantation\" refers to clinical use; patient 1 and 3 FNS with stimulus MB during postoperative loudness testing is recorded per patient and the cohort sentence is not copied.",
+    "The Table 2 \"Full Insertion (Yr)\" years are not attached to the reimplant events because the header does not state which event the year dates.",
+    "Supplement acquisition (op2 dense supplement_assets acquire) found no declared supplements: the three DOCX files (s001 to s003) are parsed as figures, so no supplement manifest or supplement review exists."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 65,
+    "facts_reviewed": 218,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Table 3: all 60 electrode cells verified against the source row by row (p1 12 thresholds, 4 x, 2 blank, 2 EC; p2 e16=47 at 20 uV, 12 x, 7 EC; p3 20 thresholds). Blank/EC = not_performed, x = negative.",
+      "Electrode-count conflicts are the same attribute (electrodes tested intraoperatively with MB): p1 five (Methods) vs 16 (Table 2/text/Table 3); p2 14 (Table 2) vs 13 (text, Table 3). FNS-positive counts and per-cell values stay include.",
+      "p2 Table 3 row marker (asterisk) vs footnote (a) mismatch is a print artefact; the electrode 16 response is placed at 20 uV by the text.",
+      "Reimplantation is recorded as completed for all three; offers are recommended care plans and now precede reimplantation in the timeline.",
+      "Fig. 2 box plots: visual.json records only printed BKB/AB labels and tick values; no plot estimates."
+    ],
+    "residual_risks": [
+      "Supplementary tables 1-2 and figures 1-2 (DOCX s001-s003) are unreviewed: the source parser lists them as figures and supplement_assets acquire found no declared supplements.",
+      "Patient 1 intraoperative MB thresholds carry an author artifact caveat (kept include with review_only caveat fact p1-f055).",
+      "Table 2 \"Full Insertion (Yr)\" years are not attached to reimplant events."
+    ]
+  },
+  "physician_adjudicated": false
+}

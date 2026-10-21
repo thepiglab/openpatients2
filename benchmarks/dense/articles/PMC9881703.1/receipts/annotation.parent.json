@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC9881703.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b9cf93b7da665d0d1b8e81765ee035a02a86a93d1b72cf4917ac8dd440e6488a",
+  "annotation_sha256": "0ab1f441f3700fa6aae5817be25b46f17fa68924bf9fd809027f1263e205f869",
+  "reviewed_at": "2026-10-21T04:16:52.981184+00:00",
+  "source_segments_read": 67,
+  "facts_reviewed": 67,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Weight loss (5.5 kg) and fever: removed the borrowed \"three-month history\" duration; the history phrase closes its own list (dizziness, precordial pain and adynamia). Ambiguity reworded.",
+    "GTG karyotype observation and its oncology biomarker alias: removed the discussion sentence (b00060) used to supply \"At the time of relapse\"; time now null.",
+    "Added a separate observation for the b00060 discussion statement (complex karyotype involving at least four chromosomes at the time of relapse) with an ambiguity that the source does not tie it to the GTG or FISH result.",
+    "Added the Figure 2 caption immunophenotype statement (71.2% of blasts positive for CD45, CD34, CD38, HLADR and CD117 at relapse) as its own observation, linked to the text-vs-caption marker-list ambiguity.",
+    "Added a not_performed observation for testing of the der(12) marker for chromosome 8 or 21 material (\"none of these points could be tested, because of the limitations of the material available\").",
+    "Split the relapse work-up event: only the myelogram/immunophenotype sentence carries \"At that time\"; molecular analysis, GTG banding and FISH are now separate untimed test events (12 events total).",
+    "Death outcome related_condition changed from AML (not stated) to septic shock.",
+    "Summary: removed the unsupported word \"abnormal\" for platelet/leukocyte counts (now printed values), fixed the three-month history scope, and stopped timing all relapse tests \"at that time\".",
+    "Ambiguities: eight-month relapse interval reworded (anchor is the complete remission); added t(8;21)-absence wording ambiguity and karyotype-at-relapse identity ambiguity."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected in the annotation; the four JPEGs are inspected in the separate visual submission.",
+    "Table 2 and Table 1 describe a literature search and 34 published ring chromosome 11 cases; they are not patient facts and the discussion outcome statistics are cohort-level.",
+    "Platelet and leukocyte counts are kept as printed text because the unit is written in scientific notation; no conversion or reference-range flag is applied.",
+    "Dates are month-level only (December 2010, August 2011, September 2011); no day-level dates are stated.",
+    "The FLAG regimen acronym is not expanded in the source and is not expanded here."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 67,
+    "facts_reviewed": 67,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (61-year-old woman, AML FAB M4); Tables 1-2 are literature search and published cases, correctly excluded.",
+      "Relapse named as AML from the Figure 1 caption (\"relapse of acute myeloid leukemia\"), which is literal caption text; accepted.",
+      "Relations checked: e05 to e06 accepted from b00058 (\"achieved complete remission after one cycle, a relapse occurred eight months later\"), the only remission described; FISH \"For further clarification\" is a purpose clause and does not order GTG to FISH; FLAG start to death not linked (no order word).",
+      "Scientific-notation platelet and leukocyte counts kept as text only; not_performed used for \"not tested\" and \"unable to study\".",
+      "Karyotype strings: GTG text has der(5?)/der(13?), caption and abstract omit the question marks (ambiguity); FISH text and Figure 4 caption match.",
+      "Death: 293 days after diagnosis vs nine months after admission are different anchors (ambiguity); hematological vs complete remission kept as ambiguity."
+    ],
+    "residual_risks": [
+      "Relapse immunophenotype recorded as two list observations (text list and caption list) rather than per-marker items.",
+      "Remission-to-relapse relation relies on the discussion calling the one remission \"complete remission\"."
+    ]
+  },
+  "physician_adjudicated": false
+}

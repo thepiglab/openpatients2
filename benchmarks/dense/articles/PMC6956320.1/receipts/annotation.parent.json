@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC6956320.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "da2a39af3f6e70b2a93f8a17da3eb5ded8a2ee987315d4b64016cdd2c3a45e69",
+  "annotation_sha256": "10aab92ba7ee06305481c1b5f4d84d003bdda229df85e5211a783ba0c2b4ee97",
+  "reviewed_at": "2026-10-21T07:59:43.468792+00:00",
+  "source_segments_read": 25,
+  "facts_reviewed": 49,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f036 conversion to open procedure: action=cancelled replaced by assertion=absent (only considered, never planned); added abstract quote \"The operation was completed without shifting to open procedures.\"",
+    "p1-f014 leucocytosis: renamed to Leucocyte count, text_value \"mild leucocytosis\", flag unknown -> high (source classifies it as leucocytosis and as the exception to normal ranges; no value derived)",
+    "p1-f048 no recurrence: removed follow_up_duration_text \"four years\" borrowed from the preceding sentence (NO-BORROWING)",
+    "Relation e06->e07 (surgery -> histology): added the membrane removal/extraction quote alongside the histology quote (implied removal -> histology of removed tissue)",
+    "Relation e08->e10 (discharge -> follow-up): added the discharge sentence alongside the follow-up sentence (discharge -> outpatient care)",
+    "Added relations e01->e06 and e01->e08 (admission opening the stay -> in-hospital surgery and discharge on the third postoperative day; both sentences quoted) and e03->e06 (\"preoperative imaging findings\")",
+    "Added article limitations for intentionally unlinked labs and albendazole events and for the superseded planned fenestration"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the six JPEGs are inspected in the separate visual submission.",
+    "Medical history is described only as not remarkable; no individual history items are recorded.",
+    "Discussion paragraphs describe the literature and the authors' opinions, not the patient, and are not patient facts.",
+    "No absolute times are given for the surgery or the albendazole course; only the admission date is stated.",
+    "Timeline left partial on purpose: the baseline laboratory evaluation and the albendazole prescription have no literal order against other events (no on-admission wording for the labs; \"to prevent recurrence\" names a goal, not an order), so they are not linked.",
+    "The planned laparoscopic cyst fenestration was superseded intraoperatively by partial pericystectomy; the source never states it was cancelled, so it stays a planned procedure."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 25,
+    "facts_reviewed": 49,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Single index patient (44-year-old man); discussion paragraphs are literature, correctly kept as background.",
+      "Simple splenic cyst correctly absent/refuted: intraoperative findings did not correspond and the lesion was recognized as hydatid.",
+      "CRP and fibrinogen flagged high from \"moderately elevated\"; tumor markers and other labs flagged normal.",
+      "Pain/bloating site: left subcostal site kept on bloating only; ambiguity recorded for pain.",
+      "Medical history \"not remarkable\" kept as a limitation only, per the conditions prompt (no expansion into individual negatives).",
+      "All six figures viewed at full resolution with crops (Fig 1 bottom overlay, Fig 3 instrument text)."
+    ],
+    "residual_risks": [
+      "Leucocytosis flag high rests on the source term leucocytosis; no count printed.",
+      "Baseline labs and albendazole prescription remain unlinked in the timeline for lack of literal order.",
+      "Visual submission Fig 3 conflates two instrument shafts; agent correction requested, figure sidecars not parent-signed."
+    ]
+  },
+  "physician_adjudicated": false
+}

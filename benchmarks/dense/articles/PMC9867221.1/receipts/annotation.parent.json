@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC9867221.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4f9ba8caf547afc642503f0966016883020e1f24b6ff71b99c216a97c68057af",
+  "annotation_sha256": "ad33afa87c12d54d7008bdee41ce80a7f93bd2013860723ec98c603378aa5850",
+  "reviewed_at": "2026-10-21T09:22:24.933087+00:00",
+  "source_segments_read": 168,
+  "facts_reviewed": 89,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f026 diabetes: the Table 2 current-case Comorbidities cell states it (glued \"DermatomyositisDiabetes\" is a lost cell line break, as in other cells of the table); set present/confirmed/include, evidence now quotes the column-header line plus the row; ambiguity reworded to forbid inferring type, onset or treatment.",
+    "MIC facts p1-f078..p1-f083: Table 4 current-case quote now includes the column-header line; p1-f078 renamed isavuconazole with the Table 4 abbreviation key quote \"ISC: Isavuconazole\" (the draft ambiguity claiming ISC is never expanded was false and was removed).",
+    "Added table-only facts from the Table 2 current-case row: p1-f088 travel interval of 4 years between last travel to a tropical/subtropical country and disease onset (footnote definition quoted) and p1-f089 follow-up 12 mo; neither is placed on the timeline.",
+    "Table 2 vs narrative ambiguity rewritten: different reference points (2013/2018 vs 4-year interval; 12 vs 18 months after surgery and 12 months after antifungal cessation) are ambiguities, not conflicts; the table third line is surgery with posaconazole followed by relapse, and the final wide excision with voriconazole is omitted from the table rather than contradicted.",
+    "p1-f087 Figure 4B caption MRI complete remission at six months follow-up set supported/include (caption-stated finding and time); anchor stays null; new unordered follow_up event p1-e16; ambiguity reworded (episode not named).",
+    "p1-f068/f069/f070 evidence now quotes the terbinafine initiation sentence together with the adjacent \"Two months later\" sentence that names its anchor.",
+    "p1-f072 \"three months later\" anchor set to null: the reference point is two sentences back across an unrelated sentence, so the adjacent-sentence anchor rule does not apply.",
+    "p1-f073 posaconazole continuation: duration_text \"three months\", time \"after the surgery\"; quote extended so it names POS.",
+    "p1-f056 swelling under the scar: size one centimeter added from the same sentence (\"both measuring one centimeter in diameter\").",
+    "Event p1-e08 split: MRI facts p1-f058..p1-f062 moved to new unordered test event p1-e15 so that the new relation p1-e08 -> p1-e09 (biopsy \"from one of these nodules\") does not order the MRI.",
+    "Relations added: p1-e02 -> p1-e03 (treatment of the named existing dermatomyositis), p1-e04 -> p1-e05 (nodule appeared, then referral with the nodule slowly growing for three months), p1-e05 -> p1-e06 (referral with the nodule, then excision for the initial suspicion of synovial cyst), p1-e08 -> p1-e09; p1-e10 -> p1-e11 evidence now quotes both the switch to POS and the excision after stabilization by POS.",
+    "Source coverage: Table 2 footnote b00105 and Table 4 footnote b00168 now patient_facts (cited); b00039 note records that the discussion restates the index course without new facts."
+  ],
+  "unresolved": [
+    "One index patient; the literature review (52 published cases, Tables 1 to 4, Results and Discussion) is aggregate or background and is not copied to the patient.",
+    "The Table 2 and Table 4 rows labelled Current case were compared with the narrative; differences in reference points are recorded as ambiguities, not reconciled.",
+    "Caption-layer visual status is not_inspected; the five figure images are reviewed in the separate visual submission.",
+    "Calendar years in the source (2013, 2014, 2017, 2018) are kept literal; no intervals or dates were derived from them."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 168,
+    "facts_reviewed": 89,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient; Tables 1 to 4 and Results are literature aggregates except the Table 2 and Table 4 rows labelled Current case.",
+      "All 9 draft relations were checked against their full evidence and kept; e01 -> e05 is ordered by two calendar years (2017, 2018) on the same calendar anchor.",
+      "Recurrence facts p1-f017 cite the nodule sentence and the adjacent confirmation sentence that refers back to it; this is the same lesion, not borrowing.",
+      "Handedness is not inferred from the abstract \"dominant hand\" plus the case text \"right hand\"; the ambiguity is kept.",
+      "Remission and posaconazole stabilization kept as outcome event other with literal text values; negative CT/PET kept as flag negative; ethnicity_as_documented \"of Malian origin\" kept literal.",
+      "All five figures viewed at full resolution with crops: Fig 1A/1B each have one arrow and one arrowhead, a red 50 um scale bar and a 0,0 degree viewer dial; Fig 4A has three arrowheads and 4B none; finger identity and laterality are caption claims only; no plot readings anywhere in visual.json."
+    ],
+    "residual_risks": [
+      "Diabetes rests on one glued Table 2 cell with no narrative support.",
+      "The MRI of the first recurrence (p1-e15) and the Figure 4B follow-up MRI (p1-e16) are not ordered in the timeline because no literal order or anchor exists.",
+      "Table 4 dash cells (agents not tested) are not recorded as not-performed observations."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC5080467.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "df28e3b006deb35e74a6d1f16e84543237dfcc86429ecbb9ce6abc7f480fe727",
+  "annotation_sha256": "0d504496164618c138ed48d884eb494d2ad67b994a58fc931fccddd1c0bf9710",
+  "reviewed_at": "2026-10-21T14:04:01.302280+00:00",
+  "source_segments_read": 14,
+  "facts_reviewed": 59,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Split p1-e02 so it holds only the 6-year didanosine exposure (time_text 'for 6 years', duration); HAART moved to new event p1-e17, so the didanosine start-to-stop relation no longer implicates HAART.",
+    "Split p1-e08: HVPG 2 mmHg (b00005) and hepatic vein wedge pressure within normal limits (b00010, new p1-e19) are not identified as the same measurement and are no longer one event.",
+    "Split p1-e09: adenoma diagnosis kept in p1-e09 (basis of the resection decision); HPS biopsy diagnosis moved to new p1-e20 so the e09->e12 relation no longer implies an HPS-based order.",
+    "Moved the review-only HPS resolution (p1-f009) from the pathology event into new p1-e18 (occurrence unknown) and added the literal relation didanosine cessation p1-e16 before p1-e18 ('complete remission of HPS after cessation of didanosine'); added that quote as second evidence of p1-f009.",
+    "Added p1-f057: changes of HPS not found on the explant (b00007, present-case Discussion statement), pathology, flag negative, linked to p1-e14 and the HPS-resolution ambiguity.",
+    "Added p1-f058: portal hypertension without resolution (b00010), condition active.",
+    "Added p1-f059 care plan (right hepatectomy offered because no HCC exception points) and event p1-e21 with the relation offer before hepatectomy p1-e12 (offer of a specific procedure later performed).",
+    "Changed HIV history p1-e01 to presentation p1-e03 from before to overlaps: ongoing well-controlled infection stated with a duration overlaps the presentation (RULINGS).",
+    "Extended the HPS-certainty ambiguity with the 'presumptive diagnosis' and 'suggestive of HPS' quotes and noted that the Discussion biopsy is not identified as the targeted biopsy."
+  ],
+  "unresolved": [
+    "Single-patient report; the case narrative gives no calendar dates, only \"Two years later\" between the biopsy workup and the transplant-center visit.",
+    "HPS resolution is stated in the Discussion alongside speculation about sampling error; recorded review-only.",
+    "Source does not map the two CT lesions to the two resected carcinomas.",
+    "Caption-layer visual status not_inspected; the three JPEGs are inspected in visual.json."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 14,
+    "facts_reviewed": 59,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (48-year-old man, HIV, HPS, two liver lesions resected as well-differentiated HCC); no tables or supplements in raw.xml, 3 figures viewed at full resolution.",
+      "HPS kept provisional with an ambiguity: Case Report 'suggestive', Discussion 'presumptive diagnosis' versus 'diagnostic of HPS'; wording conflict, not a numeric source conflict.",
+      "HPS resolution on the explant stays review_only/ambiguous because the authors offer sampling error or resolution.",
+      "Two HCCs and 'both tumors' biomarkers kept as one tumor and one biomarker each, literal to the unindividuated source; alternates (tumor/condition, biomarker/observation, oncology treatment/procedure) are the intended dual views.",
+      "No relation for 'Two years later' (opens a new paragraph, no anchor). e09 adenoma diagnosis before resection kept: 'proceeded with resection ... based on ... inflammatory subtype of adenoma' is result to action, not diagnostic basis wording."
+    ],
+    "residual_risks": [
+      "Didanosine cessation and wedge pressure come only from the Discussion; their timing relative to the workup is unstated.",
+      "The CT lesions are not mapped to the two resected HCCs."
+    ]
+  },
+  "physician_adjudicated": false
+}

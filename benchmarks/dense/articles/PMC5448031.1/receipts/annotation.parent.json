@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC5448031.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "663952e3104bd824bc37ec524713829e704e3a1cba18a0380ea6e92f127a66b3",
+  "annotation_sha256": "73a70ccacc7da7c0601ae3cb45522f2a1b852be268b937a73eaecd9a78002468",
+  "reviewed_at": "2026-10-21T04:13:24.644428+00:00",
+  "source_segments_read": 12,
+  "facts_reviewed": 42,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added demographics ethnicity_as_documented \"Indian\" from \"A 10-year-old Indian girl\" (source descriptor only, nationality vs ethnicity not resolved; follows corpus precedent for \"Chinese woman\"/\"Bangladeshi male\") and linked it to the presentation event.",
+    "Split \"The patient became afebrile and counts decreased progressively.\" out of the Post-drainage outcome event into its own untimed event p1-e09 with an ambiguity: the sentence states no time and must not borrow \"Post-drainage\" from the previous sentence.",
+    "Removed \"after drainage course\" from the p1-f020 afebrile clinical statement so it carries no time.",
+    "Restricted the Post-drainage outcome event evidence to the post-drainage improvement and the abstract recovery sentence.",
+    "Added the abstract \"After complete investigation\" sentence as extra literal evidence for the workup-before-drainage relation.",
+    "Updated the article limitation about the Indian descriptor and removed \"after drainage\" from the counts limitation."
+  ],
+  "unresolved": [
+    "The abstract and case text conflict on the history duration (1 month vs 15 days) and on the pus volume drained (around 500 ml vs around 300-400 ml); both sides are kept review_only.",
+    "The source does not state which counts decreased, nor when.",
+    "Leukocyte flag high rests on the source wording neutrophilic leukocytosis; no flags were derived from reference ranges.",
+    "The source calls the patient an Indian girl; the descriptor is recorded as documented ethnicity text without inferring nationality or race.",
+    "Discussion and conclusion statements are general and were not assigned to the patient.",
+    "Caption-layer visual status not_inspected; actual pixels inspected in the separate visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 12,
+    "facts_reviewed": 42,
+    "figures_viewed": 2,
+    "key_findings": [
+      "One index patient (10-year-old girl, left CSOM with cholesteatoma and Citelli abscess); roster 1, complete.",
+      "Abstract vs case-text conflicts (1 month vs 15-day history; around 500 ml vs around 300-400 ml pus) kept as source_conflict review_only on the conflicting attribute only.",
+      "\"counts decreased progressively\" kept ambiguous review_only because the counts are not named.",
+      "Leukocyte flag high is supported by the source term neutrophilic leukocytosis; neutrophil percentage and hemoglobin stay unflagged.",
+      "Audiometry kept as observations per SECTION-SIGNS; HRCT is both procedure and observation.",
+      "Relations checked: age-two history before 10-year-old presentation (two ages from birth), \"After complete evaluation\" for exam/workup before drainage, Post-drainage improvement, 3 weeks of parenteral antibiotics before mastoidectomy.",
+      "Discussion and conclusion paragraphs are general and correctly excluded from patient facts."
+    ],
+    "residual_risks": [
+      "Fig 2 asset contains two uncaptioned eye-barred profile photographs besides the captioned HRCT; ownership of the photographs rests on the single-patient context.",
+      "Fig 1 does not state which photograph is pre- and which post-operative.",
+      "Timing of afebrile state and falling counts is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

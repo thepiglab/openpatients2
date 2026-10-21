@@ -1,0 +1,53 @@
+{
+  "article_id": "PMC12225394.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "67336d7eb9b63e1f59d69e12c8ac0b730176867af297e7c840b30d6fb2cd36e8",
+  "annotation_sha256": "ae241fe60da80dbdcfb8aacac282cdd30a8ef40607aebf7c682dbffa21623136",
+  "reviewed_at": "2026-10-21T13:31:55.568245+00:00",
+  "source_segments_read": 56,
+  "facts_reviewed": 101,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f093 (narrative 'within the respective reference ranges', review_only, contradicted by printed Table 1 rows) from summary paragraph 2 fact_ids; disputed statements stay out of summaries.",
+    "Added order-only relations p1-e05 (ED presentation opening the stay) before p1-e06 (12-lead ECG), p1-e08 (physical examination), p1-e09 (admission laboratory tests) and p1-e10 (bedside echocardiography), each quoting the presentation and the event sentence.",
+    "Extended the Figure 4 ambiguity: the bedside echocardiogram also reported normal LA volumes without a value, so the caption's 'baseline' 32 mL is linked to the next-day echo only through the text's Figure 4 citation (added b00010 evidence and p1-f044)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the five figure JPEGs were inspected in the separate visual submission.",
+    "Supplementary Figure S1 (Apple Health screenshots in a one-page PDF inside a ZIP) carries printed values and date and time stamps in pixels; its values are not extracted as facts, and the caption-only text mention of sinus bradycardia has no printed value in the article text.",
+    "Table 1 values are recorded with their printed reference ranges and no flag from those ranges; the narrative statement that panels were within reference ranges conflicts arithmetically with several printed rows and is kept review_only.",
+    "The next-day echocardiogram findings carry no fact-level time; the event carries the stated time. The Figure 4 caption calls the echocardiogram baseline while the text places it on the following day.",
+    "Discussion statements about cited literature, the Apple Heart Study and general AF mechanisms are background and not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 56,
+    "facts_reviewed": 101,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (27-year-old man); all 33 Table 1 rows present with literal units, comparators and printed reference ranges, flag unknown.",
+      "Narrative 'within reference ranges' vs out-of-range printed AST, cholesterol, LDL, triglycerides and fT3 is an arithmetic/qualitative mismatch, not two different numbers for one value: kept as an ambiguity with the narrative review_only, not a source conflict.",
+      "Edoxaban 'optional' kept review_only/possible/unknown action ('X or not' asserts neither); 'denied any history of drug assumption' absent/historical with ambiguity; 'nonsmoker' absent/current matches corpus precedent and SOC-NEVER.",
+      "'showed or reported no recurrence of AF' kept as absent recurrence with an ambiguity; hedged trigeminocardiac/vagal mechanisms and the avoid-NP-swab advice are review_only.",
+      "All 17 relations checked on their full evidence lists against RULINGS (presentation/admission opens stay, in-hospital care to discharge, Subsequently and One month later as same-paragraph adjacent anchors, Following, discharge to follow-up).",
+      "Five figures and the one-page supplement viewed at full resolution; Figure 4 pixels print no 32 mL value (caption-only), ECG visual rows carry only printed labels and counts verified on crops."
+    ],
+    "residual_risks": [
+      "Next-day echo text 'The following day' opens a new paragraph, so p1-e14 is ordered only before discharge, not after admission.",
+      "Supplement S1 page carries a device-owner name and calendar date/time stamps; no sidecar field records privacy categories for PDF supplement pages beyond notes/limitations."
+    ]
+  },
+  "physician_adjudicated": false
+}

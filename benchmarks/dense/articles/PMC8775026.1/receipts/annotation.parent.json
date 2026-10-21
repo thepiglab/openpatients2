@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC8775026.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "319a36efd8fcc1a39bf67e6396b92dac254d9a2b51fec6f0ec6b80c8d0c477a9",
+  "annotation_sha256": "bfcb57873717dd41836caab86174099d63ecac867e898e102dd1c7e1ac4ca40d",
+  "reviewed_at": "2026-10-21T09:15:49.131621+00:00",
+  "source_segments_read": 32,
+  "facts_reviewed": 130,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "MD median facts p1-f082/085/088/091/094/097: the row-label scale \"×10^(−3)\" moved from text_value (which held the label \"MD (×10^(−3))\") to unit; MD quartile facts p1-f084/087/090/093/096/099 given the same literal scale unit.",
+    "Q1/Q3 quartile facts (24): kept the split and include scoring because raw.xml prints each cell as two values separated by a <break/> (Q1 above Q3); notes and the ambiguity now cite that printed break instead of a three-decimal convention, and the ambiguity links all 24 facts.",
+    "Text-vs-Table 1 ambiguity extended: the DTI-FA -34.9% / FWI-FAt -3.3% sentence cites Table 1 but Table 1 prints neither value; the solid-voxel MD/FW percentages have no stated reference point. Values kept unmerged, FA/FAt time left null.",
+    "Added p1-f130: \"a 10-fold smaller decrease in the FAt relative to the FA was noticed at t5\" (observation, at t5), linked to t5 event p1-e08 and summary claim 3.",
+    "Relations added: p1-e01 before p1-e03 (baseline MRI shows a \"partially resected mass\", post-hoc imaging); p1-e09 same_time p1-e08 (\"At t5, the patient presented\" + \"at 8-month follow-up (t5)\"); p1-e02 before p1-e08 (Table 1 column groups Proton Therapy Treatment then Follow-Up, cumulative dose none at t5).",
+    "p1-e08 time_precision set to approximate (\"8-month\" vs 269 days in Table 1, recorded as an ambiguity).",
+    "Summary claim 2 reworded: the draft said \"smaller later changes in the diffusion indices\"; the source says smaller fluid-voxel changes while the solid-voxel trend progressively inverted.",
+    "Article limitations: stale \"supplement not part of retained text\" line replaced by the reviewed supplement scope and the NAWM2 48.7 vs 48.6 Gy image-legend discrepancy (image-printed, not a conflict); added the Figure 2 caption t0-t4 vs printed t5 note.",
+    "p1-f018 oncology tumor note explains ONC-BENIGN handling (no grade or benign behaviour stated; histologically determined brain tumor treated with resection and 54 Gy PBT)."
+  ],
+  "unresolved": [
+    "Retrospective imaging case report with sparse clinical history; sex, exact age, symptoms before treatment and tumor grade are not stated.",
+    "Table 1 reports whole-tumor medians whereas the text reports solid-voxel changes; the two are kept as separate observations.",
+    "The supplementary ZIP (one 10-page PDF: planning dosimetry, Table S1 acquisition parameters, Figures S1 to S5 and Table S2 NAWM values) is reviewed in its own supplement sidecar; its typed facts are supplemental, not article facts. Its Figure S3 and S5 legends print different upper dose limits for NAWM2 (48.7 Gy and 48.6 Gy); these are image-printed values and are not recorded as facts or as a conflict.",
+    "Figure captions are author statements; pixels were inspected separately in visual.json.",
+    "Figure 2 caption lists t0 to t4 while the panels also print t5; panel content is described in visual.json."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 32,
+    "facts_reviewed": 130,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index child (age range 10-15 years, sex not stated); hypothalamic pilocytic astrocytoma, partial resection, PBT 30 x 1.8 Gy RBE = 54 Gy, MRI at t0, t1-t4 (9/17/24/30 days) and t5 (269 days, 8-month follow-up).",
+      "All 84 Table 1 cell facts checked programmatically and by eye against the row cells and the t0-t5 headers; the footnote supports zero days and zero delta at baseline.",
+      "Table 1 whole-tumor medians and the text solid-voxel percentages are different measurements and stay unmerged; pseudoprogression stays assertion possible (\"potentially indicate\"), and the 34% cohort rate is not a patient fact.",
+      "Both figures viewed at full resolution with crops of the Figure 2C brackets; every printed r value and significance symbol in visual.json matches the pixels; visual.json has no plot estimates or positional readings.",
+      "Supplement PDF (10 pages) rendered and read page by page; all 96 Table S2 value cells match the transcriptions and typed facts."
+    ],
+    "residual_risks": [
+      "The Q1/Q3 split rests on the article XML line break; the parsed segment text that quotes cite shows the values run together.",
+      "The DTI-FA -34.9% and FWI-FAt -3.3% values have no stated region or time and do not match Table 1, which the sentence cites.",
+      "Pilocytic astrocytoma kept in oncology.tumors although the source states no grade or malignancy."
+    ]
+  },
+  "physician_adjudicated": false
+}

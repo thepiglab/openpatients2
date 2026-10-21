@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC11688388.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "bae648652e85c2e3424bc6c4c7c4cd5f8c8b8c215465d295d62f82550f6237a1",
+  "annotation_sha256": "739cbf94d7bd3f3cb686e1d007ece67179b316c533817a0b34a0ba9edb3ae9f3",
+  "reviewed_at": "2026-10-21T14:23:55.328206+00:00",
+  "source_segments_read": 47,
+  "facts_reviewed": 214,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Figure f3 attribution note: removed the claim of a trailing \"0\" print artefact in the caption; the source caption has none.",
+    "Article limitations: corrected the Table 1 \"no separators\" statement (raw XML has line breaks); added the case 3 faricimab count conflict, the cohort-range sentences not copied, and the table-column event modelling.",
+    "Text CMT observations re-classified kind other -> imaging to match the Table 2 CMT items (no method added where the sentence does not name OCT).",
+    "p1: linked Table 1 BCVA at first faricimab dose to the first-injection event and the Table 1/2 unexpected-response cells (BCVA 0.2, PED height 547, width 4607) to the unexpected-response event; added events for the Figure 2 rows (diagnosis, after unexpected response, week 52) and the Table 2 Pre switch and Final visit columns; added 6 literal relations (ordinal first/fourth injection, caption \"after unexpected response\", follow-up following the unexpected response, Table 2 header order).",
+    "p2: linked Table 1 BCVA at first faricimab dose to the switch event and the unexpected-response cells (BCVA 0.2, PED height 264, width 1211) to the unexpected-response event; added Previous treatment, Pre switch and Final visit events; added 4 literal relations (footnote \"before the switch to faricimab\", Table 2 header order, follow-up following the unexpected response); added visual acuity versus logMAR BCVA ambiguity.",
+    "p3: merged text CMT 385 µm \"Prior to the switch\" with Table 2 \"Pre switch\" 385 (removed duplicate p3-f047); quarantined the faricimab count conflict (text four vs Table 1 five: p3-f030 and p3-f042 source_conflict/review_only) and removed the disputed count from the summary and event description; linked Table 1/2 first-dose and unexpected-response cells to their events; added Pre switch and Final visit events; added 4 literal relations (switch -> six weeks after first injection, lasers targeting the lesion found at the unexpected response, Table 2 header order); added ambiguity for differently labelled text/table pairs.",
+    "p4: merged text CMT 402 \"Before switching\" with Table 2 \"Pre switch\" (removed p4-f039) and text \"final logMAR BCVA of 0.3\" with Table 1 Final visit (removed p4-f037); split the text CMT 279 µm from the Table 2 At unexpected response cell (new p4-f052) because the gradual response is timed by Table 1 at 5 weeks post 4th faricimab while the text value has no stated time; extended Figure 3B to the stated minimal inferior thickening (hedged growth interpretation not recorded); linked Table 1/2 cells to the first-dose and 5-weeks-post-4th events; added Previous treatment, Pre switch and Final visit events; added 8 literal relations."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the three figure images are described in visual.json from pixels.",
+    "Cohort statements (means, ranges, \"one patient\" bleeding sentence, two continuing on faricimab and two switched back) are not copied to individuals; only sentences explicitly covering all four patients or labelled cases are used.",
+    "Text and table values that share numbers but differ in labelled time point (presentation versus Pre switch, time of switching versus first faricimab dose) are kept as separate observations.",
+    "Table 2 prints NA (Not Applicable) in the Previous treatment columns for cases 1 and 3; recorded as not applicable, not as zero.",
+    "Visual acuity is reported as logMAR BCVA in table headers; narrative sentences without logMAR carry no unit.",
+    "No supplementary material is listed in the source.",
+    "Table 1 Subsequent treatment cells appear glued in the parsed text (\"4 faricimab2 aflibercept\"); the raw JATS XML separates the counts with line breaks, so the split into drug-count entries is unambiguous. The order of the listed counts is not stated as a sequence and is not used for timing.",
+    "Case 3: Table 1 Subsequent treatment lists 1 faricimab, 7 aflibercept and 5 faricimab, while the text gives one faricimab injection and then seven aflibercept and four faricimab injections over 13 months; the later faricimab count (5 versus 4) is a source conflict and both count facts are review_only.",
+    "The results sentences \"all eyes experienced a reduction in SRF and improved visual acuity at 4-6 weeks\" and \"worsening of inferior macular PEDs was noticed in all patients after 1-4 faricimab injections and 4-9 weeks\" give cohort ranges; the per-case sections state each patient's own findings, so these ranges are not copied to individuals. The b00017 sentence that all patients were followed after their unexpected responses is used only to order the follow-up after each unexpected response.",
+    "Table 1/2 column headers (Previous treatment, Pre switch, first faricimab dose, At unexpected response, Final visit) are modelled as events; text values with a differently worded time label (presentation, at the time of switching, end of follow-up, latest follow-up, visual acuity versus logMAR BCVA) stay separate observations with ambiguities."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 47,
+    "facts_reviewed": 214,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Four individually described PCV cases (Cases 1-4) with Table 1 and Table 2 rows; no supplementary material (source.json supplements empty, raw XML has no supplementary-material element).",
+      "Cohort copies checked: hypertension/diabetes negation, PCV confirmed by multimodal imaging, fovea fluid-free in all cases and extrafoveal inferotemporal PED worsening in all cases each explicitly cover all four; b00033 \"both patients\" refers literally to the case 3 and case 1 labels in the preceding sentence.",
+      "Table 1 Subsequent treatment cells are separated by <break/> in raw XML, so the drug-count split is unambiguous.",
+      "Case 3 faricimab count (text four vs Table 1 five after seven aflibercept) is a source conflict; both count facts quarantined review_only and removed from the summary.",
+      "Text/table merges limited to identically labelled time points (CMT at unexpected response cases 1-2, CMT prior to/pre switch cases 3-4, final logMAR BCVA case 4); case 4 text CMT 279 split from the Table 2 cell because the gradual response is not tied to one time in the text.",
+      "Added table-column and Figure 2 row events and 22 literal relations quoting column headers, the Table 2 footnote, captions, b00017 follow-up wording and ordinal injections.",
+      "Visual, privacy and figure-EHR sidecars checked on the pixels of all three figures; measurement series values and headers match raw XML Table 1/2 by hand."
+    ],
+    "residual_risks": [
+      "Text values with differently worded time labels (presentation, at the time of switching, end of follow-up, latest follow-up, narrative visual acuity) are kept separate from table cells with equal numbers; they may describe the same visits.",
+      "Case 1 Pre switch column has no defined meaning for a treatment-naive patient; it is ordered before the unexpected response only by the Table 2 header order and caption.",
+      "Tiny scanner text in figure corners is illegible; a date cannot be ruled out."
+    ]
+  },
+  "physician_adjudicated": false
+}

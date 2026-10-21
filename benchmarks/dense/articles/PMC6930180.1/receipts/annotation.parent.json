@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC6930180.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "361513bc3d7ae43d815335eae35416168f54145ed4a40d19e4a21779bdfc8944",
+  "annotation_sha256": "e6193371d94ec31f39e3ab4deb7d44927535caf13b75ff04de23cc6f609093b0",
+  "reviewed_at": "2026-10-21T04:40:22.539723+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 94,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "June 2019 CT: split the bilateral ground-glass finding (undisputed; text plus Figure 3B caption) into an included fact; only the pleural-effusion laterality (right in text, left in caption) stays source_conflict/review_only on both sides.",
+    "Steroid-refractory pneumonitis set to confirmed, citing the discussion statement that she rapidly developed a resistance to steroid treatment alongside the \"We considered\" sentence.",
+    "Removed borrowed attributes: methylprednisolone indication (from the preceding sentence), primary_site/histology on the three later tumor time-point records, TNM placed in condition severity, inferred care-plan target and outcome related_condition.",
+    "High-dose methylprednisolone: removed duration_text \"within 5 days\" (response window, not duration). Non-response outcome event changed from deterioration to other.",
+    "Bronchoscopy result observation kind pathology -> other.",
+    "Added organ transplant (assertion absent) from the list negation; negation ambiguity updated (medications left unitemised).",
+    "Split Jan 2019 progression and third-line nab-paclitaxel into separate events (nab-paclitaxel is undated); switch relation now nab-paclitaxel -> atezolizumab.",
+    "Added literal relations: radiotherapy \"followed by\" second-line chemo; Sept 2018 symptoms same_time CT (\"At that time\"); methylprednisolone before improvement (Figure 3C caption \"After treatment with corticosteroid\"); first-line -> second-line -> third-line therapy.",
+    "Added ambiguity: Sept 2018 opacities bilateral (text) vs confined to irradiated right hilar area (Figure 2A caption). Provisional-diagnosis ambiguity now also cites Figure 3B caption and discussion.",
+    "Authored text uses ground-glass instead of the source misprint ground-grass (quotes unchanged); summary \"by day 15\" -> \"on day 15\"."
+  ],
+  "unresolved": [
+    "Table 1 and the discussion describe cited literature cases and trial data; they are not patient facts.",
+    "Figure 1 prints month-level dates and cycle counts inside the image; these are pixel content recorded only in visual.json and not promoted to facts.",
+    "Pleural effusion laterality (right in text, left in the Figure 3B caption) and the day counts versus caption intervals are unresolved source differences.",
+    "No supplements."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 94,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (44 year old woman, SCLC); Table 1 and discussion literature cases are not patient facts.",
+      "Pleural effusion laterality is a genuine text/caption source conflict; day 15/24 vs caption 1 week/Ten days later have different anchors and stay an ambiguity.",
+      "Immunotherapy-related pneumonitis kept provisional per the case text (\"was thought to develop\") with an ambiguity citing the firmer abstract, caption and discussion wording.",
+      "Figure 1 image text (month dates, cycle counts, microwave ablation) kept as pixel content in visual.json only.",
+      "Figure 3E shows three arrows, not four as visual.json states (agent-owned; reported)."
+    ],
+    "residual_risks": [
+      "Pneumonitis day counts have no stated anchor and cannot be calendar-dated.",
+      "Second-line chemotherapy time kept as the governing \"In June 2018\" of its sentence although it followed radiotherapy.",
+      "The \"subsequent CT\" showing liver progression is not ordered against the immunosuppression response (no named anchor)."
+    ]
+  },
+  "physician_adjudicated": false
+}

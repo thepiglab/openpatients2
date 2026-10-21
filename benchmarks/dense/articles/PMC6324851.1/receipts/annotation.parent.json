@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC6324851.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9e902c46137f2b733ad74e2c39bea8b7a0d39e6033fb04075feff4abf7c361bd",
+  "annotation_sha256": "e9e93ec049b2a33fa5709bb440b31cb9a4056b6bc4480929763694bff2f7f6a7",
+  "reviewed_at": "2026-10-21T04:18:53.599980+00:00",
+  "source_segments_read": 28,
+  "facts_reviewed": 50,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f001 case_context: removed \"pulmonary tuberculosis\" from index_subject_description (never stated as a diagnosis).",
+    "p1-f005 dysphonia: \"progressive\" moved from severity to text_value (course qualifier, not a severity grade).",
+    "p1-f005..f008: kept \"four months\" on all four list items (duration heads the coordinated list in each item's own sentence); replaced the drafter's self-contradicting hedge note.",
+    "p1-f016: restored the literal anchor \"physical examination\" for the time \"During the physical examination\"; other exam signs keep null time (no borrowing).",
+    "p1-f020: \"No other alterations were found in the rest of the examination\" re-coded as scoped normal exam (sign, assertion present, text_value normal) per SECTION-SIGNS and the \"no abnormalities = normal\" ruling.",
+    "p1-f022 pulmonary tuberculosis: kept provisional but made certainty ambiguous / review_only, role unknown; replaced the purpose-clause evidence (\"to evaluate the active tuberculosis disease at pulmonary stage\") with the high-suspicion sentence and the b00014 radiography clause.",
+    "p1-f043: replaced the two-fragment evidence (second quote only supplied the anchor) with one contiguous b00010 sentence that states both the treatment start and \"after a week\".",
+    "Added p1-f049: laryngeal biopsy not performed at the earlier laryngoscopy (b00006), separate from the in-hospital biopsy that was not possible (p1-f034).",
+    "Added p1-f050: oncology tumor t1 laryngeal cancer, assertion possible, alternate representation of p1-f023 (ONC-BENIGN: explicitly evaluated malignancy); oncology domain_coverage set documented.",
+    "Events: added p1-e13 (earlier laryngoscopy, report concluded laryngeal cancer, no biopsy) and p1-e14 (differential diagnoses proposed); removed p1-f037/p1-f023 from the admission event; moved confirmed laryngeal tuberculosis (p1-f021) from the treatment-start event to the improvement event whose sentence says the improvement confirmed the presumptive diagnosis.",
+    "Relations added: e13 before e03 (report brought at admission), e13 before e05 (\"A new laryngoscopy\"), e03 before e14 (admission opens the stay), e10 before e11 (in-stay improvement before discharge, same sentence).",
+    "Summary claims 1-2 rewritten: no \"tuberculosis favored over cancer\" wording; differential and high-suspicion wording literal; biopsy-not-performed facts cited.",
+    "Pulmonary tuberculosis ambiguity reworded to match the review_only decision."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual figure pixels and the video frames are inspected in separate visual and video sidecars.",
+    "The article has no Case N or Patient N headings; the only case paragraphs are under the Case presentation heading and describe one patient.",
+    "Laryngeal tuberculosis is diagnosed without biopsy; cancer is never histologically excluded.",
+    "Pregnancy outcome, delivery and neonatal status are not reported.",
+    "Discussion and conclusion statements are literature or general claims and were not copied to the patient except where the text says \"in this case\"."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 28,
+    "facts_reviewed": 50,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (28-year-old woman at 35 weeks of gestation); roster count 1 from \"We present the case of a 28-year-old pregnant woman\".",
+      "Laryngeal tuberculosis confirmed is author-literal (b00020 \"confirmed the diagnosis of laryngeal tuberculosis, in this case\"); laryngeal cancer stays a possible differential, never histologically confirmed or excluded; laryngeal biopsy not performed both at the earlier laryngoscopy and in hospital.",
+      "HR 110 and RR 14 flagged high only because the sentence calls both \"increased\"; 14 vpm kept as printed with an ambiguity, no reference-range classification.",
+      "All 17 relations checked against RULINGS: one-month-before-admission, admission opens the stay (order only), laryngoscopy \"led to\" treatment (abstract), smear result before treatment, \"after a week\", discharge before outpatient smears, \"following\" smears, \"new\" laryngoscopy.",
+      "Abstract-only items reviewed: dyspnea (b00001, also resolved in b00010) kept; abstract AFB test merged with the single body sputum bacilloscopy; abstract \"at the end of treatment\" time kept on the no-serious-sequelae item.",
+      "Figures FIG1-FIG4 viewed at full resolution with crops; VID1 MP4 frames re-sampled at 2 s (hashes match the agent sidecar) and additionally at 1 s; nothing new in the odd-second frames."
+    ],
+    "residual_risks": [
+      "Pregnancy outcome, delivery and newborn status are not reported; no reproductive outcome is inferred.",
+      "Respiratory rate 14 vpm described as increased is a likely source error kept as printed.",
+      "The admission-opens-the-stay relations are order-only under the orchestrator ruling; the physical examination may coincide with admission.",
+      "Pulmonary tuberculosis is review_only; scorers should not penalize either its presence or absence."
+    ]
+  },
+  "physician_adjudicated": false
+}

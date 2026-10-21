@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC9875866.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "73c6c93342ed8aa0136c83a156406ad353f269b39b1c3962f363165dafa6ef00",
+  "annotation_sha256": "24a4b5d96557a62228911b16c7b24e3c13e73561abd18ff03835b83e393c5c04",
+  "reviewed_at": "2026-10-21T13:09:32.931656+00:00",
+  "source_segments_read": 37,
+  "facts_reviewed": 150,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Blood test printed as \"rapid plasma reagin (RPR) test for HIV- I and II nonreactive\": name changed from \"HIV-I and II test\" to the source wording and quarantined (certainty ambiguous, review_only), because RPR is a syphilis test and the test identity cannot be decided; ambiguity rewritten.",
+    "Loss of sleep: the draft merged the five-day complaint quote with the four-day informant time. Split into p1-f018 (loss of sleep, for five days, b00004) and new p1-f148 (had not slept for four days, b00010); ambiguity now names both.",
+    "Teetotaler: present \"Teetotaler\" with alcohol domain -> Alcohol use, assertion absent, status unknown (SOC-NEVER: not explicit lifelong wording; corpus convention for non-alcoholic/abstained).",
+    "Added demographics ethnicity_as_documented \"Indian\" (b00004, b00036), following corpus precedent (PMC5448031.1, PMC6970101.1, PMC12723806.1); limitation updated.",
+    "Delusions/hallucinations absent: added the discussion statement about the present case (b00034) as supporting evidence; still untimed.",
+    "Source coverage b00034 changed to patient_facts for the present-case statement only.",
+    "Added p1-f150: no ADR on rechallenge except with cycloserine (b00030), linked to the rechallenge event.",
+    "Relations: removed e15->e16 (\"and\" plus an unanchored \"third day\") and e14->e17 (\"Therefore\" two sentences after the relapse); added e14->e16 (\"relapse\" -> \"returned to normalcy\"), e22->e03 (\"psychiatric evaluation before his treatment initiation\"), e02->e03 (diagnosis -> treatment of MDR-TB), e07->e17 (provisional -> final diagnosis); e04->e05 gains the \"well about five days back when he had a throbbing headache\" onset quote."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the actual JPEG is inspected in the separate visual target.",
+    "Day counts in the admission course are given without an explicit anchor except post-admission; no anchors inferred.",
+    "Scale scores for the final mental health examination are not given, only that scales were within normal limits.",
+    "Naranjo, Hartwig and Schumock and Thornton assessments are recorded as observations of the adverse reaction, not as symptom scales.",
+    "\"Indian male\" is recorded as ethnicity_as_documented \"Indian\" as written; the source does not distinguish ethnicity from nationality."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 37,
+    "facts_reviewed": 150,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (31-year-old man, pulmonary MDR-TB, cycloserine-induced psychosis); Tables 1 and 2 transcribed as observations and scales; the cited Tandon and Sharma cases are not attributed.",
+      "ADR causality, severity and preventability scales (Naranjo, Hartwig, Schumock and Thornton) as observations of kind other and YMRS/BPRS in symptoms_function match corpus precedent (PMC12789986.1, PMC13289299.1); the cycloserine ADR in allergies as adverse_effect matches PMC13289299.1.",
+      "Hartwig \"potentially severe\" (text) vs \"Severe, level 5\" (table) and Schumock \"definitely preventable\" vs \"Preventable\" are wording differences for one assessment, not numeric conflicts: kept as ambiguities.",
+      "AST/ALT kept in mg/dL as printed, with an ambiguity; no unit correction.",
+      "Day counts (seventh, eighth, third day) stay unanchored; the regimen administered plus a held fact per drug and generic antipsychotic stop/rechallenge facts are accepted.",
+      "CXR viewed at full resolution with magnified crops: no legible laterality marker; the cropped white glyph at the top edge is an unreadable marker fragment; the brown object at top centre is a physical object over the film. visual.json has no positional or plot readings."
+    ],
+    "residual_risks": [
+      "e07->e17 relies on provisional/final wording, read like \"initially ... later diagnosis\".",
+      "Lab, CSF and head CT event e06 has no literal ordering link to the presentation or diagnosis.",
+      "Ethnicity vs nationality of \"Indian\" is not stated by the source."
+    ]
+  },
+  "physician_adjudicated": false
+}

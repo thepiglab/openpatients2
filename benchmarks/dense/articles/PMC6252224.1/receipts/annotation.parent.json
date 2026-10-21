@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC6252224.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0457aeece3d9d59513a6a8659f15ddc18dda396858de37a1d5350689212a238f",
+  "annotation_sha256": "dedf34d22ead441276637cf585d9056f0b71b6055437c13df777a383870cf3ea",
+  "reviewed_at": "2026-10-21T04:16:37.317947+00:00",
+  "source_segments_read": 14,
+  "facts_reviewed": 63,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed the separate \"Progressive multiple myeloma\" condition (same disease as Multiple myeloma); progression recorded as an outcomes deterioration item from the abstract sentence and linked to the secondary-prophylaxis event; tumor disease_status stays unknown (the tumor item is the early-2014 diagnosis).",
+    "Split the VDT-Mel regimen item that duplicated the separate melphalan item into four component medications (bortezomib, dexamethasone, thalidomide, melphalan 200 mg/m^(2)), each regimen VDT-Mel.",
+    "Maintenance chemotherapy: medication action current/temporality current changed to administered/unknown and oncology treatment action ongoing changed to given (\"ongoing\" is relative to the prophylaxis switch, not the latest described time).",
+    "Cytology: removed the CSF specimen borrowed from the neighbouring sentence, renamed to \"Cytology\", flag negative for \"no tumor cells\"; ambiguity added.",
+    "CSF protein/glucose/WBC/lymphocytes/histiocytes now cite both printed copies of the duplicated CSF sentence as one measurement; ambiguity added.",
+    "Added an ambiguity for the scope of \"CSF\" in the negative workup list (specimen kept only on the two cultures).",
+    "Split event e05 (seropositivity \"Prior to HSCT\") from antimicrobial prophylaxis, which has no stated time (new event e17), so the e05 before e04 relation covers only the seropositivity.",
+    "Added relations e04 before e10 (\"toxoplasma encephalitis following tandem ASCT\"), e11 before e13 (drug start before its stop via \"changed to\"), e11 before e14 (treatment before response at 1-month follow-up); e14 before e15 now quotes both adjacent sentences; e01 before e04 also quotes \"tandem ASCT for multiple myeloma\".",
+    "Summary rewritten to three phase claims within 25-85 words (thin death claim merged), with no equation of maintenance chemotherapy and therapy for progressive myeloma."
+  ],
+  "unresolved": [
+    "The source has no figures, tables or supplements; no visual or measurement sidecars apply.",
+    "Discussion and literature sentences (including cited reports) are treated as background; only literal \"our patient\" statements were assigned to the index patient.",
+    "Author attributions of the infection and imaging appearance to lymphopenia and corticosteroids are hedged and not recorded as facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 14,
+    "facts_reviewed": 63,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient; discussion sentences used only where literal \"our patient\".",
+      "Neutropenia condition plus ANC < 500/µL observation with flag low kept: \"neutropenic\" states the value is low.",
+      "Sulfadiazine stop supported by \"was changed to\"; no allergy recorded because no allergy or causal wording is stated.",
+      "Tandem ASCT kept as one procedure with the combined \"June and September 2014, respectively\" time.",
+      "Hedged causes (\"likely\") kept only as ambiguities."
+    ],
+    "residual_risks": [
+      "Cytology specimen and the specimen of the cryptococcal antigen and viral PCRs left empty although CSF is plausible.",
+      "Whether maintenance chemotherapy equals the abstract's \"subsequent therapy for progressive multiple myeloma\" is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

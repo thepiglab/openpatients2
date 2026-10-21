@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC5116329.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "fd9fa9f346ed643c01190bfdbd0b28c3569a549d223241f27cf76f554a07ffd1",
+  "annotation_sha256": "e7346b26f87d99090e096788c202505189a50b94741f53528401f6322d503d2b",
+  "reviewed_at": "2026-10-21T09:26:28.988452+00:00",
+  "source_segments_read": 57,
+  "facts_reviewed": 87,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f020 (fever absent): promoted from ambiguous/review_only to supported/include; \"as demonstrated in our case\" names this case and, by the parallel clause about the reported case with normal WBC, the case demonstrates the absence of fever. The fever ambiguity was removed.",
+    "p1-f006 (outpatient community acquired pneumonia): temporality historical -> unknown (same episode, not labelled history); verification stays unknown.",
+    "p1-f079 (special staining): removed the specimen borrowed from the neighbouring histology sentence and renamed the fact.",
+    "p1-f075 (Table 3 LDH): specimen set to pleural fluid from the discussion sentence \"all of the cases that had a pleural fluid sample ... exudate as LDH is >1000\"; no unit assigned. Protein and glucose keep no specimen; the Table 3 ambiguity was reworded.",
+    "Added p1-f087: pleural fluid exudate meeting Light's criteria (explicit \"all of the cases that had a pleural fluid sample\"; the source states a pleural fluid sample was taken from this patient).",
+    "Cited the Table 2/3 Our case cells on the facts they restate (age, gender, asthma, ex-smoker, empiric and targeted antibiotics, surgical intervention, tissue culture); coverage for b00046/b00047/b00049 set to patient_facts.",
+    "Table 2 vital merges (temperature, SBP, RR, SpO2) kept on the basis of the discussion of Table 2 \"on presentation\"; WBC merge kept (only blood panel, Table 2 labels it initial). Added an ambiguity recording that the Table 2 vital cells carry no time label; heart rate 130 vs 110 stays a source conflict with both sides review_only.",
+    "Events: presentation vitals and respiratory failure moved into the presentation event p1-e04; p1-e05 re-described without an unstated \"at presentation\" time and now carries the Table 1 labs; outpatient CAP added to p1-e02; pleural fluid LDH and exudate added to p1-e07; empyema added to p1-e08.",
+    "Relations: added p1-e03 before p1-e04 (past-perfect outpatient treatment before transfer from urgent care to the ED), p1-e04 before p1-e07 and p1-e04 before p1-e11 (presentation opening the stay -> in-stay tests and in-hospital antibiotic course, order only), p1-e07 before p1-e09 (\"no organism was found ... necessitating the acquisition of lung tissue sample\"); the presentation-opening-stay relations to ICU transfer and surgery now quote the ED transfer sentence too.",
+    "Summary: no unstated \"at presentation\" time for the WBC, \"transferred\" instead of \"admitted\" to the ICU, absent fever and exudate added; article limitations updated."
+  ],
+  "unresolved": [
+    "Heart rate is printed as 130 BPM in the text and 110 in Table 2 for this case; both are kept review-only as a source conflict.",
+    "Table 2 and Table 3 columns for published cases 1-3 are literature from cited reports and are not roster patients or index-patient facts.",
+    "Table 2 vital-sign cells carry no time label; they are merged with the text presentation vitals on the basis of the discussion of Table 2 and recorded as an ambiguity.",
+    "Table 3 total protein and glucose rows name no specimen and the LDH row prints no unit; LDH is identified as pleural fluid by the discussion.",
+    "Caption-layer visual status not_inspected; the actual JPEG is inspected in the separate visual target."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 57,
+    "facts_reviewed": 87,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (52-year-old immunocompetent woman); Table 2/3 columns 1-3 are cited literature cases, not roster patients.",
+      "Heart rate 130 BPM (text) vs 110 (Table 2 Our case) is a source conflict; both review_only and kept out of the summary.",
+      "Table 3 LDH is pleural fluid per the discussion; protein and glucose specimens and the LDH unit are not printed.",
+      "The discussion literally attributes the absence of fever to this case.",
+      "Figure 1 viewed at full resolution with crops: portable AP chest radiograph with printed view text and a four-digit number consistent with an exposure time (device/timestamp text, not a calendar date) and two axial lung-window CT slices; visual.json uses image sides only and has no plot readings."
+    ],
+    "residual_risks": [
+      "The Table 2 vital cells have no own time label; the merge with the presentation vitals rests on the discussion of Table 2.",
+      "Whether the lung tissue sample came from the resection is not stated, so surgery is not ordered before the histology/culture.",
+      "Order of the empiric antibiotics relative to the surgery is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

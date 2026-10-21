@@ -1,0 +1,68 @@
+{
+  "article_id": "PMC9754278.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "df4cc57470d3deda56955105a6887e89e36f940ed40a2ee7388bce26da2c5956",
+  "annotation_sha256": "199c6f0f67b1a518747a1516247caa7c14482d5de8efa9df2f58e073a7f4272b",
+  "reviewed_at": "2026-10-21T04:34:59.805271+00:00",
+  "source_segments_read": 80,
+  "facts_reviewed": 400,
+  "patients_reviewed": 11,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Table 2 adverse effects recorded as conditions (nasopharyngitis, bronchitis, fungal skin infection) changed from role=complication to role=unknown: the table title and text hedge causation (\"possible side effects\", \"possible minor adverse events\"); occurrence stays present because the text says they were observed.",
+    "Patient 7 Anti-TNF previous-treatment cell quarantined as certainty=source_conflict, scoring=review_only (text: four sJIA patients used only tocilizumab and three used canakinumab, seven patients with another biologic vs eight rows in Table 2); removed from the p7 summary and event description.",
+    "Added a CRP observation (< 3.1 mg/l after tocilizumab treatment) for all 11 patients from the Table 3 footnote, which explicitly says \"in all patients\", with a test event and a tocilizumab-before-CRP relation.",
+    "Added diagnosis-before-tocilizumab relation for every patient (b00016: tocilizumab started for treatment of signs and symptoms of active JIA, treating an existing named condition).",
+    "Previous-treatments-before-tocilizumab relation evidence extended with the b00016 sentence naming previous therapy with DMARDs, corticosteroids and other biological medications, since the b00068 quote covers only non-biological DMARDs and NSAIDs.",
+    "Outcome death (assertion=absent) text_value changed from a negated phrase to \"death during tocilizumab treatment\".",
+    "p11 review_only rituximab fact gains the b00069 pJIA-switch quote; summaries for patients with Table 2 adverse effects now call them possible adverse effects.",
+    "Added article limitations: more-than-two-biologics count not matching Table 2, internally inconsistent corticosteroid counts, unassigned pJIA remission/discontinuation/ACR Pedi responses, and the hedged causation of Table 2 adverse effects."
+  ],
+  "unresolved": [
+    "No figures and no supplements are listed in the source.",
+    "Retrospective case series of 11 children; only Table 2 rows carry individual data. Most Results paragraphs are series-level and are not copied to patients unless the sentence explicitly covers all patients or all patients of a subtype.",
+    "Series-level negatives (\"None of the patients ...\") are copied to all 11 patients because the sentences explicitly cover all patients.",
+    "Source conflict: the text says five patients (45.4%) had possible minor adverse events, while Table 2 lists adverse effects for only three rows (6, 8 and 9); blank table cells are not recorded as absence.",
+    "Source conflict: Table 1 gives macrophage activation syndrome at onset in 3 patients (27.2%), while the Results text says two patients had three episodes before tocilizumab; neither is assigned to individual patients.",
+    "Source conflict: the text counts seven patients with another prior biological agent (four pJIA etanercept plus three sJIA canakinumab, four sJIA only tocilizumab), while Table 2 lists a biologic (Anti-TNF) for patient 7 as well.",
+    "Text gives a median tocilizumab duration of 16 months (range 12-28), while Table 2 durations run from 5 to 37 months; the corticosteroid sentences also give eight patients both as having discontinued and as not completely withdrawn. These are series-level and not assigned to patients.",
+    "Unlabelled Results statements (TST/IGRA-positive patients treated with isoniazid, anemia counts, concomitant drug use, corticosteroid discontinuation, MAS episodes, seropositive non-responder) cannot be assigned to patients literally; only the non-responder paragraphs are attached to patient 11 as review_only.",
+    "Table 2 VAS1/VAS2 do not state which scale or unit they use; Table 2 disease duration has no stated reference point.",
+    "Subtype-level tocilizumab dose ranges are series-level and kept as review_only per patient.",
+    "The text says one patient had previously used more than two biological agents, but no Table 2 row lists more than one prior biological agent; not assigned to any patient.",
+    "Corticosteroid counts are internally inconsistent: Table 2 lists corticosteroids for only three pJIA patients, yet the text says three pJIA patients discontinued corticosteroids and one pJIA patient continued them; concomitant drug use is not assigned to patients.",
+    "Use of tocilizumab was discontinued in one patient and three of four pJIA patients achieved remission; the text does not identify these patients, so discontinuation, remission and ACR Pedi responses are not assigned to pJIA patients.",
+    "Table 2 adverse effects are recorded as present events (the text says they were observed) but their causal link to tocilizumab is hedged (\"possible\"), so they are not coded as complications of treatment."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 80,
+    "facts_reviewed": 400,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Eleven patients are individuated only by Table 2 rows (p1-p7 sJIA, p8-p11 pJIA); roster order and counts match Table 1 (4 male, 7 female; 7 sJIA, 4 pJIA).",
+      "Series-level negatives copied to every patient all use explicit universal quantifiers (\"None of the patients\", \"any of the patients\", \"all 11 patients\", \"in all patients\"); sJIA-group statements use \"In all the sJIA patients\" and the sJIA group is exactly p1-p7.",
+      "Etanercept for p8-p11 accepted: \"For four pJIA patients\" equals the whole four-patient pJIA group, consistent with Anti-TNF in all four Table 2 rows.",
+      "pJIA remission (three of four), the seropositive seven-month non-responder, rituximab switch and post-treatment anemia are not literally attributable; p11 items remain review_only with an ambiguity.",
+      "Tocilizumab subtype dose ranges are protocol ranges, kept review_only per patient; VAS1/VAS2 kept as performance scores without unit or scale mapping; disease duration kept with a no-reference-point ambiguity.",
+      "Every relation quote states its order (Previous treatments / before / after / following / VAS1-VAS2 footnote definitions)."
+    ],
+    "residual_risks": [
+      "Methods-level statements (intravenous route, ILAR diagnostic basis, outpatient clinic, indication) are applied to every patient as series protocol descriptions without an explicit \"all\" quantifier.",
+      "Table 1 arthritis at onset (11 of 11) is copied to all patients on the count equalling the series size.",
+      "Table 2 adverse-effect cells are recorded as present events although the text count (five patients) exceeds the three rows listed; blank cells are not treated as absence."
+    ]
+  },
+  "physician_adjudicated": false
+}

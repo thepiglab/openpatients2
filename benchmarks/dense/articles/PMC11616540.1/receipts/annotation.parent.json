@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC11616540.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b7a010dd7a1ca224432bd9541d76dfd72cfb38349fc8e6f1baa2ffe15b72d001",
+  "annotation_sha256": "9bb7debddbfd0c5edaf0dd73f89165a457c32537d7e1e24ef992eba0384609c9",
+  "reviewed_at": "2026-10-21T13:19:00.772018+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 49,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Relation p1-e05 (newborn examination) before p1-e07 (hymenectomy): replaced the multi-sentence quote spanning five intervening sentences with two focused quotes stating both times from the same anchor (\"Immediately upon delivery the newborn was examined\"; \"Hymenectomy was done on the second day of delivery\").",
+    "Added relation p1-e01 (routine scan seeing a fetal intraabdominal cystic mass) before p1-e04 (delivery): the scan is placed during pregnancy by the fetal finding.",
+    "Added relation p1-e07 (hymenectomy) before p1-e11 (checkup), from the Figure 9 caption \"on the 14th postoperative day\", whose finding (normal vaginal orifice) belongs to the checkup event.",
+    "Hydrometrocolpos condition p1-f005 moved from the newborn examination event p1-e05 to the antenatal ultrasound event p1-e03 (the source says prenatal ultrasound diagnosed it); no time added to the fact.",
+    "Summary claim 1 no longer attaches the 39-week time to the calyceal dilation sentence, which states no time.",
+    "Diagnosis-timing ambiguity reworded with the abstract and discussion quotes: antenatal detection with postnatal confirmation of the imperforate-hymen cause, an ambiguity not a source conflict; article limitation aligned.",
+    "Added an ambiguity: whether the routine biophysical-profile scan and the 39-week advanced scan are separate examinations, and their order, is not stated (abstract says routine third-trimester scanning at 39 weeks); no p1-e01/p1-e03 order recorded."
+  ],
+  "unresolved": [
+    "Single case report: the fetus and newborn are the index patient; maternal facts are kept under the subject label mother.",
+    "The source gives no calendar dates, newborn age in days other than the second day after delivery, and no follow-up beyond the 2-week checkup.",
+    "Caption-layer visual status is not_inspected; the 9 images were inspected separately in visual.json.",
+    "The abstract and discussion describe hydrometrocolpos detected antenatally and its imperforate-hymen cause confirmed postnatally; recorded as an ambiguity, not a conflict."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 49,
+    "figures_viewed": 9,
+    "key_findings": [
+      "Single index case: fetus/female newborn with hydrometrocolpos from imperforate hymen; mother facts use subject mother, antenatal ultrasound findings use subject fetus and postnatal facts index_patient, matching the corpus convention for neonatal index cases (ROSTER-RELATIVES).",
+      "All 49 facts checked against their quotes for polarity, subject, flags, times and units; no fact added or removed. \"Told that her fetus is in good condition\" is hearsay kept only as an ambiguity.",
+      "The mild calyceal dilation condition (role complication) is literal (\"no complications were seen except mild calyceal dilation of the renal pelvis\"); it coexists with the antenatal and neonatal ultrasound observations by design. Hymenectomy indication and finding come from their own quotes.",
+      "Diagnosis timing (abstract \"at 39 weeks\" vs \"diagnosed postnatally\") is not a conflict: detection antenatal, cause confirmed after delivery.",
+      "All 9 images viewed at full resolution with crops; no faces; figures 4, 7 and 9 show newborn genital/perineal anatomy, figure 5 shows no clearly visible genitalia."
+    ],
+    "residual_risks": [
+      "Relation p1-e09 (post-procedure ultrasound) before p1-e10 (discharge) rests on the in-hospital-care-before-discharge ruling; the source joins them only with \"and\".",
+      "Event time kinds for \"at the fifth and seventh months\" (relative, approximate) and \"on the second day of delivery\" (relative) could also be read as gestational and postnatal ages.",
+      "Hydrometrocolpos condition carries no time because the source gives the diagnosis timing two ways."
+    ]
+  },
+  "physician_adjudicated": false
+}

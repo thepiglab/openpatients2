@@ -1,0 +1,67 @@
+{
+  "article_id": "PMC8761820.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b5363253efcd4d8f5bc798a945fa9d8c452daa468802006fe2c328dfca2350f7",
+  "annotation_sha256": "20b1e7904f693d7ea820ec7524d14fc706612e53b79c3ab6a34599394c6280eb",
+  "reviewed_at": "2026-10-21T09:01:36.087781+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 146,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added a completed 'Conservative treatment' procedure item for cases 2, 3 and 4 from 'B-RTO was performed on case 2 through 4 since conservative treatment alone was not sufficient', linked to each case's conservative-treatment event and summary claim.",
+    "Cases 3 and 4 death: removed cause_as_documented because 'infections and post-bone fracture complications' is stated jointly for both cases without a per-patient split; cause kept only in the ambiguity and removed from both summaries.",
+    "Case 4: added the missing discharge-ammonia event for the 'about 100-130 ug/dL at the time of hospital discharge' fact.",
+    "Cases 2-4: added admission ammonia -> discharge ammonia ('showed improvements to ... at the time of hospital discharge') and discharge -> later follow-up/death ('After several years of follow-up') relations.",
+    "Case 4: added B-RTO -> ammonia 'did not fluctuate after embolization'; hemodialysis start '200X-5 years' -> consciousness decrease 'in 200X'; decrease -> conjugate deviation 'after two days'.",
+    "Case 4: split the Figure 3 angiography event into pre-B-RTO and post-B-RTO studies with caption-stated order relations; the 'not depicted by the embolization' finding now takes its time from the caption lead sentence.",
+    "Case 4: added the Figure 1 caption finding 'Large circadian variation' of ammonia (time left null; linked to the caption-vs-text timing ambiguity).",
+    "Case 4: consciousness-decline/worsening/eye-deviation events reclassified from adverse_event to presentation.",
+    "Ambiguities added/updated: case 1 'such as' drug wording (with the Japanese supplement naming the same two agents), case 4 Fischer/ICG pairs not timed relative to B-RTO, case 4 'normalized' (English text) vs 'decreases' (English caption and Japanese version).",
+    "Case 4 B-RTO -> ammonia after embolization relation cites the Figure 3 caption, which calls the case 4 B-RTO 'the embolization' (definite back-reference); b00012 alone does not equate them.",
+    "Case 4: the Figure 1 circadian-variation caption finding is its own event (p4-e27), not merged with the text's same-day normalized-after-hemodialysis test, since the source does not identify them as the same.",
+    "Case 2 summary no longer says the referral was to the authors' hospital (not stated for case 2)."
+  ],
+  "unresolved": [
+    "The article is a four-patient series with several cohort-level statements; only statements naming a case or covering all four patients explicitly were assigned to individuals.",
+    "Calendar years are masked in the source (19XX, 200X); times are kept as printed relative expressions.",
+    "Imaging basis (contrast-enhanced CT and balloon-occluded retrograde venography) and absence of liver biopsy are stated for the series, not per patient, so they are not recorded as individual procedures.",
+    "The \"all patients\" recurrence clause is kept review_only for each patient because the same sentence cannot apply to case 1, which had no embolization.",
+    "The cause of death is stated jointly for cases 3 and 4 and is kept only as an ambiguity, not as each patient's documented cause.",
+    "Fischer ratio and ICG values for case 4 are stated as \"from X to Y\" without measurement times; Hasegawa and EEG are stated before and after treatment without dates.",
+    "Case 4 plot values (Figure 1) and image-printed text are pixel content for the visual record only, not facts.",
+    "The Japanese-language PDF supplement is a translation of the article; all eight pages were reviewed in the supplement manifest and document sidecar as background that adds no separate clinical facts.",
+    "Case 1 is described only through its conservative-treatment outcome; the supplement and text both say its later status is unknown."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 146,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Four individual cases with 'Case N:' headings; roster p1-p4 in order of first mention; count 4 from 'The subjects were four patients'.",
+      "'All patients, excluding case 1, showed improvements to about 100-130 ug/dL' explicitly names its scope and is kept include for cases 2-4 as a text range; flapping tremor and EEG statements limited to named cases are not turned into absent/not-performed items for the others.",
+      "Recurrence clause of the 'somewhat successful in all patients' sentence kept review_only per patient (its last clause cannot hold for case 1); 'somewhat successful in all patients' kept include.",
+      "Case 1 BCAA/lactulose kept administered: the sentence is specific to case 1 and the author-supplied Japanese manuscript names the same two agents for case 1's conservative therapy; ambiguity records the 'such as' wording.",
+      "Case 4 Fischer ratio and ICG 'from X to Y' order kept (a stated change from the first to the second value), not timed against B-RTO.",
+      "Japanese PDF supplement read in full (8 pages): a translation of the manuscript; no numeric value differs. Wording differences noted: case 1 agents named without 'such as'; ammonia 'decreased' rather than 'normalized' after dialysis; Figure 1 legend says same hospital day."
+    ],
+    "residual_risks": [
+      "'Shunt problems' in case 4 (a hemodialysis patient) may mean vascular-access problems rather than the portosystemic shunt; kept as stated with an ambiguity.",
+      "Case 1 dementia diagnosis has verification unknown; whether it was later revised is not stated for case 1.",
+      "Which case is the previously published one (Ref. 4, also the source of Figure 3) is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

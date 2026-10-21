@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC7968948.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4b51aca710aaa8faf2f027de41ecac85d500e64f115f9bec78ccd4dad352ab5e",
+  "annotation_sha256": "7c003622d2909492a6b7117419355da6b7fdb98c3103788c27b3738d039444db",
+  "reviewed_at": "2026-10-21T08:43:48.440859+00:00",
+  "source_segments_read": 45,
+  "facts_reviewed": 119,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Kept diagnostic_basis 'CT angiography' on p1-f013/p1-f014 with the Figure 2 caption quote: the caption itself states CT angiography showing these AV malformations and subclavian-brachiocephalic fistulas, so the basis is literal, not borrowed; notes rewritten. No time added.",
+    "Removed borrowed attributes: body_site on p1-f031 (from Figure 9 caption) and on p1-f035/p1-f036 ('Nevertheless' sentence names no site); indication 'Labored breathing' on NeoPuff p1-f048 (not stated as an indication).",
+    "p1-f100/p1-f101 renamed 'Right arm circumference', body_site 'Right arm' (source says 'for the right arm').",
+    "Added facts: p1-f115 Figure 1 caption echo after birth showing dilated left subclavian artery; p1-f116 Figure 10B port-wine stain more pronounced when crying supine; p1-f117 therapy discontinued before discharge; p1-f118 left upper arm circumference increased during follow-up; p1-f119 Figure 7B AV fistulas closed with detachable coils.",
+    "Split the fourth-procedure bundle: e17 now only the fourth embolization; new e29 angiography 'During the fourth procedure' (during e17), e30 untimed fistula closures (after e29: result -> action on the revealed fistulas), e31 Figure 5 angiography 'before the fourth procedure' (before e17; after e16 via 'after the previous embolizations'), e32 Figure 6 and e33/e34 Figure 7A/7B caption findings untimed (e33 before e34).",
+    "PDA: e20 keeps only the untimed closure; b00011 findings (aortic arch/subclavian dilated, retrograde flow, open ductus, PDA condition) moved out of the echocardiography event into e35 (modality not stated); Figure 8A aortography e36; e35 and e36 ordered before e20 (named existing condition; caption A/B).",
+    "Embolization technique facts (general anesthesia, femoral catheterization, micro-coils, glue) moved from the first-embolization event to an untimed group event e38.",
+    "Arm circumference event split into after-first (e21) and after-second (e37) embolization time points with relations from e14 and e15.",
+    "Added relations: birth -> NICU admission, admission -> echocardiography and X-ray, therapy start -> therapy stopped before discharge -> discharge, discharge -> outpatient follow-up (e24). Event e10 kind follow_up -> test (in-hospital).",
+    "Ambiguities updated/added: untimed closures, b00011 modality, Figure 5 'before' vs text 'during' the fourth procedure, Figure 7B coils vs text coil statements; summary claims 3-4 no longer place the PDA closure in the fourth procedure and call the 21/16 cm values diameters."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the ten JPEG figures are inspected in the separate visual target.",
+    "Discussion statements on Parkes Weber syndrome, imaging choice and treatment are literature or review statements and are not patient facts.",
+    "Diuretic stop time (after four weeks) is inconsistent with the 25-day discharge age; kept as printed.",
+    "The ordinal of each embolization comes from the order of the listed ages in one sentence."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 45,
+    "facts_reviewed": 119,
+    "figures_viewed": 10,
+    "key_findings": [
+      "Single index patient (female neonate with Parkes Weber syndrome); roster 1 complete; mother and carrier parent kept in the index record.",
+      "Diuretics 'discontinued after four weeks' vs discharge at 25 days with therapy 'discontinued before discharge' is arithmetic-only: kept as an ambiguity, not a conflict.",
+      "Cardiac CT 'assigned' is kept separate from the second-day multislice CT angiography (not identified as the same study).",
+      "Arm sizes: circumference 17/11 cm at birth, 19.5/13 and 20/14 cm after the first/second embolization ('respectively' pairing), 'diameter' 21/16 cm after the fourth procedure, kept as printed with an ambiguity.",
+      "Echo overlay caliper values (10.59/8.78/9.34/3.74 mm) are only in visual.json; no image value became a fact.",
+      "Privacy: device text panels (Fig 1, 2, 4, 5, 7A, 7B) show no dates or institution names; Fig 9 and 10B show only the chin/lower face, no identifiable face."
+    ],
+    "residual_risks": [
+      "Closure of the fistulas and of the PDA almost certainly happened during the fourth procedure, but the source does not say so; kept untimed.",
+      "The 21 cm/16 cm 'diameter' values are implausible as diameters and probably circumferences; kept as printed.",
+      "Figure 6 and 7 angiograms are not tied by the captions to a specific procedure."
+    ]
+  },
+  "physician_adjudicated": false
+}

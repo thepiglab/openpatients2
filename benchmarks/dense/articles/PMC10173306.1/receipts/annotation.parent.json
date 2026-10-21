@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC10173306.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7ee010460c2e7474b93c834223a64869478f1396515b855a3aa9ab24d274c585",
+  "annotation_sha256": "137f1e20b9108aa069f560936f6b26f1fa644f3a3e581efe40f54a2a3ab9df77",
+  "reviewed_at": "2026-10-21T09:27:20.587598+00:00",
+  "source_segments_read": 30,
+  "facts_reviewed": 131,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1: added p1-f051 (Figure 2I caption: arrow indicates progressive RA mass) and linked it to p1-e11.",
+    "p1: added relations e03->e08 (definite back-reference \"The RA mass was visualized and five biopsies were performed\") and e04->e12 (re- word \"recurrent bloody pleural effusion\" after thoracentesis of bloody pleural fluid).",
+    "p1 summary: removed unsupported \"elevated D-dimer and CA125\" (only CRP is called elevated); values stated instead.",
+    "p2: Figure 4A TTE prints caliper readouts for the mass that the text sizes jointly for TTE and CMR; moved the 55.2 x 38.1 x 33.9 mm size out of p2-f024 into new review-only p2-f043 with an ambiguity (RULINGS: image-printed values are pixel content).",
+    "p2: added relations e05->e10 (transferred \"for a conclusive diagnosis\" -> diagnosis) and e07->e13 (caption: lung metastases after 5 courses \"less than before (C,D)\").",
+    "p2 summary: removed unsupported \"raised pro-BNP, D-dimer and CA125\" and the implied symptom->transfer order.",
+    "p3: flag high on pro-BNP, D-dimer and CA125 (p3-f019..f021): \"high levels of\" governs the coordinated list.",
+    "p3: split p3-e06 into admission (p3-e06) and the second pericardiocentesis (new p3-e13).",
+    "p3: added relations e02->e03 (treating the named existing effusion), e04->e05 (\"then\"), e03->e13 (\"second\"), e06->e13 (admission opens the stay), e06->e07 (\"shortly after admission\"), e06->e10 (admitted \"for further diagnosis\" -> \"For further diagnosis ... atrial biopsy\").",
+    "p3 summary: rewritten to reflect the high-level wording and the admission/blood-test timing."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected in the annotation; the five JPEGs were inspected in the separate visual submission.",
+    "The abstract says all cases were initially suspected as lung infection or cancer; \"X or Y\" asserts neither, so it is recorded only as an ambiguity per patient.",
+    "Case 1 echocardiogram mass size in the text differs from the caliper readout printed inside the image; the text fact is review-only and image values stay in the visual submission.",
+    "Supplement tables and videos are described in the supplement manifest and document reviews; Table 1 summary cells are not merged into the main-text facts.",
+    "Case 3 is labelled \"Case3\" in the source headings; all three case sections are individually labelled."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 30,
+    "facts_reviewed": 131,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Three individually labelled cases; roster and attribution correct; figures F1-F2 p1, F3-F4 p2, F5 p3.",
+      "Abstract \"No procedural complications were obtained in our cases\" stays review-only for p1/p2 (no explicit count); p3 has its own literal no-complication sentence.",
+      "p1 echo size 22 x 41 mm review-only: image calipers print different distances (pixel content).",
+      "p3 grade \"intermediate or low-grade\" asserts neither grade; ambiguity only.",
+      "Relations increased from 9 to 19, each with literal order support."
+    ],
+    "residual_risks": [
+      "Caption/pixel swaps (F1 B/C planes, F2 G/H planes, F5 B/C modality) are recorded in visual limitations only.",
+      "Case 3 text places the echo mass at the right ventricle lateral wall junction while the Figure 5A caption says RA; kept as an ambiguity.",
+      "Metastases in p1/p2 rest on imaging wording without tissue confirmation (verification unknown/provisional)."
+    ]
+  },
+  "physician_adjudicated": false
+}

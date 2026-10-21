@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC9616440.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "90504036a1f812579b0a92804901a4d3bd897f1ce7e31f3f4f4b37d6c5460016",
+  "annotation_sha256": "fdd9366dbc4e85887a5418d31ef48088e27f032be8ff3d992768ce7a9f77d71b",
+  "reviewed_at": "2026-10-21T09:00:48.503810+00:00",
+  "source_segments_read": 24,
+  "facts_reviewed": 88,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f027 (difficulty finding his way around): own sentence opens with 'During his first week at home'; evidence widened to that full sentence and time set (during).",
+    "p1-f046 (persecutory statements): follows a semicolon inside the sentence opening 'During the second week as an outpatient'; evidence widened to that sentence and time set (during).",
+    "p1-f047: added the family-reported 'asked for the keys of his yellow truck as it was badly parked' quote.",
+    "p1-f082: discharge outcome text_value limited to the discharge statement ('continued his treatment as an outpatient').",
+    "Added p1-f087 observation: angio-tomography result (right MCA M1 aneurysm), linked to event e02.",
+    "Added p1-f088 symptom: family report that the patient was unable to see (second-week paragraph, untimed), linked to e12.",
+    "e17 (two-month MRI) now holds only p1-f067: caption MRI facts f070/f071 moved to new untimed event e22 (caption sections not identified as the two-month MRI); untimed right frontal lesion f068 moved to new untimed event e23.",
+    "e21 limited to hypertension (p1-f007) so the '5 years history' time does not attach to alcohol/tobacco (kept unevented with existing ambiguity).",
+    "e10/e12 time_kind duration -> relative.",
+    "Removed relation e11->e13 ('regular visit' -> 'subsequent visit' across paragraphs; 'subsequent' names no anchor).",
+    "Added relations: e01->e02 (onset opens the stay -> evaluation), e02->e03 (aneurysm reported -> aneurysm procedure, result -> action), e05->e09 (in-hospital surgery -> discharge), e09->e10 and e09->e12 (discharge -> outpatient/home weeks), e10->e12 (first vs second week from the same discharge), e02->e17 and e02->e18 (stated 'two months after the (initial) hemorrhage' anchored to the identified hemorrhages).",
+    "Added ambiguities: regular-visit vs subsequent-visit order; right frontal hemorrhagic lesion without modality/time; Figure 1 MRI sections not identified as the two-month MRI.",
+    "Figure attribution note corrected: Figure 1 is called out only in the CT-before-surgery sentence."
+  ],
+  "unresolved": [
+    "Case description (embolization) and Discussion (clipping) disagree on the aneurysm procedure; both kept review-only with the conflict recorded.",
+    "No calendar dates; timing is relative (first week at home, second week as an outpatient, two months after the hemorrhage) and several visit times are not anchored to each other.",
+    "Neurocognitive assessment was qualitative only (no formal tests); no numeric scores exist.",
+    "Caption-layer visual status not_inspected; the actual image is inspected in the separate visual submission.",
+    "Discussion theories on anosognosia, confabulation and metacognition are general or hypothesis statements and are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 24,
+    "facts_reviewed": 88,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Embolization (case) vs clipping (Discussion) kept as review_only source_conflict pair; DSA stays include; 'brain surgery' in the CT sentence left untied.",
+      "Regular-visit memory integrity and two-month neurocognitive memory deficits are different assessments (ambiguity, not conflict).",
+      "'5 years history of non-treated systemic arterial hypertension, alcohol, and tobacco use': hypertension carries the time under either scope reading; alcohol/tobacco untimed with ambiguity.",
+      "Terson syndrome provisional ('consistent with'); clozapine/valproate administered ('established'); Neuropsychiatry hospitalization unknown ('required'); formal neuropsychological tests not_performed.",
+      "Figure 1 six-section CT/MRI montage viewed; no printed labels, side markers or burned-in text."
+    ],
+    "residual_risks": [
+      "Embolization vs clipping unresolved by the source; the aneurysm procedure technique is review_only.",
+      "e10->e12 relies on 'first week at home' and 'second week as an outpatient' both counting from the same discharge.",
+      "e02->e17/e18 use the identified hemorrhages as the anchor event of 'two months after the (initial) hemorrhage'.",
+      "Handedness ('left-handed') has no demographics attribute and is not recorded as a fact."
+    ]
+  },
+  "physician_adjudicated": false
+}

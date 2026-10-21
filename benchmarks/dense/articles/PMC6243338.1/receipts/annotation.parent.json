@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC6243338.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e259cd4561e9fc5eb82ea31d324a33a4fd8aca29118015fffc59cf5085d10bcc",
+  "annotation_sha256": "9b73a9fe0082eebcc5333c5aa14047caacea11ff3f5d07652dafa13d4770fdba",
+  "reviewed_at": "2026-10-21T03:16:30.877457+00:00",
+  "source_segments_read": 48,
+  "facts_reviewed": 54,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f019 tumour, p1-f020 post-transplantation lymphoproliferative disease, p1-f021 tumefactive demyelination: review_only/ambiguous -> supported/include as differentials (assertion possible); the list lines b00005-b00009 sit under the case report's own \"Differential diagnoses\" section heading, which structurally governs every line; the tumour line also names the patient's previous gastric cancer. Primary vs secondary tumour still not asserted.",
+    "Rewrote the differential ambiguity and article limitation (the drafter said the list had no heading); event p1-e09 evidence now quotes all five list lines; notes added on p1-f017/p1-f018.",
+    "p1-f034 prednisolone: action unknown -> administered (\"was being treated with prednisolone\" placed at the time of presentation, not the latest described time).",
+    "Moved p1-f014 cerebral oedema (from the neurosurgery sentence) out of the MRI event p1-e08 into the decompressive neurosurgery event p1-e14.",
+    "Added relations p1-e02 -> p1-e01 and p1-e03 -> p1-e01 (before; \"Past medical history comprised ...\" set against the presentation sentence) and p1-e15 -> p1-e16 (before; death -> autopsy diagnosis, adjacent sentences).",
+    "Summary claim 2 now states the five differentials it cites (77 words)."
+  ],
+  "unresolved": [
+    "Tables 1 to 4 and the discussion summarise 29 literature cases including the current case and are not copied to the patient.",
+    "The five listed differential diagnoses sit under the case report's \"Differential diagnoses\" section heading and are recorded as differentials; the tumour subtype (primary or secondary) is not asserted.",
+    "No dates, times or intervals are given except the 2-day interval between the serial brain CT images, so few temporal relations are stated.",
+    "Intubation is stated as required, not as performed.",
+    "Visual status in the annotation figures is not_inspected by convention; the three images were inspected separately in visual.json."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 48,
+    "facts_reviewed": 54,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (52-year-old immunosuppressed man, fatal Acanthamoeba granulomatous amoebic encephalitis); roster count 1, complete.",
+      "Tables 1-4 are aggregate counts over 29 reviewed cases with no per-case rows and no row for the present case, so nothing in them is attributable to the patient.",
+      "Kept: intubation action unknown (\"required\"); gadolinium and iodine allergy category unknown (the allergies are not called contrast allergies); post-operative pancytopenia and pancytopenia at presentation as two time points; autopsy as procedure + pathology observation + two conditions (SECTION-IMAGING).",
+      "Relations kept: resection -> post-operative pancytopenia (\"post-operative\"); aplastic anaemia diagnosis -> bone marrow transplantation (\"Subsequent\", adjacent sentence in the same paragraph); deterioration -> intubation required.",
+      "All three figures viewed at full resolution with crops: lung-window chest CT, two head CT panels with a larger posterior low-density region in b, six MRI panels; only panel letters printed; MRI panel b (low slice through orbits) shows no distinguishable occipital lesion, recorded as a visual limitation; laterality comes from captions/text only."
+    ],
+    "residual_risks": [
+      "Order of antibiotics vs further deterioration and of neurosurgery vs death rests only on \"but\" clauses and is not recorded as relations.",
+      "The order of the microbiology, chest CT, brain CT and MRI relative to presentation is unstated.",
+      "MRI lesion sizes (50 mm, 33 mm) are text-only and not verifiable on pixels."
+    ]
+  },
+  "physician_adjudicated": false
+}

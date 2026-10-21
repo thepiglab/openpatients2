@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC9053208.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "dc8b422e4a5d103c62665ea8bfb35e62692960e4cce3831c8d94f4e8a47db20d",
+  "annotation_sha256": "f4244981baacf08031e333bd8317942188f2ac8d6a13acb84fbaf2375ecb9f8f",
+  "reviewed_at": "2026-10-21T09:25:33.439631+00:00",
+  "source_segments_read": 34,
+  "facts_reviewed": 152,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f058 (detectable until day 25): certainty ambiguous -> source_conflict; article day 25 vs Supplementary Table 2 Day 22 vs Supplementary Data 1 day 24 are different numbers for the same last-positive swab time (supplement-vs-article conflict, both sides review_only)",
+    "Relation p1-e08 (respiratory worsening/acidosis) -> p1-e09 (intubation): before -> unknown; the two adjacent sentences carry no order word, and \"The following day\" (new paragraph) and \"Day 0\" (Fig. 1A timeline) are different anchors",
+    "Relation p1-e10 (haemodynamic compromise) -> p1-e11 (adrenaline commenced): before -> unknown; adjacent sentences, no indication or order word links the infusion to the compromise",
+    "Added relation p1-e02 (household COVID-19 diagnoses \"in the preceding week\", past perfect) before p1-e04 (presentation/transfer)",
+    "Added relations p1-e04 (admission to RCH) before p1-e31 (whole-blood flow cytometry \"days following admission\") and before p1-e21 (urine RT-PCR \"at day 3 of admission\")",
+    "Summary claim 1: removed the unsupported placement of the positive SARS-CoV-2 RT-PCR at the local hospital",
+    "Summary claim 2: removed the unstated causal link (\"needing\") between haemodynamic compromise and the adrenaline infusion",
+    "Article limitations: corrected the stale statement that Supplementary Data 1 research sheets are not transcribed; added the swab-day source conflict"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three JPEGs are inspected in visual.json.",
+    "The article has no tables; serial numeric values are in Supplementary Table 2 (PDF) and Supplementary Data 1 (XLSX), reviewed in the supplement sidecars.",
+    "Fig. 1A (clinical timeline) carries symptom onset, treatment and discharge timing as image content only; discharge and heparin duration are not stated in the article text.",
+    "The control infant (age/sex-matched, tetralogy of Fallot correction) is a comparison donor and is not a patient in this annotation.",
+    "Immunology findings in the annotation are qualitative or text-stated values; the numeric flow cytometry and cytokine values of Supplementary Data 1 are transcribed and typed in the MOESM3 supplement sidecar, not as article facts.",
+    "Day-numbered times are relative to a timeline whose day 0 is called intubation and intensive care in the text; no calendar dates are given.",
+    "Last detectable upper airway swab is a source conflict: article \"until day 25\", Supplementary Table 2 Day 22, Supplementary Data 1 day 24; all sides review only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 34,
+    "facts_reviewed": 152,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index infant (5-month-old male, cyanotic congenital heart disease, severe COVID-19); control infant correctly excluded from patient facts.",
+      "All 152 facts checked against source segments; values, units, comparators, flags, times and assertions supported; hedged causes not stored.",
+      "Last detectable swab day is a source conflict (article day 25, Supplementary Table 2 Day 22, Supplementary Data 1 day 24); article fact review only.",
+      "Abstract vs Results neutrophil/lymphoid wording is an emphasis difference, not two numbers for one value: kept as ambiguity, Results stored.",
+      "Fig. 1B caption (infiltrates, consolidation) and Results (ground-glass opacities, small effusions) are separate statements on the same film; both kept.",
+      "27.2 vs 27.1 (CD4 CD69) and 28.2 vs 28 (Th2 day 84) are one-character/rounding ambiguities, not conflicts.",
+      "Two adjacent-sentence relations without order words set to unknown; three literal relations added; intubation before extubation kept (extubation ends the intubation).",
+      "Supplementary Table 1/2 (MOESM1 pp1-2) and Supplementary Data 1 (MOESM3, 13 sheets) independently read and checked cell by cell."
+    ],
+    "residual_risks": [
+      "Day numbering: Supplementary Table 2 anchors T=0 at admission to ICU/intubation; the article text does not state that Day 0 equals hospital admission (the peer-review file says so, but it is administrative and not used).",
+      "Immunology values are research assay results; the article stores qualitative statements and the numeric values live only in the MOESM3 sidecar.",
+      "AI reference review, not physician adjudication."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC10914342.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e5d4247d14399fc52f0d57a54f63eba70652889d4177c3d95259e14a76b2b74b",
+  "annotation_sha256": "5a024056060d2fcf382baa42c54dad86860fc247d4683b612c005f480ecce067",
+  "reviewed_at": "2026-10-21T13:28:01.198908+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 55,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f008 Lyme carditis: removed paraphrased diagnostic_basis ('Intermediate SILC score and positive Lyme titres'); the source never states the basis; verification stays confirmed ('LC diagnosis', no hedge).",
+    "p1-f015: 'no notable findings' on physical exam recoded as a present sign 'Physical examination' with text_value 'no notable findings' (SECTION-SIGNS) instead of an absent pseudo-sign.",
+    "p1-f032 troponin I: removed invented text_value 'three measurements'.",
+    "p1-f047 event monitor: flag normal from abstract 'unremarkable event monitor' (evidence added from b00002).",
+    "p1-f036/p1-f037 presenting EKG: text (sinus rhythm with RBBB, periods of high-grade heart block) conflicts with Figure 1 caption (complete heart block observed throughout); both set source_conflict + review_only; ambiguity added; disputed description removed from summary.",
+    "Added p1-f055 procedures_devices: no revascularization after the MI (assertion absent).",
+    "Event membership: p1-f035 (next-day leucocyte resolution) removed from presenting-workup e04; p1-f021 (endemic region) moved from e09 to the SILC 2 evaluation event e05.",
+    "Added 10 literal/ruling-supported relations: e02->e06 (presentation opens stay), e05->e06 (CHB treated by PPM), e06->e08 ('implanted prior to LC diagnosis'), e03->e09, e07->e09 ('further discussion at follow-up'), e08->e10 (result -> action), e07->e10 (outpatient regimen after discharge), e10->e13 and e12->e13 ('pacemaker extraction after antibiotics and the aforementioned rigorous testing'), e07->e14 (discharge -> >1 year follow-up).",
+    "Summary paragraphs 2 and 4 rewritten (no disputed EKG description; VVI 30 wording corrected; explant-day EKG added).",
+    "Ambiguities added: presenting EKG text vs caption, scope of 'resolved the following day', unstated LC diagnostic basis, unanchored '3 weeks prior' and '>1 year follow-up'."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual figure images are reviewed in the separate visual submission.",
+    "Supplementary Video S1 (echocardiogram) is reviewed only as sampled frames in the supplement manifest; no clinical facts are taken from it.",
+    "Reference-range comparisons in the text (\"accepted normal\") are kept as reference text; no high/low flags assigned.",
+    "Discussion sentences about the SILC score, guidelines and a cited 59-year-old patient are general or published-case statements and are not patient facts.",
+    "Presenting EKG description differs between the text and the Figure 1 caption; both facts are review_only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 55,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (67-year-old man); b00018 cited 59-year-old case and b00020 author biography correctly excluded.",
+      "Lyme carditis confirmed per source ('LC diagnosis', title 'diagnosis and treatment'); intermediate SILC does not make it provisional; basis not literal so left null.",
+      "Home medications action unknown accepted (RULINGS: home/was-taking not current).",
+      "Troponin/BNP/leucocyte flags stay unknown: only 'accepted normal' reference text; no patient-level normal/elevated wording.",
+      "SILC 2 and 4 are observations; assay sensitivity/specificity correctly excluded.",
+      "Presenting EKG text vs Figure 1 caption conflict quarantined.",
+      "Figure 2 telemetry printout carries calendar-date stamps (direct_identifiers) and printed monitor vitals that stay pixel-only; no dates leaked into article files.",
+      "Echo video: 6 frames (0-5 s) viewed; only scanner/device overlay text, no dates, names or IDs."
+    ],
+    "residual_risks": [
+      "Figure 1 is a very low-resolution print; rhythm assessment rests on text/caption, which disagree.",
+      "Order of constitutional symptoms vs presentation and of >1 year follow-up vs explantation left unstated."
+    ]
+  },
+  "physician_adjudicated": false
+}

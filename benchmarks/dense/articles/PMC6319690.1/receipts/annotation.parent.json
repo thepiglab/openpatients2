@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC6319690.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "82c3ce26f90fe1dc154d9ec34375c40012bf0a4b57d656e7563e500568dc9a64",
+  "annotation_sha256": "181f382b7e6c8df5931a37f4aa6f4cd3e2acef358802986277429d1d41bae79b",
+  "reviewed_at": "2026-10-21T03:14:03.318907+00:00",
+  "source_segments_read": 39,
+  "facts_reviewed": 128,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added review_only (ambiguous) facts for Case-labelled content tied to the unlabelled narratives only by age/sex/diagnosis match: p1-f043 classic midgut malrotation, p1-f044 Table 1 cholangiocarcinoma T1N0M0, p1-f045 Table 1 pancreaticoduodenectomy; p2-f042 incomplete rotation (table), p2-f043 classic malrotation (discussion/Fig 2 caption), p2-f044 PDA T3N1bM0, p2-f045 limb tacked to retroperitoneum (Cases 1 and 2 discussion); p3-f036 reversed rotation, p3-f037 PDA T3N1aM0.",
+    "Added p3-f038 division of the jejunum beyond the ligament of Treitz (literal, completed) to the pancreaticoduodenectomy event.",
+    "Removed p1 relation ileus -> discharge (the coordinating \"and\" states no order); added p1 preoperative labs -> surgical exploration (\"Preoperative\").",
+    "Removed inferred diagnostic_basis from the p2 and p3 malrotation conditions (narratives never name malrotation; condition rests on the all-three sentences).",
+    "Figure 2 attribution narrowed to p2 (literal \"(Fig. 2)\" callout); Case 1 -> p1 is attribute matching, recorded as unresolved.",
+    "p2-f042 (table: incomplete rotation) and p2-f043 (discussion/caption: classic malrotation) marked source_conflict, both review_only: two different values for the same Case 2 rotation subtype.",
+    "Reworded the p1 cholangiocarcinoma vs CBD adenocarcinoma ambiguity as compatible terms, not a source conflict; updated ambiguities, source coverage and article limitations."
+  ],
+  "unresolved": [
+    "The three narrative case paragraphs carry no Case labels; Table 1 rows, the Figure 2 caption and discussion statements about Cases 1, 2 and 3 are tied to the narrative patients only by age, sex, diagnosis and anatomy match, so table-only and Case-labelled values (stage, rotation subtype, table management, tacked limb in Case 2) are held review_only.",
+    "Table 1 Case 1 lists pancreaticoduodenectomy against the narrative biliary resection, and Case 2 lists incomplete rotation against the discussion and Fig. 2 caption (classic malrotation); recorded as review_only ambiguities, not reconciled.",
+    "Literature rows in Table 1 and the literature and embryology discussion describe other published cases or general background and are not patient facts.",
+    "Cohort statements (prevalence 0.2% of 1220 HPB cases, symptoms in our patients typically lasting more than several months, resection performed safely) are not copied to individuals; only statements covering all three patients explicitly are used.",
+    "Visual status in the annotation figures is not_inspected by convention; the five images were inspected separately in visual.json.",
+    "Figure 2 is attributed only to p2 (literal callout); the Case 1 tumor site it depicts cannot be literally tied to p1.",
+    "Abstract statement that all three patients underwent exploratory laparotomy is not added as a separate fact; each narrative already records the operative exploration."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 39,
+    "facts_reviewed": 128,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Three narrative patients (63 M CBD adenocarcinoma; 47 M PDA, unresectable then resected after chemoradiation; 67 F PDA); all died.",
+      "No literal link between narrative paragraphs and Case 1-3 labels; Case-labelled table/discussion content held review_only.",
+      "Figs 1 and 3 attributed by narrative callouts; Fig 2 to p2 only; Figs 4 and 5 background schematics.",
+      "p3 anastomoses named only in the standard-procedure sentence correctly not recorded as performed."
+    ],
+    "residual_risks": [
+      "Narrative-to-Case mapping is near-certain clinically but not literal; scorers ignore the review_only rows.",
+      "p2 discharge on postoperative day 8 has no stated operation anchor.",
+      "Fig 1 appears volume-rendered; modality MRI/MRCP kept from the caption."
+    ]
+  },
+  "physician_adjudicated": false
+}

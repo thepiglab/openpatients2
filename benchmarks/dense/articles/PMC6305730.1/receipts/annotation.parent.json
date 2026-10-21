@@ -1,0 +1,66 @@
+{
+  "article_id": "PMC6305730.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d94fe2281721491ace2fc44dcb3632249519470de63e1f3d3ca65f21746528a9",
+  "annotation_sha256": "ef868ef73b145f90cc05da9aa7af11193d9efd01b500e65df5805023a521e56f",
+  "reviewed_at": "2026-10-21T04:35:37.769638+00:00",
+  "source_segments_read": 59,
+  "facts_reviewed": 206,
+  "patients_reviewed": 5,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Rebuilt the annotation with a parent builder (opus_PMC6305730.1/build_ann_parent.py) that supersedes the Sonnet builder.",
+    "Moved patient-reported questionnaire results (QFS weekly alcohol use, AUDIT-C, CAS-A binge-drinking item and metacognitive belief ratings) from observations kind=other to symptoms_function kind=performance_score per SECTION-SIGNS; no score is recorded in both sections.",
+    "Added the b00012 inclusion criteria for each of the five patients (the sentence states each of the first five included individuals met them): borderline personality disorder absent, concurrent psychological treatment absent, physical withdrawal syndrome absent, progressive cerebral traumas absent, severe cognitive deficits absent, not actively suicidal, no concurrent substance use apart from nicotine in the previous 6 months, medication free (individual quotes used for Patients 2 and 5).",
+    "Added b00025 \"All patients were assessed ... to confirm the diagnosis of AUD\" as supporting evidence of the AUD diagnosis.",
+    "Added per-patient literal series statements: treatment introduction reduced weekly alcohol use and metacognitive beliefs for all patients; few binge drinking episodes during treatment for all patients; maintained gains and weekly alcohol use relatively unchanged from treatment level at post-treatment and follow-up for all except Patient 3 (the exception scopes the whole sentence, so no maintained-gains fact for Patient 3); AUDIT-C reliable change confirmed at 3- and 6-month follow-up for all except Patient 3; weekly alcohol use significantly lower than pre-treatment QFS for Patients 3 and 5.",
+    "Split facts spanning post-treatment and follow-up (DSM-5 criteria, AUDIT-C below cut-off, within one SD of normative data, Patient 3 QFS below cut-off) into separate time-point facts.",
+    "Split the single combined follow-up event into post-treatment, 3-month and 6-month follow-up events plus a screening/presentation event and an outcome-classification event; added literal relations onset->screening, screening->baseline (b00011 \"Following the screening assessment\"), treatment->post-treatment, treatment->3-month follow-up and 3-month->6-month follow-up (same anchor, both times quoted).",
+    "Recorded the session-length difference (12 one-hour sessions vs 12 weekly sessions of 45-60 min) as an ambiguity on each patient; MCT event precision set to approximate.",
+    "Patient 4: split onset (\"never consumed too much alcohol until 10-15 years ago\", relation since) from \"At present ... persisted\" and set status unknown; Patient 3 unemployment status set unknown (not placed at the latest described time).",
+    "Removed duration-as-time misuses (Patient 1 psychotherapy \"6 months\" time, Patient 2 duration_text \"almost 10 years previously\", Patient 5 time \"3 years\"); onset times use relation since where the source says began/started.",
+    "Patient 3 craving vs Discussion \"none ... worsening\" kept as an ambiguity with reference-point explanation; Discussion conclusion not copied to any patient.",
+    "Patient 5 QFS 3-months value kept review_only (one-character print artefact candidate) and the over-cut-off wording added to the post-treatment and 6-month QFS facts.",
+    "Renamed \"Weekly alcohol use (QFS)\" to \"Weekly alcohol use\" where the quote does not name the QFS."
+  ],
+  "unresolved": [
+    "Table 2 reports series-level means and standard deviations across the five patients; no individual patient values are taken from it.",
+    "Values printed inside Figure 2 (per-patient AUDIT-C, HADS, PACS, PAMS and NAMS scores at pre-treatment, post-treatment and follow-up) are pixel content recorded only in visual.json, not as facts; the text gives no per-patient numeric scores for these measures.",
+    "Figure 1 plots have no printed patient labels and no plot values were read; weekly QFS and metacognitive belief series are described only qualitatively.",
+    "Series-level statements without explicit coverage of each patient (for example the unlabelled sentence that no binge drinking was reported after treatment, the statement that three patients were below the QFS cut-off, the unlabelled metacognitive-belief stability sentence, and PAMS, NAMS, HADS and PACS decreases) are not copied to individuals; the Discussion statement that none of the patients reported any worsening is not copied.",
+    "Inclusion criteria (b00012) are recorded for each patient because the sentence states that each of the five included individuals met them.",
+    "The cut-off sentence for Patient 5 QFS is internally inconsistent with the printed 3-months value; kept review_only.",
+    "Session length is given as one hour and as 45–60 min; recorded as an ambiguity.",
+    "Patient sex is stated by pronoun only for Patients 1 to 4; none is stated for Patient 5."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 59,
+    "facts_reviewed": 206,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Five individuated patients (Patients 1-5) labelled in b00013-b00017; Table 2 is aggregate only.",
+      "Inclusion-criteria sentence covers each of the five included patients literally; unlabelled series sentences and the Discussion \"no worsening\" conclusion were not copied.",
+      "Figure 2 prints 120 per-patient bar labels (AUDIT-C, HADS-D, HADS-A, PACS, PAMS, NAMS); all independently matched to pixels and kept in visual.json only; none conflicts with text facts.",
+      "Figure 1 has five unlabelled stacked plots; patient order not printed, attribution shared, no plot values read."
+    ],
+    "residual_risks": [
+      "Patient 5 QFS at 3 months (5) contradicts the over-cut-off wording; kept review_only.",
+      "Patient 3 AUDIT-C follow-up sentence is garbled; kept review_only.",
+      "Session length one hour vs 45-60 min recorded as ambiguity.",
+      "Patient 5 sex not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

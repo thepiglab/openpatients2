@@ -1,0 +1,68 @@
+{
+  "article_id": "PMC5818772.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5670f5a81cb7c917bad78a2bf2d85d710461032c33d53180b8e5581d57b4cfad",
+  "annotation_sha256": "e493fde7e06ba15bac88b5c74cc2896fe0d4d09099024b2d149982c1cca7c5e9",
+  "reviewed_at": "2026-10-21T03:25:01.233376+00:00",
+  "source_segments_read": 23,
+  "facts_reviewed": 108,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Induction of general anesthesia p1-f041 (completed): evidence changed from \"it became necessary to perform anesthesia induction immediately\" (necessity alone is not completion) to the administration sentence \"We therefore administered sevoflurane (5 %) to induce general anesthesia as rapidly as possible.\"",
+    "Other-institution blood examination p1-f054: specimen blood added (stated \"in his blood\").",
+    "Cardiovascular \"No structural or mechanical problems\" p1-f074: evidence widened to include the immediately preceding sentence naming the monthly echocardiography follow-up, so method echocardiography is not borrowed.",
+    "Monthly echocardiography follow-up care plan p1-f097: action_status unknown -> completed (\"he was followed up once a month\").",
+    "Added p1-f100..p1-f103: BP, HR, SpO2 and body temperature not measured before the induction (b00009, time \"before the induction\"), separate from the preanesthetic not-measured statement in b00007.",
+    "Added p1-f104/p1-f105: intravenous catheter and arterial line insertion explicitly not done before the induction (assertion absent).",
+    "Added conditions p1-f106 complete right bundle branch block (ECG, verification unknown) and p1-f107 heart failure categorized as NYHA grade 1 by the attending physician.",
+    "Added care plan p1-f108: intended decrease of sevoflurane once movements were controlled (conditional, planned).",
+    "Event p1-e13 tracheal intubation: occurrence unknown -> occurred (\"we performed tracheal intubation\" is stated; only the timing conflicts). Both timing sides p1-f044/p1-f045 stay source_conflict review_only; no relations for e13.",
+    "Relation p1-e05 -> p1-e06: evidence replaced by the single abstract sentence \"Because the sedation administered before ... was insufficient ..., general anesthesia was induced\" (previous quotes spanned several intervening sentences).",
+    "Relation p1-e14 -> p1-e15: evidence now includes the anchor sentence for \"We therefore stopped CPR\".",
+    "Added relations p1-e10 -> p1-e11 (no carotid pulse, \"We immediately ceased\" sevoflurane and nitrous oxide), p1-e17 -> p1-e18 (transport to recovery room, monitored 1 day, \"then discharged\"), p1-e03 -> p1-e06 (preanesthetic examination before induction).",
+    "Summary: removed the review_only hypothesis facts p1-f012/p1-f013 and the clause about the cause remaining unclear; NYHA wording made literal; added p1-f106/p1-f107."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the four JPEG figures were inspected separately in visual.json.",
+    "Timing of tracheal intubation is stated two ways in the source (during CPR versus after return of spontaneous circulation); both are review_only.",
+    "The cause of the cardiac arrest is not established; the authors' autonomic dysfunction and vasovagal hypotheses are review_only.",
+    "Preanesthetic blood, urine and ECG results come from another institution; no timing is stated for them.",
+    "Source spells \"micronesia\" as an intubation risk factor; kept as printed without interpretation.",
+    "Fig. 4b monitor text printed in the image reads differently from the caption HR=95 bpm at the available resolution; the caption fact is review_only.",
+    "Discussion and conclusion statements about future pediatric patients are general recommendations, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 23,
+    "facts_reviewed": 108,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (14-year-old boy with Down syndrome, repaired ASD/VSD/PDA); background, IRB and conclusions are not patient facts.",
+      "Tracheal intubation timing is a true source conflict (during the rescuer switch in CPR vs decided after return of spontaneous circulation): both sides review_only, the intubation event itself occurred.",
+      "Fig. 4b monitor text read at full resolution with an enlarged crop shows HR:85 PR:85; caption HR=95 bpm fact p1-f090 stays review_only with an ambiguity; the image value is recorded only in visual.json.",
+      "Hedged causes (believe, suspect, apparently, may have caused) are review_only possible conditions; caption HR values (75, 20, 0, 50) kept separate from the text initial HR 75.",
+      "Other-institution blood, urine and ECG results carry no time; preanesthetic and in-room vital signs that could not be measured are not_performed observations.",
+      "Echocardiography: specific \"no X\" findings flagged negative, \"normal interventricular septum\" normal, \"good wall motion\" and \"all chambers were balanced\" unknown; \"micronesia\" kept as printed.",
+      "Planned versus done: gradual induction, arterial line and intraoperative antibiotics planned; dental GA cancelled after the arrest; later dental treatment under midazolam sedation planned; reoperation approach conditional.",
+      "Fig. 2 anesthetic chart: only printed values (times, gas settings 5, SpO2 100 row, axis ticks) in visual.json; no plotted heart-rate or blood-pressure estimates."
+    ],
+    "residual_risks": [
+      "The time from induction to bradycardia is worded differently in the abstract (a few minutes), the body (about 1 minute, then a few seconds later) and the Fig. 3 caption; recorded as an ambiguity, not computed.",
+      "Several intra-event steps (initial vitals, assisted ventilation, intubation, abandonment of the operation) remain unordered where the source gives no literal order.",
+      "The Fig. 4b HR digit is low resolution; the 8 reading is likely but the visual reading is marked uncertain."
+    ]
+  },
+  "physician_adjudicated": false
+}

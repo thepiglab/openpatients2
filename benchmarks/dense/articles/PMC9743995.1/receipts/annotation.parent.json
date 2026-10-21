@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC9743995.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9213d2b7e077ea0ec51aa2c7aa2b053404e240c614394aeb50b7d13422089a9a",
+  "annotation_sha256": "f07109e58f435c2832f2cdddeb6961bef3b9739812aadece04959c86bbef2252",
+  "reviewed_at": "2026-10-21T08:01:20.076168+00:00",
+  "source_segments_read": 28,
+  "facts_reviewed": 54,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "tTG IgA 27.58 RU/ml (p1-f038): kept the printed value and 'negative' wording but set certainty ambiguous, scoring review_only, because the article states a normal level < 20 RU/ml for this antibody; range not attached; ambiguity rewritten.",
+    "Summary claim 2 no longer cites the disputed tTG item or says celiac serology was negative; it cites anti-gliadin and anti-endomysium IgA, the self-reported gluten-free diet and the imaging.",
+    "Abdominal ultrasonography: flag set to normal ('could not detect any pathological condition' = no pathologic findings per orchestrator ruling); ambiguity rewritten to note the bezoar was not defined by USG.",
+    "Abdominal distension: removed text_value 'painless' (EVID-NEGATION); pain stays a separate absent item quoting 'painless abdominal distension'.",
+    "Trichophagia condition no longer cites the b00011 regression sentence owned by the outcome item (ONE-STATEMENT); the outcome now also cites the b00025 regression sentence.",
+    "Anxiety disorder and depressive disorder: added the b00002 diagnosis sentence as evidence for the confirmed status.",
+    "Hair-pulling habit: added the literal order sentence (pulling first, then eating).",
+    "CT observation: added the b00013 statement that the bezoar could be viewed using CT.",
+    "Surgical-intervention approval care plan: action_status unknown -> completed (the approval is stated as done).",
+    "Added 7 literal relations: presentation before laboratory work, radiography, USG and CT (presentation opening the workup); CT result before trichobezoar removal (result -> action); previous trichophagia before its disappearance; cognitive-behavioral techniques before regression ('through the treatments applied').",
+    "Figure f1: added panels A and B (letters printed on the image; text cites Figure 1a, b) with caption-level description, CT, stomach, p1.",
+    "Added an ambiguity for the 'had become negative ... recently' antibody statement (not merged with presentation results)."
+  ],
+  "unresolved": [
+    "Literature case-report table rows (Table 2) describe published cases and are not recorded as facts of this patient.",
+    "Caption-layer visual status not_inspected; the two JPEGs were inspected in visual.json.",
+    "The discussion sentence on the cause of trichophagia is an association statement and not recorded as an asserted cause."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 28,
+    "facts_reviewed": 54,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (12-year-old girl, celiac disease, trichobezoar with Rapunzel syndrome); Table 1 and Table 2 rows are literature/search content and correctly excluded.",
+      "tTG IgA 27.58 RU/ml is called negative against a stated normal < 20 RU/ml: an internal flag-versus-range inconsistency (not a two-number conflict), quarantined as ambiguous/review_only.",
+      "Hemoglobin unit mg/dl kept as printed with an ambiguity (likely one-character print artefact, not converted).",
+      "Discussion statement that trichophagia was associated primarily with the depressive and anxiety disorders is kept as an ambiguity, not an asserted cause.",
+      "CT panel B carries burned-in overlay text including a partial exam date (direct_identifiers category per ruling); panel A has only illegible faint marks."
+    ],
+    "residual_risks": [
+      "Order between the psychiatric evaluation and the surgery is not stated and is left open.",
+      "Panel A plane (sagittal-appearing reformat) is a pixel judgement, not stated in the source."
+    ]
+  },
+  "physician_adjudicated": false
+}

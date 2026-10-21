@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC6099001.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9528f513b9fb16867f03e8d1832693fff6b9eb2a96fedbb697eb9b6a8f954e6f",
+  "annotation_sha256": "3dc35ac6d21bd0cec1695c736dd0dd0bb3db968051da75d9cd96ca309b0e10da",
+  "reviewed_at": "2026-10-21T03:12:55.882003+00:00",
+  "source_segments_read": 34,
+  "facts_reviewed": 110,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f013/p1-f014: biopsy evidence now quotes the lesion sentence that \"Both lesions\" refers to, so site and laterality come from the item's own evidence; f013 body site reworded to \"left axillary node\" (source wording), forearm mass pathology noted as not stated.",
+    "p1-f019: tumor metastatic site \"axillary lymph node\" replaced by source wording \"excised node\"; the pathology sentence never says axillary.",
+    "p1-f020/f021/f022 and p1-f016/f017: evidence extended to the literal \"She had history of\" / \"15 years ago after which\" wording that supports temporality=historical.",
+    "p1-f036: compression ultrasound procedure quote extended to include \"of the right leg\" (site/laterality).",
+    "p1-f067: removed complication field (\"severe agitation\" is a circumstance, not a procedure complication).",
+    "p1-f099: platelet transfusion moved to medications (Platelets, administered, 10 units); removed misused finding field and unquoted indication.",
+    "p1-f104: removed disposition \"discharged with LMWH\" (not a disposition place).",
+    "Relations: added e04->e05 (lesions found -> biopsy of both lesions), e17->e26 (initial ECG -> later ECG), e18->e31 (bedside echo -> last echo before discharge), e21->e23 (CTA result -> thrombolysis for massive PTE); e05->e07 now quotes biopsy and pathology; e30->e32 now quotes enoxaparin switch and discharge.",
+    "Event p1-e28 time_kind duration -> relative (\"After 30 hours\" counts from heparin start).",
+    "Ambiguity on LMVH/excised node reworded to state the source never calls the excised node axillary and forearm pathology is unstated."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three JPEGs are inspected in visual.json.",
+    "Platelet count units and magnitudes are printed inconsistently (60 000; 50/mm^(3); 23 000/mm^(3); 123 000/mm^(3); 227/mm) and are kept as printed.",
+    "Discussion paragraphs b00022-b00028 are literature background and not patient facts.",
+    "Many events carry only \"ago\"/\"after\" relative times with no calendar dates; no order is inferred from paragraph position."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 34,
+    "facts_reviewed": 110,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single patient: 65-year-old woman with metastatic breast cancer (brain metastases) and thrombocytopenia, DVT on salvage chemotherapy, then massive PE treated with alteplase despite absolute contraindication; survived and discharged on LMWH.",
+      "Figure 3 prints 102BPM while the text says 100 per minute: the ECG rate fact p1-f092 is review_only with an ambiguity; the printed value stays in visual.json. The vital-sign heart rate 100 (p1-f088) is a separate measurement and stays include.",
+      "The two emergency department presentations (b00005 intro, b00009 after discharge) are very likely the same visit but the source never identifies them as one; kept separate and unlinked with an ambiguity.",
+      "Platelet counts 50/mm^(3) and 227/mm kept as printed (likely truncated), with an ambiguity; no rescaling.",
+      "Embolectomy candidacy (\"catheter or surgical\") is review_only; the embolectomy event is not_occurred (declared inoperable, no catheter equipment). Alteplase administered is supported by \"termination of thrombolytic therapy\"."
+    ],
+    "residual_risks": [
+      "Discharge \"after 5 days\" has no stated anchor; post-thrombolysis vitals and the half-dose heparin start have no stated time relative to thrombolysis.",
+      "Timeline remains partly fragmented by design: the b00005 presentation, further imaging and the post-thrombolysis vitals are not ordered because the source states no order.",
+      "visual.json Figure 3 names the blue-tinted segment at aVF and V6; pixels show it at aVF and V5 (agent must correct)."
+    ]
+  },
+  "physician_adjudicated": false
+}

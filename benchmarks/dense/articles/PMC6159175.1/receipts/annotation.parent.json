@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC6159175.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "90bf6b717dede8052730c9d5a5e1096088c1efbb9505794943fdf8a856a5ddb5",
+  "annotation_sha256": "e59356762da2a79801abeca35cef6930c90d1c18976a24d282fbe904b8ee19b5",
+  "reviewed_at": "2026-10-21T03:18:11.899884+00:00",
+  "source_segments_read": 16,
+  "facts_reviewed": 34,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Uterine rupture (p1-f008): verification_status refuted -> unknown; the source states the uterus did not rupture but names no workup excluding it (consistent with the haemorrhage item). The b00006 \"probably resulted from uterine rupture, heavy bleeding and hypovolemic shock\" sentence is hedged speculation, kept as an ambiguity, not a source conflict; ambiguity, note and article limitation reworded accordingly.",
+    "Intramural ectopic pregnancy (p1-f006): diagnostic_basis \"Ultrasound and MRI findings; second trimester\" -> \"MRI\", with the literal b00005 sentence \"MRI is surely ... useful in our case in diagnosis of intramural pregnancy\" added as evidence.",
+    "Placenta implantation (p1-f007): hedged \"likely\" diagnosis kept as assertion possible / provisional, now certainty supported and scoring include (the hedge is encoded in assertion; previa ambiguity retained).",
+    "Abdominal ultrasound (p1-f012) and MRI (p1-f013) procedures: finding cleared; the findings were not in each item's own evidence and are recorded as observations.",
+    "Surgical exploration (p1-f015): indication \"risk of uterine rupture and life-threatening haemorrhage\" removed (borrowed from a neighbouring sentence).",
+    "Hysteroplasty (p1-f017): added the case-text quote \"Given the age of patient, clinicians did their best to perform hysteroplasty instead of hysterectomy.\"; performed status rests on \"we performed the latter\" (latter = hysteroplasty in the preceding sentence).",
+    "Day-6 beta-hCG (p1-f031) and event p1-e09: evidence widened to the whole sentence so the analyte, unit and the \"after operation\" anchor are in the fact's own evidence.",
+    "Presentation event p1-e02: time_text \"17 weeks and 2 days ago\" removed (it dates the last menstrual period, not the presentation); evidence now quotes the presentation sentence plus the LMP sentence.",
+    "Relations: MRI p1-e04 -> surgery p1-e06 now also quotes \"However, in this case, preoperative diagnosis was possible by any kinds of examination.\" and the MRI diagnosis sentence; added abdominal ultrasound p1-e03 before surgery p1-e06 on the same \"preoperative diagnosis\" wording.",
+    "Added ambiguity: the conditional \"subtotal hysterectomy or hysterectomy\" (p1-f018, review_only) asserts neither option and no hysterectomy is reported.",
+    "Summary claim 3: removed the causal \"so\" linking the UAE judgement to the surgery. Added an article limitation for the uncaptioned green arrow in Figure 1."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the five images are described in the separate visual.json.",
+    "A discussion sentence attributes the 17-week uterine size to \"probably\" uterine rupture, heavy bleeding and hypovolemic shock; it is hedged speculation against case text stating no rupture, recorded as an ambiguity and not as a fact.",
+    "No histology, fetal outcome or follow-up beyond discharge is reported; preoperative β-hCG is not given.",
+    "Published cases cited in the discussion belong to other patients and are not recorded.",
+    "Figure 1 shows a green arrow that the caption does not describe; it is not interpreted."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 16,
+    "facts_reviewed": 34,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (20-year-old G1P0 woman, second-trimester intramural ectopic pregnancy, surgical exclusion with hysteroplasty under temporary aortic balloon occlusion); cited literature cases correctly excluded.",
+      "The b00006 rupture/bleeding/shock sentence is hedged speculation against explicit no-rupture statements; ambiguity, not a source conflict.",
+      "All five figures viewed at full resolution with crops; attributions to p1 and the f5 specimen photograph (patient_specimen, pathology) confirmed."
+    ],
+    "residual_risks": [
+      "Source English is garbled in places (\"excluded\" for excised/enucleated, \"because of pieces of evidence\"); the authors' terms are kept.",
+      "Ultrasound/MRI before surgery rests on the \"preoperative diagnosis ... by any kinds of examination\" wording plus result-to-action ordering.",
+      "No histology, fetal outcome or post-discharge follow-up is reported."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC6967288.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b29384a71e2a57dc73df6b4912d939e7ba5a37a5cb2956ea868c9341b486d878",
+  "annotation_sha256": "4cfb59a9fa235c011cb1693bdc251a34a7b98496e6091ed0f12dcc45c471f7ed",
+  "reviewed_at": "2026-10-21T08:48:14.299043+00:00",
+  "source_segments_read": 19,
+  "facts_reviewed": 55,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f006 albumin 1.9 g/dL: removed the Discussion \"hypoalbuminemia (1.9 g/dL)\" evidence and set flag unknown; the Discussion does not identify it as the same measurement (no merge on matching number); hypoalbuminemia stays as condition p1-f011 (diagnostic_basis now the literal phrase); ambiguity added.",
+    "p1-f012 difficult airway: certainty ambiguous, scoring review_only (Discussion \"presence\" vs Case presentation \"potential\"; the same sentence also asserts critical airway obstruction); both quotes cited; removed from summary fact_ids.",
+    "p1-f034 general anesthesia (absent): added the case-text quote \"general anesthesia was deemed problematic\"; finding reworded without the disputed obstruction claim.",
+    "p1-f051 TAPB plan moved from care_plans to procedures_devices (kind procedure, action planned) per SECTION-CAREPLANS; care_plans domain now not_documented.",
+    "p1-f039 propofol: added indication from b00017 (\"for sedation and to weaken the ketamine’s adverse effects\").",
+    "p1-f020 point D pain: added the Discussion quote that identifies incision D and its lateral abdominal wall site.",
+    "Added p1-f055 adequate analgesia at point B (b00010), linked to event p1-e14.",
+    "Relations: removed p1-e07->p1-e08 (two non-adjacent sentences, \"After careful consideration\" names no anchor); added e07->e12 (preoperative), e02->e04 (7 years previously vs 4 years before, same anchor), e04->e06 and e06->e12 (history/need in presentation sentence), e01->e06 (in childhood vs 49-year-old), e05->e12 (\"initial catheter placement\" vs \"this procedure\"), e14 during e12 (abstract \"moderate pain at some points during surgery\"). p1-e12 description now names the replacement surgery."
+  ],
+  "unresolved": [
+    "Fig. 1 pixels are inspected in the separate visual submission; the caption-layer visual status here stays not_inspected.",
+    "Incision points C and E appear in the figure and caption but are not described in the case text.",
+    "Discussion sentences on TAPB, RDEB, cited reports and drug-choice reasoning are background or authors' reasoning, not patient facts; dexmedetomidine, ropivacaine, right-sided rectus sheath block and bilateral TAPB are discussed as alternatives and not recorded as given.",
+    "Critical airway obstruction and difficult airway are described as potential in the Case presentation and as present in the Discussion; critical airway obstruction is not recorded and difficult airway is review_only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 19,
+    "facts_reviewed": 55,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (49-year-old woman with RDEB and IgA nephropathy on peritoneal dialysis); roster 1, complete.",
+      "All Discussion sentences used as patient facts (b00012, b00014-b00017) are explicitly about the present case; cited-study claims and alternatives (dexmedetomidine, ropivacaine, right rectus sheath block, bilateral TAPB) are not recorded as given.",
+      "GA, neuraxial and bilateral TAPB are literal not-done decisions (deemed problematic/had to be avoided, precluded, avoided): assertion absent, action unknown.",
+      "Plan event p1-e08 is literal (deemed problematic, precluded, we planned) and kind other is acceptable.",
+      "Fig. 1 pixels viewed at full resolution with upscaled view: abdominal clinical photograph with author overlays; no genitalia, breast, face or burned-in text, so privacy flags none/false are correct; visual.json describes printed labels and overlays only."
+    ],
+    "residual_risks": [
+      "Unbearable pain history (p1-f017) context is left open; the source does not tie it explicitly to the initial catheter placement.",
+      "Order of removal vs point-A pain, new catheter vs point-D pain, and hemodialysis vs vein damage is not literal and is left unordered.",
+      "Difficult airway is review_only because of potential vs presence wording."
+    ]
+  },
+  "physician_adjudicated": false
+}

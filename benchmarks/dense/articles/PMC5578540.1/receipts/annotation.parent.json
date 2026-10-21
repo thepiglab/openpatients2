@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC5578540.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7b643f4bb3f0d54e93d65ff96115f82820562fc3676cbb968a27b5a3122e48ba",
+  "annotation_sha256": "32e5d50691eb621e24826b6eefb8933510c508da1ee37241a2ea440df7a1b6b1",
+  "reviewed_at": "2026-10-21T03:14:41.484733+00:00",
+  "source_segments_read": 17,
+  "facts_reviewed": 50,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Ulcerative pancolitis (p1-f008): kept confirmed; added the case-abstract sentence \"have been developed ulcerative colitis 2 months after low anterior resection and oral capecitabine treatment\" as evidence and its literal onset time (after, anchor \"low anterior resection\"); ambiguity rewritten to explain the \"was considered as\" wording.",
+    "Relation p1-e05 -> p1-e08 (resection before oncology-clinic admission) retargeted to p1-e05 -> p1-e12 (ulcerative colitis diagnosis): the abstract orders resection before the development of ulcerative colitis, not before the admission itself; added p1-e07 -> p1-e12 (capecitabine before UC) from the same sentence.",
+    "Admission event p1-e08 now holds only the bloody diarrhea and bowel frequency stated \"Two months later\"; the untimed physical examination, biochemistry/ESR and stool findings moved to new event p1-e17 with null time and no relations.",
+    "Bloody diarrhea and bowel frequency (p1-f012, p1-f013): time relation unknown -> after (\"Two months later\", anchor null).",
+    "Repeat colonoscopy event p1-e11 evidence now also quotes the biopsy sentence for its biopsy fact.",
+    "Capecitabine setting ambiguity now quotes the b00012 discussion clause on the case's \"adjuvant chemotherapy regimen\" and states the setting and resection-capecitabine order stay unknown; added an ESR-unflagged ambiguity; blood count ambiguity links all three counts.",
+    "Summary claim 3: removed the causal \"led to a diagnosis\" and stated the colonoscopy, biopsy and diagnosis findings as written.",
+    "Source coverage notes for b00002 and b00012 updated; parent limitation added."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four figure images are reviewed in visual.json.",
+    "Discussion paragraphs describe literature cases and mechanisms and are not index-patient facts; hedged causes of the colitis are not asserted.",
+    "Chemotherapy setting and the exact interval between resection, capecitabine and symptom onset are not stated beyond \"Two months later\" and the abstract \"2 months after\".",
+    "No laboratory reference ranges or flags are printed; none were inferred.",
+    "Parent review: abstract sentence used for the ulcerative colitis onset and to order resection and capecitabine before the ulcerative colitis diagnosis; the two-month interval is not equated with the oncology-clinic admission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 17,
+    "facts_reviewed": 50,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (59-year-old woman); discussion segments b00007-b00013 are literature, mechanisms and hedged causes and are not asserted for the patient.",
+      "Ulcerative pancolitis confirmed: authors' final diagnosis, unhedged in the case abstract, treated with induction and maintenance therapy; cause stays hedged.",
+      "Tumour T3N0M0 kept with stage context, extent and disease status unknown (the source does not say pathologic staging or remission); intact borders kept as pathology text.",
+      "Capecitabine to admission ordered by the adjacent-sentence \"Two months later\"; mesalazine \"chosen for maintenance therapy\" kept action unknown and event occurrence unknown.",
+      "Hb/WBC/PLT keep the seventh-day time of their own sentence with no flags; ESR 45 unflagged; CT, colonoscopy, stool and examination findings correctly untimed.",
+      "All four figures viewed at full resolution with a magnified crop of the F1 upper-left overlay (partly legible numerals, device text); visual descriptions, attribution, EHR labels and privacy flags match the pixels."
+    ],
+    "residual_risks": [
+      "Confirmed status for ulcerative pancolitis rests on the authors' \"considered as\" wording plus the abstract; a stricter reading would make it provisional.",
+      "Physical examination and laboratory findings at the colitis admission are untimed and unordered against the admission.",
+      "No biopsy procedure items were added; biopsies are represented by their pathology observations."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,116 @@
+{
+  "format": "dense-supplement-manifest/1",
+  "article_id": "PMC7717226.2",
+  "source_text_sha256": "426ba925a131b6d41aaecd08e23596e9f88207e3606054cf825f5a8dd7d52374",
+  "source_supplements_sha256": "cd63ad6b0c4c59b64c004c50bc79122c3a49045d45756f157f2a0ce702489c8a",
+  "files": [
+    {
+      "supplement_id": "sup1",
+      "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC7717226.2/ytaa342_supplementary_data.zip?md5=90fd9dbff45454b1b1d8cb98ae26e65c",
+      "machine": {
+        "filename": "ytaa342_supplementary_data.zip",
+        "original_manifest_url": "s3://pmc-oa-opendata/PMC7717226.2/ytaa342_supplementary_data.zip?md5=90fd9dbff45454b1b1d8cb98ae26e65c",
+        "declared_md5": "90fd9dbff45454b1b1d8cb98ae26e65c",
+        "declared_kind": "supplementary_or_other",
+        "extension": ".zip",
+        "http_content_type": "binary/octet-stream",
+        "bytes": 29506622,
+        "download_status": "downloaded",
+        "download_reason": null,
+        "sha256": "71797fb48f785eca297b4dba21a0cbde7619f4fc5fce1aa2bfac0ecbaa68d739",
+        "md5_verified": true,
+        "sample_sha256": null,
+        "sample_bytes": null,
+        "tail_sha256": null,
+        "detected_type": "zip",
+        "inspection_status": "peeked",
+        "peek": {
+          "kind": "archive",
+          "format": "zip",
+          "member_count": 6,
+          "uncompressed_bytes": 31798788,
+          "members": [
+            {
+              "name": "ytaa342-suppl_data/EHJ-CR-Slide-Set COVID-19 Revised.pptx",
+              "bytes": 6796835
+            },
+            {
+              "name": "ytaa342-suppl_data/Video 1. COVID RCA occluded (1).mp4",
+              "bytes": 6754520
+            },
+            {
+              "name": "ytaa342-suppl_data/Video 2. COVID LAD  occluded PA cran.mp4",
+              "bytes": 3849384
+            },
+            {
+              "name": "ytaa342-suppl_data/Video 3. COVID LCx lesion.mp4",
+              "bytes": 2734307
+            },
+            {
+              "name": "ytaa342-suppl_data/Video S1. COVID LAD RCA occluded rao caud.mp4",
+              "bytes": 9675433
+            },
+            {
+              "name": "ytaa342-suppl_data/Video S2  TTE showing poor LV venting.mp4",
+              "bytes": 1988309
+            }
+          ],
+          "member_extensions": {
+            ".mp4": 5,
+            ".pptx": 1
+          },
+          "tool": "zipfile",
+          "dicomdir_present": false
+        },
+        "limitations": [
+          "Members listed from the central directory only; nothing extracted"
+        ],
+        "errors": []
+      },
+      "machine_suggestion": {
+        "content_class": "unknown",
+        "rule": "no_rule"
+      },
+      "review": {
+        "content_class": "video",
+        "content_class_rationale": "ZIP of five short angiography and echocardiography video clips (Video 1 to 3, Video S1, Video S2) plus one PPTX slide set that restates the case; the clips carry the patient-level imaging content, the slide set is a presentation of the same case.",
+        "classification_basis": "full_content",
+        "patient_scope": "patient_level",
+        "patient_ids": [
+          "p1"
+        ],
+        "ownership_evidence": [
+          {
+            "basis": "article",
+            "segment_id": "b00025",
+            "quote": "(Figure 1A;Supplementary material online, Video S1)"
+          },
+          {
+            "basis": "article",
+            "segment_id": "b00025",
+            "quote": "(Figure 1C;Supplementary material online, Video S3)"
+          }
+        ],
+        "ehr_includable": true,
+        "ehr_modality": "archive_mixed",
+        "estimated_counts": {
+          "rows": null,
+          "frames": 10,
+          "pages": null,
+          "members": 6,
+          "duration_seconds": 16.03,
+          "basis": "ffprobe durations of the five MP4 members (5.2, 3.4, 2.13, 4.27 and 1.03 s) read by the extractor; 10 frames sampled in total; PPTX has 60 text units"
+        },
+        "notes": "Slide set text (60 units) and all sampled frames were viewed. The slide set restates the case and differs from the article on the antiplatelet drug named before LAD stenting and on the day of death; both are recorded as source conflicts in the annotation ambiguities. Slide branding images (journal banner, society logo, journal cover) and a prone-position photograph of the same scene as Figure 3 are non-clinical or duplicate.",
+        "limitations": [
+          "Videos: frames sampled every 2 s from 0 s (3, 2, 1, 3 and 1 frames for the five clips, 10 frames in total); frames between samples, continuous motion and audio were not reviewed.",
+          "The PPTX embeds two EMF parts that the composite review path cannot render; the JPEG images stored inside them were extracted into a scratch area and viewed (a coronary angiogram frame and a device projection image), but the composite sidecar stays partial.",
+          "On-screen echocardiography text in Video S2 was not transcribed as clinical facts."
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "Machine draft: every review block must be completed by a reviewer who inspected the content."
+  ]
+}

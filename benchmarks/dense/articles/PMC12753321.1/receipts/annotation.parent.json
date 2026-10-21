@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12753321.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ffa8ad49d8be15f3e72f04b6eaf91b8b694feca879360588a14c243e2adab438",
+  "annotation_sha256": "e1db31303753bd8fda5c91b3d63669320e93ae43c983cc1cbd2b2e27816fdae1",
+  "reviewed_at": "2026-10-21T17:55:49.345035+00:00",
+  "source_segments_read": 57,
+  "facts_reviewed": 101,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added four not-performed observations (PTHrP and CYP27B1 immunohistochemistry, serum PTHrP, serum 1,25-dihydroxyvitamin D) from the case-specific b00036 sentence stating these were unavailable at the institution; b00036 coverage now names p1.",
+    "Added the imaging impression \"These findings are consistent with a GIST.\" as an observation linked to the MRI event.",
+    "Added relation initial IV fluids/furosemide/calcitonin -> corrected calcium 3.02 mmol/L with incompletely resolved hypercalcemia (\"initially\" + treatment -> its result, adjacent sentences).",
+    "Summary claim 4 rewritten: removed the invented causal \"so\" linking incomplete resolution to denosumab/imatinib; now states the source order (following pathological confirmation of GIST, same day).",
+    "Serum calcium 2.99 mmol/L given its own literal time \"at the time\".",
+    "GIST-associated hypercalcemia evidence: bare phrase replaced by the full conclusion sentence; outcome of VATS gets the Figure 1 caption resolution quote as added evidence.",
+    "Figure 1 panel b caption description no longer repeats the disputed preoperative-testing claim; ambiguity text rewritten to record the parent decision (ambiguity, not source conflict)."
+  ],
+  "unresolved": [
+    "Literature-review tables 1 and 2 describe published cases, not the index patient, and are not annotated as patient facts.",
+    "Values printed or plotted inside figure images (laboratory time courses in Figures 1b and 2b) are pixel content in visual.json only; no figure-derived values are patient facts and no plot values were estimated.",
+    "No supplementary material is declared in the article XML.",
+    "Case text gives only the year 2022 for the first episode; the second episode is dated only as two years after the first.",
+    "Figure 1 caption statement about preoperative PTH testing conflicts in wording with the case text and is kept review_only.",
+    "The effect of imatinib is confounded by denosumab and the hypercalcemia mechanism was not elucidated per the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 57,
+    "facts_reviewed": 101,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (87-year-old man); Tables 1-2 and their discussion are literature cases, correctly excluded; no supplementary material in raw.xml (only the data-availability boilerplate).",
+      "Figure 1 caption \"PTH was not included\" vs text intact PTH 505.1 pg/mL: kept as ambiguity, not source conflict, because the text never literally times that value as preoperative; text value include, caption claim review_only not_performed. Figure 1b iPTH markers are pixel-only.",
+      "Hyperplasia (histology) vs adenoma (caption/discussion/conclusions): histology observation plus authors' adenoma condition, linked by an ambiguity.",
+      "GIST-associated hypercalcemia stated as \"the diagnosis\" and in the conclusions; kept confirmed with an ambiguity noting the denosumab confounding and unelucidated mechanism.",
+      "\"with nor pleomorphism or necrosis\" kept review_only (assertion unknown); home/regular medications action unknown; tumor size 12.8 cm and 8.8 cm merges are literal (same Figure 2a reference and matching \"after three months\" / \"at diagnosis\" wording).",
+      "All 14 relations checked against full evidence lists under RULINGS."
+    ],
+    "residual_risks": [
+      "Calendar month-year dates exist only on figure axes (flagged direct_identifiers); text gives only the year 2022 and \"two years after\".",
+      "e09->e10 relies on the presentation-opens-stay ruling; remaining workup events of the second episode (bone scan, risk assessment) are left unordered because no literal order is stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

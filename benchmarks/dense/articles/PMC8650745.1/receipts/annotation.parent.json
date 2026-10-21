@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC8650745.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "fa296ba8ff5c2dd925fc8b92c3ad64b5c449166ae603f0511182cf0bf3ea1c7e",
+  "annotation_sha256": "22d0460c1a087443ef3786c35ecba8fe483988c98ab27c5e8e729d5377851d9b",
+  "reviewed_at": "2026-10-21T08:46:08.279125+00:00",
+  "source_segments_read": 46,
+  "facts_reviewed": 141,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Restored Table 1 admission TSH (p1-f104, mIU/L, 0.30 – 4.2) and FT4 (p1-f107, pmol/L) cells to supported/include with their row-label units: the table row is internally consistent and the untimed Results-text values are not literally the same measurement (no merge on matching numbers).",
+    "Kept Results-text TSH (p1-f037) and free T4 (p1-f038) source_conflict/review_only; notes now state the within-sentence unit mismatch (value unit vs range unit) that grounds the conflict.",
+    "Set flag unknown on Table 1 anti-TPO (p1-f110) and anti-Tg (p1-f111) cells: 'Elevated levels' belongs to the separate Results-text facts p1-f039/p1-f040; the table prints no H/L marker.",
+    "p1-e01 description no longer attaches the eight-day duration to the choking sensation.",
+    "Split p1-e02: it now holds only Table 1 1st-day cells; untimed examination, vital signs, Results-text labs and urine examination moved to new untimed event p1-e11 (no borrowed '1st day Admission').",
+    "Removed acute kidney injury (p1-f007) from p1-e04; the probable-diagnosis sentence does not name it.",
+    "p1-e10 kind plan -> test (workup to exclude muscle diseases, not carried out; occurrence not_occurred).",
+    "Removed relation p1-e01 before p1-e03: neither quote states order (paragraph order only)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two chart images are described in visual.json.",
+    "Table 1 dashes (U+2010) mean no value is printed for that cell and are not recorded as values.",
+    "The Results text prints TSH and free T4 with a value unit that differs from its own reference-range unit and from Table 1; the text facts are review_only with unit and range withheld, while the Table 1 cells keep the row-label units.",
+    "Results-text laboratory values state no time and are kept separate from the identical 1st-day Table 1 cells except creatine kinase and myoglobin, which the text ties to Table 1.",
+    "Discussion statements on published cases and general pathophysiology are background, not index-patient facts.",
+    "Physical examination, vital signs and Results-text laboratory values state no time and are not ordered against the admission or the Table 1 columns; ECG, chest X-ray, echocardiography and laryngoscopy are likewise unordered.",
+    "Figures 1 and 2 print a levothyroxine dose and Day 1/4/30/39 x-axis labels; these are pixel content in visual.json only and are not equated with the Table 1 column headings."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 46,
+    "facts_reviewed": 141,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (42-year-old man); roster count 1 from the case sentence.",
+      "All 71 Table 1 value cells checked programmatically and by eye against the row text: value, comparator, row-label unit, printed range and column time match; U+2010 dash cells are not recorded.",
+      "Hypothyroidism kept confirmed (Discussion: 'confirmed by the laboratory investigations') with an ambiguity against the Results 'suggestive of' and 'probable' wording; Hashimoto's thyroiditis provisional; rhabdomyolysis and acute kidney injury confirmed.",
+      "Results-text TSH/free T4 print a value unit that differs from their own range unit and from Table 1: text facts review_only with unit/range withheld; Table 1 cells keep row-label units because the untimed text values are not literally identified with the admission column.",
+      "Only creatine kinase and myoglobin merge text with the admission cell (their sentence cites Table 1); anti-TPO, anti-Tg and creatinine text values stay separate and the text's elevation wording is not copied onto the table cells.",
+      "Creatinine 1.44 mg/dl lies within the printed 0.5 – 1.5 range while the text states mild elevation and acute kidney injury: ambiguity, no flag from the range on the table cell.",
+      "Timeline: table column headers order 1st-day labs, Day 4 discharge, 4th and 6th week follow-up; discharge before further follow-up; in-hospital treatment before discharge; untimed exam/vitals/text labs and the ECG/CXR/TTE/laryngoscopy event are left unordered.",
+      "Both line charts viewed at full resolution: only printed axis ticks/labels and the printed 'Levothyroxine 125mcg started at day 1' box; no plot estimates; the dose is pixel content only, not an annotation fact."
+    ],
+    "residual_risks": [
+      "The Results-text laboratory paragraph very probably reports the admission panel, but the source does not say so literally; the text and table items are kept separate (possible double counting by a scorer).",
+      "Hypothyroidism certainty differs between Results ('suggestive', 'probable') and Discussion ('confirmed').",
+      "Figure x-axis days (1, 4, 30, 39) do not match the table headings (4th and 6th week); no equivalence asserted."
+    ]
+  },
+  "physician_adjudicated": false
+}

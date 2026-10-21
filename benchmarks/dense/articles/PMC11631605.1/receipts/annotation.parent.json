@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC11631605.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "93c9ca83e042b1f306550346d5705b981c51e4885b37f8795b0ddf2b424d948d",
+  "annotation_sha256": "68c20e0e46fb3fbe12268f733e505752e6a7e3fc8160a9d218c49a220cb427a9",
+  "reviewed_at": "2026-10-21T08:49:19.857962+00:00",
+  "source_segments_read": 29,
+  "facts_reviewed": 88,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added p1-f086 ethnicity_as_documented \"Chinese\" from \"We present the case of a Chinese girl\" (corpus convention records documented ethnicity).",
+    "Added p1-f087 outcome: serious side effects absent, from the pooled sentence that explicitly names \"our case\"; no drug attached because the sentence names none.",
+    "Added p1-f088 caption-only CT finding for Figure 1C,D (subpleural exudates, interstitial changes, worsening right lung consolidation); unlinked to an event because the caption pairs the deterioration and post-plasma-exchange panels.",
+    "RP-ILD condition p1-f006 moved out of the 20-days-later deterioration event p1-e05 into a new diagnosis event p1-e12; the source never places the diagnosis in that episode, and \"Given her diagnosis of RP-ILD\" orders only the diagnosis before cyclophosphamide/plasma exchange.",
+    "Relation p1-e05 -> p1-e06 removed and replaced by p1-e12 -> p1-e06 (\"Given her diagnosis of RP-ILD\"); the 20-days-later deterioration p1-e05 has no literal outgoing order (recorded as an ambiguity).",
+    "Outcome p1-f078 (lung condition \"continued to worsen on imaging despite\" therapies including cyclophosphamide) moved out of the initial-therapy event p1-e04 into its own outcome event p1-e13, ordered before tocilizumab p1-e08 by \"Rescue treatments with plasma exchange and tocilizumab were subsequently initiated\" (adjacent sentence).",
+    "Relations added: p1-e06 -> p1-e07 (\"This regimen ...\"; \"after three plasma exchange sessions\"); p1-e01 -> p1-e03 (admission opening the stay -> in-hospital diagnosis, order only); p1-e04 -> p1-e11 (glucocorticoid 2 mg/kg/day start -> taper to 5 mg/day); p1-e08 -> p1-e11 (\"following treatment with tocilizumab ... allowing for a successful reduction in her glucocorticoid dosage\").",
+    "p1-e08 -> p1-e10 evidence now quotes the regular tocilizumab dosing (drug start -> its continued course) instead of the glucocorticoid clause.",
+    "Two ambiguities added (RP-ILD diagnosis timing vs deterioration; introduction/discussion \"continued to worsen\" vs case-text \"no significant changes\" on CT after cyclophosphamide and plasma exchange).",
+    "Summary claim 2: \"consistent with RP-ILD\" removed (the diagnosis is not timed within the 20-days-later phase); claim 3 now opens with the literal \"Given her diagnosis of RP-ILD\" before cyclophosphamide and plasma exchange. source_coverage b00011 marked patient_facts for its last sentence."
+  ],
+  "unresolved": [
+    "Table 1 lists eight published literature cases and is not index-patient data; no facts were drawn from it.",
+    "Discussion sentences about published studies and cohorts are background, not patient facts.",
+    "Case text gives no calendar dates; relative times (for 3 months, 20 days later, After 6 months of follow-up) are kept literally.",
+    "Figure 2 plots serial laboratory values and drug bars; only printed text is recorded in the visual submission, with no values read from the plot.",
+    "The authors state IL-18 levels and anti-MDA5 antibody titers were not systematically collected or serially monitored.",
+    "Caption-layer visual status not_inspected; the two JPEG figures are inspected in the separate visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 29,
+    "facts_reviewed": 88,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (3-year-old girl, anti-MDA5-positive JDM with RP-ILD); Table 1 rows are eight published adult cases and stay aggregate.",
+      "ESR, ferritin and D dimer are each named in the \"elevated inflammatory markers:\" list and ALT, AST, LDH and CK in the \"increased serum myogenic enzymes:\" list, so all seven high flags are literal; later rises (\"elevated laboratory indicators ... from ... to\") stay unflagged.",
+      "Ferritin 316 ng/ml is printed as the end of the initial response and the start of the deterioration; kept as two observations with an ambiguity (not stated to be the same measurement).",
+      "SpO2 92%-93% kept as text; high-flow nasal oxygen \"requiring\" kept action unknown; muscle biopsy not_performed (\"despite the absence of a muscle biopsy\").",
+      "Figure 2 prints month/day axis dates of the patient course; direct_identifiers flag agreed."
+    ],
+    "residual_risks": [
+      "p1-e01 -> p1-e03 relies on the admission-opens-stay rule; no discharge is described.",
+      "The 20 days later anchor (p1-e04 -> p1-e05) is the adjacent-sentence rule; the exact anchor of the 20 days is not named.",
+      "Figure 2 drug bars and arrows (e.g. cyclophosphamide arrow before the plasma exchange arrows) are pixel content only; no timing taken from them."
+    ]
+  },
+  "physician_adjudicated": false
+}

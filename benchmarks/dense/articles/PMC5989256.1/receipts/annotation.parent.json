@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC5989256.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "354ddde17298b16fc822b2c066d9c56a6a91abc126de00810f7ad4206073f766",
+  "annotation_sha256": "1e0e6320c35762e4cf023e6b26333d2edb49795bf7fb67f427738be25a4083b9",
+  "reviewed_at": "2026-10-21T03:28:05.169145+00:00",
+  "source_segments_read": 11,
+  "facts_reviewed": 48,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Roster: kept reported_individual_count null (the singular statement is the misprint \"A 58-year-old women\", which the roster checker does not accept as a count of 1); added that quote to roster evidence beside \"In this case report we describe an esophageal perforation\".",
+    "p1-f043 contrast swallow control and p1-f046 flexible endoscopic control: flag negative -> unknown (imaging/endoscopic findings, not qualitative assays, not called normal); finding kept in text_value.",
+    "p1-f048 normal oral diet: evidence widened to the full sentence so follow_up_duration_text \"After one month\" is in its own quote.",
+    "p1-f024 antibiotics and p1-f037 plate removal: removed non-indication text (\"conservative approach\", mucosa isolation precondition) from indication.",
+    "p1-f041 nasogastric tube: removed inferred body_site esophagus (caption names no site).",
+    "Relation p1-e04->p1-e05: evidence now quotes both adjacent sentences so \"Over the next 48 hours\" has its anchor.",
+    "Added relation p1-e02->p1-e03 (MRI C5-C6 herniation result -> C5-C6 discectomy about that result).",
+    "Added relation p1-e14->p1-e16 (\"Once the contrast swallow control ... was discharged\").",
+    "Added ambiguity for the misprint \"fell to demonstrate\" in the contrast swallow control sentence.",
+    "Summary claim 3: \"previously placed plate\" -> source wording \"previously placed cervical column-blocking device\"."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three JPEG figures are inspected in the separate visual submission.",
+    "Single case report; discussion paragraphs cite literature series and are not patient facts.",
+    "Antibiotic names, doses and durations, the amount of enteral feeding and the surgical timing of the first operation are not reported.",
+    "Figure 3 caption spells \"wight arrow/star\"; caption wording preserved only in quotes.",
+    "Timing of the Gastrograffin swallow, of plate removal, and anchors of \"11th postoperative day\" and \"After one month\" are not explicit; see patient ambiguities."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 11,
+    "facts_reviewed": 48,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (58-year-old woman); discussion is literature except the \"In our case\" sentence, which is correctly attributed.",
+      "Plate removal stays action unknown / occurrence unknown: only \"we decide to remove the cervical plate\"; no later sentence or figure states removal.",
+      "Diagnosis \"two days after surgery\" (discussion) vs symptom onset on the second postoperative day with 48 h worsening before the swallow (narrative) is an ambiguity, not a conflict: no second number for the same value.",
+      "\"11th postoperative day\" and \"After one month\" kept literal with null anchors and ambiguities; relations rely on \"Once\" and \"After one month\" adjacency only.",
+      "3-0 Vicryl is caption-only and kept as a caption-evidenced fact with an ambiguity linking it to the absorbable-stitch sentence.",
+      "Figures: 1 = two contrast radiographs with anterior plate, 2-3 = intraoperative photographs with printed orientation/anatomy labels only; no identifiers, faces or sensitive anatomy."
+    ],
+    "residual_risks": [
+      "Esophagoscopy (p1-e08) and the post-repair contrast swallow (p1-e14) have no literal order against the operation and remain partly unlinked.",
+      "Which operation \"11th postoperative day\" refers to is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC9977334.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7a36a6e43dca79ad42b8218e8a812b4e2a31ba4e9da2a4eb0cc3aafa1ab5076d",
+  "annotation_sha256": "32cae01211b8e37ab1be93e76987942dea598031c1e69eec3f3442e31dc9e0bd",
+  "reviewed_at": "2026-10-21T03:46:27.799816+00:00",
+  "source_segments_read": 29,
+  "facts_reviewed": 78,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f003 documented_sex \"female\" (pronoun \"She\" only, for a male-to-female transgender patient) set ambiguous/review_only; gender identity p1-f004 kept include; ambiguity reworded.",
+    "p1-f037 planned reconstruction \"skin grafts or local thigh flaps\" set ambiguous/review_only (X or Y asserts neither); p1-f038 \"no need for skin grafts or thigh flaps\" kept absent/include.",
+    "p1-f025/p1-f026/p1-f077 (untimed b00021 discussion statements about this patient) removed from the timed nearly-one-year follow-up event p1-e17 so they borrow no time.",
+    "p1-f006 acquired scrotal lymphedema moved from the surgical-decision event p1-e13 to the lymphedema history event p1-e02.",
+    "p1-e04 split: radiotherapy keeps the \"one year prior to presentation\" time; chemotherapy is new untimed event p1-e18; Colorectal Surgery Clinic follow-up is new event p1-e19 ordered after both treatments (\"after being treated\").",
+    "New history event p1-e20 for the liquid silicone injections (\"previously\"), ordered before the revelation p1-e10 (past perfect vs later simple past); p1-f011 moved there.",
+    "Added p1-f078 and event p1-e21: Figure 6 caption \"Postoperative result after a 10-month follow-up with no lymphedema relapse\", ordered after surgery p1-e14.",
+    "Relations removed: p1-e07->p1-e08 (\"further investigated\" is not an order word), p1-e07->p1-e10 (CT in the previous paragraph is not literally \"the imaging results\"), p1-e14->p1-e17 (caption 10-month quote used for a different follow-up statement).",
+    "Relations added: p1-e18->p1-e05, p1-e04->p1-e19, p1-e18->p1-e19, p1-e20->p1-e10, p1-e14->p1-e21; p1-e04->p1-e05 evidence now quotes the treatment and its outcome.",
+    "Summary paragraph 1 reworded so the \"one year before presentation\" time attaches to radiotherapy only.",
+    "Follow-up \"nearly one year\" vs caption \"10-month\" kept as an ambiguity, not a source conflict (different statements: photographed result vs follow-up length)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the seven JPEGs are inspected in visual.json.",
+    "Discussion paragraphs b00018, b00019 and parts of b00017 and b00020 are literature background; only the sentences about this patient are recorded.",
+    "Most events carry only relative times; no calendar dates are given and no order is inferred from paragraph position.",
+    "Table 1 is an image-only literature search table (pixel content, visual.json only), not patient data.",
+    "The nearly-one-year follow-up (b00016) is not ordered against the surgery: the only ordering words (\"postoperative\") are two sentences earlier; the Figure 6 caption 10-month postoperative result is ordered after surgery instead.",
+    "The radiotherapy anchor \"presentation to our clinic\" is not literally identified with the Plastic Surgery referral, so radiotherapy is not ordered against that presentation."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 29,
+    "facts_reviewed": 78,
+    "figures_viewed": 7,
+    "key_findings": [
+      "Single index patient; discussion paragraphs b00018-b00019 and b00022 are literature/background; b00020 last sentence and b00021 are literal statements about this patient.",
+      "Hedged causes (radiotherapy \"probably\", silicone \"contributory\", lipoblast-like cells \"could be explained\", PET \"probably\" lymph node) stay out of asserted facts.",
+      "Granulomas are named only in the abstract radiology summary; kept as that abstract fact without assigning a modality.",
+      "Oncology response \"The treatment of the anal cancer was successful\" applies to the combined non-surgical radiotherapy and chemotherapy and is kept on both treatment rows.",
+      "All seven figures viewed at full resolution: f2/f3/f4/f6 show external genitalia (sensitive_anatomy true), no faces, no burned-in text; f1 MRI without text; f5 H&E with printed A/B only; f7 image-only literature search table."
+    ],
+    "residual_risks": [
+      "Radiotherapy is not ordered against the Plastic Surgery referral because \"presentation to our clinic\" is not literally identified with it.",
+      "The nearly-one-year follow-up event p1-e17 has no ordering relation to surgery; only the caption 10-month result is ordered."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC6371137.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "967e6e6bdf6ac530f881f0ac2462af4bd71718fbf6a198a752574afb3c3a7fb5",
+  "annotation_sha256": "57f8f9bd3308d759981e84fadd6430dadcfbede59824d6513a7efa8d1cf02c19",
+  "reviewed_at": "2026-10-21T03:37:05.512630+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 63,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f038..f042 (HRCT honeycombing, ground-glass, nodules, bronchiectasis, bronchial wall thickening) and p1-f053 (stress echo ischemia): flag negative -> unknown; imaging is not a qualitative assay (OBS-FLAG); negation kept in text_value and quote",
+    "p1-f050 ECG \"no ST-T wave abnormalities\": flag negative -> normal (scoped no-abnormalities wording)",
+    "p1-e17 physical therapy recommended: occurrence planned -> unknown (recommended is never planned); care plan stays action_status recommended",
+    "Required-procedure ambiguity extended to stent placement (p1-f007); stent, tracheostomy and balloon dilation stay action unknown",
+    "Added ambiguities: Auto-PAP issued but use not stated; TLC 79% without percent-predicted basis; bulbar type stated only in PMH list while the 1956 sentence says poliomyelitis",
+    "Added relations: presentation (p1-e06) before EGD performed to investigate the complaints of dysphagia (p1-e13); 1956 polio diagnosis (p1-e01) before post-polio diagnosis (p1-e15) via \"distant history of poliomyelitis\"",
+    "Notes clarified on p1-f010, p1-f045, p1-f062"
+  ],
+  "unresolved": [
+    "No figures, tables or supplements in the source.",
+    "Discussion sections are general background and were not assigned to the patient.",
+    "Whether the Auto-PAP was placed or used, and whether tracheostomy and balloon dilation were performed, is not stated.",
+    "Prior stress testing is mentioned only as a comparator; its date and result are not given."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 63,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient (78-year-old male, remote bulbar poliomyelitis) diagnosed with post-polio syndrome; no figures, tables or supplements",
+      "All 63 draft facts checked against b00002-b00007; discussion b00008-b00020 and abstract b00001 are general background with no patient-specific facts",
+      "\"Requiring\" stent, tracheostomy and balloon dilation kept as action unknown per the binding ruling; Auto-PAP issued kept as action unknown with an ambiguity",
+      "Condition and test-result views of OSA, hiatal hernia and Schatzki ring kept as distinct items (diagnosis vs test result)"
+    ],
+    "residual_risks": [
+      "Completion of tracheostomy, stent and balloon dilation is clinically likely but not literally stated",
+      "TLC 79% unit basis (percent predicted) not stated",
+      "Few literal order cues; most workup tests remain unordered relative to each other and to the presentation"
+    ]
+  },
+  "physician_adjudicated": false
+}

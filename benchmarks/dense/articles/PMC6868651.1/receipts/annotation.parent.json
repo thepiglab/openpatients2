@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC6868651.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "fc99b032a53e95f0474196627ad700a59dcae6206fd733c5169dd083756a4899",
+  "annotation_sha256": "adbca330dcaf252f7969759f5e83276c52c49bb05c170d8b5f7dc406f9abfef3",
+  "reviewed_at": "2026-10-21T07:52:52.603924+00:00",
+  "source_segments_read": 18,
+  "facts_reviewed": 226,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1 testosterone level \"low-normal physiological male range\": flag set to normal (within the normal male range; source does not call it low); literal text_value kept.",
+    "p1 clinic visit (\"1.5 years after his diagnosis of POTS\") split from the gender dysphoria diagnosis and testosterone start, which the source dates only as 2 years before November 2018; relations rebuilt from the November 2018 sentence (diagnosis 4 years / testosterone 2 years before) and from both stated times of the same anchor.",
+    "p1 subsequent testosterone levels moved out of the metoprolol event into their own test event, ordered after testosterone start by the adjacent \"Subsequent\".",
+    "p2 February 2019 clinic visit split from the gender dysphoria diagnosis and testosterone start (\"He was subsequently diagnosed\"); removed the unsupported testosterone-start before March 2019 order; kept visit before March 2019 (calendar).",
+    "p2 menarche made its own history event ordered before dizziness onset (\"symptom onset after menarche\").",
+    "p2 trazodone split into the diagnosis medication-list item and a separate \"improved with trazodone\" item (consistent with the separate Strattera and atomoxetine items); added improvement outcomes for cognitive dysfunction with Strattera and insomnia with trazodone.",
+    "p2 cyproheptadine and pyridostigmine \"continued\" at the March 2019 visit split from the initial treatment items into separate administered items in the March 2019 event.",
+    "p2 \"no other significant clinical findings\" changed from an absent sign to a scoped normal-examination sign (present, literal text_value) per SECTION-SIGNS.",
+    "p2 pyridostigmine dose increase/reduction and p3 desmopressin increase: drug name kept as written, invented regimen labels replaced by literal dose_text; no dose values added.",
+    "p3 desmopressin increase and midodrine addition (\"required ... subsequent addition\") set to action unknown per the \"required\" ruling; midodrine/desmopressin use in March 2019 kept administered.",
+    "p3 desmopressin start item no longer carries the increase evidence; added order e06 -> e07 (\"With regular exercise, symptoms improved. Stimulant therapy was subsequently discontinued in 2016.\") and diagnosis (July 2015) -> stimulant stop (2016).",
+    "Added review_only (ambiguous) documented_sex for each patient: the pronoun \"he\" reflects gender identity for natal females identifying as male (precedent PMC9977334.1); sex assigned at birth and gender identity kept as accepted items.",
+    "Added review_only outcome to each patient for the explicit all-three discussion sentence \"Before initiation of hormone therapy ... all three patients showed variable control, with overall improvement after addition of these interventions\" (\"these interventions\" refers to general typical therapy).",
+    "Past-medical-history conditions given temporality historical; species_as_documented changed from a sex/gender phrase to \"patient\"."
+  ],
+  "unresolved": [
+    "Retrospective case series of three patients; no figures, tables or supplements.",
+    "Symptom severity was not objectively measured per the authors; all symptomatology was subjective.",
+    "Conclusion-section statements that are series-level or unlabelled (reduction in medication need, patients who missed testosterone) are not copied to individuals except the explicit \"All three patients\" improvement sentence.",
+    "Several blood pressure and heart rate values are printed without units; none were added.",
+    "Times are given as months or years only; some events (testosterone start, metoprolol treatment) have no stated date."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 18,
+    "facts_reviewed": 226,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Three transgender (natal female identifying as male) adolescents with POTS; each case paragraph pair (b00008-b00013) owned by one patient; no figures, tables or supplements.",
+      "The explicit \"All three patients demonstrated apparent clinical improvement\" sentence is correctly copied to each patient; unlabelled discussion sentences (reduction in medication need, \"one of our patients\" missing testosterone) are not copied.",
+      "Clinic-visit times in p1 and p2 do not govern the testosterone start; events split accordingly.",
+      "Strattera is the brand of atomoxetine but the two names occur in separate statements; kept as separate items with an ambiguity rather than merged.",
+      "Physical therapy referral recorded as a completed referral action (the referral was made), consistent with corpus precedent; attendance not claimed.",
+      "Blood pressures kept as text_value with unit only where printed."
+    ],
+    "residual_risks": [
+      "Several treatment and follow-up items have deliberately null times (metoprolol, continued pain, dose changes, testosterone start in p1/p2).",
+      "documented_sex left review_only; downstream filters relying on documented_sex will see only sex assigned at birth and gender identity.",
+      "Clinical improvement statements are subjective per the authors; no objective severity measure."
+    ]
+  },
+  "physician_adjudicated": false
+}

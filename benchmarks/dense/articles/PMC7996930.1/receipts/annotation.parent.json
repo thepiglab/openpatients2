@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC7996930.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f20d26dcbf00527f818bd90a731b144ca14eab955ec6a0a46481593be103608b",
+  "annotation_sha256": "3db052aaca916c0a12f9b8c3f7c83c1454ac877e0cde379cf5c2cdb436d50d73",
+  "reviewed_at": "2026-10-21T03:31:19.679820+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 83,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added p1-f034: caption-stated follow-up OCT finding \"sustained resolution of subretinal fluid in the LE\" at the last visit (8 years following initial presentation), linked to p1-e07 and summary claim 3.",
+    "Added relation p1-e05 (resolution of subretinal fluid after the second injection) before p1-e06 (8 years without recurrence), quoting the adjacent clauses; \"recurrence\" orders after the resolution.",
+    "Added p1 ambiguity: last-visit SD-OCT \"similar appearance in both eyes\" has no stated comparison referent.",
+    "Split p2-e04 (kind other) into p2-e04 outcome (no improvement in vision, subretinal fluid or CNV size; f023, f017), p2-e06 deferral of further intravitreal treatment (occurred, kind other; f024) and p2-e07 plan to closely observe (planned, kind plan; f025).",
+    "Added relation p2-e04 before p2-e06 (\"Since there was no improvement ..., further intravitreal treatment was deferred\", result -> action).",
+    "Added relation p2-e01 before p2-e05 quoting the presenting BCVA and \"Her last BCVA ...\".",
+    "Added p2 ambiguities: bevacizumab route not stated in the administration sentence (\"intravitreal\" only in the next sentence about further treatment, not copied); follow-up \"similar macular appearance\" has no stated referent.",
+    "Added p3-e05 history event (EOG-proven BMD onset in his 5th decade of life, time_kind age) holding p3-f006, removed f006 from the presentation event, and related p3-e05 before p3-e01 (history stated with the presentation).",
+    "Added relations p3-e04 (last-visit OCTA) during p3-e03 (11-year conservative follow-up), adjacent-sentence anchor \"followed for 11 years. At the last visit\", and p3-e01 before p3-e04.",
+    "Added p3 ambiguity: discussion says Case 3 was \"presenting with an incidental finding of bilateral inactive CNV\" while the case report places the CNV-revealing OCTA at the last visit after 11 years.",
+    "Figure 1 panels G and H body_part changed from \"left eye\" to \"both eyes\" with the b00006 citation \"the SD-OCT showed a similar appearance in both eyes (Figure 1G,H)\"; the caption LE statement is a finding, not the scope of both panels."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three actual JPEGs are inspected in the separate visual submission.",
+    "The case-series summary sentences give counts of eyes and patients without naming cases for stage and treatment response; they were not copied to individuals except where a sentence names all three patients.",
+    "The discussion says the SD-OCT findings in Case 1 and Case 2 should be read either as optically empty spaces or as subretinal fluid rather than CNV exudation; exudation is not recorded as an established finding.",
+    "Case 3 BCVA of 20/150 has no stated eye because the source wording does not clearly scope it.",
+    "Several imaging findings are reported by the authors without laterality; no laterality was inferred from panel position."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 83,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Three individuated index patients (Cases 1-3), roster 3 complete from \"in three illustrative cases\"; no cited cases attributed.",
+      "Exudation (b00013): the authors say Cases 1 and 2 had \"exudative changes secondary to CNV\" and then say the SD-OCT findings should be interpreted either as optically empty spaces or as subretinal fluid from RPE dysfunction \"rather than signs of CNV exudation\". This is a hedged authorial reinterpretation with an either/or, not two values for one attribute: kept as an ambiguity, no CNV-exudation fact, no source_conflict.",
+      "BMD stage taken only from b00013 sentences naming the cases (vitelliruptive for Cases 1 and 2; advanced atrophic disease for Case 3); b00009 stage counts, exclusions and treatment-response counts are aggregate and not copied.",
+      "Case 3 BCVA 20/150: \"presenting with BCVA of 20/150 and eccentric vision in both eyes\" does not literally scope the eye; kept without eye plus ambiguity.",
+      "Case 2 bevacizumab route left null: \"intravitreal\" appears only in the next sentence about further treatment (no route borrowing); regimen keeps \"in the RE\".",
+      "Case 1 bevacizumab eye not stated (CNV is in the LE); no body site assigned; indication kept from the same clause \"diagnosed with BMD complicated by CNV in the LE and underwent 4 intravitreal injections\".",
+      "Pixels: no per-panel eye label printed; disc position was not used to assign eyes. No burned-in names, dates, institutions or device text; the small boxed icon at the lower left of OCTA panels is a slab indicator graphic without text. Privacy none on all 26 panels and clinical_imaging EHR labels are correct.",
+      "Figure 1B pale yellowish area inferotemporal to the fovea is visible; the visual row's \"ill-defined pale yellowish area\" is a fair pixel description.",
+      "All 10 relations checked against their full evidence lists."
+    ],
+    "residual_risks": [
+      "visual.json Figure 2 panels E and F say the panel letter is printed at the lower left; the pixels show E and F at the upper left (agent sidecar fix pending).",
+      "Relations p2-e01 -> p2-e05 and p3-e01 -> p3-e04 rest on \"last\" BCVA/visit wording rather than a stated interval.",
+      "No dates or intervals are given for Case 2 follow-up; Case 3 BCVA eye scope unresolved."
+    ]
+  },
+  "physician_adjudicated": false
+}

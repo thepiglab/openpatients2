@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC8657716.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3edf2940f46b35b173ab4af33c6deb38b9232bad450a2f287441e023c6ef425c",
+  "annotation_sha256": "b07c5e9c62b50ca2d97007dc7959faf71f9d3ae56f435ee2108d20f2414aa8de",
+  "reviewed_at": "2026-10-21T09:07:26.132881+00:00",
+  "source_segments_read": 51,
+  "facts_reviewed": 281,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Text labs equal to Table 1 cells (lymphocytes 3.23, TnI 25.7, D-dimer 729, CRP 26.00, NT-proBNP 645.40; f050-f053, f066) changed from ambiguous/review_only to supported/include, still unmerged (no conflict; corpus precedent).",
+    "f066 NT-proBNP given the time of its own sentence (twelfth day of COVID infection) with the full-sentence quote.",
+    "f012 ascites quarantined (ambiguous, review_only, subject unknown): existence and fetal subject are only implied by 'reduction in the effusion and ascites'; ambiguity added.",
+    "f013 long QT syndrome subject fetus -> index_patient (statement not scoped to the fetal period).",
+    "f075 inflammatory syndrome given its own timed discussion sentence (third day from the time of diagnosis of SARS-CoV infection).",
+    "Added f275 (no data for myocardial inflammation at the time of fetal VT, absent), f276 (impaired fetal longitudinal strain at 33 weeks), f277/f278 (second-week echo and maximum TnI/CK-MB), f279 (positiviation of myocardial enzymes), f280/f281 (discussion outcome statements).",
+    "Events re-linked so untimed facts are not carried by timed events: serial echo facts out of e15 (new e27), 24-h ECG/serial ECG out of e16 (new e28), arrhythmic storm and repeated 24-h ECG out of e24 (new e31), inflammatory syndrome out of e21 (new e29); new e30 second-week echo.",
+    "Added 14 literal relations: sotalol->favorable evolution ('later on'), sotalol->day-3 VT ('after the transplacental treatment'), 33-week diagnosis->39-week delivery, intrauterine events->delivery, birth->immediate ECG, first->second echocardiography, confirmation->day 5-13 labs and ->levosimendan (same anchor), ninth->twelfth day of COVID infection, diagnosis->inflammatory syndrome->dexamethasone, 24-h ECG arrhythmia->amiodarone increase, 24-h ECG->repeated 24-h ECG, discharge->submission recovery.",
+    "e24->e25 relation evidence split into two focused quotes instead of a three-sentence span.",
+    "Summary claim 4 no longer lists antiplatelet therapy as given; says it was described as required.",
+    "Two ambiguities added (ascites subject; strain timing 'During evolution' vs 33 weeks); text-lab ambiguity reworded."
+  ],
+  "unresolved": [
+    "Table 1 time headers (Day 3 after Birth; Day of Illness 3 to 27) are not aligned with the text's day-after-birth and day-of-COVID-infection anchors; text laboratory values are kept separate from the table cells.",
+    "Dashes in Table 1 are missing cells, not values. Qualitative cells (negative, <200) are kept as printed.",
+    "Sotalol route is transplacental in one statement and oral in another, with no stated subject for the oral dose.",
+    "Antiplatelet therapy is stated only as required; no drug or administration is documented.",
+    "Values printed inside Figure 1 to Figure 3 are pixel content and are recorded only in visual.json.",
+    "Mother and fetus facts are recorded inside the index patient's record with their own subjects."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 51,
+    "facts_reviewed": 281,
+    "figures_viewed": 3,
+    "key_findings": [
+      "All 182 non-dash Table 1 cells verified against raw.xml: Day 3 after Birth is a rowspan-2 header (first value column); Day of Illness 3..27 are the next 11 columns; every fact value, comparator, reference range and column time matches.",
+      "Antiplatelet therapy stays action unknown (only \"required\"); discharge oral heart failure therapy stays administered (RULINGS allow administered or unknown for \"discharged on\").",
+      "Oral sotalol (subject not stated) stays review_only; transplacental sotalol is the fetus fact.",
+      "Cardiac MRI and IL-6 are not_performed observations with assertion present.",
+      "Different-anchor times (day after birth/delivery, day of illness, day of COVID infection, day after confirmation) are never used to order a pair."
+    ],
+    "residual_risks": [
+      "Table Day of Illness anchor is not aligned with the text day-after-birth anchor; no common axis inferred.",
+      "Discussion sentences are attributed to the single index case only where they say \"our case\" or give case-specific times.",
+      "Third-day paragraph: only sentences naming the third day are timed; QRS, rate and fusion/capture details are untimed."
+    ]
+  },
+  "physician_adjudicated": false
+}

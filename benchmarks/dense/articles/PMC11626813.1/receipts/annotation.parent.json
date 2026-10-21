@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC11626813.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ba13a6089c07eea06dab18fa55b8836e6856ee15d16ad6b0703537c2bc2e7d99",
+  "annotation_sha256": "c3f8d1b495a63f8e92b8fc4783563d78e0247374fc6c690542a8cf736507c041",
+  "reviewed_at": "2026-10-21T13:48:01.337803+00:00",
+  "source_segments_read": 68,
+  "facts_reviewed": 146,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed pack_years=30 from smoking: the source prints '30 packs/year', not pack-years; amount_text kept, ambiguity added.",
+    "Split anti-Scl-70 and anti-centromere: Table 3 cells (−) kept as table facts p1-f108/p1-f109; the uncited case-text negative statement added as separate facts p1-f145/p1-f146 (RULINGS: merge only when the source makes them the same measurement); ambiguity added.",
+    "Rewrote the Rodnan ambiguity: components sum to 16 counted once and to 27 when 'both' regions count per side, matching the stated total; convention not stated, no conflict.",
+    "Added an ambiguity for DLCO: whether 'reduced' scopes over the coordinated DLCO phrase is not explicit; DLCO flag stays unknown (FVC flag low kept).",
+    "Event p1-e05 ('initially considered' differentials) now holds only MCTD and Sjogren's; eosinophilic pneumonia and PPI-induced pneumonia (discussion-only, review_only) detached from it; no-allergy history moved to presentation event p1-e02.",
+    "Rephrased p1-f004 diagnostic_basis to drop an invented 'then' sequence.",
+    "Added relation p1-e06 -> p1-e08: nintedanib administered to the patient with the named existing ILD associated with SSc (treating a named existing condition)."
+  ],
+  "unresolved": [
+    "Table 4 lists published literature cases; only its present-case row concerns the index patient, and its gastric involvement and renal disease cells are kept review-only because the 0/1 convention is undefined.",
+    "Discussion sentences about cohorts, mechanisms and published studies are background, not patient facts.",
+    "The case text gives no calendar dates; the only relative times are six months ago, six months after symptom onset, immediately after the visit and initially.",
+    "No outcome after nintedanib is reported, so no outcomes are recorded.",
+    "Caption-layer visual status not_inspected; the two JPEG figures are inspected in the separate visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 68,
+    "facts_reviewed": 146,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient; no supplements (none in source.json or raw.xml).",
+      "Tables 1-3 are single index-patient time points; Table 4 is literature with a present-case row; legend defines only abbreviations, so gastric 1 / renal 0 kept review_only.",
+      "PH absent/refuted from 'no evidence of pulmonary hypertension' on ECG and echocardiography.",
+      "Anti-eIF2B table value merged with text sentence that cites Table 3; anti-SS-A/Ro52 (text) vs anti-SS-A/Ro (table) kept separate.",
+      "Mycophenolate and steroids are only examples in a not-indicated care plan; not medications.",
+      "Fig 1A identifiable face (eye bar only); 1B bare male chest, face masked, not sensitive anatomy; Fig 2 CT has no burned-in text."
+    ],
+    "residual_risks": [
+      "Examination/test timing is unstated; workup events carry no time.",
+      "BALF eosinophils 15.2 (table) vs 15 % (discussion) treated as rounding.",
+      "Collagen-specialist consultation, whole-body CT and the immunosuppressive decision are not literally ordered against all other events."
+    ]
+  },
+  "physician_adjudicated": false
+}

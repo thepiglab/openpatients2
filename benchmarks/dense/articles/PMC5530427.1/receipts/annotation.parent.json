@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC5530427.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b2b262fb84633a1d338b46a59aaa46af2560205d9e765538446fceb2476dcd70",
+  "annotation_sha256": "3af0ded8253c24752ae693e70a755de577b869ec20dfd42f51a5a8b32094c81c",
+  "reviewed_at": "2026-10-21T03:56:25.445395+00:00",
+  "source_segments_read": 17,
+  "facts_reviewed": 53,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f033 (first-ERCP Dormia removal of the large stone): action completed -> unknown; the source states only that the stone could not be removed with the basket and was left in situ, not that an attempt was made; name/finding reworded and an ambiguity added.",
+    "p1-f034 renamed to repeat ERCP with attempted Dormia basket mechanical lithotripsy (lithotripsy not achieved; wires snapped).",
+    "Added caption-text observations p1-f050 (Fig 1 gallstone near top of CBD), p1-f051 (Fig 2 basket in CBD after handle broke), p1-f052 (Fig 3 large stone within impacted basket, distal CBD, choledochoscopic view), p1-f053 (Fig 4 debulked basket collapsed, few fragments).",
+    "Events: regular medications split from the past-history event p1-e01 into new history event p1-e13; retained-basket condition p1-f035 (evidence is the choledochoscopy sentence) moved from p1-e06 to p1-e09; caption observations attached to p1-e06 and p1-e09.",
+    "Relations added: e01 before e02 (past medical history stated with the presentation), e06 before e07 (referral and theatre the same day after the repeat-ERCP wire fracture), e07 before e08 (referral/taken to theatre -> laparoscopic cholecystectomy), e05 before e11 (\"After ERCP ... readmitted\": holds whichever ERCP is meant).",
+    "Basket-location ambiguity rewritten: ampulla / CBD / distal CBD are compatible granularities of one site, not a conflict; Fig 1 caption location added. Pancreatitis ambiguity updated for the recorded e05 order."
+  ],
+  "unresolved": [
+    "Single index patient; the literature search in the Discussion (114 published cases, 83 analysed) is cohort or cited-case content and is not copied to the patient.",
+    "The bilirubin unit is printed only inside the reference interval and may be a misprint; kept as printed and recorded as an ambiguity.",
+    "The source gives no calendar dates, so every time is relative; the ERCP preceding the pancreatitis readmission is not identified.",
+    "Regular medications are listed without dose, route or indication; their action is recorded as unknown."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 17,
+    "facts_reviewed": 53,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (67-year-old woman); discussion literature review (114 cases) is aggregate and not copied to the patient.",
+      "Bilirubin kept as printed \"13 (<21 mg/dl)\" with unit from the printed interval (same print pattern as ALT and ALP), flag unknown, ambiguity on the likely unit misprint; not converted.",
+      "Readmission with acute pancreatitis: which ERCP is not stated; only the order after the first ERCP is recorded; surgery vs readmission order left open.",
+      "complication \"without complication\" on the basket delivery is literal and matches corpus usage; regular medications action unknown and \"nonsmoker\" as absent/unknown follow RULINGS and SOC-NEVER.",
+      "All four figures viewed at full resolution with crops: two fluoroscopy images (Fig 1 bottom ruler with partial \"cm\" label; Fig 2 marker glyph and faint ticks only) and two choledochoscopy images with no text; visual.json has no plot estimates."
+    ],
+    "residual_risks": [
+      "Bilirubin unit likely a misprint (13 mg/dl would be inconsistent with no jaundice); kept as printed.",
+      "AI reference annotation, not physician adjudicated."
+    ]
+  },
+  "physician_adjudicated": false
+}

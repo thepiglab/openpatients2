@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC6872699.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "23f130aef9896ae264a1bd9552e6f23d2c912bf08be91b82d47f11b8c82f2a37",
+  "annotation_sha256": "fb286fff25edb5a544481f9e5e4bfd37ed7aa6159605443287bdd8a6fda10e4f",
+  "reviewed_at": "2026-10-21T04:30:37.461942+00:00",
+  "source_segments_read": 40,
+  "facts_reviewed": 68,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Transfer care plan narrowed to the transfer itself (the earlier admission at the other hospital stays in the history event); target set to the literal \"further treatment\".",
+    "Hemodynamic-stability time anchor set to the literal \"admission\".",
+    "EPS failure procedure gained the case-labelled discussion quote \"In our case, treatment with EPS failed\"; kept separate from the ENPD advancement failure with an ambiguity.",
+    "MPD disruption condition gained the abstract quote \"ERP revealed MPD disruption\".",
+    "Pancreatic tail non-visualization flag changed from indeterminate to unknown (no flag stated).",
+    "Figure 1 caption stomach-fluid observation body_site made literal (\"around the stomach\"); added caption observation \"The CT scan revealed pancreatic injury (b)\" (preoperative) to the following-day CT event.",
+    "Uneventful postoperative course outcome text_value made literal; injury-treated outcome related_condition set to pancreatic injury.",
+    "Added outcome \"organ preservation: the pancreas and spleen\" from the case-labelled discussion sentence; b00034 coverage updated.",
+    "Split the ENPD-to-EPS catheter change out of the POD 31 ERP event (no stated time; no borrowing of POD 31) into its own event e13, ordered after surgery (device placed then replaced).",
+    "Split MRCP out of the previous-CT event into e14.",
+    "Added relations: e05 labs before e08 surgery (\"Preoperative laboratory investigations\"); e04 CT and e14 MRCP before e08 (\"Preoperative MRCP and CT findings\" with the Fig. 1b–e citation); e02 admission before e06 ERP (admission opens the stay, \"we performed ERP\"); e08 before e13. e01->e04 quote expanded to \"On the following day, CT scan was again performed\".",
+    "Summary paragraphs updated to cite the new facts (EPS failure, caption CT, admission, organ preservation).",
+    "Ambiguities added: previous CT vs enhanced CT identity and MRCP timing; undated catheter change; laparotomy time scoped by the operative paragraph opening sentence (gate NO-BORROWING warning is a checker false positive)."
+  ],
+  "unresolved": [
+    "Figure pixels are inspected separately in visual.json; caption-layer visual_status stays not_inspected.",
+    "Table 1 is a single preoperative panel with no printed reference ranges; only amylase and lipase carry a stated elevated flag from the text.",
+    "No follow-up after discharge on POD 56 is reported; the planned 6-month EPS catheter course has no stated outcome.",
+    "The abstract EPS failure and the ENPD advancement failure in the case text are not tied together by the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 40,
+    "facts_reviewed": 68,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (70-year-old woman, AAST grade III pancreatic body injury with MPD disruption); all 22 Table 1 rows present with values/units; only amylase and lipase flagged high from the text.",
+      "Laparotomy time \"22 h after injury\" is kept: the sentence \"Surgery was started 22 h after injury and 2 h after ERP\" opens the operative paragraph and scopes the one operation; the NO-BORROWING warning is a false positive.",
+      "\"On the following day\" opens a new paragraph and stays unanchored; e05->e06 rests on \"Thus\" (result -> action); e01->e04 rests on \"again\".",
+      "Abstract \"EPS failed\" and text \"ENPD catheter was not advanced\" kept as two procedure facts with an ambiguity; e06->e07 rests on the case-labelled \"In our case, treatment with EPS failed; thus\".",
+      "Figure panel letters use the upper-case letters printed in the images; pixels of all three figures viewed with magnified crops; no burned-in identifiers."
+    ],
+    "residual_risks": [
+      "NO-BORROWING gate warning on the laparotomy time remains (judged a false positive).",
+      "Events e03 (previous CT) and e12 (planned 6-month EPS course) have no supported order links.",
+      "No follow-up after discharge on POD 56 is reported."
+    ]
+  },
+  "physician_adjudicated": false
+}

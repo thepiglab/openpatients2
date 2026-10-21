@@ -1,0 +1,66 @@
+{
+  "article_id": "PMC12448722.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "fc9c9a920185ba8b59f2bfcfc9082a05f91aaa518126b3ab171189239df9d1c3",
+  "annotation_sha256": "7d256c57482820d2777e211c14966a510ffc5dd9e940f0f3f7aeeefd7fd62fab",
+  "reviewed_at": "2026-10-21T13:54:06.990478+00:00",
+  "source_segments_read": 35,
+  "facts_reviewed": 110,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added p1-f054: pharmacologic provocation test not performed at the CAG about 7 years earlier (OBS-NOT-PERFORMED), linked to p1-e01.",
+    "Added p2-f056: provocation test not performed at the CAG several years earlier (OBS-NOT-PERFORMED), linked to p2-e01.",
+    "p1-f029 amlodipine: removed regimen 'long-acting calcium channel blocker' (a drug class, not a regimen); wording kept in the quote and notes.",
+    "Added p1 relation p1-e02 before p1-e04 (presentation opening the stay -> MDCTA on the first day of hospitalization).",
+    "Added p1 relation p1-e04 before p1-e06 (MDCTA findings -> CAG with provocation 'performed for confirmation').",
+    "Added p1 relation p1-e09 before p1-e11 (in-hospital diagnosis -> discharge ending that stay).",
+    "Split serial troponin ('during hospitalization') out of the p2 admission-ECG event into new event p2-e15; added p2-e04 before p2-e05 (stated times 'upon admission' and 'on the day after admission' from the same anchor).",
+    "p2-e13 now links p2-f005 (alcohol abstinence recommended) with its quote, matching the event description.",
+    "p1 timing ambiguity annotated with the parent decision: ambiguity, not a source conflict.",
+    "Article limitation for unassigned inline image ytaf401il1.jpg updated: parent viewed it (MD5 matched); it sits in the Lead author biography and is a non-clinical author portrait."
+  ],
+  "unresolved": [
+    "Two case reports (Case 1 and Case 2 headings in the source); Discussion statements are copied to both patients only where the sentence explicitly covers \"both\" or \"neither of the two patients\".",
+    "Table 1 labels its data \"at admission\", while the case text places the baseline echocardiography the day after admission and the Discussion says MDCTA and baseline echocardiography were performed on the same day; no single time is assigned to the baseline GLS.",
+    "Follow-up echocardiography is described after intracoronary nitroglycerine (Case 1 text), after nitrate administration (Case 2 text and Table 1) and after intravenous infusion of nitrate within 24 h of CAG (Discussion); the nitrate route is not assigned.",
+    "Table 1 units are kept as printed (for example troponin I in ng/L with values below 1 and NT-proBNP in pg/mL); nothing is converted and no flag is assigned from the printed normal intervals.",
+    "Case 1 initial ECG states T wave flattening or inversion; neither is asserted (review_only).",
+    "The supplementary video (sup1) is a PMC-hosted MP4 reviewed by sampled frames in the supplement manifest; audio and continuous motion were not reviewed and no clinical facts are taken from it.",
+    "The source lists one further unassigned inline image (ytaf401il1.jpg); the raw XML places it as an inline graphic in the Lead author biography section, and the parent viewed it (MD5 matched the PMC manifest): a non-clinical author portrait, not patient content. It is not a figure, not attributed to either case and not described further.",
+    "Figure pixels are inspected in visual.json; images carry printed segment strain values and burned-in identifiers in some panels (flagged in the privacy sidecar, never copied)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 35,
+    "facts_reviewed": 110,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Two male cases (59 and 70 years) with ergonovine-confirmed vasospastic angina; MDCTA, LV GLS echo and CAG findings, Table 1 rows and medications verified against b00009/b00010 and Table 1.",
+      "Case 1 MDCTA 'first day of hospitalization' vs echo/CAG 'next day after admission' vs Discussion 'same day': kept as an ambiguity (different anchors, possibly the same calendar day; case-series wording), not a source conflict; baseline GLS left untimed because Table 1 'at admission' also heads the post-nitrate row.",
+      "Text/Table 1 GLS merges kept: the source itself names both the baseline and the post-nitrate GLS of each case (Figure 2 caption panels A-D cited by the case text, Table 1 rows 'Baseline LV GLS' and 'Follow-up LV GLS after nitrate administration'), so they are the same named measurement, not a number match.",
+      "Follow-up nitrate route left unassigned (case text intracoronary nitroglycerine vs Discussion IV infusion within 24 h of CAG).",
+      "'T wave flattening or inversion' review_only; no flags from printed normal intervals; troponin and NT-proBNP units as printed.",
+      "Cross-patient copies limited to 'two cases', 'two patients' and 'neither of the two patients' sentences.",
+      "Case 2 'performed sequentially' accepted as stating MDCTA -> echocardiography -> CAG order.",
+      "All 6 figures viewed with crops; F4 A/C/E/F and F1 B burned-in name/date/birth-date text confirmed and no values copied into any authored file."
+    ],
+    "residual_risks": [
+      "Discussion case-series statements (same-day MDCTA/echo, IV nitrate follow-up echo) are not assigned to either case.",
+      "Supplement MP4 'Case I/II' slides are not cited by any article sentence; ownership unresolved and no facts taken from it.",
+      "Table 1 troponin I unit (ng/L with values below 1) kept as printed."
+    ]
+  },
+  "physician_adjudicated": false
+}

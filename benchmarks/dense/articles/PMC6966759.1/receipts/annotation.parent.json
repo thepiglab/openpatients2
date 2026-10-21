@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC6966759.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "23d68987319251100f2b1ef33025f54ce3c5a9ef038472eee3ebcf9e05705b56",
+  "annotation_sha256": "e86fc15146bb8ab31ff86d993024292aa1cfa348b1ec9e7d8fa6ad44acc49c9e",
+  "reviewed_at": "2026-10-21T09:29:14.180417+00:00",
+  "source_segments_read": 30,
+  "facts_reviewed": 204,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Observation flags high/low -> unknown where the source states only a trend or peak, not a classification: p1-f059 (pH \"mild decrease\"), p1-f060 (lactate \"increased\"), p1-f065/p1-f066 (AST/ALT \"significant rise\"), p1-f069/p1-f070/p1-f071 (K+/AST/ALT \"peaked on POD 1\"); notes added.",
+    "p1-f171 (merged Table 1 surgery-time column 1 K+ 6.3 with the text \"An hour into surgery ... (Table 1)\"): flag unknown -> high from the text \"showed hyperkalemia\"; merge confirmed (same named hour, same test, explicit Table 1 citation).",
+    "p1-f050 emergency postoperative hemodialysis (cancelled): added the discussion evidence \"we arranged emergency postoperative hemodialysis since serum K^(+) exceeded 7 mEq/L during surgery\".",
+    "Added p1-f204: surgeons reported no abnormal surgical-field changes including no color change of the liver (symptoms_function sign, absent), linked to p1-e04.",
+    "Moved p1-f059 (pH decrease \"early in the surgery\") from the eighth-hour lactate event p1-e09 to the surgery event p1-e04.",
+    "Relations added: p1-e04 -> p1-e10 (\"After the conclusion of the surgery ... extubated\"); p1-e05, p1-e06, p1-e08 during p1-e04 (stated surgery hours); p1-e11 -> p1-e12 (\"Immediate postoperative\" vs \"first postoperative day\"); p1-e12 -> p1-e13 (\"despite hemodialysis and so he received continuous hemodiafiltration\"); p1-e14 same_time p1-e15 (POD 5 fever and CT \"on the fifth postoperative day\").",
+    "Ambiguities on text-vs-Table-1 potassium timing reworded to name the near-miss columns (3.5 h 6.8, 5.5 h 7.0; postoperative 3 h 8, 24 h 5.8) and to state these are different time labels, not source conflicts."
+  ],
+  "unresolved": [
+    "Text hours and POD labels cannot be matched to Table 1 columns; text and table potassium values are kept as separate observations (see ambiguities).",
+    "Hepatic infarction is recorded as provisional because the CT is described as suggestive; abstract and discussion state it more firmly.",
+    "Table 1 footnote defines Hct and Glu but the table has no rows for them; Fig. 1 AST/ALT values are plotted only and are not recorded.",
+    "Lactate unit printed as mg/dL kept as printed.",
+    "Caption-layer visual status not_inspected; actual images inspected in visual.json."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 30,
+    "facts_reviewed": 204,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (48-year-old man on maintenance hemodialysis, laparoscopic gastrectomy for gastric cancer, intraoperative hyperkalemia); no cited cases attributed.",
+      "All 126 Table 1 cells checked against the two-level header in raw.xml (6 surgery-time columns, 8 postoperative-time columns); values, units, and column-number time with header anchor correct; pH row has no unit.",
+      "Text hours (\"third hour\", \"fifth hour\", \"eighth hour\", POD 1) are different time labels from the Table 1 columns; no pair is two numbers for one stated time point, so ambiguities only, no source conflict. Only the 1-hour K+ 6.3 is merged.",
+      "Hepatic infarction kept provisional (\"suggestive of\"/\"suggesting\"), with the abstract \"revealed\" wording in an ambiguity; the causal link to hyperkalemia is hedged and not asserted.",
+      "Glucose-insulin start time from the Table 1 footnote, whose own sentence names the infusion start; accepted.",
+      "Succinylcholine named only as an example (absent K+-releasing drug); transfusion absent; emergency postoperative hemodialysis arranged then avoided (cancelled).",
+      "Fig. 1 line chart (AST/ALT, U/L) prints only axis ticks and legend; Fig. 2 axial CT with arrowheads, \"Th10\" label and partly cut-off three-character device digits at the lower left (no date)."
+    ],
+    "residual_risks": [
+      "The text cites Table 1 for K+ 7.0 in the third hour although no column is labelled third hour; a reader could treat the 3.5 h cell (6.8) as the same draw.",
+      "Glucose-insulin start: the text places initiation after the third-hour ABG, the footnote says from the fourth hour; consistent but approximate.",
+      "Caption expands ALT as alkaline aminotransferase; lactate printed in mg/dL; Hct/Glu defined in the footnote without rows."
+    ]
+  },
+  "physician_adjudicated": false
+}

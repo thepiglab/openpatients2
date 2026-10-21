@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC6879988.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "bcdc489849c2560cb136b4d4b8929888600f360993ae2bb92e9f54ec249f9de6",
+  "annotation_sha256": "857ceb6d05c297eb97df2af0c005549a55b10abf738c0919eaf0ba23299e273f",
+  "reviewed_at": "2026-10-21T03:45:04.829220+00:00",
+  "source_segments_read": 32,
+  "facts_reviewed": 84,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Infliximab p1-f037: action unknown -> administered, temporality historical, time \"prior to the appointment\" (before, anchor \"appointment\") from the literal \"her symptoms prior to the appointment were well-managed with infliximab\"; the abstract restatement \"previously well-controlled on Remicade\" added as evidence (same history statement, brand name), replacing the limitation that Remicade was unrecorded.",
+    "Crohn disease p1-f005: added \"her known CD\" so the historical temporality is labelled in its own evidence; the 10- vs 11-year duration stays two source_conflict/review_only facts (p1-f006/p1-f007) and out of labels and summaries.",
+    "Added p1-f084 psoas-enteric fistula (conditions, assertion present, verification unknown, certainty ambiguous, review_only): the introduction states it for this case, but the narrative only records concern for retrocecal/recurrent fistula and the second laparoscopy saw no obvious cause; fistula ambiguity rewritten and linked.",
+    "Added p1-f085 \"three percutaneous drainages post-ileocolectomy\" (abstract) as ambiguous/review_only and linked it to the drain-count ambiguity (narrative describes one post-operative drain, the third IR drain overall).",
+    "Removed p1-f079 (outcome follow_up with invented text_value \"follow-up status to date\" restating the symptom-free item p1-f036); removed from event p1-e20 and the summary.",
+    "p1-f046 oral antibiotics: removed duration_text \"course\" (not a duration).",
+    "p1-f015 and p1-f055: added abstract evidence \"evidence of a recurrent abscess prompted diagnostic laparoscopy\".",
+    "Event p1-e21 (initial appendicitis diagnosis): removed back pain p1-f035 and CRP p1-f065 and their quote; \"Given ... as well as pain extending to the back, fever, and increased CRP\" is diagnosis-basis wording with no stated time for those findings.",
+    "Event kinds: p1-e13 (return presentation) and p1-e14 (admission with elbow/knee pain) follow_up/adverse_event -> presentation; p1-e20 \"To date\" precision -> unknown.",
+    "Relations: removed p1-e07 -> p1-e08 (\"a subsequent CT scan\" names no anchor). Added p1-e03 -> p1-e11 and p1-e09 -> p1-e11 (\"Two percutaneous drainages pre-ileocecectomy\" with the first/second drain wording), p1-e21 -> p1-e07 (\"initially diagnosed\" ... \"questioned ... when the patient presented with these persistent symptoms\"), p1-e17 -> p1-e20 (highlights: abscess \"managed with\" omental packing \"has not demonstrated abscess recurrence\").",
+    "Summary claim 3: \"About two months\" -> \"Two months\" (source wording)."
+  ],
+  "unresolved": [
+    "Crohn disease duration conflicts between the abstract (11-year) and the case presentation (10-year); both kept review-only.",
+    "Figure 1 pixels are described in visual.json; the annotation figure row keeps the caption-layer status.",
+    "Discussion statements about guidelines, meta-analyses and algorithms are background and not patient facts.",
+    "The abstract brand name Remicade is cited as evidence on the infliximab fact (same history statement); no separate medication item.",
+    "The introduction lists a psoas-enteric fistula for this case that the narrative does not confirm; kept review-only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 32,
+    "facts_reviewed": 85,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (25-year-old woman with Crohn disease and recurrent right psoas abscess); one roster entry with literal count evidence.",
+      "Course checked sentence by sentence: ER visit and CT, first IR drain, culture and amoxicillin-clavulanate, re-evaluation nine days later with ID consult and piperacillin/tazobactam and vancomycin, repeat CT and second drain, laparoscopic ileocecectomy, discharge on metronidazole, return visits, admission with joint pain and antibiotic switch, third drain elsewhere, ED presentation, diagnostic laparoscopy with unroofing, irrigation, debridement and omental packing, discharge, ultrasound healing, symptom-free to date.",
+      "Appendicitis kept absent/refuted (\"misdiagnosed\"); retrocecal, recurrent fistula and CD flare kept possible; the introduction-only psoas-enteric fistula is review_only.",
+      "Medication statuses follow the rulings: \"continued\" administered, \"discharged on\" unknown, \"continues ... To date\" current; infliximab before the appointment administered.",
+      "Encounters (outpatient presentation, ER visit, re-evaluation, \"14 days post-admission\") are kept unmerged; same-anchor \"initial encounter\" times order e14 before e16.",
+      "Intra-operative findings kept as observations kind other (adhesions, intact anastomosis, no obvious cause, no pus); CRP and back pain left untimed with an ambiguity.",
+      "Figure 1 viewed at full resolution with 2x panel crops: five laparoscopic stills with printed letters only, no identifiers."
+    ],
+    "residual_risks": [
+      "Encounter identity between the outpatient presentation, the re-evaluation and the admission behind \"14 days post-admission\" is unresolved; these stay unordered.",
+      "Post-ileocolectomy drain count (abstract three vs one described) and the psoas-enteric fistula remain unreconciled review-only items.",
+      "The e17 -> e20 order rests on the highlights wording (recurrence absent after omental packing)."
+    ]
+  },
+  "physician_adjudicated": false
+}

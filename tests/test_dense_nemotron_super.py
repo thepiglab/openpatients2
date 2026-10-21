@@ -189,7 +189,7 @@ def test_scores_missing_predictions_matched_timing_and_safe_export(campaign):
     partial = s.aggregate(work)
     assert not partial['complete'] and partial['matched']['text']['completed_articles'] == 1
     assert partial['metrics']['text']['validation']['nvfp4-text']['clinical']['recall'] == 0
-    with pytest.raises(ValueError, match='lack a completed attempt'):
+    with pytest.raises(ValueError, match='Incomplete campaign'):
         s.verify(work)
     for name in s.check(work)['nemotron_super']['arms']:
         finish(work / 'arms' / name, refs[1], seconds=20, prediction=name != 'bf16-text')

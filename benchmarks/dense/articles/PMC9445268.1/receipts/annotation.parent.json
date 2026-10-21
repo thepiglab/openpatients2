@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC9445268.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "db8602608d2b3257689efa3914eb7c67721bdf811668aa9231ec0b55fd299616",
+  "annotation_sha256": "c5f25648144bf1cdef31c357f0bb15c233fd13db313440c64a2a90dd2a60a3a7",
+  "reviewed_at": "2026-10-21T08:46:12.960278+00:00",
+  "source_segments_read": 21,
+  "facts_reviewed": 52,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed borrowed method \"Echocardiography\" from vena contracta area (p1-f041), flow convergence (p1-f042) and circumferential extent (p1-f044); their own sentences name no modality. Kept \"Glass image processing\" on VC width (p1-f043), stated in its own sentence.",
+    "Echocardiography-sentence facts (LVEF, PVL grade, prosthetic valve function, peak velocity, mean gradient, EOA, EOAi) now quote the sentence subject \"Echocardiography demonstrated\" that states their method; LVEF quote extended within its own clause.",
+    "PVL condition p1-f017: removed severity taken from the hedged CMR sentence, diagnostic_basis reduced to Echocardiography from its own sentence, temporality current -> unknown; grade kept on separate echo, angiography and CMR observations.",
+    "Added p1-f052 CMR PVL significance observation (text \"most consistent with\" plus abstract \"classified as clinically and hemodynamically significant\").",
+    "Added p1-f053 caption-stated location of the largest PVL jet (1 o'clock position) on echocardiography.",
+    "Removed duplicate condition p1-f019 (prosthesis under-expansion); kept as CT observation p1-f046 (ONE-STATEMENT); repointed event and summary references.",
+    "CMR regurgitant fraction/volume: method \"CMR\" from own sentence instead of borrowed \"phase contrast imaging\"; removed borrowed body_site proximal aorta; regurgitant volume quote extended to its own sentence start \"On CMR\".",
+    "Mitral stenosis temporality current -> unknown (no ongoing wording).",
+    "History list items (conditions, anticoagulation, angioplasty) now include the scoping quote \"His medical history included\" supporting temporality historical.",
+    "Removed non-literal care-plan target (Heart Team) and outcome related_condition (clinical improvement).",
+    "Added relations TAVR -> surgery (\"surgical explant of TAVR, re-do aortic valve replacement\"), TAVR -> echocardiography (prosthetic aortic PVL) and TAVR -> CT (under-expansion of the prosthesis) as post-hoc device imaging.",
+    "Added ambiguities: image-printed three-decimal caliper values vs text rounding; unnamed modality for VC area/flow convergence/circumferential extent; parameter-dependent echo grade."
+  ],
+  "unresolved": [
+    "Case text gives no calendar dates, hospital course, discharge, follow-up duration or medication doses; only relative timing (5 months after TAVR) is stated.",
+    "Modality for the vena contracta area, flow convergence and circumferential extent is not named in their own sentences; method fields are left empty (see ambiguity).",
+    "Abstract describes angiographic PVL as mild while the case text states 1+ PVL; kept as an ambiguity, not mapped.",
+    "Discussion sentences are literature review (cited studies) and are not patient facts.",
+    "Supplementary Videos 1-6 and the CARE checklist are reviewed in the supplement manifest; no clinical facts were taken from video pixels."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 21,
+    "facts_reviewed": 52,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (81-year-old man, PVL 5 months after transfemoral TAVR); discussion paragraphs are literature only.",
+      "Echo grade (moderate or severe by parameter), angiography 1+ and CMR significance kept as separate observations; abstract \"mild\" vs text \"1+\" kept as ambiguity.",
+      "Image-printed caliper and chart values (F2A, F2B, F2F) stay in visual.json only.",
+      "Figure 2 panels A and B carry a partly cut-off exam date/time stamp at the top edge (privacy sidecar must flag direct_identifiers)."
+    ],
+    "residual_risks": [
+      "No calendar dates; only TAVR -> presentation, TAVR -> echo/CT/surgery, CMR/Heart Team -> surgery and surgery -> follow-up are ordered; history, angiography and CMR placement relative to echo are unordered.",
+      "Anticoagulation agent and current status are not stated (action unknown)."
+    ]
+  },
+  "physician_adjudicated": false
+}

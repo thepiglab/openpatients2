@@ -1,0 +1,67 @@
+{
+  "article_id": "PMC12570203.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ec193c2bb7d99e4443f2908a3c8662ad4d3e1e13bc1b6d757bd2524fa9c53b3b",
+  "annotation_sha256": "5ccd220ee45687733b954995e2c197f81d454f4967332bb4e9de8ceef46b0e4a",
+  "reviewed_at": "2026-10-21T14:16:36.949329+00:00",
+  "source_segments_read": 61,
+  "facts_reviewed": 142,
+  "patients_reviewed": 7,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Table 2 ages (p1-p7) changed from age_at_presentation to age_other: the 'Age (y)' column states no time point (precedent PMC10946731.1).",
+    "ICD treatment-zone findings (p1-p7) reverted to the literal Table 2 cell text (e.g. 'VT (1/2): 375/321VF: 250'); the draft had added a space and a 'Treatment zones in CL (ms):' prefix.",
+    "Removed 7 'Compensatory sweating' absent facts copied from 'our patients did not show compensatory sweating' (no explicit all-patient quantifier); recorded as a per-patient ambiguity.",
+    "Follow-up care plan action_status unknown -> completed ('All patients were followed up clinically').",
+    "Ablation procedure names normalised to 'Ventricular tachycardia catheter ablation' with approach in body_site and count kept in clinical_statement; ACVB name without the '2 x' count.",
+    "p5 ablation finding no longer repeats the negated 'no left endocardial RF ablation', which stays its own absent fact.",
+    "Added per patient: Beta-blocker (Table 1 7 (100) covers all 7 patients, action unknown) and absent hemodynamic support during LCSD (all-patient sentence).",
+    "Added conditions from Table 2 substrate cells: p2 lateral aneurysm; p5 inferoapical aneurysm and calcified and fresh thrombus.",
+    "Added a follow-up event per patient with discharge -> follow-up relation (discharge -> outpatient care; both sentences say 'All patients').",
+    "Unattributed-events ambiguity extended (intermittent Horner, early VT recurrence in 2, ICD shocks in 1) with evidence; added mexiletine Table 1 (5) vs Table 2 (6 rows) arithmetic ambiguity on the six mexiletine patients.",
+    "Summaries rewritten without the zone values; symptoms_function coverage set to not_documented; article limitations extended."
+  ],
+  "unresolved": [
+    "Case series: individual patients are described only by the Table 2 rows; most narrative results (death, complications, VT recurrence, reasons for no catheter ablation, sex) are cohort-level and are not attributed to individual patients.",
+    "Sex and per-patient dates are not stated; Table 1 values and cohort statistics are not copied to individuals.",
+    "Cohort numbers conflict between the abstract (median VA episodes 14 to 2, P = .021; shocks 1.5 to 0, P = .034) and the Results/Discussion (34 to 4, P = .022; 4 to 0, P = .035); these cohort statistics are not recorded as patient facts.",
+    "Small arithmetic and print inconsistencies in cohort text: 5 patients (71.1%) with CA, 0.7 procedures per patient against Table 2 ablation counts, 43.86% (n = 3), 57.14% vs 57.1%; not used as facts.",
+    "Caption-layer visual status is not_inspected; the six images are described from pixels in visual.json, whose values are printed text only (no plot estimates).",
+    "Figure 4 patient numbers are not stated to equal Table 2 patient numbers.",
+    "Histology of thoracic ganglia (\"Histology was confirmed in all cases\") has no stated result and is not recorded as an observation.",
+    "No supplementary material is listed in raw.xml.",
+    "Table 1 counts mexiletine in 5 patients (71.4%) while Table 2 lists it in 6 rows; recorded as an ambiguity on each Table 2 mexiletine patient, not as a conflict.",
+    "Table 2 ages have no stated time point and are recorded as age_other.",
+    "Series-level remarks without an explicit all-patient quantifier (our patients did not show compensatory sweating; no VTs requiring intervention during the procedure; ICD programming not modified) are not copied to individuals.",
+    "The graphical abstract prints cohort statistics under a heading naming 4 patients with electrical storm; this is pixel content only (visual.json)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 61,
+    "facts_reviewed": 142,
+    "figures_viewed": 6,
+    "key_findings": [
+      "7 individuated patients only via Table 2 rows; Table 2 cells hand-checked against raw.xml for all 7 rows (ages, etiology, LVEF, presentation, CL, zones, ablation, AAD, substrate, prior surgery).",
+      "All-patient copies kept only where the sentence explicitly covers all: refractory VT inclusion, LCSD under GA without hemodynamic support, implanted ICD, discharge, no HF hospitalization, no persistent Horner, follow-up, beta-blocker 7 (100).",
+      "Death, effusion, sweating disorder, intermittent Horner, sVT recurrence and reasons for no CA stay unattributed ambiguities; Figure 4 row numbers are not tied to Table 2 numbering.",
+      "No supplementary material in raw.xml or source.json."
+    ],
+    "residual_risks": [
+      "Beta-blocker per-patient copy relies on Table 1 '7 (100)'; reviewers applying a stricter reading may prefer review_only.",
+      "Abstract vs Results cohort medians/P values differ; cohort-only, recorded as limitations.",
+      "Age time point unknown (age_other)."
+    ]
+  },
+  "physician_adjudicated": false
+}

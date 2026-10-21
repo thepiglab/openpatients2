@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC12225451.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b1e214a84fcaccaf049daff0a87a4d3c8c7c60dec277fe89d03f2640fdb601dc",
+  "annotation_sha256": "006956a2478bd827b08aea1d6375b70d18d19743150789a29085ba8b6adbc258",
+  "reviewed_at": "2026-10-21T13:39:07.823419+00:00",
+  "source_segments_read": 43,
+  "facts_reviewed": 230,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Hemoglobin 9.1 g/dL on admission (text, p1-f039) and 12.2 g/dL on Table 1 hospitalization day 1 (p1-f123) restored to supported/include as separate values: the source never equates the admission sample with the Day 1 row, so this is not a source conflict; an ambiguity records the discrepancy.",
+    "CRP over-quarantine fixed: the 10 CRP value facts (p1-f045, p1-f046, p1-f109, p1-f127, p1-f144, p1-f177, p1-f186, p1-f201, p1-f212, p1-f223) are supported/include with the disputed unit withheld (unit null); the unit conflict is quarantined in two new review_only source_conflict facts p1-f226 (text mg/dL) and p1-f227 (Table 1 mg/L).",
+    "p1-f088 parasitemia 20%: flag high (source says \"very high parasitemia\").",
+    "Added p1-f228: collective 'normalized lab results' at discharge, flag normal (RULINGS: normalized = normal); per-analyte discharge values keep flag unknown except WBC (own 'within the reference range').",
+    "Added p1-f229 and p1-f230: inadequate dose and poor compliance excluded after a detailed history (b00024), absent/refuted.",
+    "Events: untimed imaging (f079-f082) and the not-obtained doxycycline level (f120) moved from the 'On admission' event e06 to the workup event e07; untimed transfusions (f096, f097) moved from the first-day treatment event e08 to the hospital-course event e10; new facts linked (e01, e13).",
+    "Added 6 literal relations: e01 overlaps e02 (doxycycline started two days before and continued throughout the stay); e01 before e04 (drug start -> stop); e05 before e10 and e05 before e11 (admission opening the stay -> in-hospital course / Table 1 tests during the hospitalization); e10 before e13 and e11 before e13 (in-hospital care -> discharge, order only). A smear -> artemether-lumefantrine relation (e07 -> e08) was considered and not added: no quote ties the treatment to the smear result in an order-stating way (b00020 names the indication only; the abstract's diagnosis and treatment sentences are separate), so e07 stays unordered.",
+    "Ambiguities: Hgb item restated as a non-conflict discrepancy; CRP item restated as unit-only conflict with the new unit facts; timing and adherence items relinked; added discharge 'normalized lab results' scope, day 14 vs discharge non-merge, and pneumonia status ambiguities.",
+    "Summary claim 2: removed 'on admission' borrowed onto the untimed bilirubin/urea/creatinine values and the wording that the smear 'established' acute kidney injury."
+  ],
+  "unresolved": [
+    "Table 1 N/A (not available) cells are not recorded as observations or as not-performed tests.",
+    "Hemoglobin on admission (text 9.1 g/dL) differs from Table 1 day 1 (12.2 g/dL); the source does not equate the two time points, so both are kept as separate values with an ambiguity.",
+    "CRP unit is mg/dL in the text and mg/L in Table 1; only the unit is quarantined (two review_only unit facts), the CRP values stay scored without a unit.",
+    "Text lab values with \"later\" or \"then\" have no stated hospital day and are not merged with Table 1 rows; Table 1 day 14 is not merged with the discharge values.",
+    "Doxycycline plasma concentration was not obtained, so prophylaxis adherence rests on the patient report and history and prophylaxis failure is not drug-level confirmed.",
+    "Figure 1 pixels are reviewed in the separate visual submission; the annotation figure row stays caption-level."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 43,
+    "facts_reviewed": 230,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (55-year-old man); raw.xml has no supplementary-material entries and source.json lists no supplements.",
+      "All 105 Table 1 value facts checked cell by cell against the source rows (value, unit, day, anchor 'Hospitalization/Day', relation at); 21 N/A cells correctly not recorded.",
+      "Hemoglobin text 9.1 g/dL on admission vs Table 1 day 1 12.2 g/dL: the source never equates the admission sample with the Day 1 row, so both are separate scored values with an ambiguity, not a source conflict.",
+      "CRP mg/dL (text) vs mg/L (Table 1 header): only the unit is quarantined in two review_only facts; the 10 CRP values stay scored without a unit.",
+      "Untimed text lab values ('later', 'then', first-listed values) not merged with Table 1; Table 1 day 14 not merged with discharge values.",
+      "Discharge 'normalized lab results' recorded once as a collective normal statement; only WBC carries its own 'within the reference range'.",
+      "AKI asserted (abstract renal complications and 'severe malaria with AKI ... in our case'); pneumonia kept provisional ('considered to be atypical').",
+      "Figure 1 viewed at full resolution: stained thin smear with four white arrows, no printed text; visual, EHR and privacy sidecars match the pixels."
+    ],
+    "residual_risks": [
+      "Relations e05->e10/e11 and e10/e11->e13 rely on the admission-opens-stay and in-hospital-care->discharge rulings (order only); the diagnostic workup event e07 is left unordered because no quote ties the antimalarial start to the smear result.",
+      "CRP value facts carry no unit by design; downstream consumers must read the unit-conflict facts.",
+      "Day counts in the history (returned 'some ten days ago' vs hospitalized on the 8th day; '4 days after he stopped') are arithmetic-only ambiguities."
+    ]
+  },
+  "physician_adjudicated": false
+}

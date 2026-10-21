@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC7775645.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a2254aeebec9babe2ca7db0c50eee506bc22f4dd798deb101f738b508a3a25b5",
+  "annotation_sha256": "4a7a0bb3dec05e5c19124ed94d0bb42ae75ff1575eeee1244634bb83e0ef4538",
+  "reviewed_at": "2026-10-21T08:39:10.732216+00:00",
+  "source_segments_read": 119,
+  "facts_reviewed": 61,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed borrowed attributes not stated in their own evidence: indication on p1-f010, p2-f015, p2-f017, p2-f023 and p3-f009; related_condition on p1-f011, p1-f012 and p2-f024. p2-f023 evidence narrowed to the petrosectomy sentence.",
+    "p2-f019/f020/f021 (hypoglossal paresis, otorrhea, chronic otitis media) role complication -> unknown: the case text gives only temporal order, and the cohort complication list cannot be attributed by matching.",
+    "p2-f015 stereotactic radiosurgery action historical -> completed (caption states growth after radiosurgery in this woman's images); kept include with its ambiguity.",
+    "p2-f016 time relation at -> after, anchored to the initial surgery (\"At one year after the initial surgery\").",
+    "Case 2 events: radiosurgery split from the one-year MR images (new p2-e13, treatment); untimed follow-up MRI showing the remnant moved out of the admission event into new p2-e12.",
+    "Case 3: postoperative MRI moved out of the 1-year follow-up event into new p3-e10 (the sentence-initial time may not govern that clause; ambiguity added).",
+    "Added caption imaging events p1-e08/e09/e10 and p3-e07/e08/e09.",
+    "Added 15 literal relations: p1 e08>e01 (before the initial surgery), e01>e09, e05>e10 (after ... surgery), e05>e07 (resected then no regrowth); p2 e01>e12 (follow-up MRI of the resection remnant), e12>e03 (result then revision), e13>e11 (growth after radiosurgery), e01>e11 (one year after the initial surgery), e11>e03 (Then, revision surgery), e03>e08 (follow-up MRI confirming completeness of the resection); p3 e07>e01 (before), e01>e08 (after the first surgery), e03>e09, e03>e10 (postoperative MRI), e05>e06 (discharge then follow-up). p2 e02>e03 evidence now quotes the admission examination and the eligibility sentence.",
+    "Case 2 summary: added the caption-only radiosurgery and one-year MR growth; removed the inferred \"treated with petrosectomy\" wording.",
+    "Ambiguities for Cases 2 and 3 now note that the section headings name HHFN while no quotable sentence states it was performed; Figure 1 attribution note records the CT-like panel A pixels; two article limitations added (HHFN 11 vs 12; headings)."
+  ],
+  "unresolved": [
+    "The article reports 29 consecutive patients; only three are individually described (Illustrative Cases 1 to 3), so the roster is incomplete. All other results (Tables 1 to 4, results and discussion text) are cohort-level and are not copied to individual patients.",
+    "Source text is not explicit on which of the 29 patients the illustrative cases are in the cohort tables; no cohort statistic is attributed to a case.",
+    "Facial neurorrhaphy type (hemihypoglossal) is named as eligibility/plan for Cases 2 and 3 but not stated as performed in the segment text; the Case 2 caption states facial neurorrhaphy was performed.",
+    "Case 2 caption mentions stereotactic radiosurgery that the case text does not; timing and date are not stated.",
+    "Eight years in Case 1 is anchored to the preceding sentence only; no other dates are given for any case.",
+    "Caption-layer visual status not_inspected; actual 3 JPEGs inspected in the separate visual submission.",
+    "Supplement SM1 (Table_1.xlsx) is listed in the source; its contents are reviewed in the supplement manifest sidecar.",
+    "Cohort inconsistencies noted but not attributed to cases: abstract says HB grades II-IV for weakness while Methods give II-VI; complication rate is 13.8% in Results and 10.3% in Discussion with CSF leak rates swapped between sections; Table 4 percentages for HB IV, V and VI at long-term outcome are printed as 7.13.",
+    "Abstract states that 11 patients received HHFNs, while the Results state 12 (also 12/15 in Methods); not attributed to cases.",
+    "Section headings for Illustrative Cases 2 and 3 name a hemihypoglossal-facial neurorrhaphy, but the case sentences give it only as eligibility; the HHFN is not recorded as performed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 119,
+    "facts_reviewed": 61,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Cohort of 29 revision surgeries; only the three Illustrative Cases are individuated and every cohort table/statement stays out of them.",
+      "Figure 2 caption literally attributes growth after stereotactic radiosurgery to the 54-year-old woman's MR images, so the radiosurgery is a caption-stated include fact with an ambiguity; SM1 row ownership is unresolved, so the SM1 SRS \"no\" cells are not a conflict side.",
+      "HHFN for Cases 2 and 3 is stated only as eligibility (and in section headings), never in a quotable performed sentence; Case 2 facial neurorrhaphy completion rests on the Figure 2 caption, Case 3 revision completion on the Figure 3 caption, postoperative course and discharge.",
+      "\"Eight years later\" (Case 1) and \"Two months later\" (Case 2) each follow their anchor sentence inside the same paragraph (b00094, b00096), so the adjacent-sentence relations stand.",
+      "Pixels: Fig 1A looks CT-like though the caption says MR; Fig 1B prints sex/age and date fields, Fig 1C a study date and time; four photographs (2E, 3A-C) show identifiable faces."
+    ],
+    "residual_risks": [
+      "p2-e10 (2-year follow-up) and p2-e06 (CT) have only partial literal ordering; Case 1 caption \"initial surgery\" is taken as the described GTR.",
+      "The time text \"presented\" (relation at) on presentation symptoms is literal but terse.",
+      "SM1 per-row data stay unresolved review_only; no SM1 row is linked to a case."
+    ]
+  },
+  "physician_adjudicated": false
+}

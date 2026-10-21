@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12225242.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "cb2dea800ed51d5ad8c0bdef4137824e6d83a862faeaf61ba62c0ab3481ee658",
+  "annotation_sha256": "288290942c8e42cf77d53874af2a0e98521d29ed44a837e5de1abc4b7abed3e5",
+  "reviewed_at": "2026-10-21T13:36:48.021915+00:00",
+  "source_segments_read": 32,
+  "facts_reviewed": 58,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Split the combined pre- and postoperative chest X-ray procedure (p1-f021) into preoperative (p1-f021) and postoperative (p1-f057) items and events (p1-e14, new p1-e16), ordered before/after the surgery by the caption words Pre- and postoperative.",
+    "Added the Figure 1 C,D caption chest CT tumor size 2.5 cm as p1-f058 (certainty ambiguous, review_only): same CT as the text sentence citing Figure 1 that gives 28 x 22 mm; recorded as an arithmetic-only ambiguity, not merged.",
+    "Removed relation admission (e02) -> chest CT (e03): the CT is not stated to belong to the stay; ordering was paragraph order only.",
+    "Added relation chest CT (e03) -> surgery (e09) from the intraoperative finding 'corresponding to the chest CT'.",
+    "Added relation surgery (e09) -> adjuvant chemo- and radiotherapy (e12): 'adjuvant' is post-primary-treatment wording ruled equivalent to postoperative.",
+    "Added relation adjuvant therapy (e12) -> death (e13) from 'underwent adjuvant chemo- and radiotherapy and died after 12 months'; the 12-month anchor stays unstated (anchor null).",
+    "Care plan p1-f056 (qualified for surgery via right thoracotomy): action_status unknown -> completed, with Table 1 row 21 evidence that the thoracotomy was performed.",
+    "Unlinked the Table 1 size and location facts (p1-f041, p1-f043) from the admission event: the table states no time.",
+    "Rewrote the tumor-size and 12-month ambiguities to match these decisions."
+  ],
+  "unresolved": [
+    "Case report plus a literature review: Table 1 rows 1 to 20 are published cases from cited articles and are not index-patient facts; discussion text is not assigned to the index patient.",
+    "Intro says this is the third such patient treated at the authors' center; only one patient (the 56-year-old man) is individually described here, so roster is complete at one.",
+    "Caption-layer visual status not_inspected; the single Figure 1 JPEG is inspected in a separate visual target.",
+    "No adjuvant regimen, dose, dates, brain imaging or pathology details are documented; stage system and context are not stated.",
+    "No allergies, family history, social history, reproductive or perinatal data documented."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 32,
+    "facts_reviewed": 58,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (56-year-old man, SIT, right sixth-segment lung adenocarcinoma, segmentectomy via thoracotomy, adjuvant chemo- and radiotherapy, died after 12 months of brain metastases); Table 1 rows 1-20 are literature cases and were correctly excluded; no supplementary material in raw.xml.",
+      "All 56 drafted facts verified against b00001-b00004, b00011 and Table 1 row 21; quotes, polarity (no symptoms, uneventful course, no cancer cells), CEA high flag and PET/EBUS not_performed are correct.",
+      "Figure 1 viewed at full resolution with crops: A/B carry a burned-in facility-name header and a partly cut-off stamp (direct_identifiers), C/D scanner text including acquisition time (device text), E/F no text; visual.json matches the pixels, has no plot readings and stores no identifier values."
+    ],
+    "residual_risks": [
+      "Ordering adjuvant therapy after surgery rests on the word adjuvant; ordering it before death rests on same-sentence sequence with an unanchored 12 months.",
+      "The CT tumor size difference (2.5 cm caption vs 28 x 22 mm text) is treated as an ambiguity, not a source conflict.",
+      "Which of panels A and B is the preoperative film is unstated; the final diagnosis (e10) and the biopsy/CEA workup remain unordered against surgery."
+    ]
+  },
+  "physician_adjudicated": false
+}

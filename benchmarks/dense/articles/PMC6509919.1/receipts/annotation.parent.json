@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC6509919.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b55fa59127dff143080682c7b8ac9afddb1bed728eeb57985acd89a9618e1cac",
+  "annotation_sha256": "425b01af5babd9d71fc10b1a9731a191618dd8e3fe67ce8d947a3b3ad26e6183",
+  "reviewed_at": "2026-10-21T03:40:24.457343+00:00",
+  "source_segments_read": 72,
+  "facts_reviewed": 286,
+  "patients_reviewed": 5,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Case paragraphs b00055-b00059 carry literal section headings 'Patient 1'..'Patient 5' (JATS sec 2.1-2.5; source.json segment heading 'CASE PRESENTATION / Patient N'); attribution is literal. Removed the 'paragraphs are not labelled' ambiguities (p2, p5), rewrote p3/p4 ambiguities, the article limitation and source_coverage notes accordingly.",
+    "p4 ambiguity rationale replaced: pre-treatment PSG identity rests on the literal 'Comparison of the PSG outputs at before and after BP treatment' sentence, not on matching table numbers.",
+    "p1-f010/p1-f011 allergy reaction 'side effects (unspecified)' -> 'side effects' (no added wording).",
+    "p3-f017 lorazepam ('had been regularly taking', later told to stop): action historical -> administered, temporality historical -> unknown.",
+    "Added p2-f055 trimipramine administered at baseline PSG from the literal limitations sentence naming patient 2 (b00064); linked to p2-e03.",
+    "Added p2-f056 and p4-f050 outcome 'lowering the frequency of PLMS' from the discussion sentence naming patient 2 and patient 4 (b00062).",
+    "Added p5-f063 outcome sleep-latency improvement from the discussion sentence naming patient 5 (b00062).",
+    "p4-f011 (no medication) gains the literal b00064 evidence 'only patient 4 was drug-naive'.",
+    "Added p5 relations: e02 (RLS found 'About one year before') before e03 presentation; e05 tincture start before e06 ('After 2 months' treatment')."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected in this annotation; the two PSG figure images were inspected in visual.json.",
+    "The five case paragraphs (b00055 to b00059) sit under the section headings Patient 1 to Patient 5 (segment headings CASE PRESENTATION / Patient N), which is the literal patient attribution; the figure captions, Table rows and discussion patient numbers agree with it.",
+    "Table 1 patient 1 baseline sleep efficiency 64 conflicts with the case text 67; Table 2 patient 5 PSQI 14 and 5 conflict with the case text 12 and 4. Both sides are review_only source conflicts.",
+    "Table 2 prints the PSQI as a 0-15 scale and ESS healthy values close to 6 in its footnote; these printed scale notes are not used for flags or conversions.",
+    "Table 1 footnote says no sleep-associated breathing symptoms occurred (not shown) without naming patients; it conflicts in wording with patient 1 light obstructive sleep apnea on PSG and was not recorded as a fact.",
+    "Iron, ferritin and transferrin values are not reported; only the statement that iron deficiency was ruled out in all patients.",
+    "Bryophyllum pinnatum tablet composition (350 mg tablet, leaf press juice, lactose) in b00005 is a general product description and not recorded as a patient fact.",
+    "Discussion statements about four of five patients (PLMS lowering, IRLS reduction, benefit) are cohort statements and were not copied to individual patients; only literally labelled statements were used.",
+    "Supplements: none listed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 72,
+    "facts_reviewed": 286,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Five patients literally labelled by section headings; tables 1-3 rows owned by Patient N row labels; all 140 Table 1/2 cells verified against facts programmatically.",
+      "Source conflicts kept review_only: p1 baseline sleep efficiency 64 (Table 1) vs 67 (text); p5 PSQI 14/5 (Table 2) vs 12/4 (text).",
+      "p1 light OSA vs Table 1 footnote 'No sleep-associated breathing symptoms' kept as an ambiguity only.",
+      "Text/table merges each rest on text naming the same before/after-treatment PSG or questionnaire; IRLS text values without a stated time (p3 18, p4 20, p5 20) kept separate.",
+      "p3 BP 50% tablets 'recommended' kept action unknown; administration recorded separately from 'After well-tolerated treatment with BP for 2 months'. p5 continuation and 14-month current use recorded.",
+      "Hedged causes (lorazepam falls, psychophysiological insomnia) not asserted; p1 pramipexole/pregabalin stopped 'due to side effects' kept as allergies/adverse_effect, which the allergies prompt covers.",
+      "b00006 statements explicitly covering all five patients (IRLSSG diagnosis, poor sleep quality on PSG, iron deficiency ruled out, BP treatment) copied correctly."
+    ],
+    "residual_risks": [
+      "4 NO-BORROWING warnings on p1 AHI/ODI are accepted: the result sentence directly follows 'Baseline PSG showed ...' about the same recording and both sentences are quoted.",
+      "p2 Table 2 'at anamnesis' IRLS 20 vs text 28/40 at baseline PSG remains an ambiguity (text places 20 after trimipramine stop).",
+      "Printed PSQI '0-15 scale' in Table 2 footnote kept as printed, noted as a limitation only."
+    ]
+  },
+  "physician_adjudicated": false
+}

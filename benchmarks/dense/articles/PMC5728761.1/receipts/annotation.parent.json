@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC5728761.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "06e49d2f7f265a8b12c5fe8a231c2fbb0cd739342584965c9e89c1fd5abd59f6",
+  "annotation_sha256": "dfe1e8915133883569b0ece3e160d42bacb92687ff80f958536c9748161191ab",
+  "reviewed_at": "2026-10-21T03:52:20.476439+00:00",
+  "source_segments_read": 19,
+  "facts_reviewed": 51,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Paranoid schizophrenia (p1-f004): diagnostic_basis \"Diagnosis made by multiple psychiatrists\" removed; the sentence names who diagnosed, not a basis.",
+    "Side-effect report (p1-f007): renamed from \"Side effects of M-ECT\" to \"Reported side effects, for example memory impairment\"; the sentence names no treatment scope.",
+    "Split the matching-number merge: M-ECT (p1-f035) keeps the abstract \"course of 24 M-ECTs\" quote plus the \"initiated an individual treatment regime with M-ECT\" sentence; new p1-f051 records the case-text \"In total, 24 ECT treatments were administered over a 1-year period\" as its own completed procedure (time during \"over a 1-year period\").",
+    "PSYRATS negative-symptom decrease (p1-f043, abstract): certainty ambiguous, scoring review_only; the PSYRATS table image has only auditory-hallucination and delusion subscales (ambiguity p1-a03).",
+    "Event membership: untimed family history (p1-f041) and examination (p1-f023) removed from the TRS-diagnosis event p1-e05; PANSS caption fact p1-f026 (before AND after) removed from the after-24-sessions event p1-e12; event p1-e07 re-described and given p1-f051 and the initiation sentence.",
+    "Relations: added p1-e05 -> p1-e07 (diagnosis then \"initiated an individual treatment regime with M-ECT\"; result -> action) and p1-e11 -> p1-e12 (same sentence, same anchor: \"Before beginning ECT treatment\" / \"after 24 ECT treatment sessions\"); added the past-perfect \"had been treated with\" sentence to e04 -> e05 and the \"Therefore, the diagnosis\" sentence to e01 -> e02.",
+    "Ambiguities: p1-a01 restated (abstract series + 24 M-ECT vs \"24 ECT treatments in total\" is an ambiguity, not a two-number conflict) and linked to p1-f051; new p1-a09 for the Table 1 arithmetic (auditory-hallucination after-treatment items sum one point above the printed subscale; printed maximum differs from item count x Likert maximum).",
+    "Summary paragraph 4 rewritten without the quarantined PSYRATS negative-symptom claim; paragraph 3 fact list includes p1-f051; article limitation added for the Table 1 arithmetic."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two table JPEGs were inspected separately in visual.json.",
+    "Table 1 (PSYRATS) and Table 2 (PANSS) are image-only: every score is pixel content kept in visual.json and no numeric facts were recorded from them.",
+    "No dates, calendar times or hospital-stay details are stated; time statements are relative or age-based only.",
+    "Background and discussion statements about other patients, trials and general ECT knowledge are not patient facts.",
+    "No supplements; no machine-readable serial table, so no measurement series applicable.",
+    "Table 1 (PSYRATS) image: the auditory-hallucination after-treatment item scores add to one point more than the printed after-treatment subscale score; recorded as an arithmetic ambiguity, not a conflict."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 19,
+    "facts_reviewed": 51,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (26-year-old man with TRS); no cited cases or relatives attributed.",
+      "Both \"figures\" are image-only Table 1 (PSYRATS) and Table 2 (PANSS); every printed value checked against pixels and kept only in visual.json. PANSS item sums match every printed subscale and total; PSYRATS auditory-hallucination before items sum to the printed 32 but after items sum to 17 vs printed 16 (visual.json wrongly says ten items summing to 29 vs 32 and the after column matching).",
+      "Item-row pairs are unlabelled; only subscale/total rows carry (Before treatment)/(after treatment) labels, as visual.json records.",
+      "Abstract \"treatment series of ECT sessions and a course of 24 M-ECTs\" vs case text \"In total, 24 ECT treatments\": no second number for one value, so ambiguity, not conflict; the two counts are no longer merged into one fact.",
+      "Forensic-clinic counterfactual stays review_only; \"no need for add-on psychiatric in-house treatment\" stays included (hospital stays in the limitations paragraph are not described as psychiatric admissions; ambiguity kept).",
+      "Prior six antipsychotics historical; olanzapine 10 mg morning and night \"remained stable during the treatment course\" = administered.",
+      "Weekly -> biweekly -> monthly ECT phases kept as three ordered procedure items (\"Initially ... later ... followed by\"); procedures have no frequency field, so the frequency stays in the name.",
+      "\"No further clinical disorders\" kept as a sign with its literal text_value and no normal flag (not one of the ruled normal phrasings)."
+    ],
+    "residual_risks": [
+      "Whether the acute ECT series is part of the 24 treatments is unresolved; the acute series has no relation to the M-ECT course because no order word links them.",
+      "Event p1-e07 groups the M-ECT regime with the 24-in-total ECT count because the case text states them in consecutive sentences of the same paragraph; the facts stay separate.",
+      "visual.json Table 1 arithmetic statement is wrong and must be corrected by the annotator; the parent visual receipt is withheld until then."
+    ]
+  },
+  "physician_adjudicated": false
+}

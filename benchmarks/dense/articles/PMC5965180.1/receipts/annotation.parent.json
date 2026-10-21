@@ -1,0 +1,52 @@
+{
+  "article_id": "PMC5965180.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9c5db397d482491225c3f39d90203a32ea8b90a564950510c0b3e66f424eb229",
+  "annotation_sha256": "97fe69362f99926de10156fc0808d1d2b53496ce0a9ebdac9ca421feb8e8d325",
+  "reviewed_at": "2026-10-21T03:38:55.799695+00:00",
+  "source_segments_read": 23,
+  "facts_reviewed": 37,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f018 (CRMM consultation/transfer of care): removed the care-plan target \"Remote management of AF with RVR\", which b00004 does not state (NO-INFERENCE).",
+    "Event p1-e04 (CRMM consulted, care transferred to remote physicians) kind changed from treatment to other; a transfer of care is not a treatment.",
+    "Added relation p1-e06 -> p1-e07: the 49 episodes occurred \"At home\" in the sentence directly after \"was transported to his home\" (same paragraph, the single described transport home).",
+    "Added relation p1-e06 -> p1-e08: the morning conversion was \"captured on remote telemetry\", which requires the device the patient applied in b00006 (device -> events it records); both quotes cited."
+  ],
+  "unresolved": [
+    "Caption heart rate 135 beats per minute differs from rates printed inside the image; caption fact kept review only and image values stay in visual.json.",
+    "Single case report; remote-monitoring cost, satisfaction and nosocomial infection claims are general platform statements, not patient outcomes.",
+    "Doses and times of the per-episode oral diltiazem at home are not stated.",
+    "Written consent and IRB registration statements are administrative and not recorded as facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 23,
+    "facts_reviewed": 37,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (37-year-old man, new-onset AF with RVR at 129 bpm, normal labs/troponin/echo), IV diltiazem 30 mg over four hours in the ED, aspirin and oral diltiazem 150 mg before leaving, COTLT remote telemetry at home with 49 RVR episodes rate controlled by oral diltiazem, spontaneous conversion the following morning, video consult with stress test and repeat echo ordered, telemetry discontinued and discharged from CRMM, sinus rhythm at seven-day follow-up.",
+      "Figure viewed at full resolution with crops: the auto-interpretation panel prints Glasgow HR 84 and PBI HR 79 with ATRIAL FIBRILLATION, while the caption states 135 bpm; 135 is not printed anywhere and the printed rates are below the article's own RVR threshold (HR > 100 bpm), so the caption cannot be tied to these pixels. Caption fact p1-f037 stays review_only with an ambiguity; image values stay in visual.json only.",
+      "Existing relations checked: e03 -> e06 rests on \"first treated ... and sent home\" (b00009, literal about this case); e05 -> e06 on \"prior to leaving the hospital. We then used\"; e08 -> e09 on \"After\"; e08 -> e11 on \"Given spontaneous cardioversion\"; e11 -> e12 on discharge -> outpatient follow-up. \"Early the following morning\" opens a new paragraph, so it is not used to order e07 -> e08.",
+      "Judgement calls accepted: diltiazem indication from b00009 (literal \"As depicted in this case, the patient was first treated with intravenous diltiazem to achieve rate control\"); \"Emergency response was never initiated\" as an absent outcome; telemetry discontinuation as a completed monitoring care plan (no device removal is stated, so no removed device fact); COTLT device as device_present (\"The patient applied the device\"); absent past history, symptoms and risk factors as literal negatives.",
+      "b00010 low-risk statement kept as an ambiguity (retrospective author opinion coupled with a hedge); consent and IRB registration are administrative and not facts."
+    ],
+    "residual_risks": [
+      "Presentation, ED tests (e01, e02) and CRMM transfer (e04) are not linked by literal order words; the 49 home episodes are not ordered against the morning conversion.",
+      "The figure strip cannot be matched to a specific home episode, and its printed rates disagree with the caption."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC8226557.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "bfa646d41f75c747b29b27f2755c9205c7c0b5380694a2bb5835a6ea0d6fd7c9",
+  "annotation_sha256": "c21f309c2973e92c4277efcbb2e4e46efce4219443d48df06289ffacf59d2d62",
+  "reviewed_at": "2026-10-21T08:46:49.336092+00:00",
+  "source_segments_read": 23,
+  "facts_reviewed": 62,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f061 (care_plans \"Local radiotherapy ... combined with systemic chemotherapy/immunotherapy\", declined): duplicate of the declined oncology treatments p1-f055/p1-f056 (SECTION-CAREPLANS, ONE-STATEMENT); references in p1-e13 and summary claim 3 repointed.",
+    "Split p1-e13: it now holds only the refused, not-implemented treatments (not_occurred); the hospice-at-home choice p1-f062 moved to new event p1-e15 (occurred, kind other) so the choice is not marked not_occurred.",
+    "Added relation p1-e01 (presentation with decreased left-eye vision) before p1-e10 (final diagnosis), quoting the abstract \"Choroid metastasis is the initial presentation of pleomorphic carcinoma (PC) of the lung.\"",
+    "Added ambiguity: the two hypofluorescent spots \"could be small choroidal metastatic lesions\" (hedged), kept as findings only.",
+    "Added article limitation: the workup order is not stated except PET/CT before the \"Subsequent bronchoscopic biopsy\"."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the seven JPEGs were inspected in the separate visual submission.",
+    "No fine-needle aspiration of the eye was done; choroidal metastasis is highly likely but not biopsy-confirmed.",
+    "No treatment was given; the source states the lesion evolution and treatment response were not obtained.",
+    "Stage system/edition and TNM categories are not stated; distant metastatic sites are not individually itemized.",
+    "Dates are not stated; events are ordered only where the source states order.",
+    "The order of the ophthalmic workup, serology, chest radiography, PET/CT, contrast CT and biopsy is not stated beyond the abstract \"Subsequent bronchoscopic biopsy\" after PET/CT; the remaining tests are not ordered against each other."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 23,
+    "facts_reviewed": 63,
+    "figures_viewed": 7,
+    "key_findings": [
+      "Single index patient (63-year-old woman); discussion paragraphs are background except literal \"our patient\"/\"in our patient\" sentences.",
+      "Choroidal metastasis kept provisional (condition) and possible (oncology t2) with an ambiguity: abstract states it flatly, discussion says no fine-needle aspiration and the definite diagnosis is \"questionable\" but \"highly likely\".",
+      "Radiotherapy and chemotherapy/immunotherapy were suggested and refused (declined, not_occurred); hospice care at home was chosen, delivery not stated; cause of death not stated.",
+      "Smoking \"did not have any history of smoking\" kept assertion=absent with status unknown (SOC-NEVER: not explicit never-use wording).",
+      "Relations checked: PET/CT before biopsy via the abstract \"Subsequent\" with PET/CT named in the preceding sentence of the same paragraph; diagnosis before oncology transfer (result to action); transfer before \"After referral\"; diagnosis before death (\"4 months after the diagnosis\"). Biopsy to diagnosis not ordered (basis wording).",
+      "All 7 figures viewed at full resolution with crops; Fig 4 corner two-line orange stamp is unreadable even magnified and red-channel enhanced, conservative direct_identifiers kept; Fig 2B OS icon and 6.61 mm label are device text; Fig 3 optic disc side differs between rows and panel B is bright despite the hypofluorescence caption (both recorded limitations); no plot estimates."
+    ],
+    "residual_risks": [
+      "Superior (case text, caption) versus superonasal (discussion) mass location left as an ambiguity.",
+      "The Fig 4 stamp category is assumed, not read.",
+      "Workup tests are not ordered against each other because the source states no order."
+    ]
+  },
+  "physician_adjudicated": false
+}

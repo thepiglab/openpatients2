@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC6159247.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0135beea6cb708548cf217e56979c652e7c4a33f76bcb567f0bf559328484cc0",
+  "annotation_sha256": "496ef56a1affa6f2f1788508b5c28c67089a73097684bb94ac373b7666bfeff0",
+  "reviewed_at": "2026-10-21T03:44:25.625008+00:00",
+  "source_segments_read": 21,
+  "facts_reviewed": 60,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Imaging observations p1-f024..f047: text_value now the literal source finding phrase instead of the name repeated.",
+    "p1-f012 sterile pyuria role comorbidity -> unknown (urine finding, not a comorbidity); kept present/provisional ('indicative of').",
+    "p1-f050 static MR urogram: removed finding borrowed from other sentences; quote extended to the full sentence that states 'without contrast administration'.",
+    "Added caption-only imaging observations p1-f056 (Fig 2c renal pelvic narrowing suggesting stricture, CT urogram), p1-f057..f060 (Fig 4a-d MRCP: infundibular stenosis with triangular papillary cavity, distorted lower pole calyces, renal hilar lymph node, renal pelvic and interpolar infundibular stricture of the left kidney per caption lead).",
+    "p1-f014 papillary necrosis condition moved from the MR urogram event to the CT urogram event (its evidence is the Figure 3 CT sentence); new facts linked to e07/e08.",
+    "Relations e06->e07 and e07->e08: evidence now names both anchors ('Initial evaluation on plain CT' + 'This was followed up by a CT urogram'; 'followed by a static MR urogram ... demonstrated on a CT urogram').",
+    "Ambiguity on Fig 3 'right lower pole' relinked from p1-f036 (clefting) to p1-f034/p1-f035 and stated as ambiguity not conflict; timing ambiguity relinked to culture/cystoscopy/chemotherapy facts.",
+    "Figure caption layer: added caption-lead evidence for described panels, Fig 3c pooling and Fig 4c hilar node quotes, Fig 5 finding quote; Fig 2e modality set null (outside the a-d lead); Fig 2c description no longer claims the unlettered lymph node sentence."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; pixels are reviewed in the separate visual submission.",
+    "No dates or intervals are given; only the ordered pairs stated in the text are recorded.",
+    "Culture, treatment and cystoscopy are reported in the Discussion without time anchors; outcome after treatment and whether stenting was performed are not reported.",
+    "Figure 3 caption gives the right lower pole for blunt-tipped calyces whereas Figure 4 shows the left kidney; laterality of imaging findings left unrecorded.",
+    "Figure 2 caption lead names panels a to d and Figure 4 caption lead names panels a to d; panel e findings are recorded from their own caption sentences without a modality borrowed from the lead."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 21,
+    "facts_reviewed": 60,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single patient (60-year-old male); roster 1 complete.",
+      "Relations kept: presentation->referral (because-of action in adjacent sentence), referral for imaging->initial plain CT, CT->CTU->MRU on 'followed', culture result->antitubercular chemotherapy (result->action). Cystoscopy and stenting left unordered.",
+      "Follow-up and stenting both planned; distal ureteric stricture present/provisional with no side.",
+      "Fig 3 'right lower pole' vs left-sided Fig 4/cystoscopy is an ambiguity: no second value for the same finding.",
+      "Renal TB considered (provisional, b00005) and confirmed (culture + abstract) are distinct statements at different stages, not a ONE-STATEMENT duplicate.",
+      "Urine microscopy units kept as printed (RBCs/hpf, WBCs/hpf, bacteria/hpf)."
+    ],
+    "residual_risks": [
+      "Laterality of most imaging findings unrecorded; pixels show the abnormal kidney on the image right (patient left) but pixel content is not used for facts.",
+      "Culture, chemotherapy and cystoscopy are reported in the Discussion with no time anchors.",
+      "visual.json panel e submodality/attribution evidence for Figures 2 and 4 needs annotator correction."
+    ]
+  },
+  "physician_adjudicated": false
+}

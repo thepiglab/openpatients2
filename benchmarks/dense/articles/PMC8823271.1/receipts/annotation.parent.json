@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC8823271.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2d5c44f21e590c5936274b1bd3dbff7d0dc452a4c1637ae9242d7cd560ae5b95",
+  "annotation_sha256": "b2ad74c180f31fc162d3cc3041ab391afa9fc7a4d61c58c0f3da4826dbc3f59c",
+  "reviewed_at": "2026-10-21T09:04:05.933746+00:00",
+  "source_segments_read": 30,
+  "facts_reviewed": 51,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f024 unit reverted to the printed \"mIU/ mL\" (drafter had normalized whitespace to \"mIU/mL\"; units are never altered).",
+    "p1-f012 lymphopenia: removed role=complication (source does not call it a complication; role now unknown).",
+    "p1-e03 \"July of 2020\": time_precision approximate -> exact (month-level calendar convention); time_calendar_value left empty because the validator does not parse the \"Month of YYYY\" form.",
+    "Added p1-f051 care_plans \"Clinical monitoring\" (plan_type monitoring, action_status unknown) from the admission sentence; linked to p1-e04 and summary claim 2.",
+    "Added relation p1-e01 -> p1-e03 before (history of asthma/hypertension/obesity stated in the presentation paragraph -> presentation).",
+    "Added relation p1-e05 -> p1-e06 before (ultrasound finding suggestive of tubal EP -> medical management of EP initiated; treating a named existing condition).",
+    "Added relation p1-e04 -> p1-e06 before (admission opens the stay -> in-hospital MTX on hospital day 2 and 6).",
+    "Added relation p1-e04 -> p1-e09 before (admission opens the stay -> stable for discharge by HD 10, order only)."
+  ],
+  "unresolved": [
+    "Figure 1 is a chart with no printed data labels; plotted values are not transcribed (visual record only), so serial hCG values are not available beyond the printed text values.",
+    "Methotrexate dosing days differ between the text (HD 2 and 6) and the Figure 1 caption (days 1 and 4); both kept, no reconciliation.",
+    "Several discussion sentences are generic or literature statements and are not assigned to the patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 30,
+    "facts_reviewed": 51,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (36-year-old G6P3 at 6 weeks 4 days) with tubal ectopic pregnancy and severe symptomatic COVID-19; all 30 segments read, discussion literature statements kept out of the record.",
+      "MTX timing: text HD 2 and 6 versus caption days 1 and 4 are different counting frames whose interval mismatch is arithmetic only, so it stays an ambiguity with the text fact included.",
+      "Three B-hCG values (2,359 at the other hospital, 3,838 at presentation, 4,166.7 pre-treatment) kept as separate observations; Figure 1 plotted values are pixel content only and not transcribed.",
+      "Ectopic pregnancy confirmed by the authors (tubal EP, non-ruptured EP); ultrasound \"highly suggestive\" kept as an observation; viral pneumonia possible.",
+      "Dexamethasone, albuterol and clinical monitoring stay action unknown (admission purpose wording); expectant and surgical management stay care plans with status unknown.",
+      "documented_sex keeps the literal pronoun \"She\" (DEMO-SEX-WORDING); roster count 1 from the abstract \"a patient\"."
+    ],
+    "residual_risks": [
+      "Relation p1-e09 -> p1-e10 relies on the in-hospital stay -> outpatient care ruling; the source says \"stable for discharge\" without stating discharge.",
+      "hCG drop >15% (p1-e07) is not ordered against MTX because no order word is printed.",
+      "Calendar value for \"July of 2020\" is empty because the validator does not parse the \"Month of YYYY\" form."
+    ]
+  },
+  "physician_adjudicated": false
+}

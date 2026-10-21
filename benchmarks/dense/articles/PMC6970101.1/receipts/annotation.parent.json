@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC6970101.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "16f59159d84181b76369f1f795aeb0220c9d1211762c713594a72476aee3ae9a",
+  "annotation_sha256": "f21df0e401b2e2fd0e7de5d019e50ecc44677f311aa97ecc693c8c2062c11d75",
+  "reviewed_at": "2026-10-21T04:37:43.137964+00:00",
+  "source_segments_read": 29,
+  "facts_reviewed": 89,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Day-5 CT: text times it five days after the endovascular treatment, Figure 4 caption five days after the occipital craniectomy; different anchors (arithmetic-only mismatch), so the source_conflict quarantine was removed: text procedure and finding kept as supported/include, caption restatement kept ambiguous/review_only, duplicate caption procedure fact removed, ambiguity rewritten.",
+    "Day-5 CT and examination facts (procedure, CT finding, caption finding, alert, left upper limb hyposthenia, bilateral sixth nerve deficiency, no other deficits, slight improvement) linked to event p1-e16; examination facts given the time of the scoping evaluation sentence with both quotes.",
+    "Ethnicity \"Indian\" set to ambiguous/review_only with an ambiguity (nationality or ethnicity); removed from summary.",
+    "Removed borrowed indication (cerebral oedema) from the two anti-edemigenic therapy items; dropped the borrowed CT quote from the initiation item.",
+    "Removed duplicate symptoms_function \"functioning normally\" item (same statement as the functional outcome).",
+    "Left vertebral artery occlusion role comorbidity -> primary_diagnosis.",
+    "Admission MRA (Figure 1c) observation given the caption-stated arrival time with the caption lead and panel c quotes.",
+    "Post-treatment DWI/FLAIR observation timed from the Figure 3 caption lead (\"after endovascular treatment\"); added the caption-stated brain MRI procedure to event p1-e12.",
+    "ADAPT procedure: added the case-specific Discussion result (basilar recanalization, partial reconstruction of the dissected left vertebral artery); decision care plan: added the Discussion decision basis (young age, favourable DWI pcASPECTs).",
+    "Relations: added e07->e14 (abstract \"Twenty-four hours later\" adjacent to the ADAPT sentence), e01->e07 (Discussion \"more than 72 hours had passed since the onset of symptoms and recanalization\"), e11 same_time e12 (both 24 hours after the endovascular procedure); e10->e14 now also quotes \"the anti-edemigenic medical therapy was continued\"; e09->e10 quotes the full oedema finding with \"Therefore\".",
+    "Summary: removed the untimed \"on arrival\" attribution of the examination, the \"Indian\" descriptor and the intimal-flap timing in the workup claim; added the end-of-procedure dissection flap to the treatment claim.",
+    "Source coverage: Discussion segments b00020 and b00021 marked patient_facts."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEG figures were inspected separately in visual.json.",
+    "Figure 4 CT is timed from the endovascular treatment in the text but from the craniectomy in the caption; different anchors, recorded as an ambiguity with the caption restatement review_only.",
+    "No plot or chart values are present; no estimated readings were made from the images.",
+    "Discussion statements that cite other studies (DAWN, DEFUSE-3, case series, thrombectomy timing) are not facts about the index patient.",
+    "Author evaluative phrases such as fast and safe recanalization and crucial intervention are interpretation and are not recorded as facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 29,
+    "facts_reviewed": 89,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (17-year-old boy); roster complete with reported_individual_count 1.",
+      "Day-5 CT timing is a different-anchor arithmetic mismatch (ambiguity), not a source conflict.",
+      "Dissection is stated without hedging (intimal flap, Figure 2b/2h captions, abstract); its causal role for the occlusion is hedged in the case text and kept as an ambiguity.",
+      "Asthenia and fever are timed on arrival; abstract two-day duration kept as an ambiguity.",
+      "pc-ASPECTS kept as text \"6-5 points\" with an ambiguity; no numeric value.",
+      "e09->e10 \"Therefore\" is a result-to-action order (oedema finding -> anti-edemigenic therapy) and is kept; e10->e14 \"despite ... therapy\" plus \"was continued\" kept."
+    ],
+    "residual_risks": [
+      "Reference gate NO-BORROWING warnings on the day-5 examination and CT finding facts: their time comes from the scoping sentence announcing the CT and clinical examination; judged a checker false positive.",
+      "e09->e10 crosses a paragraph boundary on \"Therefore\"; ordered as result -> action about that result.",
+      "Figure 3 panel d appears T2-weighted on pixels while the caption says FLAIR; annotation follows the caption."
+    ]
+  },
+  "physician_adjudicated": false
+}

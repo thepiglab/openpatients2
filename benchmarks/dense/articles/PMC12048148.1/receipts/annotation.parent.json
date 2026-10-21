@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12048148.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ac53e126fc804618678610de9c321f890ea7dcaeae7cba3962bf4cc74bf2e819",
+  "annotation_sha256": "0a79dee344d308ab3088a228e30778aabb182fc3be6b504be57fdf339793d2dc",
+  "reviewed_at": "2026-10-21T14:13:14.452650+00:00",
+  "source_segments_read": 15,
+  "facts_reviewed": 67,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f010 (reproductive_perinatal 'The child did not adapt'), a duplicate of the symptoms_function sign p1-f021 (ONE-STATEMENT); repointed event p1-e14.",
+    "Split the Figure 1 finding: added include fact p1-f064 'isolated enlarged fetal bladder' (two days after opioid introduction, text + caption); p1-f041 now carries only the disputed 47 x 40 mm diameter (review_only, image caliper value differs).",
+    "Added missed caption facts: p1-f065 increasing urinary ascites (Figure 3); p1-f066 collapsed bladder with dorsal wall defect, p1-f067 abdominal ascites, p1-f068 adherent web (peritoneum), all at the 4th postpartal hour (Figure 5).",
+    "p1-f045 text_value set to the literal caption wording 'decompressed fetal bladder (28 mm) with thickened walls'.",
+    "Linked the five sedation drug facts to event p1-e05 (fact_ids were empty).",
+    "Removed untimed facts from timed events to avoid borrowed times: kidney/unremarkable sentences moved to new event p1-e22; anhydramnios/imminent abdominal compartment syndrome moved to new event p1-e23; text bladder-defect diagnosis split from the urine result into new event p1-e21; new event p1-e20 for the Figure 5 4th-postpartal-hour ultrasound.",
+    "Removed relation e07->e08 ('Because of the findings ... was suspected' is basis wording for a diagnosis and does not order); repointed e10->e11 to e23->e11 (its quote is the anhydramnios sentence).",
+    "Added literal relations: e01->e03, e01->e04, e01->e05 (presentation opening the stay -> in-hospital care); e04->e12 (prophylaxis 'in the event of a possible preterm delivery' -> delivery); e12->e20 and e12->e18 (birth -> stated postnatal times); e20->e18 (4th postpartal hour vs fifth day of life, same anchor).",
+    "Added ambiguities: Figure 2 caliper vs 28 mm caption (rounding), Figure 3 caption unhedged 'rupture' vs suspected in text, Figure 5 dorsal vs text dorsolateral defect with caption time not transferred, start-anchored ordering of the six-day sedation course; rewrote the Figure 1 and roster ambiguities.",
+    "Summary: claim 1 no longer says 'at that time' and cites fetal sex/eutrophic facts; claim 2 cites the drug facts and the included enlarged-bladder fact instead of the review-only diameter; claim 4 cites creatinine/ascites facts. Article limitations updated."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the five JPEGs were inspected in the separate visual submission.",
+    "The abstract (33 weeks) and body (32 weeks and 2 days) disagree on the gestational age at caesarean delivery; both are review-only.",
+    "Fetus and newborn are kept in the mother index record (ROSTER-RELATIVES, following corpus precedent); the article presents one case.",
+    "Causal wording linking opioid treatment to the rupture is author interpretation and is not recorded as a fact.",
+    "Caliper values printed inside Figures 1 and 2 are pixel content only; the Figure 1 text diameter is review-only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 15,
+    "facts_reviewed": 67,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single case: mother is p1; fetus and newborn kept in her record per ROSTER-RELATIVES and corpus precedent (PMC12831564.1 mother-index record with the newborn's own workup and intensive care).",
+      "Caesarean gestational age is a source conflict (abstract 33 weeks vs body 32 weeks and 2 days): both review_only.",
+      "Abstract 'rupture at 31 weeks' vs body 'four days after induction of opioid treatment' kept as an ambiguity.",
+      "Figure 1 caliper value differs from the text 47 x 40 mm: diameter review_only; Figure 2 caliper rounds to the 28 mm caption.",
+      "Intubation and mechanical resuscitation remain action unknown ('need for', 'was necessary'); Concord Birth Trolley only an ambiguity; opioid causation not recorded.",
+      "No tables, supplements or media in raw.xml (table-count 0)."
+    ],
+    "residual_risks": [
+      "Relations from the opioid-course event to the two- and four-day ultrasound findings order the course start only.",
+      "Expectant approach recorded with action_status unknown although daily monitoring is completed.",
+      "Abdominal compartment syndrome recorded as possible for 'imminent'."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC6159179.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ab75a96923ca7e244211c54fbf7f274f23c78425bef75c2cc6fef6db87b4f251",
+  "annotation_sha256": "c2d63c9728cf149ca2b45f178c8965c8db118b61041b8cdb66135bd9c624e1df",
+  "reviewed_at": "2026-10-21T03:09:25.642552+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 47,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Idiopathic pulmonary fibrosis verification_status confirmed -> provisional: the case text only says the right-lung CT findings were \"suggesting an underlying pulmonary fibrosis\" and no biopsy or multidisciplinary confirmation is described; author labels (abstract, learning points) kept as evidence and the ambiguity retained.",
+    "IPF right-lung evidence quote extended to the full b00006 clause naming \"the right lung\" so laterality/body site come from the item's own evidence.",
+    "Swyer-James-MacLeod syndrome evidence: replaced the bare diagnosis sentence with the two-sentence quote naming the left-lung CT features followed by \"Features were in keeping with the diagnosis\" (laterality no longer borrowed) and added the b00022 statement that the diagnosis was made in this case.",
+    "BAL eosinophil and neutrophil evidence quotes extended to include \"bronchoalveolar lavage from the right lung\" so the right-lung body site is not borrowed.",
+    "Absent medication label \"Regular medications other than prednisolone\" trimmed to the source wording \"Regular medications\"; the Otherwise scope stays in the quote.",
+    "Added conditions item: \"Otherwise, she had no significant medical condition\" (assertion absent, verification unknown).",
+    "Added Figure 2 caption evidence (extensive subpleural reticulation with lower lobe predilection) to the CT right-lung reticulation observation.",
+    "Added relation smoking cessation before initial chest radiograph (both times stated from the same anchor, presentation; both quoted).",
+    "Added relation serial chest radiographs before contrast-enhanced CT (\"to further assess the interstitial changes seen on the CXR on the right side\": result -> action about that result).",
+    "Summary claim 3 reworded to reflect the hedged fibrosis wording and the provisional IPF label; removed the unsupported meta-claim that no treatment or outcome is reported."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the 3 JPEGs were inspected in the separate visual submission.",
+    "No treatment, follow-up or outcome is reported for the patient.",
+    "IPF is stated as the diagnosis by the authors while the case text only says the CT findings suggest underlying pulmonary fibrosis; no biopsy or multidisciplinary confirmation is reported (recorded as provisional).",
+    "No dates are given; the only anchors are 2 years before presentation (initial radiograph), 2 years later (serial radiographs), 25 years before presentation (smoking cessation) and a 6-month symptom history.",
+    "Reference ranges and predicted values are not given; percentages in parentheses after FEV1 and FVC are kept as printed without the source naming them predicted values.",
+    "Discussion statements about SJMS, IPF pathobiology, incidence and literature cases are background, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 47,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (72-year-old woman); roster 1, complete; Table 1 is a literature differential-diagnosis list, not patient data, and no measurement series exists.",
+      "SJMS confirmed (CT features in keeping with the diagnosis; b00022 says the diagnosis was made in this case after the age of 70 years); age_at_diagnosis kept as literal text without numeric value.",
+      "IPF downgraded to provisional; eosinophilic pneumonia kept absent/unknown from the explicit \"no suspicion\" statement; BAL eosinophils flag high supported by the discussion sentence about the same (single) lavage.",
+      "FEV1/FVC percentages kept as text_value only because the source never calls them predicted values; prednisolone action unknown per rulings for \"was on\".",
+      "All three figures viewed at full resolution with magnified crops (Fig 1a R marker and PA view text; Fig 3b inverted-grayscale PET)."
+    ],
+    "residual_risks": [
+      "IPF certainty is a judgement between the hedged case text and the flat author labels; recorded as provisional with an explicit ambiguity.",
+      "Breathlessness versus \"exercise tolerance was unlimited\" remains an unresolved source ambiguity.",
+      "Serial-radiograph timing relative to presentation is only stated relative to the initial radiograph; no relation to presentation was invented."
+    ]
+  },
+  "physician_adjudicated": false
+}

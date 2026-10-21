@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC8716636.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "773b8df2ca21ea50dfe2e899a4a2339da04171db57dbe5e6a32ee5daa747a6f5",
+  "annotation_sha256": "a840d798adc0a77db009a99df89b0166ac94920c6ff292ad5b5812c918ca5df2",
+  "reviewed_at": "2026-10-21T08:59:15.671598+00:00",
+  "source_segments_read": 19,
+  "facts_reviewed": 82,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-e04 split: hydroxychloroquine start stays in p1-e04 (ordered after the PCR result); HAART continuation (p1-f026..f028) moved to new event p1-e15 \"throughout the admission\", so the PCR -> treatment relation no longer covers HAART.",
+    "p1-f037/p1-f079/p1-f080 time anchor \"hospital day 18\" (self-referential) set to \"admission\", the same admission day count as the day 4 and day 9 facts.",
+    "Added p1-f082: negative prior cystic findings on imaging (Discussion b00011, explicitly about our patient); b00011 source_coverage changed to patient_facts.",
+    "Relations added: p1-e03 -> p1-e06 (initial chest x-ray before the \"repeat chest x-ray\"), p1-e09 -> p1-e11 (chest tube, then \"later in the ICU admission\" mechanical ventilation), p1-e02 -> p1-e05 and p1-e02 -> p1-e15 (presentation opening the stay -> in-hospital events, order only).",
+    "Two article limitations added (hospital-day anchor equivalence; Figure 2 dots/arrow positions not read)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two JPEG figures are inspected in the separate visual target.",
+    "Height is printed as 1.7 cm in the source; kept review-only without correction.",
+    "Reference-range intervals are recorded as printed; high/low flags only where the source calls the result elevated or leukocytosis.",
+    "Discussion statements about the literature and other published cases are not index-patient facts.",
+    "Figure 2 printed timeline text is not used to add clinical facts; hospital-course facts come from the text.",
+    "Hospital day 18 is treated as the same admission day count as \"the fourth/ninth day of admission\"; no other cross-anchor ordering is made.",
+    "Figure 2 is the patient's own oxygen-saturation timeline; its unlabelled dots and arrow positions are not read as values or days."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 19,
+    "facts_reviewed": 82,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient; Introduction b00005, case b00006-b00008, Discussion b00010-b00011 patient sentences and both captions carry patient facts; literature and Conclusion restatements are background.",
+      "Height \"1.7 cm\" fits neither BMI 18.2 nor 52 kg as printed: kept review_only with an ambiguity and out of the summary; BMI and weight kept.",
+      "Flags high only for leukocytosis and the Discussion \"elevated LDH, ESR, CRP, and D-dimer\"; fibrinogen, procalcitonin and CD4 count carry printed ranges but no flag; undetectable viral load and beta-D-glucan \"<31 (negative)\" are negative.",
+      "Figure 1 caption CT findings stay untimed; the day-9 CT left pneumothorax (10%) is not merged with the tension pneumothorax; abstract \"left lower lobe\" vs case \"left-sided\" kept as an ambiguity.",
+      "PCP co-infection kept possible/differential (\"less likely\"); hydroxychloroquine has no stated indication; generic HAART \"over 20 years\" kept with unknown action and the three named drugs administered.",
+      "Both figures viewed at full resolution with panel crops: F1 four CT panels with arrows and letters only; F2 oxygen-saturation vs hospital-day timeline with no calendar dates."
+    ],
+    "residual_risks": [
+      "Day 9 vs hospital day 18 ordering relies on reading \"hospital day\" as the same admission day count.",
+      "p1-e06 -> p1-e07 rests on \"His respiratory status continued to decline\" following the day 4 worsening."
+    ]
+  },
+  "physician_adjudicated": false
+}

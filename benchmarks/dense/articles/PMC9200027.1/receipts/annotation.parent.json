@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC9200027.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1bfec5b97227e07fe1b97183808d85e9cdf36eeb77d573cdd2623d75a0681371",
+  "annotation_sha256": "f28f731ad47848952a219721b7332254b1a75f4e7a68983d1727f7af26fa68db",
+  "reviewed_at": "2026-10-21T12:58:49.196343+00:00",
+  "source_segments_read": 41,
+  "facts_reviewed": 219,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p3-f060 BiPAP action completed -> unknown: listed only in \"He was started on ...\" which does not establish completion.",
+    "Added oxygen at admission per patient (p1-f068 \"10 liters\", p2-f070 \"10liters\", p3-f072 \"15liters\"; medications administered, own admission sentence as time), linked to e02.",
+    "Added \"Resuscitation was continued with balanced salt solution and noradrenaline\" as two administered medication facts per patient (p1-f069/f070, p2-f071/f072, p3-f073/f074), linked to e07.",
+    "Added daily monitoring care plan (completed) per patient (p1-f071, p2-f073, p3-f075), linked to e09.",
+    "Added relations per patient: e02 (admission) -> e12, e07 (treatments started) -> e12, e08 (noradrenaline stopped) -> e12, each quoting both the in-hospital sentence and the hospital discharge sentence (in-hospital care -> discharge ending that stay).",
+    "p2-e04 description corrected to abdominal imaging only (no chest imaging described for Case 2).",
+    "p2-f026 noradrenaline garbled unit: dose_value 0.3 kept, no unit added, note added.",
+    "Case 3 sex ambiguity reworded (noun \"female\" plus \"She\" vs template he/his/him): ambiguity, not conflict; evidence extended.",
+    "Figure 2 attribution note and article limitation: burned-in demographic text does not match Case 2 age (values not transcribed); attribution rests on the \"(Figure 2)\" callout."
+  ],
+  "unresolved": [
+    "Case reports with no calendar dates; times are relative to admission or discharge only as stated.",
+    "Discussion statements about ulinastatin effects, mortality and published studies are general and not recorded as patient facts.",
+    "The statement that all patients had hypotension and acute kidney injury that resolved in 3-6 days is recorded for each patient without a patient-specific duration.",
+    "Several laboratory values are printed identically across cases (urea in all three cases; total protein in cases 1 and 2; amylase and lipase in cases 2 and 3); recorded as printed.",
+    "Case 2 noradrenaline dose unit is garbled in the source; case 3 uses she/her and he/his/him pronouns.",
+    "Caption-layer visual status not_inspected; the three CT images are described in visual.json.",
+    "No supplements are listed for this article.",
+    "Figure 2 carries burned-in identifier text (a name-like line, a sex/age line and a partly cut-off date stamp; values not transcribed). Its printed age does not match the 36-year-old Case 2 patient; attribution to Case 2 rests only on the \"(Figure 2)\" callout in the Case 2 text.",
+    "Imaging, laboratory and diagnosis events carry no stated time and are ordered only where the source states order (presentation/admission and in-hospital care before the hospital discharge)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 41,
+    "facts_reviewed": 219,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Three individually described cases (56-year-old male, 36-year-old male, 76-year-old female); roster count 3 from the abstract.",
+      "All per-case vitals, labs, imaging, diagnoses, drug doses/routes and course times checked against text; repeated identical values (urea 135, total protein 7.8, amylase 1956/lipase 1102) kept as printed with ambiguities.",
+      "\"All of our patients had hypotension and acute kidney injury that resolved in 3-6 days\" applied to each patient as resolved conditions with no borrowed time.",
+      "Case 3 documented_sex kept female from the sex noun; he/his/him pronouns are template wording (ambiguity).",
+      "Figures viewed at full resolution with corner crops: three axial abdominal CT slices; Figure 2 has a burned-in name-like line, sex/age line and partly cut-off date stamp (direct_identifiers); nothing transcribed in visual.json."
+    ],
+    "residual_risks": [
+      "Figure 2 burned-in age differs from the Case 2 age; attribution rests only on the text callout.",
+      "Imaging, laboratory and diagnosis events have no stated time and stay unordered relative to each other.",
+      "Mixed CT text values containing \"normal enhancing\" keep flag unknown (normalize OBS-FLAG items judged not applicable)."
+    ]
+  },
+  "physician_adjudicated": false
+}

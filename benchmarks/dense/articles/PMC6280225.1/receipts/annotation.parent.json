@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC6280225.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ef3e53655182fd4f2ca15a306d82a8fcc6d6c5e6f2cd83c9e78f349500398bf1",
+  "annotation_sha256": "a3232fcd4c609c31b793d226630473c33d27645955c2ba7d357c2d9d3d882a53",
+  "reviewed_at": "2026-10-21T04:30:44.629003+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 74,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Tumor site: removed body_site/primary_site \"perianal\" from the BCC condition and tumor (no sentence places this patient's tumor in the perianal region; the abstract names perianal abscesses); replaced with the literal case-level site \"non-sun-exposed area\" (b00003) and added that quote as evidence; b00003 coverage now patient_facts.",
+    "Site ambiguity rewritten: abscesses perianal, mass in the left lateral quadrant, medial margin bordering the gluteal cleft, and the Discussion \"anal canal or buttocks as in our patient\" (X or Y, neither asserted); linked to the BCC and tumor facts.",
+    "\"no clear fistula to the anal canal\": verification_status refuted -> unknown, certainty ambiguous, scoring review_only (hedge is not a refutation); ambiguity wording updated.",
+    "\"less than one month later\": time anchor changed from \"drained surgically\" (two sentences back) to the adjacent-sentence anchor \"culture\" (culture of the drainage fluid) for the examination under anesthesia, sinus tract and fistula facts; drainage -> EUA relation now quotes the adjacent culture sentence plus the EUA sentence.",
+    "Melan-A: observation statement now \"focal melan-A-positive cells\"; the tumor biomarker alternate (positive) set ambiguous/review_only because the positive cells were thought to be benign colonizing melanocytes, not tumor cells; ambiguity extended.",
+    "Added 4 relations: childhood perianal trauma history -> presentation and past medical history -> presentation (history stated with the presentation); excision -> wound completely healed at one-month follow-up (healed wound); one-month -> two-year follow-up (two stated times from the same follow-up anchor, both quoted).",
+    "Summary: tumor described as arising in a non-sun-exposed area."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four figure images are inspected in the separate visual submission.",
+    "Table 1 is a general differential diagnosis list of a perianal mass and is not patient data.",
+    "The excision date is not stated; only the order of drainage, examination under anesthesia and excision rests on explicit wording where relations are recorded.",
+    "Discussion and introduction statements (series, case reports, percentages, treatment advice) are not individual facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 74,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (66-year-old man); 74 facts, 15 events, 10 relations.",
+      "Excision kept completed: the abstract states \"The mass was excised\", the Figure 2 caption states the defect was closed primarily, and the specimen pathology/margins follow.",
+      "4 cm (Figure 2 caption, mass in situ) and 3.0 cm (gross nodule within a polypoid skin specimen) are different measurements; kept as an ambiguity, not a conflict.",
+      "Figure 4 caption time (10 months postoperatively) governs only the caption finding; kept separate from the two-year follow-up with an ambiguity.",
+      "Postdrainage differential kept as four differential/possible conditions with an ambiguity on which drainage."
+    ],
+    "residual_risks": [
+      "Tumor anatomical site is not stated for this patient beyond a non-sun-exposed area.",
+      "Excision date and interval from the examination under anesthesia are not stated.",
+      "Privacy flags for Figure 2 panels a and b need sensitive_anatomy=true (perianal/gluteal cleft operative photographs), agent-owned change pending."
+    ]
+  },
+  "physician_adjudicated": false
+}

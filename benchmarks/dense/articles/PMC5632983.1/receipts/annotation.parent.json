@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC5632983.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "55a2a2f19ddcde9bb4e6377b935b35c9167776b3a05f7788b1055021e8438a0a",
+  "annotation_sha256": "571e38e0ff5130592e622209d415004ff3d9fe2d05f953f6b60e2eee3015c53d",
+  "reviewed_at": "2026-10-21T03:51:46.989210+00:00",
+  "source_segments_read": 40,
+  "facts_reviewed": 163,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Split merged time points: absent infection and electrolyte signs (p1-f034, p1-f036) keep only the admission-paragraph sentence (b00005); the intensive-care-paragraph sentence (b00006) became new facts p1-f161 and p1-f162, with an ambiguity explaining the two statements.",
+    "Added p1-f163 cardiac masses, assertion absent: b00033 \"our patient did not have any of the above stated diagnoses\" covers the listed cardiac masses, which the draft omitted.",
+    "Sustained ventricular tachycardia (p1-f044): removed severity \"multiple episodes\" (a count wording, kept in the quote).",
+    "Events split so each relation is literal: rituximab start at admission moved from p1-e05 to new p1-e23; ICU transfer p1-e08 separated from the ECG/monitoring findings (new p1-e32, since SVT episodes continued after pacing); echocardiogram p1-e09 separated from the markers/examination (p1-e25), the not-performed MRI/biopsy (p1-e26, not_occurred) and the authors' discussion assessment (p1-e24); pacemaker p1-e10 separated from the airway assessment (p1-e27), the post-pacing ECG (p1-e30) and the abstract hemodynamic outcome (p1-e28); abstract corticosteroid/immunobiological immunosuppression moved from p1-e15 to p1-e29; CD19 follow-up result split from rituximab resumption (p1-e31).",
+    "Removed relations: p1-e10 -> p1-e15 (the abstract immunosuppression is not identified with the body rituximab start; now p1-e10 -> p1-e29), p1-e18 -> p1-e19 (discharge does not literally precede the resumption), p1-e05 ~ p1-e15 (retargeted to p1-e23 ~ p1-e15, unknown).",
+    "Added literal relations: e01 -> e08 (\"previously diagnosed ... who was admitted to the intensive care unit\"), e05 -> e06 (admission opens the stay; \"On the first day of hospitalization\"), e08 -> e32 (\"transferred ... where ... identified\"), e08 -> e10 (abstract \"In the intensive care unit, the patient was fitted with a provisory pacemaker\"), e10 -> e30 (\"post-transvenous temporary pacing\"), e10 -> e29 and e29 -> e28 (abstract \"followed by ... resulting in\"), e15 -> e19 (\"resumed\"), e23 -> e20 (\"After 6 months of immunobiological therapy\"), e18 -> e31 and e18 -> e21 (discharge -> outpatient follow-up), e17 -> e22 (implantation -> awaited removal).",
+    "Second look after drafter feedback: did not keep e07 -> e08 (\"immediately transferred\" names no anchor event) or e08 -> e09 (the echo sentence does not place the echo after the transfer); kept e05 -> e06 under the admission-opens-stay ruling.",
+    "Ambiguities: rituximab ambiguity now also cites the abstract immunobiological therapy sentence; added a shock (discussion-only) ambiguity; parent limitation and provenance pass added."
+  ],
+  "unresolved": [
+    "Figure pixels were inspected in a separate visual submission; values printed inside images (the Figure 5 timeline dates, monitor text) are pixel content and are not facts or conflict sides.",
+    "The Figure 5 timeline places the first symptoms, diagnosis, worsening, admission and later events in printed months; the text gives only \"five months ago\" for the diagnosis, and the printed dates are not used as time values.",
+    "The monitor printout in Figure 3B carries a printed recording date that falls before the admission month printed in the Figure 5 timeline; the discrepancy is not reconciled and the printed date is not used as a fact.",
+    "The case section has typographical gaps (a sentence without a printed subject, \"imagem exams\", \"troponi\", \"heat block\"); wording is preserved in quotes and not corrected.",
+    "Table 1 day columns have no named anchor; missing cells (CPK, CKMB and troponin I on Days 3 and 5, phosphorus on Day 19) are not values.",
+    "Discussion sentences about granulomatosis with polyangiitis in general (frequencies, treatments, cardiac manifestations, literature cases) are background and not patient facts.",
+    "Parent review: the Figure 3B printout and Figure 4 radiographs carry burned-in identifiers and a recording date (flagged in the privacy sidecar, values not copied); the Figure 5 month labels are authored timeline text and are not used as times."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 40,
+    "facts_reviewed": 163,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (44-year-old woman with granulomatosis with polyangiitis); discussion segments b00027-b00031 and b00035 are background; b00032-b00034 sentences are labelled \"In this case\"/\"our patient\" and kept.",
+      "All 61 Table 1 value cells match the facts and the measurement series exactly (7 blank cells are missing, not values); comma groups parsed as thousands, consistent with the table's period decimals; units copied as printed (\"mil/mm\"); Day N headers kept without an anchor.",
+      "Rituximab start at admission vs start after hemodynamic recovery vs resumption: kept as three facts, order of the two starts unknown, recorded as an ambiguity (not a numeric source conflict).",
+      "Abstract-only corticosteroids kept as an abstract fact with an ambiguity; Torsades de points (caption) kept separate from sustained VT (text); intubation \"determined to be unnecessary\" kept absent; shock kept present with unknown verification plus an ambiguity; cardiac involvement kept possible/provisional.",
+      "Subject-less b00005 sentence attributed to the sole patient: single-case narrative paragraph, with the drafter ambiguity retained.",
+      "All five figures viewed at full resolution with crops of the burned-in text (Fig 1A bed label, Fig 3B date stamp, Fig 4A/4B ID and bed labels); Figure 3B date and Figure 5 timeline text are pixel-only and not used as facts or times; no ECG readings recorded."
+    ],
+    "residual_risks": [
+      "Whether the admission rituximab start and the post-recovery weekly start are one start or two is unresolved by the source.",
+      "Shock and the cardiac-involvement cause come from discussion wording only.",
+      "Figure 1C visual description calls a large rounded structure \"dark\"; on the pixels it is a bright soft-tissue-density structure (agent-owned visual.json needs correction)."
+    ]
+  },
+  "physician_adjudicated": false
+}

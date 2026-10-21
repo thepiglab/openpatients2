@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC6177106.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5b302ab930bbc53c64f317962aabf3e91b842efedc5e24adf623464fee69c9e6",
+  "annotation_sha256": "fe529cd82b4bb01d8722218f1226cb57984375b4b4db075040fd5f0ca033db30",
+  "reviewed_at": "2026-10-21T03:35:43.793482+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 64,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f045 narrowed to the hedged PE trigger (\"likely triggered by acute PE\"), kept possible/review_only; added p1-f063 acute MI caused by paradoxical emboli (present, verification unknown) from the unhedged conclusion (b00023) and figure caption (b00027); the abstract names no cause.",
+    "Added p1-f061 (review_only) timeline-table systemic intravenous tPA dose following the intracoronary dose, possibly the same administration as the narrative full IV protocol (p1-f038).",
+    "Added p1-f062 (review_only) right ventricular infarction from the unlabelled discussion sentence (b00020); attribution to this patient not literal.",
+    "Added p1-f064 excellent long-term outcome stated for this case (b00023).",
+    "p1-f057 6MWT 411 m: dropped the preceding narrative follow-up sentence from its quote (that sentence is p1-f059 and supplied a borrowed time); time governed by the table row \"Outpatient clinic (12 months)\"; table and text 6MWT values merged per OBS-TABLE-ROWS.",
+    "p1-f052 6MWT 80 m gained the narrative \"improved from 80 m to 411 m\" quote (same baseline of the same comparison).",
+    "p1-f046 right heart catheterization gained the narrative sentence; p1-f053 gained the table row; p1-f006 gained \"poor compliance with anticoagulant therapy\".",
+    "p1-f041 PFO role changed from complication to unknown.",
+    "Events: Day 1 applied to angiography, tPA, aspiration and CTPA events (e05-e08) from the rowspan=4 \"Initial presentation (Day 1)\" time cell; PE suspicion split from angiography into new event p1-e15; p1-f045 removed from the echo event.",
+    "Relations: e08->e09 (CTPA vs IV tPA completion) changed to unknown (paragraph order only, table places IV dose before aspiration); e13->e14 now cites the table Time cells; e01->e02 and e02->e03 cite the presentation sentence; e12->e13 adds b00022.",
+    "Relations added: e05->e10 and e08->e10 (Day 1 vs Day 2), e01/e03/e04->e15 (\"Given ... a concurrent diagnosis of acute PE was suspected\"), e15->e08 (suspected -> \"This confirmed acute PE\").",
+    "Summary: removed review_only p1-f045, added the authors' paradoxical-emboli conclusion (p1-f063). Ambiguities, coverage notes and limitations updated."
+  ],
+  "unresolved": [
+    "Figure pixels are inspected in the separate visual submission; the caption-layer figure status stays not_inspected.",
+    "Right ventricular infarction is mentioned only in general and discussion text and is not recorded as a patient diagnosis.",
+    "The authors state the MI was caused by paradoxical emboli; no embolus crossing the PFO is documented, and the trigger by acute PE is hedged.",
+    "Timeline table and narrative values are treated as the same tests where the table and text name the same single test with the same values.",
+    "No units are printed for the cardiac index; the pressure type for 47 mmHg and 18 mmHg is not specified.",
+    "The timeline table Day 1 cell spans its first four rows (rowspan=4); Day 1 is applied to those rows’ events (angiography, tPA/aspiration, CTPA), not to narrative fact times."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 64,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Abstract does not state a cause; the conclusion and caption state the MI was caused by paradoxical emboli without hedge; only the PE trigger is hedged.",
+      "RHC, Day 2 bubble echo and 6MWT 80/411 m: table and text name the same single test with the same values; merged as one item each.",
+      "The timeline table Time cell \"Initial presentation (Day 1)\" spans four rows (rowspan=4) and is the stated time of those rows; Day 2, 2 months, 6 months and 12 months share the table Time column anchor.",
+      "Table orders IC tPA -> systemic IV dose -> (Subsequently) aspiration; the narrative only says the full protocol was completed IV; IV tPA vs CTPA order left unknown.",
+      "Figure 1 (six panels) viewed at full resolution with crops: no charts, no plot values; panel F carries ultrasound device text only (format label, heart-rate readout); panel B is a gross photograph of aspirated clots on gauze with a 10 mm scale bar."
+    ],
+    "residual_risks": [
+      "Day 1 rowspan reading applied at event level only; narrative fact times stay null.",
+      "Pulmonary pressure 47 -> 18 mmHg type unnamed; cardiac index printed without unit (left unit-less).",
+      "Panel C attribution rests on the single-case caption; it is not cited in the text."
+    ]
+  },
+  "physician_adjudicated": false
+}

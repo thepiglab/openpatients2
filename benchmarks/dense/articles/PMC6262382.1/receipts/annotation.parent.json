@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC6262382.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e66126e6e828dbef5545dfad1f45be105559748d840ef539af9ee508ba7d1ceb",
+  "annotation_sha256": "bd3a328183a8cadc7a346ac5b0b65dee695d6b72158a71f04db6b1e9dd94c876",
+  "reviewed_at": "2026-10-21T04:21:24.908362+00:00",
+  "source_segments_read": 13,
+  "facts_reviewed": 43,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed the outcomes item \"vision improved to 20/20 in both eyes\" (duplicate of the visual acuity 20/20 observation, ONE-STATEMENT); event, summary and ambiguity references repointed to the observation.",
+    "Added relation radiotherapy -> bevacizumab plus irinotecan (the \"Then we applied\" sentence governs both regimens after the 60 Gy radiotherapy).",
+    "Added the discussion sentence \"we encountered bilateral optic neuritis after cycle 2 (3 mg/kg, every 2 weeks)\" as evidence of the bilateral optic neuritis condition (it was cited in source_coverage but unused).",
+    "Clarified the decline-in-visual-acuity note: \"Two days after the second dose\" is in its own sentence and dates the admission at which the decline was present; onset not separately dated.",
+    "Reworded the methylprednisolone fact note, ambiguity and article limitation: the discussion sentence is literally \"In our case\" and very likely the same 5-day pulse course, but the source does not identify the two statements as one course; kept separate, discussion fact review_only to avoid double counting."
+  ],
+  "unresolved": [
+    "Case report of one patient; no dates are given, so relative times only are recorded and no calendar values.",
+    "Causal attribution of the optic neuritis to nivolumab is hedged in the discussion; see ambiguities.",
+    "The two steroid dose statements (case presentation and discussion \"In our case\") are not identified by the source as the same course; the discussion one is review_only to avoid double counting.",
+    "Discussion paragraphs about published studies are background and are not copied to the patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 13,
+    "facts_reviewed": 43,
+    "figures_viewed": 1,
+    "key_findings": [
+      "One index patient (9 year old male); roster count 1 literal.",
+      "Steroids: case text 1 g/day IV for 5 days (scored) vs discussion \"In our case\" 30 mg/kg/day IV methylprednisolone max 1 g for 5 days (review_only, ambiguity); not merged per no-merge ruling.",
+      "Causality: abstract \"induced by\" vs discussion \"Probably\"; no causal fact, recorded as ambiguity.",
+      "Relations checked against rulings: excision->histology, followed by, Then, despite these treatments, Therefore, Two days after the second dose, four days after the progressive decline, first...then, resulted in.",
+      "Figure 1 viewed at full resolution with crops: A coronal brain MRI with two arrows, B axial orbit band with bilateral arrows; no burned-in text other than panel letters; visual.json has no plot estimates.",
+      "Literature cases (de Velasco, Karlin, Beck, Jayakody, Waldman, Wilejto, Mizota) excluded from the patient."
+    ],
+    "residual_risks": [
+      "The ophthalmic-examination ordering after admission relies on the presentation-opens-the-stay ruling.",
+      "\"After a week\" has no named anchor; the 20/20 observation keeps relation after with a null anchor.",
+      "Single tumor record carries disease_status progression for both diagnosis and progression evidence."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12836446.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6c7d4858ded11230e76b0a308ec7690991e0e058a07f371914bdf350aa457fd3",
+  "annotation_sha256": "a9b3171bfa355db404637013a31f9ae8ee0ed56d631ab3d8aab6c9ce43487e51",
+  "reviewed_at": "2026-10-21T14:26:03.906707+00:00",
+  "source_segments_read": 46,
+  "facts_reviewed": 108,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Moved the Figure 2 first-thrombectomy pre/postoperative angiography facts (p1-f074, p1-f075) from the PTA event p1-e18 to the first thrombectomy event p1-e04.",
+    "Removed severity 'sudden-onset' from the presenting left hemiparesis and dysarthria (onset wording, not severity; kept in the evidence quotes).",
+    "Added p1-f104: DAPT administered for secondary prevention of symptomatic ICAD (Discussion sentence about the index patient).",
+    "Added p1-f105 and p1-f106: Figure 4 caption day 2 diffusion-weighted MRI (no new hyperintense lesions) and MRA (preserved right M1 patency), time 'at day 2' from the caption lead.",
+    "Added p1-f107 and p1-f108: Figure 7 caption pre-PTA angiography M1 stenosis and post-PTA angiography adequate vessel dilatation.",
+    "Added 10 literal relations: e01 overlaps e02 ('while the patient was taking'), e02->e03 and e02->e20 (presentation opening the stay), e03->e04 and e14->e16 (result -> action on that result), e04->e08 (follow-up imaging of the revascularization), e06->e09 (admission labs -> ward events; 'had decreased'), e05->e13 (drug start -> stop), e16->e18 (PTA for the residual stenosis shown after the second MT), e18->e20 (in-hospital care -> transfer ending the stay).",
+    "Added ambiguities: rescue-angioplasty decision mentioned in the first-thrombectomy paragraph vs the only described PTA after the second thrombectomy; text 'reocclusion' vs Figure 5 caption 'nearly occluded'.",
+    "Source coverage: b00035 and b00036 reclassified as patient_facts (explicit 'In this case' statements about the index patient)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the eight figure JPEGs were inspected in the separate visual submission.",
+    "Table 1 units for C-reactive protein (U/L) and red blood cell count are kept as printed; no correction applied.",
+    "Hospital day numbers (day 2 to day 21) are counted from an unstated start; the source does not define the day-1 anchor.",
+    "The source gives no calendar dates; no dates are inferred.",
+    "Discussion statements about literature, incidences and general recommendations are not patient facts.",
+    "The source reports no supplementary material."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 46,
+    "facts_reviewed": 108,
+    "figures_viewed": 8,
+    "key_findings": [
+      "Single index patient (80-year-old man); no supplements (raw.xml has no supplementary-material or media elements).",
+      "ICAD kept confirmed: the Discussion states 'the lesion was diagnosed as ICAD' for this patient; the case-text 'more consistent with' wording is recorded as an ambiguity, not a conflict.",
+      "Intravenous alteplase 'considered inappropriate' kept as assertion/action unknown with route Intravenous; the source does not literally say it was withheld or declined.",
+      "Edoxaban/prasugrel 'was taking' kept administered without an indication; the scope of 'for ischemic heart disease' is ambiguous.",
+      "Text PT-INR 4.52 (no stated time) kept separate from the Table 1 admission value; admission platelet count 51 merged (text and table both say on admission).",
+      "Table 1 values and units kept as printed (CRP U/L, RBC 395 x10^6/uL) with an ambiguity.",
+      "Day N times treated as one hospital-day count within the single narrated stay; Figure 8 'at discharge' imaging kept on the day 21 transfer event, which the text cites with Figure 8."
+    ],
+    "residual_risks": [
+      "Day-1 anchor of the hospital-day count is not stated.",
+      "History (b00008) is not ordered before the presentation (separate paragraph); only the drug-use overlap with the LVO is linked.",
+      "Figure captions name single arrows/arrowheads where several are drawn (Figures 3, 5C, 7B)."
+    ]
+  },
+  "physician_adjudicated": false
+}

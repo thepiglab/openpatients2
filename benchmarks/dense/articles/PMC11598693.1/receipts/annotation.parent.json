@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC11598693.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d9884dcf735ccffe5411f6c1513452952f2fa5dea0f541c78a93e5bb22c0f682",
+  "annotation_sha256": "0546a71ababa6c91c5ee619e22047bec462d669b2d30b1248268717d58c5c7d8",
+  "reviewed_at": "2026-10-21T13:19:34.713643+00:00",
+  "source_segments_read": 61,
+  "facts_reviewed": 219,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p2-f081 NO-BORROWING split: p2-f081 is now the elevated ICP revealed by the ophthalmology examination (own sentence, own time \"Six months after initiating monthly IVIG infusions\", verification unknown); new p2-f121 is intracranial hypertension confirmed by the first lumbar puncture (own sentence, no time), linked to p2-e14",
+    "p2-f116 mycophenolate mofetil kept planned; evidence quote extended to include \"a decision was made to ...\" so the qualifier is inside the quote",
+    "p2-f084 steroid taper: quote extended to the full sentence and indication \"elevated ICP attributed to prolonged steroid use\" added from that sentence",
+    "p2-f092/p2-f093 method set to both MR studies named in the sentence instead of splitting findings between MR imaging and MR angiography",
+    "p2-e20 split: IVIG taper/discontinuation (occurred, p2-f115) and new p2-e24 plan event for the mycophenolate mofetil transition (planned, p2-f116)",
+    "Added relations: p1-e02 same_time p1-e01 and p2-e02 same_time p2-e01 (Table 1 caption/header \"at the time of diagnosis\"); p1-e06 before p1-e07 (\"Despite the initial discomfort\"); p1-e03 before p1-e09 and p2-e03 before p2-e09 (steroid start -> wean/taper); p1-e05 before p1-e15 and p2-e05 before p2-e20 (IVIG start -> stop)",
+    "Added ambiguities: p2 IOP \"worsened to\" papilledema wording; both patients \"neither had any predisposing risk factors\" (unnamed factors); p1 \"six to eight doses\" discussion statement"
+  ],
+  "unresolved": [
+    "The source has no figures and no supplements, so no visual, figure-EHR, privacy or supplement sidecars apply.",
+    "Table segments carry the section heading \"Case 1\" but each table has columns for both cases; ownership was taken from the column headers.",
+    "Table 1 values are kept with their column time headers; no flags were derived from the printed reference ranges, and blank cells (case 1 CRP; case 2 Smith/RNP; case 1 U1 RNP) are not observations.",
+    "Case 1 sentence \"has experienced any recurrence of elevated ICP\" lacks a negation; recurrence status is review_only.",
+    "Case 2 IVIG dose \"95 mg (2 g/kg)\" mixes mg with g/kg and is kept as printed text only.",
+    "Discussion and conclusion sentences about cited MIS-C cases, JDM cohorts and general IVIG effects are background and not assigned to patients; only sentences explicitly naming both patients were used.",
+    "Causal attribution of the intracranial hypertension to IVIG is hedged by the authors and is not recorded as a fact."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 61,
+    "facts_reviewed": 219,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Two individuated cases (10-year-old and 7-year-old girls); Table 1 and Table 2 columns attributed by Case 1/Case 2 headers; all 117 table-cell observations checked cell by cell against raw.xml (values, reference ranges, units, comparators, column times, no range-derived flags)",
+      "p1 recurrence sentence verified in full: printed \"she has experienced any recurrence of elevated ICP\" has no negation; kept ambiguous/review_only with assertion unknown",
+      "p1 analgesics \"necessitating frequent administration\" kept action unknown; p2 IVIG \"95 mg (2 g/kg)\" kept as dose_text only with an ambiguity",
+      "p2 causation: steroid attribution and later IVIG suspicion are recorded as an ambiguity only; no cause asserted",
+      "p2 text statements \"persistent elevations\" (high) and \"returned to normal\" (normal) kept separate from Table 1 cells",
+      "Discussion sentences explicitly naming both patients (\"both were premedicated\", \"These patients were thought to potentially have aseptic meningitis\") used; cohort and cited MIS-C/JDM literature not copied",
+      "No figures and no supplements in the source"
+    ],
+    "residual_risks": [
+      "p1 recurrence status unresolved by the source wording",
+      "Table 2 antibody panel has no stated time",
+      "p2 elevated ICP from ophthalmology examination has verification_status unknown; the LP sentence is the stated confirmation"
+    ]
+  },
+  "physician_adjudicated": false
+}

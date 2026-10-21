@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC6993302.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9450bb11d15a6f1a70f3c2f610bf45a632d3e2de6b3261408f0967a096d24918",
+  "annotation_sha256": "b8b30483513442141048a07a7adaaaf7551ad67780e6d338411249e5339c9425",
+  "reviewed_at": "2026-10-21T07:53:00.622877+00:00",
+  "source_segments_read": 32,
+  "facts_reviewed": 85,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "P1 CAEP latency, morphology and amplitude: removed the time \"at 38 months\" taken from the b00012 methods paragraph (not the immediately preceding sentence; the immediately preceding sentence names CAEPs without a time) and the borrowed b00012 quote; time is now the result sentence own \"after 27 months of hearing aid use\" (relation after, anchor hearing aid use) with the full own-sentence quote.",
+    "P1 CAEP results: removed the method field built from b00012 stimulus wording that was not a literal source string.",
+    "Fixed DDST II conventional result fact names (\"result result\").",
+    "Removed the duplicate left EAC atresia condition derived from the CT sentence; the malformation-list condition and the CT imaging observation remain.",
+    "Added the b00014 sentence (patient evaluated with DDST II adapted for children with multiple disabilities) to the DDST II procedure evidence and set b00014 coverage to patient_facts.",
+    "Added observation: developmental quotient lower than 1 (b00025), and the summary phrase; removed the limitation saying it was not recorded.",
+    "Added relation Goldenhar diagnosis as a newborn before hearing-loss diagnosis at 11 months (two stated ages, same birth anchor).",
+    "Added ambiguity on the CAEP recording time (38 months, methods) versus the result time (after 27 months of hearing aid use)."
+  ],
+  "unresolved": [
+    "Figure 1 pixels inspected in a separate visual submission; caption-layer status here stays not_inspected.",
+    "Table 1 left-ear tympanogram and DPOAE cells are blank and were not turned into observations.",
+    "Table 1 has no stated test date; the 11-month hearing-loss diagnosis is not assigned to the tabulated results.",
+    "Whether \"normal\" in the CAEP sentence covers amplitude is unclear; amplitude flag left unknown.",
+    "The gain score GS is defined in the Table 2 footnote but no GS value is printed; none is recorded.",
+    "Sentences about other studies (cleft palate cohorts, Meizen-Derr et al.) are background, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 32,
+    "facts_reviewed": 85,
+    "figures_viewed": 1,
+    "key_findings": [
+      "One index patient (38-month-old girl, Goldenhar syndrome, BAHA Softband); all 32 source units, both tables against raw XML and Figure 1 pixels read.",
+      "Table 2 rowspan shift checked against raw XML: 38-month rows map Age, PS, FM, Language, GM, Result, DFE, Q correctly.",
+      "Blank left-ear tympanogram/DPOAE cells and missing Table 1 date kept as ambiguities; CAEP amplitude normal-scope ambiguous so no flag; CAEP reevaluation recorded as recommended only."
+    ],
+    "residual_risks": [
+      "Partial choanal atresia on CT at 23 months kept distinct from operated bilateral choanal atresia; the source does not relate them.",
+      "DFE carries no unit because the row label (months) is not applicable to every cell in the row."
+    ]
+  },
+  "physician_adjudicated": false
+}

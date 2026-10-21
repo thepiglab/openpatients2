@@ -1048,7 +1048,18 @@ def aggregate(work):
                     'output_tokens_per_second', 'answer_tokens_per_second', 'documents_per_second',
                     'documents_per_hour', 'output_tokens_per_gpu_second'))
                 lines.append(f'| {name} | {cells} | {values["gpus_per_server"]} |')
-            lines += ['', f'Matched completed articles in this scope: {matched[scope]["completed_articles"]}.', '']
+            common_count = next(iter(matched[scope]['by_split'][split].values()))['articles']
+            lines += ['', f'Matched completed articles in this split: {common_count}.', '']
+            lines += ['These shared completed attempts may still contain extraction failures. '
+                      'This subset is selection-biased and excludes unfinished articles.', '',
+                      '| Arm | Matched precision | Matched recall | Matched item F1 |',
+                      '|---|---:|---:|---:|']
+            for name, paired in matched[scope]['by_split'][split].items():
+                clinical = paired['scores']['overall']['clinical_items'] if paired['scores'] else {}
+                cells = ' | '.join(f'{clinical[k]:.4f}' if clinical.get(k) is not None else 'not measured'
+                                   for k in ('precision', 'recall', 'f1'))
+                lines.append(f'| {name} | {cells} |')
+            lines.append('')
     lines += [result['interpretation'], '',
         'Item detection and attribute correctness are separate: an item match can still have a wrong assertion, value, or time. Semantic judge scores have not been applied.', '',
         'Full scores, matched-article throughput, worker goodput, reasoning capture and fact/citation/trace links: comparison.json and arms/*/summary.', '']
@@ -1078,6 +1089,16 @@ def aggregate(work):
 
 def verify(work):
     m = check(work)
+    incomplete = []
+    for name in m['nemotron_super']['arms']:
+        progress = b.status(work / 'arms' / name)
+        if progress['pending']:
+            incomplete.append(f'{name}: {progress["completed"]}/{progress["expected"]} completed, '
+                              f'{len(progress["pending"])} pending; worker outcomes={progress["worker_outcomes"]}')
+    if incomplete:
+        raise ValueError('Incomplete campaign (finished attempts are not necessarily valid extractions):\n' +
+                         '\n'.join(incomplete) + '\nInspect status and worker receipts before resuming. '
+                         'Resume retains the frozen code, dataset and time budget.')
     for name in m['nemotron_super']['arms']:
         b.verify(work / 'arms' / name)
     integrity = b.read(work / 'summary/integrity.json')

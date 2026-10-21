@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC6291525.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "eafe04fae707113f58834559f05630f38c25872365573e9cc4aee103a82f276e",
+  "annotation_sha256": "741d7c6405628ab2738858868387f5fec0d2f24daa63bfd3184225ebda108f40",
+  "reviewed_at": "2026-10-21T04:31:13.654828+00:00",
+  "source_segments_read": 22,
+  "facts_reviewed": 74,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f003 age 26: referent (offense vs sentencing) ambiguous in the source; certainty ambiguous, scoring review_only, clinical statement no longer commits to the sentencing.",
+    "p1-f011 schizophrenic episode: removed the borrowed \"in 1989\" time (1989 dates the evaluation, not the episode); temporality historical -> unknown.",
+    "p1-f057 simple thefts and p1-f060 late-1980s sentence: temporality historical -> unknown (no history label in their evidence).",
+    "p1-f042 basic psychopharmacological care: action unknown -> administered (\"This was accompanied by basic psychopharmacological ... care\").",
+    "Added p1-f074 / p1-e18 index offense dated \"in the late 1980s\" (b00016), with an ambiguity that the source does not equate it with the deliberate killing.",
+    "p1-e14 conditional release: \"until 2020\" is the end of the probationary period; time_precision range, calendar value 2020 removed; ambiguity added (period ends after the 2018 death).",
+    "Added 7 literal before-relations: e03->e18 (\"just days prior to the index offense\"); stated-calendar-year pairs e18 (late 1980s)->e10 (1990), e06 (1989)->e10, e10->e16 (1993), e16->e12 (late 2000s), e12->e17 (2011), e17->e15 (2018).",
+    "Summary claims 1, 2 and 4 reworded to drop joins the source does not state (index offense = sentence, early negative symptoms timed at the trial, conversion \"followed by\" another 8 years)."
+  ],
+  "unresolved": [
+    "The source has no figures, tables or supplements; no visual, figure-EHR, privacy or measurement-series sidecars apply.",
+    "Case files are described as vague on therapeutic strategies; drug names, doses and psychotherapy content are not given.",
+    "Discussion paragraphs include author opinion and a risk assessment that are not recorded as patient facts.",
+    "Dates are mostly decades or years; no full calendar dates are given."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 22,
+    "facts_reviewed": 74,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single-patient forensic psychiatry case report with no figures, tables or supplements; \"the patient\"/\"our patient\" in the discussion literally denotes the one index patient, so discussion facts (b00011, b00014-b00016) are attributed literally; author opinion, risk assessment and counterfactuals are excluded.",
+      "The 1989 first forensic expert evaluation and the evaluation at the time of the trial are kept separate (not identified as the same).",
+      "Schema relative_timeline has no \"edges\" key; the 17 relations materialize as before_pairs (transitive closure), as in other signed articles.",
+      "Calendar-year times stated for two events are treated as one shared anchor; ordering pairs quote both years.",
+      "The antipsychotic side-effect entry is a documented adverse drug effect, which the allergies task explicitly covers; reaction kept as the literal \"side effects\".",
+      "\"In the 90s\" (introduction) and \"in 1990\" (case description) are compatible, not a conflict."
+    ],
+    "residual_risks": [
+      "Legal sanctions (sentence, indefinite incarceration, conditional release) are carried as social_exposures/other and the article-59 measure as a nonpharmacologic therapy; no dedicated legal-encounter section exists.",
+      "Events e07, e08 and the pair e13->e14 remain unordered against the main chain because the source states no order for them.",
+      "Psychotherapeutic care implementation is described by the authors as unclear; actions stay unknown."
+    ]
+  },
+  "physician_adjudicated": false
+}

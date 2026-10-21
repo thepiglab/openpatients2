@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC6881659.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8decb4c398019c3fd2a2698ab5edc39dac3130ee26f4c0484d8f5259c4c42933",
+  "annotation_sha256": "02105045a0cfc3efa146c55d7c68b485126fc9c97ab0f730e0fa4757ba825aeb",
+  "reviewed_at": "2026-10-21T04:03:20.063163+00:00",
+  "source_segments_read": 22,
+  "facts_reviewed": 68,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Hypercoagulopathy 'without signs of hyper-coagulopathy' moved from a refuted condition to a negative laboratory observation (RULINGS: absence of laboratory evidence = negative observation).",
+    "Removed non-anatomical body_site 'inferolateral leads' from the STEMI condition; lead wording stays in evidence and the ECG observation.",
+    "Troponin observation now quotes its full sentence and carries its own time (shortly after leaving the operating room).",
+    "Added catheterization findings observations: acute proximal LAD thrombus, no significant residual narrowing after aspiration thrombectomy, and 'no clear evidence of CAD' (SECTION-IMAGING).",
+    "Removed borrowed indication from chest tube insertion (semicolon-juxtaposed clause only) and the reason-for-not-doing from the 'indication' of the not-placed stent.",
+    "Split admission hemoglobin 12.1 g/dL out of the HD 3 shock event into its own 'on admission' event (admission and HD 3 are separate time points).",
+    "Split the untimed 'hgb remained stable' statement out of the HD 5 DVT prophylaxis event; ambiguity records the unclear scope of 'on HD 5'.",
+    "Added Cardene discontinuation sentence to the treatment event evidence; added time 'at discharge' to the no-cardiac-sequelae outcome.",
+    "Relation e02->e05 now quotes the adjacent stab-wound sentence that 'subsequently' refers to, instead of the presentation sentence four sentences earlier.",
+    "Added relations: presentation->chest tube/intubation and ->massive transfusion (presentation opens stay), STEMI->post-thrombectomy medical therapy (treating named existing condition), Cardene start->stop, HD 3 shock->heparin stop/transfusion (result->action), admission hemoglobin->HD 3 shock.",
+    "Added four ambiguities (stable hemoglobin scope, chest tube insertion side, inferolateral ECG vs LAD culprit, untimed post-shock values)."
+  ],
+  "unresolved": [
+    "Age is not stated for the index patient; the introduction's general phrase about a young and otherwise healthy patient is not recorded as an age.",
+    "Source gives no hospital day or time for several values (hemoglobin 7.8 g/dL, the pRBC transfusion after shock, SBP in the 90s), so no time is assigned.",
+    "Discharge medications are recorded with action unknown because the source says only that the patient was discharged with them.",
+    "Source does not state which agent was used for deep venous thrombosis prophylaxis, or the chest tube side at insertion.",
+    "Caption-layer visual status not_inspected; the three JPEGs are inspected in the separate visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 22,
+    "facts_reviewed": 68,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; sex male rests only on the pronoun 'his' (DEMO-SEX-WORDING allows an unambiguous pronoun); no age stated.",
+      "Discharge medications kept as action unknown with 'at discharge'; in-hospital STEMI therapy 'initiated ... post thrombectomy' kept as started.",
+      "Myocardial stunning kept provisional/resolved ('consistent with'); no stent kept as absent procedure with a not_occurred event; smoking kept absent/status unknown (denied history, not never-use).",
+      "Figures: ECG arrows over V3, V4, V5 and long-strip II and V5 complexes; angiograms carry device acquisition text only; no plot estimates in visual.json."
+    ],
+    "residual_risks": [
+      "TTE -> catheterization order rests on a single sentence with semicolon juxtaposition (result -> action).",
+      "Hemorrhagic shock -> heparin stop relation rests on result -> action across adjacent sentences without an explicit causal word.",
+      "Stab wounds and penetrating left chest injuries are two condition items for overlapping statements."
+    ]
+  },
+  "physician_adjudicated": false
+}

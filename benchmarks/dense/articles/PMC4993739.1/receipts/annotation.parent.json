@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC4993739.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "37a15f1ff8c7d9b723f6d538c3a9e4e09b53ae4fd6c6ecd93714abfa90e5cfd1",
+  "annotation_sha256": "634b2598e0be99a3285be931f7915bf8601b961ceb4c5a0eba44b56041847263",
+  "reviewed_at": "2026-10-21T14:09:09.618544+00:00",
+  "source_segments_read": 22,
+  "facts_reviewed": 74,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f016/f017/f018: \"6 weeks later\" time set to relation after, anchor \"treatment\" (same-sentence back-reference to the adjacent acyclovir sentence per RULINGS); Fig. 5 pixel intervals not used",
+    "p1-f022/f023: added own-sentence time \"During this period\" (during); tracheotomy kept completed via the literal later tracheostomy cannula back-reference, ventilation kept unknown (\"required\")",
+    "p1-f046: removed body_site \"tracheostomy cannula\" (not a body site); text_value \"via the tracheostomy cannula\"",
+    "p1-f045/f046/f064/f065/f066: time anchors restored to the literal phrases \"discontinuation of sevoflurane\", \"discontinuation of dexmedetomidine\", \"discontinuation of dexmedetomidine infusion\"",
+    "p1-f055: regimen \"Initial infusion without loading dose\" -> \"Initial infusion\" (loading-dose wording not in this fact's evidence; kept as p1-f057)",
+    "Added p1-f073 outcome: anesthesia maintained without complication / anesthetics well tolerated (b00013 + abstract b00002)",
+    "Added p1-f074 procedures_devices: tracheostomy cannula, device_present",
+    "Split p1-e07 into repeated brain imaging (p1-e07) and CSF anti-NMDA-R antibody / HSV DNA testing (new p1-e18)",
+    "Added 9 literal relations: e01->e02 and e01->e03 (presentation opening the district-hospital stay; \"initially\"), e02->e07 (\"Repeated brain imaging\"), e18->e08 (\"Subsequent\"), e08->e11 (MRI ovarian tumor result -> ovariectomy), e12->e13 (abstract \"After transfer to the intensive care unit, she became increasingly agitated\"), e11->e15 (\"The day after surgery\"), e11->e16 and e11->e17 (\"postoperative day 3/51\")",
+    "Summary claim 3 cites p1-f073/p1-f074; two ambiguities added (6-week anchor vs Fig. 5 pixel intervals; ventilation required only); article limitation on Figs 3-4 caption 10-min vs 5-min ticks and printed \"Ketmine\""
+  ],
+  "unresolved": [
+    "Combined case report and rat experiment: the animal experiment (Figs 1-4, n = 8 per group) is aggregate and not individuated patients, so it is not annotated as patient facts.",
+    "Figure 5 timeline prints durations (2 weeks, 6 weeks, 1 week, 51 days) as image pixels; they are recorded in visual.json only and are not merged with text facts.",
+    "\"6 weeks later\" is anchored to the adjacent acyclovir treatment sentence; its interval from presentation is not stated in text.",
+    "Causes of the postoperative symptoms (dexmedetomidine effect, sedation, postoperative delirium) and of the coma (midazolam, CYP3A4 status) are hedged by the authors and not asserted.",
+    "No tables or supplementary material in the source (raw.xml checked).",
+    "Figs 3 and 4 captions state 10-min intervals while the printed x-axis ticks are every 5 min; the legend of Fig. 3 prints \"Ketmine\"; both are recorded as visual limitations only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 22,
+    "facts_reviewed": 74,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single human index patient (27-year-old woman, anti-NMDA-R encephalitis secondary to ovarian teratoma); rat experiment (Figs 1-4, b00009-b00011) is aggregate and correctly excluded from patient facts",
+      "No tables or supplementary material (raw.xml has no <table> or <supplementary-material>)",
+      "Hedged statements (postoperative delirium, midazolam causation of coma, CYP3A4 poor metabolizer, dexmedetomidine direct vs sedation effect) kept as review_only or ambiguities, not asserted",
+      "Abstract-cited facts (p1-f064/f065, route of fentanyl, dexmedetomidine route/indication) do not duplicate case-text facts",
+      "Fig. 5 is a text-only patient timeline; intervals and event labels are pixel-only and kept out of facts"
+    ],
+    "residual_risks": [
+      "e08->e11 relies on the result->action ruling (MRI ovarian tumor -> laparoscopic ovariectomy) across one intervening sentence",
+      "e01->e02/e03 rely on the presentation-opens-stay ruling; the EEG and acyclovir setting is not named explicitly",
+      "Diagnosis (e08) and plasma exchange (e09) are left unordered: no literal order word"
+    ]
+  },
+  "physician_adjudicated": false
+}

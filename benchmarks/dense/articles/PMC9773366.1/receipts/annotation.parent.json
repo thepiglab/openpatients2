@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC9773366.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "374f18f4daba6d340856d3cfcc8f991b3acab8c22fa5aeb0b588cbca8feb4534",
+  "annotation_sha256": "75b0c00e0bf6eed600bafb4c72d94975c59e6c3a7ce20811993f15d5b8bb59e2",
+  "reviewed_at": "2026-10-21T09:19:42.168455+00:00",
+  "source_segments_read": 23,
+  "facts_reviewed": 110,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f043 and p2-f038: restored the surgery name \"Small intestinal segment resection\" (the drafter had renamed it to clear a NO-BORROWING warning); kept the dated \"surgical treatment\" sentence, the \"During the operation\" sentence and the explicit both-patients discussion sentence, and added the abstract both-patients resection quote. The remaining NO-BORROWING warning is a checker false positive: the date sentence announces this same operation.",
+    "p1-f024: the refused pathological examination moved from care_plans to procedures_devices (kind procedure, action declined) per SECTION-CAREPLANS; p1 care_plans coverage set to not_documented.",
+    "Patient A CT: the discussion statement \"CT examination of patient A showed no abnormality\" contradicts the case-text CT findings for the same CT; added p1-f056 (CT, no abnormality, flag normal) and set p1-f032/f033/f034 to source_conflict + review_only; ambiguity reworded as a source conflict; CT findings removed from the summary.",
+    "p1-f054 and p2-f052: the no-recurrence quote extended to the full sentence so it carries its explicit subject \"Both patients\".",
+    "Relations: added p1-e02 before p1-e01 (history stated in the presentation sentence), p1-e05 before p1-e13 (admission opening the stay before the discharge ending it), and p2-e09 before p2-e11 (literal \"After the operation\"); removed p2-e07 before p2-e08, which rested only on diagnosis basis wording (\"due to the ileal lesions\") across a multi-sentence quote.",
+    "p1-e06 description no longer calls the laboratory tests and CT \"admission\" tests, which the source does not state.",
+    "Article limitations rewritten for the angioma ambiguity, the CT source conflict and unattributed discussion statements."
+  ],
+  "unresolved": [
+    "Discussion sentences about the literature, intestinal endometriosis and general recommendations are background and not patient facts.",
+    "Caption-layer visual status is not_inspected; actual images are inspected in visual.json.",
+    "Patient A postoperative pathology is printed as angioma in the case text but as lymphangioma in the abstract (both patients); angioma is the broader term, so this is kept as an ambiguity with the printed word review-only.",
+    "The discussion statement that CT of patient A showed no abnormality conflicts with the CT findings in the case text; both sides are review-only.",
+    "Intraoperative pathology and the failure of capsule endoscopy and deep enteroscopy to diagnose lymphangioma are discussion statements not individually attributed; not recorded as patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 23,
+    "facts_reviewed": 110,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Two individually described patients (Patient A 31-year-old woman, Patient B 52-year-old woman); roster of two is complete.",
+      "Patient A postoperative pathology prints \"small intestinal angioma\" while the abstract states lymphangioma for both patients; angioma is the broader term, so it is an ambiguity, not a source conflict; lymphangioma kept from the explicit both-patients sentence.",
+      "Patient A CT \"no abnormality\" in the discussion is a source conflict with the case-text CT findings; both sides review_only.",
+      "Patient A refused pathological examination yet tissue was taken under deep enteroscopy; recorded as a declined procedure plus an ambiguity.",
+      "Patient B deep enteroscopy rests on the explicit abstract statement covering both patients; recorded as completed without findings.",
+      "Figures: 6 figures, 16 panels viewed at full resolution with crops; Fig 2 A-C carry a burned-in exam date and clock time (direct identifiers), not copied anywhere."
+    ],
+    "residual_risks": [
+      "NO-BORROWING warnings on p1-f043 and p2-f038 remain as checker false positives.",
+      "Whether the angioma wording is a translation slip cannot be resolved from the source.",
+      "Order of Patient A refusal relative to the deep enteroscopy sampling is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC12306708.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2c5de95553d4873f4e1a8201933f1ac926f91ac01820afc38b6cf140ed18ad24",
+  "annotation_sha256": "97e825f208dc65bde13477311830cfefd5c37f405f2c7315176ecafb28ef59e5",
+  "reviewed_at": "2026-10-21T13:35:54.412783+00:00",
+  "source_segments_read": 10,
+  "facts_reviewed": 91,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f028/f029/f030: text_value \"normal\" -> literal \"unremarkable\" (source word; no added words).",
+    "p1-f006 generalized dystonia and p1-f007 cerebellar ataxia: role complication -> unknown (source never calls them complications; discussion leaves DBS unmasking/triggering open).",
+    "p1-f082 half-peak bandwidth: certainty ambiguous, scoring review_only (text \"slightly broad\" vs caption >2 Hz threshold vs value printed in the Figure 2 image, which is pixel content only).",
+    "p1-f083 tremor peak with DBS on: time \"At this follow-up visit\" from the immediately preceding sentence naming the same accelerometer test (both quoted).",
+    "Added p1-f089 right-handedness (functional_status), p1-f090 dystonic tremor condition (verification unknown), p1-f091 abstract QoL improvement at 13 years of follow-up.",
+    "p1-f055 (no ataxia at the time of surgery) moved from the ataxia-emergence event e11 to the surgery event e06.",
+    "SF-36 facts f048-f051 moved out of the one/6-month BFM event e09 into new event p1-e15 timed by the caption (\"after DBS surgery\", order_only); e09 now holds the BFM fact only.",
+    "Added 6 literal relations: e01->e03 (history in presentation sentence), e06->e08 (implantation -> programming), e06->e15 (caption after DBS surgery), e06->e10 (DBS outcome at 1-year follow-up), e10->e11 (\"continued to improve for another year ... later\"), e06->e14 (13 years of follow-up after DBS).",
+    "Ambiguities: workup ambiguity now covers all 15 serum/urine analytes; added Wilson disease workup parse, untimed ADL/QoL sentences grouped with the 13-year event, untimed neck dystonia/ambulation sentence grouped with the 6-month programming event.",
+    "Summary paragraph 3 rewritten: no \"early visits\" timing for SF-36; genetic testing no longer described as prompted by the new features."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two figure images were inspected in the separate visual target.",
+    "Figure 1 and Figure 2 plot values and the values printed inside Figure 2 are image content (visual.json only); no facts or estimates were taken from the plots.",
+    "Supplementary Video S1 (DBS off and on) is a PMC-hosted video reviewed by sampled frames in the supplement manifest only; audio and continuous motion were not reviewed and no clinical facts were taken from it.",
+    "Serum and urine workup analytes are listed without results; recorded as not reported.",
+    "Ataxia onset timing differs between the abstract and the case text and is recorded as an ambiguity."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 10,
+    "facts_reviewed": 91,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (46-year-old white man with SCA17, adolescent-onset generalized dystonia and arm tremor, bilateral GPi DBS, 13-year follow-up); no cited cases attributed.",
+      "Ataxia onset: abstract \"2 years after DBS surgery\" vs case \"About 2-3 years after surgery\" share the surgery anchor (2 lies in the 2-3 range: ambiguity, not conflict); discussion \"two decades after the initial symptoms\" uses a different anchor and orders nothing.",
+      "Further serum/urine workup analytes have no stated results; \"was unremarkable\" governs only the initial MRI/dystonia panel workup, so they stay status unknown / not_reported.",
+      "Bare \"family history was negative\" kept as family_condition absent named \"Family history\" with a scope ambiguity (corpus precedent for unscoped family-history statements).",
+      "Figure 1 values are unlabelled plot points (not used); Figure 2 printed annotations stay in visual.json only."
+    ],
+    "residual_risks": [
+      "Age 46 is literally age at presentation, but the 13-year follow-up and two-decade ataxia latency suggest it may be the age at reporting (ambiguity recorded).",
+      "Several outcome sentences (neck dystonia, ADL, QoL) are grouped into timed events by paragraph position; their facts carry no time.",
+      "Supplementary video S1 frames do not identify which visit each scene belongs to; no facts from the video."
+    ]
+  },
+  "physician_adjudicated": false
+}

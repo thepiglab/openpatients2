@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC5582223.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a3eed7b0c3a8a4d67a81b6a2aa8c529bdee76a71ba569435068034e8e327abf1",
+  "annotation_sha256": "960971c4489a325371dc1537c7721e90be56d7e89bda00bb724bb93f46f366ee",
+  "reviewed_at": "2026-10-21T04:18:36.667679+00:00",
+  "source_segments_read": 32,
+  "facts_reviewed": 138,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Event membership: unlabelled result sentences moved out of dated events. Plasma cells \"remain prominent\", platelet \"at this stage\" and smear granulocytes (f100-f102) moved from the five-day event to an untimed event; marrow plasma cells 7-10% and marrow FISH (f111, f112) moved from the 6-week biopsy event; kappa/lambda immunostains and blasts 2.5%/promonocytes 1% (f117-f119) moved from the 18-week biopsy event; effusion symptom-free 6 months (f105) moved out of the 2-week pleural regression event into its own duration event.",
+    "f110 (promonocytes and monocytes 27%): coordinate clause of the 6-week biopsy sentence; quote extended to the full sentence and the sentence time assigned.",
+    "Summary claim 3 attributed blasts 2.5% to the 18-week biopsy (borrowed time); rewritten so 2.5% carries no time. Summary claim 4 merged the narrative and discussion transfusion-dependence statements; rewritten to keep them separate.",
+    "f130 blood transfusion: action completed -> unknown (\"requiring\" alone, per rulings); ambiguity added citing the \"continued supportive therapy (in the form of blood transfusion)\" wording.",
+    "f089 ilium intramarrow injection: borrowed indication \"Treatment of acute myeloid leukemia\" removed.",
+    "f010, f011, f012, f015, f016, f017: quotes extended to include \"past medical history significant for\" so historical temporality is supported by the quote; f016/f017 tumor_ref kept null.",
+    "f092 absent nausea/vomiting: added the second literal discussion statement (b00024) as evidence.",
+    "Added f133 outcome (b00015 dramatic response with blast elimination from marrow and peripheral blood), f134-f136 discussion statements explicitly about this patient (peripheral blasts reduced within days of starting therapy; mature neutrophils; fewer monocytes), f137 plasma Ara-C level not performed (b00021), f138 prostate cancer untreated (absent oncology treatment, t3).",
+    "Events: demographics moved from history event e01 to presentation e02; e02 time \"2 days history\" removed (symptom duration, kept on symptom facts); thoracentesis split from pleural cytology (new e27) so the \"recently diagnosed\" relation targets only the cytology interpretation; transfusion event e24 kind adverse_event -> outcome (cause stated as not clear) and stray f129/f132 removed from it; f103 moved from the outcome-paragraph event into a new response event e32; new events e28-e33.",
+    "Relations added: e02->e05 (presentation opens stay -> ICU admission), e13->e27 (thoracentesis -> cytology), e12->e16 (patient with AML treated with intramarrow Ara-C), e06->e20 (effusion on CT -> its complete regression on CT), e16->e32, e16->e33 (\"within days of starting the therapy\"), e16->e23 (response to intramarrow Ara-C), e17->e21 and e17->e24 (\"following intramarrow injection chemotherapy/therapy\"); e12->e13 retargeted to e12->e27.",
+    "Ambiguities added for \"normal MCV, and MCH\" punctuation and for transfusion action; marrow-timing ambiguity updated."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four figure images are reviewed in visual.json.",
+    "Graph 1 and Graph 2 print no data labels for the plotted points; only the axes, the \"Day of Ara-C injection\" marker and qualitative trends are recorded, and marrow values come from the text only.",
+    "Discussion paragraphs are mechanism, literature and cited-case commentary and are not index-patient facts; the reference to a previous intramarrow case and a published CLL patient are not index-patient facts.",
+    "No reference ranges or high/low flags are printed for the laboratory values; none were inferred (only PSA is called elevated by the source).",
+    "Several result sentences follow a dated biopsy or count sentence without a time of their own; no time is borrowed for them (see ambiguities).",
+    "The \"10^(9)/L\" unit is kept as printed; hemoglobin, platelet and WBC values carry no source flag.",
+    "Parent review (Claude Opus 5.5): unlabelled marrow and blood result sentences are kept in untimed events, not in the dated biopsy/count events."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 32,
+    "facts_reviewed": 138,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (85-year-old man, AML with monocytic differentiation, intramarrow Ara-C, died in hospice); discussion used only where literal about this patient.",
+      "Draft placed unlabelled result sentences in dated biopsy/count events and its summary gave 2.5% blasts the 18-week time; both corrected.",
+      "Condition + procedure + observation for Doppler/echo/CT diagnoses follows corpus precedent (diagnostic procedure plus findings, diagnosis as condition); no identical duplicate items found.",
+      "Pleural regression (after 2 weeks) and pericardial complete regression (untimed CT) are kept separate; no time borrowed for the pericardial CT.",
+      "EVID-NEGATION warnings on f042 (\"nontender\"), f105 (\"symptom-free\", U+2010 hyphen), f138 (\"untreated\") and GLUED-TEXT on \"promonocyte\" are checker false positives."
+    ],
+    "residual_risks": [
+      "Relation e12->e16 relies on the introduction sentence describing the patient with AML treated with intramarrow Ara-C (treating a named existing condition).",
+      "Visual.json Graph 1/2 descriptions say the markers sit over the 6 and 18 tick positions, a reading of x positions from chart points; change requested from the annotator.",
+      "Many workup events (Doppler, echo/CT, exam, labs, marrow, flow, cytogenetics) remain unordered because the source states no order."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC6210773.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "10d13f26ca0a2f4f24e7efd677c0253707ab6def67b404737104179d91bccbab",
+  "annotation_sha256": "ae3e050c70505680bb2a954568434f38a003270b72c43b7310973186ddaeb704",
+  "reviewed_at": "2026-10-21T04:24:03.487294+00:00",
+  "source_segments_read": 90,
+  "facts_reviewed": 254,
+  "patients_reviewed": 15,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "All 15 patients: removed the method field (HR LC-MS/MS) from the substance observations because the Discussion states SC use was determined in the current cases with the immunoassay method while the abstract and Methods name HR LC-MS/MS; added a per-patient method ambiguity quoting all three sentences and an article limitation.",
+    "All 15 patients: renamed substance observations from \"SC type <compound>\" to the printed compound name (the column also lists mephedrone metabolites, 4-APB, ethylphenidate and Ketiapin, which are not synthetic cannabinoids); clinical statements, the test event description and summaries now say the SC Type column listed the substance instead of asserting HR LC-MS/MS identification.",
+    "All 15 patients: renamed the GKS score from \"GKS (Glasgow Coma Score)\" to \"GKS\" because the expansion rests on a count match with the Results GCS sentence only; added a per-patient ambiguity and reworded the article limitation.",
+    "All 15 patients: added the abstract sentence (15 patients with suspected SC intoxication) as evidence for the provisional SC intoxication condition and marked abstract segment b00001 and Discussion segment b00022 as patient_facts in source coverage.",
+    "All 15 patients: the presentation-before-treatment relation now also quotes the footnote legends that call BP and pulse initial values.",
+    "Case 6: added an ambiguity for the age cell printed as \"27,\" with a trailing comma.",
+    "Article limitations: added that the Discussion haloperidol indication (acute psychotic symptoms in five patients) is not attributed to individual rows."
+  ],
+  "unresolved": [
+    "Case series of 15 patients; only the Table 2 rows are individuated. Cohort statistics in the abstract, Results, Tables 1, 3 and 4 and the Discussion are not copied to individuals.",
+    "Cohort values conflict across the article: mean age 27.35 +/- 9.93 years in Results versus 27.80 +/- 12.7 in Table 1; convulsions in eight patients (28.6%) in Results versus 4 (26.7%) in Table 4; pH given as 11.70 +/- 9.92 in Results; intubation applied to two patients in the Discussion versus one intubated patient in Table 1. None is resolved or attributed to a patient.",
+    "Table 2 footnote: the +/yes, -/no legend is given only for the illicit drug history column, the alcohol column is labelled H in the footnote and HA in the header, and SAU has no legend; alcohol and SAU facts are review-only.",
+    "GKS is not defined in the Table 2 footnote; Results report eight patients with GCS below 15 and the GKS column has eight values below 15, a count match only, so the label is kept as printed.",
+    "The analytical method is stated as HR LC-MS/MS in the abstract and Methods but as the immunoassay method in the Discussion; no method is assigned to the per-patient substance results.",
+    "The Discussion says five patients received 5 mg intravenous haloperidol because of acute psychotic symptoms; the indication is not attributed to individual Table 2 rows (attribute match only).",
+    "CT is described as time of consciousness (h) in the Table 2 footnote and as time to regain consciousness in Methods and Table 1; kept as printed.",
+    "The SC Type column lists substances determined (including mephedrone metabolites and Ketiapin); specimen type per patient is not stated; diagnosis of SC intoxication kept provisional.",
+    "One Discussion sentence reports a patient who died of respiratory problems without naming the case; Table 2 case 8 records death; the cause is review-only on p8.",
+    "Table 2 case 8 treatment cell contains printed oddities (midazolam; 2 mg IV; fentanyl 50 mg IV) kept as printed; no intubation or ICU procedure is recorded for any patient.",
+    "No figures or supplements are listed in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 90,
+    "facts_reviewed": 254,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Only the 15 Table 2 rows are individuated; every Table 2 cell is represented; cohort statistics (Tables 1, 3, 4, Results, Discussion) are not copied to individuals.",
+      "Raw XML footnote confirms the +/yes, -/no legend is attached only to the illicit drug history column and the alcohol column is labelled H in the footnote; alcohol and SAU facts correctly review_only; case 9 SAU cell is blank and has no fact.",
+      "SC intoxication kept provisional (Methods: with a diagnosis of; abstract: suspected); substance results flagged positive from the SC Type column with no specimen or method assigned.",
+      "Case 8: midazolam; 2 mg IV review_only, fentanyl kept in mg as printed with an ambiguity, intubation not recorded (Discussion two versus Table 1 one), b00019 respiratory death cause review_only by attribute match, concatenated ADB-PINACA-M / dihydromephedrone cell split into two compounds.",
+      "Relations rely on implied-necessary order within one ED stay (presentation before in-stay treatment; treatment before the discharge or ICU/death outcome that ends the stay) with the row and initial-value footnote quoted; no measurement series exists (one row per patient; machine draft only)."
+    ],
+    "residual_risks": [
+      "Fentanyl 50 mg and 50 mg/h are implausible doses kept as printed.",
+      "Case 8 treatment cell may include ICU drugs; the treatment-before-outcome relation orders treatment before the combined ICU/death outcome event only as end of stay.",
+      "The substance-analysis event is not linked to other events because no row or sentence orders sampling against treatment."
+    ]
+  },
+  "physician_adjudicated": false
+}

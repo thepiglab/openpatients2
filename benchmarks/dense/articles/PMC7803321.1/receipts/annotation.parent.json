@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC7803321.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "92132ed1ce37c4dd828df18fc6a2996ccc80b163ab16b33d68b0e15c235f5590",
+  "annotation_sha256": "00e849d1f65c5e3e4e284c23dd0b35df05f2a4272e7a957c3d9b192a00045db7",
+  "reviewed_at": "2026-10-21T08:30:49.376790+00:00",
+  "source_segments_read": 35,
+  "facts_reviewed": 113,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Un-merged the 6-month and 2-year gingival recession text values from the Table 1 mid-buccal cells (text names no site and does not cite Table 1; Table 1 prints 1 at both mid-buccal and distal at 6 months): new text facts p1-f109 (6-month canine root surface 1 mm; text, abstract, Figure 4A caption) and p1-f110 (2-year 2.5, unit from the Figure 5A caption). Baseline 12 mm merge kept (case text continues \"recorded on six aspects of the tooth (Table 1)\").",
+    "Merged the abstract-only \"left maxillary canine\" gingival recession condition (p1-f005) into the tooth 23 condition p1-f004: the case text calls tooth 23 the canine (b00013 with Figure 4A \"teeth 22 and 23 respectively\") and the abstract describes the single compromised tooth; laterality left from the abstract quote.",
+    "Merged abstract full-mouth debridement (p1-f077) into generalized scaling and root planing (p1-f076): both are stated as the first step/phase of the treatment together with oral hygiene instructions; abstract OHI quote added to p1-f104.",
+    "Pulp necrosis p1-f008: assertion possible -> present, verification unknown; the sentence presupposes \"the pulp necrosis\" and hedges only the orthodontic cause.",
+    "Initial diagnosis p1-f006: removed the non-literal diagnostic_basis (no basis wording links the cold test to the diagnosis); verification unknown kept.",
+    "Recall every four months p1-f106: action_status unknown -> completed (\"was recalled ... for the first year\", past action).",
+    "Added facts: severe periodontal attachment loss (b00011), wide periodontal pockets on more than one surface (b00020), adequate keratinized tissue lateral to the defect (b00021, \"These characteristics presented in our patient\"), graft thickness > 2 mm and complete integrity of interproximal gingiva (b00022, \"in this case\").",
+    "Removed interproximal bone loss from the baseline-examination event (stated only in a discussion sentence \"Before surgery\").",
+    "Added relations: initial diagnosis before root canal therapy (b00019 \"must first be treated with endodontic therapy. This is the reason why the root canal treatment was performed immediately\"); temporary splint made before splint removal (device placement -> removal); abstract \"After that\" quote added to first phase -> root canal therapy.",
+    "Ambiguities rewritten for the tooth-name and debridement merges and the text-only 2-/18-year values; new ambiguity on text vs table recession values; summary repointed to the text facts and states the attachment loss."
+  ],
+  "unresolved": [
+    "Single-patient case report with a single multidisciplinary course; all case-section paragraphs belong to p1 (no Case/Patient N headings).",
+    "The abstract probing depth (14 mm, mesial-buccal) and the Table 1 baseline buccal-mesial probing depth (13 mm) disagree; both sides are review_only and neither is reconciled.",
+    "Table 1 values are per site for tooth 23 only; text values at 2 and 18 years do not name a site, and the 18-year GR value has no printed unit.",
+    "Caption-layer visual status not_inspected; the 12 image assets are described in visual.json.",
+    "Discussion statements about cited studies and general mechanisms are not patient facts; the author hypotheses about orthodontic causation are recorded as hedged.",
+    "Gingival recession text values at 6 months and 2 years are kept separate from the Table 1 cells because the text names no site and does not cite Table 1; only the baseline 12 mm (case text followed by \"recorded on six aspects of the tooth (Table 1)\") is merged with the mid-buccal cell.",
+    "Operative photographs F3a and F3b carry a burned-in camera date stamp (not transcribed)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 35,
+    "facts_reviewed": 113,
+    "figures_viewed": 12,
+    "key_findings": [
+      "Single patient; all 35 segments including the three Table 1 rows (raw JATS checked: Baseline spans buccal M/B/D and palatal M/P/D; follow-up columns are buccal M/B/D at 6 months and 2 years) and all 12 captions read.",
+      "Abstract mesial-buccal PD 14 mm vs Table 1 Baseline Buccal M PD 13: same site (mesial of the buccal aspect) and same initial examination of the single tooth -> source_conflict, both review_only (p1-f035/p1-f036).",
+      "Endodontic treatment = root canal therapy merge kept (b00019 equates them and the abstract/case sentences mirror \"After that\").",
+      "Text-only 2-/18-year \"no increase in PD (3mm)\" and 18-year \"2.5 of GR\" keep no site; no unit added to the 18-year 2.5.",
+      "Absence of tooth decay or fillings kept as two absent facts (negation scopes over both); interproximal bone loss is literal for this case (\"Before surgery ... in this case\"); splinting \"decided to perform\" stays planned; referrals and counseling are completed past actions.",
+      "All 12 figures viewed at full resolution; F3a and F3b carry an orange burned-in camera date stamp (F3b full date, F3a partly cut off) at the lower right; no other printed text."
+    ],
+    "residual_risks": [
+      "The FDI tooth-number to tooth-name mapping (23 = left maxillary canine) is not printed; the merge rests on the case text calling tooth 23 the canine.",
+      "Whether the abstract 14 mm is a misprint of the CAL value (14) cannot be decided from the source; both PD values stay review_only.",
+      "Root coverage percentages (91.7%, 91%, 79%) are the author figures; not recomputed."
+    ]
+  },
+  "physician_adjudicated": false
+}

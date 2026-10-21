@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC8892276.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "04434ca3422789fe64b274345f3dd3fc5abf3a43fd867df321397ff8b62636ef",
+  "annotation_sha256": "d9dd6e9825540ff595d630df24b7ce5754519ddb238b65d690dd1cab6bbcc8cc",
+  "reviewed_at": "2026-10-21T09:15:22.488481+00:00",
+  "source_segments_read": 112,
+  "facts_reviewed": 182,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed relation e02 (2019 MS attack) -> e03 (MRI): 'a posterior MRI scan' names no anchor (like 'subsequent' with no named anchor); recorded as an ambiguity with the hedged 'could be related' link.",
+    "Moved f020-f022 ('Once the intervention finished' Romberg/single-leg/tandem >30 s) out of the T3 event e10 (time borrowed); new outcome event e11 with relation e07 (intervention) before e11 quoting b00101.",
+    "Removed f014-f016 (MMSE, EDSS, ambulation; no stated time) from the baseline T0 event e06; ambiguity added; summary paragraph 2 no longer calls them baseline.",
+    "Added literal order evidence: b00011 'Quality of life before the experimental intervention' to e06->e07, and b00053 'baseline and postintervention ... Then, 1 month later' to e09->e10.",
+    "Added f181 (Results: global iTUG ameliorated by 2.35 s, adding 0.43 s at 1 month; ambiguous, review_only, linked to the iTUG T2 conflict) and f182 (remaining iTUG transitions and turns showed a remarkable reduction; include).",
+    "Rewrote the 0.43 s ambiguity: the wording does not state whether the improvement or the total time grew; no change value recorded, Table 2 T3 kept as printed."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEG figures are inspected in the separate visual submission.",
+    "Table 1 (intervention protocol exercise rows) is protocol design and is summarized in intervention facts rather than extracted row by row.",
+    "The abstract and Table 2 give different iTUG total times at T2; both kept review_only without reconciliation.",
+    "Text percentage decreases in muscle tone do not match the Table 2 Hz values; kept review_only as arithmetic-only mismatches.",
+    "No medications, allergies, family history, social history or adverse events are documented for the participant.",
+    "Discussion statements about cited studies and general vestibular or MS background are not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 112,
+    "facts_reviewed": 182,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Table 2 alignment verified against raw JATS: header has a colspan=2 blank then Baseline (T0); each row has a blank cell, the label, then T0..T3 values, so the drafter's one-column-left pairing is correct for all 124 Table 2 value facts and all 128 series points (usability row label spans 2 columns; 90 sits under T2).",
+      "iTUG total time at T2: abstract 5.57 s vs Table 2 6.00 s (Results 'ameliorated by 2.35 s' is consistent with 6.00) - two numbers for one value, kept as source_conflict both sides review_only; T3 5.57 table fact stays include.",
+      "Muscle-tone percentage decreases in b00093 do not match the Table 2 Hz values (arithmetic-only); six text facts ambiguous review_only, Hz cells include. 'Stance and swing ... 50%' is an untimed approximate statement (ambiguity only).",
+      "Baseline merges of text and table values are supported by the abstract 'at T0' quotes (DHI, BBS, iTUG total, MFIS) and by b00011 'baseline gait parameters' / 'before the experimental intervention' / 'All baseline data are listed in detail in the Results section'.",
+      "Figures 2-4 show the participant with headset and mask (no identifiable face); figure 4 tennis and bowling scoreboards print a player user-name (direct identifier category), not copied into any authored file."
+    ],
+    "residual_risks": [
+      "Step cadence T2 printed as 298 steps/min is implausible against neighbours (129, 151) but no source contradiction exists; kept include as printed.",
+      "Table 1 exercise rows are summarized in procedure facts rather than itemized.",
+      "MMSE/EDSS have no stated time and are unlinked to the timeline; pre-study history events (2013, 2019, MRI, vestibular tests) are not ordered against the study evaluations.",
+      "Whole iTUG total-time series is review_only in the measurement-series sidecar because series scoring is series-level."
+    ]
+  },
+  "physician_adjudicated": false
+}

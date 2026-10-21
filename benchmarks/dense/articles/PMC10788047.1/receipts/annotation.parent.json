@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC10788047.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "03463adc7da897cdd05270a1402587eede72623bda55147453c70e5cd739c614",
+  "annotation_sha256": "c65cc3b94b5f3951e7d769d76b82a5486402158d7fb983eb6b94f91091f81bd0",
+  "reviewed_at": "2026-10-21T13:16:23.107735+00:00",
+  "source_segments_read": 29,
+  "facts_reviewed": 67,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Applied the adjacent-sentence rule to \"no recurrence\" (p1-f052) and \"resumed activities\" (p1-f053): time \"At the one-year follow-up\" from the immediately preceding sentence naming that assessment, both sentences quoted.",
+    "Split the merged text+caption flexion/abduction facts: p1-f055/p1-f056 now carry only the untimed text sentence; added p1-f062/p1-f063 for the Figure 11/12 caption statements with their own one-year postoperative time.",
+    "Added Figure 7-10 caption observations (p1-f064 to p1-f067) for postoperative left and right shoulder radiographs; Figure 9 caption view (scapular Y) kept review_only/ambiguous because the image prints \"AP\".",
+    "Added side-specific events p1-e18 (left postoperative radiographs) and p1-e19 (right postoperative radiographs) with relations left surgery -> e18 and right surgery -> e19 from the captions.",
+    "Moved general anesthesia and coracoid transfer facts off the left-surgery event into a side-neutral operative technique event (with labral repair, capsular plication and the 2cm coracoid caption fact); added ambiguity.",
+    "Added relations: radiographs/CT (glenoid bone loss) -> surgical decision (\"Given ... presence of glenoid bone loss\"); right surgery -> one-year follow-up (\"compared to the preoperative condition\" in both shoulders and the one-year postoperative bilateral external rotation caption).",
+    "Added relations: diagnosis -> surgical decision (\"Given the bilateral nature of the shoulder instability and the presence of glenoid bone loss\"); informed consent -> operative technique event (consent for the Latarjet procedure -> the Latarjet procedure was performed).",
+    "Added the exam range-of-motion sentence to the exam -> follow-up relation evidence beside the preoperative-comparison quote.",
+    "Added ambiguities for the Figure 9 view and the text/caption range-of-motion split; rewrote the timing ambiguity and the Figure 1-3 and Figure 9 limitations; added a limitation for the unrecorded positioning sentence."
+  ],
+  "unresolved": [
+    "Visual status of figures in this annotation stays not_inspected; actual pixels are reviewed in visual.json.",
+    "The case gives no calendar dates; the right-sided operation is \"one month later\" than the left and the one-year follow-up is not anchored to either operation.",
+    "Figures 1 to 3 captions locate the CT and MRI findings in the right shoulder while the text findings are bilateral; the caption findings are kept as separate right-shoulder observations. Figure 4 to 6 captions do not state the operated side.",
+    "The Figure 13 caption gives about 60-70 degrees external rotation while the text says nearly full; kept as separate facts, not merged.",
+    "The Figure 9 caption calls the radiograph a scapular Y view while the image prints \"AP\"; the caption fact is review_only and the projection is not resolved.",
+    "Discussion paragraphs describe literature and general recommendations; only sentences that literally say \"in our case\" or \"the patient\" are attributed to the index patient.",
+    "The patient positioning sentence (supine, propped up 30 degrees, sandbag under the right shoulder) is not recorded as a separate fact; it is not tied to either side of surgery."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 29,
+    "facts_reviewed": 67,
+    "figures_viewed": 13,
+    "key_findings": [
+      "Single index patient (24-year-old male boxing instructor); no calendar dates; right surgery one month after the left.",
+      "ED manual reduction kept action unknown (\"required\"); self-reduction and conservative immobilization/physiotherapy completed.",
+      "Figure 13 caption about 60-70 degrees external rotation and text nearly full kept as separate facts with an ambiguity.",
+      "Only the two \"In our case\" discussion sentences are attributed to the patient.",
+      "NO-BORROWING warnings on p1-f052/p1-f053 are checker false positives under the adjacent-sentence ruling (preceding sentence names the one-year follow-up)."
+    ],
+    "residual_risks": [
+      "The one-year follow-up is not anchored to the left or right operation.",
+      "Operative technique facts are not assigned to a side; Figures 4-6 do not state the side.",
+      "Text postoperative radiographs (Figures 7-10 cited) and side-specific caption radiograph events are separate events."
+    ]
+  },
+  "physician_adjudicated": false
+}

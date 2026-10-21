@@ -1,0 +1,70 @@
+{
+  "article_id": "PMC7593234.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4113a04baff3cd660d31f0b5164f72e385fbec17ba17ef2ab1cb10e6d82a7da5",
+  "annotation_sha256": "ae8ea66273cbb62c4d01ee6c50b5a7c6058c3170ad95dfe6e7820bc3ce15cf1d",
+  "reviewed_at": "2026-10-21T08:30:45.988965+00:00",
+  "source_segments_read": 39,
+  "facts_reviewed": 174,
+  "patients_reviewed": 6,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added Table 1 row evidence to each documented_sex fact (Sex column of the same-numbered case).",
+    "p1-f025 regimen 're-administered after the relapse' -> 're-administered' (removed inferred order).",
+    "Added p1-f027 intolerance of prior acitretin/psoralen-UVA/MTX/CsA ('These treatments were not tolerated').",
+    "Added Figure 2 caption facts p1-f028 (baseline numerous pustules on scaled red skin, palms and soles) and p1-f029 (partial remission and reduced inflammation after 5 weeks), new event p1-e10 with relation p1-e03 before p1-e10.",
+    "Added Figure 3 caption facts p2-f033 (baseline conflating pustules, left sole) and p2-f034 (substantial decrease after 12 weeks), new event p2-e07 with relation p2-e03 before p2-e07.",
+    "Added p2-f031 text PGA = 4 before improvement (not merged with Table 1 baseline, consistent with other patients).",
+    "Added p2-f032 adverse effects (e.g., infections) of biologic treatments; linked to p2-e02 and the infection ambiguity.",
+    "p3-f022 depressive episode role complication -> unknown (causation not stated).",
+    "Removed explicit null indication on p4-f023.",
+    "Added relations p1-e06 before p1-e07 ('1 week before the visit'), p2-e03 before p2-e05 (adjacent-sentence 'After 4 weeks'), p3-e06 before p3-e09 ('reintroduced'), p6-e06 before p6-e07 (week 12 vs after 6 months).",
+    "p6 prednisolone relation changed from p6-e03 before p6-e04 to p6-e04 during p6-e03 ('several weeks both before and initially during the first days of apremilast treatment').",
+    "time_precision range for bare 'within X' events and approximate for 'several days' events.",
+    "Summaries: p1 'within days' -> 'Several days after'; p4 removed unsupported 'had not controlled disease'; p1/p2 summaries cite new caption facts.",
+    "Article limitations: case-number mapping decision, systematic +1 age offset, Figure 1 patient 6 single 0 label vs Table 1 two values."
+  ],
+  "unresolved": [
+    "Ages differ between the Results paragraphs and Table 1 for all six patients (one digit for five, a larger gap for patient 3); all age facts are review_only and no age appears in labels or summaries.",
+    "Table 2 drug lists differ from the text for patient 2 (ETN, methotrexate and glucocorticosteroids marked in the table only; secukinumab named in the text only); ETN is not expanded in the table footnote.",
+    "Cohort aggregate statements about PGA at 4 weeks and 12 weeks (b00022) are not copied to individuals and do not exactly match the individual paragraphs (for example more than one patient at PGA 2 at 4 weeks individually, and palms PGA 2 for patient 6 at week 12 against two PGA 0 patients in the aggregate).",
+    "Patient 6 week 12 text says disease activity decreased to PGA 2 after PGA 1 at four weeks.",
+    "Figure 1 values are pixel content and kept in visual.json only; its legend labels the end of observation as 18 months although two patients were followed 6 months.",
+    "Disease duration in Table 1 equals the text diagnosis intervals; it was not added as separate facts.",
+    "Abstract and methods follow-up statements (four patients 18 months, two 6 months) are not attributed to individuals except through Table 1 per-case rows.",
+    "Parent decision: Table 1/Table 2 'Case N' rows are attributed to text 'Patient N' by the article's own identical numbering of its six-patient series (figure captions also say 'patient 1'/'patient 2'); this is a printed label, not attribute matching, and sex, disease duration and comorbidities agree. The source never states the mapping explicitly.",
+    "Five of six Table 1 ages exceed the text age by exactly one year, which may reflect different reference times that the source does not state; kept as ambiguities. Patient 3 (54 vs 48) is a source conflict.",
+    "Figure 1 prints a single end-of-observation label 0 for patient 6, while Table 1 gives 0 (soles) 1 (palms); pixel values stay in visual.json only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 39,
+    "facts_reviewed": 174,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Six-patient PPPP/apremilast series; Table 1/2 Case N mapped to text Patient N by the article's identical numbering (accepted as literal label, corroborated by sex, disease duration and comorbidities).",
+      "All six ages differ text vs Table 1: five by +1 year kept as ambiguities, patient 3 (54 vs 48) source_conflict; all review_only, none in labels or summaries.",
+      "p2 Table 2 vs text drug discrepancy (ETN/MTX/GCS table-only, secukinumab text-only) kept as ambiguity; ETN not expanded.",
+      "'All six patients' sentences (prior topical GCs, apremilast titration in all patients, mild GI effects) correctly copied; aggregate PGA sentences not copied.",
+      "p6 TNF-alpha inhibitor 'discontinued ... in order to initiate' is a treatment decision, recorded planned; p6 week 12 'decreased to PGA = 2' recorded literally with ambiguity.",
+      "Text PGA values equal to Table 1 baseline kept separate (source does not identify the time points as the same)."
+    ],
+    "residual_risks": [
+      "Case-to-patient mapping rests on numbering identity, never stated.",
+      "Table 2 GCS column blank for p1/p3 although methods say all six had topical GCs; treated as different drug classes, not a conflict.",
+      "Figure 1 legend '18 month' vs 6-month follow-up for p4/p6 left unresolved (visual.json only)."
+    ]
+  },
+  "physician_adjudicated": false
+}

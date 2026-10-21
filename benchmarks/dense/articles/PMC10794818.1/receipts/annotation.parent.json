@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC10794818.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "253df67b47f857d84ecdbb3e1da6af968b603b36e44353b5c280c585b197b4e7",
+  "annotation_sha256": "173e8980a94cbe756ae010462558b68bd58b02cd6e09ceeb1b7c7ad6798ebe5c",
+  "reviewed_at": "2026-10-21T13:50:00.760075+00:00",
+  "source_segments_read": 30,
+  "facts_reviewed": 83,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Split the case-text TTE (p1-f033, IVSd 14 mm p1-f052) from the Day 1 summary-row echocardiogram: removed the borrowed Day 1 time and row evidence; added p1-f079 (Day 1 echocardiogram) and p1-f080 (Day 1 maximum septal diameter 14 mm). The source never identifies them as the same measurement.",
+    "Split the case-text cMRI (p1-f035, IVSd up to 18 mm p1-f057, mid-myocardial LGE p1-f058) from the Day 2 summary row: removed the borrowed Day 2 time and row evidence; added p1-f081 (Day 2 cMRI), p1-f082 (maximum septal diameter 18 mm) and p1-f083 (septal LGE).",
+    "Events: Day 1 event p1-e06 and Day 2 event p1-e08 now hold only the summary-row items; new p1-e14 holds the case-text cMRI, septal HCM and the suspected VT focus; text TTE/angiogram event p1-e07 rewritten.",
+    "Electrophysiology mapping study \"bypassed\" (p1-f036): changed from a cancelled procedure to an observation with status not_performed / result_absent_reason not_performed / assertion present (no prior plan is stated, so \"cancelled\" was inferred); moved to its own not_occurred event p1-e15.",
+    "Suspected VT focus p1-f016: kept possible/provisional (literal \"suspected\"/\"belief\") and changed from ambiguous/review_only to supported/include; the Day 2 row wording \"localized\" is recorded as an ambiguity, not a confirmed focus.",
+    "\"for 4 days\" scope: duration kept only on the adjacent intermittent chest pain (p1-f020); removed from palpitations (p1-f018) and presyncope (p1-f019); ambiguity and summary wording updated.",
+    "Relations: expanded e09->e10 evidence to the adjacent Repeat TTE sentence that \"then\" refers to; added the 4 months/1 year summary-row times to e12->e13; added e03->e05 (At emergency room presentation / Intensive care unit admission rows, initially/ultimately), e02->e06/e07/e14 (presentation opens the stay -> in-hospital workup, order only), e14->e09 (\"imaging data thus far ... target of ablation\"), e05->e10 and e04->e10 (in-hospital care/events of the stay -> discharge, order only), e10->e11 (discharge/ICD -> 3-month follow-up, no defibrillator shocks), e11->e12 (3 months / 4 months rows).",
+    "Ambiguities: rewrote the merge ambiguity (studies kept separate), the 4-day scope ambiguity and the catheterization ambiguity (ambiguity, not a source conflict); added the \"localized\" vs \"suspected\" VT focus ambiguity. Limitations updated (split; Figure 2A printed IVSd stays pixel content).",
+    "Source coverage: b00024 conclusion is cited for p1-f012 and now marked patient_facts for p1."
+  ],
+  "unresolved": [
+    "Summary-figure table rows use Day 1, Day 2 and Day 5 and later 3 months, 4 months and 1 year labels without a named anchor; no calendar dates are stated.",
+    "Case-text echocardiogram and cardiac MRI values and the Day 1/Day 2 summary-row studies are kept as separate items because the source does not identify them as the same measurement or time point.",
+    "Several alternative ablation strategies (simultaneous epicardial-endocardial ablation, bipolar ablation, surgical myectomy) were considered but not recorded as items because no plan or performance is stated; radiofrequency ablation is recorded as recommended.",
+    "The statement that the true LVOT gradient was suspected to be significantly higher is hedged and is not recorded as a fact.",
+    "The supplementary video is a cardiac MRI cine clip referenced as supplementary material in the case text; it is reviewed in the supplement manifest by sampled frames only, and no clinical facts are taken from it.",
+    "The unassigned inline image ytad632il1.jpg belongs to the lead author biography, is not a patient asset and was not reviewed as clinical media.",
+    "Visual status in the figure rows is not_inspected; actual image analysis is in the separate visual target.",
+    "Figure 2A prints an on-screen IVSd measurement; image-printed values stay in visual.json and are not recorded as facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 30,
+    "facts_reviewed": 83,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient, 66-year-old man with monomorphic VT storm and septal HCM treated with TCEA (Day 5), ICD and later amiodarone; no calendar dates.",
+      "Aortic stenosis p1-f017 absent/refuted is supported: \"misinterpreted as aortic stenosis\" is the misdiagnosed wording of the rulings; the EVID-NEGATION warning is a checker false positive.",
+      "Day 1 \"normal coronaries\" vs text \"patent stents and non-obstructive CAD\" are not identified as the same procedure: ambiguity, both items kept.",
+      "Amiodarone 100 mg daily at 1 year stays administered (\"Stable on\", \"takes\"); RFA recommendation stays recommended; considered strategies and the hedged higher-gradient remark stay limitations/ambiguities.",
+      "OBS-FLAG needs_review suggestion for p1-f050 (presenting ECG \"normal axis\") rejected: the result is VT, flag stays unknown.",
+      "All three figures viewed at full resolution with crops; supplement MP4 frames (0, 1, 2 s) viewed."
+    ],
+    "residual_risks": [
+      "Day N and \"N months later\" summary rows have no stated anchor; the text and summary-row echo/cMRI may in fact be the same studies.",
+      "In-hospital order-only relations from presentation to the Day 1 row rely on the stay rule."
+    ]
+  },
+  "physician_adjudicated": false
+}

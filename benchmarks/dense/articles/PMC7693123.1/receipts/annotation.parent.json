@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC7693123.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ea2c88eedabccde14fee993e318985a1a6561e29b5f7768a63677ae79fbe2ae3",
+  "annotation_sha256": "1709f5a8b399729ad2c5d58fe4ac3b4ff9f8195293c16cc10bac5c321ff8866d",
+  "reviewed_at": "2026-10-21T04:13:54.495717+00:00",
+  "source_segments_read": 46,
+  "facts_reviewed": 179,
+  "patients_reviewed": 6,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Repeat chest CT interval ruled a source conflict (case text/Abstract/Introduction/captions/b00006: 4 months from onset, about 3 months from discharge; Discussion b00036: 3 months from onset, about 2 months from discharge): per patient the time attribute is quarantined in two review_only procedure facts (case-text side with time \"4 months from the onset of symptoms\"; Discussion side with time \"after 3 months from the onset of symptoms\", covered by \"Our six confirmed COVID-19 cases ... The patients\"); the follow-up CT findings stay include with quotes trimmed to the findings clause and no time.",
+    "Removed the disputed 4-month interval from patient labels, the follow-up event description/time_text and the summaries; figure panel descriptions now say follow-up CT instead of CT at 4 months.",
+    "Case 6 air bubble sign finding: quote trimmed to its own clause; time removed (quarantined with the other repeat-CT facts).",
+    "Smoking (b00005): kept the explicit all-patient \"None of our patients were smokers\" statement for Cases 1, 2, 4, 5, 6 (not contradicted for them); Case 3 smoker clause and 20-pack-year history stay source_conflict review_only; Case 3 smoking-related-lung-disease absence upgraded to supported/include because her smoking history contradicts only the smoker clause.",
+    "Added \"previously in good health\" (Case 1) and \"previously healthy\" (Case 4) as historical prior-health-status items in symptoms_function.",
+    "Added per patient the Abstract all-patient statement that all patients were completely asymptomatic at the follow-up CT (symptoms absent), linked to the outcome event.",
+    "Admission CT for Cases 2-6: added the all-six series quote (b00004 \"a series of six patients ... underwent unenhanced chest CT at first assessment\") as evidence for the unenhanced attribute; observation method set to the case-text wording \"chest CT\".",
+    "Presentation events: removed non-time phrases (e.g. \"admitted to the hospital\") from time_text; now order_only with null time.",
+    "Added literal/ruling-sanctioned relations per patient: presentation before in-hospital isolation/treatment, admission chest CT before discharge (12 relations added).",
+    "Updated ambiguities (interval conflict, Figure 7 admission-vs-onset anchor as an ambiguity, Case 3 smoking conflict), source_coverage for b00036 and article limitations."
+  ],
+  "unresolved": [
+    "Figure pixels are reviewed in visual.json; annotation figure rows keep caption-only descriptions.",
+    "Source conflict on the repeat chest CT interval: the Discussion gives 3 months from onset and about 2 months from discharge, while the case text, Abstract, Introduction, captions and Case Series paragraph give 4 months and about 3 months. The time attribute is quarantined (review_only) on both sides; the CT findings are accepted without a time. The Figure 7 caption anchors the same 4 months to admission rather than onset (ambiguity).",
+    "Series-level statements (RT-PCR positivity, isolation, treatment, discharge after 4 weeks, resolution) are copied to individuals only where the sentence explicitly covers all six patients; antibiotic and symptomatic drug names are not stated.",
+    "The statement that none of the patients were smokers conflicts with Case 3's 20-pack-year smoking history; both smoking statements stay review_only for Case 3. The sentence explicitly covers all six patients and is not contradicted for Cases 1, 2 and 4 to 6, so it is kept for them; its lung-disease clause is kept for all six.",
+    "Case 3 to 5 lab values after the first named result are not individually called normal in the text and carry no flag."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 46,
+    "facts_reviewed": 179,
+    "figures_viewed": 7,
+    "key_findings": [
+      "Six individuated index patients (Cases 1-6), roster complete; each case paragraph and figure callout attributed correctly; Figures 4 and 5 both belong to Case 4.",
+      "Laboratory flags follow the literal wording: Case 2 slightly decreased WBC low, ALC normal, PCT/CRP/sO2 within normal limits; Cases 3-5 only WBC called normal (other values unflagged); Case 6 neutrophilia high, lymphopenia low, elevated CRP and LDH high; Case 1 all labs normal.",
+      "Series-level hospital-course sentence b00006 (isolation, symptomatic and antibiotic treatment, no oxygen, discharge after 4 weeks with two negative samples) explicitly covers all patients (\"In all six cases\", \"all patients\") and is copied; no drug names exist in the source.",
+      "Repeat-CT interval 4 vs 3 months is a source conflict quarantined on both sides; Figure 7 caption admission anchor is an ambiguity.",
+      "All 7 figures (32 CT panels) viewed at full resolution with crops; no burned-in identifiers, faces or sensitive anatomy."
+    ],
+    "residual_risks": [
+      "The all-patient non-smoker statement is demonstrably wrong for Case 3, so its reliability for the other five is limited; kept because the sentence literally covers them.",
+      "visual.json needs agent corrections (stray thin arrows in Figure 3b/3e described as lines; several panels lack explicit arrow counts); figure sidecar parent receipts not signed yet.",
+      "Laterality of findings is not inferred from image-left/right; captions/text only."
+    ]
+  },
+  "physician_adjudicated": false
+}

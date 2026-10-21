@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC11708826.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "524e02aa39169885072b00943a38180072de08ffa4d30eb9b2b22307c939ee19",
+  "annotation_sha256": "e5aaff26b3cd54a52f6d38d7b49bfacf61ad468bdc144cba33695ce09924c9d5",
+  "reviewed_at": "2026-10-21T14:09:20.334274+00:00",
+  "source_segments_read": 51,
+  "facts_reviewed": 90,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f069 refused referral: action_text restored to the literal 'Referral to a counsellor or psychiatrist' (the draft narrowed it to 'a counsellor'); X-or-Y target, so certainty ambiguous, scoring review_only, quoting only the text sentence.",
+    "Added p1-f088: Table 2 barrier 'refused referral to a counsellor or psychologist' (declined, review_only): the table names a different second professional and the source does not identify it as the same refusal, so not merged.",
+    "Added p1-f089/p1-f090: 'There was no feature suggesting depression and post-stroke dementia' recorded as absent findings (symptoms_function, mental_status). 'No feature suggesting X' is a negative clinical finding, unlike 'no suspicion of X'; no condition-level absent depression/dementia was added.",
+    "p1-f077 cognitive therapy sessions: action_status completed -> unknown ('difficult to intensify due to the long interval between sessions' does not state completion).",
+    "Relations: removed the meaningless e07 -> e16 'unknown' placeholder; added b00005 'initially' evidence to e03 -> e05; added e06 -> e07 (CT showing recent infarctions -> treated for young stroke), e06 -> e16 (hospital CT -> 'later discharged'), e16 -> e10 (discharge to primary care -> health clinic FMS assessment), e11 -> e14 (MoCA 24 -> 'improved to 30/30'), e13 -> e14 ('responded favourably to the rehabilitation goals').",
+    "Events: e10 evidence adds the sentence tying Table 1 to the FMS assessment; e11 includes the new absent depression/dementia findings; e13 includes p1-f088 and the '(Table 2)' plan sentence.",
+    "Summary claim 2 no longer states the review-only referral; claim 3 adds the Two Questions with Help Question result and the absent depression/dementia features.",
+    "Ambiguities rewritten for the referral (both review-only) and for the absent depression features beside earlier low mood and the checklist mood 'Yes'; limitations updated."
+  ],
+  "unresolved": [
+    "The source has no figures, no supplementary material and no media; raw.xml contains no supplementary-material element.",
+    "Almost no event has a calendar date; only the stroke month (April 2022), the first-week interval to the second episode and the 6-week MoCA interval are timed, so most events are ordered only where the text states order.",
+    "The post-stroke checklist rows, Table 2 and the MoCA domain Table 3 are stated without per-item dates; Table 3 is general background.",
+    "The refused referral is a counsellor or psychiatrist in the text and a counsellor or psychologist in Table 2; both are review-only.",
+    "The post-stroke checklist mood item (anxious or depressed) is review-only because it joins two states.",
+    "The MoCA paragraph opens with 'Thereafter' after Table 1; as a paragraph-opening order word it is not used to order the MoCA after the specialist assessment."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 51,
+    "facts_reviewed": 90,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient (42-year-old Malay man, multifocal lacunar infarctions, mild cognitive impairment); roster 1. raw.xml has three table-wrap elements and no fig, graphic, media or supplementary-material element: no figures or supplements.",
+      "Table 1 post-stroke checklist rows are tied to the FMS health-clinic assessment by 'A post-stroke checklist (PSC) was also used ... (Table 1)'; neither the caption nor the text gives a date, so the rows stay untimed. 'No' rows are absent; the mood row 'more anxious or depressed' is X-or-Y and review-only; secondary-prevention 'Yes' is completed counseling.",
+      "Musculoskeletal pain kept as a confirmed outpatient diagnosis ('was diagnosed with'); the source never calls it a misdiagnosis.",
+      "Stroke time 'April 2022' (abstract) is consistent with '2022' (case text); a month-year in text is an ordinary calendar time (corpus precedent 2022-04, precision exact).",
+      "'Thereafter' opening the MoCA paragraph after Table 1 is treated like a paragraph-opening 'Subsequently' and does not order the MoCA after the FMS assessment.",
+      "Normal neurological findings at the private clinic and at the FMS assessment vs hemiparesis at the second episode are separate time points (ambiguity, not conflict). Wife kept as social support from the intervention-plan sentence.",
+      "Table 3 (MoCA domains) is general background, not patient data."
+    ],
+    "residual_risks": [
+      "Few events carry times; e09 (low-mood visit) and e10 (FMS assessment) at the same health clinic are not ordered or merged because the source does not identify them as one visit.",
+      "The referral refusal is review-only in both statements, so no included declined-referral item remains."
+    ]
+  },
+  "physician_adjudicated": false
+}

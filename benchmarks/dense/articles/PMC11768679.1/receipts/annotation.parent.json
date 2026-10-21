@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC11768679.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0423daa50b5403bac08a53effcb2bbe540a9381331bdc3d5644570dca0a422fb",
+  "annotation_sha256": "1cd71aabf3c414ea79fa9fef93a3c311bc02263181821f84b489862c2c3a2b75",
+  "reviewed_at": "2026-10-21T14:06:43.841359+00:00",
+  "source_segments_read": 25,
+  "facts_reviewed": 73,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Table 1 ABG rows (pH, PCO2, PO2, SPO2, HCO3; p1-f037..f041) now carry time \"two weeks after admission\" (after, anchor admission): the sentence stating that time names the ABG and refers to Table 1; that sentence added as second evidence; ABG event p1-e16 timed accordingly. Values, range-cell units and the printed 75-11 mmHg range unchanged; no flags.",
+    "SpO2 87% on 3 L nasal cannula (p1-f035) takes \"Ten days later\" from the preceding sentence, which names the desaturation (same assessment); both quotes kept. MAP 65 and dopamine (0.2 mg) are not named by that sentence: no time, moved out of the timed deterioration event into new untimed event p1-e24.",
+    "Chronic constipation (p1-f014) unlinked from the two-weeks deterioration event (standing comorbidity named as the reason, not an event of that day).",
+    "Discharge oxygen: both carrier facts (p1-f048 98% on room air, p1-f064 discharge with supplemental oxygen) kept source_conflict/review_only with notes naming the conflicting attribute (oxygen support at discharge); discharge outcome p1-f065 stays include; ambiguity and limitation reworded.",
+    "\"kept on oxygen\" (p1-f055) action unknown -> completed (kept on = maintained/given).",
+    "Added p1-f073 gastric distension (huge distension of the stomach pushing the lungs, b00005), linked to event p1-e08.",
+    "Relations 7 -> 22: ED presentation -> CXR/CTA, labs, antibiotics, NGT, omeprazole (stay-opening rule); admission -> Ten days later deterioration, two-weeks respiratory failure, ABG, subsequent chest CT (stay rule; \"two weeks after admission\"); pulmonology advice same_time omeprazole/OGD scheduling (\"Concurrently\"); respiratory failure attributed to constipation -> laxatives and improvement; diuretics -> \"Eventually\" stabilized; NGT, diuretics, laxatives -> discharge (in-hospital care -> discharge; discharged without NGT). No order between the two deterioration episodes (different anchors).",
+    "Added ambiguity for the SpO2/MAP/dopamine time split; ABG ambiguity reworded for the attached time."
+  ],
+  "unresolved": [
+    "Visual status of figures in this annotation stays not_inspected; actual pixels are reviewed in visual.json.",
+    "Oxygen support at discharge conflicts between the case text (98% on room air) and the conclusions (discharge with supplemental oxygen); both carrier facts are review_only.",
+    "Table 1 (ABG) takes its time (two weeks after admission) from the sentence that names the ABG; the PO2 reference range is printed as 75-11 mmHg; the nasogastric drainage volume is printed as \"2 lL\".",
+    "Whether the Ten days later deterioration and the two-weeks-after-admission respiratory failure are the same episode is not stated; they have different anchors and no order is asserted between them.",
+    "The result of the planned Doppler ultrasound and any later anticoagulation are not reported; the Type IV classification appears only in the abstract.",
+    "Discussion statements about mechanisms (chronic pressure, blood stasis) and surgical repair with literature citations are interpretation or general background and are not recorded as facts.",
+    "No supplementary material is listed in raw.xml or source.json."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 25,
+    "facts_reviewed": 73,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single 83-year-old woman with a large (abstract: Type IV) paraesophageal hernia, coffee ground vomiting, right pulmonary artery embolism and respiratory failure; roster 1, complete.",
+      "Discharge oxygen is a categorical source conflict (room air vs supplemental oxygen); only its two carrier facts are review_only.",
+      "Table 1 ABG takes the time of the sentence that names it; MAP/dopamine stay untimed.",
+      "Soft calls confirmed: advice against anticoagulation = recommended care plan; pulmonary hypertension possible/provisional; organo-axial rotation present with verification unknown (discussion, literal \"In this case\"); \"2 lL\" kept as printed; Type IV abstract-only note; congenital diaphragmatic vs congenital paraesophageal and upon-discharge vs before-discharge CXR kept as ambiguities.",
+      "No supplementary material in raw.xml or source.json. All three figures viewed at full resolution with corner crops."
+    ],
+    "residual_risks": [
+      "Gate warning NO-BORROWING on p1-f035 is a checker false positive under the orchestrator result-sentence ruling (preceding sentence names the desaturation and its time).",
+      "Laxatives -> improvement ordered after the constipation-attributed deterioration from the causal chain in b00009.",
+      "Fig 3 burned-in partial date-like stamp is flagged direct_identifiers (value not stored)."
+    ]
+  },
+  "physician_adjudicated": false
+}

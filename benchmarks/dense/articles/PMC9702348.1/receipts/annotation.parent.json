@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC9702348.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1967f695536c6010d544d602e2ef4b8b7eef37a2dbfe83b0f0c2ade0d3f69006",
+  "annotation_sha256": "c2a4c5ccbb6ec56fb9606fb91e21126a6f6f715cdf9f4ca776a243c2418b28db",
+  "reviewed_at": "2026-10-21T09:25:09.324703+00:00",
+  "source_segments_read": 30,
+  "facts_reviewed": 78,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added flag high to baseline AHI, SAHI and 90% CPAP pressure for both patients from the literal both-patient sentence \"both patients had high AHI, SAHI, and CPAP therapeutic pressures\" (b00020).",
+    "Added p1-f037/p2-f041 symptoms_function sign: no other positive physical findings (b00020, literally both patients).",
+    "Jaw recession kept review_only; ambiguity now also cites the b00020 both-patient sentence (it does not name jaw recession; b00018 does not name the patients).",
+    "Removed the Table 2 \"AHI after all-night CPAP\" fact from the titration event (not stated to be the titration night); new test events p1-e10/p2-e10.",
+    "Replaced the unsupported relation home CPAP use -> \"after treatment\" outcomes with a CPAP treatment event (p1-e11/p2-e11) before the outcomes, quoting \"reported from both patients after treatment\".",
+    "Split regular follow-up into follow_up events p1-e12/p2-e12 ordered after discharge (\"After leaving the hospital ... have been receiving regular follow-up\").",
+    "Added relations: snoring duration overlaps the dated visit (both patients); p1 cervical internal fixation before UACT (\"Postoperative changes in the cervical spine\").",
+    "Rewrote outcome summaries to drop the implied order between home CPAP use and the reported improvement; removed review_only p2-f021 from the p2 summary.",
+    "jats-graphic-1 attribution notes and article limitations: graphical-abstract graphic is a lower-resolution pixel copy of the Figure 2 asset; text attribution stays unresolved."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual images inspected in the separate visual target.",
+    "Table 1 prints N/A for jaw recession in both cases; recorded as review_only, not as a stated negative.",
+    "Discussion sentences without patient labels (no typical physical findings, CPAP recommended) are not assigned as literal facts to a patient.",
+    "Post-treatment AHI in the text and AHI after all-night CPAP in Table 2 are kept as separate items.",
+    "Figure captions give population comparison diameters for OSA-free males; they are not patient reference ranges and are not recorded as facts.",
+    "The graphical-abstract graphic jats-graphic-1 is a lower-resolution pixel copy of Figure 2; it has no caption and its text attribution is unresolved.",
+    "Post-treatment AHI (text) and AHI after all-night CPAP (Table 2) carry the same numbers but are not identified by the source as the same measurement; kept separate.",
+    "In-hospital tests (UACT, PSG, titration, laryngoscopy) are not stated to have occurred within the dated hospital visit; no admission-to-test order is asserted."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 30,
+    "facts_reviewed": 78,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Text and Table 2 merges for AHI, SAHI, minSat and 90% CPAP pressure are supported by \"see Table 2\"/\"PSG results\" and the single titration per patient.",
+      "Post-treatment AHI (text) and AHI after all-night CPAP (Table 2) kept separate with an ambiguity: same numbers, not identified as the same measurement.",
+      "ESS 8/13 and post-treatment AHI 11/8.8 by \"respectively\"; discharge home, CPAP use, follow-up, compliance and improvement by literal \"both patients\".",
+      "CPAP \"recommended by the physician\" and p2 \"no history of medical intervention or treatment for this condition\" stay review_only.",
+      "Caption population comparison diameters are not patient facts.",
+      "jats-graphic-1 (graphical abstract) is pixel-identical to Figure 2 at lower resolution (mean grey difference about 1 of 255)."
+    ],
+    "residual_risks": [
+      "Whether the UACT, PSG, titration and laryngoscopy happened within the dated hospital visit is not stated; no admission-to-test order asserted.",
+      "Jaw recession per patient remains unresolved (Table 1 N/A)."
+    ]
+  },
+  "physician_adjudicated": false
+}

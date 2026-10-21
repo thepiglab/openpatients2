@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC5705871.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "0af1a93e6456eff14c9c0bbeedb8c5d9959d36e64771df5e7d210369275569d2",
+  "annotation_sha256": "4f7959fc14570a5638c0b79f68f4548f3daf1c7daa11bbe18541948daaaa6711",
+  "reviewed_at": "2026-10-21T03:51:37.351353+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 71,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f027 glycemia 88 mg/dl: flag unknown -> normal (source says \"normoglycemic glycosuria\").",
+    "p1-f058 HBV vaccination: action historical -> administered and temporality historical -> unknown (no history label in the evidence).",
+    "Added relation p1-e05 before p1-e06 (\"Further laboratory tests confirmed ... progressively worsening\" after the detected hypertransaminasemia).",
+    "Added relation p1-e07 before p1-e08 (acute HBV diagnosis formulated, then tenofovir started for that existing hepatitis B).",
+    "Hedged-causality ambiguity: added the Table 1 Our case row quote that carries the Ifosfamide, Cisplatin risk-factor cell it describes.",
+    "Figure ambiguity reworded: phosphatemia 1.9 mg/dl stays scored because the text states it independently; Figure 1 printed labels remain pixel-only."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the actual Figure 1 image is inspected in a separate visual target.",
+    "Table 1 literature rows (cited reports) are aggregate background and are not assigned to the index patient; only the Our case row is patient data.",
+    "Table 1 Our case row states no time for its laboratory values; table cells are kept separate from text values with matching numbers.",
+    "Serum creatinine 0.47 mg/dl (table) versus urine creatinine 0.47 g/day (text) and 56% tubular absorption (text) versus phosphate fractional excretion 56% (table) are kept as review-only ambiguities.",
+    "Causal wording for TDF and chemotherapy contributions to the tubulopathy is hedged by the authors and is not recorded as an asserted cause.",
+    "Units printed as UI/ml, U/L and dot-separated digits are kept literally; no unit conversion or numeric parse of dot-separated values.",
+    "Figure 1 values are pixel content only; no plot-derived values are used."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 71,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (12-year-old male, femoral osteosarcoma, acute HBV, TDF-associated Fanconi syndrome); Table 1 literature rows are cited cases kept out of the record.",
+      "Creatinine 0.47 (table serum mg/dl vs text urine g/day) and 56% (table phosphate fractional excretion vs text reduced tubular absorption) are same-number label mismatches, not two numbers for one value: ambiguities, both sides review_only.",
+      "Table 1 Our case cells state no time and the source never says the row is the 5-month measurement; kept separate from the matching text values (eGFR ml/min by MDRD vs GFR ml/min/1.73 m2).",
+      "Abstract \"severe acute HBV hepatitis\" grades the disease; case text \"moderate elevation in aminotransferases and INR\" grades the lab elevation; different attributes, kept as an ambiguity, not a conflict.",
+      "Fanconi syndrome confirmed; TDF causation hedged (\"possibly related\") so the adverse effect is possible; vaccine nonresponse provisional (\"considered\").",
+      "Remission recorded literally as \"Oncological disease\" with a separate tumor_ref t2 as a repeated assessment per the oncology prompt.",
+      "Figure 1 viewed at full resolution: printed phosphate labels 2,7 / 1,9 / 3,7, HBV-DNA unlabelled; visual.json has no plot estimates; no privacy flags needed."
+    ],
+    "residual_risks": [
+      "Relation p1-e13 before p1-e14 assumes the elliptical \"after 6 months\" shares the anchor \"this treatment\" of \"after 2 months of this treatment\" in the same sentence.",
+      "Maintain-NA-treatment decision kept in care_plans as a treatment goal rather than as a medication item.",
+      "measurement_series.json for Table 1 is draft-only and unsigned by the annotator."
+    ]
+  },
+  "physician_adjudicated": false
+}

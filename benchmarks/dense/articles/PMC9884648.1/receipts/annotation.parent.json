@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC9884648.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "73a0a6a6e2f245a25f567106fec8e3a169dd5fad31c7c4d16391839be865838f",
+  "annotation_sha256": "7d5e47394f9340bb3145125ca1a2b42bb0595314ffcb7b8a71faa638bd37e3af",
+  "reviewed_at": "2026-10-21T12:58:48.293202+00:00",
+  "source_segments_read": 23,
+  "facts_reviewed": 116,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Conditions: plasmablastic lymphoma clinical_status active -> unknown (not stated); EBV viremia and relapse role complication -> unknown.",
+    "Literal time anchors restored: ARV absence \"hospitalization\", CD4 count \"admission\".",
+    "Daratumumab (p1-f035, p1-f106, p1-e18): evidence did not name the drug; replaced with the consideration (CD38 positive) and insurance-delay sentences; oncology treatment linked to t1 via \"his lymphoma cells were CD38 positive\".",
+    "CT observations p1-f042..f044: added method CT; removed borrowed body_site chest from the pneumonia observation.",
+    "Tumor t1: added abstract quote identifying the FNA-sampled lesion as plasmablastic lymphoma; FNA biomarkers CD138, pan-CK and EBV ISH and flow CD38 now tumor_ref t1; liver-biopsy and other flow markers stay unlinked (new ambiguity).",
+    "Relapse tumor t2: chest site removed from primary_site (relapse site, not origin) and kept in the name.",
+    "Relapse condition/outcome p1-f013, p1-f112: literal time \"for five months after which\" anchored to remission.",
+    "Palliative care plan p1-f109: removed paraphrased target.",
+    "Added p1-f115 social_exposures access_to_care (insurance-related barriers) and p1-f116 care_plans continual follow-up (completed).",
+    "Events: added p1-e26 presentation for evaluation of newly diagnosed plasma cell malignancy, p1-e27 CD4 count at admission (moved p1-f038 out of the history event), p1-e28 EBV viral load at discharge (split from p1-e15); time precision exact for unhedged relative times (e02, e20, e24).",
+    "Relations 9 -> 21: added history->presentation, outside presentation \"one week ago\"->presentation, liver biopsy->transfer (\"Subsequently\"), transfer->bone survey/bone marrow biopsy/PET-CT (stay opened by transfer), colonoscopy->FNA (\"the lesion\"), flow/FISH/PCR->diagnosis (\"At this point\"), CD38 result->daratumumab, first EBV value->discharge value, transfer->discharge value, first salvage PET-CT->repeat PET-CT.",
+    "CD4 ambiguity now cites the untimed b00009 restatement; summary updated for the presentation, daratumumab rationale/delay and follow-up."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three images are reviewed in visual.json.",
+    "CD4 count differs by one digit between the abstract (128) and the case text (124); case text recorded.",
+    "Overall disease status (remission, relapse) is recorded as time-specific outcomes and conditions rather than a single tumor status.",
+    "Discussion and conclusion segments are literature or general statements and are not copied to the patient.",
+    "The source gives no calendar dates; times are relative and literal."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 23,
+    "facts_reviewed": 116,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; abstract/introduction restate the case; discussion is literature only and not copied.",
+      "CD4 128 (abstract) vs 124 (case, twice): one-character print artefact recorded as an ambiguity; 124 at admission kept as the fact.",
+      "Remission \"about five months after initiation of treatment\" kept literal with no regimen relation (antiretroviral or chemotherapy ambiguous).",
+      "Bone survey negative vs CT/PET lytic lesions and colonoscopy 1.5 cm vs EUS 3.2 cm are separate tests, not conflicts.",
+      "Leiomyoma kept as possible/differential; plasma cell malignancy and pneumonia verification unknown.",
+      "Three microscopy figures viewed at full resolution: visual descriptions match pixels with no plot readings; no burned-in text, faces or sensitive anatomy."
+    ],
+    "residual_risks": [
+      "Chemotherapy, antiretroviral start and workup are not ordered against each other; the source gives no literal order.",
+      "\"With good tolerance\" of bortezomib-CHOP and the HIV-AIDS wording of the abstract are not structured as separate facts.",
+      "Ordering of in-stay workup after the transfer relies on the \"our institute\"/\"our hospital\" back-reference."
+    ]
+  },
+  "physician_adjudicated": false
+}

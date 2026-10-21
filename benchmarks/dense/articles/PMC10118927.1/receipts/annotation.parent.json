@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC10118927.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "bad6453c6d6f8afd01959700184e625f31a4da31c8745388b377dda462a6dc77",
+  "annotation_sha256": "7b5f0a15228dbf0ed77f4a78ca79b0e82ee83d4cefcc6eb3c5679c507da31983",
+  "reviewed_at": "2026-10-21T04:39:50.707512+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 35,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f008 multifocal oral melanoacanthoma: removed body_site borrowed from the examination sentence (only the upper lip mucosa was biopsied); added the literal abstract quote for \"multifocal oral melanoacanthoma\".",
+    "p1-f019/f022/f023 (thyroid scintigraphy, TSH 0.01, TRAB 2.68): removed the \"in 2014\" time; the 2014 date belongs to the diagnosis, which was \"based on\" these tests, and the test dates are not stated.",
+    "p1-f012 itching: body_site corrected to \"upper lip mucosa\" with the antecedent quote; added the same-sentence time \"in recent months\" (itching accompanied the reported growth).",
+    "p1-f011 growth: added the antecedent quote grounding the upper lip site of \"these patches\".",
+    "p1-f014 asymptomatic: quote extended to the full sentence that lists the lesion sites carried in body_site.",
+    "p1-f034 follow-up every 3 months: removed target borrowed from the b00013 sentence.",
+    "Graves diagnosis event p1-e01 no longer carries the 2014 tests; new untimed test event p1-e13 (scintigraphy, TSH, TRAB). Events: follow-up labs (TSH 1.33, FT4 0.87, cortisol 13.59) and \"no medication for Addison’s disease\" removed from the \"At the time of this report\" event (their sentence states no time); new untimed events p1-e11 (labs) and p1-e12 (no Addison medication, not_occurred).",
+    "Relations added: p1-e01 Graves diagnosis (medical history) before p1-e03 presentation; p1-e03 presentation (reported growth history) before p1-e07 biopsy (\"due to ... history of increased lesion size ... a biopsy ... was performed\"); p1-e07 -> p1-e08 now quotes both the biopsy and the histopathology report.",
+    "Summary paragraph 3 rewritten so the report time is not attached to the untimed labs.",
+    "Ambiguities reworded (itching vs asymptomatic and treated-and-monitored vs no Addison medication are ambiguities, not source conflicts; two FT4 values are two observations); added an ambiguity for the b00020 \"as in the patient described\" clause; f033 gains the abstract \"had not regressed\" quote."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two JPEGs were inspected in the separate visual submission.",
+    "Figure 2 panel letters printed on the image are transposed against the caption (hematoxylin-eosin appearance under printed labels C and D, HMB-45 appearance under printed labels A and B). figures[] follows the caption letters; visual.json describes the pixels as printed; the letter mapping is left unresolved.",
+    "Thyroid scintigraphy findings are not described; the timing of the 2014 blood tests relative to the diagnosis year is not stated.",
+    "Follow-up duration is not stated; the authors call it short."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 35,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (50-year-old woman) with Addison’s disease, Graves’ disease and multifocal oral melanoacanthoma; all 35 facts checked against quotes, polarity, units and times.",
+      "Figure 2 printed letters are transposed against the caption on the pixels (H&E row printed C/D with 100 and 50 µm bars, HMB-45 row printed A/B with 200 and 50 µm bars); figures[] keeps caption letters and the mapping is recorded as a limitation.",
+      "Cortisol normal flag is literal (\"the cortisol levels were within the normal range\"); TSH/FT4 in the same parenthesis stay unflagged; follow-up labs are untimed.",
+      "Tapazol 5 mg current is supported by \"At the time of this report ... using Tapazol 5 mg\"."
+    ],
+    "residual_risks": [
+      "Addison’s disease and \"the adrenal insufficiency\" are kept as two condition items; a prediction merging them matches only one.",
+      "Fig 1D shows no clearly visible tongue pigmentation at the published resolution; the tongue site rests on the text and caption.",
+      "Relative timing of the \"current\" FT4 2.04 and the follow-up FT4 0.87 is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

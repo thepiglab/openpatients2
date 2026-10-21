@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12452402.1",
+  "reviewer": "Claude Opus 5.5 parent",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "dcda5433077f90d5c18e123cdf351262b1535271d9818da37266e3e58f280e41",
+  "annotation_sha256": "48384e26bb8e718151efeaeb668c2b72949629784dfbca296dce3a49d328aa08",
+  "reviewed_at": "2026-10-21T08:20:38.499777+00:00",
+  "source_segments_read": 28,
+  "facts_reviewed": 31,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f005: removed invented text_value 'Noticed by the patient' (the evidence carries the wording).",
+    "p1-f020 (Figure 3C caption, maximum CM reaction at the 500 Hz area) merged into p1-f017: the text sentence cites Figure 3C and states the same finding; f017 now cites both quotes (ONE-STATEMENT).",
+    "Added p1-f030/p1-e08 pre-operative audiogram and p1-f031/p1-e09 audiogram at 12 months post-operatively from 'Audiograms taken pre-operatively and at 12 months post-operatively are shown in Figure 4A,B.'; thresholds stay pixel-only.",
+    "Added p1-f032/p1-e10 Figure 6 caption finding 'IFT was maintained at a very low level compared with the controls', timed by the caption lead 'Post-operative impedance field telemetry (IFT)'; kept separate from the untimed text statement p1-f028.",
+    "Added p1-e07 untimed NGS genetic diagnosis event (m.1555A > G), not merged with or ordered against the 2023 genetic testing event.",
+    "Added relations e08 before e04 (pre-operatively), e04 before e09 (12 months post-operatively), e08 before e09 (both times quoted from one sentence), e04 before e10 (Post-operative).",
+    "Replaced the untimed-results ambiguity to cover HP, speech audiometry, hearing level with EAS and the text impedance comparison and to note Figure 4C '12 months post-op' is image text only; added an ambiguity that the undated technique sentences are grouped with the February 2024 electrode use without copying the date to the technique facts.",
+    "Rewrote the three summary claims to cover the added audiogram and caption IFT facts and the merged CM finding."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual figure pixels are inspected in the separate visual submission.",
+    "Control-group data (22 EAS patients, 15 IFT patients) are aggregate comparisons and are not patient facts.",
+    "No numeric audiogram thresholds or impedance values are printed in the text; plotted values are not transcribed.",
+    "Side (left or right) of the implanted ear is not stated.",
+    "Video S1 supplement (surgical procedure) was frame-sampled only; audio and continuous motion not reviewed.",
+    "Discussion statements about expected reduction of fibrosis and general applicability are author expectations, not recorded as patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 28,
+    "facts_reviewed": 31,
+    "figures_viewed": 7,
+    "key_findings": [
+      "Single individuated patient (53-year-old woman, m.1555A > G hearing loss, EAS with FLEX28 DEX in February 2024); control groups of 22 and 15 patients are aggregate and not copied.",
+      "Drafter flags reviewed against RULINGS: 2023 test before February 2024 ordered by absolute calendar times; surgery technique facts untimed; Figure 3 D/E timed only by the caption phrase After full insertion; laterality left unassigned; hearing aids device action unknown; medications not documented with the DEX electrode as a device; control comparisons kept as patient observations without control values.",
+      "All 7 figures (17 panels) and 21 sampled Video S1 frames viewed at full resolution; visual.json has no plot readings and no positional readings."
+    ],
+    "residual_risks": [
+      "Implanted ear not stated; Figure 4 uses cross marks only, which must not be read as laterality.",
+      "Speech audiometry, hearing level with EAS and HP percentage carry no stated time point.",
+      "Video S1 frames 2 to 17 and 20 to 21 show a legible taskbar calendar date; the supplement sidecar privacy category must change to direct_identifiers (agent-owned)."
+    ]
+  },
+  "physician_adjudicated": false
+}

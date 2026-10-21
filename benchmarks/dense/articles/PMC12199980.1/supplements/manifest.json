@@ -1,0 +1,95 @@
+{
+  "format": "dense-supplement-manifest/1",
+  "article_id": "PMC12199980.1",
+  "source_text_sha256": "9331ccc42b6b39ec9de1c10daffe5d26da26f9fbfe1843673fc228f2c1f2f548",
+  "source_supplements_sha256": "99cd62db3781032f463d3836ae15d7594062da2e403986744b7a4928444297df",
+  "files": [
+    {
+      "supplement_id": "reports-07-00094-s001",
+      "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC12199980.1/reports-07-00094-s001.zip?md5=88ddeb7b1260963778682d4213112e00",
+      "machine": {
+        "filename": "reports-07-00094-s001.zip",
+        "original_manifest_url": "s3://pmc-oa-opendata/PMC12199980.1/reports-07-00094-s001.zip?md5=88ddeb7b1260963778682d4213112e00",
+        "declared_md5": "88ddeb7b1260963778682d4213112e00",
+        "declared_kind": "supplementary_or_other",
+        "extension": ".zip",
+        "http_content_type": "binary/octet-stream",
+        "bytes": 1889747,
+        "download_status": "downloaded",
+        "download_reason": null,
+        "sha256": "0f54e91a5b101df9b9b1fa17b7919b9400de7276ec7e92b0da0f61706035c748",
+        "md5_verified": true,
+        "sample_sha256": null,
+        "sample_bytes": null,
+        "tail_sha256": null,
+        "detected_type": "zip",
+        "inspection_status": "peeked",
+        "peek": {
+          "kind": "archive",
+          "format": "zip",
+          "member_count": 1,
+          "uncompressed_bytes": 1896360,
+          "members": [
+            {
+              "name": "reports-3268930-supplementary.pdf",
+              "bytes": 1896360
+            }
+          ],
+          "member_extensions": {
+            ".pdf": 1
+          },
+          "tool": "zipfile",
+          "dicomdir_present": false
+        },
+        "limitations": [
+          "Members listed from the central directory only; nothing extracted"
+        ],
+        "errors": []
+      },
+      "machine_suggestion": {
+        "content_class": "unknown",
+        "rule": "no_rule"
+      },
+      "review": {
+        "content_class": "lab_results",
+        "content_class_rationale": "ZIP with one 3-page PDF holding index-patient material: Figure S1 (two EKG images), Table S1 (medication doses by date) and Table S2 (serial labs and clinical parameters by date). Mixed content; labs and serial values dominate, so lab_results with a document modality.",
+        "classification_basis": "full_content",
+        "patient_scope": "patient_level",
+        "patient_ids": [
+          "p1"
+        ],
+        "ownership_evidence": [
+          {
+            "basis": "article",
+            "segment_id": "b00027",
+            "quote": "Figure S1: EKG readouts at baseline (A) and following the intervention (B)."
+          },
+          {
+            "basis": "article",
+            "segment_id": "b00027",
+            "quote": "Table S1: Medication changes; Table S2: Additional labs and clinical parameters."
+          }
+        ],
+        "ehr_includable": true,
+        "ehr_modality": "document_text",
+        "estimated_counts": {
+          "rows": null,
+          "frames": null,
+          "pages": 3,
+          "members": 1,
+          "duration_seconds": null,
+          "basis": "Rendered PDF pages viewed one by one; pdfinfo page count of the single member PDF is 3."
+        },
+        "notes": "Extracted the member PDF and viewed all three rendered pages. Page 1 carries two EKG images; pages 2 and 3 carry Table S1 and Table S2, transcribed cell by cell in the dense-supplemental document sidecar.",
+        "limitations": [
+          "EKG image pixels are not extracted as facts; blank Table S2 cells are not transcribed.",
+          "Table S2 values for carbon dioxide on 5.23.2020 and 5.24.2020 and the 5.14.2020 treadmill time conflict with the main article; Table S1 lists Vitamin D2 where the article text says Vitamin D3 after discharge.",
+          "The EKG images still show printed institution and physician text and date-time stamps although the caption says identifying information was redacted."
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "Machine draft: every review block must be completed by a reviewer who inspected the content."
+  ]
+}

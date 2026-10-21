@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC7968493.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "02d31070a244661c40adb62a5340208826c18f475b2ea9d79a8ce6dc663512bd",
+  "annotation_sha256": "fab90ba18ba350876ee16bbaa2c0179c64848436cccd3bd15ed98dc0c0b2b7a9",
+  "reviewed_at": "2026-10-21T08:42:08.656699+00:00",
+  "source_segments_read": 25,
+  "facts_reviewed": 111,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f007 (suicide attempt): removed time \"Some time after his transfer to psychiatry\"; that phrase dates the patient's disclosure, not the attempt (kept in notes and on event p1-e14).",
+    "p1-f006 (carbofuran/chlormephos poisoning): added the b00017 powder sentence as evidence because diagnostic_basis cites the powder.",
+    "p1-f010 (neurologist: seizures due to metabolic causes): renamed, set certainty ambiguous and scoring review_only. The authors separately attribute the seizures to poisoning only, and the existing ambiguity records this. Also removed it from summary claim 3, which now says the neurologist was consulted and no further imaging was done.",
+    "Removed p1-f109 (care_plans transfer to psychiatry). The same sentence is the outcomes disposition p1-f111, whose text_value now carries \"for observation and additional diagnostics\" (ONE-STATEMENT). Repointed event p1-e13 and summary claim 4.",
+    "Table 1 facts p1-f054..p1-f072: added the row segment's own \"Day 1 | Day 2 | Day 3 | Reference values\" header quote, which states the Day anchor. For p1-f066..p1-f072, this quote replaces a header quote that came from another row's segment (b00010). Values and times were verified against the raw XML grid (Day 1 colspan=2 over 11:40/17:50; Day 2 7:50; Day 3 8:00).",
+    "p1-f101 (bronchodilation during mechanical ventilation): moved from the extubation event p1-e12 to p1-e04, which holds mechanical ventilation.",
+    "Summary claim 1 trimmed to 84 words without changing content.",
+    "Relation p1-e05 before p1-e08: added the literal \"No further seizures developed after administration of obidoxime.\" quote to the same-anchor ICU-hour quotes.",
+    "Added relation p1-e04 before p1-e05 (ICU admission opens the stay; \"In the first eight hours at ICU\" seizures).",
+    "Added relations p1-e08 before p1-e13 and p1-e11 before p1-e13. Obidoxime ~10 h after (ICU) admission and the Table 1 labs \"over the first three days at ICU\" are in-stay care, ordered before the transfer that ends the ICU stay (stay rule, order only)."
+  ],
+  "unresolved": [
+    "The article has no figures or supplements; no visual task applies.",
+    "Discussion paragraphs mix general treatment guidance and literature with sentences about the index patient; only literal patient sentences are used.",
+    "Cited-literature statements about LD50 values, atropine and oxime dosing are general background, not patient facts.",
+    "Table 1 uses merged cells; Day 1 hours are known only for non-merged rows and the creatine kinase Day 2/Day 3 cell is ambiguous."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 25,
+    "facts_reviewed": 112,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient (52-year old Caucasian male); roster 1 complete. No figures or supplements.",
+      "Table 1 verified against raw.xml. The header \"Day 1\" has colspan=2 over hours 11:40 and 17:50, Day 2 is 7:50 and Day 3 is 8:00. CRP <3, leucocytes 17.47 and CK 10.29 span both Day 1 columns, and CK 4.04 spans Day 2 and Day 3. The annotation Day 3 facts are correct: ChE 140, lactate 2.2 and potassium 3.93, at 8:00 on Day 3. The CK 4.04 fact is review_only.",
+      "Text \"Initial\" laboratory values are not merged with the Table 1 Day 1 cells: the source never says they are the same measurement. Leucocytes 17.5 vs 17.47 is a rounding difference, recorded as an ambiguity. Table cells keep flag unknown because the table does not classify cells.",
+      "\"we decided against atropine therapy\" and \"did not need any vasopressor or inotropic support\" stay assertion=absent with action unknown. This is a clinician judgement that the drug was not indicated, not a patient refusal (\"declined\") and not an order that was cancelled.",
+      "Obidoxime route \"intravenously\" is kept only on the start fact p1-f088. The bolus and infusion sentences state no route, so it is not borrowed.",
+      "The oxime stop fact keeps the source wording \"Oxime treatment\". \"After five days\" keeps anchor null: no anchor in the sentence, and the preceding sentence is in another paragraph.",
+      "b00023/b00024: only the literal patient sentences are used (not bradycardic, atropine not given, fluids/bronchodilation during ventilation, 24 h oxime limit, improvement, ChE rise and extubation one day after stopping).",
+      "All 10 relations checked against their full evidence lists."
+    ],
+    "residual_risks": [
+      "The ICU admission is dated only relative to the seizure. Admission, ED and transport order is not stated with order words, so e02/e03 are unlinked to e04.",
+      "Text initial labs and Table 1 Day 1 cells are likely the same draws but are kept as separate items per the merge ruling.",
+      "Machine table grid ignores header colspan (see measurement-series limitations), so the Day 3 cells of the ChE, lactate and potassium rows are not series points."
+    ]
+  },
+  "physician_adjudicated": false
+}

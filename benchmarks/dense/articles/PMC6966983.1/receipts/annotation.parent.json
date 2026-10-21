@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC6966983.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "deb49065d01a02ad27b70e04fa2cec0e3ec78d89d9d94b97d4f7a33e4c78b47f",
+  "annotation_sha256": "31384d79969ab15f4e7f2d7fd511b353fa924e0f2eb1d1957315de57bbf43331",
+  "reviewed_at": "2026-10-21T08:07:57.498360+00:00",
+  "source_segments_read": 19,
+  "facts_reviewed": 112,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Merged the duplicate Fig. 1a pleural effusion facts: one Pleural effusion observation now cites the text sentence (which cites Fig. 1a, small effusion) and the caption panel a (bilateral, before surgery); the costophrenic-angle item is now only the blunting sign.",
+    "Moved diffuse severe left ventricular hypokinesis from symptoms_function (sign) to observations (imaging): it is an echocardiographic result, not an examination sign.",
+    "Extended the CTR 51.1% quote to the whole sentence so the chest-radiograph method comes from its own evidence.",
+    "Added missed patient facts from the discussion: blood pressure stated as going to fluctuate around 160/110 mmHg (review_only); pulmonary congestion right after cesarean section (cause hedged, not recorded); face mask worn during transfer to the intensive care unit (case text).",
+    "Added the text statement that prolactin fell from 228 to 3.4 ng/mL with 14 days of bromocriptine as a separate review_only/ambiguous observation, not merged with the Table 1 cells (14 days vs postoperative day 13).",
+    "Rebuilt the pre-operative test event to hold only the Fig. 1a radiograph and Fig. 2a ECG findings timed by their captions; removed CRP/CK, the before-24-weeks blood pressures, proteinuria and the discussion LV-enlargement fact from it (no borrowed time). Added separate events for the before-24-weeks blood pressures, the CRP/CK results, the LV enlargement prior to surgery, the not-given nifedipine/magnesium sulfate, and the no-eclampsia/blood-pressure assessment.",
+    "Removed nifedipine/magnesium sulfate non-receipt from the cesarean section event (now its own not_occurred event).",
+    "Relations: strengthened evidence for ITP age to admission (full diagnosis clause), admission to cesarean section (diagnosis sentence plus Therefore), pre-op tests to cesarean section (both captions), and cesarean section to extubation (full After the completion of the surgery sentence).",
+    "Added 10 literal relations: IVF pregnancy before fetal death; BP before 24 weeks before fetal death; fetal death same_time preeclampsia admission (At the same time); admission platelet count before platelet transfusion; nifedipine/magnesium sulfate non-receipt before cesarean section; LV enlargement prior to surgery before cesarean section; cesarean section before ICU radiograph (performed postoperatively), before ward move (postoperative day 2) and before discharge (24 days after surgery); therapy start before the Table 1 series (after the start of bromocriptine).",
+    "Reworded the Fig. 1b timing ambiguity: caption day of surgery and text after ICU admission are compatible, not a conflict.",
+    "Summary claim 2 now states the CRP and creatine kinase results it cites.",
+    "Per orchestrator ruling on p1-f070: the discussion blood pressure \"going to fluctuate around 160/110 mmHg\" is now status unknown, certainty ambiguous, scoring review_only, with no time and an ambiguity quoting the sentence; the eclampsia/blood-pressure event is order_only with no relation; the not_occurred nifedipine/magnesium sulfate event orders before the cesarean section from its own quote."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two figure images are inspected in the separate visual submission.",
+    "Table 1 PRL and NT-proBNP values are separate observations per time column; the text statement of prolactin fall from 228 to 3.4 ng/mL is a separate review_only observation, not merged with the table cells.",
+    "Discussion sentences about general literature (incidence, diagnostic criteria, bromocriptine mechanism, guideline blood pressure thresholds) are not patient facts.",
+    "Hindsight and hedged discussion statements about the patient (possible cause of pulmonary congestion, echocardiography on admission, antihypertensive use should be considered) are not recorded as facts.",
+    "Reference-range classification of laboratory values was not added; only source-stated flags are recorded.",
+    "Medication absent items \"no need for carperitide or other diuretics\" record the source wording; actual non-administration is not separately stated."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 19,
+    "facts_reviewed": 112,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (36-year-old woman, ITP, preeclampsia with intrauterine fetal death, emergency cesarean section, then peripartum cardiomyopathy); roster count 1 is literal.",
+      "CTR 57.1% (f051) keeps the time of the immediately preceding sentence: that sentence names the chest radiograph obtained after ICU admission and the CTR sentence reports that radiograph result; both sentences are quoted. The gate NO-BORROWING warning is accepted as a checker false positive under the result-sentence ruling.",
+      "Text and caption merges for Fig. 1a (pulmonary edema, pleural effusion), Fig. 1b (butterfly shadows), Fig. 1c (shadows disappeared) and Fig. 2a/2b ECGs are the same images because the text explicitly cites each panel; caption times govern only the findings the caption states.",
+      "Fig. 2b ECG keeps the caption time (immediately after CCU admission); the text paragraph order differs, recorded as an ambiguity, no relation to the CCU move added.",
+      "Discussion LV enlargement prior to surgery is a literal patient statement kept with an ambiguity against the pre-op CTR 49.4%; not a source conflict.",
+      "No need for carperitide or other diuretics kept as absent with action unknown; nifedipine and magnesium sulfate not received before cesarean section are absent; no sign of eclampsia absent.",
+      "Table 1 rows are 8 separate observations with column-header times; NT-proBNP reference range from the text."
+    ],
+    "residual_risks": [
+      "Fig. 2b timing (caption after CCU admission vs text order before the CCU move) is unresolved.",
+      "No sign of eclampsia recorded as refuted; it is a clinical assessment rather than a test-based exclusion.",
+      "Pulmonary congestion is taken from a discussion sentence whose causal clause is hedged."
+    ]
+  },
+  "physician_adjudicated": false
+}

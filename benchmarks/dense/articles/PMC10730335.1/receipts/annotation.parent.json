@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC10730335.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "b30329820e7308549a4e362d9b2ea694fd287350ecbc16c5deb57d4cf297f107",
+  "annotation_sha256": "08e169df29e2602e824f1fc1cf9641b1ec1974744d1d5c0dbd29fb4dda5fafc4",
+  "reviewed_at": "2026-10-21T09:12:23.238224+00:00",
+  "source_segments_read": 53,
+  "facts_reviewed": 252,
+  "patients_reviewed": 8,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "All 8 patients: added missing literal relation NAC diagnosis -> Mohs surgery, evidence 'All 8 patients underwent MMS for the excision of cutaneous malignancy involving the NAC' (treatment of a named existing condition).",
+    "All 8 patients: added three explicit all-cohort negations from the discussion ('No patient underwent excision or topical therapy for NMSC of the NAC in our cohort.'; 'None of the patients in our cohort had SCC in situ of the NAC.') as absent excision, absent topical therapy and absent SCC in situ; source_coverage b00029 updated; medications domain now documented.",
+    "Case 8: split the single footnote history event into TNBC, adriamycin/cytoxan, and dose-dense taxol + radiation events, ordered TNBC -> AC ('for treatment of') and AC -> taxol/radiation ('followed by'); 'previously' chemotherapy now ordered before the NAC diagnosis (with the History of immunosuppression row) instead of before Mohs; immunosuppression fact removed from the event ordered before chemotherapy.",
+    "Case 8: added history event for 'Yes (radiation and surgery)' on the chest/breast ordered before the NAC diagnosis (History-of row); kept unmerged with the footnote radiation and the solid organ malignancy (ambiguity retained).",
+    "Cases 6 and 7: observation names capitalised to 'C-V transposition flap'.",
+    "Summaries: grammar fixes only ('1 month', '1 stage was', 'an 84-year-old'); no new facts.",
+    "Article limitations: Case 5 multicentric BCC recorded as an ambiguity, not a conflict; added note that history ordering rests on the table's history framing."
+  ],
+  "unresolved": [
+    "Case-level data come from one table with one column per case; no narrative case descriptions, dates or per-patient timing are given.",
+    "Cohort statistics, literature-review recurrence rates and the literature case table (Tables II and III) are not individual patient facts and were not copied to patients.",
+    "Fig 1 is a previously published image of unstated ownership; pixels are described in visual.json only.",
+    "Case 5 is typed as multicentric basal cell carcinoma while a footnote says each patient had 1 unique skin cancer on the breast; recorded as one tumor with an ambiguity, not as a conflict.",
+    "Order of the history rows and the Case 8 footnote ('previously') relative to the NAC diagnosis rests on the table's history framing; no dates are given."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 53,
+    "facts_reviewed": 252,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Eight individuated patients, one Table I column each; every Table I cell, all footnotes, the discussion and the Fig 1 caption read; Tables II and III are literature data and not copied.",
+      "Header-plus-row table quotes are the only literal way to bind a cell to its case column and match corpus precedent; age text_value 67/M and sex M/F are the printed cells.",
+      "Footnote negations (no melanoma, transplant, local trauma) and the two discussion negations explicitly cover every cohort patient and are copied; cohort statistics are not.",
+      "Case 8 footnote dagger binds the chemotherapy to the Case 8 immunosuppression cell; solid organ malignancy and chest/breast radiation and surgery are not merged with it (ambiguity).",
+      "Fig 1 is a previously reported, permission-reproduced C-V flap case; the source does not say whether it is one of the 8 cases (Cases 6 and 7 had C-V flaps), so all panels stay unresolved and not includable rather than external."
+    ],
+    "residual_risks": [
+      "History-to-diagnosis ordering (prior NMSC, Case 8 footnote and history rows) rests on table history framing, not stated dates.",
+      "Order of the two repairs in Cases 6 and 7 is not stated (ambiguity).",
+      "Case 5 multicentric BCC vs 1 unique skin cancer per patient kept as ambiguity."
+    ]
+  },
+  "physician_adjudicated": false
+}

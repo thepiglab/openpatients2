@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC6015595.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7a977b49a5ceb0146030494e58b3a379db743116e8bd0ec027d6bcef0c2653c7",
+  "annotation_sha256": "8efa64196ffa1b5a677b9ef5f6ca7adb7ecb1a4b63cdf75831b14fded387f8c7",
+  "reviewed_at": "2026-10-21T03:44:20.295593+00:00",
+  "source_segments_read": 24,
+  "facts_reviewed": 42,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f021 lamotrigine action ordered -> administered: the parenthetical elaborates 'The patient was on anticonvulsants' (on lamotrigine for 5 months, later valproate).",
+    "p1-f023 lateral cephalogram: removed borrowed 'In May 2007' (the date governs the main-clause evaluation); split into its own event p1-e12 ordered before the evaluation p1-e05.",
+    "p1-f032 antiepileptic drug discontinuation no longer merged with the abstract 10-year status; added p1-f039 (does not need any antiepileptic drugs, after 10 years of follow-up) to the follow-up event.",
+    "Added abstract patient facts p1-f040/p1-f041 (no symptoms of OSA / epilepsy after the surgery) and p1-f042 (problems completely resolved) in new outcome event p1-e10.",
+    "Split p1-e02 into intraoral examination (p1-e02) and preoperative EEG (p1-e11); moved facial-profile fact out of the dated May 2007 evaluation event; added on-anticonvulsants/antidepressants event p1-e13.",
+    "Added 6 literal relations: Dec 2006 referral before May 2007 evaluation (both dates quoted); cephalogram analysis before evaluation ('after analyzing'); preoperative EEG before surgery (caption 'Preoperative EEG'); intraoral finding before surgery ('chose ... since the patient had ... a large soft palate'); surgery before no OSA/epilepsy symptoms ('after the surgery'); anticonvulsants/antidepressants before their discontinuation (drug start -> stop).",
+    "Summary claim 2 no longer implies the surgery was in May 2007; claims 1 and 3 now state the lamotrigine/valproate sequence and the 10-year AED status; ambiguities updated (undated surgery/cephalogram, unanchored 10-year follow-up)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEGs are inspected in the separate visual submission.",
+    "Surgery date is not stated in the surgery sentence; May 2007 is attached to the craniofacial and pharyngeal airway evaluation only.",
+    "Introduction and discussion are general literature background and were not assigned to the patient.",
+    "The article does not state when lamotrigine was started relative to the referral, nor drug doses other than sodium valproate.",
+    "No tables or supplements in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 24,
+    "facts_reviewed": 42,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (31-year-old woman); introduction and discussion are general background.",
+      "No epilepsy diagnosis is asserted in the case text; EEG findings kept as printed, including 'sharp waves at the level of the trachea'.",
+      "Surgery date is not stated; May 2007 belongs only to the airway morphology evaluation before the surgery.",
+      "All four figures viewed at full resolution: two intraoral photographs and two paper EEG tracings with hand-drawn pink marks and no printed text."
+    ],
+    "residual_risks": [
+      "The 10-year follow-up and the drug discontinuation carry no literal order relative to the surgery; left unlinked.",
+      "Lamotrigine recorded as administered from the 'was on anticonvulsants' parenthetical rather than as ordered."
+    ]
+  },
+  "physician_adjudicated": false
+}

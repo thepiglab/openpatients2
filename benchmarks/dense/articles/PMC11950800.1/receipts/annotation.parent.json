@@ -1,0 +1,80 @@
+{
+  "article_id": "PMC11950800.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c78c15798768f141f3385a6848b2b22095dcb747087a1d288aaf36d64fc74bf7",
+  "annotation_sha256": "bf9abb1a46f5b0ef5b94d0384dd2f3f1684acee44cf978cfa59e2f48097255de",
+  "reviewed_at": "2026-10-21T18:06:33.036385+00:00",
+  "source_segments_read": 31,
+  "facts_reviewed": 135,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f016 cDLQI 15: quote extended to its own whole sentence and pre-biologic time (before, anchor null) added, matching the EASI in the same sentence",
+    "p1: relation p1-e03 before p1-e04 evidence now the start sentence plus \"This initially led to\" (drug start -> its outcome)",
+    "p1: relation p1-e06 before p1-e07 evidence now the methotrexate addition plus \"This combination of treatment led to\"",
+    "p1: added relation p1-e03 before p1-e10 (\"switched back to dupilumab\" is a re- word after the first dupilumab start)",
+    "p1: added relation p1-e08 before p1-e10 (Figure 4 caption: dupilumab monotherapy \"following a unsuccessful trial on abrocitinib\")",
+    "p1: added relation p1-e10 before p1-e12 (drug start -> its dose reduction)",
+    "p1: added relation p1-e12 before p1-e13 (\"Given that her AD remained inadequately controlled on dupilumab 200 mg\" after the reduction to 200 mg)",
+    "p1: relation p1-e13 before p1-e15 evidence now both the abrocitinib addition that starts the combination and \"12 months into combined systemic treatment\"",
+    "p2-f015 POEM 28 and p2-f016 cDLQI 8: quotes extended to their own whole pre-biologic sentence and pre-biologic time (before, anchor null) added",
+    "p2: relation p2-e03 before p2-e04 evidence now the start plus \"This initially resulted in\"",
+    "p2: added relation p2-e01 before p2-e03 (dupilumab was started \"switching seamlessly from cyclosporine\", one of the prior therapies)",
+    "p2: added relation p2-e03 before p2-e08 (drug start -> its dose increase)",
+    "p2: added relation p2-e08 before p2-e09 (\"subsequently\" mid-paragraph with the adjacent named dupilumab increase as anchor)",
+    "p2: added relation p2-e03 before p2-e11 (drug start -> its stop (switched away))",
+    "p2: added relation p2-e05 before p2-e13 (drug start -> its stop)",
+    "p2: added relation p2-e13 before p2-e14 (\"At this point, on abrocitinib alone\" follows the adjacent methotrexate stop)",
+    "p2: added relation p2-e11 before p2-e14 (\"on abrocitinib alone\" refers back to the single described abrocitinib start)",
+    "p2: relation p2-e15 before p2-e16 evidence now the combination start plus \"on this combined systemic treatment strategy since 2021\"",
+    "p2-f047 added: discussion sentence literally naming \"the first two cases\" (hedged, assertion=possible) as an outcome of the combination for Patient 2, with an ambiguity on the Case/Patient pairing; not duplicated for p1/p3 whose case text states it more strongly",
+    "p2 summary: removed the disputed dupilumab re-addition dose (text 300 mg vs Figure 1b) from the claim text",
+    "p3: added relation p3-e02 before p3-e03 (\"then\" (opening the next paragraph still orders))",
+    "p3: added relation p3-e03 before p3-e05 (baricitinib course plus \"This benefited his AA but not his AD\" (drug -> its outcome))",
+    "p3: added relation p3-e07 before p3-e08 (\"on this combination\" refers back to the dupilumab plus methotrexate combination formed by the addition)",
+    "p3: added relation p3-e09 before p3-e11 (drug start -> its dose reduction)",
+    "p3: added relation p3-e11 before p3-e13 (\"On the lower dose of abrocitnib\" refers back to the reduction to 100 mg)",
+    "p3: relation p3-e06 before p3-e12 evidence now the first dupilumab start plus \"Dupilumab was revisited\" (re- word)",
+    "p3: relation p3-e14 before p3-e15 evidence now the combination start plus \"Over the last year since starting this combination\"",
+    "Figure 1 panels a-c: added the case-text sentences citing Figure 1a/1b/1c as attribution evidence (Case N caption paired to the Patient N case text)",
+    "Article limitation on discussion copying updated to state the p2-f047 exception (stale wording flagged by the annotator)"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the five JPEGs were inspected in the separate visual submission.",
+    "Figure 1 timeline images print values (doses, scores) that differ from the text in two places (Patient 2 dupilumab re-addition dose; Patient 3 final EASI); the text facts are review_only with ambiguities and the printed values live only in visual.json.",
+    "Discussion sentences that interpret the cases were not copied to individual patients, except the sentence literally naming \"the first two cases\", copied to Patient 2 only as a hedged ophthalmic benefit (p2-f047, assertion possible); the alopecia benefit for the third case and the cost and access experience across the three cases were not copied.",
+    "Relative times such as \"6 months later\" and \"Eighteen months later\" often lack a named anchor; no absolute dates or intervals are derived.",
+    "The article has no tables and no supplements.",
+    "Parent review: weakly worded orders (paragraph position only, \"over time\", \"Unfortunately ... continued\") were not converted into relations; only literal order words, re- words, start->stop/dose-change pairs and definite back-references were used."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 31,
+    "facts_reviewed": 135,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Three individuated pediatric AD cases (13F, 15F, 13M); roster 3 complete; no tables or supplements (raw.xml has no table-wrap, supplementary-material or media).",
+      "All 5 assets viewed at full resolution with crops of Figure 1a-c; PMC file numbering is out of order (Fig 1=g005, Fig 5=g001) but every asset matches its own caption, so no swap.",
+      "Figure 1b prints the dupilumab re-addition as 200mg Q2W vs text 300 mg (p2-f039 review_only) and Figure 1c prints final EASI 5.9 vs text EASI 8 (p3-f045 review_only); printed values stay visual-only.",
+      "Relations re-read in full: added literal links (re- words switched back/revisited, Figure 4 caption \"following\", start->dose-change/stop pairs, \"then\", \"subsequently\" with adjacent anchor, \"At this point\", definite back-references \"on this combination\"/\"On the lower dose\"); paragraph-opening \"Six months later\"/\"Eighteen months later\" and \"6 months later\" keep null anchors.",
+      "Discussion: only the sentence literally naming \"the first two cases\" was copied, to Patient 2 as a hedged (possible) ophthalmic benefit; study-level discussion statements not copied."
+    ],
+    "residual_risks": [
+      "Case N (caption/discussion) vs Patient N (case text) pairing rests on the case texts citing Figure 1a/1b/1c.",
+      "Several isolated history events (prior therapies) stay unordered because no literal order word links them to the later course.",
+      "Hospital admission for erythrodermic AD is kept as a completed care_plans item (corpus convention); no encounter section exists."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC11826527.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "51f7a387b7efa940e6804edc67035070c8f989d0def83c169c349100d6935b21",
+  "annotation_sha256": "ea42aa9d0847f16351e4bf1c18c1b570face424cbfe9657f3effd2d6e811e3a0",
+  "reviewed_at": "2026-10-21T13:59:29.655521+00:00",
+  "source_segments_read": 47,
+  "facts_reviewed": 42,
+  "patients_reviewed": 5,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Roster scope: rostered three further singly described series members, following the individual_cases precedent PMC5654891.1 and for consistency with p1 (whose description is no richer): p3 the single patient with ocular hypertension controlled with topical anti-glaucoma medication (6 facts, 4 events, 2 relations); p4 the man with DON progression who received systemic corticosteroids and urgent decompressive surgery and was \"the patient with decreased vision\" who \"restored his vision (10/10) in both eyes\" (13 facts, 6 events, 4 relations); p5 the patient who discontinued after superficial eyelid ecchymosis following the first injection (5 facts, 4 events, 3 relations). Pairs/groups (diplopia worsening, nine ecchymoses, eleven systemic treatments) stay aggregate.",
+    "Only explicit all-of-group statements are applied to the new patients: all 123 had TED and PT injections; \"All received systemic corticosteroids\"; RAPD 4/4; \"All postoperative controls\" improved visual field and color test; \"all cases of eyelid ecchymosis ... resolved spontaneously\". Visual field/color alteration (3/4) is not attributed to p4. The \"In all patients\" IOP schedule is not copied because p5 discontinued after the first injection (ambiguity). Study-level \"all adverse effects were transitory\" is not copied.",
+    "p1-f005 PT: evidence regrounded from the Table 2 caption to the explicit all-123-patients sentence plus the patient's own \"after four injections\" sentence. p2-f003 gains the same all-patients quote.",
+    "Relations added: p1-e04 insulin before p1-e05 good metabolic control (\"required additional insulin, finally reaching\"); p2-e01 injections before p2-e04 adrenal insufficiency diagnosis (\"suprarenal inhibition after prolonged treatment\").",
+    "p2-f008 adrenal insufficiency: added the abstract quote \"suprarenal inhibition after stop treatment\".",
+    "Systemic-complication count ambiguity reworded: 1.6% equals 2/123, so \"one patient\" is the likely error; arithmetic-only cohort mismatch, not a conflict, attached to no fact. Added cohort arithmetic notes (Eleven (8.5%), Table 1 percentages).",
+    "source_coverage and article_limitations updated for the five-patient roster."
+  ],
+  "unresolved": [
+    "Retrospective case series of 123 patients with thyroid eye disease treated with peribulbar triamcinolone; five singly described series members are rostered (p1 hyperglycemia, p2 adrenal insufficiency, p3 ocular hypertension, p4 the operated DON patient with decreased vision, p5 discontinuation after eyelid ecchymosis). Roster is incomplete (5 of 123); overlap between p3/p4 and p1/p2 is not stated.",
+    "Cohort statistics (Table 1 demographics, Table 2 complication counts, injection counts, response rates, discussion of cited studies) are aggregate and are not copied to individuals; only explicit all-of-group statements (all 123 had TED and PT; all eleven needing other treatment received systemic corticosteroids; all operated patients improved visual field and color test; RAPD in 4/4; all ecchymoses resolved spontaneously) are applied. Pairs and groups (two with diplopia worsening, nine with ecchymosis) are not rostered.",
+    "Cohort arithmetic inconsistencies: \"one patient; 1.6%\" for the two systemic complications; \"Eleven (8.5%)\" for 11 of 123; Table 1 severity percentages do not match their counts. None is attributed to an individual.",
+    "No age, laboratory values, doses beyond injection counts, or dates are given for any rostered patient. The source has no figures and no supplementary material (raw XML checked)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 47,
+    "facts_reviewed": 42,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Article has no figures, media or supplementary material (raw.xml has no fig, graphic, media or supplementary-material element).",
+      "TED and PT are applied to every rostered patient from the explicit all-patients sentence \"123 patients with TED who underwent treatment with PT injections\".",
+      "p1 insulin stays action unknown (\"required additional insulin\"); outcome improvement (\"finally reaching good metabolic control\").",
+      "p2 relations referral -> diagnosis (the endocrinologist the patient was referred to reached the diagnosis), diagnosis -> oral hydrocortisone, injections -> symptoms (\"One week after completing the eight injections\") are literal.",
+      "No cortisol value, age or laterality is printed for p1/p2; the only sex statement in the case sentences is \"his\" for p4."
+    ],
+    "residual_risks": [
+      "Rostering singly described series members (p3-p5) follows PMC5654891.1 but differs from aggregate_only precedents (e.g. PMC9979917.1); overlap of p3/p4 with p1/p2 is not stated.",
+      "p4 attribution to DON progression rests on the definite reference \"the patient with decreased vision\" back to the preoperative examination of the four operated DON patients.",
+      "p5 outcome comes from the all-cases ecchymosis resolution sentence."
+    ]
+  },
+  "physician_adjudicated": false
+}

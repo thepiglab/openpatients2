@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC10510622.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "840518b1bbbf37c3b47e830d494c52810f9b0ffc8443583ca3085f4aacfb3540",
+  "annotation_sha256": "d7b9e6010d15c964a0f0ba44f7c40527662242833e1b7634b53bbcf7c76e39b9",
+  "reviewed_at": "2026-10-21T08:41:55.780003+00:00",
+  "source_segments_read": 41,
+  "facts_reviewed": 62,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f012 lung adenocarcinoma: added the abstract quote \"the patient was diagnosed with lung adenocarcinoma\"; kept confirmed (authors state the diagnosis twice) with the \"favoring the lung as primary origin\" ambiguity retained; tumor p1-f057 keeps distant_metastatic/left iliac crest from \"metastatic lung cancer\" plus the iliac biopsy.",
+    "Added p1-f062: past medical history uneventful (conditions, absent/unknown, history).",
+    "p1-f055 no medication after ESD: added its own literal time \"after the ESD procedure\"; new ambiguity on the later chemotherapy versus this statement.",
+    "New presentation event p1-e16 (presentation to the authors' gastroenterology department) holding the previously unlinked exam p1-f006 and laboratory p1-f027 facts.",
+    "Linked unlinked facts: p1-f009 and p1-f010 (malignancy and GIST suspicion) to the previous-hospital workup p1-e02; p1-f011 (lymphoproliferative neoplasm excluded) to histology p1-e05.",
+    "Relations added: p1-e02->p1-e16 (\"had previously visited\"), p1-e16->p1-e03 (admission opening the stay -> in-hospital endoscopy), p1-e03->p1-e04 (\"Because of the obstruction ... endoscopic removal ... was planned\" then ESD), p1-e08->p1-e09 (discharge -> follow-up CT, abstract \"During the follow-up\"), p1-e09->p1-e10 (CT \"unexpectedly\" found the mass -> PET of \"the mass\").",
+    "Relation evidence strengthened: p1-e09->p1-e11 now quotes the CT finding and the bronchoscopy attempt on \"the mass\"; p1-e04->p1-e08 quotes the ESD and the post-procedural discharge.",
+    "Ambiguity added for unordered pairs (chemotherapy vs biopsy/death; diagnosis vs tests by basis wording); previous-hospital ambiguity reworded to state the recorded \"previously\" order.",
+    "Source-coverage notes for discussion paragraphs b00030/b00032 reworded (they restate the index ESD; no new facts)."
+  ],
+  "unresolved": [
+    "Table 1 (b00013 to b00029) reports 15 previously published esophageal IgG4-RD cases from other reports; they are not index-patient data and were not extracted as facts or a measurement series.",
+    "Dates of the previous-hospital workup and of the lung and bone workup are not stated; only relations anchored to the ESD procedure are recorded.",
+    "Caption-layer visual status not_inspected; the six figures are inspected in visual.json."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 41,
+    "facts_reviewed": 62,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Single index patient; Table 1 (b00013-b00029) is 15 literature cases, correctly background with no facts or measurement series.",
+      "Neck/thorax CT results take \"two months after the ESD procedure\" from the immediately preceding sentence about the same CT, quoted with both sentences (allowed by the rulings); PET, bronchoscopy, scintigraphy, biopsy and chemotherapy have no stated times.",
+      "Serum IgG4 179 mg/dL flag high from the source word \"elevated\" with the printed reference range 0-125 mg/dL; the discussion cut-off (>=135 mg/dl) is criteria text and correctly not attached.",
+      "Chemotherapy has no agent, date, target tumor or order word; tumor_ref is left empty and it is not ordered against the biopsy or death.",
+      "All six figures viewed at full resolution with crops: Fig 1 gross specimen with ruler plus endoscopic inset (index patient); Figs 2-6 H&E/IHC micrographs without printed text."
+    ],
+    "residual_risks": [
+      "Lung primary is only \"favored\" by the iliac biopsy while the authors state lung adenocarcinoma and metastatic lung cancer; kept confirmed with an ambiguity.",
+      "Discharge -> two-month CT relation relies on the abstract's \"During the follow-up\" for the outpatient follow-up character of the CT.",
+      "Visual.json Fig 1 description overstates the visible ruler numerals (4 and 5 are hidden by the specimen) and omits a faint illegible mark in the inset corner; reported to the annotator, figure sidecar receipts not parent-signed."
+    ]
+  },
+  "physician_adjudicated": false
+}

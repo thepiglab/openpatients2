@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12585070.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "977089bace7eabf2044d255179b18bb725fdbf75d005dd0eaf51ad386379ebb3",
+  "annotation_sha256": "8b33f1e66873bcd447a1b6dc4a023fb39c164903878f820708dd26fe0246e7bd",
+  "reviewed_at": "2026-10-21T14:09:08.442528+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 84,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed relation p1-e12 -> p1-e13: \"Five months later\" opens a new paragraph (b00009) with no named anchor; per the same-paragraph adjacency ruling the oculoplastic referral is not ordered before the return. The abstract-quoted MMC/interferon -> return relations (e04->e13, e06->e13) are kept.",
+    "Added relations: p1-e09 -> p1-e10 (hyperemia/total epithelial defect observed -> MMC discontinued for suspected MMC lesion, adjacent sentences same paragraph); p1-e18 -> p1-e19 (\"continued to have no complaints\", BDT/BVCA \"maintained\" refer back to the first-month review); p1-e21 -> p1-e17 (\"This led to the need for a transplant\" -> transplant performed); order-only presentation -> care of that episode, same paragraph: p1-e02 -> p1-e03/p1-e04 (referral to \"our tertiary center\" -> \"we found\"/\"We began\") and p1-e13 -> p1-e14/p1-e15 (return -> gentamicin/vancomycin/atropine and medroxyprogesterone). Evidence for e06->e10 and e13->e17 now quotes both ends.",
+    "Removed duplicates (ONE-STATEMENT): p1-f017 (lesion regression as a sign; kept as outcome p1-f076) and p1-f081 (declined triple procedure as an outcome; kept as procedures p1-f057); event and summary references updated.",
+    "p1-f080 (discussion \"optical refractive result ... improving surface quality\") set ambiguous/review_only against the worsening edema at four months; added review_only p1-f082 for the abstract claim \"established new tectonic support and corneal homeostasis\"; ambiguity updated with both.",
+    "Added p1-f083 outcome deterioration \"progressive thinning occurred\" despite resolution of the infection (b00015, paragraph about \"The patient presented in this study\") with event p1-e21; p1-f079 linked into event p1-e16.",
+    "Added oncology view of the suspected OSSN: tumor t2 p1-f084 (assertion possible, alternate of p1-f007) and treatments p1-f085 IFN-α2b (neoadjuvant, route/modality unknown) and p1-f086 topical MMC (stopped), alternates of p1-f038/p1-f040.",
+    "Added ambiguity on \"no surgery was required\" after oculoplastic referral and OSSN never confirmed; f050 note clarified. Rewrote the abstract-vs-case-text five-month ambiguity and the related limitation (no anchor for \"Five months later\").",
+    "Rewrote summary into five phase paragraphs (25-85 words), naming gentamicin/vancomycin instead of \"antibiotics\", removing the causal \"led to MMC being stopped\", and citing only include facts."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the actual images are inspected in visual.json.",
+    "The article lists no supplements (raw.xml has no supplementary-material and records no supplement).",
+    "No calendar dates are printed; all timing is relative. The anchor of \"After one month\" and \"Five months later\" is not named, so order is recorded only where the text states it.",
+    "Laterality of the operated eye is not stated in the surgery description; the lesions and visual acuity are stated for the right eye (OR) only in the presentation paragraph.",
+    "Introduction, discussion paragraphs on OSSN treatment and aims, and literature statements are not patient facts.",
+    "The abstract orders the mitomycin-C/interferon treatment before the presentation with thinning; the case text's \"Five months later\" opens a new paragraph without an anchor, so the oculoplastic referral is not ordered before the return."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 84,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (69-year-old man, CTCL and ocular rosacea); no tables or supplements in raw.xml; abstract and discussion sentences about \"this case\"/\"the patient presented in this study\" used only where literal.",
+      "Times attach only to their own sentences: b00011/b00012 open with visit times but the later sentences name different assessments, so BVCA, BDT, pachymetry, B-ultrasound and the four-month biomicroscopy/OCT findings stay untimed (grouped in the visit events).",
+      "Topical applies to both fluorometholone and MMC in the one shared coordinated phrase (own sentence, not borrowed); \"1.000.000 Ul\" kept literally; medroxyprogesterone ordered with stated non-adherence; scheduled excision cancelled; triple procedure declined.",
+      "Figures viewed at full resolution with crops: F1 toluidine-stained eye; F2 five unlettered photos (donor button on holder, preoperative eye, three operative views) as one whole-figure panel for p1; F3 OCT screen capture whose 1006/1101 labels are unitless pixel-only content with scanner interface text only."
+    ],
+    "residual_risks": [
+      "The return visit (e13) and its treatments are ordered after MMC/interferon only through the abstract; the oculoplastic referral, cytology and regression events are not ordered against the return.",
+      "Return -> gentamicin/vancomycin/atropine and medroxyprogesterone, and referral -> staining/interferon, rest on the presentation-opens-episode implied order (order only).",
+      "F2 is one whole-figure panel attributed to p1 although one photograph shows donor tissue; the caption describes only donor preparation."
+    ]
+  },
+  "physician_adjudicated": false
+}

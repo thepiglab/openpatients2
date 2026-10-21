@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC9858242.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "21ff8c950b6ff212072da2e6ebec7036687ac784220b4e1f5a11378ad0cd3fa3",
+  "annotation_sha256": "2f97c4e73dc6185df22df15fd050d6671ef48be892644acf56189e70fe63c198",
+  "reviewed_at": "2026-10-21T09:30:42.451765+00:00",
+  "source_segments_read": 46,
+  "facts_reviewed": 353,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1: removed the hepatic steatosis condition (p1-f013); the ultrasonography result is already the observation p1-f034 (ONE-STATEMENT).",
+    "p2: removed the outcome \"permanent discontinuation of Alectinib\" (p2-f169); it duplicates the medication stop p2-f026.",
+    "p2: added the iron-normal statement from the explicit \"All patients had normal levels of iron\" sentence as review_only/ambiguous, linked to the ambiguity about her own unclassified serum iron 6.6 µmol/L and saturation 11%.",
+    "Added caption-stated imaging findings: Figure 1 (p1) and Figure 2A (p2) disease response on alectinib with the caption comparison interval, Figure 2B brain lesion variation within less than one month on treatment (relation before, anchor null), Figure 3 chest response (pictures C,D, January 2020) and brain-lesion response (picture F, December 2019) with two new p3 test events.",
+    "p4: added the Figure 4 caption smear result (spherocytes, bite cells, echinocytes and acanthocytes) as its own caption observation.",
+    "Added literal relations: p1 diagnosis -> alectinib stop (result -> action), p1 July liver perturbation -> \"No further similar lab perturbations\"; p3 alectinib start (1 November 2019) -> December 2019 brain MRI response -> January 2020 chest response -> late February 2020 hemolysis labs (calendar); p4 diagnosis -> alectinib start, no dose change -> \"still on the same dosing\".",
+    "Added the literal unit \"× 10^(9)/L\" to the text reticulocyte counts of p1, p2, p3 and p4.",
+    "p3: brain-lesion condition role changed from comorbidity to unknown; the haptoglobin/bilirubin text-vs-Table 2 ambiguity reworded so it no longer asserts the two are the same assessment.",
+    "p2: added ambiguities for the Figure 2B caption interval vs untranscribed image labels and for the discussion RBC-membrane sentence (spherocytes) vs her own smear."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the four figures were inspected separately in visual.json.",
+    "Patient 2 laboratory values in the text, Table 1 and Table 2 are not consistent and are kept as separate timed facts (see the patient 2 ambiguities); none is declared the correct value.",
+    "Table 1 marks abnormal values in red script; colour is not retained in the source text, so table cells carry no high/low flags.",
+    "Discussion statements about mechanisms, PD-L1 interplay, cited trials and the cited American Journal of Hematology review are not patient facts.",
+    "Discussion sentences that describe all four patients were copied to individuals only where explicit and not already stated in the case text: normal vitamin B12 and folate to patients 1 and 2, normal iron to patients 1 and 3, and normal iron to patient 2 as review_only (her own iron values are unclassified); patients 3 and 4 state the rest in their own case text. No hemolysis recurrence is copied to patients 1-3 only. RBC morphology statements for all four were not copied because each case text or caption gives its own smear findings.",
+    "No plot or chart values are present; no values were estimated from images.",
+    "Table 1 row events keep time_calendar_value null: the row labels use an en-dash year-month form (e.g. 2019–10) that the calendar-value checker does not read at month precision."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 46,
+    "facts_reviewed": 353,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Four index patients (45F, 80F, 48F, 69F) numbered by first mention; Table 2 rows owned per patient; Table 1 is patient 2 only. All 124 table-cell facts checked cell by cell against the rows.",
+      "Patient 2 text (early November 2019), Table 1 2019–10 (late) row and Table 2 (\"upon diagnosis\") are not made the same time point by the source, so none is merged and no source_conflict is declared; differences are ambiguities.",
+      "Brigatinib August 2020 vs the 2020–09 \"Replaced by Brigatinib\" row, Hb 133 after the April stop vs the 128 April row, and the 450 mg 2020–07 row are timing ambiguities, not conflicts; each value keeps its own stated time.",
+      "\"up to\" values (LDH 361, reticulocytes 143, indirect bilirubin 25) carry comparator <= exactly as OBS-COMPARATOR prescribes; nothing reshaped.",
+      "All-patient discussion sentences (B12/folate/iron normal) are explicit; \"no hemolysis recurred\" is copied only to patients 1–3 as the sentence names them. Non-smoker kept absent/unknown (corpus majority convention); never smoker = never.",
+      "Figures viewed at full resolution with crops: month-year labels under Figs 1/2 are exam dates (direct_identifiers, not transcribed); the Fig 3F strip is cut off and unreadable (no legible date); R/L and orientation letters are device text. visual.json has no plot readings."
+    ],
+    "residual_risks": [
+      "Three NO-BORROWING checker warnings remain on caption-governed times (Figure 1/2A comparison parenthetical, Figure 3 panel F label); the caption itself states both the finding and the time, so they are left as checker false positives.",
+      "Table 1 row events keep time_calendar_value null because the en-dash year-month labels are not read at month precision by the checker.",
+      "Table 1 red-script abnormal marking is not preserved in the source text, so table cells carry no flags."
+    ]
+  },
+  "physician_adjudicated": false
+}

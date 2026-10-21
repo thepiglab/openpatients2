@@ -1,0 +1,89 @@
+{
+ "format": "dense-supplement-manifest/1",
+ "article_id": "PMC8775026.1",
+ "source_text_sha256": "319a36efd8fcc1a39bf67e6396b92dac254d9a2b51fec6f0ec6b80c8d0c477a9",
+ "source_supplements_sha256": "4f8d1ab23e9b43d5cc485d9fcf2d34d5e7be2b1401c12c2bf0e21dda28a50407",
+ "files": [
+  {
+   "supplement_id": "diagnostics-12-00026-s001",
+   "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC8775026.1/diagnostics-12-00026-s001.zip?md5=8786e485182dccf49e92692a3da7faa6",
+   "machine": {
+    "filename": "diagnostics-12-00026-s001.zip",
+    "original_manifest_url": "s3://pmc-oa-opendata/PMC8775026.1/diagnostics-12-00026-s001.zip?md5=8786e485182dccf49e92692a3da7faa6",
+    "declared_md5": "8786e485182dccf49e92692a3da7faa6",
+    "declared_kind": "supplementary_or_other",
+    "extension": ".zip",
+    "http_content_type": "binary/octet-stream",
+    "bytes": 938035,
+    "download_status": "downloaded",
+    "download_reason": null,
+    "sha256": "eba083c7e9bb3a1afe7bf50562fd6225987ef00396bf4bcaa1ea5159be069d34",
+    "md5_verified": true,
+    "sample_sha256": null,
+    "sample_bytes": null,
+    "tail_sha256": null,
+    "detected_type": "zip",
+    "inspection_status": "peeked",
+    "peek": {
+     "kind": "archive",
+     "format": "zip",
+     "member_count": 1,
+     "uncompressed_bytes": 1033544,
+     "members": [
+      {
+       "name": "diagnostics-1502929-supplementary.pdf",
+       "bytes": 1033544
+      }
+     ],
+     "member_extensions": {
+      ".pdf": 1
+     },
+     "tool": "zipfile",
+     "dicomdir_present": false
+    },
+    "limitations": [
+     "Members listed from the central directory only; nothing extracted"
+    ],
+    "errors": []
+   },
+   "machine_suggestion": {
+    "content_class": "unknown",
+    "rule": "no_rule"
+   },
+   "review": {
+    "content_class": "other",
+    "content_class_rationale": "ZIP with one 10-page PDF mixing treatment-plan dosimetry text, MRI protocol table, five figures (MRI series, diffusion maps, NAWM segmentations, bar charts) and a per-patient NAWM serial table; no single listed class fits.",
+    "classification_basis": "full_content",
+    "patient_scope": "patient_level",
+    "patient_ids": [
+     "p1"
+    ],
+    "ownership_evidence": [
+     {
+      "basis": "article",
+      "segment_id": "b00009",
+      "quote": "The NAWM showed microstructural changes at t5 that were the strongest in proximity to the tumor (Figures S4 and S5, Table S2)"
+     }
+    ],
+    "ehr_includable": true,
+    "ehr_modality": "document_text",
+    "estimated_counts": {
+     "rows": null,
+     "frames": null,
+     "pages": 10,
+     "members": null,
+     "duration_seconds": null,
+     "basis": "Page count of the single extracted PDF member; all 10 pages were rendered and viewed."
+    },
+    "notes": "All pages describe the single index patient (planning dosimetry, MRI series, NAWM data); typed facts are in the signed document sidecar, not here.",
+    "limitations": [
+     "Figure captions are typed; text printed inside images (such as dose legends) is pixel content and not typed in the document sidecar; image pixels, bar heights and Table S1 acquisition parameters are not converted into values.",
+     "Only one patient exists in the article, so ownership rests on the article citations of the supplementary figures and tables."
+    ]
+   }
+  }
+ ],
+ "limitations": [
+  "Single ZIP with one PDF member inspected page by page."
+ ]
+}

@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC7782967.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "29349c6d454999b96092b0dbd0c0de146cc0f3e0700af9f325ba162e48482c35",
+  "annotation_sha256": "89354a46ab815948bd4570346e1a26837eb1c61a27cd99bb809f7e2622275c3d",
+  "reviewed_at": "2026-10-21T08:41:59.427803+00:00",
+  "source_segments_read": 15,
+  "facts_reviewed": 124,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f036 anti-NMDA receptor encephalitis diagnostic_basis narrowed to the stated basis (clinical stages typical); the antibody sentence states the basis of autoimmune limbic encephalitis, not of NMDAR encephalitis.",
+    "p1-f037 evidence widened to the full b00004 sentence so the bands/antibody basis is quoted with the limbic encephalitis diagnosis.",
+    "p1-f059 bortezomib (first three cycles) given its own-sentence time \"16 weeks after onset\" (relation after, anchor onset).",
+    "p1-f061 daratumumab: indication cut to \"deplete these plasma cells\" and \"off-label\" removed from regimen (only in the abstract, not in its quotes); dose_text keeps the two literal dose phrases.",
+    "p1-f077 PET-CT: tracers moved out of the finding field into the name.",
+    "p1-f089 CSF anti-AMPA-R titer 1:4 flag low -> positive (the antibody was found; \"low\" describes the titer, not a below-range result); note added.",
+    "p1-f106 renamed \"CD38-positive cells on flow cytometric monitoring\" (its quote states no post-daratumumab time).",
+    "Added p1-f124 observation: rising anti-NMDA receptor antibody titers (stated reason for the 12-month bortezomib cycles), linked to p1-e35.",
+    "Event regrouping so no fact inherits a time from a neighbouring sentence: e37 keeps only the 18-month sentence (f079, f020, f021) and new untimed e42 holds f022-f024; e32 keeps only the CD19 nearly-1-year fact and new untimed e43 holds the CD38 fact f106; e40 keeps f034/f121 and new untimed e44 holds the last cranial MRI and apprehended deficits (f080, f109, f035); NEOS f033 and abstract follow-up f119 no longer sit in the timed e40.",
+    "Added 5 literal relations: e29 phenotyping -> e30 daratumumab (\"Based on ... to deplete these plasma cells. Thus, ... were given\"); e01 first symptoms -> e05 transfer (\"about 2 weeks after symptom onset\"); e30 -> e32 (\"for nearly 1 year after starting daratumumab therapy\"); e20 IVIG -> e36 (\"given four times after initial administration\"); e33 intermediate care -> e41 follow-ups (\"followed by several weeks on the intermediate care unit with close follow ups every 4-6 weeks afterward\").",
+    "Summary claim 4: removed the causal \"so\" between the titer/FACS findings and daratumumab.",
+    "Ambiguities added: \"onset\" vs \"disease onset\" read as one reference point; Figure 1 Iraq care-location bar is pixel-only and not recorded as a fact."
+  ],
+  "unresolved": [
+    "Figure pixels are described in visual.json; the annotation figures keep not_inspected caption-layer status.",
+    "Values printed inside figures are pixel content only and are not extracted as facts.",
+    "Discussion statements about guidelines, myeloma, cited cases (Gresa-Arribas, CASPR2 case) and the NEOS cohort probability are background and not patient facts.",
+    "No serial per-patient table exists in the article; antibody titers appear only as prose values and as plotted figure series."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 15,
+    "facts_reviewed": 124,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (20-year-old woman); all case facts are hers; background, NEOS cohort probability, Gresa-Arribas and CASPR2 cited case stay out.",
+      "Text 0.81% CD19low CD38+ disagrees with Fig 2A printed 0,081% and with the derived 0.029% (0.081 x 36.4% = 0.029); the figure value is pixel content only, so the text fact stays review_only with an ambiguity (decimal/print artefact).",
+      "Anti-AMPAR \"both in serum and CSF\" vs serum <1:20 and \"only found in the first CSF sample\": qualitative fact review_only with ambiguity; titers included.",
+      "ICU about 200 days (abstract) vs 220 ICU days (case): rounding ambiguity, not a conflict.",
+      "Bortezomib three cycles administered then interrupted: both kept with ambiguity on completion; daratumumab improvement ordered only (abstract \"led to\"), causation caveat from the discussion recorded.",
+      "Teratoma of the right ovary is never called malignant, so it stays a condition (ONC-BENIGN), not an oncology tumor; left ovary occult teratoma absent/refuted after removal; herpes encephalitis possible/differential (PCR negative but exclusion not stated).",
+      "Cell-based assay method attached only to results the scope sentence covers (\"Every antibody detection ... in both hospitals in Germany\")."
+    ],
+    "residual_risks": [
+      "Intubation \"on the admission day\" may refer to the first hospital admission or to the German secondary care center; left unordered against the transfer.",
+      "Follow-up mGLUR5 titer 1:1 specimen unstated (left null).",
+      "\"onset\" and \"disease onset\" treated as one anchor for the week/month relations."
+    ]
+  },
+  "physician_adjudicated": false
+}

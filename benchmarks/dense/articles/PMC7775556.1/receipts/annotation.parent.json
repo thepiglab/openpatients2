@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC7775556.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "97a82146c351d25fdbd0564c5c0233376ac2e1b755708830426d4916e46587dd",
+  "annotation_sha256": "718bd903073bc0cee00bf68b4c11fba76d770089175867586b3d799068fdcb1a",
+  "reviewed_at": "2026-10-21T08:29:39.113874+00:00",
+  "source_segments_read": 16,
+  "facts_reviewed": 98,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f008 pre-drainage MRI abscess: removed the b00004 'The abscess was drained' quote; that lesion is not identified as the Figure 2A abscess",
+    "p1-f040 name set to Catheter (removal carried by action=removed)",
+    "p1-f031 and p1-f036: non-adherence / advised wording moved out of the regimen field into notes",
+    "p1-f071 no residual urine on imaging flagged negative",
+    "p1-f011 no sling exposure: added the b00008 'In our patient ... no sling exposure' quote",
+    "Added p1-f098 blood glucose spectrum stable before procedure (own sentence), linked to e01 and summary",
+    "e16 time_kind duration -> relative; e21 duplicate overlapping evidence quote removed",
+    "Added relations e07->e08, e07->e09, e07->e11, e07->e12 (presentation opening the stay before in-hospital care, order only, RULINGS)",
+    "Added ambiguities: follow-up 'after discharge' anchor names no described discharge of the DKA/cellulitis stay; 'Once X ... we initiated' read as ordering",
+    "Summary paragraph 4 no longer attributes 'no sling exposure or erosion' to ultrasound; paragraph 1 adds stable pre-procedure glucose"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the 3 JPEG figures are inspected in the separate visual submission.",
+    "Single case report; the Goldman 2005 published case and general literature statements in the Discussion are not patient facts.",
+    "Antimicrobial agents are not named; insulin and glibenclamide doses, routes and schedules are not stated.",
+    "Timing of the TVT-O procedure, the emergency presentation and follow-up ultrasound findings is mostly relative or absent; no calendar dates.",
+    "Two discharge statements and the catheter-removal day versus the following-day discharge are recorded as stated without reconciliation.",
+    "Figure 1 and Figure 3 captions describe time-labelled panels; their findings are kept separate from text sentences that cite the same figures without naming panels.",
+    "Values printed inside the figure images (for example distance labels) are pixel content for visual.json only and are not facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 16,
+    "facts_reviewed": 98,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; Goldman 2005 case and generic statements excluded; b00007 imaging-extent sentence kept for the index patient (directly follows 'In our case' in a single-case report)",
+      "Two discharge statements kept separate and unrelated; catheter day-2 vs following-day discharge kept as an ambiguity",
+      "e10->e11 kept: 'Once X were controlled, we initiated Y' states order; e14->e15 kept as an adjacent-sentence anchor for '4 weeks later' within the paragraph",
+      "Text 'corrected bladder neck funnel (3 mm above the reference line)' vs caption 'no funnel formation' is an ambiguity, not a numeric source conflict (no second value for one measurement; text untimed)",
+      "Advised therapy/drainage stay action unknown / recommended; abstract multi-point drainage and text puncture drainage stay separate completed items (not identified as the same)",
+      "Figure 3 overlay text is scanner/measurement text; no burned-in date or identifier legible at full-resolution crops"
+    ],
+    "residual_risks": [
+      "Abstract multi-point drainage (f043) and text puncture drainage (f042) may describe the same procedure",
+      "Follow-up text ultrasound/uroflowmetry findings are grouped under the follow-up event without their own time",
+      "visual.json F2 panel B describes the red arrows on the wrong image side (agent fix pending)"
+    ]
+  },
+  "physician_adjudicated": false
+}

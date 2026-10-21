@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC5613125.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "34c3eeed797a9107684e99dc82f8157a85c815e9082db4b8fcc161bb042a2889",
+  "annotation_sha256": "34017988b7b685591e704ff718570f48fe09c62dabc0c623f5be697b4dbe53c9",
+  "reviewed_at": "2026-10-21T08:10:12.787462+00:00",
+  "source_segments_read": 23,
+  "facts_reviewed": 85,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f008/p1-f009/p1-f010 (alcohol use, drug use, epileptic seizures from \"There was not any description of ...\") set ambiguous/review_only with a new ambiguity: lack of a description is not an explicit denial; removed from the summary.",
+    "p1-f061 BMT time anchor \"test isolation\" set to null: \"One week later\" opens a new paragraph and names no anchor; event p1-e10 given its literal time text \"One week later\" (relative, no anchor).",
+    "Relation p1-e09->p1-e10 added (test isolation done to judge tolerance of the BMT isolation phase; result: judged able to tolerate) - test result -> action, not the paragraph-crossing \"One week later\".",
+    "Relations added: p1-e01->p1-e08 (ages 23 and 24, same anchor), p1-e08->p1-e10 (abstract \"received BMT for acute myeloid leukemia\", treating a named existing condition), p1-e10->p1-e17 (\"After BMT\").",
+    "p1-f072 removed as a duplicate of outcome p1-f076 (same clause \"his psychotic symptom had almost disappeared\"; ONE-STATEMENT); references repointed.",
+    "Abstract post-BMT improvement p1-f077 moved out of the 2 and 4 year follow-up event p1-e15 into new event p1-e17 \"After BMT\".",
+    "Added p1-f084 (abstract: drastic improvement in social functioning), p1-f085 (BMT isolation accomplished with no trouble), p1-f086 (judged able to tolerate the isolation stress, the test-isolation result).",
+    "p1-f033/p1-f042: misused regimen field (drug abbreviations QTP/RIS) removed; p1-f033 quetiapine kept review_only under the image-value ruling, note and ambiguity now say the Figure 1 bar label is not tied to a stated time point.",
+    "p1-f081 outcome text_value trimmed to social functioning (work is p1-f082).",
+    "Summary rewritten to cite the corrected facts, keep review_only facts out, and stay within 25-85 words per claim."
+  ],
+  "unresolved": [
+    "Figure 1 pixels were inspected in the separate visual record; plotted PANSS and GAF values are not extracted and no estimates from the plot are made.",
+    "The text gives no PANSS or GAF scores; the scale values exist only as plotted image content.",
+    "Quetiapine dose in the text differs from the dose label printed in Figure 1; the text dose fact is review_only.",
+    "Anchors for \"One week later\" (BMT) and \"Thirty days later\" lie across paragraph breaks and are left null; the test isolation is ordered before BMT by its stated purpose and result, not by \"One week later\".",
+    "Discussion and concluding statements about immune mechanisms, animal studies and other reported patients are background, not patient facts.",
+    "\"Not any description\" of alcohol or drug use or epileptic seizures is kept review_only, not as a confirmed negative history."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 23,
+    "facts_reviewed": 85,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (24-year-old man); b00013 sentence on no infection is literal about this patient; animal/literature discussion b00015-b00017 is background.",
+      "Figure 1 viewed at full resolution with crops: printed bar labels QTP 800 mg/day, RIS 12 mg/day, OLZ 20 mg/day; x tick labels 2, 6, 10 ... 54, 60, 64 \"Month\" confirmed; no per-point values printed.",
+      "Text quetiapine 300 mg/day is the starting dose; the figure bar label is image content not tied to a stated time point, so the text fact stays review_only and 800 stays in visual.json only.",
+      "Refusal of neuroleptics vs family-managed antipsychotics kept as written with an ambiguity; cyclosporin A stop read from \"in place of\"; GVHD early symptoms with verification unknown; PANSS/GAF named with no scores.",
+      "p1-f011 family history \"there is nobody with\" is an explicit negation; the EVID-NEGATION warning is a checker false positive (cue list lacks \"nobody\")."
+    ],
+    "residual_risks": [
+      "\"Thirty days later\" has no literal anchor and is not ordered against BMT.",
+      "The 34-day isolation event is not ordered against the BMT event (no literal order word).",
+      "Abstract follow-up at 2 and 4 years and the 2017 8-year follow-up are kept as separate statements."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC6123333.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a92b1d15e7013256220e238df2587bd6568889d3800d687eca8f8b158bab617c",
+  "annotation_sha256": "ef3641946a3acd82dea4de775bd0e367e0eb40bcf11a2815b652dc24cb3f62f9",
+  "reviewed_at": "2026-10-21T03:14:32.084072+00:00",
+  "source_segments_read": 16,
+  "facts_reviewed": 79,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f026 PET \"no accumulations\" (abstract, \"At first\"): flag negative -> unknown; not worded as normal and PET is not a qualitative assay.",
+    "p1-f066 (t2 portal vein tumor thrombosis): primary_site \"rectal carcinoma\" -> null; origin label disputed (rectal carcinoma vs colon cancer) and not an anatomic site.",
+    "p1-f074 second-line systemic treatment: tumor_ref t3 removed; the sentence joins recurrence and treatment with \"and\" without stating the target.",
+    "p1-f071 laparoscopic anterior resection intent curative: added case-text evidence \"Prior treatment with systemic chemotherapy was performed for curative surgery\".",
+    "p1-f059..f063 adjuvant mFOLFOX6 items: indication \"adjuvant chemotherapy\" -> null (a setting, kept in oncology treatment p1-f072).",
+    "p1-f011 initial CT clinical statement no longer places the CT at the local physician (not stated).",
+    "p1-e11 time_precision exact -> unknown (\"after six courses\" gives no interval).",
+    "Relation p1-e14 -> p1-e17: added the abstract sentence, which states the same order (only the interval is disputed).",
+    "Summary claim 4: removed the disputed 4- vs 6-month interval values and the review_only conflict facts p1-f077/p1-f078 from its sources."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four figure JPEGs are inspected in the separate visual.json.",
+    "Abstract and main text disagree on the interval from hepatectomy to paraaortic lymph node recurrence (four vs six months) and on its wording (recurrence vs swelling); both sides are review_only.",
+    "Tumor marker and PET results at first (normal, no accumulation) are stated only in the abstract without dates; the case text gives no serial values.",
+    "Abbreviated pathology codes (SS, P0, H0, M[-], D2, aw, ow, ew, CurA) are printed without expansion and are kept as printed; no staging system or edition is named.",
+    "Whether the portal vein tumor thrombosis is a recurrence, persistence or progression of the thrombosis suspected before surgery is not stated.",
+    "The \"operation\" preceding the 13-day discharge and the \"first surgery\" in the 15-month survival statement are not identified.",
+    "Discussion sentences on cited studies, HCC and CTC biology are background and not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 16,
+    "facts_reviewed": 79,
+    "figures_viewed": 4,
+    "key_findings": [
+      "One index patient (61-year-old man): rectosigmoid adenocarcinoma stage IIIb with portal vein tumor thrombosis resected by right hemihepatectomy, then paraaortic lymph node recurrence.",
+      "p1-f028 SUVmax 5.8 time \"after six courses of adjuvant chemotherapy\" is governed by the Fig 1 caption, which itself states the finding (abnormal accumulation, SUVmax 5.8, segment 8); the NO-BORROWING warning is a checker false positive.",
+      "Recurrence interval is a source conflict: four months (case text) vs six months (abstract); both outcome facts review_only, condition and event carry no interval.",
+      "Whether the PVTT is a recurrence, persistence or progression of the PVTT suspected before surgery is unresolved (source says both \"progressive\" and \"recurrence\"); disease_status left unset with an ambiguity.",
+      "Rectal carcinoma (abstract) vs colon cancer (text) vs Rs is a label ambiguity, not a numeric conflict.",
+      "Pathology codes kept as printed; aw/ow/ew flagged negative from the printed [−]; ly1/v1 unflagged; M[−] (text) and M0 (abstract) are consistent."
+    ],
+    "residual_risks": [
+      "Abstract-only \"At first\" normal tumor markers / no PET accumulation have no stated anchor; the e09 -> e10 order rests on the abstract identifying its elevated markers with the case-text elevation during adjuvant chemotherapy.",
+      "Unnamed \"the operation\" (13-day discharge) and \"the first surgery\" (15-month survival) are not linked to a specific operation.",
+      "Relation e17 -> e18 relies on past \"recurrence was noted\" vs present \"currently being administered\"."
+    ]
+  },
+  "physician_adjudicated": false
+}

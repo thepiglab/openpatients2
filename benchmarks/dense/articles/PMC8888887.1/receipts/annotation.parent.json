@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC8888887.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "069bd46c5f3b493b283e8aeac2c57c29e48309644d57a21390e9273471411c8b",
+  "annotation_sha256": "ce64432f10f4ea76e215a521a4062b6f348c49b8cd376f72c6d77035ea1f8d3e",
+  "reviewed_at": "2026-10-21T17:55:07.297216+00:00",
+  "source_segments_read": 52,
+  "facts_reviewed": 112,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Case 1 dysphagia-onset conflict (abstract '5 months later' vs Table 1 '1.1'): both facts p1-f010/p1-f011 stay source_conflict review_only and now carry their own conflicting time (1.1 after Onset; 5 months later after first symptom) instead of no time; removed them from the summary claim.",
+    "Added p1-f057 swallowing difficulty from the Case 1 diagnosis-findings row (empty Years cell, no time).",
+    "'no aspiration occurred' (p1-f029, p2-f029) made ambiguous review_only with an ambiguity: unlabelled study-level clause under the cohort rule, like 'no adverse events occurred'.",
+    "Split admission from procedure: p1-e07 is the admission (1.6 row with ALSFRS-R/MWST/RSST) and new p1-e09 the port construction; p2-e06 is the admission (1.5 row) and new p2-e09 the PEG construction.",
+    "Removed paragraph-position time grouping: %VC/FEV1/ADL/oral intake/VF facts moved from the timed admission events to new untimed evaluation events p1-e10 and p2-e10; p2-e07 'On admission' keeps only the tongue findings of that sentence.",
+    "Added relations: p1-e01 before p1-e03 ('first symptom ... later'), p1-e07 before p1-e09 and p2-e06 before p2-e09 (admission opening the stay), p2-e06 same_time p2-e07 ('On admission'), p1-e02 before p1-e08 and p2-e05 before p2-e08 (Table 1 Years from one onset anchor); p1-e06 before relation retargeted to the port event ('Since his dietary intake decreased, he was given ...').",
+    "Article limitations updated (conflict representation, unlabelled-statement handling, garbled Figure 1 caption)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three figure images were inspected in the separate visual submission.",
+    "Case 1 diagnosis timing differs in arithmetic between the abstract (2 years before the evaluation) and the case text (age 70 years at diagnosis, age 71 years at evaluation); kept as an ambiguity.",
+    "Table 1 diagnosis and edaravone rows have an empty Years cell; no time is attached to those findings except Case 2 diagnosis findings, which sit in the 0.5 year row.",
+    "Per-patient 95% confidence limits for ERD and CMC are analysis thresholds and are not recorded as observations; methods paragraphs on EEG processing and equations are not patient facts.",
+    "Discussion interpretations of ERD (cognitive compensation, tongue representation, temporal area compensation) are author hypotheses and are not recorded as findings.",
+    "The Data_Sheet_1.pdf supplement is a one-page CARE checklist (administrative) reviewed in the supplement manifest; it is not a patient data source.",
+    "Statements without a case label (adverse events during the recordings) are kept review_only; the sentences on severe dysphagia use \"they\" for the two patients and are copied explicitly to both.",
+    "Dysphagia onset timing for Case 1 differs between the abstract (5 months after the first symptom) and Table 1 (1.1 years); both timed facts are source_conflict review_only.",
+    "The 'no aspiration occurred' and 'no adverse events occurred' statements name no case and are review_only for both patients; 'the patients did not execute the double or more swallowing' and the discussion 'they showed severe dysphagia' (antecedent: the two ALS patients) are kept for both.",
+    "Figure 1 caption wording is garbled ('M0 is the E1 is the time to initiate swallowing'); no equivalence of M0 and E1 is recorded."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 52,
+    "facts_reviewed": 112,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Two index patients (Case 1 man 71, Case 2 woman 64); roster count 2 from 'in two patients with ALS'.",
+      "Table 1 raw XML checked: the diagnosis (Case 1) and edaravone rows have empty Years cells with rowspan 1, so no time is borrowed; Case 2 diagnosis findings sit in the 0.5 row under the Years header with '0 (Onset)' as literal anchor.",
+      "Case 1 diagnosis at age 70 vs '2 years before the evaluation' with evaluation at 1.6 years after onset is an arithmetic ambiguity, not a conflict.",
+      "'they showed severe dysphagia' kept for both: antecedent is 'two ALS patients with dysphagia' in the preceding sentence; 'either case'/'both cases'/'the patients' statements kept for both.",
+      "MWST in symptoms_function (bedside swallow grade), RSST in observations (count test); MRI 'without explainable findings' left unflagged; 'decreased' %VC/FEV1 flagged low as the source's own classification.",
+      "Supplement SM1 is a one-page CARE checklist (administrative, not includable)."
+    ],
+    "residual_risks": [
+      "Edaravone (both cases) and the Case 1 diagnosis-findings row have no stated time and are not ordered.",
+      "Abstract Case 2 ERD summary (lateral sensorimotor only) vs results text (also premotor and temporal) kept as an ambiguity."
+    ]
+  },
+  "physician_adjudicated": false
+}

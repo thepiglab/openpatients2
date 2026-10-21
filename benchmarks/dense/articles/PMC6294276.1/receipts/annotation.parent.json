@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC6294276.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "29548851f5f99d4f8262ce32d1b21ff77157f7b1639713b74765eefb067e9aa6",
+  "annotation_sha256": "7d4bfdc417fdc5cffce9afdeffb64e066509c419ef69f14ae417da645bf947b7",
+  "reviewed_at": "2026-10-21T04:06:05.782487+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 71,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f010 (patient-stated fall into a bar stool): verification unknown -> unconfirmed, certainty supported -> ambiguous, scoring include -> review_only; the family account contradicts it \"upon further exploration\" and the author etiology (sustained external compression) does not endorse it. Both mechanism accounts are now review-only; the author etiology p1-f009 stays include.",
+    "Added p1-f071 social_exposures housing \"Resided in an assisted living environment\" at initial presentation (discussion sentence), attached to the presentation event p1-e04; residence ambiguity rewritten as compatible attributes (living arrangement vs residence type), not a source conflict.",
+    "p1-f067 (ambulatory status and normal limb function): related_condition \"wound\" removed (not stated).",
+    "p1-f046 renamed to include the device named in its sentence (V.A.C. Freedom).",
+    "p1-e01 description no longer repeats the disputed mechanism values; mechanism ambiguity notes that \"Less than a week prior\" grammatically dates the patient statement.",
+    "Relations added (8): e05->e06 (exam findings -> admission for debridement workup), e10->e15 (\"After six days of NPWTi-d ... continued to receive traditional NPWT\"), e15->e17 (NPWT start -> \"NPWT was discontinued\"), e08->e17 (\"Approximately six weeks from surgery\"), e17->e18 (granular wound bed -> grafting offered; \"Once the wound was ready for skin grafting\"), e08->e16 (\"within the first postoperative month\"), e11->e14 (in-hospital NPWTi-d during the six-day stay -> transfer after six days), e21->e20 (normal limb function \"achieved much sooner\" than complete closure).",
+    "Relation evidence strengthened: e01->e04 adds \"presented much later after the initial traumatic event\"; e13->e14 adds the six-day hospital stay and the transfer sentence identifying the transfer as the end of that stay.",
+    "Summary paragraph 1 rewritten without the disputed mechanism and cites the author etiology; paragraph 2 uses the literal culture wording. Article limitations updated for mechanism and residence."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the 14 JPEGs were inspected in the separate visual target.",
+    "Injury mechanism differs between the patient (fall into a bar stool) and the family (leg lodged in a recliner footrest); both accounts are review-only and the author-stated compression etiology is kept.",
+    "Residence is described both as living alone and independently and as an assisted living environment at initial presentation; recorded as an ambiguity, not a conflict.",
+    "Complete closure is stated both about six weeks after the third grafting and at six months; the anchor of six months is not stated, so both are kept without reconciliation.",
+    "Compartment syndrome sequela is a hedged author diagnosis (favored over hematoma alone) and is recorded as provisional.",
+    "No laboratory values, antibiotic names or measurements are reported; deep tissue cultures and the later surgical wound culture result are not linked.",
+    "Introduction, literature-review sentences and the author general practice with other irrigants are background and not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 71,
+    "figures_viewed": 14,
+    "key_findings": [
+      "Single index patient (83-year-old man); introduction, literature review (Volkmann, Jepson, Lessing, Kim et al. six-minute dwell) and the author general practice with hypochlorous acid/Prontosan are background, not patient facts.",
+      "Residence wording (\"living alone and independently\" vs assisted living environment at initial presentation) judged an ambiguity, not a source conflict: different attributes, not mutually exclusive.",
+      "Closure \"approximately six weeks after the third\" grafting vs \"six months\": different, partly unstated anchors, kept as two include outcome facts in one event with an ambiguity; normal function \"in approximately two months\" vs FIG14 \"return to normal function at six months\" is a status at six months, not a conflicting onset.",
+      "Compartment syndrome sequela kept provisional (\"thought to represent\", \"favored over hematoma alone\").",
+      "\"within the first postoperative month\" has no \"of <event>\" construction: drafter encoding (before, anchor null) kept per RULINGS; order after surgery carried by relation e08->e16.",
+      "Deep tissue cultures and \"Surgical wound cultures were negative other than skin flora\" are not identified as the same specimens; kept unlinked with an ambiguity.",
+      "Antibiotic change \"before hospital discharge\" ordered before the SNF transfer because the source states a six-day hospital stay and the transfer after six days of in-hospital NPWTi-d.",
+      "All 14 clinical photographs viewed at full resolution with crops (FIG1 bed-scale control panel, FIG6 trackpad, FIG10 harvester housings and hand with ring); no faces or sensitive anatomy."
+    ],
+    "residual_risks": [
+      "Timing of the injury relies on the patient-statement time (\"Less than a week prior\").",
+      "AI reference annotation, not physician adjudicated."
+    ]
+  },
+  "physician_adjudicated": false
+}

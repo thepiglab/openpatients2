@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC4967697.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "968793c096af0256f679f77b35459deaa817acd76683a20a2613ccb2609cdaa9",
+  "annotation_sha256": "c31a274f67b3afbcd7a7a80505c6cf75dbbfed79894ce0699e640ff0945c3015",
+  "reviewed_at": "2026-10-21T08:17:35.446480+00:00",
+  "source_segments_read": 44,
+  "facts_reviewed": 86,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f034 dysphonia: \"progressive\" moved from severity to text_value (course word, not a severity).",
+    "p1-f043 cardiovascular exam text_value \"normal\" changed to the source word \"unremarkable\".",
+    "p1-f054 STEMI: removed diagnostic_basis (the source never states the EKG as the basis of the STEMI diagnosis).",
+    "p1-f070 chest-pain resolution: removed related_condition STEMI (not named in the sentence).",
+    "p1-f061 second-angiogram mid-LAD finding: given the Fig. 2 caption's own time \"4 days later\" (after, anchor \"First left heart catheterization\"), caption quote extended to both panel lines; added to the 4-day interval ambiguity.",
+    "Added relation p1-e01 before p1-e02 (\"a history of ... four prior cerebrovascular accidents ... status after surgical repair\" vs \"initially presented\").",
+    "Added relation p1-e02 before p1-e05 (stay-opening presentation before the in-stay first angiogram, order only; quotes the presentation, \"On her second day of hospitalization\" and the angiogram sentence).",
+    "Added ambiguity for hemoglobin printed as 10.5 mg/dL (likely unit print artefact; kept as printed, not converted)."
+  ],
+  "unresolved": [
+    "Table 1 and the Discussion describe previously published cases and cohort studies; none of it is attributed to the index patient.",
+    "Figure pixels are inspected in the separate visual submission; the caption layer here is not_inspected.",
+    "The case narrative gives no discharge, follow-up duration or later outcome beyond resolution of chest pain and EKG return to baseline.",
+    "Hemoglobin unit is printed as mg/dL in the source and kept literally."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 44,
+    "facts_reviewed": 86,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (75-year-old woman); Table 1 (six published steroid-associated MI cases) and the discussion are literature, correctly excluded.",
+      "\"4 days\" (abstract, introduction, Fig. 2 caption) vs narrative steps is an ambiguity, not a conflict: the dexamethasone start day is unstated, so the step sum is not fixed.",
+      "STEMI kept \"associated with\" dexamethasone; the spasm-thrombosis mechanism is hedged and recorded only as an ambiguity; no causal field.",
+      "NSTEMI verification unknown is right: the source labels treatment \"for a NSTEMI\" and the next angiogram showed no significant CAD.",
+      "Paragraph-opening \"On the following day\" (b00004) and \"One day later\" (b00005) have no anchor inside their own paragraphs; null anchors are correct.",
+      "Troponin \"up to 0.3\" kept with <=; later 0.1 ng/mL left unflagged (no flag from cutoff); EF 30-35% kept as text; ticagrelor/aspirin/diltiazem/atorvastatin \"in addition to\" kept action unknown.",
+      "Fig. 2 pixels carry burned-in patient-name/ID fields, date/time stamps, filter label, frame numbers and projection angles on all three panels; Fig. 1 EKGs carry only lead labels."
+    ],
+    "residual_risks": [
+      "Events p1-e09 (bedside echo), p1-e11 (troponin 0.1), p1-e14 (eptifibatide) and p1-e16 (blood work) remain unordered: no literal order word links them.",
+      "p1-e07 (dexamethasone) and p1-e08 (STEMI) are not directly ordered because \"One day later\" opens a new paragraph."
+    ]
+  },
+  "physician_adjudicated": false
+}

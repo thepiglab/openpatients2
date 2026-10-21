@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC6488964.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "309ada2a0bc4f9fd0ed8c23978db7565a4f658e36d434df2d87d4d72b77621a2",
+  "annotation_sha256": "e5b7db4d3042316d965d4ae177f0c98f7ba392950766c365edfe48a12b34b078",
+  "reviewed_at": "2026-10-21T04:03:23.327988+00:00",
+  "source_segments_read": 14,
+  "facts_reviewed": 138,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed the dipstick method from the haematuria (+) observation; dipstick is stated only for the protein result (no borrowing).",
+    "Current MMF and prednisolone doses are stated twice with different numbers, each introduced with \"now on\" (1gm twice daily/10mg daily vs maintenance 500mg twice daily/5mg daily): all four facts set to source_conflict, review_only, action administered; ambiguity rewritten as a conflict; disputed doses removed from the summary.",
+    "Irbesartan, hydroxychloroquine, atenolol, methyldopa, calcium/vitamin D and atorvastatin set to current with time \"now\", quoted contiguously from the \"now on\" clause of their own sentence.",
+    "Added the discussion sentence on induction with high dose oral steroids to the prednisolone 60mg/day and MMF 1.5g facts (regimen induction, prednisolone route oral).",
+    "Removed the duplicate outcomes follow-up fact; the renal clinic follow-up stays as one care plan with time \"currently\".",
+    "Care plans: monthly outpatient follow-up and close renal function watching set to completed (past tense); report with the histology report set to planned (a discharge instruction, not recommended wording).",
+    "Removed the non-condition related_condition from the no-new-complication outcome; removed the discussion cost statement from the remission event.",
+    "Split hemoglobin 13.5 g/dl out of the six-month event (its sentence states no six-month time) and transfusion out of the antihypertensive event; added transfusion before hemoglobin improvement (\"after only a unit of whole blood was transfused\").",
+    "Laboratory event no longer carries \"on admission\", which governs only the creatinine peak; split UPCR 4.9g/day (the previous month) from the 9.7g/day increase with an order relation.",
+    "Added relations: presentation before exam, antihypertensives, transfusion, labs (both quotes), biopsy and discharge (presentation opens the stay); discharge before outpatient induction follow-up; acne before dyspepsia (\"then\"); biopsy-to-histology now quotes both sentences.",
+    "Time kinds for \"after six months of treatment\", \"after one month on steroids\" and \"after three months of immunosuppression\" set to relative."
+  ],
+  "unresolved": [
+    "No figures, tables or supplements in the source; no pixel review applies.",
+    "Discussion statements citing literature (SLE and lupus nephritis prevalence, drug comparisons, anti-Smith sensitivity) are background and not patient facts.",
+    "Immunofluorescence and electron microscopy were unavailable, so class V elements were suggestive but not confirmed.",
+    "The first sentence of the presentation paragraph does not make clear whether the single seizure falls inside the two week history, so no time is assigned to it.",
+    "Hemoglobin, cholesterol and albumin baselines are printed twice with rounding differences; see ambiguities."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 14,
+    "facts_reviewed": 138,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient; no figures, tables or supplements.",
+      "SLE criteria count (6 of 11) does not match the seven items listed; kept as an ambiguity without recounting.",
+      "Hb 7.4 vs 7, cholesterol 14.5 vs 14, albumin 13.1 vs 13 are rounding differences of the presentation baselines; one value each plus an ambiguity.",
+      "Class IV lupus nephritis confirmed (\"Histology however proved Class IV LN\"); class V elements and interstitial nephritis provisional/possible; immunofluorescence and electron microscopy not performed (not available).",
+      "Proteinuria 0.55g/day carries two timing descriptions (current maintenance vs after six months of induction); time left null with an ambiguity."
+    ],
+    "residual_risks": [
+      "Acne timing anchor (\"one month on steroids\") is ambiguous because steroids were taken before presentation.",
+      "Seizure timing relative to the two week history is unclear; no time assigned.",
+      "Thrombocytopenia and arthritis are attested only in the discussion criteria list."
+    ]
+  },
+  "physician_adjudicated": false
+}

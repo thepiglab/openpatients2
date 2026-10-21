@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC11669445.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "394f89cc08b9fad578e648ef9f1656c2b380edf0e83a047e768b495fe0702025",
+  "annotation_sha256": "33399776a2840f20e275ec8c7941e566b465204ae70d69eebc7f0152d749070e",
+  "reviewed_at": "2026-10-21T13:57:09.976674+00:00",
+  "source_segments_read": 18,
+  "facts_reviewed": 77,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Relation p1-e09 -> p1-e11: replaced the Figure 3 caption time quote (caption times govern only the caption's own finding-free panels, not the text sentence citing Figure 3a-f) with the literal 'Switching to lorlatinib resulted in ... improvement of liver failure' (b00004) and 'lorlatinib ... improved the patient's liver function and performance status' (b00001).",
+    "Relation p1-e06 -> p1-e07: added the literal 'developed severe hemolytic anemia after starting low-dose alectinib' (b00002) beside the Figure 2 caption quotes.",
+    "Relation p1-e06 -> p1-e09: added Figure 3 caption '(c) At the time of lorlatinib initiation after discontinuing alectinib.'",
+    "Relation p1-e09 -> p1-e13: evidence now quotes the 50 mg lorlatinib start together with the later increase to 75 mg.",
+    "Added relation p1-e05 -> p1-e06 (liver failure from diffuse liver metastasis -> low-dose alectinib 'due to' / 'despite ... liver failure ... was chosen').",
+    "Added relation p1-e06 -> p1-e08 (hemolytic anemia developed 'after starting low-dose alectinib').",
+    "p1-f009 hemolytic anemia: severity 'severe' with the abstract quote added as evidence.",
+    "Figure 3 panel h evidence extended to the caption words its description states.",
+    "Added two ambiguities: biopsy ordered after liver-failure improvement only ('once ... had improved'); presentation/workup events left unordered (diagnostic basis wording only)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEGs were inspected in the separate visual submission.",
+    "Figure 2 values (Hb, CEA, T-Bil) are plotted without per-point printed values; no plot readings are recorded as facts or in visual.json.",
+    "The source calls the patient a man and then uses the pronoun She; both are review-only and unresolved.",
+    "Hepatobiliary enzymes are described as elevated without naming analytes; individual flags left unknown.",
+    "The graphical abstract image has no caption; it is attributed to the single case through the abstract text.",
+    "No supplementary material is declared in the raw XML."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 18,
+    "facts_reviewed": 77,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single 50-year-old never smoker with ALK-positive lung adenocarcinoma, clinical stage IVB, liver failure from diffuse liver metastasis (Child-Pugh C, PS 3); alectinib 150 -> 300 -> 600 mg, alectinib-induced hemolytic anemia, switch to oral lorlatinib 50 mg, 75 mg with grade 2 neuropathy, 50 mg maintained; all 77 facts checked against b00001-b00018.",
+      "Sex: 'A 50-year-old man' vs 'She had no significant past medical history' are the only sex words in the article (raw.xml checked); both kept source_conflict/review_only, no sex resolved.",
+      "RBC transfusion kept completed: the Figure 2 caption literally states '2 units transfused per session'.",
+      "Low-dose description vs escalation to 600 mg and the hedged 'might have led to' blood-concentration sentence kept as ambiguities only.",
+      "Hepatobiliary enzymes 'elevated' (flag high) as a group; individual analyte flags unknown; CEA/NSE/CA19-9 high from 'markedly elevated'.",
+      "e11 -> e12 accepted: 'performed once the liver failure had improved' states the order (past perfect against simple past in one sentence).",
+      "No tables or supplements in raw.xml (table-count 0, no supplementary-material). Four assets viewed at full resolution: Fig 1 -> g004, Fig 2 -> g001, Fig 3 -> g003, graphical abstract jats-graphic-1 -> g002; pixels match each caption; graphical abstract is a smaller copy of Fig 2."
+    ],
+    "residual_risks": [
+      "Patient sex unresolved (source conflict).",
+      "Presentation and diagnostic workup events (e01-e04) carry no literal order to each other or to the diagnosis.",
+      "Figure 2 plotted Hb, T-Bil, D-Bil and CEA values are not printed per point and are not recorded; the image prints D-Bil though the caption names only T-Bil."
+    ]
+  },
+  "physician_adjudicated": false
+}

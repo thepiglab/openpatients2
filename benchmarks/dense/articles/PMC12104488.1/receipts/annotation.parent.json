@@ -1,0 +1,68 @@
+{
+  "article_id": "PMC12104488.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "275b897d1ed2d74ff0bc1b1c56aa4f0049c739b075bdc5e30bac404c8de32187",
+  "annotation_sha256": "5fd4fdbab6a417f4eb9c1e2585ea7b79f8966fbcbdd3dd4ac7d11cefe842c223",
+  "reviewed_at": "2026-10-21T14:11:04.033456+00:00",
+  "source_segments_read": 31,
+  "facts_reviewed": 100,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1: un-merged creatinine. f015 now holds only the Table 1 value 63 μmol/L with footnote a (flag high); new f034 holds the text statement \"mildly elevated\" creatinine. The source does not identify them as the same measurement, matching the separate urea items f016/f017 (RULINGS merge rule).",
+    "p1: added f035 (rapidly enlarging abdominal mass) from the discussion sentence literally naming \"The first patient\".",
+    "p1: tumor lysis syndrome kept provisional/review_only as an AMBIGUITY (certainty wording differs between narrative/discussion and the \"suspected\" Table 1 cell; no two different values, so not a source conflict); ambiguity now quotes the b00013 sentence too. Renal failure (f027) stays include: b00013 literally names \"The first patient\".",
+    "p1: added relations e03 (ECHO discussion) before e05 (BL diagnosis) from Table 1 footnote b \"Diagnosis not available until after ECHO discussion\"; e01 before e04 (\"Given the presentation ...\"); e07 during e06 (Table 1 \"suspected tumor lysis syndrome during prephase\").",
+    "p2: f023 removed duration_text \"completed\" (not a duration; completion is carried by the evidence and outcome f029).",
+    "p2: f015 (possible lymphoma) now also quotes the discussion sentence literally naming \"the second patient\" (\"already suspicious of lymphoma\").",
+    "p2: added f030 (Table 1 Duration of symptoms 4 months), previously unrepresented (OBS-TABLE-ROWS).",
+    "p3: split tachypnea/edema. f008/f009 keep the text third-presentation signs plus the Table 1 exam cell; new f032/f033 hold the Table 1 Associated symptoms cell as untimed symptoms, preserving the table's symptom vs exam distinction.",
+    "p3: added f034 (Table 1 Duration of symptoms 3–4 months); the 4 months vs 3–4 months difference stays an ambiguity (compatible range, not a conflict).",
+    "p3: b00015 (\"In the third scenario\") is literal for Patient 3: added f035 possible leukemia (provisional, separate from confirmed ALL f020) and added the b00015 referral sentence as evidence to f027.",
+    "p3: f018 (Table 1 Imaging \"None\") converted from a procedure with assertion absent to an observation status/result_absent_reason not_performed with assertion present (OBS-NOT-PERFORMED), review_only with an ambiguity because the table does not state the period it covers.",
+    "p3: added relations e04 (referral via the hub team) before e05 (same-day transfer; \"led to\"), e05 before e06 (\"transfer to MTRH where the patient was diagnosed with ALL\"), e08 (induction) before e09 (consolidation; ordered treatment phases, \"ultimately\").",
+    "Article: source_coverage notes for b00013-b00015 updated to the literal ordinal patient references used."
+  ],
+  "unresolved": [
+    "Table 1 is a per-patient characteristics table with no serial time points; no measurement series were built.",
+    "Figure 1 is a process schematic with no patient measurements; pixels inspected in visual.json only.",
+    "Discussion paragraphs give author interpretation of delay and decision making; only literal case statements were extracted.",
+    "Table 1 laboratory values carry no flags except creatinine for Patient 1 (footnote a); no flags were derived from reference ranges.",
+    "Patient 1 imaging (abdominal CT) is listed only in Table 1 and is kept review-only.",
+    "The source reports no dates, regimens or doses for chemotherapy."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 31,
+    "facts_reviewed": 100,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Roster of three children (Patient 1 BL died in prephase, Patient 2 BL survived, Patient 3 ALL died in consolidation) confirmed; Table 1 column-to-patient mapping checked against the JATS table in raw.xml (no rowspans; footnote a on the Patient 1 creatinine cell, footnote b on the Patient 1 final diagnosis). No supplementary material in raw.xml.",
+      "Patient 1 tumor lysis syndrome: narrative and discussion unhedged, Table 1 \"suspected\": a certainty-wording ambiguity, not a source conflict; kept provisional/review_only. Renal failure from the discussion is literal (\"The first patient\") and included.",
+      "Patient 1 abdominal CT in Table 1 versus local evaluations deferred: not a contradiction (setting and time of the CT unstated); kept review_only with action unknown and an ambiguity.",
+      "Creatinine un-merged (Table 1 value with footnote a separate from the text \"mildly elevated\") consistent with the separate urea items, since the source never identifies the text and table values as the same measurement.",
+      "Discussion b00013/b00014/b00015 name the first/second patient and the third scenario literally; added rapidly enlarging mass (p1), suspicion of lymphoma evidence (p2), possible leukemia and referral evidence (p3).",
+      "Patient 3 Table 1 associated-symptom tachypnea/edema split from the exam signs; Table 1 Imaging \"None\" recorded as not_performed review-only; Table 1 symptom durations for Patients 2 and 3 added.",
+      "Added literal relations: p1 ECHO discussion before BL diagnosis (footnote b), presentation before deferral (\"Given the presentation\"), TLS during prephase; p3 referral before transfer, transfer before ALL diagnosis, induction before consolidation.",
+      "Figure 1 viewed at full resolution: process schematic with Case 1-3 lines, no patient values or identifiers; visual, figure-EHR and privacy sidecars match the pixels.",
+      "Pronoun-derived sex (\"he\"/\"He\") for Patients 1 and 3 is allowed by DEMO-SEX-WORDING and has corpus precedent."
+    ],
+    "residual_risks": [
+      "Grouping the Table 1 laboratory cells into the presentation/exam events treats them as the presented work-up; the table states no time.",
+      "Patient 1 death related_condition Burkitt lymphoma rests on \"a complication of BL treatment\".",
+      "Patient 1 transfer to MTRH (care plan) stays action_status unknown because the narrative never states that the transfer occurred."
+    ]
+  },
+  "physician_adjudicated": false
+}

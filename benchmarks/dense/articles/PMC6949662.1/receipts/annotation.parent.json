@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC6949662.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6169b6417655530cd0b56931be51244e2b09ac9ffd55f47d356ee1fddc3d396b",
+  "annotation_sha256": "c7e766deb7f3559ee8872ea4babf9c39ddf8942dceb310dc52d31eb5763ef4de",
+  "reviewed_at": "2026-10-21T07:57:45.434671+00:00",
+  "source_segments_read": 42,
+  "facts_reviewed": 114,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed duplicate Botox procedure item (p1-f094); Botox held once in medications with action unknown (\"requiring\" does not establish administration).",
+    "Removed the CSF NMDAR antibody test procedure item (p1-f095, CSF as body site); the result stays as observation p1-f073.",
+    "Removed duplicate return-to-pre-morbid-function symptoms_function item (p1-f047); held once by outcomes p1-f109.",
+    "Removed the \"delayed diagnosis\" condition (p1-f022): author characterization of the course, not a patient condition.",
+    "Pelvic ultrasound procedure: dropped the inferred indication (the sentence joins suspicion and request with \"and\").",
+    "Teratoma diagnostic_basis reduced to the ultrasound finding; autoimmune panel text_value (invented wording) removed, result left unknown/review_only.",
+    "Heart rate text_value set to the literal source wording.",
+    "Added care_plans item: mental health assessment order revoked (abstract), linked to the medical-admission event; added outcomes item: failed to respond to initial treatment (discussion, literal about the patient).",
+    "Added 10 literal relations: psychiatric admission before change to medical admission (\"previous admission\"); possible infective encephalitis diagnosis before ceftriaxone/acyclovir (\"to cover for possible HSE\"); antibiotics before GCS decline (\"despite being on intravenous antibiotics\"); suspicion and pelvic ultrasound before immunotherapy (\"At this point\"); laparotomy/oophorectomy during immunotherapy (\"During this time\"); GCS decline before ICU admission (\"due to low GCS\"); first CSF before the subsequent positive CSF antibody test; ICU stay and admission complications before discharge (in-hospital care before discharge).",
+    "Summary: \"after recent exam and work stress\" reworded to \"in the setting of\"; complications attributed to the admission, not to the ICU stay.",
+    "Added an ambiguity that the GCS value at ICU admission is not stated."
+  ],
+  "unresolved": [
+    "The article has no figures or supplements; visual and supplement sidecars do not apply.",
+    "Source conflict on patient age (22 years in the abstract versus 28 years in the case report); both age facts are review_only and no age appears in labels or summaries.",
+    "Review sections, epidemiology and proposed diagnostic criteria are background and not patient facts.",
+    "The Table 1 CSF cells are separate per-tube observations; the text CSF values are not merged with Tube 1."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 42,
+    "facts_reviewed": 116,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index woman; case report b00021-b00026 plus abstract and discussion sentences literally about this case; Table 1 CSF tubes are hers.",
+      "Age 22 (abstract) vs 28 (case report) is a two-number source conflict: both review_only, no age in label/summary.",
+      "Text CSF counts (200/13/187) equal Table 1 Tube 1 but the text names no tube: kept unmerged with an ambiguity, per the merge ruling.",
+      "WBC \"up to 15\" with printed unit 10^6 mmol/L kept literal (<=, flag high from \"slight elevation\"), unit ambiguity recorded.",
+      "NO-BORROWING warning on p1-f073 is a checker false positive: the abstract quote itself states the positive CSF anti-NMDAR antibody result, and the anchor is the adjacent sentence of the same paragraph.",
+      "Teratoma kept provisional (ultrasound suggestive; discussion names ovarian teratoma; no histology); oophorectomy indication not stated, so not linked.",
+      "Botox and cognitive rehabilitation unknown (requiring/needed); nonsmoker absent with status unknown (not never-use wording)."
+    ],
+    "residual_risks": [
+      "Autoimmune panel result left ambiguous (sentence may mean it was also negative).",
+      "Order within the emergency stay (sedation, referral, fever spike, lumbar puncture) is not stated.",
+      "WBC unit as printed is implausible; not corrected."
+    ]
+  },
+  "physician_adjudicated": false
+}

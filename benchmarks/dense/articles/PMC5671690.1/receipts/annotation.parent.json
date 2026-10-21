@@ -1,0 +1,69 @@
+{
+  "article_id": "PMC5671690.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c9e5d7cca6647851e1ebba0a85d0f7364c572e3e406d5fb99b69cbe69a886cd6",
+  "annotation_sha256": "973ce10acbafad780ae0e045a26ed0e461a45e56131825439db59218ca509ee1",
+  "reviewed_at": "2026-10-21T03:14:19.457498+00:00",
+  "source_segments_read": 18,
+  "facts_reviewed": 96,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f037 deep tendon reflexes: \"absent\" moved from a present item's text_value to assertion=absent (EVID-NEGATION).",
+    "p1-f044 methimazole: added the case-report clause \"methimazole that was started about 3 weeks earlier\" as evidence for action=started.",
+    "p1-f056 first-episode ECG (caption side): added the Table 1 Episode 1 cell and time \"Episode 1\"; text_value reduced to \"ST elevation\" (leads quarantined).",
+    "Added p1-f092 Q waves in V1-V3 (Figure 1 caption and Table 1 agree; not part of the lead-extent conflict), included.",
+    "Added p1-f093 abstract side of the ECG lead conflict (\"anterolateral leads\"), source_conflict/review_only with leads removed; linked to the ECG ambiguity.",
+    "Split the ventriculogram regional-pattern conflict into one fact per side: p1-f062 abstract (apical and mid hypokinesis) and new p1-f094 Figure 2 caption (preserved apex, mid akinesia), both source_conflict/review_only with the region removed.",
+    "p1-f070 second-episode ECG: added the Table 1 Episode 2 ECG cell as evidence.",
+    "p1-f077 Figure 4 ECG (\"3 days later\", nonspecific ST-T changes): certainty supported/include, because the caption finding and its literal unanchored time are not in doubt; only its episode is unresolved (ambiguity kept).",
+    "p1-f079 EF 60%: flag normal (\"complete normalization of LV function and wall motion (EF 60%)\").",
+    "p1-f089 resolution in 10 days: removed follow_up_duration_text misuse; time \"in 10 days after PLEX\", relation after, anchor PLEX; added the discussion quote.",
+    "p1-f006 first myasthenia crisis: added the abstract quote \"Her symptoms were attributed to MG crisis.\"",
+    "Added p1-f095 extensive evaluation found no significant trigger for her crisis (discussion, literal \"her\"), included.",
+    "Added p1-f096 discussion sentence on LV improvement with prolonged hospitalization as review_only with a new ambiguity (unlabelled discussion sentence).",
+    "Events: moved p1-f058 (Episode 1 peak troponin) from the TTE event to the ECG/troponin event p1-e04; moved p1-f016 (Grave's ophthalmopathy history) from p1-e07 to the history event p1-e15; linked p1-f092, p1-f093, p1-f094.",
+    "Relations: added p1-e01 before p1-e03 (\"myocardial infarction one year earlier\"), p1-e04 before p1-e08 (resolution of the ECG findings and troponemia), p1-e07 before p1-e08 (PLEX recommended, then 5 cycles of PLEX); added the single-sentence discussion quote to p1-e10 before p1-e11.",
+    "Summary claim 1: replaced the non-source label \"bulbar\" weakness with the stated symptoms and cited p1-f024/p1-f025.",
+    "Ambiguities: linked the new facts, added the no-trigger quote, replaced boilerplate must_not_infer texts with specific ones."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four JPEGs were inspected separately in visual.json.",
+    "ECG lead extent for the first episode and the left ventriculogram regional pattern are inconsistent between text, abstract, captions and table; recorded as review-only source conflicts.",
+    "Discussion statements about other patients, case reports and general myasthenia or Takotsubo knowledge are not patient facts.",
+    "Table 1 has an empty spacer segment (b00017) between the Episode 1 and Episode 2 rows.",
+    "No supplements; no values were read from plots or waveforms."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 18,
+    "facts_reviewed": 96,
+    "figures_viewed": 4,
+    "key_findings": [
+      "One index patient (69-year-old woman, MG and Grave's disease); roster 1 from \"We report a patient\".",
+      "ECG lead extent for episode 1 is a real three-way source conflict (text V1-V4 anteroseptal, Fig 1 caption and Table 1 V1-V6, abstract anterolateral): all three sides review_only with leads removed; ST elevation itself and Q waves V1-V3 are undisputed.",
+      "Ventriculogram apex is contradicted (abstract apical and mid hypokinesis vs caption preserved apex with mid akinesia): one review_only fact per side, region removed.",
+      "Figure 4 is the patient's ECG (single-patient article); its episode/anchor is unstated and the text cites it for \"resolution of the ST elevations\" in the episode-2 sentence although episode 2 shows T inversions: kept as ambiguity, facts recorded literally.",
+      "Pre-admission IVIG/prednisone/pyridostigmine action unknown; methimazole started about 3 weeks before episode 1 (case text and discussion); tracheostomy \"requiring\" kept action unknown; STEMI possible/provisional (no ruled-out wording).",
+      "TSH 7.6 text and Table 1 Episode 1 merged (text cites Table 1, same value, micro unit/ml = mcunit/ml spelling); Table 1 spacer row b00017 carries no values.",
+      "All relations checked against their full evidence lists; e10->e11 and e12->e14 rest on adjacent-sentence \"X later\" anchors in the same paragraph (allowed), e10->e11 now also has a single-sentence discussion quote."
+    ],
+    "residual_risks": [
+      "Figure 4 episode attribution and the \"resolution of the ST elevations\" wording for episode 2 remain unresolved in the source.",
+      "First-episode tests have no stated times; \"3 weeks later\" and \"3 days later\" are unanchored.",
+      "Discussion sentence on prolonged hospitalization is unlabelled and review_only."
+    ]
+  },
+  "physician_adjudicated": false
+}

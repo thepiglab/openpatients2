@@ -1,0 +1,69 @@
+{
+  "article_id": "PMC12118242.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "50166cea3a248bafe3c58ba6bbdf136e0be878053f61b259e213d7f69e8e371f",
+  "annotation_sha256": "425b9ed1e9dd21d22a01a594d48856f3a2ced6f770652e87c4d2a8181841a5ce",
+  "reviewed_at": "2026-10-21T13:22:44.431698+00:00",
+  "source_segments_read": 43,
+  "facts_reviewed": 150,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1: added f055 (outcome improvement: in situ infection effectively controlled, Case 1 discharge paragraph).",
+    "p1: added f056 (favorable prognosis following management) as ambiguous/review_only with an ambiguity: the discussion sentence follows the Case 1 sentence but names no case.",
+    "p1: added event e09 for the untimed discharge-paragraph exam/PFT/HRCT facts (f023-f027, f055), time null; added relation e02 before e09 from the post-hoc wording \"mostly resolved lung consolidation\".",
+    "p2: added relation e02 (acute HRCT) before e06 (mosaic-perfusion HRCT) from the comparison \"consistent with that of the acute phase\".",
+    "p3: f025 (pulmonary function returned to normal) time removed and evidence reduced to its own sentence (\"Meanwhile\" refers to a different test's sentence; NO-BORROWING, consistent with the earlier Meanwhile ruling); co-timing kept as event relation e08 same_time e09.",
+    "p3: f024 (HRCT after 1 month) evidence trimmed to its own sentence; the appended \"Meanwhile\" sentence is the pulmonary-function fact f025.",
+    "p3: split event e08 into e08 (HRCT after 1 month) and new e09 (pulmonary function returned to normal, untimed).",
+    "p3: removed e06 (PFT) before e07 (asthma considered, Seretide prescribed): the quote orders them only by sentence order; no order word or stated action on the PFT result.",
+    "p3: added e08 same_time e09 (\"Meanwhile\"), e02 before e08 (post-hoc \"disappearance of the inflammation\"), e06 before e09 (\"returned to normal\" after the abnormal PFT).",
+    "Article: added limitations on the Table 1 \"None\" reading and on the two discussion statements covering all three cases; b00035 coverage note updated."
+  ],
+  "unresolved": [
+    "The article has no figures and no supplements.",
+    "Table 1 merges cells with row spans; the Case 2 physical-examination cell (\"Any significant findings\") spans two rows and its polarity is not stated.",
+    "Table 1 values carry no explicit time except the \"Lung function at discharge\" block; laboratory, symptom and examination rows are recorded without time.",
+    "Case 2 discharge lung-function values in Table 1 conflict with the text statement that lung function was not examined at discharge.",
+    "The statement that blood and sputum cultures were negative and biochemical parameters normal is worded for the series, so it is kept review-only per patient.",
+    "Cell values \"None\" in the MP PCR and MP-IgM rows do not say whether the test was not done or negative and are kept review-only.",
+    "Admission window (January 2022 to September 2022) is stated for the series, not per patient.",
+    "The discussion states that, as in \"our three cases\", lung function improved considerably during recovery, and that unrelated medications were given to \"these three patients\" because of possible mixed infections; these are not recorded as separate per-patient facts because they name no specific value, drug or time.",
+    "Table 1 has no legend or footnote; \"None\" is read as absent for history, allergy, symptom and examination rows and left uninterpreted (review-only) for the MP PCR and MP-IgM test rows, where it could mean not done or negative."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 43,
+    "facts_reviewed": 150,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Roster of three 7-year-old boys (Case 1/2/3) confirmed; Table 1 columns checked cell by cell against the JATS table including the rowspan cells (Physical examination Case 2 \"Any significant findings\" spans tachypnea and rales; \"Lung function at discharge\" spans FEV1, FEF50, FEF75, MMEF and dilation test).",
+      "Case 2 discharge lung-function table cells versus \"Lung function and HRCT were not examined at discharge\" kept as a source conflict with both sides review-only; HRCT not examined at discharge has no table counterpart and stays included.",
+      "Case 2 \"Convalescent lung function: Abnormal\" versus text \"lung function returned to normal\" kept as an ambiguity (convalescent time undefined), both review-only.",
+      "Case 2 physical-examination cell \"Any significant findings\" has no negation and no legend: review-only with assertion unknown; no tachypnea or rales facts derived from it.",
+      "\"None\" cells: MP PCR (Case 2) and MP-IgM (Cases 1 and 3) review-only status unknown; history, allergy, family, other-symptom and tachypnea \"None\" read as absent; there is no table legend.",
+      "Series sentence on negative blood/sputum cultures and normal biochemistry does not name the three patients; kept review-only per patient. The MPP-with-bronchiolitis diagnosis sentence names the three patients and is included for each.",
+      "Case 3 \"Meanwhile, pulmonary function returned to normal\": time no longer copied from the HRCT sentence (different test); co-timing recorded as an event same_time relation.",
+      "Status: Case 1 advised azithromycin/prednisone action unknown; Case 2 PIBO confirmed (discussion states BO in Case 2 flatly); Case 3 asthma provisional (\"considered to have\"); Seretide prescribed = ordered; retreatment kept as a completed care plan with unnamed agents.",
+      "Units and values: WBC unit literal \"*10^(6) cells/L\", Case 2 23,360 recorded as 23360; budesonide route \"atomization\" kept as written."
+    ],
+    "residual_risks": [
+      "Relation p3-e06 before p3-e09 rests on \"returned to normal\" referring back to the abnormal post-discharge pulmonary function test; the table discharge test is also abnormal.",
+      "Merging the Table 1 symptom cells with the narrative presenting symptoms (fever and cough with matching durations) treats them as the same presentation; the table states no time.",
+      "Case 2 PIBO is recorded confirmed from the discussion sentence although the case paragraph says \"considered to have\".",
+      "No figures or supplements exist; no visual, figure-EHR or privacy sidecars are applicable."
+    ]
+  },
+  "physician_adjudicated": false
+}

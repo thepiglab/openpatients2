@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC6197088.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6125e8eab770adb6e8860add71de0727ceac7a00506d7488bddccd22d1933778",
+  "annotation_sha256": "9b09d86976c5368da510c16c2f2dad9ecbe41a8f35749a075a3be427a7373a02",
+  "reviewed_at": "2026-10-21T03:46:07.112067+00:00",
+  "source_segments_read": 19,
+  "facts_reviewed": 65,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Autopsy p1-f018: indication \"Sudden unexpected death\" -> \"sudden death\" (the request sentence says \"requested by the inquirer of sudden death\").",
+    "Gestational age p1-f054: numeric_value/unit/gestational_age_weeks 11 removed; \"Approximately in 11th week of amenorrhea\" is approximate and ordinal, kept as literal text with the existing amenorrhea/pregnancy/first-trimester ambiguity (ambiguity, not conflict).",
+    "ARVC/D p1-f006: added b00007 \"after confirmation by histology\" evidence for the histology basis; family history p1-f058: added the b00008 case restatement.",
+    "Added p1-f064 chest pain absent (b00008 \"history did not reveal that these were experienced by the deceased\") and p1-f065 \"No other macroscopic abnormalities were detected\" (flag normal).",
+    "Event p1-e07 (cause of death given): removed time_text \"first trimester of pregnancy\", which qualifies the death, not the diagnostic conclusion; added the natural-circumstance quote.",
+    "Added event p1-e09 (relatives informed of screening importance after confirmation by histology), kept separate from p1-e08 (source does not identify them as the same act).",
+    "Added relations p1-e02 -> p1-e05 (death \"in first trimester of pregnancy\" after conception), p1-e05 -> p1-e06 (autopsy \"requested by the inquirer of sudden death\"), p1-e06 -> p1-e09 (\"after confirmation by histology\"). Autopsy -> cause-of-death diagnosis not ordered (diagnosis basis wording).",
+    "Summary claims cite the two added facts; article limitations record that the supplement's own label is \"Supp_mat_TFSR_Figure_1_1325548.jpg\" with no declared link to the Figure S1(A)-(C) citations, so its ownership is unresolved."
+  ],
+  "unresolved": [
+    "The source lists no main-article figures, so there is no visual.json; the one supplement image SM1385 (three panels A-C) is reviewed in its supplement sidecars.",
+    "The case text cites \"Figure S1(A)\", \"Figure S1(B)\" and \"Figure S1(C)\", but the supplement's own caption title is the filename \"Supp_mat_TFSR_Figure_1_1325548.jpg\" and no cross-reference or caption links those citations to SM1385; its panel ownership is left unresolved (not attributed by content match).",
+    "Discussion sentences are general literature or hedged author interpretation and are not copied to the patient.",
+    "No ECG, echocardiography or other in-life cardiac testing is reported for this patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 19,
+    "facts_reviewed": 65,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient: 27-year-old pregnant woman found collapsed and pronounced dead on admission; medico-legal autopsy with histology gives ARVC/D as cause of death (confirmed by histology; discussion stage/mechanism hedged and kept as ambiguity only).",
+      "Autopsy completion is literal (\"Autopsy revealed\"); \"no evidence of nutritional deficiencies, congenital abnormalities ... or trauma\" at autopsy is a workup exclusion, so absent/refuted is correct.",
+      "Fetus kept in the index record (subject fetus); teacher occupation and mild/moderate activity kept with status unknown; relatives counselling recorded as completed (literal past tense).",
+      "No main figures (no visual.json applicable); supplement SM1385 three-panel image viewed at full resolution with crops; no readings taken from the tape measure."
+    ],
+    "residual_risks": [
+      "Supplement SM1385 ownership left unresolved: the text cites Figure S1(A)-(C) but the supplement label is a filename \"Supp_mat_TFSR_Figure_1_1325548.jpg\" with no declared cross-reference.",
+      "Antenatal visit, hCG test and cause-of-death conclusion remain unordered relative to other events (no literal order)."
+    ]
+  },
+  "physician_adjudicated": false
+}

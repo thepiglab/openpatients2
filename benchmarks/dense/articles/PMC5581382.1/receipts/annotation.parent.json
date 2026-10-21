@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC5581382.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f79627bdd09dde21a7c9edee7fc5d382e8ffa8486c37f1c86e6974950744ad23",
+  "annotation_sha256": "379fd1cb403b24d6566873a6b7228a2df30a990d80c6e3abfcc465fc4ab8690f",
+  "reviewed_at": "2026-10-21T03:39:01.704503+00:00",
+  "source_segments_read": 36,
+  "facts_reviewed": 45,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f005 otitis media: diagnostic_basis \"Ear exudate swab culture identified V. cholerae O100\" was not in its quotes; now \"Ear exudate examined in a clinical laboratory\" with the abstract sentence added.",
+    "p1-f006 V. cholerae O100 infection: diagnostic_basis listed methods its abstract quote does not state; now \"Five bacterial isolates identified as V. cholerae O100\" citing that abstract sentence.",
+    "p1-f007 eardrum perforation: temporality historical -> unknown (evidence gives only a calendar year, no history label).",
+    "p1-f010 complications of otitis media: verification_status refuted -> unknown (\"had not such complications\" with no workup described); unstated body_site \"ear\" removed; ambiguity added.",
+    "p1-f009 renamed \"Immunocompetent\" (literal label).",
+    "p1-f014 ciprofloxacin: name \"Ciprofloxacin\", ingredient \"ciprofloxacin\", route \"ear drops\" copied as written (corpus precedent \"eye drops\"); no \"otic\" normalization.",
+    "Virulence-gene observations p1-f030 to p1-f042: added the b00011 sentence stating PCR detection, so method \"PCR\" is in the evidence.",
+    "p1-f044 accident exposure: added the discussion sentence \"The water skiing accident happened in January\"; event p1-e01 time now \"January, 2011\" (2011-01) with the Table 1 \"The current study\" row quoted.",
+    "p1-e11 resolution event no longer includes the untimed no-complications fact p1-f010.",
+    "Relations: removed e11 -> e12 (anchor of \"Three weeks later\" is the drop course, its start vs resolution unstated); added e10 -> e12 (adjacent-sentence anchor, both sentences quoted) and e06 -> e07/e08/e09 (culture isolates picked, then serogrouped, antibiogram-tested and gene-screened); added e02 -> e06 from the abstract (\"The condition lasted for three years, until his ear exudate was examined in a clinical laboratory\"), linking the history chain to the laboratory chain.",
+    "Ambiguities: acute vs recurrent rewritten as a non-conflict course-descriptor ambiguity; new ambiguity for the \"Three weeks later\" anchor; new ambiguity for the untested no-complications statement. Article limitation on Table 1 updated."
+  ],
+  "unresolved": [
+    "The article has no figures and no supplements; no visual, figure-EHR, privacy, measurement-series or supplement review applies.",
+    "Table 1 lists published literature cases; only its last row (labelled \"The current study\") concerns the index patient; it repeats the accident place and gives January 2011, and the discussion also states January.",
+    "Discussion paragraphs on virulence genes, OmpU and ToxR are mechanistic commentary and are not recorded as patient facts; hedged causal claims are not asserted.",
+    "The reference point of \"Three weeks later\" for the repeat ear swab is not restated in its sentence, so no anchor is recorded.",
+    "No dose or frequency is given for ciprofloxacin ear drops; no hearing test, otoscopy or imaging is described."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 36,
+    "facts_reviewed": 45,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient (27-year-old Caucasian man, V. cholerae O100 otitis media after a 2011 Murray River water skiing accident with right eardrum perforation); Table 1 rows other than \"The current study\" are literature cases and are not attributed.",
+      "Acute (case text) vs recurrent (abstract) otitis media are compatible course descriptors, not two values of one attribute: ambiguity, not source conflict.",
+      "Symptom facts carry \"a period of three years\", which is stated in their own sentence; the onset \"approximately one week after\" the accident is in the next sentence and stays on the onset event only (no borrowing). This is literal, not reshaping.",
+      "Every antibiogram and virulence-gene result checked against b00010/b00011 and the abstract; ctxA abstract quote states the same result for the same isolates.",
+      "No figures in the article (XML fig-count 0); visual.json figures [] is correct."
+    ],
+    "residual_risks": [
+      "Relative timing of symptom resolution and the repeat swab is not stated.",
+      "Presentation to the otolaryngologist and the \"admission\" during which the swab was taken are not identified as the same encounter and are not merged or ordered.",
+      "Dose and frequency of ciprofloxacin ear drops are not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

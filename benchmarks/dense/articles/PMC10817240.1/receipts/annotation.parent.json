@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC10817240.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f2537a97a47ab548179e9173a81650b946796deacbd29c92e7b6e99f6f3e7865",
+  "annotation_sha256": "d7a1944a30a8c22c42e9c43ad6a6d18f504a20cbcc5c0e08ee08d310beed6d3f",
+  "reviewed_at": "2026-10-21T04:29:45.345998+00:00",
+  "source_segments_read": 40,
+  "facts_reviewed": 63,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Drug-identity conflict (text prednisolone vs Fig 3A caption oral methylprednisolone): the single review_only dose-increase fact quarantined dose and duration too; split per RULINGS into a scored generic \"Corticosteroid dose increase\" (20 mg, for an additional week, text evidence) plus two review_only source_conflict facts carrying only the drug name (Prednisolone from text; oral Methylprednisolone from caption). Ambiguity and event e19 repointed; summary keeps only the undisputed dose.",
+    "Prednisolone 10 mg \"was maintaining\" at the first and bilateral hearing-loss episodes: action unknown -> administered (RULINGS: maintained = administered, not current); first-episode fact gains route oral from the next sentence about the same drug (\"Since he was taking oral prednisolone\").",
+    "Left optic neuritis role complication -> unknown (nothing labels it a complication).",
+    "Added procedures_devices \"Audiological tests (PTA, SRT, SDS)\" completed (b00006) and care_plans otolaryngology consultation referral completed (b00006 \"leading to consultation\"), linked to e12/e11 and summary claim 3.",
+    "Added b00012 \"in our presented case, immediate improvement was not achieved post-ITDI\" as supporting evidence for the administered bilateral ITDI.",
+    "Added 5 literal relations: e02->e03 and e02->e07 (presentation opening the stay; \"One week after admission\"), e11->e13 (ITDI plan \"for the additional treatment for SSNHL\" treats the named existing condition), e01->e15 (\"recurrence of visual impairment\"), e19->e20 (Fig 3A caption \"After using the increased dose\", cited by the text as Figure 3A).",
+    "Added ambiguities: text \"minimal improvement\" vs Fig 3A caption \"pure-tone thresholds were the same\"; prompted comprehensive MRI vs T4-T5 MRI not identified as the same study. First-ITDI ambiguity now also quotes \"keeping the same regimen as the previous treatment\".",
+    "Limitation and b00012 source-coverage note updated to match."
+  ],
+  "unresolved": [
+    "Figure rows are caption-layer only (visual_status not_inspected); the three audiogram images were inspected in visual.json. Image-printed values (SRT and word recognition tables) are pixel content only and not facts.",
+    "The Figure 3 caption names oral methylprednisolone while the text names prednisolone; only the drug identity is quarantined (two review_only facts), the 20 mg one-week dose increase stays scored.",
+    "Literature tables (Tables 1 to 3) and discussion-level statistics describe other published patients and are not individual facts of this patient.",
+    "The first planned intratympanic dexamethasone course is not stated as delivered; time anchors \"the onset\" are kept literal."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 40,
+    "facts_reviewed": 63,
+    "figures_viewed": 3,
+    "key_findings": [
+      "One index patient (20-year-old male, MS, right then bilateral SSNHL); Tables 1-3 and discussion statistics are literature cases and correctly excluded; only literal \"our case\" discussion statements used (ABR not performed; ITDI without immediate improvement).",
+      "Drug name conflict quarantined at the attribute level only; dose and duration scored.",
+      "Text vs caption intervals (approximately one month vs 6 weeks; immediately after vs after 3 weeks of ITDI; three months after the onset vs 3 months after the bilateral loss) kept as ambiguities, not conflicts: different or unstated anchors and approximate wording.",
+      "First ITDI course kept planned (never stated as given); bilateral ITDI administered (response after treatment, abstract \"received\", discussion \"post-ITDI\").",
+      "No time borrowed onto SRT/SDS sentences; image-printed SRT/WRS values (incl. 1B, 2B, 3A WRS not in text) stay in visual.json only and were checked against pixels.",
+      "Judgement calls accepted: first optic neuritis verification unknown with no laterality; multidisciplinary follow-up action_status unknown (\"began\"); MRIs separate; conditional neurology discussion; MS condition untimed (event e07 carries the time)."
+    ],
+    "residual_risks": [
+      "Event e22 (three-month recovery) has no literal ordering link: the text anchor \"the onset\" is not tied to the bilateral episode, and identifying it with the uncited Fig 3B caption finding would be attribute matching.",
+      "Route oral on the first-episode 10 mg prednisolone comes from the adjacent sentence naming the same drug.",
+      "Generic label \"Corticosteroid dose increase\" for the scored dose fact is a reviewer label, not source wording."
+    ]
+  },
+  "physician_adjudicated": false
+}

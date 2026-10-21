@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC9979917.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c0b7c62c136edc76c95f333b0d83a21b6d4355fe26807251332b6830ffe31947",
+  "annotation_sha256": "bc8ef6e4dc7cad736e2cf14b28e5531ac104b136ad993f625cafd2b2c1e3f8dc",
+  "reviewed_at": "2026-10-21T09:01:29.925205+00:00",
+  "source_segments_read": 12,
+  "facts_reviewed": 0,
+  "patients_reviewed": 0,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Article limitation on the retrobulbar spot sign reworded: abstract 75% vs results 78% (7/9) kept as an unreconciled conflict; the Figure 1 caption shows six patients without claiming they are all patients with the sign.",
+    "Article limitation on CRAO diagnosis extended: abstract 88% diagnosed vs 38% ophthalmology-confirmed, plus the methods describing all included patients as having a CRAO diagnosis and the results reusing 88% for embolic risk factors.",
+    "Article limitation on treatment extended to name the second single-patient mention (vision improved from light/colour to hand motion) alongside the teenager given intra-arterial TPA; both kept aggregate.",
+    "Added a limitation on percentages that do not resolve to whole patients of nine (38%, 88%, 40% of the HBOT group).",
+    "Added a limitation that Video S1 frames carry burned-in screen text (site/system header and a partly masked fragment in the date position); categories only."
+  ],
+  "unresolved": [
+    "Disposition aggregate_only: the source reports nine patients only as a series (percentages and means); no patient has individual identity evidence, so no individual patient records are created and series statements are not copied to placeholder patients.",
+    "reported_individual_count is 9 (literal) and roster_complete is false because none of the nine stated individuals can be enumerated.",
+    "Source conflict on the proportion with a retrobulbar spot sign: the abstract states 75% while the results state 78% (7/9). The Figure 1 caption shows the sign in six distinct patients without saying that these are all patients with the sign. These are not reconciled.",
+    "The abstract states that 88% of patients were diagnosed with CRAO while the results and discussion state that 38% had an ophthalmology-confirmed diagnosis by fundoscopic examination; the denominators and the relation between these figures are not stated. The methods describe all included patients as having a diagnosis of CRAO, and the results give the same 88% for patients with risk factors for embolic occlusive disease; the abstract's 88% is not reconciled with either.",
+    "The results give 67% undergoing hyperbaric oxygen therapy and 40% of those with subjective improvement, one patient whose vision improved from recognising light and colour to recognising hand motion, and one teenager receiving intra-arterial TPA who did not recover vision, without saying which patients; these two single-patient mentions have no case narrative or link to Figure 1 or Video S1, so no individual record is created and none of this is assigned to individuals.",
+    "Figure 1 shows six unidentified series members; ownership is unresolved and it is not EHR-includable. Supplement Video S1 is a single ocular ultrasound clip whose patient is not identified.",
+    "Several series percentages do not resolve to whole patients of nine (38% and 88% of nine, and 40% of the 67% undergoing hyperbaric oxygen therapy); denominators are not stated, so these are arithmetic ambiguities, not values assigned to anyone.",
+    "Video S1 frames carry burned-in screen text, including a site/system header and a partly masked fragment beside the on-screen clock in the date position; categories only are recorded in the supplement manifest."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 12,
+    "facts_reviewed": 0,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Aggregate-only disposition is correct: nine patients are reported only as series means and percentages; the teenager given intra-arterial TPA and the patient improving to hand motion are isolated one-sentence mentions with no case narrative, no link to Figure 1 or Video S1, so no individual record is created.",
+      "Roster: reported_individual_count 9 from the literal Results sentence; roster_complete false.",
+      "Figure 1 (six ocular B-mode images with green arrows) viewed at full resolution with crops; caption says six distinct patients; ownership unresolved.",
+      "Video S1: six sampled frames viewed; on-screen site/system header, R EYE label, probe/preset text, clock and a masked header region with a fragment in the date position."
+    ],
+    "residual_risks": [
+      "Two single-patient sentences could be argued to individuate patients; kept aggregate because neither has identity evidence beyond one descriptor plus one treatment/outcome.",
+      "Series percentages are internally inconsistent with nine patients; recorded as limitations only."
+    ]
+  },
+  "physician_adjudicated": false
+}

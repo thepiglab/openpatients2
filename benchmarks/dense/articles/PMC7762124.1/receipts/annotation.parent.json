@@ -1,0 +1,69 @@
+{
+  "article_id": "PMC7762124.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8c3a71b8e5d73c52ddd08f27d6603f6dcfb1088452f1dd067b0112ec5a4e7899",
+  "annotation_sha256": "21d48d7d7f24cc642cb138acb969ad26a55b1ae27f0538c0ec659e472b8fc408",
+  "reviewed_at": "2026-10-21T09:18:16.186516+00:00",
+  "source_segments_read": 70,
+  "facts_reviewed": 281,
+  "patients_reviewed": 10,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added 39 Table 2 cell items the draft omitted: the footnote defines Y = Yes, N = No and NA = Not available, so N cells (previous AP, pre-admission lipid treatment, T2DM, smoker, gallstones on imaging, ICU admission, endocrine input) are recorded as assertion=absent items and NA cells (BMI for Cases 2, 6, 7, 8; HbA1c for Case 5) as not available, each quoting the cell, its header and the footnote.",
+    "Case 4: added diabetes treatment absent (footnote 'Not on treatment') and an insulin adverse-reaction item (insulin ceased due to hypoglycemia, reaction type unknown), parallel to the omega-3 dyspepsia item.",
+    "Case 10 intravenous insulin rate reclassified from ambiguity to source conflict (Table 2 4 to 6 units/h, 0.06 units/kg/h vs Figure 2 caption 8 units/h, 0.1 units/kg/h): both rate items review_only, new include item for the undisputed IV insulin infusion; disputed rate removed from the summary.",
+    "Charlson Comorbidity Index (10 items) moved from symptoms_function to observations kind=other; APACHE II stays in symptoms_function.",
+    "HbA1c percent items marked alternate_representation_of the mmol/mol item from the same cell (6 patients); not separate results.",
+    "Case 7 liver derangement role complication -> unknown (source gives it only as the reason a statin was not commenced).",
+    "ICU admission items for Cases 1, 6 and 10 now also cite the text sentence naming those cases (and the Case 6 narrative).",
+    "Timeline: Case 2 multi-organ failure split from death and ordered before supportive therapy for it; stay-opening admission ordered before ICU/in-hospital care for Cases 1, 2, 3, 9, 10; Case 1 3 units/h before increase, 48 h TG during 3 units/h infusion, new 11.4 mmol/L TG event after the 48 h level ('a further 21%'); 'They were then transitioned' sentence orders ICU before SC insulin and before new resolution outcome events for Cases 1, 6, 10; Case 6 hypoglycemia during IV insulin and peak before the 80.5 mmol/L level; pre-admission history events for Case 4 (statin ceased 1 month ago, insulin ceased few months ago) and Case 8 (self-ceased 4 years ago) ordered before admission.",
+    "Summaries rewritten as phase paragraphs citing the new negative items; Case 4 low-dose subcutaneous insulin sentence recorded as an attribute-only ambiguity; article limitations updated (N/NA convention, conflict, aggregate counts not patient-level conflicts, FIG-LABELS false positive, no measurement series)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three figure images are reviewed in the separate visual submission.",
+    "Cohort-level counts and percentages in the abstract, Results text and Table 1 are not copied to individual patients; text sentences that name no case are not assigned to a patient.",
+    "The text says eight patients received dietitian input and a low-fat diet, while Table 2 lists fasting then a low-fat diet for nine cases; both are kept without reconciliation because the cohort sentence does not name the cases.",
+    "The text says two patients had previous HTGAP admissions before July 2017 while Table 2 marks three cases Previous AP Y; Previous AP is recorded only as the table prints it.",
+    "Table 2 prints Previous resection in the Gallstones on Imaging cell for Cases 2 and 4 without naming the organ; recorded as a historical procedure with no site.",
+    "Table 2 prints glued management entries; each listed entry is recorded as an in-patient management item without a time unless the entry prints one. Lipid-lowering drugs listed there may be continued home therapy or newly started; the action is recorded as administered.",
+    "Values printed inside images (Figure 1 flow chart counts, Figure 2 axes) are pixel content kept in the visual submission only.",
+    "Table 2 footnote defines Y = Yes, N = No and NA = Not available; N cells are recorded as explicit negatives (assertion absent) and NA cells for BMI, HbA1c and the 24 h triglyceride as not available. APACHE II NA cells for non-ICU cases are not recorded (APACHE II was calculated only for ICU admissions).",
+    "Case 10 intravenous insulin rate is a source conflict (Table 2: 4 to 6 units/h, 0.06 units/kg/h; Figure 2 caption: 8 units/h, 0.1 units/kg/h); both rate statements are review-only.",
+    "Case 6: Table 2 says the infusion was increased after 5 h while the text links the increase to the peak seven hours after presentation; kept as an ambiguity because the table entry names no anchor.",
+    "The text-level counts (eight patients with dietitian input; two patients with previous HTGAP admissions) name no cases and are not patient-level conflicts with Table 2 (nine low-fat diet entries; three Previous AP Y cells).",
+    "Charlson Comorbidity Index values are recorded as observations (comorbidity index), APACHE II values as symptoms_function scores.",
+    "Figure 2 panel titles Case 1, Case 6, Case 9 and Case 10 are printed on the image and are used as panel labels; the FIG-LABELS gate warning is a false positive here.",
+    "No measurement series sidecar: Table 2 is one row per patient (admission and 24 h triglyceride columns), and the serial triglyceride and insulin values exist only as unlabelled plot points in Figure 2."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 70,
+    "facts_reviewed": 281,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Ten Table 2 cases correctly rostered by first mention (p1=Case 2, p2=Case 1, p3=Case 6, p4=Case 10, p5=Case 9, then Cases 3, 4, 5, 7, 8).",
+      "Table 2 footnote defines N = No, so N cells are stated negatives; the draft omitted all of them (39 items added).",
+      "'respectively' maps two reasons onto three cases and cannot be resolved literally; kept as an ambiguity for Cases 6 and 10.",
+      "Dietitian (8 vs 9 low-fat diet entries) and previous HTGAP (2 vs 3 Previous AP Y) are aggregate text counts naming no case, not patient-level conflicts.",
+      "Case 10 insulin rate is a source conflict; Case 6 after 5 h vs 7 h peak is an ambiguity (no anchor in the table); Case 1 after 48 h vs day 3 is compatible.",
+      "Figure 2 has printed axis ticks and legends only, no data labels; visual.json has no plot estimates or positional readings; Figure 1 counts stay in visual.json only."
+    ],
+    "residual_risks": [
+      "Management-column lipid drugs may be continued home therapy or new starts; recorded as administered without time.",
+      "Previous resection in the gallstones column for Cases 2 and 4 is recorded as a historical procedure with no organ stated.",
+      "Gallstones N cells are recorded as absent with verification unknown because the imaging performed is not described."
+    ]
+  },
+  "physician_adjudicated": false
+}

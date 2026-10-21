@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC8871403.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f7782c16470410b94ece322d49115b80a600ae7cdcd01bb1b0c1401040230693",
+  "annotation_sha256": "dbefa3bf54f9b2cce47ccdc3d81aaed2d1fc17d59377276211f3399cae53d77c",
+  "reviewed_at": "2026-10-21T03:57:13.065581+00:00",
+  "source_segments_read": 39,
+  "facts_reviewed": 162,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "f006/f007: removed severity='subacute axonal loss' (a lesion type, not a severity); kept the wording in the condition name with its literal evidence",
+    "8 NCS amplitude cells (printed unit 'µm' for a CMAP amplitude) and 8 NCS duration cells (every row repeats its latency) set certainty=ambiguous, scoring=review_only; values and printed units kept as printed",
+    "Added the literal text statement of the right-sided needle EMG findings (cites Table 1) as evidence on the 15 matching right-sided fibrillation/PSW/recruitment cells (nasalis excluded as the text excludes it); flags unchanged (no 'abnormal' flag value exists)",
+    "f048-f053 blink reflex: added the caption's own finding sentence so the caption time 'Preoperative' governs findings the caption states",
+    "Added f162: needle EMG MUAP polyphasic pattern (literal discussion sentence about the two cranial nerves of the present patient; not in Table 1)",
+    "e01: removed hip-fracture condition f010 so the 2017 time is not implied for the fracture; moved facial nerve injury f007 from the masseter/temporalis EMG event to the facial NCS event",
+    "Added 7 relations: medical history (2017 arthroplasties) before presentation; PM&R referral before blink reflex and needle EMG; NCS, blink reflex, facial needle EMG and masseter/temporalis EMG before the craniotomy on the literal 'Preoperative' wording (abstract and Figure 2 caption). 'One week later' stays unanchored"
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual images are inspected in the separate visual submission.",
+    "Table 1 is a single preoperative-evaluation table without stated time; its values carry no time. Printed amplitude unit \"µm\" and duration values equal to latency are recorded as printed.",
+    "Discussion sentences about general electrodiagnostic or tumor knowledge are background, not patient facts.",
+    "No audiometry, trigeminal sensory testing or other numeric hearing data are reported."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 39,
+    "facts_reviewed": 162,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (79-year-old woman, right CPA vestibular schwannoma); no cited cases attributed.",
+      "Raw XML Table 1: latency cell spans 3 header columns; amplitude, duration and area are single columns, so cell values were read correctly; duration equals latency in all 8 rows and amplitude is printed in µm (both quarantined as print artefacts).",
+      "Left-sided NCS/EMG cells flagged normal from the literal statement that all left-sided muscles were normal on NCS and needle EMG (includes none cells); right cells normal only where the cell prints normal; delayed/small stay unknown.",
+      "One week later opens a new paragraph and stays unanchored; electrodiagnostic tests ordered before surgery only on the literal Preoperative wording.",
+      "Figures viewed at full resolution with crops: Figure 1 MRI rows a-c without side markers; Figure 2 blink reflex traces with printed R1 10.0 ms and iR2 35.3 ms labels only; no identifiers."
+    ],
+    "residual_risks": [
+      "in 2017 may apply only to the hip hemiarthroplasty; kept on both procedures with an ambiguity.",
+      "Facial nerve injury laterality right rests on the right-sided NCS/EMG and right facial palsy rather than one sentence naming the right facial nerve.",
+      "measurement_series.json not finalized by the annotator (only a .draft exists)."
+    ]
+  },
+  "physician_adjudicated": false
+}

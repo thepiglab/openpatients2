@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC6180866.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "32d6559bdc2a5f1b80af1328417f69b8d48d526f8f18f5783084df7e82df3689",
+  "annotation_sha256": "96e93607d86796bebf8e929d8f57ce02200593a45e2983d7814735006239c2df",
+  "reviewed_at": "2026-10-21T03:40:56.599868+00:00",
+  "source_segments_read": 17,
+  "facts_reviewed": 62,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Year-less follow-up time text trimmed from \"A follow-up in May\" to the literal temporal phrase \"in May\" on the TED-active, free T4, euthyroid and follow-up facts and on event e17; no year assigned and the event stays unordered.",
+    "Orbital radiotherapy name shortened to the concise label \"Orbital radiotherapy\" (NAME-LABEL: no dose values in the name); dose, fractions, energy and beams kept in evidence and statement.",
+    "Removed the procedure complication \"increased inflammation and erythema of the eyelids\" from the radiotherapy item and its third quote: the source states the reaction occurred after the first three treatments but does not call it a complication; added an ambiguity saying so.",
+    "Event e01 (stroke) no longer links the four demographic/smoking facts; it links stroke, atrial fibrillation and hyperthyroidism only.",
+    "Event e22 time precision approximate -> exact (\"after 4 months\" states no approximation).",
+    "Relation e01 before e02 now quotes the whole sentence so the \"later diagnosed\" order names the stroke; relation e15 before e16 quotes the OR start and the full \"after the first three treatments\" sentence; relation e21 before e22 quotes both adjacent sentences.",
+    "Added relations: presentation (September 2014) before progression (\"This progressed ... over 6 months\", adjacent sentence); thyroxine increase (August 2015) before disease inactive (October 2015), both calendar times quoted.",
+    "Summary rewritten so each claim states what it cites: removed the unsupported \"consistent with\" link between CT and the TED severity, mentioned the carbimazole and thyroxine increases that were cited but not stated, dropped the active-monitoring citation from the outcome claim.",
+    "Figure 2 caption evidence extended to the whole caption (DVH sentence with the lens structures)."
+  ],
+  "unresolved": [
+    "Figure pixels are inspected in the separate visual submission; the caption-layer figure status stays not_inspected.",
+    "Several events carry no stated time (CT scan, steroid therapy, the Graves’ diagnosis); no order is inferred for them.",
+    "The follow-up \"in May\" has no year in its sentence and is not ordered against dated events.",
+    "Literature-review paragraphs (trial results, percentages, cohort statements) are background or aggregate and are not copied to the patient.",
+    "The abstract and text contain print artefacts (\"moderate-tosevere\", \"hyroid-stimulating\", \"omazeprole\") that are kept as printed where quoted."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 17,
+    "facts_reviewed": 62,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (76-year-old woman, TED with Graves disease); roster 1 complete; discussion paragraphs b00007-b00009 are literature/cohort data and stay out of the patient.",
+      "Selenium \"recommended\" kept as medication action unknown with an ambiguity (never planned); strabismus surgery conditional/planned with no anchor for \"after 4 months\"; \"may require further intervention\" kept as ambiguity only.",
+      "Year-less \"in May\" follow-up not ordered; \"a month after OR\" is a separate event ordered after OR start; CT, steroid course and Graves diagnosis have no literal order and stay unordered.",
+      "Print artefacts (moderate-tosevere, hyroid-stimulating, omazeprole) kept as printed in quotes with spaced labels; Free T4 12.6 kept unitless; methylprednisolone schedule kept literally.",
+      "Both figures viewed at full resolution with magnified crops of the Figure 2 planning overlay text; visual.json has no plot readings; privacy flags match pixels.",
+      "Figure 2 is this patient's own radiotherapy plan (planning slice with dose overlay plus her DVH), so its EHR label should be patient data and includable rather than \"other\"."
+    ],
+    "residual_risks": [
+      "CT text finding and Figure 1 caption finding are kept as two observations of the same study because they state different findings; scorers may see partial overlap.",
+      "The authors' undated summary of improvement (abstract/discussion) overlaps the dated follow-up outcomes; kept as one separate undated outcome item.",
+      "Steroid course, CT, alendronic acid/omazeprole and the early outcome have no stated dates or order words and remain unlinked in the timeline."
+    ]
+  },
+  "physician_adjudicated": false
+}

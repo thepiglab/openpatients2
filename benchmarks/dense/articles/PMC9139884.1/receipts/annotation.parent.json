@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC9139884.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e879605435491aad2fc5f365786abcf96aa7d133e4983883bb225253ce539ded",
+  "annotation_sha256": "117cc3304ae00f7744a28912663f82c1a335fdcb925f23b0efa3e9b5cf9b3ff8",
+  "reviewed_at": "2026-10-21T08:22:19.096821+00:00",
+  "source_segments_read": 157,
+  "facts_reviewed": 478,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed the integrative-therapy indication (no indication stated in its own evidence; NO-BORROWING).",
+    "Restricted the t1 EEG-finding text_value to its own quote (behavioral-test clause came from a different sentence).",
+    "Kindergarten enrollment status current -> unknown (present perfect, not placed at the latest described time).",
+    "Removed inferred related_condition from the first-six-months outcome and the 48-month language-progress outcome.",
+    "Split the merged first-six-months outcome: b00023 no progress in developmental functions stays; b00057 minimal behavioral retest changes added as its own outcome linked to t1.",
+    "Added missing facts: problems deepened on going to kindergarten around age two (new history event with age-ordered relations to the 18-month onset and the 36-month examination), parents calmed her with difficulty, similar reactions in familiar and unknown environments, speech-language development with parallel reduction of autistic symptoms during therapy, SEPAC t0 non-verbal finding, discussion sensory-profile statements for the first and second/third assessment points.",
+    "Added relation integrative therapy -> t1 assessment (\"t1 (after six months of treatment)\").",
+    "Added ambiguities: immediately-after vs seven-days-after therapy start; working diagnosis ASD vs \"ASD or SLI\" uncertainty; extended the assessment-numbering ambiguity to the ordinal sensory-profile statements.",
+    "Updated summary claims 3-4 and coverage for b00020, b00060, b00061 (patient facts) and Table 6 rows (attributed to p1 as aggregate statistics of her own values); added limitation on derived Table 5/6 and Frange/Fnorm values."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the one JPEG is inspected in the separate visual target.",
+    "Table 5 (normalized values) and Table 6 (correlations) are author-derived rescalings and statistics over six time points; they are not recorded as observations. Table A2 Frange and Fnorm are likewise rescalings; only Fdiff is recorded.",
+    "GARS-3 subscale NA cells (cognitive style, maladaptive speech at t0 to t2) and CCC-2 NA cells (t0, t1) and the t5 degree-of-difficulty slash are not-assigned cells with no result; they are not recorded as facts.",
+    "Table 3 Visual SD at t2 is printed as a slash and no SD category is recorded for it.",
+    "Instruments behind Table 1 VIQ/PIQ cells and the unit of SEPAC ESLD are not stated; none inferred.",
+    "Statistical analyses (no significant theta change per electrode, correlations, 20 percent change) are analysis conclusions, not recorded as patient observations.",
+    "Discussion comparisons with literature and cited studies are background and not patient facts.",
+    "Table 5 normalized values, Table 6 correlations and Table A2 Frange/Fnorm are author rescalings or statistics of values already recorded as observations; they appear only as derived series in the measurement-series sidecar."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 157,
+    "facts_reviewed": 478,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index child (36-66 months); all 228 Table A1 theta cells, Table A2 Fdiff, Table 1 VIQ/PIQ, Table 2 GARS-3, Table 3 Sensory Profile 2 scores with SD category, and Table 4 CCC-2/SEPAC cells verified programmatically against the source rows and time columns (0 mismatches).",
+      "Table 5 normalized values, Table 6 correlations and Table A2 Frange/Fnorm are author rescalings/statistics of already-recorded values: not recorded as observations (limitation); NA and slash cells carry no fact.",
+      "ASD and SLI kept provisional (working diagnosis); GARS-3, Sensory Profile 2 and CCC-2 in symptoms_function, VIQ/PIQ and SEPAC in observations per SECTION-SIGNS; mother counseling as a completed care plan with subject mother.",
+      "Assessment-point chain ordered from the single age list t0 = 36 months ... t5 = 66 months; table facts carry t labels from column/rowspan cells."
+    ],
+    "residual_risks": [
+      "Instrument behind each VIQ/PIQ cell before t4 is not stated (ambiguity).",
+      "Table A1 caption says auditory-verbal processing while rows include resting state (ambiguity).",
+      "Ordinal \"first/second/third assessment point\" wording in the discussion is not mapped to t labels."
+    ]
+  },
+  "physician_adjudicated": false
+}

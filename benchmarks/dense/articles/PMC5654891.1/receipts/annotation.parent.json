@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC5654891.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1ce41f0bbff941a2fe79720bcba0e36f14c8f929c0c97b2a2cb762fdd4a9bc00",
+  "annotation_sha256": "dc1f1461da09a6c4d2ce75faf2498a86ee59d3a5e71f93d834bc95fcd6188647",
+  "reviewed_at": "2026-10-21T03:48:34.861471+00:00",
+  "source_segments_read": 72,
+  "facts_reviewed": 16,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Changed disposition aggregate_only -> individual_cases: the source individually describes four people, which the draft left unrostered.",
+    "Added p1: the one study patient who reported helmet use at the time of the injury (b00003, b00024), with helmet-use social exposure and the all-83-patients diagnosed hoverboard injury and ED presentation.",
+    "Added p2: the female patient excluded because she did not sustain injuries from her accident (b00020): sex, accident, injury absent, ED presentation; ambiguity on the 84-with-injuries wording and the unstated accident type.",
+    "Added p3: the 18-month-old girl who was not the primary rider, fell from a hoverboard while supported by an older sibling and hit her head on a coffee table (b00021): age, sex, rider context, fall with head strike, cohort-stated diagnosed injury; no diagnosis or order invented.",
+    "Added p4: the oldest patient, 78 years old (b00021), with the cohort-stated diagnosed injury and ED presentation.",
+    "Roster: reported_individual_count 83 -> 84 (84 presented, one excluded = p2), roster_complete false; evidence quotes the 84 and 83 statements.",
+    "Source coverage for b00003, b00020, b00021, b00024 now patient_facts with owners; b00031 notes the 1.3% helmet rate ambiguity.",
+    "Article limitations rewritten: Table 4 bullet tightened (mislabelled 'Injury site on body' header, 4,810 vs $4,800.00 laceration/abrasion median, 84 = 86 minus two admitted encounters, per-encounter single-type counts vs per-patient percentages); removed the claim that the 84/86 denominators are unreconciled; split head-injury/helmet and N=83 vs N=84 chi-square bullets; added non-individuated pair groups."
+  ],
+  "unresolved": [
+    "Disposition individual_cases with an incomplete roster: the source is a retrospective chart review of 83 emergency department patients reported mainly as cohort statistics; only four individuals are described singly and are rostered (the helmet user p1, the excluded patient without injuries p2, the 18-month-old girl p3 and the 78-year-old oldest patient p4). Cohort percentages, means, medians, charges and test statistics are not copied to them; only the explicit all-patient statement that the 83 study patients had diagnosed hoverboard-related injuries is applied to p1, p3 and p4.",
+    "reported_individual_count is 84 because the source states that 84 patients presented and one of them (p2) was excluded, leaving the 83 study patients; roster_complete is false because the remaining study patients cannot be enumerated.",
+    "Groups described only as pairs or small sets (two patients with repeat emergency department visits, two admitted encounters, two pediatric transfers and two adult admissions, the patients with multiple injury types or sites) are not individuated and are not rostered; whether any of them is p1, p3 or p4 is not stated.",
+    "Source inconsistency on fall mechanism: 91% in the abstract, 91.6% in the results and 92% in the discussion (rounding).",
+    "Source inconsistency on adult share: 53% adults in the abstract and 53.0% in the results versus 51.8% adults and 48.2% youth in the discussion.",
+    "Source inconsistency on mean injury severity score: 5.4 in the abstract, 5.46 in the results and 5.44 in the discussion.",
+    "Source inconsistency on the overall median ED charge: $1,808.00 in the abstract, $1,808.80 in the results, 1,809 in Table 3, and 1,8089 in Table 4 (a likely print artefact).",
+    "Table 4 (median charges by injury type) prints the row header \"Injury site on body\" although its rows are injury types, and prints the laceration/abrasion median as 4,810 while the results text states $4,800.00 for lacerations and abrasions. Its rows (and those of Table 3) total 84 encounters, which the methods explain as the 86 encounters minus the two admitted encounters. Table 4 assigns each encounter one type or \"Multiple types\" (fracture 29, contusion 23), whereas the text reports injury types per patient (fractures 36.1%, contusions 37.3% of 83); the two breakdowns are not reconciled by the source.",
+    "Source inconsistency on head injury and helmet use: 20% of patients with head injuries (abstract, conclusion) versus 20.2% with a closed head injury (results); helmet use is reported for one patient while the discussion gives a 1.3% helmet use rate without a denominator.",
+    "Denominators differ between analyses: the injury-type chi-square reports N=83 and the injury-site chi-square reports N=84, although injury site data are stated to be analyzed at the patient level (83 patients).",
+    "Figures 1 and 2 are aggregate bar charts; only the printed data labels and axis ticks are recorded in the visual target, no values are read from bar heights."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 72,
+    "facts_reviewed": 16,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Not aggregate-only: four individuals are described singly (helmet user, excluded patient, 18-month-old girl, 78-year-old) and are now rostered; all tables are cohort-level with no per-patient rows.",
+      "Only the explicit all-83-patients statement (diagnosed injuries) is applied to p1, p3 and p4; no cohort percentages copied.",
+      "Internal inconsistencies (falls %, adult share, ISS, median charge incl. 1,8089, laceration 4,810 vs 4,800.00, head injury 20 vs 20.2%, helmet 1 patient vs 1.3%, N=83 vs N=84) recorded as limitations only.",
+      "Figures 1 and 2 viewed at full resolution: printed labels and ticks in visual.json match the pixels; Figure 2 pixel_observations wrongly says 10% y-axis steps (ticks are 20%)."
+    ],
+    "residual_risks": [
+      "Rostering the excluded patient p2 and the single-attribute p1/p4 is a judgement under the 'every described individual is rostered' instruction; p2's accident type is not stated.",
+      "Identity overlap between p1 and p3/p4 is unknown and recorded as an ambiguity."
+    ]
+  },
+  "physician_adjudicated": false
+}

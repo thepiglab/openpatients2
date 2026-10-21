@@ -1,0 +1,68 @@
+{
+  "article_id": "PMC11797887.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d9dd2163c23c3d3341e1f5563d58d2e7404ca7a601f9f968b685e019f2624b27",
+  "annotation_sha256": "0592769673704f62f8e698d180f7e05e38362b29fe23c60caab6943286205ce7",
+  "reviewed_at": "2026-10-21T14:08:21.563829+00:00",
+  "source_segments_read": 22,
+  "facts_reviewed": 146,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f105 (SPINK5 sequencing duplicated as an observation; kept once as family_genetics p1-f114) and repointed e07 and summary claim 2.",
+    "p1-f010 rotavirus infection: temporality historical -> unknown (its evidence carries no history label).",
+    "p1-f073 Butler fluodent foam N: moved 'neutral type fluoride' from regimen to ingredient_as_documented.",
+    "Moved p1-f101 (tube feeding 'before beginning the treatment') out of e30 into new event e31.",
+    "Added relation e01 before e02 (birth -> event at a stated age).",
+    "Added relation e08 before e09 (finding (caries pointed out) -> referral acting on it).",
+    "Added relation e10 before e11 (first-visit refusal -> decision that discusses it ('discussed this')).",
+    "Added relation e11 before e13 (decision on a specific treatment -> that treatment, later given).",
+    "Added relation e31 before e13 ('before beginning the treatment').",
+    "Added relation e14 before e16 (ordinal second -> third treatment ('Finally')).",
+    "Added relation e30 before e17 ('After treatment' -> recovery).",
+    "Added relation e16 before e21 (two stated ages).",
+    "Added relation e16 before e22 (two stated ages; 'better than that before treatment').",
+    "Added relation e22 before e23 (two stated ages).",
+    "Added relation e24 before e26 (adjacent 'Since then').",
+    "Summary: claim 3 now cites p1-f124; claim 4 no longer dates the tooth removal to 5 years 10 months and cites p1-f108."
+  ],
+  "unresolved": [
+    "Figure pixels are described in visual.json; the annotation figures keep caption-layer status not_inspected.",
+    "The introduction age (2 years 6 months) differs from the referral and initial examination age (2 years 9 months); both kept, the introduction age as review-only.",
+    "Supplementary Table S1 (per-tooth diagnoses and restorations) and Supplementary Figure S1 are in the DOCX supplement and reviewed in its sidecar, not in this annotation.",
+    "Causes the authors only believe or suggest (hypersalivation, ionic beverages, candidiasis and nail changes, ALOX12B nonsense mutation and severe conditions) are not recorded as facts.",
+    "Several signs are untimed because their own sentences state no time; the first-visit time is not borrowed for them."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 22,
+    "facts_reviewed": 147,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Single index patient (Japanese boy, congenital ichthyosis with ALOX12B variants); roster 1/complete.",
+      "Ages: 2 years 9 months (referral, initial examination) is age_at_presentation; the introduction's 2 years 6 months is a different, unanchored statement kept review_only with an ambiguity, not a source conflict.",
+      "Discharge 'the day after general examination' kept literally with an ambiguity; postoperative fever not tied to either earlier surgery and left without relations.",
+      "Hypoplastic teeth: the abstract asserts it but the case discussion hedges ('may also have had'); kept possible/review_only with both quotes in the ambiguity. Hypersalivation kept possible (authors' belief).",
+      "'diazepam or dormicum' kept as conditional review_only alternatives; 'p.Try53*' kept as printed.",
+      "Untimed first-visit signs do not borrow 'At the first visit' (the preceding sentence is height/weight, not the same assessment).",
+      "Every relation's full evidence checked; 11 literal relations added (birth->rotavirus, caries finding->referral, refusal->decision, decision->first session, tube feeding->first session, second->third session, procedures->recovery, age-stated orders, 'Since then').",
+      "NO-BORROWING warning on p1-f055 is a checker false positive (sentence split at 'Co. Ltd.'); GLUED-TEXT 'blurrier' in visual.json is a real word."
+    ],
+    "residual_risks": [
+      "e30 groups the untimed intra-operative procedures across the three sessions; no relation places it relative to individual sessions.",
+      "Per-tooth supplement facts rely on the table's printed FDI tooth numbers plus column/row-block layout (verified on a rendered page and against the text)."
+    ]
+  },
+  "physician_adjudicated": false
+}

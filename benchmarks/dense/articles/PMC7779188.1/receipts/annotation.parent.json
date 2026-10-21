@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC7779188.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4029cc752ce5a4822bfe364fb64b126123f1c0af7c96d03a5bb8506be976022c",
+  "annotation_sha256": "5c931d86642c03f9d9faf2e082f8560864be7cee549514396da7fc86bbedb90f",
+  "reviewed_at": "2026-10-21T08:57:52.799299+00:00",
+  "source_segments_read": 19,
+  "facts_reviewed": 76,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added p1-f075 (pain at the nodule, symptom) from \"because the patient felt pain there\"; linked to p1-e21 and summary claim 4.",
+    "Added p1-f076 caption-only observation \"(d) ultrasonography revealed cutaneous metastasis of lung cancer\"; linked to p1-e20.",
+    "p1-f064 now also cites the Figure 3 caption statement of the 3 mm nodule.",
+    "Relation p1-e19 -> p1-e20 (rehospitalization -> nodule workup) changed before -> unknown: adjacent sentences with no order word; ambiguity added.",
+    "Added literal relations: e06 -> e08 (second-line durvalumab, then third-line \"changed to\" docetaxel), e08 -> e10 (third-line before hospitalization for fourth-line), e17 -> e20 (abstract/introduction: cutaneous metastasis developed \"after generalized herpes zoster was cured\"), e10 -> e22 (hospitalized for fourth-line chemotherapy; died during it).",
+    "Relation evidence completed: e10 -> e12 quotes the hospitalization sentence the \"day of hospitalization\" refers to; e13 -> e14 and e12 -> e13 quote both adjacent sentences of the same paragraph.",
+    "Summary claim 2 no longer places the pleural effusion \"at hospitalization\" (time not stated); now states hospitalization, then chest X-ray/CT findings."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the actual images are reviewed in visual.json.",
+    "Figure 4 prints dates, treatment bars and laboratory curves (and an event not described in the text) as pixel content only; none is recorded as a text fact.",
+    "LDH is printed with unit g/dL for serum and pleural fluid; kept literally.",
+    "The anchor of \"About three weeks later\" before death is not named; no order is asserted against the nodule events.",
+    "Discussion statements about cohorts, literature and hedged mechanisms are not copied to the patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 19,
+    "facts_reviewed": 76,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (53-year-old man); Discussion sentence \"Our patient received ... chest drainage to treat pleural effusion\" is literal and kept; hedged contributors stay an ambiguity only.",
+      "Figure 4 pixel-only content (8 Gy RT 5/28-29, Carboplatin + TS-1, 7/21 brain metastasis, 7/27 death, calendar dates) appears in no fact, event, relation or summary.",
+      "Figure 4 legend colour mapping (blue WBC, orange Lym, gray TP, yellow Alb) verified against the JATS inline-graphic order g005-g008 and swatch pixels; no point values read.",
+      "LDH in g/dL kept literally with an ambiguity; death \"About three weeks later\" opens a new paragraph so the death fact time stays relation unknown, while the event is ordered after the fourth-line hospitalization via \"during the fourth-line chemotherapy\".",
+      "\"Three days later\"/\"eight days later\"/\"Then\" anchors are inside paragraph b00007; \"rehospitalized\" (re-) orders discharge -> rehospitalization."
+    ],
+    "residual_risks": [
+      "e08 -> e10 rests on chemotherapy line ordinals (third-line before hospitalization for fourth-line) across paragraphs.",
+      "e12 -> e13 treats the exanthema as the finding behind the suspicion of herpes zoster (adjacent sentences).",
+      "Massive pleural effusion is kept both as a CT observation and a condition."
+    ]
+  },
+  "physician_adjudicated": false
+}

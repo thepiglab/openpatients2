@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC9864164.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6b4a0d1477861e2aef320390bfdccfc5691d1dda6ffbdc2a3fd41bdd33c16527",
+  "annotation_sha256": "dd09ccee3fc9998fec22b64b38b36ed0a6bb3edb48311e55f73d352ad5055915",
+  "reviewed_at": "2026-10-21T12:55:30.921287+00:00",
+  "source_segments_read": 38,
+  "facts_reviewed": 129,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Case 2 re-check timing reclassified from source conflict to ambiguity per the rulings (text \"6 weeks after antibiotic initiation\" vs caption \"two months after the end of treatment\": different anchors, mismatch only by arithmetic). p2-f031 (text complete resolution) restored to supported/include; p2-f032 (caption time) kept ambiguous review_only, event follow_up, text_value restated as a caption time point with no finding, and removed from the text re-check event p2-e11; ambiguity, summary, figure note and article limitation reworded; p2-f031 added to the treatment summary.",
+    "Case 3 control-examination interval (2 months text vs one month caption, same anchor) kept as source conflict; p3-f053 restated as a caption-only follow_up time point; the disputed interval removed from event p3-e14 time_text.",
+    "Case 3 laterality conflict kept on p3-f004 / p3-f023 only; Figure 3 panel body_part, panel descriptions and caption_summary no longer carry the disputed side or interval (literal caption kept in caption_evidence).",
+    "p1: clinical examination facts p1-f015..f023 moved to a new untimed examination event p1-e12 so the lab-time \"5 weeks from the appearance of the first skin changes\" governs only the labs (p1-e04 now also holds CRP, fibrinogen, coagulation factors p1-f025..f027).",
+    "p2-f017 body_site \"ear lobe\" removed (sentence \"The lesion was painless\" names no site). p3-f020 suburbs status current -> unknown (past tense).",
+    "Relations added: p1-e06->p1-e08 and p1-e07->p1-e08 (\"After 1 week of treatment\" / \"At 2 weeks\" adjacent sentences); p2-e01->p2-e05 (November 2020 -> March 2021); p2-e09->p2-e11 (third week of treatment vs 6 weeks after antibiotic initiation, same anchor); p3-e08->p3-e09 (referred to the hospital for a skin biopsy -> hospitalization on the infectious diseases ward)."
+  ],
+  "unresolved": [
+    "Case series with three headed cases; the source states no total number of patients, so the roster count is null and roster_complete is false.",
+    "Discussion sections review diagnosis and treatment generally (published recommendations); they are background, not patient facts, except two sentences about \"the case presented above\" that are kept review_only.",
+    "Case 3 lesion side disagrees within the article (right in the presentation sentence and Figure 3 caption, left in the examination sentence); quarantined as a source conflict.",
+    "Control-examination interval after antibiotic therapy disagrees between the Case 3 text (2 months) and the Figure 3 caption (one month); quarantined as a source conflict.",
+    "Case 2 re-check timing: the text gives 6 weeks after antibiotic initiation and the Figure 2 caption gives two months after the end of treatment; different anchors, mismatch only by arithmetic, recorded as an ambiguity (caption side review_only).",
+    "Caption-layer visual status is not_inspected; actual images are inspected in visual.json.",
+    "Figures 4 to 6 illustrate the discussion (tick bite without erythema migrans, classical erythema migrans, classical multiple erythema migrans) and are not attributed to the three cases."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 38,
+    "facts_reviewed": 129,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Three headed cases (Case 1 4-year-old girl with atypical MEM; Case 2 11-year-old boy with borrelial lymphocytoma of the right ear; Case 3 8-year-old girl with LB and localized scleroderma). The article never states a total count, so roster count null / incomplete is correct.",
+      "Discussion sentences \"The case presented above\" (b00029) and \"One of the cases presented above\" (b00030) identify a case only by topic/attribute; kept review_only with ambiguities.",
+      "p2 histology \"lymphocytoma cutis or pseudo lymphocytoma\" kept review_only (X or Y). Mupirocin \"recommended\" kept action unknown / occurrence unknown; \"not referred for any diagnostic blood tests\" kept as absent care plan; parents declining dermatological continuation kept declined.",
+      "Antibody flags: \"raised\"/\"elevated\" -> high; p2 IgG \"positive\"; p2 IgM 17 AU/mL unflagged; Western blots positive. Case 3 hospital labs \"no abnormalities\" -> normal.",
+      "All six figures viewed at full resolution: Fig 1-3 clinical photographs of the index cases, Fig 4 background, Figs 5/6 external children (ages 6 and 1, not in the series); no faces, burned-in text or sensitive anatomy; Fig 6 two unlettered photographs as one whole-figure panel."
+    ],
+    "residual_risks": [
+      "Whether Figure 2C is the same visit as the 6-week re-check is unresolved by the source.",
+      "Case 3 lesion side (right vs left) and control-examination interval (one vs two months) remain source conflicts.",
+      "Figures 5 and 6 may be patients of the authors, but the captions give no link to the described cases."
+    ]
+  },
+  "physician_adjudicated": false
+}

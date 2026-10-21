@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC10821746.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d2f8bfa09fd3c4f280058f196783bb2584b2738580499806ad23f47397903956",
+  "annotation_sha256": "85473f7a884d7c1fcd41b91b55b43c8efa6b28470a85689916f23df403ee055a",
+  "reviewed_at": "2026-10-21T13:19:00.804540+00:00",
+  "source_segments_read": 14,
+  "facts_reviewed": 78,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added missing baseline observation 'normal kidney function' (b00002 'a diabetic patient with normal kidney function'), flag normal, no time.",
+    "Removed the hedged acute tubular necrosis and volume depletion conditions from the occurred kidney-biopsy event; ATN ambiguity now also cites the Fig 1b caption's histologic 'changes of acute tubular necrosis'.",
+    "Split the urinalysis/serology event: 'Subsequently' anchors only the serology/complement sentence, so the relation to the biopsy now starts from a new serology event (p1-e20); urinalysis + UPCR stay p1-e14 unordered.",
+    "Split the repeat CT (stated 'in our hospital') from the 24-hour urine oxalate and urine routine test (new p1-e21, no time).",
+    "Added literal relations: previous admission -> kidney deterioration ('During the course in that hospital', '11th day after admission'); deterioration -> leaving that hospital and juice intake -> leaving (in-stay -> end of stay, order only); previous admission -> juice intake ('admitted ... and subsequently kept on a juice diet', 'during his admission to the previous hospital'); juice intake -> advice to avoid juices (action about the revealed intake); first CT -> repeat CT ('repeat'); admission to our hospital -> repeat CT 'in our hospital' (order only).",
+    "Ultrasonography no longer described as at the previous hospital (sentence does not name the hospital); ambiguity added and summary reworded.",
+    "Pedal edema body_site changed from invented 'both feet (bilateral pedal)' to 'bilateral pedal'.",
+    "Ambiguities: urine-oxalate pronoun reasoning made explicit (preceding sentence concerns oxalate excretion, not a named test; no time set); creatine misprint separated from juice-dose wording; added juice-diet 'put on/kept on' vs 'preferred a liquid diet' ambiguity, ultrasound-setting ambiguity and two-admission anchor ambiguity.",
+    "Summaries reworded to avoid an implied sequence and an unstated ultrasound setting; no new facts. b00004 coverage set to patient_facts."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; figure pixels are described in the separate visual submission.",
+    "The 24-hour urine oxalate has no stated time; the juice stop date is not stated."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 14,
+    "facts_reviewed": 78,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (85-year-old man); all 14 segments read, both figures viewed at full resolution with crops.",
+      "AKI and oxalate nephropathy confirmed (\"biopsy-proven\"); ATN and volume depletion possible/provisional (\"It is likely that\"); slow recovery or dialysis dependence is an X-or-Y expectation kept review_only.",
+      "Urine oxalate normal flag is supported by \"within the normal range\"; no time because the \"10 days after stopping juices\" pronoun is not tied to the adjacent sentence.",
+      "Pomegranate juice frequency (case) and 600-900 mL/day (Discussion) describe the same stated exposure of \"our patient\"; the 450 mg/day vitamin C is a separate author estimate.",
+      "Neither alcoholic nor smoker recorded as absent with status unknown (not never-use wording); metformin/glipizide \"had been on\" kept administered.",
+      "FIG1 is the patient biopsy histology (a-d); FIG2 is a background pathway diagram with no patient data."
+    ],
+    "residual_risks": [
+      "Urinalysis, urine oxalate and ultrasonography remain unordered because their setting/time is not literal.",
+      "Presentation to nephrology is not ordered against admission to the authors hospital (may be the same event)."
+    ]
+  },
+  "physician_adjudicated": false
+}

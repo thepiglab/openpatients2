@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC9854657.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "afc6d1c00c532b59eaa59ea3a96b9c62f74ad215aa08190aa9a87b9f11da9211",
+  "annotation_sha256": "a0ae3ef9c780fb5e1fa3aaea90e988cdb324e02f6ca70d2c0921d91dfb8c8c83",
+  "reviewed_at": "2026-10-21T13:08:10.635825+00:00",
+  "source_segments_read": 71,
+  "facts_reviewed": 233,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Table A2 isolates f223-f229: text_value rebuilt from the row cells without stray \"|\" characters; the invented \"resistant: none listed\" removed (blank Resistant cell noted instead).",
+    "Added p1-f231: the Table A2 Third Month Notes cell (inflammatory reaction, bacteria, mycelial filaments and yeast cells), which was missing; linked to event M3.",
+    "f076 (infiltration of the internal right eye muscle on MRI) set ambiguous/review_only: it is part of the side-inconsistent MRI sentence already under ambiguity with f077.",
+    "Added p1-f232: Remdesivir absent (\"temporarily unavailable\"), consistent with the amphotericin \"not available\" fact; linked to e01.",
+    "Added p1-f233: social_exposures \"from an urban area\" (environment); domain coverage social_exposures documented.",
+    "Figure 3 caption event e14 split into second-month (e14, f068) and third-month (new e26, f069) events, ordered by the caption \"evolution ... in the second month (a) and third month (b)\".",
+    "Added relations: discharge e02 -> clinic presentation e03 (both times stated from the hospitalization: \"after 14 days\" and \"in the third month after he was hospitalized\"; discharge -> outpatient care); COVID-19 hospitalization e01 -> posaconazole start e23 (\"began in the third month after COVID-19\") and e01 -> palate reconstruction e25 (\"After 9 months from COVID-19\").",
+    "e09 description no longer claims the stroke diagnosis (f052 lives in e06); it describes the scheduled brain imaging and home-care decision only.",
+    "Summary: \"posaconazole ... because amphotericin was not available\" reworded without the added causal link."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the five figures were inspected separately in visual.json.",
+    "The case text gives no calendar dates; times are relative (days after discharge, months after COVID-19) and the presentation month and the Day-17 and Day-28 events are not reconciled by the source.",
+    "Table A1 prints no units for some rows and loses column group spans; no flags were assigned from the printed normal ranges.",
+    "Discussion statements about mechanisms, cited reviews and literature cohorts are not patient facts and were not recorded.",
+    "No plot or chart values are present; no values were estimated from images."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 71,
+    "facts_reviewed": 233,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (69-year-old man, COVID-19-associated rhino-orbito-cerebral mucormycosis); all case paragraphs, both appendix tables (Table A1 18 rows x 7 time columns = 101 cells; Table A2 7 isolate rows plus notes) and Table 1 particulars checked cell by cell.",
+      "Stroke kept provisional with left laterality from the ambulatory diagnosis and the Figure 2 caption; brain imaging only scheduled (planned); undated MRI ischemic-character image kept separate.",
+      "Presentation \"third month after he was hospitalized\" vs Day-17/Day-28 dated from discharge kept as an ambiguity without a relation; Table A1 Day-14 vs 3rd Month and Table A2 Day-28 vs Second Month not ordered (anchors unstated).",
+      "Text cultures and Table A2 isolates not merged; piperacillin/tazobactam administered (descriptive \"contains\", no plan wording); amphotericin and remdesivir unavailable recorded absent; oxygen \"required\" kept action unknown.",
+      "No flags derived from printed normal ranges; lymphocyte/neutrophil units left null as printed; PTL unit keeps the printed x 10^(3) multiplier."
+    ],
+    "residual_risks": [
+      "Table A1 time columns are not tied to stated anchors; Day-N vs month columns are not ordered and the group-header spans are not in the segment text.",
+      "MRI sentence laterality is internally inconsistent; both affected facts review_only.",
+      "Remdesivir absent fact triggers a non-blocking EVID-NEGATION warning (\"temporarily unavailable\" is not in the cue list); left as is."
+    ]
+  },
+  "physician_adjudicated": false
+}

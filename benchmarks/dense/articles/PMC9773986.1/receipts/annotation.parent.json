@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC9773986.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "08988ac5b7881d8c7a8f95eb6e1ee2f85f58a4b401921a0f37a9952007f5841f",
+  "annotation_sha256": "a44c037a9344cd844d6ebe995983d7abc6345c5b04f189cdfa4e79244c9c9888",
+  "reviewed_at": "2026-10-21T13:00:38.159193+00:00",
+  "source_segments_read": 23,
+  "facts_reviewed": 116,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Laterality conflict (right upper lobe nodule on admission vs wedge resection of the left upper lobe): only the side is quarantined. Added include p1-f111 thoracoscopic wedge resection (Aug 27, 2019, laterality unknown) and include p1-f112 incidental nodule (no side); side-specific p1-f035 and p1-f041 stay source_conflict/review_only; oncology surgery p1-f092 now an alternate of p1-f111; ambiguity and limitation updated.",
+    "Restored the dropped time-specific tumor assessments as separate tumor_refs (the schema forbids a duplicate t1): t2 p1-f113 nodal metastasis Oct 27, 2020; t3 p1-f114 nodal progression July 2021; t4 p1-f115 pleural, pericardial and liver progression (distant_metastatic, no date).",
+    "Added p1-f116 symptoms_function sign: no signs of cryptococcal meningitis on neurological physical examination (SECTION-SIGNS).",
+    "Added literal index-patient discussion outcomes p1-f117 (pralsetinib adverse effects alleviated with dose reduction to 200-300 mg once daily) and p1-f118 (recurrent lung infections well controlled by antimicrobial therapy).",
+    "Removed care_plans p1-f109 and p1-f110 (refused adjuvant therapy, refused chemotherapy): duplicates of oncology declined treatments p1-f093/p1-f094 outside care_plans scope (ONE-STATEMENT).",
+    "Names p1-f062 and p1-f065 no longer carry dates (\"Chest CT\"); intrapleural/pericardial chemotherapy p1-f097/p1-f098 modality systemic -> other.",
+    "Relations: removed p1-e18 (in November 2021) before p1-e19 (November 29th, 2021), month precision does not order; added p1-e16 before p1-e19 (Aug 15 vs Nov 29, 2021), p1-e02 before p1-e04 (postoperative), p1-e01 before p1-e05 (admission opening the stay before discharge), p1-e02 before p1-e07 (surgically resected archived tissue), p1-e13 before p1-e17 (every month after initiation of pralsetinib), p1-e10 before p1-e12 and p1-e12 before p1-e16 (stated dates), p1-e38 before p1-e33 (\"Since then\").",
+    "Split the liver metastasis abdominal CT out of the effusion cytology event into new event p1-e38 so the drainage -> cytology relation does not order the abdominal CT.",
+    "Summary claim 3 reworded (\"On November 29th, 2021\" instead of \"In late 2021\"; no causal \"led to\"); summary sources repointed from review_only p1-f041 to p1-f112 and extended to the new facts; added an ambiguity for the WBC unit printed with a stray comma."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the single timeline image is reviewed in visual.json and its printed values are pixel content only.",
+    "Source conflict: right upper lobe nodule on admission versus wedge resection of the left upper lobe; only the side-specific facts are review_only; the nodule, the resection and the tumor are kept without a side.",
+    "Discussion statements on infection causes and pralsetinib contribution are hedged and not recorded as established causes.",
+    "Neutrophil and platelet suppression are recorded as stated in the case text; no counts are reported.",
+    "White cell count unit is printed with a stray comma in the source (\"×10^(9),/l\") and kept as printed.",
+    "Pralsetinib stop date is not stated; no stopped action is recorded."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 23,
+    "facts_reviewed": 116,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (81-year-old man, KIF5B-RET NSCLC): stage IB after wedge resection, nodal metastasis Oct 2020, first-line alectinib, progression July 2021, second-line pralsetinib with dose reductions, cryptococcal pneumonia, MSSA lung abscess, pleural/pericardial/liver progression April 2022, death June 21, 2022.",
+      "The right vs left upper lobe statement is a laterality-only source conflict; nodule and resection themselves are kept include without a side.",
+      "Every one of the 34 relations has a stated date pair, an order word (Postoperative, Therefore, After two weeks, One month later, Upon initiation, As a result, Since then) or an implied-necessary order (test -> result -> action, admission -> discharge, treating a named effusion).",
+      "Figure 1 timeline viewed at full resolution with crops: printed labels match visual.json; month-year headings are not transcribed; first-column text prints \"left upper lobe nodule\" (pixel content only)."
+    ],
+    "residual_risks": [
+      "Four events remain unordered (ECOG 2, refused chemotherapy, CT-guided lung biopsy, respiratory distress): the source states no order word for them.",
+      "Intrapleural and pericardial chemotherapy modality recorded as other; a prediction labelling them systemic will not match.",
+      "Discussion outcomes p1-f117/p1-f118 use the discussion wording (neutropenia, well controlled), which is coarser than the case text."
+    ]
+  },
+  "physician_adjudicated": false
+}

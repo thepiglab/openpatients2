@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC9785198.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "77f67cad510daee3344940eb3d762d479da5d485d7a6bd88a3b8dcb1ee60f573",
+  "annotation_sha256": "d4c64509a5f989113e88219efefeb8eb92dd8c2e93f980b8b89715f448baf55c",
+  "reviewed_at": "2026-10-21T13:09:34.901738+00:00",
+  "source_segments_read": 37,
+  "facts_reviewed": 109,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Digoxin interpretation treated as a source conflict: 'positive for poisoning with ... digoxin (4.8 ng/mL)' vs 'plasma levels of digoxin were low' (same paragraph) and 'did not reach toxic levels' (discussion). Removed flag=positive from the 4.8 ng/mL observation (p1-f047, value kept include), narrowed p1-f011 to metoprolol and benzodiazepine poisoning, added review_only source_conflict facts p1-f098 (digoxin poisoning) and p1-f099 (digoxin toxicity absent); removed digoxin from the summary.",
+    "Split 'digoxin at presentation and at 6 h apart did not exceed 5 ng/mL' into two time points (p1-f054 at presentation, new p1-f103 at 6 h apart) with new event p1-e17 and relation e03->e17.",
+    "LV dysfunction grade (moderate in case text/abstract vs mild in discussion) quarantined: removed text_value 'moderate reduction' from p1-f065 (LVEF 40% kept), added review_only conflict facts p1-f100/p1-f101.",
+    "Apical wall motion (severe hypokinesis in case text vs akinesia of the apex in abstract) made a source conflict: p1-f066 review_only, added p1-f102 review_only; removed apical hypokinesis from the summary.",
+    "Added missed facts: iopamidol contrast for the angiogram (p1-f104), Glidesheath Slender 6 F sheath and Judkins left 3.5 / right 4.0 catheters (p1-f105..f107), catecholamine level not determined (p1-f108, not_performed), LDH increase as a review_only ambiguous fact (p1-f109).",
+    "Replaced unsupported relation e03(labs/toxicology)->e04 with e02(presentation)->e04 quoting 'Upon presentation ... was thus treated with vasopressors' and 'due to maintained hypotension ... epinephrine'.",
+    "Added relations: e02->e05 (presentation opens the stay -> stabilization 4 h later), e15->e16 (3- and 6-month follow-ups), and order-only in-stay care -> discharge e03/e08/e09/e11->e14.",
+    "Added 6-month follow-up event p1-e16 (p1-f028); removed the middle-term 'no other complications' fact p1-f097 from the 3-month event.",
+    "Fixed atorvastatin ingredient_as_documented ('statins (atorvastatin' -> 'atorvastatin') and noradrenaline dose_text to the literal 'average dose of 0.5 µg/kg/min'.",
+    "Updated ambiguities (digoxin conflict, LV grade conflict, wall-motion conflict, LDH) and source coverage for b00010/b00014."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual images are inspected in the separate visual target.",
+    "Discussion sentences on Takotsubo mechanisms, literature comparisons and pharmacology are general literature, not patient facts; only sentences that literally describe the patient or our subject are used.",
+    "Table 1 is a single-time presentation panel; the toxicology rows are cited in text as plasma harvested ~1 h following ingestion, see ambiguity.",
+    "Cardiac magnetic resonance is mentioned only as a lack of modifications; its performance and timing are not described.",
+    "Time anchors for day counts differ between statements and are not reconciled.",
+    "Parent review: digoxin poisoning interpretation, LV dysfunction grade and apical wall-motion grade are source conflicts held as review_only facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 37,
+    "facts_reviewed": 109,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (63-year-old woman, poly-drug ingestion, Takotsubo cardiomyopathy); roster and ownership correct.",
+      "Text toxicology sentence cites Table 1 with identical values, so the text-table merge is one measurement; the ~1 h vs 'upon presentation' sampling time stays an ambiguity.",
+      "Oxycodone/phenobarbital rows keep flag unknown (class-to-drug mapping would be inference); acetaminophen flag normal is literal.",
+      "TTC kept confirmed (body 'established'; abstract 'suspected' is an earlier hedged statement, recorded as ambiguity, not a conflict).",
+      "The 3-month follow-up outcome text_value '3-month follow-up' is a literal substring of the quote.",
+      "Figures: ECG and two angiogram frames viewed at full resolution with crops; no printed identifiers; visual.json has no plot or positional readings."
+    ],
+    "residual_risks": [
+      "Treating the qualitative digoxin and LV/wall-motion grade disagreements as source conflicts is a judgment; values themselves are kept.",
+      "Troponin/echo event p1-e08 is ordered only to discharge; its order relative to the day-3 chest pain is not literal.",
+      "Cardiac MRI recorded only as an observation; its timing is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

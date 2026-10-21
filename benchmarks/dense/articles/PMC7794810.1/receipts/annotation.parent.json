@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC7794810.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2fe4a80a7c720b0ad99a984f564c0d2d243a1252567e821c9ac794f0a32e9478",
+  "annotation_sha256": "c30bb7bf052cbbfe036c5dea752163add39d500df13cfb82e3a940852e2a6775",
+  "reviewed_at": "2026-10-21T13:27:32.414898+00:00",
+  "source_segments_read": 58,
+  "facts_reviewed": 179,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p2-f033 (supplementary motor area enlargement) and p2-f034 (very extended activated areas) set supported/include: they carry no hand laterality, so the text RHM vs printed Figure 4 LHM label discrepancy does not affect them; the LHM/RHM ambiguity now links only p2-f031 and p2-f032, which name the task RHM and stay review_only.",
+    "p1-f024 (constrained absence of social life) status current -> unknown: the source does not place it at the latest described time (he later regained some social life).",
+    "p3-f021 dysarthria: removed text_value \"Denied by the patient\" (a negation must not be a present item value); the clinician-observed mild sign stays present and the patient denial is recorded as a p3 ambiguity.",
+    "Added p1 ambiguity: physiotherapy restarted (Methods) vs motor rehabilitation resumed (Results) kept as two items because the source does not identify them as the same activity.",
+    "Added p1 relation e02 (presentation, therapy just finished) before e04 (HBOT period with restarted therapy) on the literal re- word \"restarted\" in the adjacent sentence.",
+    "p2 summary claim 1: removed the unsupported phrase \"during the HBOT period\"."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four figure images and the supplementary PDF page were inspected in separate visual and supplement targets.",
+    "The Figure 3 and Figure 4 captions state p < 0.005; this is not a patient fact and printed image text is recorded only in visual.json.",
+    "Series-level discussion statements (for example that the changes strictly correlated with clinical improvement and that new eloquent areas appeared in some cases) are not copied to individual patients beyond literal per-patient sentences.",
+    "The Pt 2 hand-movement task is labelled RHM in the Results text but LHM on the printed Figure 4 panel; the affected facts are review_only.",
+    "Supplementary Figure S1 (PDF) is a one-page post-HBOT lesion-morphology figure; its caption says its legends and arrowhead numbers are as in Figure 1 although the numbered lesion arrowheads belong to Figure 2.",
+    "Figure 2 text and caption describe Pt 3 cysts as arachnoid cysts and cysts without further characterization; kept as imaging observations, not conditions."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 58,
+    "facts_reviewed": 179,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Four individually described men (Pt 1-4) with chronic stroke, each with 40 HBOT sessions and MR/fMRI a few days before and after; roster complete (four Pts).",
+      "Pt 2 hand task: text RHM vs printed Figure 4 LHM; per RULINGS the image label is pixel content only, so the two facts naming RHM are review_only with an ambiguity rather than a source conflict.",
+      "Before-HBOT time is applied only to lesion findings the Figure 2 caption itself states; text-only MR findings keep a null time.",
+      "The \"in almost all Pts\" after-HBOT TL statement is attributed to Pts 1, 2, 4 because its own figure citation names those patients with their arrowheads; kept include with an ambiguity.",
+      "Pt 4 ventricle panel (text C vs caption B) and Pt 3 Figure 4 arrowhead 3 (text) vs 4 (image) are panel-label ambiguities or visual limitations, not value conflicts.",
+      "HBOT procedure plus EAN 72 medication are two source statements (sessions vs breathed gas), not a duplicate."
+    ],
+    "residual_risks": [
+      "Presentation events of Pts 2-4 are not ordered before the HBOT chain because no literal order word links their examination to the HBOT period.",
+      "Cohort-level abstract/discussion statements (all Pts reported clinical improvement) are not copied as separate items; per-patient outcome sentences cover them."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,66 @@
+{
+  "article_id": "PMC7252767.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "401f1f8799f9efcbd4d2a6d791eac73f5ca0cb18e0db5a4b0ae32f0724183ec7",
+  "annotation_sha256": "b371e2a6b1bfa7077174cd01dcb957f95bdd97493cb422eaacad16e5cb566f9a",
+  "reviewed_at": "2026-10-21T04:14:49.995494+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 214,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1: removed misused disposition/follow_up_duration_text from the three-day hospital stay outcome.",
+    "p1: device detection results after the CRT upgrade and for the next two years recoded as performed observations with flag negative (assertion present) instead of assertion absent.",
+    "p1: added relations pres->surg1 and surg1->crt (stated ages 22, 24, 32), icd->resp1 (back-reference \"after device placement\"), qrsup during p630 (\"At that time\").",
+    "p1: rewrote the ages/intervals ambiguity as arithmetic-only and the 9.5-year versus seven-year ambiguity (implant duration versus counting window, not two values for one attribute).",
+    "p2: added age_at_presentation \"age 29 years\"; removed unsupported temporality=historical from congenital d-TGA and VSD (\"born with\").",
+    "p2: procainamide and quinidine get their own literal time \"During that time\".",
+    "p2: added the four DC cardioversions \"required over the next four months\" and the discussion six DC cardioversions before ATD implantation as procedures with action unknown.",
+    "p2: EnRhythm generator \"received\" set to action completed; removed device name misused as related_condition; renamed the 20-sequence observation to the attempted ATP sequences.",
+    "p2: added relations ed29->rfa, rfa->pm, pm->age43 (stated ages), age43->age3y (\"three more years\" after the episode), age46 same_time advisa (\"At that time\").",
+    "p2: the first DC cardioversion item now cites only its own performed sentence; the \"first of four DC cardioversions that would be required\" sentence is recorded once, in the separate four-cardioversion item (ONE-STATEMENT).",
+    "p3: Holter \"no episodes of arrhythmia\" recoded as assertion present with flag negative.",
+    "p3: removed the duplicate observation count for the two symptomatic IART episodes (condition kept); the two additional episodes recoded from observation to IART recurrence condition.",
+    "p3: removed \"two locations\" misused as ablation body_site (kept in name); ED visits outcome event other instead of readmission; added digoxin stopped for the change from digoxin to sotalol; note on capped lead versus discussion \"empiric removal\".",
+    "p3: added relations eps1->aten50 (atenolol start before dose increase), amio->at500 (amiodarone 500 mg before reduction to 200 mg), at500->fail1 (\"after receiving his ATD\"), lost->gen30 (ages 21 and 30)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the Figure 1 image is inspected in the separate visual submission.",
+    "Case 1 ATP counts are given for the first seven years in the case text but for approximately 9.5 years in the abstract; kept as an ambiguity.",
+    "Case 3 cardioversion counts do not reconcile; \"required\" cardioversions are not recorded as completed unless the text says performed.",
+    "Hedged causes of device failure (slower IART circuit, far-field oversensing) are not recorded as established.",
+    "Group statements in the abstract (patients with biventricular physiology forgoing DC cardioversion) and study-level discussion are not copied to individuals.",
+    "Interval and age statements are kept literal; no calendar dates or ages are computed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 214,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Three individual CHD patients (systemic LV post-TOF, d-TGA/Mustard, DILV/Fontan) correctly rostered and attributed; Table 1 rows and Figure 1 panels A-C attributed by literal case labels.",
+      "Case 1 abstract 9.5 years versus text first seven years kept as an ambiguity: 9.5 years is an implant duration, the seven years a counting window; no IART after the CRT upgrade.",
+      "Case 3 12.5 versus approximately 13 years is a rounding difference (ambiguity); fifth DC cardioversion count does not reconcile with earlier counts (ambiguity); required/needing cardioversions kept as action unknown.",
+      "Case 3 lead capped (case text) versus empiric removal (discussion) kept as ambiguity with the case-text capping fact; suspected causes of device failure are not asserted.",
+      "Case 2 verbless sotalol/warfarin sentence kept as action unknown with ambiguity; ibultilide kept as printed.",
+      "Case 3 VSD and ventricular inversion are caption-only but literally attributed to Case 3 by the caption."
+    ],
+    "residual_risks": [
+      "Cross-paragraph relative intervals (\"One year later\", \"Nineteen months later\", \"Six months later\") are left unordered per the paragraph rule, so the timelines are only partially linked.",
+      "Device ATP counts are recorded as observations; abstract group statement on biventricular patients is not copied to individuals.",
+      "Panel A red lead labels are not legible at the published resolution."
+    ]
+  },
+  "physician_adjudicated": false
+}

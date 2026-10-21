@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12940157.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4da639555d8faa9bbfa5edb2be3d140db6eea9faa2943e70ef10d97cbfc6d306",
+  "annotation_sha256": "2821c0d98584da2a4a52c25329309c33865907ddb579a9161adb95b6765ede00",
+  "reviewed_at": "2026-10-21T14:18:22.530273+00:00",
+  "source_segments_read": 147,
+  "facts_reviewed": 203,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Proteobacteria March 2022 change: 69.51% (text) vs 44.58% (Table 1 and April 12 visit text) reclassified from source conflict to an arithmetic-only ambiguity (same endpoints 1.604% to 2.319% give 44.58%); p1-f133 restored to supported/include, p1-f164 kept ambiguous/review_only.",
+    "Table 6 Grade 1 diarrhea check marks vs text \"no diarrhea or GI symptoms were reported (Table 6)\" at the same five assessments made a source conflict: p1-f165..f169 and p1-f175/f176 now source_conflict/review_only; summary no longer cites the disputed negatives.",
+    "Surgery date conflict (Table 5 Jan 22 vs text January 28) confirmed as same first surgery and same attribute; figure removed as a conflict side; disputed date removed from event p1-e04.",
+    "Patient-perspective gut upset (p1-f183) upgraded to supported/include: literal patient report about the 24 hours after each infusion, not contradicted by visit reports.",
+    "June 24 visit facts p1-f173/f174 given the literal relative time \"10 days post the final chemotherapy infusion\".",
+    "Added visit events p1-e19..e24 (post-diagnosis consultation, initial nutritional consultation, integrative oncology supplement review, pre-chemotherapy, post-first-infusion and post-final-infusion visits) and 15 literal order relations linking them to surgeries, chemotherapy, stool tests, radiation and the final visit; heading dates are not quotable so no calendar times were copied.",
+    "Added care_plans facts p1-f201 (nutritional intake forms), p1-f202 (supplement adjustment by integrative oncologist and PharmD), p1-f203 (supplement changes for radiotherapy).",
+    "Added ambiguities for the unnamed as-needed support medications and for heading-only visit dates; reworded the surgery, Proteobacteria, Table 6, gut-upset and figure-only ambiguities."
+  ],
+  "unresolved": [
+    "Figure 1 (timeline) and Figure 2 are inspected in visual.json; dates and events printed only in figure pixels (diagnostics, Oncotype Dx result date, surgery dates, COVID-19 chemotherapy hold) are not text facts.",
+    "Visit and consultation dates appear only in section headings (not quotable segment text); visit events use literal relative times or order relations instead.",
+    "Table 4 probiotic and prebiotic rows (\"See table 2\") and Table 3 literature evidence were not recorded as separate facts.",
+    "Supplement SM2841 is a DOCX copy of the article tables and figures; it is reviewed in its own sidecar.",
+    "Dashes in Table 6 have no legend meaning and are not recorded as negatives.",
+    "Table 6 Grade 1 diarrhea check marks conflict with the text report of no diarrhea at the same five assessments; both sides are review_only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 147,
+    "facts_reviewed": 203,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient; all Table 1, 2, 4, 5 and 6 cells checked against facts; Table 1 sums and percent changes recomputed (69.51% equals 1.604% to 2.719%, an arithmetic slip).",
+      "Figure 1 timeline and Figure 2 genus bar chart viewed in colour and grayscale with crops; figure-only content (COVID-19 hold, stage 3, visit dates) stays visual-only.",
+      "Visit chronology now linked literally: diagnosis, consultations, surgeries, chemotherapy, visits, radiation, stool tests and final visit."
+    ],
+    "residual_risks": [
+      "Section-heading visit dates cannot be quoted, so visit events carry no calendar date.",
+      "Which support medications were only as needed is not stated.",
+      "TC regimen named taxol in the abstract while Table 5 lists docetaxel; kept separate as printed."
+    ]
+  },
+  "physician_adjudicated": false
+}

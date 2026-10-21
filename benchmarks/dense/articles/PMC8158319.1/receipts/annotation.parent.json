@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC8158319.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "cc93983454c489b1affdd0cc6dd074b562570cd52ddb8027954b20d0e45498ee",
+  "annotation_sha256": "1da74ab348138733c2378f2b88e6d180d87bc5c6f74368fbf7b4571b7601a11b",
+  "reviewed_at": "2026-10-21T08:36:33.136250+00:00",
+  "source_segments_read": 15,
+  "facts_reviewed": 73,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Split the ICU day 5 'surgical treatment' (b00008) from the CABG/mitral valve replacement (b00009): the source gives no back-reference identifying them; added fact p1-f073 and event p1-e19 (time 'ICU day 5'); p1-e08 CABG/MVR is now untimed with only its own b00009 evidence.",
+    "Relations re-grounded: e05->e19 (surgery planned -> surgical treatment), e07->e19 ('allowing for'); e06->e08 from abstract 'treated initially by medical optimization, followed by mitral valve replacement and complete surgical revascularization'; e08->e10 now quotes b00013 'Despite the complete revascularization and replacement of insufficient valve ... postoperative cardiogenic shock'.",
+    "Removed e03->e04 ('Initial workup was completed with' does not order TEE vs angiography) and e10->e11 ('Postoperatively' vs '24 hours postoperatively' gives no order).",
+    "Added relations: e05->e06 (Heart Team decision to stabilize -> optimization), e09 during e08 (procedure done under CPB), e08->e12 ('requiring rescue mechanical circulatory support by ECMO'), e10->e12 ('the next choice was to use ECMO'), e16->e18 (in-hospital TEE -> discharge); e02->e03 now quotes both admission and TEE sentences.",
+    "Cardiac output 2.1 and 2.4 printed with indexed unit l/min/m^(2): set certainty ambiguous, scoring review_only; ambiguity updated.",
+    "Removed borrowed attributes: ECMO indication (not stated in the ECMO item's own quotes; recorded as ambiguity), outcome related_condition 'Mitral valve regurgitation' on p1-f068 and 'Postoperative refractory cardiogenic shock' on p1-f070.",
+    "Event p1-e17 (shift to ward) kind follow_up -> other (in-hospital, not post-discharge).",
+    "Summary claim 3 rewritten so it no longer states the CABG/MVR happened on ICU day 5; ambiguity and article limitation on the split updated; b00001 coverage set to background."
+  ],
+  "unresolved": [
+    "The caption of Figure 1 is only \"Figure 1\"; what the image shows comes from pixel inspection in visual.json and the single citation in the text.",
+    "No calendar dates are given; times are relative (ICU day, postoperative day) with unstated anchors.",
+    "The ICU day 5 surgical treatment and the described CABG with mitral valve replacement are not identified as the same operation by the source; they are kept as separate events.",
+    "Discussion and conclusion paragraphs mix patient-specific and general statements; only literal patient statements were recorded."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 15,
+    "facts_reviewed": 73,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (49-year-old woman); roster count 1 complete; no tables or supplements.",
+      "Discussion 'our patient' statements used (IABP afterload reduction, levosimendan inotropy/afterload, CRRT for anuria, normal lactate, IABP unloading) are literal about the patient; general ECMO/IABP/levosimendan literature statements are not recorded.",
+      "Heart Team (b00007) and MCS (b00010) sentences state decisions ('decided'), so planned care_plans and 'other' events are supported.",
+      "Silent MI 'possibly in the previous 7 days' kept as hedged time before anchor 'admitted' with an ambiguity.",
+      "Figure 1 TEE color Doppler still: printed '1,07 cm', calipers and probe settings are not tied to any structure and not used as values; no dates or identifiers in pixels."
+    ],
+    "residual_risks": [
+      "Relative times (ICU day, postoperative day) have unstated anchors; the CABG/MVR has no stated time.",
+      "ECMO '9 days' vs weaning on 'postoperative day 10' not reconciled by the source.",
+      "Visual description has minor pixel inaccuracies reported to the annotator (scale dots diagonal, unmentioned triangle icon and left-edge marker)."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC12713933.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a84957bd9271a67aaecbc026a047c03b404769c4c1fd08fdcbc6b33ad7e8a1ba",
+  "annotation_sha256": "900d2b3568534962f2577665f8f4969a5a3b2a0557efc38cd4b0ee36eb9328f5",
+  "reviewed_at": "2026-10-21T14:24:33.635417+00:00",
+  "source_segments_read": 57,
+  "facts_reviewed": 196,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "b00040 'All patients underwent psychiatric and/or psychological evaluation prior to initiation' explicitly covers the three reported patients (RULINGS cohort rule): p1-f059, p2-f068, p3-f056 changed from ambiguous/review_only to supported/include with time 'prior to initiation' (before); the three 'unlabelled sentence' ambiguities and the matching article limitation removed; a test event per patient added and ordered before the first atomoxetine dosing (p1-e07, p2-e10) or the Case 3 trial (p3-e06).",
+    "Added literal per-case Discussion results: hypoxic burden 'marked reduction' (Cases 1, 2; b00033); nadir and time below 90% 'improvement' (all three cases; b00033); AHI by sleep stage (Case 1 NREM reduction not REM; Case 2 REM-only improvement; b00037); sleep efficiency 'remained comparable' (Cases 1, 2; b00044); Case 1 REM sleep duration 'unchanged' (b00044). Matching Case 3 / Case 2 sentences added as extra evidence to p3-f052, p3-f053, p2-f057, p3-f054 (same statements).",
+    "Ambiguities added: Case 2 REM AHI reduction hedged by the author (limited REM sleep); 6-month longest treatment in 'these cases' not attributable (p1, p2); abstract 'morbid obesity under treatment with liraglutide' vs case text obesity BMI 31.2 and liraglutide discontinued (p2); Case 3 trial/first-week dosing prescribed but non-adherence confirmed (p3).",
+    "Case 3: p3-f015 4-week trial action started -> ordered (non-adherence); first-week dosing event p3-e08 occurrence occurred -> unknown; non-adherence event p3-e09 kind adverse_event -> other.",
+    "Event membership (no borrowed times): removed p1-f055/f056 from the 'several days' event p1-e11; removed untimed family statements p3-f022/f023 from 'the day before the follow-up polysomnography' event p3-e09; moved the follow-up calls p2-f026 and repeated calls p3-f020 out of dosing events into their own follow_up events.",
+    "Relations added: pre-treatment PSG before first dosing (p1-e05<e07, p2-e13<e10, p3-e07<e08; time-labelled Table 1 header); first-week dosing/adverse effects before the 'Ato-Oxy 28 days' PSG (p1-e07<e10, p2-e10<e14, p2-e12<e14; both relative to the same course start); p1-e06 decision < p1-e07 dosing; p2 follow-up calls < 80 mg step; psychiatric evaluation < initiation (3).",
+    "Age facts p1/p2/p3-f002: added the Table 1 Age row as second evidence (same value).",
+    "Summaries: removed 'Baseline' from Case 1 BMI and the unsupported 'Given the benefits seen in the previous two cases' clause in Case 3; Case 3 first-week dosing phrased as prescribed; psychiatric evaluation sentence added to each patient's summary."
+  ],
+  "unresolved": [
+    "The article has no figures and no supplementary material in the retained source; no visual task is applicable.",
+    "Table 1 columns are attributed to Cases 1-3 by the paired column grouping under the Case 1, Case 2 and Case 3 header and the colspan of the age and BMI rows; the table rows carry the heading Case 1 for every row.",
+    "Discussion sentences about heart-rate effects, hormonal development and mechanisms are speculative or non-individual and are not recorded as patient facts.",
+    "Case 1 is described as a girl but one sentence says \"his previous treatment\"; recorded as an ambiguity."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 57,
+    "facts_reviewed": 196,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Table 1 (raw.xml T1) has Case 1/2/3 headers with colspan=2 and a time row Pre-treatment | Ato-Oxy 28 days | Pre-treatment | Ato-Oxy 28 days | Pretreatment | Ato-Oxy Night PSG; all 84 value cells (14 rows x 6 columns) checked cell by cell against the annotation facts and measurement_series.json: columns 1-2 Case 1, 3-4 Case 2, 5-6 Case 3, times correct.",
+      "Text-table merges are the same measurement: Case 1 AHI 30.4->8.6, nadir 73->86%, REM 12.9/13.1% cite Table 1; Case 2 post AHI 3.3 with text \"AHI below 5 events/h (Table 1)\"; Case 3 baseline polysomnography AHI 31.5 = Pretreatment column.",
+      "Case 3 presentation AHI 69/nadir 77% stays separate from the pretreatment PSG 31.5/84% with an ambiguity; no conflict (different studies, undated).",
+      "Case 1 is a girl; \"his previous treatment\" kept as a print-inconsistency ambiguity.",
+      "No figures, no supplements, no media in raw.xml (fig-count 0); visual, figure-EHR and privacy sidecars are empty and correct."
+    ],
+    "residual_risks": [
+      "Discussion-level qualitative results (b00033/b00037/b00044) restate Table 1 comparisons and are recorded as separate text observations by design.",
+      "Case 2 REM AHI improvement is hedged by the author; values kept as printed with an ambiguity.",
+      "The sleep technician observation of intake 30 min before bedtime (b00046) and 6-month longest treatment (b00043) are not attributed to a case."
+    ]
+  },
+  "physician_adjudicated": false
+}

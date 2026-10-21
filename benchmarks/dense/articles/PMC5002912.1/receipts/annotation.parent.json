@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC5002912.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "377441e94188e4058fef39854d78358b6c5c602c1a52165584955dba9f9b2e6d",
+  "annotation_sha256": "04947c14fccddb37d3ed928a12db34dfe6500f15a3de2965e842cd48cdb2d400",
+  "reviewed_at": "2026-10-21T03:30:16.128115+00:00",
+  "source_segments_read": 59,
+  "facts_reviewed": 210,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Absolute VO2max at T4: the text prints 1.15 L·min^(−1) and Table 2 prints 1.16 for the same measurement and time point (same precision, different digit: not rounding, not a print artefact). p1-f117 (table) set to source_conflict/review_only and the text value added as p1-f209 (source_conflict/review_only); ambiguity rewritten to cover both.",
+    "Summary claim 3 rewritten so the disputed T4 absolute VO2max (1.16) no longer appears; it now cites weight-relative VO2max 32.6 to 27.3 and the stated stability of absolute VO2max.",
+    "Text values repeating table cells now cite both (OBS-TABLE-ROWS): absolute VO2max T1-T3, FEV1 % predicted T1-T4, relative VO2max % predicted T2/T4 and -16.3% change, VE/VO2 T1-T4 with +3.8%/+7.5%, VE/VCO2 T2/T4 with -4.7%, VE T2/T4 with +14.4%, exercise duration +18% T2-T4.",
+    "Added p1-f210 body composition assessment (e.g., skin folds) status not_performed (\"clinical constraints prevented such measures in the current report\"); b00053 source coverage changed to patient_facts.",
+    "Event p1-e09 (T1): removed the \"11-year-old\" presentation age p1-f002 and the untimed spirometry procedure p1-f030 (neither is stated as a T1 fact).",
+    "Event p1-e14 (T4): removed whole-period items not stated at T4 (FEV1 and VO2max correlations p1-f202/p1-f203, visit cadence p1-f031, abstract decline/stability/fluctuation outcomes p1-f205 to p1-f208); added the conflicting text T4 value p1-f209.",
+    "Added relations: e01 -> e04 (birth before the stated age 9), e05 -> e09 (stated age 10 for CFRD before Table 1 age 11.83 at T1, same age anchor, both quoted), e06 -> e11 and e07 -> e11 (\"Her growth failed to respond to these noninvasive nutritional supplements, leading to consideration of overnight supplemental feeding via a PEG\", with the PEG later inserted).",
+    "Ambiguities: height \"3.2 cm\" vs Table 1 148.3/153.0 cm and 3.2% recorded as an arithmetic-only mismatch; CFRD age 10 vs 10.9 (Fig. 1 caption) recorded as a precision difference; new ambiguity listing the unrecorded author-calculated deltas and target weights."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two charts are reviewed in the separate visual submission.",
+    "Table cells are recorded per time point with times from the column headers and footnote legend; percent-change columns are author-calculated and stored as separate observations.",
+    "Absolute VO2max at T4 differs between the text (1.15) and Table 2 (1.16); both values are kept as review_only source-conflict items.",
+    "Author-calculated target weights for the 50th BMI percentile and text-stated deltas that repeat table values are not recorded as separate facts.",
+    "RPE and RPD ratings are recorded as performance scores in symptoms_function; the 1-10 scale is stated only in the methods.",
+    "No allergies, oncology, reproductive, social exposure or medication doses for childhood treatments are documented."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 59,
+    "facts_reviewed": 210,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (11-year-old girl with CF, homozygous deltaF508); PEG inserted 2 days after T2 under general anaesthetic, then overnight Fresubin feeding; exercise testing, spirometry and anthropometry at T1-T4 with calendar dates in Table 1.",
+      "Every Table 1 and Table 2 cell checked against the draft (28 rows x 6 columns); all values, units and comparators match; percent-change cells kept as separate observations with the literal header time \"from T2 to T3/T4\".",
+      "Column-header times (\"3M-Pre\" etc.) are literal in each cell quote and the footnote legend is quoted as structural evidence; T1-T4 events merge Table 1 and Table 2 cells under the same labelled time points, with times from the Table 1 Date row.",
+      "HR max dashes at T2/T4 are not_performed with the equipment-malfunction footnote; RPE/RPD kept as symptoms_function performance scores; \"requiring surgery\"/\"requiring insulin\" stay action unknown.",
+      "Relation ordering T1 -> T2 -> PEG -> T3 -> T4 rests on footnote/time-point wording and the Fig. 1/2 caption \"inserted 2 days after T2\"; feeding after PEG on \"subsequently introduced\".",
+      "Both figures viewed at full resolution: plain scatter graphs, no identifiers; visual.json records only printed ticks/labels and caption-stated values, no plot estimates."
+    ],
+    "residual_risks": [
+      "Clinical instability and the 22 days of intravenous antibiotics are not ordered relative to T1-T4 (only \"during the 15-month period\").",
+      "Overnight feeding start is ordered after the PEG but not relative to T3.",
+      "Author-calculated text deltas are not separate items (recorded as an ambiguity)."
+    ]
+  },
+  "physician_adjudicated": false
+}

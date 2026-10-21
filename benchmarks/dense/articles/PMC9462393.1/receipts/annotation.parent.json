@@ -1,0 +1,66 @@
+{
+  "article_id": "PMC9462393.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4ce8073b7f2dee38c1dfc1ab93b69abd655351d482c10450e555b3de0f5a7345",
+  "annotation_sha256": "b3fa41d52811f6a8de630da4c7c6c40f058e66a4005978dd0fdd6c7dec4df90f",
+  "reviewed_at": "2026-10-21T13:07:32.903467+00:00",
+  "source_segments_read": 46,
+  "facts_reviewed": 211,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1 subject_state unknown -> deceased_during_course: the reported autopsy (b00014, b00032 \"at autopsy\") is a post-mortem examination; no death outcome item added, time/cause of death left unstated (ambiguity updated).",
+    "p1-f041 and p3-f046 (paraneoplastic neurologic syndrome from \"Our patients fit the diagnostic criteria\") -> ambiguous/review_only: no explicit per-patient coverage.",
+    "p2-f046 re-evidenced to the literal patient 2 sentence (b00035 \"patient 2 is a male with a paraneoplastic syndrome\"); alternative-antibody ambiguity added.",
+    "p2-f018 (decreased VOR gain on LEFT head impulse) -> ambiguous/review_only: text-vs-table side-label disagreement (Table 1/caption low gain right); added include facts p2-f054 unilaterally decreased/asymmetric VOR gain (b00024, b00029, b00028) and p2-f055 catch-up saccade 100 m sec after the left head impulse (caption + text agree); caption gain quotes added to review-only p2-f019/f020.",
+    "p2: added vHIT/alternate cover test procedure (methods), rehabilitation unit stay care plan, CT chest/abdomen abnormal mass lesions (b00027 explicit \"all three patients\"), serum cancer markers tested without reported result (b00002 \"All patients underwent\"); p2-f040 kind imaging -> other (modality unstated).",
+    "All patients: added video-oculography procedure (b00002/b00007 \"All patients\") and three absent conditions from \"None of our patients had a metabolic abnormalities, infectious cerebellitis, or medication effects to cause DBN\".",
+    "p1: added Figure 1 caption primary-gaze SPV 2 deg/sec (separate from the Table 1 cell) and DBN increase in lateral gaze; autopsy severe cerebellar degeneration and diffuse ovarian cancer metastases (b00032); Table 1 \"Normal^(**)\" added to HIT fact; Athena Labs methods sentence added to PCA-1 fact; b00027 added to p1 CT finding.",
+    "p3: removed non-clinical care_plans item p3-f008 (\"we did not see her\"); removed borrowed \"5-day course\" from IV immunoglobulin; PET anchor \"hospitalization\" (not in its sentence) -> null; hospice transition action_status completed -> unknown (only the directive is stated); repeat CA-125 split into its own event p3-e14.",
+    "Relations: p1 +5 (admission -> in-stay MRI/CSF/steroid; CA-125 -> follow-up CA-125; excision -> later recurrence) and b00032 evidence on recurrence -> withdrawal; p2 +5 (exam on arrival same_time presentation; presentation -> MRI/CSF/treatment; panel -> \"2 weeks later\" rehabilitation deterioration); p3 +6 (initial symptoms -> transfer; MRI at onset -> CSF 1 week -> MRI 2 weeks; first solumedrol course -> second methylprednisolone course; transfer -> inpatient PET; CA-125 -> repeat CA-125). p1 e09 time precision -> exact.",
+    "Follow-up check: dropped p3-e12 -> p3-e13 (however is not an order word and the discontinued life-prolonging treatments are not named as rituximab); kept p2-e02 same_time p2-e01 (Examination on arrival is at the transfer presentation).",
+    "Source coverage updated for b00002, b00024, b00028, b00029, b00031, b00032, b00035; article limitations updated."
+  ],
+  "unresolved": [
+    "Visual status of figures in this annotation stays not_inspected; actual pixels are reviewed in visual.json.",
+    "Table 1 rows carry the \"Patient 1\" section heading in source.json for all three rows; ownership was taken from the age/sex cell of each row, not the heading.",
+    "Patient 3 CT results conflict between the results paragraph and the discussion; patient 1 deep/dentate nucleus findings conflict between the Figure 2 caption and the discussion; both kept review-only.",
+    "Patient 2 lateral vHIT gain values and sides are kept review-only because the printed figure legend labels the sides differently from Table 1 and the caption.",
+    "Several discussion statements about \"two of our patients\" or \"one of our cases\" do not name patients and are not assigned.",
+    "Supplementary Video 1 is a video supplement reviewed through the supplement manifest by sampled frames; audio and continuous motion are not reviewed.",
+    "Patient 1 vital status is set from the reported autopsy (a post-mortem examination); time and cause of death are not stated.",
+    "The discussion sentence \"Our patients fit the diagnostic criteria for paraneoplastic neurologic syndromes\" lacks explicit per-patient coverage; patient 1 and 3 diagnosis items from it are review-only.",
+    "The sentence noting worsening gaze holding failure, abnormal pursuit and impaired VFX \"noted in our three patients\" has unclear scope over its list and is not copied to patients."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 46,
+    "facts_reviewed": 211,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Table 1 rows (all under a \"Patient 1\" heading in source.json) render in raw XML as three rows with Age/gender cells Female 67, Male 68, Female 80 and no patient column; ownership by the age/gender identity cell is consistent with text cross-references (Table 1, patient 1/2) and the footnote.",
+      "p1 deep nuclei: Figure 2 caption \"deep nuclei were normal\" vs discussion \"demyelination of the dentate nuclei\" kept as source_conflict/review_only on both sides.",
+      "p3 CT: results \"unremarkable\" vs discussion \"abnormal mass lesions in all three patients\" kept as source_conflict/review_only on both sides.",
+      "p2 vHIT: Table 1 and caption put 0.57 on the right; text puts decreased gain on a left impulse; the image legend prints LL 0.57 / RL 0.89 (pixel content only, not a conflict side). Treated as a side-label ambiguity; lateral gains review-only.",
+      "p1 \"regain independent function abilities\" kept review_only against wheelchair dependence; CA-125 units and the 1:6,1440 titer kept literal.",
+      "Figure 3 legend values (LL 0.57, RL 0.89, sigma 0.05) are legible on enlargement and are transcribed only in visual.json; the small box label near the blue cluster is illegible and correctly not transcribed."
+    ],
+    "residual_risks": [
+      "Implied order-only relations from admission/presentation to in-stay care assume the MRI, CSF, steroid and PET belong to the same stay.",
+      "Cohort copies rely on the explicit quantifiers \"All patients\", \"All three patients\" and \"None of our patients\"; the b00027 CT sentence is demonstrably unreliable for patient 3.",
+      "Video SM1 reviewed by 15 sampled frames only; audio and continuous motion not reviewed."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC13070244.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "4a61186d424b652a2dfa355469eba6b0ed67041f19508978eb6b076102a38c1b",
+  "annotation_sha256": "c28eba1ecb2f554d66cda135290e3ff07707bbc8520eeb4ad1074e6efd321c08",
+  "reviewed_at": "2026-10-21T18:03:28.093889+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 116,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f101 (outcome deterioration): it repeated the f030 deconditioning statement verbatim (ONE-STATEMENT); unlinked from e28.",
+    "Lanreotide absence (f047): added the literal time 'while inpatient' (during) from its own sentence.",
+    "Added review_only/ambiguous facts f116 (recurrent bleeding, conditions) and f117 (haemodynamic instability, sign) from the abstract sentence about this patient, because the case text reports controlled bleeding on octreotide; the abstract ambiguity now links them.",
+    "Endoscopy ambiguity now also cites the abstract 'Despite endoscopic intervention'; the discussion 'endoscopy could not be done' is treated as an ambiguity (likely further endoscopy), not a source conflict.",
+    "Events: TAVR recommendation (e20) and hematology/cardiology recommendations (e21) reclassified from plan/planned to other/occurred (recommended is never planned; the recommendation itself occurred); anticoagulation not given (e18), declined interventions (e22) and bevacizumab/lanreotide not given (e34) set to kind treatment, not_occurred; e33 time_kind duration -> relative.",
+    "Added 9 relations: presentation before TTE, new-onset AF and the PRBC/iron course (stay-opening rule); PRBC/iron course, in-hospital deconditioning, PT discharge recommendation and the hospice decision before discharge to home hospice; hematology consultation before its recommendation; IV iron recommendation before intravenous ferric gluconate.",
+    "Summary claim 3 reworded to the source's 'not considered a candidate for anticoagulation'.",
+    "Article limitation added on the abstract/discussion tensions."
+  ],
+  "unresolved": [
+    "Video S1 is cited in the text but raw.xml and source.json list no supplementary material or media, so it is not available and not reviewed.",
+    "Values printed inside the Figure 3D image differ in part from the text echocardiography values; they are recorded in visual.json only and the text mean gradient and valve area are review_only.",
+    "No dates are stated; the course is ordered only where the source wording orders it.",
+    "Caption-layer visual status is not_inspected; the three JPEGs were inspected in the separate visual submission.",
+    "The abstract's recurrent bleeding and haemodynamic instability are recorded as review_only facts because the case text reports controlled bleeding on octreotide; the discussion's statement that endoscopy could not be done is not used against the reported endoscopy with thermal therapy."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 115,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; Video S1 is cited in the text but raw.xml has no supplementary-material or media element and source.json lists only the three figure JPEGs, so it is unavailable.",
+      "Figure 3D prints Mean PG 37 mmHg and AVA 0.86 / 0.79 cm2 versus text 36 mmHg and 0.8; pixel values stay in visual.json and the text mean gradient and valve area stay review_only with an ambiguity (text prints 'cm', caption cm^(2)).",
+      "Hemoglobin 6.6 g/dL in the untimed laboratory evaluation and 6.6 g/dL 'on admission' are kept as two items with an ambiguity: the source never identifies them as the same measurement.",
+      "Three transfusion statements (transfused with blood; AF management including blood transfusions; six units PRBC) are separate statements kept separately with an ambiguity.",
+      "Heyde syndrome kept as present for this patient from 'This case highlights the complexities of managing Heyde syndrome in elderly, frail patients who declined aortic valve intervention'."
+    ],
+    "residual_risks": [
+      "Hb 6.6 may be one admission measurement recorded twice.",
+      "Abstract recurrent bleeding/instability versus body bleeding control is unresolved (review_only).",
+      "Heyde syndrome verification_status confirmed rests on author framing rather than an explicit diagnosis sentence."
+    ]
+  },
+  "physician_adjudicated": false
+}

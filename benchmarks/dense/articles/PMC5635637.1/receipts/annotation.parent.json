@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC5635637.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "270e2946c383392c5d2aca67b2676e94deafaa4b52d8e7e665eedfc4c616fa3c",
+  "annotation_sha256": "aaaa0ed99fa8a540a2c7d8280bb5de3a3d6d1fc2337076b960f0808d6dcd6955",
+  "reviewed_at": "2026-10-21T03:54:20.848111+00:00",
+  "source_segments_read": 13,
+  "facts_reviewed": 49,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f008 Brugada syndrome absent/refuted: certainty ambiguous, scoring review_only; the source never states the syndrome was excluded (criteria referent unnamed, negative ajmaline test not stated to exclude it); removed from summary claim 4; ambiguity rewritten.",
+    "p1-f007 Brugada phenocopy (resolved): added the abstract quote \"the Brugada phenocopy was a transient finding\" as support for clinical_status resolved.",
+    "p1-f014 propafenone overdose: action unknown -> administered (\"She took 1.5 g propafenone\", \"taking five pills\"), abstract quote added; route left unstated.",
+    "p1-f005 suicide attempt: role history -> unknown (it is the presenting episode, not past history).",
+    "Added p1-f048 abstract \"Long QRS interval\" on electrocardiography (not merged with the 280 ms initial-ECG measurement).",
+    "Added p1-f049 \"Absence of symptoms\" (abstract conclusion) as assertion absent, ambiguous/review_only, linked to the existing symptoms ambiguity.",
+    "Events: removed p1-f028 (abstract ST elevation) and p1-f030 (discussion type 1 pattern) from the following-ECG event p1-e08, and p1-f009 (VT absence, untimed) from the follow-up event p1-e14.",
+    "Relations: added p1-e02 same_time p1-e03 (\"Upon admission\"); admission before labs p1-e06 and infusions p1-e07 (admission opens the stay); p1-e07 before p1-e10 (abstract \"After bicarbonate infusion for 4 hours ... disappeared\"); p1-e07, p1-e09, p1-e10 before discharge p1-e12 (in-hospital care before the discharge ending the stay); added the abstract \"After bicarbonate infusion\" quote to p1-e07 before p1-e09."
+  ],
+  "unresolved": [
+    "Figure pixels are inspected separately in visual.json; the annotation figures keep caption-layer visual_status not_inspected.",
+    "No serial per-patient tables, supplements or videos are listed in the source.",
+    "Discussion statements about other patients, cohorts and treatment recommendations are not recorded as index-patient facts.",
+    "Reference-range classifications were not applied; blood pressure and heart rate carry no abnormal flag because the source does not classify them."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 13,
+    "facts_reviewed": 49,
+    "figures_viewed": 2,
+    "key_findings": [
+      "One index patient (15-year-old girl, propafenone overdose); roster 1; the cited Hasdemir 16-year-old girl and the Junttila cohort are correctly excluded.",
+      "Brugada syndrome exclusion is not literal (no \"ruled out/excluded\" wording; criteria referent unnamed) -> review_only.",
+      "Ajmaline test: abstract \"2 weeks later\" and case text \"2 weeks after the incident\" describe the single ajmaline test of this case and are kept as one fact with the case-text time; \"the incident\" anchor is literal and taken as the overdose (ambiguity kept).",
+      "The two Holter recordings (\"After the treatment was completed\" vs abstract \"at follow-up\") are not identified as the same and stay separate; Fig 2 \"4 hours later\" stays unanchored; \"lasting 3 hours\" stays unassigned.",
+      "BP 70/45 mmHg kept as text with no flag (hypotension is not stated).",
+      "Both figures are unlabelled scanned 12-lead ECGs with a rhythm strip; no printed values, no identifiers; Fig 2 has a faint hand-drawn mark on the rhythm strip."
+    ],
+    "residual_risks": [
+      "Abstract and case-text ECG/Holter statements may describe the same recordings; kept separate as the source does not identify them.",
+      "Lead labels on the low-resolution scans are partly illegible."
+    ]
+  },
+  "physician_adjudicated": false
+}

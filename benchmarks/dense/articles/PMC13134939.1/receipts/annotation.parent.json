@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC13134939.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "5624d32e8ff11a8a087ac3974c3d0dce849c674712c45e73b3c98bd81adf0858",
+  "annotation_sha256": "3ea7adfa362951cd69542fc0cf9a0ab181c1f33a449baa09fb3cfe864c6f0406",
+  "reviewed_at": "2026-10-21T18:09:23.261905+00:00",
+  "source_segments_read": 22,
+  "facts_reviewed": 57,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added f054 arterial thrombosis (conditions, complication, verification unknown) from the discussion sentence literally about our patient ('critical distal limb ischaemia due to arterial thrombosis'); that quote also added to f009.",
+    "Added f055 leukoneutropenia condition (parallel to the anaemia condition from the same CBC sentence); the printed '2.9,000/ml' stays text-only in f038.",
+    "Added f056 IV iodinated contrast medium (administered) from the Figure 2 caption, and f057 outcome improvement ('improved both the functional prognosis of our patient's limb and his vital prognosis').",
+    "f007 renamed to the source wording 'Antiretroviral treatment (TDF+3TC+DTG)', action kept unknown ('was receiving irregular'); added the literal discussion quote on his irregularity and non-compliance.",
+    "Removed figure-caption tags from labels of f036 and f043.",
+    "Events: split the lumped diagnostic-assessment event into angiography (e04, with contrast), ECG (e08), blood tests (e09) and diagnosis (e10, kind diagnosis); split surgery into aneurysmectomy (e05), femorotibial ligation (e11) and vein-graft reconstruction (e12); split outcome into immediate postoperative period (e07) and functional recovery/amputation avoided/improved prognosis (e13); claudication moved from the swelling-onset event to the presentation (no stated onset).",
+    "Relations 4 -> 13: admission opening the stay before ECG, angiography, blood tests and ligation; angiography result and diagnosis before aneurysmectomy (result -> action); ligation before vein graft ('preceded by'); vein graft and aneurysmectomy before the postoperative/outcome events ('Follow-up and outcomes of the procedures', 'postoperative'); existing relations re-quoted so each quote states the order.",
+    "Added an ambiguity for 'As in our patient, Dua et al. found apyrexia ... portal of entry located in the lower limb' against the reported slight fever and absent entry point; extended the b00014 and microbiology ambiguities.",
+    "Summary updated for contrast, leukoneutropenia and the ligation-before-graft order."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual JPEGs inspected in the separate visual target.",
+    "Discussion sentences without a literal tie to the patient (hyperkalaemia, microthrombi, shiny skin) are review_only; the causal claim for the extrasystoles is not recorded.",
+    "White cell value printed as \"2.9,000/ml\" is kept as text only.",
+    "Source does not describe the microbiology methods behind \"no germs could be isolated\".",
+    "No dates are stated; all timing is relative.",
+    "The discussion's 'As in our patient ... apyrexia' comparison sits against the reported slight fever; kept as an ambiguity."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 22,
+    "facts_reviewed": 57,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; raw.xml has three fig elements (F1-F3, one JPEG each) and no table-wrap, supplementary-material or media.",
+      "b00014 pain/shiny skin, hyperkalaemia and microthrombi sentences do not name the patient and have no case-text support; kept review_only with an ambiguity.",
+      "30 x 23 cm is the clinical swelling on examination, 12 cm the diameter of the excised spongy mass in the Figure 3 caption and 1,800 g the clot weight: different attributes, kept as an ambiguity, not a conflict.",
+      "Abstract 'pelvic limb CT angiography' versus 'Angiography of the lower limbs' and the Figure 2 caption kept as an ambiguity; no technique inferred.",
+      "Patient perspective is a hope, not a plan or outcome; 'no germs could be isolated' kept as a negative microbiology result with no method.",
+      "Figures: F1 is a single photograph with lowercase a/b arrows bound to caption A/B; F2A prints partial device text (INTERP-3/FC), F2B an F letter; F3 has an orientation cross only. No faces, names or dates."
+    ],
+    "residual_risks": [
+      "Admission-to-test relations rely on the stay-opening ruling; the source never says the work-up was in hospital.",
+      "Arterial thrombosis rests on a discussion sentence about this patient; verification left unknown."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -75,3 +75,22 @@ def test_comparison_contains_split_and_matched_document_rates(campaign):
     assert paired['documents_per_second'] == .1
     markdown = (work / 'summary/comparison.md').read_text()
     assert 'Output tok/s' in markdown and 'Doc/s' in markdown and 'Item F1' in markdown
+    assert 'Matched completed articles in this split: 1.' in markdown
+    assert 'Matched item F1' in markdown
+
+
+def test_status_distinguishes_failed_extraction_and_exhausted_workers(tmp_path):
+    work, refs, _ = dense_campaign(tmp_path)
+    folder = finish(work, refs[0], prediction=False)
+    receipt = b.read(folder / 'receipt.json')
+    b.write(folder / 'receipt.json', {**receipt, 'model_calls': 0})
+    b.write(work / 'results/articles' / refs[1]['article_id'] / 'attempt-0000/receipt.json',
+            {'status': 'error', 'error_type': 'TimeoutError'})
+    b.write(work / 'results/workers/0/job-100/receipt.json', {'status': 'budget_exhausted'})
+    result = b.status(work)
+    assert result['completed'] == 1
+    assert result['completed_without_prediction'] == 1
+    assert result['completed_without_model_calls'] == 1
+    assert result['worker_outcomes'] == {'budget_exhausted': 1}
+    assert result['pending_with_failed_attempt'] == {refs[1]['article_id']: 'TimeoutError'}
+    assert len(result['pending']) == 2

@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC8727758.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8e6903832293e22d9e39477796cd34ae040321acce91fa5be0da007538c79736",
+  "annotation_sha256": "9c6f040c1e894c89a1dd2abb365e0e6375e478a5094bca8a2771432585292eec",
+  "reviewed_at": "2026-10-21T08:21:51.398660+00:00",
+  "source_segments_read": 30,
+  "facts_reviewed": 108,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Troponin T (p1-f058) and white blood cell count (p1-f052) set to source_conflict/review_only: Supplementary Table 1 prints reference 0-0.014 against the text \"< 0.005 ng/ml\", and unit /mL against the text \"/ul\" (supplement-vs-article ruling). The ambiguity was rewritten. Troponin T was removed from summary claim 1.",
+    "Indications, specimens and times now come from each item's own quotes. CPR (f037, f043), mechanical ventilation and CRRT (f038, f039), immunostains (f080-f082 now quote the full EMB sentence) and CSF results (f086-f089 now quote \"The cerebrospinal fluid exam showed ...\") had their quotes extended. Indications that were not in the quotes were dropped for ECPR, both cannulas and VA-ECMO. Specimen dropped from DNA sequencing. PCR (f077) now quotes the whole-blood sentence and has time \"During VA-ECMO treatment\".",
+    "Cardiac arrest conditions: procedure details removed from severity. The hedged \"thought of as respiratory origin\" was removed from diagnostic_basis. Global aphasia text_value \"patient seemed alert\" removed. Doxycycline indication trimmed to the source reason. Related_condition removed from outcomes f100 and f102, and the borrowed disposition removed from f103.",
+    "Comparator of \"markedly thickened up to about 13 mm\" (f072) set to \"<=\" (OBS-COMPARATOR upper-bound wording, consistent with the other \"up to\" values).",
+    "IgG and IgM titers (f094, f095) now quote the preceding day-19 IFA sentence, which names the same test, and take its time and method.",
+    "Times added from the item's own sentence or from the caption lead sentence: scrotal lesion f018 (\"On the initial physical examination at the emergency department\"), rash f020 and presentation LV wall thickness f062 (\"at presentation\", Figure 1 and Figure 3A captions).",
+    "Added 4 Figure 3 caption facts: LV chamber size normal at presentation (f105); just after extracorporeal CPR, LV posterior wall 13.6 mm (f106), septum 11.8 mm (f107) and right ventricle wall thickened (f108). The approximate-text ambiguity now covers them.",
+    "Relations: added presentation before azithromycin, hospital day 3, the new T wave inversion and discharge (presentation opens the stay; order only). Added ICU ventilation/CRRT before \"On the next day (hospital day four)\", first arrest before second (\"occurred again\"), day-four echo before the post-ECMO echo (\"several hours after the echocardiography on the same day\"), post-ECMO echo before the next-day echo (back-reference to the newly formed effusion), and ECMO start before the PCR result (\"During VA-ECMO treatment\"). Removed ECMO before next-day echo: \"on the next day\" opens a new paragraph. The EMB-before-second-arrest relation now also quotes the cath-lab procedure.",
+    "Moved \"other tests for viral or autoimmune etiologies\" from the EMB event to the diagnosis event. T wave inversion ambiguity rewritten: the day-3 legend is the article's own supplementary-material caption, not supplement content."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the 4 article JPEGs and the supplementary figure were inspected in separate visual and supplement submissions.",
+    "Values printed inside images (Figure 3 echocardiography overlays, Figure 2 labels) are pixel content and are not facts; the ejection fractions in the text that differ from the printed overlays are review_only.",
+    "Supplementary Table 1 (laboratory findings) and the echocardiography videos are reviewed under the supplement sidecars, not copied into article-text facts.",
+    "No hospital-day dates are stated for several events (arrests, ECMO); order is given only where the text states it.",
+    "The Supplementary Figure 1 legend and the case text disagree on the hospital day of the T wave inversion; the day is left out of that item.",
+    "Discussion statements about incidence, mortality, strain virulence and literature are background, not patient facts.",
+    "Supplementary Table 1 conflicts with the case text on the troponin T reference interval and the white blood cell unit; the text facts are review_only source conflicts, and the matching SM2 rows must be too.",
+    "Supplementary Videos 1 and 2 (WMV) were not machine-typed as video by the acquisition tool; their manifest rows rest on caption and filename, although decoded frames were viewed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 38,
+    "facts_reviewed": 108,
+    "figures_viewed": 4,
+    "key_findings": [
+      "One index patient: a 61-year-old man with scrub typhus (Ikeda strain by whole-blood nested PCR and sequencing). He had biopsy-proven acute fulminant myocarditis, two cardiac arrests and ECPR with VA-ECMO plus left atrial venting. He recovered, had transient global aphasia suggesting meningoencephalitis, and was discharged with EF 54%.",
+      "Figure 3 overlay EF(Teich) values (38.79, 48.62, 38.67 %) differ from the text EFs (45, 37, 14 %), so the three text EF facts stay review_only with an ambiguity (image-value ruling). The Figure 3C overlay IVSd/LVPWd agree with the caption 11.8/13.6 mm, which are now caption facts.",
+      "The T wave inversion day conflict (text hospital day four vs Supplementary Figure 1 legend day 3) is an intra-article caption-vs-text conflict. Only the time is quarantined; the troponin I day-four facts stay include.",
+      "Figure 2 printed labels (P. aeruginosa BSI, doxycycline PO, antibiotic spans) are pixel content only and are not facts.",
+      "Supplementary Table 1 was reviewed against the text. Two supplement-vs-article conflicts (troponin reference interval, WBC unit) were found and are quarantined on the article side."
+    ],
+    "residual_risks": [
+      "\"elevated up to\" values use comparator \"<=\" by the OBS-COMPARATOR rule, though they read as single measured values.",
+      "Pneumonia, AKI and meningoencephalitis are kept provisional (\"suggested\"/\"suggesting\") although the discussion lists them flatly. Hospital-acquired pneumonia verification is unknown.",
+      "EMB/CAG before the second arrest rests on the \"from a cath lab\" back-reference; post-ECMO echo before next-day echo rests on the back-reference to the newly formed pericardial effusion.",
+      "SM2 rows f01 and f25 must be set to review_only source conflicts by the annotator. Supplementary Videos 1-2 (WMV) are typed binary_unknown by the acquisition tool."
+    ]
+  },
+  "physician_adjudicated": false
+}

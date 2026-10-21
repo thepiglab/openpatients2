@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC5769811.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3d4107913d4cc08adc2b8d93afcda7a20c24c52836e836f254e16146a77bdb27",
+  "annotation_sha256": "2897ca3ad9d5a241bf37937162dc1c3680493f28601cc8f390698e9b5659a737",
+  "reviewed_at": "2026-10-21T08:57:08.023715+00:00",
+  "source_segments_read": 25,
+  "facts_reviewed": 79,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f039 antidepressants: action unknown -> administered, adding the b00021 quote that she had taken it for decades prior to and during the NET trial (status not current).",
+    "p1-f044/f045/f047/f048/f051: point-in-time ages moved from duration_text to time (relation at).",
+    "Added p1-f076 ethnicity_as_documented Norwegian (corpus convention) with an ambiguity about nationality vs ethnicity.",
+    "Added missed findings p1-f077 incoherent and inconsistent autobiography in the initial sessions (b00017), p1-f078 early beliefs of herself as unlovable and p1-f079 deep-rooted feelings of shame and guilt (b00018).",
+    "p1-e05 restricted to the marriage at 21; the daughters carry no stated time.",
+    "Removed treatment choice (f054) and goal setting (f055) from the NET event p1-e16; added p1-e23 treatment choice (plan) ordered before NET.",
+    "Added history events p1-e21 suicide attempt at age 17 and p1-e22 general physician visit at age 12, with age-ordered relations (12 -> 15 -> 17 -> 21; 18 -> 21) quoting both stated ages.",
+    "Summary paragraph 1 now names the age 17 suicide attempt alongside the age 18 overdose (kept separate, not merged)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the single bar chart was inspected in the separate visual submission.",
+    "Figure 1 bars carry no printed data labels, so no numeric PSS-SR, BDI or BAI scores are recorded; only the severity wording in the text is recorded.",
+    "The patient is described under a pseudonym in the source; no name is stored in authored fields.",
+    "Introduction and discussion statements about other published studies are background and not attributed to the patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 25,
+    "facts_reviewed": 79,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient; all introduction/discussion literature comparisons stay background.",
+      "Age 18 sleeping-pill overdose and age 17 suicide attempt are not identified by the source as one event; kept as two history conditions with an ambiguity.",
+      "Anxiety at follow-up: results wording (returned to moderate levels) is the fact; limitations (pre-treatment levels) and discussion (remained at a moderate level) kept as an ambiguity.",
+      "Figure 1 bars have no printed values; no scores are recorded anywhere; visual.json contains only printed ticks/labels and relative bar heights.",
+      "Assessment-list relations (baseline, NET session 4, after treatment, follow-up one month after NET) are stated times relative to the one treatment anchor."
+    ],
+    "residual_risks": [
+      "Norwegian recorded as ethnicity_as_documented per corpus convention though the demographics prompt warns against nationality-derived ethnicity.",
+      "Intake presentation event p1-e13 and neurologist visit p1-e10 remain without ordering links because no literal order word connects them."
+    ]
+  },
+  "physician_adjudicated": false
+}

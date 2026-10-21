@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC11695413.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e37831542830de9e179e5404cd9941781a3b875aec8ba58582d06e834803f4aa",
+  "annotation_sha256": "6ff4d85a803de691eede0931b86b5372ca39c81a28f4ab2137bd6b7cead9bb60",
+  "reviewed_at": "2026-10-21T13:21:58.953453+00:00",
+  "source_segments_read": 56,
+  "facts_reviewed": 175,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f039 referral: time relation changed from \"at\" to \"after\" (time text \"then\" is an order word, not a point in time).",
+    "Added p1-f173 normal left ventricular wall motion (Figure 2E caption) and p1-f174 reduced tissue Doppler mitral annular velocities at the septal mitral annulus, flag low (Figure 2F caption); both undated.",
+    "Added p1-f175 Table 1 presentation cell \"Same as above\" for the 6 March 2022 hospitalization (rowspan time), linked to p1-e08.",
+    "Added relation p1-e01 presentation before p1-e07 referral, quoting \"presented with ... 6 months prior to being referred to our hospital\".",
+    "Ambiguities: LVEF 51% vs 0.52 reworded to state why the source makes the clinic echocardiogram the 6 March 2022 examination (genuine source conflict, both sides review_only); GLS sign ambiguity now quotes the Table 1 and Table 2 cells for both dates and states that Table 2 cells stay as printed in the series; untimed clinic-echo ambiguity reworded and linked to all five text-only findings; new ambiguity on the undated discussion troponin wording (troponin flag stays unknown)."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the five JPEG figures are inspected in the separate visual submission.",
+    "LVEF for the 6 March 2022 echocardiogram is a source conflict (text 51% versus tables 0.52); both sides are review_only.",
+    "Table 2 prints GLS on 22 March 2022 and April 2022 without a minus sign; recorded as negative strain per text and Table 1.",
+    "Table 1 labels the ECT 99m Tc-PYP result as ATTR subtype cardiac amyloidosis while the text diagnoses light chain (lambda) amyloidosis; no ATTR diagnosis recorded.",
+    "Undated text-only echocardiographic findings and the clinic examination carry no time; the dates from Table 1 are used only where a table row states them.",
+    "Missing table cells (GLS on 6 March 2022, May 2022 and March 2023) are printed as dashes and are not recorded as values.",
+    "Values printed inside the figure images are pixel content and are not clinical facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 56,
+    "facts_reviewed": 175,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (50-year-old woman, light chain lambda cardiac amyloidosis with heart failure, died July 2023); all 172 drafted facts checked against quotes, polarity, flags, units and times; 3 facts added.",
+      "Text/table merges accepted: the clinic visit is the 6 March 2022 Table 1 encounter (text cites Table 1 and Table 2, every echo value equals the 6 March row, Figure 2A dates IVS/LVPW to 6 March, RWT 0.49 is the \"initial echocardiographic examination at our hospital\"); Table 2 May 2022 with the Fig 2C 21 May 2022 caption values; extracardiac biopsy dated by the Table 1 third-hospitalization rowspan.",
+      "LVEF 51% (text) vs 0.52 (Tables 1 and 2) for the same 6 March 2022 examination kept as a source conflict with both sides review_only.",
+      "GLS negative values are printed in the text and Table 1 (not added); Table 2 sign omission is an ambiguity and the series keeps the cells as printed.",
+      "ECT 99m Tc-PYP \"CA of ATTR subtypes\" and bisphosphonate scintigraphy Perugini grade 2 kept as two observations; no ATTR diagnosis recorded.",
+      "Visual readings checked on pixels (F2A Dist list, F2B readouts, F2D GLPS_Avg -10.0 % uncertain); no plot estimates or positional readings; no identifier values in any sidecar."
+    ],
+    "residual_risks": [
+      "Medication-stop facts p1-f036 to p1-f038 take the drug names from the preceding sentence through the definite back-reference \"the medications\"; the NO-BORROWING warning is a checker false positive (the time \"after 2 months\" is in the stop sentence itself).",
+      "Clinic examination, vital signs and text-only echo findings are untimed although the source equates the visit with 6 March 2022 for table-backed values.",
+      "Pericardial effusion at the clinic echo is two items (text \"mild\", Table 2 12 mm) rather than one merged item."
+    ]
+  },
+  "physician_adjudicated": false
+}

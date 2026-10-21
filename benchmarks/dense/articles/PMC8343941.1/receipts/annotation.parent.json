@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC8343941.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "ffb8d6c932a2c188e4a5c40d85e61551fc34e848cb65f47811f053c08d971ac4",
+  "annotation_sha256": "bccb504d361bfa72b749b7b3e0e11a6530482c6492b76412fdc1f7dd87092a17",
+  "reviewed_at": "2026-10-21T04:14:15.702975+00:00",
+  "source_segments_read": 16,
+  "facts_reviewed": 70,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Relation e06->e07 (chemotherapy before grade I neutropenia after 5 of 8 cycles) corrected to e07 during e06, quoting the eight-cycle and after-5-cycles sentences.",
+    "Removed e11->e12: \"About 15 months later\" opens a new paragraph with no named anchor; replaced by e10->e12 before from the Discussion adjacent sentences (\"...and local radiotherapy. One year later, the patient presented...\").",
+    "Added e15->e16 before (Abstract \"long-term survival after endonasal endoscopic metastasectomy and radiotherapy...\").",
+    "Amelanotic MM condition and tumor t1: removed borrowed \"posterior of the right thigh\"/right laterality; site now \"thigh\" from the incisional biopsy of thigh lesion sentence, laterality unknown.",
+    "Endonasal endoscopic excision: removed borrowed body site \"paranasal sinuses\" (not in its own sentences).",
+    "t2 metastatic_sites: removed anterior cranial fossa, dura and right periorbital region (intraoperative local invasion, not metastatic sites).",
+    "GCSF: removed numeric dose 300 mg (per ampule vs total not stated); dose text kept as printed.",
+    "Chemotherapy 20% dose reduction: action unknown -> administered (\"resulting in a 20% dose reduction\").",
+    "Summary claim 2 no longer cites the review_only undifferentiated skin carcinoma fact.",
+    "Added ambiguities: Conclusion \"In our patient ... for frontal sinus, involvement has not been found\" vs the left frontal sinus lesion; unanchored \"About 15 months later\"."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the single JPEG was inspected in visual.json.",
+    "Figure 1 caption says CT scan of face, but the image text and appearance indicate a contrast-enhanced MR acquisition; the text-based CT facts are kept as the authors wrote them and the discrepancy is recorded in visual.json.",
+    "The initial disease is called non-metastatic in the Discussion but metastatic lymphadenopathy is reported on CT; no initial stage is inferred.",
+    "Interval to sinus metastasis is 15 months in the case text and one year in the Discussion.",
+    "Chemotherapy cycle schedule and neutropenia cycle numbering are unclear in the source; doses kept as printed.",
+    "Immunohistochemistry negatives for CK, LCA, CD117 and CD34 follow from the wording \"labeled only for S100 protein and ... Melan-A\".",
+    "The Discussion and Conclusion literature statements, survival statistics and general differential diagnosis list are background and not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 16,
+    "facts_reviewed": 70,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (31-year-old man); roster and ownership correct; Discussion/Conclusion literature statements correctly excluded.",
+      "Figure 1 pixels (zoomed crops) show Siemens-style MR overlay text (\"MR B17\", IV CONTRAST, TR/TE values) although caption and text say CT; annotation keeps caption CT, visual.json records MR from pixels with a limitation.",
+      "Panel A carries a birth-date-style entry with sex and age plus study date/time; panel B carries study date/time only (no demographic line) - both direct_identifiers category per rulings.",
+      "IHC negatives for CK, LCA, CD117, CD34 accepted: the sentence enumerates the six-marker panel and says labeled \"only\" for S100 and Melan-A.",
+      "Non-metastatic (Discussion) vs CT-confirmed inguinal metastatic lymphadenopathy, 15 months vs one year (rounding), black vs amelanotic, unremarkable nodes of 15x10 cm, garbled biopsy sentence and chemotherapy schedule wording kept as ambiguities; nothing reconciled."
+    ],
+    "residual_risks": [
+      "Diagnosis/staging events (e01-e05) are not linked by a literal order to the chemotherapy course (e06); an Introduction-based e04->e06 link was considered and dropped as not literal (the sentence orders the condition, not the diagnosis event, before treatment).",
+      "Figure modality conflict (MR pixels vs CT caption) is unresolved by the source.",
+      "Oncology t2 is a time-specific reassessment of the same melanoma with primary_site null."
+    ]
+  },
+  "physician_adjudicated": false
+}

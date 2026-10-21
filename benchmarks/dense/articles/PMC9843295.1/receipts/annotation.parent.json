@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC9843295.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1d5759ff61462afe9711e25a1e53af18ff6e21d938a9fabe39f294413239ba61",
+  "annotation_sha256": "56dc70e4ae7be2388ae39c02d7b2b08d6f4f090047cc5b8152108bf0b1dceaa5",
+  "reviewed_at": "2026-10-21T12:54:28.017325+00:00",
+  "source_segments_read": 17,
+  "facts_reviewed": 62,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "ECG lead list made a source conflict: the case text cites Figure 1 for the same ECG, so text \"V3 and V4\" (p1-f022, was include) and caption \"V3, V4, V5\" (p1-f023, was ambiguous) are both source_conflict/review_only; added scored p1-f062 \"ST elevations in the anterior leads\" (undisputed part, untimed); ambiguity rewritten as a source conflict.",
+    "p1-f031 Takotsubo diagnosis evidence expanded to the whole echocardiography basis clause supporting diagnostic_basis.",
+    "History event split: p1-e01 keeps hypothyroidism history (ordered before presentation by \"past medical history\"); home levothyroxine \"was on\" moved to new unordered event p1-e21 (occurrence unknown, ongoing use overlapping the presentation).",
+    "New event p1-e20 \"found unconscious on the bathroom floor at home\" (p1-f004 moved from the presentation event) ordered before ED presentation p1-e02 (\"brought into the emergency department after being found unconscious\").",
+    "Removed relation p1-e17 venous ultrasound -> p1-e18 apixaban: no order word and no stated indication; ambiguity added.",
+    "Added order-only relations in-hospital care -> discharge p1-e19 for admission labs, ECG, catheterization, TTE, conservative drugs, ICU IV therapy, brain MRI, CT angiography, TEE and venous ultrasound.",
+    "Summary paragraph 1: removed flag words the source does not state (\"markedly elevated TSH, low free T4, raised creatinine and sodium\"); states the printed values instead and cites p1-f062 instead of the quarantined p1-f022. Paragraph 2 \"was diagnosed with\" changed to the source wording \"had\".",
+    "Two article limitations added (ECG lead conflict; diagnosis sentence not ordered)."
+  ],
+  "unresolved": [
+    "Pixels of the figures are described in visual.json; the caption-layer figure rows stay not_inspected.",
+    "Medication compliance and other systems could not be obtained by the authors.",
+    "The ECG lead list is a source conflict (text V3 and V4 vs Figure 1 caption V3, V4, V5 for the same cited ECG); only the anterior-lead ST elevation is scored.",
+    "The diagnosis sentence \"Thus, she had a myxedema coma with an ST-elevation MI\" opens a new paragraph and is diagnosis basis wording, so it is not ordered after the ECG or laboratory tests; most in-hospital tests and treatments are ordered only before the discharge of the same stay."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 17,
+    "facts_reviewed": 62,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Single index patient (74-year-old woman); b00002-b00003 and b00009-b00011 are background/discussion; the hedged mechanism sentence in b00010 stays an ambiguity only.",
+      "Same ECG described with two lead lists (text cites Figure 1): source conflict on the lead attribute only.",
+      "STEMI stated before catheterization, never ruled out or called misdiagnosed: assertion present, verification unknown, not refuted.",
+      "Flags follow wording only: hypothermic 93 F low, hypertensive 185/97 high, leukocytosis high, EF moderately reduced low, angiography normal; sodium, BUN, creatinine, TSH, free T4, troponin unflagged despite reference ranges.",
+      "Home levothyroxine \"was on\" action unknown per RULINGS; loop recorder recommended (never planned); demyelination and AF possible.",
+      "All six figures viewed at full resolution: FIG1 three arrows at V3/V4/V5, FIG5 one arrow, FIG6 three arrows, FIG4 device overlay text without date or name; no positional readings in visual.json."
+    ],
+    "residual_risks": [
+      "Most in-hospital events are ordered only relative to presentation/discharge; the ECG -> diagnosis -> catheterization -> echo sequence has no literal order words.",
+      "IV route is read as applying to both levothyroxine and hydrocortisone in \"intravenous levothyroxine and hydrocortisone\".",
+      "FIG5 arrow lies on the image-left side while the text reports a left caudate infarct; image laterality is unprinted and not adjudicated."
+    ]
+  },
+  "physician_adjudicated": false
+}

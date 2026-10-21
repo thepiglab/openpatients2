@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC6707823.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6ac4c67e5466f669bd898a3dd9c51d450b20ef13c9a5f2c10a8a328fcb52bbae",
+  "annotation_sha256": "ce038f7059c6f354688239d15ca713c029a691b28c8e7502cf51a4309a1cbe2b",
+  "reviewed_at": "2026-10-21T03:59:52.959468+00:00",
+  "source_segments_read": 50,
+  "facts_reviewed": 96,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p2 lesion region (left hip in b00010 vs left lower abdomen in b00011/b00013/abstract/captions) treated as a source conflict: p2-f005 (left hip mass) set source_conflict/review_only; added p2-f040 (nodule on left lower abdomen) source_conflict/review_only; body_site removed from p2-f018, f019, f028-f031 and the diagnosis f032 (laterality left kept, consistent on both sides).",
+    "p2-f006/f007/f008 (asymptomatic, present over a year, progressively enlarging) restored to supported/include: they carry no site attribute.",
+    "Disputed region removed from p2 event descriptions (e03, e04, e07, e08) and summaries.",
+    "p2-f022 indication removed: the sentence only joins the clinical impression and the biopsy with \"and\".",
+    "p1-e01 and p2-e01 history events now quote the lymphoma, skin-cancer denial, smoking/alcohol and social-history sentences of the facts they carry.",
+    "Added caption-stated pathology findings: p1-f039..f042 (Figure 2) and p1-f043..f046 (Figure 3, recurrent specimen); p2-f041..f046 (Figure 6) and p2-f047..f049 (Figure 7); Figure 7 acanthosis quote added to p2-f033.",
+    "Added p1-f047 review_only/ambiguous recurrence (Figure 1 and 3 captions say recurrent; case text says persisted) linked to the existing ambiguity.",
+    "Relations added: p1-e06->e10 (\"reaffirmed\"), p1-e02->e08 (\"returned\"), p2-e03->e08 and p2-e05->e10 (\"initial clinical impression\" -> later diagnosis). p1-e06->e07 quote extended to include the diagnosis sentence.",
+    "Discussion sentences b00041-b00043 (\"one of our patients\", \"our female patient\") left unattributed; ambiguity text updated."
+  ],
+  "unresolved": [
+    "Case 2 gives the region of the presenting mass as the left hip but the examined nodule, diagnosis, abstract and captions place it on the left lower abdomen; treated as a source conflict with both region-bearing facts review_only.",
+    "Discussion and conclusion statements about \"our patients\" are not attributed to a case.",
+    "No laboratory values, imaging beyond clinical photographs and histology, or treatment other than shave biopsies are reported.",
+    "Discussion sentences naming \"our female patient\" or \"one of our patients\" are not attributed: identification would rest on attribute-matching."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 50,
+    "facts_reviewed": 96,
+    "figures_viewed": 7,
+    "key_findings": [
+      "Two individuated patients (Case 1, Case 2) correctly separated; all draft facts checked against b00001-b00015 and captions b00044-b00050.",
+      "Case 2 lesion region conflict (hip vs lower abdomen) quarantined on both sides; site-free attributes kept.",
+      "\"Our female patient\" identifies p1 only by sex matching; per RULINGS attribute-matching is not literal, so not attributed.",
+      "Melanoma suspicion for both patients is literal (\"in both patients\"); smoking status unknown, alcohol absent with status unknown; past-history conditions kept confirmed/historical per corpus precedent.",
+      "All 20 panels viewed; arrow, star, bracket and circle counts in visual.json match the pixels; no faces, sensitive anatomy or burned-in text."
+    ],
+    "residual_risks": [
+      "The hip and lower-abdomen statements may well describe one lesion; quarantine is conservative.",
+      "Figure 2 findings are tied to the first biopsy only through the in-text citation, so no time is recorded on them."
+    ]
+  },
+  "physician_adjudicated": false
+}

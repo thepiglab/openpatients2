@@ -1,0 +1,64 @@
+{
+  "article_id": "PMC8931735.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "33675f6bce2acacde8ee784c2fd1f124028117102b9af4290e6332a7c3650072",
+  "annotation_sha256": "b00fd3579d45d4a9cf4ab5590f71f9e2ca5143828bcfa6d806ed77ac1acd097b",
+  "reviewed_at": "2026-10-21T04:37:47.812532+00:00",
+  "source_segments_read": 47,
+  "facts_reviewed": 210,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f140 RT-QuIC: text_value/flag set to negative and evidence \"The negative RT-QuIC ruled out vCJD.\" added (was \"negative or within normal limits\", flag unknown).",
+    "p1-f190 Table 2 CSF IgM 1/1: certainty ambiguous -> source_conflict (positive side of the Table 1 Not done vs text positive conflict; still review_only).",
+    "p1-f186 serum WBC peak 11.22 cells/uL and p1-f187 creatinine peak 0.77 umol/L: implausible printed units kept as printed, now ambiguous + review_only.",
+    "p1-f188 Table 2 CSF WBC peak 18 (above both Table 1 LP values): now ambiguous + review_only.",
+    "p1-f071 outside-hospital levetiracetam: removed indication borrowed from the propofol purpose clause.",
+    "p1-f066 frontal release signs absent: removed non-time \"on exam\" time.",
+    "p1-f002 age: added the Table 2 age row as second evidence (same value, one item).",
+    "Added p1-f211 sequelae of status epilepticus (possible, differential) and p1-f212 malignancy absent/refuted by CT chest/abdomen/pelvis.",
+    "Split event p1-e19: methylprednisolone recommendation (occurrence unknown) vs new p1-e28 follow-up MRI after completion (occurred).",
+    "p1-e06 time_precision exact -> range (\"within 48 h\" is an upper bound).",
+    "Added 15 literal relations (admission e08 before CT e15, e06<e07, e07<e10 transfer for continuous EEG, e03<e11 repeat LP, e01<e27 consult given recent vaccination, admission e08 before e10/e11/e17/e27, e13<e14 MRI result prompting IVIG stop, e17<e16 NSICU course before transfer out, e26<e16 hospital day 2 vs 16, e16<e21 and e20<e21 in-stay care before discharge, e19<e28 MRI after completion); 16 -> 31 relations, pre-transfer and OHSU chains now linked.",
+    "Added ambiguities: IVIG 0.4 mg/kg printed unit; Figure 1B caption \"without contrast\" vs T1 post-contrast/enhancement; Table 1 LP 1 \"1 day prior to admission\" vs text LP timing."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two figure images are reviewed in the separate visual submission.",
+    "Table 1 YF IgM Not done conflicts with text and Table 2 CSF IgM positive; held review_only.",
+    "Discussion comparisons with published YEL-AND cases and Table 2 literature averages are background, not patient facts.",
+    "Exam findings without a time-bearing sentence of their own are recorded without a time.",
+    "Hospital and institution names in the source are not carried into authored fields beyond the transfer wording."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 47,
+    "facts_reviewed": 210,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient; roster 1 complete; Table 2 literature column and discussion literature statements correctly kept out.",
+      "CSF YFV IgM: Table 1 LP 2 Not done vs text/Table 2 positive held as source_conflict review_only on both sides; serum IgM positive and the YEL-AND diagnosis remain include.",
+      "Text LP findings, Table 1 columns, text 14-3-3/tau/PRNT90 and Table 1 IgG titer rows deliberately not merged (source never identifies them as the same measurement).",
+      "Methylprednisolone kept action unknown (recommended); PEG and urinary catheter kept unknown (\"requiring\"); intubation completed supported by \"extubated\".",
+      "Untimed exam findings after the NSICU admission and IRF discharge sentences correctly left without borrowed times.",
+      "Both figures viewed at full resolution with crops: MRI panels A/B match captions; EEG screenshots have illegible toolbar/channel text, no plot estimates in visual.json."
+    ],
+    "residual_risks": [
+      "Measurement series time cells read only the second header row (\"to admission)\") because the tool extracts one header row; full header \"LP 1 (1 day prior to admission)\" is split across two header rows in the raw XML.",
+      "NSICU admission vs the transfer event (e07/e08) remain unordered (\"At that time\" and paragraph order only); the YEL-AND diagnosis event e18 is unordered because basis wording for a diagnosis does not order.",
+      "Transaminitis kept review_only because \"possible\" may scope the whole parenthetical.",
+      "GLUED-TEXT warning on \"heavier\" in visual.json is a checker false positive."
+    ]
+  },
+  "physician_adjudicated": false
+}

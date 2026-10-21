@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC5812525.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d6f271ea3c1b521dc483b4b17e2ccb2c097adfd30d61d43585ceab88e8e73d10",
+  "annotation_sha256": "6987e726139d92216f84c057dd2d44dc814b453fec40a73a0a020ed767f42d43",
+  "reviewed_at": "2026-10-21T03:44:36.276701+00:00",
+  "source_segments_read": 101,
+  "facts_reviewed": 467,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Abstract \"bilateral\" vs case-text \"left\" cerebellar infarct laterality ruled a source conflict: p1-f019 (left) and p1-f020 (bilateral) set source_conflict/review_only; unlateralized CVA diagnosis p1-f018 and dated CT results stay included.",
+    "p1-f292 (conclusion: independent in modified ADL and IADL) set ambiguous/review_only; summary claim 5 rewritten to cite the timed abstract and month-ten results statements instead.",
+    "p1-f052, p1-f163, p1-f210, p1-f211: evidence pointed at the wrong (preceding) sentence; replaced with their own sentences and the borrowed times removed.",
+    "p1-f159 time corrected to \"by week seven of IPR\" (relation before, anchor null); p1-f164 name trimmed to what its evidence states.",
+    "p1-f031 to p1-f036 home medications: time anchor restored to the literal \"admission\"; p1-f299 anchor \"discharge from IPR\".",
+    "p1-f025 smoking name changed to \"Tobacco smoking\" (no duration value in the label); p1-f027 exercise temporality historical removed.",
+    "Abstract \"postoperative ... hydrocephalus\" quote moved from the pre-surgery hydrocephalus p1-f055 to the postoperative hydrocephalus p1-f066.",
+    "ONE-STATEMENT: p1-f179 (PT restating the OT cervical collar, \"As noted in the OT evaluation\") merged into p1-f145; p1-f223 (outpatient initiation) merged into care plan p1-f222, which now carries the \"seventeen weeks after\" time and moved to event p1-e28.",
+    "Added 11 literal relations: e03->e05 (repeat CT the next day), e05->e06 (based on her diagnosis), e12=e19 and e19->e17->e21 (same-anchor day counts from the fall), e20/e21 during e22 (ICU stay), e24/e25 during e23 (IPR), e28->e32, e33->e34 (PASS after one month vs at four months).",
+    "Ambiguities added: OT 50 feet vs PT 24 m (80 ft) wheelchair propulsion at week seven; Fig 9 caption \"independent\" vs text \"close supervision\". Parent decisions appended to the laterality, Discussion-complications, Table 2 colspan and final-function ambiguities.",
+    "Article limitations added for Fig 2 pixel labels (craniectomy, 14 months outpatient) and Figs 3-7 plotted values."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the nine actual JPEG figures were inspected in the separate visual submission.",
+    "Figure 2 and Figures 3-7 print timeline labels and CARE item scores only as pixel content (for example the PEG insertion, tracheostomy removal and day markers); plot values are not extracted and no value in them is used as a fact.",
+    "Discussion statements that MSS and early initiation may have hastened recovery, the stated reasons for good outcomes, and literature-derived claims are author interpretation or background and are not recorded as patient facts.",
+    "Table 2 uses a printed colspan marker near Month 1 and Month 2; values were assigned by cell position. Empty cells in Tables 2 and 4 are not values.",
+    "CARE item scoring in Figures 3-7 and Table 1 coding key are not patient-reported item scores in the text and are not extracted.",
+    "Abstract and Discussion sentences are used only where they state a fact about this patient; Kelly et al. cohort data are background.",
+    "The source states the 14-month course in total while component durations (six weeks ICU, approximately 10 weeks IPR, 41 weeks outpatient) are approximate; no dates are derived.",
+    "Figure 2 prints \"FALL AND CRANIECTOMY SURGERIES\" and \"14 MONTHS OF OUTPATIENT PT/OT BEGINS\", which differ from the text (craniotomy; 41 weeks of outpatient rehabilitation); these are pixel labels and are not facts or conflict sides.",
+    "Figures 3-7 CARE item scores are plotted values only; no point values are read."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 101,
+    "facts_reviewed": 469,
+    "figures_viewed": 9,
+    "key_findings": [
+      "Table 2 raw XML: header Month 1 has colspan=2 and each body row spans its third value over two columns offset by one; ten printed values for ten time labels, so the positional mapping (OE, M1, M2..M9) in facts and series is correct; the third value also overlaps the second Month 1 column (ambiguity recorded).",
+      "Tables 3-5 facts checked cell by cell (R/L split into right/left observations, kg from the header, seconds and number of blocks from column headers, N/A as status unknown); measurement series values and times match the source.",
+      "PT start (30 days after the fall vs eight days after OT at day 3) is an arithmetic-only mismatch kept as an ambiguity.",
+      "Discussion \"absence of serious medical complications\" is author interpretation; documented hemorrhages and hydrocephalus remain included.",
+      "Fig 1 caption \"occipital\" vs text \"suboccipital\" kept as an ambiguity, not a conflict; Fig 8 callout (wheelchair propulsion) vs caption (seated rest break) kept as an ambiguity."
+    ],
+    "residual_risks": [
+      "Infarct laterality is quarantined; the Fig 1 MRI pixels were not used to adjudicate it.",
+      "Rehabilitation interventions are recorded as procedures_devices nonpharmacologic_therapy rather than care_plans; left as drafted.",
+      "Many functional findings in IPR paragraphs have no own-sentence time and remain untimed."
+    ]
+  },
+  "physician_adjudicated": false
+}

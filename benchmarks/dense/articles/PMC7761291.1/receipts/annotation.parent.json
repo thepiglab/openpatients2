@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC7761291.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "12a58e57abf54054513d51996e80e74ff0638e2794ea9159b9980e403c079154",
+  "annotation_sha256": "b2e3f56e34fd88cd6ed3bcf1c8a66d0928e3e6c89ddc87d249133fa5dc9ffed9",
+  "reviewed_at": "2026-10-21T09:05:43.928294+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 156,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added the explicit three-patient sentence \"All three patients were treated with tacrolimus and everolimus\" (b00014) as supporting evidence on the tacrolimus and everolimus medication facts of all three cases (p1-f022/f023, p2-f018/f019, p3-f026/f027).",
+    "Case 3 tremor p3-f014: added the b00017 quote that names Case 3 for tremor and ataxia.",
+    "Case 2 p2-f031 \"Blood alcohol concentration was absent\": flag unknown -> negative (undetectable = negative).",
+    "Case 2 p2-f030 \"did not show markers for possible infections\": flag unknown -> negative (absence of evidence of infection).",
+    "Case 3 p3-f005: \"related to alcohol abuse and hepatitis B infection\" is the stated etiology, not a diagnostic basis; moved into the condition name and diagnostic_basis cleared.",
+    "Case 2 p2-f040 improvement: time \"after treatment with thiamine\" (after, anchor \"treatment with thiamine\") from its own sentence.",
+    "Added relation p2-e02 (delirium onset) before p2-e04 (thiamine): \"delirium disappeared after treatment with thiamine\" treats a named existing condition; the same sentence added as first evidence of the existing p2-e04 -> p2-e05 relation."
+  ],
+  "unresolved": [
+    "The article has no figures, tables or supplements; no visual, figure-EHR, privacy or measurement-series sidecars apply.",
+    "Discussion statements that are cohort-level or unlabelled (haloperidol in two patients, magnesium of the third patient, 2 to 3 weeks onset, mechanism hypotheses) are not copied to individual patients beyond what is explicitly stated for all patients.",
+    "Cited external cases (Xye et al. and an allogeneic stem cell transplantation report) and literature-review statements are not index-patient facts.",
+    "Medication lists are recorded as administered without a start time; no timing relative to the neurological onset is stated."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 156,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Three individuated men (Case 1-3 headings); cited external cases (Xye et al., the stem cell transplantation report, Okumura et al.) excluded.",
+      "Shared statements copied only where the sentence covers these three: b00006 diagnosis basis and malnutrition before transplantation (\"three cases ... their\"), b00017 \"none of the patients showed ophthalmoplegia\" (\"our case series\"), b00013 loop diuretics (\"In the reported cases ... All these patients\"), b00014 tacrolimus/everolimus (\"All three patients\"), b00019 abstinence at LT (\"These cases reported ... all patients\") for Cases 2 and 3.",
+      "Unlabelled discussion statements (haloperidol \"to two patients\", third patient with unknown magnesium, 2-3 weeks onset) stay unassigned; Case 2 carries ambiguities for the haloperidol and magnesium statements.",
+      "Low flags only where the text says hypokalemia, hypomagnesemia, hypocalcemia; tacrolimus 3 and everolimus 3.5 ng/mL keep the reference range without a low flag. Print oddities kept as printed (1,9 mg/dL as text, glued ALT quote, calcium in mEq/L, \"crain\", \"pale nucleus\").",
+      "Medication lists (\"His medication included\", \"His medications at that time included\") are administered without time, not current. Remission \"after three days\" for Cases 1 and 3 has anchor null; the treatment -> remission relations rest on the same sentence (\"was treated with ... and showed ... after three days\")."
+    ],
+    "residual_risks": [
+      "No relation orders the in-hospital workup against the post-transplant symptom onset or the thiamine treatment; the source does not state those orders literally.",
+      "Case 3 medication list \"at that time\" refers back to the colitis period; no time was attached to avoid borrowing the neighbouring sentence's time.",
+      "b00006 says onset 1-3 weeks and b00012 says about 2-3 weeks after LT, while Case 3 states one week; the discussion ranges are cohort statements and not assigned."
+    ]
+  },
+  "physician_adjudicated": false
+}

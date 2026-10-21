@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC8681921.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a862e8f831072cb406bcd55a354303f6ad134533100a7575966870ebfa8c4c3d",
+  "annotation_sha256": "86a026dddc77563b52a039189cfdfc0e703ee31d5154266567ff5d9fe33e3641",
+  "reviewed_at": "2026-10-21T08:49:36.880491+00:00",
+  "source_segments_read": 63,
+  "facts_reviewed": 112,
+  "patients_reviewed": 2,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f067: clinical statement duplicated 'at autopsy'; fixed.",
+    "p1-f086, p1-f087: gene THOC2 was not in the fact's own quotes; added the b00011 quote naming the novel THOC2 gene-splicing mutation of both fetuses.",
+    "p2-f005, p2-f006: added literal time 'around 19 weeks' from their own quote.",
+    "Added p2-f015 (facial dysmorphism) and p2-f016 (generalized subcutaneous edema) for the second fetus from 'In the present fetuses ...' (b00010) and the Figure 5 caption; linked to p2-e04; p2 symptoms_function now documented.",
+    "p2-f014 (family IVF with donor oocyte): ambiguous/review_only -> supported/include with subject family_member; added planned event p2-e06 'On follow-up'.",
+    "Added relations p2-e01 -> p2-e02 (second pregnancy -> ultrasound at around 19 weeks, adjacent sentences), p2-e02 -> p2-e06 (recurrence -> IVF choice 'to avoid further recurrences').",
+    "Added per-patient ambiguities: termination stays planned and subject_state unknown although autopsy findings are described; replaced the p2 IVF ambiguity.",
+    "p2 summary rewritten to cover the added signs and the IVF plan; article limitation on IVF updated."
+  ],
+  "unresolved": [
+    "Table 2 and the cohort statistics describe published THOC2 cases and are not attributed to the two fetuses.",
+    "Authors note lack of RNA or protein functional evidence for the variant effect (b00057); recorded only as an article limitation.",
+    "Variant-level statements (ACMG criteria, BLAST/VARSEEK analysis, inheritance) are recorded on both fetuses where the sentence covers the variant or \"the fetuses\"; the VARSEEK paragraph sits in the first-fetus work-up and is recorded on p1 only.",
+    "Medical termination of pregnancy is recorded as planned (parents opted); completion is not stated in words, although autopsy of the fetus is described.",
+    "Caption-layer figure status is not_inspected; pixels are described in visual.json.",
+    "Parental ethnicity and non-consanguinity are recorded only on p1 (first mention); the second pregnancy is of the same couple but its paragraph does not repeat them.",
+    "The follow-up IVF statement (b00008) concerns the family; it is recorded once on p2 with subject family_member (include) and as a planned event after the second-pregnancy recurrence."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 63,
+    "facts_reviewed": 112,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Two male fetuses of one couple; p1 (first pregnancy) holds parental/family facts; Table 2 and cohort percentages are literature cases and correctly excluded.",
+      "Autopsy is stated as conducted for p1 ('was conducted') and as performed for p2 ('External examination and limited autopsy confirmed'); medical termination is only 'opted for' and stays planned.",
+      "Variant-level statements (Table 1 ACMG, X-linked recessive 'in the fetuses', 'present fetuses' syndromic AMC) explicitly cover both fetuses; BLAST/VARSEEK stays on p1 where it is reported.",
+      "Biometry 'mean for N weeks' equivalents vs 'around 19 weeks' kept as an ambiguity, not a conflict; FIG3/FIG4 'ACGT' vs delTGAC/delGTCA kept as a notation ambiguity."
+    ],
+    "residual_risks": [
+      "Ethnicity and non-consanguinity of the couple are recorded only on p1.",
+      "FIG3A attribution to p1 relies on the first-fetus paragraph citing Figure 3; FIG3C (carrier mother) is held in p1's record.",
+      "Ultrasound biometry facts on p1 carry no time because the sentence giving 'around 19 weeks' does not name the ultrasound."
+    ]
+  },
+  "physician_adjudicated": false
+}

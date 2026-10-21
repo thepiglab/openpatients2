@@ -1,0 +1,59 @@
+{
+  "article_id": "PMC9795117.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2ae2b889a342ab88cde233e0f92b5a93a00fafe82f0d0f52b480d6cce32d135c",
+  "annotation_sha256": "2c9dd2dbea422f5db0280a1dbc347630095a65b8b8ed0dbc04ec7d50b7e723f9",
+  "reviewed_at": "2026-10-21T13:31:49.591455+00:00",
+  "source_segments_read": 20,
+  "facts_reviewed": 107,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f040 ascites and p1-f083 coarsened liver on ultrasonography (b00012) changed from ambiguous/review_only to supported/include: the sentence literally names 'this patient'; the case section is silent, not contradictory; ambiguity text updated.",
+    "p1-f010 renamed 'Primary sclerosing cholangitis' -> 'Sclerosing cholangitis' (source wording); both b00012 exclusions stay review_only (sentence does not name the patient).",
+    "p1-f075/p1-f076 hepatitis B/C serology text_value 'none' (not source wording) -> literal 'no hepatitis B or C serological markers'; flag negative kept.",
+    "p1-f087 insulin: removed duration_text 'for 1 year' (borrowed from the diabetes duration).",
+    "p1-f105 ICU transfer: removed related_condition 'Suspected shock' (reason for transfer not stated).",
+    "IgG (p1-f064) moved from the laboratory event p1-e04 to new event p1-e14 ('Later'), with relation e04 -> e14 before quoting both sentences.",
+    "Relations added: e03 during e02 (initial visit = presentation), e02 -> e09 / e11 / e12 (presentation opening the stay before in-hospital treatment, ICU care and deterioration), e11 -> e13 (ICU care before death after 15 days of hospital stay), e04 -> e14 ('Later').",
+    "Fig 1 panels B and C: added b00007 body-text evidence attributing all three findings to MRCP (Figure 1); attribution notes updated."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two JPEGs were inspected in the separate visual submission.",
+    "No dates, doses or intervals are given for the investigations and treatments; only the stated orders are linked.",
+    "The discussion characterises the patient's laboratory values in wording that differs from the case-section values, and lists ascites and a coarsened liver that the case section does not describe; recorded as ambiguities.",
+    "Cause of death is stated by the authors as liver cirrhosis while the case section describes pneumonia and septic shock; no single cause is inferred.",
+    "Hepatitis C and other viral serology beyond the printed tests are not itemised in the case section."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 20,
+    "facts_reviewed": 107,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (37-year-old woman) with AIH type 1, cirrhosis, in-hospital shock, bilateral pneumonia, septic shock and death after 15 days of hospital stay; no supplementary material in raw.xml.",
+      "Discussion descriptors (mild transaminase rise, lower-limit albumin, high total protein, 'negative' IgG) differ only qualitatively from single printed values (ALT 310, AST 936, albumin 2.4, TP 6, IgG 1095 within 700-1600): ambiguity, not a source conflict; printed values stay include.",
+      "Cited case-report prednisolone response in b00011 is not attributed to the patient; 'our patient did not respond to prednisolone' is.",
+      "Death: cause_as_documented liver cirrhosis is literal ('resulting in the demise'); septic shock precedes death by 'finally' but is not stated as cause; recorded as an ambiguity.",
+      "Prednisolone route left unassigned (IV may modify ceftriaxone only); 'Based on the biopsy findings' is basis wording and is not used as an order.",
+      "Fig 1 A-C (axial, axial, coronal MR-type slices) and Fig 2 A-B (H&E-type and trichrome-type liver histology) viewed at full resolution with crops: no burned-in text beyond panel letters, no faces; visual.json has no plot readings."
+    ],
+    "residual_risks": [
+      "Ascites and coarsened liver rest only on the discussion sentence; 'Past history of' may govern the whole list.",
+      "e03 'during' e02 equates 'the initial visit' with the presentation; in-stay relations rely on the presentation-opens-stay ruling.",
+      "Condition roles (complication) for cirrhosis, shock, pneumonia and septic shock are classifications of later-developing conditions, not source wording."
+    ]
+  },
+  "physician_adjudicated": false
+}

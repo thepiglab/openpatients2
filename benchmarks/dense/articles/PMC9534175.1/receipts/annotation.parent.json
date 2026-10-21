@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC9534175.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e60049dc41e0b278aac5a50f9fedb4497d5c9ad47aba928fdecb6aee6c77094d",
+  "annotation_sha256": "aa3e315f8f2ad475964239c2995c60b3e529cfaccf8dc3233a9bfc4f2f5badae",
+  "reviewed_at": "2026-10-21T13:17:54.954222+00:00",
+  "source_segments_read": 9,
+  "facts_reviewed": 39,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f025/p1-f026 (Nov 2012 AST 44, ALT 77): flag unknown -> high; \"an elevated level of\" governs the coordinated CEA/AST/ALT list; removed the corresponding ambiguity",
+    "Added p1-f038: abstract CEA continued within normal levels while high-dose vitamin C infusions were given (flag normal, time during) and event p1-e21 during p1-e16",
+    "Added p1-f039 (review_only, ambiguous) for the undated discussion statement that labs were normal except CEA, AST and ALT, with an ambiguity",
+    "p1-f037 improvement: added literal time \"while receiving high dose IV vitamin C infusions for 1.5 years\" (during)",
+    "Split event p1-e15 into first (p1-e15), second (p1-e19) and third (p1-e20) infusion events with ordinal before relations",
+    "Added relation p1-e06 surgery -> p1-e14 vitamin C start from the abstract \"After undergoing surgery and chemotherapy\"; added the same quote to p1-e10 -> p1-e14",
+    "Summaries, source_coverage notes and article limitation updated to match"
+  ],
+  "unresolved": [
+    "No figures or supplements are listed in the source.",
+    "Lung cancer histology and stage are not stated.",
+    "The abstract conclusion that vitamin C had no secondary effects is a study-level claim and is not recorded as an adverse-event fact.",
+    "The undated discussion sentence that laboratory values were within normal levels except for CEA, AST and ALT is kept review_only.",
+    "Vitamin C start date (December 2013) conflicts in timing with the August 2013 CEA sentence; see ambiguities."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 9,
+    "facts_reviewed": 39,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient; no figures, tables or supplements",
+      "p1-f018 June 2015 stop: abstract \"The treatment\" is a definite back-reference to the vitamin C protocol in the preceding abstract sentence; not borrowed; NO-BORROWING warning is a checker false positive",
+      "August 2013 \"while given high doses of vitamin C infusions\" vs December 2013 start kept as an ambiguity (no two values for one attribute)",
+      "Adjuvant weeks 7-20 vs \"just 27 weeks after the surgery\" kept as an ambiguity; chemotherapy with last cycle November 2013 kept separate",
+      "Chest CT undated and nodule count unresolved; G6PD result not reported; CEA ng/mg kept as printed; later infusion routes null",
+      "\"without secondary effects\" is a generalized conclusion, not a patient finding; not recorded"
+    ],
+    "residual_risks": [
+      "Source has internal timing inconsistencies (vitamin C vs August 2013 CEA; adjuvant duration)",
+      "Two non-blocking NO-BORROWING warnings on p1-f018 remain (reviewed false positive)"
+    ]
+  },
+  "physician_adjudicated": false
+}

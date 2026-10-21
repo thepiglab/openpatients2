@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC9883064.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "662b1566fb5d3a2990fada07003ca826ec944b89f9dc7d0654d21c939bed7285",
+  "annotation_sha256": "c90f3c13a2880c44c38f9974f4135decfe76728dd908154a7ec761db1030f180",
+  "reviewed_at": "2026-10-21T09:24:24.481709+00:00",
+  "source_segments_read": 41,
+  "facts_reviewed": 107,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Restored the phase time on Phase I items p1-f083..f091 and p1-f102 and Phase II items p1-f093..f099 (time \"Phase I (day 1 to four weeks)\" / \"Phase II (four to eight weeks)\", relation during, plus the phase-label quote): each phase label opens its paragraph with a colon and scopes every sentence of that paragraph; the drafter had dropped these only to clear NO-BORROWING warnings, which are checker false positives here.",
+    "p1-f095 Phase II breathing exercises: added the sentence stating rounds of breathing exercises were done (\"in between each round of breathing exercises\").",
+    "Added p1-f107: day-7 change in tone of the right upper and lower limbs (b00018), a sign not recorded in the draft.",
+    "Split the Table 2 Modified Ashworth Scale tone assessment (\"On day 7\" in the text) out of the Table 1 Day 7 reflex event into new event p1-e18; the source does not state the two day counts share an anchor.",
+    "p1-e01 (hypertension medicine for the past two years) -> admission changed from before to overlaps: an ongoing exposure stated with a duration overlaps the presentation.",
+    "p1-e02 -> p1-e03 evidence replaced by two separate quotes (\"Previously...\" / \"Now, after two years...\") instead of one three-sentence span.",
+    "Added relations admission (p1-e03) before craniotomy (p1-e05) and before ICU monitoring/ward transfer (p1-e06): the admission opens the stay in which this care happened (order only); added Phase II (p1-e14) before the posttreatment changes (p1-e17) and the abstract quote to p1-e17.",
+    "p1-e13/p1-e14 time_kind changed from duration to relative (day ranges from an unstated reference point).",
+    "Roster label rewritten: the draft label (\"recurrent intracranial hemorrhagic stroke after decompressive craniotomy\") implied the stroke followed the craniotomy and that the earlier strokes were hemorrhagic.",
+    "Summary claim 3: removed the review_only skin care (p1-f091) from the text and sources.",
+    "Added ambiguities: narrative NIHSS 30/mRS 5 vs Table 3 Pretreatment (not merged); GCS 7 (severe) vs oriented to time, place and people; Table 1 Day 7 vs text \"On day 7\"; the unnamed referent of \"the same condition\"."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; actual images inspected in the separate visual submission.",
+    "Introduction and discussion are general background and are not patient facts.",
+    "Table 1 day columns have no stated anchor; the date of admission is given only as a month without a year.",
+    "No plot or pixel estimates are recorded."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 41,
+    "facts_reviewed": 107,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (45-year-old woman, hemorrhagic stroke, decompressive craniotomy, Phase I/II physiotherapy); Tables 1-3 transcribed cell by cell and checked against raw XML (Day 1/7/14/21 columns correct).",
+      "Phase labels scope their paragraphs; Table 2 cells validly take day 7 and MAS from the sentence that introduces Table 2.",
+      "MRI and CT carry identical wording; kept separate with an ambiguity. \"midline shaft\" is a print artefact for the caption \"shift\".",
+      "Narrative NIHSS/mRS are not merged with Table 3 Pretreatment (source does not identify the same time point).",
+      "Imaging vs craniotomy has no stated order; craniotomy before rehabilitation is literal (\"Treatment was started after the patient was operated on\")."
+    ],
+    "residual_risks": [
+      "Day labels in Table 1 and the phase ranges have no stated anchor; all such times are relative with null anchors.",
+      "Fifteen NO-BORROWING warnings on the phase-scoped intervention items remain by decision (heading scopes the paragraph).",
+      "Spasticity treatment is described while the patient's documented tone is flaccid/hypotonic; spasticity not recorded (ambiguity).",
+      "Figure 3 ownership rests on the text citation of Figure 3 for the patient's PNF."
+    ]
+  },
+  "physician_adjudicated": false
+}

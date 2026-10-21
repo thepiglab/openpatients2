@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC12821473.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9de6d9bc89e268da3873cf027f65884d600d519ac1ace0f53279b7c153ea66e4",
+  "annotation_sha256": "e536bd4ac638c6ea610d7d36562cd68acc8fe4d8b4aaabc6db096e50410ad1c9",
+  "reviewed_at": "2026-10-21T18:03:15.111707+00:00",
+  "source_segments_read": 25,
+  "facts_reviewed": 89,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Temporality reset to unknown for all course items (conditions, signs, drugs, procedures, observations, outcomes, monitoring); kept historical for no prior chronic illness/allergy and the prior pregnancy, future for the advised follow-up and the hedged future-dye suggestion.",
+    "p1-f007 pulmonary edema: time \"one hour postoperatively\" now anchored to the literal \"surgery\" (adjacent sentence of b00019, quoted).",
+    "p1-f011 methemoglobinemia (refuted): added the b00018 sentence stating it \"ruled out this complication\".",
+    "Added p1-f075 suspected anaphylactic reaction (b00009, possible/provisional) and p1-f076 allergic reaction suggested by rapid onset (b00019, possible/provisional).",
+    "Added p1-f077/p1-f078 intrapulmonary vascular spasm and capillary leak as probable mechanisms (possible/provisional); p1-f079 cardiac etiology \"partially excluding\" as ambiguous review_only (not refuted).",
+    "Added laparoscopy findings as observations p1-f080 (flimsy uterine adhesions) and p1-f081 (beaded fallopian tubes), and p1-f083 no dye spillage at chromopertubation (findings belong in observations).",
+    "Added p1-f082 Figure 1 caption observation (more than three B-lines in a single intercostal space); B-line ambiguity reworded as compatible attributes, not a conflict.",
+    "Added b00007 \"Until this time\" findings: p1-f084 normocapnia (flag normal), p1-f085 adequate intravascular volume, p1-f086 adequate depth of anesthesia, p1-f087 hemodynamically stable.",
+    "Added p1-f088/p1-f089 no changes in pulse oximetry and PaO2 (b00018 methemoglobinemia work-up sentence about this case); b00018 coverage changed to patient_facts.",
+    "p1-e01 presentation: removed time_text \"nine years\" (it is the infertility duration, not the presentation time).",
+    "Relations: added e01->e05 (scheduled for hysterolaparoscopy), e05 during e04 (under general anesthesia), e07 during e05 (intraoperative ventricular arrhythmia), e07->e09 (the arrhythmia reverted), e05->e10 (postoperative ward), e05->e11 (one hour postoperatively), and order-only in-hospital care -> discharge for e14, e12 and e15 -> e17; added literal ordering quotes to e02->e05 (preoperative investigations), e07->e08 (after a diagnosis of unstable VT) and e10->e11 (After one hour, case text).",
+    "Route and tubal-occlusion ambiguities reworded: transcervical vs intrauterine are compatible; abstract \"confirming\" vs case \"suggesting\" is a hedging difference (ambiguity, kept provisional), not a source conflict.",
+    "Summary reduced from 7 to 6 phase claims (intraoperative paragraphs merged); the either/or review_only cause removed from the summary."
+  ],
+  "unresolved": [
+    "Single-patient case report; discussion paragraphs b00016-b00017 and the background part of b00018 and b00022-b00024 are literature background and not assigned to the patient; b00020 and b00021 are used only for statements explicitly about this case.",
+    "Point-of-care ultrasound B-lines are described as more than six bilaterally (text) and more than three in a single intercostal space (Figure 1 caption); compatible attributes, both kept.",
+    "Cause of the cardiovascular collapse and pulmonary edema is hedged (potential anaphylactoid reaction); no tryptase or confirmatory test was done.",
+    "No supplementary material is listed in the source or raw XML."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 25,
+    "facts_reviewed": 89,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient; raw.xml has one figure, no tables, no supplementary material.",
+      "Cause wording: \"potential anaphylactoid\" kept possible/provisional; \"allergic or anaphylactoid\" either/or kept review_only; cardiotoxicity (\"ruled out\") and methemoglobinemia (\"excluded\", \"ruled out\") refuted literally.",
+      "Cardioversion: \"preparation for\" and reversion \"before cardioversion was administered\" do not literally state it was not done; kept action planned with an ambiguity.",
+      "Midazolam route left null: \"IV\" precedes glycopyrrolate only; no borrowing.",
+      "Furosemide escalation was only anticipated; future dye suggestion (\"may be appropriate\") is review_only recommended.",
+      "\"before the procedure\" is a definite back-reference to the single described hysterolaparoscopy; relation kept with the \"preoperative investigations\" quote added."
+    ],
+    "residual_risks": [
+      "POCUS event p1-e12 and diagnostic event p1-e15 are ordered only before discharge (in-hospital care ruling); the source does not order them against the tachypnea or treatment except via diagnosis-basis wording.",
+      "visual.json pixel observation says the \"Pleural line\" arrow points at the curved bright line; in the pixels the arrow points downward from the label and ends below that line (annotator should reword).",
+      "Pulse oximetry/PaO2 \"no changes\" have no stated time."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC10908412.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1d01b3ae5ab322b13d789041357339286dc87cffcb94f66a71bb957e27e9b0f8",
+  "annotation_sha256": "ba8f9626581fea295d94bf12387dc0a4c1bcb2d23f8f8a0f96d5d3f31afabf17",
+  "reviewed_at": "2026-10-21T13:42:05.772057+00:00",
+  "source_segments_read": 36,
+  "facts_reviewed": 46,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f013 dizziness and p1-f014 head rolling: quote extended to \"... while returning to school for 10 days\" and time \"for 10 days\" (during) added; the duration closes the whole complaint clause, so attaching it only to blurring (p1-f012) was the less literal reading. Residual scope ambiguity kept.",
+    "p1-f029 MRI procedure: added body_site \"brain\" with the Figure 1 caption quote \"MRI of the brain\".",
+    "p1-f030 post-rehabilitation MRI: removed from event p1-e09 (\"At the end of six weeks\" governs only the physiotherapy measures); new event p1-e12 (time_text \"post-rehabilitation\", order_only) with relation p1-e08 rehabilitation before p1-e12 (\"Our rehabilitation consisted of six weeks.\" + \"post-rehabilitation MRI\"). Notes and ambiguity now state that the Figure 2 arrow is unexplained.",
+    "New event p1-e11 pre-physiotherapy outcome measures (FIM 50, NEI VFQ-25 40; Table 3 column header \"Pre-physiotherapy intervention\"); relations p1-e11 before p1-e07 physiotherapy started and p1-e07 before p1-e09 post-physiotherapy measures, quoting the Table 3 column headers and the Table 1 physiotherapy-start row.",
+    "Added p1-f046 outcome: exercises increased coordination and improved quality of life (b00017 \"All these exercises helped our patient ...\" and b00032 \"which helped to enhance our patient's coordination\").",
+    "Event p1-e09 kind follow_up -> test; evidence now also quotes the Table 3 header.",
+    "Ambiguity on \"for 10 days\" rewritten: scope reading, and the Table 1 dates (10/10/2023, 16/10/2023, 18/10/2023) versus \"for two days\"/\"for 10 days\" do not reconcile to one visit date (arithmetic-only mismatch = ambiguity, no visit-to-table ordering).",
+    "Summary claims 2-3 rewritten: added the Snellen 22/32 value, removed \"over six weeks\" attached to the physiotherapy start date, added the post-rehabilitation MRI and the coordination/quality-of-life outcome."
+  ],
+  "unresolved": [
+    "Figure captions carry visual_status not_inspected; the two MRI images are inspected in the separate visual submission.",
+    "Table 1 dates are numeric day/month/year strings and are kept literally without calendar normalization.",
+    "Visual acuity and Snellen values do not state eye assignment; Ishihara values are given per eye.",
+    "Post-rehabilitation MRI findings are not stated in the text.",
+    "Discussion and conclusion contain general and stroke-study statements that are not treated as patient facts.",
+    "Pre- and post-physiotherapy scores have no stated unit or score range."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 36,
+    "facts_reviewed": 46,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (14-year-old boy) with MRI-described bilateral optic neuritis, right-eye strabismus and right upper limb weakness, treated with a six-week physiotherapy programme; no supplements in raw.xml.",
+      "Table 1 numeric dates kept literally with date_iso/time_calendar_value null, matching corpus precedent (PMC12906728.1, PMC12588875.1); the Table 1 relations e02->e03->e06 and e06 same_time e07 rest on stated calendar dates (10/10/2023 < 16/10/2023 < 18/10/2023 = 18/10/2023), both quoted.",
+      "Typhoid \"three months ago\" before the presentation (N ago ruling); \"Then\" orders the MRI/diagnosis visit before the referral; referral precedes the physiotherapy it names.",
+      "Visual acuity 14/24 and 6/12 has no eye assignment and Snellen 22/32 is unexplained: kept literal with an ambiguity, not a conflict (not stated to be the same measurement); Ishihara values are per eye.",
+      "Neuromyelitis optica (conclusion) and the Discussion \"our study\" on stroke patients are not patient facts; ambiguities retained.",
+      "Table 3 FIM 50/110 (functional_status) and NEI VFQ-25 40/90 (quality_of_life) verified cell by cell against raw.xml.",
+      "Both MRI images viewed at full resolution with arrow crops: one overlaid arrow each, no printed text, dates or identifiers."
+    ],
+    "residual_risks": [
+      "\"for 10 days\" could alternatively attach only to \"while returning to school\"; recorded as an ambiguity.",
+      "The outpatient visit is not dated and is not ordered against the Table 1 dates or the AVBRH admission.",
+      "Diminution of vision (abstract) and blurring of vision (case text) are kept as two symptom items.",
+      "Admission to AVBRH is represented as a care_plans item (no encounter section)."
+    ]
+  },
+  "physician_adjudicated": false
+}

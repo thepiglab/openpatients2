@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC7591674.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1626293dc08aebad2bb42cd0cd6294ff71b06b7c74f5f203505529dc6143bf87",
+  "annotation_sha256": "ca92ed859f8152af392dda4776c6e386451115c3b909df4ceecfeb653ab09006",
+  "reviewed_at": "2026-10-21T04:42:08.501693+00:00",
+  "source_segments_read": 33,
+  "facts_reviewed": 44,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Surgical-margin observation: evidence widened to the full sentence so the quote carries 'infiltrated' (was only 'the side margins of the excision').",
+    "Renamed the 6.8 mm observation to the concise label 'Melanoma size'; kept separate from Breslow thickness 2.7 mm with the existing ambiguity (different or unnamed attributes, not a value conflict).",
+    "Methylprednisolone start: indication 'immediate response' removed (a purpose, not a condition); indication null with a note.",
+    "Removed duplicate conditions item 'Psoriasis' in remission (same abstract statement as the remission outcome) and duplicate absent sign 'Relapse of psoriasis plaques' (same sentence as the no-relapse outcome); outcome text trimmed to 'No relapse of the psoriasis plaques'.",
+    "Added allergies adverse_effect item: Pembrolizumab -> psoriasis, supported by 'This irAE' and the conclusion sentence 'Pembrolizumab induced ... a significant skin immune-related reaction' (corpus precedent PMC12915822.1, PMC12843839.1).",
+    "Oncology treatment Pembrolizumab: added the conclusion sentence stating Pembrolizumab induced the response as evidence for the response field.",
+    "Excision split out of the October 2018 referral event into its own order-only event; methylprednisolone start and its discontinuation '15 days later' split into two events (the referral time and the 15-day time no longer cover the wrong facts).",
+    "Temporal relations 5 -> 13: added excision -> histology (histology of removed tissue), methylprednisolone start -> discontinuation ('followed by'), pembrolizumab interruption -> skin improvement ('interrupted ... until the improvement'), 10-month treatment -> 10-month review ('After 10 months of treatment'), pembrolizumab -> caption PET after 18 cycles baseline PET -> caption PET after 18 cycles (both caption times from the pembrolizumab-start anchor, both quoted), psoriasis -> improvement of skin manifestations and disappearance of itching (improvement of the existing condition), pembrolizumab -> PET/CT complete response (conclusion: 'Pembrolizumab induced ... the complete clinical response'); added abstract evidence to pembrolizumab -> psoriasis and psoriasis -> apremilast.",
+    "Ambiguities: 18 cycles vs 10 months stated as different anchors, not a value conflict; methylprednisolone anchor ambiguity notes Figure 3 text is not used."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three figure images are inspected in visual.json.",
+    "Figure 3 is an image-only timeline whose printed dates and boxes are pixel content, not used as facts.",
+    "Several outcomes and the PET and CT time points are stated without a calendar date; no dates were derived.",
+    "Discussion sentences about other published patients are not assigned to the index patient."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 33,
+    "facts_reviewed": 44,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (75-year-old man, metastatic melanoma on pembrolizumab, psoriasis treated with apremilast); discussion cases (Salopek, Fattore, Sapalidis, Apalla, Nigro) correctly excluded.",
+      "6.8 mm melanoma measurement and 2.7 mm Breslow thickness are different/unnamed attributes: ambiguity, not a source conflict.",
+      "Figure 2 caption PET (before pembrolizumab; after 18 cycles) and text PET findings kept as separate facts and events per the caption-time ruling; 18 cycles vs 10 months use different anchors.",
+      "Figure 3 is an image-only timeline; its month-year labels and box text stay pixel content (visual.json) and are not facts; no image value contradicts the text.",
+      "Flags: BRAF wild type negative, PET no evidence of lesions negative, pathological liver uptake positive; caption iRECIST CR unknown."
+    ],
+    "residual_risks": [
+      "Pembrolizumab resumption after the 4-week interruption is implied only by the 10-month treatment statement and the Figure 3 pixels; no resumption event recorded.",
+      "Anchor of methylprednisolone discontinuation 15 days later is unstated.",
+      "Reference-gate warning NO-BORROWING on the allergy item time is a checker false positive: the time comes from the reaction sentence itself (After the 10th cycle, he developed psoriasis)."
+    ]
+  },
+  "physician_adjudicated": false
+}

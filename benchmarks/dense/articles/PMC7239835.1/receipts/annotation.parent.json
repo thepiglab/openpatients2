@@ -1,0 +1,55 @@
+{
+  "article_id": "PMC7239835.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "65284e7e58587bf1631aa67db238bb83a7f77b7cb5ac352e8bf82e5f69b17fcb",
+  "annotation_sha256": "cfdd7237026e592aebaec447b49b8a72fc3906aba292f6dd68d17e3accf1a753",
+  "reviewed_at": "2026-10-21T08:14:26.391087+00:00",
+  "source_segments_read": 35,
+  "facts_reviewed": 59,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added p1-f058 (include): abstract states the white rough mucosa in the gastric body still exists 3 years and 5 months after lanthanum discontinuation; linked to e12 and the follow-up ambiguity.",
+    "Added p1-f059 (review_only, ambiguous): text-only 'elevated phosphate' statement with flag high, kept separate from the Table 1 P (phosphorous) row; linked to e07 and the phosphate ambiguity.",
+    "Moved p1-f009 (severe renal impairment on blood tests) from the hemodialysis event e03 to the blood-test event e07 so e03->e04 orders only hemodialysis before lanthanum start.",
+    "Reworded e05 to describe the EGD 6 months after lanthanum start seen on retrospective review (not the review itself).",
+    "Added the abstract quotes to the NBI vessel-position ambiguity ('vessels ... on the substance') and the follow-up ambiguity ('still exists ...').",
+    "Summary claim 3: removed the disputed review_only 'no significant changes' statement (p1-f055) and added the persistence finding p1-f058."
+  ],
+  "unresolved": [
+    "Caption-layer visual status is not_inspected; the seven image assets were inspected in visual.json.",
+    "Table 1 laboratory values have no stated collection time; Table 2 literature content and the pie chart describe 51 previously reported cases and are not recorded as index-patient facts.",
+    "Discussion statements about the mechanism of lanthanum uptake and the usefulness of magnified NBI are author interpretation or general conclusions and are not recorded as facts.",
+    "Hedged causal statements (parietal cell hyperplasia attributed to lansoprazole; histiocyte phagocytosis of lanthanum) are not recorded as asserted causes.",
+    "Timing statements in the abstract, Figure 6 caption and case report differ by about 6 months; see ambiguities."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 35,
+    "facts_reviewed": 59,
+    "figures_viewed": 7,
+    "key_findings": [
+      "Single index patient; Table 1 rows all captured as observations without time; Mg and HbA1c high flags from the text; H. pylori text and table value merged because the text cites Table 1, IU/ml vs U/mL kept as a one-character unit ambiguity.",
+      "Relation e05->e08 is supported by the Fig. 6 caption's own statement that the EGD was performed 5 years prior to the first biopsy; the 5 years vs 5.5 years interval mismatch is an arithmetic-only ambiguity.",
+      "NBI substance position (above vs beneath vessels) and follow-up course (improved a little vs no significant changes) stay review_only with ambiguities; hedged causes not recorded.",
+      "MO6 (Table 2 asset) is a pie chart of 51 literature cases consistent with the Table 2 caption and text; aggregate, not patient data."
+    ],
+    "residual_risks": [
+      "Table 1 collection time is unstated.",
+      "Phosphate (text) vs P/phosphorous (table) equivalence left unresolved.",
+      "Timing of the discussion's 'no significant changes' statement is unknown."
+    ]
+  },
+  "physician_adjudicated": false
+}

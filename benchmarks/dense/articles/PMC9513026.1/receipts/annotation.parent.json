@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC9513026.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9c5c4288fa7ff092438faa796e1342b660753ebb06859f838303f78eadfc675e",
+  "annotation_sha256": "4a95e7b361dc8164784343f0de7568a8343edbc5163e87c8f120b5f36cc428dd",
+  "reviewed_at": "2026-10-21T04:40:58.122350+00:00",
+  "source_segments_read": 48,
+  "facts_reviewed": 206,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1: cousin (III-1) death outcome set ambiguous/review_only with an ambiguity, because the Figure 1 pedigree draws III-1 without the deceased oblique line (pixel content kept out of facts).",
+    "p1-p4: removed authored diagnostic_basis \"reduced ECD and hexagonality\" from corneal endothelial degeneration (not stated per patient; P3 left HEX is 81%).",
+    "p4: added relation ophthalmic examination (e04) before bullous keratopathy diagnosis (e05), literal \"Therefore\".",
+    "p4: added the Discussion sentence naming Patient 4 as second evidence for the Descemet membrane/endothelium pathology result.",
+    "p1, p4: cited the Table 1 \"Age of onset of symptoms\" cells (same onset statements as the text) on the onset symptom facts.",
+    "p2-p4: added absent specific corneal pigmentation on slit-lamp (\"our four patients\") and ethnicity \"Japanese\" (\"a single Japanese family ... including the following four patients\").",
+    "F3: added printed panel D (inside caption range \"C–E\") to the annotation figure panels for Patient 1."
+  ],
+  "unresolved": [
+    "Four related patients from one family; literature cases in Table 1 (Ref 2-5) are not patients of this article and are excluded.",
+    "Table 1 values for the four patients are merged into the matching text facts only where they state the same finding (ECD, CAG repeats, MRI, optic atrophy); unmatched table cells are separate facts.",
+    "Values printed inside figure or supplement images are pixel content and are kept out of clinical facts.",
+    "Discussion cohort-level comparisons (reduced ECD/HEX against published normal values; absence of a CAG-repeat relationship) are not copied to individuals.",
+    "Supplementary Figures 1-3 are single-page PDFs reviewed in the supplement sidecars; their caption text adds a left-eye RNFL average for Patient 2 and fundus findings for Patient 3 that the main text does not give.",
+    "Caption-layer visual status is not_inspected; the image pixels are described in visual.json."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 48,
+    "facts_reviewed": 206,
+    "figures_viewed": 6,
+    "key_findings": [
+      "Four related DRPLA patients (III-10, III-5, IV-3, IV-1) correctly rostered in first-mention order; Table 1 literature columns (Ref 2-5) and Discussion literature excluded.",
+      "P4 specular microscopy: text says no rounded dark cells while the SM3 caption states rounded dark cells in panel A; kept as a source conflict with both sides review_only and only that attribute quarantined.",
+      "P1 neurological \"bilateral reduction in visual acuity\" vs best corrected 20/200 and 20/20 kept as an ambiguity; the trailing \"respectively\" maps both acuity and pressure pairs to right/left.",
+      "b00006 vision sentence after the mother sentence kept with subject unknown, review_only.",
+      "P3 visual acuity and P4 RNFL thinning stated unreliable by the authors kept review_only.",
+      "P4 DSEK and the left-eye corneal transplantation kept as separate events (not identified as one); LASIK left untimed; diagnosis->cataract surgery->transplantation ordered by \"then\"/\"prior to\"; transplantation->recovered acuity accepted as an outcome order.",
+      "b00015 \"Our patients had no history of trauma, inflammation, glaucoma, or contact lens use\" follows \"we described four patients\" and is contrasted patient by patient in the same sentence; accepted as literal four-patient scope.",
+      "Pedigree draws III-1 without the deceased line although the text says she died; cousin death made review_only with an ambiguity."
+    ],
+    "residual_risks": [
+      "CV and HEX for P2 and P4 follow an elliptical \"had decreased to ..., CV to ..., and HEX to ...\"; left unflagged rather than inferring a low flag for CV.",
+      "Table 1 cells are merged into the matching case-text facts because the authors state Table 1 summarizes these same examinations.",
+      "SM2 fundus panels carry a burned-in record-style number and exam date/time; the agent supplement sidecars describe this as device overlay text rather than the direct-identifier category."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,66 @@
+{
+  "article_id": "PMC7828763.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "fdd27fc468279b538c135725ec9802752d3d06c948641f6b3fd51cae5402ffde",
+  "annotation_sha256": "0ca5764949ac1f2738d5823d759be2f5359aa41bb698ddc1c78cab41984f20a6",
+  "reviewed_at": "2026-10-21T08:26:45.240102+00:00",
+  "source_segments_read": 16,
+  "facts_reviewed": 104,
+  "patients_reviewed": 4,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1: e03 (palpitation admission) -> e04 (AV node ablation / VVI) changed from before to unknown: adjacent sentences carry no order word and the source does not place the procedure within that admission.",
+    "p1: added e03 before e05 (\"another three admissions in six months later\" after the palpitation admission).",
+    "p1: added e09 (S/V initiation) during e07 (nine admissions in ten months) from \"Meanwhile\" in the adjacent sentence.",
+    "p1: e05/f015 time text restored to the literal \"in six months later\", event precision unknown, with an ambiguity (within six months vs six months later).",
+    "p1: rewrote ambiguities (removed the claim that the S/V dose was not stated; added Meanwhile, \"in six months later\" and ablation-timing ambiguities).",
+    "p1: added care_plans f027 (close follow-up regarding drug side effects, monitoring, completed); linked to e09; care_plans coverage documented.",
+    "p2: added e05 (norepinephrine start) before e08 (norepinephrine taper/off), drug start -> its taper.",
+    "p2: added e07 (S/V start) before e09 (up-titration at follow-up visits), drug start -> its dose change.",
+    "p2: ambiguity extended to the unordered S/V initiation vs norepinephrine taper and the unnamed inotrope of the failed discontinuation trials.",
+    "p2: summary claim 3 no longer says the norepinephrine taper came \"after\" S/V initiation (order not stated).",
+    "p2: added care_plans f030 (follow-up visits, completed); linked to e09; care_plans coverage documented.",
+    "p3: added e06 (milrinone start) before e07 (hypo-perfusion on reduction of milrinone), drug start -> its reduction.",
+    "p3: added e05 before e07 (\"the same signs of organ hypo-perfusion\" refers back to the earlier hypo-perfusion signs).",
+    "p3: added medications f027 (GDMT administered at optimal tolerable dose, \"despite administration of\"); linked to e02.",
+    "p3: added outcomes f028 and event e12 for the single admission \"two weeks after initiation of ARNI\" (reason not inferred); e08 -> e12 before (repointed from e11), e12 during e11.",
+    "p4: added e02 (two inotropes administered at first admission) before e03 (could not be discontinued) and before e05 (inotropes discontinued), drug start -> its stop; drug items stay generic \"Inotropes\"."
+  ],
+  "unresolved": [
+    "The article has no figures, tables or supplements; no visual, figure-EHR, privacy or measurement-series review applies.",
+    "Series-level statements (abstract, introduction and discussion, including that ARNI initiation led to inotrope discontinuation and that no hypotension or worsening renal function occurred in \"our patients\") are not copied to individual patients; only the individual case paragraphs supply patient facts.",
+    "Discussion paragraphs describe other published studies and mechanisms and are not patient facts.",
+    "Case paragraphs state no laboratory values, ejection fractions or hemodynamic measurements beyond systolic blood pressure around 100 mm Hg at sacubitril/valsartan initiation; the authors state hemodynamic assessment was not performed.",
+    "Drug names for guideline directed medical therapy are not stated; the sacubitril/valsartan dose 24/26 mg is kept as printed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 16,
+    "facts_reviewed": 104,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Four individual cases from the Case 1-4 headings (b00003-b00006); roster count 4 from the abstract; no figures, tables or supplements.",
+      "Cohort statements (abstract/introduction ARNI -> inotrope discontinuation; b00009 \"Our patients\" without hypotension or worsening renal function; b00012 no hemodynamic assessment) do not explicitly cover all patients and are not copied to individuals.",
+      "Every relation re-checked for a literal order quote; one unsupported before (p1 palpitation admission -> ablation) set to unknown; missing literal relations added (drug start -> stop/taper/reduction, \"another ... later\", \"Meanwhile\", \"the same signs\", \"two weeks after initiation of ARNI\").",
+      "Systolic blood pressure \"about\"/\"~\"/\"approximately\" 100 mm Hg uses comparator \"=\" with the approximation kept in text_value (OBS-COMPARATOR).",
+      "p3 single admission two weeks after ARNI is a separate readmission with no inferred reason."
+    ],
+    "residual_risks": [
+      "Unordered by design: p1 mexiletine; p2 norepinephrine start vs presentation and S/V initiation vs norepinephrine taper; p3 milrinone start vs preceding events and S/V vs hypo-perfusion.",
+      "p1 \"in six months later\" is ungrammatical; precision left unknown.",
+      "p4 order of inotropes relies on \"Inotropes\" referring back to the two inotropes of the first admission (only inotropes described)."
+    ]
+  },
+  "physician_adjudicated": false
+}

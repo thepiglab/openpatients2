@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC12657666.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2df4b7d911960c7e54b07c807b6724631f1857af3ad6d99901650645531fabb8",
+  "annotation_sha256": "8dde1bfbb96270eba672c280e079ce254315bd770572a8656f89ed723db424ff",
+  "reviewed_at": "2026-10-21T13:39:17.222595+00:00",
+  "source_segments_read": 27,
+  "facts_reviewed": 21,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Nodule count recorded as a source conflict: abstract \"two nodular growths\" (p1-f019) vs Figure 1 caption \"A solitary pink nodular lesion\" (p1-f020), both certainty source_conflict / review_only; case-text nodule p1-f008 stays accepted; ambiguity updated.",
+    "p1-f006 congenital alopecic plaque: added body_site scalp and the abstract \"long-standing alopecic plaque on the scalp\" evidence.",
+    "Added care_plans p1-f021 three-month follow-up (completed), linked to follow-up event p1-e08; care_plans domain now documented.",
+    "Added the introduction sentence about the present case as evidence for the three confirmed diagnoses and the abstract excision sentence for p1-f017.",
+    "Split event p1-e01: new history event p1-e09 congenital long-standing plaque; relations p1-e09 before p1-e01 (\"progressively developed into\"), p1-e09 before p1-e02 (history in presentation sentence), and p1-e03 before p1-e04 (biopsy of \"the verrucous plaque and the nodular lesion\" detected at examination).",
+    "Added ambiguities: plaque colour pink to brown (text) vs yellowish (caption); trichoblastoma specimen unnamed; no literal order between biopsy/diagnosis and excision and Figure 5 intraoperative/postoperative wording.",
+    "Summary claim 1 rewritten to mention the scalp site and the caption-stated right parietal location without the disputed nodule count."
+  ],
+  "unresolved": [
+    "One index patient. Table 1 (segments b00013 to b00019) lists previously published poroma-in-nevus-sebaceous cases and is not assigned to the index patient; discussion statements are background.",
+    "Source conflict: the abstract describes two nodular growths while the Figure 1 caption describes a solitary nodular lesion (the case text describes one nodule); both count statements are review_only.",
+    "No dates are given; the only stated times are the four-year enlargement and the three-month follow-up.",
+    "The follicular proliferation consistent with trichoblastoma is described after the plaque biopsy but its specimen is not named in that sentence.",
+    "Caption-layer visual status not_inspected; the five JPEGs are inspected in the separate visual submission. No supplementary material is listed in the source or raw XML."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 27,
+    "facts_reviewed": 21,
+    "figures_viewed": 5,
+    "key_findings": [
+      "One index patient (33-year-old woman); Table 1 is literature cases and correctly excluded; no supplements in source.json or raw.xml.",
+      "Nodule count is a source conflict (two vs solitary); dimension reordering 1.2 x 1 x 1 vs 1 x 1 x 1.2 cm kept as an ambiguity.",
+      "Right parietal location is caption-only and kept on the caption-evidenced plaque sign p1-f009; conditions carry no body site.",
+      "Relations e04->e05 (test to result) and e07->e08 (excision to three-month follow-up) confirmed; three literal relations added.",
+      "All 9 panels viewed at full resolution; visual, figure-EHR and privacy sidecars match the pixels (no face, no burned-in text)."
+    ],
+    "residual_risks": [
+      "Biopsy/diagnosis versus excision order is not literal and left unordered.",
+      "Trichoblastoma specimen and the number of nodules remain unresolved in the source."
+    ]
+  },
+  "physician_adjudicated": false
+}

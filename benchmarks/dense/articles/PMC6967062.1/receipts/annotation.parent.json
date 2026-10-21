@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC6967062.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "28c65b85fa9b089cf1c7d67c319b351a26a0a291e01e3004f8f9650da7d2cc18",
+  "annotation_sha256": "49f2fa885bfe20fa9813d04ef1fff1bbeb38dbcdd9adfad347d282ab9f30d966",
+  "reviewed_at": "2026-10-21T04:41:40.995667+00:00",
+  "source_segments_read": 23,
+  "facts_reviewed": 65,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added missing fact p1-f065: PaO2/FiO2 ratio 171.5 at the time of VAP diagnosis (case text and Fig. 1 caption), linked to event p1-e07 and summary claim 2.",
+    "Fig. 2 caption PEEP 14 mmHg vs case-text PEEP 14 cm H2O treated as a unit source conflict: added caption fact p1-f064 and set p1-f046 and p1-f048 to certainty source_conflict, scoring review_only; PEEP 14 removed from the e09 description and summary; ambiguity rewritten.",
+    "Rewrote the VAP-day ambiguity: the case text does not place the diagnosis itself on postoperative day 3; abstract \"second day\" and body day-3 use different/unstated anchors, so ambiguity not conflict (p1-f031 stays ambiguous review_only).",
+    "Added relation p1-e03 before p1-e04 (\"preoperative\" tests stated in the presentation of the reoperation admission) and removed the ambiguity forbidding that order.",
+    "Added relations p1-e05 before p1-e08 (\"Initially\" ... \"additional automatic settings\"), p1-e06 before p1-e08 (\"oxygenation also decreased. Thus, we used the iASV mode\"), p1-e08 before p1-e09 (FiO2/PEEP increased while oxygenation declined; FiO2 decline after recovery).",
+    "Split sedation continuation into new event p1-e13 (after VAP diagnosis) with relations p1-e07 before p1-e13 and p1-e13 before p1-e11 (propofol stopped after stopping ventilator usage); p1-e08 now holds the iASV automatic-settings facts incl. FiO2 0.6 and PEEP maximum.",
+    "Event p1-e03 time_kind changed from relative to order_only for \"preoperative\".",
+    "Time anchors restored to literal phrases: PaO2/FiO2 462 anchor \"entering the ICU\"; dexmedetomidine/propofol anchor \"admission in ICU\".",
+    "Meropenem indication now cites its literal source \"changing the antibiotics to treat VAP\" as a second evidence quote.",
+    "Delta P fact p1-f044 caption evidence expanded from a subjectless fragment to the full caption sentence.",
+    "Oncology tumor p1-f012 and treatment p1-f013 now carry alternate_representation_of links to p1-f006 and p1-f010."
+  ],
+  "unresolved": [
+    "Values printed inside Figures 1 and 2 (CRP, WBC, fluid balance and PaO2/FiO2 labels without text-stated times) are pixel content recorded only in visual.json, not as facts.",
+    "Abstract and case text differ on the VAP diagnosis day and on the description of the surgery; both kept without reconciliation.",
+    "Fig. 2 caption gives PEEP 14 in mmHg while the text gives PEEP 14 in cm H2O; recorded as a source conflict (both sides review_only), no unit conversion made.",
+    "Discussion statements about iASV in general, other studies and hypothetical septic shock are background, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 23,
+    "facts_reviewed": 65,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (47-year-old man); roster 1/1 complete; no cited cases or cohort data copied.",
+      "Abstract \"second day\" VAP vs body postoperative day 3: different or unstated anchors and the body never dates the diagnosis itself, so ambiguity, not conflict.",
+      "Fig. 2 caption PEEP 14 mmHg vs text cm H2O is a unit source conflict; both sides review_only.",
+      "Abstract surgery description kept review_only and not merged with the case-text reoperation.",
+      "Non-smoker recorded as absent current tobacco use (not explicit never-use); ampicillin/sulbactam administered, meropenem started.",
+      "Discussion hedges (sepsis, transfusion) not recorded; heart lung index non-operation is a literal case statement and kept.",
+      "Figures viewed at full resolution with crops: only printed labels; no plot estimates; Fig. 1 prints \"PiO2/FiO2 ratio\" and Fig. 2 \"P/F ratio\"."
+    ],
+    "residual_risks": [
+      "Relation p1-e03 before p1-e04 relies on reading \"preoperative\" as referring to the operation of the described admission.",
+      "Figure-internal CRP, WBC, balance and other P/F values are untimed pixel content in visual.json only.",
+      "visual.json contains positional wording about the dashed line and the FiO2 rise relative to ICU-day ticks; reported to the annotator for rewording."
+    ]
+  },
+  "physician_adjudicated": false
+}

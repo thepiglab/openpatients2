@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC6571448.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "7bf340f7cd4a6a2eadd223d5e549e0eedbd765a49c10321d149df820b68f6e7b",
+  "annotation_sha256": "eeb63261e93ae252b447769e137b6669e3c5f5d7a9b394bf44a89e0b811dba8d",
+  "reviewed_at": "2026-10-21T04:20:44.454530+00:00",
+  "source_segments_read": 23,
+  "facts_reviewed": 86,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Moved the four per-quadruplet Apgar scores from observations to symptoms_function kind=performance_score (SECTION-SIGNS).",
+    "Added reproductive_perinatal fact: quadruplet B female, from the pronoun \"she\" in the NICU sentence; updated the sex-mapping ambiguity.",
+    "Removed the betamethasone two-dose fact from the 28-week admission event (hospitalization not named) and added an ambiguity; summary reworded.",
+    "Added relation e02 before e03 (ordinal second and 3rd pregnancy) and e12 before e13 (3 days and two weeks after delivery, same anchor).",
+    "Removed follow_up_duration_text from the 8-week labour-delay outcome (not a follow-up duration).",
+    "Restored literal anchor for sporadic contractions; added b00015 reported-patient quote to the no-cerclage fact; reworded second-pregnancy text_value to the curettage week.",
+    "Rewrote the week 29 ambiguity (abstract hospitalization not identified with the 28-week or a-week-later admission; not a source conflict); added abstract weight-range/normal-Apgar ambiguity; clarified the last-pregnancy ambiguity."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the 3 JPEGs were inspected in the separate visual submission.",
+    "The four quadruplets are part of the index patient record (ROSTER-RELATIVES); they have no individual clinical courses beyond birth weight, Apgar score, NICU transfer and follow-up.",
+    "Discussion paragraphs cite published cases; only sentences literally about the reported patient were used.",
+    "Several relative times (\"3 days later\", \"a week later\", \"6 months later\") have no named anchor; no order was inferred across paragraphs."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 23,
+    "facts_reviewed": 86,
+    "figures_viewed": 3,
+    "key_findings": [
+      "One index patient (34-year-old mother); quadruplets kept in her record with subject newborn/fetus per ROSTER-RELATIVES.",
+      "Abstract week 29 hospitalization kept separate from the 28-week and a-week-later admissions with an ambiguity; consistent arithmetic, no conflict.",
+      "Pethidine kept as administered: \"The contractions were controlled with the prescription of pethidine and hydration\".",
+      "adalat kept as printed in ingredient_as_documented; no nifedipine inference.",
+      "Discussion 8-week labour delay is literally about \"our reported patient\"; start not stated, kept with ambiguity.",
+      "Relative times without a named anchor keep anchor null; no cross-paragraph order invented."
+    ],
+    "residual_risks": [
+      "e03 before e04 rests on reading \"her last pregnancy\" as the latest described prior pregnancy.",
+      "Figures show the newborns, attributed to the mother record (p1) per ROSTER-RELATIVES; no individual quadruplet identifiable.",
+      "Apgar time point not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

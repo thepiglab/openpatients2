@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC9574449.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d8b20d32706e2c57148f9870dc200c90f26aace6a2baf427fac65ec146c889ed",
+  "annotation_sha256": "6523192a6c08f9598104a7557ac5defa37e06a42d631f7a259c868cd08361386",
+  "reviewed_at": "2026-10-21T09:28:24.517990+00:00",
+  "source_segments_read": 64,
+  "facts_reviewed": 196,
+  "patients_reviewed": 10,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Birthweight <10th centile observations (p1-p10): flag changed from positive/negative to unknown; the printed symbol stays as text_value (no legend, and not a qualitative laboratory test). Rhesus type and antibody flags kept.",
+    "Weight gain (p1-p10): added the literal all-case text quote \"All women demonstrated hemodilution, and median rapid weight gain ...\" (b00028) next to the Table 3 10 (100%) row.",
+    "Added per patient (30 facts): documented_sex (text_value 'women', the literal source word per DEMO-SEX-WORDING) from \"All women demonstrated hemodilution\"; maternal edema sign and placentomegaly on ultrasound from the explicit all-case inclusion sentence \"of which 10 cases met the criteria for Mirror Syndrome - defined as the presence of placentomegaly on ultrasound, evidence of maternal edema on clinical examination and fetal hydrops\".",
+    "domain_coverage procedures_devices for p4 and p7 changed from documented to unresolved (only review-only attribute-matched items).",
+    "Summaries: first phase claim now cites the inclusion-criteria findings and the all-women statement.",
+    "Article limitations rewritten: Table 2 is a JATS text table (image duplicates it), symbol-flag policy, all-case statements used."
+  ],
+  "unresolved": [
+    "Only Table 2 gives per-case data. Table 2 is a JATS text table (its rendered image duplicates the same cells and is described only in visual.json); per-case facts cite the text cells. Tables 3, 4 and 5 and most of the Results text are cohort statistics and are not copied to individual cases, except explicit all-case statements (all 10 cases met the inclusion criteria; all women had hemodilution and rapid weight gain; maternal features improved within 5 days postpartum in all instances).",
+    "Table 2 has no legend defining the + and - symbols. Maternal Rhesus type and Maternal Antibody cells keep the printed symbol as text with a positive/negative flag for these qualitative blood-bank results; Birthweight <10th centile cells keep the printed symbol as text with no flag; the twin-case cells -/NA and -/+ are unresolved text with an ambiguity.",
+    "The Diagnosis to birth (days) header does not say whether the interval starts at fetal hydrops or Mirror Syndrome diagnosis; no start point is inferred from arithmetic on the printed gestational ages.",
+    "Cohort medians in the text differ from Table 2 medians (hydrops diagnosis 19 weeks 2 days in the text versus 22 + 3 in Table 2; Mirror Syndrome diagnosis 22 weeks 3 days in the text and discussion, 23 weeks 3 days in the abstract, 24 + 1 in Table 2; diagnosis to birth median 8 days range 1-48 versus median 7 in Table 2; Table 3 hemoglobin and albumin ranges differ from Table 5). These are aggregate inconsistencies, not individual facts, and are not reconciled.",
+    "Several etiologies and outcomes (sacrococcygeal teratoma, CPAM, hypoplastic left heart syndrome, cystic hygroma, TTTS, incomplete molar pregnancy with dilation and evacuation, coxsackie virus B3, mode of delivery and labour induction per case, stillbirth and neonatal death per infant, hypertension, preeclampsia, hypoalbuminemia, anemia, hyperuricemia, proteinuria, thrombocytopenia, dyspnea) are stated only as cohort counts and are not attributed to labeled cases; only the Rhesus isoimmunization pregnancy (Case 7) and the TRAP pregnancy (Case 4) are kept as review-only facts with ambiguities.",
+    "Ten patients are the mothers of the ten pregnancies; fetuses and newborns stay in the mother record with subject fetus or newborn.",
+    "Caption-layer visual status not_inspected; the five table images are inspected in visual.json."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 64,
+    "facts_reviewed": 196,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Critical check: Table 2 exists as a JATS text table (segments b00015-b00025 with text cells) in addition to its rendered image, so per-case facts citing the text cells are valid; no image-only facts exist and the 10-patient roster (Case 1-10) stands from text.",
+      "All five table images viewed at full resolution with crops; every Table 2 image cell matches the text cells (154 visual readings checked programmatically, 0 mismatches).",
+      "Attribute-matched items (Rh isoimmunization, 4 IUTs, emergency caesarean, surviving infant to Case 7; TRAP and RFA to Case 4) kept review_only/ambiguous with ambiguities, per RULINGS (attribution by attribute matching is not literal).",
+      "Unlabelled cohort items (etiologies, induction, mode of delivery, per-infant outcomes, Table 3 lab abnormalities other than 100% rows) correctly left out.",
+      "Relations: same_time/before from the time-labelled GA columns of the same row (same gestational-age anchor); birth before improvement from \"improved within 5 days postpartum in all instances\".",
+      "Diagnosis-to-birth interval kept without an inferred start point; age cells kept as age_other with no unit."
+    ],
+    "residual_risks": [
+      "Birthweight cells use subject newborn although most infants were stillborn; the per-infant outcome is not attributed.",
+      "Rh type/antibody +/- flags rely on conventional reading of the printed symbols (no legend)."
+    ]
+  },
+  "physician_adjudicated": false
+}

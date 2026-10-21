@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC10611494.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "a7891868f91602045aa221d3e52093100b5675e6e0e2560a53ddca0f538f9c93",
+  "annotation_sha256": "3e2f12904522bd1f402b6e04797db67c3d381ea198d23314c649308c4bbf43f1",
+  "reviewed_at": "2026-10-21T04:26:14.545333+00:00",
+  "source_segments_read": 40,
+  "facts_reviewed": 116,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Previous follow-up echocardiography and CT pulmonary angiogram facts now quote their whole own sentence so \"her previous workup\" is inside the evidence.",
+    "Cardiac MRI facts \"Upon her admission\" and the MRI-suggested acute myocarditis: temporality historical removed (quote does not label it), acute myocarditis role history -> unknown; descriptions say undated admission.",
+    "Table 1 row times \"during hospitalization\" now carry the literal anchor \"hospitalization\".",
+    "SLE clinical_status active now supported by the literal Discussion quote \"managing the active disease\".",
+    "Lupus nephritis role complication -> unknown (source does not call it a complication); contradictory note removed.",
+    "Added cerebritis, encephalitis and meningitis as absent/refuted conditions from the brain MRI sentence.",
+    "ICU admission (\"required ... on her latest visit\"): event occurrence occurred -> unknown per the required-alone ruling; fact text and an ambiguity say so; literal time \"on her latest visit\" added to the ICU and hypotension facts and the event.",
+    "Split the examination event: \"On examination\" now groups only heart rate, blood pressure and plaques; new event for the ECG/lab/culture sentences (no time) and a separate event for Table 1 rows with the caption time \"during hospitalization\".",
+    "Added 12 relations: previous workup -> presentation; previously sent antibodies -> their results/SLE diagnosis; presentation opens the stay -> examination, ECG/labs, Table 1 labs, initial treatment, echocardiography, SLE diagnosis (abstract: \"during her hospital stay\"), discharge and ICU event (order only); anaphylaxis and sepsis treatment -> SLE diagnosis (Discussion: differentials \"before a diagnosis of SLE was established\").",
+    "MRI/antibody ambiguity rewritten to cover the undated admission and discharge, the possible contradiction with \"not indicated and hence not done\", and the \"previously sent\" wording.",
+    "Summary rewritten to three phase claims of 25-85 words (merged the short discharge/follow-up claim; added the ICU statement); C3/C4 kept out."
+  ],
+  "unresolved": [
+    "Table 1 prints no individual time point; values carry only the caption time \"during hospitalization\".",
+    "Complement C3/C4 values differ between text and Table 1 and are kept as review-only source conflicts.",
+    "Cardiac MRI \"upon her admission\" is undated and a later sentence states cardiac MRI was not done in the current course.",
+    "Anemia, proteinuria and lab flags are not assigned from reference ranges; only source-stated normal/low/high/positive/negative flags are recorded.",
+    "Discussion sentences about published cases cited by reference are not index-patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 40,
+    "facts_reviewed": 116,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient; all case text, all 18 Table 1 rows, the figure caption and the patient-specific Discussion sentences (b00028, b00029, b00033) were checked against the facts.",
+      "C3/C4: text (0.41, 0.07) cites Table 1 but Table 1 prints 0.17 and 0.04 -> both sides kept review_only source_conflict; low flag undisputed; values kept out of summaries.",
+      "Anti-dsDNA: text sentence cites Table 1 with the same >379 value -> one merged fact citing both. Troponin, CRP and procalcitonin \"normal\" sentence does not itself cite Table 1 (the citation closes the next sentence about cultures, which are not in Table 1) and procalcitonin 0.62 cannot be confirmed as the same measurement -> kept separate with an ambiguity, consistent with the merge rule.",
+      "Cardiac MRI \"Upon her admission\" is told in the history paragraph together with antibodies \"sent before discharge\" that the hospital course later calls \"previously sent\"; the source points to an earlier admission but does not state it, so it is an ambiguity, not a numeric source conflict; the hospital-course \"not indicated and hence not done\" stays a separate not_performed fact.",
+      "Prior echocardiography/CTPA and hospital-course echocardiography/CTPA kept separate; Figure 1 caption time not applied to the text ECG sentence; differentials anaphylaxis and sepsis, ethnicity Filipino, hypotension and ICU requirement are literal for this patient.",
+      "Figure 1 viewed at full resolution with crops: 12-lead ECG, no printed identifiers, dates or device text; visual.json has no plot estimates or readings."
+    ],
+    "residual_risks": [
+      "Which admission the cardiac MRI and antibody send-out belong to is not stated.",
+      "Table 1 has a single undated column; its time is only the caption \"during hospitalization\".",
+      "Whether the ICU admission occurred is stated only as \"required\"."
+    ]
+  },
+  "physician_adjudicated": false
+}

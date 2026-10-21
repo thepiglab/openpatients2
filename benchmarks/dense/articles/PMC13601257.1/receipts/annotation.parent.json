@@ -1,0 +1,63 @@
+{
+  "article_id": "PMC13601257.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e50354e139cb4515e47655a2bffff9f6e39541b4116690a6d9c97cd7686a9fbd",
+  "annotation_sha256": "f2baab78b22a8c3a82b2497681ffcb6cbc9c3f571c63f067ebed0bd01588eb5f",
+  "reviewed_at": "2026-10-21T14:21:55.172698+00:00",
+  "source_segments_read": 45,
+  "facts_reviewed": 128,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Follow-up facts p1-f045, p1-f046, p1-f100, p1-f120, p1-f121: time nulled (relation unknown); their sentence does not name the follow-up assessments, so \"after discharge\" from the preceding sentence is not borrowed; ambiguity added; still linked to follow-up event p1-e20.",
+    "p1-f082 (excision of superficial and soft-tissue masses): own sentence states no time; dropped the two quotes that only supplied the 7-15 year range, time nulled, moved out of range event p1-e06 into new untimed event p1-e21.",
+    "p1-f079 and p1-f080 keep \"Between 7 and 15 years of age\": their own sentence opens \"During this period\", a definite back-reference to the immediately preceding sentence (remaining NO-BORROWING warnings on f079/f081 judged checker false positives).",
+    "p1-f081 transfusions 7-15 years: action completed -> unknown (\"required\" alone).",
+    "Removed p1-f024 (symptom duplicate of outcome p1-f113, same sentence) and repointed event p1-e07; p1-e07 kind adverse_event -> outcome.",
+    "Removed relation p1-e03 -> p1-e05 (diagnosis \"on the basis of\" postoperative findings is basis wording, not order); diagnosis stays untimed and unordered.",
+    "Added relations p1-e18 -> p1-e19 (in-hospital care before the discharge ending that stay) and p1-e21 -> p1-e07 (\"these lesion-directed interventions provided temporary symptomatic relief\").",
+    "Added facts: p1-f124 repeated prior transfusions (Table 2 present-case row), p1-f125 bluish venous malformations of skin and tongue (Fig 1 A-C caption, untimed), p1-f126 intraoperative findings (Fig 2A caption, caption-governed 17-year time), p1-f127/f128/f129 Table 1 assessment cells at 9, 12 and 15 years as completed procedures without results.",
+    "Cited the Table 2 present-case row on p1-f067 (no genetic testing) and p1-f102 (no systemic therapy documented).",
+    "Removed negated procedures p1-f095/p1-f096 from occurred treatment event p1-e18; follow-up event p1-e20 time_kind relative/exact.",
+    "Added ambiguities (follow-up timing, \"required\" transfusions, untimed excision) and limitations (parents healthy not encoded; supplement restates Table 1 without contradiction)."
+  ],
+  "unresolved": [
+    "Genetic testing was not performed and detailed records of some previous interventions at outside institutions were unavailable (source limitation).",
+    "Follow-up was limited to 2 months with no systemic therapy; the source states durable disease control cannot be assessed.",
+    "Table 1 rows at 9, 12 and 15 years are not identified by the source as the same events as the narrative range between 7 and 15 years; kept separate.",
+    "Table 2 compares published literature reports; those rows and the discussion of other patients and studies are background, not facts about the index patient.",
+    "Caption-layer figure visual status is not_inspected; the two figure images and the supplementary PDF were inspected in separate visual and supplement records.",
+    "\"His parents were healthy\" is not encoded: the family_genetics schema has no value field for a general health statement and recording it as an absent named condition would invent a condition; the specific negative family history is recorded.",
+    "Supplementary Data sheet 1 (one-page PDF timeline) restates Table 1 and the follow-up text; its values are typed in the SM1 supplement clinical data, not as article facts. It groups 9 to 12 years in one column; no supplement-versus-article contradiction was found."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 45,
+    "facts_reviewed": 128,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (20-year-old Han Chinese man with BRBNS); Table 2 literature rows are background, its present-case row is the index patient.",
+      "Table 1 rows (9/12/15 years) kept separate from the 7-15 year narrative range; supplement 9-12 year grouping noted as a limitation.",
+      "HHT \"considered unlikely\" kept as possible differential; Klippel-Trenaunay and Maffucci excluded = refuted; infantile hemangioma \"not supported by histopathology\" kept refuted (judgement).",
+      "Uneventful recovery at 15 and 17 years recorded as complication absent; table-row times at 17 and 20 years govern findings of assessments named in those rows; Fig 1 D-I and Fig 2 A-E captions govern 17-year time of the findings they state.",
+      "Supplement SM1 (one-page timeline) agrees with the article; no source conflicts."
+    ],
+    "residual_risks": [
+      "NO-BORROWING warnings remain on p1-f079/p1-f081 by reviewer judgement (\"During this period\" back-reference).",
+      "Exam signs at 20 years and labs at 17 years take the age from the Table 1 row that names the physical examination / blood count, not from their own sentence.",
+      "Infantile hemangioma refuted is a judgement on \"not supported by histopathology\"."
+    ]
+  },
+  "physician_adjudicated": false
+}

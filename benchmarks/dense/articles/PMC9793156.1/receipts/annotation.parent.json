@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC9793156.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "1c3e07de8e661f8c11c9375cfb1b71009a231b45d3ddda4d9112677f63882676",
+  "annotation_sha256": "6b7631319a229ec52600fd17114de4fc056a98c46d00c00810025b66a4d1f1c6",
+  "reviewed_at": "2026-10-21T12:56:09.376868+00:00",
+  "source_segments_read": 49,
+  "facts_reviewed": 75,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f071 outcome text_value set to the literal printed wording 'initial outcome was favorable' (b00017 prints 'The initial outcome was favorable'); the separate absent-symptoms fact p1-f016 for 'asymptomatic' is kept as EVID-NEGATION requires.",
+    "Removed relation p1-e13 -> p1-e14 (second VT/amiodarone before ICD): only sentence order and the purpose phrase 'for secondary prevention'; recorded as an ambiguity.",
+    "Removed relation p1-e19 -> p1-e21 (VF episode before death): abstract 'few weeks later' follows a sentence naming both the ICD and its therapy episode, and the case-text death sentence opens a new paragraph; kept p1-e14 -> p1-e21; recorded as an ambiguity.",
+    "Added relation p1-e15 -> p1-e16 (salivary gland biopsy then serum protein electrophoresis, 'was then conducted').",
+    "Added relation p1-e14 -> p1-e20 (ICD successfully done, then 'The initial outcome was favorable').",
+    "Added Fig. 4 caption quote 'the second episode of polymorphic VT after temporary pacing' to relation p1-e12 -> p1-e13.",
+    "Added caption-stated facts: p1-f073 R on T phenomenon (Fig. 4 caption, linked to p1-e13), p1-f074 restoration of electro-induced rhythm after ICD shock (Fig. 6 caption, linked to p1-e19), p1-f075 right atrial appendage and right ventricular apex lead placement on fluoroscopy (Fig. 5 caption, linked to p1-e14)."
+  ],
+  "unresolved": [
+    "Visual status in the annotation figures[] is not_inspected; pixels are described in the separate visual submission.",
+    "The medical management of junctional bradycardia with polymorphic ventricular extrasystole is unspecified.",
+    "Death is dated only as \"after a few weeks\"; no cause of death or explicit anchor is stated.",
+    "Discussion statements about cardiac amyloidosis, ICD guidelines and cited studies are literature and not copied to the patient.",
+    "No units are printed for blood pressure; none were added. The eGFR unit is kept as printed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 49,
+    "facts_reviewed": 75,
+    "figures_viewed": 7,
+    "key_findings": [
+      "Single index patient (59-year-old man) with AL cardiac amyloidosis secondary to multiple myeloma, sinus node dysfunction confirmed on Holter, sustained polymorphic VT twice cardioverted, ICD with one VF therapy, death after a few weeks.",
+      "'favorable' is printed in the source, so the outcome wording is literal; 'asymptomatic' is an absent-symptoms fact per EVID-NEGATION.",
+      "First ECG time 'Admission' comes from the Fig. 1A caption, which itself states the junctional bradycardia finding; second ECG 'Shortly after' anchored to the adjacent same-paragraph ECG sentence.",
+      "Smoking '10 pack-years' is printed literally; blood pressure has no printed unit; eGFR unit kept as printed.",
+      "Relations e10->e14 ('requiring an ICD'), e09->e15 ('Since cardiac amyloidosis was highly suspected'), e14->e19 ('Few days following placement'), e14->e21 (abstract 'few weeks later') kept as literally ordered."
+    ],
+    "residual_risks": [
+      "'Since cardiac amyloidosis was highly suspected' links the suspicion to the biopsy; event p1-e09 also bundles the cardiac MRI, whose order relative to the biopsy is not separately stated.",
+      "Figure date stamps (pixel content, not recorded) are not reconciled with the text interval 'Few days following placement'.",
+      "Annotation figures[] uses caption-printed A/B letters for Fig. 2 and Fig. 6 while visual.json attributes those figures as a whole because no letters are printed on the images."
+    ]
+  },
+  "physician_adjudicated": false
+}

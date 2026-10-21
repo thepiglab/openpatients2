@@ -1,0 +1,54 @@
+{
+  "article_id": "PMC7803304.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "20668ad758323485706e5d712b9e20a7159412fd212b57150be9b758f9b7de91",
+  "annotation_sha256": "2b7bc8fa294dbc413cbef8c8bff32e9fcdaf2ca0ad9268479b0dbae50fb95ace",
+  "reviewed_at": "2026-10-21T08:32:04.726680+00:00",
+  "source_segments_read": 42,
+  "facts_reviewed": 19,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f006 referral time \"one month postpartum\": relation at/anchor null changed to relation after, anchor \"delivery\" (postpartum names the delivery as the reference point; \"delivery\" is literal in the same paragraph).",
+    "p1-f008 text_value replaced by the literal source wording \"progressive worsening of the symptoms in the following month\" (draft value was a paraphrase).",
+    "p1-e01 (uncomplicated vaginal birth) no longer links p1-f004 multiparity, a parity status rather than part of the delivery event.",
+    "Relation added p1-e03 -> p1-e04 before: worsening \"starting the day after delivery\" and referral \"one month postpartum\" are two stated times from the same delivery anchor; both quoted.",
+    "Relation added p1-e06 -> p1-e07 before: MRI result (large right L4/L5 disc hernia) -> L4/L5 microdiscectomy acting on that result (result -> action ruling); both sentences quoted.",
+    "Ambiguity added: the order of the referral, neurological examination and MRI is not stated, so no relation is recorded between them."
+  ],
+  "unresolved": [
+    "Only the single case in the Case report section is an index patient; the 10 literature cases in Tables 1 and 2 and the Results and Discussion paragraphs are published cases cited by reference and are not assigned to the index patient.",
+    "The case report gives no dates for the microdiscectomy or the MRI and no follow-up duration; order is recorded only where the text states it.",
+    "The discussion sentence about a case of cauda equina syndrome at presentation treated by laminectomy refers to a cited literature case, not the index patient.",
+    "Caption-layer visual status not_inspected; the 3 JPEGs are inspected in the separate visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 42,
+    "facts_reviewed": 19,
+    "figures_viewed": 3,
+    "key_findings": [
+      "One index patient (b00033 case report); Tables 1-2 (b00010-b00029) and Results/Discussion paragraphs describe 10 literature cases and contain nothing about p1; the CES/laminectomy discussion sentence is a cited case.",
+      "Examination findings correctly kind=sign; MRI recorded as completed procedure plus imaging observation (SECTION-IMAGING); the caudally-migrated fragment is part of the MRI finding, not a separate condition.",
+      "Weakness text_value \"great toe dorsiflexion\" is literal; source spelling \"halluces\" kept.",
+      "\"no neurological sequelae\" kept as an absent outcome with the negation inside the quote.",
+      "All three MRI film photographs viewed at full resolution with header and canal crops; captions and text attribute them to p1."
+    ],
+    "residual_risks": [
+      "The 4-month LBP history at one month postpartum implies onset before delivery, but no order between p1-e02 and the delivery is recorded because it would rest on arithmetic only.",
+      "Referral -> examination -> MRI order is not literal and is left unordered (ambiguity recorded)."
+    ]
+  },
+  "physician_adjudicated": false
+}

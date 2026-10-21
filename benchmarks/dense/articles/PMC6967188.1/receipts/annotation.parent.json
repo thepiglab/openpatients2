@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC6967188.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "fabca0b0f18e01308ef0edae98192b2c968591683f0517fbb59876d3fabbc17d",
+  "annotation_sha256": "8f22ae4af19e8ff0f56764e5ad921841c9bd54d2c1f5dacfc13428491eeb7fb9",
+  "reviewed_at": "2026-10-21T04:24:49.416470+00:00",
+  "source_segments_read": 15,
+  "facts_reviewed": 55,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Re-recorded \"There were no abnormalities in other examination findings\" as an observation with flag normal (was an absent sign), per the no-abnormalities = normal ruling.",
+    "Added the missing intravenous catheter insertion procedure (after disappearance of spontaneous respiration) and linked it to event p1-e11.",
+    "Surgery fact: renamed to \"Surgery\", removed the unrelated \"Anesthesia time was 161 min.\" quote from its evidence, added the abstract \"postoperative course\" quote; not equated with the orchiopexy (ambiguity kept).",
+    "Removed the non-literal related_condition \"Anesthesia\" from the no-adverse-respiratory-events outcome.",
+    "Added the b00010 \"from 67% at birth to 79% before surgery (Fig. 2)\" attribution quote to the at-birth M/W ratio fact.",
+    "Split the surgery out of the sugammadex event into its own event p1-e22 (surgery, anesthesia time, successful anesthetic management) and removed the discussion \"success\" fact from the ward-transfer event p1-e17.",
+    "Added events p1-e19 (chest X-ray at birth), p1-e20 (M/W ratio at birth), p1-e21 (M/W ratio at 1 year 10 months).",
+    "Added 9 literal relations: induction -> IV catheter/rocuronium, sugammadex -> LMA removal, scheduling -> the operation, preoperative CT -> surgery, premedication -> surgery, M/W at birth -> M/W before surgery, M/W before surgery -> surgery, surgery -> postoperative recovery/discharge, sugammadex during surgery; added the LMA insertion quote to the plan A -> LMA relation."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the two figure images were inspected separately in visual.json.",
+    "Discussion statements about KOS in general and cited reports (Jeune syndrome, other tracheal deviation cases) are background and not patient facts.",
+    "The source does not state outright that orchiopexy was performed; it refers to \"surgery\" after the scheduled orchiopexy.",
+    "Ventilator settings are kept inside the pressure-controlled ventilation procedure text rather than as separate measurements."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 15,
+    "facts_reviewed": 55,
+    "figures_viewed": 2,
+    "key_findings": [
+      "Single index patient (2-year-old boy with KOS); discussion sentences used only where literally about our patient/his.",
+      "Fig. 2 M/W ratios attributed to the patient through b00010 \"Our patient ... (Fig. 2)\"; values are caption/text, not pixel readings.",
+      "The 90 degree angle is caption-stated for the same preoperative CT, so it stays on the CT observation.",
+      "Drug routes are literal (orally, via a face mask, caudal); rocuronium has no borrowed IV route.",
+      "Age 2 years vs 1 year 10 months kept as a rounding ambiguity; orchiopexy kept planned with only order to the operation."
+    ],
+    "residual_risks": [
+      "Identity of the performed surgery with the scheduled orchiopexy is implied by back-reference but not stated; recorded as planned plus ambiguity.",
+      "Ventilator settings remain in the pressure-controlled ventilation procedure text rather than as separate observations."
+    ]
+  },
+  "physician_adjudicated": false
+}

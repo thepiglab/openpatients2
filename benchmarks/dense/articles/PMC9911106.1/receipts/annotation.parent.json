@@ -1,0 +1,60 @@
+{
+  "article_id": "PMC9911106.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "d5d8c9458fda8ad5b100e11febe1303da5561622a6f728f274678dbaa2a4b2b8",
+  "annotation_sha256": "46903b7bec31855f901071071704bc9f7056128ed8e33e6e452b381f2466b502",
+  "reviewed_at": "2026-10-21T08:52:41.479878+00:00",
+  "source_segments_read": 17,
+  "facts_reviewed": 89,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Removed p1-f029 (Table 1 response \"Yes\"): same carboplatin-response statement as p1-f028 (ONE-STATEMENT); its two Table 1 quotes moved onto p1-f028 as evidence.",
+    "Removed p1-f030 (oncology supportive G-CSF + transfusions): not a cancer treatment and duplicates medications p1-f033 and procedures_devices p1-f034 (ONE-STATEMENT).",
+    "p1-f049 \"further treatment precluded\" moved from care_plans to oncology.treatments (assertion absent, modality/action unknown, no tumor link); care_plans now not_documented (SECTION-CAREPLANS).",
+    "Removed p2-f022 and p3-f022 outcome \"did not benefit\": same statement as the oncology response \"No\" in p2-f007/p3-f007; outcomes now not_documented for p2/p3.",
+    "Added p1-e11 (Table 1 pre-first-cycle ECOG and laboratory values; these facts had no event) and relation e11 -> e04 (caption \"before the administration of the first cycle\" + carboplatin start).",
+    "Removed relation p1-e02 -> e04: quote joined two adjacent sentences with no order word.",
+    "Added p1-f006 liver failure to diagnosis event p1-e01 (the fact carries the abstract quote \"diagnosed with ED-SCLC and severe liver involvement leading to liver failure\"; event evidence keeps the dated sentence only) and relation e01 -> e04 (\"received single-agent carboplatin as first-line treatment due to liver failure\", explicitly covering the 3 patients incl. the described one).",
+    "p1 summary: removed unstored claim \"well tolerated\", reworded \"Baseline\", linked recovery of liver function; fact links refreshed.",
+    "p2/p3 line-of-therapy ambiguity rewritten to cite the cohort first-line sentence and explain why it is not applied to Cases 2/3.",
+    "source_coverage b00004 set to patient_facts for p1 (relation evidence)."
+  ],
+  "unresolved": [
+    "No figures and no supplements in the source.",
+    "Cases 2 and 3 appear only in Table 1 and one Discussion sentence; no dates, treatment details or outcomes beyond \"No\" response.",
+    "Table 1 albumin cells print an en dash inside the value; kept as printed text.",
+    "Cohort statistics (74 consecutive patients, 3 patients, 4%) and literature response rates are background, not patient facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 17,
+    "facts_reviewed": 93,
+    "figures_viewed": 0,
+    "key_findings": [
+      "All 17 segments read incl. the three Table 1 rows, caption and footnote; no figures or supplements.",
+      "Three patients: Case 1 narrative (p1) and Table 1 Cases 2/3 (p2/p3); rowspan \"No\" response cell applies to both rows.",
+      "Text values (bilirubin 14.81, AST 303, creatinine 1.8, ECOG 1 at admission) kept separate from the Table 1 pre-first-cycle values: no statement makes them the same time point.",
+      "Decimal-comma table values parsed with the printed text kept; albumin cells \"30–3\", \"28–9\", \"35–4\" stored as text only with ambiguities.",
+      "\"None of the patients had a previous history of liver disease, evidence of viral infection or exposure to hepatotoxins\" follows directly on the described patient plus the \"two other\" Table 1 patients, so it covers exactly p1-p3.",
+      "G-CSF/transfusions \"needing the support of\" kept action unknown; myelofibrosis kept provisional (\"suggestive finding\")."
+    ],
+    "residual_risks": [
+      "p1 presentation event e02 has no literal order relation to the other events.",
+      "Ownership of Cases 2/3 rests on the Table 1 row labels; their line of therapy is not recorded.",
+      "Creatinine 1.8 vs 1.7 mg/dl have no stated times; kept as separate values, not a conflict."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC9723233.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "3a5efbadf30152257ae5e99439898fd58e6e29600e86b27a6931df2ca23e89f6",
+  "annotation_sha256": "79268b6e48b6412aae33babfe06dace4e4305d34f2e6f933083970bb138ac604",
+  "reviewed_at": "2026-10-21T13:03:25.109043+00:00",
+  "source_segments_read": 36,
+  "facts_reviewed": 59,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Confirmed the Table 1 current-case merges (initial BCVA 20/17 OS, nasal location, base 5.9 x 5.7 mm, thickness 4.1 mm, amelanotic): the single current-case row restates the initial findings; notes and the ambiguity reworded as the parent decision.",
+    "Radiotherapy indication now cites the Table 1 \"Tumor treatment\" column and the b00019 sentence \"(the only treatment in the current case)\"; \"after the clinical diagnosis\" is temporal only.",
+    "Added Table 1 row and header evidence to PVD, macular hole, vitreous hemorrhage (header), distant metastases absent, PPV+ILM peeling and macular hole closed facts (OBS-TABLE-ROWS).",
+    "Moved the asymptomatic (symptoms absent) fact from the referral event to the diagnosis event (\"diagnosed with asymptomatic choroidal melanoma\").",
+    "Detached the Discussion \"surgical finding of bleeding from the tumor surface\" from the first-vitrectomy event (source does not say which vitrectomy) and added an ambiguity.",
+    "Final BCVA 20/125 now also cites the case-text sentence; macular hole closed outcome gets the literal time \"after the two procedures\".",
+    "Added p1-f058 (tumor regression confirmed before vitrectomy, abstract) with event p1-e12 and relation e12 before e08 (\"Following confirmation of tumor regression\").",
+    "Added p1-f059 (melanoma site distant from the macula; Discussion sentence literally about the current case).",
+    "Added literal relations: e01 before e02 (referral opens the workup), e04 before e06 (abstract \"vitreous hemorrhage after stereotactic hypofractionated radiotherapy\"), e05 before e08 (\"which was eventually repaired by pars plana vitrectomy\"), e06 before e09 (\"reappeared\"); e08 before e10 now quotes both ordinals (first/second vitrectomy).",
+    "Removed p1-f037 from summary claim 3, which does not state it."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the three JPEGs were inspected in the separate visual submission.",
+    "Figure 1 is an image-only timeline whose printed values (dates, BCVA values, examination labels) are pixel content in visual.json only; its printed BCVA of light perception and the second-hemorrhage timing are not in the text and are not facts.",
+    "Table 1 rows other than the current case describe published cases (references 6-13) and are not this patient.",
+    "Table 1 values for the current case were cited together with equal text values as the same measurements; hedged causal explanations by the authors are kept as ambiguities."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 36,
+    "facts_reviewed": 59,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (83-year-old man, left-eye choroidal melanoma); Table 1 rows other than the current case are published cases and are excluded.",
+      "Abstract \"no evidence of intraocular tumor dissemination or distant metastases during follow-up\" is case narrative for the single patient and kept as two absent conditions.",
+      "Hedged mechanisms (PVD cause, hemorrhage from ischemic shrinkage), the author exclusion of radiation-induced MH and the unassigned \"6 months after radiotherapy\" vitrectomy timing remain ambiguities.",
+      "Figure 1 image-only timeline values (calendar dates, LP, Second PPV timing) stay pixel content; no facts taken from it."
+    ],
+    "residual_risks": [
+      "Macular hole diameter 232 (unit from the Table 1 header) has no stated time or method.",
+      "Table-text merges rely on the single current-case row restating the initial findings."
+    ]
+  },
+  "physician_adjudicated": false
+}
