@@ -1,8 +1,8 @@
 """Frozen clinical extraction benchmark for Nemotron Super, Muse Spark and Beam.
 
 CPU access preflight -> per-profile CPU download, GPU benchmark, CPU cleanup.
-CPU jobs hash/score/export; GPU stages serve local files. Servers run sequentially;
-Spark and Beam FP8 reserve eight B200s; Beam NVFP4 uses four.
+CPU jobs hash/score/export; GPU stages serve local files. Packed mode overlaps
+smaller models within the group budget; Spark uses eight B200s alone.
 """
 from __future__ import annotations
 
@@ -35,15 +35,19 @@ STARTUP_TIMEOUT_SECONDS = 5400
 
 
 def prepare(root, work, expected=None, hours=12, with_images=True, include_test=False,
-            limit_articles=None, profiles=None, splits=None, selection_seed=42, article_ids=None):
+            limit_articles=None, profiles=None, splits=None, selection_seed=42, article_ids=None, scheduler='serial'):
     if not 1 <= hours <= 72 or (limit_articles is not None and limit_articles < 1):
         raise ValueError('Invalid hours/article limit')
     selected = list(DEFAULT_PROFILES) if profiles is None else list(profiles)
     if not selected or len(set(selected)) != len(selected) or set(selected) - PROFILES.keys():
         raise ValueError('Select unique, supported profiles')
+    if scheduler not in {'serial', 'packed'}:
+        raise ValueError('Unknown scheduler')
+    from .super_packing import plan as packing_plan, create_slots
+    scheduling = packing_plan(selected) if scheduler == 'packed' else {'mode': 'serial'}
     definitions = {k: v for k, v in arm_definitions(with_images).items() if v['profile'] in selected}
     pixels = any(v['pixels'] for v in definitions.values())
-    from .benchmark_selection import select_articles
+    from .benchmark_selection import METHOD, article_features, select_articles, source_for
     splits = tuple(('train',) if splits is None else splits)
     if not splits or len(set(splits)) != len(splits) or not set(splits) <= {'train', 'validation', 'test'}:
         raise ValueError('Select unique train/validation/test splits')
@@ -71,16 +75,22 @@ def prepare(root, work, expected=None, hours=12, with_images=True, include_test=
     m.update(format=FORMAT, git_head=os.environ.get('DENSE_SOURCE_REVISION') or m['git_head'],
              container=None, model=None, drafter=None,
              nemotron_super={'storage_policy': STORAGE_POLICY, 'hours': hours, 'arms': definitions, 'profiles': selected,
+                 'scheduler': scheduling,
                  'with_images': pixels, 'input_policy': 'supported-modalities-once' if with_images else 'text-only',
                  'include_test': 'test' in splits, 'limit_articles': limit_articles,
                  'selection': {'splits': list(splits), 'seed': selection_seed, 'article_ids': article_ids,
-                     'method': 'explicit-ids' if article_ids else 'source-stratified-sha256/1',
-                     'strata': ['split', 'figures_present', 'tables_present', 'source_length']},
+                     'method': 'explicit-ids' if article_ids else METHOD if limit_articles else 'all-eligible',
+                     'strata': ['split', 'clinical_category', 'figures', 'tables', 'source_length', 'reference_patients', 'species'],
+                     'policy': 'Category-balanced diagnostic sample; not population prevalence. Reference metadata is used only for selection/reporting, never inference.'},
+                 'evaluation_features': {aid: article_features(row, source_for(root, aid))
+                     for aid, row in b.rows(work / 'reference/unified.jsonl').items()},
                  'recipes': {name: copy.deepcopy(PROFILES[name]) for name in selected},
                  'pins': {model: PINS[model] for name in selected
                           for model in [PROFILES[name]['model']] + ([PROFILES[name]['drafter']] if 'drafter' in PROFILES[name] else [])},
                  'engines': {p.get('engine', 'nemotron'): engine(p) for name in selected for p in [PROFILES[name]]},
-                 'timing_policy': 'One active article per server; synthetic startup probes are outside article timing. Configurations run sequentially, using at most eight B200s.'})
+                 'timing_policy': 'One active article per server; synthetic probes are outside article timing. '
+                     + ('Budgeted parallel waves; NVFP4 replicas claim distinct articles. At most eight B200s.' if scheduler == 'packed'
+                        else 'Configurations run sequentially, using at most eight B200s.')})
     m['files'] = b.inventory(work, ['code', 'inputs', 'reference'])
     for name, definition in definitions.items():
         profile = PROFILES[definition['profile']]
@@ -118,6 +128,8 @@ def prepare(root, work, expected=None, hours=12, with_images=True, include_test=
         am['files'] = b.inventory(arm, ['code', 'inputs', 'reference'])
         b.write(arm / 'manifest.json', am)
         m['files'][f'arms/{name}/manifest.json'] = b.sha(arm / 'manifest.json')
+    if scheduler == 'packed':
+        create_slots(work, m)
     b.write(work / 'manifest.json', m)
     b.write(work / 'prepared.json', {'manifest_sha256': b.sha(work / 'manifest.json')})
     return {**result, 'archive': None, 'arms': list(definitions),
@@ -130,6 +142,10 @@ def check(work):
             or b.read(work / 'prepared.json')['manifest_sha256'] != b.sha(work / 'manifest.json')):
         raise ValueError('Not an intact pinned Super campaign')
     plan = m['nemotron_super']
+    if plan.get('scheduler', {}).get('mode') == 'packed':
+        from .super_packing import plan as packing_plan
+        if plan['scheduler'] != packing_plan(plan['profiles']):
+            raise ValueError('Packed resource plan differs from frozen code')
     # Older frozen campaigns may contain both conditions. Keep inspection and
     # cleanup compatible while new preparation selects only one per profile.
     allowed_arms = {**arm_definitions(False), **arm_definitions(True)}
@@ -227,14 +243,14 @@ def runtime_owner(work, create=False):
 
 
 @contextmanager
-def runtime_lock(work, create=False):
+def runtime_lock(work, create=False, shared=False):
     runtime = runtime_owner(work, create=create)
     path = runtime / 'lifecycle.lock'
     if path.is_symlink():
         raise ValueError('Refusing symlink runtime lock')
     with path.open('a') as lock:
         try:
-            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            fcntl.flock(lock, (fcntl.LOCK_SH if shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
         except BlockingIOError:
             raise ValueError('A campaign download, worker or cleanup still owns the runtime') from None
         yield runtime
@@ -312,7 +328,7 @@ def serving(work, name, shard=0):
     definition = b.read(work / 'manifest.json')['nemotron_super']['arms'][name]
     profile = PROFILES[definition['profile']]
     runtime = engine(profile)
-    cache = work / 'arms' / name / 'runtime/caches'
+    cache = work / 'arms' / name / 'runtime/caches' / f'replica-{shard}'
     spec = copy.deepcopy(profile['speculation'])
     if 'drafter' in profile:
         spec['model'] = str(weights_path(work, profile['drafter']))
@@ -542,12 +558,26 @@ def cleanup_profile(work, profile_name):
 
 
 @exclusive_runtime
-def cleanup(work, profile=None):
+def _serial_cleanup(work, profile=None):
     # All-profile cleanup is a manual CPU operation, also supported for old campaigns.
     legacy = b.read(work / 'manifest.json')['nemotron_super'].get('storage_policy') != STORAGE_POLICY
     if (profile is None or legacy) and active_jobs(work):
         raise ValueError('Cancel/wait for all campaign jobs before cleaning the entire runtime')
     return cleanup_profile(work, profile)
+
+
+def cleanup(work, profile=None):
+    m = check(work)
+    if m['nemotron_super'].get('scheduler', {}).get('mode') != 'packed':
+        return _serial_cleanup(work, profile)
+    if active_jobs(work):
+        raise ValueError('Cancel/wait for all packed campaign jobs before cleanup')
+    from .super_packing import slot
+    profiles = m['nemotron_super']['profiles'] if profile is None else [profile]
+    if any(p not in m['nemotron_super']['profiles'] for p in profiles):
+        raise ValueError('Unknown campaign profile')
+    return {'profiles': {p: _serial_cleanup(slot(work,p),p) for p in profiles
+                         if (slot(work,p)/'runtime/owner.json').exists()}}
 
 
 def build_image(work, sif, image):
@@ -761,7 +791,7 @@ async def reasoning_smoke(endpoint, logs, config):
 
 
 async def worker(work, name):
-    with runtime_lock(work):
+    with runtime_lock(work, shared=True):
         return await _worker(work, name)
 
 
@@ -801,7 +831,8 @@ async def _worker(work, name):
         config = b.read(arm / 'manifest.json')['extraction']
         await smoke(endpoint, logs, config, definition['pixels'])
         await reasoning_smoke(endpoint, logs, config)
-    return await b.worker(arm, 0, campaigns=[arm],
+    replica = int(os.environ.get('OP2_WORKER_REPLICA', '0'))
+    return await b.worker(arm, replica, campaigns=[arm],
         serving_factory=lambda _work, shard, _logs: serving(work, name, shard), runtime_probe=gpu_probe(profile),
         startup_check=startup, budget_seconds=m['nemotron_super']['hours'] * 3600 - 120,
         article_timeout=3600)
@@ -809,8 +840,14 @@ async def _worker(work, name):
 
 def status(work):
     m = check(work)
-    reports = {name: b.status(work / 'arms' / name) for name in m['nemotron_super']['arms']}
+    packed = m['nemotron_super'].get('scheduler', {}).get('mode') == 'packed'
+    from .super_packing import slot
+    def arm_work(name, definition):
+        child = slot(work, definition['profile']) / 'arms' / name
+        return child if packed and (child / 'results').exists() else work / 'arms' / name
+    reports = {name: b.status(arm_work(name, definition)) for name, definition in m['nemotron_super']['arms'].items()}
     return {'complete': all(not r['pending'] for r in reports.values()),
+        'scheduler': m['nemotron_super'].get('scheduler', {'mode': 'serial'}),
         'arms': {name: {**r, 'pending': len(r['pending']), 'pending_sample': r['pending'][:5]}
                  for name, r in reports.items()}, 'report': str(work / 'summary/comparison.md'),
         'archive_available': (work / 'results.tar.gz.sha256').exists()}
@@ -827,6 +864,11 @@ def submit(work, account, qos, resume=False, dry_run=False):
     if plan.get('storage_policy') != STORAGE_POLICY:
         raise ValueError('Prepare a new campaign to use staged CPU downloads; resume uses the old frozen code')
     pending = [name for name in plan['arms'] if b.status(work / 'arms' / name)['pending']]
+    if plan.get('scheduler', {}).get('mode') == 'packed':
+        from .super_packing import collect, submit as packed_submit
+        collect(work, m)
+        pending = [name for name in plan['arms'] if b.status(work / 'arms' / name)['pending']]
+        return packed_submit(work, m, account, qos, pending, dry_run)
     ready = False
     if resume and (work / 'runtime.json').exists():
         validate_runtime(work)
@@ -924,6 +966,17 @@ def export(work):
         for name in b.read(work / 'manifest.json')['nemotron_super']['arms']:
             for folder in ('manifest.json', 'runtime.json', 'code', 'inputs', 'reference', 'results', 'summary'):
                 add(work / 'arms' / name / folder)
+        m = b.read(work / 'manifest.json')
+        if m['nemotron_super'].get('scheduler', {}).get('mode') == 'packed':
+            from .super_packing import slot
+            for profile in m['nemotron_super']['profiles']:
+                child = slot(work,profile)
+                for folder in ('manifest.json', 'prepared.json', 'code', 'inputs', 'reference', 'runtime.json', 'results', 'logs'):
+                    add(child / folder)
+                # Article results already live in the canonical parent arms.
+                for name in b.read(child / 'manifest.json')['nemotron_super']['arms']:
+                    for folder in ('manifest.json', 'code', 'inputs', 'reference', 'runtime.json'):
+                        add(child / 'arms' / name / folder)
     b.checksum(archive)
     return {'archive': str(archive), 'bytes': archive.stat().st_size}
 
@@ -937,6 +990,9 @@ def aggregate(work):
     m = check(work)
     if active_jobs(work, {'setup', 'download', 'worker', 'cleanup'}):
         raise ValueError('Setup/download/GPU/cleanup jobs are still active')
+    if m['nemotron_super'].get('scheduler', {}).get('mode') == 'packed':
+        from .super_packing import collect
+        collect(work, m)
     reports = {name: b.aggregate(work / 'arms' / name) for name in m['nemotron_super']['arms']}
     refs = b.rows(work / 'reference/unified.jsonl')
     predictions = {name: b.rows(work / 'arms' / name / 'summary/predictions.jsonl') for name in reports}
@@ -998,8 +1054,41 @@ def aggregate(work):
             'Compare matched-article throughput to avoid partial-run workload bias. Worker goodput includes observed startup/retries. '
             'Use sacct for actual allocation costs, including hard-killed jobs with missing final receipts. '
             'One seed; annotation agreement only; no automatic model promotion.'}
+    from .benchmark_selection import cohort_report
+    cohorts = cohort_report(refs, predictions, receipts, m['nemotron_super'].get('evaluation_features', {}))
+    result['scheduler'] = m['nemotron_super'].get('scheduler', {'mode': 'serial'})
+    if result['scheduler']['mode'] == 'packed':
+        from .super_packing import capture_accounting
+        capture_accounting(work)
+    result['observed_worker_span_goodput'] = {
+        name: {'span_seconds': report['observed_worker_span_seconds'],
+               'documents_per_hour': report['completed'] * 3600 / report['observed_worker_span_seconds']
+                   if report['observed_worker_span_seconds'] and not report['worker_goodput']['missing_worker_receipts'] else None,
+               'note': 'First worker start to last worker end, including startup and observed overlap/gaps; inspect missing worker receipts and sacct.'}
+        for name, report in reports.items()}
+    b.write(work / 'summary/cohorts.json', cohorts)
+    cohort_lines = ['# Results by article category and difficulty', '',
+        'Evaluation metadata stays outside prompts. Categories overlap across dimensions. '
+        'Counts are articles, not independent patients. Small groups are descriptive; '
+        'a balanced diagnostic sample does not estimate population performance. '
+        'Missing predictions remain in the planned denominator. Item F1 is annotation agreement, not semantic or clinical adjudication.', '',
+        '| Split | Dimension | Category | Arm | Planned | Completed | Predictions | Fully valid | Item F1 | Doc/h |',
+        '|---|---|---|---|---:|---:|---:|---:|---:|---:|']
+    for group in cohorts['groups']:
+        for name, values in group['arms'].items():
+            f1, rate = values['clinical']['f1'], values['throughput']['documents_per_hour']
+            cohort_lines.append(f'| {group["split"]} | {group["dimension"]} | {group["category"]} | {name} | '
+                f'{len(group["article_ids"])} | {values["completed"]} | {values["predictions"]} | {values["fully_valid"]} | '
+                f'{f"{f1:.4f}" if f1 is not None else "unavailable"} | {f"{rate:.2f}" if rate is not None else "unavailable"} |')
+    (work / 'summary/cohorts.md').write_text('\n'.join(cohort_lines) + '\n')
     b.write(work / 'summary/comparison.json', result)
     lines = ['# Clinical model comparison', '', f'Complete: {result["complete"]}. Test evaluated: {result["test_evaluated"]}.', '']
+    lines += ['Category and difficulty breakdowns, with article membership and coverage: [cohorts.md](cohorts.md) and cohorts.json.', '']
+    if result['scheduler']['mode'] == 'packed':
+        lines += ['Packed execution: NVFP4 uses two independent TP1 replicas, with unchanged model sampling. '
+                  'Article throughput below divides by summed article seconds; it is not aggregate replica throughput. '
+                  'See observed_worker_span_goodput in comparison.json for overlap-aware wall-time rates, '
+                  'and slurm-accounting.json / worker host_memory telemetry for resource evidence.', '']
     if not result['complete']:
         lines += ['INCOMPLETE: this archive contains diagnostic/partial results. '
                   'Archive creation does not mean the benchmark succeeded.', '']
@@ -1040,18 +1129,22 @@ def aggregate(work):
                     attr = None
                 completed = f'{values["completed_articles"]} / {values["planned_articles"]}'
                 lines.append(f'| {name} | {completed} | {quality} | {attr if attr is not None else "unavailable"} |')
-            lines += ['', '| Arm | Output tok/s | Answer tok/s | Doc/s | Doc/h | Output tok/GPU-s | GPUs |',
-                      '|---|---:|---:|---:|---:|---:|---:|']
+            lines += ['', '| Arm | Output tok/s | Answer tok/s | Doc/s | Doc/h | Output tok/GPU-s | GPUs/server | Scheduled replicas |',
+                      '|---|---:|---:|---:|---:|---:|---:|---:|']
             for name, values in arms.items():
                 rates = values['throughput']
                 cells = ' | '.join(f'{rates[k]:.4f}' if rates[k] is not None else 'unavailable' for k in (
                     'output_tokens_per_second', 'answer_tokens_per_second', 'documents_per_second',
                     'documents_per_hour', 'output_tokens_per_gpu_second'))
-                lines.append(f'| {name} | {cells} | {values["gpus_per_server"]} |')
+                profile = m['nemotron_super']['arms'][name]['profile']
+                replicas = result['scheduler'].get('resources', {}).get(profile, {}).get('replicas', 1)
+                lines.append(f'| {name} | {cells} | {values["gpus_per_server"]} | {replicas} |')
             common_count = next(iter(matched[scope]['by_split'][split].values()))['articles']
             lines += ['', f'Matched completed articles in this split: {common_count}.', '']
-            lines += ['These shared completed attempts may still contain extraction failures. '
-                      'This subset is selection-biased and excludes unfinished articles.', '',
+            coverage_note = ('All planned articles in this split completed across these arms.'
+                             if common_count == sum(ref['split'] == split for ref in refs.values())
+                             else 'This subset may be selection-biased and excludes unfinished articles.')
+            lines += ['These shared completed attempts may still contain extraction failures. ' + coverage_note, '',
                       '| Arm | Matched precision | Matched recall | Matched item F1 |',
                       '|---|---:|---:|---:|']
             for name, paired in matched[scope]['by_split'][split].items():
@@ -1089,6 +1182,11 @@ def aggregate(work):
 
 def verify(work):
     m = check(work)
+    if m['nemotron_super'].get('scheduler', {}).get('mode') == 'packed':
+        if active_jobs(work):
+            raise ValueError('Packed campaign jobs are still active')
+        from .super_packing import collect
+        collect(work, m)
     incomplete = []
     for name in m['nemotron_super']['arms']:
         progress = b.status(work / 'arms' / name)
@@ -1117,7 +1215,7 @@ def verify(work):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='command', required=True)
-    for command in ('prepare', 'setup', 'download', 'cleanup', 'submit', 'worker', 'aggregate', 'status', 'verify', 'cancel', 'export', 'recipe'):
+    for command in ('prepare', 'setup', 'download', 'cleanup', 'submit', 'worker', 'aggregate', 'status', 'verify', 'cancel', 'export', 'recipe', 'packing-preflight'):
         p = sub.add_parser(command)
         if command == 'recipe':
             continue
@@ -1137,6 +1235,9 @@ def main(argv=None):
             p.add_argument('--article-ids', nargs='+')
             p.add_argument('--limit-articles', type=int)
             p.add_argument('--profiles', choices=list(PROFILES), nargs='+')
+            p.add_argument('--scheduler', choices=['serial', 'packed'], default='serial')
+        if command == 'packing-preflight':
+            p.add_argument('--wave', type=int, required=True)
         if command == 'submit':
             p.add_argument('--account', default='cai5724'); p.add_argument('--qos', default='cai5724')
             p.add_argument('--resume', action='store_true'); p.add_argument('--dry-run', action='store_true')
@@ -1156,7 +1257,10 @@ def main(argv=None):
         if args.command == 'prepare':
             result = prepare(args.root.resolve(), work, args.expected, args.hours, args.with_images,
                              args.include_test, args.limit_articles, args.profiles, args.splits,
-                             args.selection_seed, args.article_ids)
+                             args.selection_seed, args.article_ids, args.scheduler)
+        elif args.command == 'packing-preflight':
+            from .super_packing import preflight
+            result = preflight(work, args.wave)
         elif args.command == 'submit':
             result = submit(work, args.account, args.qos, args.resume, args.dry_run)
         elif args.command in ('download', 'cleanup'):

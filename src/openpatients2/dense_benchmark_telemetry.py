@@ -9,6 +9,34 @@ import subprocess
 import time
 
 
+def host_memory():
+    """Measure this Slurm cgroup, never substitute whole-node RAM usage."""
+    try:
+        entries = Path('/proc/self/cgroup').read_text().splitlines()
+        for entry in entries:
+            hierarchy, controllers, relative = entry.split(':', 2)
+            if hierarchy == '0' and not controllers:
+                base = Path('/sys/fs/cgroup') / relative.lstrip('/')
+                names = {'current_bytes':'memory.current', 'peak_bytes':'memory.peak', 'limit_bytes':'memory.max'}
+            elif 'memory' in controllers.split(','):
+                base = Path('/sys/fs/cgroup/memory') / relative.lstrip('/')
+                names = {'current_bytes':'memory.usage_in_bytes', 'peak_bytes':'memory.max_usage_in_bytes', 'limit_bytes':'memory.limit_in_bytes'}
+            else:
+                continue
+            values = {}
+            for key, name in names.items():
+                try:
+                    value = (base / name).read_text().strip()
+                    values[key] = int(value) if value.isdigit() else None
+                except OSError:
+                    values[key] = None
+            if values.get('current_bytes') is not None:
+                return dict(values, available=True, scope='current process cgroup including descendants', cgroup=str(base))
+    except (OSError, ValueError):
+        pass
+    return {'available':False, 'scope':'unavailable; no node-wide fallback'}
+
+
 def sample():
     try:
         result=subprocess.run(['nvidia-smi','--query-gpu=timestamp,index,uuid,utilization.gpu,utilization.memory,memory.used,memory.total,power.draw',
@@ -31,6 +59,7 @@ async def monitor(path, *, interval=15):
     async def collect():
         while True:
             row=await asyncio.to_thread(sample)
+            row['host_memory'] = await asyncio.to_thread(host_memory)
             # Read the phase receipt without embedding patient/model output.
             progress=path.parent/'progress.json'
             if progress.exists():

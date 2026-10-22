@@ -14,10 +14,10 @@ from openpatients2.pilot_extract import PilotConfig
 from test_dense_nemotron_super import campaign
 
 
-def test_redhat_default_arm_freezes_target_and_draft_and_preserves_profiles(campaign, tmp_path, monkeypatch):
+def test_redhat_explicit_arm_freezes_target_and_draft_and_preserves_profiles(campaign, tmp_path, monkeypatch):
     monkeypatch.setattr(b, 'freeze_media', lambda *a, **kw: {})
     work = tmp_path / 'all-profiles'
-    s.prepare(campaign[2], work, expected=3)
+    s.prepare(campaign[2], work, expected=3, profiles=[k for k in r.PROFILES if k != 'redhat-fp8-no-spec'])
     m = s.check(work)
     assert 'redhat-fp8-dspark' in m['nemotron_super']['profiles']
     assert len(m['nemotron_super']['arms']) == 8

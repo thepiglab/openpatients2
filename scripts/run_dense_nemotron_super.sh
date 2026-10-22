@@ -14,6 +14,7 @@ if [[ "${1:-}" == --bootstrap ]]; then
   export DENSE_SOURCE_REVISION="$revision"
   uv sync --locked --extra data --no-dev --python 3.12
   selection=()
+  selection+=(--scheduler "${DENSE_SUPER_SCHEDULER:-packed}")
   read -r -a splits <<< "${DENSE_SUPER_SPLITS:-train}"
   selection+=(--splits "${splits[@]}" --selection-seed "${DENSE_SUPER_SELECTION_SEED:-42}")
   if [[ -n "${DENSE_SUPER_EXPECTED:-}" ]]; then selection+=(--expected "$DENSE_SUPER_EXPECTED"); fi
@@ -96,6 +97,7 @@ revision="$(git -C "$repo" rev-parse "$ref^{commit}")"
 for required in scripts/benchmark_dense_nemotron_super.py scripts/dense_nemotron_super.sbatch scripts/vllm_rust_frontend.py \
     scripts/run_dense_nemotron_super.sh src/openpatients2/dense_nemotron_super.py \
     src/openpatients2/benchmark_selection.py src/openpatients2/staged_timeline.py \
+    src/openpatients2/super_packing.py \
     src/openpatients2/semantic_benchmark.py src/openpatients2/speculation_metrics.py \
     scripts/freeze_super_reference.py docs/SEMANTIC_BENCHMARK.md \
     src/openpatients2/benchmark_reporting.py src/openpatients2/reasoning_lineage.py \
@@ -125,4 +127,4 @@ job="$(sbatch --parsable --account="$account" --qos="$qos" --partition=hpg-defau
 printf '%s\n' "$job" > "$bootstrap/job-id.txt"
 printf '%s\n' "$work" > "$pointer"
 printf 'Preparation job: %s\nSource commit: %s\nCampaign: %s\nLog: %s/prepare.log\n' "$job" "$revision" "$work" "$bootstrap"
-echo 'Default: each of eight configurations runs once. NVIDIA NVFP4 + MTP5, BF16 + MTP5, NVFP4 + LiLiCorr7, Muse Spark Open + DSpark7 and Red Hat FP8 + DSpark8 use article text and images together; Fastino Healthcare and Beam FP8/NVFP4 + DFlash2 use text only. DENSE_SUPER_WITH_IMAGES=0 explicitly selects text-only runs. Each profile gets CPU download -> GPU benchmark -> CPU weight/cache/container cleanup, then CPU scoring/export. At most eight B200s run at once. Every worker checks streaming reasoning capture before article inference.'
+echo 'Default: four configurations run once per article: NVIDIA NVFP4 + MTP5 (1 GPU), NVIDIA BF16 + MTP5 (2 GPUs), Muse Spark Open + DSpark7 (8 GPUs) use text and images; Beam NVFP4 + DFlash2 (4 GPUs) uses text only. DENSE_SUPER_WITH_IMAGES=0 explicitly selects text-only runs. Packed default: Beam 4 GPUs + BF16 2 GPUs + two NVFP4 replicas on 1 GPU each; Spark runs alone on 8. CPU staging and cleanup are serial barriers. DENSE_SUPER_SCHEDULER=serial restores one-model-at-a-time storage use. At most eight B200s run at once. Every worker checks streaming reasoning capture before article inference.'

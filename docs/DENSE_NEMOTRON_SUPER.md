@@ -6,11 +6,13 @@ live patient discovery, source-aware extraction/repair, literal evidence checks,
 caption attribution, measurement-series extraction and unified scorer.
 The obsolete Fastino Lightning launcher and model support have been removed;
 the `fastino` configuration here is the new **Super VL Healthcare** checkpoint.
-The default campaign includes Muse Spark Open, five Fastino/Nemotron configurations,
-and Beam FP8/NVFP4 with DFlash2. Beam BF16 is excluded.
+The default campaign now focuses on four candidates: NVIDIA NVFP4 + MTP5,
+NVIDIA BF16 + MTP5, Muse Spark Open + DSpark7, and Beam NVFP4 + DFlash2.
+Fastino, LiLiCorr, RedHat DSpark and Beam FP8 remain explicit diagnostic options.
+Beam BF16 is excluded.
 Each configuration runs **once per article** using its supported modalities:
-five configurations receive text and images together; Fastino and both Beam
-variants receive text only. There are no duplicate text-versus-image runs.
+three default configurations receive text and images together; Beam NVFP4
+receives text only. There are no duplicate text-versus-image runs.
 
 ## Run on HiPerGator
 
@@ -25,14 +27,16 @@ DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=4 bash scripts/run_dense_nemotron_super
 bash scripts/run_dense_nemotron_super.sh status
 
 # After the small campaign passes, run a representative development sample:
-DENSE_SUPER_LIMIT_ARTICLES=24 DENSE_HOURS=24 bash scripts/run_dense_nemotron_super.sh
+DENSE_SUPER_PROFILES='nvfp4 bf16 spark beam-nvfp4-dflash2' \
+DENSE_SUPER_SPLITS=train DENSE_SUPER_ARTICLE_IDS='' \
+DENSE_SUPER_LIMIT_ARTICLES=48 DENSE_HOURS=48 bash scripts/run_dense_nemotron_super.sh
 bash scripts/run_dense_nemotron_super.sh status
 bash scripts/run_dense_nemotron_super.sh verify
 WORK="$(cat runs/dense-nemotron-super-last-work.txt)"
 cat "$WORK/summary/comparison.md"
 ```
 
-To stop the current campaign and start a fresh eight-configuration smoke after updating:
+To stop the current campaign and start a fresh four-configuration smoke after updating:
 
 ```bash
 bash scripts/run_dense_nemotron_super.sh cancel && \
@@ -48,13 +52,31 @@ Other campaigns are untouched. Downloads and partial results are retained.
 
 The committed reference now contains **526 completed articles: 316 train, 105
 validation, and 105 test**. The default split is **train only**: without a limit,
-eight configurations × 316 articles = 2,528 article runs. Use a small development
+four configurations × 316 articles = 1,264 article runs. Use a small development
 sample first; a full run can exceed one allocation's time limit and require resume.
 Validation and test remain separate explicit selections. This is a development
 comparison, not a blinded clinical validation.
-Limited samples use deterministic SHA256 ordering with round-robin source strata
-(split, figures present, tables present, and source length), seed 42. They no longer
-select the first lexicographic article IDs. A two-article sample is still only an
+Limited samples take round-robin turns across split/category buckets using the
+existing reference primary_stratum labels. Within each bucket they favor
+underrepresented figure counts, tables, source lengths, reference patient counts,
+and species, with SHA256 seed-42 tie-breaking. Category and reference metadata
+are used only for selection/reporting, never passed into inference prompts.
+This intentionally balanced diagnostic distribution is not population prevalence.
+The tracked development-sample-48.json documents the current 48-article selection
+and reference checksum: all 36 training category labels, 20 single-patient, 26
+multi-patient and two no-patient references; 38 articles with figures and 27 with
+tables. Categories include overlapping specialties, age groups and modalities.
+Some categories have only one or two sampled articles: use them to locate failure
+cases, not to claim statistically reliable category rankings. The full eligibility
+set remains train-only; no validation or test labels guide this selection.
+Changing the reference snapshot changes the preview: regenerate it when refreshing
+the data. summary/cohorts.json and cohorts.md report clinical category, length,
+figures, tables, patient-count and species groups separately for each split and
+model, preserving failed/missing predictions in planned denominators. They also
+include completion, prediction, fully-valid and task-status counts.
+A 48-article run means 192 article attempts across the four models. DENSE_HOURS=48
+is the per-model allocation limit, not a promise of completion; longer cases may
+need resume. The worker reserves a full article timeout before starting more work. A two-article sample is still only an
 operational smoke. Each arm also runs synthetic startup
 checks outside article timing. No annotated roster, facts, figure labels or
 supplement transcription enters model inference.
@@ -83,13 +105,13 @@ DENSE_SUPER_WITH_IMAGES=1 bash scripts/run_dense_nemotron_super.sh
 # An optional text-only comparison, still one run per configuration:
 DENSE_SUPER_WITH_IMAGES=0 bash scripts/run_dense_nemotron_super.sh
 # A smaller campaign can select configurations:
+DENSE_SUPER_SCHEDULER=serial \
 DENSE_SUPER_PROFILES='nvfp4 lilicorr' DENSE_SUPER_LIMIT_ARTICLES=2 \
   DENSE_HOURS=4 bash scripts/run_dense_nemotron_super.sh
 ```
 
-The eight jobs are `fastino-text`, `nvfp4-vision`, `bf16-vision`, `lilicorr-vision`,
-`spark-vision`, `redhat-fp8-dspark-vision`, `beam-fp8-dflash2-text`, and
-`beam-nvfp4-dflash2-text`. The `-vision` suffix means text and image pixels are
+The four default jobs are `nvfp4-vision`, `bf16-vision`, `spark-vision`, and
+`beam-nvfp4-dflash2-text`. The other recipes require explicit DENSE_SUPER_PROFILES. The `-vision` suffix means text and image pixels are
 processed together through the full pipeline. It is not an image-only job.
 Fastino Super and Beam are text-only and never receive pixels. CPU preparation freezes
 eligible source image bytes and verifies acquisition hashes; missing/rights-review
@@ -153,6 +175,7 @@ exactly one segment or cell. Existing validators remain strict.
 To diagnose RedHat's low draft acceptance, use the optional controlled baseline:
 
 ```bash
+DENSE_SUPER_SCHEDULER=serial \
 DENSE_SUPER_PROFILES='redhat-fp8-dspark redhat-fp8-no-spec' \
 DENSE_SUPER_SPLITS=train DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=4 \
   bash scripts/run_dense_nemotron_super.sh
@@ -161,7 +184,7 @@ DENSE_SUPER_SPLITS=train DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=4 \
 Both arms use the same target checkpoint, quantization override, GPU topology,
 sampling, client concurrency and server settings. The second omits the drafter
 and speculative config. It is an explicit diagnostic experiment, excluded from
-the default eight configurations. The existing serial CPU download/cleanup
+the default four configurations. The existing serial CPU download/cleanup
 lifecycle is retained. New article receipts capture speculative counter snapshots
 and acceptance deltas; missing, reset or unsupported counters are unavailable,
 not zero. The counters follow [vLLM's speculative-decoding metric definitions](https://docs.vllm.ai/en/v0.20.2/api/vllm/v1/spec_decode/metrics/).
@@ -343,28 +366,60 @@ Sources:
 
 ## Resources, validation and recovery
 
-CPU preparation/access checks → **for each selected profile: CPU download → GPU
-benchmark → CPU cleanup** → CPU aggregation/export. Downloads use `hpg-default`,
-eight CPUs, **128G RAM**, up to eight hours, and **no GPUs**. Setup, cleanup and
-aggregation request eight CPUs and 32G RAM.
-All eight default profiles remain selected, with one GPU worker per profile.
-Cleanup runs after that worker terminates and before the next profile downloads.
-Inspection and cleanup still accept older frozen campaigns containing both conditions.
-At most **eight B200s, 16 CPUs and 200G host RAM** for this campaign at once.
-Muse Spark Open and Beam FP8 request eight GPUs; Beam NVFP4 requests four.
-The Nemotron profiles request at most two GPUs and eight CPUs. Other users'
-jobs and account CPU/RAM/GPU limits still affect scheduling. GPU stages require
-successful CPU access checks and their own CPU download/probe job. Cleanup runs
-after the profile's download and GPU jobs terminate, including failures. The next
-profile downloads only after cleanup succeeds; a cleanup failure blocks further
-large downloads. Independent model failures allow later profiles and diagnostics
-to continue once cleanup succeeds. Jobs remain held until the whole dependency graph is accepted.
-Submission failure cancels only IDs created by that submission.
+The shell launcher defaults to `DENSE_SUPER_SCHEDULER=packed` for the four focused
+profiles. Direct Python/CLI preparation retains serial mode unless passed
+`--scheduler packed`. Other profiles require explicit serial mode. A frozen
+campaign never changes its scheduling mode on resume.
 
-Storage now holds **one target plus its drafter and serving image at a time**,
-rather than every model. Budget roughly **650–750 GB free** for the largest profile
-(Muse Spark Open), its drafter/container, and working space, plus inputs/results.
-Actual free space and image sizes still determine whether it fits. The CPU
+| Wave | Model / replicas | GPUs | CPUs | Host RAM requested |
+|---|---|---:|---:|---:|
+| 1 | Beam NVFP4, one TP4 server | 4 | 16 | 96G |
+| 1 | NVIDIA BF16 MTP, one TP2 server | 2 | 8 | 64G |
+| 1 | NVIDIA NVFP4 MTP, two TP1 servers | 1 + 1 | 4 + 4 | 32G + 32G |
+| 1 total | Three models / four servers | 8 | 32 | 224G |
+| 2 | Muse Spark, one TP8 server | 8 | 16 | 160G |
+
+These fit the supplied cai5724 investment cap of 8 GPUs, 32 CPUs and 250G RAM.
+Host RAM requests are distinct from GPU VRAM. They include headroom over the
+user-supplied sacct batch MaxRSS values from the preceding two-article run:
+NVFP4 8.87G, BF16 19.93G, Beam NVFP4 31.07G, Spark 51.98G. MaxRSS does not prove
+aggregate job memory safety; longer articles and concurrent loading still need
+a hardware smoke. The serial recipe table above retains the previous host RAM
+requests; packed job overrides and their evidence are frozen under scheduler
+in manifest.json. GPU tensor parallelism, sampling and reasoning settings stay
+unchanged. The extra NVFP4 GPU is a second independent replica, not TP2.
+
+Each model has an isolated `profiles/NAME` lifecycle workspace. The two NVFP4
+workers share read-only weights but use separate compilation caches and worker
+locks; atomic article claims prevent duplicate processing. They process the same
+combined 48-article set as every other model, not 48 articles per replica.
+Slurm assigns disjoint GPUs to the independent jobs, which may land on different
+nodes. The scheduler fits the supplied resource cap but cannot guarantee immediate
+cluster availability or globally optimal elapsed time.
+
+Within each wave, CPU setup/download jobs run serially first. All worker jobs
+wait for all wave downloads. Cleanup waits for every worker in the wave, then
+runs serially; the next wave starts only after cleanup succeeds. Thus 128G CPU
+image builds never overlap the 224G GPU wave. Model/startup failures still allow
+cleanup and diagnostic aggregation; failure of cleanup blocks subsequent staging.
+Jobs are held until the entire dependency graph is accepted. Submission failure
+cancels only the newly created IDs. The ordinary cancel/status/verify/resume/export
+commands cover all child jobs. Export collects canonical article results and
+profile lifecycle receipts, excluding all runtime weights and caches.
+
+Packed mode trades disk space for elapsed time. The prior artifact inventories
+were approximately 78.1 GiB (NVFP4), 240.0 GiB (BF16), 285.1 GiB (Beam NVFP4), and
+514.3 GiB (Spark). Staging estimates reserve 80+245+290 GiB plus 128 GiB for scratch
+and results: wave 1 requires approximately **743 GiB free** on a fresh campaign;
+wave 2 requires 648 GiB after wave 1 is removed. CPU preflight checks actual free
+space before each wave and subtracts only existing artifacts in that same wave
+on resume. It fails explicitly when space is insufficient; it never deletes old
+campaigns. Disk estimates are headroom, not a storage quota reservation.
+
+Use `DENSE_SUPER_SCHEDULER=serial` if disk cannot hold the concurrent wave. Serial
+mode retains the one-target-at-a-time lifecycle and the earlier resource requests.
+Downloads use eight CPUs, 128G RAM, up to eight hours and no GPUs. Setup, cleanup
+and aggregation use eight CPUs and 32G RAM, without overlapping GPU waves. The CPU
 download job builds the container first and removes its OCI cache/conversion
 scratch before downloading model weights, reducing peak space. Image builds use
 `apptainer build --mksquashfs-args '-processors 8 -mem 8G'`: compression must not
@@ -433,10 +488,12 @@ python3 "$WORK/code/scripts/benchmark_dense_nemotron_super.py" submit --work "$W
 ```
 
 Resume skips completed articles/configurations and schedules CPU downloads only
-for profiles with pending articles. Retained partial downloads can resume when
+for profiles with pending articles. Packed mode collects completed child results
+first, rebuilds a fresh claim namespace and re-stages only pending profiles;
+cleanup-only stages recover retained completed runtimes. Retained partial downloads can resume when
 available; cleaned weights are downloaded again. A canceled cleanup is recovered
-before a different profile downloads. A campaign runtime lock prevents download,
-cleanup and inference from using its weights concurrently. A failed access setup
+before a different profile downloads. Runtime lifecycle locks prevent download or cleanup while workers hold shared
+read locks; separate per-replica locks and article claims protect concurrent inference. A failed access setup
 is rerun if no ready root runtime receipt exists. Change code, recipe, sampling,
 storage policy or input selection by preparing a **new** campaign. Old campaigns
 continue to use their frozen all-model download code when resumed.
@@ -583,3 +640,19 @@ expected="$(awk '{print $1}' nemotron-super-results.tar.gz.sha256)"
 actual="$(shasum -a 256 nemotron-super-results.tar.gz | awk '{print $1}')"
 test "$expected" = "$actual"
 ```
+
+## Resource evidence for packed runs
+
+Worker gpu-telemetry.jsonl samples now include host_memory from the current
+process cgroup (current/peak/limit bytes when supported), including descendants.
+No whole-node memory usage is substituted. summary/slurm-accounting.json captures
+job and step memory, CPU and allocated-resource accounting when sacct is available.
+Missing accounting remains unavailable rather than zero. Accounting may lag.
+
+The article throughput table remains normalized by summed article wall seconds.
+It now distinguishes GPUs/server from scheduled replica count. It must not be
+read as combined throughput from both NVFP4 replicas. comparison.json additionally
+reports observed_worker_span_goodput, using first worker start to last worker
+finish per model, including startup, overlap and any intervening gaps. Missing
+worker receipts make its document rate unavailable. Keep actual sacct allocation
+costs separate from model-generation throughput.

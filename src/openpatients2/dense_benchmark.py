@@ -221,7 +221,9 @@ def prepare(root, work, expected, download_media=False, *, splits=None, make_arc
             raise ValueError('Invalid split selection')
         refs = {k: v for k, v in refs.items() if v['split'] in splits}
     if article_selector is not None:
-        selected = set(article_selector([{'article_id': k, 'split': v['split']} for k, v in refs.items()]))
+        # Selection may use corpus categories and difficulty metadata. This stays
+        # in CPU preparation; reference records never enter inference prompts.
+        selected = set(article_selector(list(refs.values())))
         if not selected or not selected <= set(refs):
             raise ValueError('Invalid article selection')
         refs = {k: v for k, v in refs.items() if k in selected}

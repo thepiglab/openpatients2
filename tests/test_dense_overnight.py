@@ -36,7 +36,8 @@ def prepared(tmp_path, monkeypatch):
     with gzip.open(root / 'configs/hipergator/dense-benchmark/reference.jsonl.gz', 'wt') as f:
         f.write(''.join(json.dumps(r) + '\n' for r in refs))
     seen = []
-    def media(source, folder, out, download=False):
+    def media(source, folder, out, download=False, max_figures=12):
+        assert max_figures == 12
         seen.append(source['article_id'])
         return {}
     monkeypatch.setattr(b, 'freeze_media', media)

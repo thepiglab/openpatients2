@@ -96,8 +96,9 @@ PROFILES = {
     **BEAM_PROFILES,
 }
 
-# Every publisher configuration, including Muse Spark, participates by default.
-DEFAULT_PROFILES = tuple(PROFILES)
+# Focus longer development runs on the four candidates retained after the smoke.
+# Other publisher recipes remain available explicitly and for frozen campaigns.
+DEFAULT_PROFILES = ('nvfp4', 'bf16', 'spark', 'beam-nvfp4-dflash2')
 
 # Explicit diagnostic arm, excluded from the default publisher comparison.
 # Target bytes, sampling, concurrency, topology and kernels are unchanged.

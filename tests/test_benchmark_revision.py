@@ -281,3 +281,60 @@ async def test_real_timeline_repair_merges_only_failed_atom(tmp_path,monkeypatch
         assert [e['event_id'] for e in result['data']['events']]==['good','bad']
         assert result['data']['events'][0]['description']==good['description']
     finally:await runner.close()
+
+
+def test_diverse_selection_covers_categories_and_varies_difficulty(tmp_path):
+    from openpatients2.benchmark_selection import article_features
+    rows = []
+    for category in ('cardiac', 'oncology', 'veterinary'):
+        for i in range(4):
+            aid = f'{category}-{i}'
+            source = {'text': 'x' * (100 if i % 2 else 150000),
+                      'figures': [] if i % 2 else [{}, {}, {}, {}],
+                      'segments': [] if i % 2 else [{'kind': 'table_row'}]}
+            b.write(tmp_path / f'benchmarks/dense/articles/{aid}/source.json', source)
+            rows.append({'article_id': aid, 'split': 'train', 'primary_stratum': category,
+                         'patients': [{}] * (1 if i % 2 else 6)})
+    selected = select_articles(tmp_path, rows, 6)
+    assert selected == select_articles(tmp_path, list(reversed(rows)), 6)
+    chosen = [r for r in rows if r['article_id'] in selected]
+    assert {c: sum(r['primary_stratum'] == c for r in chosen) for c in ('cardiac','oncology','veterinary')} == {
+        'cardiac': 2, 'oncology': 2, 'veterinary': 2}
+    assert {len(r['patients']) for r in chosen} == {1, 6}
+    assert article_features(rows[0], {'text':'', 'segments':[], 'figures':[]})['clinical_category'] == 'cardiac'
+
+
+def test_category_scores_preserve_missing_denominator_and_split(tmp_path):
+    from openpatients2.benchmark_selection import cohort_report
+    row = copy.deepcopy(next(iter(b.rows(Path(__file__).parent/'fixtures/unified_scoring_reference.jsonl').values())))
+    row['split'] = 'train'
+    aid = row['article_id']
+    other = {**row, 'article_id':'missing'}
+    validation = {**row, 'article_id':'validation', 'split':'validation'}
+    refs = {aid:row, 'missing':other, 'validation':validation}
+    features = {k:{'clinical_category':'cardiac'} for k in refs}
+    receipts = {'model': {aid:{'wall_seconds':10, 'has_prediction':True}, 'missing':None, 'validation':None}}
+    report = cohort_report(refs, {'model':{aid:row}}, receipts, features)
+    train, val = report['groups']
+    assert train['article_ids'] == sorted([aid,'missing'])
+    assert train['arms']['model']['completed'] == 1
+    assert train['arms']['model']['clinical']['recall'] == pytest.approx(.5)
+    assert val['arms']['model']['clinical']['f1'] is None
+    assert val['arms']['model']['throughput']['documents_per_hour'] is None
+
+
+def test_preparation_passes_category_metadata_to_selector(campaign, tmp_path, monkeypatch):
+    from openpatients2 import benchmark_selection as selection
+    captured = []
+    original = selection.select_articles
+    def inspect(root, rows, *args):
+        captured.extend(rows)
+        return original(root, rows, *args)
+    monkeypatch.setattr(selection, 'select_articles', inspect)
+    work = tmp_path/'category-preparation'
+    s.prepare(campaign[2], work, expected=3, profiles=['nvfp4'], with_images=False, limit_articles=1)
+    assert captured and 'patients' in captured[0]
+    m = b.read(work/'manifest.json')
+    assert m['nemotron_super']['selection']['method'] == selection.METHOD
+    assert set(m['nemotron_super']['evaluation_features']) == {r['article_id'] for r in captured}
+    assert 'evaluation_features' not in b.read(work/'arms/nvfp4-text/manifest.json')['extraction']

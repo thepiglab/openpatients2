@@ -20,6 +20,7 @@ if [[ ! -x "$python" ]]; then python=python3; fi
 args=("$phase" --work "$work")
 if [[ "$phase" == worker ]]; then args+=(--arm "$arm"); fi
 if [[ "$phase" == download || "$phase" == cleanup ]]; then args+=(--profile "$arm"); fi
+if [[ "$phase" == packing-preflight ]]; then args+=(--wave "$arm"); fi
 "$python" scripts/benchmark_dense_nemotron_super.py "${args[@]}" &
 child=$!
 terminate() {

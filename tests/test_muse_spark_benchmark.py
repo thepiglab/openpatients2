@@ -15,23 +15,23 @@ from openpatients2.pilot_extract import PilotConfig, PilotRunner
 from test_dense_nemotron_super import campaign
 
 
-@pytest.mark.parametrize('with_images,arm_count', [(False, 8), (True, 8)])
+@pytest.mark.parametrize('with_images,arm_count', [(False, 4), (True, 4)])
 def test_default_includes_spark_access_image_and_eight_gpu_job(campaign, tmp_path, monkeypatch, with_images, arm_count):
     monkeypatch.setattr(b, 'freeze_media', lambda *a, **kw: {})
     work = tmp_path / 'default-models'
     s.prepare(campaign[2], work, expected=3, with_images=with_images)
     m = s.check(work)
-    assert m['nemotron_super']['profiles'] == ['fastino', 'nvfp4', 'bf16', 'lilicorr', 'spark', 'redhat-fp8-dspark', 'beam-fp8-dflash2', 'beam-nvfp4-dflash2']
+    assert m['nemotron_super']['profiles'] == ['nvfp4', 'bf16', 'spark', 'beam-nvfp4-dflash2']
     assert len(m['nemotron_super']['arms']) == arm_count
     assert ('spark-vision' if with_images else 'spark-text') in m['nemotron_super']['arms']
-    assert len({a['profile'] for a in m['nemotron_super']['arms'].values()}) == 8
-    assert sum(a['pixels'] for a in m['nemotron_super']['arms'].values()) == (5 if with_images else 0)
+    assert len({a['profile'] for a in m['nemotron_super']['arms'].values()}) == 4
+    assert sum(a['pixels'] for a in m['nemotron_super']['arms'].values()) == (3 if with_images else 0)
     assert spark.SPARK in m['nemotron_super']['pins'] and spark.DSPARK in m['nemotron_super']['pins']
     assert set(m['nemotron_super']['engines']) == {'nemotron', 'spark', 'beam'}
     plan = s.submit(work, 'account', 'qos', dry_run=True)
     assert plan['maximum_simultaneous_gpus'] == 8
-    assert sum('--gres=gpu:b200:8' in command for command in plan['commands_without_dependencies']) == 2
-    assert sum(command[-3] == 'worker' for command in plan['commands_without_dependencies']) == 8
+    assert sum('--gres=gpu:b200:8' in command for command in plan['commands_without_dependencies']) == 1
+    assert sum(command[-3] == 'worker' for command in plan['commands_without_dependencies']) == 4
 
 
 def test_explicit_spark_uses_its_own_image(campaign, tmp_path, monkeypatch):
@@ -39,8 +39,8 @@ def test_explicit_spark_uses_its_own_image(campaign, tmp_path, monkeypatch):
     work = tmp_path / 'all-models'
     s.prepare(root, work, expected=3, profiles=list(s.DEFAULT_PROFILES), with_images=False)
     m = s.check(work)
-    assert list(m['nemotron_super']['profiles']) == ['fastino', 'nvfp4', 'bf16', 'lilicorr', 'spark', 'redhat-fp8-dspark', 'beam-fp8-dflash2', 'beam-nvfp4-dflash2']
-    assert len(m['nemotron_super']['arms']) == 8
+    assert list(m['nemotron_super']['profiles']) == ['nvfp4', 'bf16', 'spark', 'beam-nvfp4-dflash2']
+    assert len(m['nemotron_super']['arms']) == 4
     assert set(m['nemotron_super']['engines']) == {'nemotron', 'spark', 'beam'}
     assert spark.SPARK in m['nemotron_super']['pins'] and spark.DSPARK in m['nemotron_super']['pins']
     monkeypatch.setenv('CUDA_VISIBLE_DEVICES', '0,1,2,3,4,5,6,7')
@@ -65,12 +65,11 @@ def test_default_runs_each_profile_once_with_supported_modalities(campaign, tmp_
     work = tmp_path / 'vision'
     result = s.prepare(campaign[2], work, expected=3)
     m = s.check(work)
-    assert len(m['nemotron_super']['arms']) == 8
-    assert result['article_runs'] == 8  # training-only default, one training fixture
+    assert len(m['nemotron_super']['arms']) == 4
+    assert result['article_runs'] == 4  # training-only default, one training fixture
     assert m['nemotron_super']['input_policy'] == 'supported-modalities-once'
     assert set(m['nemotron_super']['arms']) == {
-        'fastino-text', 'nvfp4-vision', 'bf16-vision', 'lilicorr-vision', 'spark-vision',
-        'redhat-fp8-dspark-vision', 'beam-fp8-dflash2-text', 'beam-nvfp4-dflash2-text'}
+        'nvfp4-vision', 'bf16-vision', 'spark-vision', 'beam-nvfp4-dflash2-text'}
     assert m['nemotron_super']['arms']['spark-vision'] == {'profile': 'spark', 'pixels': True}
     assert 'fastino-vision' not in m['nemotron_super']['arms']
     for name, definition in m['nemotron_super']['arms'].items():
@@ -87,7 +86,7 @@ def test_legacy_dual_condition_campaign_remains_inspectable_and_cleanable(campai
     def old_selection(with_images):
         return {**current(False), **(current(True) if with_images else {})}
     monkeypatch.setattr(s, 'arm_definitions', old_selection)
-    s.prepare(campaign[2], work, expected=3)
+    s.prepare(campaign[2], work, expected=3, profiles=[k for k in s.PROFILES if k != 'redhat-fp8-no-spec'])
     monkeypatch.setattr(s, 'arm_definitions', current)
     assert len(s.check(work)['nemotron_super']['arms']) == 13
     s.runtime_owner(work, create=True)
