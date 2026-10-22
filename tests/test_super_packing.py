@@ -43,7 +43,9 @@ def test_profile_lifecycles_and_dag_are_isolated(campaign,tmp_path):
     assert sorted(c[-1] for c in workers).count('nvfp4-text')==2
     assert {next(x for x in c if x.startswith('--export=')) .split('OP2_WORKER_REPLICA=')[1] for c in workers} == {'0','1'}
     deps = plan['dependencies']
-    assert len(deps['worker-nvfp4-text-r0'][0][1]) == 3  # all staging finishes first
+    assert deps['worker-nvfp4-text-r0'] == [('afterok',['download-nvfp4'])]
+    assert deps['worker-bf16-text-r0'] == [('afterok',['download-bf16'])]
+    assert len(deps['worker-nvfp4-text-r1'][0][1]) == 3  # extra replica preserves staging headroom
     assert len(deps['cleanup-bf16'][0][1]) == 4  # wait for entire GPU wave
     assert deps['preflight-1'][0][0] == 'afterok'
     assert deps['setup-spark'] == [('afterok',['preflight-1'])]
@@ -117,7 +119,7 @@ def test_held_submission_resolves_wave_dependencies_before_release(campaign,tmp_
     jobs=result['jobs']; nv=[j for j in jobs if j['phase']=='worker' and j['arm']=='nvfp4-text']
     assert len(nv)==2
     assert all('--gres=gpu:b200:1' in j['argv'] and '--mem=32G' in j['argv'] for j in nv)
-    assert next(x for x in nv[0]['argv'] if x.startswith('--dependency=')) == next(x for x in nv[1]['argv'] if x.startswith('--dependency='))
+    assert next(x for x in nv[0]['argv'] if x.startswith('--dependency=')) != next(x for x in nv[1]['argv'] if x.startswith('--dependency='))
     first_release=next(i for i,c in enumerate(calls) if c[:2]==['scontrol','release'])
     assert all(c[0]=='sbatch' for c in calls[:first_release])
     assert b.read(Path(result['ledger']))['status']=='released'
@@ -170,3 +172,36 @@ def test_cleanup_one_profile_cannot_remove_another_models_weights(campaign,tmp_p
     assert result['profiles']['nvfp4']['deleted']
     assert not s.weights_path(p.slot(work,'nvfp4'),s.PROFILES['nvfp4']['model']).exists()
     assert (s.weights_path(p.slot(work,'bf16'),s.PROFILES['bf16']['model'])/'weights.safetensors').exists()
+
+
+def test_every_permitted_pipeline_overlap_fits_allocation(campaign,tmp_path):
+    import itertools
+    work=packed(campaign,tmp_path)
+    result=s.submit(work,'account','qos',dry_run=True)
+    deps=result['dependencies']; ancestors={}
+    for name,conditions in deps.items():
+        direct={k for _,keys in conditions for k in keys}
+        ancestors[name]=direct | set().union(*(ancestors[k] for k in direct))
+    resources={}
+    for cmd in result['commands_without_dependencies']:
+        name=next(x for x in cmd if x.startswith('--job-name=')).split('op2-super-',1)[1]
+        cpu=int(next(x for x in cmd if x.startswith('--cpus-per-task=')).split('=')[1])
+        mem=int(next(x for x in cmd if x.startswith('--mem=')).split('=')[1][:-1])
+        gpu=next((int(x.rsplit(':',1)[1]) for x in cmd if x.startswith('--gres=')),0)
+        resources[name]={'cpus':cpu,'memory_gib':mem,'gpus':gpu}
+    def visit(candidates,totals):
+        for i,name in enumerate(candidates):
+            total={k:totals[k]+resources[name][k] for k in p.LIMITS}
+            assert all(total[k]<=limit for k,limit in p.LIMITS.items()), (name,total)
+            remaining=[n for n in candidates[i+1:] if n not in ancestors[name] and name not in ancestors[n]]
+            visit(remaining,total)
+    visit(list(deps),dict.fromkeys(p.LIMITS,0))
+
+
+def test_legacy_packed_plan_keeps_original_download_barrier(campaign,tmp_path):
+    work=packed(campaign,tmp_path);m=s.check(work)
+    m['nemotron_super']['scheduler']=p.plan(m['nemotron_super']['profiles'],pipelined=False)
+    b.write(work/'manifest.json',m)
+    b.write(work/'prepared.json',{'manifest_sha256':b.sha(work/'manifest.json')})
+    result=s.submit(work,'account','qos',dry_run=True)
+    assert len(result['dependencies']['worker-nvfp4-text-r0'][0][1])==3

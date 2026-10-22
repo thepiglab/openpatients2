@@ -23,7 +23,7 @@ RESOURCES = {
 }
 
 
-def plan(profiles):
+def plan(profiles, *, pipelined=True):
     if not profiles or set(profiles) - RESOURCES.keys():
         raise ValueError('Packed scheduling supports only the four focused profiles; use serial for other recipes')
     waves = []
@@ -44,8 +44,11 @@ def plan(profiles):
         if any(wave['totals'][k] > v for k, v in LIMITS.items()):
             raise ValueError('Packed wave exceeds allocation limits')
     for wave in waves:
+        if pipelined:
+            order = {'nvfp4': 0, 'bf16': 1, 'beam-nvfp4-dflash2': 2, 'spark': 3}
+            wave['profiles'].sort(key=order.__getitem__)
         wave['required_free_gib'] = sum(RESOURCES[p]['artifacts_gib'] for p in wave['profiles']) + 128
-    return {'mode': 'packed', 'version': 1, 'limits': dict(LIMITS),
+    return {'mode': 'packed', 'version': 2 if pipelined else 1, 'limits': dict(LIMITS),
             'resources': {p: dict(RESOURCES[p]) for p in profiles}, 'waves': waves,
             'memory_evidence': 'User-supplied sacct batch MaxRSS, jobs 47060318/21/27/37; requests are not GPU VRAM limits.',
             'storage_note': 'Concurrent residency requires more disk than serial; artifact estimates plus 128 GiB scratch/results reserve.'}
@@ -139,7 +142,7 @@ def preflight(work, wave_index):
 
 
 def submit(work, manifest, account, qos, pending, dry_run):
-    """CPU staging and cleanup are serial barriers around concurrent GPU waves."""
+    """Pipeline staging/inference with bounded host RAM; cleanup is a barrier."""
     jobspecs = []
     wave_last = []
     scheduler = manifest['nemotron_super']['scheduler']
@@ -163,11 +166,23 @@ def submit(work, manifest, account, qos, pending, dry_run):
             staged.append(download)
             last_cpu = [download]
         workers = []
+        early = {k: 0 for k in LIMITS}
         for p in profiles:
             for arm in [a for a in pending if manifest['nemotron_super']['arms'][a]['profile'] == p]:
                 for replica in range(scheduler['resources'][p]['replicas']):
                     key = f'worker-{arm}-r{replica}'
-                    jobspecs.append((key, 'worker', slot(work,p), arm, (p,replica), [('afterok', staged)]))
+                    r = scheduler['resources'][p]
+                    # Start one server per model early, reserving 8 CPUs/128G
+                    # for a later staging job. Extra replicas must not delay a
+                    # different model by consuming that staging headroom.
+                    can_overlap = (scheduler['version'] >= 2 and replica == 0
+                        and early['cpus'] + r['cpus'] + 8 <= scheduler['limits']['cpus']
+                        and early['memory_gib'] + r['memory_gib'] + 128 <= scheduler['limits']['memory_gib'])
+                    dependencies = [f'download-{p}'] if can_overlap else staged
+                    if can_overlap:
+                        for k in LIMITS:
+                            early[k] += r[k]
+                    jobspecs.append((key, 'worker', slot(work,p), arm, (p,replica), [('afterok', dependencies)]))
                     workers.append(key)
         previous_cleanup = []
         for p in profiles:

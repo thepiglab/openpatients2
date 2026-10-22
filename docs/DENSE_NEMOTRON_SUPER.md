@@ -397,10 +397,16 @@ Slurm assigns disjoint GPUs to the independent jobs, which may land on different
 nodes. The scheduler fits the supplied resource cap but cannot guarantee immediate
 cluster availability or globally optimal elapsed time.
 
-Within each wave, CPU setup/download jobs run serially first. All worker jobs
-wait for all wave downloads. Cleanup waits for every worker in the wave, then
-runs serially; the next wave starts only after cleanup succeeds. Thus 128G CPU
-image builds never overlap the 224G GPU wave. Model/startup failures still allow
+New packed plans (version 2) pipeline serial CPU staging with inference. Stage
+NVFP4 first and start replica 0; then stage BF16 and start it; then stage Beam.
+While Beam downloads, NVFP4 replica 0 (32G) + BF16 (64G) + CPU download (128G)
+use at most 224G and 20 CPUs. Once staging finishes, Beam and the second NVFP4
+replica can start, reaching the full 224G/32-CPU/8-GPU wave. Extra replicas are
+deferred to preserve staging headroom. Admission checks reserve 128G and eight
+CPUs for remaining staging, so subsets also fit. Readiness removes a dependency;
+actual start still depends on Slurm resources and queueing. Cleanup waits for
+every worker in the wave, then runs serially; the next wave starts only after
+cleanup succeeds. Version-1 frozen campaigns retain their all-downloads barrier. Model/startup failures still allow
 cleanup and diagnostic aggregation; failure of cleanup blocks subsequent staging.
 Jobs are held until the entire dependency graph is accepted. Submission failure
 cancels only the newly created IDs. The ordinary cancel/status/verify/resume/export

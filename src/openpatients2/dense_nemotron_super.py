@@ -144,7 +144,7 @@ def check(work):
     plan = m['nemotron_super']
     if plan.get('scheduler', {}).get('mode') == 'packed':
         from .super_packing import plan as packing_plan
-        if plan['scheduler'] != packing_plan(plan['profiles']):
+        if plan['scheduler'] != packing_plan(plan['profiles'], pipelined=plan['scheduler'].get('version', 1) >= 2):
             raise ValueError('Packed resource plan differs from frozen code')
     # Older frozen campaigns may contain both conditions. Keep inspection and
     # cleanup compatible while new preparation selects only one per profile.
