@@ -1,0 +1,141 @@
+{
+  "schema_version": "decision-model-research/1",
+  "researched_on": "2026-10-23",
+  "not_a_serving_configuration": true,
+  "leaderboard": {
+    "url": "https://huggingface.co/spaces/multimodalart/jev-decision-index",
+    "payload_url": "https://huggingface.co/spaces/multimodalart/jev-decision-index/resolve/main/data/index.json",
+    "generated_utc": "2026-10-22T20:10:35Z",
+    "sha256": "68f9211771a3ebb6520fb2dd4d303d4e9c9a9649a65e360436e4f5b3ea1855fe",
+    "metric": "scores.balanced_skill (Full score), not the older public-only score",
+    "latency_note": "Publisher leaderboard workload; not complete PubMed article throughput."
+  },
+  "constraint": "Exclude Qwen and other prohibited backbones. Google/Liquid/ModernBERT lineage is a technical screen, not institutional certification of a third-party publisher.",
+  "candidates": [
+    {
+      "model_id": "tattrongvu/Jeffan-31b-1710",
+      "revision": "cebfa86c2bed2b5c83b12e44de4374b20c87fd79",
+      "declared_base": "google/gemma-4-31B-it",
+      "license_metadata": "apache-2.0",
+      "role": "quality anchor",
+      "jev_full_score": 69.75,
+      "board_latency_ms": {
+        "median": 121,
+        "p95": 1514,
+        "mean": 336.2
+      },
+      "source": "https://huggingface.co/tattrongvu/Jeffan-31b-1710/blob/cebfa86c2bed2b5c83b12e44de4374b20c87fd79/README.md",
+      "notes": "Research candidate only; no serving adapter or clinical validation. Board does not identify a served checkpoint revision."
+    },
+    {
+      "model_id": "PelaAI/KnowLine-26B-A4B-Gen2.5",
+      "revision": "7486767f8546beb510e61aef07d0e74219ceb4e3",
+      "declared_base": [
+        "google/gemma-4-26B-A4B-it"
+      ],
+      "license_metadata": "apache-2.0",
+      "role": "efficient MoE candidate",
+      "jev_full_score": 64.57,
+      "board_latency_ms": {
+        "median": 71.7,
+        "p95": 417.5,
+        "mean": 124.9
+      },
+      "source": "https://huggingface.co/PelaAI/KnowLine-26B-A4B-Gen2.5/blob/7486767f8546beb510e61aef07d0e74219ceb4e3/README.md",
+      "notes": "Research candidate only; no serving adapter or clinical validation. Board does not identify a served checkpoint revision."
+    },
+    {
+      "model_id": "LiquidAI/d1-3B",
+      "revision": "051bcc464b01b9f92942b364d9586b0ef5912432",
+      "declared_base": "LiquidAI/LFM2.5-VL-3B",
+      "license_metadata": "other",
+      "role": "small open-weight candidate, custom license",
+      "jev_full_score": 31.12,
+      "board_latency_ms": {
+        "median": 16.1,
+        "p95": 55.9,
+        "mean": 25.9
+      },
+      "source": "https://huggingface.co/LiquidAI/d1-3B/blob/051bcc464b01b9f92942b364d9586b0ef5912432/README.md",
+      "notes": "Research candidate only; no serving adapter or clinical validation. Board does not identify a served checkpoint revision.",
+      "license_name": "LFM Open License v1.0 (custom open-weight license)"
+    },
+    {
+      "model_id": "LiquidAI/d1-omni-600M",
+      "revision": "02b55d7076f15129e59ab3f94783f32c4b088674",
+      "declared_base": "LiquidAI/LFM2.5-Encoder-350M",
+      "license_metadata": "other",
+      "role": "optional cost-floor experiment",
+      "jev_full_score": 11.75,
+      "board_latency_ms": {
+        "median": 10.9,
+        "p95": 34,
+        "mean": 14.5
+      },
+      "source": "https://huggingface.co/LiquidAI/d1-omni-600M/blob/02b55d7076f15129e59ab3f94783f32c4b088674/README.md",
+      "notes": "Research candidate only; no serving adapter or clinical validation. Board does not identify a served checkpoint revision.",
+      "license_name": "LFM Open License v1.0 (custom open-weight license)"
+    },
+    {
+      "model_id": "convaiinnovations/laya",
+      "revision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+      "declared_base": null,
+      "license_metadata": "apache-2.0",
+      "role": "permissive encoder fine-tuning baseline, low general score",
+      "jev_full_score": 9.21,
+      "board_latency_ms": {
+        "median": 5.8,
+        "p95": 222.5,
+        "mean": 32.7
+      },
+      "source": "https://huggingface.co/convaiinnovations/laya/blob/7b928d828b7b0e022f929d9bd2e44165aa270148/README.md",
+      "notes": "Research candidate only; no serving adapter or clinical validation. Board does not identify a served checkpoint revision.",
+      "verified_base_from_model_card": "answerdotai/ModernBERT-large (English root checkpoint)"
+    }
+  ],
+  "optional_unpinned": [
+    {
+      "model_id": "knowledgator/gliclass-v4-edge",
+      "revision": null,
+      "declared_base": "microsoft/deberta-v3-large",
+      "license_metadata": "apache-2.0",
+      "jev_full_score": 31.21,
+      "role": "optional small classifier after DeBERTa provenance review",
+      "notes": "Metadata/card checked; not pinned or approved for automatic download."
+    }
+  ],
+  "excluded": [
+    {
+      "model": "baselabs/elephant-1, baselabs/mammoth-1",
+      "reason": "Qwen3.5 backbones",
+      "source": "https://labs.baseten.co/articles/mammoth-1-and-elephant-1-frontier-decision-models"
+    },
+    {
+      "model": "perplexity-ai/pplx-decider-v1.2",
+      "reason": "Qwen3.8-27B backbone",
+      "source": "https://huggingface.co/perplexity-ai/pplx-decider-v1.2"
+    },
+    {
+      "model": "Microsoft-Decision-1",
+      "reason": "Qwen3.5-9B backbone",
+      "source": "https://commandline.microsoft.com/microsoft-decision-1-model-foundry/"
+    },
+    {
+      "model": "tattrongvu/Jeffan-4B-2010, PelaAI/KnowLine-4B-Gen5.5",
+      "reason": "Qwen3.5-4B; family name alone does not identify backbone"
+    },
+    {
+      "model": "h2oai/h2o-lightning-31b",
+      "reason": "Gemma backbone but custom noncommercial/nonproduction license, restrictions on redistribution and competing-model training; not default release/distillation teacher",
+      "revision": "b6c969e76e37e221aa975c2dae5512e5d34b5735"
+    },
+    {
+      "model": "MLukauskas/amber-0.4b, tardellirs/crivo-1b",
+      "reason": "CC-BY-NC-4.0; not default permissive release candidates"
+    },
+    {
+      "model": "Liquid d1-ultra",
+      "reason": "Hosted product; no verified open checkpoint/backbone. Not equivalent to d1-3B."
+    }
+  ]
+}

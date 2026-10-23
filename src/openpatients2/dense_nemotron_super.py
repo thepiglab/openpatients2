@@ -952,7 +952,14 @@ def submit(work, account, qos, resume=False, dry_run=False):
 
 
 def export(work):
-    check(work)
+    m = check(work)
+    if m['nemotron_super'].get('scheduler', {}).get('mode') == 'packed':
+        if active_jobs(work, {'setup', 'download', 'worker', 'cleanup'}):
+            raise ValueError('Packed campaign lifecycle jobs are still active; export after they stop')
+        # Aggregation can fail before collect (for example on a missing scoring
+        # dependency). Diagnostic archives must still include child arm results.
+        from .super_packing import collect
+        collect(work, m)
     archive = work / 'results.tar.gz'
     with tarfile.open(archive, 'w:gz') as tf:
         def add(path):

@@ -678,6 +678,9 @@ def aggregate(work):
     out = work / 'summary'
     out.mkdir(exist_ok=True)
     reasoning_index = export_fact_index(work, out / 'fact-reasoning.jsonl', completed_paths)
+    from .benchmark_failures import extraction_failures
+    failures = extraction_failures(work, completed_paths)
+    write(out / 'extraction-failures.json', failures)
     write_rows(out / 'predictions.jsonl', [predictions[k] for k in sorted(predictions)])
     scores = score(reference, predictions)
     write(out / 'scores.json', scores)
@@ -722,6 +725,8 @@ def aggregate(work):
                   default_gpus=m.get('extraction', {}).get('gpus_per_endpoint', 1), missing_receipts=missing_worker_receipts),
               'reasoning_capture': dict(sum((Counter(r.get('reasoning_statuses', {})) for r in all_attempts), Counter())),
               'fact_reasoning_index': reasoning_index,
+              'extraction_failures': {'artifact': 'summary/extraction-failures.json',
+                                     'by_task': failures['by_task'], 'by_article': failures['by_article']},
               'output_tokens_per_gpu_article_second': rates['output_tokens_per_gpu_second'],
               'slowest_articles': sorted([{'article_id': r['article_id'], 'seconds': r['wall_seconds']} for r in timing],
                                          key=lambda r: -r['seconds'])[:10],

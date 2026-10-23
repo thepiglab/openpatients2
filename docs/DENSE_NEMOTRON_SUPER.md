@@ -651,6 +651,11 @@ test "$expected" = "$actual"
 
 Worker gpu-telemetry.jsonl samples now include host_memory from the current
 process cgroup (current/peak/limit bytes when supported), including descendants.
+The effective ancestor limit is also recorded when the local cgroup is unlimited.
+Kernel memory.stat fields distinguish anonymous memory from file cache (some
+fields are counters, not bytes); memory.events records OOM events when available.
+These values are not process RSS. GPU telemetry reports expected/observed
+allocation coverage and handles visible device indices remapped by Slurm.
 No whole-node memory usage is substituted. summary/slurm-accounting.json captures
 job and step memory, CPU and allocated-resource accounting when sacct is available.
 Missing accounting remains unavailable rather than zero. Accounting may lag.
@@ -662,3 +667,22 @@ reports observed_worker_span_goodput, using first worker start to last worker
 finish per model, including startup, overlap and any intervening gaps. Missing
 worker receipts make its document rate unavailable. Keep actual sacct allocation
 costs separate from model-generation throughput.
+
+## Reporting and extraction diagnostics
+
+The final aggregate job creates the parent's locked core Python environment even
+when packed setup created environments only inside profile slots. It does not
+download model weights. Direct packed export collects child results first and
+requires setup/download/worker/cleanup jobs to have stopped, so a reporting
+dependency failure cannot silently omit those results from a diagnostic archive.
+
+Each arm writes summary/extraction-failures.json with terminal failed/partial
+tasks, patient/figure identity, errors, failed-item repair history and relative
+task paths. Counts can include dependent failures and assembly wrappers. Completed
+article attempts are not a claim that every extraction task passed.
+
+See [the October 22 analysis](analysis/run-20261022-162221.md) for the recovered
+two-article run and the next diverse development comparison. The new
+[article-profiling design](ARTICLE_PROFILING_DECISIONS.md) is an experimental
+metadata/evidence contract; no decision-model inference or filtering is enabled
+in this campaign.

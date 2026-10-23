@@ -12,6 +12,9 @@ if [[ "$phase" == download || "$phase" == worker ]]; then
   if ! command -v apptainer >/dev/null; then module load apptainer; fi
 fi
 if [[ "$phase" == setup ]]; then uv sync --locked --extra data --no-dev --python 3.12; fi
+# Packed campaigns set up child runtimes only. The parent still needs the
+# locked core dependencies for scoring/lineage after all children are cleaned.
+if [[ "$phase" == aggregate ]]; then uv sync --locked --no-dev --python 3.12; fi
 if [[ "$phase" == worker ]]; then
   export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 HF_DATASETS_OFFLINE=1
 fi

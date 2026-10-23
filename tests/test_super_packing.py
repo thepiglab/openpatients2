@@ -94,6 +94,10 @@ def test_collect_and_export_keep_results_and_exclude_weights(campaign,tmp_path):
         (child/'runtime/weights').mkdir(parents=True)
         (child/'runtime/weights/DO_NOT_EXPORT.safetensors').write_bytes(b'weights')
     assert s.status(work)['complete']
+    # Direct diagnostic export must collect child results even if scoring has
+    # never started (the missing-httpx failure previously skipped this step).
+    s.export(work)
+    assert list((work/'arms').glob('*/results/articles/*/*/receipt.json'))
     report=s.aggregate(work)
     assert report['complete']
     assert s.verify(work)['verified']

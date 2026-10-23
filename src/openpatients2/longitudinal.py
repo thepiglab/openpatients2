@@ -329,12 +329,65 @@ def partial_timeline(value, sources, fact_records, record_id):
     if not shell['events']: return None, quarantine
     combined = PatientTimeline.model_validate(shell)
     if not audit_timeline(combined, sources, fact_records)['structural_source_gates_passed']:
-        # Do not select a winning chronology by source/list order.
-        for raw in shell['edges']: reject('edge', raw, 'combined_graph_conflict')
+        conflicts = _conflicting_order_edges(combined)
+        kept = []
+        for raw in shell['edges']:
+            if raw['edge_id'] in conflicts:
+                reject('edge', raw, 'combined_graph_conflict')
+            else:
+                kept.append(raw)
+        shell['edges'] = kept
+        # Numeric contradictions can exist in an acyclic order. Quarantine
+        # their entire connected constraint component, without choosing a
+        # winning interval or losing unrelated components/interval relations.
+        temporal = [e for e in kept if e['relation'] in {'before', 'after', 'same_time'}]
+        groups = {e['event_id']: {e['event_id']} for e in shell['events']}
+        for edge in temporal:
+            group = groups[edge['from_event_id']] | groups[edge['to_event_id']]
+            for eid in group:
+                groups[eid] = group
+        rejected = set()
+        for group in {frozenset(v) for v in groups.values()}:
+            edges = [e for e in temporal if e['from_event_id'] in group]
+            probe = PatientTimeline.model_validate({**shell, 'edges': edges})
+            if not audit_timeline(probe, sources, fact_records)['structural_source_gates_passed']:
+                rejected.update(e['edge_id'] for e in edges)
         shell['edges'] = []
+        for raw in kept:
+            if raw['edge_id'] in rejected:
+                reject('edge', raw, 'combined_graph_conflict')
+            else:
+                shell['edges'].append(raw)
+        if not audit_timeline(PatientTimeline.model_validate(shell), sources, fact_records)['structural_source_gates_passed']:
+            # Defensive fallback for future audit rules; never publish an
+            # invalid graph just because it was not an ordering conflict.
+            for raw in shell['edges']: reject('edge', raw, 'combined_graph_conflict')
+            shell['edges'] = []
     shell['limitations'].append('Partial timeline: unresolved candidates retained in the task quarantine audit; '
                                 'no completeness or semantic chronology claim.')
     return shell, quarantine
+
+
+def _conflicting_order_edges(timeline):
+    """All members of strict cycles, including equality links; no winner by order."""
+    reach = {e.event_id: {e.event_id} for e in timeline.events}
+    arcs = []
+    for edge in timeline.edges:
+        a, b = edge.from_event_id, edge.to_event_id
+        if edge.relation == 'after': a, b = b, a
+        if edge.relation in {'before', 'after', 'same_time'}:
+            reach[a].add(b)
+            arcs.append((edge, a, b))
+            if edge.relation == 'same_time': reach[b].add(a)
+    for middle in reach:
+        for left in reach:
+            if middle in reach[left]: reach[left].update(reach[middle])
+    cyclic = set()
+    for edge, a, b in arcs:
+        if edge.relation != 'same_time' and a in reach[b]:
+            cyclic.update(eid for eid in reach if eid in reach[a] and a in reach[eid])
+    return {edge.edge_id for edge, a, b in arcs
+            if a in cyclic and b in reach[a] and a in reach[b]}
 
 
 def canonical_timeline_ids(value):

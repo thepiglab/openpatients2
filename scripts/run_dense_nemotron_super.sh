@@ -96,7 +96,7 @@ ref="${DENSE_REF:-HEAD}"
 revision="$(git -C "$repo" rev-parse "$ref^{commit}")"
 for required in scripts/benchmark_dense_nemotron_super.py scripts/dense_nemotron_super.sbatch scripts/vllm_rust_frontend.py \
     scripts/run_dense_nemotron_super.sh src/openpatients2/dense_nemotron_super.py \
-    src/openpatients2/benchmark_selection.py src/openpatients2/staged_timeline.py \
+    src/openpatients2/benchmark_selection.py src/openpatients2/benchmark_failures.py src/openpatients2/staged_timeline.py \
     src/openpatients2/super_packing.py \
     src/openpatients2/semantic_benchmark.py src/openpatients2/speculation_metrics.py \
     scripts/freeze_super_reference.py docs/SEMANTIC_BENCHMARK.md \
