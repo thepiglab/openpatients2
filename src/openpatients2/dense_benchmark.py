@@ -376,6 +376,33 @@ def ledger_metrics(paths):
     return metrics
 
 
+def infrastructure_failures(attempt):
+    """Terminal task transport failures; recovered retries are not failures.
+
+    Inspect task results rather than every ledger entry, so a successful retry
+    does not invalidate an otherwise completed article. Keep all raw outputs.
+    """
+    failures = []
+    transient = {'ReadTimeout', 'ConnectTimeout', 'ConnectError', 'ReadError',
+                 'RemoteProtocolError', 'TimeoutError', 'total_request_deadline'}
+    for folder in ('extraction', 'ehr'):
+        for path in (attempt / folder).rglob('tasks/*.json'):
+            task = read(path)
+            if task.get('status') == 'valid':
+                continue
+            for entry in task.get('attempts', [])[-1:]:
+                response = entry.get('response') or {}
+                status = response.get('http_status')
+                error = response.get('error')
+                if (entry.get('metrics', {}).get('transport_error') or
+                        status in {408, 429} or isinstance(status, int) and status >= 500 or
+                        error in transient or error in {'http_408', 'http_429'} or
+                        isinstance(error, str) and error.startswith('http_5')):
+                    failures.append({'task': task.get('task'), 'file': str(path.relative_to(attempt)),
+                                     'error': error or 'transport_error'})
+    return failures
+
+
 async def run_article(work, item, endpoint, attempt):
     from .pilot_extract import PilotRunner
     from .ehr_pipeline import run_ehr_stages
@@ -406,6 +433,8 @@ async def run_article(work, item, endpoint, attempt):
         runner = ArticleRunner(cfg, attempt / 'extraction', [endpoint], context, 'targeted')
         runner.vision_slots = asyncio.Semaphore(min(2, cfg.get('concurrency_per_endpoint', 64)))
         report = await runner.run(source, image_manifest=media)
+        if infrastructure_failures(attempt):
+            raise RuntimeError('Extraction backend failed; article must be retried')
         receipt['extraction_seconds'] = time.monotonic() - start
         receipt['task_statuses'] = report['task_statuses']
         receipt['patients_extracted'] = report['patients_extracted']
@@ -438,6 +467,11 @@ async def run_article(work, item, endpoint, attempt):
             from .speculation_metrics import snapshot, delta
             receipt['speculation'] = delta(spec_before, await snapshot(endpoint))
         receipt.update(ledger_metrics([attempt / 'extraction/attempts.jsonl', attempt / 'ehr/calls/attempts.jsonl']))
+        failures = infrastructure_failures(attempt)
+        if failures:
+            receipt.update(status='error', error_type='InfrastructureError', retryable=True,
+                           infrastructure_failures=failures,
+                           error='Backend request failed; retained outputs are incomplete, retry this article')
         write(attempt / 'receipt.json', receipt)
     return receipt
 
@@ -589,6 +623,8 @@ async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_ti
                 else:
                     budget_exhausted = False
                     for campaign, item in pending:
+                        if any(p.poll() is not None for p in group.processes):
+                            raise RuntimeError('Model server exited; remaining articles are pending')
                         if budget_seconds is not None and time.monotonic() - monotonic_start + (article_timeout or 900) >= budget_seconds:
                             budget_exhausted = True
                             break
@@ -609,6 +645,8 @@ async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_ti
                                 write(attempt / 'receipt.json', receipt)
                         summary['articles'].append({'article_id': aid, 'campaign': campaign.name, 'status': receipt['status']})
                         print(json.dumps({k: receipt[k] for k in ('article_id', 'status', 'wall_seconds', 'model_calls')}), flush=True)
+                        if receipt.get('error_type') == 'InfrastructureError':
+                            raise RuntimeError('Backend request failed; stopping worker before consuming more articles. Resume retries the affected article.')
                         if any(p.poll() is not None for p in group.processes):
                             raise RuntimeError('Model server exited; remaining articles are pending')
                 await counters('metrics-after.txt')

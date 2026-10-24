@@ -727,6 +727,9 @@ class PilotRunner:
                         continue
                     break
                 except (httpx.HTTPError, ValueError, TypeError, KeyError) as exc:
+                    # Tokenizer transport failures may be wrapped for image requests.
+                    if isinstance(exc, httpx.HTTPError) or isinstance(exc.__cause__, httpx.HTTPError):
+                        entry['metrics']['transport_error'] = True
                     errors = [str(exc)[:4000]]
                     entry['errors'] = errors; attempts.append(entry); self.save_attempt(entry)
                     break

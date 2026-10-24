@@ -13,7 +13,8 @@ from test_dense_benchmark import finish
 
 def packed(campaign, tmp_path):
     work = tmp_path/'packed'
-    s.prepare(campaign[2],work,expected=3,with_images=False,scheduler='packed')
+    s.prepare(campaign[2],work,expected=3,with_images=False,scheduler='packed',
+              profiles=['nvfp4', 'bf16', 'spark', 'beam-nvfp4-dflash2'])
     return work
 
 

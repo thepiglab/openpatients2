@@ -177,7 +177,8 @@ def test_export_excludes_runtime_and_preserves_raw_attempts(tmp_path):
     assert (work / 'results.tar.gz.sha256').exists()
 
 
-def test_article_drives_source_only_and_times_ehr(tmp_path, monkeypatch):
+@pytest.mark.parametrize('backend_failure', [False, True])
+def test_article_drives_source_only_and_times_ehr(tmp_path, monkeypatch, backend_failure):
     from openpatients2 import pilot_extract, ehr_pipeline
     work, refs, m = campaign(tmp_path, 1)
     m['extraction'] = b.extraction_config()
@@ -189,11 +190,15 @@ def test_article_drives_source_only_and_times_ehr(tmp_path, monkeypatch):
         async def run(self, source, *, image_manifest):
             received.append((source, image_manifest))
             assert '/inputs/' in str(source) and 'reference' not in str(source)
+            if backend_failure:
+                b.write(self.output / 'tasks/failed.json', {'task': 'roster', 'status': 'failed',
+                    'attempts': [{'response': {'http_status': 500, 'error': 'http_500'}}]})
             return {'task_statuses': {'valid': 1}, 'patients_extracted': 1, 'selected_articles': 1,
                     'eligible_articles': 1, 'articles': [{}], 'valid_tasks': 1, 'task_count': 1}
         async def close(self):
             pass
     async def ehr(config, source, run, out, endpoints, context, **kwargs):
+        assert not backend_failure  # Don't cascade a dead backend into sidecar stages.
         assert not kwargs.get('supplement_transcriptions') and not kwargs.get('supplement_assets')
         b.write_rows(out / 'data/unified.jsonl', refs)
         return {'articles': [{'errors': {}}]}
@@ -201,6 +206,11 @@ def test_article_drives_source_only_and_times_ehr(tmp_path, monkeypatch):
     monkeypatch.setattr(ehr_pipeline, 'run_ehr_stages', ehr)
     attempt = tmp_path / 'attempt-0000'
     r = asyncio.run(b.run_article(work, m['articles'][0], 'http://127.0.0.1:8600/v1', attempt))
+    if backend_failure:
+        assert r['status'] == 'error' and r['retryable']
+        assert r['error_type'] == 'InfrastructureError'
+        assert not (attempt / 'ehr/data/unified.jsonl').exists()
+        return
     assert r['status'] == 'done' and r['has_prediction']
     assert r['wall_seconds'] >= r['extraction_seconds'] + r['ehr_seconds']
     assert received and r['prediction_sha256']

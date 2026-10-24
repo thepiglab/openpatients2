@@ -116,7 +116,7 @@ def prepare(root, work, expected=None, hours=12, with_images=True, include_test=
             vision_temperature=profile['vision_temperature'], top_k=None, nemotron_thinking=True,
             max_output_tokens=32768, max_retry_tokens=32768, max_length_retry_tokens=49152,
             require_full_output_budget=False, min_output_tokens=16384, timeout_seconds=1200,
-            staged_timeline=True,
+            staged_timeline=True, timeline_segment_batch_size=4, timeline_relation_batch_size=3,
             concurrency_per_endpoint=profile['concurrency'], summary_structured_output=False,
             max_figures=48 if definition['pixels'] else 0, focused_pixels=definition['pixels'])
         from .pilot_extract import PilotConfig
@@ -1136,13 +1136,14 @@ def aggregate(work):
                     attr = None
                 completed = f'{values["completed_articles"]} / {values["planned_articles"]}'
                 lines.append(f'| {name} | {completed} | {quality} | {attr if attr is not None else "unavailable"} |')
-            lines += ['', '| Arm | Output tok/s | Answer tok/s | Doc/s | Doc/h | Output tok/GPU-s | GPUs/server | Scheduled replicas |',
-                      '|---|---:|---:|---:|---:|---:|---:|---:|']
+            lines += ['', '| Arm | Output tok/s | Answer tok/s | Attempt/s | Attempt/h | Prediction/h | Fully valid/h | Output tok/GPU-s | GPUs/server | Scheduled replicas |',
+                      '|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|']
             for name, values in arms.items():
                 rates = values['throughput']
                 cells = ' | '.join(f'{rates[k]:.4f}' if rates[k] is not None else 'unavailable' for k in (
                     'output_tokens_per_second', 'answer_tokens_per_second', 'documents_per_second',
-                    'documents_per_hour', 'output_tokens_per_gpu_second'))
+                    'documents_per_hour', 'prediction_documents_per_hour',
+                    'valid_extraction_documents_per_hour', 'output_tokens_per_gpu_second'))
                 profile = m['nemotron_super']['arms'][name]['profile']
                 replicas = result['scheduler'].get('resources', {}).get(profile, {}).get('replicas', 1)
                 lines.append(f'| {name} | {cells} | {values["gpus_per_server"]} | {replicas} |')

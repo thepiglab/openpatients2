@@ -6,13 +6,56 @@ live patient discovery, source-aware extraction/repair, literal evidence checks,
 caption attribution, measurement-series extraction and unified scorer.
 The obsolete Fastino Lightning launcher and model support have been removed;
 the `fastino` configuration here is the new **Super VL Healthcare** checkpoint.
-The default campaign now focuses on four candidates: NVIDIA NVFP4 + MTP5,
-NVIDIA BF16 + MTP5, Muse Spark Open + DSpark7, and Beam NVFP4 + DFlash2.
+The default campaign focuses on three candidates: NVIDIA NVFP4 + MTP5,
+NVIDIA BF16 + MTP5, and Beam NVFP4 + DFlash2. Spark remains an explicit diagnostic option.
 Fastino, LiLiCorr, RedHat DSpark and Beam FP8 remain explicit diagnostic options.
 Beam BF16 is excluded.
 Each configuration runs **once per article** using its supported modalities:
-three default configurations receive text and images together; Beam NVFP4
+two default configurations receive text and images together; Beam NVFP4
 receives text only. There are no duplicate text-versus-image runs.
+
+## Long focused campaign (October 24)
+
+After committing and transferring these changes to HiPerGator:
+
+```bash
+set -a
+source .env
+set +a
+DENSE_HOURS=72 bash scripts/run_dense_super_long.sh
+```
+
+This dedicated launcher clears old pilot limits, selects all 316 train and 105
+validation articles (1,263 model/article attempts), and excludes test data. Results
+remain split-specific; do not tune on validation results and then call them blinded.
+It uses one packed wave: two independent one-GPU NVFP4 replicas, two GPUs for BF16,
+and four for Beam: eight GPUs, 32 CPUs, 224 GiB requested host RAM. Models start as
+soon as staging and resource dependencies permit; all eight GPUs are not guaranteed
+to be busy during staging or after a faster model finishes. Storage preflight requires
+743 GiB before crediting reusable artifacts. Downloads and cleanup remain CPU jobs.
+
+The 72-hour limit is per GPU worker, not a promise of campaign completion. At the
+previous 48-article rate, BF16 may need a resume for this larger workload; smaller
+timeline batches also change runtime. Resume keeps the frozen code and selection:
+
+```bash
+bash scripts/run_dense_nemotron_super.sh status
+bash scripts/run_dense_nemotron_super.sh resume
+```
+
+Terminal backend/transport failures now leave retryable article receipts and stop
+the worker before consuming additional articles. Successful retries within a task
+are not penalized. Invalid clinical outputs remain finished attempts with validation
+failures. Raw outputs and reasoning remain preserved in both cases. This change does
+not retroactively reclassify old frozen campaigns.
+
+Timeline focus batches are reduced from eight segments/six relation origins to
+four/three, retaining complete primary source context and cross-batch relation
+candidates. This reduces requested output size but does not solve source-only
+context overflow or guarantee valid timelines. Reports distinguish attempt,
+prediction, and fully valid document throughput. Publisher sampling, templates,
+and speculation settings are unchanged; no unvalidated speculation ablation or
+semantic judge is silently added to the long run.
 
 ## Run on HiPerGator
 
@@ -27,7 +70,7 @@ DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=4 bash scripts/run_dense_nemotron_super
 bash scripts/run_dense_nemotron_super.sh status
 
 # After the small campaign passes, run a representative development sample:
-DENSE_SUPER_PROFILES='nvfp4 bf16 spark beam-nvfp4-dflash2' \
+DENSE_SUPER_PROFILES='nvfp4 bf16 beam-nvfp4-dflash2' \
 DENSE_SUPER_SPLITS=train DENSE_SUPER_ARTICLE_IDS='' \
 DENSE_SUPER_LIMIT_ARTICLES=48 DENSE_HOURS=48 bash scripts/run_dense_nemotron_super.sh
 bash scripts/run_dense_nemotron_super.sh status
@@ -36,7 +79,7 @@ WORK="$(cat runs/dense-nemotron-super-last-work.txt)"
 cat "$WORK/summary/comparison.md"
 ```
 
-To stop the current campaign and start a fresh four-configuration smoke after updating:
+To stop the current campaign and start a fresh three-configuration smoke after updating:
 
 ```bash
 bash scripts/run_dense_nemotron_super.sh cancel && \
@@ -52,7 +95,7 @@ Other campaigns are untouched. Downloads and partial results are retained.
 
 The committed reference now contains **526 completed articles: 316 train, 105
 validation, and 105 test**. The default split is **train only**: without a limit,
-four configurations × 316 articles = 1,264 article runs. Use a small development
+three configurations × 316 articles = 948 article runs. Use a small development
 sample first; a full run can exceed one allocation's time limit and require resume.
 Validation and test remain separate explicit selections. This is a development
 comparison, not a blinded clinical validation.
@@ -110,7 +153,7 @@ DENSE_SUPER_PROFILES='nvfp4 lilicorr' DENSE_SUPER_LIMIT_ARTICLES=2 \
   DENSE_HOURS=4 bash scripts/run_dense_nemotron_super.sh
 ```
 
-The four default jobs are `nvfp4-vision`, `bf16-vision`, `spark-vision`, and
+The three default arms are `nvfp4-vision`, `bf16-vision`, and
 `beam-nvfp4-dflash2-text`. The other recipes require explicit DENSE_SUPER_PROFILES. The `-vision` suffix means text and image pixels are
 processed together through the full pipeline. It is not an image-only job.
 Fastino Super and Beam are text-only and never receive pixels. CPU preparation freezes

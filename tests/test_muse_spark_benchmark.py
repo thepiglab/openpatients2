@@ -16,10 +16,11 @@ from test_dense_nemotron_super import campaign
 
 
 @pytest.mark.parametrize('with_images,arm_count', [(False, 4), (True, 4)])
-def test_default_includes_spark_access_image_and_eight_gpu_job(campaign, tmp_path, monkeypatch, with_images, arm_count):
+def test_explicit_spark_access_image_and_eight_gpu_job(campaign, tmp_path, monkeypatch, with_images, arm_count):
     monkeypatch.setattr(b, 'freeze_media', lambda *a, **kw: {})
     work = tmp_path / 'default-models'
-    s.prepare(campaign[2], work, expected=3, with_images=with_images)
+    s.prepare(campaign[2], work, expected=3, with_images=with_images,
+              profiles=['nvfp4', 'bf16', 'spark', 'beam-nvfp4-dflash2'])
     m = s.check(work)
     assert m['nemotron_super']['profiles'] == ['nvfp4', 'bf16', 'spark', 'beam-nvfp4-dflash2']
     assert len(m['nemotron_super']['arms']) == arm_count
@@ -37,7 +38,7 @@ def test_default_includes_spark_access_image_and_eight_gpu_job(campaign, tmp_pat
 def test_explicit_spark_uses_its_own_image(campaign, tmp_path, monkeypatch):
     root = campaign[2]
     work = tmp_path / 'all-models'
-    s.prepare(root, work, expected=3, profiles=list(s.DEFAULT_PROFILES), with_images=False)
+    s.prepare(root, work, expected=3, profiles=['nvfp4', 'bf16', 'spark', 'beam-nvfp4-dflash2'], with_images=False)
     m = s.check(work)
     assert list(m['nemotron_super']['profiles']) == ['nvfp4', 'bf16', 'spark', 'beam-nvfp4-dflash2']
     assert len(m['nemotron_super']['arms']) == 4
@@ -65,12 +66,12 @@ def test_default_runs_each_profile_once_with_supported_modalities(campaign, tmp_
     work = tmp_path / 'vision'
     result = s.prepare(campaign[2], work, expected=3)
     m = s.check(work)
-    assert len(m['nemotron_super']['arms']) == 4
-    assert result['article_runs'] == 4  # training-only default, one training fixture
+    assert len(m['nemotron_super']['arms']) == 3
+    assert result['article_runs'] == 3  # training-only default, one training fixture
     assert m['nemotron_super']['input_policy'] == 'supported-modalities-once'
     assert set(m['nemotron_super']['arms']) == {
-        'nvfp4-vision', 'bf16-vision', 'spark-vision', 'beam-nvfp4-dflash2-text'}
-    assert m['nemotron_super']['arms']['spark-vision'] == {'profile': 'spark', 'pixels': True}
+        'nvfp4-vision', 'bf16-vision', 'beam-nvfp4-dflash2-text'}
+    assert 'spark' not in m['nemotron_super']['profiles']
     assert 'fastino-vision' not in m['nemotron_super']['arms']
     for name, definition in m['nemotron_super']['arms'].items():
         arm = b.read(work / 'arms' / name / 'manifest.json')
