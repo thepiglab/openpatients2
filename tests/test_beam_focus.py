@@ -144,3 +144,32 @@ async def test_length_failure_splits_focus_without_discarding_attempts(tmp_path,
         {'article_id': 'PMC1.1', 'record_id': 'PMC1.1:p1'}, 0, sources)
     assert result['status'] == 'valid' and len(result['attempts']) == 3
     assert result['stage_coverage'][0]['status'] == 'replaced_by_split'
+
+
+def test_shared_artifacts_survive_donor_cleanup(tmp_path, monkeypatch):
+    from contextlib import nullcontext
+    root = tmp_path / 'campaign'
+    donor = root / 'profiles/beam-nvfp4-dflash2'
+    target = root / 'profiles/beam-nvfp4-no-spec'
+    for p in (donor, target):
+        (p / 'runtime').mkdir(parents=True)
+    b.write(donor / 'runtime/active-profile.json', {'ready': True})
+    source = s.weights_path(donor, beam.NVFP4)
+    source.mkdir(parents=True)
+    (source / 'weights.safetensors').write_bytes(b'fixture')
+    (source / '.cache').mkdir()
+    (source / '.cache/private').write_text('not shared')
+    image = s.engine(beam.PROFILES['beam-nvfp4-dflash2'])['sif']
+    (donor / 'runtime' / image).write_bytes(b'image')
+    manifest = {'nemotron_super': {'profiles': ['beam-nvfp4-dflash2', 'beam-nvfp4-no-spec'], 'arms': {'arm': {}}}}
+    monkeypatch.setattr(s, 'check', lambda p: manifest)
+    monkeypatch.setattr(s, 'runtime_lock', lambda *a, **kw: nullcontext())
+    monkeypatch.setattr(s, 'validate_runtime', lambda *a: None)
+    assert s.reuse_packed_artifacts(target, 'beam-nvfp4-no-spec') == {beam.NVFP4}
+    dest = s.weights_path(target, beam.NVFP4)
+    assert (dest / 'weights.safetensors').stat().st_ino == (source / 'weights.safetensors').stat().st_ino
+    assert not (dest / '.cache').exists()
+    import shutil
+    shutil.rmtree(donor)
+    assert (dest / 'weights.safetensors').read_bytes() == b'fixture'
+    assert (target / 'runtime' / image).read_bytes() == b'image'

@@ -613,6 +613,53 @@ def build_image(work, sif, image):
             temporary.unlink()
 
 
+def reuse_packed_artifacts(work, profile_name):
+    """Hard-link verified immutable artifacts from a finished sibling download.
+
+    Unlinking one runtime cannot remove another runtime's hard links. Never
+    share mutable caches, and never update a linked checkpoint via HF download.
+    """
+    if work.parent.name != 'profiles':
+        return set()
+    parent = work.parent.parent
+    manifest = check(parent)
+    from .super_packing import slot
+    profile = PROFILES[profile_name]
+    reused = set()
+    for donor_name in manifest['nemotron_super']['profiles']:
+        donor = slot(parent, donor_name)
+        if donor == work or not (donor / 'runtime/active-profile.json').exists():
+            continue
+        with runtime_lock(donor, shared=True):
+            marker = b.read(donor / 'runtime/active-profile.json')
+            if not marker.get('ready'):
+                continue
+            dm = check(donor)
+            arm = next(iter(dm['nemotron_super']['arms']))
+            validate_runtime(donor, arm)
+            dp = PROFILES[donor_name]
+            if engine(dp) == engine(profile):
+                source = donor / 'runtime' / engine(dp)['sif']
+                target = work / 'runtime' / engine(profile)['sif']
+                if not target.exists():
+                    os.link(source, target)
+            for model in set(profile_models(profile_name)) & set(profile_models(donor_name)):
+                source, target = weights_path(donor, model), weights_path(work, model)
+                if target.exists():
+                    continue  # Resume verifies/downloads its own existing snapshot.
+                if any(p.is_symlink() for p in source.rglob('*')):
+                    raise ValueError('Refusing symlink checkpoint reuse')
+                target.parent.mkdir(parents=True, exist_ok=True)
+                temporary = target.with_name(target.name + '.linking')
+                if temporary.exists():
+                    shutil.rmtree(temporary)
+                shutil.copytree(source, temporary, copy_function=os.link,
+                                ignore=shutil.ignore_patterns('.cache'))
+                temporary.rename(target)
+                reused.add(model)
+    return reused
+
+
 @exclusive_runtime
 def download(work, profile_name):
     m = check(work)
@@ -630,6 +677,7 @@ def download(work, profile_name):
     token, cache = download_environment(work)
     profile = PROFILES[profile_name]
     models_to_download = profile_models(profile_name)
+    reused = reuse_packed_artifacts(work, profile_name)
     # Build the image before downloading the large target so OCI layers and
     # Apptainer conversion scratch do not overlap the full model on disk.
     selected_engine = engine(profile)
@@ -643,6 +691,15 @@ def download(work, profile_name):
     for model in models_to_download:
         pin = m['nemotron_super']['pins'][model]
         path = owned_path(work, weights_path(work, model))
+        if model in reused:
+            validate_checkpoint(path, model, require_weights=True)
+            continue
+        # A resumed staging job must not let HF mutate a sibling's inode.
+        for existing in path.rglob('*') if path.exists() else []:
+            if existing.is_file() and existing.stat().st_nlink > 1:
+                temporary = existing.with_name(existing.name + '.private')
+                shutil.copy2(existing, temporary)
+                temporary.replace(existing)
         snapshot_download(repo_id=model, revision=pin['revision'], local_dir=path,
             cache_dir=cache / 'hub', token=token,
             allow_patterns=['*.json', '*.jinja', '*.py', '*.safetensors', '*.model', '*.tiktoken', '*.txt',

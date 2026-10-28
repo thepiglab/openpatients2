@@ -26,8 +26,11 @@ NVFP4 on Blackwell and supports two replicas on eight GPUs. See the
 
 Each worker requests 16 CPUs and 96 GiB host RAM. Total: eight B200s, 32 CPUs,
 192 GiB host RAM, below the group's 250 GiB limit. Two replicas of one configuration
-share one downloaded target/drafter. Two ablation configurations have isolated
-runtimes and currently download separate copies. Free-space preflight requires
+share one downloaded target/drafter. Ablation configurations keep isolated runtimes but reuse completed sibling
+checkpoints and the identical container through hard links. Only the speculative
+arm loads the drafter. Mutable caches are never shared; cleanup unlinks each
+runtime after the worker barrier, preserving other links. A resumed download
+privatizes linked files before any update. Free-space preflight conservatively requires
 418 GiB for `long`, or 708 GiB for the two-arm pilots, including 128 GiB reserve.
 CPU downloads are serialized and overlap an eligible already-downloaded worker;
 CPU cleanup follows the GPU wave. Initial staging and tail completion can leave
