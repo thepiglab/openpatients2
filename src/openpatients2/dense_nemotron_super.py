@@ -1,8 +1,8 @@
-"""Frozen clinical extraction benchmark for Nemotron Super, Muse Spark and Beam.
+"""Frozen clinical extraction benchmark, defaulting to Beam NVFP4.
 
 CPU access preflight -> per-profile CPU download, GPU benchmark, CPU cleanup.
 CPU jobs hash/score/export; GPU stages serve local files. Packed mode overlaps
-smaller models within the group budget; Spark uses eight B200s alone.
+workers within the group budget; historical model profiles remain explicit.
 """
 from __future__ import annotations
 
@@ -89,7 +89,7 @@ def prepare(root, work, expected=None, hours=12, with_images=True, include_test=
                           for model in [PROFILES[name]['model']] + ([PROFILES[name]['drafter']] if 'drafter' in PROFILES[name] else [])},
                  'engines': {p.get('engine', 'nemotron'): engine(p) for name in selected for p in [PROFILES[name]]},
                  'timing_policy': 'One active article per server; synthetic probes are outside article timing. '
-                     + ('Budgeted parallel waves; NVFP4 replicas claim distinct articles. At most eight B200s.' if scheduler == 'packed'
+                     + ('Budgeted parallel waves; replicas of each profile claim distinct articles. At most eight B200s.' if scheduler == 'packed'
                         else 'Configurations run sequentially, using at most eight B200s.')})
     m['files'] = b.inventory(work, ['code', 'inputs', 'reference'])
     for name, definition in definitions.items():
@@ -101,6 +101,7 @@ def prepare(root, work, expected=None, hours=12, with_images=True, include_test=
         am = copy.deepcopy(m)
         am.pop('nemotron_super')
         am.update(experiment_arm=name, arm_profile=definition, text_only=not definition['pixels'],
+                  context=profile.get('context', m['context']),
                   capture_speculation_metrics=True,
                   model={'id': profile['model'], 'revision': PINS[profile['model']]['revision']},
                   drafter=({'id': profile['drafter'], 'revision': PINS[profile['drafter']]['revision']}
@@ -119,6 +120,10 @@ def prepare(root, work, expected=None, hours=12, with_images=True, include_test=
             staged_timeline=True, timeline_segment_batch_size=4, timeline_relation_batch_size=3,
             concurrency_per_endpoint=profile['concurrency'], summary_structured_output=False,
             max_figures=48 if definition['pixels'] else 0, focused_pixels=definition['pixels'])
+        if profile.get('engine') == 'beam':
+            am['extraction'].update(timeline_bounded_context=True,
+                timeline_segment_batch_size=2, timeline_relation_batch_size=2,
+                timeline_target_batch_size=8)
         from .pilot_extract import PilotConfig
         PilotConfig.model_validate(am['extraction'])
         if not definition['pixels']:
@@ -346,7 +351,8 @@ def serving(work, name, shard=0):
         model_path=str(weights_path(work, profile['model'])), model_id=profile['model'],
         served_model_name=profile.get('served_model', 'nemotron-3.5-super-vl'), container_python='/usr/bin/python3',
         replicas=1, tensor_parallel=profile['gpus'], expert_parallel=profile.get('expert_parallel', False),
-        reasoning_parser=profile.get('reasoning_parser', 'nemotron_v3'), max_model_len=b.read(work / 'manifest.json')['context'],
+        reasoning_parser=profile.get('reasoning_parser', 'nemotron_v3'),
+        max_model_len=b.read(work / 'arms' / name / 'manifest.json')['context'],
         max_num_seqs=profile['max_num_seqs'], max_batched_tokens=profile['max_batched_tokens'],
         gpu_memory_utilization=profile['gpu_memory'], speculative_config=spec,
         kv_cache_dtype=profile.get('kv_cache_dtype', 'auto'),
@@ -361,7 +367,7 @@ def serving(work, name, shard=0):
             'VLLM_CACHE_ROOT': str(cache / 'vllm'), 'TRITON_CACHE_DIR': str(cache / 'triton'),
             'TORCHINDUCTOR_CACHE_DIR': str(cache / 'inductor'), 'XDG_CACHE_HOME': str(cache / 'xdg'),
             **environment, 'VLLM_ENGINE_READY_TIMEOUT_S': str(STARTUP_TIMEOUT_SECONDS)},
-        validation_note=profile['adaptation'] + ' Context capped at 65,536 for the project comparison; requires real B200 smoke.')
+        validation_note=profile['adaptation'] + ' Requires real B200 smoke before article execution.')
 
 
 CPU_PROBE = '''
@@ -700,7 +706,7 @@ def download(work, profile_name):
             'download_seconds': receipt['download_seconds']}
 
 
-async def smoke(endpoint, logs, config, pixels):
+async def smoke(endpoint, logs, config, pixels, context=b.CONTEXT):
     """Require identical live tokenize/generation prompt counts before real data."""
     import base64
     import struct
@@ -739,7 +745,7 @@ async def smoke(endpoint, logs, config, pixels):
             count = response.json()
             if (type(count.get('count')) is not int or count['count'] < 1
                     or not isinstance(count.get('tokens'), list) or len(count['tokens']) != count['count']
-                    or type(count.get('max_model_len')) is not int or count['max_model_len'] < b.CONTEXT):
+                    or type(count.get('max_model_len')) is not int or count['max_model_len'] < context):
                 raise ValueError('Invalid exact tokenizer contract')
             body = client.body('case_context', prompt, 64)
             body.update(stream=False)
@@ -752,10 +758,11 @@ async def smoke(endpoint, logs, config, pixels):
             results.append({'pixels': isinstance(prompt[0]['content'], list), 'prompt_tokens': count['count'],
                 'temperature': body['temperature'], 'top_p': body['top_p'],
                 'chat_template_kwargs': kwargs, 'response': answer})
-    b.write(logs / 'smoke.json', {'passed': True, 'outside_article_timing': True, 'cases': results})
+    b.write(logs / 'smoke.json', {'passed': True, 'outside_article_timing': True,
+                                'required_context': context, 'cases': results})
 
 
-async def reasoning_smoke(endpoint, logs, config):
+async def reasoning_smoke(endpoint, logs, config, context=b.CONTEXT):
     """Require saved reasoning through the actual streaming extraction client.
 
     Uses the production template/sampling/stop settings, including Spark xhigh
@@ -768,7 +775,7 @@ async def reasoning_smoke(endpoint, logs, config):
     receipt = {'passed': False, 'outside_article_timing': True, 'synthetic': True,
                'messages': messages, 'model_id': config['model_id'], 'revision': config['revision']}
     async with httpx.AsyncClient(timeout=600) as http:
-        runner = PilotRunner(config, logs / 'reasoning-smoke-client', [endpoint], b.CONTEXT, 'targeted', http=http)
+        runner = PilotRunner(config, logs / 'reasoning-smoke-client', [endpoint], context, 'targeted', http=http)
         try:
             client = runner.clients[0]
             receipt['request'] = client.body('case_context', messages, 512)
@@ -828,9 +835,10 @@ async def _worker(work, name):
     profile = PROFILES[definition['profile']]
     validate_runtime(work, name)
     async def startup(endpoint, logs):
-        config = b.read(arm / 'manifest.json')['extraction']
-        await smoke(endpoint, logs, config, definition['pixels'])
-        await reasoning_smoke(endpoint, logs, config)
+        manifest = b.read(arm / 'manifest.json')
+        config = manifest['extraction']
+        await smoke(endpoint, logs, config, definition['pixels'], manifest['context'])
+        await reasoning_smoke(endpoint, logs, config, manifest['context'])
     replica = int(os.environ.get('OP2_WORKER_REPLICA', '0'))
     return await b.worker(arm, replica, campaigns=[arm],
         serving_factory=lambda _work, shard, _logs: serving(work, name, shard), runtime_probe=gpu_probe(profile),
@@ -990,7 +998,7 @@ def export(work):
 
 def aggregate(work):
     from .unified_scoring import score
-    from .benchmark_reporting import throughput
+    from .benchmark_reporting import throughput, paired_speculation
     def f2(counts):
         denominator = 5 * counts['tp'] + 4 * counts['fn'] + counts['fp']
         return 5 * counts['tp'] / denominator if denominator else None
@@ -1051,9 +1059,8 @@ def aggregate(work):
             'recipe': PROFILES[m['nemotron_super']['arms'][name]['profile']],
             'report': report, 'measured_worker_gpu_seconds': report['summed_worker_seconds'] * PROFILES[m['nemotron_super']['arms'][name]['profile']]['gpus']}
                  for name, report in reports.items()},
-        'interpretation': 'Publisher-recipe comparison, not an isolated quantization/speculation ablation. '
-            'Sampling, GPU counts, engine concurrency and client concurrency differ by published recipe. '
-            'LiLiCorr is the SAME NVFP4 target with a separate drafter, not an independent target model. '
+        'interpretation': 'Pinned serving comparison. Beam speculation arms share the same target, sampling, context and concurrency; '
+            'only the drafter configuration differs. Comparisons across other model families can differ in all those settings. '
             'Text arms share identical sources/captions; vision arms are reported separately. '
             'Full scores retain every planned reference, including failed/no predictions. Matched scores on partial runs may be selection-biased. '
             'Article GPU seconds exclude queue/setup/startup; worker GPU seconds include startup/probes/retries. '
@@ -1064,6 +1071,7 @@ def aggregate(work):
     from .benchmark_selection import cohort_report
     cohorts = cohort_report(refs, predictions, receipts, m['nemotron_super'].get('evaluation_features', {}))
     result['scheduler'] = m['nemotron_super'].get('scheduler', {'mode': 'serial'})
+    result['beam_speculation_comparison'] = paired_speculation(receipts, m['nemotron_super']['arms'])
     if result['scheduler']['mode'] == 'packed':
         from .super_packing import capture_accounting
         capture_accounting(work)
@@ -1092,7 +1100,7 @@ def aggregate(work):
     lines = ['# Clinical model comparison', '', f'Complete: {result["complete"]}. Test evaluated: {result["test_evaluated"]}.', '']
     lines += ['Category and difficulty breakdowns, with article membership and coverage: [cohorts.md](cohorts.md) and cohorts.json.', '']
     if result['scheduler']['mode'] == 'packed':
-        lines += ['Packed execution: NVFP4 uses two independent TP1 replicas, with unchanged model sampling. '
+        lines += ['Packed execution: GPU counts and independent replica counts are recorded in scheduler.resources. '
                   'Article throughput below divides by summed article seconds; it is not aggregate replica throughput. '
                   'See observed_worker_span_goodput in comparison.json for overlap-aware wall-time rates, '
                   'and slurm-accounting.json / worker host_memory telemetry for resource evidence.', '']
@@ -1111,6 +1119,17 @@ def aggregate(work):
                      f'{tasks.get("failed", 0)} | {tasks.get("partial", 0)} | '
                      f'{report["articles_with_ehr_errors"]} | {length if length is not None else "unavailable"} |')
     lines.append('')
+    lines += ['## Tokens per completed article', '',
+              'Includes every extraction, timeline, EHR and repair call; input includes repeated prompts, '
+              'not just unique source text. Output includes reasoning. Unknown usage is not zero.', '',
+              '| Arm | Mean input tokens | Mean output tokens | Mean reasoning tokens | Mean calls |',
+              '|---|---:|---:|---:|---:|']
+    for name, report in reports.items():
+        rates = report['throughput']
+        values = [rates[k] for k in ('mean_input_tokens_per_article', 'mean_output_tokens_per_article',
+                                     'mean_reasoning_tokens_per_article', 'mean_model_calls_per_article')]
+        lines.append('| ' + name + ' | ' + ' | '.join(f'{v:,.1f}' if v is not None else 'unavailable' for v in values) + ' |')
+    lines.append('')
     lines += ['## Speculative decoding diagnostics', '',
               '| Arm | Articles with counters / completed | Accepted draft tokens / drafted | Acceptance |',
               '|---|---:|---:|---:|']
@@ -1123,6 +1142,12 @@ def aggregate(work):
         lines.append(f'| {name} | {spec["articles_measured"]} / {spec["articles_expected"]} | {counts} | {label} |')
     lines += ['', 'Counter differences exclude startup probes. Missing/reset/unsupported counters are unavailable; '
               'acceptance alone does not measure speedup. Compare an otherwise identical speculation-off arm.', '']
+    for comparison in result['beam_speculation_comparison']:
+        ratio = comparison['pipeline_speedup']
+        label = f'{ratio:.3f}x' if ratio is not None else 'unavailable'
+        lines += [f'Beam matched pipeline speedup for {comparison["candidate"]["arm"]} versus speculation off: '
+                  f'{label} ({comparison["articles"]} matched articles). Greater than 1 is faster. '
+                  'Compare matched quality and output lengths before selecting a winner.', '']
     for scope, splits in metrics.items():
         for split, arms in splits.items():
             lines += [f'## {scope}: {split}', '', '| Arm | Completed / planned | Precision | Recall | Item F1 | F2 | Attribute accuracy |',

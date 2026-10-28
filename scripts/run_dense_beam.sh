@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Beam only. Freeze a matched speculation experiment before the full campaign.
+set -euo pipefail
+repo="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
+mode="${1:-pilot}"
+if [[ $# -gt 0 ]]; then shift; fi
+export DENSE_SUPER_SCHEDULER=packed DENSE_SUPER_WITH_IMAGES=0 DENSE_INCLUDE_TEST=0
+export DENSE_SUPER_ARTICLE_IDS='' DENSE_SUPER_EXPECTED=''
+case "$mode" in
+  pilot|short-draft)
+    speculative=beam-nvfp4-dflash2
+    if [[ "$mode" == short-draft ]]; then speculative=beam-nvfp4-dflash2-short; fi
+    export DENSE_SUPER_PROFILES="$speculative beam-nvfp4-no-spec"
+    export DENSE_SUPER_SPLITS=train DENSE_SUPER_LIMIT_ARTICLES="${DENSE_BEAM_PILOT_ARTICLES:-48}"
+    export DENSE_HOURS="${DENSE_HOURS:-24}"
+    ;;
+  long)
+    profile="${DENSE_BEAM_PROFILE:-beam-nvfp4-dflash2}"
+    case "$profile" in
+      beam-nvfp4-dflash2|beam-nvfp4-no-spec|beam-nvfp4-dflash2-short) ;;
+      *) echo 'Choose a supported Beam NVFP4 profile in DENSE_BEAM_PROFILE.' >&2; exit 2;;
+    esac
+    export DENSE_SUPER_PROFILES="$profile" DENSE_SUPER_SPLITS='train validation'
+    export DENSE_SUPER_LIMIT_ARTICLES='' DENSE_HOURS="${DENSE_HOURS:-72}"
+    ;;
+  *) echo 'Usage: run_dense_beam.sh [pilot|short-draft|long] [new-work-directory]' >&2; exit 2;;
+esac
+exec bash "$repo/scripts/run_dense_nemotron_super.sh" "$@"

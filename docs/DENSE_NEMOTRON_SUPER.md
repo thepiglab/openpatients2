@@ -6,56 +6,31 @@ live patient discovery, source-aware extraction/repair, literal evidence checks,
 caption attribution, measurement-series extraction and unified scorer.
 The obsolete Fastino Lightning launcher and model support have been removed;
 the `fastino` configuration here is the new **Super VL Healthcare** checkpoint.
-The default campaign focuses on three candidates: NVIDIA NVFP4 + MTP5,
-NVIDIA BF16 + MTP5, and Beam NVFP4 + DFlash2. Spark remains an explicit diagnostic option.
-Fastino, LiLiCorr, RedHat DSpark and Beam FP8 remain explicit diagnostic options.
-Beam BF16 is excluded.
-Each configuration runs **once per article** using its supported modalities:
-two default configurations receive text and images together; Beam NVFP4
-receives text only. There are no duplicate text-versus-image runs.
+The default campaign now focuses exclusively on **Beam NVFP4**, with two
+independent TP4 replicas using eight B200s. NVIDIA, Spark, Fastino, LiLiCorr,
+RedHat and Beam FP8 remain explicit diagnostic recipes for historical comparisons.
+Beam is text-only: captions are included, but images are not inspected.
 
-## Long focused campaign (October 24)
+## Beam-only campaign (October 28)
 
-After committing and transferring these changes to HiPerGator:
-
-```bash
-set -a
-source .env
-set +a
-DENSE_HOURS=72 bash scripts/run_dense_super_long.sh
-```
-
-This dedicated launcher clears old pilot limits, selects all 316 train and 105
-validation articles (1,263 model/article attempts), and excludes test data. Results
-remain split-specific; do not tune on validation results and then call them blinded.
-It uses one packed wave: two independent one-GPU NVFP4 replicas, two GPUs for BF16,
-and four for Beam: eight GPUs, 32 CPUs, 224 GiB requested host RAM. Models start as
-soon as staging and resource dependencies permit; all eight GPUs are not guaranteed
-to be busy during staging or after a faster model finishes. Storage preflight requires
-743 GiB before crediting reusable artifacts. Downloads and cleanup remain CPU jobs.
-
-The 72-hour limit is per GPU worker, not a promise of campaign completion. At the
-previous 48-article rate, BF16 may need a resume for this larger workload; smaller
-timeline batches also change runtime. Resume keeps the frozen code and selection:
+See [BEAM_FHIR.md](BEAM_FHIR.md) for failure analysis, the matched speculation
+pilot, per-article token reporting, the long-run command and the new terminology
+and FHIR export stage.
 
 ```bash
-bash scripts/run_dense_nemotron_super.sh status
-bash scripts/run_dense_nemotron_super.sh resume
+# Same 48 diverse training articles: DFlash2 on versus off, four GPUs each.
+bash scripts/run_dense_beam.sh pilot
+# After comparing matched quality and throughput, select a configuration:
+DENSE_BEAM_PROFILE=beam-nvfp4-dflash2 bash scripts/run_dense_beam.sh long
 ```
 
-Terminal backend/transport failures now leave retryable article receipts and stop
-the worker before consuming additional articles. Successful retries within a task
-are not penalized. Invalid clinical outputs remain finished attempts with validation
-failures. Raw outputs and reasoning remain preserved in both cases. This change does
-not retroactively reclassify old frozen campaigns.
-
-Timeline focus batches are reduced from eight segments/six relation origins to
-four/three, retaining complete primary source context and cross-batch relation
-candidates. This reduces requested output size but does not solve source-only
-context overflow or guarantee valid timelines. Reports distinguish attempt,
-prediction, and fully valid document throughput. Publisher sampling, templates,
-and speculation settings are unchanged; no unvalidated speculation ablation or
-semantic judge is silently added to the long run.
+The long run uses two replicas claiming different articles, sharing the weights.
+It requests eight B200s, 32 CPUs and 192 GiB host RAM, with 418 GiB storage
+preflight including scratch reserve. The ablation pilot uses isolated copies of
+the target and needs 708 GiB. CPU download/cleanup and pipelined staging remain.
+`run_dense_super_long.sh` delegates to Beam-only long mode. Both launchers exclude
+test data; long mode selects all train and validation articles. The 72-hour limit
+is per worker and does not guarantee completion. Resume uses the frozen code.
 
 ## Run on HiPerGator
 
@@ -70,7 +45,7 @@ DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=4 bash scripts/run_dense_nemotron_super
 bash scripts/run_dense_nemotron_super.sh status
 
 # After the small campaign passes, run a representative development sample:
-DENSE_SUPER_PROFILES='nvfp4 bf16 beam-nvfp4-dflash2' \
+DENSE_SUPER_PROFILES='beam-nvfp4-dflash2' \
 DENSE_SUPER_SPLITS=train DENSE_SUPER_ARTICLE_IDS='' \
 DENSE_SUPER_LIMIT_ARTICLES=48 DENSE_HOURS=48 bash scripts/run_dense_nemotron_super.sh
 bash scripts/run_dense_nemotron_super.sh status
@@ -79,7 +54,7 @@ WORK="$(cat runs/dense-nemotron-super-last-work.txt)"
 cat "$WORK/summary/comparison.md"
 ```
 
-To stop the current campaign and start a fresh three-configuration smoke after updating:
+To stop the current campaign and start a fresh Beam-only smoke after updating:
 
 ```bash
 bash scripts/run_dense_nemotron_super.sh cancel && \
@@ -95,7 +70,7 @@ Other campaigns are untouched. Downloads and partial results are retained.
 
 The committed reference now contains **526 completed articles: 316 train, 105
 validation, and 105 test**. The default split is **train only**: without a limit,
-three configurations × 316 articles = 948 article runs. Use a small development
+one configuration × 316 articles = 316 article runs. Use a small development
 sample first; a full run can exceed one allocation's time limit and require resume.
 Validation and test remain separate explicit selections. This is a development
 comparison, not a blinded clinical validation.
@@ -153,8 +128,7 @@ DENSE_SUPER_PROFILES='nvfp4 lilicorr' DENSE_SUPER_LIMIT_ARTICLES=2 \
   DENSE_HOURS=4 bash scripts/run_dense_nemotron_super.sh
 ```
 
-The three default arms are `nvfp4-vision`, `bf16-vision`, and
-`beam-nvfp4-dflash2-text`. The other recipes require explicit DENSE_SUPER_PROFILES. The `-vision` suffix means text and image pixels are
+The default arm is `beam-nvfp4-dflash2-text`. NVIDIA vision arms remain available explicitly. The other recipes require explicit DENSE_SUPER_PROFILES. The `-vision` suffix means text and image pixels are
 processed together through the full pipeline. It is not an image-only job.
 Fastino Super and Beam are text-only and never receive pixels. CPU preparation freezes
 eligible source image bytes and verifies acquisition hashes; missing/rights-review
@@ -193,8 +167,8 @@ Unset `DENSE_SUPER_ARTICLE_IDS` before a stratified sample. Override its seed wi
 `DENSE_SUPER_SELECTION_SEED`. New Super campaigns allow up to 48 frozen figures
 per article (one new training article has 13); each request still follows the
 publisher's per-prompt image limit. Missing or rights-restricted assets stay
-explicit. Full source context remains intact; very long new articles can still
-fail the exact-token context check instead of being silently shortened.
+explicit. Clinical source text is not truncated. Beam timeline tasks may use explicit
+whole-segment windows after exact-token preflight; impossible singleton packets fail visibly.
 
 ## Changes following the October 17 run
 
@@ -227,7 +201,7 @@ DENSE_SUPER_SPLITS=train DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS=4 \
 Both arms use the same target checkpoint, quantization override, GPU topology,
 sampling, client concurrency and server settings. The second omits the drafter
 and speculative config. It is an explicit diagnostic experiment, excluded from
-the default four configurations. The existing serial CPU download/cleanup
+the default Beam campaign. The existing serial CPU download/cleanup
 lifecycle is retained. New article receipts capture speculative counter snapshots
 and acceptance deltas; missing, reset or unsupported counters are unavailable,
 not zero. The counters follow [vLLM's speculative-decoding metric definitions](https://docs.vllm.ai/en/v0.20.2/api/vllm/v1/spec_decode/metrics/).
@@ -332,7 +306,7 @@ Speculators adapter, Qwen3 DSpark model and Nemotron auxiliary-state support.
   `sha256:25635d363e0a86a099e16690f642e85301c4940ee11acf9335c4570657db9d9d`.
   Its source-revision label is unavailable publicly; runtime source hashes are
   recorded and live tokenization/streaming capture must pass. Project overrides
-  are 64K context, 32K prefill, c32, 0.90 GPU memory and two loading workers.
+  are 128K context, 32K prefill, c32, 0.90 GPU memory and two loading workers.
   Beam BF16 is not selected. No B200 benchmark result is claimed before a run.
 
 All NVIDIA configurations use `nemotron_v3` reasoning and `qwen3_coder` tool
@@ -366,12 +340,11 @@ explicit per-request sampling. Tokenization uses the identical native template
 kwargs. Schemas are prompt instructions plus local validators, not constrained
 generation.
 
-Project-specific overrides are explicit: **65,536 context**, 32,768 output/repair
+Project-specific overrides are explicit: **131,072 context for Beam; 65,536 for other families**, 32,768 output/repair
 tokens, 32,768 prefill tokens on BF16/Fastino/Muse Spark Open, 0.90 GPU utilization
 on NVIDIA MTP/Muse Spark Open profiles, 0.89 on Red Hat FP8 and 0.85 on Fastino, loopback ports and
 offline local snapshots.
-The official models support larger contexts; this comparison keeps the established
-source context budget. Length-limited retries request up to 49,152 output tokens.
+The official models support larger contexts; each arm freezes its context budget. Length-limited retries request up to 49,152 output tokens.
 Every request is tokenized first: output is capped at remaining context, with a
 minimum 16,384-token allowance; smaller allowances fail visibly without source
 truncation. Reasoning remains enabled and saved. B200
@@ -409,8 +382,10 @@ Sources:
 
 ## Resources, validation and recovery
 
-The shell launcher defaults to `DENSE_SUPER_SCHEDULER=packed` for the four focused
-profiles. Direct Python/CLI preparation retains serial mode unless passed
+The shell launcher defaults to `DENSE_SUPER_SCHEDULER=packed`, now Beam only.
+A single Beam profile uses two TP4 replicas (8 GPUs, 32 CPUs, 192G host RAM).
+Beam on/off pilot arms each use one TP4 server. The historical multi-model plan below
+remains available only when explicitly selected. Direct Python/CLI preparation retains serial mode unless passed
 `--scheduler packed`. Other profiles require explicit serial mode. A frozen
 campaign never changes its scheduling mode on resume.
 

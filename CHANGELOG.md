@@ -1,3 +1,11 @@
+## 2026-10-28 — Beam focus and FHIR research export
+
+- Default to Beam NVFP4 only, with two TP4 replicas on eight B200s; add matched DFlash2 on/off and shorter-draft pilots.
+- Increase Beam context to 128K; bound timeline source/target batches, retain explicit source-window coverage and split context/length failures without discarding attempt traces.
+- Report mean per-article input/output/reasoning/answer tokens and matched pipeline speculation speedup.
+- Add frozen terminology candidate selection/review and deterministic linked FHIR R4 patient bundles, source provenance, synthetic identity labels and explicit deferred mappings.
+- Validate against a pinned official HL7 JSON schema and reference/status checks; support a separate official validator gate without claiming clinical correctness.
+
 ## 2026-10-06 — Patient-bundle corrections
 
 - Fix clinical repair aliases; compact and token-count late completion hints while retaining complete primary source text and prior timeline events.

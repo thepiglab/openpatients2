@@ -30,10 +30,10 @@ def test_terminal_transport_failures_are_retryable(tmp_path, entry):
 
 
 def test_focused_defaults_fit_single_wave():
-    assert set(DEFAULT_PROFILES) == {'nvfp4', 'bf16', 'beam-nvfp4-dflash2'}
+    assert set(DEFAULT_PROFILES) == {'beam-nvfp4-dflash2'}
     waves = plan(DEFAULT_PROFILES)['waves']
     assert len(waves) == 1
-    assert waves[0]['totals'] == {'gpus': 8, 'cpus': 32, 'memory_gib': 224}
+    assert waves[0]['totals'] == {'gpus': 8, 'cpus': 32, 'memory_gib': 192}
 
 
 def test_long_launcher_clears_stale_pilot_selection(tmp_path):
@@ -41,6 +41,7 @@ def test_long_launcher_clears_stale_pilot_selection(tmp_path):
     scripts = tmp_path / 'scripts'
     scripts.mkdir()
     (scripts / 'run_dense_super_long.sh').write_text((root / 'scripts/run_dense_super_long.sh').read_text())
+    (scripts / 'run_dense_beam.sh').write_text((root / 'scripts/run_dense_beam.sh').read_text())
     (scripts / 'run_dense_nemotron_super.sh').write_text(
         'env | sort\n')
     env = {**os.environ, 'DENSE_SUPER_ARTICLE_IDS': 'PMC1', 'DENSE_SUPER_LIMIT_ARTICLES': '2',
@@ -53,4 +54,4 @@ def test_long_launcher_clears_stale_pilot_selection(tmp_path):
     assert values['DENSE_SUPER_LIMIT_ARTICLES'] == values['DENSE_SUPER_ARTICLE_IDS'] == ''
     assert values['DENSE_SUPER_SPLITS'] == 'train validation'
     assert values['DENSE_INCLUDE_TEST'] == '0'
-    assert values['DENSE_SUPER_PROFILES'] == 'nvfp4 bf16 beam-nvfp4-dflash2'
+    assert values['DENSE_SUPER_PROFILES'] == 'beam-nvfp4-dflash2'

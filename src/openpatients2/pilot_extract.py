@@ -113,6 +113,8 @@ class PilotConfig(ConfigModel):
     staged_timeline: bool = False
     timeline_segment_batch_size: int = Field(default=8, ge=1, le=32)
     timeline_relation_batch_size: int = Field(default=6, ge=1, le=16)
+    timeline_bounded_context: bool = False
+    timeline_target_batch_size: int = Field(default=8, ge=1, le=32)
     summary_completion: bool = False
     scatter_calls: bool = False
     experimental_pipeline: Literal['original', 'evidence_ledger'] = 'original'
@@ -759,7 +761,7 @@ class PilotRunner:
                 partial = checker(partial)
             except (ValueError, TypeError, KeyError):
                 partial = None
-        result = {'task': task, 'identity': identity, 'arm': self.arm, 'replica': replica,
+        result = {'task': task, 'task_key': key, 'identity': identity, 'arm': self.arm, 'replica': replica,
             'status': 'valid' if data is not None and not errors else 'partial' if partial is not None else 'failed',
             'data': data if not errors else partial, 'errors': errors, 'attempts': attempts,
             'semantic_review': 'unreviewed', 'clinical_accuracy_verified': False}
@@ -1399,6 +1401,7 @@ class PilotRunner:
                 stream.write(json.dumps(patient, ensure_ascii=False) + '\n')
         write_json(self.output / 'visual-annotations.json', self.visual_rows)
         wall = time.monotonic() - started
+        active_results = [r for r in self.results if not r.get('superseded_by_split')]
         report = {'schema_version': 'pilot-extraction-report/1', 'arm': self.arm,
             'experimental_pipeline':self.config.experimental_pipeline,
             'model': {'model_id': self.config.model_id, 'revision': self.config.revision},
@@ -1432,9 +1435,10 @@ class PilotRunner:
                 'clinical_sequence_verified': False},
             'concurrency': {'configured_per_endpoint': self.config.concurrency_per_endpoint,
                             'observed_peak_completions_per_endpoint': self.peak_active},
-            'valid_tasks': sum(r['status'] == 'valid' for r in self.results), 'task_count': len(self.results),
-            'task_statuses': dict(Counter(r['status'] for r in self.results)),
-            'task_statuses_by_domain': {name: dict(Counter(r['status'] for r in self.results if r['task'] in tasks))
+            'valid_tasks': sum(r['status'] == 'valid' for r in active_results), 'task_count': len(active_results),
+            'superseded_tasks': len(self.results) - len(active_results),
+            'task_statuses': dict(Counter(r['status'] for r in active_results)),
+            'task_statuses_by_domain': {name: dict(Counter(r['status'] for r in active_results if r['task'] in tasks))
                 for name, tasks in {'clinical': set(TASK_MODELS), 'summary': {'summary'}, 'timeline': {'timeline_v2'},
                     'patient_discovery': {'roster'}, 'caption_ownership': {'figure_attribution'},
                     'pixel_description': {'figure_visuals'}, 'pixel_ownership': {'pixel_attribution'},

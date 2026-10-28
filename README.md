@@ -58,7 +58,17 @@ uv run op2 ehr-pipeline --config ehr.yaml --articles sample.jsonl --run-dir RUN 
 # 3. score against the reference release
 uv run python -m openpatients2.unified_scoring --reference data/dense_clinical_cases_v1/data \
     --predicted OUT/data/unified.jsonl --out score.json
+
+# 4. optional terminology/FHIR stage (uncoded export works without a model)
+uv run op2 fhir prepare --input OUT/data/unified.jsonl \
+    --sources benchmarks/dense --output runs/fhir-work
+uv run op2 fhir export --work runs/fhir-work --output runs/fhir-export
 ```
+
+The [Beam and FHIR guide](docs/BEAM_FHIR.md) covers the eight-GPU Beam-only
+speculation comparison, long runs, token reporting, terminology catalogs and
+per-patient FHIR R4 export. FHIR structure checks are separate from clinical
+accuracy and terminology review; unsupported mappings remain explicit.
 
 `extract.yaml` is a `PilotConfig` (`openpatients2.pilot_extract`: call/token/figure limits, sampling seed, optional
 review stages); omitted, the defaults apply. `RUN` must be new or empty; results are never overwritten. Details in

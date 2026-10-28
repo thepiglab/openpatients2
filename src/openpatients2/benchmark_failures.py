@@ -8,7 +8,7 @@ def extraction_failures(work, completed):
     for article_id, split, attempt in completed:
         for path in sorted((attempt / 'extraction/tasks').glob('*.json')):
             task = json.loads(path.read_text())
-            if task.get('status') == 'valid':
+            if task.get('status') == 'valid' or task.get('superseded_by_split'):
                 continue
             records.append({'article_id': article_id, 'split': split,
                 'task': task['task'], 'status': task.get('status'),

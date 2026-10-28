@@ -21,16 +21,24 @@ RESOURCES = {
     'beam-nvfp4-dflash2': {'gpus': 4, 'cpus': 16, 'memory_gib': 96, 'replicas': 1, 'observed_maxrss_gib': 31.07, 'artifacts_gib': 290},
     'spark': {'gpus': 8, 'cpus': 16, 'memory_gib': 160, 'replicas': 1, 'observed_maxrss_gib': 51.98, 'artifacts_gib': 520},
 }
+for _name in ('beam-nvfp4-no-spec', 'beam-nvfp4-dflash2-short'):
+    RESOURCES[_name] = dict(RESOURCES['beam-nvfp4-dflash2'])
 
 
 def plan(profiles, *, pipelined=True):
     if not profiles or set(profiles) - RESOURCES.keys():
-        raise ValueError('Packed scheduling supports only the four focused profiles; use serial for other recipes')
+        raise ValueError('Packed scheduling supports the four focused model families and Beam ablations; use serial for other recipes')
+    resources = {p: dict(RESOURCES[p]) for p in profiles}
+    # One Beam configuration uses two independent TP4 replicas, sharing one
+    # local weight snapshot and claiming different articles. Ablations use one
+    # TP4 server per configuration so both see the same article sample.
+    if len(profiles) == 1 and profiles[0].startswith('beam-nvfp4-'):
+        resources[profiles[0]]['replicas'] = 2
     waves = []
     # First-fit decreasing by total GPU allocation; Spark necessarily alone.
     # Prefer the small-model wave first to expose serving problems sooner.
     for name in sorted(profiles, key=lambda p: (p == 'spark', -RESOURCES[p]['gpus'])):
-        r = RESOURCES[name]
+        r = resources[name]
         cost = {k: r[k] * r['replicas'] for k in LIMITS}
         for wave in waves:
             if all(wave['totals'][k] + cost[k] <= limit for k, limit in LIMITS.items()):
@@ -46,10 +54,10 @@ def plan(profiles, *, pipelined=True):
     for wave in waves:
         if pipelined:
             order = {'nvfp4': 0, 'bf16': 1, 'beam-nvfp4-dflash2': 2, 'spark': 3}
-            wave['profiles'].sort(key=order.__getitem__)
+            wave['profiles'].sort(key=lambda p: (order.get(p, 2), p))
         wave['required_free_gib'] = sum(RESOURCES[p]['artifacts_gib'] for p in wave['profiles']) + 128
     return {'mode': 'packed', 'version': 2 if pipelined else 1, 'limits': dict(LIMITS),
-            'resources': {p: dict(RESOURCES[p]) for p in profiles}, 'waves': waves,
+            'resources': resources, 'waves': waves,
             'memory_evidence': 'User-supplied sacct batch MaxRSS, jobs 47060318/21/27/37; requests are not GPU VRAM limits.',
             'storage_note': 'Concurrent residency requires more disk than serial; artifact estimates plus 128 GiB scratch/results reserve.'}
 

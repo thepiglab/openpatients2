@@ -39,6 +39,8 @@ def parser():
                          help="Optional EHR stages on a finished extraction run -> unified article rows "
                               "(same as python -m openpatients2.ehr_pipeline; pass --help for its options)")
     cmd.add_argument("ehr_args", nargs=argparse.REMAINDER)
+    cmd = sub.add_parser("fhir", add_help=False, help="Terminology selection and deterministic FHIR R4 research export")
+    cmd.add_argument("fhir_args", nargs=argparse.REMAINDER)
     cmd = sub.add_parser("dense", add_help=False,
                          help="Dense reference-set tools: op2 dense <tool> [args] (same as python -m "
                               "openpatients2.dense.<tool>; `op2 dense --help` lists the tools)")
@@ -143,6 +145,10 @@ def _main(argv=None):
     if argv[:1] == ["ehr-pipeline"]:
         from .ehr_pipeline import main as ehr_main
         ehr_main(argv[1:])
+        return 0
+    if argv[:1] == ["fhir"]:
+        from .fhir_pipeline import main as fhir_main
+        fhir_main(argv[1:])
         return 0
     args = parser().parse_args(argv)
     try:

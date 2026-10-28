@@ -5,6 +5,8 @@ not public on GitHub; CPU probes record installed source hashes instead.
 """
 from __future__ import annotations
 
+from copy import deepcopy
+
 FP8 = 'reflection/Beam-1.0-501B-A23B-FP8'
 NVFP4 = 'reflection/Beam-1.0-501B-A23B-NVFP4'
 DFLASH2 = 'reflection/Beam-1.0-501B-A23B-DFlash2'
@@ -41,6 +43,7 @@ def profile(model, gpus):
         'model': model, 'drafter': DFLASH2, 'engine': 'beam', 'gpus': gpus, 'cpus': 16,
         'host_memory': '200G', 'max_num_seqs': 32, 'max_batched_tokens': 32768,
         'gpu_memory': .9, 'concurrency': 32, 'temperature': .7, 'top_p': .99,
+        'context': 131072,
         'vision_temperature': None, 'supports_images': False, 'reasoning_effort': 'max',
         'stop_token_ids': list(STOP_TOKEN_IDS), 'reasoning_parser': 'beam',
         'served_model': model, 'kv_cache_dtype': 'fp8',
@@ -55,9 +58,19 @@ def profile(model, gpus):
             f'{gpus}x B200 TP{gpus}; FP8 uses the recommended Triton MoE backend. '
             'DFlash2 proposes seven tokens with FLASH_ATTN and adaptive verification. '
             'Publisher generation config T=0.7/top_p=0.99; native max/512 reasoning. '
-            'Project context 64K, prefill 32K, c32, two loading workers and 0.90 GPU utilization. '
+            'Project context 128K, prefill 32K, c32, two loading workers and 0.90 GPU utilization. '
             'Harmony analysis/final channels and native return/call stops; text only. Requires a real B200 smoke.',
     }
 
 
 PROFILES = {'beam-fp8-dflash2': profile(FP8, 8), 'beam-nvfp4-dflash2': profile(NVFP4, 4)}
+
+# Change one serving variable at a time. Target weights, template, sampling,
+# context, pipeline and client concurrency are identical in each pair.
+PROFILES['beam-nvfp4-no-spec'] = deepcopy(PROFILES['beam-nvfp4-dflash2'])
+PROFILES['beam-nvfp4-no-spec'].pop('drafter')
+PROFILES['beam-nvfp4-no-spec'].update(speculation=None,
+    adaptation=PROFILES['beam-nvfp4-dflash2']['adaptation'] + ' Controlled ablation: DFlash2 disabled.')
+PROFILES['beam-nvfp4-dflash2-short'] = deepcopy(PROFILES['beam-nvfp4-dflash2'])
+PROFILES['beam-nvfp4-dflash2-short']['speculation']['num_speculative_tokens'] = 3
+PROFILES['beam-nvfp4-dflash2-short']['adaptation'] += ' Controlled ablation: three draft tokens instead of seven.'
