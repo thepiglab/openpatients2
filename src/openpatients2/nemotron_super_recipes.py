@@ -11,6 +11,8 @@ from .muse_spark_recipe import ENGINE as SPARK_ENGINE, PINS as SPARK_PINS, PROFI
 from .redhat_nemotron_recipe import PINS as REDHAT_PINS, PROFILE as REDHAT_PROFILE
 from .beam_recipe import ENGINE as BEAM_ENGINE, PINS as BEAM_PINS, PROFILES as BEAM_PROFILES
 
+from .mistral_large4_recipe import PINS as MISTRAL_PINS, ENGINE as MISTRAL_ENGINE, PROFILE as MISTRAL_PROFILE
+
 VLLM_COMMIT = '3f1bcfd82bb2e93fcd364fc7a5491718453a77e2'
 VLLM_IMAGE = 'docker://vllm/vllm-openai:nightly-' + VLLM_COMMIT
 TOKENIZER_CONTRACT = 'vllm/' + VLLM_COMMIT
@@ -37,6 +39,7 @@ PINS = {
     **SPARK_PINS,
     **REDHAT_PINS,
     **BEAM_PINS,
+    **MISTRAL_PINS,
 }
 
 ENGINES = {
@@ -45,6 +48,7 @@ ENGINES = {
                  'tokenizer_source_sha': TOKENIZER_SOURCE_SHA, 'registry_source_sha': REGISTRY_SOURCE_SHA},
     'spark': SPARK_ENGINE,
     'beam': BEAM_ENGINE,
+    'mistral': MISTRAL_ENGINE,
 }
 
 
@@ -94,6 +98,7 @@ PROFILES = {
     'spark': SPARK_PROFILE,
     'redhat-fp8-dspark': REDHAT_PROFILE,
     **BEAM_PROFILES,
+    'le-chonk-nvfp4-dspark': MISTRAL_PROFILE,
 }
 
 # Beam-only development runs; historical recipes remain explicit options.

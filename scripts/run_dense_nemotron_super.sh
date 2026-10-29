@@ -123,9 +123,10 @@ while IFS='=' read -r key value; do
 done < <(env)
 job="$(sbatch --parsable --account="$account" --qos="$qos" --partition=hpg-default \
   --nodes=1 --ntasks=1 --cpus-per-task=8 --mem=32G --time=04:00:00 \
-  --job-name=op2-super-prepare --output="$bootstrap/prepare.log" \
+  --job-name="op2-super-${DENSE_SUPER_JOB_LABEL:+$DENSE_SUPER_JOB_LABEL-}prepare" --output="$bootstrap/prepare.log" \
   "$bootstrap/bootstrap.sh" --bootstrap "$repo" "$work" "$revision" "$bootstrap" "$account" "$qos" "$hours")"
 printf '%s\n' "$job" > "$bootstrap/job-id.txt"
 printf '%s\n' "$work" > "$pointer"
 printf 'Preparation job: %s\nSource commit: %s\nCampaign: %s\nLog: %s/prepare.log\n' "$job" "$revision" "$work" "$bootstrap"
-echo 'Default: Beam NVFP4 + DFlash2 only, text input. Packed mode runs two four-GPU replicas with distinct article claims, using eight B200s in total. Explicit DENSE_SUPER_PROFILES overrides select other configurations; run_dense_beam.sh pilot compares DFlash2 with speculation off. CPU downloads are serial; ready models start during later downloads when the resource budget fits. Cleanup is a wave barrier. Every worker checks its required context and streaming reasoning capture before article inference.'
+printf 'Selected profiles: %s\nScheduler: %s; images when supported: %s\n' "${DENSE_SUPER_PROFILES:-beam-nvfp4-dflash2}" "${DENSE_SUPER_SCHEDULER:-packed}" "${DENSE_SUPER_WITH_IMAGES:-1}"
+echo 'CPU staging precedes inference; cleanup and aggregation follow. Every worker checks its context and streaming reasoning capture before article inference.'

@@ -16,6 +16,8 @@ LIMITS = {'gpus': 8, 'cpus': 32, 'memory_gib': 250}
 # Host RAM requests include substantial headroom over sacct batch MaxRSS from
 # run-20261021-170808. MaxRSS is evidence, not an aggregate cgroup guarantee.
 RESOURCES = {
+    'le-chonk-nvfp4-dspark': {'gpus': 8, 'cpus': 16, 'memory_gib': 200, 'replicas': 1,
+        'observed_maxrss_gib': None, 'artifacts_gib': 750},
     'nvfp4': {'gpus': 1, 'cpus': 4, 'memory_gib': 32, 'replicas': 2, 'observed_maxrss_gib': 8.87, 'artifacts_gib': 80},
     'bf16': {'gpus': 2, 'cpus': 8, 'memory_gib': 64, 'replicas': 1, 'observed_maxrss_gib': 19.93, 'artifacts_gib': 245},
     'beam-nvfp4-dflash2': {'gpus': 4, 'cpus': 16, 'memory_gib': 96, 'replicas': 1, 'observed_maxrss_gib': 31.07, 'artifacts_gib': 290},
@@ -212,7 +214,7 @@ def submit(work, manifest, account, qos, pending, dry_run):
         cmd = ['sbatch', '--parsable', '--hold', '--nodes=1', '--ntasks=1', '--no-requeue',
                '--account='+account, '--qos='+qos, '--chdir='+str(work/'code'),
                '--export=ALL,OP2_SUBMISSION_ID='+epoch+',OP2_WORKER_REPLICA='+str(resource[1] if resource else 0),
-               '--signal=B:TERM@120', '--job-name=op2-super-'+key,
+               '--signal=B:TERM@120', '--job-name=op2-super-'+('le-chonk-🐱-' if 'le-chonk-nvfp4-dspark' in manifest['nemotron_super']['profiles'] else '')+key,
                '--cpus-per-task='+str(cpus), '--mem='+str(memory)+'G',
                '--partition='+('hpg-b200' if resource else 'hpg-default'),
                '--time='+ (f'{manifest["nemotron_super"]["hours"]:02d}:00:00' if resource else '08:00:00'),

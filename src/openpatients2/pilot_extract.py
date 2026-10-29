@@ -65,7 +65,7 @@ class PilotConfig(ConfigModel):
     template_date: str | None = Field(default=None, pattern=r'^\d{4}-\d{2}-\d{2}$')
     stop_token_ids: list[int] | None = None
     temperature: Literal[0.0, 0.7, 1.0] = 1.0
-    vision_temperature: Literal[0.6] | None = None
+    vision_temperature: Literal[0.6, 1.0] | None = None
     top_p: Literal[0.95, 0.99, 1.0] = 0.95
     top_k: Literal[64] | None = 64
     seed: int = Field(default=42, ge=0, le=2**32-1)
@@ -129,6 +129,13 @@ class PilotConfig(ConfigModel):
         from .muse_spark_recipe import SPARK, DSPARK, TOKENIZER_CONTRACT as SPARK_CONTRACT, STOP_TOKEN_IDS
         from .redhat_nemotron_recipe import DSPARK as REDHAT_DSPARK
         from .beam_recipe import TARGETS as BEAM_TARGETS, DFLASH2, TOKENIZER_CONTRACT as BEAM_CONTRACT, STOP_TOKEN_IDS as BEAM_STOPS
+        from .mistral_large4_recipe import MODEL as MISTRAL, TOKENIZER_CONTRACT as MISTRAL_CONTRACT
+        if self.model_id == MISTRAL:
+            if (self.revision != PINS[MISTRAL]['revision'] or self.tokenizer_contract != MISTRAL_CONTRACT
+                    or self.temperature != 1.0 or self.vision_temperature != 1.0 or self.top_p != .95
+                    or self.top_k is not None or self.reasoning_strength != 'high' or self.stop_token_ids is not None):
+                raise ValueError('Mistral revision/template/sampling must match the pinned recipe')
+            return self
         if self.model_id in BEAM_TARGETS:
             if (self.revision != PINS[self.model_id]['revision'] or self.tokenizer_contract != BEAM_CONTRACT
                     or self.temperature != .7 or self.top_p != .99 or self.top_k is not None
@@ -165,6 +172,9 @@ class PilotConfig(ConfigModel):
         return self
 
     def template_kwargs(self):
+        from .mistral_large4_recipe import MODEL as MISTRAL
+        if self.model_id == MISTRAL:
+            return {"reasoning_effort": self.reasoning_strength}
         from .beam_recipe import TARGETS as BEAM_TARGETS
         if self.model_id in BEAM_TARGETS:
             return {'reasoning_effort': self.reasoning_strength, 'allow_missing_thinking': False}

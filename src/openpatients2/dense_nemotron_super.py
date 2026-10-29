@@ -126,6 +126,10 @@ def prepare(root, work, expected=None, hours=12, with_images=True, include_test=
                 timeline_relation_batch_size=4 if beam_repair else 2,
                 timeline_target_batch_size=16 if beam_repair else 8)
             am['article_timeout_seconds'] = 14400 if beam_repair else 3600
+        if profile.get('engine') == 'mistral':
+            am['article_timeout_seconds'] = 14400
+            am['extraction'].update(timeline_bounded_context=True, timeline_prefer_windows=True,
+                timeline_segment_batch_size=4, timeline_relation_batch_size=4, timeline_target_batch_size=16)
         from .pilot_extract import PilotConfig
         PilotConfig.model_validate(am['extraction'])
         if not definition['pixels']:
@@ -307,7 +311,7 @@ def validate_runtime(work, arm_name=None):
     profile = PROFILES[profile_name]
     if local.get('image') != engine(profile)['image']:
         raise ValueError('Arm image differs from pinned recipe')
-    required = [weights_path(work, model) / 'config.json' for model in profile_models(profile_name)]
+    required = [weights_path(work, model) / PINS[model].get('config_file', 'config.json') for model in profile_models(profile_name)]
     required.append(runtime / engine(profile)['sif'])
     if any(os.path.relpath(path, arm) not in local['files'] for path in required):
         raise ValueError('Arm runtime omits target/drafter/container')
@@ -387,7 +391,11 @@ for module, expected in [('entrypoints/serve/tokenize/serving.py', sys.argv[2]),
 ReasoningParserManager.get_reasoning_parser(sys.argv[4])
 overrides = json.loads(sys.argv[5])
 for path, family in json.loads(sys.argv[1]).items():
-    config = json.loads((pathlib.Path(path)/'config.json').read_text())
+    if family == 'mistral':
+        from vllm.transformers_utils.config import get_config
+        config = get_config(path, trust_remote_code=True, config_format='mistral').to_dict()
+    else:
+        config = json.loads((pathlib.Path(path)/'config.json').read_text())
     if str(path) in overrides:
         from vllm.model_executor.layers.quantization.compressed_tensors.compressed_tensors import CompressedTensorsConfig
         from vllm.model_executor.layers.vocab_parallel_embedding import VocabParallelEmbedding
@@ -431,7 +439,8 @@ for path, family in json.loads(sys.argv[1]).items():
     modes = ([{'reasoning_effort': effort, 'current_date':'2026-10-15'} for effort in ['low','xhigh']]
              if family == 'spark' else
              [{'reasoning_effort': effort, 'allow_missing_thinking': False} for effort in ['low','max']]
-             if family == 'beam' else [{'enable_thinking': on} for on in [False, True]])
+             if family == 'beam' else [{'reasoning_effort': effort} for effort in ['low','high']]
+             if family == 'mistral' else [{'enable_thinking': on} for on in [False, True]])
     rendered = [t.apply_chat_template([{'role':'user','content':'Say READY'}], tokenize=False,
                 add_generation_prompt=True, **kw) for kw in modes]
     assert rendered[0] != rendered[1], 'Native reasoning modes must differ'
@@ -452,6 +461,8 @@ for path, family in json.loads(sys.argv[1]).items():
         assert t.convert_tokens_to_ids('<|call|>') == 151675
         assert t.convert_tokens_to_ids('<|end|>') not in [151674, 151675]
         assert json.loads((pathlib.Path(path)/'generation_config.json').read_text())['eos_token_id'] == [151674, 151675]
+    elif family == 'mistral':
+        assert '[MODEL_SETTINGS]' in rendered[1] and '"high"' in rendered[1]
     else:
         assert '<think>' in rendered[1]
     assert all(t.encode(x) for x in rendered)
@@ -462,10 +473,14 @@ print(json.dumps({'vllm_version':vllm.__version__, 'models':json.loads(sys.argv[
 
 def validate_checkpoint(path, model, require_weights=False):
     pin = PINS[model]
-    config = b.read(path / 'config.json')
-    if ('architecture' in pin and config.get('architectures') != [pin['architecture']]) or not config.get('architectures'):
+    config_file = pin.get('config_file', 'config.json')
+    config = b.read(path / config_file)
+    if config_file == 'params.json':
+        if config.get('n_layers') != 72 or not config.get('vision_encoder'):
+            raise ValueError('Unexpected Mistral parameters')
+    elif ('architecture' in pin and config.get('architectures') != [pin['architecture']]) or not config.get('architectures'):
         raise ValueError('Unexpected architecture: ' + model)
-    if 'config_sha256' in pin and b.sha(path / 'config.json') != pin['config_sha256']:
+    if 'config_sha256' in pin and b.sha(path / config_file) != pin['config_sha256']:
         raise ValueError('Unexpected model config: ' + model)
     if 'template_sha256' in pin and b.sha(path / 'chat_template.jinja') != pin['template_sha256']:
         raise ValueError('Unexpected chat template: ' + model)
@@ -501,7 +516,7 @@ def setup(work):
     start = time.time()
     from huggingface_hub import snapshot_download
     token, cache = download_environment(work)
-    metadata_patterns = ['config.json', 'chat_template.jinja', 'generation_config.json',
+    metadata_patterns = ['params.json', 'config.json', 'chat_template.jinja', 'generation_config.json',
                          'hf_quant_config.json', 'tokenizer_config.json', 'processor_config.json',
                          '*.py', 'l4_200k_base', 'LICENSE*', 'USE_POLICY.md']
     # Access checks for every selected model stay small; no weights or images here.
@@ -778,7 +793,8 @@ async def smoke(endpoint, logs, config, pixels, context=b.CONTEXT):
     kwargs = ({'reasoning_effort': 'low', 'current_date': config['template_date']}
               if config['model_id'] == SPARK else
               {'reasoning_effort': 'low', 'allow_missing_thinking': False}
-              if config['model_id'] in BEAM_TARGETS else {'enable_thinking': False})
+              if config['model_id'] in BEAM_TARGETS else {'reasoning_effort': 'low'}
+              if config['model_id'].startswith('mistralai/Mistral-Large-4-') else {'enable_thinking': False})
     # A synthetic 32x32 RGB PNG; no reference or patient information in probes.
     def chunk(kind, value):
         return struct.pack('!I', len(value)) + kind + value + struct.pack('!I', zlib.crc32(kind + value))

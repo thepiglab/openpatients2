@@ -1,3 +1,9 @@
+## 2026-10-29 — Le Chonk campaign
+
+- Add opt-in Mistral Large 4 NVFP4 with embedded DSpark3, pinned native parameters/template and official container digest.
+- Add eight-B200 text/image smoke, pilot and long campaigns with le-chonk-🐱 Slurm names; retain Beam defaults.
+- Add native Mistral configuration/loading checks and publisher reasoning/sampling settings.
+
 ## 2026-10-29 — Beam pilot diagnosis
 
 - Document verified October 28 results, matched speculation speed/quality, article timeouts, timeline token exhaustion and genomic-appendix overflow.
