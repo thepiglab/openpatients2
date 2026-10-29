@@ -74,7 +74,7 @@ def select_articles(root, rows, limit=None, seed=42, article_ids=None):
 
 def cohort_report(reference, predictions, receipts, features):
     from .unified_scoring import score
-    from .benchmark_reporting import throughput
+    from .benchmark_reporting import throughput, nonempty_valid
     groups = defaultdict(list)
     for aid, ref in reference.items():
         for dimension, category in features.get(aid, {}).items():
@@ -88,6 +88,7 @@ def cohort_report(reference, predictions, receipts, features):
             scores = score(subset, {aid: predicted[aid] for aid in ids if aid in predicted})
             arms[name] = {'completed': len(completed), 'predictions': sum(aid in predicted for aid in ids),
                 'fully_valid': sum(r.get('all_extraction_tasks_valid', False) for r in completed),
+                'nonempty_pipeline_valid': sum(nonempty_valid(r) for r in completed),
                 'clinical': scores['overall']['clinical_items'],
                 'attribute_accuracy': scores['overall']['attribute_accuracy'],
                 'task_statuses': dict(sum((Counter(r.get('task_statuses', {})) for r in completed), Counter())),

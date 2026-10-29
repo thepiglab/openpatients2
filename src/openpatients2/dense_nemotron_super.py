@@ -122,9 +122,12 @@ def prepare(root, work, expected=None, hours=12, with_images=True, include_test=
             max_figures=48 if definition['pixels'] else 0, focused_pixels=definition['pixels'])
         if profile.get('engine') == 'beam':
             am['extraction'].update(timeline_bounded_context=True, timeline_prefer_windows=beam_repair,
+                timeline_scope_repair=beam_repair, bounded_document_stages=beam_repair,
                 timeline_segment_batch_size=4 if beam_repair else 2,
-                timeline_relation_batch_size=4 if beam_repair else 2,
-                timeline_target_batch_size=16 if beam_repair else 8)
+                timeline_relation_batch_size=2,
+                timeline_target_batch_size=8)
+            if beam_repair:
+                am['beam_repair_policy'] = 'scope-routing-bounded-documents/2'
             am['article_timeout_seconds'] = 14400 if beam_repair else 3600
         if profile.get('engine') == 'mistral':
             am['article_timeout_seconds'] = 14400
@@ -136,6 +139,10 @@ def prepare(root, work, expected=None, hours=12, with_images=True, include_test=
             am['scope'] = {**b.SCOPE, 'figures': 'caption attribution only; no pixels',
                 'ehr_stages': ['measurement_series_extraction'],
                 'unsupported': b.SCOPE['unsupported'] + ['figure pixels', 'figure EHR labels', 'figure privacy flags']}
+        if profile.get('engine') == 'beam' and beam_repair:
+            am['scope']['clinical'] = ('Live discovery over all source segments; oversized requests use bounded '
+                'windows and model-reconciled patient routing. Original sources/omissions retained; '
+                'semantic coverage unverified. Measurement rows have separate coverage receipts.')
         am['files'] = b.inventory(arm, ['code', 'inputs', 'reference'])
         b.write(arm / 'manifest.json', am)
         m['files'][f'arms/{name}/manifest.json'] = b.sha(arm / 'manifest.json')
@@ -1119,7 +1126,8 @@ def aggregate(work):
                     'articles': len(common), 'seconds': paired_seconds, 'gpu_seconds': paired_seconds * profile['gpus'],
                     'throughput': throughput([{**receipts[name][aid], 'gpus_per_server': profile['gpus']} for aid in common])}
     result = {'format': FORMAT, 'complete': all(r['complete'] for r in reports.values()),
-        'all_extractions_valid': all(r['complete'] and r['all_extraction_tasks_valid'] == r['expected'] for r in reports.values()),
+        'all_extractions_valid': all(r['complete'] and r['all_extraction_tasks_valid'] == r['expected']
+                                    and not r['articles_with_ehr_errors'] for r in reports.values()),
         'scoring_policy': {'semantic_judge_enabled': False,
             'item_matching': 'one-to-one evidence overlap and fuzzy names',
             'attribute_errors_scored_separately': True,
@@ -1162,13 +1170,13 @@ def aggregate(work):
         'Counts are articles, not independent patients. Small groups are descriptive; '
         'a balanced diagnostic sample does not estimate population performance. '
         'Missing predictions remain in the planned denominator. Item F1 is annotation agreement, not semantic or clinical adjudication.', '',
-        '| Split | Dimension | Category | Arm | Planned | Completed | Predictions | Fully valid | Item F1 | Doc/h |',
+        '| Split | Dimension | Category | Arm | Planned | Completed | Predictions | Nonempty pipeline-valid | Item F1 | Doc/h |',
         '|---|---|---|---|---:|---:|---:|---:|---:|---:|']
     for group in cohorts['groups']:
         for name, values in group['arms'].items():
             f1, rate = values['clinical']['f1'], values['throughput']['documents_per_hour']
             cohort_lines.append(f'| {group["split"]} | {group["dimension"]} | {group["category"]} | {name} | '
-                f'{len(group["article_ids"])} | {values["completed"]} | {values["predictions"]} | {values["fully_valid"]} | '
+                f'{len(group["article_ids"])} | {values["completed"]} | {values["predictions"]} | {values["nonempty_pipeline_valid"]} | '
                 f'{f"{f1:.4f}" if f1 is not None else "unavailable"} | {f"{rate:.2f}" if rate is not None else "unavailable"} |')
     (work / 'summary/cohorts.md').write_text('\n'.join(cohort_lines) + '\n')
     b.write(work / 'summary/comparison.json', result)
@@ -1184,8 +1192,17 @@ def aggregate(work):
                   'Archive creation does not mean the benchmark succeeded.', '']
     lines += ['## Pipeline validity', '',
               'Completed means the article attempt finished, not that every task passed. '
-              'Fully valid extraction is schema/evidence validation, not verified clinical accuracy.', '',
-              '| Arm | Fully valid extractions / planned | Failed tasks | Partial tasks | Articles with EHR errors | Length-limited calls |',
+              'Schema validity can include EMPTY rosters and excludes EHR-stage errors. '
+              'Nonempty pipeline-valid requires patients, passing extraction tasks, and no EHR errors; '
+              'neither establishes clinical accuracy.', '',
+              '| Arm | Nonempty patient articles | Empty prediction artifacts | Nonempty pipeline-valid | Empty roster vs reference disagreements |',
+              '|---|---:|---:|---:|---:|']
+    for name, report in reports.items():
+        q = report['quality_summary']
+        lines.append(f'| {name} | {q["nonempty_patient_articles"]} | {q["empty_prediction_articles"]} | '
+                     f'{q["nonempty_pipeline_valid_articles"]} | {len(q["empty_roster_reference_disagreements"])} |')
+    lines += ['',
+              '| Arm | Schema-valid, including empty / planned | Failed tasks | Partial tasks | Articles with EHR errors | Length-limited calls |',
               '|---|---:|---:|---:|---:|---:|']
     for name, report in reports.items():
         tasks = report['extraction_task_statuses']
@@ -1193,6 +1210,17 @@ def aggregate(work):
         lines.append(f'| {name} | {report["all_extraction_tasks_valid"]} / {report["expected"]} | '
                      f'{tasks.get("failed", 0)} | {tasks.get("partial", 0)} | '
                      f'{report["articles_with_ehr_errors"]} | {length if length is not None else "unavailable"} |')
+    lines.append('')
+    lines += ['## Cost by task', '',
+              'Output includes reasoning. Out-of-batch candidates remain auditable in original ledgers; '
+              'they are not accepted facts. Missing historical breakdowns are unavailable.', '',
+              '| Arm | Task | Calls | Input tokens | Output tokens | Length-limited | Out-of-batch candidates |',
+              '|---|---|---:|---:|---:|---:|---:|']
+    for name, report in reports.items():
+        for task, usage in (report.get('task_usage') or {}).items():
+            cells = ' | '.join(str(usage[k]) if usage[k] is not None else 'unavailable' for k in
+                ('model_calls','prompt_tokens','completion_tokens','length_limited_calls','out_of_batch_candidates'))
+            lines.append(f'| {name} | {task} | {cells} |')
     lines.append('')
     lines += ['## Tokens per completed article', '',
               'Includes every extraction, timeline, EHR and repair call; input includes repeated prompts, '
@@ -1236,14 +1264,14 @@ def aggregate(work):
                     attr = None
                 completed = f'{values["completed_articles"]} / {values["planned_articles"]}'
                 lines.append(f'| {name} | {completed} | {quality} | {attr if attr is not None else "unavailable"} |')
-            lines += ['', '| Arm | Output tok/s | Answer tok/s | Attempt/s | Attempt/h | Prediction/h | Fully valid/h | Output tok/GPU-s | GPUs/server | Scheduled replicas |',
+            lines += ['', '| Arm | Output tok/s | Answer tok/s | Attempt/s | Attempt/h | Prediction/h | Nonempty valid/h | Output tok/GPU-s | GPUs/server | Scheduled replicas |',
                       '|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|']
             for name, values in arms.items():
                 rates = values['throughput']
                 cells = ' | '.join(f'{rates[k]:.4f}' if rates[k] is not None else 'unavailable' for k in (
                     'output_tokens_per_second', 'answer_tokens_per_second', 'documents_per_second',
                     'documents_per_hour', 'prediction_documents_per_hour',
-                    'valid_extraction_documents_per_hour', 'output_tokens_per_gpu_second'))
+                    'nonempty_pipeline_valid_documents_per_hour', 'output_tokens_per_gpu_second'))
                 profile = m['nemotron_super']['arms'][name]['profile']
                 replicas = result['scheduler'].get('resources', {}).get(profile, {}).get('replicas', 1)
                 lines.append(f'| {name} | {cells} | {values["gpus_per_server"]} | {replicas} |')
@@ -1276,6 +1304,10 @@ def aggregate(work):
               'summary/fact-reasoning.jsonl links facts and source citations to those calls. Synthetic reasoning-smoke.json traces are excluded from article scoring and distillation data. '
               'Returned traces and their facts remain unreviewed for training.', '']
     (work / 'summary/comparison.md').write_text('\n'.join(lines))
+    error_path = work / 'results/aggregate-error.json'
+    if error_path.exists():
+        b.write(error_path, {**b.read(error_path), 'resolved_by_aggregation_unix': time.time(),
+                            'note': 'Historical aggregation error; a later summary was produced.'})
     files = b.inventory(work, ['results', 'summary', 'submissions'])
     for name in reports:
         files[f'arms/{name}/summary/integrity.json'] = b.sha(work / 'arms' / name / 'summary/integrity.json')
@@ -1385,7 +1417,8 @@ def main(argv=None):
             try:
                 result = aggregate(work)
             except Exception as exc:
-                b.write(work / 'results/aggregate-error.json', {'error_type': type(exc).__name__, 'error': str(exc)})
+                b.write(work / 'results/aggregate-error.json', {'error_type': type(exc).__name__, 'error': str(exc),
+                                                              'failed_unix': time.time()})
                 export(work)
                 raise
         else:

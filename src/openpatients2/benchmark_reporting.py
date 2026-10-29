@@ -2,6 +2,45 @@
 from __future__ import annotations
 
 
+def nonempty_valid(row):
+    """Pipeline validity is not clinical accuracy; an empty roster is separate."""
+    return bool(row.get('has_prediction') and (row.get('patients_extracted') or 0) > 0
+                and row.get('all_extraction_tasks_valid') and 'ehr_errors' in row and not row['ehr_errors'])
+
+
+def quality_summary(receipts, reference=None, predictions=None):
+    rows = list(receipts)
+    result = {
+        'prediction_artifacts': sum(bool(r.get('has_prediction')) for r in rows),
+        'nonempty_patient_articles': sum(bool(r.get('has_prediction') and (r.get('patients_extracted') or 0)>0) for r in rows),
+        'empty_prediction_articles': sum(bool(r.get('has_prediction') and r.get('patients_extracted')==0) for r in rows),
+        'patient_count_unavailable': sum(r.get('patients_extracted') is None for r in rows),
+        'schema_valid_including_empty': sum(bool(r.get('all_extraction_tasks_valid')) for r in rows),
+        'nonempty_pipeline_valid_articles': sum(nonempty_valid(r) for r in rows),
+        'pipeline_validity_unavailable': sum('ehr_errors' not in r or r.get('patients_extracted') is None for r in rows),
+        'semantic_accuracy_verified': False}
+    if reference is not None and predictions is not None:
+        result['empty_roster_reference_disagreements'] = sorted(aid for aid,p in predictions.items()
+            if not p.get('patients') and reference.get(aid,{}).get('patients'))
+        result['empty_roster_agreements'] = sorted(aid for aid,p in predictions.items()
+            if not p.get('patients') and aid in reference and not reference[aid].get('patients'))
+    return result
+
+
+def task_usage_summary(receipts):
+    rows = list(receipts)
+    if not rows or any('task_usage' not in r for r in rows):
+        return None  # Historical totals cannot be retrospectively apportioned.
+    result = {}
+    for task in sorted({t for r in rows for t in r['task_usage']}):
+        items = [r['task_usage'][task] for r in rows if task in r['task_usage']]
+        result[task] = {k: sum(i[k] for i in items) for k in
+            ('model_calls', 'length_limited_calls', 'out_of_batch_candidates')}
+        for k in ('prompt_tokens','completion_tokens','reasoning_tokens'):
+            result[task][k] = sum(i[k] for i in items) if all(i[k] is not None for i in items) else None
+    return result
+
+
 def throughput(receipts):
     """Aggregate completed documents; never average per-document token rates.
 
@@ -33,6 +72,8 @@ def throughput(receipts):
     return {
         'documents': len(rows), 'prediction_documents': predicted,
         'valid_extraction_documents': valid,
+        'nonempty_pipeline_valid_documents': sum(nonempty_valid(r) for r in rows),
+        'nonempty_pipeline_valid_documents_per_hour': rate(sum(nonempty_valid(r) for r in rows) * 3600),
         'article_seconds': seconds, 'article_gpu_seconds': gpu_seconds,
         'prompt_tokens': total('prompt_tokens'), 'completion_tokens': output,
         'reasoning_tokens': reasoning, 'answer_tokens': answer,
@@ -74,6 +115,7 @@ def worker_goodput(completed, workers, *, default_gpus=1, missing_receipts=0):
         'documents_per_second': len(rows) / seconds if available else None,
         'prediction_documents_per_second': sum(bool(r.get('has_prediction')) for r in rows) / seconds if available else None,
         'valid_extraction_documents_per_second': sum(bool(r.get('has_prediction') and r.get('all_extraction_tasks_valid')) for r in rows) / seconds if available else None,
+        'nonempty_pipeline_valid_documents_per_second': sum(nonempty_valid(r) for r in rows) / seconds if available else None,
         'documents_per_gpu_hour': len(rows) * 3600 / gpu_seconds if available and gpu_seconds > 0 else None,
         'basis': 'completed documents / sum observed worker wall seconds; includes startup, probes, retries and cleanup; excludes queue/CPU setup; use sacct for exact allocated cost',
         'validity_is_not_semantic_accuracy': True}

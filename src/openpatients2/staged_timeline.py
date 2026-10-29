@@ -15,6 +15,31 @@ import httpx
 from .longitudinal import PatientTimeline, audit_timeline, partial_timeline
 
 
+def route_relation_scope(value, allowed_pairs, event_ids):
+    """Exclude known, differently owned pairs without repairing their identity.
+
+    All pairs have their own request. This is request routing, NOT acceptance of
+    an extra edge as a fact. Original candidates stay in the ledger and audit.
+    Unknown IDs, self-links, malformed edges and in-scope evidence errors still
+    reach the checker and must fail normally.
+    """
+    routed = copy.deepcopy(value)
+    excluded = []
+    if not isinstance(routed, dict) or not isinstance(routed.get('edges'), list):
+        return routed, excluded
+    kept = []
+    for edge in routed['edges']:
+        a, b = (edge.get('from_event_id'), edge.get('to_event_id')) if isinstance(edge, dict) else (None, None)
+        if (isinstance(a, str) and isinstance(b, str) and a != b
+                and a in event_ids and b in event_ids and frozenset((a, b)) not in allowed_pairs):
+            excluded.append({'reason': 'pair_owned_by_another_batch', 'candidate': edge,
+                             'evidence_validated': False, 'accepted_as_fact': False})
+        else:
+            kept.append(edge)
+    routed['edges'] = kept
+    return routed, excluded
+
+
 def evidence_ids(value, segments):
     """Locate literal evidence, including old citations that name a heading."""
     ids = set()
@@ -136,7 +161,8 @@ async def extract(runner, article, patient, facts, rows, identity, replica, sour
             {**identity, 'timeline_stage': 'events', 'batch': number, 'focus_segments': sorted(focus),
              'source_scope': 'whole_article' if view is article else 'whole_segment_window',
              'included_segment_ids': [s['segment_id'] for s in view['segments']]},
-            replica, segments, partial_builder=lambda v: partial_timeline(v, sources, facts, rid))
+            replica, segments, partial_builder=lambda v: partial_timeline(v, sources, facts, rid),
+            split_on_length=bounded and len(batch) > 1 and getattr(runner.config, 'timeline_scope_repair', False))
         if bounded and len(batch) > 1 and splittable_failure(result):
             mid = len(batch) // 2
             return [replaced(runner, result)] + await events(str(number)+'.0', batch[:mid]) + await events(str(number)+'.1', batch[mid:])
@@ -167,8 +193,24 @@ async def extract(runner, article, patient, facts, rows, identity, replica, sour
                     for e in relevant]
         def build(view):
             local_facts = {fid: facts[fid] for e in relevant for fid in e['fact_ids'] if fid in facts} if bounded else facts
-            messages = timeline_messages(view, patient, rid, local_facts, [], refined=True)
-            messages[-1]['content'] = messages[-1]['content'].split('\nSCHEMA:\n')[0]
+            if getattr(runner.config, 'timeline_scope_repair', False):
+                # Do not inherit the whole-timeline prompt's request to emit
+                # events/all relations. The registry is context, not a request
+                # to enumerate its Cartesian product.
+                from .article_tasks import SYSTEM
+                from .patient_context import minimal_segments
+                messages = [{'role': 'system', 'content': SYSTEM}, {'role': 'user', 'content':
+                    'SOURCE_JSON:\n' + json.dumps({'article_id': article['article_id'],
+                        'patient': patient, 'segments': minimal_segments(view['segments'])}, ensure_ascii=False) +
+                    '\nTASK:\nDecide only source-supported temporal relations for the listed patient and candidate pairs. '
+                    'Each event is an unreviewed candidate. Evidence must support the patient and BOTH endpoints. '
+                    'Do not copy unrelated patients, infer order from clinical practice, or equate a plan with a performed action. '
+                    'Omit unknown/unsupported relations rather than enumerating unknown edges. '
+                    'Evidence supplies only segment_id and an exact unique quote; code resolves the '
+                    'source hash and offsets. A time phrase must be literal in its own cited evidence. '}]
+            else:
+                messages = timeline_messages(view, patient, rid, local_facts, [], refined=True)
+                messages[-1]['content'] = messages[-1]['content'].split('\nSCHEMA:\n')[0]
             ownership = ('Consider only the CANDIDATE_PAIRS, each an UNORDERED pair. Either event may be '
                 'from_event_id; choose direction from source evidence, including during. Pair ordering is '
                 'only bookkeeping and conveys NO chronology. ' if bounded else
@@ -213,7 +255,11 @@ async def extract(runner, article, patient, facts, rows, identity, replica, sour
             {**identity, 'timeline_stage': 'relations', 'batch': number, 'focus_event_ids': focus,
              'target_event_ids': targets, 'source_scope': 'whole_article' if view is article else 'whole_segment_window',
              'candidate_event_pairs': pairs if bounded else None,
-             'included_segment_ids': [s['segment_id'] for s in view['segments']]}, replica, segments)
+             'included_segment_ids': [s['segment_id'] for s in view['segments']]}, replica, segments,
+            candidate_scope=(lambda value: route_relation_scope(value, allowed_pairs, set(positions)))
+                if bounded and getattr(runner.config, 'timeline_scope_repair', False) else None,
+            split_on_length=bounded and (len(focus) > 1 or len(targets) > 1)
+                and getattr(runner.config, 'timeline_scope_repair', False))
         if bounded and (len(focus) > 1 or len(targets) > 1) and splittable_failure(result):
             return [replaced(runner, result)] + await split_relations(number, focus, targets)
         return [result]

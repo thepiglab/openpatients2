@@ -30,6 +30,11 @@ def discovery_messages(article, *, refined=False, isolated=False):
     instruction = (
         'Identify individually described patients in ALL supplied blocks. Human and animal patients are allowed. '
         'A cohort size, group mean, generic diagram or anonymous dashboard bed is not an individual case. '
+        'A singleton inside a cohort CAN be an individual case when the text gives that one patient a '
+        'specific clinical event plus management or outcome (for example one perforation immediately '
+        'treated with endoclips). Retain only those explicitly individual details; do not copy cohort '
+        'means, demographics or other patients into that record. A count alone, such as one complication '
+        'without an individual course, is insufficient. '
         'Include a previously published patient only if this article itself reports an individual clinical course; '
         'flag prior publication in attribution_limitations, and do not merge across articles. '
         'A fetus, newborn, mother or other relative mentioned in a case about one index patient stays in that '

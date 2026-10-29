@@ -190,6 +190,8 @@ def test_repair_pilot_freezes_experimental_settings(campaign, tmp_path):
     m = b.read(work / 'arms/beam-nvfp4-dflash2-text/manifest.json')
     assert m['article_timeout_seconds'] == 14400
     assert m['extraction']['timeline_prefer_windows']
-    assert m['extraction']['timeline_relation_batch_size'] == 4
-    assert m['extraction']['timeline_target_batch_size'] == 16
+    assert m['extraction']['timeline_relation_batch_size'] == 2
+    assert m['extraction']['timeline_target_batch_size'] == 8
+    assert m['extraction']['timeline_scope_repair'] and m['extraction']['bounded_document_stages']
+    assert m['beam_repair_policy'] == 'scope-routing-bounded-documents/2'
     assert s.check(work)['nemotron_super']['scheduler']['waves'][0]['totals']['gpus'] == 8

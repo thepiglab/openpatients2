@@ -1,11 +1,27 @@
 # Beam optimization and literature-derived FHIR records
 
-See [the October 28 pilot assessment](reports/BEAM_PILOT_20261028.md) before a full run.
-The next diagnostic command is `bash scripts/run_dense_beam.sh repair-pilot`.
-Window-first timelines and four-hour article limits are opt-in through that mode
-or `DENSE_BEAM_REPAIR=1`; the original pilot settings remain available.
-Use `DENSE_BEAM_REPAIR=1 bash scripts/run_dense_beam.sh long` only after validating
-the repair pilot and resolving the documented appendix/roster failure.
+See [the October 29 repair assessment](reports/BEAM_REPAIR_20261029.md) before a full run.
+The next command is `bash scripts/run_dense_beam.sh diagnostic`: twelve fixed training
+articles, including all known long-document/series failures, singleton-cohort
+discovery, representative multi-patient cases and empty controls. It runs two TP4
+replicas, with a 12-hour worker limit and a four-hour article limit. No test data.
+
+Repair policy `scope-routing-bounded-documents/2` is frozen in the arm manifest.
+`diagnostic` and `repair-pilot` enable it; `long` now enables it by default.
+For `long`, the original pipeline remains available with `DENSE_BEAM_REPAIR=0`;
+`diagnostic` and `repair-pilot` always enable the repair policy.
+This is a new experiment, not proof of better accuracy: first inspect the diagnostic,
+then repeat `repair-pilot` on the same 48 training articles. Only after that should
+we schedule `long` or compare speculative decoding settings on the revised pipeline.
+
+Promotion checks: all twelve attempts finish; the genomic roster and measurement
+coverage receipts show no failed leaves; singleton-case and empty-control decisions
+match a source review; out-of-batch edges no longer consume targeted repair loops;
+no reference patient is lost merely to raise validity; and manual event/relation
+checks agree with the literal source. Compare matched clinical recall, timeline
+quality, nonempty-valid documents/GPU-hour and per-task tokens on the 48-article
+rerun. A cheaper empty output or higher schema-valid count is not an improvement.
+The diagnostic deliberately overrepresents failures and is not a population metric.
 
 ## Run Beam first
 
@@ -27,6 +43,8 @@ NVFP4 on Blackwell and supports two replicas on eight GPUs. See the
 
 | Run mode | Four-GPU worker A | Four-GPU worker B | Articles | Worker limit |
 |---|---|---|---|---|
+| `diagnostic` | Beam + DFlash2, replica 0 | Same configuration, replica 1 | Twelve fixed training articles, distinct claims; repair v2 | 12 hours |
+| `repair-pilot` | Beam + DFlash2, replica 0 | Same configuration, replica 1 | Same 48 diverse training articles, distinct claims; repair v2 | 24 hours |
 | `pilot` | Beam + DFlash2, 7 draft tokens | Same Beam, speculation off | Same 48 diverse training articles per arm | 24 hours |
 | `short-draft` | Beam + DFlash2, 3 draft tokens | Same Beam, speculation off | Same 48 diverse training articles per arm | 24 hours |
 | `long` | Selected configuration, replica 0 | Same configuration, replica 1 | All train + validation, distinct article claims | 72 hours |
@@ -51,12 +69,13 @@ From an updated, committed HiPerGator checkout:
   set -a
   source .env
   set +a
-  DENSE_ACCOUNT=cai5724 DENSE_QOS=cai5724 bash scripts/run_dense_beam.sh pilot
+  DENSE_ACCOUNT=cai5724 DENSE_QOS=cai5724 bash scripts/run_dense_beam.sh diagnostic
 )
 ```
 
-Use `DENSE_BEAM_PILOT_ARTICLES=2 DENSE_HOURS=4` before that command for a hardware
-smoke. The launcher must see committed code: untracked or uncommitted modules
+Use `DENSE_BEAM_PILOT_ARTICLES=2 DENSE_HOURS=4 bash scripts/run_dense_beam.sh repair-pilot`
+for a smaller hardware smoke; `diagnostic` always selects its twelve fixed cases.
+The launcher must see committed code: untracked or uncommitted modules
 will not be present in its frozen snapshot. It refuses a new launch while the
 previous campaign is active. Monitor with:
 
@@ -65,7 +84,12 @@ squeue -u "$USER" -o "%.18i %.12P %.65j %.10T %.12M %R"
 bash scripts/run_dense_nemotron_super.sh status
 ```
 
-After examining matched quality, fully valid document throughput, tokens per
+For a paired speculation comparison using the repaired pipeline, run
+`DENSE_BEAM_REPAIR=1 bash scripts/run_dense_beam.sh pilot` or
+`DENSE_BEAM_REPAIR=1 bash scripts/run_dense_beam.sh short-draft`. Without that
+override, these two ablation modes retain the original pipeline as a control.
+
+After examining matched quality, nonempty pipeline-valid document throughput, tokens per
 article and `beam_speculation_comparison` in `summary/comparison.json`, select
 the winning profile explicitly. For example, **if speculation off wins**:
 
@@ -84,7 +108,7 @@ on test data or count incomplete/failed outputs as zero-cost successes.
 - Beam uses a 131,072-token context cap instead of 65,536. Server startup,
   exact `/tokenize` counts and reasoning-capture probes remain mandatory.
 - Timeline event calls cover four source segments at a time. Relation calls
-  cover four origin events and at most sixteen target events, including cross-batch
+  cover two origin events and at most eight target events, including cross-batch
   candidates. Each event pair is considered once, allowing either edge direction,
   to avoid redundant reverse-pair calls. The repair pilot uses whole evidence/focus segments, identity evidence and
   adjacent context. No segment is shortened. Every segment remains an event
@@ -95,6 +119,33 @@ on test data or count incomplete/failed outputs as zero-cost successes.
   failure. Scoped context may miss a remote relation cue: candidate coverage is
   not proof of semantic coverage. Exhaustive target batching costs more calls,
   so measure the new workload before scheduling the full dataset.
+- Repair v2 uses a relation-only prompt, without inherited instructions to return
+  a complete timeline. Known pairs belonging to another batch are retained in
+  `scope_routing` audits, not repeatedly repaired or accepted as clinical facts.
+  Unknown endpoints, self-links, bad quotes and temporal contradictions still fail.
+  Every unordered pair retains its own batch; emitted extra edges do not bypass
+  the validation of that batch. Length failures split immediately instead of
+  spending two large retries first.
+- Oversized roster requests split into whole-source-segment windows. Every segment
+  must be attempted and every window must pass before global discovery succeeds.
+  Identity reconciliation covers every candidate exactly once, preserves literal
+  identity evidence, and blocks on unresolved identities. The candidate mapping is
+  model-generated, not a reviewed identity guarantee. A whole segment that cannot
+  fit, or an oversized reconciliation request, remains an explicit failure.
+  For these windowed articles, downstream patient requests retain assigned,
+  unresolved, identity/adjacent and abstract blocks. Background stays in the full
+  archived source and omission audit; semantic completeness is not asserted.
+- Measurement extraction batches whole rows with original headers/legends, counts
+  serving tokens, and splits further on length/context failures. Values, units and
+  times are still checked against literal cells. Successful batches survive a failed
+  neighbour, but the EHR stage stays failed/partial and its coverage receipt records
+  the missing rows. No synthetic values or dates are introduced.
+- Reports now separate empty prediction artifacts, nonempty patient articles,
+  schema validity, nonempty pipeline validity (including EHR checks), and empty
+  roster disagreements with references. Legacy JSON counters remain for compatibility;
+  the displayed useful-valid rate uses nonempty records. Clinical accuracy remains
+  unreviewed. Per-task input/output/reasoning totals and length/routing counts expose
+  the cost of timeline repair instead of burying it in article averages.
 - All requests retain endpoint-returned reasoning, raw response fields, messages,
   usage, task identity and model revision. Fact/citation/trace links remain in
   `summary/fact-reasoning.jsonl`. Reasoning is unverified model output, not source

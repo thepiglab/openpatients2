@@ -341,6 +341,7 @@ def serving(work, shard, logdir):
 
 def ledger_metrics(paths):
     metrics = {'model_calls': 0, 'failed_attempts': 0}
+    by_task = {}
     reasoning_statuses = Counter()
     finish_reasons = Counter()
     for k in ('prompt_tokens', 'completion_tokens', 'reasoning_tokens'):
@@ -357,12 +358,18 @@ def ledger_metrics(paths):
             if response is None:
                 continue
             metrics['model_calls'] += 1
+            task = by_task.setdefault(entry.get('task', 'unknown_legacy'), {'model_calls':0, 'length_limited_calls':0,
+                'out_of_batch_candidates':0, 'prompt_tokens':0, 'completion_tokens':0, 'reasoning_tokens':0})
+            task['model_calls'] += 1
+            task['length_limited_calls'] += entry.get('metrics', {}).get('finish_reason') == 'length'
+            task['out_of_batch_candidates'] += len(entry.get('scope_routing', []))
             finish_reasons[entry.get('metrics', {}).get('finish_reason') or 'unknown'] += 1
             reasoning_statuses[response.get('reasoning_status', 'unknown_legacy')] += 1
             if response.get('error') and not entry.get('errors'):
                 metrics['failed_attempts'] += 1
             for k in ('prompt_tokens', 'completion_tokens', 'reasoning_tokens'):
                 value = entry.get('metrics', {}).get(k)
+                task[k] = task[k] + value if task[k] is not None and value is not None else None
                 if value is None:
                     metrics['unknown_' + k] += 1
                 else:
@@ -373,6 +380,7 @@ def ledger_metrics(paths):
             metrics[k] = None
     metrics['reasoning_statuses'] = dict(reasoning_statuses)
     metrics['finish_reasons'] = dict(finish_reasons)
+    metrics['task_usage'] = by_task
     return metrics
 
 
@@ -457,6 +465,8 @@ async def run_article(work, item, endpoint, attempt):
         receipt.update(status='done', has_prediction=aid in predictions,
                        prediction_sha256=sha(attempt / 'ehr/data/unified.jsonl'),
                        all_extraction_tasks_valid=report['valid_tasks'] == report['task_count'])
+        from .benchmark_reporting import nonempty_valid
+        receipt['nonempty_pipeline_valid'] = nonempty_valid(receipt)
     except Exception as exc:
         receipt.update(error_type=type(exc).__name__, error=str(exc)[:2000])
     finally:
@@ -683,7 +693,9 @@ def status(work):
                 latest = read(attempts[-1])
                 latest_errors[item['article_id']] = latest.get('error_type') or latest.get('status', 'unknown')
     workers = [read(p) for p in (work / 'results/workers').glob('*/job-*/receipt.json')]
+    from .benchmark_reporting import quality_summary
     return {'expected': len(m['articles']), 'completed': len(done), 'pending': pending,
+            'quality_summary': quality_summary(done),
             'completed_without_prediction': sum(not r['has_prediction'] for r in done),
             'completed_without_model_calls': sum(r.get('model_calls') == 0 for r in done),
             'pending_with_failed_attempt': latest_errors,
@@ -697,7 +709,7 @@ def status(work):
 def aggregate(work):
     m = check_snapshot(work)
     from .unified_scoring import score
-    from .benchmark_reporting import throughput, worker_goodput
+    from .benchmark_reporting import throughput, worker_goodput, quality_summary, task_usage_summary
     from .reasoning_lineage import export_fact_index
     from .speculation_metrics import summarize as speculation_summary
     reference = rows(work / 'reference/unified.jsonl')
@@ -745,6 +757,8 @@ def aggregate(work):
     worker_dirs = list((work / 'results/workers').glob('*/job-*'))
     missing_worker_receipts = sum(not (p / 'receipt.json').exists() for p in worker_dirs)
     report = {**progress, 'scope': m['scope'], 'complete': not progress['pending'],
+              'quality_summary': quality_summary(timing, reference, predictions),
+              'task_usage': task_usage_summary(timing),
               'score_overall': scores['overall'], 'split_counts': m['splits'], 'media': m['media'],
               'startup_seconds': stats([r['startup_seconds'] for r in workers if 'startup_seconds' in r]),
               'summed_worker_seconds': sum(r['worker_seconds'] for r in workers),

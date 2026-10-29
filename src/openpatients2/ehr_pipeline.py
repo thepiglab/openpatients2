@@ -131,7 +131,7 @@ async def run_ehr_stages(config, articles_path, run_dir, output, endpoints, cont
             annotation = {'article_id': aid, 'text_sha256': article['text_sha256'],
                           'patients': [{'patient_id': p['patient_id'], 'label': p.get('label'), 'species': p.get('species'),
                                         'identity_evidence': p.get('identity_evidence')} for p in (roster or {}).get('patients', [])]}
-            outputs = {}; statuses = {}; errors = {}
+            outputs = {}; statuses = {}; errors = {}; partial_stages = {}
             inspected = [f for f in visual_target['figures'] if f['status'] == 'inspected']
             async def figure_stage(task, builder, checker, assemble, need_pixels):
                 results = []
@@ -170,6 +170,15 @@ async def run_ehr_stages(config, articles_path, run_dir, output, endpoints, cont
             if config.measurement_series_extraction and (transcriptions or any(s.get('kind') == 'table_row' for s in article['segments'])):
                 draft = ehr_tasks.series_draft(article, transcriptions)
                 async def series_stage(draft=draft, transcriptions=transcriptions):
+                    if extraction.bounded_document_stages:
+                        from .bounded_series import extract as bounded_series
+                        document, coverage = await bounded_series(runner, article, roster, annotation, draft, transcriptions)
+                        target = output / 'coverage' / (aid + '-measurement-series.json')
+                        target.parent.mkdir(parents=True, exist_ok=True)
+                        target.write_text(json.dumps(coverage, ensure_ascii=False, indent=2) + '\n')
+                        if not coverage['all_batches_valid'] or not coverage['all_focus_cells_attempted']:
+                            partial_stages['measurement_series_extraction'] = 'Incomplete row coverage; see coverage receipt'
+                        return document
                     # Cells quoting reviewed supplement transcriptions are validated against them.
                     result = await runner.call('measurement_series_extraction', ehr_tasks.series_messages(article, roster, draft),
                                                lambda v: ehr_tasks.check_series(v, article, annotation, draft, transcriptions),
@@ -184,6 +193,9 @@ async def run_ehr_stages(config, articles_path, run_dir, output, endpoints, cont
                         raise ValueError('No valid roster for this article')
                     document = await job()
                     outputs[task] = document; statuses[task] = PRESENT
+                    if task in partial_stages:
+                        statuses[task] = 'model_output_failed'
+                        errors[task] = partial_stages[task]
                     path = load_store().path(output, folder, aid); path.parent.mkdir(parents=True, exist_ok=True)
                     path.write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n')
                 except (ValueError, KeyError, OSError) as exc:

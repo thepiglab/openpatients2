@@ -74,7 +74,7 @@ def test_comparison_contains_split_and_matched_document_rates(campaign):
     assert values['output_tokens_per_gpu_second'] == 5
     assert paired['documents_per_second'] == .1
     markdown = (work / 'summary/comparison.md').read_text()
-    assert 'Output tok/s' in markdown and 'Attempt/s' in markdown and 'Prediction/h' in markdown and 'Fully valid/h' in markdown and 'Item F1' in markdown
+    assert 'Output tok/s' in markdown and 'Attempt/s' in markdown and 'Prediction/h' in markdown and 'Nonempty valid/h' in markdown and 'Item F1' in markdown
     assert 'Matched completed articles in this split: 1.' in markdown
     assert 'Matched item F1' in markdown
 

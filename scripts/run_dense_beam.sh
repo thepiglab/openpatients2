@@ -8,6 +8,14 @@ export DENSE_SUPER_SCHEDULER=packed DENSE_SUPER_WITH_IMAGES=0 DENSE_INCLUDE_TEST
 export DENSE_SUPER_ARTICLE_IDS='' DENSE_SUPER_EXPECTED=''
 export DENSE_SUPER_BEAM_REPAIR="${DENSE_BEAM_REPAIR:-0}"
 case "$mode" in
+  diagnostic)
+    export DENSE_SUPER_BEAM_REPAIR=1
+    export DENSE_SUPER_PROFILES=beam-nvfp4-dflash2
+    export DENSE_SUPER_SPLITS=train DENSE_SUPER_LIMIT_ARTICLES=''
+    # Fixed training-only failures + representative cases + empty controls.
+    export DENSE_SUPER_ARTICLE_IDS='PMC12283752.1 PMC12373494.1 PMC12486612.1 PMC12779367.1 PMC12780777.1 PMC12834360.1 PMC13476113.1 PMC7770219.1 PMC13575834.1 PMC12373261.1 PMC12835657.1 PMC12470713.1'
+    export DENSE_HOURS="${DENSE_HOURS:-12}"
+    ;;
   repair-pilot)
     export DENSE_SUPER_BEAM_REPAIR=1
     export DENSE_SUPER_PROFILES=beam-nvfp4-dflash2
@@ -22,6 +30,7 @@ case "$mode" in
     export DENSE_HOURS="${DENSE_HOURS:-24}"
     ;;
   long)
+    export DENSE_SUPER_BEAM_REPAIR="${DENSE_BEAM_REPAIR:-1}"
     profile="${DENSE_BEAM_PROFILE:-beam-nvfp4-dflash2}"
     case "$profile" in
       beam-nvfp4-dflash2|beam-nvfp4-no-spec|beam-nvfp4-dflash2-short) ;;
@@ -30,6 +39,6 @@ case "$mode" in
     export DENSE_SUPER_PROFILES="$profile" DENSE_SUPER_SPLITS='train validation'
     export DENSE_SUPER_LIMIT_ARTICLES='' DENSE_HOURS="${DENSE_HOURS:-72}"
     ;;
-  *) echo 'Usage: run_dense_beam.sh [repair-pilot|pilot|short-draft|long] [new-work-directory]' >&2; exit 2;;
+  *) echo 'Usage: run_dense_beam.sh [diagnostic|repair-pilot|pilot|short-draft|long] [new-work-directory]' >&2; exit 2;;
 esac
 exec bash "$repo/scripts/run_dense_nemotron_super.sh" "$@"

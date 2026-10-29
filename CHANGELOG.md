@@ -1,3 +1,10 @@
+## 2026-10-29 — Beam repair v2
+
+- Stop retrying known out-of-batch timeline edges; preserve raw candidates and routing audits, retain strict evidence gates, use relation-only prompts and split length failures immediately.
+- Add bounded whole-segment roster discovery with explicit identity reconciliation and coverage, plus whole-row measurement batches retaining successful partial results and literal cell validation.
+- Separate nonempty pipeline-valid records from empty/schema-valid outputs and EHR failures; add per-task token/length/routing diagnostics.
+- Add a fixed twelve-article training diagnostic on two TP4 Beam replicas before the 48-article repair pilot and longer runs. Freeze the repair policy in manifests; preserve reasoning and original sources.
+
 ## 2026-10-29 — Le Chonk campaign
 
 - Add opt-in Mistral Large 4 NVFP4 with embedded DSpark3, pinned native parameters/template and official container digest.

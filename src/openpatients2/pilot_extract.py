@@ -115,6 +115,8 @@ class PilotConfig(ConfigModel):
     timeline_relation_batch_size: int = Field(default=6, ge=1, le=16)
     timeline_bounded_context: bool = False
     timeline_prefer_windows: bool = False
+    timeline_scope_repair: bool = False
+    bounded_document_stages: bool = False
     timeline_target_batch_size: int = Field(default=8, ge=1, le=32)
     summary_completion: bool = False
     scatter_calls: bool = False
@@ -430,6 +432,7 @@ class PilotRunner:
         self.calls = 0; self.reserved_tokens = 0; self.accounted_tokens = 0; self.attempt_number = 0
         self.results = []; self.patients = []; self.article_rows = []; self.visual_rows = []
         self.source_ledgers = {}
+        self.windowed_roster_articles = set()
         self.slots = [asyncio.Semaphore(self.config.concurrency_per_endpoint) for _ in endpoints]
         self.active = [0 for _ in endpoints]
         self.peak_active = [0 for _ in endpoints]
@@ -451,7 +454,9 @@ class PilotRunner:
             'gepa_assessment': ClinicalFeedback.model_json_schema()}
         from .evidence_ledger import ChunkMap, AttributeIdAudit
         from .episode_ledger import ledger_wire_schema
+        from .bounded_roster import Reconciliation
         self.schemas.update({'ledger_chunk_map':ChunkMap.model_json_schema(),
+            'roster_reconcile':Reconciliation.model_json_schema(),
             'ledger_attribute_audit':AttributeIdAudit.model_json_schema(),
             'ledger_events':ledger_wire_schema(),'ledger_edges':ledger_wire_schema(),
             **{'ledger_repair_'+k:v.model_json_schema() for k,v in TASK_MODELS.items()}})
@@ -548,7 +553,7 @@ class PilotRunner:
             size = max(1, size // 2)
 
     async def call(self, task, messages, checker, identity, replica, segments, *, packet=None, partial_builder=None,
-                   repair_from=None):
+                   repair_from=None, candidate_scope=None, split_on_length=False):
         clinical_task = canonical_clinical_task(task)
         targeted = self.arm == 'targeted' and (self.config.task_repair_allowlist is None
                                               or task in self.config.task_repair_allowlist)
@@ -662,6 +667,9 @@ class PilotRunner:
                             candidate = parsed.value
                             entry.update(parse_method=parsed.method, parse_transformations=parsed.transformations,
                                          raw_candidate=copy.deepcopy(candidate))
+                            if candidate_scope is not None:
+                                candidate, scope_audit = candidate_scope(candidate)
+                                entry['scope_routing'] = scope_audit
                             if self.config.repair_enabled('figures') and task == 'figure_visuals':
                                 from .overnight_repairs import canonical_figure_identity
                                 candidate, identity_audit = canonical_figure_identity(candidate, identity)
@@ -734,6 +742,11 @@ class PilotRunner:
                             transports += 1
                             continue
                         break
+                    if split_on_length and response.finish_reason == 'length':
+                        # The caller owns lossless partitioning and records this
+                        # parent as superseded. Do not spend two full retries on
+                        # a request already known to need smaller batches.
+                        break
                     if (targeted and repair_rounds < self.config.max_repair_rounds
                             and (plan is None or plan.repair_batch())):
                         repair_rounds += 1; mode = 'repair'; repair_errors = list(errors)
@@ -776,6 +789,8 @@ class PilotRunner:
             'status': 'valid' if data is not None and not errors else 'partial' if partial is not None else 'failed',
             'data': data if not errors else partial, 'errors': errors, 'attempts': attempts,
             'semantic_review': 'unreviewed', 'clinical_accuracy_verified': False}
+        if candidate_scope is not None:
+            result['scope_routing'] = [r for a in attempts for r in a.get('scope_routing', [])]
         result['refinement_policy'] = self.config.refinement_policy
         result['quarantine'] = quarantine
         if time_quarantined:
@@ -864,12 +879,16 @@ class PilotRunner:
 
     async def patient(self, article, roster, patient, reviews, replica):
         context_article, context_patient, context_audit = article, patient, None
-        if self.input_scope == 'patient_sections':
+        windowed = article['article_id'] in self.windowed_roster_articles
+        if windowed:
+            from .bounded_roster import routed_patient_view
+            context_article, context_patient, context_audit = routed_patient_view(article, roster, patient)
+        elif self.input_scope == 'patient_sections':
             context_article, context_patient, context_audit = patient_view(article, roster, patient)
         packet = patient_packet(article, roster, context_patient,
-            scope='localized' if self.input_scope == 'patient_sections' else 'whole_article', figure_reviews=reviews)
+            scope='localized' if windowed or self.input_scope == 'patient_sections' else 'whole_article', figure_reviews=reviews)
         packet['context_selection'] = context_audit
-        packet['input_scope'] = self.input_scope
+        packet['input_scope'] = 'window_discovery_patient_routing' if windowed else self.input_scope
         rid = packet['record_id']; segments = packet_segments(packet)
         identity = {'article_id': article['article_id'], 'patient_id': patient['patient_id'], 'record_id': rid}
         ledger_mode = self.config.experimental_pipeline == 'evidence_ledger'
@@ -1349,6 +1368,9 @@ class PilotRunner:
                 roster = {'task':'roster','identity':{'article_id':article['article_id']},
                     'status':saved['status'],'data':data,'errors':[], 'attempts':[],
                     'origin':'cached_generated_unreviewed_roster','excluded_from_generated_task_metrics':True}
+            elif self.config.bounded_document_stages:
+                from .bounded_roster import discover as bounded_discover
+                roster = await bounded_discover(self, article, replica)
             else:
                 quarantine = []
                 def roster_checker(value):
@@ -1418,6 +1440,8 @@ class PilotRunner:
             'model': {'model_id': self.config.model_id, 'revision': self.config.revision},
             'selected_articles': len(articles), 'eligible_articles': len(eligible),
             'input_scope': self.input_scope, 'seed': self.config.seed, 'discovery_only': discovery_only,
+            'windowed_roster_articles': sorted(self.windowed_roster_articles),
+            'windowed_clinical_scope': 'assigned/unresolved/identity/adjacent/abstract source blocks; omissions audited, semantic coverage unverified',
             'conditioned_on_frozen_rosters': frozen is not None,
             'conditioned_on_cached_generated_rosters': cached is not None,
             'roster_scores_are_independent_of_clinical_extraction': frozen is not None,
