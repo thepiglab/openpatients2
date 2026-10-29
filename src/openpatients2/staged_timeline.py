@@ -116,7 +116,8 @@ async def extract(runner, article, patient, facts, rows, identity, replica, sour
 
         view = article
         messages = build(view)
-        if bounded and not await fits(runner, 'timeline_events', messages, replica):
+        if bounded and (getattr(runner.config, 'timeline_prefer_windows', False)
+                        or not await fits(runner, 'timeline_events', messages, replica)):
             view = source_window(article, focus, patient)
             messages = build(view)
             if len(batch) > 1 and not await fits(runner, 'timeline_events', messages, replica):
@@ -175,6 +176,9 @@ async def extract(runner, article, patient, facts, rows, identity, replica, sour
                 'Every edge from_event_id must be a focus ID and to_event_id a target ID. ')
             messages[-1]['content'] += ('\nRELATION STAGE: Return only edges and limitations matching the schema. '
             'Do not rewrite or return events. ' + ownership +
+            'Return only directly supported relations; an empty edges list is valid. '
+            'Do not emit an edge for every candidate pair. Use offset=null unless the '
+            'quoted relation evidence contains the literal duration expression. '
             'Do not infer order from IDs, source paragraph order or medical plausibility. '
             'Use after where needed; cite primary source evidence for the relation and both events. '
             '\nEVENT_REGISTRY:\n' + json.dumps(registry, ensure_ascii=False) +
@@ -186,7 +190,8 @@ async def extract(runner, article, patient, facts, rows, identity, replica, sour
             return messages
         view = article
         messages = build(view)
-        if bounded and not await fits(runner, 'timeline_relations', messages, replica):
+        if bounded and (getattr(runner.config, 'timeline_prefer_windows', False)
+                        or not await fits(runner, 'timeline_relations', messages, replica)):
             view = source_window(article, evidence_ids(relevant, segments), patient)
             messages = build(view)
             if (len(focus) > 1 or len(targets) > 1) and not await fits(runner, 'timeline_relations', messages, replica):
@@ -250,7 +255,8 @@ async def extract(runner, article, patient, facts, rows, identity, replica, sour
         'data': graph, 'errors': errors, 'quarantine': quarantine,
         'attempts': [a for s in stages for a in s['attempts']],
         'stage_coverage': [{'task': s['task'], 'identity': s['identity'], 'status': s['status']} for s in stages],
-        'context_policy': 'full_source_then_whole_segment_windows' if bounded else 'full_source',
+        'context_policy': ('whole_segment_windows' if bounded and getattr(runner.config, 'timeline_prefer_windows', False)
+                           else 'full_source_then_whole_segment_windows' if bounded else 'full_source'),
         'relation_candidate_policy': 'each_unordered_pair_once_either_edge_direction' if bounded else 'all_events',
         'semantic_coverage_verified': False,
         'semantic_review': 'unreviewed', 'clinical_accuracy_verified': False,

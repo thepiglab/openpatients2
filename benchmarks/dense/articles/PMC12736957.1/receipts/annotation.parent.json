@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12736957.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f08d2348011c28c67380824453b73641376a2a5d72856be2f24734934dc0350a",
+  "annotation_sha256": "53fa1a83734f745a7bb9c8c0519c4e85a047674e0b238ec447dddaa277354a43",
+  "reviewed_at": "2026-10-29T12:49:21.791176+00:00",
+  "source_segments_read": 12,
+  "facts_reviewed": 81,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Presenting hematochezia, melena and syncope now quote their own sentence and carry its time (June 2024).",
+    "Hemorrhagic shock (abstract) quotes its own sentence with its time \"Eight months after embolization\" and moved to the terminal-presentation event.",
+    "Post-procedure angiography finding carries its own time \"Following the procedure\".",
+    "Removed body sites not stated in the facts' own evidence (11 July pseudocyst size; CT angiography \"abdomen\").",
+    "Heavy alcohol use status current -> unknown (\"continued drinking\" does not place use at the latest described time).",
+    "Added observation: initial EGD not performed (CTA performed instead of initial EGD).",
+    "Split events: covered stent (not_occurred) out of the embolization event; pseudocyst observation out of the referral event; untimed hepatitis/PE/LVEF out of the three-month readmission event; untimed terminal labs out of the arrest event; resuscitation moved into the arrest event so \"following resuscitation\" orders arrest -> laparotomy.",
+    "Moved presumed virsungorrhagia and sentinel bleed to the presentation event.",
+    "Relations: added CTA -> embolization (result -> action on the detected pseudoaneurysm) and laparotomy/ligation -> death (\"died despite massive transfusion and emergent splenic artery ligation\"); embolization -> 11 July CT now quotes \"post-embolization ... prior embolization\".",
+    "Ambiguities added for the untimed comorbidities and terminal labs; abstract 3.6 cm added to the pseudoaneurysm-size ambiguity.",
+    "Summary rewritten so the three-month window and the arrest time do not cover untimed items.",
+    "Source coverage: b00004 is index-patient content."
+  ],
+  "unresolved": [
+    "Figure pixels are described in visual.json; caption-layer visual status stays not_inspected.",
+    "The pseudocyst size at the initial CT angiography is printed as 4.2 cm (text, Figure 2 caption) and 5.4 cm (Figure 1 caption); both are review_only.",
+    "Burned-in text in Figure 3 includes a date and time stamp and an identifier string; values are not copied.",
+    "Discussion statements that are general or literature-based are not copied to the patient.",
+    "Terminal laboratory values and blood pressure carry no stated time because their own sentences name none; lipase 118 U/L is timed by the discussion restatement of the same value."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 12,
+    "facts_reviewed": 81,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; no tables or supplements (confirmed in raw.xml).",
+      "Pseudocyst 4.2 cm (text, Fig 2 caption) vs 5.4 cm (Fig 1 caption) kept as source_conflict/review_only; pseudoaneurysm 3.5 / 3.6 cm vs 3.6 x 3.7 x 3.5 cm kept as ambiguity.",
+      "Lipase 118 U/L keeps the discussion restatement (same value, \"mildly elevated\", \"at the time of fatal rupture\"); the NO-BORROWING warning is a checker false positive because that quote carries the value itself.",
+      "Terminal BP, lactate and hemoglobin stay untimed; the adjacent-sentence rule does not apply because the arrest sentence names a different finding.",
+      "Covered stent recorded as cancelled with a not_occurred event; recanalization and virsungorrhagia possible/provisional."
+    ],
+    "residual_risks": [
+      "The lipase time depends on the discussion restatement; the gate warning remains.",
+      "Readmissions, comorbidities, referral, labs and the comfort-care/death pair are only partly linked because the source gives no literal order (cross-paragraph \"next three months\", \"complicated by\").",
+      "The Fig 2 visual description says the blue-arrow structure is \"on the left of the vertebra\" although it lies to the image right and the figure has no laterality letters."
+    ]
+  },
+  "physician_adjudicated": false
+}

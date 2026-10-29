@@ -35,7 +35,7 @@ STARTUP_TIMEOUT_SECONDS = 5400
 
 
 def prepare(root, work, expected=None, hours=12, with_images=True, include_test=False,
-            limit_articles=None, profiles=None, splits=None, selection_seed=42, article_ids=None, scheduler='serial'):
+            limit_articles=None, profiles=None, splits=None, selection_seed=42, article_ids=None, scheduler='serial', beam_repair=False):
     if not 1 <= hours <= 72 or (limit_articles is not None and limit_articles < 1):
         raise ValueError('Invalid hours/article limit')
     selected = list(DEFAULT_PROFILES) if profiles is None else list(profiles)
@@ -121,9 +121,11 @@ def prepare(root, work, expected=None, hours=12, with_images=True, include_test=
             concurrency_per_endpoint=profile['concurrency'], summary_structured_output=False,
             max_figures=48 if definition['pixels'] else 0, focused_pixels=definition['pixels'])
         if profile.get('engine') == 'beam':
-            am['extraction'].update(timeline_bounded_context=True,
-                timeline_segment_batch_size=2, timeline_relation_batch_size=2,
-                timeline_target_batch_size=8)
+            am['extraction'].update(timeline_bounded_context=True, timeline_prefer_windows=beam_repair,
+                timeline_segment_batch_size=4 if beam_repair else 2,
+                timeline_relation_batch_size=4 if beam_repair else 2,
+                timeline_target_batch_size=16 if beam_repair else 8)
+            am['article_timeout_seconds'] = 14400 if beam_repair else 3600
         from .pilot_extract import PilotConfig
         PilotConfig.model_validate(am['extraction'])
         if not definition['pixels']:
@@ -900,7 +902,7 @@ async def _worker(work, name):
     return await b.worker(arm, replica, campaigns=[arm],
         serving_factory=lambda _work, shard, _logs: serving(work, name, shard), runtime_probe=gpu_probe(profile),
         startup_check=startup, budget_seconds=m['nemotron_super']['hours'] * 3600 - 120,
-        article_timeout=3600)
+        article_timeout=b.read(arm / 'manifest.json').get('article_timeout_seconds', 3600))
 
 
 def status(work):
@@ -1326,6 +1328,7 @@ def main(argv=None):
             p.add_argument('--limit-articles', type=int)
             p.add_argument('--profiles', choices=list(PROFILES), nargs='+')
             p.add_argument('--scheduler', choices=['serial', 'packed'], default='serial')
+            p.add_argument('--beam-repair', action='store_true', help='Experimental windowed timelines and four-hour article timeout')
         if command == 'packing-preflight':
             p.add_argument('--wave', type=int, required=True)
         if command == 'submit':
@@ -1347,7 +1350,7 @@ def main(argv=None):
         if args.command == 'prepare':
             result = prepare(args.root.resolve(), work, args.expected, args.hours, args.with_images,
                              args.include_test, args.limit_articles, args.profiles, args.splits,
-                             args.selection_seed, args.article_ids, args.scheduler)
+                             args.selection_seed, args.article_ids, args.scheduler, args.beam_repair)
         elif args.command == 'packing-preflight':
             from .super_packing import preflight
             result = preflight(work, args.wave)

@@ -460,12 +460,18 @@
             "assertion": "present",
             "name": "Hemorrhagic shock",
             "verification_status": "confirmed",
-            "role": "complication"
+            "role": "complication",
+            "time": {
+              "text": "Eight months after embolization",
+              "relation": "after",
+              "anchor": "embolization",
+              "date_iso": null
+            }
           },
           "evidence": [
             {
               "segment_id": "b00001",
-              "quote": "she presented in hemorrhagic shock from recurrent SAP rupture"
+              "quote": "Eight months after embolization, she presented in hemorrhagic shock from recurrent SAP rupture"
             }
           ],
           "clinical_statement": "Hemorrhagic shock from recurrent rupture",
@@ -569,12 +575,18 @@
             "subject": "index_patient",
             "assertion": "present",
             "name": "Hematochezia",
-            "kind": "symptom"
+            "kind": "symptom",
+            "time": {
+              "text": "June 2024",
+              "relation": "at",
+              "anchor": null,
+              "date_iso": null
+            }
           },
           "evidence": [
             {
               "segment_id": "b00005",
-              "quote": "symptoms including hematochezia, melena, and syncope"
+              "quote": "presented in June 2024 with symptoms including hematochezia, melena, and syncope"
             }
           ],
           "clinical_statement": "Hematochezia",
@@ -590,12 +602,18 @@
             "subject": "index_patient",
             "assertion": "present",
             "name": "Melena",
-            "kind": "symptom"
+            "kind": "symptom",
+            "time": {
+              "text": "June 2024",
+              "relation": "at",
+              "anchor": null,
+              "date_iso": null
+            }
           },
           "evidence": [
             {
               "segment_id": "b00005",
-              "quote": "symptoms including hematochezia, melena, and syncope"
+              "quote": "presented in June 2024 with symptoms including hematochezia, melena, and syncope"
             }
           ],
           "clinical_statement": "Melena",
@@ -611,12 +629,18 @@
             "subject": "index_patient",
             "assertion": "present",
             "name": "Syncope",
-            "kind": "symptom"
+            "kind": "symptom",
+            "time": {
+              "text": "June 2024",
+              "relation": "at",
+              "anchor": null,
+              "date_iso": null
+            }
           },
           "evidence": [
             {
               "segment_id": "b00005",
-              "quote": "symptoms including hematochezia, melena, and syncope"
+              "quote": "presented in June 2024 with symptoms including hematochezia, melena, and syncope"
             }
           ],
           "clinical_statement": "Syncope",
@@ -915,7 +939,13 @@
             "text_value": "total occlusion",
             "comparator": "unknown",
             "flag": "unknown",
-            "method": "angiography"
+            "method": "angiography",
+            "time": {
+              "text": "Following the procedure",
+              "relation": "after",
+              "anchor": "procedure",
+              "date_iso": null
+            }
           },
           "evidence": [
             {
@@ -930,7 +960,7 @@
           "clinical_statement": "Angiography after the procedure showed total occlusion",
           "certainty": "supported",
           "scoring": "include",
-          "notes": "Figure 3 caption time (\"Following the procedure\") applies to this finding."
+          "notes": ""
         },
         {
           "fact_id": "p1-f038",
@@ -1057,7 +1087,6 @@
             "unit": "cm",
             "flag": "unknown",
             "method": "CT",
-            "body_site": "pancreas",
             "time": {
               "text": "11 July 2024",
               "relation": "at",
@@ -1576,7 +1605,7 @@
           "clinical_statement": "Lipase 118 U/L, mildly elevated at the time of fatal rupture",
           "certainty": "supported",
           "scoring": "include",
-          "notes": ""
+          "notes": "The discussion restates this same value (118 U/L) as mildly elevated at the time of fatal rupture; that quote carries the value, flag and time of this fact, so it is not a borrowed neighbour."
         },
         {
           "fact_id": "p1-f059",
@@ -1588,8 +1617,7 @@
             "name": "CT angiography",
             "kind": "procedure",
             "action": "completed",
-            "indication": "to rule out vascular complications",
-            "body_site": "abdomen"
+            "indication": "to rule out vascular complications"
           },
           "evidence": [
             {
@@ -1841,7 +1869,7 @@
             "assertion": "present",
             "domain": "alcohol",
             "name": "Heavy alcohol use",
-            "status": "current",
+            "status": "unknown",
             "amount_text": "heavily"
           },
           "evidence": [
@@ -2102,6 +2130,31 @@
           "certainty": "supported",
           "scoring": "include",
           "notes": ""
+        },
+        {
+          "fact_id": "p1-f081",
+          "task": "observations",
+          "collection": "items",
+          "fields": {
+            "subject": "index_patient",
+            "assertion": "present",
+            "name": "Initial esophagogastroduodenoscopy",
+            "kind": "other",
+            "status": "not_performed",
+            "result_absent_reason": "not_performed",
+            "comparator": "unknown",
+            "flag": "unknown"
+          },
+          "evidence": [
+            {
+              "segment_id": "b00005",
+              "quote": "CT angiography (CTA) was performed urgently instead of initial esophagogastroduodenoscopy (EGD)"
+            }
+          ],
+          "clinical_statement": "CT angiography was performed instead of initial EGD",
+          "certainty": "supported",
+          "scoring": "include",
+          "notes": ""
         }
       ],
       "events": [
@@ -2135,7 +2188,9 @@
             "p1-f028",
             "p1-f029",
             "p1-f031",
-            "p1-f032"
+            "p1-f032",
+            "p1-f009",
+            "p1-f008"
           ],
           "time_text": "in June 2024",
           "evidence": [
@@ -2159,8 +2214,7 @@
             "p1-f007",
             "p1-f033",
             "p1-f034",
-            "p1-f035",
-            "p1-f008"
+            "p1-f035"
           ],
           "time_text": null,
           "evidence": [
@@ -2172,13 +2226,12 @@
         },
         {
           "event_id": "p1-e04",
-          "description": "Immediate visceral angiography with coil embolization of the pseudoaneurysm; covered stent not pursued",
+          "description": "Immediate visceral angiography with coil embolization of the splenic artery pseudoaneurysm",
           "kind": "treatment",
           "occurrence": "occurred",
           "fact_ids": [
             "p1-f060",
-            "p1-f061",
-            "p1-f063"
+            "p1-f061"
           ],
           "time_text": null,
           "evidence": [
@@ -2225,12 +2278,11 @@
         },
         {
           "event_id": "p1-e07",
-          "description": "Referral to addiction medicine and psychiatric services with limited engagement; pseudocyst observed without intervention",
-          "kind": "plan",
+          "description": "Referral to addiction medicine and psychiatric services, with engagement limited by non-compliance",
+          "kind": "other",
           "occurrence": "occurred",
           "fact_ids": [
             "p1-f078",
-            "p1-f079",
             "p1-f070"
           ],
           "time_text": null,
@@ -2243,26 +2295,19 @@
         },
         {
           "event_id": "p1-e08",
-          "description": "Recurrent pancreatitis admissions, heavy drinking, alcoholic hepatitis, pulmonary embolism and reduced ejection fraction",
+          "description": "Recurrent admissions for alcohol-induced pancreatitis (peak lipase 527 U/L)",
           "kind": "follow_up",
           "occurrence": "occurred",
           "fact_ids": [
             "p1-f010",
             "p1-f072",
-            "p1-f038",
-            "p1-f069",
-            "p1-f011",
-            "p1-f039",
-            "p1-f040",
-            "p1-f012",
-            "p1-f013",
-            "p1-f041"
+            "p1-f038"
           ],
           "time_text": "Over the next three months",
           "evidence": [
             {
               "segment_id": "b00007",
-              "quote": "Over the next three months, she had recurrent admissions for alcohol-induced pancreatitis (peak lipase 527 U/L). She continued drinking heavily and developed alcoholic hepatitis (AST 400 U/L, INR 4.0), pulmonary embolism, and reduced left ventricular ejection fraction (45–50%)."
+              "quote": "Over the next three months, she had recurrent admissions for alcohol-induced pancreatitis (peak lipase 527 U/L)."
             }
           ],
           "time_kind": "duration",
@@ -2373,24 +2418,26 @@
         },
         {
           "event_id": "p1-e14",
-          "description": "Found unresponsive in pulseless electrical activity arrest with return of spontaneous circulation, hypotension and severe metabolic acidosis",
+          "description": "Found unresponsive in pulseless electrical activity arrest, in hemorrhagic shock; return of spontaneous circulation with persistent critical hypotension",
           "kind": "adverse_event",
           "occurrence": "occurred",
           "fact_ids": [
             "p1-f014",
             "p1-f030",
+            "p1-f019",
+            "p1-f068",
             "p1-f074",
-            "p1-f055",
-            "p1-f015",
-            "p1-f056",
-            "p1-f057",
-            "p1-f058"
+            "p1-f055"
           ],
           "time_text": "Eight months after the initial embolization",
           "evidence": [
             {
               "segment_id": "b00007",
               "quote": "Eight months after the initial embolization, the patient was found unresponsive and in pulseless electrical activity arrest. Return of spontaneous circulation was achieved, but she remained critically hypotensive (blood pressure 61/34 mmHg)."
+            },
+            {
+              "segment_id": "b00001",
+              "quote": "Eight months after embolization, she presented in hemorrhagic shock from recurrent SAP rupture"
             }
           ],
           "time_kind": "relative",
@@ -2402,14 +2449,12 @@
           "kind": "treatment",
           "occurrence": "occurred",
           "fact_ids": [
-            "p1-f068",
             "p1-f065",
             "p1-f066",
             "p1-f067",
             "p1-f016",
             "p1-f017",
-            "p1-f018",
-            "p1-f019"
+            "p1-f018"
           ],
           "time_text": "within 1–2 h of hospital arrival",
           "evidence": [
@@ -2443,7 +2488,7 @@
         {
           "event_id": "p1-e17",
           "description": "Transition to comfort measures after family discussion",
-          "kind": "plan",
+          "kind": "other",
           "occurrence": "occurred",
           "fact_ids": [
             "p1-f080"
@@ -2469,6 +2514,83 @@
             {
               "segment_id": "b00007",
               "quote": "care was transitioned to comfort measures, and she subsequently died"
+            }
+          ]
+        },
+        {
+          "event_id": "p1-e19",
+          "description": "Covered stent placement considered but not pursued because of vessel tortuosity and caliber",
+          "kind": "treatment",
+          "occurrence": "not_occurred",
+          "fact_ids": [
+            "p1-f063"
+          ],
+          "time_text": null,
+          "evidence": [
+            {
+              "segment_id": "b00006",
+              "quote": "Covered stent placement was considered but not pursued due to anatomical constraints, including vessel tortuosity and caliber."
+            }
+          ]
+        },
+        {
+          "event_id": "p1-e20",
+          "description": "Pancreatic head pseudocyst observed without intervention on serial imaging",
+          "kind": "follow_up",
+          "occurrence": "occurred",
+          "fact_ids": [
+            "p1-f079"
+          ],
+          "time_text": null,
+          "evidence": [
+            {
+              "segment_id": "b00006",
+              "quote": "The pancreatic head pseudocyst was observed without intervention, as it fluctuated in size on serial imaging"
+            }
+          ]
+        },
+        {
+          "event_id": "p1-e21",
+          "description": "Continued heavy drinking with alcoholic hepatitis, pulmonary embolism with right heart strain and reduced left ventricular ejection fraction",
+          "kind": "adverse_event",
+          "occurrence": "occurred",
+          "fact_ids": [
+            "p1-f069",
+            "p1-f011",
+            "p1-f039",
+            "p1-f040",
+            "p1-f012",
+            "p1-f013",
+            "p1-f041"
+          ],
+          "time_text": null,
+          "evidence": [
+            {
+              "segment_id": "b00007",
+              "quote": "She continued drinking heavily and developed alcoholic hepatitis (AST 400 U/L, INR 4.0), pulmonary embolism, and reduced left ventricular ejection fraction (45–50%)."
+            },
+            {
+              "segment_id": "b00008",
+              "quote": "pulmonary embolism with right heart strain"
+            }
+          ]
+        },
+        {
+          "event_id": "p1-e22",
+          "description": "Laboratory evaluation: severe metabolic acidosis with lactate 19.7 mmol/L, hemoglobin 6.4 g/dL and lipase 118 U/L",
+          "kind": "test",
+          "occurrence": "occurred",
+          "fact_ids": [
+            "p1-f015",
+            "p1-f056",
+            "p1-f057",
+            "p1-f058"
+          ],
+          "time_text": null,
+          "evidence": [
+            {
+              "segment_id": "b00007",
+              "quote": "Laboratory evaluation revealed severe metabolic acidosis (lactate 19.7 mmol/L), hemoglobin 6.4 g/dL, and lipase 118 U/L."
             }
           ]
         }
@@ -2544,7 +2666,7 @@
           "evidence": [
             {
               "segment_id": "b00007",
-              "quote": "sequelae of prior embolization"
+              "quote": "Serial CT imaging was conducted up to 3 months post-embolization: On 11 July 2024, there were sequelae of prior embolization"
             }
           ]
         },
@@ -2628,6 +2750,32 @@
               "quote": "care was transitioned to comfort measures, and she subsequently died"
             }
           ]
+        },
+        {
+          "from_event_id": "p1-e03",
+          "to_event_id": "p1-e04",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00005",
+              "quote": "revealing a 3.6 × 3.7 × 3.5 cm pseudoaneurysm developing from the splenic artery"
+            },
+            {
+              "segment_id": "b00006",
+              "quote": "The patient had immediate visceral angiography with successful coil embolization of the splenic artery pseudoaneurysm."
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e15",
+          "to_event_id": "p1-e18",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00001",
+              "quote": "died despite massive transfusion and emergent splenic artery ligation"
+            }
+          ]
         }
       ],
       "summary": [
@@ -2666,7 +2814,7 @@
           ]
         },
         {
-          "text": "Over the next three months she had recurrent admissions for alcohol-induced pancreatitis (peak lipase 527 U/L), continued drinking heavily and developed alcoholic hepatitis, pulmonary embolism and reduced left ventricular ejection fraction. Serial CT imaging up to 3 months after embolization showed a fluctuating pseudocyst and, on the last scan, no evidence of significant aneurysm recanalization. Long-term surveillance then lapsed because of patient non-compliance.",
+          "text": "Over the next three months she had recurrent admissions for alcohol-induced pancreatitis (peak lipase 527 U/L). She continued drinking heavily and developed alcoholic hepatitis, pulmonary embolism and reduced left ventricular ejection fraction. Serial CT imaging up to 3 months after embolization showed a fluctuating pseudocyst and, on the last scan, no evidence of significant aneurysm recanalization. Long-term surveillance lapsed because of patient non-compliance.",
           "fact_ids": [
             "p1-f010",
             "p1-f072",
@@ -2685,7 +2833,7 @@
           ]
         },
         {
-          "text": "Eight months after the initial embolization she was found unresponsive in pulseless electrical activity arrest and, after return of spontaneous circulation, remained critically hypotensive with lactate 19.7 mmol/L and hemoglobin 6.4 g/dL. Emergency laparotomy revealed massive hemoperitoneum from rupture of the previously embolized pseudoaneurysm; the splenic artery was ligated and over 55 units of blood products were given. Refractory shock, anuric acute kidney injury, DIC and multi-organ failure followed, care was transitioned to comfort measures and she died.",
+          "text": "Eight months after the initial embolization she was found unresponsive in pulseless electrical activity arrest and, after return of spontaneous circulation, remained critically hypotensive; laboratory evaluation showed lactate 19.7 mmol/L and hemoglobin 6.4 g/dL. Emergency laparotomy revealed massive hemoperitoneum from rupture of the previously embolized pseudoaneurysm; the splenic artery was ligated and over 55 units of blood products were given. Refractory shock, anuric acute kidney injury, DIC and multi-organ failure complicated her course; care was transitioned to comfort measures and she died.",
           "fact_ids": [
             "p1-f014",
             "p1-f030",
@@ -2788,7 +2936,7 @@
           ]
         },
         {
-          "issue": "The Figure 1 caption gives the pseudoaneurysm as 3.5 cm while the case text and Figure 2 caption give 3.6 × 3.7 × 3.5 cm. The 3.5 cm matches one printed dimension, so this is recorded as an ambiguity, not a source conflict; no single-dimension size is entered as a separate fact.",
+          "issue": "The Figure 1 caption gives the pseudoaneurysm as 3.5 cm and the abstract as 3.6 cm, while the case text and Figure 2 caption give 3.6 × 3.7 × 3.5 cm. Each single value matches one printed dimension, so this is recorded as an ambiguity, not a source conflict; no single-dimension size is entered as a separate fact.",
           "evidence": [
             {
               "segment_id": "b00010",
@@ -2797,6 +2945,10 @@
             {
               "segment_id": "b00011",
               "quote": "showed a 3.6 × 3.7 × 3.5 cm pseudoaneurysm (blue arrows)"
+            },
+            {
+              "segment_id": "b00001",
+              "quote": "CT angiography revealed a 3.6 cm SAP"
             }
           ],
           "fact_ids": [
@@ -2830,6 +2982,44 @@
           "fact_ids": [
             "p1-f018",
             "p1-f016"
+          ]
+        },
+        {
+          "issue": "The case text times only the recurrent pancreatitis admissions (\"Over the next three months\"); the next sentence (heavy drinking, alcoholic hepatitis, pulmonary embolism, reduced ejection fraction) states no time, so these items stay untimed and are not placed inside the three-month window.",
+          "evidence": [
+            {
+              "segment_id": "b00007",
+              "quote": "Over the next three months, she had recurrent admissions for alcohol-induced pancreatitis (peak lipase 527 U/L)."
+            },
+            {
+              "segment_id": "b00007",
+              "quote": "She continued drinking heavily and developed alcoholic hepatitis"
+            }
+          ],
+          "fact_ids": [
+            "p1-f011",
+            "p1-f012",
+            "p1-f041",
+            "p1-f069"
+          ]
+        },
+        {
+          "issue": "The terminal laboratory values and blood pressure are stated in sentences without their own time; \"Eight months after the initial embolization\" belongs to the arrest sentence, so these values carry no time. Lipase 118 U/L is timed only by the discussion, which restates the value \"at the time of fatal rupture\".",
+          "evidence": [
+            {
+              "segment_id": "b00007",
+              "quote": "Laboratory evaluation revealed severe metabolic acidosis (lactate 19.7 mmol/L), hemoglobin 6.4 g/dL, and lipase 118 U/L."
+            },
+            {
+              "segment_id": "b00008",
+              "quote": "the only mildly elevated level at the time of fatal rupture (118 U/L)"
+            }
+          ],
+          "fact_ids": [
+            "p1-f055",
+            "p1-f056",
+            "p1-f057",
+            "p1-f058"
           ]
         }
       ]
@@ -2898,7 +3088,7 @@
       "patient_ids": [
         "p1"
       ],
-      "note": "Reviewed for index-patient clinical content."
+      "note": "Abstract: index-patient statements; the hemorrhagic shock sentence and the pseudoaneurysm size are used."
     },
     {
       "segment_id": "b00002",
@@ -2914,9 +3104,11 @@
     },
     {
       "segment_id": "b00004",
-      "disposition": "background",
-      "patient_ids": [],
-      "note": "Background, conclusions or article administration; no additional patient findings."
+      "disposition": "patient_facts",
+      "patient_ids": [
+        "p1"
+      ],
+      "note": "Introduction sentence about the index case (roster evidence: fatal recurrent rupture eight months after initial embolization)."
     },
     {
       "segment_id": "b00005",
@@ -2986,7 +3178,7 @@
     "The pseudocyst size at the initial CT angiography is printed as 4.2 cm (text, Figure 2 caption) and 5.4 cm (Figure 1 caption); both are review_only.",
     "Burned-in text in Figure 3 includes a date and time stamp and an identifier string; values are not copied.",
     "Discussion statements that are general or literature-based are not copied to the patient.",
-    "Laboratory values at the terminal presentation carry no stated time because their sentences name none."
+    "Terminal laboratory values and blood pressure carry no stated time because their own sentences name none; lipase 118 U/L is timed by the discussion restatement of the same value."
   ],
   "annotation_provenance": {
     "annotator_model": "Claude Sonnet 5.5 annotator",

@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC13050135.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "c180707d41de0455673f5bbfee68dd5287540d84694cc965ae36e781897227e0",
+  "annotation_sha256": "5cae9b03f01f0bbf60956a38a7a13a097522915db835b392ae36e4e0de4ba409",
+  "reviewed_at": "2026-10-29T12:48:51.214643+00:00",
+  "source_segments_read": 36,
+  "facts_reviewed": 90,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "f029-f032: 'While awaiting an autoimmune assessment' relation during -> before (awaiting precedes the assessment).",
+    "f023/f027: removed regimen 'tapering regimen' and the b00028 quote; the Discussion clause covers both corticosteroid courses without naming which was tapered (no borrowing); ambiguity added.",
+    "f038: removed invented body_site 'skin lesions'.",
+    "f070: quote extended so body_site 'thoracic region' is in the fact's own evidence.",
+    "f074 small-vessel vasculitis: kept possible/provisional, certainty ambiguous/review_only -> supported/include (hedge encoded in assertion), added b00031 'suspected involvement' quote.",
+    "f073 HIV-associated vasculitis: added patient-scoped b00031 quote; stays confirmed per Conclusions wording.",
+    "Added f087 blood draw (that same day), f088 early observation care plan (completed), f089 chronic otitis absent, f090 new systemic symptoms absent.",
+    "Split Table 1 admission-only results (f050-f060) out of e08 ('A few days later') into new event e18 'Result at admission' to avoid borrowing the text time; ambiguity added.",
+    "Added 6 literal relations: e03<e05 (abstract 'After the first consultation'), e01<e03 and e02<e03 (history in presentation sentence / 'One year before consultation'), e04<e03 ('While awaiting'), e06<e07 (result -> action: biopsy referral and PET for the confirmed lymphadenopathies), e05<e14 ('no longer had any skin lesions').",
+    "CD4 278 ambiguity rewritten: one measurement (text cites Table 1) with conflicting time attribution; both sides review_only, ratio f049 linked to the ambiguity.",
+    "Psoriasis ambiguity: added unhedged Discussion wording; fact stays provisional."
+  ],
+  "unresolved": [
+    "Table 1 column headers are printed in a separate segment from the row segments; time for table facts comes from the header segment.",
+    "CD4 count time attribution differs between text and Table 1 (see ambiguities).",
+    "Discussion statements about general HIV vasculitis literature are background and not patient facts.",
+    "No supplementary material is listed in the source."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 36,
+    "facts_reviewed": 90,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient; no supplements (raw.xml has no supplementary-material).",
+      "Viral load 128,000 merge valid: text cites Table 1 and value matches the admission column; time taken from the column header, not the text.",
+      "CD4 278 is one value placed at two times (text: diagnostic labs; Table 1: December 2024 column, dash at admission); kept as two review_only facts with ambiguity.",
+      "Social history 'no history of' items are absent/status unknown (not never); 'previous transfusions' absent with historical temporality.",
+      "Home medications 'treated with' recorded as administered, not current.",
+      "f038 EVID-NEGATION warning is a checker false positive: 'nonpruritic' is the negation cue."
+    ],
+    "residual_risks": [
+      "Meaning of 'admission' for an outpatient course and the date of the admission-column labs are unstated.",
+      "Classification of the CD4 time mismatch as ambiguity (not source_conflict) is a judgement call.",
+      "Indications for the two corticosteroid courses come from 'responded to'/'resolved with' wording."
+    ]
+  },
+  "physician_adjudicated": false
+}

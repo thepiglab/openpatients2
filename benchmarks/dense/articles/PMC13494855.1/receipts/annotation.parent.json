@@ -1,0 +1,57 @@
+{
+  "article_id": "PMC13494855.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "12c5e749d0f478a76426f6811a0659f1069ff4fd8469dafa981b5488e5482b6c",
+  "annotation_sha256": "616830245d57974495619d5b2097d5f8919ed643574678d7350533e7946c5477",
+  "reviewed_at": "2026-10-29T12:48:01.654925+00:00",
+  "source_segments_read": 84,
+  "facts_reviewed": 139,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Added p1-f139 serial chest radiographs showing regression of cardiomegaly (b00063), untimed, linked to event p1-e10.",
+    "Removed untimed LVDd 41 mm (p1-f050), LVEF ~20% (p1-f053) and Table 1 'Initial' NT-proBNP/cTnT rows (p1-f064, p1-f065) from the 'On admission' event p1-e04 so the event does not give them a time the source does not state; description updated.",
+    "Removed TIC diagnosis p1-f103 from the ATP/AFL-confirmation event p1-e06 (TIC basis includes later recovery; no time stated).",
+    "Relation e05->e06 now quotes the ATP administration and its result (test -> result); e06->e07 now quotes 'confirming AFL' and the cardioversion that restored sinus rhythm (arrhythmia shown -> its treatment) instead of a two-sentence quote; e03->e04 adds the 'On admission' back-reference to the same-day referral.",
+    "Added relations birth -> maternity discharge/1- and 2-month checkups (birth -> visit at stated age), 1-/2-month checkups -> 111-day checkup (stated postnatal ages), and in-hospital oral heart-failure therapy ('during the hospital stay') -> discharge on Day 25.",
+    "Rewrote summary claim 2 so 'On admission' governs only the ventricular rate, CTR 0.66 and the ECG, not the untimed echo values and NT-proBNP.",
+    "Added ambiguity recording that LVDd 41 mm/Z +7.3/hypokinesis/LVEF ~20% are untimed (Fig 1c caption times only dilated LV and mild MR; printed LVDd label is pixel content); recorded the parent decision not to merge text creatine kinase with Table 1 CPK ('creatinine phosphokinase' note)."
+  ],
+  "unresolved": [
+    "Single-patient case report; Figure 2 values and Figure 1 panel pixels are recorded only in visual.json.",
+    "Supplementary file is a scanned CARE reporting checklist with no patient data (manifest only).",
+    "Hospital day numbering is not anchored to admission in the source; Day N times are kept as printed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 84,
+    "facts_reviewed": 139,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index infant (111 days, male) with idiopathic AFL and severe TIC; roster count 1 from 'We report a 3-month-old boy'.",
+      "All 38 Table 1 result rows present with literal values, units (e.g. '× 103/μL') and ranges; time 'Initial' from the caption; no flags from reference ranges.",
+      "NT-proBNP and cTnT text/table merge kept: same analyte, value and unit in the laboratory paragraph that cites Table 1. Text creatine kinase kept separate from table CPK.",
+      "CTR 0.61 'by Day 8' (before, anchor null) and CTR 0.55 'on Day 12' from the Fig 1e caption verified; vitals take 'On admission' from the paragraph-opening scope sentence.",
+      "Hepatomegaly 'indistinct' kept as assertion unknown with ambiguity; Figure 2 caption Days 5/14 vs printed Day 5/12/25 kept as ambiguity, printed values visual-only.",
+      "Every relation's full evidence list read; orders rest on literal 'after cardioversion', 'following discharge', Day N times from the same numbering, or listed implied-order rulings."
+    ],
+    "residual_risks": [
+      "Hospital Day numbering is not explicitly anchored to admission.",
+      "Discussion fragment 'In our patient, the absence of pre-excitation...' is incomplete; held as ambiguity only.",
+      "'healthy' parents and 'first child' are not itemised (no fitting schema field).",
+      "Event p1-e04 relies on the admission back-reference to the same-day referral."
+    ]
+  },
+  "physician_adjudicated": false
+}

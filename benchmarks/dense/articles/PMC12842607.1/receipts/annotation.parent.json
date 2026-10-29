@@ -1,0 +1,62 @@
+{
+  "article_id": "PMC12842607.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "9cdcfe4000559618c9c6e10c081e69d6ed0f3aa55adc89182af1ab1953190b61",
+  "annotation_sha256": "481686ec16b3703d95437e4bf824b837784e7e898c86705472366ce923a2fd82",
+  "reviewed_at": "2026-10-29T12:49:12.038903+00:00",
+  "source_segments_read": 60,
+  "facts_reviewed": 225,
+  "patients_reviewed": 10,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "All 10 patients: removed the ETDRS-chart method and b00014 evidence from the 50 Table 2 BCVA facts (method stated only in the \"Patients underwent\" protocol sentence, not all patients).",
+    "All 10 patients: fundus photography and macular SD-OCT procedure facts set ambiguous/review_only (b00014 says \"Patients\", not all; b00010 schedule completion does not name the assessments); ambiguity added.",
+    "All 10 patients: prone-positioning care plan action_status recommended -> planned (instruction ordered \"After treatment\"), set ambiguous/review_only because b00012 says \"patients\", not all; removed from summaries.",
+    "All 10 patients: relations tPA+gas -> BCVA 7-14 days/1/3/6 months now cite the Table 2 \"Postop.\" column headers instead of the non-all cohort sentence b00014.",
+    "All 10 patients: added relation presentation (SMH) before tPA+gas treatment from b00001 \"ten eyes with sub-macular haemorrhage (SMH) treated ... All patients received intravitreal alteplase\".",
+    "Cases 1 and 9: \"limited improvement (0.18 and 0.22 logMAR)\" certainty source_conflict -> ambiguous (arithmetic-only mismatch with Table 2); review_only kept; atrophy attribution stays source_conflict/review_only; Table 2 cells stay scored.",
+    "Cases 3 and 10: Table 1 duration of symptoms (21, 8 days) set source_conflict/review_only and new text-side fact \"presented late, haemorrhage duration up to 2 months\" (b00025) added as source_conflict/review_only; disputed duration removed from presentation event descriptions and summaries.",
+    "Cases 3 and 10: early ellipsoid-zone disruption on OCT promoted to supported/include (\"Both eyes\" refers to Cases 3 and 10 in the preceding sentence; not the conflicting attribute); added to summaries.",
+    "Updated source_coverage notes (b00001, b00014, b00025), article limitations and ambiguities accordingly."
+  ],
+  "unresolved": [
+    "Caption-layer visual status not_inspected; the four actual images are inspected in the separate visual submission.",
+    "Ten individual eyes are listed only through Table 1 and Table 2 plus a few case-numbered complication statements; the narrative otherwise describes the cohort and is not copied to individuals except where the sentence says all patients or all eyes.",
+    "The aflibercept formulation (2 mg or 8 mg) is not stated per patient; no dose is recorded.",
+    "Disputed attribution: Results name Cases 1 and 9 as the late cases with atrophy and limited improvement (0.18 and 0.22 logMAR; an arithmetic-only mismatch with Table 2, kept as ambiguity), while the Results say the two eyes with ellipsoid-zone disruption had both scarring and atrophy and the Discussion pairs the atrophic eyes with Cases 3 and 10 (MNV scarring). Atrophy for Cases 1 and 9 is source_conflict; the Discussion statement that Cases 3 and 10 presented late (up to 2 months) conflicts with Table 1 (21 and 8 days), so both duration sides are review_only for those cases.",
+    "Aggregate inconsistencies are kept as printed and not copied to individuals: mean duration of symptoms 25 days in the text versus 24 in Table 1; patients aged 80 years or more n = 3 in the text versus two in Table 1; mean gains by sex and the statement that none lost vision do not match the Table 2 individual values (Cases 5 and 7 have higher logMAR at 6 months than before).",
+    "Table 1 and Table 2 Mean and Median rows are aggregate and are not patient facts.",
+    "The Fig 3 and Fig 4 examples are not attributed to any case; the text does not name them. Printed OCT thickness values inside the images are pixel content recorded only in the visual submission.",
+    "Fundus photography, SD-OCT, the ETDRS-chart method and the prone-positioning instruction are stated only for \"Patients\"/\"patients\" (not all) and are review_only or not recorded per patient.",
+    "The Results text writes MNVB scarring and the figure 2 caption writes EDTRS; both kept as printed."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 60,
+    "facts_reviewed": 225,
+    "figures_viewed": 4,
+    "key_findings": [
+      "Ten individual eyes identified by Table 1 rows (Cases 1-10); identity, ages, sex (literal F/M), diagnoses and all 50 Table 2 BCVA cells verified.",
+      "Only sentences explicitly covering all patients/eyes are copied (b00001/b00007/b00010/b00012 first sentence/b00013/b00016); aggregate means, subgroup gains, n counts and \"none lost vision\" stay aggregate.",
+      "Aflibercept dose 2 mg or 8 mg is not stated per patient; no dose recorded.",
+      "Figures 1, 3 and 4 unattributed; Figure 2 aggregate with no plot readings; no supplements in raw.xml."
+    ],
+    "residual_risks": [
+      "The referent of \"Both eyes\" in b00025 could be the two atrophic eyes rather than Cases 3 and 10; EZ disruption is scored for Cases 3 and 10 on the literal antecedent.",
+      "Which two eyes developed atrophy is internally inconsistent in the source.",
+      "visual.json Figure 3 panels B/D and Figure 4 panels A-D sector-grid/table colour counts are slightly inaccurate (reported for the annotator to fix)."
+    ]
+  },
+  "physician_adjudicated": false
+}

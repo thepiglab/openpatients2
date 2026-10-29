@@ -86,18 +86,23 @@ def test_mean_tokens_and_paired_speedup_use_common_work_not_acceptance():
     assert comp['pipeline_speedup'] == 2 and comp['article_ids'] == ['a']
 
 
-async def test_bounded_timeline_windows_keep_all_focus_segments_and_distant_pairs(tmp_path, monkeypatch):
+@pytest.mark.parametrize('prefer_windows', [False, True])
+@pytest.mark.parametrize('relation_width,target_width', [(1, 2), (4, 16)])
+async def test_bounded_timeline_windows_keep_all_focus_segments_and_distant_pairs(tmp_path, monkeypatch, prefer_windows, relation_width, target_width):
     article = {'article_id': 'PMC1.1', 'segments': [
         {'segment_id': f's{i}', 'text': f'Patient had event {i}.'} for i in range(6)]}
     rid = 'PMC1.1:p1'; _, sources = sources_for(article)
     calls = []
     async def fits(runner, task, messages, replica):
+        if prefer_windows:
+            return True  # Windows must still be used even when full source fits.
         source = json.loads(messages[-1]['content'].split('SOURCE_JSON:\n')[1].split('\nTASK:\n')[0])
         return len(source['segments']) < 6
     monkeypatch.setattr(timeline, 'fits', fits)
     class Runner:
-        config = SimpleNamespace(timeline_segment_batch_size=1, timeline_relation_batch_size=1,
-            timeline_bounded_context=True, timeline_target_batch_size=2, refinement_policy='source_aware')
+        config = SimpleNamespace(timeline_segment_batch_size=1, timeline_relation_batch_size=relation_width,
+            timeline_bounded_context=True, timeline_prefer_windows=prefer_windows,
+            timeline_target_batch_size=target_width, refinement_policy='source_aware')
         output = tmp_path; arm = 'targeted'; results = []
         async def call(self, task, messages, checker, identity, replica, segments, **kwargs):
             calls.append(identity)
@@ -109,7 +114,7 @@ async def test_bounded_timeline_windows_keep_all_focus_segments_and_distant_pair
                     'attribution_evidence': [{'segment_id': sid, 'quote': seg['text']}], 'times': []}
                 value = {'schema_version': 'patient-timeline/2', 'record_id': rid, 'events': [event], 'edges': [], 'limitations': []}
             else:
-                assert len(identity['target_event_ids']) <= 2
+                assert len(identity['target_event_ids']) <= target_width
                 value = {'edges': [], 'limitations': []}
             value, _ = resolve_timeline_spans(value, 'PMC1.1:jats', segments)
             return {'task': task, 'identity': identity, 'status': 'valid', 'data': checker(value), 'attempts': []}
@@ -117,6 +122,9 @@ async def test_bounded_timeline_windows_keep_all_focus_segments_and_distant_pair
     result = await timeline.extract(Runner(), article, {'patient_id': 'p1'}, {}, [],
         {'article_id': 'PMC1.1', 'record_id': rid}, 0, sources)
     assert result['status'] == 'valid' and len(result['data']['events']) == 6
+    if prefer_windows:
+        assert result['context_policy'] == 'whole_segment_windows'
+        assert all(c['source_scope'] == 'whole_segment_window' for c in calls)
     assert {s for c in calls if c['timeline_stage'] == 'events' for s in c['focus_segments']} == {f's{i}' for i in range(6)}
     pairs = [frozenset(pair) for c in calls if c['timeline_stage'] == 'relations' for pair in c['candidate_event_pairs']]
     assert frozenset(('e1', 'e6')) in pairs and len(pairs) == len(set(pairs)) == 15
@@ -173,3 +181,15 @@ def test_shared_artifacts_survive_donor_cleanup(tmp_path, monkeypatch):
     shutil.rmtree(donor)
     assert (dest / 'weights.safetensors').read_bytes() == b'fixture'
     assert (target / 'runtime' / image).read_bytes() == b'image'
+
+
+def test_repair_pilot_freezes_experimental_settings(campaign, tmp_path):
+    work = tmp_path / 'repair'
+    s.prepare(campaign[2], work, expected=3, profiles=['beam-nvfp4-dflash2'],
+              scheduler='packed', beam_repair=True)
+    m = b.read(work / 'arms/beam-nvfp4-dflash2-text/manifest.json')
+    assert m['article_timeout_seconds'] == 14400
+    assert m['extraction']['timeline_prefer_windows']
+    assert m['extraction']['timeline_relation_batch_size'] == 4
+    assert m['extraction']['timeline_target_batch_size'] == 16
+    assert s.check(work)['nemotron_super']['scheduler']['waves'][0]['totals']['gpus'] == 8

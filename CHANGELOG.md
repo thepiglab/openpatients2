@@ -1,3 +1,9 @@
+## 2026-10-29 — Beam pilot diagnosis
+
+- Document verified October 28 results, matched speculation speed/quality, article timeouts, timeline token exhaustion and genomic-appendix overflow.
+- Add opt-in Beam repair pilot: window-first timelines, larger coverage-preserving relation batches, explicit sparse-edge/offset instructions and frozen four-hour article deadlines.
+- Preserve original pilot defaults and require validation before a full repair campaign.
+
 ## 2026-10-28 — Beam focus and FHIR research export
 
 - Default to Beam NVFP4 only, with two TP4 replicas on eight B200s; add matched DFlash2 on/off and shorter-draft pilots.

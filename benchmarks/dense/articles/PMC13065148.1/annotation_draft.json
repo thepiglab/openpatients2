@@ -160,7 +160,8 @@
             "subject": "index_patient",
             "assertion": "present",
             "name": "Punctate epithelial fluorescein staining",
-            "kind": "sign"
+            "kind": "sign",
+            "body_site": "both eyes"
           },
           "evidence": [
             {
@@ -171,7 +172,7 @@
           "clinical_statement": "Punctate epithelial fluorescein staining on slit-lamp examination",
           "certainty": "supported",
           "scoring": "include",
-          "notes": "Laterality not attached: the sentence lists staining and PED together before \"in both eyes\"."
+          "notes": "The sentence lists staining and PED together before \"in both eyes\", contrasted with \"stromal opacity in the right eye\"."
         },
         {
           "fact_id": "p1-f007",
@@ -538,12 +539,12 @@
             "kind": "physiologic",
             "status": "resulted",
             "comparator": "=",
-            "flag": "unknown",
+            "flag": "low",
             "unit": "mm",
             "method": "Cochet-Bonnet esthesiometer, averaging values across five corneal sectors",
-            "name": "Corneal sensitivity",
+            "name": "Mean corneal sensitivity",
             "numeric_value": 10,
-            "text_value": "mean 10 mm",
+            "text_value": "10 mm",
             "body_site": "right eye"
           },
           "evidence": [
@@ -555,7 +556,7 @@
           "clinical_statement": "Mean corneal sensitivity 10 mm, right eye",
           "certainty": "supported",
           "scoring": "include",
-          "notes": ""
+          "notes": "Flag low from the source wording \"reduced corneal sensation\" for these measurements."
         },
         {
           "fact_id": "p1-f022",
@@ -567,12 +568,12 @@
             "kind": "physiologic",
             "status": "resulted",
             "comparator": "=",
-            "flag": "unknown",
+            "flag": "low",
             "unit": "mm",
             "method": "Cochet-Bonnet esthesiometer, averaging values across five corneal sectors",
-            "name": "Corneal sensitivity",
+            "name": "Mean corneal sensitivity",
             "numeric_value": 15,
-            "text_value": "mean 15 mm",
+            "text_value": "15 mm",
             "body_site": "left eye"
           },
           "evidence": [
@@ -584,7 +585,7 @@
           "clinical_statement": "Mean corneal sensitivity 15 mm, left eye",
           "certainty": "supported",
           "scoring": "include",
-          "notes": ""
+          "notes": "Flag low from the source wording \"reduced corneal sensation\" for these measurements."
         },
         {
           "fact_id": "p1-f023",
@@ -711,12 +712,16 @@
             {
               "segment_id": "b00008",
               "quote": "The patient experienced a relapse eighteen months post-transplant"
+            },
+            {
+              "segment_id": "b00007",
+              "quote": "a patient with relapsed AML undergoing treatment with Gilteritinib"
             }
           ],
           "clinical_statement": "AML relapse eighteen months after transplantation",
           "certainty": "supported",
           "scoring": "include",
-          "notes": "Name uses AML from the preceding history sentence; the relapse clause itself does not repeat the diagnosis."
+          "notes": "The introduction states \"relapsed AML\" for this patient; the case sentence gives the timing."
         },
         {
           "fact_id": "p1-f028",
@@ -754,12 +759,16 @@
             {
               "segment_id": "b00008",
               "quote": "The patient experienced a relapse eighteen months post-transplant"
+            },
+            {
+              "segment_id": "b00007",
+              "quote": "a patient with relapsed AML undergoing treatment with Gilteritinib"
             }
           ],
           "clinical_statement": "AML, relapsed",
           "certainty": "supported",
           "scoring": "include",
-          "notes": "Relapse wording from the source; histology/extent not stated."
+          "notes": "Relapsed AML stated in the introduction; histology/extent not stated."
         },
         {
           "fact_id": "p1-f030",
@@ -1319,7 +1328,7 @@
           "event_id": "p1-e03",
           "description": "AML relapse",
           "occurrence": "occurred",
-          "kind": "adverse_event",
+          "kind": "history",
           "fact_ids": [
             "p1-f027",
             "p1-f029"
@@ -1512,8 +1521,7 @@
             "p1-f020",
             "p1-f016",
             "p1-f042",
-            "p1-f050",
-            "p1-f048"
+            "p1-f050"
           ],
           "time_text": "At the one-month assessment",
           "evidence": [
@@ -1608,8 +1616,12 @@
           "relation": "before",
           "evidence": [
             {
-              "segment_id": "b00019",
-              "quote": "at baseline (A, B), at 1 week (C, D), and at 1 month (E, F)"
+              "segment_id": "b00008",
+              "quote": "On examination, his best-corrected visual acuity (BCVA) was 20/100 in the right eye and 20/40 in the left eye."
+            },
+            {
+              "segment_id": "b00008",
+              "quote": "At the one-week follow-up"
             }
           ]
         },
@@ -1619,8 +1631,106 @@
           "relation": "before",
           "evidence": [
             {
-              "segment_id": "b00019",
-              "quote": "at baseline (A, B), at 1 week (C, D), and at 1 month (E, F)"
+              "segment_id": "b00008",
+              "quote": "At the one-week follow-up"
+            },
+            {
+              "segment_id": "b00008",
+              "quote": "At the one-month assessment"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e02",
+          "to_event_id": "p1-e05",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00008",
+              "quote": "A 52-year-old male patient presented to our department with bilateral blurred vision and photophobia, which had progressively worsened over the past few weeks. His medical history was significant for AML with an FLT3-ITD mutation, diagnosed four years prior and initially treated with cytarabine and allogeneic hematopoietic stem cell transplantation"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e04",
+          "to_event_id": "p1-e05",
+          "relation": "overlaps",
+          "evidence": [
+            {
+              "segment_id": "b00002",
+              "quote": "neurotrophic keratitis, which developed after two years of treatment with Gilteritinib"
+            },
+            {
+              "segment_id": "b00007",
+              "quote": "a patient with relapsed AML undergoing treatment with Gilteritinib"
+            },
+            {
+              "segment_id": "b00008",
+              "quote": "Gilteritinib therapy was promptly discontinued"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e05",
+          "to_event_id": "p1-e06",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00008",
+              "quote": "A 52-year-old male patient presented to our department with bilateral blurred vision and photophobia"
+            },
+            {
+              "segment_id": "b00008",
+              "quote": "On examination"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e07",
+          "to_event_id": "p1-e08",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00008",
+              "quote": "The patient was diagnosed with bilateral neurotrophic keratitis, stage 2"
+            },
+            {
+              "segment_id": "b00008",
+              "quote": "Treatment was initiated with topical insulin and preservative-free artificial tears"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e08",
+          "to_event_id": "p1-e10",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00003",
+              "quote": "Treatment with artificial tears and topical insulin led to favorable epithelial healing"
+            },
+            {
+              "segment_id": "b00008",
+              "quote": "Treatment was initiated with topical insulin"
+            },
+            {
+              "segment_id": "b00008",
+              "quote": "At the one-week follow-up"
+            }
+          ]
+        },
+        {
+          "from_event_id": "p1-e09",
+          "to_event_id": "p1-e10",
+          "relation": "before",
+          "evidence": [
+            {
+              "segment_id": "b00008",
+              "quote": "Gilteritinib therapy was promptly discontinued"
+            },
+            {
+              "segment_id": "b00008",
+              "quote": "At the one-week follow-up"
             }
           ]
         }
@@ -1760,7 +1870,7 @@
           ]
         },
         {
-          "issue": "The abstract says the keratitis developed after two years of Gilteritinib, while the case text says the drug was received for two years with no start or stop dates; whether treatment was still ongoing at presentation is not stated and is not inferred.",
+          "issue": "The abstract says the keratitis developed after two years of Gilteritinib, while the case text says the drug was received for two years; no start or stop dates are given, so whether the two years is the whole course up to discontinuation is not stated.",
           "evidence": [
             {
               "segment_id": "b00002",
@@ -1787,7 +1897,7 @@
           "fact_ids": []
         },
         {
-          "issue": "The discussion says autologous serum was contraindicated by the hematologic condition and cenegermin was not commercially available. These are not recorded as patient treatments given, declined or planned.",
+          "issue": "The discussion says autologous serum was contraindicated by the hematologic condition and cenegermin was not commercially available. Neither sentence states that the drug was withheld or declined, and no medication action fits, so they are not recorded as medication items.",
           "evidence": [
             {
               "segment_id": "b00012",
@@ -1933,9 +2043,11 @@
     },
     {
       "segment_id": "b00003",
-      "disposition": "background",
-      "patient_ids": [],
-      "note": "Abstract discussion; hedged causal statements kept as ambiguity only."
+      "disposition": "patient_facts",
+      "patient_ids": [
+        "p1"
+      ],
+      "note": "Abstract discussion; hedged cause kept as ambiguity; the \"led to\" sentence is cited for the treatment to healing order."
     },
     {
       "segment_id": "b00004",
@@ -1957,9 +2069,11 @@
     },
     {
       "segment_id": "b00007",
-      "disposition": "background",
-      "patient_ids": [],
-      "note": "Introduction statement of the single reported case."
+      "disposition": "patient_facts",
+      "patient_ids": [
+        "p1"
+      ],
+      "note": "Introduction statement of the single case; \"relapsed AML undergoing treatment with Gilteritinib\" is cited."
     },
     {
       "segment_id": "b00008",

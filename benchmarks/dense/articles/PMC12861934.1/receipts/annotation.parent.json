@@ -4,8 +4,8 @@
   "review_type": "source-grounded AI review; not physician adjudication",
   "status": "source_reviewed",
   "source_text_sha256": "b526480d45873735d32df91cc0a00c4bef024b4518aabde44eadb68fd94b4c6a",
-  "annotation_sha256": "485bb73585ccc44c411a276f345654e85b4b636e4c2a9559072ac32d655ee28b",
-  "reviewed_at": "2026-10-21T18:10:00.908927+00:00",
+  "annotation_sha256": "46f4c59db27f8fba18d4321ac8153b3d5c9e6fec09a437a21e6e531ae1c2d814",
+  "reviewed_at": "2026-10-29T12:40:34.191302+00:00",
   "source_segments_read": 26,
   "facts_reviewed": 134,
   "patients_reviewed": 1,
@@ -31,8 +31,9 @@
     "Right heart catheterization (f094, cancelled) moved out of the occurred TTE event into its own not_occurred event e24.",
     "Abstract stress-test fact f076 removed from the stress PET event e07 (not merged).",
     "e12 CICU transfer kind treatment -> other; e22 time_kind duration -> relative.",
-    "Added 7 relations: e04->e14 (presentation opens the stay), e06->e16 (TEE compared with \"the echocardiogram done on admission\"), e15->e17 (explanted heart pathology), e15->e19 (allograft rejection biopsy), e18->e21 (inotropes started then weaned), e21->e22 (in-hospital care -> discharge), e22->e23 (discharge -> follow-up).",
-    "Added ambiguity for the unanchored \"the next day\" CICU transfer; summary wording fixed (shock at presentation; follow-up required, not planned)."
+    "Added 6 relations (round 2 dropped e15->e19): e04->e14 (presentation opens the stay), e06->e16 (TEE compared with \"the echocardiogram done on admission\"), e15->e17 (explanted heart pathology), e18->e21 (inotropes started then weaned), e21->e22 (in-hospital care -> discharge), e22->e23 (discharge -> follow-up).",
+    "Added ambiguity for the unanchored \"the next day\" CICU transfer; summary wording fixed (shock at presentation; follow-up required, not planned).",
+    "Round 2: dropped e15->e19 (OHT -> rejection biopsy): the biopsy quote has no order word and allograft rejection is not a RULINGS implied order; kept e04->e14 under the ruling \"the presentation/admission that opens a stay -> the in-hospital care ... of that same stay (order only)\"."
   ],
   "unresolved": [
     "Caption-layer visual status is not_inspected; the three figure images were inspected separately in visual.json.",
@@ -54,8 +55,8 @@
     ],
     "residual_risks": [
       "17 non-blocking NO-BORROWING warnings on f040-f056: the \"Initial\" time comes from the same sentence as each lab value (orchestrator ruling), a checker false positive.",
-      "e15->e19 order rests on rejection being of the transplanted heart (allograft biopsy), not on an order word.",
-      "\"hexagonal anticoagulant\" kept literal; \"activating clotting time\" possible duplicate recorded only as an ambiguity."
+      "\"hexagonal anticoagulant\" kept literal; \"activating clotting time\" possible duplicate recorded only as an ambiguity.",
+      "OHT and the rejection biopsy are linked only through e15->e18 (six days after transplantation) and shared later events; no direct OHT -> biopsy edge."
     ]
   },
   "physician_adjudicated": false

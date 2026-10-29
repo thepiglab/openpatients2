@@ -1,0 +1,65 @@
+{
+  "article_id": "PMC13181193.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "6c151df4392db1a2e28097a46f36098bf6942ba83f89ef061b1d4c660c2a9f6b",
+  "annotation_sha256": "330e8a023bf707699da859ed0d14aa9d959fee035babeeeae4cfa77f975afb29",
+  "reviewed_at": "2026-10-29T12:44:26.027475+00:00",
+  "source_segments_read": 67,
+  "facts_reviewed": 222,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Renal transplant 2013 vs 2017 re-classified from 'one or two transplants' ambiguity to a source conflict on the year of the single transplant (the source always says 'the renal transplant'): p1-f005/p1-f007 now source_conflict review_only, new include fact p1-f222 (living-related donor renal transplant, no year), events p1-e02/p1-e04 merged into p1-e02 with no time.",
+    "Onset 'approximately two weeks before' vs '22 days after the onset of symptoms' re-classified from ambiguity to a source conflict on the interval: times removed from symptom facts p1-f030..p1-f035 (symptoms stay scored), two review_only conflict sides added (p1-f223, p1-f224), disputed interval removed from event times p1-e08/p1-e11 and from the summary.",
+    "p1-f127 (>80% left lung perfusion decrease, Fig. 4C caption only) set ambiguous/review_only and unlinked from the pre-lobectomy CT event p1-e28 because the caption (V/Q scan, lobectomy visible) contradicts the text timing.",
+    "Merged duplicate outpatient tacrolimus/mycophenolic acid (b00041 p1-f216/p1-f217 into b00010 p1-f026/p1-f027, adding doses); discharge drugs p1-f026..p1-f028 action unknown -> administered.",
+    "p1-f213 palliative care 'was initiated': action_status unknown -> completed.",
+    "p1-f121 fever spikes 'exceeding 38°C': numeric 38 without a comparator replaced by text_value (symptom schema has no comparator).",
+    "p1-f109 ('no evidence of acute intracranial pathology') and p1-f111 ('within physiological limits') flag normal.",
+    "p1-f014 glargine insulin: indication type 2 diabetes mellitus from its own sentence.",
+    "Summary claim 1 no longer states the disputed 'about two weeks' interval.",
+    "Added 16 literal 'before' relations: appendectomy/transplant/fistula history and calendar orders, anemic-uremic diagnosis -> urgent dialysis, linezolid initiated -> continued, C. gattii pathology -> antifungal start, platelet drop -> bone marrow study, day 43 -> day 75 after onset, CT effusion -> thoracocentesis, intubation -> subsequent ultrasound -> thoracoscopy, lobectomy -> thoracotomy changes on Fig. 7A, pneumonectomy -> Fig. 9 CT, CT new infection -> Trichosporon identification, day 39 -> 42 -> 44.",
+    "F8 panel B label confirmed printed on the image pixels (FIG-LABELS needs_review item answered: keep)."
+  ],
+  "unresolved": [
+    "Source conflict on the renal transplant year (2013 vs 2017) for the single transplant; the year is quarantined (review_only) and the transplant is scored without a year.",
+    "Source conflict on the onset-to-emergency-visit interval (approximately two weeks vs 22 days); the interval is quarantined (review_only).",
+    "Hospital-day numbers and days counted from symptom onset use different anchors and are not converted to each other.",
+    "The Fig. 4 caption describes a lobectomy and ventilation-perfusion scans for a study the text places before the lobectomy decision (ambiguity recorded).",
+    "Discussion sentences on other published cases, general cryptococcosis epidemiology and rituximab effects are background and were not copied to the patient; hedged causes (\"likely contributed\") were not recorded as facts.",
+    "No tables, supplements or videos exist for this article. Figure pixels are inspected in visual.json; the annotation figures[] keep caption-derived entries only."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 67,
+    "facts_reviewed": 222,
+    "figures_viewed": 10,
+    "key_findings": [
+      "Single index patient (50-year-old male renal transplant recipient, disseminated Cryptococcus gattii, died hospital day 53); no tables, supplements or media in raw.xml.",
+      "Transplant year 2013 vs 2017 is a source conflict on one transplant (the source always says \"the renal transplant\"); year quarantined, transplant scored without year.",
+      "Onset-to-ED interval (approximately two weeks vs 22 days) is a source conflict; interval quarantined, symptoms scored without it.",
+      "Fig. 4C >80% perfusion decrease is caption-only; caption (V/Q scan, lobectomy visible) contradicts the text timing, so it is review_only; no percentage printed in the pixels (only HU scale text and frame numerals).",
+      "Family history facts kept (family history is literal; relative left null because \"reported by his father\" does not name who has the conditions).",
+      "Hedged discussion claims (rituximab likely contributed, immunosuppression likely facilitated progression) correctly not recorded; literal discussion statements about this case (immunosuppression at ED admission, DILI, malnutrition/PEW) kept.",
+      "All 33 original relations re-read with full evidence and kept; 16 literal relations added."
+    ],
+    "residual_risks": [
+      "b00016 workup (serology, cranial CT, lumbar puncture) left unordered against the day-10 diagnosis of disseminated cryptococcosis; which diagnosis \"The diagnosis of disseminated cryptococcosis\" refers to is not stated.",
+      "Days 39, 42 and 44 are ordered only among themselves (bare day numbers), not tied to the day-of-hospitalization chain.",
+      "Malnutrition and protein-energy wasting are author assertions in the discussion without supporting measurements (kept include, verification unknown).",
+      "AI reference annotation, not physician-adjudicated."
+    ]
+  },
+  "physician_adjudicated": false
+}

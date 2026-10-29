@@ -114,6 +114,7 @@ class PilotConfig(ConfigModel):
     timeline_segment_batch_size: int = Field(default=8, ge=1, le=32)
     timeline_relation_batch_size: int = Field(default=6, ge=1, le=16)
     timeline_bounded_context: bool = False
+    timeline_prefer_windows: bool = False
     timeline_target_batch_size: int = Field(default=8, ge=1, le=32)
     summary_completion: bool = False
     scatter_calls: bool = False

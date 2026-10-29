@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC6161984.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "e4d358a548e692d5538df2d2653146cae0f2fd77b007082fe67b0e4cd133ea53",
+  "annotation_sha256": "c128d2bf1708f17d138be8b02f1565633fc92bc62d60e4ff69325c512aaa1505",
+  "reviewed_at": "2026-10-29T12:51:43.569264+00:00",
+  "source_segments_read": 26,
+  "facts_reviewed": 91,
+  "patients_reviewed": 3,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1 zopiclone 7.5 mg \"at night as required\" action administered -> ordered (taking a dose is not stated); ambiguity added that supplement Table S1 omits zopiclone (omission, not a conflict).",
+    "p1: added pregnancy history event (well during her first pregnancy) ordered before the post-partum admission by the past perfect \"had been well ... but she was admitted\"; added relations R1 -> readmission (\"Readmission ... later\") and R1 -> R2 (\"first admission (R1)\" / \"second admission (R2)\").",
+    "p2: split the lifetime-history event so only \"prior experience of psychotic symptoms\" is ordered before the index hospitalizations; \"more than 10 hospitalizations in total\" (incl. involuntary hospitalization for severe mania) is its own unordered history event.",
+    "p2: R1, R2 and R3 now relate \"during\" the five hospitalizations within 3 months (was \"admission before R1\" against the aggregate event); hospitalization event time precision -> range.",
+    "p2: added reported fluctuations in clinical symptoms over 24 h (hedged correspondence not recorded as a finding).",
+    "p2 summary no longer assigns daytime inactivity and entropy peaks to R2 (kept untimed with the existing ambiguity).",
+    "p3: removed borrowed time \"after 10 weeks\" from gradual improvement (belongs to the discharge); improvement and discharge moved from the readmission event to a new discharge event.",
+    "p3: added remission-at-end-of-first-admission event; relations admission -> remission, remission -> readmission, R1 -> readmission, regimen change -> readmission, readmission -> discharge, R2 -> discharge; history -> admission relation also quotes the \"prior ... history\" sentence.",
+    "p3: added quetiapine in the changed regimen (during the admission) and afternoon sample-entropy peaks timed R1 via the adjacent sentence naming sample entropy and R1; ambiguity added that lithium discontinuation and the timing of the change versus R1 are not stated.",
+    "p3 summary: \"lithium was replaced\" (inferred stop) rewritten as \"regimen was changed to quetiapine and lamotrigine\".",
+    "Source coverage note for b00021 records the per-sentence decision on \"For Cases 1 and 2\"; article limitation records supplement agreement and the zopiclone omission."
+  ],
+  "unresolved": [
+    "Case details are deliberately brief to maintain anonymity; ages are bounds or approximations and sex is stated only for Case 1.",
+    "Supplement Tables S1 to S3 (DOCX) carry per-admission clinical descriptions, medications and actigraphy variables; they are reviewed in the supplement sidecar, not in main-article facts.",
+    "Cross-case discussion statements in the Conclusions (for example for Cases 1 and 2 and the three cases) are interpretive and are not copied to individual patients.",
+    "Figures are actigraphy plots; only printed text is recorded, with no plot-derived values.",
+    "Supplement Tables S1 to S3 agree with the article text; Table S1 omits zopiclone listed in the article for the second admission (omission, not a conflict)."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 26,
+    "facts_reviewed": 91,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Three individuated BD-I cases; roster count 3 literal (\"three cases\"); ages are bounds/approximations with null numerics; sex only for Case 1 (\"She\"); no sex wording for Cases 2 and 3 in text or supplement.",
+      "\"within 1 week post-partum\" names its reference point (post-partum = after delivery), so relation after / anchor \"post-partum\" is kept; the TIME-LITERAL warning is a checker false positive (the source has no \"of\").",
+      "Supplement MOESM1 Tables S1-S3 agree with the article (diagnoses, medications, symptoms, activity direction); no source conflicts. Merged Comments cells (gridSpan 2 and 4) state no admission time and their facts stay untimed.",
+      "Cross-case Conclusions: \"For Cases 1 and 2\" sentence restates per-case results already recorded; not copied. b00022/b00023 statements are interpretive or study-level.",
+      "p2 daytime inactivity/entropy peaks and p3 anxiety/agitation stay untimed with ambiguities (not the same assessment as the timed clause/sentence); p3 afternoon entropy peaks take R1 by the adjacent-sentence ruling."
+    ],
+    "residual_risks": [
+      "p3 entropy peaks timed R1 rely on the adjacent-sentence ruling; anxiety/agitation remain untimed.",
+      "Durations of the p1 admissions (about 2 weeks, 6 weeks) have no discharge event because no discharge is stated in words.",
+      "visual.json lists left-axis ticks 0, 0.2 ... 1 for Fig 2 panels b, d, f; the pixels print 0, 0.5, 1 (agent-owned file, reported for correction)."
+    ]
+  },
+  "physician_adjudicated": false
+}

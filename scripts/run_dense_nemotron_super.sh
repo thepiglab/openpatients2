@@ -14,6 +14,7 @@ if [[ "${1:-}" == --bootstrap ]]; then
   export DENSE_SOURCE_REVISION="$revision"
   uv sync --locked --extra data --no-dev --python 3.12
   selection=()
+  if [[ "${DENSE_SUPER_BEAM_REPAIR:-0}" == 1 ]]; then selection+=(--beam-repair); fi
   selection+=(--scheduler "${DENSE_SUPER_SCHEDULER:-packed}")
   read -r -a splits <<< "${DENSE_SUPER_SPLITS:-train}"
   selection+=(--splits "${splits[@]}" --selection-seed "${DENSE_SUPER_SELECTION_SEED:-42}")

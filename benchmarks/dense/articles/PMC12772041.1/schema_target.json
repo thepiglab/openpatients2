@@ -1,7 +1,7 @@
 {
   "format": "dense-runtime-targets/1",
   "article_id": "PMC12772041.1",
-  "annotation_sha256": "df0d2925e62b2e0489f0219d135c58c4b12640da6f1e782d822dc559b92fb9df",
+  "annotation_sha256": "f1bd50412e85aea8dcb1a01f0aedeab4f8e761d7e6ea1c0fe39d830873970bd0",
   "source_text_sha256": "2f9c9264446d5353cacf344ff5e8b52795f5fc05aba80e0df3e8ef83a60fef38",
   "schema_fingerprints": {
     "case_context": "d7439310910ef4a7d5e1706c5b9dc8a2b379f132a2562791c059a478b588ec71",
@@ -77,15 +77,16 @@
           "b00039",
           "b00040",
           "b00042",
+          "b00044",
           "b00051",
           "b00063",
           "b00064"
         ],
         "attribution_limitations": [
-          "Table 2 is titled as cerebrospinal fluid analysis and includes anti-EBV IgM and IgG rows, but the text describes these as serological testing; the specimen is not stated.",
+          "Table 2 is titled as cerebrospinal fluid analysis and includes anti-EBV IgM and IgG rows, but the text describes these as serological testing; the specimen is not stated. This is a specimen ambiguity, not a source conflict: no two values are given for the antibody results themselves.",
           "The follow-up MRI is stated as performed 10 days later without naming what it is measured from; it is ordered after the earlier MRI only because it is a follow-up MRI.",
           "The text says renal and hepatic function tests were within the reference range and electrolytes normal, but does not map these statements to individual table rows other than glucose.",
-          "Table 3 includes a row for the present case (82/M, immunocompetent, acyclovir plus steroids, death) alongside literature cases; the row adds an immune-status label not stated elsewhere and was not recorded as a separate fact."
+          "Table 3 includes a row for the present case alongside literature cases; its immune-status cell (Immunocompetent) is the only statement of immune status and is recorded as p1-f103; its other cells repeat text facts."
         ]
       }
     ],
@@ -98,7 +99,6 @@
       "b00007",
       "b00041",
       "b00043",
-      "b00044",
       "b00045",
       "b00046",
       "b00052",
@@ -193,7 +193,7 @@
     ],
     "limitations": [
       "Caption-layer visual status not_inspected; the two JPEGs are inspected in visual.json.",
-      "Literature-review rows of Table 3 and discussion statements are not patient facts; only the present-case row is noted as an ambiguity.",
+      "Literature-review rows of Table 3 and discussion statements are not patient facts; the present-case row supplies immune status only.",
       "Time of the CSF, serology, autoimmune panel, culture and imaging sequence relative to hospital day is not stated; no hospital-day times were derived.",
       "Case text gives no sex-assigned-at-birth, ethnicity or social history beyond absent travel and exposure."
     ]
@@ -434,15 +434,16 @@
             "b00039",
             "b00040",
             "b00042",
+            "b00044",
             "b00051",
             "b00063",
             "b00064"
           ],
           "attribution_limitations": [
-            "Table 2 is titled as cerebrospinal fluid analysis and includes anti-EBV IgM and IgG rows, but the text describes these as serological testing; the specimen is not stated.",
+            "Table 2 is titled as cerebrospinal fluid analysis and includes anti-EBV IgM and IgG rows, but the text describes these as serological testing; the specimen is not stated. This is a specimen ambiguity, not a source conflict: no two values are given for the antibody results themselves.",
             "The follow-up MRI is stated as performed 10 days later without naming what it is measured from; it is ordered after the earlier MRI only because it is a follow-up MRI.",
             "The text says renal and hepatic function tests were within the reference range and electrolytes normal, but does not map these statements to individual table rows other than glucose.",
-            "Table 3 includes a row for the present case (82/M, immunocompetent, acyclovir plus steroids, death) alongside literature cases; the row adds an immune-status label not stated elsewhere and was not recorded as a separate fact."
+            "Table 3 includes a row for the present case alongside literature cases; its immune-status cell (Immunocompetent) is the only statement of immune status and is recorded as p1-f103; its other cells repeat text facts."
           ]
         },
         "source_text_omitted_from_release": true
@@ -690,6 +691,10 @@
                 {
                   "quote": "while the absence of other neurotropic viruses and negative autoimmune and paraneoplastic panels excluded alternative diagnoses such as acute disseminated encephalomyelitis (ADEM), Bickerstaff’s brainstem encephalitis, and anti-NMDA receptor autoimmune encephalitis",
                   "source_section": "b00042"
+                },
+                {
+                  "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded.",
+                  "source_section": "b00001"
                 }
               ],
               "verification_status": "refuted",
@@ -715,6 +720,10 @@
                 {
                   "quote": "while the absence of other neurotropic viruses and negative autoimmune and paraneoplastic panels excluded alternative diagnoses such as acute disseminated encephalomyelitis (ADEM), Bickerstaff’s brainstem encephalitis, and anti-NMDA receptor autoimmune encephalitis",
                   "source_section": "b00042"
+                },
+                {
+                  "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded.",
+                  "source_section": "b00001"
                 }
               ],
               "verification_status": "refuted",
@@ -821,6 +830,185 @@
               "name": "Vasculitic changes",
               "clinical_status": "unknown",
               "role": "differential",
+              "body_site": null,
+              "laterality": "unknown",
+              "severity": null,
+              "diagnostic_basis": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded.",
+                  "source_section": "b00001"
+                }
+              ],
+              "verification_status": "refuted",
+              "name": "Autoimmune encephalitis",
+              "clinical_status": "unknown",
+              "role": "differential",
+              "body_site": null,
+              "laterality": "unknown",
+              "severity": null,
+              "diagnostic_basis": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded.",
+                  "source_section": "b00001"
+                },
+                {
+                  "quote": "In this case, the absence of vascular occlusion on MRA and the typical DWI/ADC pattern of cytotoxic oedema were crucial to exclude ischemic or venous causes",
+                  "source_section": "b00044"
+                }
+              ],
+              "verification_status": "refuted",
+              "name": "Vascular cause",
+              "clinical_status": "unknown",
+              "role": "differential",
+              "body_site": null,
+              "laterality": "unknown",
+              "severity": null,
+              "diagnostic_basis": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded.",
+                  "source_section": "b00001"
+                }
+              ],
+              "verification_status": "refuted",
+              "name": "Metabolic cause",
+              "clinical_status": "unknown",
+              "role": "differential",
+              "body_site": null,
+              "laterality": "unknown",
+              "severity": null,
+              "diagnostic_basis": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded.",
+                  "source_section": "b00001"
+                }
+              ],
+              "verification_status": "refuted",
+              "name": "Other viral causes",
+              "clinical_status": "unknown",
+              "role": "differential",
+              "body_site": null,
+              "laterality": "unknown",
+              "severity": null,
+              "diagnostic_basis": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "possible",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Given the suspicion of viral encephalitis",
+                  "source_section": "b00038"
+                }
+              ],
+              "verification_status": "provisional",
+              "name": "Viral encephalitis",
+              "clinical_status": "unknown",
+              "role": "differential",
+              "body_site": null,
+              "laterality": "unknown",
+              "severity": null,
+              "diagnostic_basis": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "possible",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Serological testing confirmed anti-EBV IgM positivity with negative anti-EBV IgG, supporting a recent primary infection.",
+                  "source_section": "b00033"
+                }
+              ],
+              "verification_status": "provisional",
+              "name": "Recent primary EBV infection",
+              "clinical_status": "unknown",
+              "role": "unknown",
+              "body_site": null,
+              "laterality": "unknown",
+              "severity": null,
+              "diagnostic_basis": null
+            },
+            {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Present case, 2025 | 82/M | Immunocompetent | Bilateral thalami (T2/FLAIR + DWI/ADC) | Positive | Acyclovir + steroids | Death",
+                  "source_section": "b00051"
+                }
+              ],
+              "verification_status": "unknown",
+              "name": "Immunocompromised state",
+              "clinical_status": "unknown",
+              "role": "comorbidity",
               "body_site": null,
               "laterality": "unknown",
               "severity": null,
@@ -1652,8 +1840,8 @@
               "assertion": "present",
               "temporality": "unknown",
               "time": {
-                "text": null,
-                "relation": "unknown",
+                "text": "at presentation",
+                "relation": "at",
                 "anchor": null,
                 "date_iso": null
               },
@@ -1661,6 +1849,10 @@
                 {
                   "quote": "Brain magnetic resonance imaging (MRI) demonstrated",
                   "source_section": "b00036"
+                },
+                {
+                  "quote": "Brain MRI at presentation",
+                  "source_section": "b00063"
                 }
               ],
               "name": "Brain magnetic resonance imaging",
@@ -2240,6 +2432,10 @@
                 {
                   "quote": "EBV-DNA was detected by polymerase chain reaction (PCR)",
                   "source_section": "b00022"
+                },
+                {
+                  "quote": "Present case, 2025 | 82/M | Immunocompetent | Bilateral thalami (T2/FLAIR + DWI/ADC) | Positive | Acyclovir + steroids | Death",
+                  "source_section": "b00051"
                 }
               ],
               "result_absent_reason": null,
@@ -2724,7 +2920,7 @@
               "unit": null,
               "flag": "negative",
               "reference_range_text": null,
-              "specimen": null,
+              "specimen": "serum and CSF",
               "method": null,
               "body_site": null
             },
@@ -2758,7 +2954,7 @@
               "unit": null,
               "flag": "negative",
               "reference_range_text": null,
-              "specimen": null,
+              "specimen": "serum and CSF",
               "method": null,
               "body_site": null
             },
@@ -2792,7 +2988,7 @@
               "unit": null,
               "flag": "negative",
               "reference_range_text": null,
-              "specimen": null,
+              "specimen": "serum and CSF",
               "method": null,
               "body_site": null
             },
@@ -2826,7 +3022,7 @@
               "unit": null,
               "flag": "negative",
               "reference_range_text": null,
-              "specimen": null,
+              "specimen": "serum and CSF",
               "method": null,
               "body_site": null
             },
@@ -2860,7 +3056,7 @@
               "unit": null,
               "flag": "negative",
               "reference_range_text": null,
-              "specimen": null,
+              "specimen": "serum and CSF",
               "method": null,
               "body_site": null
             },
@@ -3424,8 +3620,12 @@
               ]
             },
             {
-              "text": "Consciousness deteriorated to a Glasgow Coma Scale score of 3 within 24 hours of empirical piperacillin–tazobactam for suspected urinary tract infection, and he was transferred to intensive care. CSF showed mild lymphocytic pleocytosis, raised protein and EBV-DNA by PCR with anti-EBV IgM positive; autoimmune and paraneoplastic panels were negative. MRI showed bilateral thalamic lesions with restricted diffusion and no enhancement, and MRA showed normal vessel patency.",
+              "text": "Despite empirical piperacillin–tazobactam for a suspected urinary tract infection, his consciousness deteriorated within the next 24 hours to a Glasgow Coma Scale score of 3, and he was transferred to the intensive care unit, where he required endotracheal intubation and mechanical ventilation.",
               "evidence": [
+                {
+                  "segment_id": "b00020",
+                  "quote": "a urinary tract infection was suspected"
+                },
                 {
                   "segment_id": "b00020",
                   "quote": "Given the presence of fever and inflammatory markers, a urinary tract infection was suspected, and empirical antibiotic therapy with piperacillin–tazobactam was initiated."
@@ -3439,33 +3639,14 @@
                   "quote": "He was therefore transferred to the intensive care unit (ICU)"
                 },
                 {
-                  "segment_id": "b00006",
-                  "quote": "acute bilateral thalamic EBV encephalitis confirmed by positive EBV-DNA in the CSF and characteristic MRI findings"
-                },
-                {
-                  "segment_id": "b00036",
-                  "quote": "with restricted diffusion on DWI"
-                },
-                {
-                  "segment_id": "b00063",
-                  "quote": "Brain MRI at presentation showing bilateral thalamic lesions"
-                },
-                {
-                  "segment_id": "b00063",
-                  "quote": "Lesions demonstrate diffusion restriction"
-                },
-                {
-                  "segment_id": "b00036",
-                  "quote": "No contrast enhancement was observed."
-                },
-                {
-                  "segment_id": "b00063",
-                  "quote": "no contrast enhancement"
-                },
-                {
-                  "segment_id": "b00036",
-                  "quote": "Magnetic resonance angiography (MRA) revealed normal patency of the main intracranial vessels"
-                },
+                  "segment_id": "b00021",
+                  "quote": "where he required endotracheal intubation and mechanical ventilation"
+                }
+              ]
+            },
+            {
+              "text": "CSF showed mild lymphocytic pleocytosis, raised protein, normal glucose and EBV-DNA by PCR, with other viral PCRs negative; anti-EBV IgM was positive and IgG negative. Autoimmune and paraneoplastic panels, cultures and whole-body CT were negative. MRI showed bilateral thalamic T2/FLAIR hyperintensities with restricted diffusion and no enhancement, and MRA showed normal vessel patency. Bilateral thalamic EBV encephalitis was diagnosed and alternative causes were excluded.",
+              "evidence": [
                 {
                   "segment_id": "b00023",
                   "quote": "Cerebrospinal fluid (CSF) analysis and microbiology"
@@ -3503,8 +3684,140 @@
                   "quote": "normal glucose (64 mg/dL)"
                 },
                 {
+                  "segment_id": "b00026",
+                  "quote": "Cerebrospinal fluid (CSF) analysis and microbiology"
+                },
+                {
+                  "segment_id": "b00026",
+                  "quote": "EBV-DNA PCR | Positive | Negative"
+                },
+                {
+                  "segment_id": "b00022",
+                  "quote": "EBV-DNA was detected by polymerase chain reaction (PCR)"
+                },
+                {
+                  "segment_id": "b00051",
+                  "quote": "Present case, 2025 | 82/M | Immunocompetent | Bilateral thalami (T2/FLAIR + DWI/ADC) | Positive | Acyclovir + steroids | Death"
+                },
+                {
+                  "segment_id": "b00027",
+                  "quote": "Cerebrospinal fluid (CSF) analysis and microbiology"
+                },
+                {
+                  "segment_id": "b00027",
+                  "quote": "HSV-1/2 PCR | Negative | Negative"
+                },
+                {
+                  "segment_id": "b00022",
+                  "quote": "whereas PCR for HSV-1/2, varicella-zoster virus (VZV), cytomegalovirus (CMV), enteroviruses and JC virus were all negative"
+                },
+                {
+                  "segment_id": "b00028",
+                  "quote": "Cerebrospinal fluid (CSF) analysis and microbiology"
+                },
+                {
+                  "segment_id": "b00028",
+                  "quote": "VZV PCR | Negative | Negative"
+                },
+                {
+                  "segment_id": "b00029",
+                  "quote": "Cerebrospinal fluid (CSF) analysis and microbiology"
+                },
+                {
+                  "segment_id": "b00029",
+                  "quote": "CMV PCR | Negative | Negative"
+                },
+                {
+                  "segment_id": "b00030",
+                  "quote": "Cerebrospinal fluid (CSF) analysis and microbiology"
+                },
+                {
+                  "segment_id": "b00030",
+                  "quote": "Enterovirus PCR | Negative | Negative"
+                },
+                {
+                  "segment_id": "b00031",
+                  "quote": "Cerebrospinal fluid (CSF) analysis and microbiology"
+                },
+                {
+                  "segment_id": "b00031",
+                  "quote": "Anti-EBV IgM | Positive | Negative"
+                },
+                {
+                  "segment_id": "b00033",
+                  "quote": "Serological testing confirmed anti-EBV IgM positivity"
+                },
+                {
+                  "segment_id": "b00032",
+                  "quote": "Cerebrospinal fluid (CSF) analysis and microbiology"
+                },
+                {
+                  "segment_id": "b00032",
+                  "quote": "Anti-EBV IgG | Negative | Negative"
+                },
+                {
+                  "segment_id": "b00033",
+                  "quote": "negative anti-EBV IgG"
+                },
+                {
                   "segment_id": "b00034",
                   "quote": "A complete autoimmune and paraneoplastic panel was performed on both serum and CSF, yielding negative results for anti-NMDA receptor, anti-MOG, anti-GQ1b, anti-AQP4, LGI1 and CASPR2 antibodies."
+                },
+                {
+                  "segment_id": "b00034",
+                  "quote": "Paraneoplastic antibodies (anti-Hu, anti-Yo, anti-Ri, anti-Ma2 and anti-amphiphysin) were also negative."
+                },
+                {
+                  "segment_id": "b00035",
+                  "quote": "No neoplastic lesions were detected on whole-body computed tomography."
+                },
+                {
+                  "segment_id": "b00035",
+                  "quote": "Blood and urine cultures remained sterile."
+                },
+                {
+                  "segment_id": "b00036",
+                  "quote": "bilateral thalamic hyperintensities on T2-weighted and FLAIR sequences"
+                },
+                {
+                  "segment_id": "b00036",
+                  "quote": "with restricted diffusion on DWI"
+                },
+                {
+                  "segment_id": "b00063",
+                  "quote": "Brain MRI at presentation showing bilateral thalamic lesions"
+                },
+                {
+                  "segment_id": "b00063",
+                  "quote": "Lesions demonstrate diffusion restriction"
+                },
+                {
+                  "segment_id": "b00036",
+                  "quote": "No contrast enhancement was observed."
+                },
+                {
+                  "segment_id": "b00063",
+                  "quote": "no contrast enhancement"
+                },
+                {
+                  "segment_id": "b00036",
+                  "quote": "Magnetic resonance angiography (MRA) revealed normal patency of the main intracranial vessels"
+                },
+                {
+                  "segment_id": "b00006",
+                  "quote": "acute bilateral thalamic EBV encephalitis confirmed by positive EBV-DNA in the CSF and characteristic MRI findings"
+                },
+                {
+                  "segment_id": "b00042",
+                  "quote": "while the absence of other neurotropic viruses and negative autoimmune and paraneoplastic panels excluded alternative diagnoses such as acute disseminated encephalomyelitis (ADEM), Bickerstaff’s brainstem encephalitis, and anti-NMDA receptor autoimmune encephalitis"
+                },
+                {
+                  "segment_id": "b00001",
+                  "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded."
+                },
+                {
+                  "segment_id": "b00044",
+                  "quote": "In this case, the absence of vascular occlusion on MRA and the typical DWI/ADC pattern of cytotoxic oedema were crucial to exclude ischemic or venous causes"
                 }
               ]
             },
@@ -3540,7 +3853,7 @@
           ],
           "limitations": [
             "Caption-layer visual status not_inspected; the two JPEGs are inspected in visual.json.",
-            "Literature-review rows of Table 3 and discussion statements are not patient facts; only the present-case row is noted as an ambiguity.",
+            "Literature-review rows of Table 3 and discussion statements are not patient facts; the present-case row supplies immune status only.",
             "Time of the CSF, serology, autoimmune panel, culture and imaging sequence relative to hospital day is not stated; no hospital-day times were derived.",
             "Case text gives no sex-assigned-at-birth, ethnicity or social history beyond absent travel and exposure."
           ]
@@ -3555,9 +3868,8 @@
               "episode_id": null,
               "kind": "history",
               "occurrence": "occurred",
-              "description": "History of arterial hypertension and previous herpes zoster",
+              "description": "Previous herpes zoster infection of a thoracic dermatome",
               "fact_ids": [
-                "p1-f004",
                 "p1-f005"
               ],
               "evidence": [
@@ -3565,9 +3877,9 @@
                   "source_id": "PMC12772041.1:jats",
                   "segment_id": "b00008",
                   "segment_sha256": "1628f64f8423485e9c6738e571ab3633a501d538913ac1467e36905643f3977f",
-                  "start": 24,
-                  "end": 157,
-                  "quote": "a history of arterial hypertension and a previous episode of herpes zoster infection affecting a thoracic dermatome two years earlier"
+                  "start": 63,
+                  "end": 195,
+                  "quote": "a previous episode of herpes zoster infection affecting a thoracic dermatome two years earlier, completely resolved without sequelae"
                 }
               ],
               "attribution_evidence": [
@@ -3591,9 +3903,9 @@
                       "source_id": "PMC12772041.1:jats",
                       "segment_id": "b00008",
                       "segment_sha256": "1628f64f8423485e9c6738e571ab3633a501d538913ac1467e36905643f3977f",
-                      "start": 24,
-                      "end": 157,
-                      "quote": "a history of arterial hypertension and a previous episode of herpes zoster infection affecting a thoracic dermatome two years earlier"
+                      "start": 63,
+                      "end": 195,
+                      "quote": "a previous episode of herpes zoster infection affecting a thoracic dermatome two years earlier, completely resolved without sequelae"
                     }
                   ]
                 }
@@ -4017,8 +4329,8 @@
                   "segment_id": "b00063",
                   "segment_sha256": "8a95b35bd9adcd0e67ac60d0fb277ae98674703fc3be8542743a6e3fe1b9aee2",
                   "start": 7,
-                  "end": 67,
-                  "quote": "Brain MRI at presentation showing bilateral thalamic lesions"
+                  "end": 32,
+                  "quote": "Brain MRI at presentation"
                 }
               ],
               "attribution_evidence": [
@@ -4051,8 +4363,8 @@
                       "segment_id": "b00063",
                       "segment_sha256": "8a95b35bd9adcd0e67ac60d0fb277ae98674703fc3be8542743a6e3fe1b9aee2",
                       "start": 7,
-                      "end": 67,
-                      "quote": "Brain MRI at presentation showing bilateral thalamic lesions"
+                      "end": 32,
+                      "quote": "Brain MRI at presentation"
                     }
                   ]
                 }
@@ -4122,7 +4434,13 @@
                 "p1-f011",
                 "p1-f012",
                 "p1-f013",
-                "p1-f014"
+                "p1-f014",
+                "p1-f097",
+                "p1-f098",
+                "p1-f099",
+                "p1-f100",
+                "p1-f102",
+                "p1-f103"
               ],
               "evidence": [
                 {
@@ -4132,6 +4450,14 @@
                   "start": 229,
                   "end": 343,
                   "quote": "acute bilateral thalamic EBV encephalitis confirmed by positive EBV-DNA in the CSF and characteristic MRI findings"
+                },
+                {
+                  "source_id": "PMC12772041.1:jats",
+                  "segment_id": "b00001",
+                  "segment_sha256": "55769870f3d43c286b2909ed505a5b2845a1f001e11e3dc6c73904e1ebd8f022",
+                  "start": 1104,
+                  "end": 1293,
+                  "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded."
                 }
               ],
               "attribution_evidence": [
@@ -4156,7 +4482,8 @@
               "fact_ids": [
                 "p1-f039",
                 "p1-f040",
-                "p1-f041"
+                "p1-f041",
+                "p1-f101"
               ],
               "evidence": [
                 {
@@ -4265,6 +4592,38 @@
                   ]
                 }
               ]
+            },
+            {
+              "event_id": "p1-e16",
+              "record_id": "PMC12772041.1:p1",
+              "episode_id": null,
+              "kind": "history",
+              "occurrence": "occurred",
+              "description": "History of arterial hypertension",
+              "fact_ids": [
+                "p1-f004"
+              ],
+              "evidence": [
+                {
+                  "source_id": "PMC12772041.1:jats",
+                  "segment_id": "b00008",
+                  "segment_sha256": "1628f64f8423485e9c6738e571ab3633a501d538913ac1467e36905643f3977f",
+                  "start": 0,
+                  "end": 58,
+                  "quote": "An 82-year-old man with a history of arterial hypertension"
+                }
+              ],
+              "attribution_evidence": [
+                {
+                  "source_id": "PMC12772041.1:jats",
+                  "segment_id": "b00008",
+                  "segment_sha256": "1628f64f8423485e9c6738e571ab3633a501d538913ac1467e36905643f3977f",
+                  "start": 0,
+                  "end": 18,
+                  "quote": "An 82-year-old man"
+                }
+              ],
+              "times": []
             }
           ],
           "edges": [
@@ -4279,9 +4638,9 @@
                   "source_id": "PMC12772041.1:jats",
                   "segment_id": "b00008",
                   "segment_sha256": "1628f64f8423485e9c6738e571ab3633a501d538913ac1467e36905643f3977f",
-                  "start": 0,
+                  "start": 63,
                   "end": 237,
-                  "quote": "An 82-year-old man with a history of arterial hypertension and a previous episode of herpes zoster infection affecting a thoracic dermatome two years earlier, completely resolved without sequelae, was admitted to the emergency department"
+                  "quote": "a previous episode of herpes zoster infection affecting a thoracic dermatome two years earlier, completely resolved without sequelae, was admitted to the emergency department"
                 }
               ]
             },
@@ -4386,6 +4745,73 @@
                   "quote": "Despite aggressive treatment, the patient remained comatose and exhibited no neurological improvement. On day 18 of hospitalisation, he died of multi-organ failure."
                 }
               ]
+            },
+            {
+              "edge_id": "edge8",
+              "from_event_id": "p1-e16",
+              "to_event_id": "p1-e02",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12772041.1:jats",
+                  "segment_id": "b00008",
+                  "segment_sha256": "1628f64f8423485e9c6738e571ab3633a501d538913ac1467e36905643f3977f",
+                  "start": 0,
+                  "end": 237,
+                  "quote": "An 82-year-old man with a history of arterial hypertension and a previous episode of herpes zoster infection affecting a thoracic dermatome two years earlier, completely resolved without sequelae, was admitted to the emergency department"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge9",
+              "from_event_id": "p1-e02",
+              "to_event_id": "p1-e03",
+              "relation": "same_time",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12772041.1:jats",
+                  "segment_id": "b00008",
+                  "segment_sha256": "1628f64f8423485e9c6738e571ab3633a501d538913ac1467e36905643f3977f",
+                  "start": 197,
+                  "end": 237,
+                  "quote": "was admitted to the emergency department"
+                },
+                {
+                  "source_id": "PMC12772041.1:jats",
+                  "segment_id": "b00010",
+                  "segment_sha256": "22c9eb855de4a27d558c6d1832a294f759196bb3ddf678f0c2dcec3f194be9b7",
+                  "start": 0,
+                  "end": 77,
+                  "quote": "On admission, the patient appeared somnolent but arousable to painful stimuli"
+                }
+              ]
+            },
+            {
+              "edge_id": "edge10",
+              "from_event_id": "p1-e05",
+              "to_event_id": "p1-e15",
+              "relation": "before",
+              "offset": null,
+              "evidence": [
+                {
+                  "source_id": "PMC12772041.1:jats",
+                  "segment_id": "b00021",
+                  "segment_sha256": "ffcad3a83623d1debf3ef4c35c189731414b9824fe8314e4522d89b051d037dd",
+                  "start": 99,
+                  "end": 154,
+                  "quote": "reaching a Glasgow Coma Scale (GCS) score of 3 (E1V1M1)"
+                },
+                {
+                  "source_id": "PMC12772041.1:jats",
+                  "segment_id": "b00040",
+                  "segment_sha256": "bd7448faccacd7445e5472e48998716b33693fa392e3a19c4f88576b5851cdbe",
+                  "start": 30,
+                  "end": 101,
+                  "quote": "the patient remained comatose and exhibited no neurological improvement"
+                }
+              ]
             }
           ],
           "limitations": [
@@ -4403,9 +4829,8 @@
             "episode_id": null,
             "kind": "history",
             "occurrence": "occurred",
-            "description": "History of arterial hypertension and previous herpes zoster",
+            "description": "Previous herpes zoster infection of a thoracic dermatome",
             "fact_ids": [
-              "p1-f004",
               "p1-f005"
             ],
             "evidence": [
@@ -4413,9 +4838,9 @@
                 "source_id": "PMC12772041.1:jats",
                 "segment_id": "b00008",
                 "segment_sha256": "1628f64f8423485e9c6738e571ab3633a501d538913ac1467e36905643f3977f",
-                "start": 24,
-                "end": 157,
-                "quote": "a history of arterial hypertension and a previous episode of herpes zoster infection affecting a thoracic dermatome two years earlier"
+                "start": 63,
+                "end": 195,
+                "quote": "a previous episode of herpes zoster infection affecting a thoracic dermatome two years earlier, completely resolved without sequelae"
               }
             ],
             "attribution_evidence": [
@@ -4439,9 +4864,9 @@
                     "source_id": "PMC12772041.1:jats",
                     "segment_id": "b00008",
                     "segment_sha256": "1628f64f8423485e9c6738e571ab3633a501d538913ac1467e36905643f3977f",
-                    "start": 24,
-                    "end": 157,
-                    "quote": "a history of arterial hypertension and a previous episode of herpes zoster infection affecting a thoracic dermatome two years earlier"
+                    "start": 63,
+                    "end": 195,
+                    "quote": "a previous episode of herpes zoster infection affecting a thoracic dermatome two years earlier, completely resolved without sequelae"
                   }
                 ]
               }
@@ -4865,8 +5290,8 @@
                 "segment_id": "b00063",
                 "segment_sha256": "8a95b35bd9adcd0e67ac60d0fb277ae98674703fc3be8542743a6e3fe1b9aee2",
                 "start": 7,
-                "end": 67,
-                "quote": "Brain MRI at presentation showing bilateral thalamic lesions"
+                "end": 32,
+                "quote": "Brain MRI at presentation"
               }
             ],
             "attribution_evidence": [
@@ -4899,8 +5324,8 @@
                     "segment_id": "b00063",
                     "segment_sha256": "8a95b35bd9adcd0e67ac60d0fb277ae98674703fc3be8542743a6e3fe1b9aee2",
                     "start": 7,
-                    "end": 67,
-                    "quote": "Brain MRI at presentation showing bilateral thalamic lesions"
+                    "end": 32,
+                    "quote": "Brain MRI at presentation"
                   }
                 ]
               }
@@ -4970,7 +5395,13 @@
               "p1-f011",
               "p1-f012",
               "p1-f013",
-              "p1-f014"
+              "p1-f014",
+              "p1-f097",
+              "p1-f098",
+              "p1-f099",
+              "p1-f100",
+              "p1-f102",
+              "p1-f103"
             ],
             "evidence": [
               {
@@ -4980,6 +5411,14 @@
                 "start": 229,
                 "end": 343,
                 "quote": "acute bilateral thalamic EBV encephalitis confirmed by positive EBV-DNA in the CSF and characteristic MRI findings"
+              },
+              {
+                "source_id": "PMC12772041.1:jats",
+                "segment_id": "b00001",
+                "segment_sha256": "55769870f3d43c286b2909ed505a5b2845a1f001e11e3dc6c73904e1ebd8f022",
+                "start": 1104,
+                "end": 1293,
+                "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded."
               }
             ],
             "attribution_evidence": [
@@ -5004,7 +5443,8 @@
             "fact_ids": [
               "p1-f039",
               "p1-f040",
-              "p1-f041"
+              "p1-f041",
+              "p1-f101"
             ],
             "evidence": [
               {
@@ -5113,15 +5553,44 @@
                 ]
               }
             ]
+          },
+          {
+            "event_id": "p1-e16",
+            "record_id": "PMC12772041.1:p1",
+            "episode_id": null,
+            "kind": "history",
+            "occurrence": "occurred",
+            "description": "History of arterial hypertension",
+            "fact_ids": [
+              "p1-f004"
+            ],
+            "evidence": [
+              {
+                "source_id": "PMC12772041.1:jats",
+                "segment_id": "b00008",
+                "segment_sha256": "1628f64f8423485e9c6738e571ab3633a501d538913ac1467e36905643f3977f",
+                "start": 0,
+                "end": 58,
+                "quote": "An 82-year-old man with a history of arterial hypertension"
+              }
+            ],
+            "attribution_evidence": [
+              {
+                "source_id": "PMC12772041.1:jats",
+                "segment_id": "b00008",
+                "segment_sha256": "1628f64f8423485e9c6738e571ab3633a501d538913ac1467e36905643f3977f",
+                "start": 0,
+                "end": 18,
+                "quote": "An 82-year-old man"
+              }
+            ],
+            "times": []
           }
         ],
         "topological_layers": [
           [
             [
               "p1-e01"
-            ],
-            [
-              "p1-e03"
             ],
             [
               "p1-e07"
@@ -5143,20 +5612,23 @@
             ],
             [
               "p1-e14"
+            ],
+            [
+              "p1-e16"
             ]
           ],
           [
             [
-              "p1-e02"
-            ],
-            [
-              "p1-e04"
+              "p1-e02",
+              "p1-e03"
             ],
             [
               "p1-e11"
-            ],
+            ]
+          ],
+          [
             [
-              "p1-e15"
+              "p1-e04"
             ]
           ],
           [
@@ -5167,6 +5639,9 @@
           [
             [
               "p1-e06"
+            ],
+            [
+              "p1-e15"
             ]
           ]
         ],
@@ -5174,6 +5649,42 @@
           [
             "p1-e01",
             "p1-e02"
+          ],
+          [
+            "p1-e01",
+            "p1-e03"
+          ],
+          [
+            "p1-e01",
+            "p1-e04"
+          ],
+          [
+            "p1-e01",
+            "p1-e05"
+          ],
+          [
+            "p1-e01",
+            "p1-e06"
+          ],
+          [
+            "p1-e01",
+            "p1-e15"
+          ],
+          [
+            "p1-e02",
+            "p1-e04"
+          ],
+          [
+            "p1-e02",
+            "p1-e05"
+          ],
+          [
+            "p1-e02",
+            "p1-e06"
+          ],
+          [
+            "p1-e02",
+            "p1-e15"
           ],
           [
             "p1-e03",
@@ -5188,6 +5699,10 @@
             "p1-e06"
           ],
           [
+            "p1-e03",
+            "p1-e15"
+          ],
+          [
             "p1-e04",
             "p1-e05"
           ],
@@ -5196,8 +5711,16 @@
             "p1-e06"
           ],
           [
+            "p1-e04",
+            "p1-e15"
+          ],
+          [
             "p1-e05",
             "p1-e06"
+          ],
+          [
+            "p1-e05",
+            "p1-e15"
           ],
           [
             "p1-e10",
@@ -5210,27 +5733,35 @@
           [
             "p1-e14",
             "p1-e15"
+          ],
+          [
+            "p1-e16",
+            "p1-e02"
+          ],
+          [
+            "p1-e16",
+            "p1-e03"
+          ],
+          [
+            "p1-e16",
+            "p1-e04"
+          ],
+          [
+            "p1-e16",
+            "p1-e05"
+          ],
+          [
+            "p1-e16",
+            "p1-e06"
+          ],
+          [
+            "p1-e16",
+            "p1-e15"
           ]
         ],
         "incomparable_pairs": [
           [
             "p1-e01",
-            "p1-e03"
-          ],
-          [
-            "p1-e01",
-            "p1-e04"
-          ],
-          [
-            "p1-e01",
-            "p1-e05"
-          ],
-          [
-            "p1-e01",
-            "p1-e06"
-          ],
-          [
-            "p1-e01",
             "p1-e07"
           ],
           [
@@ -5263,23 +5794,7 @@
           ],
           [
             "p1-e01",
-            "p1-e15"
-          ],
-          [
-            "p1-e02",
-            "p1-e03"
-          ],
-          [
-            "p1-e02",
-            "p1-e04"
-          ],
-          [
-            "p1-e02",
-            "p1-e05"
-          ],
-          [
-            "p1-e02",
-            "p1-e06"
+            "p1-e16"
           ],
           [
             "p1-e02",
@@ -5314,10 +5829,6 @@
             "p1-e14"
           ],
           [
-            "p1-e02",
-            "p1-e15"
-          ],
-          [
             "p1-e03",
             "p1-e07"
           ],
@@ -5348,10 +5859,6 @@
           [
             "p1-e03",
             "p1-e14"
-          ],
-          [
-            "p1-e03",
-            "p1-e15"
           ],
           [
             "p1-e04",
@@ -5386,10 +5893,6 @@
             "p1-e14"
           ],
           [
-            "p1-e04",
-            "p1-e15"
-          ],
-          [
             "p1-e05",
             "p1-e07"
           ],
@@ -5420,10 +5923,6 @@
           [
             "p1-e05",
             "p1-e14"
-          ],
-          [
-            "p1-e05",
-            "p1-e15"
           ],
           [
             "p1-e06",
@@ -5494,6 +5993,10 @@
             "p1-e15"
           ],
           [
+            "p1-e07",
+            "p1-e16"
+          ],
+          [
             "p1-e08",
             "p1-e09"
           ],
@@ -5522,6 +6025,10 @@
             "p1-e15"
           ],
           [
+            "p1-e08",
+            "p1-e16"
+          ],
+          [
             "p1-e09",
             "p1-e10"
           ],
@@ -5544,6 +6051,10 @@
           [
             "p1-e09",
             "p1-e15"
+          ],
+          [
+            "p1-e09",
+            "p1-e16"
           ],
           [
             "p1-e10",
@@ -5562,6 +6073,10 @@
             "p1-e15"
           ],
           [
+            "p1-e10",
+            "p1-e16"
+          ],
+          [
             "p1-e11",
             "p1-e12"
           ],
@@ -5576,6 +6091,10 @@
           [
             "p1-e11",
             "p1-e15"
+          ],
+          [
+            "p1-e11",
+            "p1-e16"
           ],
           [
             "p1-e12",
@@ -5588,13 +6107,30 @@
           [
             "p1-e12",
             "p1-e15"
+          ],
+          [
+            "p1-e12",
+            "p1-e16"
           ],
           [
             "p1-e13",
             "p1-e14"
+          ],
+          [
+            "p1-e13",
+            "p1-e16"
+          ],
+          [
+            "p1-e14",
+            "p1-e16"
           ]
         ],
-        "same_time_groups": [],
+        "same_time_groups": [
+          [
+            "p1-e02",
+            "p1-e03"
+          ]
+        ],
         "interval_relations": [],
         "ordered_event_ids": [
           "p1-e01",
@@ -5607,7 +6143,8 @@
           "p1-e11",
           "p1-e13",
           "p1-e14",
-          "p1-e15"
+          "p1-e15",
+          "p1-e16"
         ],
         "order_unknown_event_ids": [
           "p1-e07",
@@ -5621,7 +6158,7 @@
         "basis": "Source-gated model relations; paragraph order and event kind do not create chronology."
       },
       "reference_provenance": {
-        "annotation_sha256": "df0d2925e62b2e0489f0219d135c58c4b12640da6f1e782d822dc559b92fb9df",
+        "annotation_sha256": "f1bd50412e85aea8dcb1a01f0aedeab4f8e761d7e6ea1c0fe39d830873970bd0",
         "materializer_version": "dense-runtime-targets/1",
         "fact_pointers": [
           {
@@ -5728,6 +6265,10 @@
               {
                 "segment_id": "b00042",
                 "quote": "while the absence of other neurotropic viruses and negative autoimmune and paraneoplastic panels excluded alternative diagnoses such as acute disseminated encephalomyelitis (ADEM), Bickerstaff’s brainstem encephalitis, and anti-NMDA receptor autoimmune encephalitis"
+              },
+              {
+                "segment_id": "b00001",
+                "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded."
               }
             ]
           },
@@ -5739,6 +6280,10 @@
               {
                 "segment_id": "b00042",
                 "quote": "while the absence of other neurotropic viruses and negative autoimmune and paraneoplastic panels excluded alternative diagnoses such as acute disseminated encephalomyelitis (ADEM), Bickerstaff’s brainstem encephalitis, and anti-NMDA receptor autoimmune encephalitis"
+              },
+              {
+                "segment_id": "b00001",
+                "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded."
               }
             ]
           },
@@ -5783,6 +6328,87 @@
               {
                 "segment_id": "b00036",
                 "quote": "ruling out both arterial and venous occlusion as well as vasculitic changes"
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f097",
+            "task": "conditions",
+            "pointer": "/items/11",
+            "source_evidence": [
+              {
+                "segment_id": "b00001",
+                "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded."
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f098",
+            "task": "conditions",
+            "pointer": "/items/12",
+            "source_evidence": [
+              {
+                "segment_id": "b00001",
+                "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded."
+              },
+              {
+                "segment_id": "b00044",
+                "quote": "In this case, the absence of vascular occlusion on MRA and the typical DWI/ADC pattern of cytotoxic oedema were crucial to exclude ischemic or venous causes"
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f099",
+            "task": "conditions",
+            "pointer": "/items/13",
+            "source_evidence": [
+              {
+                "segment_id": "b00001",
+                "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded."
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f100",
+            "task": "conditions",
+            "pointer": "/items/14",
+            "source_evidence": [
+              {
+                "segment_id": "b00001",
+                "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded."
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f101",
+            "task": "conditions",
+            "pointer": "/items/15",
+            "source_evidence": [
+              {
+                "segment_id": "b00038",
+                "quote": "Given the suspicion of viral encephalitis"
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f102",
+            "task": "conditions",
+            "pointer": "/items/16",
+            "source_evidence": [
+              {
+                "segment_id": "b00033",
+                "quote": "Serological testing confirmed anti-EBV IgM positivity with negative anti-EBV IgG, supporting a recent primary infection."
+              }
+            ]
+          },
+          {
+            "fact_id": "p1-f103",
+            "task": "conditions",
+            "pointer": "/items/17",
+            "source_evidence": [
+              {
+                "segment_id": "b00051",
+                "quote": "Present case, 2025 | 82/M | Immunocompetent | Bilateral thalami (T2/FLAIR + DWI/ADC) | Positive | Acyclovir + steroids | Death"
               }
             ]
           },
@@ -6135,6 +6761,10 @@
               {
                 "segment_id": "b00036",
                 "quote": "Brain magnetic resonance imaging (MRI) demonstrated"
+              },
+              {
+                "segment_id": "b00063",
+                "quote": "Brain MRI at presentation"
               }
             ]
           },
@@ -6398,6 +7028,10 @@
               {
                 "segment_id": "b00022",
                 "quote": "EBV-DNA was detected by polymerase chain reaction (PCR)"
+              },
+              {
+                "segment_id": "b00051",
+                "quote": "Present case, 2025 | 82/M | Immunocompetent | Bilateral thalami (T2/FLAIR + DWI/ADC) | Positive | Acyclovir + steroids | Death"
               }
             ]
           },
@@ -7194,7 +7828,7 @@
               }
             ],
             "event_ids": [
-              "p1-e01"
+              "p1-e16"
             ]
           },
           {
@@ -7427,6 +8061,10 @@
                 {
                   "quote": "while the absence of other neurotropic viruses and negative autoimmune and paraneoplastic panels excluded alternative diagnoses such as acute disseminated encephalomyelitis (ADEM), Bickerstaff’s brainstem encephalitis, and anti-NMDA receptor autoimmune encephalitis",
                   "source_section": "b00042"
+                },
+                {
+                  "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded.",
+                  "source_section": "b00001"
                 }
               ],
               "verification_status": "refuted",
@@ -7453,6 +8091,14 @@
                 "start": 98,
                 "end": 363,
                 "quote": "while the absence of other neurotropic viruses and negative autoimmune and paraneoplastic panels excluded alternative diagnoses such as acute disseminated encephalomyelitis (ADEM), Bickerstaff’s brainstem encephalitis, and anti-NMDA receptor autoimmune encephalitis"
+              },
+              {
+                "source_id": "PMC12772041.1:jats",
+                "segment_id": "b00001",
+                "segment_sha256": "55769870f3d43c286b2909ed505a5b2845a1f001e11e3dc6c73904e1ebd8f022",
+                "start": 1104,
+                "end": 1293,
+                "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded."
               }
             ],
             "event_ids": [
@@ -7477,6 +8123,10 @@
                 {
                   "quote": "while the absence of other neurotropic viruses and negative autoimmune and paraneoplastic panels excluded alternative diagnoses such as acute disseminated encephalomyelitis (ADEM), Bickerstaff’s brainstem encephalitis, and anti-NMDA receptor autoimmune encephalitis",
                   "source_section": "b00042"
+                },
+                {
+                  "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded.",
+                  "source_section": "b00001"
                 }
               ],
               "verification_status": "refuted",
@@ -7503,6 +8153,14 @@
                 "start": 98,
                 "end": 363,
                 "quote": "while the absence of other neurotropic viruses and negative autoimmune and paraneoplastic panels excluded alternative diagnoses such as acute disseminated encephalomyelitis (ADEM), Bickerstaff’s brainstem encephalitis, and anti-NMDA receptor autoimmune encephalitis"
+              },
+              {
+                "source_id": "PMC12772041.1:jats",
+                "segment_id": "b00001",
+                "segment_sha256": "55769870f3d43c286b2909ed505a5b2845a1f001e11e3dc6c73904e1ebd8f022",
+                "start": 1104,
+                "end": 1293,
+                "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded."
               }
             ],
             "event_ids": [
@@ -7703,6 +8361,368 @@
                 "start": 369,
                 "end": 444,
                 "quote": "ruling out both arterial and venous occlusion as well as vasculitic changes"
+              }
+            ],
+            "event_ids": [
+              "p1-e12"
+            ]
+          },
+          {
+            "fact_id": "p1-f097",
+            "task": "conditions",
+            "pointer": "/items/11",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded.",
+                  "source_section": "b00001"
+                }
+              ],
+              "verification_status": "refuted",
+              "name": "Autoimmune encephalitis",
+              "clinical_status": "unknown",
+              "role": "differential",
+              "body_site": null,
+              "laterality": "unknown",
+              "severity": null,
+              "diagnostic_basis": null
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "name": "Autoimmune encephalitis",
+              "verification_status": "refuted",
+              "role": "differential"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12772041.1:jats",
+                "segment_id": "b00001",
+                "segment_sha256": "55769870f3d43c286b2909ed505a5b2845a1f001e11e3dc6c73904e1ebd8f022",
+                "start": 1104,
+                "end": 1293,
+                "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded."
+              }
+            ],
+            "event_ids": [
+              "p1-e12"
+            ]
+          },
+          {
+            "fact_id": "p1-f098",
+            "task": "conditions",
+            "pointer": "/items/12",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded.",
+                  "source_section": "b00001"
+                },
+                {
+                  "quote": "In this case, the absence of vascular occlusion on MRA and the typical DWI/ADC pattern of cytotoxic oedema were crucial to exclude ischemic or venous causes",
+                  "source_section": "b00044"
+                }
+              ],
+              "verification_status": "refuted",
+              "name": "Vascular cause",
+              "clinical_status": "unknown",
+              "role": "differential",
+              "body_site": null,
+              "laterality": "unknown",
+              "severity": null,
+              "diagnostic_basis": null
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "name": "Vascular cause",
+              "verification_status": "refuted",
+              "role": "differential"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12772041.1:jats",
+                "segment_id": "b00001",
+                "segment_sha256": "55769870f3d43c286b2909ed505a5b2845a1f001e11e3dc6c73904e1ebd8f022",
+                "start": 1104,
+                "end": 1293,
+                "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded."
+              },
+              {
+                "source_id": "PMC12772041.1:jats",
+                "segment_id": "b00044",
+                "segment_sha256": "90aae8fd6cbb73d07f13ca2929772a833a0e21cda4e4de5a2ada0ff12df64315",
+                "start": 258,
+                "end": 414,
+                "quote": "In this case, the absence of vascular occlusion on MRA and the typical DWI/ADC pattern of cytotoxic oedema were crucial to exclude ischemic or venous causes"
+              }
+            ],
+            "event_ids": [
+              "p1-e12"
+            ]
+          },
+          {
+            "fact_id": "p1-f099",
+            "task": "conditions",
+            "pointer": "/items/13",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded.",
+                  "source_section": "b00001"
+                }
+              ],
+              "verification_status": "refuted",
+              "name": "Metabolic cause",
+              "clinical_status": "unknown",
+              "role": "differential",
+              "body_site": null,
+              "laterality": "unknown",
+              "severity": null,
+              "diagnostic_basis": null
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "name": "Metabolic cause",
+              "verification_status": "refuted",
+              "role": "differential"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12772041.1:jats",
+                "segment_id": "b00001",
+                "segment_sha256": "55769870f3d43c286b2909ed505a5b2845a1f001e11e3dc6c73904e1ebd8f022",
+                "start": 1104,
+                "end": 1293,
+                "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded."
+              }
+            ],
+            "event_ids": [
+              "p1-e12"
+            ]
+          },
+          {
+            "fact_id": "p1-f100",
+            "task": "conditions",
+            "pointer": "/items/14",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded.",
+                  "source_section": "b00001"
+                }
+              ],
+              "verification_status": "refuted",
+              "name": "Other viral causes",
+              "clinical_status": "unknown",
+              "role": "differential",
+              "body_site": null,
+              "laterality": "unknown",
+              "severity": null,
+              "diagnostic_basis": null
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "name": "Other viral causes",
+              "verification_status": "refuted",
+              "role": "differential"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12772041.1:jats",
+                "segment_id": "b00001",
+                "segment_sha256": "55769870f3d43c286b2909ed505a5b2845a1f001e11e3dc6c73904e1ebd8f022",
+                "start": 1104,
+                "end": 1293,
+                "quote": "Differential diagnoses such as autoimmune encephalitis, acute disseminated encephalomyelitis, Bickerstaff’s brainstem encephalitis, vascular, metabolic and other viral causes were excluded."
+              }
+            ],
+            "event_ids": [
+              "p1-e12"
+            ]
+          },
+          {
+            "fact_id": "p1-f101",
+            "task": "conditions",
+            "pointer": "/items/15",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "possible",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Given the suspicion of viral encephalitis",
+                  "source_section": "b00038"
+                }
+              ],
+              "verification_status": "provisional",
+              "name": "Viral encephalitis",
+              "clinical_status": "unknown",
+              "role": "differential",
+              "body_site": null,
+              "laterality": "unknown",
+              "severity": null,
+              "diagnostic_basis": null
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "possible",
+              "name": "Viral encephalitis",
+              "verification_status": "provisional",
+              "role": "differential"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12772041.1:jats",
+                "segment_id": "b00038",
+                "segment_sha256": "198c852953c2b37b77be8ea00a9536b5416f9f328070baebb5a4f1c8bcd737b8",
+                "start": 0,
+                "end": 41,
+                "quote": "Given the suspicion of viral encephalitis"
+              }
+            ],
+            "event_ids": [
+              "p1-e13"
+            ]
+          },
+          {
+            "fact_id": "p1-f102",
+            "task": "conditions",
+            "pointer": "/items/16",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "possible",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Serological testing confirmed anti-EBV IgM positivity with negative anti-EBV IgG, supporting a recent primary infection.",
+                  "source_section": "b00033"
+                }
+              ],
+              "verification_status": "provisional",
+              "name": "Recent primary EBV infection",
+              "clinical_status": "unknown",
+              "role": "unknown",
+              "body_site": null,
+              "laterality": "unknown",
+              "severity": null,
+              "diagnostic_basis": null
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "possible",
+              "name": "Recent primary EBV infection",
+              "verification_status": "provisional",
+              "role": "unknown"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12772041.1:jats",
+                "segment_id": "b00033",
+                "segment_sha256": "093067a8ae385d9f561ad37b6a4d1ae7eadbb1812c8194401ca765a8b8c9048d",
+                "start": 0,
+                "end": 120,
+                "quote": "Serological testing confirmed anti-EBV IgM positivity with negative anti-EBV IgG, supporting a recent primary infection."
+              }
+            ],
+            "event_ids": [
+              "p1-e12"
+            ]
+          },
+          {
+            "fact_id": "p1-f103",
+            "task": "conditions",
+            "pointer": "/items/17",
+            "value_as_extracted": {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "temporality": "unknown",
+              "time": {
+                "text": null,
+                "relation": "unknown",
+                "anchor": null,
+                "date_iso": null
+              },
+              "evidence": [
+                {
+                  "quote": "Present case, 2025 | 82/M | Immunocompetent | Bilateral thalami (T2/FLAIR + DWI/ADC) | Positive | Acyclovir + steroids | Death",
+                  "source_section": "b00051"
+                }
+              ],
+              "verification_status": "unknown",
+              "name": "Immunocompromised state",
+              "clinical_status": "unknown",
+              "role": "comorbidity",
+              "body_site": null,
+              "laterality": "unknown",
+              "severity": null,
+              "diagnostic_basis": null
+            },
+            "value_as_annotated": {
+              "subject": "index_patient",
+              "assertion": "absent",
+              "name": "Immunocompromised state",
+              "verification_status": "unknown",
+              "role": "comorbidity"
+            },
+            "evidence": [
+              {
+                "source_id": "PMC12772041.1:jats",
+                "segment_id": "b00051",
+                "segment_sha256": "6616ac6fa0ec2c182fc2fdad24c49adb8b34b7bbcd539d0ef43be51ab3a0ae4c",
+                "start": 181,
+                "end": 307,
+                "quote": "Present case, 2025 | 82/M | Immunocompetent | Bilateral thalami (T2/FLAIR + DWI/ADC) | Positive | Acyclovir + steroids | Death"
               }
             ],
             "event_ids": [
@@ -9316,8 +10336,8 @@
               "assertion": "present",
               "temporality": "unknown",
               "time": {
-                "text": null,
-                "relation": "unknown",
+                "text": "at presentation",
+                "relation": "at",
                 "anchor": null,
                 "date_iso": null
               },
@@ -9325,6 +10345,10 @@
                 {
                   "quote": "Brain magnetic resonance imaging (MRI) demonstrated",
                   "source_section": "b00036"
+                },
+                {
+                  "quote": "Brain MRI at presentation",
+                  "source_section": "b00063"
                 }
               ],
               "name": "Brain magnetic resonance imaging",
@@ -9342,7 +10366,12 @@
               "name": "Brain magnetic resonance imaging",
               "kind": "procedure",
               "action": "completed",
-              "body_site": "brain"
+              "body_site": "brain",
+              "time": {
+                "text": "at presentation",
+                "relation": "at",
+                "anchor": null
+              }
             },
             "evidence": [
               {
@@ -9352,6 +10381,14 @@
                 "start": 0,
                 "end": 51,
                 "quote": "Brain magnetic resonance imaging (MRI) demonstrated"
+              },
+              {
+                "source_id": "PMC12772041.1:jats",
+                "segment_id": "b00063",
+                "segment_sha256": "8a95b35bd9adcd0e67ac60d0fb277ae98674703fc3be8542743a6e3fe1b9aee2",
+                "start": 7,
+                "end": 32,
+                "quote": "Brain MRI at presentation"
               }
             ],
             "event_ids": [
@@ -10565,6 +11602,10 @@
                 {
                   "quote": "EBV-DNA was detected by polymerase chain reaction (PCR)",
                   "source_section": "b00022"
+                },
+                {
+                  "quote": "Present case, 2025 | 82/M | Immunocompetent | Bilateral thalami (T2/FLAIR + DWI/ADC) | Positive | Acyclovir + steroids | Death",
+                  "source_section": "b00051"
                 }
               ],
               "result_absent_reason": null,
@@ -10617,6 +11658,14 @@
                 "start": 152,
                 "end": 207,
                 "quote": "EBV-DNA was detected by polymerase chain reaction (PCR)"
+              },
+              {
+                "source_id": "PMC12772041.1:jats",
+                "segment_id": "b00051",
+                "segment_sha256": "6616ac6fa0ec2c182fc2fdad24c49adb8b34b7bbcd539d0ef43be51ab3a0ae4c",
+                "start": 181,
+                "end": 307,
+                "quote": "Present case, 2025 | 82/M | Immunocompetent | Bilateral thalami (T2/FLAIR + DWI/ADC) | Positive | Acyclovir + steroids | Death"
               }
             ],
             "event_ids": [
@@ -11564,7 +12613,7 @@
               "unit": null,
               "flag": "negative",
               "reference_range_text": null,
-              "specimen": null,
+              "specimen": "serum and CSF",
               "method": null,
               "body_site": null
             },
@@ -11575,7 +12624,8 @@
               "kind": "laboratory",
               "status": "resulted",
               "flag": "negative",
-              "text_value": "negative"
+              "text_value": "negative",
+              "specimen": "serum and CSF"
             },
             "evidence": [
               {
@@ -11633,7 +12683,7 @@
               "unit": null,
               "flag": "negative",
               "reference_range_text": null,
-              "specimen": null,
+              "specimen": "serum and CSF",
               "method": null,
               "body_site": null
             },
@@ -11644,7 +12694,8 @@
               "kind": "laboratory",
               "status": "resulted",
               "flag": "negative",
-              "text_value": "negative"
+              "text_value": "negative",
+              "specimen": "serum and CSF"
             },
             "evidence": [
               {
@@ -11702,7 +12753,7 @@
               "unit": null,
               "flag": "negative",
               "reference_range_text": null,
-              "specimen": null,
+              "specimen": "serum and CSF",
               "method": null,
               "body_site": null
             },
@@ -11713,7 +12764,8 @@
               "kind": "laboratory",
               "status": "resulted",
               "flag": "negative",
-              "text_value": "negative"
+              "text_value": "negative",
+              "specimen": "serum and CSF"
             },
             "evidence": [
               {
@@ -11771,7 +12823,7 @@
               "unit": null,
               "flag": "negative",
               "reference_range_text": null,
-              "specimen": null,
+              "specimen": "serum and CSF",
               "method": null,
               "body_site": null
             },
@@ -11782,7 +12834,8 @@
               "kind": "laboratory",
               "status": "resulted",
               "flag": "negative",
-              "text_value": "negative"
+              "text_value": "negative",
+              "specimen": "serum and CSF"
             },
             "evidence": [
               {
@@ -11840,7 +12893,7 @@
               "unit": null,
               "flag": "negative",
               "reference_range_text": null,
-              "specimen": null,
+              "specimen": "serum and CSF",
               "method": null,
               "body_site": null
             },
@@ -11851,7 +12904,8 @@
               "kind": "laboratory",
               "status": "resulted",
               "flag": "negative",
-              "text_value": "negative"
+              "text_value": "negative",
+              "specimen": "serum and CSF"
             },
             "evidence": [
               {

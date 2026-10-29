@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC11693611.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f05b5ab00eb2a020cfd9c4ab6ec0da150a1344400bcc528b82ffecd092dee8d6",
+  "annotation_sha256": "058a3bd1970407f22389ffecce1fc5c2cdbd192834fc426da983d31f18703cd2",
+  "reviewed_at": "2026-10-29T12:37:42.435964+00:00",
+  "source_segments_read": 68,
+  "facts_reviewed": 311,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f026 renamed 'Discomfort' and body_site 'abdomen' removed: abstract lists 'abdominal bloating, and discomfort' as separate items; 'After 1 week' kept only on this abstract-only symptom.",
+    "p1-f041 time 'During hospitalization' removed (it governs the preceding critical-values sentence, not the transfusion sentence); quote narrowed to the transfusion sentence.",
+    "p1-f011 impaired coagulation given time 'Upon admission' with the full abstract admission-laboratory clause as evidence.",
+    "Added p1-f310 (transaminase levels significantly elevated, flag high, Upon admission) and p1-f311 (hepatitis B markers positive, Upon admission) from the abstract.",
+    "Split event p1-e11 into critical coagulation reports during hospitalization (e11) and transfusions/coagulation factor supplementation (new e22).",
+    "Added events p1-e19 hospital admission, p1-e20 abstract admission laboratory tests, p1-e21 artificial liver therapy combined with CRRT (kept separate from DPMAS+RRT).",
+    "Added 9 relations: e02->e19 (one month prior to admission), e04->e19 (abstract After 1 week ... Upon admission), e19 same_time e20, e19->e12 (days after admission), e19->e11 and e19->e17 and e11->e17 (stay order), e22->e16 (transfusions improved coagulation), e21->e16 (improved after artificial liver therapy).",
+    "e05->e12 relation now quotes both the presentation sentence and the DPMAS-after-admission sentence (presentation opening the stay, order only).",
+    "Ambiguity 1 extended with the discussion 'levels at admission (Table 2)' sentence; new ambiguity on presentation vs admission and artificial liver/CRRT vs DPMAS/RRT identity.",
+    "Summary paragraphs cite the new admission facts and mention artificial liver therapy with CRRT."
+  ],
+  "unresolved": [
+    "The article has no figures and no supplementary material (raw.xml checked for supplementary-material, none found).",
+    "Tables 1 to 3 are serial results labelled only by sequence number; no dates or days are given and the Table 1 \"R\" column is undefined.",
+    "Discussion paragraphs mix general literature statements with sentences about this patient; only explicitly patient-specific statements were recorded as facts."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 68,
+    "facts_reviewed": 311,
+    "figures_viewed": 0,
+    "key_findings": [
+      "Single index patient; no figures and no supplementary material (raw.xml has no fig, graphic, media or supplementary-material elements).",
+      "All 206 table cells (T1 36, T2 140, T3 30) checked programmatically and by eye against the rows: values, comparators (>), units, dash cells as not_reported, ordinal row times with unknown relation.",
+      "Table first rows are not merged with the untimed narrative labs: no row is labelled as admission; Table 1 row 1 differs from the narrative and is kept as an ambiguity, not a conflict.",
+      "Normal annual-exam liver function vs discussion 'pre-existing impaired liver function' is an ambiguity, not a source conflict (no two values for one measurement at one time).",
+      "DILI provisional (RUCAM 7 / Naranjo 6 'probable'); hepatocellular and cholestatic patterns recorded separately; 'both' sentence kept as ambiguity."
+    ],
+    "residual_risks": [
+      "Table rows carry only ordinal labels; their relation to admission, DPMAS days and discharge is unknown.",
+      "Uric acid 187 mmol/L kept as printed (likely a unit misprint); Table 1 'R' column undefined; 'APTT_rati' header truncated in source.",
+      "Abstract artificial liver therapy with CRRT may duplicate DPMAS with RRT; kept separate because the source does not identify them."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,56 @@
+{
+  "article_id": "PMC6393035.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "f9e440a6f4cd72f349ab08d894ad9686a328f93ed7f1a52ccb57d945586d9879",
+  "annotation_sha256": "54a8cb56ca5a741f72b9a33f0c24e7a82576dba3557a160bd902e5fa8eba066f",
+  "reviewed_at": "2026-10-29T12:44:51.258830+00:00",
+  "source_segments_read": 23,
+  "facts_reviewed": 27,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Margin at the urethral meatus re-checked in raw.xml: 5 mm (abstract, case report, Fig 3 caption) vs 0.5 mm (Discussion); kept as source_conflict on both sides, review_only; ambiguity text explains why it is not a one-character artefact; 5 mm fact now cites all three 5 mm statements.",
+    "p1-f006 kind symptom -> sign (visible macula).",
+    "p1-f018 second quote widened within its own sentence to carry the glans body site; abstract and Discussion 1 cm margin restatements added as evidence.",
+    "Abstract evidence added to p1-f013 (biopsy result) and p1-f021 (graft); abstract and Discussion outcome restatements added to p1-f023/f024/f025.",
+    "Added p1-f027: functional disorders absent after 50 months from the excision (Discussion b00018), linked to follow-up event p1-e11.",
+    "Added relation p1-e07 (histology MIS) before p1-e09 (wide excision of MIS): result -> action about that result.",
+    "Summary claim 2 no longer names an assessing author; claim 4 cites p1-f027.",
+    "Added ambiguity for the authors' decision to avoid penile amputation (not recorded as a declined procedure)."
+  ],
+  "unresolved": [
+    "Table 1 is an image-only table of 8 literature cases; its printed values are pixel content (visual.json only) and not index-patient facts.",
+    "Margin close to the urethral meatus is a source conflict (5 mm vs 0.5 mm); both sides review_only.",
+    "Discussion statements on literature cases, guidelines and prognosis are background, not patient facts.",
+    "Caption-layer visual status not_inspected; actual images inspected in visual.json."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 23,
+    "facts_reviewed": 27,
+    "figures_viewed": 5,
+    "key_findings": [
+      "Single index patient (69-year-old man), roster count 1 literal; no supplements (raw.xml has no supplementary-material).",
+      "All 7 draft relations re-read with full evidence and supported; one result -> action relation added.",
+      "Table 1 is an image-only literature table; no patient facts taken from it.",
+      "Mohs surgery 'not taken in consideration' kept as ambiguity only."
+    ],
+    "residual_risks": [
+      "Meatal margin value (5 mm vs 0.5 mm) unresolved by the source; both sides review_only.",
+      "Lesion duration 'several years' vs 'about 8 years earlier' kept as an ambiguity, not a conflict.",
+      "Graft laterality 'left' rests on the Figure 4 caption statement about the graft."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC13065148.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8f20626b8631f1c91fd883534a8080b00f0ef8ad692c274c381b4526fba40178",
+  "annotation_sha256": "45bea6ef28a8359071f5c671b30a70ef4323c9ff24197eeba8eaf66a2e9d00a9",
+  "reviewed_at": "2026-10-29T12:39:31.587884+00:00",
+  "source_segments_read": 19,
+  "facts_reviewed": 51,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f006 punctate epithelial fluorescein staining: body_site set to \"both eyes\" (sentence lists staining and PED before \"in both eyes\", contrasted with \"stromal opacity in the right eye\").",
+    "p1-f021/p1-f022 Cochet-Bonnet esthesiometry: name \"Mean corneal sensitivity\", text_value \"10 mm\"/\"15 mm\" (was \"mean 10 mm\"), flag low from the source wording \"reduced corneal sensation\".",
+    "p1-f027/p1-f029 relapse of AML: added literal evidence from the introduction (\"a patient with relapsed AML undergoing treatment with Gilteritinib\") so the AML label is not borrowed from the preceding sentence.",
+    "p1-e03 AML relapse event kind adverse_event -> history.",
+    "p1-e12 one-month event: removed untimed discussion outcome p1-f048 from its fact links.",
+    "Relations e06->e10 and e10->e12: replaced caption-only evidence with the text times (\"On examination\", \"At the one-week follow-up\", \"At the one-month assessment\").",
+    "Added relations: e02 before e05 (history sentence adjacent to presentation), e04 overlaps e05 (keratitis developed after two years of Gilteritinib; \"undergoing treatment with Gilteritinib\"; drug promptly discontinued), e05 before e06, e07 before e08 (diagnosis -> treatment of it), e08 before e10 (\"led to favorable epithelial healing\"; follow-up), e09 before e10 (index care -> follow-up).",
+    "Ambiguities reworded: Gilteritinib duration (after vs for two years, no start/stop dates); autologous serum contraindicated and cenegermin unavailable kept as ambiguity only, no medication items.",
+    "source_coverage b00003 and b00007 set to patient_facts (cited for this patient)."
+  ],
+  "unresolved": [
+    "Single-patient report; discussion statements about other patients, cited literature cases and general disease background are not patient facts.",
+    "Causal attribution of the keratitis to Gilteritinib is hedged by the authors and is not recorded as an asserted fact.",
+    "Gilteritinib start and stop dates, the date of examination and the exact tests used to exclude other etiologies are not stated.",
+    "Figure 1 panel laterality is not printed; caption-level pixel review is recorded separately in visual.json.",
+    "No supplementary material is declared in raw.xml."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 19,
+    "facts_reviewed": 51,
+    "figures_viewed": 1,
+    "key_findings": [
+      "Single index patient (52-year-old man, relapsed FLT3-ITD AML on Gilteritinib, bilateral stage 2 neurotrophic keratitis); no tables or supplements in raw.xml.",
+      "The abstract \"at one month\" literally times visual acuity and the residual central leukoma, not the slit-lamp procedure; the leukoma keeps the time, the procedure correctly has none.",
+      "Hedged causality (\"most likely related to prolonged Gilteritinib therapy\") is an ambiguity only; no causal or adverse-reaction fact asserted.",
+      "BCVA kept as Snellen text_value with comparator unknown and flag unknown.",
+      "Figure 1: two assets (A alone; B-F staggered) viewed at full resolution: tight eye close-ups, no face, no burned-in text beyond panel letters."
+    ],
+    "residual_risks": [
+      "e04 overlaps e05 relies on the abstract/introduction and the discontinuation sentence rather than a single stated interval.",
+      "Panel laterality is not printed and is not assigned."
+    ]
+  },
+  "physician_adjudicated": false
+}

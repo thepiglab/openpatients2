@@ -1,0 +1,58 @@
+{
+  "article_id": "PMC12936458.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "2392da3b9febad99c37fcd37c9b08c906ec23c6d3ae4909e1d6e8a2e8ff612db",
+  "annotation_sha256": "d2a3ea81b3549646478b1011428f67bdb8a91c93038024f28030d38cedb60aa8",
+  "reviewed_at": "2026-10-29T12:38:51.382874+00:00",
+  "source_segments_read": 30,
+  "facts_reviewed": 81,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "p1-f077 'Malignant potential' moved from a possible complication condition to a present pathology observation: the case pathology sentence asserts that this PA had malignant potential; transformation and metastasis stay possibilities inside the text value, not conditions.",
+    "p1-f078 (fibrosis and necrosis in some of the lesions) restored to supported/include: the b00015 sentence refers back to 'our pathologic findings' in the preceding sentence (both sentences now quoted) and is contrasted with previously reported findings in the next.",
+    "Added p1-f080 (Fig. 1a caption T1 'moderately to slightly low signal', an asserted range) and p1-f081 (Fig. 2 caption: scattered lymph nodes around the nodules with significant enhancement on contrast CT); linked to the MRI and CT events.",
+    "Relations: MRI->CT evidence now quotes both stated admission-day times in full; added MRI (first day of admission) before puncture biopsy (day 2), CT (second day) same_time biopsy (day 2) at day precision, and admission before the resection performed 'in our hospital' (admission opening the stay -> in-hospital care, order only).",
+    "Ambiguities rewritten: T1 text alternatives vs caption range; fibrosis/necrosis assignment basis; CT/biopsy same stated day with intra-day order unstated.",
+    "Summary: 'recurred five years before admission' reworded to the literal 'five years ago'; prior pathology worded as 'considered a mixed tumor'."
+  ],
+  "unresolved": [
+    "No follow-up or outcome after resection is stated; no care plan is recorded.",
+    "Case Report gives no dates; all timing is relative.",
+    "Caption-layer visual status not_inspected; the three JPEGs are described in visual.json.",
+    "The CT-referent of 'The enhancement was not homogeneous' (nodules or lymph nodes) is not stated and stays review_only.",
+    "CT and puncture biopsy share the stated day 2; their order within that day is not stated.",
+    "The fibrosis and necrosis finding is stated only in the Discussion and is assigned to this case through a literal back-reference."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 30,
+    "facts_reviewed": 81,
+    "figures_viewed": 3,
+    "key_findings": [
+      "Single index patient (28-year-old woman, recurrent right submandibular pleomorphic adenoma); raw.xml has no tables or supplements; no outcome or follow-up is stated.",
+      "Timeline: prior resection 10 years prior, recurrence five years ago, admission, MRI day 1, CT and puncture biopsy day 2 (same_time at day precision), resection in our hospital, pathology; radiotherapy not performed (absent).",
+      "Text T1 alternatives (intermediate or slightly low) and the CT enhancement sentence with an unclear referent stay review_only; the Fig. 1a caption T1 range and the Fig. 2 caption lymph-node enhancement were added as caption facts.",
+      "The Discussion fibrosis/necrosis sentence is assigned to the case through its literal back-reference to our pathologic findings; malignant potential is a case-specific pathology statement.",
+      "IHC P53 and Ki-67 keep comparator = (the schema has no approximate comparator; about stays in the text value); SMA -/+ has no flag.",
+      "All three figures viewed at full resolution with magnified crops (Fig. 3b red label, Fig. 2d upper anatomy)."
+    ],
+    "residual_risks": [
+      "The Fig. 3b red text string is illegible; its privacy category should be direct_identifiers (agent change pending).",
+      "The Fig. 2d visual description names orbits/sinus air that the pixels do not show with certainty (agent change pending).",
+      "The order of CT and biopsy within day 2, and of biopsy relative to surgery, is not stated."
+    ]
+  },
+  "physician_adjudicated": false
+}

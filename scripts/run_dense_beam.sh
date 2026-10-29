@@ -6,7 +6,14 @@ mode="${1:-pilot}"
 if [[ $# -gt 0 ]]; then shift; fi
 export DENSE_SUPER_SCHEDULER=packed DENSE_SUPER_WITH_IMAGES=0 DENSE_INCLUDE_TEST=0
 export DENSE_SUPER_ARTICLE_IDS='' DENSE_SUPER_EXPECTED=''
+export DENSE_SUPER_BEAM_REPAIR="${DENSE_BEAM_REPAIR:-0}"
 case "$mode" in
+  repair-pilot)
+    export DENSE_SUPER_BEAM_REPAIR=1
+    export DENSE_SUPER_PROFILES=beam-nvfp4-dflash2
+    export DENSE_SUPER_SPLITS=train DENSE_SUPER_LIMIT_ARTICLES="${DENSE_BEAM_PILOT_ARTICLES:-48}"
+    export DENSE_HOURS="${DENSE_HOURS:-24}"
+    ;;
   pilot|short-draft)
     speculative=beam-nvfp4-dflash2
     if [[ "$mode" == short-draft ]]; then speculative=beam-nvfp4-dflash2-short; fi
@@ -23,6 +30,6 @@ case "$mode" in
     export DENSE_SUPER_PROFILES="$profile" DENSE_SUPER_SPLITS='train validation'
     export DENSE_SUPER_LIMIT_ARTICLES='' DENSE_HOURS="${DENSE_HOURS:-72}"
     ;;
-  *) echo 'Usage: run_dense_beam.sh [pilot|short-draft|long] [new-work-directory]' >&2; exit 2;;
+  *) echo 'Usage: run_dense_beam.sh [repair-pilot|pilot|short-draft|long] [new-work-directory]' >&2; exit 2;;
 esac
 exec bash "$repo/scripts/run_dense_nemotron_super.sh" "$@"

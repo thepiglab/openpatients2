@@ -1,0 +1,61 @@
+{
+  "article_id": "PMC12840563.1",
+  "reviewer": "parent assistant",
+  "review_type": "source-grounded AI review; not physician adjudication",
+  "status": "source_reviewed",
+  "source_text_sha256": "8ec6b81fdf34efc3cc5d568109e72b65d9d713933f0007e59d533d462919b739",
+  "annotation_sha256": "d7da91901523c62100954f8b255d2616746790dcfa92c34923a2a4c697d52692",
+  "reviewed_at": "2026-10-29T12:52:19.965049+00:00",
+  "source_segments_read": 32,
+  "facts_reviewed": 88,
+  "patients_reviewed": 1,
+  "source_read_in_full": true,
+  "reviewed_components": [
+    "patient identity and source scope",
+    "all clinical facts and measured quantities",
+    "normal and negative findings",
+    "diagnostic certainty and planning status",
+    "relative chronology",
+    "summary entailment and omissions",
+    "all captions and panel attribution"
+  ],
+  "corrections": [
+    "Relation e15->e17 replaced by e17 during e15: the screw exchange followed audible blocking \"during distraction\" and allowed \"continued\" advancement.",
+    "Relation e15->e14 replaced by e14 during e15 (weight-bearing allowed from two weeks postoperatively, inside distraction from postoperative day 8 for 230 days; same postoperative anchor).",
+    "Event e18 (18 months) no longer carries the 5-week/4-month/8-month Figure 6 defect facts; new test events e23/e24/e25 and e26 (direct postoperative, 9 cm) chained by the caption sequence sentence to e18.",
+    "Added relations: surgical-sequence chain e05->e06->e07->e08->e09 (\"The surgical sequence was as follows\"), e10->e11 (postoperative), e02->e05 (Preoperative captions), e12 same_time e15 (both postoperative day 8), e15->e18 (docking-site consolidation), e01->e22 (\"compared to preoperative status\").",
+    "Kept e03->e05 (\"Despite these features ... necessitated\"); ambiguity on biopsy vs resection specimen reworded accordingly.",
+    "Weight-bearing event e14 occurrence set to unknown (\"allowed\"); hardware-integrity statement p1-f038 made review_only (protocol criterion, not a dated result).",
+    "Removed non-time time.text from p1-f024 and the borrowed six-month time from p1-f043 (blocking reported before the exchange); added Intraoperative caption time to p1-f030.",
+    "Added 13 facts: skeletal growth preserved (b00001); non-union absent and anterior tibial angular deformity absent (review_only) from \"In this case, none of these complications occurred\" (b00021); general anesthesia, midline infrapatellar incision, Kirschner wire guidance, specimen sent for histology, fixator maintained during nail insertion; Fig 4 gross specimen; Fig 5 intact fibular diaphysis; Fig 6 initial 9 cm defect and full consolidation at 1.5 years; clinical monitoring care plan; new event e27.",
+    "Deformity cluster (Fig 8 slight procurvatum/varus vs no coronal/sagittal deformity vs no malalignment vs none of these complications) kept as an ambiguity, not a source conflict (time point and method not established as the same); all post-removal alignment statements review_only; earlier restored-alignment statements included.",
+    "Ambiguities expanded (deformity, site wording, Fig 6 arithmetic-only mismatches) and one added (weight-bearing); article limitation added for the Fig 2 caption signal words vs pixel appearance; coverage of b00001 and b00021 set to patient_facts."
+  ],
+  "unresolved": [
+    "Single-patient case report; discussion sentences about published series and literature complication rates are background and not copied to the patient.",
+    "Caption-layer visual status is not_inspected; actual pixels were inspected in the separate visual submission.",
+    "Figure 6 caption distances are stated to be approximate; Figure 8 caption deformity wording is not reconciled with the text, see ambiguities.",
+    "Oncology section left empty: the source calls the lesion locally aggressive and of intermediate WHO classification, not malignant.",
+    "No supplementary material is listed in the source XML.",
+    "Figure 2 caption signal descriptions (hypointense in panels A, C and D) are kept as caption facts; on viewing, the lesion in panels A and D appears bright relative to adjacent marrow. Pixel appearance is not a conflict side and is recorded only in the visual submission."
+  ],
+  "assessment": {
+    "reviewer": "Claude Opus 5.5 parent",
+    "source_units_read": 32,
+    "facts_reviewed": 88,
+    "figures_viewed": 9,
+    "key_findings": [
+      "Single index patient, no tables or supplements (confirmed in raw.xml).",
+      "Oncology left empty: the source calls OFD-AD locally aggressive and WHO intermediate, never malignant or suspected malignant (ONC-BENIGN); the condition is in conditions.",
+      "Figure 2 caption hypointense/hyperintense facts stand as caption facts; the lesion in panels A and D looks bright on the pixels, which is not a conflict side.",
+      "Lesion site proximal tibia vs diaphysis is an ambiguity, both wordings kept.",
+      "Figure 6 approximate distances vs 8.5 cm/230 days are arithmetic-only mismatches (ambiguity), kept include with notes."
+    ],
+    "residual_risks": [
+      "Deformity statements treated as ambiguity rather than source conflict; a stricter reading would call Fig 8 vs the two-year text a conflict at the same visit.",
+      "Surgical-step order rests on the \"surgical sequence was as follows\" sentence.",
+      "Figure 6 caption times are taken to share the postoperative anchor with the 18-month text time."
+    ]
+  },
+  "physician_adjudicated": false
+}

@@ -1,7 +1,7 @@
 {
   "format": "dense-runtime-targets/1",
   "article_id": "PMC12779483.1",
-  "annotation_sha256": "57c65dd3d265e8afac9638d58e04d5c9c1e52a653314c07d053cc89e169aa7d0",
+  "annotation_sha256": "f7ec7fe6a65995c404d91c50d8ac5b88c544d8b309e30a587e57fa5c40ab4379",
   "source_text_sha256": "11719fc067add7365bb8b2e2c5e227909a746b8f30f12f967745562328cadd52",
   "schema_fingerprints": {
     "case_context": "d7439310910ef4a7d5e1706c5b9dc8a2b379f132a2562791c059a478b588ec71",
@@ -142,7 +142,10 @@
       "Disposition aggregate_only: the article is a brief report evaluating an educational telementoring program (Project ECHO) for rural primary care clinicians. Its n = 106 participants are clinicians and other health workers, not patients, and it reports only program-level counts, means and agreement levels, so no individual patient record is created.",
       "The sessions presented de-identified patient cases from participants, but the article describes none of them, so there is no patient text to annotate. The roster block has no count (null) and roster_complete false because no individual patients are stated or enumerable.",
       "Tables 1 to 3 exist both as JATS text rows and as images (graphics outside figure elements). Both were read; their values describe program participants and session evaluations in aggregate and are not copied to any patient.",
-      "The source lists no supplementary material and no figure elements (raw XML checked); the only images are the three table graphics."
+      "The source lists no supplementary material and no figure elements (raw XML checked); the only images are the three table graphics.",
+      "Disposition and roster reasoning (parent review): the only stated counts (32 + 74 = 106 participants, 98 unique; 167 session evaluations; 65 respondents) count clinicians, other health workers and survey responses, not patients. The de-identified patient cases presented in sessions are neither counted nor described. reported_individual_count is therefore null (no stated number of individual patients) and roster_complete is false with no evidence quote. aggregate_only is kept rather than no_patient_case because the article reports aggregate human-participant data only, matches the corpus aggregate_only convention for patients [], and the runtime Roster contract (article_tasks.Roster) has no no_patient_case value, so schema_targets could not materialize it.",
+      "Table 1 printed values do not all match their counts (recorded as printed, no facts created): Cohort 1 Primary care prints 19 (59.8) although 19 of 32 is 59.4%; the Cohort 1 burnout rows print 5 (20.0), 14 (56.0) and 6 (24.0), which use a denominator of 25, while Missing/NA in the same column prints 7 (21.9), which uses 32; Cohort 2 prints 36 (48.7) although 36 of 74 is 48.6%; the total Not applicable/missing occupation row prints 1 (0.94) with two decimals. Table 2 differences do not always equal post minus pre of the printed rounded means (for example Overall 2.5 and 3.5 with difference 0.9); the footnote states means and confidence intervals were rounded to 1 decimal place.",
+      "Denominator wording differs in the results text: 'Among participants completing post-session evaluations (n = 65)' introduces 71.9%, 88.6% and 74.3%, which equal the Table 3 strongly-agree plus agree counts over the 167 session evaluations (120, 148 and 124 of 167), and 'Most participants (n = 65, 61.3%)' uses 106 participants rather than 98 unique. Recorded as printed; nothing here is patient data."
     ]
   },
   "figure_attribution": [

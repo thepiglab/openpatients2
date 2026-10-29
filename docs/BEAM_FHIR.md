@@ -1,5 +1,12 @@
 # Beam optimization and literature-derived FHIR records
 
+See [the October 28 pilot assessment](reports/BEAM_PILOT_20261028.md) before a full run.
+The next diagnostic command is `bash scripts/run_dense_beam.sh repair-pilot`.
+Window-first timelines and four-hour article limits are opt-in through that mode
+or `DENSE_BEAM_REPAIR=1`; the original pilot settings remain available.
+Use `DENSE_BEAM_REPAIR=1 bash scripts/run_dense_beam.sh long` only after validating
+the repair pilot and resolving the documented appendix/roster failure.
+
 ## Run Beam first
 
 The October 24 campaign used **Reflection Beam-1.0-501B-A23B-NVFP4** with
@@ -76,11 +83,10 @@ on test data or count incomplete/failed outputs as zero-cost successes.
 
 - Beam uses a 131,072-token context cap instead of 65,536. Server startup,
   exact `/tokenize` counts and reasoning-capture probes remain mandatory.
-- Timeline event calls cover two source segments at a time. Relation calls
-  cover two origin events and at most eight target events, including cross-batch
+- Timeline event calls cover four source segments at a time. Relation calls
+  cover four origin events and at most sixteen target events, including cross-batch
   candidates. Each event pair is considered once, allowing either edge direction,
-  to avoid redundant reverse-pair calls. The full source is preferred. If it cannot fit with the output
-  allowance, requests use whole evidence/focus segments, identity evidence and
+  to avoid redundant reverse-pair calls. The repair pilot uses whole evidence/focus segments, identity evidence and
   adjacent context. No segment is shortened. Every segment remains an event
   focus; included segment IDs and scope are recorded per call.
 - Context/length failures split non-singleton batches. The failed parent attempt
