@@ -35,7 +35,8 @@ STARTUP_TIMEOUT_SECONDS = 5400
 
 
 def prepare(root, work, expected=None, hours=12, with_images=True, include_test=False,
-            limit_articles=None, profiles=None, splits=None, selection_seed=42, article_ids=None, scheduler='serial', beam_repair=False):
+            limit_articles=None, profiles=None, splits=None, selection_seed=42, article_ids=None, scheduler='serial', beam_repair=False,
+            competition=False):
     if not 1 <= hours <= 72 or (limit_articles is not None and limit_articles < 1):
         raise ValueError('Invalid hours/article limit')
     selected = list(DEFAULT_PROFILES) if profiles is None else list(profiles)
@@ -53,12 +54,28 @@ def prepare(root, work, expected=None, hours=12, with_images=True, include_test=
         raise ValueError('Select unique train/validation/test splits')
     if 'test' in splits and not include_test:
         raise ValueError('Test selection requires --include-test')
-    reference = root / 'configs/hipergator/nemotron-super/reference.jsonl.gz'
+    competition_selection = None
+    if competition:
+        from .competition_selection import validate_selection
+        selection_path = root / 'configs/hipergator/nemotron-super/competition-50.json'
+        competition_selection = validate_selection(root, selection_path)
+        # Validation returns a receipt; keep the complete versioned selection.
+        competition_selection = b.read(selection_path)
+        if splits != ('train',) or include_test or limit_articles is not None or article_ids is not None:
+            raise ValueError('Competition campaign requires its frozen fifty training articles without selection overrides')
+        if set(selected) != {'beam-nvfp4-dflash2', 'beam-nvfp4-no-spec'} or scheduler != 'packed' or with_images:
+            raise ValueError('Competition uses matched Beam DFlash2/no-spec TP4 arms, packed and text-only')
+        beam_repair = True
+        article_ids = competition_selection['article_ids']
+        reference = root / competition_selection['reference']['path']
+        expected = 50
+    else:
+        reference = root / 'configs/hipergator/nemotron-super/reference.jsonl.gz'
     # Legacy explicit-count callers can still use their historical packet.
     # Default launches must never silently fall back to the old 260 reference.
     if not reference.exists() and expected is None:
         raise ValueError('Missing current Super reference snapshot; refresh and commit it before launching')
-    if reference.exists():
+    if reference.exists() and not competition:
         metadata = b.read(reference.with_name('reference-manifest.json'))
         if metadata['sha256'] != b.sha(reference):
             raise ValueError('Current reference snapshot checksum mismatch; refresh the reference packet')
@@ -91,6 +108,9 @@ def prepare(root, work, expected=None, hours=12, with_images=True, include_test=
                  'timing_policy': 'One active article per server; synthetic probes are outside article timing. '
                      + ('Budgeted parallel waves; replicas of each profile claim distinct articles. At most eight B200s.' if scheduler == 'packed'
                         else 'Configurations run sequentially, using at most eight B200s.')})
+    if competition:
+        from .competition_campaign import configuration
+        m['competition'] = configuration(root, competition_selection)
     m['files'] = b.inventory(work, ['code', 'inputs', 'reference'])
     for name, definition in definitions.items():
         profile = PROFILES[definition['profile']]
@@ -129,6 +149,11 @@ def prepare(root, work, expected=None, hours=12, with_images=True, include_test=
             if beam_repair:
                 am['beam_repair_policy'] = 'scope-routing-bounded-documents/2'
             am['article_timeout_seconds'] = 14400 if beam_repair else 3600
+            if competition:
+                am['extraction'].update(timeline_sparse_relations=True, bounded_clinical_extraction=True,
+                    literal_series_time_cells=True)
+                am['beam_repair_policy'] = 'source-coverage-sparse-timeline-fhir/3'
+                am['article_timeout_seconds'] = 3600
         if profile.get('engine') == 'mistral':
             am['article_timeout_seconds'] = 14400
             am['extraction'].update(timeline_bounded_context=True, timeline_prefer_windows=True,
@@ -1315,18 +1340,23 @@ def aggregate(work):
         files['runtime.json'] = b.sha(work / 'runtime.json')
     b.write(work / 'summary/integrity.json', {'manifest_sha256': b.sha(work / 'manifest.json'), 'files': files})
     if result['complete']:
-        verify(work)
+        verify(work, from_aggregate=True)
     export(work)
     return result
 
 
-def verify(work):
+def verify(work, *, from_aggregate=False):
     m = check(work)
     if m['nemotron_super'].get('scheduler', {}).get('mode') == 'packed':
-        if active_jobs(work):
+        live = active_jobs(work)
+        own = os.environ.get('SLURM_JOB_ID') if from_aggregate else None
+        aggregate_ids = {str(j['id']) for p in (work/'submissions').glob('*.json')
+                         for j in b.read(p)['jobs'] if j['phase'] == 'aggregate'}
+        if any(str(j) != own or own not in aggregate_ids for j in live):
             raise ValueError('Packed campaign jobs are still active')
         from .super_packing import collect
-        collect(work, m)
+        if not from_aggregate:
+            collect(work, m)
     incomplete = []
     for name in m['nemotron_super']['arms']:
         progress = b.status(work / 'arms' / name)
@@ -1377,6 +1407,7 @@ def main(argv=None):
             p.add_argument('--profiles', choices=list(PROFILES), nargs='+')
             p.add_argument('--scheduler', choices=['serial', 'packed'], default='serial')
             p.add_argument('--beam-repair', action='store_true', help='Experimental windowed timelines and four-hour article timeout')
+            p.add_argument('--competition', action='store_true', help='Frozen 50-article paired Beam/FHIR campaign')
         if command == 'packing-preflight':
             p.add_argument('--wave', type=int, required=True)
         if command == 'submit':
@@ -1398,7 +1429,7 @@ def main(argv=None):
         if args.command == 'prepare':
             result = prepare(args.root.resolve(), work, args.expected, args.hours, args.with_images,
                              args.include_test, args.limit_articles, args.profiles, args.splits,
-                             args.selection_seed, args.article_ids, args.scheduler, args.beam_repair)
+                             args.selection_seed, args.article_ids, args.scheduler, args.beam_repair, args.competition)
         elif args.command == 'packing-preflight':
             from .super_packing import preflight
             result = preflight(work, args.wave)

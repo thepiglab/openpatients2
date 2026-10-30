@@ -117,6 +117,11 @@ class PilotConfig(ConfigModel):
     timeline_prefer_windows: bool = False
     timeline_scope_repair: bool = False
     bounded_document_stages: bool = False
+    timeline_sparse_relations: bool = False
+    timeline_sparse_neighbors: int = Field(default=16, ge=0, le=64)
+    timeline_sparse_pairs_per_event: int = Field(default=32, ge=1, le=128)
+    bounded_clinical_extraction: bool = False
+    literal_series_time_cells: bool = False
     timeline_target_batch_size: int = Field(default=8, ge=1, le=32)
     summary_completion: bool = False
     scatter_calls: bool = False
@@ -895,6 +900,9 @@ class PilotRunner:
         routing = {}
         async def clinical(task):
             task_packet, task_segments = packet, segments
+            if self.config.bounded_clinical_extraction and not ledger_mode:
+                from .bounded_clinical import extract as bounded_clinical
+                return await bounded_clinical(self, task, packet, context_article, patient, identity, replica)
             if ledger_mode:
                 from .evidence_ledger import route_segments, subset_packet
                 selected, receipt = route_segments(article,patient,task,self.source_ledgers.get(article['article_id'],[]))

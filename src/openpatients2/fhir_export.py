@@ -53,11 +53,13 @@ def fact_entries(article, patient):
                                    'task': task, 'collection': collection, 'fact': fact})
                 yield {'fact_key': key, 'task': task, 'collection': collection,
                        'source_pointer': f'/sections/{task}/{collection}/{i}', 'fact': fact}
+    from .fhir_measurements import series_entries
+    yield from series_entries(article, patient)
 
 
 def term(entry):
     fact = entry['fact']
-    return str(next((fact[k] for k in ('name', 'substance', 'attribute', 'action_text', 'event', 'text_value') if fact.get(k)), entry['task']))
+    return str(next((fact[k] for k in ('name', 'measurement_name', 'substance', 'attribute', 'action_text', 'event', 'text_value') if fact.get(k)), entry['task']))
 
 
 def literal_evidence(fact, source):
@@ -253,10 +255,13 @@ def compile_patient(article, patient, source, *, recorded, codings=None):
         if key in seen:
             reason = 'exact_duplicate'
         seen.add(key)
-        if not literal_evidence(entry['fact'], source):
+        if entry['task'] != 'measurement_series' and not literal_evidence(entry['fact'], source):
             reason = 'missing_or_nonliteral_evidence'
         if reason:
             resource = None
+        elif entry['task'] == 'measurement_series':
+            from .fhir_measurements import map_series_point
+            resource, reason = map_series_point(entry, article, patient, source, ref)
         else:
             resource, reason = map_fact(entry, ref, codings.get(key))
         target = add(resource, key) if resource else None
@@ -274,5 +279,5 @@ def compile_patient(article, patient, source, *, recorded, codings=None):
               'type': 'collection', 'entry': entries}
     return bundle, {'article_id': aid, 'patient_id': pid, 'facts': audit,
         'clinical_accuracy_verified': False, 'synthetic_fields': ['Patient.identifier', 'Patient.name'],
-        'deferred_sections': ['case_context', 'timeline', 'measurement_series', 'supplemental_clinical'],
+        'deferred_sections': ['case_context', 'timeline', 'supplemental_clinical'],
         'preservation': 'The extraction DocumentReference retains the complete patient packet, including every deferred fact.'}

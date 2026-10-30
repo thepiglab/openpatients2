@@ -98,7 +98,8 @@ def official_validate(bundle_path, jar, *, output, terminology_server=None, time
     if output.exists():
         raise ValueError('Choose a new official validation output path')
     cmd = ['java', '-jar', str(jar), str(Path(bundle_path).resolve()), '-version', '4.0.1',
-           '-tx', terminology_server or 'n/a', '-output', str(output)]
+           '-tx', terminology_server or 'n/a', '-ig',
+           str(files('openpatients2').joinpath('rules/fhir-extensions')), '-output', str(output)]
     result = subprocess.run(cmd, text=True, capture_output=True, timeout=timeout, check=False)
     outcome = json.loads(output.read_text()) if output.exists() else None
     issues = (outcome or {}).get('issue', [])

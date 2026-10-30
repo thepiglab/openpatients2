@@ -1,0 +1,52 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "source-fact",
+  "url": "https://github.com/thepiglab/openpatients2/fhir/StructureDefinition/source-fact",
+  "version": "1.0.0",
+  "name": "SourceFact",
+  "status": "draft",
+  "experimental": true,
+  "description": "Original extracted fact serialized as JSON, including literal evidence and uncertainty; not a clinically reviewed assertion.",
+  "fhirVersion": "4.0.1",
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "type": "element",
+      "expression": "Element"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "short": "Original extracted fact serialized as JSON, including literal evidence and uncertainty; not a clinically reviewed assertion.",
+        "definition": "Original extracted fact serialized as JSON, including literal evidence and uncertainty; not a clinically reviewed assertion."
+      },
+      {
+        "id": "Extension.extension",
+        "path": "Extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "https://github.com/thepiglab/openpatients2/fhir/StructureDefinition/source-fact"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "min": 1,
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      }
+    ]
+  }
+}

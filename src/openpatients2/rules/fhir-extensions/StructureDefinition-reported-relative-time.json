@@ -1,0 +1,52 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "reported-relative-time",
+  "url": "https://github.com/thepiglab/openpatients2/fhir/StructureDefinition/reported-relative-time",
+  "version": "1.0.0",
+  "name": "ReportedRelativeTime",
+  "status": "draft",
+  "experimental": true,
+  "description": "Literal reported timing and extracted relative offset serialized as JSON. This is not an inferred calendar timestamp.",
+  "fhirVersion": "4.0.1",
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "type": "element",
+      "expression": "Element"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "short": "Literal reported timing and extracted relative offset serialized as JSON. This is not an inferred calendar timestamp.",
+        "definition": "Literal reported timing and extracted relative offset serialized as JSON. This is not an inferred calendar timestamp."
+      },
+      {
+        "id": "Extension.extension",
+        "path": "Extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "https://github.com/thepiglab/openpatients2/fhir/StructureDefinition/reported-relative-time"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "min": 1,
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      }
+    ]
+  }
+}

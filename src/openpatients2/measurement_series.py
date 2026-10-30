@@ -445,7 +445,8 @@ def series_rows(article_id, target, split=None):
     for s in target['series']:
         referenced = {s['name_cell_id'], s.get('reference_range_cell_id')} | {
             cid for p in s['points'] for cid in (p['value_cell_id'], p['time']['time_cell_id'], p['unit_cell_id'],
-                                                  p.get('legend_cell_id'))}
+                                                  p.get('legend_cell_id'))} | {
+            e.get('cell_id') for e in s.get('ownership_evidence', [])}
         yield {'format': FORMAT, 'article_id': article_id, **s, 'split': split,
                'cells': [cells[c] for c in sorted(c for c in referenced if c)]}
 

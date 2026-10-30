@@ -56,7 +56,20 @@ async def extract(runner, article, roster, annotation, draft, transcriptions):
             await batch(number+'.0', rows[:mid]); await batch(number+'.1', rows[mid:])
             return
 
+        projections = []
         def check(value):
+            if getattr(runner.config, 'literal_series_time_cells', False):
+                value = copy.deepcopy(value)
+                by_id = {c['cell_id']: c for c in local_draft['cells']}
+                for series in value.get('series', []):
+                    for point in series.get('points', []):
+                        cell_id = point.get('time_cell_id')
+                        if cell_id is not None and cell_id in by_id:
+                            literal = by_id[cell_id]['raw_text']
+                            if point.get('time_text') != literal:
+                                projections.append({'time_cell_id': cell_id, 'original_time_text': point.get('time_text'),
+                                    'literal_time_text': literal, 'policy': 'selected-cell-literal-projection/1'})
+                                point['time_text'] = literal
             checked = ehr_tasks.check_series(value, article, annotation, local_draft, transcriptions)
             visible = {s['segment_id'] for s in view['segments']}
             if any(e.get('segment_id') and e['segment_id'] not in visible
@@ -72,6 +85,10 @@ async def extract(runner, article, roster, annotation, draft, transcriptions):
              'included_segment_ids': [s['segment_id'] for s in view['segments']],
              'source_scope': 'whole_article' if view is article else 'whole_segment_window'},
             0, view['segments'], split_on_length=len(rows) > 1)
+        if projections:
+            result['literal_cell_projections'] = projections
+            from .data import write_json
+            write_json(runner.output/'tasks'/(result['task_key']+'.json'), result)
         if len(rows) > 1 and splittable_failure(result):
             replaced(runner, result)
             mid = len(rows) // 2

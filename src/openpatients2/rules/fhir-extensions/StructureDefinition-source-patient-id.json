@@ -1,0 +1,52 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "source-patient-id",
+  "url": "https://github.com/thepiglab/openpatients2/fhir/StructureDefinition/source-patient-id",
+  "version": "1.0.0",
+  "name": "SourcePatientId",
+  "status": "draft",
+  "experimental": true,
+  "description": "Patient identifier in the source extraction packet; not a clinical medical record identifier.",
+  "fhirVersion": "4.0.1",
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "type": "element",
+      "expression": "Element"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "short": "Patient identifier in the source extraction packet; not a clinical medical record identifier.",
+        "definition": "Patient identifier in the source extraction packet; not a clinical medical record identifier."
+      },
+      {
+        "id": "Extension.extension",
+        "path": "Extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "https://github.com/thepiglab/openpatients2/fhir/StructureDefinition/source-patient-id"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "min": 1,
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      }
+    ]
+  }
+}

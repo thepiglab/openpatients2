@@ -4,8 +4,13 @@ Catalogs are supplied under their own licenses. We do not redistribute SNOMED,
 LOINC or RxNorm releases, guess ICD codes, or treat a lexical match as reviewed.
 """
 from difflib import SequenceMatcher
+from functools import lru_cache, cached_property
+from collections import defaultdict
+import gzip
 import json
+import math
 from pathlib import Path
+import re
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -20,6 +25,27 @@ SYSTEM_TASKS = {
     'http://loinc.org': {'observations', 'demographics', 'symptoms_function', 'oncology', 'family_genetics'},
     'http://www.nlm.nih.gov/research/umls/rxnorm': {'medications', 'allergies', 'oncology'},
 }
+
+STOP_WORDS = {'a', 'an', 'and', 'or', 'of', 'the', 'with', 'without', 'in', 'to', 'due', 'other', 'unspecified'}
+
+
+def words(text):
+    return set(re.findall(r'[a-z0-9]+', text.casefold())) - STOP_WORDS
+
+
+class Catalog(dict):
+    """Cached retrieval metadata is an attribute, never part of frozen JSON."""
+    @cached_property
+    def digest(self):
+        return json_digest(self)
+
+    @cached_property
+    def index(self):
+        index = defaultdict(set)
+        for i, c in enumerate(self['concepts']):
+            for word in words(' '.join([c['display'], *c['aliases']])):
+                index[word].add(i)
+        return dict(index)
 
 
 class Candidate(BaseModel):
@@ -62,8 +88,16 @@ class Decision(BaseModel):
 
 def load_catalog(path=None):
     if path is None:
-        return {'format': 'openpatients2-terminology-catalog/1', 'source': 'none', 'license': 'none', 'concepts': []}
-    catalog = json.loads(Path(path).read_text())
+        return Catalog(format='openpatients2-terminology-catalog/1', source='none', license='none', concepts=[])
+    path = Path(path).resolve()
+    stat = path.stat()
+    return _load_catalog(str(path), stat.st_size, stat.st_mtime_ns)
+
+
+@lru_cache(maxsize=2)
+def _load_catalog(path, size, modified_ns):
+    raw = Path(path).read_bytes()
+    catalog = Catalog(json.loads(gzip.decompress(raw) if path.endswith('.gz') else raw))
     if catalog.get('format') != 'openpatients2-terminology-catalog/1' or not catalog.get('source') or not catalog.get('license'):
         raise ValueError('Catalog requires format, source and license provenance')
     catalog['concepts'] = [Candidate.model_validate(c).model_dump() for c in catalog['concepts']]
@@ -75,11 +109,23 @@ def load_catalog(path=None):
 
 def candidates(catalog, task, text, limit=8, system=None):
     text = text.casefold().strip()
+    catalog = catalog if isinstance(catalog, Catalog) else Catalog(catalog)
+    query = words(text)
+    overlaps = defaultdict(float)
+    # An inverted token shortlist avoids 75k SequenceMatcher calls per fact.
+    # Missing/abbreviated vocabulary stays an explicit retrieval miss, not a guessed code.
+    for token in query:
+        postings = catalog.index.get(token, set())
+        weight = math.log(1 + len(catalog['concepts']) / (1 + len(postings)))
+        for i in postings:
+            overlaps[i] += weight
     scored = []
-    for concept in catalog['concepts']:
+    for i in sorted(overlaps, key=lambda i: (-overlaps[i], i))[:512]:
+        concept = catalog['concepts'][i]
         if task not in concept['tasks'] or system is not None and concept['system'] != system:
             continue
-        score = max(SequenceMatcher(None, text, t.casefold().strip()).ratio()
+        score = max(.6 * (len(query & words(t)) / max(1, len(query | words(t)))) +
+                    .4 * SequenceMatcher(None, text, t.casefold().strip()).ratio()
                     for t in [concept['display'], *concept['aliases']])
         if score >= .45:
             scored.append({**concept, 'candidate_id': json_digest(concept), 'retrieval_score': score})

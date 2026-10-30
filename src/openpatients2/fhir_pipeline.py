@@ -54,8 +54,19 @@ def prepare(input_path, sources, output, catalog_path=None):
     catalog = load_catalog(catalog_path)
     output = new_directory(output)
     inventory = {}; article_ids = set(); count = 0; facts = 0
-    write_json(output / 'catalog.json', catalog)
-    inventory['catalog.json'] = sha(output / 'catalog.json')
+    catalog_name = 'catalog.json.gz' if catalog_path and str(catalog_path).endswith('.gz') else 'catalog.json'
+    catalog_digest = catalog.digest
+    systems_by_task = {}
+    for concept in catalog['concepts']:
+        for task in concept['tasks']:
+            systems_by_task.setdefault(task, set()).add(concept['system'])
+    if catalog_name.endswith('.gz'):
+        # Copy the pinned compressed release rather than serializing it once
+        # per fact or recompressing 75k concepts for every article.
+        (output / catalog_name).write_bytes(Path(catalog_path).read_bytes())
+    else:
+        write_json(output / catalog_name, catalog)
+    inventory[catalog_name] = sha(output / catalog_name)
     with (output / 'articles.jsonl').open('w') as data, (output / 'requests.jsonl').open('w') as requests:
         for value in read_jsonl(input_path):
             article = UnifiedArticle.model_validate(value).model_dump()
@@ -82,20 +93,20 @@ def prepare(input_path, sources, output, catalog_path=None):
                     if entry['fact_key'] in seen:
                         continue
                     seen.add(entry['fact_key'])
-                    systems = sorted({c['system'] for c in catalog['concepts'] if entry['task'] in c['tasks']}) or [None]
+                    systems = sorted(systems_by_task.get(entry['task'], set())) or [None]
                     for system in systems:
                         request = {'id': json_digest([entry['fact_key'], system]), 'fact_key': entry['fact_key'],
                             'article_id': aid, 'patient_id': patient['patient_id'], 'system': system,
                             'text_sha256': article['text_sha256'], 'task': entry['task'],
                             'collection': entry['collection'], 'fact': entry['fact'],
-                            'catalog_sha256': json_digest(catalog),
+                            'catalog_sha256': catalog_digest,
                             'candidates': candidates(catalog, entry['task'], term(entry), system=system)}
                         requests.write(json.dumps(request, ensure_ascii=False) + '\n'); facts += 1
     for name in ('articles.jsonl', 'requests.jsonl'):
         inventory[name] = sha(output / name)
     manifest = {'format': VERSION, 'created_at': datetime.now(timezone.utc).isoformat(),
         'input_sha256': sha(input_path), 'articles': len(article_ids), 'patients': count,
-        'terminology_requests': facts, 'files': inventory,
+        'terminology_requests': facts, 'files': inventory, 'catalog_sha256': catalog_digest,
         'policy': 'Candidate selection is not reviewed coding. Default export attaches only explicitly approved equivalent selections.'}
     write_json(output / 'manifest.json', manifest)
     return manifest
@@ -206,6 +217,13 @@ def export(work, output, *, allow_unreviewed_coding=False, validator_jar=None, r
                 rows.append({**identity, 'status': 'skipped', 'reason': 'nonhuman_or_unresolved_species'})
                 continue
             bundle, mapping = compile_patient(article, patient, source, recorded=manifest['created_at'], codings=codings)
+            if allow_unreviewed_coding:
+                from .fhir_export import BASE
+                tag = {'system': BASE + '/CodeSystem/dataset-status', 'code': 'model-coding-unreviewed',
+                       'display': 'Experimental model-selected terminology; not clinically reviewed'}
+                bundle.setdefault('meta', {}).setdefault('tag', []).append(tag)
+                for entry in bundle['entry']:
+                    entry['resource'].setdefault('meta', {}).setdefault('tag', []).append(dict(tag))
             validation = validate_bundle(bundle)
             path = output / ('bundles' if validation['passed'] else 'quarantine') / (bundle['id'] + '.json')
             write_json(path, bundle)

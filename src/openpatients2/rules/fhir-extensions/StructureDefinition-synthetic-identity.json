@@ -1,0 +1,52 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "synthetic-identity",
+  "url": "https://github.com/thepiglab/openpatients2/fhir/StructureDefinition/synthetic-identity",
+  "version": "1.0.0",
+  "name": "SyntheticIdentity",
+  "status": "draft",
+  "experimental": true,
+  "description": "The identity fields are synthetic; clinical facts remain literature-derived and unreviewed.",
+  "fhirVersion": "4.0.1",
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "type": "element",
+      "expression": "Element"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "short": "The identity fields are synthetic; clinical facts remain literature-derived and unreviewed.",
+        "definition": "The identity fields are synthetic; clinical facts remain literature-derived and unreviewed."
+      },
+      {
+        "id": "Extension.extension",
+        "path": "Extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "https://github.com/thepiglab/openpatients2/fhir/StructureDefinition/synthetic-identity"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "min": 1,
+        "type": [
+          {
+            "code": "boolean"
+          }
+        ]
+      }
+    ]
+  }
+}

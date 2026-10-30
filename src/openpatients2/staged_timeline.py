@@ -15,7 +15,7 @@ import httpx
 from .longitudinal import PatientTimeline, audit_timeline, partial_timeline
 
 
-def route_relation_scope(value, allowed_pairs, event_ids):
+def route_relation_scope(value, allowed_pairs, event_ids, *, reason='pair_owned_by_another_batch'):
     """Exclude known, differently owned pairs without repairing their identity.
 
     All pairs have their own request. This is request routing, NOT acceptance of
@@ -32,7 +32,7 @@ def route_relation_scope(value, allowed_pairs, event_ids):
         a, b = (edge.get('from_event_id'), edge.get('to_event_id')) if isinstance(edge, dict) else (None, None)
         if (isinstance(a, str) and isinstance(b, str) and a != b
                 and a in event_ids and b in event_ids and frozenset((a, b)) not in allowed_pairs):
-            excluded.append({'reason': 'pair_owned_by_another_batch', 'candidate': edge,
+            excluded.append({'reason': reason, 'candidate': edge,
                              'evidence_validated': False, 'accepted_as_fact': False})
         else:
             kept.append(edge)
@@ -102,6 +102,9 @@ async def extract(runner, article, patient, facts, rows, identity, replica, sour
              'events': [], 'edges': [], 'limitations': []}
     segments = article['segments']
     bounded = getattr(runner.config, 'timeline_bounded_context', False)
+    sparse = getattr(runner.config, 'timeline_sparse_relations', False)
+    if sparse and not bounded:
+        raise ValueError('Sparse timeline relations require bounded timeline context')
     width = runner.config.timeline_segment_batch_size
     batches = [segments[i:i + width] for i in range(0, len(segments), width)] or [[]]
 
@@ -133,6 +136,17 @@ async def extract(runner, article, patient, facts, rows, identity, replica, sour
             'events even when no fact ID exists. kind=plan cannot have occurrence=occurred; '
             'documented performed monitoring is a test/follow_up/other event, not a completed plan. '
             '\nFOCUS_SEGMENTS:\n' + json.dumps(sorted(focus)))
+            if sparse:
+                messages[-1]['content'] += (
+                    '\nEPISODE GRANULARITY: Describe distinct patient clinical occurrences, not a separate '
+                    'timeline event for every measured analyte or restatement. When the source explicitly '
+                    'documents several findings at the SAME occurrence/time, one test/assessment event may '
+                    'link all their fact_ids and evidence. Keep different visits, administrations, time points, '
+                    'plans and performed actions separate. Never merge merely because names or values match. '
+                    'Clinical facts and measurement cells remain in their own extraction records; grouping '
+                    'them into one event must not delete their links or invent a visit. Repeated abstract/body '
+                    'descriptions of the same occurrence are not new visits. Use episode_id only when the '
+                    'source explicitly distinguishes an episode. Leave missing chronology unresolved.')
             if view is not article:
                 messages[-1]['content'] += ('\nSOURCE WINDOW: only the listed whole segments are supplied. '
                     'Other focus batches cover the rest of the article. Do not guess missing context; '
@@ -170,20 +184,27 @@ async def extract(runner, article, patient, facts, rows, identity, replica, sour
 
     stages = [s for group in await asyncio.gather(*(events(i, batch) for i, batch in enumerate(batches))) for s in group]
     graph = copy.deepcopy(shell)
-    seen = set()
+    canonicalization = None
+    if sparse:
+        from .sparse_timeline import canonical_events
+        graph['events'], canonicalization = canonical_events(stages)
+    else:
+        seen = set()
+        for stage in stages:
+            for event in (stage.get('data') or {}).get('events', []):
+                # Collapse only byte-equivalent content, never semantic near-duplicates.
+                content = {k: v for k, v in event.items() if k != 'event_id'}
+                key = json.dumps(content, sort_keys=True, ensure_ascii=False)
+                if key in seen:
+                    continue
+                seen.add(key)
+                graph['events'].append({**event, 'event_id': 'e' + str(len(graph['events']) + 1)})
     for stage in stages:
-        for event in (stage.get('data') or {}).get('events', []):
-            # Collapse only byte-equivalent content, never semantic near-duplicates.
-            content = {k: v for k, v in event.items() if k != 'event_id'}
-            key = json.dumps(content, sort_keys=True, ensure_ascii=False)
-            if key in seen:
-                continue
-            seen.add(key)
-            graph['events'].append({**event, 'event_id': 'e' + str(len(graph['events']) + 1)})
         graph['limitations'].extend((stage.get('data') or {}).get('limitations', []))
 
-    async def relations(number, focus, targets):
-        pairs = [[a, b] for a in focus for b in targets if positions[a] < positions[b]] if bounded else []
+    async def relations(number, focus, targets, explicit_pairs=None):
+        pairs = (explicit_pairs if explicit_pairs is not None else
+                 [[a, b] for a in focus for b in targets if positions[a] < positions[b]] if bounded else [])
         if bounded and not pairs:
             return []
         allowed_pairs = {frozenset(pair) for pair in pairs}
@@ -229,6 +250,13 @@ async def extract(runner, article, patient, facts, rows, identity, replica, sour
             '\nSCHEMA:\n' + json.dumps(schema))
             if view is not article:
                 messages[-1]['content'] += '\nSource is a window of whole evidence/identity/adjacent segments. Leave unsupported relations unresolved.'
+            if sparse:
+                messages[-1]['content'] += (
+                    '\nSPARSE CANDIDATE RETRIEVAL: Proximity and shared anchors only selected these pairs '
+                    'for inspection. They establish NO order, equality, attribution or clinical relation. '
+                    'Do not emit a transitive closure or manufacture a link to connect the graph. Return '
+                    'only a minimal directly source-supported set of links, preserving explicit uncertainty. '
+                    'Events outside these candidates remain unassessed, not unrelated.')
             return messages
         view = article
         messages = build(view)
@@ -236,8 +264,9 @@ async def extract(runner, article, patient, facts, rows, identity, replica, sour
                         or not await fits(runner, 'timeline_relations', messages, replica)):
             view = source_window(article, evidence_ids(relevant, segments), patient)
             messages = build(view)
-            if (len(focus) > 1 or len(targets) > 1) and not await fits(runner, 'timeline_relations', messages, replica):
-                return await split_relations(number, focus, targets)
+            can_split = len(pairs) > 1 if explicit_pairs is not None else len(focus) > 1 or len(targets) > 1
+            if can_split and not await fits(runner, 'timeline_relations', messages, replica):
+                return await split_relations(number, focus, targets, explicit_pairs)
 
         def checker(value):
             if not isinstance(value, dict) or set(value) != {'edges', 'limitations'}:
@@ -256,15 +285,24 @@ async def extract(runner, article, patient, facts, rows, identity, replica, sour
              'target_event_ids': targets, 'source_scope': 'whole_article' if view is article else 'whole_segment_window',
              'candidate_event_pairs': pairs if bounded else None,
              'included_segment_ids': [s['segment_id'] for s in view['segments']]}, replica, segments,
-            candidate_scope=(lambda value: route_relation_scope(value, allowed_pairs, set(positions)))
+            candidate_scope=(lambda value: route_relation_scope(value, allowed_pairs, set(positions),
+                reason='outside_sparse_candidate_batch_not_accepted' if sparse else 'pair_owned_by_another_batch'))
                 if bounded and getattr(runner.config, 'timeline_scope_repair', False) else None,
-            split_on_length=bounded and (len(focus) > 1 or len(targets) > 1)
+            split_on_length=bounded and (len(pairs) > 1 if explicit_pairs is not None else len(focus) > 1 or len(targets) > 1)
                 and getattr(runner.config, 'timeline_scope_repair', False))
-        if bounded and (len(focus) > 1 or len(targets) > 1) and splittable_failure(result):
-            return [replaced(runner, result)] + await split_relations(number, focus, targets)
+        if bounded and (len(pairs) > 1 if explicit_pairs is not None else len(focus) > 1 or len(targets) > 1) and splittable_failure(result):
+            return [replaced(runner, result)] + await split_relations(number, focus, targets, explicit_pairs)
         return [result]
 
-    async def split_relations(number, focus, targets):
+    async def split_relations(number, focus, targets, explicit_pairs=None):
+        if explicit_pairs is not None:
+            mid = len(explicit_pairs) // 2
+            results = []
+            for suffix, pairs in [('0', explicit_pairs[:mid]), ('1', explicit_pairs[mid:])]:
+                focus = list(dict.fromkeys(p[0] for p in pairs))
+                targets = list(dict.fromkeys(p[1] for p in pairs))
+                results.extend(await relations(str(number)+'.'+suffix, focus, targets, pairs))
+            return results
         if len(targets) >= len(focus) and len(targets) > 1:
             mid = len(targets) // 2
             return await relations(str(number)+'.0', focus, targets[:mid]) + await relations(str(number)+'.1', focus, targets[mid:])
@@ -275,9 +313,32 @@ async def extract(runner, article, patient, facts, rows, identity, replica, sour
     ids = [e['event_id'] for e in graph['events']]
     positions = {eid: i for i, eid in enumerate(ids)}
     target_width = runner.config.timeline_target_batch_size if bounded else max(1, len(ids))
-    links = [s for group in await asyncio.gather(*(relations(f'{i // width}.{j // target_width}',
-        ids[i:i + width], ids[j:j + target_width]) for i in range(0, len(ids), width)
-        for j in range(i if bounded else 0, len(ids), target_width))) for s in group]
+    candidate_audit = None
+    if sparse:
+        from .sparse_timeline import plan
+        candidates, candidate_audit = plan(graph['events'], segments, rid,
+            neighbors=getattr(runner.config, 'timeline_sparse_neighbors', 16),
+            pairs_per_event_budget=getattr(runner.config, 'timeline_sparse_pairs_per_event', 32))
+        pair_width = max(1, min(16, width * target_width))
+        groups = [candidates[i:i+pair_width] for i in range(0, len(candidates), pair_width)]
+        links = [s for group in await asyncio.gather(*(relations(str(i),
+            list(dict.fromkeys(p[0] for p in pairs)), list(dict.fromkeys(p[1] for p in pairs)), pairs)
+            for i, pairs in enumerate(groups))) for s in group]
+        leaves = [s for s in links if s['status'] != 'replaced_by_split']
+        leaf_pairs = [p for s in leaves for p in s['identity']['candidate_event_pairs']]
+        candidate_audit.update(
+            candidate_leaf_requests=len(leaves),
+            candidate_pairs_in_leaf_requests=len(leaf_pairs),
+            all_candidates_assigned_to_leaf_requests=sorted(leaf_pairs) == sorted(candidates),
+            successful_candidate_pairs=sum(len(s['identity']['candidate_event_pairs']) for s in leaves if s['status'] == 'valid'),
+            failed_candidate_pairs=sum(len(s['identity']['candidate_event_pairs']) for s in leaves if s['status'] != 'valid'),
+            request_coverage_is_semantic_coverage=False)
+        graph['limitations'].append('Sparse relation retrieval: unselected event pairs remain unassessed; '
+                                    'this graph does not assert exhaustive temporal coverage.')
+    else:
+        links = [s for group in await asyncio.gather(*(relations(f'{i // width}.{j // target_width}',
+            ids[i:i + width], ids[j:j + target_width]) for i in range(0, len(ids), width)
+            for j in range(i if bounded else 0, len(ids), target_width))) for s in group]
     stages.extend(links)
     seen = set()
     for stage in links:
@@ -303,10 +364,19 @@ async def extract(runner, article, patient, facts, rows, identity, replica, sour
         'stage_coverage': [{'task': s['task'], 'identity': s['identity'], 'status': s['status']} for s in stages],
         'context_policy': ('whole_segment_windows' if bounded and getattr(runner.config, 'timeline_prefer_windows', False)
                            else 'full_source_then_whole_segment_windows' if bounded else 'full_source'),
-        'relation_candidate_policy': 'each_unordered_pair_once_either_edge_direction' if bounded else 'all_events',
+        'relation_candidate_policy': 'source-anchor-sparse-relations/1' if sparse else
+                                     'each_unordered_pair_once_either_edge_direction' if bounded else 'all_events',
         'semantic_coverage_verified': False,
         'semantic_review': 'unreviewed', 'clinical_accuracy_verified': False,
         'refinement_policy': runner.config.refinement_policy}
+    if sparse:
+        result['event_canonicalization'] = canonicalization
+        result['relation_candidate_audit'] = candidate_audit
+        result['global_graph_audit'] = {
+            'locally_accepted_edges': sum(len((s.get('data') or {}).get('edges', [])) for s in links),
+            'retained_edges': len((graph or {}).get('edges', [])),
+            'quarantined_edges': sum(q.get('kind') == 'edge' for q in quarantine),
+            'conflict_candidates_preserved': True, 'semantic_entailment_verified': False}
     key = hashlib.sha256((rid + ':staged-timeline/1').encode()).hexdigest()
     (runner.output / 'tasks' / (key + '.json')).write_text(json.dumps(result, ensure_ascii=False))
     runner.results.append(result)
