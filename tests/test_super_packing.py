@@ -79,6 +79,17 @@ def test_shared_worker_locks_exclude_download_and_cleanup(campaign,tmp_path):
                 pass
 
 
+def test_cleanup_after_preflight_failure_skips_only_absent_runtime(campaign, tmp_path):
+    work = packed(campaign, tmp_path)
+    child = p.slot(work, 'nvfp4')
+    result = s._serial_cleanup(child, 'nvfp4')
+    assert result['deleted'] == [] and 'not reached' in result['note']
+    assert not (child / 'runtime').exists()
+    (child / 'runtime').mkdir()
+    with pytest.raises(ValueError, match='ownership mismatch'):
+        s._serial_cleanup(child, 'nvfp4')
+
+
 def test_two_replica_queues_never_claim_same_article(campaign,tmp_path,monkeypatch):
     work=packed(campaign,tmp_path);child=p.slot(work,'nvfp4');arm=child/'arms/nvfp4-text'
     monkeypatch.setenv('OP2_SUBMISSION_ID','test')

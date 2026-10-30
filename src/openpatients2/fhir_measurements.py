@@ -82,7 +82,11 @@ def map_series_point(entry, article, patient, source, patient_ref):
     else:
         result['valueString'] = raw
     if series.get('reference_range_cell_id'):
-        result['referenceRange'] = [{'text': cells[series['reference_range_cell_id']]['raw_text']}]
+        reference = cells[series['reference_range_cell_id']]['raw_text']
+        # Blank table cells are valid source evidence, but not FHIR strings.
+        # Keep the original cell in source-fact provenance without inventing a range.
+        if reference.strip():
+            result['referenceRange'] = [{'text': reference}]
     if point.get('time'):
         result['extension'].append(extension('reported-relative-time', json.dumps(point['time'], sort_keys=True)))
     return result, None

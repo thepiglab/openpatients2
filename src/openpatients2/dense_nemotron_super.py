@@ -613,8 +613,21 @@ def cleanup_profile(work, profile_name):
     return receipt
 
 
-@exclusive_runtime
 def _serial_cleanup(work, profile=None):
+    manifest = check(work)
+    if profile is not None and profile not in manifest['nemotron_super']['profiles']:
+        raise ValueError('Unknown campaign profile')
+    runtime = work / 'runtime'
+    if not runtime.exists() and not runtime.is_symlink():
+        receipt = {'profile': profile, 'deleted': [], 'cleaned_unix': time.time(),
+                   'note': 'No runtime created; setup was not reached.'}
+        b.write(work / f'results/lifecycle/cleanup-{time.time_ns()}.json', receipt)
+        return receipt
+    with runtime_lock(work):
+        return _owned_cleanup(work, profile)
+
+
+def _owned_cleanup(work, profile):
     # All-profile cleanup is a manual CPU operation, also supported for old campaigns.
     legacy = b.read(work / 'manifest.json')['nemotron_super'].get('storage_policy') != STORAGE_POLICY
     if (profile is None or legacy) and active_jobs(work):
@@ -695,16 +708,24 @@ def reuse_packed_artifacts(work, profile_name):
                     os.link(source, target)
             for model in set(profile_models(profile_name)) & set(profile_models(donor_name)):
                 source, target = weights_path(donor, model), weights_path(work, model)
-                if target.exists():
+                owned_path(work, target)
+                if target.exists() and list(target.glob('*.safetensors')):
                     continue  # Resume verifies/downloads its own existing snapshot.
+                # CPU setup already created a metadata-only target directory.
+                # It must not prevent reuse of the donor's complete checkpoint.
+                if target.exists() and any(p.is_symlink() for p in target.rglob('*')):
+                    raise ValueError('Refusing symlink checkpoint reuse')
                 if any(p.is_symlink() for p in source.rglob('*')):
                     raise ValueError('Refusing symlink checkpoint reuse')
                 target.parent.mkdir(parents=True, exist_ok=True)
                 temporary = target.with_name(target.name + '.linking')
+                owned_path(work, temporary)
                 if temporary.exists():
                     shutil.rmtree(temporary)
                 shutil.copytree(source, temporary, copy_function=os.link,
                                 ignore=shutil.ignore_patterns('.cache'))
+                if target.exists():
+                    shutil.rmtree(target)
                 temporary.rename(target)
                 reused.add(model)
     return reused
@@ -799,6 +820,7 @@ def download(work, profile_name):
         records[str(path.relative_to(work))] = {'sha256': b.sha(path), 'bytes': path.stat().st_size,
                                               'mtime_ns': path.stat().st_mtime_ns}
     receipt = {'ready': True, 'profile': profile_name, 'files': records,
+               'reused_models': sorted(reused),
                'serving_artifact_checks': serving_checks,
                'download_started_unix': start, 'download_seconds': time.time() - start, 'cpu_probes': probes,
                'image_build': {'method': 'apptainer build', 'mksquashfs_args': MKSQUASHFS_ARGS,

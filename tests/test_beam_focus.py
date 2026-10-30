@@ -154,7 +154,8 @@ async def test_length_failure_splits_focus_without_discarding_attempts(tmp_path,
     assert result['stage_coverage'][0]['status'] == 'replaced_by_split'
 
 
-def test_shared_artifacts_survive_donor_cleanup(tmp_path, monkeypatch):
+@pytest.mark.parametrize('metadata_exists', [False, True])
+def test_shared_artifacts_survive_donor_cleanup(tmp_path, monkeypatch, metadata_exists):
     from contextlib import nullcontext
     root = tmp_path / 'campaign'
     donor = root / 'profiles/beam-nvfp4-dflash2'
@@ -173,6 +174,11 @@ def test_shared_artifacts_survive_donor_cleanup(tmp_path, monkeypatch):
     monkeypatch.setattr(s, 'check', lambda p: manifest)
     monkeypatch.setattr(s, 'runtime_lock', lambda *a, **kw: nullcontext())
     monkeypatch.setattr(s, 'validate_runtime', lambda *a: None)
+    if metadata_exists:
+        dest = s.weights_path(target, beam.NVFP4)
+        b.write(dest / 'config.json', {'setup': 'metadata-only'})
+        (dest / '.cache').mkdir()
+        (dest / '.cache/private').write_text('target private cache')
     assert s.reuse_packed_artifacts(target, 'beam-nvfp4-no-spec') == {beam.NVFP4}
     dest = s.weights_path(target, beam.NVFP4)
     assert (dest / 'weights.safetensors').stat().st_ino == (source / 'weights.safetensors').stat().st_ino

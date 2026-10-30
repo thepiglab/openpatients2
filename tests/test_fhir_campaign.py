@@ -82,6 +82,28 @@ def measured_article():
     return a, p, source
 
 
+@pytest.mark.parametrize('reference', ['', '135–145'])
+def test_series_blank_reference_range_does_not_quarantine_patient(reference):
+    a, p, source = measured_article()
+    text = 'Name | Range\nSodium | ' + reference
+    source['segments'].append({'segment_id': 'range-row', 'kind': 'table_row', 'table_id': 'T1', 'text': text})
+    source['text'] += '\n' + text
+    source['text_sha256'] = hashlib.sha256(source['text'].encode()).hexdigest()
+    a['text_sha256'] = source['text_sha256']
+    series = p['measurement_series'][0]
+    cell = {key: None for key in Cell.model_fields}
+    cell.update(cell_id='range', origin='article_table', role='reference_range', raw_text=reference,
+                segment_id='range-row', table_id='T1', grid_row='data', column_index=1)
+    series['cells'].append(cell)
+    series['reference_range_cell_id'] = 'range'
+    bundle, _ = compile_patient(a, p, source, recorded='2026-10-30T00:00:00Z')
+    assert validate_bundle(bundle)['passed']
+    obs = next(e['resource'] for e in bundle['entry'] if e['resource']['resourceType'] == 'Observation')
+    assert obs.get('referenceRange') == ([{'text': reference}] if reference else None)
+    provenance = next(e['valueString'] for e in obs['extension'] if e['url'].endswith('/source-fact'))
+    assert any(c['cell_id'] == 'range' and c['raw_text'] == reference for c in json.loads(provenance)['cells'])
+
+
 def test_numeric_series_maps_literal_point_and_preserves_patient_ownership():
     a, p, s = measured_article()
     assert 'owner' in {c['cell_id'] for c in p['measurement_series'][0]['cells']}
