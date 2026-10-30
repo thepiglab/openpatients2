@@ -36,6 +36,7 @@ class Completion:
     http_status: int | None = None
     error: str | None = None
     usage: dict = field(default_factory=dict)
+    interrupted: bool = False
 
     def metrics(self) -> dict:
         return {k: v for k, v in asdict(self).items() if k not in {"content", "usage", "reasoning_text", "reasoning_fields"}}
@@ -52,7 +53,7 @@ class Completion:
                 "response_id": self.response_id, "response_model": self.response_model,
                 "provider": self.provider,
                 "system_fingerprint": self.system_fingerprint, "finish_reason": self.finish_reason,
-                "usage": self.usage, "error": self.error,
+                "usage": self.usage, "error": self.error, "interrupted": self.interrupted,
                 "reasoning_provenance": "endpoint-returned output, not verified clinical evidence"}
 
     def capture_reasoning(self, delta: dict) -> bool:
@@ -182,6 +183,18 @@ class APIClient:
                             result.finish_reason = choice["finish_reason"]
             if not result.error and result.finish_reason is None:
                 result.error = "stream_ended_without_finish_reason"
+        except asyncio.CancelledError as exc:
+            # Keep the original CancelledError type so asyncio.timeout() and
+            # worker cancellation still propagate. The caller can persist only
+            # what the endpoint actually returned before interruption.
+            result.error = 'cancelled'
+            result.interrupted = True
+            # A canceled stream need not contain final billing usage. Retain
+            # raw usage as evidence, but do not report partial counts as totals.
+            result.prompt_tokens = result.completion_tokens = None
+            result.cached_tokens = result.reasoning_tokens = None
+            exc.partial_completion = result
+            raise
         except (httpx.HTTPError, ValueError, TimeoutError) as exc:
             result.error = type(exc).__name__
         finally:

@@ -333,7 +333,8 @@ def validate_series(target, source, annotation, *, transcriptions=None, manifest
             elif point.unit_cell_id is not None:
                 raise ValueError('unit_cell_id without unit_text')
             t = point.time
-            if t.time_text is not None and (t.time_cell_id is None or t.time_text not in need(t.time_cell_id).raw_text):
+            time_cell = need(t.time_cell_id) if t.time_cell_id is not None else None
+            if t.time_text is not None and (time_cell is None or t.time_text not in time_cell.raw_text):
                 raise ValueError(f'{point.point_id}: time_text must be literal in its time cell')
             if t.offset_value is not None:
                 if not t.offset_unit or not (t.offset_basis or '').strip():

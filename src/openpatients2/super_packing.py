@@ -4,9 +4,13 @@ Each profile is an ordinary serial Super campaign. Replicas share read-only
 weights and atomically claim distinct articles; they never share GPU devices.
 """
 import copy
+import hashlib
+import json
 import os
 from pathlib import Path
+import re
 import shutil
+import stat
 import subprocess
 import time
 
@@ -25,6 +29,55 @@ RESOURCES = {
 }
 for _name in ('beam-nvfp4-no-spec', 'beam-nvfp4-dflash2-short'):
     RESOURCES[_name] = dict(RESOURCES['beam-nvfp4-dflash2'])
+
+
+def artifact_residency(profiles):
+    """Conservative residency of verified shared immutable profile artifacts.
+
+    A larger artifact set can cover another profile only when the pinned target
+    and entire engine definition match. Distinct drafts cannot be hidden inside
+    one maximum estimate unless one profile already contains all their models.
+    This matches reuse_packed_artifacts' verified sibling hard links; caches and
+    scratch/results retain their separate 128 GiB reserve.
+    """
+    from .nemotron_super_recipes import PINS, PROFILES, engine
+    entries = []
+    for index, name in enumerate(profiles):
+        recipe = PROFILES[name]
+        runtime = engine(recipe)
+        models = [recipe['model']] + ([recipe['drafter']] if recipe.get('drafter') else [])
+        pins = {model: PINS.get(model, {}) for model in models}
+        pinned = (all(re.fullmatch(r'[0-9a-f]{40,64}', str(pin.get('revision', ''))) for pin in pins.values())
+                  and re.search(r'@sha256:[0-9a-f]{64}$', runtime.get('image', '')) is not None)
+        engine_json = json.dumps(runtime, sort_keys=True)
+        artifact_set = frozenset((model, json.dumps(pin, sort_keys=True)) for model, pin in pins.items())
+        entries.append({'index': index, 'profile': name, 'artifacts': artifact_set,
+            'share_key': (recipe['model'], json.dumps(pins[recipe['model']], sort_keys=True), engine_json) if pinned else None,
+            'target_model': recipe['model'], 'target_revision': pins[recipe['model']].get('revision'),
+            'engine_image': runtime.get('image'), 'engine_definition_sha256': hashlib.sha256(engine_json.encode()).hexdigest(),
+            'models': [{'model': model, 'revision': pin.get('revision'),
+                        'pin_sha256': hashlib.sha256(json.dumps(pin, sort_keys=True).encode()).hexdigest()}
+                       for model, pin in sorted(pins.items())]})
+    groups = []
+    # Supersets lead so a target-only arm can reuse target+draft storage.
+    for entry in sorted(entries, key=lambda e: (-len(e['artifacts']), e['index'])):
+        group = next((g for g in groups if entry['share_key'] is not None
+                      and g['share_key'] == entry['share_key']
+                      and entry['artifacts'] <= g['artifacts']), None)
+        if group is None:
+            group = {**entry, 'profiles': [], 'first_index': entry['index'], 'artifacts_gib': 0}
+            groups.append(group)
+        group['profiles'].append(entry['profile'])
+        group['first_index'] = min(group['first_index'], entry['index'])
+        group['artifacts_gib'] = max(group['artifacts_gib'], RESOURCES[entry['profile']]['artifacts_gib'])
+    receipts = [{key: group[key] for key in ('profiles', 'artifacts_gib', 'target_model', 'target_revision',
+                                           'engine_image', 'engine_definition_sha256', 'models')}
+                for group in sorted(groups, key=lambda g: g['first_index'])]
+    return {'policy': 'verified-shared-artifact-residency/1', 'groups': receipts,
+            'artifacts_gib': sum(g['artifacts_gib'] for g in groups), 'scratch_results_reserve_gib': 128,
+            'basis': 'Maximum full-profile estimate within matching pinned target/engine groups with nested model sets; '
+                     'different targets, engines or non-nested draft sets remain additive. Reuse verifies artifacts '
+                     'before hard-linking; preflight counts resident device/inode pairs once.'}
 
 
 def plan(profiles, *, pipelined=True):
@@ -57,11 +110,13 @@ def plan(profiles, *, pipelined=True):
         if pipelined:
             order = {'nvfp4': 0, 'bf16': 1, 'beam-nvfp4-dflash2': 2, 'spark': 3}
             wave['profiles'].sort(key=lambda p: (order.get(p, 2), p))
-        wave['required_free_gib'] = sum(RESOURCES[p]['artifacts_gib'] for p in wave['profiles']) + 128
+        wave['artifact_residency'] = artifact_residency(wave['profiles'])
+        wave['required_free_gib'] = wave['artifact_residency']['artifacts_gib'] + 128
     return {'mode': 'packed', 'version': 2 if pipelined else 1, 'limits': dict(LIMITS),
             'resources': resources, 'waves': waves,
             'memory_evidence': 'User-supplied sacct batch MaxRSS, jobs 47060318/21/27/37; requests are not GPU VRAM limits.',
-            'storage_note': 'Concurrent residency requires more disk than serial; artifact estimates plus 128 GiB scratch/results reserve.'}
+            'storage_note': 'Unique verified shared artifact groups plus 128 GiB scratch/results reserve; '
+                            'each wave records pinned target/engine provenance and the conservative estimate basis.'}
 
 
 def slot(work, profile):
@@ -132,18 +187,28 @@ def preflight(work, wave_index):
     # Existing artifacts count toward residency after resume. They live below
     # this campaign only; never assume another campaign's bytes are reclaimable.
     resident = 0
+    resident_files, duplicate_hardlinks = set(), 0
     for profile in wave['profiles']:
         runtime = slot(work, profile) / 'runtime'
         candidates = list((runtime / 'weights').rglob('*')) + list(runtime.glob('*.sif'))
         for path in candidates:
             if '.cache' in path.parts or path.name.endswith('.building.sif'):
                 continue
-            if path.is_file() and not path.is_symlink():
-                resident += path.stat().st_size
+            info = path.stat(follow_symlinks=False)
+            if stat.S_ISREG(info.st_mode):
+                identity = (info.st_dev, info.st_ino)
+                if identity in resident_files:
+                    duplicate_hardlinks += 1
+                    continue
+                resident_files.add(identity)
+                resident += info.st_size
     free = shutil.disk_usage(work).free
     needed = max(0, wave['required_free_gib'] * 2**30 - resident)
     receipt = {'wave': wave_index, 'free_bytes': free, 'required_free_bytes': needed,
-               'resident_bytes': resident, 'passed': free >= needed}
+               'resident_bytes': resident, 'resident_unique_files': len(resident_files),
+               'resident_duplicate_hardlinks': duplicate_hardlinks,
+               'resident_counting': 'Regular-file logical size, counted once per (st_dev, st_ino); no symlinks or mutable caches.',
+               'passed': free >= needed}
     b.write(work / f'results/packing-preflight-{wave_index}.json', receipt)
     if free < needed:
         raise ValueError(f'Packed wave needs approximately {needed / 2**30:.0f} GiB free; '

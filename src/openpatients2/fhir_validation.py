@@ -97,16 +97,18 @@ def official_validate(bundle_path, jar, *, output, terminology_server=None, time
     jar, output = Path(jar).resolve(), Path(output).resolve()
     if output.exists():
         raise ValueError('Choose a new official validation output path')
-    cmd = ['java', '-jar', str(jar), str(Path(bundle_path).resolve()), '-version', '4.0.1',
+    cmd = ['java', '-Xmx2g', '-jar', str(jar), str(Path(bundle_path).resolve()), '-version', '4.0.1',
            '-tx', terminology_server or 'n/a', '-ig',
            str(files('openpatients2').joinpath('rules/fhir-extensions')), '-output', str(output)]
     result = subprocess.run(cmd, text=True, capture_output=True, timeout=timeout, check=False)
     outcome = json.loads(output.read_text()) if output.exists() else None
-    issues = (outcome or {}).get('issue', [])
+    issues = outcome.get('issue', []) if isinstance(outcome, dict) else []
+    valid_issues = isinstance(issues, list) and bool(issues) and all(
+        isinstance(i, dict) and i.get('severity') in {'information', 'warning', 'error', 'fatal'} for i in issues)
     return {'command': cmd, 'validator_sha256': hashlib.sha256(jar.read_bytes()).hexdigest(),
         'returncode': result.returncode, 'stdout': result.stdout, 'stderr': result.stderr,
         'outcome': outcome, 'official_validator_run': True,
         'terminology_validation': 'server' if terminology_server else 'disabled',
         'passed': result.returncode == 0 and isinstance(outcome, dict)
-                  and outcome.get('resourceType') == 'OperationOutcome' and bool(issues)
+                  and outcome.get('resourceType') == 'OperationOutcome' and valid_issues
                   and not any(i.get('severity') in {'error', 'fatal'} for i in issues)}

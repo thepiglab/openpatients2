@@ -1,4 +1,6 @@
 import json
+import copy
+import os
 from pathlib import Path
 from types import SimpleNamespace
 import tarfile
@@ -210,3 +212,73 @@ def test_legacy_packed_plan_keeps_original_download_barrier(campaign,tmp_path):
     b.write(work/'prepared.json',{'manifest_sha256':b.sha(work/'manifest.json')})
     result=s.submit(work,'account','qos',dry_run=True)
     assert len(result['dependencies']['worker-nvfp4-text-r0'][0][1])==3
+
+
+def test_shared_beam_ablation_storage_uses_maximum_profile_estimate(monkeypatch):
+    from openpatients2 import beam_recipe as beam
+    profiles = ['beam-nvfp4-dflash2', 'beam-nvfp4-no-spec']
+    wave = p.plan(profiles)['waves'][0]
+    assert wave['required_free_gib'] == 418
+    assert wave['totals'] == {'gpus': 8, 'cpus': 32, 'memory_gib': 192}
+    groups = wave['artifact_residency']['groups']
+    assert len(groups) == 1 and set(groups[0]['profiles']) == set(profiles)
+    assert groups[0]['target_model'] == beam.NVFP4
+    assert groups[0]['target_revision'] == beam.PINS[beam.NVFP4]['revision']
+    assert groups[0]['engine_image'] == beam.ENGINE['image']
+    assert {m['model'] for m in groups[0]['models']} == {beam.NVFP4, beam.DFLASH2}
+    monkeypatch.setitem(p.RESOURCES, profiles[1], {**p.RESOURCES[profiles[1]], 'artifacts_gib': 310})
+    assert p.plan(profiles)['waves'][0]['required_free_gib'] == 438
+
+
+@pytest.mark.parametrize('difference', ['target', 'image', 'draft', 'unpinned'])
+def test_storage_estimates_stay_additive_without_verified_full_sharing(monkeypatch, difference):
+    from openpatients2 import nemotron_super_recipes as recipes
+    profiles = ['beam-nvfp4-dflash2', 'beam-nvfp4-no-spec']
+    altered = copy.deepcopy(recipes.PROFILES[profiles[1]])
+    if difference == 'target':
+        altered['model'] = recipes.PROFILES['bf16']['model']
+    elif difference == 'image':
+        alternate_engine = {**recipes.engine(altered), 'image': 'docker://alternate@sha256:' + '1' * 64}
+        monkeypatch.setitem(recipes.ENGINES, 'alternate', alternate_engine)
+        altered['engine'] = 'alternate'
+    elif difference == 'draft':
+        altered['drafter'] = recipes.PROFILES['spark']['drafter']
+    else:
+        model = altered['model']
+        monkeypatch.setitem(recipes.PINS, model, {**recipes.PINS[model], 'revision': 'main'})
+    monkeypatch.setitem(recipes.PROFILES, profiles[1], altered)
+    wave = p.plan(profiles)['waves'][0]
+    assert wave['required_free_gib'] == 708
+    assert len(wave['artifact_residency']['groups']) == 2
+
+
+def test_different_model_residency_and_same_target_draft_ablation():
+    assert p.plan(['nvfp4', 'bf16', 'beam-nvfp4-dflash2'])['waves'][0]['required_free_gib'] == 743
+    assert p.plan(['beam-nvfp4-dflash2', 'beam-nvfp4-dflash2-short'])['waves'][0]['required_free_gib'] == 418
+
+
+def test_resume_preflight_counts_shared_inode_once_without_double_subtraction(tmp_path, monkeypatch):
+    profiles = ['beam-nvfp4-dflash2', 'beam-nvfp4-no-spec']
+    wave = p.plan(profiles)['waves'][0]
+    monkeypatch.setattr(s, 'check', lambda _: {'nemotron_super': {'scheduler': {'waves': [wave]}}})
+    monkeypatch.setattr(p.shutil, 'disk_usage', lambda _: SimpleNamespace(free=500 * 2**30))
+    source, target = [tmp_path / 'profiles' / profile / 'runtime' for profile in profiles]
+    for runtime in (source, target):
+        (runtime / 'weights/beam').mkdir(parents=True)
+    (source / 'weights/beam/model.safetensors').write_bytes(b'weight-data')
+    os.link(source / 'weights/beam/model.safetensors', target / 'weights/beam/model.safetensors')
+    (source / 'image.sif').write_bytes(b'image')
+    os.link(source / 'image.sif', target / 'image.sif')
+    # Equal contents alone do not establish shared disk residency.
+    (source / 'weights/beam/unshared').write_bytes(b'copy')
+    (target / 'weights/beam/unshared').write_bytes(b'copy')
+    (target / 'weights/beam/alias').symlink_to(source / 'weights/beam/model.safetensors')
+    (source / 'unfinished.building.sif').write_bytes(b'not counted')
+    cache = source / 'weights/beam/.cache'; cache.mkdir()
+    (cache / 'download').write_bytes(b'not counted')
+    receipt = p.preflight(tmp_path, 0)
+    assert receipt['resident_bytes'] == len(b'weight-data') + len(b'image') + 2 * len(b'copy')
+    assert receipt['resident_unique_files'] == 4
+    assert receipt['resident_duplicate_hardlinks'] == 2
+    assert receipt['required_free_bytes'] == 418 * 2**30 - receipt['resident_bytes']
+    assert receipt['passed']

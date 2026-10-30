@@ -950,7 +950,8 @@ async def _worker(work, name):
     return await b.worker(arm, replica, campaigns=[arm],
         serving_factory=lambda _work, shard, _logs: serving(work, name, shard), runtime_probe=gpu_probe(profile),
         startup_check=startup, budget_seconds=m['nemotron_super']['hours'] * 3600 - 120,
-        article_timeout=b.read(arm / 'manifest.json').get('article_timeout_seconds', 3600))
+        article_timeout=b.read(arm / 'manifest.json').get('article_timeout_seconds', 3600),
+        consume_remaining_budget=bool(m.get('competition')))
 
 
 def status(work):
@@ -1180,6 +1181,15 @@ def aggregate(work):
     cohorts = cohort_report(refs, predictions, receipts, m['nemotron_super'].get('evaluation_features', {}))
     result['scheduler'] = m['nemotron_super'].get('scheduler', {'mode': 'serial'})
     result['beam_speculation_comparison'] = paired_speculation(receipts, m['nemotron_super']['arms'])
+    if m.get('competition'):
+        from .competition_campaign import summarize, export_dataset
+        result['competition'] = m['competition']
+        result['fhir'] = {name: summarize([r for r in values.values() if r], len(refs))
+                          for name, values in receipts.items()}
+        result['all_fhir_stages_complete'] = all(r['complete'] for r in result['fhir'].values())
+        result['release_ready'] = False
+        result['fhir_datasets'] = {name: export_dataset(work, name, sorted(refs)) for name in reports}
+        b.write(work / 'summary/competition-fhir.json', result['fhir'])
     if result['scheduler']['mode'] == 'packed':
         from .super_packing import capture_accounting
         capture_accounting(work)
@@ -1236,6 +1246,17 @@ def aggregate(work):
                      f'{tasks.get("failed", 0)} | {tasks.get("partial", 0)} | '
                      f'{report["articles_with_ehr_errors"]} | {length if length is not None else "unavailable"} |')
     lines.append('')
+    lines += ['## Source and timeline coverage', '',
+        'A valid sparse graph covers its selected requests. Unselected event pairs remain unassessed; '
+        'lower graph workload or schema validity alone is not an accuracy improvement. Clinical coverage decisions are model judgments.', '',
+        '| Arm | Candidate pairs | Unassessed pairs | Failed pairs | Retained / quarantined edges | Non-direct clinical facts quarantined |',
+        '|---|---:|---:|---:|---:|---:|']
+    for name, report in reports.items():
+        audits = report['extraction_audits']
+        t, clinical = audits['timeline'], audits['clinical']
+        lines.append(f'| {name} | {t["candidate_pairs"]} | {t["unassessed_pairs"]} | {t["failed_candidate_pairs"]} | '
+            f'{t["retained_edges"]} / {t["quarantined_edges"]} | {clinical["attribution_quarantined_facts"]} |')
+    lines += ['', 'Per-article coverage, unresolved cells and missing-audit counts: arms/*/summary/extraction-audits.json.', '']
     lines += ['## Cost by task', '',
               'Output includes reasoning. Out-of-batch candidates remain auditable in original ledgers; '
               'they are not accepted facts. Missing historical breakdowns are unavailable.', '',
@@ -1248,7 +1269,7 @@ def aggregate(work):
             lines.append(f'| {name} | {task} | {cells} |')
     lines.append('')
     lines += ['## Tokens per completed article', '',
-              'Includes every extraction, timeline, EHR and repair call; input includes repeated prompts, '
+              'Includes every extraction, timeline, EHR, enabled terminology and repair call; input includes repeated prompts, '
               'not just unique source text. Output includes reasoning. Unknown usage is not zero.', '',
               '| Arm | Mean input tokens | Mean output tokens | Mean reasoning tokens | Mean calls |',
               '|---|---:|---:|---:|---:|']
@@ -1325,9 +1346,13 @@ def aggregate(work):
         returned = counts.get('returned_text', 0)
         linked = report['fact_reasoning_index']['facts_with_returned_reasoning_links']
         lines.append(f'| {name} | {returned} | {sum(counts.values()) - returned} | {linked} |')
-    lines += ['', 'Original reasoning remains in extraction/attempts.jsonl and ehr/calls/attempts.jsonl under each article attempt. '
+    lines += ['', 'Original reasoning remains in extraction/attempts.jsonl and ehr/calls/attempts.jsonl under each article attempt; '
+              'enabled terminology calls are under fhir/packet/coding-calls. '
               'summary/fact-reasoning.jsonl links facts and source citations to those calls. Synthetic reasoning-smoke.json traces are excluded from article scoring and distillation data. '
               'Returned traces and their facts remain unreviewed for training.', '']
+    if m.get('competition'):
+        from .competition_campaign import markdown
+        lines += markdown(result['fhir'])
     (work / 'summary/comparison.md').write_text('\n'.join(lines))
     error_path = work / 'results/aggregate-error.json'
     if error_path.exists():
@@ -1379,6 +1404,8 @@ def verify(work, *, from_aggregate=False):
     if not result['complete']:
         raise ValueError('Incomplete comparison')
     return {'verified': True, 'arms': list(m['nemotron_super']['arms']),
+            **({'all_fhir_stages_complete': result['all_fhir_stages_complete'], 'release_ready': False}
+               if m.get('competition') else {}),
             'test_evaluated': result['test_evaluated'], 'note': 'Execution integrity, not clinical correctness.'}
 
 

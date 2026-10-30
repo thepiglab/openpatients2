@@ -70,6 +70,10 @@ speculation comparison, long runs, token reporting, terminology catalogs and
 per-patient FHIR R4 export. FHIR structure checks are separate from clinical
 accuracy and terminology review; unsupported mappings remain explicit.
 
+The [fifty-article competition campaign](docs/BEAM_COMPETITION.md) runs matched
+Beam DFlash2/no-spec configurations on eight B200s, with twelve-hour worker
+budgets and end-to-end ICD-10-CM/FHIR outputs.
+
 `extract.yaml` is a `PilotConfig` (`openpatients2.pilot_extract`: call/token/figure limits, sampling seed, optional
 review stages); omitted, the defaults apply. `RUN` must be new or empty; results are never overwritten. Details in
 the [pipeline overview](docs/PIPELINE_OVERVIEW.md#end-to-end-local-run).

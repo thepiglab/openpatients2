@@ -65,7 +65,11 @@ def map_series_point(entry, article, patient, source, patient_ref):
         number = Decimal(parsed['magnitude'])
         value = int(number) if number == number.to_integral_value() else float(number)
         # JSON serialization must not quietly round the source's numeric value.
-        if not math.isfinite(value) or Decimal(str(value)) != number:
+        try:
+            exact = math.isfinite(value) and Decimal(str(value)) == number
+        except OverflowError:
+            exact = False
+        if not exact:
             result['valueString'] = raw
         else:
             quantity = {'value': value}

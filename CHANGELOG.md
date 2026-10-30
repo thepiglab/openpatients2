@@ -1,3 +1,10 @@
+## 2026-10-30 — Fifty-article Beam competition campaign
+
+- Freeze a diverse, measurement-rich fifty-article training subset from the expanded corpus; compare DFlash2 and no-spec Beam on eight B200s with twelve-hour worker budgets.
+- Add source-window/cell coverage, direct-patient attribution quarantine, sparse temporal candidates and literal selected-cell time projection, retaining failed/unassessed work and returned reasoning.
+- Run bounded ICD-10-CM FY2027 selection and deterministic FHIR R4 compilation after extraction; export source-validated numeric series, linked resources and separate uncoded/unreviewed-coded datasets.
+- Add formal provenance extension definitions, official-validator smoke tests, stage-level costs, downstream-only resume, cancellation trace/unknown-usage preservation and aggregate-job verification fixes.
+
 ## 2026-10-29 — Beam repair v2
 
 - Stop retrying known out-of-batch timeline edges; preserve raw candidates and routing audits, retain strict evidence gates, use relation-only prompts and split length failures immediately.

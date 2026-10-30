@@ -203,7 +203,7 @@ def test_valid_series_neighbors_survive_repair():
     assert not changed_accepted_atoms('measurement_series_extraction', protected, {'series': [good]})
 
 
-@pytest.mark.parametrize('mode', ['done', 'timeout', 'budget'])
+@pytest.mark.parametrize('mode', ['done', 'timeout', 'budget', 'remaining'])
 async def test_worker_budget_timeout_and_cpu_work_separation(tmp_path, monkeypatch, mode):
     import asyncio
     from contextlib import asynccontextmanager
@@ -264,10 +264,11 @@ async def test_worker_budget_timeout_and_cpu_work_separation(tmp_path, monkeypat
         return receipt
     monkeypatch.setattr(b, 'run_article', run)
     result = await b.worker(work, 0, campaigns=[work / 'arms' / n for n in o.ARMS],
-                            budget_seconds=0 if mode == 'budget' else 60,
-                            article_timeout=.01 if mode == 'timeout' else 5)
+                            budget_seconds=0 if mode == 'budget' else 600 if mode == 'remaining' else 60,
+                            article_timeout=.01 if mode == 'timeout' else 3600 if mode == 'remaining' else 5,
+                            consume_remaining_budget=mode == 'remaining')
     assert events.count('start') == events.count('stop') == 1
-    assert result['status'] == {'done': 'done', 'timeout': 'errors', 'budget': 'budget_exhausted'}[mode]
+    assert result['status'] == {'done': 'done', 'timeout': 'errors', 'budget': 'budget_exhausted', 'remaining': 'done'}[mode]
     assert len(result['articles']) == (0 if mode == 'budget' else 4)
     assert not any(p.is_dir() for p in (work / 'runtime/article-claims/fixture').iterdir())
     if mode == 'timeout':

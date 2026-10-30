@@ -14,6 +14,7 @@ if [[ "${1:-}" == --bootstrap ]]; then
   export DENSE_SOURCE_REVISION="$revision"
   uv sync --locked --extra data --no-dev --python 3.12
   selection=()
+  if [[ "${DENSE_SUPER_COMPETITION:-0}" == 1 ]]; then selection+=(--competition); fi
   if [[ "${DENSE_SUPER_BEAM_REPAIR:-0}" == 1 ]]; then selection+=(--beam-repair); fi
   selection+=(--scheduler "${DENSE_SUPER_SCHEDULER:-packed}")
   read -r -a splits <<< "${DENSE_SUPER_SPLITS:-train}"
@@ -112,6 +113,19 @@ for required in scripts/benchmark_dense_nemotron_super.py scripts/dense_nemotron
     exit 1
   }
 done
+if [[ "${DENSE_SUPER_COMPETITION:-0}" == 1 ]]; then
+  for required in src/openpatients2/competition_campaign.py src/openpatients2/competition_selection.py \
+      src/openpatients2/bounded_clinical.py src/openpatients2/sparse_timeline.py \
+      src/openpatients2/fhir_campaign.py src/openpatients2/fhir_measurements.py \
+      configs/hipergator/nemotron-super/competition-50.json \
+      configs/hipergator/nemotron-super/competition-50-reference.jsonl.gz \
+      configs/terminology/icd10cm-2027.json.gz; do
+    git -C "$repo" cat-file -e "$revision:$required" 2>/dev/null || {
+      echo "The selected commit lacks the competition pipeline: $required. Commit/push and pull it before launching." >&2
+      exit 1
+    }
+  done
+fi
 if ! git -C "$repo" diff --quiet "$revision" -- src scripts configs docs/DENSE_NEMOTRON_SUPER.md pyproject.toml uv.lock; then
   echo 'Commit the benchmark changes before launching: this launcher freezes committed code.' >&2; exit 1
 fi

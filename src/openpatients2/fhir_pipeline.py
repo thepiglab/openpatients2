@@ -228,6 +228,7 @@ def export(work, output, *, allow_unreviewed_coding=False, validator_jar=None, r
             path = output / ('bundles' if validation['passed'] else 'quarantine') / (bundle['id'] + '.json')
             write_json(path, bundle)
             if validator_jar and validation['passed']:
+                validation['official_validator_requested'] = True
                 try:
                     validation['official'] = official_validate(path, validator_jar,
                         output=output / (bundle['id'] + '.operation-outcome.json'))
@@ -250,7 +251,10 @@ def export(work, output, *, allow_unreviewed_coding=False, validator_jar=None, r
                 'deferred_facts': sum(r['status'] == 'deferred' for r in mapping['facts'])})
     report = {'format': VERSION, 'source_manifest_sha256': sha(work / 'manifest.json'),
         'compiler_sources': {p: sha(Path(__file__).with_name(p)) for p in
-            ('fhir_pipeline.py', 'fhir_export.py', 'fhir_validation.py', 'terminology.py')},
+            ('fhir_pipeline.py', 'fhir_export.py', 'fhir_measurements.py', 'measurement_series.py',
+             'fhir_validation.py', 'terminology.py')},
+        'extension_definition_sha256': {p.name: sha(p) for p in
+            Path(str(files('openpatients2').joinpath('rules/fhir-extensions'))).glob('*.json')},
         'complete': len(rows) == manifest['patients'], 'patients': rows,
         'statuses': dict(Counter(r['status'] for r in rows)), 'resource_counts': dict(types),
         'deferred_reasons': dict(deferred), 'codings_attached': attached,

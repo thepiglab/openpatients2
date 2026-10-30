@@ -129,13 +129,16 @@ async def test_live_batch_stage_has_raw_reasoning_tokens_and_separate_unreviewed
     cfg = PilotConfig(model_id=beam.NVFP4, revision=beam.PINS[beam.NVFP4]['revision'],
         served_model=beam.NVFP4, tokenizer_contract=beam.TOKENIZER_CONTRACT,
         temperature=.7, top_p=.99, top_k=None, stop_token_ids=beam.STOP_TOKEN_IDS,
-        reasoning_strength='max', max_figures=0).model_dump()
+        reasoning_strength='max', max_figures=0, min_output_tokens=16384,
+        max_output_tokens=32768, require_full_output_budget=True).model_dump()
     manifest = tmp_path / 'arm.json'; manifest.write_text(json.dumps({'extraction': cfg, 'context': 131072}))
     actual = httpx.AsyncClient
+    generation_calls = []
     def response(request):
         body = json.loads(request.content)
         if request.url.path == '/tokenize':
             return httpx.Response(200, json={'count': 12, 'tokens': [1] * 12, 'max_model_len': 131072})
+        generation_calls.append(request.url.path)
         assert body['chat_template_kwargs']['reasoning_effort'] == 'max'
         payload = body['messages'][-1]['content'].split('REQUESTS:\n', 1)[1].split('\nSCHEMA:', 1)[0]
         requests = [p['request'] for p in json.loads(payload)]
@@ -147,7 +150,8 @@ async def test_live_batch_stage_has_raw_reasoning_tokens_and_separate_unreviewed
              'usage': {'prompt_tokens': 12, 'completion_tokens': 40}}]
         return httpx.Response(200, text=''.join('data: ' + json.dumps(e) + '\n\n' for e in events) + 'data: [DONE]\n\n')
     monkeypatch.setattr(httpx, 'AsyncClient', lambda **kw: actual(transport=httpx.MockTransport(response), **kw))
-    output = tmp_path / 'output'
+    attempt = tmp_path / 'article-attempt'
+    output = attempt / 'fhir'
     report = await campaign.run_article_stage(inp, ROOT / 'benchmarks/dense', output,
         'http://localhost:8000/v1', manifest, cat, max_batches=1)
     assert report['complete'] and not report['clinical_accuracy_verified']
@@ -158,5 +162,75 @@ async def test_live_batch_stage_has_raw_reasoning_tokens_and_separate_unreviewed
     assert attempts[0]['response']['reasoning_text'] == 'Returned mapping trace'
     decision = json.loads(next((output / 'packet/decisions').glob('*.json')).read_text())
     assert decision['review_status'] == 'model_unreviewed'
-    coded = json.loads(next((output / 'experimental-coded').rglob('*.bundle.json')).read_text())
+    coded = json.loads(next((output / 'experimental-coded/bundles').glob('*.json')).read_text())
     assert any(t['code'] == 'model-coding-unreviewed' for t in coded['meta']['tag'])
+    assert len(generation_calls) == 1
+    history = attempt / 'fhir-history'; history.mkdir()
+    old_call_dir = None
+    # Repeated stage-only retries move prior packets into deeper history paths.
+    # Both direct and already-inherited trace links must remain resolvable.
+    for index in range(2):
+        previous = history / f'attempt-{index:04d}'
+        output.rename(previous)
+        if index == 0:
+            old_call_dir = previous / 'packet' / decision['call_directory']
+        repeated = await campaign.run_article_stage(inp, ROOT / 'benchmarks/dense', output,
+            'http://localhost:8000/v1', manifest, cat, max_batches=1,
+            previous_packet=previous / 'packet', previous_packet_original_location=output / 'packet')
+        assert repeated['complete'] and repeated['coding']['reused_decisions'] == 1
+        assert repeated['coding']['requests_selected'] == 0 and repeated['usage']['model_calls'] == 0
+        assert len(generation_calls) == 1
+        inherited = json.loads(next((output / 'packet/decisions').glob('*.json')).read_text())
+        assert inherited['decision'] == decision['decision']
+        assert (output / 'packet' / inherited['call_directory']).resolve() == old_call_dir.resolve()
+        assert (output / 'packet' / inherited['call_directory'] / 'attempts.jsonl').exists()
+        assert (output / 'packet' / inherited['call_directory'] / 'tasks' / (inherited['task_key'] + '.json')).exists()
+        repeated_bundle = json.loads(next((output / 'experimental-coded/bundles').glob('*.json')).read_text())
+        def codes(bundle):
+            return [e['resource']['code']['coding'] for e in bundle['entry']
+                    if e['resource'].get('code', {}).get('coding')]
+        assert codes(repeated_bundle) == codes(coded)
+
+    # The same fact identifier with different source text cannot inherit an old
+    # decision. It is the full request hash, not just its filename, that matters.
+    changed_article = deepcopy(article)
+    source = json.loads((ROOT / 'benchmarks/dense/articles' / article['article_id'] / 'source.json').read_text())
+    source['text'] += '\nAdditional source fixture text.'
+    source['text_sha256'] = hashlib.sha256(source['text'].encode()).hexdigest()
+    changed_article['text_sha256'] = source['text_sha256']
+    changed_sources = tmp_path / 'changed-sources'; changed_sources.mkdir()
+    (changed_sources / (article['article_id'] + '.json')).write_text(json.dumps(source))
+    changed_input = tmp_path / 'changed-input.jsonl'; changed_input.write_text(json.dumps(changed_article) + '\n')
+    with pytest.raises(ValueError, match='changed source facts'):
+        await campaign.run_article_stage(changed_input, changed_sources, tmp_path / 'stale-source',
+            'http://localhost:8000/v1', manifest, cat, previous_packet=output / 'packet')
+    changed_catalog = deepcopy(catalog); changed_catalog['concepts'][0]['version'] = 'another-fixture-release'
+    changed_cat = tmp_path / 'changed-catalog.json'; changed_cat.write_text(json.dumps(changed_catalog))
+    with pytest.raises(ValueError, match='changed catalog'):
+        await campaign.run_article_stage(inp, ROOT / 'benchmarks/dense', tmp_path / 'stale-catalog',
+            'http://localhost:8000/v1', manifest, changed_cat, previous_packet=output / 'packet')
+    assert len(generation_calls) == 1
+
+
+async def test_skip_saved_decision_still_rejects_invalid_candidate(tmp_path, monkeypatch):
+    # An existing file is not sufficient: the request hash and candidate choice
+    # must validate before it can suppress a live coding call.
+    article = json.loads((ROOT / 'tests/fixtures/unified_scoring_reference.jsonl').read_text().splitlines()[0])
+    inp = tmp_path / 'input.jsonl'; inp.write_text(json.dumps(article) + '\n')
+    packet = tmp_path / 'packet'
+    pipeline.prepare(inp, ROOT / 'benchmarks/dense', packet)
+    request = next(read_jsonl(packet / 'requests.jsonl'))
+    from openpatients2.provenance import json_digest
+    from openpatients2.pilot_extract import PilotConfig
+    saved = packet / 'decisions' / (request['id'] + '.json'); saved.parent.mkdir()
+    saved.write_text(json.dumps({'request_sha256': json_digest(request), 'review_status': 'model_unreviewed',
+        'decision': {'decision': 'select', 'candidate_id': 'not-an-offered-candidate',
+                     'relation': 'equivalent', 'rationale': 'Invalid saved fixture'}}))
+    manifest = tmp_path / 'arm.json'
+    manifest.write_text(json.dumps({'extraction': PilotConfig().model_dump(), 'context': 131072}))
+    actual = httpx.AsyncClient
+    def forbidden(request):
+        raise AssertionError('Invalid saved choices must not trigger an endpoint request')
+    monkeypatch.setattr(httpx, 'AsyncClient', lambda **kw: actual(transport=httpx.MockTransport(forbidden), **kw))
+    with pytest.raises(ValueError, match='candidate set'):
+        await campaign.select_batches(packet, 'http://localhost:8000/v1', manifest)

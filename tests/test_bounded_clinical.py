@@ -10,6 +10,7 @@ import pytest
 
 from openpatients2 import bounded_clinical as bounded
 from openpatients2.article_tasks import patient_packet
+from openpatients2.client import Completion
 from openpatients2.ehr_tasks import series_draft
 from openpatients2.pilot_extract import PilotRunner
 from openpatients2.schemas import TASK_MODELS
@@ -75,6 +76,15 @@ def test_extracted_segment_claim_requires_an_actual_fact_citation():
     value = envelope(section([observation()]))
     value['source_decisions'][0]['disposition'] = 'extracted'
     assert bounded.check_envelope(value, 'observations', checker(), {'s1'}) == value
+
+
+def test_context_only_fact_cannot_be_emitted_even_with_no_patient_fact_focus_decisions():
+    value = envelope(section([observation('neighbor')]))
+    with pytest.raises(ValueError, match='focus-support citation'):
+        bounded.check_envelope(value, 'observations', checker(), {'s1'})
+    value['extraction']['items'][0]['evidence'].append({'source_section': 's1', 'quote': 'Glucose was 7.20 mmol/L.'})
+    checked = bounded.check_envelope(value, 'observations', checker(), {'s1'})
+    assert checked['extraction']['items'][0]['evidence'] == value['extraction']['items'][0]['evidence']
 
 
 @pytest.mark.parametrize('mutation', ['missing', 'duplicate', 'unknown'])
@@ -200,6 +210,80 @@ def test_cell_claim_must_have_literal_value_evidence_in_its_source_row(mutation)
     assert bounded.check_envelope(value, 'observations', checker(), {'s1'}, [CELL]) == value
 
 
+@pytest.mark.parametrize('raw,text,number,unit,comparator,matched', [
+    ('7.20', '7.20', 7.2, 'mmol/L', '=', True),
+    ('7.20 mmol/L', '7.20', 7.2, 'mmol/L', '=', True),
+    ('7.20 mmol/L', '7.20 mmol/L', None, 'mmol/L', '=', True),
+    ('7.20 mmol/L', '7.20 mmol/L', None, 'mg/dL', '=', False),
+    ('7.20', '7.20 mmol/L', 7.2, 'mg/dL', '=', False),
+    ('7.20 mmol/L', '7.20', 7.2, 'mg/dL', '=', False),
+    ('7.20', '8.40', 7.2, 'mmol/L', '=', False),
+    ('7.20', '7.20', 8.4, 'mmol/L', '=', False),
+    ('<7.20', '<7.20', 7.2, 'mmol/L', '<', True),
+    ('<7.20', '7.20', 7.2, 'mmol/L', '=', False),
+    ('7.20', '7.20', 7.2, 'mmol/L', 'unknown', False),
+    ('7.20e3', '7.20e3', 7200.0, None, '=', True),
+    ('7.20 × 109/L', '7.20 × 109/L', None, None, '=', True),
+    ('7.20 × 109/L', '7.20 × 109/L', 7.2e9, '/L', '=', False),
+    ('negative', 'negative', None, None, 'unknown', True),
+    ('negative', 'negative', 0.0, None, 'unknown', False),
+    ('120/80', '120/80', None, None, 'unknown', True),
+    ('120/80', '120', 120.0, 'mmHg', '=', False),
+    ('—', '0', 0.0, 'mmol/L', '=', False),
+])
+def test_cell_correspondence_checks_result_fields_without_conversions_or_notation_guesses(raw, text, number, unit, comparator, matched):
+    item = observation(quote='Glucose | ' + raw, value=text, number=number)
+    item.update(unit=unit, comparator=comparator)
+    cell = {**CELL, 'raw_text': raw}
+    before = deepcopy(item)
+    actual, _ = bounded.cell_item_correspondence(cell, item)
+    assert actual is matched and item == before
+
+
+def test_mismatched_cell_link_is_unresolved_with_raw_decision_and_values_retained():
+    item = observation(quote='Glucose | 7.20 | 8.40', value='7.20', number=7.2)
+    cell = {**CELL, 'raw_text': '8.40'}
+    value = envelope(section([item]), cells=[cell])
+    value['cell_decisions'][0].update(disposition='extracted', item_indices=[0])
+    original = deepcopy(value)
+    checked = bounded.check_envelope(value, 'observations', checker(), {'s1'}, [cell])
+    assert value == original and checked['extraction'] == original['extraction']
+    assert checked['cell_decisions'][0]['disposition'] == 'unresolved'
+    assert checked['cell_decisions'][0]['item_indices'] == []
+    audit = checked['cell_linkage_audit'][0]
+    assert audit['cell'] == cell and audit['original_decision'] == original['cell_decisions'][0]
+    assert audit['measurement_fields_changed'] is False
+    data, _, errors = bounded.merge('observations', [leaf(checked)], checker())
+    assert data['items'] == [item] and data['coverage'] == 'limited'
+    assert errors == ['unresolved_cell_coverage:0']
+
+
+def test_one_item_cannot_claim_two_time_columns_even_when_values_are_equal():
+    cells = [CELL, {**CELL, 'cell_id': 's1-c2', 'column_index': 2}]
+    value = envelope(section([observation(quote='Glucose | 7.20 | 7.20')]), cells=cells)
+    for decision in value['cell_decisions']:
+        decision.update(disposition='extracted', item_indices=[0])
+    checked = bounded.check_envelope(value, 'observations', checker(), {'s1'}, cells)
+    assert all(d['disposition'] == 'unresolved' for d in checked['cell_decisions'])
+    assert len(checked['cell_linkage_audit']) == 2
+    assert all(row['issues'][0]['reason'] == 'one_item_claimed_for_multiple_value_cells'
+               for row in checked['cell_linkage_audit'])
+
+
+def test_distinct_cells_preserve_equal_observations_after_quarantine_changes_item_indices():
+    cells = [CELL, {**CELL, 'cell_id': 's1-c2', 'column_index': 2}]
+    repeated = observation(quote='Glucose | 7.20 | 7.20')
+    foreign = observation(quote='Glucose | 7.20 | 7.20', value='99', number=99)
+    value = envelope(section([foreign, repeated, repeated]), cells=cells,
+        scopes={'/items/0': 'background', '/items/1': 'direct_patient', '/items/2': 'direct_patient'})
+    for index, decision in enumerate(value['cell_decisions'], 1):
+        decision.update(disposition='extracted', item_indices=[index])
+    checked = bounded.check_envelope(value, 'observations', checker(), {'s1'}, cells)
+    data, quarantine, errors = bounded.merge('observations', [leaf(checked)], checker())
+    assert data['items'] == [repeated, repeated] and not errors
+    assert len(quarantine) == 1 and quarantine[0]['candidate'] == foreign
+
+
 def test_partition_keeps_every_whole_segment_once_and_bounds_table_batches():
     segments = [{'segment_id': f's{i}', 'kind': 'paragraph', 'text': str(i) * 20} for i in range(7)]
     segments += [{'segment_id': f'r{i}', 'kind': 'table_row', 'text': f'Analyte {i} | 7.20'} for i in range(11)]
@@ -306,3 +390,32 @@ async def test_dynamic_envelope_schema_reaches_real_api_client_and_attempt_ledge
     assert attempts[0]['response']['content'] and attempts[0]['task'] == 'clinical_window_observations'
     assert attempts[0]['metrics']['prompt_tokens'] == 10
     assert attempts[0]['metrics']['completion_tokens'] == 20
+
+
+async def test_length_failure_splits_whole_source_and_keeps_failed_parent_attempt(tmp_path, monkeypatch):
+    source = article(); registry = roster(source); patient = registry['patients'][0]
+    packet = patient_packet(source, registry, patient)
+    seen = []
+    def reply(task, messages):
+        focus = prompt_list(messages, '\nFOCUS_SEGMENTS:\n', '\nFOCUS_VALUE_CELLS:')
+        seen.append(focus)
+        if len(focus) > 1:
+            return Completion(content='{"extraction":', finish_reason='length', prompt_tokens=10, completion_tokens=20)
+        return envelope(focus=focus)
+    http, _ = setup_mock(monkeypatch, source, responses=reply)
+    async with http:
+        runner = PilotRunner({'max_output_tokens': 256, 'max_retry_tokens': 256, 'max_repair_rounds': 1},
+            tmp_path / 'run', ['http://localhost:8000/v1'], 4096, 'targeted', http=http)
+        try:
+            result = await bounded.extract(runner, 'observations', packet, source, patient,
+                {'article_id': source['article_id'], 'record_id': 'PMC1.1:p1'}, 0)
+        finally:
+            await runner.close()
+    assert result['status'] == 'valid' and len(seen) == 3
+    assert sorted(sid for focus in seen[1:] for sid in focus) == sorted(seen[0])
+    tasks = [json.loads(p.read_text()) for p in (tmp_path / 'run' / 'tasks').glob('*.json')]
+    parent = next(row for row in tasks if row.get('superseded_by_split'))
+    assert parent['attempts'][0]['response']['content'] == '{"extraction":'
+    assert parent['errors'] == ['incomplete_finish:length']
+    attempts = [json.loads(line) for line in (tmp_path / 'run' / 'attempts.jsonl').read_text().splitlines()]
+    assert len(attempts) == 3 and sum(a['metrics']['completion_tokens'] for a in attempts) == 60

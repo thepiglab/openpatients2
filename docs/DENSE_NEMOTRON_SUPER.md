@@ -1,5 +1,9 @@
 # Nemotron Super, Muse Spark Open and Reflection Beam clinical extraction benchmark
 
+For the current fifty-article, twelve-hour paired Beam extraction → ICD-10-CM →
+FHIR campaign, use [BEAM_COMPETITION.md](BEAM_COMPETITION.md) and
+`bash scripts/run_dense_beam.sh competition`. Historical modes below remain explicit.
+
 Separate campaign from the existing Glimmer, GEPA and LoRA runs.
 It never submits or cancels their jobs. Uses the existing dense reference,
 live patient discovery, source-aware extraction/repair, literal evidence checks,

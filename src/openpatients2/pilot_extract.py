@@ -619,6 +619,8 @@ class PilotRunner:
                 if repair_from is not None:
                     entry['replayed_failure'] = {'errors':repair_from.get('errors'),
                         'candidate_sha256':json_digest(repair_from.get('raw_candidate'))}
+                reservation = 0
+                generation_started = False
                 try:
                     if self.calls >= self.config.max_calls:
                         raise ValueError('model_call_budget_exhausted')
@@ -648,13 +650,16 @@ class PilotRunner:
                     if self.accounted_tokens + self.reserved_tokens + allowance > self.config.max_total_tokens:
                         raise ValueError('total_token_budget_exhausted')
                     self.calls += 1; self.reserved_tokens += allowance
+                    reservation = allowance
                     self.active[replica] += 1
                     self.peak_active[replica] = max(self.peak_active[replica], self.active[replica])
                     try:
+                        generation_started = True
                         response = await client.complete_once(client.config.endpoints[0], task, current, cap)
                     finally:
                         self.active[replica] -= 1
                     self.reserved_tokens -= allowance
+                    reservation = 0
                     actual = (response.prompt_tokens + response.completion_tokens
                               if response.prompt_tokens is not None and response.completion_tokens is not None else allowance)
                     self.accounted_tokens += max(0, actual)
@@ -757,6 +762,27 @@ class PilotRunner:
                         repair_rounds += 1; mode = 'repair'; repair_errors = list(errors)
                         continue
                     break
+                except asyncio.CancelledError as exc:
+                    # Parent article/stage deadlines can interrupt generation
+                    # before complete_once returns. Record that paid/computed
+                    # request with unknown usage, then propagate cancellation.
+                    # A canceled tokenizer call has no model response and must
+                    # not be counted as a generation request.
+                    entry['errors'] = ['cancelled']
+                    entry['cancelled_during'] = 'generation' if generation_started else 'tokenization'
+                    if generation_started:
+                        from .client import Completion
+                        partial_response = getattr(exc, 'partial_completion', None)
+                        if partial_response is None:
+                            partial_response = Completion(error='cancelled', interrupted=True)
+                        entry.update(response=partial_response.response(), metrics=partial_response.metrics(),
+                            token_budget_accounted=reservation, usage_missing_reserved=True)
+                        self.accounted_tokens += reservation
+                    if reservation:
+                        self.reserved_tokens -= reservation
+                    attempts.append(entry)
+                    self.save_attempt(entry)
+                    raise
                 except (httpx.HTTPError, ValueError, TypeError, KeyError) as exc:
                     # Tokenizer transport failures may be wrapped for image requests.
                     if isinstance(exc, httpx.HTTPError) or isinstance(exc.__cause__, httpx.HTTPError):

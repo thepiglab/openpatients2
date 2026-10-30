@@ -423,6 +423,11 @@ async def run_article(work, item, endpoint, attempt):
     source = work / 'inputs' / aid / 'source.jsonl'
     media = source.parent / 'vision-assets/manifest.json'
     manifest = read(work / 'manifest.json')
+    if manifest.get('competition') and (attempt / 'receipt.json').exists():
+        saved = read(attempt / 'receipt.json')
+        if saved.get('status') == 'done' and saved.get('has_prediction') and not saved.get('fhir', {}).get('complete'):
+            from .competition_campaign import retry_stage
+            return await retry_stage(work, attempt, endpoint, manifest)
     cfg = manifest['extraction']
     text_only = manifest.get('text_only', False)
     if text_only:
@@ -467,6 +472,14 @@ async def run_article(work, item, endpoint, attempt):
                        all_extraction_tasks_valid=report['valid_tasks'] == report['task_count'])
         from .benchmark_reporting import nonempty_valid
         receipt['nonempty_pipeline_valid'] = nonempty_valid(receipt)
+        if manifest.get('competition'):
+            from .competition_campaign import run_stage
+            if aid in predictions:
+                receipt['fhir'] = await run_stage(work, attempt, endpoint, manifest)
+            else:
+                receipt['fhir'] = {'status': 'skipped_no_prediction', 'complete': False,
+                    'elapsed_seconds': 0, 'exports': {}, 'coding': {},
+                    'clinical_accuracy_verified': False, 'release_ready': False}
     except Exception as exc:
         receipt.update(error_type=type(exc).__name__, error=str(exc)[:2000])
     finally:
@@ -476,7 +489,15 @@ async def run_article(work, item, endpoint, attempt):
         if spec_before is not None:
             from .speculation_metrics import snapshot, delta
             receipt['speculation'] = delta(spec_before, await snapshot(endpoint))
-        receipt.update(ledger_metrics([attempt / 'extraction/attempts.jsonl', attempt / 'ehr/calls/attempts.jsonl']))
+        extraction_ledgers = [attempt / 'extraction/attempts.jsonl', attempt / 'ehr/calls/attempts.jsonl']
+        from .competition_campaign import coding_ledgers
+        downstream_ledgers = coding_ledgers(attempt)
+        if manifest.get('competition'):
+            if (attempt / 'fhir/receipt.json').exists():
+                receipt['fhir'] = read(attempt / 'fhir/receipt.json')
+            receipt['extraction_and_ehr_usage'] = ledger_metrics(extraction_ledgers)
+            receipt['fhir_seconds'] = receipt.get('fhir', {}).get('elapsed_seconds')
+        receipt.update(ledger_metrics(extraction_ledgers + downstream_ledgers))
         failures = infrastructure_failures(attempt)
         if failures:
             receipt.update(status='error', error_type='InfrastructureError', retryable=True,
@@ -488,6 +509,8 @@ async def run_article(work, item, endpoint, attempt):
 
 def completed_attempt(work, aid):
     candidates = sorted((work / 'results/articles' / aid).glob('attempt-*/receipt.json'))
+    if (work / 'manifest.json').exists() and read(work / 'manifest.json').get('competition'):
+        candidates.reverse()
     for p in candidates:
         r = read(p)
         if r['status'] == 'done':
@@ -495,6 +518,13 @@ def completed_attempt(work, aid):
                 raise ValueError(f'Completed result changed: {aid}')
             return p.parent, r
     return None, None
+
+
+def needs_article(work, aid):
+    _, receipt = completed_attempt(work, aid)
+    if not receipt:
+        return True
+    return bool(read(work / 'manifest.json').get('competition') and not receipt.get('fhir', {}).get('complete'))
 
 
 def paired_jobs(work, campaigns, shard):
@@ -535,7 +565,7 @@ def paired_jobs(work, campaigns, shard):
                 if (rank // len(campaigns)) % 2:
                     order = list(reversed(order))
             for campaign in order:
-                if not completed_attempt(campaign, aid)[0]:
+                if needs_article(campaign, aid):
                     yield campaign, {**item, 'shard': shard}
             # Do not let another worker reroll operational errors from a pair
             # already attempted in this submission. Resume gets a fresh epoch.
@@ -545,7 +575,7 @@ def paired_jobs(work, campaigns, shard):
 
 
 async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_timeout=None, workload=None,
-                 serving_factory=None, runtime_probe=None, startup_check=None):
+                 serving_factory=None, runtime_probe=None, startup_check=None, consume_remaining_budget=False):
     from .dense_benchmark_serving import ServerGroup
     from .dense_benchmark_telemetry import monitor
     m = check_snapshot(work)
@@ -567,7 +597,7 @@ async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_ti
     claimed = None
     if campaigns is None:
         pending = [(work, x) for x in m['articles']
-                   if x['shard'] == shard and not completed_attempt(work, x['article_id'])[0]]
+                   if x['shard'] == shard and needs_article(work, x['article_id'])]
     else:
         for campaign in campaigns:
             check_snapshot(campaign)
@@ -635,23 +665,40 @@ async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_ti
                     for campaign, item in pending:
                         if any(p.poll() is not None for p in group.processes):
                             raise RuntimeError('Model server exited; remaining articles are pending')
-                        if budget_seconds is not None and time.monotonic() - monotonic_start + (article_timeout or 900) >= budget_seconds:
-                            budget_exhausted = True
-                            break
+                        effective_timeout = article_timeout
+                        if budget_seconds is not None:
+                            remaining = budget_seconds - (time.monotonic() - monotonic_start)
+                            if consume_remaining_budget:
+                                # Competition runs can use the last hour instead of
+                                # reserving a full worst-case article. Checkpoints and
+                                # the final receipt retain an interrupted last article.
+                                if remaining < 360:
+                                    budget_exhausted = True
+                                    break
+                                effective_timeout = min(article_timeout or remaining, remaining - 60)
+                            elif remaining <= (article_timeout or 900):
+                                budget_exhausted = True
+                                break
                         aid = item['article_id']
                         write(logs / 'progress.json', {'article_id': aid, 'campaign': campaign.name, 'started_unix': time.time()})
                         base = campaign / 'results/articles' / aid
                         base.mkdir(parents=True, exist_ok=True)
-                        attempt = base / f'attempt-{len(list(base.glob("attempt-*"))):04d}'
-                        attempt.mkdir()
-                        if article_timeout is None:
+                        previous, previous_receipt = completed_attempt(campaign, aid)
+                        if (consume_remaining_budget and previous_receipt and previous_receipt.get('has_prediction')
+                                and not previous_receipt.get('fhir', {}).get('complete')):
+                            attempt = previous  # Explicit competition resume: coding/export only.
+                        else:
+                            attempt = base / f'attempt-{len(list(base.glob("attempt-*"))):04d}'
+                            attempt.mkdir()
+                        if effective_timeout is None:
                             receipt = await run_article(campaign, item, endpoints[0]['endpoint'], attempt)
                         else:
                             try:
-                                receipt = await asyncio.wait_for(run_article(campaign, item, endpoints[0]['endpoint'], attempt), article_timeout)
+                                receipt = await asyncio.wait_for(run_article(campaign, item, endpoints[0]['endpoint'], attempt), effective_timeout)
                             except TimeoutError:
                                 receipt = read(attempt / 'receipt.json')
-                                receipt.update(error_type='TimeoutError', error='Per-article overnight time budget exceeded')
+                                receipt.update(error_type='TimeoutError', error='Per-article time budget exceeded',
+                                               effective_time_budget_seconds=effective_timeout)
                                 write(attempt / 'receipt.json', receipt)
                         summary['articles'].append({'article_id': aid, 'campaign': campaign.name, 'status': receipt['status']})
                         print(json.dumps({k: receipt[k] for k in ('article_id', 'status', 'wall_seconds', 'model_calls')}), flush=True)
@@ -694,16 +741,25 @@ def status(work):
                 latest_errors[item['article_id']] = latest.get('error_type') or latest.get('status', 'unknown')
     workers = [read(p) for p in (work / 'results/workers').glob('*/job-*/receipt.json')]
     from .benchmark_reporting import quality_summary
-    return {'expected': len(m['articles']), 'completed': len(done), 'pending': pending,
+    downstream_pending = [r['article_id'] for r in done if m.get('competition') and not r.get('fhir', {}).get('complete')]
+    result = {'expected': len(m['articles']), 'completed': len(done) - len(downstream_pending),
+            'pending': pending + downstream_pending,
+            **({'completed_extraction_attempts': len(done), 'pending_fhir': downstream_pending} if m.get('competition') else {}),
             'quality_summary': quality_summary(done),
             'completed_without_prediction': sum(not r['has_prediction'] for r in done),
             'completed_without_model_calls': sum(r.get('model_calls') == 0 for r in done),
             'pending_with_failed_attempt': latest_errors,
             'worker_outcomes': dict(Counter(r.get('status', 'unknown') for r in workers)),
-            'completion_note': 'Completed counts finished attempts, including extraction failures; worker outcomes are historical receipts, not live queue state.',
+            'completion_note': ('Competition completion also requires coding/FHIR stage coverage. Finished extraction attempts and pending FHIR are separate. '
+                if m.get('competition') else 'Completed counts finished attempts, including extraction failures; ') +
+                'Worker outcomes are historical receipts, not live queue state; clinical accuracy is unverified.',
             'completed_with_prediction': sum(r['has_prediction'] for r in done),
             'article_seconds': stats([r['wall_seconds'] for r in done]),
             'all_extraction_tasks_valid': sum(r.get('all_extraction_tasks_valid', False) for r in done)}
+    if m.get('competition'):
+        from .competition_campaign import summarize
+        result['fhir'] = summarize(done, len(m['articles']))
+    return result
 
 
 def aggregate(work):
@@ -729,8 +785,11 @@ def aggregate(work):
     out.mkdir(exist_ok=True)
     reasoning_index = export_fact_index(work, out / 'fact-reasoning.jsonl', completed_paths)
     from .benchmark_failures import extraction_failures
+    from .extraction_audits import summarize as summarize_extraction_audits
     failures = extraction_failures(work, completed_paths)
+    audit_summary = summarize_extraction_audits(completed_paths)
     write(out / 'extraction-failures.json', failures)
+    write(out / 'extraction-audits.json', audit_summary)
     write_rows(out / 'predictions.jsonl', [predictions[k] for k in sorted(predictions)])
     scores = score(reference, predictions)
     write(out / 'scores.json', scores)
@@ -740,7 +799,7 @@ def aggregate(work):
     write(out / 'scores-per-article.json', {aid: score({aid: ref}, {aid: predictions[aid]} if aid in predictions else {})['overall']
                                           for aid, ref in reference.items()})
     write_rows(out / 'timing-all-attempts.jsonl', all_attempts)
-    fields = ['article_id', 'split', 'shard', 'status', 'wall_seconds', 'extraction_seconds', 'ehr_seconds',
+    fields = ['article_id', 'split', 'shard', 'status', 'wall_seconds', 'extraction_seconds', 'ehr_seconds', 'fhir_seconds',
               'model_calls', 'prompt_tokens', 'completion_tokens', 'reasoning_tokens', 'failed_attempts',
               'patients_extracted', 'has_prediction', 'all_extraction_tasks_valid',
               'output_tokens_per_second', 'answer_tokens_per_second', 'documents_per_second',
@@ -779,6 +838,7 @@ def aggregate(work):
               'fact_reasoning_index': reasoning_index,
               'extraction_failures': {'artifact': 'summary/extraction-failures.json',
                                      'by_task': failures['by_task'], 'by_article': failures['by_article']},
+              'extraction_audits': {**audit_summary, 'artifact': 'summary/extraction-audits.json'},
               'output_tokens_per_gpu_article_second': rates['output_tokens_per_gpu_second'],
               'slowest_articles': sorted([{'article_id': r['article_id'], 'seconds': r['wall_seconds']} for r in timing],
                                          key=lambda r: -r['seconds'])[:10],
@@ -789,6 +849,8 @@ def aggregate(work):
                               'Summed worker time includes probe/startup/cleanup/retries; interrupted jobs without final receipt require sacct.',
                               'Worker span excludes initial queue/CPU setup; never sum worker rates as simultaneous throughput.',
                               'Use sacct for queue and scheduler allocation duration. Missing token usage stays null.']}
+    if m.get('competition'):
+        report['timing_notes'].append('Competition article time and token totals also include ICD-10-CM coding and FHIR export; stage-specific receipts distinguish their costs.')
     write(out / 'report.json', report)
     (out / 'report.md').write_text('# Dense article benchmark\n\n' +
         f"Completed: {progress['completed']}/{progress['expected']}; predictions: {len(predictions)}.\n\n" +
@@ -809,7 +871,7 @@ def verify(work):
     check_snapshot(work)
     progress = status(work)
     if progress['pending']:
-        raise ValueError(f'{len(progress["pending"])} articles lack a completed attempt: {progress["pending"][:8]}')
+        raise ValueError(f'{len(progress["pending"])} articles lack a completed attempt (including required downstream stages): {progress["pending"][:8]}')
     integrity = read(work / 'summary/integrity.json')
     if integrity['manifest_sha256'] != sha(work / 'manifest.json'):
         raise ValueError('Frozen manifest changed after scoring')

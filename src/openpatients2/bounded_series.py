@@ -1,7 +1,8 @@
 """Measurement requests partitioned by table rows, with explicit cell coverage.
 
-Never rewrite a value, time or unit. Headers/legends are context, not new focus
-values. Failed leaves remain visible and successful leaves can still be saved.
+Never rewrite a value or unit. Optional literal-time projection copies the exact
+model-selected source cell, with an audit of the original text. Headers/legends
+are context, not new focus values. Failed leaves remain visible.
 """
 import copy
 from collections import defaultdict
@@ -51,6 +52,10 @@ async def extract(runner, article, roster, annotation, draft, transcriptions):
         messages[-1]['content'] += ('\nOnly the supplied rows are in scope. Headers and legends are context. '
             'Select only supported serial measurements; series=[] is valid. Do not turn cohort rows into '
             'patients. Missing ownership/time stays unresolved/null. Other batches cover other rows.')
+        if getattr(getattr(runner, 'config', None), 'literal_series_time_cells', False):
+            messages[-1]['content'] += (' Select the exact time_cell_id when the source supplies a time label. '
+                'The pipeline copies that cell verbatim into time_text and retains your original response; '
+                'it does not infer dates, convert units or create a time when the cell is unknown.')
         if len(rows) > 1 and not await fits(runner, 'measurement_series_extraction', messages, 0):
             mid = len(rows) // 2
             await batch(number+'.0', rows[:mid]); await batch(number+'.1', rows[mid:])
@@ -58,7 +63,7 @@ async def extract(runner, article, roster, annotation, draft, transcriptions):
 
         projections = []
         def check(value):
-            if getattr(runner.config, 'literal_series_time_cells', False):
+            if getattr(getattr(runner, 'config', None), 'literal_series_time_cells', False):
                 value = copy.deepcopy(value)
                 by_id = {c['cell_id']: c for c in local_draft['cells']}
                 for series in value.get('series', []):

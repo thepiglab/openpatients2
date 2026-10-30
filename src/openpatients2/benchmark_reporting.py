@@ -94,7 +94,7 @@ def throughput(receipts):
         'valid_extraction_documents_per_second': rate(valid),
         'valid_extraction_documents_per_hour': rate(valid * 3600),
         'documents_per_gpu_hour': rate(len(rows) * 3600, gpu_seconds),
-        'basis': 'sum completed-article tokens or document counts / sum article wall seconds; includes repairs and EHR calls; excludes startup, queue and operationally failed attempts',
+        'basis': 'sum completed-article tokens or document counts / sum article wall seconds; includes repairs, EHR and any enabled terminology/FHIR stage; excludes startup, queue and operationally failed attempts',
         'reasoning_is_subset_of_completion': True,
         'validity_is_not_semantic_accuracy': True,
     }
@@ -134,9 +134,16 @@ def paired_speculation(receipts, definitions):
         base = [receipts[baseline][aid] for aid in ids]
         trial = [receipts[arm][aid] for aid in ids]
         btime, ttime = sum(r['wall_seconds'] for r in base), sum(r['wall_seconds'] for r in trial)
+        stages = {}
+        for key in ('extraction_seconds', 'ehr_seconds', 'fhir_seconds'):
+            if ids and all(r.get(key) is not None for r in base + trial):
+                bs, ts = sum(r[key] for r in base), sum(r[key] for r in trial)
+                stages[key] = {'baseline_seconds': bs, 'candidate_seconds': ts,
+                               'speedup': bs / ts if ts > 0 else None}
         out.append({'articles': len(ids), 'article_ids': ids,
             'pipeline_speedup': btime / ttime if ids and ttime > 0 else None,
             'baseline_seconds': btime, 'candidate_seconds': ttime,
+            'stage_comparison': stages,
             'baseline': {'arm': baseline, 'throughput': throughput(base)},
             'candidate': {'arm': arm, 'throughput': throughput(trial)},
             'basis': 'sum baseline article wall seconds / sum candidate article wall seconds on identical completed IDs; >1 is faster. Includes all repairs. Check quality, output lengths and host telemetry; not isolated decoding speedup.',

@@ -6,6 +6,7 @@ responses, non-patient candidates and failed leaves remain available for review.
 import asyncio
 import copy
 import json
+from decimal import Decimal
 from typing import Literal
 
 from pydantic import Field, create_model
@@ -13,6 +14,8 @@ from pydantic import Field, create_model
 from .data import write_json
 from .evidence_ledger import subset_packet
 from .evidence_recovery import packet_segments
+from .measurement_series import expected_parse
+from .measurements import _model_measurement, parse_measurement
 from .provenance import json_digest
 from .schemas import StrictModel, TASK_MODELS
 from .staged_timeline import fits, replaced, source_window, splittable_failure
@@ -70,6 +73,65 @@ def partition(segments, *, max_segments=6, max_chars=10000):
     return groups
 
 
+def cell_item_correspondence(cell, item):
+    """Verify a value association, not its patient, analyte, unit source or time.
+
+    A whole row quotation cannot stand in for extracting each column's value.
+    Decimal comparisons do not convert units; ambiguous notation stays literal.
+    The caller preserves both the original decision and all model fields.
+    """
+    raw = cell['raw_text']
+    status, parsed = expected_parse(raw)
+    text, number = item.get('text_value'), item.get('numeric_value')
+    if status == 'missing_cell':
+        # A dash does not establish zero, normality, a negative result, or why
+        # the value is missing. Keep such cells explicitly unassessed.
+        return False, 'missing_cell_has_no_extractable_result_value'
+    if status != 'parsed' or 'magnitude' not in parsed:
+        if text == raw and number is None:
+            return True, 'exact_literal_nonscalar_result'
+        return False, 'nonscalar_cell_requires_exact_text_without_numeric_guess'
+
+    if item.get('comparator') != parsed['comparator']:
+        return False, 'cell_and_observation_comparator_disagree'
+    item_unit = _model_measurement({**item, 'numeric_value': 1}) if item.get('unit') else None
+    if parsed['unit'] is not None and item.get('unit') is not None and (
+            item_unit is None or item_unit.unit != parsed['unit']):
+        return False, 'cell_and_observation_unit_disagree'
+
+    def same_value(other, *, missing_unit_ok=False):
+        return bool(other and 'magnitude' in other
+            and Decimal(parsed['magnitude']) == Decimal(other['magnitude'])
+            and parsed['comparator'] == other['comparator']
+            and (parsed['unit'] is None or parsed['unit'] == other.get('unit')
+                 or missing_unit_ok and other.get('unit') is None))
+
+    if text is not None:
+        text_status, text_parse = expected_parse(text)
+        separately_recorded_unit = bool(item_unit and item_unit.unit == parsed['unit'])
+        if text_status != 'parsed' or not same_value(text_parse, missing_unit_ok=separately_recorded_unit):
+            return False, 'cell_and_text_value_disagree_or_are_ambiguous'
+        if text_parse.get('unit') is not None and item.get('unit') is not None and (
+                item_unit is None or item_unit.unit != text_parse['unit']):
+            return False, 'text_value_and_observation_unit_disagree'
+    if number is not None:
+        modeled = _model_measurement(item)
+        candidates = [modeled.model_dump()] if modeled else []
+        if parsed['unit'] is None:
+            # Numeric-only cells may have units/scales in their column header.
+            # Check the literal numeric field as well, without claiming the
+            # header unit has been verified by this value-only association.
+            comparator = item.get('comparator')
+            literal = parse_measurement((comparator if comparator in {'<', '<=', '>', '>='} else '') + str(number))
+            if literal:
+                candidates.append(literal.model_dump())
+        if item.get('comparator') == 'unknown' or not any(same_value(v) for v in candidates):
+            return False, 'cell_and_numeric_value_comparator_or_unit_disagree'
+    if text is None and number is None:
+        return False, 'cell_value_not_represented_in_observation'
+    return True, 'scalar_result_corresponds_without_unit_conversion'
+
+
 def check_envelope(value, task, checker, focus, cells=()):
     checked = envelope_model(task).model_validate(value).model_dump()
     checked['extraction'] = checker(checked['extraction'])
@@ -78,17 +140,18 @@ def check_envelope(value, task, checker, focus, cells=()):
     if len(ids) != len(set(ids)) or set(ids) != set(focus):
         raise ValueError('Every focus segment needs exactly one coverage decision')
     scopes = [r['path'] for r in checked['fact_scopes']]
-    if len(scopes) != len(set(scopes)) or set(scopes) != set(fact_paths(checked['extraction'])):
+    facts = fact_paths(checked['extraction'])
+    if len(scopes) != len(set(scopes)) or set(scopes) != set(facts):
         raise ValueError('Every extracted fact needs exactly one attribution scope')
+    fact_evidence = [e for fact in facts.values() for e in fact.get('evidence', [])]
+    for path, fact in facts.items():
+        if not any(e.get('source_section') in focus and e.get('quote') for e in fact.get('evidence', [])):
+            raise ValueError('Extracted fact needs a focus-support citation: ' + path)
     # A claim to have extracted from a segment needs at least one literal fact
     # citation there. This does not prove that every eligible fact was found.
     for d in decisions:
         if d['disposition'] == 'extracted':
-            def cited(v):
-                if isinstance(v, dict):
-                    return (v.get('source_section') == d['segment_id'] and bool(v.get('quote'))) or any(cited(x) for x in v.values())
-                return isinstance(v, list) and any(cited(x) for x in v)
-            if not cited(checked['extraction']):
+            if not any(e.get('source_section') == d['segment_id'] and e.get('quote') for e in fact_evidence):
                 raise ValueError('Extracted coverage decision has no citation in ' + d['segment_id'])
     decisions = checked['cell_decisions']
     ids = [r['cell_id'] for r in decisions]
@@ -96,6 +159,12 @@ def check_envelope(value, task, checker, focus, cells=()):
     if len(ids) != len(set(ids)) or set(ids) != set(by_id):
         raise ValueError('Every focus value cell needs exactly one coverage decision')
     items = checked['extraction'].get('items', [])
+    associations = {}
+    for d in decisions:
+        if d['disposition'] == 'extracted':
+            for index in d['item_indices']:
+                associations.setdefault(index, set()).add(d['cell_id'])
+    linkage_audit = []
     for d in decisions:
         if len(d['item_indices']) != len(set(d['item_indices'])):
             raise ValueError('Duplicate cell item index')
@@ -106,6 +175,7 @@ def check_envelope(value, task, checker, focus, cells=()):
         if not d['item_indices']:
             raise ValueError('Extracted cell requires at least one item index')
         cell = by_id[d['cell_id']]
+        issues = []
         for index in d['item_indices']:
             if not 0 <= index < len(items):
                 raise ValueError('Unknown cell item index')
@@ -113,6 +183,20 @@ def check_envelope(value, task, checker, focus, cells=()):
             if not any(e.get('source_section') == cell['segment_id'] and cell['raw_text'] in e.get('quote','')
                        for e in item.get('evidence', [])):
                 raise ValueError('Cell extraction lacks literal evidence for its source row and value')
+            matched, reason = cell_item_correspondence(cell, item)
+            if len(associations[index]) > 1:
+                matched, reason = False, 'one_item_claimed_for_multiple_value_cells'
+            if not matched:
+                issues.append({'item_index': index, 'reason': reason,
+                    'model_fields': {k: copy.deepcopy(item.get(k)) for k in ('text_value', 'numeric_value', 'comparator', 'unit')}})
+        if issues:
+            linkage_audit.append({'cell': copy.deepcopy(cell), 'original_decision': copy.deepcopy(d),
+                'issues': issues, 'status': 'unresolved', 'clinical_entailment_verified': False,
+                'measurement_fields_changed': False})
+            d.update(disposition='unresolved', item_indices=[],
+                reason='Deterministic cell correspondence unresolved: ' + '; '.join(i['reason'] for i in issues))
+    if linkage_audit:
+        checked['cell_linkage_audit'] = linkage_audit
     return checked
 
 
@@ -138,7 +222,7 @@ def patient_only(envelope):
 
 def merge(task, leaves, checker):
     """Union exact facts. Scalar disagreements stay partial; never last-write-wins."""
-    parts, quarantine, errors = [], [], []
+    parts, part_cells, quarantine, errors = [], [], [], []
     for leaf in leaves:
         if leaf['status'] != 'valid':
             errors.append('failed_source_window:' + str(leaf['identity']['source_batch']))
@@ -146,6 +230,12 @@ def merge(task, leaves, checker):
         part, excluded = patient_only(leaf['data']); quarantine.extend(excluded)
         if part is not None:
             parts.append(part)
+            scopes = {s['path']: s['scope'] for s in leaf['data']['fact_scopes']}
+            direct_indices = [i for i in range(len(leaf['data']['extraction'].get('items', [])))
+                              if scopes.get(f'/items/{i}') == 'direct_patient']
+            part_cells.append({new: sorted(d['cell_id'] for d in leaf['data'].get('cell_decisions', [])
+                if d['disposition'] == 'extracted' and old in d['item_indices'])
+                for new, old in enumerate(direct_indices)})
         if any(d['disposition'] == 'unresolved' for d in leaf['data']['source_decisions']):
             errors.append('unresolved_source_coverage:' + str(leaf['identity']['source_batch']))
         if any(d['disposition'] == 'unresolved' for d in leaf['data'].get('cell_decisions', [])):
@@ -157,7 +247,11 @@ def merge(task, leaves, checker):
     result = copy.deepcopy(parts[0])
     for key in ('items', 'tumors', 'biomarkers', 'treatments', 'documentation_evidence', 'limitations', 'evidence'):
         if key in result:
-            result[key] = list({json.dumps(v, sort_keys=True): v for p in parts for v in p.get(key, [])}.values())
+            # Equal values in different table columns are distinct occurrences,
+            # even when their timing remains unknown and their full-row quote
+            # is identical. Deduplication must retain that cell identity.
+            result[key] = list({json.dumps([v, cells.get(i, [])] if key == 'items' else v, sort_keys=True): v
+                for p, cells in zip(parts, part_cells) for i, v in enumerate(p.get(key, []))}.values())
     excluded_keys = {'items', 'tumors', 'biomarkers', 'treatments', 'documentation_evidence',
                      'limitations', 'evidence', 'coverage', 'documentation_status'}
     for key in result.keys() - excluded_keys:
@@ -223,6 +317,11 @@ async def extract(runner, task, packet, article, patient, identity, replica):
             'For every FOCUS_VALUE_CELL, give a cell_decision with the zero-based extraction.items indices '
             'covering that value, or explicitly no_patient_fact/unresolved with empty item_indices and a reason. '
             'An extracted cell needs an item citation containing that literal value in its source row. '
+            'Each item also needs a focus-segment citation; identity/header/neighbor context alone cannot emit a fact. '
+            'An extracted cell must correspond to the actual item text_value/numeric_value and comparator, '
+            'not merely appear somewhere in a long row quotation. Preserve literal result notation and never '
+            'convert units. Different time/value cells need distinct item indices even when their values match. '
+            'Use unresolved when the value-to-item correspondence cannot be verified. '
             'Missing cells/dashes are not zeros. If no focus cells, cell_decisions=[]. '
             '\nFOCUS_SEGMENTS:\n' + json.dumps(sorted(focus)) +
             '\nFOCUS_VALUE_CELLS:\n' + json.dumps([{k:c[k] for k in ('cell_id','segment_id','column_index','raw_text')} for c in focus_cells]) +
@@ -257,6 +356,7 @@ async def extract(runner, task, packet, article, patient, identity, replica):
              'semantic_coverage_verified': False, 'attribution_quarantine': quarantine,
              'source_decisions': [d for r in leaves if r['status']=='valid' for d in r['data']['source_decisions']],
              'cell_decisions': [d for r in leaves if r['status']=='valid' for d in r['data']['cell_decisions']],
+             'cell_linkage_audit': [d for r in leaves if r['status']=='valid' for d in r['data'].get('cell_linkage_audit', [])],
              'batches': [{k:r[k] for k in ('identity','status','errors')} for r in leaves]}
     key = json_digest([identity, task, 'assembled-clinical-windows'])
     result = {'task': task, 'task_key': key, 'identity': identity, 'arm': runner.arm, 'replica': replica,
