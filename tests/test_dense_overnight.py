@@ -203,7 +203,7 @@ def test_valid_series_neighbors_survive_repair():
     assert not changed_accepted_atoms('measurement_series_extraction', protected, {'series': [good]})
 
 
-@pytest.mark.parametrize('mode', ['done', 'timeout', 'budget', 'remaining'])
+@pytest.mark.parametrize('mode', ['done', 'timeout', 'budget', 'remaining', 'startup_failure', 'cancelled'])
 async def test_worker_budget_timeout_and_cpu_work_separation(tmp_path, monkeypatch, mode):
     import asyncio
     from contextlib import asynccontextmanager
@@ -232,6 +232,10 @@ async def test_worker_budget_timeout_and_cpu_work_separation(tmp_path, monkeypat
             self.processes = [SimpleNamespace(poll=lambda: None)]
         async def start(self):
             events.append('start')
+            if mode == 'startup_failure':
+                raise ValueError('Missing local serving artifacts: params.json')
+            if mode == 'cancelled':
+                raise asyncio.CancelledError()
             return [{'endpoint': 'http://localhost:1234/v1'}]
         def stop(self): events.append('stop')
     monkeypatch.setattr(dense_benchmark_serving, 'ServerGroup', Group)
@@ -263,6 +267,19 @@ async def test_worker_budget_timeout_and_cpu_work_separation(tmp_path, monkeypat
             b.write(attempt / 'receipt.json', receipt)
         return receipt
     monkeypatch.setattr(b, 'run_article', run)
+    if mode in {'startup_failure', 'cancelled'}:
+        with pytest.raises(ValueError if mode == 'startup_failure' else asyncio.CancelledError):
+            await b.worker(work, 0, campaigns=[work / 'arms' / n for n in o.ARMS])
+        receipt = b.read(work / 'results/workers/0/job-fixture/receipt.json')
+        assert receipt['articles'] == []
+        assert events == ['start', 'stop']
+        assert not list((work / 'runtime/article-claims/fixture').iterdir())
+        if mode == 'startup_failure':
+            assert receipt['status'] == 'error' and receipt['failed_phase'] == 'server_startup'
+            assert receipt['error_type'] == 'ValueError' and 'params.json' in receipt['error']
+        else:
+            assert receipt['status'] == 'interrupted' and 'error_type' not in receipt
+        return
     result = await b.worker(work, 0, campaigns=[work / 'arms' / n for n in o.ARMS],
                             budget_seconds=0 if mode == 'budget' else 600 if mode == 'remaining' else 60,
                             article_timeout=.01 if mode == 'timeout' else 3600 if mode == 'remaining' else 5,

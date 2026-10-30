@@ -27,11 +27,22 @@ candidate; this is not a matched comparison against old Beam pipeline settings.
 The model supports a larger context, but full 1M serving has not been validated
 on this allocation. Neither GPU fit nor host RAM peaks have been measured yet.
 
+The first smoke (`run-20261029-110126`) downloaded successfully but stopped at
+the launcher's incorrect `config.json` requirement, before loading weights.
+The fix passes the pinned `params.json` filename into serving and runs the same
+artifact gate on CPU before publishing download readiness. See
+[the diagnostic report](reports/LE_CHONK_20261029.md). Start a new smoke after
+committing/syncing the fix; resuming that run reuses its frozen, defective code.
+
 CPU preflight/download, then GPU inference, then CPU cleanup and aggregation.
 Conservative disk preflight: 750 GiB runtime estimate + 128 GiB reserve = 878 GiB
 free. This is a planning allowance, not a measured checkpoint size. All eight
 GPUs belong to this worker; do not overlap another GPU campaign within the same
 allocation. The launcher retains the existing active-campaign guard.
+
+The first download inventory measured 568.15 GiB of weight shards and 576.42 GiB
+including the container and other retained files. Conversion/download scratch
+and outputs need additional space; keep the conservative preflight allowance.
 
 ## Launch after committing and syncing code
 

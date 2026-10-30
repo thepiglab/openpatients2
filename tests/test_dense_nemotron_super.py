@@ -287,6 +287,19 @@ def cpu_runtime(campaign, monkeypatch):
     return work, downloads
 
 
+def test_cpu_download_rejects_worker_artifact_mismatch_before_ready(cpu_runtime, monkeypatch):
+    work, _ = cpu_runtime
+    original_serving = s.serving
+    def mismatched_config(*args, **kwargs):
+        return original_serving(*args, **kwargs).model_copy(update={'model_config_file': 'params.json'})
+    monkeypatch.setattr(s, 'serving', mismatched_config)
+    with pytest.raises(ValueError, match='params.json'):
+        s.download(work, 'fastino')
+    assert b.read(work / 'runtime/active-profile.json')['ready'] is False
+    assert not (work / 'runtime/profiles/fastino.json').exists()
+    assert not (work / 'arms/fastino-text/runtime.json').exists()
+
+
 def test_cpu_setup_only_metadata_then_downloads_one_profile_and_worker_dispatch(cpu_runtime, monkeypatch):
     work, downloads = cpu_runtime
     assert {d['repo_id'] for d in downloads} == set(s.check(work)['nemotron_super']['pins'])
@@ -295,6 +308,8 @@ def test_cpu_setup_only_metadata_then_downloads_one_profile_and_worker_dispatch(
     assert not list((work / 'runtime').glob('*.sif'))
     downloads.clear()
     assert s.download(work, 'lilicorr')['ready']
+    assert b.read(work / 'runtime/profiles/lilicorr.json')['serving_artifact_checks'] == {
+        'lilicorr-text': {'model_id': r.NVFP4, 'model_config_file': 'config.json'}}
     assert [d['repo_id'] for d in downloads] == [r.NVFP4, r.LILICORR]
     assert all(d['revision'] == r.PINS[d['repo_id']]['revision'] for d in downloads)
     s.validate_runtime(work, 'lilicorr-text')

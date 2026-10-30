@@ -27,6 +27,7 @@ class ServingConfig(ConfigModel):
     sif: str
     model_path: str
     model_id: str
+    model_config_file: Literal["config.json", "params.json"] = "config.json"
     served_model_name: str = "clinical-extractor"
     container_python: str | None = None
     replicas: int = Field(default=1, ge=1)
@@ -176,6 +177,22 @@ def render(config: ServingConfig, root: str = ".") -> list[dict]:
     return commands
 
 
+def validate_serving_artifacts(config: ServingConfig, root: str | Path) -> dict:
+    """Shared CPU/GPU file gate; native Mistral checkpoints use params.json."""
+    root = Path(root).resolve()
+    model = (root / config.model_path).resolve()
+    sif = (root / config.sif).resolve()
+    required = [model / config.model_config_file, sif, model / "op2_snapshot.json"]
+    missing = [str(path) for path in required if not path.is_file()]
+    if missing:
+        raise ValueError("Missing local serving artifacts: " + ", ".join(missing)
+                         + ". Download/build on CPU before allocating GPUs.")
+    snapshot = json.loads((model / "op2_snapshot.json").read_text())
+    if snapshot.get("model_id") != config.model_id:
+        raise ValueError("Serving profile model_id differs from downloaded snapshot")
+    return snapshot
+
+
 class ServerGroup:
     def __init__(self, config: ServingConfig, root: str, logs: str):
         self.config, self.root, self.logs = config, Path(root).resolve(), Path(logs)
@@ -184,15 +201,7 @@ class ServerGroup:
         self.files = []
 
     def preflight(self):
-        model = (self.root / self.config.model_path).resolve()
-        sif = (self.root / self.config.sif).resolve()
-        if not model.is_dir() or not (model / "config.json").exists() or not sif.is_file():
-            raise ValueError("Missing local model/config.json or serving SIF. Download/build on CPU before allocating GPUs.")
-        if not (model / "op2_snapshot.json").is_file():
-            raise ValueError("Missing pinned op2_snapshot.json; use `op2 download-model` on CPU first")
-        snapshot = json.loads((model / "op2_snapshot.json").read_text())
-        if snapshot.get("model_id") != self.config.model_id:
-            raise ValueError("Serving profile model_id differs from downloaded snapshot")
+        snapshot = validate_serving_artifacts(self.config, self.root)
         import shutil
         if not shutil.which("apptainer"):
             raise ValueError("Apptainer is not on PATH; load the cluster module first")

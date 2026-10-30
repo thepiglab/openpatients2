@@ -387,6 +387,7 @@ def serving(work, name, shard=0):
     return ServingConfig(name=name, backend='vllm', version=runtime['version'],
         image_reference=runtime['image'], sif=str(work / 'runtime' / runtime['sif']),
         model_path=str(weights_path(work, profile['model'])), model_id=profile['model'],
+        model_config_file=PINS[profile['model']].get('config_file', 'config.json'),
         served_model_name=profile.get('served_model', 'nemotron-3.5-super-vl'), container_python='/usr/bin/python3',
         replicas=1, tensor_parallel=profile['gpus'], expert_parallel=profile.get('expert_parallel', False),
         reasoning_parser=profile.get('reasoning_parser', 'nemotron_v3'),
@@ -755,6 +756,15 @@ def download(work, profile_name):
                             'l4_200k_base', 'README.md', 'LICENSE*', 'USE_POLICY.md'])
         validate_checkpoint(path, model, require_weights=True)
         b.write(path / 'op2_snapshot.json', {'model_id': model, 'revision': pin['revision']})
+    # Exercise the worker's file gate on CPU too, before publishing readiness.
+    # Do not construct ServerGroup here: rendering it inspects GPU visibility.
+    from .dense_benchmark_serving import validate_serving_artifacts
+    serving_checks = {}
+    for name, definition in m['nemotron_super']['arms'].items():
+        if definition['profile'] == profile_name:
+            config = serving(work, name)
+            validate_serving_artifacts(config, work / 'arms' / name)
+            serving_checks[name] = {'model_id': config.model_id, 'model_config_file': config.model_config_file}
     cpu_env = {'HF_HUB_OFFLINE': '1', 'TRANSFORMERS_OFFLINE': '1', 'CUDA_VISIBLE_DEVICES': '',
                'HF_HOME': str(runtime / 'cpu-cache/hf'), 'HF_MODULES_CACHE': str(runtime / 'cpu-cache/modules'),
                'VLLM_CACHE_ROOT': str(runtime / 'cpu-cache/vllm'), 'XDG_CACHE_HOME': str(runtime / 'cpu-cache/xdg'),
@@ -789,6 +799,7 @@ def download(work, profile_name):
         records[str(path.relative_to(work))] = {'sha256': b.sha(path), 'bytes': path.stat().st_size,
                                               'mtime_ns': path.stat().st_mtime_ns}
     receipt = {'ready': True, 'profile': profile_name, 'files': records,
+               'serving_artifact_checks': serving_checks,
                'download_started_unix': start, 'download_seconds': time.time() - start, 'cpu_probes': probes,
                'image_build': {'method': 'apptainer build', 'mksquashfs_args': MKSQUASHFS_ARGS,
                                'slurm_memory': DOWNLOAD_MEMORY}}

@@ -621,6 +621,7 @@ async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_ti
     summary = {'shard': shard, 'job_id': os.environ['SLURM_JOB_ID'], 'started_unix': started,
                'gpus_per_server': cfg.gpus,
                'articles': [], 'status': 'interrupted'}
+    phase = 'article_selection'
     try:
         if claimed is not None:
             first = next(claimed, None)
@@ -637,15 +638,19 @@ async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_ti
                  'print(vllm.__version__,torch.__version__,torch.cuda.get_device_name(0))')
         argv = group.commands[0]['argv']
         prefix = argv[:argv.index(group.config.sif)+1]
+        phase = 'runtime_probe'
         result = subprocess.run(prefix + ['/usr/bin/python3', '-c', probe], text=True, capture_output=True)
         write(logs / 'probe.json', {'returncode': result.returncode, 'stdout': result.stdout, 'stderr': result.stderr})
         result.check_returncode()
         async with monitor(logs / 'gpu-telemetry.jsonl'):
             begin = time.monotonic()
+            phase = 'server_startup'
             endpoints = await group.start()
             summary['startup_seconds'] = time.monotonic() - begin
+            phase = 'startup_check'
             if startup_check is not None:
                 await startup_check(endpoints[0]['endpoint'], logs)
+            phase = 'inference'
             # Capture engine counters before/after, including actual DFlash counters.
             import httpx
             async with httpx.AsyncClient(timeout=10) as http:
@@ -709,6 +714,10 @@ async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_ti
                 await counters('metrics-after.txt')
             summary['status'] = ('budget_exhausted' if budget_exhausted else
                                  'done' if all(x['status'] == 'done' for x in summary['articles']) else 'errors')
+    except Exception as exc:
+        summary.update(status='error', failed_phase=phase,
+                       error_type=type(exc).__name__, error=str(exc)[:2000])
+        raise
     finally:
         group.stop()
         if claimed is not None:
