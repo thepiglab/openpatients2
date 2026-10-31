@@ -984,7 +984,7 @@ async def _worker(work, name):
         serving_factory=lambda _work, shard, _logs: serving(work, name, shard), runtime_probe=gpu_probe(profile),
         startup_check=startup, budget_seconds=m['nemotron_super']['hours'] * 3600 - 120,
         article_timeout=b.read(arm / 'manifest.json').get('article_timeout_seconds', 3600),
-        consume_remaining_budget=bool(m.get('competition')))
+        consume_remaining_budget=True)
 
 
 def status(work):

@@ -20,7 +20,8 @@ ROOT = Path(__file__).resolve().parents[1]
 PROFILES = ['beam-nvfp4-dflash2', 'beam-nvfp4-no-spec']
 
 
-def test_competition_launcher_resets_stale_selection_and_uses_twelve_hours(tmp_path):
+@pytest.mark.parametrize('mode', ['competition', 'overnight'])
+def test_competition_launcher_resets_stale_selection_and_uses_twelve_hours(tmp_path, mode):
     scripts = tmp_path / 'scripts'; scripts.mkdir()
     shutil.copyfile(ROOT / 'scripts/run_dense_beam.sh', scripts / 'run_dense_beam.sh')
     (scripts / 'run_dense_nemotron_super.sh').write_text('env\n')
@@ -28,7 +29,7 @@ def test_competition_launcher_resets_stale_selection_and_uses_twelve_hours(tmp_p
         'DENSE_SUPER_SPLITS': 'test', 'DENSE_SUPER_ARTICLE_IDS': 'PMC1',
         'DENSE_SUPER_LIMIT_ARTICLES': '2', 'DENSE_SUPER_WITH_IMAGES': '1'}
     env.pop('DENSE_HOURS', None)
-    result = subprocess.check_output(['bash', str(scripts / 'run_dense_beam.sh'), 'competition'], env=env, text=True)
+    result = subprocess.check_output(['bash', str(scripts / 'run_dense_beam.sh'), mode], env=env, text=True)
     values = dict(line.split('=', 1) for line in result.splitlines() if '=' in line)
     assert values['DENSE_HOURS'] == '12' and values['DENSE_SUPER_COMPETITION'] == '1'
     assert values['DENSE_SUPER_PROFILES'].split() == PROFILES

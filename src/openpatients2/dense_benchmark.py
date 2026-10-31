@@ -620,7 +620,9 @@ async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_ti
     monotonic_start = time.monotonic()
     summary = {'shard': shard, 'job_id': os.environ['SLURM_JOB_ID'], 'started_unix': started,
                'gpus_per_server': cfg.gpus,
-               'articles': [], 'status': 'interrupted'}
+               'articles': [], 'status': 'interrupted', 'budget_seconds': budget_seconds,
+               'article_timeout_seconds': article_timeout,
+               'consume_remaining_budget': consume_remaining_budget}
     phase = 'article_selection'
     try:
         if claimed is not None:
@@ -674,14 +676,16 @@ async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_ti
                         if budget_seconds is not None:
                             remaining = budget_seconds - (time.monotonic() - monotonic_start)
                             if consume_remaining_budget:
-                                # Competition runs can use the last hour instead of
+                                # Bounded runs can use the last hour instead of
                                 # reserving a full worst-case article. Checkpoints and
                                 # the final receipt retain an interrupted last article.
                                 if remaining < 360:
+                                    summary['budget_stop'] = {'reason': 'shutdown_reserve', 'remaining_seconds': remaining}
                                     budget_exhausted = True
                                     break
                                 effective_timeout = min(article_timeout or remaining, remaining - 60)
                             elif remaining <= (article_timeout or 900):
+                                summary['budget_stop'] = {'reason': 'full_article_reserve', 'remaining_seconds': remaining}
                                 budget_exhausted = True
                                 break
                         aid = item['article_id']
@@ -689,7 +693,7 @@ async def worker(work, shard, *, campaigns=None, budget_seconds=None, article_ti
                         base = campaign / 'results/articles' / aid
                         base.mkdir(parents=True, exist_ok=True)
                         previous, previous_receipt = completed_attempt(campaign, aid)
-                        if (consume_remaining_budget and previous_receipt and previous_receipt.get('has_prediction')
+                        if (read(campaign / 'manifest.json').get('competition') and previous_receipt and previous_receipt.get('has_prediction')
                                 and not previous_receipt.get('fhir', {}).get('complete')):
                             attempt = previous  # Explicit competition resume: coding/export only.
                         else:

@@ -325,6 +325,7 @@ def test_cpu_setup_only_metadata_then_downloads_one_profile_and_worker_dispatch(
     assert cfg.model_id == r.NVFP4 and cfg.speculative_config['model'].endswith('/weights/lilicorr')
     assert dispatched['campaigns'] == [work / 'arms/lilicorr-text']
     assert dispatched['startup_check'] is not None
+    assert dispatched['consume_remaining_budget'] is True
     assert dispatched['runtime_probe'] == s.gpu_probe(r.PROFILES['lilicorr'])
     checks = []
     async def token_smoke(*args):

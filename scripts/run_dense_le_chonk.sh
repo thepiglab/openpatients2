@@ -11,8 +11,9 @@ export DENSE_SUPER_SPLITS=train
 case "$mode" in
   smoke) export DENSE_SUPER_LIMIT_ARTICLES=2 DENSE_HOURS="${DENSE_HOURS:-8}";;
   pilot) export DENSE_SUPER_LIMIT_ARTICLES=48 DENSE_HOURS="${DENSE_HOURS:-24}";;
+  overnight) export DENSE_SUPER_LIMIT_ARTICLES=24 DENSE_HOURS="${DENSE_HOURS:-12}";;
   long) export DENSE_SUPER_LIMIT_ARTICLES='' DENSE_SUPER_SPLITS='train validation' DENSE_HOURS="${DENSE_HOURS:-72}";;
-  *) echo 'Usage: run_dense_le_chonk.sh [smoke|pilot|long] [new-work-directory]' >&2; exit 2;;
+  *) echo 'Usage: run_dense_le_chonk.sh [smoke|pilot|overnight|long] [new-work-directory]' >&2; exit 2;;
 esac
 printf 'Le Chonk 🐱: NVFP4, embedded DSpark3, one TP8 B200 worker, text + images.\n'
 exec bash "$repo/scripts/run_dense_nemotron_super.sh" "$@"

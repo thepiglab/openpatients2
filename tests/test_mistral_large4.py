@@ -104,16 +104,19 @@ def test_default_checkpoint_format_does_not_accept_params_as_substitute(native_s
     assert validate_serving_artifacts(cfg, group.root)['model_id'] == MODEL
 
 
-def test_chonk_launcher_clears_competition_mode(tmp_path):
+@pytest.mark.parametrize('mode,count,hours', [('smoke', '2', '8'), ('overnight', '24', '12')])
+def test_chonk_launcher_clears_competition_mode(tmp_path, mode, count, hours):
     scripts = tmp_path / 'scripts'; scripts.mkdir()
     root = Path(__file__).resolve().parents[1]
     shutil.copyfile(root / 'scripts/run_dense_le_chonk.sh', scripts / 'run_dense_le_chonk.sh')
     (scripts / 'run_dense_nemotron_super.sh').write_text('env\n')
     env = {**os.environ, 'DENSE_SUPER_COMPETITION': '1', 'DENSE_SUPER_ARTICLE_IDS': 'PMC1',
            'DENSE_SUPER_BEAM_REPAIR': '1', 'DENSE_SUPER_PROFILES': 'beam-nvfp4-dflash2'}
-    output = subprocess.check_output(['bash', str(scripts / 'run_dense_le_chonk.sh'), 'smoke'], env=env, text=True)
+    env.pop('DENSE_HOURS', None)
+    output = subprocess.check_output(['bash', str(scripts / 'run_dense_le_chonk.sh'), mode], env=env, text=True)
     values = dict(line.split('=', 1) for line in output.splitlines() if '=' in line)
     assert values['DENSE_SUPER_COMPETITION'] == values['DENSE_SUPER_BEAM_REPAIR'] == '0'
     assert values['DENSE_SUPER_PROFILES'] == 'le-chonk-nvfp4-dspark'
-    assert values['DENSE_SUPER_WITH_IMAGES'] == '1' and values['DENSE_SUPER_LIMIT_ARTICLES'] == '2'
+    assert values['DENSE_SUPER_WITH_IMAGES'] == '1' and values['DENSE_SUPER_LIMIT_ARTICLES'] == count
+    assert values['DENSE_HOURS'] == hours
     assert values['DENSE_SUPER_ARTICLE_IDS'] == ''
